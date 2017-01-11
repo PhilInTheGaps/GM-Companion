@@ -115,6 +115,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
         
+		System.out.println("Just a test change for git");
+		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
