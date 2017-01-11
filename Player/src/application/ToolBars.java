@@ -131,7 +131,7 @@ public class ToolBars {
   		nextSButton.setPrefHeight(Main.defaultButtonHeight);
   		nextSButton.setOnAction((ActionEvent e) -> {
   			if(Main.soundFolderSelected == true){
-  				Main.nextSoundFile();
+  				nextSoundFile.next();
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
