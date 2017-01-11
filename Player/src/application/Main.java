@@ -37,84 +37,84 @@ import javafx.scene.control.*;
 public class Main extends Application {
 	
 	//Defining Variables
-	MediaPlayer mediaPlayer;
-	MediaPlayer soundPlayer;
-	Duration duration;
-	Scene scene;
-	Media mMedia;
-	Media sMedia;
-	double width;
-	double height;
-	MediaView mediaView;
-	String musicPath;
-	String soundPath;
-	BorderPane borderPane;
+	public static MediaPlayer mediaPlayer;
+	public static MediaPlayer soundPlayer;
+	public static Duration duration;
+	public static Scene scene;
+	public static Media mMedia;
+	public static Media sMedia;
+	public static double width;
+	public static double height;
+	public static MediaView mediaView;
+	public static String musicPath;
+	public static String soundPath;
+	public static BorderPane borderPane;
 	private Slider mVolumeSlider;
 	private Slider sVolumeSlider;
-	String[] musicPathList = new String[500];
-	String[] soundPathList = new String[500];
-	String currentTrack;
-	String currentSound;
-	int maxTrackCount;
-	int maxSoundCount;
-	Boolean musicIsPlaying = false;
-	Boolean soundIsPlaying = false;
-	String osName;
-	Boolean windows = false;
-	Boolean linux = false;
-	Boolean musicFolderSelected = false;
-	Boolean soundFolderSelected = false;
-	String musicError;
-	String soundError;
+	public static String[] musicPathList = new String[500];
+	public static String[] soundPathList = new String[500];
+	public static String currentTrack;
+	public static String currentSound;
+	public static int maxTrackCount;
+	public static int maxSoundCount;
+	public static Boolean musicIsPlaying = false;
+	public static Boolean soundIsPlaying = false;
+	public static String osName;
+	public static Boolean windows = false;
+	public static Boolean linux = false;
+	public static Boolean musicFolderSelected = false;
+	public static Boolean soundFolderSelected = false;
+	public static String musicError;
+	public static String soundError;
 	
-	Label titleLabel = new Label();
-	Label albumLabel = new Label();
-	Label artistLabel = new Label();
-	Label yearLabel = new Label();
-	Label musicFolderLabel = new Label();
-	Label soundFolderLabel = new Label();
-	Random randomTrackID = new Random();
-	Random randomSoundID = new Random();
-	ImageView coverImage = new ImageView();
+	public static Label titleLabel = new Label();
+	public static Label albumLabel = new Label();
+	public static Label artistLabel = new Label();
+	public static Label yearLabel = new Label();
+	public static Label musicFolderLabel = new Label();
+	public static Label soundFolderLabel = new Label();
+	public static Random randomTrackID = new Random();
+	public static Random randomSoundID = new Random();
+	public static ImageView coverImage = new ImageView();
 	
 	//Setting Default Values
-	double defaultWidth = 1366;
-	double defaultHeight = 768;
-	double defaultSpacing = 20;
-	double defaultPadding = 20;
-	double defaultButtonHeight = 70;
-	double defaultSliderWidth = 320;
-	double defaultSliderHeight = 50;
-	double defaultFolderButtonWidth = 150;
-	double defaultFolderButtonHeight = 65;
-	double defaultMusicAndSoundWidth = defaultFolderButtonWidth*3 + 2*defaultPadding + 10;
+	public static double defaultWidth = 1366;
+	public static double defaultHeight = 768;
+	public static double defaultSpacing = 20;
+	public static double defaultPadding = 20;
+	public static double defaultButtonHeight = 70;
+	public static double defaultSliderWidth = 320;
+	public static double defaultSliderHeight = 50;
+	public static double defaultFolderButtonWidth = 150;
+	public static double defaultFolderButtonHeight = 65;
+	public static double defaultMusicAndSoundWidth = defaultFolderButtonWidth*3 + 2*defaultPadding + 10;
 	
-	String defaultLinuxFolder = "/home/phil/RPG Music Player/";
+	public static String defaultLinuxFolder = "/home/phil/RPG Music Player/";
 	
-	double musicVolume = 0.5;
-	double soundVolume = 0.25;
-	String defaultMusicPath = ("./Music/");
-	String defaultSoundPath = ("./Sounds/");
-	int currentTrackID = 0;
-	int currentSoundID = 0;
-	Boolean autoplay = true;
-	Boolean randomTrack = true;
-	Boolean singleTrack = false;
-	Boolean debug = false;
-	Boolean devV = false;
+	public static double musicVolume = 0.5;
+	public static double soundVolume = 0.25;
+	public static String defaultMusicPath = ("./Music/");
+	public static String defaultSoundPath = ("./Sounds/");
+	public static int currentTrackID = 0;
+	public static int currentSoundID = 0;
+	public static Boolean autoplay = true;
+	public static Boolean randomTrack = true;
+	public static Boolean singleTrack = false;
+	public static Boolean debug = false;
+	public static Boolean devV = false;
 	
-	String Album = "Unknown";
-	String Title = "Unknown";
-	String Artist = "Unknown";
-	String Year = "";
-	String mainPath;
-	String musicFolder = "Not Chosen";
-	String soundFolder = "Not Chosen";
+	public static String Album = "Unknown";
+	public static String Title = "Unknown";
+	public static String Artist = "Unknown";
+	public static String Year = "";
+	public static String mainPath;
+	public static String musicFolder = "Not Chosen";
+	public static String soundFolder = "Not Chosen";
 
 	//Start of Program
 	@Override
 	public void start(Stage primaryStage) {
-        
+		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
@@ -152,10 +152,10 @@ public class Main extends Application {
         musicPath = file.getAbsolutePath();
         musicPath = musicPath.replace("\\", "/");
         
-        MPlayer();
+        MPlayer.play();
 	}
 	
-	//Set MusicPlayer and Play
+	/*Set MusicPlayer and Play
 	public void MPlayer(){
 	
 		musicPath = musicPathList[currentTrackID];
@@ -195,6 +195,7 @@ public class Main extends Application {
             }
         });
 	}
+	*/
 	
 	//Set SoundPlayer and Play
 	public void SPlayer(){
@@ -274,7 +275,6 @@ public class Main extends Application {
     */
     }
     
-    	
     //Find all MusicFiles in Folder and add to Array
     public void getMusicFiles(){
     	
@@ -347,7 +347,7 @@ public class Main extends Application {
     }
     
     //Skip to next Song or play from beginning
-    public void nextMusicFile(){
+    public static void nextMusicFile(){
     	if (musicIsPlaying == true){
     		mediaPlayer.stop();
     	}
@@ -418,7 +418,7 @@ public class Main extends Application {
     	}
     	*/
     	
-    	MPlayer();
+    	MPlayer.play();
     }
     
     //Skip to next Sound or play from beginning
@@ -842,7 +842,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Bedrückend
@@ -866,7 +866,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Credits
@@ -890,7 +890,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Dramatisch
@@ -914,7 +914,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//DUNGEONS AND SWAGONS
@@ -938,7 +938,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Entspannt
@@ -962,7 +962,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Heroisch / Episch
@@ -986,7 +986,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Insel
@@ -1010,7 +1010,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//JazzLounge
@@ -1034,7 +1034,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Stadt
@@ -1058,7 +1058,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//PIRATEN
@@ -1082,7 +1082,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//HE IS A PIRATE!
@@ -1106,7 +1106,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Random Opener
@@ -1130,7 +1130,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Reise
@@ -1154,7 +1154,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SANDSTORM
@@ -1178,7 +1178,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFi Action
@@ -1202,7 +1202,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFi Bedrückend
@@ -1226,7 +1226,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiDramatisch
@@ -1250,7 +1250,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiEntspannt
@@ -1274,7 +1274,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiFroehlich
@@ -1298,7 +1298,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiLounge
@@ -1322,7 +1322,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiMarkt
@@ -1346,7 +1346,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiReise
@@ -1370,7 +1370,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//SciFiTraurig
@@ -1394,7 +1394,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Taverne
@@ -1418,7 +1418,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//TheBearAndTheMaidenFair
@@ -1442,7 +1442,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//TheRainsOfCastamere
@@ -1466,7 +1466,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Piraten Songs
@@ -1490,7 +1490,7 @@ public class Main extends Application {
   				mediaPlayer.stop();
   			}
   			getMusicFiles();
-  			MPlayer();
+  			MPlayer.play();
   		});
   		
   		//Add every Button
