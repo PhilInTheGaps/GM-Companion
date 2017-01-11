@@ -24,7 +24,7 @@ public class SPlayer {
 		Main.soundPlayer.setOnEndOfMedia(new Runnable() {
             @Override public void run() {
             	if (Main.singleTrack == false){
-            		Main.nextSoundFile();
+            		nextSoundFile.next();
             	}
             }
         });
