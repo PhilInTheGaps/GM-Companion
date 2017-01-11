@@ -49,8 +49,8 @@ public class Main extends Application {
 	public static String musicPath;
 	public static String soundPath;
 	public static BorderPane borderPane;
-	private Slider mVolumeSlider;
-	private Slider sVolumeSlider;
+	public static Slider mVolumeSlider;
+	public static Slider sVolumeSlider;
 	public static String[] musicPathList = new String[500];
 	public static String[] soundPathList = new String[500];
 	public static String currentTrack;
@@ -111,11 +111,11 @@ public class Main extends Application {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 
-	//Start of Program
+	//Start
 	@Override
 	public void start(Stage primaryStage) {
 		
-        scene = setScene(this.width, this.height);
+        scene = setScene(Main.width, Main.height);
         scene.setFill(Color.BLACK);
 
         primaryStage.setTitle("RPG Music and Sound Player | © 2016 Phil Hoffmann");
@@ -131,10 +131,10 @@ public class Main extends Application {
 		
 		//Add Components
         borderPane = new BorderPane();
-        borderPane.setTop(addToolBar());
+        borderPane.setTop(ToolBars.addToolBar());
         borderPane.setStyle("-fx-background-color: White");
 		borderPane.setRight(addGridPane());
-		borderPane.setLeft(addVBox());
+		borderPane.setLeft(ToolBars.addVBox());
         
         scene = new Scene(borderPane, defaultWidth, defaultHeight);
         scene.setFill(Color.WHITE);
@@ -142,7 +142,7 @@ public class Main extends Application {
         return scene;
 	}
 	
-	//Defining MusicFileChooser
+	/*Defining MusicFileChooser
 	public void MFChooser(){
 		FileChooser fc = new FileChooser();
 		fc.setInitialDirectory(new File(defaultMusicPath));
@@ -154,6 +154,7 @@ public class Main extends Application {
         
         MPlayer.play();
 	}
+	*/
 	
 	/*Set MusicPlayer and Play
 	public void MPlayer(){
@@ -197,7 +198,7 @@ public class Main extends Application {
 	}
 	*/
 	
-	//Set SoundPlayer and Play
+	/*Set SoundPlayer and Play
 	public void SPlayer(){
 	
 		soundPath = soundPathList[currentSoundID];
@@ -221,8 +222,9 @@ public class Main extends Application {
             }
         });
 	}
+	*/
 	
-	//Do something with Metadata
+	/*Do something with Metadata
     public void handleMetadata(String key, Object value){
     	switch (key){
     	case ("album"):
@@ -272,10 +274,11 @@ public class Main extends Application {
     		Image cover = (Image) value;
     		coverImage.setImage(cover);
     	}
-    */
-    }
     
-    //Find all MusicFiles in Folder and add to Array
+    }
+    */
+    
+    /*Find all MusicFiles in Folder and add to Array
     public void getMusicFiles(){
     	
     	currentTrackID = 0;
@@ -294,7 +297,6 @@ public class Main extends Application {
 		        }
 		    });
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
@@ -310,8 +312,9 @@ public class Main extends Application {
 			System.out.println(musicPathList[i]);
 		}
     }
+    */
     
-    //Find all SoundFiles in Folder and add to Array
+    /*Find all SoundFiles in Folder and add to Array
     public void getSoundFiles(){
     	
     	currentSoundID = 0;
@@ -330,7 +333,6 @@ public class Main extends Application {
 		        }
 		    });
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
@@ -345,8 +347,9 @@ public class Main extends Application {
 			System.out.println(soundPathList[i]);
 		}
     }
+    */
     
-    //Skip to next Song or play from beginning
+    /*Skip to next Song or play from beginning
     public static void nextMusicFile(){
     	if (musicIsPlaying == true){
     		mediaPlayer.stop();
@@ -416,13 +419,14 @@ public class Main extends Application {
         		currentTrackID = 0;
         	}
     	}
-    	*/
+    	
     	
     	MPlayer.play();
     }
+    */
     
     //Skip to next Sound or play from beginning
-    public void nextSoundFile(){
+    public static void nextSoundFile(){
     	
     	if (soundIsPlaying == true){
     		soundPlayer.stop();
@@ -447,10 +451,10 @@ public class Main extends Application {
         	}
     	}
 
-    	SPlayer();
+    	SPlayer.play();
     }
     
-    //Adding ToolBar
+    /*Adding ToolBar
   	private HBox addToolBar() {
   		//Setting ToolBar Style
   		HBox toolBar = new HBox();
@@ -519,7 +523,7 @@ public class Main extends Application {
   		filesButton.setPrefHeight(defaultButtonHeight);
   		filesButton.setOnAction((ActionEvent e) -> {
   			mediaPlayer.stop();
-  			MFChooser();
+  			MFChooser.choose();
   		});
   		
   		//Reload Music Button
@@ -556,7 +560,7 @@ public class Main extends Application {
   		nextMButton.setPrefHeight(defaultButtonHeight);
   		nextMButton.setOnAction((ActionEvent e) -> {
   			if(musicFolderSelected == true){
-  				nextMusicFile();
+  				nextMusicFile.next();
   			}
   			else{
   				musicError = "Please select music folder!";
@@ -641,8 +645,9 @@ public class Main extends Application {
   		
   		return toolBar;
   		}
-    
-  	//Adding VBar
+    */
+  	
+  	/*Adding VBar
   	private VBox addVBox(){
   		VBox vBox = new VBox();
   		vBox.setPadding(new Insets(defaultPadding));
@@ -809,6 +814,7 @@ public class Main extends Application {
   		
   		return vBox;
   	}
+  	*/
   	
   	//Adding MusicTilePane
   	private TilePane addMusicTilePane(){
@@ -841,7 +847,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -865,7 +871,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -889,7 +895,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -913,7 +919,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -937,7 +943,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -961,7 +967,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -985,7 +991,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1009,7 +1015,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1033,7 +1039,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1057,7 +1063,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1081,7 +1087,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1105,7 +1111,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1129,7 +1135,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1153,7 +1159,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1177,7 +1183,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1201,7 +1207,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1225,7 +1231,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1249,7 +1255,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1273,7 +1279,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1297,7 +1303,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1321,7 +1327,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1345,7 +1351,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1369,7 +1375,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1393,7 +1399,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1417,7 +1423,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1441,7 +1447,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1465,7 +1471,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1489,7 +1495,7 @@ public class Main extends Application {
   			if (musicIsPlaying == true){
   				mediaPlayer.stop();
   			}
-  			getMusicFiles();
+  			getMusicFiles.get();
   			MPlayer.play();
   		});
   		
@@ -1547,8 +1553,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Grillenzirpen
@@ -1572,8 +1578,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Hafen
@@ -1597,8 +1603,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Höhle
@@ -1622,8 +1628,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Kanalisation
@@ -1647,8 +1653,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Katakomben
@@ -1672,8 +1678,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Markt
@@ -1697,8 +1703,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Nacht 1
@@ -1722,8 +1728,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Nacht 2
@@ -1747,8 +1753,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Regen (Gewitter)
@@ -1772,8 +1778,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Schlacht
@@ -1797,8 +1803,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Stadt
@@ -1822,8 +1828,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Tag (Reise)
@@ -1847,8 +1853,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Taverne
@@ -1872,8 +1878,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Taverne (Berg)
@@ -1897,8 +1903,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Vögel
@@ -1922,8 +1928,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Warcraft III
@@ -1947,8 +1953,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Wasser (Bach)
@@ -1972,8 +1978,8 @@ public class Main extends Application {
   			if (soundIsPlaying == true){
   				soundPlayer.stop();
   			}
-  			getSoundFiles();
-  			SPlayer();
+  			getSoundFiles.get();
+  			SPlayer.play();
   		});
   		
   		//Add everything

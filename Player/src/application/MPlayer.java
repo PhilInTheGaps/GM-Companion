@@ -44,7 +44,7 @@ public class MPlayer {
 	    Main.mediaPlayer.setOnEndOfMedia(new Runnable() {
 	        @Override public void run() {
 	        	if(Main.singleTrack == false){
-	        		Main.nextMusicFile();
+	        		nextMusicFile.next();
 	        	}
 	        }
 	    });
