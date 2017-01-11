@@ -115,8 +115,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
         
-		System.out.println("Just a test change for git");
-		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
@@ -225,6 +223,29 @@ public class Main extends Application {
 	
 	//Do something with Metadata
     public void handleMetadata(String key, Object value){
+    	switch (key){
+    	case ("album"):
+    		Album = value.toString();
+			albumLabel.setText("Album: " + Album);
+			break;
+    	case ("artist"):
+    		Artist = value.toString();
+			artistLabel.setText("Artist: " + Artist);
+    		break;
+    	case ("title"):
+    		Title = value.toString();
+			titleLabel.setText("Title: " + Title);
+    		break;
+    	case ("year"):
+    		Year = value.toString();
+			yearLabel.setText("Year: " + Year);
+    		break;
+    	case ("image"):
+    		Image cover = (Image) value;
+			coverImage.setImage(cover);
+    		break;
+    	}
+    	/*
     	if (key.equals("album")){
     		System.out.println("Album: "+ value.toString());
     		Album = value.toString();
@@ -250,8 +271,10 @@ public class Main extends Application {
     		Image cover = (Image) value;
     		coverImage.setImage(cover);
     	}
+    */
     }
     
+    	
     //Find all MusicFiles in Folder and add to Array
     public void getMusicFiles(){
     	
@@ -331,6 +354,53 @@ public class Main extends Application {
     	
     	if (randomTrack == true){
     		if(maxTrackCount != 0){
+    			if(currentTrackID == maxTrackCount-1){
+        			for(int i = 0; i<50; i++){
+        				System.out.println(musicPathList);
+        				System.out.println("Neue Liste wird generiert");
+        				
+        				String shuffle1 = "";
+        				String shuffle2 = "";
+        				String shuffle3 = "";
+        				
+        				System.out.println(shuffle1);
+        				System.out.println(shuffle2);
+        				System.out.println(shuffle3);
+        				
+        				System.out.println(maxTrackCount);
+        				
+        				int ID1 = randomTrackID.nextInt(maxTrackCount);
+        				shuffle1 = musicPathList[ID1];
+        				System.out.println(ID1);
+        				int ID2 = randomTrackID.nextInt(maxTrackCount);
+        				shuffle2 = musicPathList[ID2];
+        				System.out.println(ID2);
+        				shuffle3 = shuffle2;
+        				shuffle2 = shuffle1;
+        				shuffle1 = shuffle3;
+        				currentTrackID = 0;
+        			}
+        			currentTrackID = 0;
+        			//System.out.println("Next Random Track: " + currentTrackID);
+        		}
+        		else{
+        			currentTrackID++;
+        			//currentTrackID = 0;
+        		}
+    		}
+    		
+    	}
+    	else{
+    		if (currentTrackID < maxTrackCount - 1){
+        		currentTrackID ++;
+        	}
+        	else{
+        		currentTrackID = 0;
+        	}
+    	}
+    	/*
+    	if (randomTrack == true){
+    		if(maxTrackCount != 0){
     			currentTrackID = randomTrackID.nextInt(maxTrackCount);
     			System.out.println("Next Random Track: " + currentTrackID);
     		}
@@ -346,6 +416,7 @@ public class Main extends Application {
         		currentTrackID = 0;
         	}
     	}
+    	*/
     	
     	MPlayer();
     }
