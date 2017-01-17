@@ -10,3 +10,4 @@ Silvester
 
 11. Jan
 - GitHub Implementierung
+- Einzelne Funktionen in eigene Classes ausgelagert, um Übersicht zu verbessern
