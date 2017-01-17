@@ -11,3 +11,12 @@ Silvester
 11. Jan
 - GitHub Implementierung
 - Einzelne Funktionen in eigene Classes ausgelagert, um Übersicht zu verbessern
+
+16. Jan
+- Erste Servertests
+
+17. Jan
+- Überarbeitung des Gits
+- Planung des Designs
+- Planung des Servers
+- planung der Zukünftigen Vorgehensweisen
