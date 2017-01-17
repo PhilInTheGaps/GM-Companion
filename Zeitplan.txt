@@ -7,3 +7,6 @@ Silvester
 10. Jan
 - Ideensammlung
 - Random Listen
+
+11. Jan
+- GitHub Implementierung
