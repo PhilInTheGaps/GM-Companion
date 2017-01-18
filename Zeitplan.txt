@@ -1,22 +1,25 @@
-Weihnachtsferien
+Weihnachtsferien 2016
 - Programmierung des Musikplayer bis Beta 1.0
 
-Silvester
+31.12.16
 - Beta Test (Fehler: Musikregulierung)
 
-10. Jan
+10. 01.17
 - Ideensammlung
 - Random Listen
 
-11. Jan
+11. 01.17
 - GitHub Implementierung
 - Einzelne Funktionen in eigene Classes ausgelagert, um Übersicht zu verbessern
 
-16. Jan
+16. 01.17
 - Erste Servertests
 
-17. Jan
+17. 01.17
 - Überarbeitung des Gits
 - Planung des Designs
 - Planung des Servers
-- planung der Zukünftigen Vorgehensweisen
+- Planung der zukünftigen Vorgehensweisen
+
+18. 01.17
+- (Beta) Buttons für Musik werden jetzt automatisch für jeden verfügbaren Ordner erstellt und nicht mehr manuell
