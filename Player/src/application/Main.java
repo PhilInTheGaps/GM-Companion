@@ -150,7 +150,7 @@ public class Main extends Application {
   		grid.setVgap(5);
   		grid.setMinWidth(500);
   		
-  		grid.add(MusicButtons.addMusicTilePane(), 0, 0);
+  		grid.add(MusicButtonsProcedually.addMusicTilePane(), 0, 0);
   		grid.add(SoundButtons.addSoundTilePane(), 1, 0);
   		
   		return grid;
