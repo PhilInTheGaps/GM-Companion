@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -18,24 +20,45 @@ public class MusicButtonsProcedually {
   		tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
   		tile.setPrefHeight(Main.defaultHeight);
   		
-  		File file = new File("/Music");
+  		File file = new File("Music/");
   		String[] names = file.list();
-
+  		List<String> folders = new ArrayList<String>();
+  		
   		for(String name : names)
   		{
-  		    if (new File("/Music" + name).isDirectory())
+  		    if (new File("Music/" + name).isDirectory())
   		    {
   		        System.out.println(name);
+  		        folders.add(name);
   		    }
   		}
+  		Object[] folderArray = folders.toArray();
   		
-  		for(int i  = 0; i <5; i++){
-  			String bName = "Button " + i;
+  		for(int i  = 0; i < folderArray.length; i++){
+  			String bName = folderArray[i].toString();
   			Button b = new Button(String.valueOf(i));
+  			
   			b.setText(bName);
   			b.setPrefSize(Main.defaultFolderButtonWidth, Main.defaultFolderButtonHeight);
   			
   			b.setOnAction((ActionEvent e) -> {
+  				if(Main.linux == true){
+  	  				Main.defaultMusicPath = Main.defaultLinuxFolder + "Music/"+bName;
+  	  			}
+  	  			else{
+  	  				Main.defaultMusicPath = "Music/"+bName; 
+  	  			}
+  				
+  				Main.musicFolder = bName;
+  	  			Main.musicFolderLabel.setText("Folder: " + Main.musicFolder);
+  	  			Main.musicFolderSelected = true;
+  	  			
+  	  			if (Main.musicIsPlaying == true){
+  	  				Main.mediaPlayer.stop();
+  	  			}
+  	  			getMusicFiles.get();
+  	  			MPlayer.play();
+  				
   	  			System.out.println(bName);
   	  		});
   			
