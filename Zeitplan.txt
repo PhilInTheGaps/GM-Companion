@@ -4,7 +4,7 @@ Weihnachtsferien 2016
 31.12.16
 - Beta Test (Fehler: Musikregulierung)
 
-10. 01.17
+10. 01.17 (Schule)
 - Ideensammlung
 - Random Listen
 
@@ -15,7 +15,7 @@ Weihnachtsferien 2016
 16. 01.17
 - Erste Servertests
 
-17. 01.17
+17. 01.17 (Schule)
 - Überarbeitung des Gits
 - Planung des Designs
 - Planung des Servers
