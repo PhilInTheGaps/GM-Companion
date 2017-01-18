@@ -9,7 +9,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
 
-public class MusicButtonsProcedually {
+public class MusicButtonsProcedurally {
 	public static TilePane addMusicTilePane(){
   		TilePane tile = new TilePane();
   		tile.setPadding(new Insets(20, 20, 20, 20));
