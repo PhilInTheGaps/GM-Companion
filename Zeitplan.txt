@@ -25,3 +25,10 @@ Weihnachtsferien 2016
 - (Beta) Buttons für Musik werden jetzt automatisch für jeden verfügbaren Ordner erstellt und nicht mehr manuell
 - (Beta) Buttons für Sounds werden ebenfalls automatisch generiert
 - Sounds werden jetzt auch in Zufalls-Listen gespeichert, um mehr Abwechslung zu gewährleisten
+
+19.01.17
+- Auto-Buttons getestet und released
+- Code aufgeräumt und Comments hinzugefügt, zur besseren Übersicht
+- Console-Prints aufgeräumt und einige neue hinzugefügt, für einfacheres debugging
+- Zufallslisten-Bug gefixed (Manchmal wurde die neue Liste nicht übernommen)
+- Zu Testzecken ein paar Musik und Soundfiles ins Git hochgeladen
