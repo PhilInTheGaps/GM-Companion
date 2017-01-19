@@ -1,5 +1,7 @@
 package application;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,6 +16,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import javafx.scene.control.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 
 public class Main extends Application {
 	
@@ -98,6 +104,7 @@ public class Main extends Application {
 	public static Boolean singleTrack = false;
 	public static Boolean debug = false;
 	public static Boolean devV = false;
+	public static Boolean onlineMode = true;
 	
 	//Default Strings displayed when MetaData is not found
 	public static String Album = "Unknown";
@@ -110,7 +117,7 @@ public class Main extends Application {
 
 	//Start
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws IOException {
 		
 		System.out.println("Initializing...");
 		System.out.println("");
@@ -124,7 +131,7 @@ public class Main extends Application {
 	}
 	
 	//Defining Scene
-	public Scene setScene(double width, double height){
+	public Scene setScene(double width, double height) throws IOException{
 		
 		//Check OS
 		System.out.println("Checking Operating System...");
@@ -146,7 +153,7 @@ public class Main extends Application {
 
   	
   	//Adding Grid on the Right
-  	private GridPane addGridPane(){
+  	private GridPane addGridPane() throws IOException{
   		GridPane grid = new GridPane();
   		grid.setHgap(5);
   		grid.setVgap(5);
