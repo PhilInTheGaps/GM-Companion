@@ -10,13 +10,16 @@ import javafx.scene.media.MediaPlayer;
 public class MPlayer {
 	
 	public static void play(){
-	
+		System.out.println("Converting File Path...");
+		//Gets the path to the current music file and converts it, so the MediaPlayer can read it
 		Main.musicPath = Main.musicPathList[Main.currentTrackID];
 		
 		Main.musicPath = Main.musicPath.replace("\\", "/");
 		
 		Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
-	
+		
+		//Creates a MediaPlayer that plays the music file
+		System.out.println("Creating MediaPlayer...");
 		Main.mediaPlayer = new MediaPlayer(Main.mMedia);
 		Main.mediaPlayer.setAutoPlay(Main.autoplay);
 		Main.mediaPlayer.setVolume(Main.musicVolume);
@@ -25,6 +28,7 @@ public class MPlayer {
 	    }
 	    
 	    //Clear Metadata
+	    System.out.println("Clearing old MetaData...");
 	    Main.albumLabel.setText("Album: Unknown");
 	    Main.artistLabel.setText("Artist: Unknown");
 	    Main.titleLabel.setText("Title: Unknown");
@@ -32,6 +36,7 @@ public class MPlayer {
 	    Main.coverImage.setImage(null);
 	    
 	    //Get Metadata
+	    System.out.println("Getting new MetaData...");
 	    Main.mMedia.getMetadata().addListener(new MapChangeListener<String, Object>(){
 	    	@Override
 	    	public void onChanged(Change<? extends String, ? extends Object> ch){
@@ -41,6 +46,7 @@ public class MPlayer {
 	    	}
 	    });
 	    
+	    //Plays the next music file if the current one ends
 	    Main.mediaPlayer.setOnEndOfMedia(new Runnable() {
 	        @Override public void run() {
 	        	if(Main.singleTrack == false){
@@ -48,6 +54,5 @@ public class MPlayer {
 	        	}
 	        }
 	    });
-	    /**/
 	}
 }

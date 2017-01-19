@@ -12,7 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
+	//Adds the toolbar on the top
 	public static HBox addToolBar() {
+		System.out.println("Adding toolbar...");
   		//Setting ToolBar Style
   		HBox toolBar = new HBox();
   		toolBar.setPadding(new Insets(Main.defaultPadding));
@@ -203,7 +205,9 @@ public class ToolBars {
   		return toolBar;
   		}
 	
+	//Adds the VerticalBox on the left
 	public static VBox addVBox(){
+		System.out.println("Adding MediaInfo Box...");
   		VBox vBox = new VBox();
   		vBox.setPadding(new Insets(Main.defaultPadding));
   		vBox.setStyle("-fx-background-color: White");
