@@ -3,6 +3,8 @@ package application;
 import javafx.scene.image.Image;
 
 public class HandleMetadata {
+	
+	//Adds the found MetaData to display
 	public static void handle(String key, Object value){
 		switch (key){
     	case ("album"):

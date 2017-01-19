@@ -10,13 +10,15 @@ import javafx.scene.media.MediaPlayer;
 public class MPlayer {
 	
 	public static void play(){
-	
+		
+		//Gets the path to the current music file and converts it, so the MediaPlayer can read it
 		Main.musicPath = Main.musicPathList[Main.currentTrackID];
 		
 		Main.musicPath = Main.musicPath.replace("\\", "/");
 		
 		Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
-	
+		
+		//Creates a MediaPlayer that plays the music file
 		Main.mediaPlayer = new MediaPlayer(Main.mMedia);
 		Main.mediaPlayer.setAutoPlay(Main.autoplay);
 		Main.mediaPlayer.setVolume(Main.musicVolume);
@@ -41,6 +43,8 @@ public class MPlayer {
 	    	}
 	    });
 	    
+	    
+	    //Plays the next music file if the current one ends
 	    Main.mediaPlayer.setOnEndOfMedia(new Runnable() {
 	        @Override public void run() {
 	        	if(Main.singleTrack == false){
@@ -48,6 +52,5 @@ public class MPlayer {
 	        	}
 	        }
 	    });
-	    /**/
 	}
 }

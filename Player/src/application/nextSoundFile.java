@@ -2,7 +2,7 @@ package application;
 
 public class nextSoundFile {
 	public static void next(){
-    	
+    	//Same as with nextMusicFile, only for sounds
     	if (Main.soundIsPlaying == true){
     		Main.soundPlayer.stop();
     	}
