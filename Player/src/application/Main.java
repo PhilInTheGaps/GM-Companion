@@ -112,6 +112,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
+		System.out.println("Initializing...");
+		System.out.println("");
+		
         scene = setScene(Main.width, Main.height);
         scene.setFill(Color.BLACK);
 
@@ -124,9 +127,11 @@ public class Main extends Application {
 	public Scene setScene(double width, double height){
 		
 		//Check OS
+		System.out.println("Checking Operating System...");
 		checkOS();
 		
 		//Add Components
+		System.out.println("Adding components to view...");
         borderPane = new BorderPane();
         borderPane.setTop(ToolBars.addToolBar());
         borderPane.setStyle("-fx-background-color: White");
@@ -149,6 +154,8 @@ public class Main extends Application {
   		
   		grid.add(MusicButtons.addMusicTilePane(), 0, 0);
   		grid.add(SoundButtons.addSoundTilePane(), 1, 0);
+  		System.out.println("Added all buttons");
+  		System.out.println("");
   		
   		return grid;
   	}
@@ -157,21 +164,23 @@ public class Main extends Application {
   	private void checkOS(){
   		
   		mainPath = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		System.out.println(mainPath);
 		
 		osName = System.getProperty("os.name");
-		System.out.println(osName);
+		System.out.println("Operating System: "+osName);
 		
 		if(osName.toLowerCase().contains("windows")){
 			windows = true;
+			System.out.println("OS detected as Windows");
 		}
 		else if(osName.toLowerCase().contains("linux")){
 			linux = true;
+			System.out.println("OS detected as Linux");
 		}
 		else{
 			System.out.println("OS currently not supportet, maybe it will work, maybe not.");
 			windows = true;
 		}
+		System.out.println("");
   	}
   	
 	//Main

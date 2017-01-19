@@ -11,6 +11,8 @@ import javafx.scene.layout.TilePane;
 
 public class MusicButtons {
 	public static TilePane addMusicTilePane(){
+		System.out.println("Generating music buttons...");
+		
   		TilePane tile = new TilePane();
   		tile.setPadding(new Insets(20, 20, 20, 20));
   		tile.setVgap(3);
@@ -23,6 +25,8 @@ public class MusicButtons {
   		File file = new File("Music/");
   		String[] names = file.list();
   		List<String> folders = new ArrayList<String>();
+  		
+  		System.out.println("Found the following music folders:");
   		
   		for(String name : names)
   		{
@@ -58,57 +62,12 @@ public class MusicButtons {
   	  			}
   	  			getMusicFiles.get();
   	  			MPlayer.play();
-  				
-  	  			System.out.println(bName);
   	  		});
   			
   			tile.getChildren().add(b);
   		}
-  		
-  		/*
-  		//Action
-  		Button Action = new Button();
-  		Action.setText("Action");
-  		Action.setPrefWidth(Main.defaultFolderButtonWidth);
-  		Action.setPrefHeight(Main.defaultFolderButtonHeight);
-  		Action.setOnAction((ActionEvent e) -> {
-  			if(Main.linux == true){
-  				Main.defaultMusicPath = Main.defaultLinuxFolder + "Music/Action";
-  			}
-  			else{
-  				Main.defaultMusicPath = "Music/Action"; 
-  			}
-  			
-  			Main.musicFolder = "Action";
-  			Main.musicFolderLabel.setText("Folder: " + Main.musicFolder);
-  			Main.musicFolderSelected = true;
-  			
-  			if (Main.musicIsPlaying == true){
-  				Main.mediaPlayer.stop();
-  			}
-  			getMusicFiles.get();
-  			MPlayer.play();
-  		});
-  		*/
-
-  		
-  		//Add every Button
-  		/*tile.getChildren().addAll(/*Action, SANDSTORM, 
-  								  TheBearAndTheMaidenFair, TheRainsOfCastamere); */
-  		
-  		/*
-  		Action 		Dramatisch 		Bedrueckend
-  		Taverne		Entspannt		HE
-  		Insel		Stadt			Reise
-  		PIRATEN
-  		SciFiAction	SciFiDramatisch	SciFiBedrueckend
-  		SciFiReise	SciFiEntspannt	SciFiFroehlich
-  		SciFiTraurigSciFiMarkt		SciFiLounge	
-  		JazzLounge		
-  		Credits		DnS				RandomOpener
-  		SANDSTORM	TheBearAndTheMaidenFair		TheRainsOfCastamere
-  		*/
-  		
+  		System.out.println("Added music buttons");
+  		System.out.println("");
 		return tile;
   	}
 }
