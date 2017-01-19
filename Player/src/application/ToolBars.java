@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
+	//Adds the toolbar on the top
 	public static HBox addToolBar() {
   		//Setting ToolBar Style
   		HBox toolBar = new HBox();
@@ -203,6 +204,7 @@ public class ToolBars {
   		return toolBar;
   		}
 	
+	//Adds the VerticalBox on the left
 	public static VBox addVBox(){
   		VBox vBox = new VBox();
   		vBox.setPadding(new Insets(Main.defaultPadding));

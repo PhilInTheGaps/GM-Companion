@@ -6,6 +6,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MFChooser {
+	//A FileChooser only used for debugging purposes, not in the normally implemented
 	public static void choose(){
 		FileChooser fc = new FileChooser();
 		fc.setInitialDirectory(new File(Main.defaultMusicPath));

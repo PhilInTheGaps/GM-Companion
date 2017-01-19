@@ -2,10 +2,13 @@ package application;
 
 public class nextMusicFile {
 	public static void next(){
+		//Switches to the next music file
+		//Checks, whether a file is currently playing and stops it if true
     	if (Main.musicIsPlaying == true){
     		Main.mediaPlayer.stop();
     	}
     	
+    	//Creates a randomly generated playlist if the current file is the last one in the playlist
     	if (Main.randomTrack == true){
     		if(Main.maxTrackCount != 0){
     			if(Main.currentTrackID == Main.maxTrackCount-1){
@@ -39,7 +42,6 @@ public class nextMusicFile {
         		}
         		else{
         			Main.currentTrackID++;
-        			//currentTrackID = 0;
         		}
     		}
     		
@@ -52,25 +54,6 @@ public class nextMusicFile {
         		Main.currentTrackID = 0;
         	}
     	}
-    	/*
-    	if (randomTrack == true){
-    		if(maxTrackCount != 0){
-    			currentTrackID = randomTrackID.nextInt(maxTrackCount);
-    			System.out.println("Next Random Track: " + currentTrackID);
-    		}
-    		else{
-    			currentTrackID = 0;
-    		}
-    	}
-    	else{
-    		if (currentTrackID < maxTrackCount - 1){
-        		currentTrackID ++;
-        	}
-        	else{
-        		currentTrackID = 0;
-        	}
-    	}
-    	*/
     	
     	MPlayer.play();
     }

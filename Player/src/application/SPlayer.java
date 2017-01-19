@@ -8,6 +8,8 @@ import javafx.scene.media.MediaPlayer;
 public class SPlayer {
 	public static void play(){
 		
+		//Like MPlayer.java, only for sounds
+		
 		Main.soundPath = Main.soundPathList[Main.currentSoundID];
 		Main.soundPath = Main.soundPath.replace("\\", "/");
 		

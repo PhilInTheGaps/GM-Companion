@@ -7,8 +7,9 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class getMusicFiles {
-public static void get(){
+	public static void get(){
     	
+		//This finds every music file in the folder and writes them into a list
     	Main.currentTrackID = 0;
     	
     	for (int i = 0; i<500; i++){
@@ -28,6 +29,9 @@ public static void get(){
 			e.printStackTrace();
 		} 
 		
+		// This checks whether RandomTrack is enabled and if true, generates a random TrackID
+		// at which the playlist starts.
+		// It was implemented before the randomly generated playlists and might be completely unnecessary.	
 		Main.maxTrackCount = Main.currentTrackID;
 		if (Main.randomTrack == true){
 			Main.currentTrackID = Main.randomTrackID.nextInt(Main.maxTrackCount);
@@ -36,6 +40,7 @@ public static void get(){
 			Main.currentTrackID = 0;
 		}
 		
+		//Prints out the name of every music file in the folder
 		for (int i = 0; i < Main.maxTrackCount + 1; i++){
 			System.out.println(Main.musicPathList[i]);
 		}
