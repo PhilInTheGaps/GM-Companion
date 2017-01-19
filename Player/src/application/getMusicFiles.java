@@ -8,8 +8,10 @@ import java.util.stream.Stream;
 
 public class getMusicFiles {
 	public static void get(){
-    	
 		//This finds every music file in the folder and writes them into a list
+		
+		System.out.println("Finding music files in folder: /"+Main.defaultMusicPath);
+		
     	Main.currentTrackID = 0;
     	
     	for (int i = 0; i<500; i++){
@@ -19,7 +21,6 @@ public class getMusicFiles {
 		try(Stream<Path> paths = Files.walk(Paths.get(Main.defaultMusicPath))) {
 		    paths.forEach(filePath -> {
 		        if (Files.isRegularFile(filePath)) {
-		            //System.out.println(filePath);
 		            String tempPath = filePath.toString();
 		            Main.musicPathList[Main.currentTrackID] = tempPath;
 		            Main.currentTrackID ++;
@@ -41,8 +42,10 @@ public class getMusicFiles {
 		}
 		
 		//Prints out the name of every music file in the folder
-		for (int i = 0; i < Main.maxTrackCount + 1; i++){
+		System.out.println("Found the following files:");
+		for (int i = 0; i < Main.maxTrackCount; i++){
 			System.out.println(Main.musicPathList[i]);
 		}
+		System.out.println("");
     }
 }

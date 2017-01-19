@@ -10,6 +10,9 @@ public class getSoundFiles {
 	public static void get(){
     	
 		//This finds every sound file in the folder and writes them into a list
+		
+		System.out.println("Finding sound files in folder: /"+Main.defaultSoundPath);
+		
     	Main.currentSoundID = 0;
     	
     	for (int i = 0; i<500; i++){
@@ -42,8 +45,10 @@ public class getSoundFiles {
 		}
 		
 		//Prints out the name of every music file in the folder
+		System.out.println("Found the following files:");
 		for (int i = 0; i < Main.maxSoundCount + 1; i++){
 			System.out.println(Main.soundPathList[i]);
 		}
+		System.out.println("");
     }
 }
