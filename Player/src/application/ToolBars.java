@@ -260,7 +260,7 @@ public class ToolBars {
   			if(Main.serverURL.charAt(i-1)!= ("/").toCharArray()[0]){
   				Main.serverURL = Main.serverURL + "/";
   			}
-  			if(Main.serverURL.contains("http") == false){
+  			if(Main.serverURL.contains("http://") == false){
   				Main.serverURL = "http://" + Main.serverURL;
   			}
   			Main.serverMusicURL = Main.serverURL + "music/";
@@ -282,6 +282,7 @@ public class ToolBars {
   	  				Main.soundPlayer.pause();
   	  			}
 				Main.grid.add(MusicButtons.addMusicTilePane(), 0, 0);
+				Main.grid.add(SoundButtons.addSoundTilePane(), 1, 0);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
