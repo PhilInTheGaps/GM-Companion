@@ -32,3 +32,5 @@ Weihnachtsferien 2016
 - Console-Prints aufgeräumt und einige neue hinzugefügt, für einfacheres debugging
 - Zufallslisten-Bug gefixed (Manchmal wurde die neue Liste nicht übernommen)
 - Zu Testzecken ein paar Musik und Soundfiles ins Git hochgeladen
+- Server Tests (POSITIV!)
+- Angefangen die Server-Funktion zu implementieren
