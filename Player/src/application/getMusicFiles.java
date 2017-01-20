@@ -16,8 +16,6 @@ public class getMusicFiles {
 		
 		System.out.println("Finding music files in folder: "+Main.defaultMusicPath);
 		
-		String[] fileArray = new String[500];
-		
 		Main.currentTrackID = 0;
     	
     	for (int i = 0; i<500; i++){
@@ -26,10 +24,10 @@ public class getMusicFiles {
 		
   		if(Main.onlineMode){
   			//Get all music files from server
-  			Document doc = Jsoup.connect("http://192.168.178.55/music/"+Main.defaultMusicPath).get();
+  			Document doc = Jsoup.connect(Main.serverMusicURL + Main.defaultMusicPath).get();
   	        //System.out.println(doc.toString());
   	        String str = doc.toString();
-  	        String findStr = ".mp3";
+  	        String findStr = "href=";
   	        int lastIndex1 = 0;
   	        int lastIndex2 = 10;
   	        ArrayList<String> fileNames = new ArrayList<String>();
@@ -39,30 +37,26 @@ public class getMusicFiles {
   	        while(lastIndex1 != -1){
 
   	            lastIndex1 = str.indexOf(findStr,lastIndex1);
-  	            lastIndex2 = str.indexOf("/", lastIndex1);
+  	            lastIndex2 = str.indexOf(".mp3", lastIndex1);
   	            
   	            
   	            if(lastIndex1 != -1){
-  	            	for(int i = lastIndex1+findStr.length()+3; i < lastIndex2-1; i++){
+  	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2+4; i++){
   	            		test += str.charAt(i);
   	            	}
-  	            	//System.out.println(test);
   	            	fileNames.add(test);
   	            	test = "";
   	                lastIndex1 += findStr.length();
   	            }
   	        }
   	        int f = 0;
-  	        for(int i = 0; i< fileNames.size(); i+=2){
+  	        for(int i = 1; i< fileNames.size(); i++){
   	        	String temp = fileNames.get(i).toString();
-  	        	Main.musicPathList[f] = temp;
-  	        	//System.out.println(Main.musicPathList[f]);
+  	        	Main.musicPathList[f] = Main.serverMusicURL + Main.musicFolder +"/" + temp;
   	        	f++;
   	        	count += 1;
   	        }
-  	        //Main.musicPathList = fileArray;
   	        Main.maxTrackCount = count;
-  	        //System.out.println(count);
   		}
   		else{
   			try(Stream<Path> paths = Files.walk(Paths.get(Main.defaultMusicPath))) {

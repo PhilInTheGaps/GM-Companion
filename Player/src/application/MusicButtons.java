@@ -19,13 +19,13 @@ public class MusicButtons {
 		System.out.println("Generating music buttons...");
 		
   		TilePane tile = new TilePane();
-  		tile.setPadding(new Insets(20, 20, 20, 20));
-  		tile.setVgap(3);
-  		tile.setHgap(5);
-  		tile.setPrefColumns(2);
+  		tile.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding, Main.defaultPadding, Main.defaultPadding));
+  		tile.setVgap(Main.defaultPadding/4);
+  		tile.setHgap(Main.defaultPadding/4);
+  		tile.setPrefColumns(3);
   		tile.setStyle("-fx-background-color: LightGrey");
   		tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
-  		tile.setPrefHeight(Main.defaultHeight);
+  		//tile.setPrefHeight(Main.defaultHeight);
   		
   		String[] folderArray = new String[500];
   		
@@ -33,7 +33,7 @@ public class MusicButtons {
   		
   		if(Main.onlineMode){
   			//Get all foldernames from server
-  			Document doc = Jsoup.connect("http://192.168.178.55/music/").get();
+  			Document doc = Jsoup.connect(Main.serverMusicURL).get();
   	        //System.out.println(doc.toString());
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
@@ -90,12 +90,13 @@ public class MusicButtons {
   	  		    }
   	  		}
   	  		String[] folderArrayTemp = new String[500];
-	        for(int i = 1; i < folderArray.length-1; i++){
-	        	//System.out.println(i);
-	        	//System.out.println(folderArray[i]);
-	        	folderArrayTemp[i-1] = folderArray[i].toString();
+	        for(int i = 0; i < folders.size()-1; i++){
+	        	System.out.println(i);
+	        	System.out.println(folders.get(i));
+	        	folderArrayTemp[i] = folders.get(i).toString();
 	        }
-	        folderArray = folderArrayTemp;
+	        
+	        folderArray = folderArrayTemp; 
   		}
   		
   		for(int i  = 0; i < folderArray.length; i++){
@@ -133,7 +134,7 @@ public class MusicButtons {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-  		  	  			//MPlayer.play();
+  		  	  			MPlayer.play();
   		  	  		});
   		  			
   		  			tile.getChildren().add(b);
