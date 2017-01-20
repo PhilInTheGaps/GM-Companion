@@ -36,6 +36,7 @@ Weihnachtsferien 2016
 - Angefangen die Server-Funktion zu implementieren
 
 20.01.17
-- Musik kann jetzt von einem Server abgespielt werden (Alpha)
+- Musik und Sounds können jetzt von einem Server abgespielt werden (Beta)
 - VolumeSlider-Bug gefixed, die Lautstärke kann jetzt auch durch Klicken und nicht nur durch Ziehen verändert werden
 - Angefangen, das Design zu überarbeiten
+- Progress Bar hinzugefügt
