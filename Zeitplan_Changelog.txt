@@ -34,3 +34,8 @@ Weihnachtsferien 2016
 - Zu Testzecken ein paar Musik und Soundfiles ins Git hochgeladen
 - Server Tests (POSITIV!)
 - Angefangen die Server-Funktion zu implementieren
+
+20.01.17
+- Musik kann jetzt von einem Server abgespielt werden (Alpha)
+- VolumeSlider-Bug gefixed, die Lautstärke kann jetzt auch durch Klicken und nicht nur durch Ziehen verändert werden
+- Angefangen, dass Design zu überarbeiten
