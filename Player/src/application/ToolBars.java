@@ -1,28 +1,49 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
+	
+	public static Boolean localOnline = Main.onlineMode;
+	
 	//Adds the toolbar on the top
-	public static HBox addToolBar() {
+	public static VBox addToolBar() {
 		System.out.println("Adding toolbar...");
-  		//Setting ToolBar Style
-  		HBox toolBar = new HBox();
-  		toolBar.setPadding(new Insets(Main.defaultPadding));
-  		toolBar.setAlignment(Pos.CENTER_LEFT);
-  		toolBar.alignmentProperty().isBound();
-  		toolBar.setSpacing(Main.defaultSpacing);
-  		toolBar.setStyle("-fx-background-color: Grey");
-  		toolBar.setMinHeight(100);
+		//Adding a VBox that contains 2 HBoxes
+		VBox toolBox = new VBox();
+		
+  		//Setting ToolBar1 Style
+  		HBox toolBar1 = new HBox();
+  		toolBar1.setPadding(new Insets(Main.defaultPadding/2, Main.defaultPadding/4, Main.defaultPadding/2, Main.defaultPadding/2));
+  		toolBar1.setAlignment(Pos.CENTER_LEFT);
+  		toolBar1.alignmentProperty().isBound();
+  		toolBar1.setSpacing(Main.defaultSpacing/2);
+  		toolBar1.setStyle("-fx-background-color: Grey");
+  		toolBar1.setMinHeight(50);
+  		toolBar1.setMaxHeight(50);
+  		
+  		//Setting ToolBar2 Style
+  		HBox toolBar2 = new HBox();
+  		toolBar2.setPadding(new Insets(Main.defaultPadding/4, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
+  		toolBar2.setAlignment(Pos.CENTER_LEFT);
+  		toolBar2.alignmentProperty().isBound();
+  		toolBar2.setSpacing(Main.defaultSpacing/2);
+  		toolBar2.setStyle("-fx-background-color: Grey");
+  		toolBar2.setMinHeight(50);
+  		toolBar2.setMaxHeight(50);
   		
   		//Play Button
   		Button playButton = new Button();
@@ -60,6 +81,19 @@ public class ToolBars {
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
+  			}
+  		});
+  		
+  		//Pause Music Button
+  		Button pauseMButton = new Button();
+  		pauseMButton.setText("Pause Music");
+  		pauseMButton.setPrefHeight(Main.defaultButtonHeight);
+  		pauseMButton.setOnAction((ActionEvent e) -> {
+  			if(Main.musicFolderSelected == true){
+  				Main.mediaPlayer.pause();
+  			}
+  			else{
+  				Main.musicError = "Please select sound folder!";
   			}
   		});
   		
@@ -145,19 +179,19 @@ public class ToolBars {
   		Button toggleRandomButton = new Button();
   		toggleRandomButton.setPrefHeight(Main.defaultButtonHeight);
   		if(Main.randomTrack == true){
-  			toggleRandomButton.setText("Disable Random");
+  			toggleRandomButton.setText("Disable Random Mode");
   		}
   		else{
-  			toggleRandomButton.setText("Enable Random");
+  			toggleRandomButton.setText("Enable Random Mode");
   		}
   		toggleRandomButton.setOnAction((ActionEvent e) -> {
   			if(Main.randomTrack == true){
   				Main.randomTrack = false;
-  				toggleRandomButton.setText("Enable Random");
+  				toggleRandomButton.setText("Enable Random Mode");
   			}
   			else{
   				Main.randomTrack = true;
-  				toggleRandomButton.setText("Disable Random");
+  				toggleRandomButton.setText("Disable Random Mode");
   			}
   			
   		});
@@ -166,30 +200,106 @@ public class ToolBars {
   		Button toggleSingleButton = new Button();
   		toggleSingleButton.setPrefHeight(Main.defaultButtonHeight);
   		if(Main.singleTrack == true){
-  			toggleSingleButton.setText("Disable Single M.");
+  			toggleSingleButton.setText("Disable Single Mode");
   		}
   		else{
-  			toggleSingleButton.setText("Enable Single M.");
+  			toggleSingleButton.setText("Enable Single Mode");
   		}
   		toggleSingleButton.setOnAction((ActionEvent e) -> {
   			if(Main.singleTrack == true){
   				Main.singleTrack = false;
-  				toggleSingleButton.setText("Enable Single M.");
+  				toggleSingleButton.setText("Enable Single Mode");
   			}
   			else{
   				Main.singleTrack = true;
-  				toggleSingleButton.setText("Disable Single M.");
+  				toggleSingleButton.setText("Disable Single Mode");
   			}
   			
   		});
   		
+  		
+  		//Online Mode Button
+  		Button toggleOnline = new Button();
+  		toggleOnline.setPrefHeight(Main.defaultButtonHeight);
+  		if(Main.onlineMode == true){
+  			toggleOnline.setText("Use Local Files");
+  		}
+  		else{
+  			toggleOnline.setText("Use Server Files");
+  		}
+  		toggleOnline.setOnAction((ActionEvent e) -> {
+  			if(localOnline == true){
+  				localOnline = false;
+  				toggleOnline.setText("Use Server Files");
+  			}
+  			else{
+  				localOnline = true;
+  				toggleOnline.setText("Use Local Files");
+  			}
+  			
+  		});
+  		
+  		//SpacerLabel1
+  		Label spacerLabel1 = new Label();
+  		spacerLabel1.setPrefWidth(150);
+  		
+  		//SpacerLabel1
+  		Label spacerLabel2 = new Label();
+  		spacerLabel2.setPrefWidth(150);
+  		
+  		//Server URL
+  		TextField serverField = new TextField();
+  		serverField.setPromptText("Server URL");
+  		serverField.setPrefHeight(Main.defaultButtonHeight);
+  		
+  		//Set Server URL
+  		Button setServerURL = new Button();
+  		setServerURL.setPrefHeight(Main.defaultButtonHeight);
+  		setServerURL.setPrefWidth(75);
+  		setServerURL.setText("Set URL");
+  		setServerURL.setOnAction((ActionEvent e) -> {
+  			Main.serverURL = serverField.getText();
+  			int i = Main.serverURL.length();
+  			if(Main.serverURL.charAt(i-1)!= ("/").toCharArray()[0]){
+  				Main.serverURL = Main.serverURL + "/";
+  			}
+  			if(Main.serverURL.contains("http://") == false){
+  				Main.serverURL = "http://" + Main.serverURL;
+  			}
+  			Main.serverMusicURL = Main.serverURL + "music/";
+  			Main.serverSoundsURL = Main.serverURL + "sounds/";
+  		});
+  		
+  		//Update Folders
+  		Button updateFolders = new Button();
+  		updateFolders.setPrefHeight(Main.defaultButtonHeight);
+  		updateFolders.setPrefWidth(75);
+  		updateFolders.setText("Update");
+  		updateFolders.setOnAction((ActionEvent e) -> {
+  			System.out.println("Updating Folders...");
+  			try {
+  				Main.onlineMode = localOnline;
+  				if(Main.musicFolderSelected == true){
+  	  				Main.mediaPlayer.pause();
+  	  			}
+  	  			if(Main.soundFolderSelected == true){
+  	  				Main.soundPlayer.pause();
+  	  			}
+				Main.grid.add(MusicButtons.addMusicTilePane(), 0, 0);
+				Main.grid.add(SoundButtons.addSoundTilePane(), 1, 0);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+  		});
+  		
   		//Add everything to ToolBar
-  		toolBar.getChildren().addAll(playButton, pauseButton, pauseSButton, reloadMButton, reloadSButton, 
-  									 nextMButton, nextSButton, toggleRandomButton, toggleSingleButton);
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
   		
   		//Set Button Width
-  		int buttonCount = toolBar.getChildren().toArray().length;
-  		double defaultButtonWidth = (Main.defaultWidth - ((buttonCount+1)*Main.defaultPadding)) / buttonCount;
+  		int buttonCount = toolBar1.getChildren().toArray().length;
+  		double defaultButtonWidth = Main.defaultButtonWidth; //(Main.defaultWidth - ((buttonCount+1)*Main.defaultPadding)) / buttonCount
   		
   		toggleSingleButton.setPrefWidth(defaultButtonWidth);
   		toggleRandomButton.setPrefWidth(defaultButtonWidth);
@@ -198,11 +308,17 @@ public class ToolBars {
   		reloadSButton.setPrefWidth(defaultButtonWidth);
   		reloadMButton.setPrefWidth(defaultButtonWidth);
   		filesButton.setPrefWidth(defaultButtonWidth);
+  		pauseMButton.setPrefWidth(defaultButtonWidth);
   		pauseButton.setPrefWidth(defaultButtonWidth);
   		playButton.setPrefWidth(defaultButtonWidth);
   		pauseSButton.setPrefWidth(defaultButtonWidth);
+  		toggleOnline.setPrefWidth(defaultButtonWidth);
+  		serverField.setPrefWidth(defaultButtonWidth);
   		
-  		return toolBar;
+  		toolBox.getChildren().add(toolBar1);
+  		toolBox.getChildren().add(toolBar2);
+  		
+  		return toolBox;
   		}
 	
 	//Adds the VerticalBox on the left
@@ -226,7 +342,7 @@ public class ToolBars {
   		
   		Main.mVolumeSlider.valueProperty().addListener(new InvalidationListener() {
   		    public void invalidated(Observable ov) {
-  		       if (Main.mVolumeSlider.isValueChanging()) {
+  		       if (Main.mVolumeSlider.isPressed()) {
   		    	 Main.musicVolume = Main.mVolumeSlider.getValue() / 100.0;
   		           if(Main.musicIsPlaying == true){
   		        	 Main.mediaPlayer.setVolume(Main.mVolumeSlider.getValue() / 100.0);
@@ -249,13 +365,13 @@ public class ToolBars {
   		
   		Main.sVolumeSlider.valueProperty().addListener(new InvalidationListener() {
   		    public void invalidated(Observable ov) {
-  		       if (Main.sVolumeSlider.isValueChanging()) {
-  		    	 Main.soundVolume = Main.sVolumeSlider.getValue() / 100.0;
-  		           if(Main.soundIsPlaying == true){
-  		        	 Main.soundPlayer.setVolume(Main.sVolumeSlider.getValue() / 100.0);
-  		           }   
-  		       }
-  		    }
+  		    	if (Main.sVolumeSlider.isPressed()){
+  		    		Main.soundVolume = Main.sVolumeSlider.getValue() / 100.0;
+  		    		if(Main.soundIsPlaying == true){
+  		    			Main.soundPlayer.setVolume(Main.sVolumeSlider.getValue() / 100.0);
+  		    		}
+  		    	}
+	    	}
   		});
   		vBox.getChildren().add(Main.sVolumeSlider);
   		

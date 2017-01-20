@@ -14,7 +14,12 @@ public class SPlayer {
 		Main.soundPath = Main.soundPathList[Main.currentSoundID];
 		Main.soundPath = Main.soundPath.replace("\\", "/");
 		
-		Main.sMedia = new Media(new File(Main.soundPath).toURI().toString());
+		if(Main.onlineMode){
+			Main.sMedia = new Media(Main.soundPath);
+		}
+		else{
+			Main.sMedia = new Media(new File(Main.soundPath).toURI().toString());
+		}
 		
 		System.out.println("Creating Sound MediaPlayer...");
 		Main.soundPlayer = new MediaPlayer(Main.sMedia);
