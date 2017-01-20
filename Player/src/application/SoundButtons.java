@@ -14,10 +14,10 @@ public class SoundButtons {
 		System.out.println("Generating sound buttons...");
 		
   		TilePane tile = new TilePane();
-  		tile.setPadding(new Insets(20, 20, 20, 20));
-  		tile.setVgap(3);
-  		tile.setHgap(5);
-  		tile.setPrefColumns(2);
+  		tile.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding, Main.defaultPadding, Main.defaultPadding));
+  		tile.setVgap(Main.defaultPadding/4);
+  		tile.setHgap(Main.defaultPadding/4);
+  		tile.setPrefColumns(3);
   		tile.setStyle("-fx-background-color: LightGrey");
   		tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
   		tile.setPrefHeight(Main.defaultHeight);

@@ -16,7 +16,12 @@ public class MPlayer {
 		
 		Main.musicPath = Main.musicPath.replace("\\", "/");
 		
-		Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
+		if(Main.onlineMode){
+			Main.mMedia = new Media(Main.musicPath);
+		}
+		else{
+			Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
+		}
 		
 		//Creates a MediaPlayer that plays the music file
 		System.out.println("Creating MediaPlayer...");

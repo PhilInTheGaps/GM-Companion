@@ -64,6 +64,7 @@ public class Main extends Application {
 	public static ImageView coverImage = new ImageView();
 	public static int currentTrackID;
 	public static int currentSoundID;
+	public static GridPane grid = new GridPane();
 	
 	//Setting Default Values
 	//The default window size of the program
@@ -71,20 +72,21 @@ public class Main extends Application {
 	public static double defaultHeight = 768;
 	
 	//The default space between different elements like buttons
-	public static double defaultSpacing = 20;
-	public static double defaultPadding = 20;
+	public static double defaultSpacing = 10;
+	public static double defaultPadding = 10;
 	
 	//Default values of the buttons in the top toolbar
-	public static double defaultButtonHeight = 70;
+	public static double defaultButtonHeight = 50;
+	public static double defaultButtonWidth = 175;
+	
+	//The size of the volume sliders
+	public static double defaultSliderHeight = 50;
 	public static double defaultSliderWidth = 320;
 	
-	//The height of the volume sliders
-	public static double defaultSliderHeight = 50;
-	
 	//Default values of the buttons used to select a music or sound category
-	public static double defaultFolderButtonWidth = 150;
-	public static double defaultFolderButtonHeight = 65;
-	public static double defaultMusicAndSoundWidth = defaultFolderButtonWidth*3 + 2*defaultPadding + 10;
+	public static double defaultMusicAndSoundWidth = (defaultWidth - Main.defaultSliderWidth+3*Main.defaultPadding)/2-3*defaultPadding; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
+	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
+	public static double defaultFolderButtonHeight = 60;
 	
 	//The default path to the folders used to store music and sounds on linux systems, 
 	//because relative file paths don't seem to work
@@ -104,7 +106,7 @@ public class Main extends Application {
 	public static Boolean singleTrack = false;
 	public static Boolean debug = false;
 	public static Boolean devV = false;
-	public static Boolean onlineMode = true;
+	public static Boolean onlineMode = false;
 	
 	//Default Strings displayed when MetaData is not found
 	public static String Album = "Unknown";
@@ -114,6 +116,11 @@ public class Main extends Application {
 	public static String mainPath;
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
+	
+	//Default Server URL
+	public static String serverURL = ""; //http://192.168.178.55/
+	public static String serverMusicURL = serverURL + "music/";
+	public static String serverSoundsURL = serverURL + "sounds/";
 
 	//Start
 	@Override
@@ -153,11 +160,9 @@ public class Main extends Application {
 
   	
   	//Adding Grid on the Right
-  	private GridPane addGridPane() throws IOException{
-  		GridPane grid = new GridPane();
-  		grid.setHgap(5);
-  		grid.setVgap(5);
-  		grid.setMinWidth(500);
+  	public static GridPane addGridPane() throws IOException{
+  		grid.setHgap(defaultPadding/4);
+  		grid.setVgap(defaultPadding/4);
   		
   		grid.add(MusicButtons.addMusicTilePane(), 0, 0);
   		grid.add(SoundButtons.addSoundTilePane(), 1, 0);
