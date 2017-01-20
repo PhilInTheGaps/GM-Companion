@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.util.Map;
 
 import javafx.collections.MapChangeListener;
 //import javafx.collections.MapChangeListener.Change;
@@ -16,7 +17,12 @@ public class MPlayer {
 		
 		Main.musicPath = Main.musicPath.replace("\\", "/");
 		
-		Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
+		if(Main.onlineMode){
+			Main.mMedia = new Media(Main.musicPath);
+		}
+		else{
+			Main.mMedia = new Media(new File(Main.musicPath).toURI().toString());
+		}
 		
 		//Creates a MediaPlayer that plays the music file
 		System.out.println("Creating MediaPlayer...");
@@ -52,6 +58,16 @@ public class MPlayer {
 	        	if(Main.singleTrack == false){
 	        		nextMusicFile.next();
 	        	}
+	        }
+	    });
+	    
+	    //Updates the Progress Bar
+	    Main.mediaPlayer.setOnReady(new Runnable() {
+
+	        @Override
+	        public void run() {
+	            System.out.println("Duration: "+Main.mMedia.getDuration().toSeconds());
+	            UpdateProgressBar.update();
 	        }
 	    });
 	}
