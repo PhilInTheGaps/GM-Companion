@@ -14,6 +14,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.scene.control.*;
 import org.jsoup.Jsoup;
@@ -65,6 +66,8 @@ public class Main extends Application {
 	public static int currentTrackID;
 	public static int currentSoundID;
 	public static GridPane grid = new GridPane();
+	public static HBox botBox = new HBox();
+	public static ProgressBar pb = new ProgressBar();
 	
 	//Setting Default Values
 	//The default window size of the program
@@ -151,6 +154,7 @@ public class Main extends Application {
         borderPane.setStyle("-fx-background-color: White");
 		borderPane.setRight(addGridPane());
 		borderPane.setLeft(ToolBars.addVBox());
+		borderPane.setBottom(addBotBox());
         
         scene = new Scene(borderPane, defaultWidth, defaultHeight);
         scene.setFill(Color.WHITE);
@@ -170,6 +174,21 @@ public class Main extends Application {
   		System.out.println("");
   		
   		return grid;
+  	}
+  	
+  	//Adding HBox at the Bottom
+  	public static HBox addBotBox() throws IOException{
+  		botBox.setMinHeight(20);
+  		botBox.setStyle("-fx-background-color: Grey");
+  		
+  		pb.setPrefWidth(defaultWidth);
+  		pb.setPrefHeight(5);
+  		pb.setMaxHeight(5);
+  		pb.setStyle("-fx-control-inner-background: Grey; -fx-text-box-border: Grey; -fx-accent: LightGrey; -fx-background-color: Grey;");
+  		pb.setProgress(0.7);
+  		botBox.getChildren().add(pb);
+  		
+  		return botBox;
   	}
   	
   	//Checking the Operating System

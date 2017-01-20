@@ -16,6 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
+	
+	public static Boolean localOnline = Main.onlineMode;
+	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
 		System.out.println("Adding toolbar...");
@@ -225,12 +228,12 @@ public class ToolBars {
   			toggleOnline.setText("Use Server Files");
   		}
   		toggleOnline.setOnAction((ActionEvent e) -> {
-  			if(Main.onlineMode == true){
-  				Main.onlineMode = false;
+  			if(localOnline == true){
+  				localOnline = false;
   				toggleOnline.setText("Use Server Files");
   			}
   			else{
-  				Main.onlineMode = true;
+  				localOnline = true;
   				toggleOnline.setText("Use Local Files");
   			}
   			
@@ -275,6 +278,7 @@ public class ToolBars {
   		updateFolders.setOnAction((ActionEvent e) -> {
   			System.out.println("Updating Folders...");
   			try {
+  				Main.onlineMode = localOnline;
   				if(Main.musicFolderSelected == true){
   	  				Main.mediaPlayer.pause();
   	  			}
