@@ -27,7 +27,7 @@ public class ToolBars {
 		
   		//Setting ToolBar1 Style
   		HBox toolBar1 = new HBox();
-  		toolBar1.setPadding(new Insets(Main.defaultPadding/2, Main.defaultPadding/4, Main.defaultPadding/2, Main.defaultPadding/2));
+  		toolBar1.setPadding(new Insets(Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
   		toolBar1.setAlignment(Pos.CENTER_LEFT);
   		toolBar1.alignmentProperty().isBound();
   		toolBar1.setSpacing(Main.defaultSpacing/2);
@@ -37,7 +37,7 @@ public class ToolBars {
   		
   		//Setting ToolBar2 Style
   		HBox toolBar2 = new HBox();
-  		toolBar2.setPadding(new Insets(Main.defaultPadding/4, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
+  		toolBar2.setPadding(new Insets(0, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
   		toolBar2.setAlignment(Pos.CENTER_LEFT);
   		toolBar2.alignmentProperty().isBound();
   		toolBar2.setSpacing(Main.defaultSpacing/2);

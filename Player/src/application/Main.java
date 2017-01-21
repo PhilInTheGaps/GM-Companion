@@ -185,7 +185,7 @@ public class Main extends Application {
   		pb.setPrefHeight(5);
   		pb.setMaxHeight(5);
   		pb.setStyle("-fx-control-inner-background: Grey; -fx-text-box-border: Grey; -fx-accent: LightGrey; -fx-background-color: Grey;");
-  		pb.setProgress(0.7);
+  		pb.setProgress(0);
   		botBox.getChildren().add(pb);
   		
   		return botBox;
