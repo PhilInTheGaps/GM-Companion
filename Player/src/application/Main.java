@@ -11,6 +11,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -72,6 +73,8 @@ public class Main extends Application {
 	public static TilePane tile = new TilePane();
 	public static TilePane tile2 = new TilePane();
 	public static Boolean initialPress = false;
+	public static int buttonRowCount;
+	public static double currentWidth;
 	
 	//Setting Default Values
 	//The default window size of the program
@@ -145,6 +148,8 @@ public class Main extends Application {
         primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
+        primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
         primaryStage.setMaximized(true);
 	}
 	
@@ -180,8 +185,33 @@ public class Main extends Application {
                 Object[] bArray1 = toolBar1.getChildren().toArray();
                 Object[] bArray2 = toolBar2.getChildren().toArray();
                 int bCount = bArray1.length;
+                Object[] bArrayMusic = tile.getChildren().toArray();
+                int bCountMusic = bArrayMusic.length;
+                Object[] bArraySounds = tile2.getChildren().toArray();
+                int bCountSounds = bArraySounds.length;
                 defaultButtonWidth = defaultWidth/bCount;
                 
+                //Adjusting Music and Sound Button width
+                double buttonsFittingIn = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4)/defaultFolderButtonWidth;
+                double availableSpace = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4);
+                buttonRowCount = (int) Math.floor(buttonsFittingIn+0.1);
+                System.out.println("Buttons Fitting in: "+buttonsFittingIn);
+                System.out.println("Available Space: "+availableSpace);
+            	
+            	
+                currentWidth = (buttonsFittingIn/(buttonRowCount))*defaultFolderButtonWidth;
+                System.out.println("CurrentWidth: "+currentWidth);
+                System.out.println("Space/Width: "+availableSpace/currentWidth);
+            	for(int i = 0; i < bCountMusic; i++){
+            		((Region) bArrayMusic[i]).setPrefWidth(currentWidth-1);
+            	}
+            	for(int i = 0; i < bCountSounds; i++){
+            		((Region) bArraySounds[i]).setPrefWidth(currentWidth-1);
+            	}
+            	
+            	System.out.println("");
+            	
+            	//Adjusting ToolBar button width
                 for(int i = 0; i < bCount; i++){
                 	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
                 	if (bArray2[i] != null){
