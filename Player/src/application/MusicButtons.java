@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
