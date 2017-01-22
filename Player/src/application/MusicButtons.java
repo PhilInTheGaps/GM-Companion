@@ -126,6 +126,8 @@ public class MusicButtons {
   		  	  			Main.musicFolderLabel.setText("Folder: " + Main.musicFolder);
   		  	  			Main.musicFolderSelected = true;
   		  	  			
+  		  	  			Main.initialPress = true;
+  		  	  			
   		  	  			if (Main.musicIsPlaying == true){
   		  	  				Main.mediaPlayer.stop();
   		  	  			}

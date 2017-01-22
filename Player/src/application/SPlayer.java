@@ -30,6 +30,13 @@ public class SPlayer {
 			Main.soundIsPlaying = true;
 		}
         
+		//If the sound folder button was pressed, generate a new random playlist
+	    if(Main.initialPress){
+	    	Main.initialPress = false;
+	    	Main.currentSoundID = Main.maxSoundCount-1;
+	    	nextSoundFile.next();
+	    }
+		
 		Main.soundPlayer.setOnEndOfMedia(new Runnable() {
             @Override public void run() {
             	if (Main.singleTrack == false){

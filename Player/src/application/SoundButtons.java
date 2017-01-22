@@ -124,6 +124,8 @@ public class SoundButtons {
 		  	  			Main.soundFolderLabel.setText("Folder: " + Main.soundFolder);
 		  	  			Main.soundFolderSelected = true;
 		  	  			
+		  	  			Main.initialPress = true;
+		  	  			
 		  	  			if (Main.soundIsPlaying == true){
 		  	  				Main.soundPlayer.stop();
 		  	  			}

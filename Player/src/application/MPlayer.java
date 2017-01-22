@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import javafx.collections.MapChangeListener;
+import javafx.scene.image.Image;
 //import javafx.collections.MapChangeListener.Change;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -41,7 +42,16 @@ public class MPlayer {
 	    Main.yearLabel.setText("Year: Unknown");
 	    Main.coverImage.setImage(null);
 	    
+	    //If the music folder button was pressed, generate a new random playlist
+	    if(Main.initialPress){
+	    	Main.initialPress = false;
+	    	Main.currentTrackID = Main.maxTrackCount-1;
+	    	nextMusicFile.next();
+	    }
+	    
+	    
 	    //Get Metadata
+	    
 	    System.out.println("Getting new MetaData...");
 	    Main.mMedia.getMetadata().addListener(new MapChangeListener<String, Object>(){
 	    	@Override
@@ -61,14 +71,13 @@ public class MPlayer {
 	        }
 	    });
 	    
-	    //Updates the Progress Bar
+	    //Updates the Progress Bar and sets Metadata
 	    Main.mediaPlayer.setOnReady(new Runnable() {
-
 	        @Override
 	        public void run() {
 	            System.out.println("Duration: "+Main.mMedia.getDuration().toSeconds());
 	            UpdateProgressBar.update();
 	        }
-	    });
-	}
+        });
+    }
 }
