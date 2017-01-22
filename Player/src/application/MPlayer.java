@@ -1,11 +1,7 @@
 package application;
 
 import java.io.File;
-import java.util.Map;
-
 import javafx.collections.MapChangeListener;
-import javafx.scene.image.Image;
-//import javafx.collections.MapChangeListener.Change;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 

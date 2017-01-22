@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -307,7 +306,7 @@ public class ToolBars {
   		Main.toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
   		
   		//Set Button Width
-  		int buttonCount = Main.toolBar1.getChildren().toArray().length;
+  		//int buttonCount = Main.toolBar1.getChildren().toArray().length;
   		double defaultButtonWidth = Main.defaultButtonWidth; //(Main.defaultWidth - ((buttonCount+1)*Main.defaultPadding)) / buttonCount
   		
   		Object[] bArray1 = Main.toolBar1.getChildren().toArray();
