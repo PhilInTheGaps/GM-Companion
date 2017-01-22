@@ -1,7 +1,6 @@
 package application;
 
 import java.io.IOException;
-
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
