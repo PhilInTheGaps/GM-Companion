@@ -93,8 +93,8 @@ public class MusicButtons {
   	  		}
   	  		
 	        for(int i = 0; i < folders.size()-1; i++){
-	        	System.out.println(i);
-	        	System.out.println(folders.get(i));
+	        	//System.out.println(i);
+	        	//System.out.println(folders.get(i));
 	        	folderArrayTemp[i] = folders.get(i).toString();
 	        }
 	        

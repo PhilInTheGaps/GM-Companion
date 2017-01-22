@@ -5,11 +5,13 @@ import java.util.Random;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -29,8 +31,6 @@ public class Main extends Application {
 	public static Scene scene;
 	public static Media mMedia;
 	public static Media sMedia;
-	public static double width;
-	public static double height;
 	public static MediaView mediaView;
 	public static String musicPath;
 	public static String soundPath;
@@ -82,7 +82,7 @@ public class Main extends Application {
 	
 	//Default values of the buttons in the top toolbar
 	public static double defaultButtonHeight = 50;
-	public static double defaultButtonWidth = 175;
+	public static double defaultButtonWidth = 175; //Currently not used, generates from window width
 	
 	//The size of the volume sliders
 	public static double defaultSliderHeight = 50;
@@ -133,12 +133,17 @@ public class Main extends Application {
 		System.out.println("Initializing...");
 		System.out.println("");
 		
-        scene = setScene(Main.width, Main.height);
+		//Main.defaultWidth = Screen.getPrimary().getVisualBounds().getMinX();
+		//Main.defaultHeight = Screen.getPrimary().getVisualBounds().getMinY();
+		
+		
+        scene = setScene(Main.defaultWidth, Main.defaultHeight);
         scene.setFill(Color.BLACK);
 
         primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setMaximized(true);
 	}
 	
 	//Defining Scene
