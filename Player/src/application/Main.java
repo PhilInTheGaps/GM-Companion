@@ -218,6 +218,9 @@ public class Main extends Application {
                 		((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
                 	}
                 }
+                
+                //Adjusting ProgressBar Width
+                pb.setPrefWidth(defaultWidth);
             }
         });
         
@@ -231,24 +234,23 @@ public class Main extends Application {
         });
         
         scene.setOnKeyPressed(
-        		new EventHandler<KeyEvent>(){
-			         @Override
-			         public void handle(KeyEvent keyEvent){
-			        	 if (keyEvent.getCode() == KeyCode.F1) {
-			                    System.out.println("Dev Mode Activated!");
-			                    if(devV){
-			                    	devV = false;
-			                    	debug = false;
-			                    	borderPane.setLeft(ToolBars.addVBox());
-			                    }
-			                    else{
-			                    	devV = true;
-			                    	borderPane.setLeft(ToolBars.addVBox());
-			                    }
-			                    
-			        	 }
-			         }
-        		}
+    		new EventHandler<KeyEvent>(){
+		         @Override
+		         public void handle(KeyEvent keyEvent){
+		        	 if (keyEvent.getCode() == KeyCode.F1) {
+	                    System.out.println("Dev Mode Activated!");
+	                    if(devV){
+	                    	devV = false;
+	                    	debug = false;
+	                    	borderPane.setLeft(ToolBars.addVBox());
+	                    }
+	                    else{
+	                    	devV = true;
+	                    	borderPane.setLeft(ToolBars.addVBox());
+	                    }
+    	 			}
+	         	}	
+			}
 		);
         return scene;
 	}

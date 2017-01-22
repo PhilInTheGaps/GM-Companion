@@ -51,7 +51,6 @@ public class MPlayer {
 	    
 	    
 	    //Get Metadata
-	    
 	    System.out.println("Getting new MetaData...");
 	    Main.mMedia.getMetadata().addListener(new MapChangeListener<String, Object>(){
 	    	@Override
