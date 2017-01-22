@@ -16,7 +16,7 @@ public class nextMusicFile {
     		if(Main.maxTrackCount != 0){
     			if(Main.currentTrackID == Main.maxTrackCount-1){
     				System.out.println("Generating new random music playlist...");
-        			for(int i = 0; i<50; i++){
+        			for(int i = 0; i<500; i++){
         				String shuffle1 = "";
         				String shuffle2 = "";
         				String shuffle3 = "";
@@ -36,7 +36,13 @@ public class nextMusicFile {
         				
         				Main.currentTrackID = 0;
         			}
-        			System.out.println("Random music playlist generated");
+        			System.out.println("Random music playlist generated:");
+        			if(Main.debug){
+        				for(int i = 0; i < Main.maxTrackCount; i++){
+        					System.out.println(Main.musicPathList[i]);
+        				}
+        			}
+        			
         			System.out.println("");
         		}
         		else{
