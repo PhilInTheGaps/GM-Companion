@@ -18,16 +18,19 @@ public class MusicButtons {
 	public static TilePane addMusicTilePane() throws IOException{
 		System.out.println("Generating music buttons...");
 		
-  		TilePane tile = new TilePane();
-  		tile.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding, Main.defaultPadding, Main.defaultPadding));
-  		tile.setVgap(Main.defaultPadding/4);
-  		tile.setHgap(Main.defaultPadding/4);
-  		tile.setPrefColumns(3);
-  		tile.setStyle("-fx-background-color: LightGrey");
-  		tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
+  		Main.tile.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding/2, Main.defaultPadding, Main.defaultPadding));
+  		Main.tile.setVgap(Main.defaultPadding/4);
+  		Main.tile.setHgap(Main.defaultPadding/4);
+  		Main.tile.setPrefColumns(3);
+  		Main.tile.setStyle("-fx-background-color: LightGrey");
+  		Main.tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(Main.defaultHeight);
   		
+  		Main.tile.getChildren().clear();
+  		
   		String[] folderArray = new String[500];
+  		String[] folderArrayTemp = new String[500];
+  		List<String> folders = new ArrayList<String>();
   		
   		File file = new File("Music/");
   		
@@ -66,7 +69,6 @@ public class MusicButtons {
   	        	folderArray[i] = temp;
   	        }
   	        
-  	        String[] folderArrayTemp = new String[500];
   	        for(int i = 1; i < count; i++){
   	        	//System.out.println(i);
   	        	//System.out.println(folderArray[i]);
@@ -77,7 +79,7 @@ public class MusicButtons {
   		}
   		else{
   			String[] names = file.list();
-  	  		List<String> folders = new ArrayList<String>();
+  	  		
   	  		
   	  		System.out.println("Found the following music folders:");
   	  		
@@ -89,7 +91,7 @@ public class MusicButtons {
   	  		        folders.add(name);
   	  		    }
   	  		}
-  	  		String[] folderArrayTemp = new String[500];
+  	  		
 	        for(int i = 0; i < folders.size()-1; i++){
 	        	System.out.println(i);
 	        	System.out.println(folders.get(i));
@@ -131,19 +133,18 @@ public class MusicButtons {
   		  	  			try {
 							getMusicFiles.get();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
   		  	  			MPlayer.play();
   		  	  		});
   		  			
-  		  			tile.getChildren().add(b);
+  		  			Main.tile.getChildren().add(b);
   				}
 
 	  		}
   		
   		System.out.println("Added music buttons");
   		System.out.println("");
-		return tile;
+		return Main.tile;
   	}
 }
