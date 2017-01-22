@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 
 public class MusicButtons {
@@ -144,6 +145,23 @@ public class MusicButtons {
   				}
 
 	  		}
+  		
+  		//Adjusting Music Button width
+        double buttonsFittingIn = (Main.defaultMusicAndSoundWidth-2*Main.defaultPadding-(Main.buttonRowCount-1)*Main.defaultPadding/4)/Main.defaultFolderButtonWidth+0.1;
+        double availableSpace = (Main.defaultMusicAndSoundWidth-2*Main.defaultPadding-(Main.buttonRowCount-1)*Main.defaultPadding/4);
+        Main.buttonRowCount = (int) Math.floor(buttonsFittingIn+0.1);
+        System.out.println("Buttons Fitting in: "+buttonsFittingIn);
+        System.out.println("Available Space: "+availableSpace);
+        Object[] bArrayMusic = Main.tile.getChildren().toArray();
+        int bCountMusic = bArrayMusic.length;
+    	
+    	double currentWidth = Main.defaultFolderButtonWidth;
+        currentWidth = Main.currentWidth;//(buttonsFittingIn/(Main.buttonRowCount))*Main.defaultFolderButtonWidth;
+        System.out.println("CurrentWidth: "+currentWidth);
+        System.out.println("Space/Width: "+availableSpace/currentWidth);
+    	for(int i = 0; i < bCountMusic; i++){
+    		((Region) bArrayMusic[i]).setPrefWidth(currentWidth-1);
+    	}
   		
   		System.out.println("Added music buttons");
   		System.out.println("");

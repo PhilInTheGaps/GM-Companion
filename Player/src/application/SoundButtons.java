@@ -105,7 +105,7 @@ public class SoundButtons {
 		  			Button b = new Button(String.valueOf(i));
 		  			
 		  			b.setText(bName);
-		  			b.setPrefSize(Main.defaultFolderButtonWidth, Main.defaultFolderButtonHeight);
+		  			b.setPrefSize(Main.currentWidth-1, Main.defaultFolderButtonHeight);
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(Main.onlineMode){
