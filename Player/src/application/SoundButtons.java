@@ -17,14 +17,15 @@ public class SoundButtons {
 	public static TilePane addSoundTilePane() throws IOException{
 		System.out.println("Generating sound buttons...");
 		
-  		TilePane tile = new TilePane();
-  		tile.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding, Main.defaultPadding, Main.defaultPadding));
-  		tile.setVgap(Main.defaultPadding/4);
-  		tile.setHgap(Main.defaultPadding/4);
-  		tile.setPrefColumns(3);
-  		tile.setStyle("-fx-background-color: LightGrey");
-  		tile.setPrefWidth(Main.defaultMusicAndSoundWidth);
+  		Main.tile2.setPadding(new Insets(Main.defaultPadding, Main.defaultPadding, Main.defaultPadding, Main.defaultPadding/2));
+  		Main.tile2.setVgap(Main.defaultPadding/4);
+  		Main.tile2.setHgap(Main.defaultPadding/4);
+  		Main.tile2.setPrefColumns(3);
+  		Main.tile2.setStyle("-fx-background-color: LightGrey");
+  		Main.tile2.setPrefWidth(Main.defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(Main.defaultHeight);
+  		
+  		Main.tile2.getChildren().clear();
   		
   		String[] folderArray = new String[500];
   		
@@ -136,13 +137,13 @@ public class SoundButtons {
 		  	  			SPlayer.play();
 		  	  		});
 		  			
-		  			tile.getChildren().add(b);
+		  			Main.tile2.getChildren().add(b);
 				}
 
   			}
 		
 		System.out.println("Added sound buttons");
 		System.out.println("");
-		return tile;
+		return Main.tile2;
 	}
 }

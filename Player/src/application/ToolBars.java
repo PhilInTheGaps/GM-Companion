@@ -8,11 +8,11 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
@@ -26,24 +26,22 @@ public class ToolBars {
 		VBox toolBox = new VBox();
 		
   		//Setting ToolBar1 Style
-  		HBox toolBar1 = new HBox();
-  		toolBar1.setPadding(new Insets(Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
-  		toolBar1.setAlignment(Pos.CENTER_LEFT);
-  		toolBar1.alignmentProperty().isBound();
-  		toolBar1.setSpacing(Main.defaultSpacing/2);
-  		toolBar1.setStyle("-fx-background-color: Grey");
-  		toolBar1.setMinHeight(50);
-  		toolBar1.setMaxHeight(50);
+  		Main.toolBar1.setPadding(new Insets(Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/4, Main.defaultPadding/2));
+  		Main.toolBar1.setAlignment(Pos.CENTER_LEFT);
+  		Main.toolBar1.alignmentProperty().isBound();
+  		Main.toolBar1.setSpacing(Main.defaultSpacing/2);
+  		Main.toolBar1.setStyle("-fx-background-color: Grey");
+  		Main.toolBar1.setMinHeight(50);
+  		Main.toolBar1.setMaxHeight(50);
   		
   		//Setting ToolBar2 Style
-  		HBox toolBar2 = new HBox();
-  		toolBar2.setPadding(new Insets(0, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
-  		toolBar2.setAlignment(Pos.CENTER_LEFT);
-  		toolBar2.alignmentProperty().isBound();
-  		toolBar2.setSpacing(Main.defaultSpacing/2);
-  		toolBar2.setStyle("-fx-background-color: Grey");
-  		toolBar2.setMinHeight(50);
-  		toolBar2.setMaxHeight(50);
+  		Main.toolBar2.setPadding(new Insets(Main.defaultPadding/4, Main.defaultPadding/2, Main.defaultPadding/2, Main.defaultPadding/2));
+  		Main.toolBar2.setAlignment(Pos.CENTER_LEFT);
+  		Main.toolBar2.alignmentProperty().isBound();
+  		Main.toolBar2.setSpacing(Main.defaultSpacing/2);
+  		Main.toolBar2.setStyle("-fx-background-color: Grey");
+  		Main.toolBar2.setMinHeight(50);
+  		Main.toolBar2.setMaxHeight(50);
   		
   		//Play Button
   		Button playButton = new Button();
@@ -255,7 +253,7 @@ public class ToolBars {
   		//Set Server URL
   		Button setServerURL = new Button();
   		setServerURL.setPrefHeight(Main.defaultButtonHeight);
-  		setServerURL.setPrefWidth(75);
+  		//setServerURL.setPrefWidth(75);
   		setServerURL.setText("Set URL");
   		setServerURL.setOnAction((ActionEvent e) -> {
   			Main.serverURL = serverField.getText();
@@ -273,7 +271,7 @@ public class ToolBars {
   		//Update Folders
   		Button updateFolders = new Button();
   		updateFolders.setPrefHeight(Main.defaultButtonHeight);
-  		updateFolders.setPrefWidth(75);
+  		//updateFolders.setPrefWidth(75);
   		updateFolders.setText("Update");
   		updateFolders.setOnAction((ActionEvent e) -> {
   			System.out.println("Updating Folders...");
@@ -285,8 +283,19 @@ public class ToolBars {
   	  			if(Main.soundFolderSelected == true){
   	  				Main.soundPlayer.pause();
   	  			}
-				Main.grid.add(MusicButtons.addMusicTilePane(), 0, 0);
-				Main.grid.add(SoundButtons.addSoundTilePane(), 1, 0);
+  	  			
+  	  			/*
+  	  			Main.borderPane.setCenter(null);
+	  			Main.borderPane.setRight(null);
+  	  			
+  	  			Main.borderPane.setCenter(MusicButtons.addMusicTilePane());
+  	  			Main.borderPane.setRight(SoundButtons.addSoundTilePane());
+  	  			*/
+  	  			
+				MusicButtons.addMusicTilePane();
+				SoundButtons.addSoundTilePane();
+				
+				
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -294,29 +303,27 @@ public class ToolBars {
   		});
   		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
+  		Main.toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
+  		Main.toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
   		
   		//Set Button Width
-  		int buttonCount = toolBar1.getChildren().toArray().length;
+  		int buttonCount = Main.toolBar1.getChildren().toArray().length;
   		double defaultButtonWidth = Main.defaultButtonWidth; //(Main.defaultWidth - ((buttonCount+1)*Main.defaultPadding)) / buttonCount
   		
-  		toggleSingleButton.setPrefWidth(defaultButtonWidth);
-  		toggleRandomButton.setPrefWidth(defaultButtonWidth);
-  		nextSButton.setPrefWidth(defaultButtonWidth);
-  		nextMButton.setPrefWidth(defaultButtonWidth);
-  		reloadSButton.setPrefWidth(defaultButtonWidth);
-  		reloadMButton.setPrefWidth(defaultButtonWidth);
-  		filesButton.setPrefWidth(defaultButtonWidth);
-  		pauseMButton.setPrefWidth(defaultButtonWidth);
-  		pauseButton.setPrefWidth(defaultButtonWidth);
-  		playButton.setPrefWidth(defaultButtonWidth);
-  		pauseSButton.setPrefWidth(defaultButtonWidth);
-  		toggleOnline.setPrefWidth(defaultButtonWidth);
-  		serverField.setPrefWidth(defaultButtonWidth);
+  		Object[] bArray1 = Main.toolBar1.getChildren().toArray();
+        Object[] bArray2 = Main.toolBar2.getChildren().toArray();
+        int bCount = bArray1.length;
+        defaultButtonWidth = Main.defaultWidth/bCount;
+        
+  		for(int i = 0; i < bCount; i++){
+        	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
+        	if (bArray2[i] != null){
+        		((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
+        	}
+        }
   		
-  		toolBox.getChildren().add(toolBar1);
-  		toolBox.getChildren().add(toolBar2);
+  		toolBox.getChildren().add(Main.toolBar1);
+  		toolBox.getChildren().add(Main.toolBar2);
   		
   		return toolBox;
   		}

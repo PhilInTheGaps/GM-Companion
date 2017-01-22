@@ -1,26 +1,24 @@
 package application;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
 import javafx.scene.control.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 
 public class Main extends Application {
 	
@@ -36,7 +34,7 @@ public class Main extends Application {
 	public static MediaView mediaView;
 	public static String musicPath;
 	public static String soundPath;
-	public static BorderPane borderPane;
+	public static BorderPane borderPane = new BorderPane();
 	public static Slider mVolumeSlider;
 	public static Slider sVolumeSlider;
 	public static String[] musicPathList = new String[500];
@@ -68,6 +66,10 @@ public class Main extends Application {
 	public static GridPane grid = new GridPane();
 	public static HBox botBox = new HBox();
 	public static ProgressBar pb = new ProgressBar();
+	public static HBox toolBar1 = new HBox();
+	public static HBox toolBar2 = new HBox();
+	public static TilePane tile = new TilePane();
+	public static TilePane tile2 = new TilePane();
 	
 	//Setting Default Values
 	//The default window size of the program
@@ -87,7 +89,7 @@ public class Main extends Application {
 	public static double defaultSliderWidth = 320;
 	
 	//Default values of the buttons used to select a music or sound category
-	public static double defaultMusicAndSoundWidth = (defaultWidth - Main.defaultSliderWidth+3*Main.defaultPadding)/2-3*defaultPadding; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
+	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
 	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
 	public static double defaultFolderButtonHeight = 60;
 	
@@ -108,7 +110,7 @@ public class Main extends Application {
 	public static Boolean randomTrack = true;
 	public static Boolean singleTrack = false;
 	public static Boolean debug = false;
-	public static Boolean devV = false;
+	public static Boolean devV = true;
 	public static Boolean onlineMode = false;
 	
 	//Default Strings displayed when MetaData is not found
@@ -121,12 +123,11 @@ public class Main extends Application {
 	public static String soundFolder = "Not Chosen";
 	
 	//Default Server URL
-	public static String serverURL = ""; //http://192.168.178.55/
+	public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
 	public static String serverMusicURL = serverURL + "music/";
 	public static String serverSoundsURL = serverURL + "sounds/";
-
+	
 	//Start
-	@Override
 	public void start(Stage primaryStage) throws IOException {
 		
 		System.out.println("Initializing...");
@@ -135,7 +136,7 @@ public class Main extends Application {
         scene = setScene(Main.width, Main.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
 	}
@@ -149,32 +150,51 @@ public class Main extends Application {
 		
 		//Add Components
 		System.out.println("Adding components to view...");
-        borderPane = new BorderPane();
         borderPane.setTop(ToolBars.addToolBar());
         borderPane.setStyle("-fx-background-color: White");
-		borderPane.setRight(addGridPane());
+		borderPane.setCenter(MusicButtons.addMusicTilePane());
+		borderPane.setRight(SoundButtons.addSoundTilePane());
 		borderPane.setLeft(ToolBars.addVBox());
 		borderPane.setBottom(addBotBox());
         
         scene = new Scene(borderPane, defaultWidth, defaultHeight);
         scene.setFill(Color.WHITE);
         
+        scene.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                //System.out.println("Width: " + newSceneWidth);
+                defaultWidth = (double) newSceneWidth;
+                defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2;
+                tile.setPrefWidth(defaultMusicAndSoundWidth);
+                tile.setMinWidth(defaultMusicAndSoundWidth);
+                tile2.setPrefWidth(defaultMusicAndSoundWidth);
+                tile2.setMinWidth(defaultMusicAndSoundWidth);
+                toolBar1.setPrefWidth(defaultWidth);
+                Object[] bArray1 = toolBar1.getChildren().toArray();
+                Object[] bArray2 = toolBar2.getChildren().toArray();
+                int bCount = bArray1.length;
+                defaultButtonWidth = defaultWidth/bCount;
+                
+                for(int i = 0; i < bCount; i++){
+                	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
+                	if (bArray2[i] != null){
+                		((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
+                	}
+                }
+            }
+        });
+        
+        scene.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+                //System.out.println("Height: " + newSceneHeight);
+                defaultHeight = (double) newSceneHeight;
+                tile.setPrefHeight(defaultHeight);
+                
+            }
+        });
+        
         return scene;
 	}
-
-  	
-  	//Adding Grid on the Right
-  	public static GridPane addGridPane() throws IOException{
-  		grid.setHgap(defaultPadding/4);
-  		grid.setVgap(defaultPadding/4);
-  		
-  		grid.add(MusicButtons.addMusicTilePane(), 0, 0);
-  		grid.add(SoundButtons.addSoundTilePane(), 1, 0);
-  		System.out.println("Added all buttons");
-  		System.out.println("");
-  		
-  		return grid;
-  	}
   	
   	//Adding HBox at the Bottom
   	public static HBox addBotBox() throws IOException{
