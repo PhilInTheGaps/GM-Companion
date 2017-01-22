@@ -352,7 +352,7 @@ public class ToolBars {
   		Main.mVolumeSlider.valueProperty().addListener(new InvalidationListener() {
   		    public void invalidated(Observable ov) {
   		       if (Main.mVolumeSlider.isPressed()) {
-  		    	 Main.musicVolume = Main.mVolumeSlider.getValue() / 100.0;
+  		    	   Main.musicVolume = Main.mVolumeSlider.getValue() / 100.0;
   		           if(Main.musicIsPlaying == true){
   		        	 Main.mediaPlayer.setVolume(Main.mVolumeSlider.getValue() / 100.0);
   		           }
