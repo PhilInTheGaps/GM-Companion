@@ -45,3 +45,5 @@ Weihnachtsferien 2016
 - Support für variable Auflösung
 - Bug fixes (verdammt viele)
 - Mehr Ideen für zukünftige Versionen hinzugefügt
+- Zufalls-Playlisten verbessert (Werden jetzt öfter gemischt)
+- Das Cover sollte jetzt immer angezeigt werden, sofern vorhanden (vorher wurden sie nicht geladen, wenn sie zu groß waren)
