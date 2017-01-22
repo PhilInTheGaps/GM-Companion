@@ -340,6 +340,8 @@ public class ToolBars {
   		mVolumeLabel.setText("Music Volume:");
   		vBox.getChildren().add(mVolumeLabel);
   		
+  		vBox.getChildren().clear();
+  		
   		//mVolume Slider
   		Main.mVolumeSlider = new Slider();
   		Main.mVolumeSlider.setPrefWidth(Main.defaultSliderWidth);
