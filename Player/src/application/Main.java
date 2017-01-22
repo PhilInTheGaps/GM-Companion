@@ -5,6 +5,7 @@ import java.util.Random;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
@@ -14,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -110,7 +113,7 @@ public class Main extends Application {
 	public static Boolean randomTrack = true;
 	public static Boolean singleTrack = false;
 	public static Boolean debug = false;
-	public static Boolean devV = true;
+	public static Boolean devV = false;
 	public static Boolean onlineMode = false;
 	
 	//Default Strings displayed when MetaData is not found
@@ -198,6 +201,26 @@ public class Main extends Application {
             }
         });
         
+        scene.setOnKeyPressed(
+        		new EventHandler<KeyEvent>(){
+			         @Override
+			         public void handle(KeyEvent keyEvent){
+			        	 if (keyEvent.getCode() == KeyCode.F1) {
+			                    System.out.println("Dev Mode Activated!");
+			                    if(devV){
+			                    	devV = false;
+			                    	debug = false;
+			                    	borderPane.setLeft(ToolBars.addVBox());
+			                    }
+			                    else{
+			                    	devV = true;
+			                    	borderPane.setLeft(ToolBars.addVBox());
+			                    }
+			                    
+			        	 }
+			         }
+        		}
+		);
         return scene;
 	}
   	
