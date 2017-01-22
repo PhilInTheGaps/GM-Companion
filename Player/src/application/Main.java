@@ -1,8 +1,8 @@
 package application;
 
+import javafx.application.Application;
 import java.io.IOException;
 import java.util.Random;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -132,8 +132,16 @@ public class Main extends Application {
 	public static String serverMusicURL = serverURL + "music/";
 	public static String serverSoundsURL = serverURL + "sounds/";
 	
+	//Main
+		public static void main(String[] args) {
+			
+			launch(args);
+			
+		}
+	
 	//Start
 	public void start(Stage primaryStage) throws IOException {
+		//Application.launch();
 		
 		System.out.println("Initializing...");
 		System.out.println("");
@@ -292,12 +300,4 @@ public class Main extends Application {
 		}
 		System.out.println("");
   	}
-  	
-	//Main
-	public static void main(String[] args) {
-		
-		//System.out.println(MEDIA_URL);
-		launch(args);
-		
-	}
 }
