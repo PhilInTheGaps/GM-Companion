@@ -40,3 +40,8 @@ Weihnachtsferien 2016
 - VolumeSlider-Bug gefixed, die Lautstärke kann jetzt auch durch Klicken und nicht nur durch Ziehen verändert werden
 - Angefangen, das Design zu überarbeiten
 - Progress Bar hinzugefügt
+
+22.01.2017
+- Support für variable Auflösung
+- Bug fixes (verdammt viele)
+- Mehr Ideen für zukünftige Versionen hinzugefügt
