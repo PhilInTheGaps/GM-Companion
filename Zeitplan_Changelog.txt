@@ -47,3 +47,8 @@ Weihnachtsferien 2016
 - Mehr Ideen für zukünftige Versionen hinzugefügt
 - Zufalls-Playlisten verbessert (Werden jetzt öfter gemischt)
 - Das Cover sollte jetzt immer angezeigt werden, sofern vorhanden (vorher wurden sie nicht geladen, wenn sie zu groß waren)
+
+23.01.2017
+- Beta 2.0 Release!
+- Programm ist jetzt nach etlichen bug fixes standalone-lauffähig
+- Classes aufgeräumt
