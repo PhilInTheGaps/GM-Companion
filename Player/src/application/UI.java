@@ -70,7 +70,7 @@ public class UI {
 	
 	public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
 	
-	public static String defaultLinuxFolder = "/home/phil/RPG Music Player/";
+	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
 	public static double defaultWidth = 1366;
 	public static double defaultHeight = 768;
