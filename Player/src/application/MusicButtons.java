@@ -129,7 +129,7 @@ public class MusicButtons {
   		  	  			Main.initialPress = true;
   		  	  			
   		  	  			if (Main.musicIsPlaying == true){
-  		  	  				Main.mediaPlayer.stop();
+  		  	  				MPlayer.mediaPlayer.stop();
   		  	  			}
   		  	  			
   		  	  			try {

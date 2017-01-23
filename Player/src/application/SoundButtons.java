@@ -127,7 +127,7 @@ public class SoundButtons {
 		  	  			Main.initialPress = true;
 		  	  			
 		  	  			if (Main.soundIsPlaying == true){
-		  	  				Main.soundPlayer.stop();
+		  	  				SPlayer.soundPlayer.stop();
 		  	  			}
 		  	  			
 		  	  			try {
