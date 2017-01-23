@@ -18,17 +18,13 @@ import javafx.scene.layout.Region;
 public class Main extends Application {
 	
 	//Defining Variables
-	public static BorderPane borderPane = new BorderPane();
-	public static Scene scene = new Scene(borderPane, 1280, 720);
+	
+	public static Scene scene;
 		
 	//Main
 	public static void main(String[] args) throws IOException {
 		
 		launch(args);
-		
-		scene = setScene(1280, 720);
-		//primaryStage.setScene(scene);
-		
 	}
 	
 	//Start
@@ -37,33 +33,35 @@ public class Main extends Application {
 		System.out.println("Initializing...");
 		System.out.println("");
 		
-        //scene = setScene(1280, 720);
-        //scene.setFill(Color.BLACK);
+        scene = setScene(1280, 720);
+        scene.setFill(Color.BLACK);
 
         primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
-        primaryStage.setScene(setScene(1280, 720));
+        primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
-        primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
-        primaryStage.setMaximized(true);
+        //primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
+        //primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
+        //primaryStage.setMaximized(true);
 	}	
 	
 	//Defining Scene
 	public static Scene setScene(double width, double height) throws IOException{
+		
+		BorderPane borderPane = new BorderPane();
 		
 		//Check OS
 		System.out.println("Checking Operating System...");
 		checkOS();
 		
 		//Add Components
-		System.out.println("Adding components to view...");
+		/*System.out.println("Adding components to view...");
         borderPane.setTop(UI.addToolBar());
         borderPane.setStyle("-fx-background-color: White");
 		borderPane.setCenter(UI.addMusicTilePane());
 		borderPane.setRight(UI.addSoundTilePane());
 		borderPane.setLeft(UI.addVBox());
-		borderPane.setBottom(addBotBox());
-        
+		//borderPane.setBottom(addBotBox());
+        */
         scene.setFill(Color.WHITE);
         
         
