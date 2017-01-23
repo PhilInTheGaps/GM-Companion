@@ -26,6 +26,35 @@ import javafx.scene.control.*;
 
 public class Main extends Application {
 	
+	//Main
+	public static void main(String[] args) {
+		
+		launch(args);
+		
+	}
+	
+	//Start
+	public void start(Stage primaryStage) throws IOException {
+		//Application.launch();
+		
+		System.out.println("Initializing...");
+		System.out.println("");
+		
+		//Main.defaultWidth = Screen.getPrimary().getVisualBounds().getMinX();
+		//Main.defaultHeight = Screen.getPrimary().getVisualBounds().getMinY();
+		
+		
+        scene = setScene(Main.defaultWidth, Main.defaultHeight);
+        scene.setFill(Color.BLACK);
+
+        primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
+        primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
+        primaryStage.setMaximized(true);
+	}
+	
 	//Defining Variables
 	public static MediaPlayer mediaPlayer;
 	public static MediaPlayer soundPlayer;
@@ -130,36 +159,7 @@ public class Main extends Application {
 	//Default Server URL
 	public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
 	public static String serverMusicURL = serverURL + "music/";
-	public static String serverSoundsURL = serverURL + "sounds/";
-	
-	//Main
-		public static void main(String[] args) {
-			
-			launch(args);
-			
-		}
-	
-	//Start
-	public void start(Stage primaryStage) throws IOException {
-		//Application.launch();
-		
-		System.out.println("Initializing...");
-		System.out.println("");
-		
-		//Main.defaultWidth = Screen.getPrimary().getVisualBounds().getMinX();
-		//Main.defaultHeight = Screen.getPrimary().getVisualBounds().getMinY();
-		
-		
-        scene = setScene(Main.defaultWidth, Main.defaultHeight);
-        scene.setFill(Color.BLACK);
-
-        primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
-        primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
-        primaryStage.setMaximized(true);
-	}
+	public static String serverSoundsURL = serverURL + "sounds/";	
 	
 	//Defining Scene
 	public Scene setScene(double width, double height) throws IOException{
@@ -270,7 +270,7 @@ public class Main extends Application {
   		
   		pb.setPrefWidth(defaultWidth);
   		pb.setPrefHeight(5);
-  		pb.setMaxHeight(5);
+  		//pb.setMaxHeight(5);
   		pb.setStyle("-fx-control-inner-background: Grey; -fx-text-box-border: Grey; -fx-accent: LightGrey; -fx-background-color: Grey;");
   		pb.setProgress(0);
   		botBox.getChildren().add(pb);
