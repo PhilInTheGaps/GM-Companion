@@ -8,7 +8,7 @@ public class nextMusicFile {
 		
 		//Checks, whether a file is currently playing and stops it if true
     	if (Main.musicIsPlaying == true){
-    		Main.mediaPlayer.stop();
+    		MPlayer.mediaPlayer.stop();
     	}
     	
     	//Creates a randomly generated playlist if the current file is the last one in the playlist

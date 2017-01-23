@@ -7,7 +7,7 @@ public class nextSoundFile {
 		System.out.println("Changing to next sound file...");
 		
     	if (Main.soundIsPlaying == true){
-    		Main.soundPlayer.stop();
+    		SPlayer.soundPlayer.stop();
     	}
     	
     	if (Main.randomTrack == true){

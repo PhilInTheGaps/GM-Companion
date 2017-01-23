@@ -7,9 +7,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -21,10 +18,81 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
-import javafx.util.Duration;
 import javafx.scene.control.*;
 
 public class Main extends Application {
+	
+	//Defining Variables
+		
+		public Scene scene;
+		public BorderPane borderPane = new BorderPane();
+		
+		public static GridPane grid = new GridPane();
+		public static HBox botBox = new HBox();
+		public static ProgressBar pb = new ProgressBar();
+		public static HBox toolBar1 = new HBox();
+		public static HBox toolBar2 = new HBox();
+		public static TilePane tile = new TilePane();
+		public static TilePane tile2 = new TilePane();
+		public static Boolean initialPress = false;
+		public static int buttonRowCount;
+		public static double currentWidth;
+		
+		//Setting Default Values
+		//The default window size of the program
+		public static double defaultWidth = 1366;
+		public static double defaultHeight = 768;
+		
+		//The default space between different elements like buttons
+		public static double defaultSpacing = 10;
+		public static double defaultPadding = 10;
+		
+		//Default values of the buttons in the top toolbar
+		public static double defaultButtonHeight = 50;
+		public static double defaultButtonWidth = 175; //Currently not used, generates from window width
+		
+		//The size of the volume sliders
+		public static double defaultSliderHeight = 50;
+		public static double defaultSliderWidth = 320;
+		
+		//Default values of the buttons used to select a music or sound category
+		public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
+		public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
+		public static double defaultFolderButtonHeight = 60;
+		
+		//The default path to the folders used to store music and sounds on linux systems, 
+		//because relative file paths don't seem to work
+		public static String defaultLinuxFolder = "/home/phil/RPG Music Player/";
+		
+		//Default volume values
+		public static double musicVolume = 0.5;
+		public static double soundVolume = 0.25;
+		
+		//Default subfolders for music and sounds
+		public static String defaultMusicPath = ("./Music/");
+		public static String defaultSoundPath = ("./Sounds/");
+
+		//Default values of Autoplay, RandomTrack, Debug mode and more
+		public static Boolean autoplay = true;
+		public static Boolean randomTrack = true;
+		public static Boolean singleTrack = false;
+		public static Boolean debug = false;
+		public static Boolean devV = false;
+		public static Boolean onlineMode = false;
+		
+		//Default Strings displayed when MetaData is not found
+		public static String Album = "Unknown";
+		public static String Title = "Unknown";
+		public static String Artist = "Unknown";
+		public static String Year = "";
+		public static String mainPath;
+		public static String musicFolder = "Not Chosen";
+		public static String soundFolder = "Not Chosen";
+		
+		//Default Server URL
+		public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
+		public static String serverMusicURL = serverURL + "music/";
+		public static String serverSoundsURL = serverURL + "sounds/";
 	
 	//Main
 	public static void main(String[] args) {
@@ -53,113 +121,7 @@ public class Main extends Application {
         primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
         primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
         primaryStage.setMaximized(true);
-	}
-	
-	//Defining Variables
-	public static MediaPlayer mediaPlayer;
-	public static MediaPlayer soundPlayer;
-	public static Duration duration;
-	public static Scene scene;
-	public static Media mMedia;
-	public static Media sMedia;
-	public static MediaView mediaView;
-	public static String musicPath;
-	public static String soundPath;
-	public static BorderPane borderPane = new BorderPane();
-	public static Slider mVolumeSlider;
-	public static Slider sVolumeSlider;
-	public static String[] musicPathList = new String[500];
-	public static String[] soundPathList = new String[500];
-	public static String currentTrack;
-	public static String currentSound;
-	public static int maxTrackCount;
-	public static int maxSoundCount;
-	public static Boolean musicIsPlaying = false;
-	public static Boolean soundIsPlaying = false;
-	public static String osName;
-	public static Boolean windows = false;
-	public static Boolean linux = false;
-	public static Boolean musicFolderSelected = false;
-	public static Boolean soundFolderSelected = false;
-	public static String musicError;
-	public static String soundError;
-	public static Label titleLabel = new Label();
-	public static Label albumLabel = new Label();
-	public static Label artistLabel = new Label();
-	public static Label yearLabel = new Label();
-	public static Label musicFolderLabel = new Label();
-	public static Label soundFolderLabel = new Label();
-	public static Random randomTrackID = new Random();
-	public static Random randomSoundID = new Random();
-	public static ImageView coverImage = new ImageView();
-	public static int currentTrackID;
-	public static int currentSoundID;
-	public static GridPane grid = new GridPane();
-	public static HBox botBox = new HBox();
-	public static ProgressBar pb = new ProgressBar();
-	public static HBox toolBar1 = new HBox();
-	public static HBox toolBar2 = new HBox();
-	public static TilePane tile = new TilePane();
-	public static TilePane tile2 = new TilePane();
-	public static Boolean initialPress = false;
-	public static int buttonRowCount;
-	public static double currentWidth;
-	
-	//Setting Default Values
-	//The default window size of the program
-	public static double defaultWidth = 1366;
-	public static double defaultHeight = 768;
-	
-	//The default space between different elements like buttons
-	public static double defaultSpacing = 10;
-	public static double defaultPadding = 10;
-	
-	//Default values of the buttons in the top toolbar
-	public static double defaultButtonHeight = 50;
-	public static double defaultButtonWidth = 175; //Currently not used, generates from window width
-	
-	//The size of the volume sliders
-	public static double defaultSliderHeight = 50;
-	public static double defaultSliderWidth = 320;
-	
-	//Default values of the buttons used to select a music or sound category
-	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
-	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
-	public static double defaultFolderButtonHeight = 60;
-	
-	//The default path to the folders used to store music and sounds on linux systems, 
-	//because relative file paths don't seem to work
-	public static String defaultLinuxFolder = "/home/phil/RPG Music Player/";
-	
-	//Default volume values
-	public static double musicVolume = 0.5;
-	public static double soundVolume = 0.25;
-	
-	//Default subfolders for music and sounds
-	public static String defaultMusicPath = ("./Music/");
-	public static String defaultSoundPath = ("./Sounds/");
-
-	//Default values of Autoplay, RandomTrack, Debug mode and more
-	public static Boolean autoplay = true;
-	public static Boolean randomTrack = true;
-	public static Boolean singleTrack = false;
-	public static Boolean debug = false;
-	public static Boolean devV = false;
-	public static Boolean onlineMode = false;
-	
-	//Default Strings displayed when MetaData is not found
-	public static String Album = "Unknown";
-	public static String Title = "Unknown";
-	public static String Artist = "Unknown";
-	public static String Year = "";
-	public static String mainPath;
-	public static String musicFolder = "Not Chosen";
-	public static String soundFolder = "Not Chosen";
-	
-	//Default Server URL
-	public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
-	public static String serverMusicURL = serverURL + "music/";
-	public static String serverSoundsURL = serverURL + "sounds/";	
+	}	
 	
 	//Defining Scene
 	public Scene setScene(double width, double height) throws IOException{

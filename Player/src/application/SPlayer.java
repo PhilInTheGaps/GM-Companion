@@ -1,11 +1,28 @@
 package application;
 
 import java.io.File;
+import java.util.Random;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class SPlayer {
+	
+	public static MediaPlayer soundPlayer;
+	public static Media sMedia;
+	public static String soundPath;
+	public static String[] soundPathList = new String[500];
+	public static String currentSound;
+	public static int maxSoundCount;
+	public static Boolean soundIsPlaying = false;
+	public static Boolean soundFolderSelected = false;
+	public static String soundError;
+	public static Random randomSoundID = new Random();
+	public static int currentSoundID;
+	
+	
+	
+	
 	public static void play(){
 		
 		//Like MPlayer.java, only for sounds
@@ -22,9 +39,9 @@ public class SPlayer {
 		}
 		
 		System.out.println("Creating Sound MediaPlayer...");
-		Main.soundPlayer = new MediaPlayer(Main.sMedia);
-		Main.soundPlayer.setAutoPlay(Main.autoplay);
-		Main.soundPlayer.setVolume(Main.soundVolume);
+		soundPlayer = new MediaPlayer(Main.sMedia);
+		soundPlayer.setAutoPlay(Main.autoplay);
+		soundPlayer.setVolume(Main.soundVolume);
 		
 		if (Main.autoplay == true){
 			Main.soundIsPlaying = true;
@@ -37,7 +54,7 @@ public class SPlayer {
 	    	nextSoundFile.next();
 	    }
 		
-		Main.soundPlayer.setOnEndOfMedia(new Runnable() {
+		soundPlayer.setOnEndOfMedia(new Runnable() {
             @Override public void run() {
             	if (Main.singleTrack == false){
             		nextSoundFile.next();

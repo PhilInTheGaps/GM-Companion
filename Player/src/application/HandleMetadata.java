@@ -30,6 +30,6 @@ public class HandleMetadata {
     		//Main.coverImage.setImage(cover);
     		//break;
     	}
-		Main.coverImage.setImage((Image) Main.mediaPlayer.getMedia().getMetadata().get("image"));
+		Main.coverImage.setImage((Image) MPlayer.mediaPlayer.getMedia().getMetadata().get("image"));
 	}
 }

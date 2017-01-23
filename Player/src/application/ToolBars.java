@@ -10,12 +10,27 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class ToolBars {
 	
 	public static Boolean localOnline = Main.onlineMode;
+	public static Slider mVolumeSlider;
+	public static Slider sVolumeSlider;
+	public static String osName;
+	public static Boolean windows = false;
+	public static Boolean linux = false;
+	public static Label titleLabel = new Label();
+	public static Label albumLabel = new Label();
+	public static Label artistLabel = new Label();
+	public static Label yearLabel = new Label();
+	public static Label musicFolderLabel = new Label();
+	public static Label soundFolderLabel = new Label();
+	public static ImageView coverImage = new ImageView();
+	
+	
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -47,13 +62,13 @@ public class ToolBars {
   		playButton.setPrefHeight(Main.defaultButtonHeight);
   		playButton.setOnAction((ActionEvent e) ->{
   			if(Main.musicFolderSelected == true){
-  				Main.mediaPlayer.play();
+  				MPlayer.mediaPlayer.play();
   			}
   			else{
   				Main.musicError = "Please select music folder!";
   			}
   			if(Main.soundFolderSelected == true){
-  				Main.soundPlayer.play();
+  				SPlayer.soundPlayer.play();
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
@@ -67,13 +82,13 @@ public class ToolBars {
   		pauseButton.setPrefHeight(Main.defaultButtonHeight);
   		pauseButton.setOnAction((ActionEvent e) -> {
   			if(Main.musicFolderSelected == true){
-  				Main.mediaPlayer.pause();
+  				MPlayer.mediaPlayer.pause();
   			}
   			else{
   				Main.musicError = "Please select music folder!";
   			}
   			if(Main.soundFolderSelected == true){
-  				Main.soundPlayer.pause();
+  				SPlayer.soundPlayer.pause();
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
@@ -86,7 +101,7 @@ public class ToolBars {
   		pauseMButton.setPrefHeight(Main.defaultButtonHeight);
   		pauseMButton.setOnAction((ActionEvent e) -> {
   			if(Main.musicFolderSelected == true){
-  				Main.mediaPlayer.pause();
+  				MPlayer.mediaPlayer.pause();
   			}
   			else{
   				Main.musicError = "Please select sound folder!";
@@ -99,7 +114,7 @@ public class ToolBars {
   		pauseSButton.setPrefHeight(Main.defaultButtonHeight);
   		pauseSButton.setOnAction((ActionEvent e) -> {
   			if(Main.soundFolderSelected == true){
-  				Main.soundPlayer.pause();
+  				SPlayer.soundPlayer.pause();
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
@@ -111,7 +126,7 @@ public class ToolBars {
   		filesButton.setText("Files");
   		filesButton.setPrefHeight(Main.defaultButtonHeight);
   		filesButton.setOnAction((ActionEvent e) -> {
-  			Main.mediaPlayer.stop();
+  			MPlayer.mediaPlayer.stop();
   			MFChooser.choose();
   		});
   		
@@ -121,7 +136,7 @@ public class ToolBars {
   		reloadMButton.setPrefHeight(Main.defaultButtonHeight);
   		reloadMButton.setOnAction((ActionEvent e) -> {
   			if(Main.musicFolderSelected == true){
-  				Main.mediaPlayer.seek(Main.mediaPlayer.getStartTime());
+  				MPlayer.mediaPlayer.seek(MPlayer.mediaPlayer.getStartTime());
   			}
   			else{
   				Main.musicError = "Please select music folder!";
@@ -135,7 +150,7 @@ public class ToolBars {
   		reloadSButton.setPrefHeight(Main.defaultButtonHeight);
   		reloadSButton.setOnAction((ActionEvent e) -> {
   			if(Main.soundFolderSelected == true){
-  				Main.soundPlayer.seek(Main.soundPlayer.getStartTime());
+  				SPlayer.soundPlayer.seek(SPlayer.soundPlayer.getStartTime());
   			}
   			else{
   				Main.soundError = "Please select sound folder!";
@@ -276,10 +291,10 @@ public class ToolBars {
   			try {
   				Main.onlineMode = localOnline;
   				if(Main.musicFolderSelected == true){
-  	  				Main.mediaPlayer.pause();
+  					MPlayer.mediaPlayer.pause();
   	  			}
   	  			if(Main.soundFolderSelected == true){
-  	  				Main.soundPlayer.pause();
+  	  				SPlayer.soundPlayer.pause();
   	  			}
   	  			
   	  			/*
@@ -352,7 +367,7 @@ public class ToolBars {
   		       if (Main.mVolumeSlider.isPressed()) {
   		    	   Main.musicVolume = Main.mVolumeSlider.getValue() / 100.0;
   		           if(Main.musicIsPlaying == true){
-  		        	 Main.mediaPlayer.setVolume(Main.mVolumeSlider.getValue() / 100.0);
+  		        	 MPlayer.mediaPlayer.setVolume(Main.mVolumeSlider.getValue() / 100.0);
   		           }
   		       }
   		    }
@@ -375,7 +390,7 @@ public class ToolBars {
   		    	if (Main.sVolumeSlider.isPressed()){
   		    		Main.soundVolume = Main.sVolumeSlider.getValue() / 100.0;
   		    		if(Main.soundIsPlaying == true){
-  		    			Main.soundPlayer.setVolume(Main.sVolumeSlider.getValue() / 100.0);
+  		    			SPlayer.soundPlayer.setVolume(Main.sVolumeSlider.getValue() / 100.0);
   		    		}
   		    	}
 	    	}
