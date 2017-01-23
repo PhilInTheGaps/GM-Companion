@@ -18,32 +18,30 @@ import javafx.scene.layout.Region;
 public class Main extends Application {
 	
 	//Defining Variables
-	public Scene scene;
-	public BorderPane borderPane = new BorderPane();
+	public static BorderPane borderPane = new BorderPane();
+	public static Scene scene = new Scene(borderPane, 1280, 720);
 		
 	//Main
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		launch(args);
+		
+		scene = setScene(1280, 720);
+		//primaryStage.setScene(scene);
 		
 	}
 	
 	//Start
 	public void start(Stage primaryStage) throws IOException {
-		//Application.launch();
 		
 		System.out.println("Initializing...");
 		System.out.println("");
 		
-		//Main.defaultWidth = Screen.getPrimary().getVisualBounds().getMinX();
-		//Main.defaultHeight = Screen.getPrimary().getVisualBounds().getMinY();
-		
-		
-        scene = setScene(UI.defaultWidth, UI.defaultHeight);
-        scene.setFill(Color.BLACK);
+        //scene = setScene(1280, 720);
+        //scene.setFill(Color.BLACK);
 
         primaryStage.setTitle("RPG Music and Sound Player | © 2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.0 Beta");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(setScene(1280, 720));
         primaryStage.show();
         primaryStage.setWidth(Screen.getPrimary().getVisualBounds().getMinX());
         primaryStage.setHeight(Screen.getPrimary().getVisualBounds().getMinY());
@@ -51,7 +49,7 @@ public class Main extends Application {
 	}	
 	
 	//Defining Scene
-	public Scene setScene(double width, double height) throws IOException{
+	public static Scene setScene(double width, double height) throws IOException{
 		
 		//Check OS
 		System.out.println("Checking Operating System...");
@@ -66,7 +64,6 @@ public class Main extends Application {
 		borderPane.setLeft(UI.addVBox());
 		borderPane.setBottom(addBotBox());
         
-        scene = new Scene(borderPane, UI.defaultWidth, UI.defaultHeight);
         scene.setFill(Color.WHITE);
         
         scene.widthProperty().addListener(new ChangeListener<Number>() {
@@ -168,7 +165,7 @@ public class Main extends Application {
   	}
   	
   	//Checking the Operating System
-  	private void checkOS(){
+  	public static void checkOS(){
   		
   		UI.mainPath = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		
