@@ -96,7 +96,6 @@ public class UI {
 	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
 	public static double defaultFolderButtonHeight = 60;
 	
-	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
 		System.out.println("Adding toolbar...");
@@ -594,6 +593,7 @@ public class UI {
         Music.play();
 	}
 	
+	//Add Music Buttons
 	public static TilePane addMusicTilePane() throws IOException{
 		System.out.println("Generating music buttons...");
 		
@@ -749,6 +749,7 @@ public class UI {
 		return tile;
   	}
 	
+	//Add Sound Buttons
 	public static TilePane addSoundTilePane() throws IOException{
 		System.out.println("Generating sound buttons...");
 		
@@ -883,6 +884,7 @@ public class UI {
 		return tile2;
 	}
 	
+	//Updates the ProgressBar
 	public static void updatePB(){
 		ChangeListener<Duration> progressChangeListener;
 		progressChangeListener = new ChangeListener<Duration>(){
@@ -895,6 +897,7 @@ public class UI {
 
 	}
 	
+	//Adds ProgressBar
 	public static HBox addBotBox() throws IOException{
   		botBox.setMinHeight(20);
   		botBox.setStyle("-fx-background-color: Grey");
