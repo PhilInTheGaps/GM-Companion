@@ -52,3 +52,7 @@ Weihnachtsferien 2016
 - Beta 2.0 Release!
 - Programm ist jetzt nach etlichen bug fixes standalone-lauffähig
 - Classes aufgeräumt
+
+24.01.2017 (Schule)
+- Evaluation der bisherigen Arbeit / des bisher Geschafftem
+- Planung der zukünftigen Arbeit
