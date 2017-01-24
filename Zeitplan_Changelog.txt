@@ -4,24 +4,24 @@ Weihnachtsferien 2016
 31.12.16
 - Beta Test (Fehler: Musikregulierung)
 
-10. 01.17 (Schule)
+10.01.17 (Schule)
 - Ideensammlung
 - Random Listen
 
-11. 01.17
+11.01.17
 - GitHub Implementierung
 - Einzelne Funktionen in eigene Classes ausgelagert, um Übersicht zu verbessern
 
-16. 01.17
+16.01.17
 - Erste Servertests
 
-17. 01.17 (Schule)
+17.01.17 (Schule)
 - Überarbeitung des Gits
 - Planung des Designs
 - Planung des Servers
 - Planung der zukünftigen Vorgehensweisen
 
-18. 01.17
+18.01.17
 - (Beta) Buttons für Musik werden jetzt automatisch für jeden verfügbaren Ordner erstellt und nicht mehr manuell
 - (Beta) Buttons für Sounds werden ebenfalls automatisch generiert
 - Sounds werden jetzt auch in Zufalls-Listen gespeichert, um mehr Abwechslung zu gewährleisten
