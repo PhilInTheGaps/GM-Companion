@@ -56,3 +56,4 @@ Weihnachtsferien 2016
 24.01.2017 (Schule)
 - Evaluation der bisherigen Arbeit / des bisher Geschafftem
 - Planung der zukünftigen Arbeit
+- Musik und Sounds werden jetzt in TabPane dargestellt -> mehr Platz für Buttons
