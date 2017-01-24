@@ -92,9 +92,10 @@ public class UI {
 	public static double defaultSliderHeight = 50;
 	public static double defaultSliderWidth = 320;
 	
-	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
-	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
-	public static double defaultFolderButtonHeight = 60;
+	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding);
+	public static double defaultFolderButtonWidth = 200;
+	public static double folderButtonWidth;
+	public static double defaultFolderButtonHeight = 100;
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -686,7 +687,7 @@ public class UI {
   		  			Button b = new Button(String.valueOf(i));
   		  			
   		  			b.setText(bName);
-  		  			b.setPrefSize(currentWidth-1, defaultFolderButtonHeight);
+  		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
@@ -724,24 +725,8 @@ public class UI {
 
 	  		}
   		
-  		if (updating == false){
-  			//Adjusting Music Button width
-  	        double buttonsFittingIn = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4)/defaultFolderButtonWidth+0.1;
-  	        double availableSpace = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4);
-  	        buttonRowCount = (int) Math.floor(buttonsFittingIn+0.1);
-  	        System.out.println("Buttons Fitting in: "+buttonsFittingIn);
-  	        System.out.println("Available Space: "+availableSpace);
-  	        Object[] bArrayMusic = tile.getChildren().toArray();
-  	        int bCountMusic = bArrayMusic.length;
-  	    	
-  	    	double currentWidth = defaultFolderButtonWidth;
-  	        //currentWidth = currentWidth;//(buttonsFittingIn/(buttonRowCount))*defaultFolderButtonWidth;
-  	        System.out.println("CurrentWidth: "+currentWidth);
-  	        System.out.println("Space/Width: "+availableSpace/currentWidth);
-  	    	for(int i = 0; i < bCountMusic; i++){
-  	    		((Region) bArrayMusic[i]).setPrefWidth(currentWidth-1);
-  	    	}
-  		}
+  		Main.adjustUI();
+  		
   		updating = false;
   		
   		System.out.println("Added music buttons");
@@ -841,7 +826,7 @@ public class UI {
 		  			Button b = new Button(String.valueOf(i));
 		  			
 		  			b.setText(bName);
-		  			b.setPrefSize(currentWidth-1, defaultFolderButtonHeight);
+		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(onlineMode){
