@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Player</name>
-	<comment></comment>
+	<name>RPGMSP</name>
+	<comment>Ein Informatik-Projekt von Phil Hoffmann und Niklas Lüdtke</comment>
 	<projects>
 	</projects>
 	<buildSpec>

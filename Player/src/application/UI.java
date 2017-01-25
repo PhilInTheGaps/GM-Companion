@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -49,8 +51,8 @@ public class UI {
 	public static ProgressBar pb = new ProgressBar();
 	public static HBox toolBar1 = new HBox();
 	public static HBox toolBar2 = new HBox();
-	public static TilePane tile = new TilePane();
 	public static TilePane tile2 = new TilePane();
+	public static TabPane tabPane = new TabPane();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -68,7 +70,7 @@ public class UI {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 	
-	public static String serverURL = "http://192.168.178.55/"; //http://192.168.178.55/
+	public static String serverURL = ""; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -79,6 +81,8 @@ public class UI {
 	public static double currentWidth;
 	
 	public static Boolean updating = false;
+	public static int catCount = 0;
+	public static String[] catArray = new String[500];
 	
 	//The default space between different elements like buttons
 	public static double defaultSpacing = 10;
@@ -92,10 +96,10 @@ public class UI {
 	public static double defaultSliderHeight = 50;
 	public static double defaultSliderWidth = 320;
 	
-	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding)/2; //(defaultFolderButtonWidth*3 + 3*defaultPadding)
-	public static double defaultFolderButtonWidth = (defaultMusicAndSoundWidth - 3*defaultPadding)/3;
-	public static double defaultFolderButtonHeight = 60;
-	
+	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding);
+	public static double defaultFolderButtonWidth = 200;
+	public static double folderButtonWidth;
+	public static double defaultFolderButtonHeight = 100;
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -372,7 +376,8 @@ public class UI {
   	  			borderPane.setRight(SoundButtons.addSoundTilePane());
   	  			*/
   	  			
-				addMusicTilePane();
+  	  			addTabPane();
+				//addMusicTilePane();
 				addSoundTilePane();
 				
 				
@@ -594,9 +599,165 @@ public class UI {
         Music.play();
 	}
 	
-	public static TilePane addMusicTilePane() throws IOException{
-		System.out.println("Generating music buttons...");
+	//Add TabPane
+	public static void addTabPane(){
+		tabPane.setTabMinWidth(200);
+		tabPane.setTabMinHeight(45);
+		tabPane.getTabs().clear();
+		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
+		TabPane tabPaneCategories = new TabPane();
+		tabPaneCategories.setTabMinWidth(200);
+		tabPaneCategories.setTabMinHeight(40);
+		
+		Tab general = new Tab();
+		general.setClosable(false);
+		general.setText("All");
+
+		catCount = 0;
+		try {
+			addMusicCategories();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		//tabPaneCategories.getTabs().add(general);
+		for(int i = 0; i<catCount;i++){
+			Tab t = new Tab();
+			t.setClosable(false);
+			t.setText(catArray[i]);
+			
+			try {
+				t.setContent(addMusicTilePane(catArray[i]));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			tabPaneCategories.getTabs().add(t);
+		}
+		
+		Tab music = new Tab();
+		music.setClosable(false);
+		music.setText("Music");
+		music.setContent(tabPaneCategories);
+		tabPane.getTabs().add(music);
+		
+		Tab sound = new Tab();
+		sound.setClosable(false);
+		sound.setText("Sounds");
+		try {
+			sound.setContent(UI.addSoundTilePane());
+		} catch (IOException e1) {
+			System.out.println("ERROR: Could not create Sound Buttons");
+			e1.printStackTrace();
+		}
+		tabPane.getTabs().add(sound);
+		
+		Tab gm = new Tab();
+		gm.setClosable(false);
+		gm.setText("GM Help");
+		gm.setContent(null);
+		tabPane.getTabs().add(gm);
+	}
+	
+	//Add Music Category Tabs
+	public static void addMusicCategories() throws IOException{
+		System.out.println("Generating music categories...");
+  		
+  		String[] catArrayTemp = new String[500];
+  		List<String> cats = new ArrayList<String>();
+  		
+  		File file = new File("Music/");
+  		
+  		if(onlineMode){
+  			//Get all foldernames from server
+  			Document doc = Jsoup.connect(Music.serverMusicURL).get();
+  	        //System.out.println(doc.toString());
+  	        String str = doc.toString();
+  	        String findStr = "<li><a href=";
+  	        int lastIndex1 = 0;
+  	        int lastIndex2 = 10;
+  	        ArrayList<String> folderNames = new ArrayList<String>();
+  	        String test = new String();
+  	        int count = 0;
+  	        
+  	        System.out.println("Found the following music category folders:");
+  	        while(lastIndex1 != -1){
+
+  	            lastIndex1 = str.indexOf(findStr,lastIndex1);
+  	            lastIndex2 = str.indexOf("/", lastIndex1);
+  	            
+  	            
+  	            if(lastIndex1 != -1){
+  	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2; i++){
+  	            		test += str.charAt(i);
+  	            	}
+  	            	System.out.println(test);
+  	            	folderNames.add(test);
+  	            	test = "";
+  	            	count += 1;
+  	                lastIndex1 += findStr.length();
+  	            }
+  	        }
+  	        for(int i = 0; i< folderNames.size(); i++){
+  	        	String temp = folderNames.get(i).toString();
+  	        	catArray[i] = temp;
+  	        }
+  	        
+  	        for(int i = 1; i < count; i++){
+  	        	//System.out.println(i);
+  	        	//System.out.println(folderArray[i]);
+  	        	catArrayTemp[i-1] = catArray[i].toString();
+  	        }
+  	        catArray = catArrayTemp;
+  	        
+  		}
+  		else{
+  			String[] names = file.list();
+  	  		
+  	  		System.out.println("Found the following music category folders:");
+  	  		
+  	  		if(names != null){
+	  	  		for(String name : names)
+	  	  		{
+	  	  		    if (new File("Music/" + name).isDirectory())
+	  	  		    {
+	  	  		        System.out.println(name);
+	  	  		        cats.add(name);
+	  	  		    }
+	  	  		}
+	  	  		
+		        for(int i = 0; i < cats.size(); i++){
+		        	//System.out.println(i);
+		        	//System.out.println(folders.get(i));
+		        	catArrayTemp[i] = cats.get(i).toString();
+		        }
+  	  		}
+  	  		
+	        catArray = catArrayTemp; 
+  		}
+  		
+  		for(int i  = 0; i < catArray.length; i++){
+  				if(catArray[i] != null){
+  					catCount++;
+  					System.out.println("Category Count: "+catCount);
+  		  			
+  				}
+
+	  		}
+  		
+  		Main.adjustUI();
+  		
+  		updating = false;
+  		
+  		System.out.println("Added music category buttons");
+  		System.out.println("");
+  	}
+	
+	//Add Music Buttons
+	public static TilePane addMusicTilePane(String directory) throws IOException{
+		System.out.println("Generating music buttons for directory: "+directory);
+		
+		TilePane tile = new TilePane();
   		tile.setPadding(new Insets(defaultPadding, defaultPadding/2, defaultPadding, defaultPadding));
   		tile.setVgap(defaultPadding/4);
   		tile.setHgap(defaultPadding/4);
@@ -611,12 +772,14 @@ public class UI {
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
   		
-  		File file = new File("Music/");
+  		File file = new File("Music/"+directory+"/");
+  		System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
-  			Document doc = Jsoup.connect(Music.serverMusicURL).get();
+  			Document doc = Jsoup.connect(Music.serverMusicURL+directory+"/").get();
   	        //System.out.println(doc.toString());
+  			System.out.println(Music.serverMusicURL+directory+"/");
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
@@ -662,20 +825,22 @@ public class UI {
   	  		
   	  		System.out.println("Found the following music folders:");
   	  		
-  	  		for(String name : names)
-  	  		{
-  	  		    if (new File("Music/" + name).isDirectory())
-  	  		    {
-  	  		        System.out.println(name);
-  	  		        folders.add(name);
-  	  		    }
+  	  		if(names !=null){
+	  	  		for(String name : names){
+	  	  			System.out.println("Music/"+directory+"/" + name);
+					if (new File("Music/"+directory+"/" + name).isDirectory()){
+						System.out.println(name);
+						folders.add(name);
+					}
+	  	  		}
+	  	  		
+		        for(int i = 0; i < folders.size(); i++){
+		        	//System.out.println(i);
+		        	//System.out.println(folders.get(i));
+		        	folderArrayTemp[i] = folders.get(i).toString();
+		        }
   	  		}
   	  		
-	        for(int i = 0; i < folders.size(); i++){
-	        	//System.out.println(i);
-	        	//System.out.println(folders.get(i));
-	        	folderArrayTemp[i] = folders.get(i).toString();
-	        }
 	        
 	        folderArray = folderArrayTemp; 
   		}
@@ -686,22 +851,23 @@ public class UI {
   		  			Button b = new Button(String.valueOf(i));
   		  			
   		  			b.setText(bName);
-  		  			b.setPrefSize(currentWidth-1, defaultFolderButtonHeight);
+  		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
-  		  					Music.defaultMusicPath = bName;
+  		  					Music.defaultMusicPath = directory+"/"+bName;
+  		  					System.out.println();
   		  				}
   		  				else{
   		  					if(linux == true){
   		  						Music.defaultMusicPath = defaultLinuxFolder + "Music/"+bName;
   			  	  			}
   			  	  			else{
-  			  	  				Music.defaultMusicPath = "Music/"+bName; 
+  			  	  				Music.defaultMusicPath = "Music/"+directory+"/"+bName; 
   			  	  			}
   		  				}
   		  				
-  		  				musicFolder = bName;
+  		  				musicFolder = directory+"/"+bName;
   		  	  			musicFolderLabel.setText("Folder: " + musicFolder);
   		  	  			Music.musicFolderSelected = true;
   		  	  			
@@ -724,24 +890,8 @@ public class UI {
 
 	  		}
   		
-  		if (updating == false){
-  			//Adjusting Music Button width
-  	        double buttonsFittingIn = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4)/defaultFolderButtonWidth+0.1;
-  	        double availableSpace = (defaultMusicAndSoundWidth-2*defaultPadding-(buttonRowCount-1)*defaultPadding/4);
-  	        buttonRowCount = (int) Math.floor(buttonsFittingIn+0.1);
-  	        System.out.println("Buttons Fitting in: "+buttonsFittingIn);
-  	        System.out.println("Available Space: "+availableSpace);
-  	        Object[] bArrayMusic = tile.getChildren().toArray();
-  	        int bCountMusic = bArrayMusic.length;
-  	    	
-  	    	double currentWidth = defaultFolderButtonWidth;
-  	        //currentWidth = currentWidth;//(buttonsFittingIn/(buttonRowCount))*defaultFolderButtonWidth;
-  	        System.out.println("CurrentWidth: "+currentWidth);
-  	        System.out.println("Space/Width: "+availableSpace/currentWidth);
-  	    	for(int i = 0; i < bCountMusic; i++){
-  	    		((Region) bArrayMusic[i]).setPrefWidth(currentWidth-1);
-  	    	}
-  		}
+  		Main.adjustUI();
+  		
   		updating = false;
   		
   		System.out.println("Added music buttons");
@@ -749,6 +899,7 @@ public class UI {
 		return tile;
   	}
 	
+	//Add Sound Buttons
 	public static TilePane addSoundTilePane() throws IOException{
 		System.out.println("Generating sound buttons...");
 		
@@ -816,22 +967,24 @@ public class UI {
   	  		
   	  		System.out.println("Found the following sound folders:");
   	  		
-  	  		for(String name : names)
-  	  		{
-  	  		    if (new File("Sounds/" + name).isDirectory())
-  	  		    {
-  	  		        System.out.println(name);
-  	  		        folders.add(name);
-  	  		    }
+  	  		if(names != null){
+	  	  		for(String name : names)
+	  	  		{
+	  	  		    if (new File("Sounds/" + name).isDirectory())
+	  	  		    {
+	  	  		        System.out.println(name);
+	  	  		        folders.add(name);
+	  	  		    }
+	  	  		}
+	  	  		String[] folderArrayTemp = new String[500];
+		        for(int i = 0; i < folders.size(); i++){
+		        	//System.out.println(i);
+		        	//System.out.println(folders.get(i));
+		        	folderArrayTemp[i] = folders.get(i).toString();
+		        }
+		        folderArray = folderArrayTemp;
   	  		}
-  	  		String[] folderArrayTemp = new String[500];
-	        for(int i = 0; i < folders.size(); i++){
-	        	//System.out.println(i);
-	        	//System.out.println(folders.get(i));
-	        	folderArrayTemp[i] = folders.get(i).toString();
-	        }
 	        
-	        folderArray = folderArrayTemp;
   		}
   		
   		for(int i  = 0; i < folderArray.length; i++){
@@ -840,7 +993,7 @@ public class UI {
 		  			Button b = new Button(String.valueOf(i));
 		  			
 		  			b.setText(bName);
-		  			b.setPrefSize(currentWidth-1, defaultFolderButtonHeight);
+		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(onlineMode){
@@ -883,6 +1036,7 @@ public class UI {
 		return tile2;
 	}
 	
+	//Updates the ProgressBar
 	public static void updatePB(){
 		ChangeListener<Duration> progressChangeListener;
 		progressChangeListener = new ChangeListener<Duration>(){
@@ -895,6 +1049,7 @@ public class UI {
 
 	}
 	
+	//Adds ProgressBar
 	public static HBox addBotBox() throws IOException{
   		botBox.setMinHeight(20);
   		botBox.setStyle("-fx-background-color: Grey");
