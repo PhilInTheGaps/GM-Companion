@@ -145,12 +145,21 @@ public class Music {
 		UI.coverImage.setImage((Image) mediaPlayer.getMedia().getMetadata().get("image"));
 	}
 	 
-	public static void downloadFile (String fileName, String fileUrl) throws MalformedURLException, IOException {  
-		System.out.println("Starting Downloading "+fileName);
-		FileUtils.copyURLToFile(new URL(fileUrl), new File(fileName));
-		System.out.println("Finished Downloading");
-		slowID++;
-		setDownloadFile();
+	public static void downloadFile (String fileName, String fileUrl) throws MalformedURLException, IOException { 
+		if(new File (fileName).isFile()){
+			System.out.println("Is already downloaded, switching to next one");
+			System.out.println("");
+			slowID++;
+			setDownloadFile();
+		}
+		else{
+			System.out.println("Starting Downloading to "+fileName);
+			FileUtils.copyURLToFile(new URL(fileUrl), new File(fileName));
+			System.out.println("Finished Downloading");
+			System.out.println("");
+			slowID++;
+			setDownloadFile();
+		}
 	}
 	
 	public static void setDownloadFile(){
