@@ -17,6 +17,11 @@ import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import java.net.MalformedURLException;  
+import java.net.URL;  
+import org.apache.commons.io.FileUtils;
+
+
 public class Music {
 	public static MediaPlayer mediaPlayer;
 	//public static Duration duration;
@@ -129,6 +134,11 @@ public class Music {
 		UI.coverImage.setImage((Image) mediaPlayer.getMedia().getMetadata().get("image"));
 	}
 	
+	// Using common IO  
+	public static void downloadFile (String fileName, String fileUrl) throws MalformedURLException, IOException {  
+		FileUtils.copyURLToFile(new URL(fileUrl), new File(fileName));
+	}
+	
 	public static void get() throws IOException{
 		//This finds every music file in the folder and writes them into a list
 		
@@ -139,7 +149,7 @@ public class Music {
     	for (int i = 0; i<500; i++){
     		musicPathList[i] = "";
     	}
-		
+    	
   		if(UI.onlineMode){
   			//Get all music files from server
   			Document doc = Jsoup.connect(serverMusicURL + defaultMusicPath).get();
