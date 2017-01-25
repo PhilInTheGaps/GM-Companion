@@ -2,8 +2,11 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -386,8 +389,40 @@ public class UI {
 			}
   		});
   		
+  		
+  		//Set Download File
+  		Button download = new Button();
+  		download.setPrefHeight(defaultButtonHeight);
+  		//setServerURL.setPrefWidth(75);
+  		download.setText("download");
+  		download.setOnAction((ActionEvent e) -> {
+			Runnable r = new Runnable() {
+		         public void run() {
+		        	// Using Apache common IO  
+		   	        try {
+		   				Music.downloadFile("C:/Users/Phil/Test" + "/file.mp3", 
+		   						"http://rpgmsp.ddns.net/music/Fantasy/Action/Warcraft.mp3");
+		   			} catch (MalformedURLException e2) {
+		   				// TODO Auto-generated catch block
+		   				e2.printStackTrace();
+		   			} catch (IOException e2) {
+		   				// TODO Auto-generated catch block
+		   				e2.printStackTrace();
+		   			}
+		         }
+		     };
+	
+		    ExecutorService executor = Executors.newCachedThreadPool();
+		    executor.submit(r);
+  		    //this line will execute immediately, not waiting for your task to complete  
+  	       
+  	        System.out.println("Downloaded file from github using apache common IO");  
+  	        System.out.println("---------------------------");  
+  	        System.out.println("Downloading file from github using NIO");
+  		});
+  		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders, download);
   		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
   		
   		//Set Button Width
@@ -397,13 +432,14 @@ public class UI {
   		Object[] bArray1 = toolBar1.getChildren().toArray();
         Object[] bArray2 = toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
+        int bCount2 = bArray2.length;
         defaultButtonWidth = defaultWidth/bCount;
         
   		for(int i = 0; i < bCount; i++){
         	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
-        	if (bArray2[i] != null){
-        		((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
-        	}
+        }
+  		for(int i = 0; i < bCount2; i++){
+        	((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
         }
   		
   		toolBox.getChildren().add(toolBar1);

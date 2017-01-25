@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -48,6 +49,8 @@ public class Main extends Application {
         primaryStage.setMaximized(true);
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
+        
+        
 	}
 	
 	//Defining Scene
@@ -135,6 +138,7 @@ public class Main extends Application {
         Object[] bArray1 = UI.toolBar1.getChildren().toArray();
         Object[] bArray2 = UI.toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
+        int bCount2 = bArray2.length;
         UI.defaultButtonWidth = UI.defaultWidth/bCount;
         /*
         Object[] bArrayMusic = UI.tile.getChildren().toArray();
@@ -174,9 +178,9 @@ public class Main extends Application {
     	//Adjusting ToolBar button width
         for(int i = 0; i < bCount; i++){
         	((Region) bArray1[i]).setPrefWidth(UI.defaultButtonWidth);
-        	if (bArray2[i] != null){
-        		((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
-        	}
+        }
+        for(int i = 0; i < bCount2; i++){
+        	((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
         }
         
         //Adjusting ProgressBar Width
