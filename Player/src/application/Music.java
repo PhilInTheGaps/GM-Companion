@@ -143,7 +143,7 @@ public class Music {
   		if(UI.onlineMode){
   			//Get all music files from server
   			Document doc = Jsoup.connect(serverMusicURL + defaultMusicPath).get();
-  	        //System.out.println(doc.toString());
+  	        System.out.println(doc.toString());
   	        String str = doc.toString();
   	        String findStr = "href=";
   	        int lastIndex1 = 0;
