@@ -12,10 +12,10 @@ Also, the Linux version currently does not support locally hosted files, it will
 ###Setup
 The RPGMSPlayer is easy to set up:
 
-1. Download the .jar from the git
+Download the .jar from the git
 
 ####Local files
-2. In the same folder you downloaded the .jar into, create new folders in an order that looks like this:
+In the same folder you downloaded the .jar into, create new folders in an order that looks like this:
 
  * Music
    * Scenario1
