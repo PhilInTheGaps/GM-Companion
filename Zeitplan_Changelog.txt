@@ -1,32 +1,32 @@
 Weihnachtsferien 2016
 - Programmierung des Musikplayer bis Beta 1.0
 
-31.12.16
+31.12.2016
 - Beta Test (Fehler: Musikregulierung)
 
-10.01.17 (Schule)
+10.01.2017 (Schule)
 - Ideensammlung
 - Random Listen
 
-11.01.17
+11.01.2017
 - GitHub Implementierung
 - Einzelne Funktionen in eigene Classes ausgelagert, um Übersicht zu verbessern
 
-16.01.17
+16.01.2017
 - Erste Servertests
 
-17.01.17 (Schule)
+17.01.2017 (Schule)
 - Überarbeitung des Gits
 - Planung des Designs
 - Planung des Servers
 - Planung der zukünftigen Vorgehensweisen
 
-18.01.17
+18.01.2017
 - (Beta) Buttons für Musik werden jetzt automatisch für jeden verfügbaren Ordner erstellt und nicht mehr manuell
 - (Beta) Buttons für Sounds werden ebenfalls automatisch generiert
 - Sounds werden jetzt auch in Zufalls-Listen gespeichert, um mehr Abwechslung zu gewährleisten
 
-19.01.17
+19.01.2017
 - Auto-Buttons getestet und released
 - Code aufgeräumt und Comments hinzugefügt, zur besseren Übersicht
 - Console-Prints aufgeräumt und einige neue hinzugefügt, für einfacheres debugging
@@ -35,7 +35,7 @@ Weihnachtsferien 2016
 - Server Tests (POSITIV!)
 - Angefangen die Server-Funktion zu implementieren
 
-20.01.17
+20.01.2017
 - Musik und Sounds können jetzt von einem Server abgespielt werden (Beta)
 - VolumeSlider-Bug gefixed, die Lautstärke kann jetzt auch durch Klicken und nicht nur durch Ziehen verändert werden
 - Angefangen, das Design zu überarbeiten
@@ -57,3 +57,7 @@ Weihnachtsferien 2016
 - Evaluation der bisherigen Arbeit / des bisher Geschafftem
 - Planung der zukünftigen Arbeit
 - Musik und Sounds werden jetzt in TabPane dargestellt -> mehr Platz für Buttons
+
+25.01.2017
+- Musik kann jetzt in einzelne Kategorien eingeteilt werden (über Ordnerstruktur)
+- Programm kann jetzt auch gestartet werden, wenn keine "Music" und "Sounds" Ordner vorhanden sind
