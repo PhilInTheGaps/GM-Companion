@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -22,7 +23,6 @@ public class Main extends Application {
 	//Defining Variables
 	Scene scene;
 	BorderPane borderPane;
-	TabPane tabPane;
 	double height;
 	double width;
 		
@@ -54,40 +54,6 @@ public class Main extends Application {
 	public Scene setScene(double width, double height){
 		
 		borderPane = new BorderPane();
-		tabPane = new TabPane();
-		tabPane.setTabMinWidth(150);
-		UI.defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
-		
-		TabPane tabPaneCategories = new TabPane();
-		tabPaneCategories.setTabMinWidth(150);
-		
-		Tab general = new Tab();
-		general.setClosable(false);
-		general.setText("All");
-		try {
-			general.setContent(UI.addMusicTilePane());
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-		tabPaneCategories.getTabs().add(general);
-		
-		Tab music = new Tab();
-		music.setClosable(false);
-		music.setText("Music");
-		music.setContent(tabPaneCategories);
-		tabPane.getTabs().add(music);
-		
-		Tab sound = new Tab();
-		sound.setClosable(false);
-		sound.setText("Sounds");
-		try {
-			sound.setContent(UI.addSoundTilePane());
-		} catch (IOException e1) {
-			System.out.println("ERROR: Could not create Sound Buttons");
-			e1.printStackTrace();
-		}
-		tabPane.getTabs().add(sound);
 		
 		//Check OS
 		checkOS();
@@ -96,15 +62,15 @@ public class Main extends Application {
         borderPane = new BorderPane();
         borderPane.setTop(UI.addToolBar());
         borderPane.setStyle("-fx-background-color: White");
-        borderPane.setCenter(tabPane);	
+        borderPane.setCenter(UI.tabPane);	
 		borderPane.setLeft(UI.addVBox());
 		try {
 			borderPane.setBottom(UI.addBotBox());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		UI.addTabPane();
 		
-        
         scene = new Scene(borderPane, 1280, 720);
         scene.setFill(Color.WHITE);
         UI.defaultWidth = (double) scene.getWidth();
@@ -113,7 +79,7 @@ public class Main extends Application {
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override 
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-            	System.out.println("Width: " + newSceneWidth);
+            	//System.out.println("Width: " + newSceneWidth);
             	UI.defaultWidth = (double) newSceneWidth;
             	adjustUI();
             }
@@ -123,7 +89,7 @@ public class Main extends Application {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
                 //System.out.println("Height: " + newSceneHeight);
             	UI.defaultHeight = (double) newSceneHeight;
-            	UI.tile.setPrefHeight(UI.defaultHeight);
+            	//UI.tile.setPrefHeight(UI.defaultHeight);
                 
             }
         });
@@ -155,21 +121,25 @@ public class Main extends Application {
 	//Adjusting UI
 	public static void adjustUI(){
         
+		/*
     	UI.defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
-    	System.out.println("Tabpane Width: " + UI.defaultMusicAndSoundWidth);
+    	//System.out.println("Tabpane Width: " + UI.defaultMusicAndSoundWidth);
+    	
     	
         UI.tile.setPrefWidth(UI.defaultMusicAndSoundWidth);
         UI.tile.setMinWidth(UI.defaultMusicAndSoundWidth);
         UI.tile2.setPrefWidth(UI.defaultMusicAndSoundWidth);
         UI.tile2.setMinWidth(UI.defaultMusicAndSoundWidth);
+        */
         UI.toolBar1.setPrefWidth(UI.defaultWidth);
         Object[] bArray1 = UI.toolBar1.getChildren().toArray();
         Object[] bArray2 = UI.toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
         UI.defaultButtonWidth = UI.defaultWidth/bCount;
-        
+        /*
         Object[] bArrayMusic = UI.tile.getChildren().toArray();
         int bCountMusic = bArrayMusic.length;
+        
         System.out.println("Button Count: " + bCountMusic);
         System.out.println("DefaultFolderButtonWidth: " + UI.defaultFolderButtonWidth);
         System.out.println("FolderButtonWidth: " + UI.folderButtonWidth);
@@ -181,13 +151,16 @@ public class Main extends Application {
         double buttonsFittingIn = (UI.defaultMusicAndSoundWidth-(UI.buttonRowCount)*UI.defaultPadding)/UI.defaultFolderButtonWidth;
         double availableSpace = (UI.defaultMusicAndSoundWidth-2*UI.defaultPadding-(UI.buttonRowCount)*UI.defaultPadding/4);
         UI.buttonRowCount = (int) Math.floor(buttonsFittingIn);
+        /*
         System.out.println("Buttons Fitting in: "+buttonsFittingIn);
         System.out.println("ButtonRowCount: "+UI.buttonRowCount);
         System.out.println("Available Space: "+availableSpace);
     	
         UI.folderButtonWidth = (buttonsFittingIn/(UI.buttonRowCount))*UI.defaultFolderButtonWidth-1;
+        /*
         System.out.println("CurrentWidth: "+UI.folderButtonWidth);
         System.out.println("Space/Width: "+availableSpace/UI.folderButtonWidth);
+    	
     	for(int i = 0; i < bCountMusic; i++){
     		((Region) bArrayMusic[i]).setPrefWidth(UI.folderButtonWidth);
     	}
@@ -195,8 +168,9 @@ public class Main extends Application {
     		((Region) bArraySounds[i]).setPrefWidth(UI.folderButtonWidth);
     	}
     	
-    	System.out.println("");
-    	
+    	//System.out.println("");
+    	*/
+		
     	//Adjusting ToolBar button width
         for(int i = 0; i < bCount; i++){
         	((Region) bArray1[i]).setPrefWidth(UI.defaultButtonWidth);
@@ -206,6 +180,7 @@ public class Main extends Application {
         }
         
         //Adjusting ProgressBar Width
+        
         UI.pb.setPrefWidth(UI.defaultWidth);
 	}
 	
