@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
@@ -64,6 +65,7 @@ public class UI {
 	public static Boolean devV = false;
 	public static Boolean onlineMode = false;
 	public static Boolean localOnline = onlineMode;
+	public static Boolean slowServer = true;
 	
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -73,7 +75,7 @@ public class UI {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 	
-	public static String serverURL = ""; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String serverURL = "http://rpgmsp.ddns.net/"; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -410,20 +412,38 @@ public class UI {
 		   				e2.printStackTrace();
 		   			}
 		         }
-		     };
-	
+		    };
+		    
 		    ExecutorService executor = Executors.newCachedThreadPool();
 		    executor.submit(r);
-  		    //this line will execute immediately, not waiting for your task to complete  
-  	       
-  	        System.out.println("Downloaded file from github using apache common IO");  
-  	        System.out.println("---------------------------");  
-  	        System.out.println("Downloading file from github using NIO");
+  		});
+  		
+  		//Set Slow Server CheckBox
+  		CheckBox slow = new CheckBox();
+  		slow.setPrefHeight(defaultButtonHeight);
+  		slow.setText("Slow Server Mode");
+  		slow.setOnAction((ActionEvent e) -> {
+			if(slow.isSelected()){
+				slowServer = true;
+				try {
+					Music.slowFolder = "Fantasy/Action/";
+					Music.slowMode();
+				} catch (IOException e1) {
+					System.out.println("Slow Server Mode could not be activated");
+					e1.printStackTrace();
+					slowServer = false;
+					slow.setSelected(false);
+				}
+			}
+			else{
+				slowServer = false;
+			}
+  			
   		});
   		
   		//Add everything to ToolBar
   		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders, download);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL, slow);
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
