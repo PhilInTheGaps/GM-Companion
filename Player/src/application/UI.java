@@ -66,6 +66,7 @@ public class UI {
 	public static Boolean onlineMode = false;
 	public static Boolean localOnline = onlineMode;
 	public static Boolean slowServer = true;
+	public static Boolean stopDownload = false;
 	
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -418,32 +419,26 @@ public class UI {
 		    executor.submit(r);
   		});
   		
-  		//Set Slow Server CheckBox
+  		//Set Slow Server Mode CheckBox
   		CheckBox slow = new CheckBox();
   		slow.setPrefHeight(defaultButtonHeight);
   		slow.setText("Slow Server Mode");
   		slow.setOnAction((ActionEvent e) -> {
 			if(slow.isSelected()){
 				slowServer = true;
-				try {
-					Music.slowFolder = "Fantasy/Action/";
-					Music.slowMode();
-				} catch (IOException e1) {
-					System.out.println("Slow Server Mode could not be activated");
-					e1.printStackTrace();
-					slowServer = false;
-					slow.setSelected(false);
-				}
+				//Music.slowFolder = "Fantasy/Action/";
+				Music.setDownloadFile();
 			}
 			else{
 				slowServer = false;
+				stopDownload = true;
 			}
   			
   		});
   		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders, download);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL, slow);
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders); //, download
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
@@ -908,11 +903,15 @@ public class UI {
   		  			
   		  			b.setText(bName);
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			//b.setMaxSize(defaultFolderButtonWidth+100, defaultFolderButtonHeight);
+  		  			b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
   		  					Music.defaultMusicPath = directory+"/"+bName;
   		  					System.out.println();
+  		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
   		  					if(linux == true){

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,6 +44,8 @@ public class Music {
 	static String slowFolder;
 	static ArrayList<String> slowFileNames = new ArrayList<String>();
 	public static ExecutorService executor = Executors.newCachedThreadPool();
+	static int slowCatID = 0;
+	static int slowFolderID = 0;
 	
 	public static String defaultMusicPath = ("./Music/");
 	public static String serverMusicURL = UI.serverURL + "music/";
@@ -150,7 +153,11 @@ public class Music {
 			System.out.println("Is already downloaded, switching to next one");
 			System.out.println("");
 			slowID++;
-			setDownloadFile();
+			slowCatID++;
+			
+			if(UI.stopDownload == false){
+				setDownloadFile();
+			}
 		}
 		else{
 			System.out.println("Starting Downloading to "+fileName);
@@ -158,72 +165,123 @@ public class Music {
 			System.out.println("Finished Downloading");
 			System.out.println("");
 			slowID++;
-			setDownloadFile();
+			if(UI.stopDownload == false){
+				setDownloadFile();
+			}
 		}
 	}
 	
 	public static void setDownloadFile(){
         Runnable r = new Runnable() {
 	         public void run() {
+	     		System.out.println("Starting to download files because Slow Server Mode is activated");
+	     		//Get folders in category from Server
+	     		String[] folderArray = new String[500];
+	      		String[] folderArrayTemp = new String[500];
+
+      			Document doc = null;
+				try {
+					doc = Jsoup.connect(Music.serverMusicURL+UI.catArray[slowCatID]+"/").get();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+      	        //System.out.println(doc.toString());
+      			System.out.println(Music.serverMusicURL+UI.catArray[slowCatID]+"/");
+      	        String str = doc.toString();
+      	        String findStr = "<li><a href=";
+      	        int lastIndex1 = 0;
+      	        int lastIndex2 = 10;
+      	        ArrayList<String> folderNames = new ArrayList<String>();
+      	        String test = new String();
+      	        int count = 0;
+      	        
+      	        //System.out.println("Found the following music folders:");
+      	        while(lastIndex1 != -1){
+
+      	            lastIndex1 = str.indexOf(findStr,lastIndex1);
+      	            lastIndex2 = str.indexOf("/", lastIndex1);
+      	            
+      	            
+      	            if(lastIndex1 != -1){
+      	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2; i++){
+      	            		test += str.charAt(i);
+      	            	}
+      	            	//System.out.println(test);
+      	            	folderNames.add(test);
+      	            	test = "";
+      	            	count += 1;
+      	                lastIndex1 += findStr.length();
+      	            }
+      	        }
+      	        for(int i = 0; i< folderNames.size(); i++){
+      	        	String temp = folderNames.get(i).toString();
+      	        	folderArray[i] = temp;
+      	        }
+      	        
+      	        for(int i = 1; i < count; i++){
+    				folderArrayTemp[i-1] = folderArray[i].toString();
+      	        }
+      	        folderArray = folderArrayTemp;
+	     		
+	    		//Get all music files from server
+	    		doc = null;
+				try {
+					doc = Jsoup.connect(serverMusicURL + UI.catArray[slowCatID]+"/"+ folderArray[slowFolderID]).get();
+				} catch (IOException e) {
+					System.out.println("ERROR: Connecting to URL failed");
+					e.printStackTrace();
+				}
+	            //System.out.println(doc.toString());
+	            
+	            String[] slowMPathList = new String[500];
+	            str = doc.toString();
+	            findStr = "href=";
+	            lastIndex1 = 0;
+	            lastIndex2 = 10;
+	            String name = new String();
+	            count = 0;
+	            
+	            while(lastIndex1 != -1){
+
+	                lastIndex1 = str.indexOf(findStr,lastIndex1);
+	                lastIndex2 = str.indexOf(".mp3", lastIndex1);
+	                
+	                
+	                if(lastIndex1 != -1){
+	                	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2+4; i++){
+	                		name += str.charAt(i);
+	                	}
+	                	slowFileNames.add(name);
+	                	name = "";
+	                    lastIndex1 += findStr.length();
+	                }
+	            }
+	            int f = 0;
+	            for(int i = 1; i< slowFileNames.size(); i++){
+	            	String temp = slowFileNames.get(i).toString();
+	            	//System.out.println(temp);
+	            	slowMPathList[f] = serverMusicURL + slowFolder + temp;
+	            	//System.out.println(slowMPathList[f]);
+	            	f++;
+	            	count ++;
+	            }
+	            maxTrackCount = count;
+	        	 
 	   	        try {
-	   	        	System.out.println(serverMusicURL+slowFolder+slowFileNames.get(slowID));
+	   	        	System.out.println(serverMusicURL+UI.catArray[slowCatID]+"/"+folderArray[slowFolderID]+"/"+slowFileNames.get(slowID));
 	   				Music.downloadFile(
-	   				"C:/Users/Phil/Test" + "/"+slowFileNames.get(slowID).toString(), serverMusicURL+slowFolder+slowFileNames.get(slowID));
-	   			} catch (MalformedURLException e2) {
+	   				"TestFolder/"+UI.catArray[slowCatID]+"/"+folderArray[slowFolderID]+"/"+slowFileNames.get(slowID).toString(), 
+	   				serverMusicURL+UI.catArray[slowCatID]+"/"+folderArray[slowFolderID]+"/"+slowFileNames.get(slowID));
 	   				
+	   			} catch (MalformedURLException e2) {
 	   				e2.printStackTrace();
 	   			} catch (IOException e2) {
-	   				
 	   				e2.printStackTrace();
 	   			}
 	         }
 	    };
-	    
 	    executor.submit(r);
-	}
-	
-	public static void slowMode() throws IOException{
-		System.out.println("Starting to download files because Slow Server Mode is activated");
-		//Get all music files from server
-		Document doc = Jsoup.connect(serverMusicURL + slowFolder).get();
-        System.out.println(doc.toString());
-        
-        String[] slowMPathList = new String[500];
-        String str = doc.toString();
-        String findStr = "href=";
-        int lastIndex1 = 0;
-        int lastIndex2 = 10;
-        String name = new String();
-        int count = 0;
-        
-        while(lastIndex1 != -1){
-
-            lastIndex1 = str.indexOf(findStr,lastIndex1);
-            lastIndex2 = str.indexOf(".mp3", lastIndex1);
-            
-            
-            if(lastIndex1 != -1){
-            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2+4; i++){
-            		name += str.charAt(i);
-            	}
-            	slowFileNames.add(name);
-            	name = "";
-                lastIndex1 += findStr.length();
-            }
-        }
-        int f = 0;
-        for(int i = 1; i< slowFileNames.size(); i++){
-        	String temp = slowFileNames.get(i).toString();
-        	System.out.println(temp);
-        	slowMPathList[f] = serverMusicURL + slowFolder + temp;
-        	//System.out.println(slowMPathList[f]);
-        	f++;
-        	count ++;
-        }
-        maxTrackCount = count;
-        
-        setDownloadFile();
-        
 	}
 	
 	public static void get() throws IOException{
@@ -241,7 +299,8 @@ public class Music {
   			if(UI.slowServer){
   				System.out.println("Slow Server Mode Is Active!");
   				//musicPath = "./TestFolder/";
-  				try(Stream<Path> paths = Files.walk(Paths.get("TestFolder/"))) {
+  				System.out.println("TestFolder/"+slowFolder);
+  				try(Stream<Path> paths = Files.walk(Paths.get("TestFolder/"+slowFolder))) {
   	  			    paths.forEach(filePath -> {
   	  			        if (Files.isRegularFile(filePath)) {
   	  			        	System.out.println("Path: "+filePath);
@@ -250,11 +309,15 @@ public class Music {
   	  			            currentTrackID ++;
   	  			        }
   	  			    });
-  	  			    defaultMusicPath = "TestFolder/";
+  	  			    defaultMusicPath = "TestFolder/"+slowFolder;
   	  			} catch (IOException e) {
-  	  				e.printStackTrace();
+  	  				System.out.println("Directory not existing, creating it...");
+  	  				new File("TestFolder/"+slowFolder).mkdirs();
+  	  				//e.printStackTrace();
   	  			}
+  				
   	  			maxTrackCount = currentTrackID;
+  	  			System.out.println(maxTrackCount);
   			}
   			else{
   				//Get all music files from server
@@ -309,16 +372,7 @@ public class Music {
   			maxTrackCount = currentTrackID;
   		}
 		
-		// This checks whether RandomTrack is enabled and if true, generates a random TrackID
-		// at which the playlist starts.
-		// It was implemented before the randomly generated playlists and might be completely unnecessary.	
-		
-		if (UI.randomTrack == true){
-			currentTrackID = randomTrackID.nextInt(maxTrackCount);
-		}
-		else{
-			currentTrackID = 0;
-		}
+		currentTrackID = 0;
 		
 		//Prints out the name of every music file in the folder
 		System.out.println("Found the following files:");
