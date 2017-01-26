@@ -1,17 +1,11 @@
 package application;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Side;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -186,6 +180,12 @@ public class Main extends Application {
         //Adjusting ProgressBar Width
         
         UI.pb.setPrefWidth(UI.defaultWidth);
+	}
+	
+	@Override
+	public void stop(){
+	    System.out.println("Closing...");
+	    UI.stopDownload = true;
 	}
 	
   	//Checking the Operating System
