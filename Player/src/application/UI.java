@@ -2,8 +2,11 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
@@ -61,6 +65,8 @@ public class UI {
 	public static Boolean devV = false;
 	public static Boolean onlineMode = false;
 	public static Boolean localOnline = onlineMode;
+	public static Boolean slowServer = false;
+	public static Boolean stopDownload = false;
 	
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -70,7 +76,7 @@ public class UI {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 	
-	public static String serverURL = ""; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String serverURL = "http://rpgmsp.ddns.net/"; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -386,9 +392,53 @@ public class UI {
 			}
   		});
   		
+  		
+  		//Set Download File
+  		Button download = new Button();
+  		download.setPrefHeight(defaultButtonHeight);
+  		//setServerURL.setPrefWidth(75);
+  		download.setText("download");
+  		download.setOnAction((ActionEvent e) -> {
+			Runnable r = new Runnable() {
+		         public void run() {
+		        	// Using Apache common IO  
+		   	        try {
+		   				Music.downloadFile("C:/Users/Phil/Test" + "/file.mp3", 
+		   						"http://rpgmsp.ddns.net/music/Fantasy/Action/Warcraft.mp3");
+		   			} catch (MalformedURLException e2) {
+		   				// TODO Auto-generated catch block
+		   				e2.printStackTrace();
+		   			} catch (IOException e2) {
+		   				// TODO Auto-generated catch block
+		   				e2.printStackTrace();
+		   			}
+		         }
+		    };
+		    
+		    ExecutorService executor = Executors.newCachedThreadPool();
+		    executor.submit(r);
+  		});
+  		
+  		//Set Slow Server Mode CheckBox
+  		CheckBox slow = new CheckBox();
+  		slow.setPrefHeight(defaultButtonHeight);
+  		slow.setText("Slow Server Mode");
+  		slow.setOnAction((ActionEvent e) -> {
+			if(slow.isSelected()){
+				slowServer = true;
+				//Music.slowFolder = "Fantasy/Action/";
+				Music.setDownloadFile();
+			}
+			else{
+				slowServer = false;
+				stopDownload = true;
+			}
+  			
+  		});
+  		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL);
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders); //, download
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
@@ -397,13 +447,14 @@ public class UI {
   		Object[] bArray1 = toolBar1.getChildren().toArray();
         Object[] bArray2 = toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
+        int bCount2 = bArray2.length;
         defaultButtonWidth = defaultWidth/bCount;
         
   		for(int i = 0; i < bCount; i++){
         	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
-        	if (bArray2[i] != null){
-        		((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
-        	}
+        }
+  		for(int i = 0; i < bCount2; i++){
+        	((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
         }
   		
   		toolBox.getChildren().add(toolBar1);
@@ -852,11 +903,15 @@ public class UI {
   		  			
   		  			b.setText(bName);
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			//b.setMaxSize(defaultFolderButtonWidth+100, defaultFolderButtonHeight);
+  		  			b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
   		  					Music.defaultMusicPath = directory+"/"+bName;
   		  					System.out.println();
+  		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
   		  					if(linux == true){

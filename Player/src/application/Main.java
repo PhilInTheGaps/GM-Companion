@@ -1,16 +1,11 @@
 package application;
 
 import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Side;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -42,12 +37,14 @@ public class Main extends Application {
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.1 Beta");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.2 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
+        
+        
 	}
 	
 	//Defining Scene
@@ -135,6 +132,7 @@ public class Main extends Application {
         Object[] bArray1 = UI.toolBar1.getChildren().toArray();
         Object[] bArray2 = UI.toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
+        int bCount2 = bArray2.length;
         UI.defaultButtonWidth = UI.defaultWidth/bCount;
         /*
         Object[] bArrayMusic = UI.tile.getChildren().toArray();
@@ -174,14 +172,20 @@ public class Main extends Application {
     	//Adjusting ToolBar button width
         for(int i = 0; i < bCount; i++){
         	((Region) bArray1[i]).setPrefWidth(UI.defaultButtonWidth);
-        	if (bArray2[i] != null){
-        		((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
-        	}
+        }
+        for(int i = 0; i < bCount2; i++){
+        	((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
         }
         
         //Adjusting ProgressBar Width
         
         UI.pb.setPrefWidth(UI.defaultWidth);
+	}
+	
+	@Override
+	public void stop(){
+	    System.out.println("Closing...");
+	    UI.stopDownload = true;
 	}
 	
   	//Checking the Operating System
