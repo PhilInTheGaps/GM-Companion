@@ -61,3 +61,6 @@ Weihnachtsferien 2016
 25.01.2017
 - Musik kann jetzt in einzelne Kategorien eingeteilt werden (über Ordnerstruktur)
 - Programm kann jetzt auch gestartet werden, wenn keine "Music" und "Sounds" Ordner vorhanden sind
+
+26./27.01.2017
+- Musik kann jetzt vom Server heruntergeladen werden (nicht ausgereift)
