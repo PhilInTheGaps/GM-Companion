@@ -76,6 +76,8 @@ public class UI {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 	
+	public static String musicFolderName = "";
+	
 	public static String serverURL = "http://rpgmsp.ddns.net/"; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
@@ -392,33 +394,6 @@ public class UI {
 			}
   		});
   		
-  		
-  		//Set Download File
-  		Button download = new Button();
-  		download.setPrefHeight(defaultButtonHeight);
-  		//setServerURL.setPrefWidth(75);
-  		download.setText("download");
-  		download.setOnAction((ActionEvent e) -> {
-			Runnable r = new Runnable() {
-		         public void run() {
-		        	// Using Apache common IO  
-		   	        try {
-		   				Music.downloadFile("C:/Users/Phil/Test" + "/file.mp3", 
-		   						"http://rpgmsp.ddns.net/music/Fantasy/Action/Warcraft.mp3");
-		   			} catch (MalformedURLException e2) {
-		   				// TODO Auto-generated catch block
-		   				e2.printStackTrace();
-		   			} catch (IOException e2) {
-		   				// TODO Auto-generated catch block
-		   				e2.printStackTrace();
-		   			}
-		         }
-		    };
-		    
-		    ExecutorService executor = Executors.newCachedThreadPool();
-		    executor.submit(r);
-  		});
-  		
   		//Set Slow Server Mode CheckBox
   		CheckBox slow = new CheckBox();
   		slow.setPrefHeight(defaultButtonHeight);
@@ -426,10 +401,11 @@ public class UI {
   		slow.setOnAction((ActionEvent e) -> {
 			if(slow.isSelected()){
 				slowServer = true;
-				//Music.slowFolder = "Fantasy/Action/";
+				System.out.println("Activating Slow Server Mode...");
 				Music.setDownloadFile();
 			}
 			else{
+				System.out.println("Disabling Slow Server Mode...");
 				slowServer = false;
 				stopDownload = true;
 			}
@@ -437,8 +413,8 @@ public class UI {
   		});
   		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders); //, download
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL); //, slow
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL, slow); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
@@ -790,7 +766,7 @@ public class UI {
   		for(int i  = 0; i < catArray.length; i++){
   				if(catArray[i] != null){
   					catCount++;
-  					System.out.println("Category Count: "+catCount);
+  					//System.out.println("Category Count: "+catCount);
   		  			
   				}
 
@@ -824,13 +800,13 @@ public class UI {
   		List<String> folders = new ArrayList<String>();
   		
   		File file = new File("Music/"+directory+"/");
-  		System.out.println(file);
+  		//System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
   			Document doc = Jsoup.connect(Music.serverMusicURL+directory+"/").get();
   	        //System.out.println(doc.toString());
-  			System.out.println(Music.serverMusicURL+directory+"/");
+  			//System.out.println(Music.serverMusicURL+directory+"/");
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
@@ -878,7 +854,7 @@ public class UI {
   	  		
   	  		if(names !=null){
 	  	  		for(String name : names){
-	  	  			System.out.println("Music/"+directory+"/" + name);
+	  	  			//System.out.println("Music/"+directory+"/" + name);
 					if (new File("Music/"+directory+"/" + name).isDirectory()){
 						System.out.println(name);
 						folders.add(name);
@@ -923,6 +899,7 @@ public class UI {
   		  				}
   		  				
   		  				musicFolder = directory+"/"+bName;
+  		  				musicFolderName = bName;
   		  	  			musicFolderLabel.setText("Folder: " + musicFolder);
   		  	  			Music.musicFolderSelected = true;
   		  	  			
