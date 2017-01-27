@@ -65,7 +65,7 @@ public class UI {
 	public static Boolean devV = false;
 	public static Boolean onlineMode = false;
 	public static Boolean localOnline = onlineMode;
-	public static Boolean slowServer = true;
+	public static Boolean slowServer = false;
 	public static Boolean stopDownload = false;
 	
 	public static String Album = "Unknown";
