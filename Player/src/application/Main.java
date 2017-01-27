@@ -37,7 +37,7 @@ public class Main extends Application {
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.1 Beta");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.2 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
