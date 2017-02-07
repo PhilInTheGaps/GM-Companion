@@ -67,3 +67,4 @@ Weihnachtsferien 2016
 
 07.02.2017 (Schule)
 - Weitere Planung (mehr TODOs)
+- Planung des nächsten Beta-Tests
