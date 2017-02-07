@@ -54,7 +54,7 @@ Weihnachtsferien 2016
 - Classes aufgeräumt
 
 24.01.2017 (Schule)
-- Evaluation der bisherigen Arbeit / des bisher Geschafftem
+- Evaluation der bisherigen Arbeit / des bisher Geschafften
 - Planung der zukünftigen Arbeit
 - Musik und Sounds werden jetzt in TabPane dargestellt -> mehr Platz für Buttons
 
