@@ -64,3 +64,6 @@ Weihnachtsferien 2016
 
 26./27.01.2017
 - Musik kann jetzt vom Server heruntergeladen werden (nicht ausgereift)
+
+07.02.2017 (Schule)
+- Weitere Planung (mehr TODOs)
