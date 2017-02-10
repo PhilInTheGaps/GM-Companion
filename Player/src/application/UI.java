@@ -2,12 +2,8 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -281,6 +277,25 @@ public class UI {
   				randomTrack = true;
   				toggleRandomButton.setText("Disable Random Mode");
   			}
+  		});
+  		
+  		//Random CheckBox
+  		CheckBox randomMode = new CheckBox();
+  		randomMode.setPrefHeight(defaultButtonHeight);
+  		randomMode.setText("Random Mode");
+  		if(randomTrack == true){
+  			randomMode.setSelected(true);
+  		}
+  		else{
+  			randomMode.setSelected(false);
+  		}
+  		randomMode.setOnAction((ActionEvent e) -> {
+			if(randomMode.isSelected()){
+				randomTrack = true;
+			}
+			else{
+				randomTrack = false;
+			}
   			
   		});
   		
@@ -302,6 +317,26 @@ public class UI {
   				singleTrack = true;
   				toggleSingleButton.setText("Disable Single Mode");
   			}
+  			
+  		});
+  		
+  		//SingleTrack CheckBox
+  		CheckBox singleTrackBox = new CheckBox();
+  		singleTrackBox.setPrefHeight(defaultButtonHeight);
+  		singleTrackBox.setText("Single Track Mode");
+  		if(singleTrack == true){
+  			singleTrackBox.setSelected(true);
+  		}
+  		else{
+  			singleTrackBox.setSelected(false);
+  		}
+  		singleTrackBox.setOnAction((ActionEvent e) -> {
+			if(singleTrackBox.isSelected()){
+				singleTrack = true;
+			}
+			else{
+				singleTrack = false;
+			}
   			
   		});
   		
@@ -376,18 +411,9 @@ public class UI {
   	  			
   	  			updating = true;
   	  			
-  	  			/*
-  	  			borderPane.setCenter(null);
-	  			borderPane.setRight(null);
-  	  			
-  	  			borderPane.setCenter(MusicButtons.addMusicTilePane());
-  	  			borderPane.setRight(SoundButtons.addSoundTilePane());
-  	  			*/
-  	  			
   	  			addTabPane();
 				//addMusicTilePane();
 				addSoundTilePane();
-				
 				
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -412,9 +438,14 @@ public class UI {
   			
   		});
   		
+  		//Settings Button
+  		Button settings = new Button();
+  		settings.setPrefHeight(defaultButtonHeight);
+  		settings.setText("Settings");
+  		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL, slow); //, slow
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleOnline, updateFolders, randomMode);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, serverField, setServerURL, singleTrackBox); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
