@@ -715,6 +715,7 @@ public class UI {
 		gm.setText("GM Help");
 		gm.setContent(null);
 		tabPane.getTabs().add(gm);
+		
 	}
 	
 	//Add Music Category Tabs
