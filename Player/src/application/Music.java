@@ -158,16 +158,23 @@ public class Music {
 			System.out.println("FolderID: "+folderID);
 			System.out.println("folderCount: "+folderCount);
 			System.out.println("scenID: "+scenID);
+			System.out.println("scenCount: "+scenCount);
 			if(folderID>=folderCount){
-				if(scenID>=scenCount){
-					scenID = 0;
-				}
-				else{
+				
+				if(scenID<scenCount-1){
+					System.out.println("Switching to next scenario");
 					scenID++;
 				}
+				else{
+					System.out.println("Setting Scene ID 0");
+					scenID = 0;
+					musicID ++;
+				}
+				System.out.println("Folder = 0");
 				folderID = 0;
 			}
 			else{
+				System.out.println("Switching to next folder");
 				folderID++;
 			}
 			
@@ -177,9 +184,15 @@ public class Music {
 		}
 		else{
 			System.out.println("Starting Downloading to "+downloadPath);
-			FileUtils.copyURLToFile(new URL(downloadUrl), new File(downloadPath));
+			try{
+				FileUtils.copyURLToFile(new URL(downloadUrl), new File(downloadPath));
+			}
+			catch(IOException e){
+				System.out.println("Something went wrong");
+			}
 			System.out.println("Finished Downloading");
 			System.out.println("");
+			
 			folderID++;
 			if(UI.stopDownload == false){
 				setDownloadFile();
@@ -250,6 +263,7 @@ public class Music {
       	        scenArray = scenArrayTemp;
           		
       	        //Setting amount of scenarios
+      	        scenCount = 0;
           		for(int i  = 0; i < scenArray.length; i++){
 	  				if(scenArray[i] != null){
 	  					scenCount++;	
