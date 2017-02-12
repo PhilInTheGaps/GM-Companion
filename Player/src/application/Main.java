@@ -68,7 +68,7 @@ public class Main extends Application {
         		//System.out.println(settings.size());
         		settings.add(line);
         	}
-
+        	UI.serverURL = settings.get(6);
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");

@@ -74,7 +74,7 @@ public class UI {
 	
 	public static String musicFolderName = "";
 	
-	public static String serverURL = "http://rpgmsp.ddns.net/"; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String serverURL; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -374,6 +374,9 @@ public class UI {
   		TextField serverField = new TextField();
   		serverField.setPromptText("Server URL");
   		serverField.setPrefHeight(defaultButtonHeight);
+  		if(serverURL != ""){
+  			serverField.setText(serverURL);
+  		}
   		
   		//Set Server URL
   		Button setServerURL = new Button();
