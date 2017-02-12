@@ -1,6 +1,9 @@
 package application;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,6 +23,7 @@ public class Main extends Application {
 	BorderPane borderPane;
 	double height;
 	double width;
+	public static ArrayList<String> settings = new ArrayList<String>();
 		
 	//Main
 	public static void main(String[] args){
@@ -54,6 +58,23 @@ public class Main extends Application {
 		
 		//Check OS
 		checkOS();
+		
+		//Read Settings
+        String sp = "settings.txt";
+        System.out.println("Reading Settings...");
+        try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
+        	for(String line = null; (line = br.readLine()) != null;){
+        		//System.out.println(line);
+        		//System.out.println(settings.size());
+        		settings.add(line);
+        	}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Reading Settings Failed");
+		}
+        System.out.println("Finished Reading Settings");
+        System.out.println("");
 		
 		//Add Components
         borderPane = new BorderPane();
@@ -110,6 +131,8 @@ public class Main extends Application {
 	         	}	
 			}
 		);
+        
+        
         
         return scene;
         

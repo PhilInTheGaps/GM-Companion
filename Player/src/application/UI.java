@@ -725,7 +725,8 @@ public class UI {
   		String[] catArrayTemp = new String[500];
   		List<String> cats = new ArrayList<String>();
   		
-  		File file = new File("Music/");
+  		File file = new File(Main.settings.get(2));
+  		System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
@@ -772,14 +773,12 @@ public class UI {
   		}
   		else{
   			String[] names = file.list();
-  	  		
+  			
   	  		System.out.println("Found the following music category folders:");
   	  		
   	  		if(names != null){
-	  	  		for(String name : names)
-	  	  		{
-	  	  		    if (new File("Music/" + name).isDirectory())
-	  	  		    {
+	  	  		for(String name : names){
+	  	  		    if (new File(Main.settings.get(2)+ name).isDirectory()){
 	  	  		        System.out.println(name);
 	  	  		        cats.add(name);
 	  	  		    }
@@ -831,7 +830,7 @@ public class UI {
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
   		
-  		File file = new File("Music/"+directory+"/");
+  		File file = new File(Main.settings.get(2)+directory+"/");
   		//System.out.println(file);
   		
   		if(onlineMode){
@@ -886,8 +885,7 @@ public class UI {
   	  		
   	  		if(names !=null){
 	  	  		for(String name : names){
-	  	  			//System.out.println("Music/"+directory+"/" + name);
-					if (new File("Music/"+directory+"/" + name).isDirectory()){
+					if (new File(Main.settings.get(2)+directory+"/" + name).isDirectory()){
 						System.out.println(name);
 						folders.add(name);
 					}
@@ -922,12 +920,7 @@ public class UI {
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-  		  					if(linux == true){
-  		  						Music.defaultMusicPath = defaultLinuxFolder + "Music/"+bName;
-  			  	  			}
-  			  	  			else{
-  			  	  				Music.defaultMusicPath = "Music/"+directory+"/"+bName; 
-  			  	  			}
+		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+bName;
   		  				}
   		  				
   		  				musicFolder = directory+"/"+bName;
@@ -979,7 +972,7 @@ public class UI {
   		
   		String[] folderArray = new String[500];
   		
-  		File file = new File("Sounds/");
+  		File file = new File(Main.settings.get(4));
   		
   		if(onlineMode){
   		//Get all foldernames from server
@@ -1034,7 +1027,7 @@ public class UI {
   	  		if(names != null){
 	  	  		for(String name : names)
 	  	  		{
-	  	  		    if (new File("Sounds/" + name).isDirectory())
+	  	  		    if (new File(Main.settings.get(4) + name).isDirectory())
 	  	  		    {
 	  	  		        System.out.println(name);
 	  	  		        folders.add(name);
@@ -1064,12 +1057,7 @@ public class UI {
 		  					Sound.defaultSoundPath = bName;
 		  				}
 		  				else{
-		  					if(linux == true){
-		  						Sound.defaultSoundPath = defaultLinuxFolder + "Music/"+bName;
-			  	  			}
-			  	  			else{
-			  	  			Sound.defaultSoundPath = "Sounds/"+bName;
-			  	  			}
+			  	  			Sound.defaultSoundPath = Main.settings.get(4)+bName;
 		  				}
 		  				
 		  				soundFolder = bName;
