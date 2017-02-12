@@ -16,8 +16,6 @@ import org.jsoup.nodes.Document;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioEqualizer;
-import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -51,7 +49,7 @@ public class Music {
 	static int scenID = 0;
 	static int musicID = 1;
 	
-	public static String defaultMusicPath = ("./Music/");
+	public static String defaultMusicPath = Main.settings.get(2);
 	public static String serverMusicURL = UI.serverURL + "music/";
 	
 	public static void play(){
@@ -115,12 +113,6 @@ public class Music {
 	        	}
 	        }
 	    });
-	    
-	    //EQ
-	    System.out.println("Spectrum:");
-	    AudioSpectrumListener spec = null;
-		mediaPlayer.setAudioSpectrumListener(spec);
-	    System.out.println(mediaPlayer.getAudioSpectrumListener());
 	    
 	    //Updates the Progress Bar and sets Metadata
 	    mediaPlayer.setOnReady(new Runnable() {
