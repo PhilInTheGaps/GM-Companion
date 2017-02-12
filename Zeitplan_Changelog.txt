@@ -68,3 +68,8 @@ Weihnachtsferien 2016
 07.02.2017 (Schule)
 - Weitere Planung (mehr TODOs)
 - Planung des nächsten Beta-Tests
+
+12.02.2017
+- Erste Implementierung von Einstellungsmöglichkeiten
+  - Musik und Sound Pfad kann(/muss) jetzt manuell eingestellt werden
+- Bug Fix: Der Soundpfad ist jetzt auch wirklich der Sound-Ordner (Trat nur unter Linux auf)
