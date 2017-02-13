@@ -65,6 +65,9 @@ public class Music {
 		
 		musicPath = musicPath.replace("\\", "/");
 		
+		//Select Song in ListView
+		UI.lv.getSelectionModel().select(currentTrackID);
+		
 		if(UI.onlineMode){
 			if(UI.slowServer){
 				mMedia = new Media(new File(musicPath).toURI().toString());
@@ -410,7 +413,7 @@ public class Music {
 	public static void get() throws IOException{
 		//This finds every music file in the folder and writes them into a list
 		
-		System.out.println("Finding music files in folder: "+"Download/"+UI.serverURL.substring(7, UI.serverURL.length())+"Music/"+defaultMusicPath+"/");
+		//System.out.println("Finding music files in folder: "+"Download/"+UI.serverURL.substring(7, UI.serverURL.length())+"Music/"+defaultMusicPath+"/");
 		
 		currentTrackID = 0;
     	
@@ -492,6 +495,14 @@ public class Music {
   			maxTrackCount = currentTrackID;
   		}
 		
+  		//Display Song List in ListView
+  		UI.items.clear();
+  		for(int i = 0; i<musicPathList.length; i++){
+  			if(musicPathList[i]!=""){
+  				UI.items.add(i, musicPathList[i]);
+  			}	
+  		}
+  		
 		currentTrackID = 0;
 		
 		//Prints out the name of every music file in the folder
@@ -546,6 +557,13 @@ public class Music {
         					System.out.println(musicPathList[i]);
         				}
         			}
+        			
+        			UI.items.clear();
+        	  		for(int i = 0; i<musicPathList.length; i++){
+        	  			if(musicPathList[i]!=""){
+        	  				UI.items.add(i, musicPathList[i]);
+        	  			}	
+        	  		}
         			
         			System.out.println("");
         		}
