@@ -1,6 +1,9 @@
 package application;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,6 +23,7 @@ public class Main extends Application {
 	BorderPane borderPane;
 	double height;
 	double width;
+	public static ArrayList<String> settings = new ArrayList<String>();
 		
 	//Main
 	public static void main(String[] args){
@@ -37,7 +41,7 @@ public class Main extends Application {
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.2 Beta");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.4 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
@@ -54,6 +58,47 @@ public class Main extends Application {
 		
 		//Check OS
 		checkOS();
+		
+		//Read Settings
+        String sp = "settings.txt";
+        System.out.println("Reading Settings...");
+        try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
+        	for(String line = null; (line = br.readLine()) != null;){
+        		settings.add(line);
+        	}
+        	
+        	//Set Server URL
+        	UI.serverURL = settings.get(6);
+        	System.out.println("Set Server URL to "+UI.serverURL);
+        	
+        	//Set Autoplay
+        	if(settings.get(10).equals("True")){
+        		UI.autoplay = true;
+        	}
+        	else{
+        		UI.autoplay = false;
+        	}
+        	System.out.println("Set Autoplay to "+UI.autoplay);
+        	
+        	//Set FadeOut
+        	if(settings.get(8).equals("True")){
+        		UI.fadeOut = true;
+        	}
+        	else{
+        		UI.fadeOut = false;
+        	}
+        	System.out.println("Set Fade Out to "+UI.fadeOut);
+        	
+        	//Set Fade Duration
+        	UI.fadeDuration = Integer.parseInt(settings.get(12));
+        	System.out.println("Set Fade Duration to "+UI.fadeDuration);
+        	
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Reading Settings Failed");
+		}
+        System.out.println("Finished Reading Settings");
+        System.out.println("");
 		
 		//Add Components
         borderPane = new BorderPane();
@@ -110,6 +155,8 @@ public class Main extends Application {
 	         	}	
 			}
 		);
+        
+        
         
         return scene;
         

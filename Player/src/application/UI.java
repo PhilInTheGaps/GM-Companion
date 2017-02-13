@@ -2,12 +2,8 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -15,18 +11,25 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -57,6 +60,8 @@ public class UI {
 	public static HBox toolBar2 = new HBox();
 	public static TilePane tile2 = new TilePane();
 	public static TabPane tabPane = new TabPane();
+	public static ListView<String> lv = new ListView<String>();
+	public static ObservableList<String> items =FXCollections.observableArrayList();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -67,6 +72,8 @@ public class UI {
 	public static Boolean localOnline = onlineMode;
 	public static Boolean slowServer = false;
 	public static Boolean stopDownload = false;
+	public static Boolean fadeOut = true;
+	public static int fadeDuration = 10;
 	
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -76,7 +83,9 @@ public class UI {
 	public static String musicFolder = "Not Chosen";
 	public static String soundFolder = "Not Chosen";
 	
-	public static String serverURL = "http://rpgmsp.ddns.net/"; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String musicFolderName = "";
+	
+	public static String serverURL; //http://192.168.178.55/ http://rpgmsp.ddns.net/
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -136,19 +145,30 @@ public class UI {
   		playButton.setText("Play / Continue");
   		playButton.setPrefHeight(defaultButtonHeight);
   		playButton.setOnAction((ActionEvent e) ->{
-  			if(Music.musicFolderSelected == true){
+  			if(Music.isPaused){
   				Music.mediaPlayer.play();
   			}
-  			else{
-  				Music.musicError = "Please select music folder!";
-  			}
-  			if(Sound.soundFolderSelected == true){
+  			if(Sound.isPaused){
   				Sound.soundPlayer.play();
   			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
+  			
+  			if(Music.isPaused == false){
+  				if(Music.musicFolderSelected == true){
+  	  				Music.play();
+  	  			}
+  	  			else{
+  	  				Music.musicError = "Please select music folder!";
+  	  			}
   			}
   			
+  			if(Sound.isPaused == false){
+  				if(Sound.soundFolderSelected == true){
+  	  				Sound.play();
+  	  			}
+  	  			else{
+  	  				Sound.soundError = "Please select sound folder!";
+  	  			}
+  			}
   		});
   		
   		//Pause Button
@@ -158,12 +178,14 @@ public class UI {
   		pauseButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.mediaPlayer.pause();
+  				Music.isPaused = true;
   			}
   			else{
   				Music.musicError = "Please select music folder!";
   			}
   			if(Sound.soundFolderSelected == true){
   				Sound.soundPlayer.pause();
+  				Sound.isPaused = true;
   			}
   			else{
   				Sound.soundError = "Please select sound folder!";
@@ -279,6 +301,25 @@ public class UI {
   				randomTrack = true;
   				toggleRandomButton.setText("Disable Random Mode");
   			}
+  		});
+  		
+  		//Random CheckBox
+  		CheckBox randomMode = new CheckBox();
+  		randomMode.setPrefHeight(defaultButtonHeight);
+  		randomMode.setText("Random Mode");
+  		if(randomTrack == true){
+  			randomMode.setSelected(true);
+  		}
+  		else{
+  			randomMode.setSelected(false);
+  		}
+  		randomMode.setOnAction((ActionEvent e) -> {
+			if(randomMode.isSelected()){
+				randomTrack = true;
+			}
+			else{
+				randomTrack = false;
+			}
   			
   		});
   		
@@ -300,6 +341,26 @@ public class UI {
   				singleTrack = true;
   				toggleSingleButton.setText("Disable Single Mode");
   			}
+  			
+  		});
+  		
+  		//SingleTrack CheckBox
+  		CheckBox singleTrackBox = new CheckBox();
+  		singleTrackBox.setPrefHeight(defaultButtonHeight);
+  		singleTrackBox.setText("Single Track Mode");
+  		if(singleTrack == true){
+  			singleTrackBox.setSelected(true);
+  		}
+  		else{
+  			singleTrackBox.setSelected(false);
+  		}
+  		singleTrackBox.setOnAction((ActionEvent e) -> {
+			if(singleTrackBox.isSelected()){
+				singleTrack = true;
+			}
+			else{
+				singleTrack = false;
+			}
   			
   		});
   		
@@ -337,6 +398,9 @@ public class UI {
   		TextField serverField = new TextField();
   		serverField.setPromptText("Server URL");
   		serverField.setPrefHeight(defaultButtonHeight);
+  		if(serverURL != ""){
+  			serverField.setText(serverURL);
+  		}
   		
   		//Set Server URL
   		Button setServerURL = new Button();
@@ -374,49 +438,13 @@ public class UI {
   	  			
   	  			updating = true;
   	  			
-  	  			/*
-  	  			borderPane.setCenter(null);
-	  			borderPane.setRight(null);
-  	  			
-  	  			borderPane.setCenter(MusicButtons.addMusicTilePane());
-  	  			borderPane.setRight(SoundButtons.addSoundTilePane());
-  	  			*/
-  	  			
   	  			addTabPane();
 				//addMusicTilePane();
 				addSoundTilePane();
 				
-				
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-  		});
-  		
-  		
-  		//Set Download File
-  		Button download = new Button();
-  		download.setPrefHeight(defaultButtonHeight);
-  		//setServerURL.setPrefWidth(75);
-  		download.setText("download");
-  		download.setOnAction((ActionEvent e) -> {
-			Runnable r = new Runnable() {
-		         public void run() {
-		        	// Using Apache common IO  
-		   	        try {
-		   				Music.downloadFile("C:/Users/Phil/Test" + "/file.mp3", 
-		   						"http://rpgmsp.ddns.net/music/Fantasy/Action/Warcraft.mp3");
-		   			} catch (MalformedURLException e2) {
-		   				// TODO Auto-generated catch block
-		   				e2.printStackTrace();
-		   			} catch (IOException e2) {
-		   				// TODO Auto-generated catch block
-		   				e2.printStackTrace();
-		   			}
-		         }
-		    };
-		    
-		    ExecutorService executor = Executors.newCachedThreadPool();
-		    executor.submit(r);
   		});
   		
   		//Set Slow Server Mode CheckBox
@@ -426,19 +454,25 @@ public class UI {
   		slow.setOnAction((ActionEvent e) -> {
 			if(slow.isSelected()){
 				slowServer = true;
-				//Music.slowFolder = "Fantasy/Action/";
+				System.out.println("Activating Slow Server Mode...");
 				Music.setDownloadFile();
 			}
 			else{
+				System.out.println("Disabling Slow Server Mode...");
 				slowServer = false;
 				stopDownload = true;
 			}
   			
   		});
   		
+  		//Settings Button
+  		Button settings = new Button();
+  		settings.setPrefHeight(defaultButtonHeight);
+  		settings.setText("Settings");
+  		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleRandomButton, toggleOnline, updateFolders); //, download
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, toggleSingleButton, serverField, setServerURL); //, slow
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleOnline, updateFolders, randomMode);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, serverField, setServerURL, singleTrackBox); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
@@ -661,6 +695,27 @@ public class UI {
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
 		
+		lv.setMaxHeight(150);
+		lv.setFocusTraversable(false);
+		//lv.setMouseTransparent(true);
+		lv.setItems(items);
+		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent mouseEvent) {
+		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+		            if(mouseEvent.getClickCount() == 2){
+		                System.out.println("Double clicked");
+		                Music.currentTrackID = lv.getSelectionModel().getSelectedIndex()-1;
+		                Music.next();
+		            }
+		        }
+		    }
+		});
+		
+		BorderPane bp = new BorderPane();
+		bp.setCenter(tabPaneCategories);
+		bp.setBottom(lv);
+		
 		Tab general = new Tab();
 		general.setClosable(false);
 		general.setText("All");
@@ -689,7 +744,7 @@ public class UI {
 		Tab music = new Tab();
 		music.setClosable(false);
 		music.setText("Music");
-		music.setContent(tabPaneCategories);
+		music.setContent(bp);
 		tabPane.getTabs().add(music);
 		
 		Tab sound = new Tab();
@@ -708,6 +763,7 @@ public class UI {
 		gm.setText("GM Help");
 		gm.setContent(null);
 		tabPane.getTabs().add(gm);
+		
 	}
 	
 	//Add Music Category Tabs
@@ -717,7 +773,8 @@ public class UI {
   		String[] catArrayTemp = new String[500];
   		List<String> cats = new ArrayList<String>();
   		
-  		File file = new File("Music/");
+  		File file = new File(Main.settings.get(2));
+  		System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
@@ -764,14 +821,12 @@ public class UI {
   		}
   		else{
   			String[] names = file.list();
-  	  		
+  			
   	  		System.out.println("Found the following music category folders:");
   	  		
   	  		if(names != null){
-	  	  		for(String name : names)
-	  	  		{
-	  	  		    if (new File("Music/" + name).isDirectory())
-	  	  		    {
+	  	  		for(String name : names){
+	  	  		    if (new File(Main.settings.get(2)+ name).isDirectory()){
 	  	  		        System.out.println(name);
 	  	  		        cats.add(name);
 	  	  		    }
@@ -790,7 +845,7 @@ public class UI {
   		for(int i  = 0; i < catArray.length; i++){
   				if(catArray[i] != null){
   					catCount++;
-  					System.out.println("Category Count: "+catCount);
+  					//System.out.println("Category Count: "+catCount);
   		  			
   				}
 
@@ -823,14 +878,14 @@ public class UI {
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
   		
-  		File file = new File("Music/"+directory+"/");
-  		System.out.println(file);
+  		File file = new File(Main.settings.get(2)+directory+"/");
+  		//System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
   			Document doc = Jsoup.connect(Music.serverMusicURL+directory+"/").get();
   	        //System.out.println(doc.toString());
-  			System.out.println(Music.serverMusicURL+directory+"/");
+  			//System.out.println(Music.serverMusicURL+directory+"/");
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
@@ -878,8 +933,7 @@ public class UI {
   	  		
   	  		if(names !=null){
 	  	  		for(String name : names){
-	  	  			System.out.println("Music/"+directory+"/" + name);
-					if (new File("Music/"+directory+"/" + name).isDirectory()){
+					if (new File(Main.settings.get(2)+directory+"/" + name).isDirectory()){
 						System.out.println(name);
 						folders.add(name);
 					}
@@ -914,15 +968,11 @@ public class UI {
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-  		  					if(linux == true){
-  		  						Music.defaultMusicPath = defaultLinuxFolder + "Music/"+bName;
-  			  	  			}
-  			  	  			else{
-  			  	  				Music.defaultMusicPath = "Music/"+directory+"/"+bName; 
-  			  	  			}
+		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+bName;
   		  				}
   		  				
   		  				musicFolder = directory+"/"+bName;
+  		  				musicFolderName = bName;
   		  	  			musicFolderLabel.setText("Folder: " + musicFolder);
   		  	  			Music.musicFolderSelected = true;
   		  	  			
@@ -937,7 +987,9 @@ public class UI {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-  		  	  			Music.play();
+  		  	  			if(autoplay){
+  		  	  				Music.play();
+  		  	  			}
   		  	  		});
   		  			
   		  			tile.getChildren().add(b);
@@ -970,7 +1022,7 @@ public class UI {
   		
   		String[] folderArray = new String[500];
   		
-  		File file = new File("Sounds/");
+  		File file = new File(Main.settings.get(4));
   		
   		if(onlineMode){
   		//Get all foldernames from server
@@ -1025,7 +1077,7 @@ public class UI {
   	  		if(names != null){
 	  	  		for(String name : names)
 	  	  		{
-	  	  		    if (new File("Sounds/" + name).isDirectory())
+	  	  		    if (new File(Main.settings.get(4) + name).isDirectory())
 	  	  		    {
 	  	  		        System.out.println(name);
 	  	  		        folders.add(name);
@@ -1055,12 +1107,7 @@ public class UI {
 		  					Sound.defaultSoundPath = bName;
 		  				}
 		  				else{
-		  					if(linux == true){
-		  						Sound.defaultSoundPath = defaultLinuxFolder + "Music/"+bName;
-			  	  			}
-			  	  			else{
-			  	  			Sound.defaultSoundPath = "Sounds/"+bName;
-			  	  			}
+			  	  			Sound.defaultSoundPath = Main.settings.get(4)+bName;
 		  				}
 		  				
 		  				soundFolder = bName;
@@ -1097,11 +1144,20 @@ public class UI {
 		progressChangeListener = new ChangeListener<Duration>(){
 			@Override public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue, Duration newValue) {
 		        pb.setProgress(1.0 * Music.mediaPlayer.getCurrentTime().toMillis() / Music.mediaPlayer.getTotalDuration().toMillis());
-		      }
-			
+		        //System.out.println(Music.mediaPlayer.getCurrentTime().toSeconds());
+		        //Fade Out
+		        if(fadeOut){
+		        	if(Music.mediaPlayer.getCurrentTime().toSeconds()>Music.mediaPlayer.getTotalDuration().toSeconds()-fadeDuration){
+		        		if(Music.fading == false){
+		        			Music.fading = true;
+		        			System.out.println("Fading Music...");
+		        			Music.fade();
+		        		}
+		        	}
+		        }
+			}
 		};
 		Music.mediaPlayer.currentTimeProperty().addListener(progressChangeListener);
-
 	}
 	
 	//Adds ProgressBar
