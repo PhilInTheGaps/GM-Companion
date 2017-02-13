@@ -134,19 +134,30 @@ public class UI {
   		playButton.setText("Play / Continue");
   		playButton.setPrefHeight(defaultButtonHeight);
   		playButton.setOnAction((ActionEvent e) ->{
-  			if(Music.musicFolderSelected == true){
+  			if(Music.isPaused){
   				Music.mediaPlayer.play();
   			}
-  			else{
-  				Music.musicError = "Please select music folder!";
-  			}
-  			if(Sound.soundFolderSelected == true){
+  			if(Sound.isPaused){
   				Sound.soundPlayer.play();
   			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
+  			
+  			if(Music.isPaused == false){
+  				if(Music.musicFolderSelected == true){
+  	  				Music.play();
+  	  			}
+  	  			else{
+  	  				Music.musicError = "Please select music folder!";
+  	  			}
   			}
   			
+  			if(Sound.isPaused == false){
+  				if(Sound.soundFolderSelected == true){
+  	  				Sound.play();
+  	  			}
+  	  			else{
+  	  				Sound.soundError = "Please select sound folder!";
+  	  			}
+  			}
   		});
   		
   		//Pause Button
@@ -156,12 +167,14 @@ public class UI {
   		pauseButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.mediaPlayer.pause();
+  				Music.isPaused = true;
   			}
   			else{
   				Music.musicError = "Please select music folder!";
   			}
   			if(Sound.soundFolderSelected == true){
   				Sound.soundPlayer.pause();
+  				Sound.isPaused = true;
   			}
   			else{
   				Sound.soundError = "Please select sound folder!";
@@ -942,7 +955,9 @@ public class UI {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-  		  	  			Music.play();
+  		  	  			if(autoplay){
+  		  	  				Music.play();
+  		  	  			}
   		  	  		});
   		  			
   		  			tile.getChildren().add(b);

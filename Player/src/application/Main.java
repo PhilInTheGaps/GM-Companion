@@ -64,11 +64,17 @@ public class Main extends Application {
         System.out.println("Reading Settings...");
         try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
         	for(String line = null; (line = br.readLine()) != null;){
-        		//System.out.println(line);
-        		//System.out.println(settings.size());
         		settings.add(line);
         	}
+        	//Set Server URL
         	UI.serverURL = settings.get(6);
+        	//Set Autoplay
+        	if(settings.get(10)=="True"){
+        		UI.autoplay = true;
+        	}
+        	else{
+        		UI.autoplay = false;
+        	}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");

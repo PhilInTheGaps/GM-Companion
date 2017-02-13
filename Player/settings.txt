@@ -5,3 +5,7 @@ C:\Users\Phil\Desktop\RPG Music Player\Music\
 C:\Users\Phil\Desktop\RPG Music Player\Sounds\
 #Default Server URL
 http://rpgmsp.ddns.net/
+#Fade Out
+True
+#AutoPlay
+False
