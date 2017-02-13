@@ -7,25 +7,29 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -56,6 +60,8 @@ public class UI {
 	public static HBox toolBar2 = new HBox();
 	public static TilePane tile2 = new TilePane();
 	public static TabPane tabPane = new TabPane();
+	public static ListView<String> lv = new ListView<String>();
+	public static ObservableList<String> items =FXCollections.observableArrayList();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -689,6 +695,27 @@ public class UI {
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
 		
+		lv.setMaxHeight(150);
+		lv.setFocusTraversable(false);
+		//lv.setMouseTransparent(true);
+		lv.setItems(items);
+		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		    @Override
+		    public void handle(MouseEvent mouseEvent) {
+		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+		            if(mouseEvent.getClickCount() == 2){
+		                System.out.println("Double clicked");
+		                Music.currentTrackID = lv.getSelectionModel().getSelectedIndex()-1;
+		                Music.next();
+		            }
+		        }
+		    }
+		});
+		
+		BorderPane bp = new BorderPane();
+		bp.setCenter(tabPaneCategories);
+		bp.setBottom(lv);
+		
 		Tab general = new Tab();
 		general.setClosable(false);
 		general.setText("All");
@@ -717,7 +744,7 @@ public class UI {
 		Tab music = new Tab();
 		music.setClosable(false);
 		music.setText("Music");
-		music.setContent(tabPaneCategories);
+		music.setContent(bp);
 		tabPane.getTabs().add(music);
 		
 		Tab sound = new Tab();
