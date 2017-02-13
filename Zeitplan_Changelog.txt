@@ -76,3 +76,9 @@ Weihnachtsferien 2016
 - Beta Milestones hinzugefügt
 - Arbeit am experimenellen "Slow-Server-Mode" wieder eingestellt
   (wird eventuell irgendwann weiterentwickelt, ist derzeit den Aufwand nicht wert)
+  
+13.02.2017
+- Option für Default Server URL hinzugefügt
+- Option für FadeOut hinzugefügt (Fade Zeit ist einstellbar)
+- Option für AutoPlay hinzugefügt (Wenn aus, Musik muss nach Ordnerwahl manuell gestartet werden)
+- Beginn der Arbeit am GM-Help Modus
