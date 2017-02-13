@@ -7,6 +7,9 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
@@ -63,6 +66,8 @@ public class UI {
 	public static Boolean localOnline = onlineMode;
 	public static Boolean slowServer = false;
 	public static Boolean stopDownload = false;
+	public static Boolean fadeOut = true;
+	public static int fadeDuration = 10;
 	
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -1112,11 +1117,20 @@ public class UI {
 		progressChangeListener = new ChangeListener<Duration>(){
 			@Override public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue, Duration newValue) {
 		        pb.setProgress(1.0 * Music.mediaPlayer.getCurrentTime().toMillis() / Music.mediaPlayer.getTotalDuration().toMillis());
-		      }
-			
+		        //System.out.println(Music.mediaPlayer.getCurrentTime().toSeconds());
+		        //Fade Out
+		        if(fadeOut){
+		        	if(Music.mediaPlayer.getCurrentTime().toSeconds()>Music.mediaPlayer.getTotalDuration().toSeconds()-fadeDuration){
+		        		if(Music.fading == false){
+		        			Music.fading = true;
+		        			System.out.println("Fading Music...");
+		        			Music.fade();
+		        		}
+		        	}
+		        }
+			}
 		};
 		Music.mediaPlayer.currentTimeProperty().addListener(progressChangeListener);
-
 	}
 	
 	//Adds ProgressBar

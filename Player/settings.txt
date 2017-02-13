@@ -8,4 +8,6 @@ http://rpgmsp.ddns.net/
 #Fade Out
 True
 #AutoPlay
-False
+True
+#Fade Duration in Seconds
+10

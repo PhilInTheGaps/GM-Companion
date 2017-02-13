@@ -14,10 +14,14 @@ import java.util.stream.Stream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 import java.net.MalformedURLException;  
 import java.net.URL;  
@@ -43,6 +47,7 @@ public class Music {
 	static ArrayList<String> slowFileNames = new ArrayList<String>();
 	public static ExecutorService executor = Executors.newCachedThreadPool();
 	public static Boolean isPaused = false;
+	public static Boolean fading = false;
 	
 	static int folderCount = 0;
 	static int folderID = 0;
@@ -503,6 +508,8 @@ public class Music {
 		System.out.println("");
 		System.out.println("Changing to next music file...");
 		
+		fading = false;
+		
 		//Checks, whether a file is currently playing and stops it if true
     	if (musicIsPlaying == true){
     		mediaPlayer.stop();
@@ -559,5 +566,12 @@ public class Music {
     	
     	play();
     }
+	
+	public static void fade(){
+		Timeline timeline = new Timeline(
+				new KeyFrame(Duration.seconds(UI.fadeDuration),
+				new KeyValue(Music.mediaPlayer.volumeProperty(), 0)));
+			timeline.play();
+	}
 	
 }

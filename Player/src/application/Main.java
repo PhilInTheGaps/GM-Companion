@@ -66,15 +66,33 @@ public class Main extends Application {
         	for(String line = null; (line = br.readLine()) != null;){
         		settings.add(line);
         	}
+        	
         	//Set Server URL
         	UI.serverURL = settings.get(6);
+        	System.out.println("Set Server URL to "+UI.serverURL);
+        	
         	//Set Autoplay
-        	if(settings.get(10)=="True"){
+        	if(settings.get(10).equals("True")){
         		UI.autoplay = true;
         	}
         	else{
         		UI.autoplay = false;
         	}
+        	System.out.println("Set Autoplay to "+UI.autoplay);
+        	
+        	//Set FadeOut
+        	if(settings.get(8).equals("True")){
+        		UI.fadeOut = true;
+        	}
+        	else{
+        		UI.fadeOut = false;
+        	}
+        	System.out.println("Set Fade Out to "+UI.fadeOut);
+        	
+        	//Set Fade Duration
+        	UI.fadeDuration = Integer.parseInt(settings.get(12));
+        	System.out.println("Set Fade Duration to "+UI.fadeDuration);
+        	
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
