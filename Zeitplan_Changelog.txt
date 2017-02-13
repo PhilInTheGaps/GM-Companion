@@ -78,7 +78,10 @@ Weihnachtsferien 2016
   (wird eventuell irgendwann weiterentwickelt, ist derzeit den Aufwand nicht wert)
   
 13.02.2017
+- Beta 2.4 Released
 - Option für Default Server URL hinzugefügt
 - Option für FadeOut hinzugefügt (Fade Zeit ist einstellbar)
 - Option für AutoPlay hinzugefügt (Wenn aus, Musik muss nach Ordnerwahl manuell gestartet werden)
 - Beginn der Arbeit am GM-Help Modus
+- Playlistanzeige hinzugefügt
+- Einzelne Songs können jetzt in Playlist ausgewählt werden
