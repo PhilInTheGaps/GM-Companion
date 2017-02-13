@@ -29,6 +29,7 @@ public class Sound {
 	public static Random randomSoundID = new Random();
 	public static int currentSoundID;
 	public static Boolean initialPress = false;
+	public static Boolean isPaused = false;
 	
 	public static double soundVolume = 0.25;
 	
