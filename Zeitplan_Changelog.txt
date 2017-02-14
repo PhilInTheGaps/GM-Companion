@@ -85,3 +85,8 @@ Weihnachtsferien 2016
 - Beginn der Arbeit am GM-Help Modus
 - Playlistanzeige hinzugefügt
 - Einzelne Songs können jetzt in Playlist ausgewählt werden
+
+14.02.2017 (Schule)
+- Icon hinzugefügt
+- Hintergrund-Bild hinzugefügt
+- Einarbeitung in GoogleDrive API (--> Eventuell Umsetzung des Drive supports nicht möglich, da nicht Java 1.8 kompatibel!?)
