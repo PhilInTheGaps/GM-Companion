@@ -10,4 +10,4 @@ True
 #AutoPlay
 True
 #Fade Duration in Seconds
-10
+5

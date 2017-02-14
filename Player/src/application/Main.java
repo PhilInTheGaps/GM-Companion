@@ -1,14 +1,18 @@
 package application;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -45,6 +49,9 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
+        URI icon = new File("content/icon.png").toURI();
+        primaryStage.getIcons().clear();
+        primaryStage.getIcons().add(new Image(icon.toString()));
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
         
