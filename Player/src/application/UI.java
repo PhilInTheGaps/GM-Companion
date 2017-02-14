@@ -26,6 +26,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -689,11 +690,13 @@ public class UI {
 		tabPane.setTabMinWidth(200);
 		tabPane.setTabMinHeight(45);
 		tabPane.getTabs().clear();
+		tabPane.setStyle("-fx-background-color: transparent");
 		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
 		TabPane tabPaneCategories = new TabPane();
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
+		tabPaneCategories.setStyle("-fx-background-color: transparent");
 		
 		lv.setMaxHeight(150);
 		lv.setFocusTraversable(false);
@@ -715,6 +718,7 @@ public class UI {
 		BorderPane bp = new BorderPane();
 		bp.setCenter(tabPaneCategories);
 		bp.setBottom(lv);
+		bp.setStyle("-fx-background-color: transparent");
 		
 		Tab general = new Tab();
 		general.setClosable(false);
@@ -734,6 +738,7 @@ public class UI {
 			
 			try {
 				t.setContent(addMusicTilePane(catArray[i]));
+				addMusicTilePane(catArray[i]).setStyle("-fx-background-color: transparent");;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -868,7 +873,8 @@ public class UI {
   		tile.setVgap(defaultPadding/4);
   		tile.setHgap(defaultPadding/4);
   		tile.setPrefColumns(3);
-  		tile.setStyle("-fx-background-color: LightGrey");
+  		//tile.setStyle("-fx-background-color: LightGrey");
+  		tile.setStyle("-fx-background-color: transparent");
   		tile.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
@@ -1014,7 +1020,8 @@ public class UI {
   		tile2.setVgap(defaultPadding/4);
   		tile2.setHgap(defaultPadding/4);
   		tile2.setPrefColumns(3);
-  		tile2.setStyle("-fx-background-color: LightGrey");
+  		//tile2.setStyle("-fx-background-color: LightGrey");
+  		tile2.setStyle("-fx-background-color: transparent");
   		tile2.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
