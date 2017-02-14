@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -15,6 +14,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -45,23 +49,19 @@ public class Main extends Application {
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.4 Beta");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.5 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
-        URI icon = new File("content/icon.png").toURI();
+        URI icon = new File("resources/icon.png").toURI();
         primaryStage.getIcons().clear();
         primaryStage.getIcons().add(new Image(icon.toString()));
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
-        
-        
 	}
 	
 	//Defining Scene
 	public Scene setScene(double width, double height){
-		
-		borderPane = new BorderPane();
 		
 		//Check OS
 		checkOS();
@@ -110,7 +110,7 @@ public class Main extends Application {
 		//Add Components
         borderPane = new BorderPane();
         borderPane.setTop(UI.addToolBar());
-        borderPane.setStyle("-fx-background-color: White");
+        //borderPane.setStyle("-fx-background-color: White");
         borderPane.setCenter(UI.tabPane);	
 		borderPane.setLeft(UI.addVBox());
 		try {
@@ -119,6 +119,14 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		UI.addTabPane();
+		
+		//Setting Background Image
+		URI bip = new File("resources/bg.png").toURI();
+		BackgroundImage bi= new BackgroundImage(
+				new Image(bip.toString(), 0, 0, true, true),
+		        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+		        BackgroundSize.DEFAULT);
+		borderPane.setBackground(new Background(bi));
 		
         scene = new Scene(borderPane, 1280, 720);
         scene.setFill(Color.WHITE);
