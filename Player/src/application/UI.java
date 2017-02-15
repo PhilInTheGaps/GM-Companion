@@ -505,11 +505,11 @@ public class UI {
   		vBox.setStyle("-fx-background-color: White");
   		vBox.setMaxWidth(defaultSliderWidth+2*defaultPadding);
   		
+  		vBox.getChildren().clear();
+  		
   		Label mVolumeLabel = new Label();
   		mVolumeLabel.setText("Music Volume:");
   		vBox.getChildren().add(mVolumeLabel);
-  		
-  		vBox.getChildren().clear();
   		
   		//mVolume Slider
   		mVolumeSlider = new Slider();
