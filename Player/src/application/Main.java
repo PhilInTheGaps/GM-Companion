@@ -1,9 +1,11 @@
 package application;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import javafx.application.Application;
@@ -58,6 +60,9 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(icon.toString()));
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
+        
+        //GoogleDrive.printFile("0B2lW8fcqYF5IUFJ4a1hoVU1NVWM");
+        
 	}
 	
 	//Defining Scene
