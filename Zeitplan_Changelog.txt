@@ -90,3 +90,8 @@ Weihnachtsferien 2016
 - Icon hinzugefügt
 - Hintergrund-Bild hinzugefügt
 - Einarbeitung in GoogleDrive API (--> Eventuell Umsetzung des Drive supports nicht möglich, da nicht Java 1.8 kompatibel!?)
+
+15.02.2017
+- Weitere Google Drive Tests
+- Dropbox Tests
+- Arbeit an Cloud-Support auf Eis gelegt, in Zukunft Fokus auf GM-Hilfe
