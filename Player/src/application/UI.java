@@ -783,7 +783,7 @@ public class UI {
   		if(onlineMode){
   			//Get all foldernames from server
   			Document doc = Jsoup.connect(Music.serverMusicURL).get();
-  	        //System.out.println(doc.toString());
+  	        System.out.println(doc.toString());
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
