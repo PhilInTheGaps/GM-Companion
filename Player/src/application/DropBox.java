@@ -16,9 +16,6 @@ import com.dropbox.core.v2.files.Metadata;
 import com.dropbox.core.v2.users.FullAccount;
 
 public class DropBox {
-	//APP KEY: u8tb7c5le0qr2ip
-	//ACCES TOKEN: onk3FayfIUAAAAAAAAAAGUKyYY72tHuPBcWOAQVzBB7NyyE-KesExTXbL5_TgeaV
-	
 	
 	private static final String ACCESS_TOKEN = "onk3FayfIUAAAAAAAAAAGUKyYY72tHuPBcWOAQVzBB7NyyE-KesExTXbL5_TgeaV";
 
