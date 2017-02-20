@@ -63,7 +63,7 @@ public class Main extends Application {
         }
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
-        
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	}
 	
 	//Defining Scene
