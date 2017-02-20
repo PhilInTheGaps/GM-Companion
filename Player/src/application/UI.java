@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -70,6 +73,7 @@ public class UI {
 	public static TabPane tabPane = new TabPane();
 	public static ListView<String> lv = new ListView<String>();
 	public static ObservableList<String> items =FXCollections.observableArrayList();
+	public static ExecutorService executor = Executors.newCachedThreadPool();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -739,24 +743,32 @@ public class UI {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		//tabPaneCategories.getTabs().add(general);
+		//Adding Category Tabs
 		for(int i = 0; i<catCount;i++){
 			Tab t = new Tab();
 			t.setClosable(false);
 			t.setText(catArray[i]);
 			//Setting Background Image
-			t.setOnSelectionChanged((Event e) -> {
-				if(new File(resourceFolder+t.getText()+".png").exists()){
-					URI bip = new File(resourceFolder+t.getText()+".png").toURI();
-					BackgroundImage bi= new BackgroundImage(
-							new Image(bip.toString(), 0, 0, true, true),
-					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
-					        BackgroundSize.DEFAULT);
-					bp.setBackground(new Background(bi));
+			Runnable r = new Runnable(){
+				@Override
+				public void run() {
+					if(new File(resourceFolder+t.getText()+".png").exists()){
+						URI bip = new File(resourceFolder+t.getText()+".png").toURI();
+						BackgroundImage bi= new BackgroundImage(
+								new Image(bip.toString(), 0, 0, true, true),
+						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+						        BackgroundSize.DEFAULT);
+						bp.setBackground(new Background(bi));
+					}
+					else{
+						bp.setBackground(null);
+						bp.setStyle("-fx-background-color: transparent");
+					}
 				}
-				else{
-					bp.setBackground(null);
-					bp.setStyle("-fx-background-color: transparent");
+			};
+			t.setOnSelectionChanged((Event e) -> {
+				if(t.isSelected()){
+					executor.submit(r);
 				}
 	  		});
 			
