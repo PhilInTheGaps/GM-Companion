@@ -1015,6 +1015,10 @@ public class UI {
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.getStyleClass().add("button1");
+  		  			if(new File(resourceFolder+directory+"_"+bName+".png").exists()){
+  		  				URI pic = new File(resourceFolder+directory+"_"+bName+".png").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.7;");
+  		  			}
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
@@ -1157,6 +1161,7 @@ public class UI {
 		  			
 		  			b.setText(bName);
 		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+		  			b.getStyleClass().add("button1");
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(onlineMode){
