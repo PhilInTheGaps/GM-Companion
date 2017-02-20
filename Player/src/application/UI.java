@@ -2,6 +2,7 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.Jsoup;
@@ -14,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,9 +28,15 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -86,6 +94,7 @@ public class UI {
 	public static String musicFolderName = "";
 	
 	public static String serverURL; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String resourceFolder;
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -112,9 +121,10 @@ public class UI {
 	public static double defaultSliderWidth = 320;
 	
 	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding);
-	public static double defaultFolderButtonWidth = 200;
+	public static double defaultFolderButtonWidth = 150;
+	public static double defaultFolderButtonHeight = 150;
 	public static double folderButtonWidth;
-	public static double defaultFolderButtonHeight = 100;
+	
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -717,7 +727,7 @@ public class UI {
 		BorderPane bp = new BorderPane();
 		bp.setCenter(tabPaneCategories);
 		bp.setBottom(lv);
-		bp.setStyle("-fx-background-color: transparent");
+		//bp.setStyle("-fx-background-color: transparent");
 		
 		Tab general = new Tab();
 		general.setClosable(false);
@@ -734,10 +744,24 @@ public class UI {
 			Tab t = new Tab();
 			t.setClosable(false);
 			t.setText(catArray[i]);
+			//Setting Background Image
+			t.setOnSelectionChanged((Event e) -> {
+				if(new File(resourceFolder+t.getText()+".png").exists()){
+					URI bip = new File(resourceFolder+t.getText()+".png").toURI();
+					BackgroundImage bi= new BackgroundImage(
+							new Image(bip.toString(), 0, 0, true, true),
+					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+					        BackgroundSize.DEFAULT);
+					bp.setBackground(new Background(bi));
+				}
+				else{
+					bp.setBackground(null);
+					bp.setStyle("-fx-background-color: transparent");
+				}
+	  		});
 			
 			try {
 				t.setContent(addMusicTilePane(catArray[i]));
-				addMusicTilePane(catArray[i]).setStyle("-fx-background-color: transparent");;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -855,7 +879,7 @@ public class UI {
 
 	  		}
   		
-  		Main.adjustUI();
+  		//Main.adjustUI();
   		
   		updating = false;
   		
@@ -963,8 +987,8 @@ public class UI {
   		  			b.setText(bName);
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			//b.setMaxSize(defaultFolderButtonWidth+100, defaultFolderButtonHeight);
-  		  			b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
+  		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			//b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
