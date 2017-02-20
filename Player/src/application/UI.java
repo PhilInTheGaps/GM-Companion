@@ -22,11 +22,14 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -773,7 +776,11 @@ public class UI {
 	  		});
 			
 			try {
-				t.setContent(addMusicTilePane(catArray[i]));
+				ScrollPane s = new ScrollPane();
+				s.setBackground(null);
+				s.setFitToWidth(true);
+				s.setContent(addMusicTilePane(catArray[i]));
+				t.setContent(s);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -791,7 +798,11 @@ public class UI {
 		sound.setClosable(false);
 		sound.setText("Sounds");
 		try {
-			sound.setContent(UI.addSoundTilePane());
+			ScrollPane s = new ScrollPane();
+			s.setBackground(null);
+			s.setFitToWidth(true);
+			s.setContent(UI.addSoundTilePane());
+			sound.setContent(s);
 		} catch (IOException e1) {
 			System.out.println("ERROR: Could not create Sound Buttons");
 			e1.printStackTrace();
@@ -915,6 +926,9 @@ public class UI {
   		
   		tile.getChildren().clear();
   		
+  		ScrollPane sp = new ScrollPane();
+		sp.setContent(tile);
+  		
   		String[] folderArray = new String[500];
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
@@ -1000,7 +1014,7 @@ public class UI {
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			//b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
+  		  			b.getStyleClass().add("button1");
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
