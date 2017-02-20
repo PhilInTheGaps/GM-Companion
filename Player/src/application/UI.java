@@ -1007,10 +1007,13 @@ public class UI {
   		
   		for(int i  = 0; i < folderArray.length; i++){
   				if(folderArray[i] != null){
-  					String bName = folderArray[i].toString();
+  					String bName = new String();
+  					bName = folderArray[i].toString();
   		  			Button b = new Button(String.valueOf(i));
   		  			
-  		  			b.setText(bName);
+  		  			String nbName = bName.replace("%2520", "%20");
+  		  			System.out.println(nbName);
+  		  			b.setText(nbName.replace("%20", " "));
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
@@ -1022,16 +1025,24 @@ public class UI {
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
-  		  					Music.defaultMusicPath = directory+"/"+bName;
+  		  					Music.defaultMusicPath = directory+"/"+nbName;
+  		  					System.out.println(Music.defaultMusicPath);
+			  				System.out.println(Music.defaultMusicPath);
+			  				System.out.println(Music.defaultMusicPath);
+			  				System.out.println(Music.defaultMusicPath);
+		  					System.out.println(Music.defaultMusicPath);
+		  					System.out.println(Music.defaultMusicPath);
+		  					System.out.println(Music.defaultMusicPath);
+		  					System.out.println(Music.defaultMusicPath);
   		  					System.out.println();
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+bName;
+		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+nbName;
   		  				}
   		  				
-  		  				musicFolder = directory+"/"+bName;
-  		  				musicFolderName = bName;
+  		  				musicFolder = directory+"/"+nbName;
+  		  				musicFolderName = nbName;
   		  	  			musicFolderLabel.setText("Folder: " + musicFolder);
   		  	  			Music.musicFolderSelected = true;
   		  	  			
