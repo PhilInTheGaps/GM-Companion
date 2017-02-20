@@ -95,3 +95,7 @@ Weihnachtsferien 2016
 - Weitere Google Drive Tests
 - Dropbox Tests
 - Arbeit an Cloud-Support auf Eis gelegt, in Zukunft Fokus auf GM-Hilfe
+
+20.02.2017
+- Settings(z.B. Fantasy, Science Fiction etc.) kann jetzt ein Hintergrundbild hinzugefügt werden
+- Kategorie-Button Design überarbeitet (Einarbeitung in CSS)
