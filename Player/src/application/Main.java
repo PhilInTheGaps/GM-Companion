@@ -60,6 +60,12 @@ public class Main extends Application {
                 primaryStage.getIcons().add(new Image(icon.toString()));
                 System.out.println(UI.resourceFolder);
         	}
+        	else if(new File(UI.resourceFolder+"icon.jpg").exists()){
+        		URI icon = new File(UI.resourceFolder+"icon.jpg").toURI();
+                primaryStage.getIcons().clear();
+                primaryStage.getIcons().add(new Image(icon.toString()));
+                System.out.println(UI.resourceFolder);
+        	}
         }
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
@@ -135,8 +141,16 @@ public class Main extends Application {
 		UI.addTabPane();
 		
 		//Setting Background Image
-		if(new File(UI.resourceFolder+"bg.png").exists()){
-			URI bip = new File(UI.resourceFolder+"bg.png").toURI();
+		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
+			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
+			BackgroundImage bi= new BackgroundImage(
+					new Image(bip.toString(), 0, 0, true, true),
+			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+			        BackgroundSize.DEFAULT);
+			borderPane.setBackground(new Background(bi));
+		}
+		else if(new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").exists()){
+			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").toURI();
 			BackgroundImage bi= new BackgroundImage(
 					new Image(bip.toString(), 0, 0, true, true),
 			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
