@@ -753,8 +753,16 @@ public class UI {
 			Runnable r = new Runnable(){
 				@Override
 				public void run() {
-					if(new File(resourceFolder+t.getText()+".png").exists()){
-						URI bip = new File(resourceFolder+t.getText()+".png").toURI();
+					if(new File(resourceFolder+"Backgrounds/"+t.getText()+".png").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".png").toURI();
+						BackgroundImage bi= new BackgroundImage(
+								new Image(bip.toString(), 0, 0, true, true),
+						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+						        BackgroundSize.DEFAULT);
+						bp.setBackground(new Background(bi));
+					}
+					else if(new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").toURI();
 						BackgroundImage bi= new BackgroundImage(
 								new Image(bip.toString(), 0, 0, true, true),
 						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
@@ -1016,22 +1024,18 @@ public class UI {
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.getStyleClass().add("button1");
-  		  			if(new File(resourceFolder+directory+"_"+bName+".png").exists()){
-  		  				URI pic = new File(resourceFolder+directory+"_"+bName+".png").toURI();
+  		  			if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.7;");
+  		  			}
+  		  			else if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").toURI();
 		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.7;");
   		  			}
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
   		  					Music.defaultMusicPath = directory+"/"+nbName;
-  		  					System.out.println(Music.defaultMusicPath);
-			  				System.out.println(Music.defaultMusicPath);
-			  				System.out.println(Music.defaultMusicPath);
-			  				System.out.println(Music.defaultMusicPath);
-		  					System.out.println(Music.defaultMusicPath);
-		  					System.out.println(Music.defaultMusicPath);
-		  					System.out.println(Music.defaultMusicPath);
-		  					System.out.println(Music.defaultMusicPath);
   		  					System.out.println();
   		  					//Music.slowFolder = directory;
   		  				}
