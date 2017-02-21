@@ -28,7 +28,7 @@
     -fx-background-repeat : stretch;
 }
 .label{
-	-fx-font-size: 16px;
+	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 }
 .button1 {
@@ -38,7 +38,7 @@
     -fx-background-color: white;
     -fx-border-width: 2;
     -fx-background-radius: 6, 5;
-    -fx-background-insets: 0, 1;
+    -fx-background-insets: 1, 1;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
     -fx-background-size: 150 150;
     -fx-font-weight: bold;

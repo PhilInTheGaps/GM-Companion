@@ -22,7 +22,6 @@ public class GM {
 		grid.setVgap(10);
 		grid.setMinHeight(360);
 		grid.setPadding(new Insets(20));
-		//grid.setMaxHeight(400);
 		
 		Label die = new Label("Die");
 		Label number = new Label("Number");
