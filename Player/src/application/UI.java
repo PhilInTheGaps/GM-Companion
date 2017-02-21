@@ -732,7 +732,6 @@ public class UI {
 		BorderPane bp = new BorderPane();
 		bp.setCenter(tabPaneCategories);
 		bp.setBottom(lv);
-		//bp.setStyle("-fx-background-color: transparent");
 		
 		Tab general = new Tab();
 		general.setClosable(false);
@@ -818,7 +817,7 @@ public class UI {
 		Tab gm = new Tab();
 		gm.setClosable(false);
 		gm.setText("GM Help");
-		gm.setContent(null);
+		gm.setContent(GM.GMHelp());
 		tabPane.getTabs().add(gm);
 		
 	}
