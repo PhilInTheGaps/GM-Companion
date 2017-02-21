@@ -108,3 +108,5 @@ Weihnachtsferien 2016
 - Planung des weiteren Vorgehens
 
 - Support von .jpg Dateien als Bilder
+- Dateipfad für Resourcen verbessert
+- Würfel Funktion zu GM-Hilfe hinzugefügt (W3, W4, W6, W8, W10, W12, W20, Custom; mehrere Würfel gleichzeitig)
