@@ -101,3 +101,8 @@ Weihnachtsferien 2016
 - Kategorie-Button Design überarbeitet (Einarbeitung in CSS)
 - ScrollBar hinzugefügt, um mehr Musik und Sound Ordner darstellen zu können
 - Musik Buttons können jetzt Bilder bekommen
+
+21.02.2017 (Schule)
+- Buttondesignplanung
+- Planung eines Betatests (22.02.2017)
+- Planung des weiteren Vorgehens
