@@ -106,3 +106,5 @@ Weihnachtsferien 2016
 - Buttondesignplanung
 - Planung eines Betatests (22.02.2017)
 - Planung des weiteren Vorgehens
+
+- Support von .jpg Dateien als Bilder
