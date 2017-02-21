@@ -52,7 +52,7 @@ public class Main extends Application {
         primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.5 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
         	if(new File(UI.resourceFolder+"icon.png").exists()){
         		URI icon = new File(UI.resourceFolder+"icon.png").toURI();

@@ -524,6 +524,7 @@ public class UI {
   		
   		Label mVolumeLabel = new Label();
   		mVolumeLabel.setText("Music Volume:");
+  		mVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(mVolumeLabel);
   		
   		//mVolume Slider
@@ -547,6 +548,7 @@ public class UI {
   		
   		Label sVolumeLabel = new Label();
   		sVolumeLabel.setText("Sound Volume:");
+  		sVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(sVolumeLabel);
   		
   		//sVolume Slider
@@ -569,39 +571,38 @@ public class UI {
   		vBox.getChildren().add(sVolumeSlider);
   		
   		//Music Information
-  		Label spacerLabel2 = new Label();
-  		spacerLabel2.setText("");
-  		vBox.getChildren().add(spacerLabel2);
   		
   		Label trackLabel = new Label();
   		trackLabel.setText("Music Track Information:");
   		vBox.getChildren().add(trackLabel);
   		
   		musicFolderLabel.setText("Folder: " + musicFolder);
+  		musicFolderLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(musicFolderLabel);
   		
   		titleLabel.setText("Title: " + Title);
+  		titleLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(titleLabel);
   		
   		albumLabel.setText("Album: " + Title);
+  		albumLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(albumLabel);
   		
   		artistLabel.setText("Artist: " + Title);
+  		artistLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(artistLabel);
   		
   		yearLabel.setText("Year: " + Title);
+  		yearLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(yearLabel);
   		
   		//Sound Information
-  		Label spacerLabelS = new Label();
-  		spacerLabelS.setText("");
-  		vBox.getChildren().add(spacerLabelS);
-  		
   		Label soundInfoLabel = new Label();
   		soundInfoLabel.setText("Sound Information:");
   		vBox.getChildren().add(soundInfoLabel);
   		
   		soundFolderLabel.setText("Folder: " + soundFolder);
+  		soundFolderLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(soundFolderLabel);
   		
   		//Debug Information
@@ -652,30 +653,27 @@ public class UI {
   		}
   		
   		if(debug){
-  		
-  		spacerLabel.setText("");
-  		vBox.getChildren().add(spacerLabel);
-  		
-  		debugLabel.setText("Debug Information:");
-  		vBox.getChildren().add(debugLabel);
-  		
-  		pathLabel.setText(".jar Path: " + mainPath);
-  		vBox.getChildren().add(pathLabel);
-  		
-  		pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
-  		vBox.getChildren().add(pathLabel2);
-  		
-  		pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
-  		vBox.getChildren().add(pathLabel3);
-  		
-  		osLabel.setText("OS: " + osName);
-  		vBox.getChildren().add(osLabel);
+	  		spacerLabel.setText("");
+	  		vBox.getChildren().add(spacerLabel);
+	  		
+	  		debugLabel.setText("Debug Information:");
+	  		vBox.getChildren().add(debugLabel);
+	  		
+	  		pathLabel.setText(".jar Path: " + mainPath);
+	  		vBox.getChildren().add(pathLabel);
+	  		
+	  		pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
+	  		vBox.getChildren().add(pathLabel2);
+	  		
+	  		pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
+	  		vBox.getChildren().add(pathLabel3);
+	  		
+	  		osLabel.setText("OS: " + osName);
+	  		vBox.getChildren().add(osLabel);
   		}
   		 
   		//Set Cover Image
   		//coverImage.setFitHeight(defaultSliderWidth-30);
-  		Label coverSpacerLabel = new Label();
-  		vBox.getChildren().add(coverSpacerLabel);
   		coverImage.setFitWidth(defaultSliderWidth);
   		coverImage.setPreserveRatio(true);
   		vBox.getChildren().add(coverImage);
@@ -1025,11 +1023,11 @@ public class UI {
   		  			b.getStyleClass().add("button1");
   		  			if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").exists()){
   		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.7;");
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
   		  			}
   		  			else if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").exists()){
   		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.7;");
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
   		  			}
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
