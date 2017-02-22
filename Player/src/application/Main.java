@@ -23,6 +23,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
 	
@@ -48,11 +49,12 @@ public class Main extends Application {
 		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
-
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.5 Beta");
+        
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
-        //primaryStage.setMaximized(true);
+        primaryStage.setMaximized(true);
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
         	if(new File(UI.resourceFolder+"icon.png").exists()){
         		URI icon = new File(UI.resourceFolder+"icon.png").toURI();
@@ -69,7 +71,7 @@ public class Main extends Application {
         }
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("DarkMode.css").toExternalForm());
 	}
 	
 	//Defining Scene
@@ -130,7 +132,6 @@ public class Main extends Application {
 		//Add Components
         borderPane = new BorderPane();
         borderPane.setTop(UI.addToolBar());
-        //borderPane.setStyle("-fx-background-color: White");
         borderPane.setCenter(UI.tabPane);	
 		borderPane.setLeft(UI.addVBox());
 		try {
@@ -157,12 +158,9 @@ public class Main extends Application {
 			        BackgroundSize.DEFAULT);
 			borderPane.setBackground(new Background(bi));
 		}
-		else{
-			borderPane.setStyle("-fx-background-color: LightGrey");
-		}
 		
         scene = new Scene(borderPane, 1280, 720);
-        scene.setFill(Color.WHITE);
+        //scene.setFill(Color.WHITE);
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
         
@@ -256,7 +254,7 @@ public class Main extends Application {
 			System.out.println("OS detected as Linux");
 		}
 		else{
-			System.out.println("OS currently not supportet, maybe it will work, maybe not.");
+			System.out.println("OS currently not natively supportet, maybe it will work, maybe not.");
 			UI.windows = true;
 		}
 		System.out.println("");
