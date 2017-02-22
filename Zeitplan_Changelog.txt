@@ -110,3 +110,7 @@ Weihnachtsferien 2016
 - Support von .jpg Dateien als Bilder
 - Dateipfad für Resourcen verbessert
 - Würfel Funktion zu GM-Hilfe hinzugefügt (W3, W4, W6, W8, W10, W12, W20, Custom; mehrere Würfel gleichzeitig)
+
+22.02.2017
+- erfolgreicher Beta-Test
+- Arbeit an besserem UI (Darkmode und Aufräumung der ToolBar/TabPane)
