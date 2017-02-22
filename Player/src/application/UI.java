@@ -142,7 +142,6 @@ public class UI {
   		toolBar1.setAlignment(Pos.CENTER_LEFT);
   		toolBar1.alignmentProperty().isBound();
   		toolBar1.setSpacing(defaultSpacing/2);
-  		toolBar1.setStyle("-fx-background-color: Grey");
   		toolBar1.setMinHeight(50);
   		toolBar1.setMaxHeight(50);
   		
@@ -151,7 +150,6 @@ public class UI {
   		toolBar2.setAlignment(Pos.CENTER_LEFT);
   		toolBar2.alignmentProperty().isBound();
   		toolBar2.setSpacing(defaultSpacing/2);
-  		toolBar2.setStyle("-fx-background-color: Grey");
   		toolBar2.setMinHeight(50);
   		toolBar2.setMaxHeight(50);
   		
@@ -508,7 +506,7 @@ public class UI {
   		
   		toolBox.getChildren().add(toolBar1);
   		toolBox.getChildren().add(toolBar2);
-  		
+  		toolBox.getStyleClass().add("hbox");
   		return toolBox;
   		}
 	
@@ -517,9 +515,8 @@ public class UI {
 		System.out.println("Adding MediaInfo Box...");
   		VBox vBox = new VBox();
   		vBox.setPadding(new Insets(defaultPadding));
-  		vBox.setStyle("-fx-background-color: White");
   		vBox.setMaxWidth(defaultSliderWidth+2*defaultPadding);
-  		
+  		vBox.getStyleClass().add("vbox");
   		vBox.getChildren().clear();
   		
   		Label mVolumeLabel = new Label();
@@ -702,13 +699,11 @@ public class UI {
 		tabPane.setTabMinWidth(200);
 		tabPane.setTabMinHeight(45);
 		tabPane.getTabs().clear();
-		tabPane.setStyle("-fx-background-color: transparent");
 		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
 		TabPane tabPaneCategories = new TabPane();
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
-		tabPaneCategories.setStyle("-fx-background-color: transparent");
 		
 		lv.setMaxHeight(150);
 		lv.setFocusTraversable(false);
@@ -768,7 +763,6 @@ public class UI {
 					}
 					else{
 						bp.setBackground(null);
-						bp.setStyle("-fx-background-color: transparent");
 					}
 				}
 			};
@@ -922,8 +916,6 @@ public class UI {
   		tile.setVgap(defaultPadding/4);
   		tile.setHgap(defaultPadding/4);
   		tile.setPrefColumns(3);
-  		//tile.setStyle("-fx-background-color: LightGrey");
-  		tile.setStyle("-fx-background-color: transparent");
   		tile.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
@@ -1083,8 +1075,6 @@ public class UI {
   		tile2.setVgap(defaultPadding/4);
   		tile2.setHgap(defaultPadding/4);
   		tile2.setPrefColumns(3);
-  		//tile2.setStyle("-fx-background-color: LightGrey");
-  		tile2.setStyle("-fx-background-color: transparent");
   		tile2.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
@@ -1234,7 +1224,6 @@ public class UI {
 	//Adds ProgressBar
 	public static HBox addBotBox() throws IOException{
   		botBox.setMinHeight(20);
-  		botBox.setStyle("-fx-background-color: Grey");
   		
   		pb.setPrefWidth(defaultWidth);
   		pb.setPrefHeight(5);

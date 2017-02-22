@@ -30,7 +30,6 @@ import org.apache.commons.io.FileUtils;
 
 public class Music {
 	public static MediaPlayer mediaPlayer;
-	//public static Duration duration;
 	public static Media mMedia;
 	public static String musicPath;
 	public static String[] musicPathList = new String[500];
