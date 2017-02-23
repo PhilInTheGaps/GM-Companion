@@ -6,9 +6,9 @@
  /*Default Button*/
 .button {
 	-fx-opacity: 1;
-    -fx-text-fill: black;
+    -fx-text-fill: white;
     -fx-font-size: 14px;
-    -fx-background-color: transparent;
+    -fx-background-color: #666666;
     -fx-border-width: 1;
     -fx-background-radius: 0, 0;
     -fx-background-insets: 0, 1;
@@ -24,9 +24,9 @@
 /*Default Text Field */
 .text-field{
 	-fx-opacity: 1;
-    -fx-text-fill: transparent;
+    -fx-text-fill: white;
     -fx-font-size: 14px;
-    -fx-background-color: transparent;
+    -fx-background-color: #666666;
     -fx-border-width: 1;
     -fx-background-radius: 0, 0;
     -fx-background-insets: 0, 1;
@@ -39,14 +39,15 @@
 .label{
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
+	-fx-text-fill: white;
 }
 
 /*Custom Folder Button */
 .button1 {
 	-fx-opacity: 0.9;
-    -fx-text-fill: transparent;
+    -fx-text-fill: white;
     -fx-font-size: 14px;
-    -fx-background-color: transparent;
+    -fx-background-color: #666666;
     -fx-border-width: 2;
     -fx-background-radius: 6, 5;
     -fx-background-insets: 1, 1;
@@ -57,7 +58,7 @@
     -fx-background-repeat : stretch;
 }
 .button1:hover {
-    -fx-background-color: derive(transparent,30%);
+    -fx-background-color: derive(#222222,30%);
     -fx-opacity: 1;
 }
 
@@ -87,20 +88,52 @@
 
 /*Default BorderPane */
 .border-pane{
-	-fx-background-color: transparent;
+	-fx-background-color: #222222;
 }
 
 /*Default vBox */
 .vbox {
-	-fx-background-color: transparent;
+	-fx-background-color: #222222;
 }
 
 /*Default hBox */
 .hbox {
-	-fx-background-color: transparent;
+	-fx-background-color: #222222;
+}
+
+/*Default MenuBar */
+.menu-bar {
+	-fx-background-color: #666666;
+}
+.menu{
+	-fx-background-color: #666666;
+}
+.menu:showing{
+	-fx-background-color: #222222;
+}
+.context-menu {
+    -fx-background-color: #222222;
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em;
+}
+.menu-item:focused {
+     -fx-background-color: #666666;
 }
 
 /*Default ListView */
 .list-view{
 	-fx-background-color: #666666;
 }
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-text-fill: white;
+    -fx-background-color: #666666;
+}
+.list-cell{
+	-fx-text-fill: white;
+}
+.list-cell:even {
+    -fx-background-color: #222222;
+}
+.list-cell:odd {
+    -fx-background-color: #333333;
+}
+

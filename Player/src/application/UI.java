@@ -136,6 +136,10 @@ public class UI {
 	public static double defaultFolderButtonHeight = 150;
 	public static double folderButtonWidth;
 	
+	public static Tab tmusic = new Tab();
+	public static Tab sound = new Tab();
+	public static Tab tgm = new Tab();
+	
 	//Menus
 	public static Menu options = new Menu("Options");
 	public static Menu music = new Menu("Music");
@@ -218,70 +222,39 @@ public class UI {
   	  			
   	  			addTabPane();
 				addSoundTilePane();
+				tabPane.getStylesheets().clear();
+				tabPane.getStyleClass().add(".tab-pane");
 				
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
   		});
+  		
+  		//All Sounds
+  		MenuItem allS = new MenuItem("All");
+  		allS.setOnAction((ActionEvent e) ->{
+  			tabPane.getSelectionModel().select(sound);
+  		});
+  		
+  		//Dice
+  		MenuItem dice = new MenuItem("Dice");
+  		dice.setOnAction((ActionEvent e) ->{
+  			tabPane.getSelectionModel().select(tgm);
+  		});
 		
         //Adding Items to Menus
+  		gmh.getItems().addAll(dice);
+  		sounds.getItems().addAll(allS);
   		options.getItems().addAll(random, single, online, fupdate);
         
 		return menu;
 	}
 	
-	//Adds the toolbar on the top
+	//Adds the toolbar at the top
 	public static VBox addToolBar() {
 		System.out.println("Adding toolbar...");
 		//Adding a VBox that contains 2 HBoxes
 		VBox toolBox = new VBox();
-		
-  		//Setting ToolBar1 Style
-  		toolBar1.setPadding(new Insets(defaultPadding/2, defaultPadding/2, defaultPadding/4, defaultPadding/2));
-  		toolBar1.setAlignment(Pos.CENTER_LEFT);
-  		toolBar1.alignmentProperty().isBound();
-  		toolBar1.setSpacing(defaultSpacing/2);
-  		toolBar1.setMinHeight(50);
-  		toolBar1.setMaxHeight(50);
-  		
-  		//Setting ToolBar2 Style
-  		toolBar2.setPadding(new Insets(defaultPadding/4, defaultPadding/2, defaultPadding/2, defaultPadding/2));
-  		toolBar2.setAlignment(Pos.CENTER_LEFT);
-  		toolBar2.alignmentProperty().isBound();
-  		toolBar2.setSpacing(defaultSpacing/2);
-  		toolBar2.setMinHeight(50);
-  		toolBar2.setMaxHeight(50);
-  		
-  		//Play Button
-  		Button playButton = new Button();
-  		playButton.setText("Play / Continue");
-  		playButton.setPrefHeight(defaultButtonHeight);
-  		playButton.setOnAction((ActionEvent e) ->{
-  			if(Music.isPaused){
-  				Music.mediaPlayer.play();
-  			}
-  			if(Sound.isPaused){
-  				Sound.soundPlayer.play();
-  			}
-  			
-  			if(Music.isPaused == false){
-  				if(Music.musicFolderSelected == true){
-  	  				Music.play();
-  	  			}
-  	  			else{
-  	  				Music.musicError = "Please select music folder!";
-  	  			}
-  			}
-  			
-  			if(Sound.isPaused == false){
-  				if(Sound.soundFolderSelected == true){
-  	  				Sound.play();
-  	  			}
-  	  			else{
-  	  				Sound.soundError = "Please select sound folder!";
-  	  			}
-  			}
-  		});
   		
   		//Pause Button
   		Button pauseButton = new Button();
@@ -304,32 +277,6 @@ public class UI {
   			}
   		});
   		
-  		//Pause Music Button
-  		Button pauseMButton = new Button();
-  		pauseMButton.setText("Pause Music");
-  		pauseMButton.setPrefHeight(defaultButtonHeight);
-  		pauseMButton.setOnAction((ActionEvent e) -> {
-  			if(Music.musicFolderSelected == true){
-  				Music.mediaPlayer.pause();
-  			}
-  			else{
-  				Music.musicError = "Please select sound folder!";
-  			}
-  		});
-  		
-  		//Pause Sound Button
-  		Button pauseSButton = new Button();
-  		pauseSButton.setText("Pause Sound");
-  		pauseSButton.setPrefHeight(defaultButtonHeight);
-  		pauseSButton.setOnAction((ActionEvent e) -> {
-  			if(Sound.soundFolderSelected == true){
-  				Sound.soundPlayer.pause();
-  			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
-  			}
-  		});
-  		
   		//Files Button
   		Button filesButton = new Button();
   		filesButton.setText("Files");
@@ -338,75 +285,6 @@ public class UI {
   			Music.mediaPlayer.stop();
   			chooser();
   		});
-  		
-  		//Reload Music Button
-  		Button reloadMButton = new Button();
-  		reloadMButton.setText("Replay Track");
-  		reloadMButton.setPrefHeight(defaultButtonHeight);
-  		reloadMButton.setOnAction((ActionEvent e) -> {
-  			if(Music.musicFolderSelected == true){
-  				Music.mediaPlayer.seek(Music.mediaPlayer.getStartTime());
-  			}
-  			else{
-  				Music.musicError = "Please select music folder!";
-  			}
-  			
-  		});
-  		
-  		//Reload Sound Button
-  		Button reloadSButton = new Button();
-  		reloadSButton.setText("Replay Sound");
-  		reloadSButton.setPrefHeight(defaultButtonHeight);
-  		reloadSButton.setOnAction((ActionEvent e) -> {
-  			if(Sound.soundFolderSelected == true){
-  				Sound.soundPlayer.seek(Sound.soundPlayer.getStartTime());
-  			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
-  			}
-  			
-  		});
-  		
-  		//Next Music Button
-  		Button nextMButton = new Button();
-  		nextMButton.setText("Next Song");
-  		nextMButton.setPrefHeight(defaultButtonHeight);
-  		nextMButton.setOnAction((ActionEvent e) -> {
-  			if(Music.musicFolderSelected == true){
-  				Music.next();
-  			}
-  			else{
-  				Music.musicError = "Please select music folder!";
-  			}
-  			
-  		});
-  		
-  		//Next Sound Button
-  		Button nextSButton = new Button();
-  		nextSButton.setText("Next Sound");
-  		nextSButton.setPrefHeight(defaultButtonHeight);
-  		nextSButton.setOnAction((ActionEvent e) -> {
-  			if(Sound.soundFolderSelected == true){
-  				Sound.next();
-  			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
-  			}
-  			
-  		});
-  		
-  		
-  		
-  		
-  		
-  		
-  		//SpacerLabel1
-  		Label spacerLabel1 = new Label();
-  		spacerLabel1.setPrefWidth(150);
-  		
-  		//SpacerLabel1
-  		Label spacerLabel2 = new Label();
-  		spacerLabel2.setPrefWidth(150);
   		
   		//Server URL
   		TextField serverField = new TextField();
@@ -457,14 +335,6 @@ public class UI {
   		settings.setPrefHeight(defaultButtonHeight);
   		settings.setText("Settings");
   		
-  		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, serverField, setServerURL); //, slow
-  		
-  		//Set Button Width
-  		//int buttonCount = toolBar1.getChildren().toArray().length;
-  		//double defaultButtonWidth = defaultButtonWidth; //(defaultWidth - ((buttonCount+1)*defaultPadding)) / buttonCount
-  		
   		Object[] bArray1 = toolBar1.getChildren().toArray();
         Object[] bArray2 = toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
@@ -494,9 +364,87 @@ public class UI {
   		vBox.getChildren().clear();
   		
   		Label mVolumeLabel = new Label();
-  		mVolumeLabel.setText("Music Volume:");
+  		mVolumeLabel.setText("Music:");
   		mVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(mVolumeLabel);
+  		
+  		//Setting ToolBar1 Style
+  		toolBar1.setPadding(new Insets(defaultPadding/2, defaultPadding/2, defaultPadding/4, defaultPadding/2));
+  		toolBar1.setAlignment(Pos.CENTER_LEFT);
+  		toolBar1.alignmentProperty().isBound();
+  		toolBar1.setSpacing(defaultSpacing/2);
+  		toolBar1.setMinHeight(50);
+  		toolBar1.setMaxHeight(50);
+  		toolBar1.getChildren().clear();
+  		vBox.getChildren().add(toolBar1);
+  		
+  		//Play Button
+  		Button playButton = new Button();
+  		playButton.setText("Play");
+  		playButton.setMinHeight(25);
+  		playButton.setMaxHeight(defaultButtonHeight);
+  		playButton.setOnAction((ActionEvent e) ->{
+  			if(Music.isPaused){
+  				Music.mediaPlayer.play();
+  			}
+  			
+  			if(Music.isPaused == false){
+  				if(Music.musicFolderSelected == true){
+  	  				Music.play();
+  	  			}
+  	  			else{
+  	  				Music.musicError = "Please select music folder!";
+  	  			}
+  			}
+  		});
+  		toolBar1.getChildren().add(playButton);
+  		
+  		//Pause Music Button
+  		Button pauseMButton = new Button();
+  		pauseMButton.setText("Pause");
+  		pauseMButton.setMinHeight(25);
+  		pauseMButton.setMaxHeight(defaultButtonHeight);
+  		pauseMButton.setOnAction((ActionEvent e) -> {
+  			if(Music.musicFolderSelected == true){
+  				Music.mediaPlayer.pause();
+  			}
+  			else{
+  				Music.musicError = "Please select sound folder!";
+  			}
+  		});
+  		toolBar1.getChildren().add(pauseMButton);
+  		
+  		//Reload Music Button
+  		Button reloadMButton = new Button();
+  		reloadMButton.setText("Replay");
+  		reloadMButton.setMinHeight(25);
+  		reloadMButton.setMaxHeight(defaultButtonHeight);
+  		reloadMButton.setOnAction((ActionEvent e) -> {
+  			if(Music.musicFolderSelected == true){
+  				Music.mediaPlayer.seek(Music.mediaPlayer.getStartTime());
+  			}
+  			else{
+  				Music.musicError = "Please select music folder!";
+  			}
+  			
+  		});
+  		toolBar1.getChildren().add(reloadMButton);
+  		
+  		//Next Music Button
+  		Button nextMButton = new Button();
+  		nextMButton.setText("Next");
+  		nextMButton.setMinHeight(25);
+  		nextMButton.setMaxHeight(defaultButtonHeight);
+  		nextMButton.setOnAction((ActionEvent e) -> {
+  			if(Music.musicFolderSelected == true){
+  				Music.next();
+  			}
+  			else{
+  				Music.musicError = "Please select music folder!";
+  			}
+  			
+  		});
+  		toolBar1.getChildren().add(nextMButton);
   		
   		//mVolume Slider
   		mVolumeSlider = new Slider();
@@ -518,9 +466,83 @@ public class UI {
   		vBox.getChildren().add(mVolumeSlider);
   		
   		Label sVolumeLabel = new Label();
-  		sVolumeLabel.setText("Sound Volume:");
+  		sVolumeLabel.setText("Sound:");
   		sVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(sVolumeLabel);
+  		
+  		//Setting ToolBar2 Style
+  		toolBar2.setPadding(new Insets(defaultPadding/4, defaultPadding/2, defaultPadding/2, defaultPadding/2));
+  		toolBar2.setAlignment(Pos.CENTER_LEFT);
+  		toolBar2.alignmentProperty().isBound();
+  		toolBar2.setSpacing(defaultSpacing/2);
+  		toolBar2.setMinHeight(50);
+  		toolBar2.setMaxHeight(50);
+  		toolBar2.getChildren().clear();
+  		vBox.getChildren().add(toolBar2);
+  		
+  		//Play Button
+  		Button playSButton = new Button();
+  		playSButton.setText("Play");
+  		playSButton.setPrefHeight(defaultButtonHeight);
+  		playSButton.setOnAction((ActionEvent e) ->{
+  			if(Sound.isPaused){
+  				Sound.soundPlayer.play();
+  			}
+  			
+  			if(Sound.isPaused == false){
+  				if(Sound.soundFolderSelected == true){
+  	  				Sound.play();
+  	  			}
+  	  			else{
+  	  				Sound.soundError = "Please select sound folder!";
+  	  			}
+  			}
+  		});
+  		toolBar2.getChildren().add(playSButton);
+  		
+  		//Pause Sound Button
+  		Button pauseSButton = new Button();
+  		pauseSButton.setText("Pause");
+  		pauseSButton.setPrefHeight(defaultButtonHeight);
+  		pauseSButton.setOnAction((ActionEvent e) -> {
+  			if(Sound.soundFolderSelected == true){
+  				Sound.soundPlayer.pause();
+  			}
+  			else{
+  				Sound.soundError = "Please select sound folder!";
+  			}
+  		});
+  		toolBar2.getChildren().add(pauseSButton);
+  		
+  		//Reload Sound Button
+  		Button reloadSButton = new Button();
+  		reloadSButton.setText("Replay");
+  		reloadSButton.setPrefHeight(defaultButtonHeight);
+  		reloadSButton.setOnAction((ActionEvent e) -> {
+  			if(Sound.soundFolderSelected == true){
+  				Sound.soundPlayer.seek(Sound.soundPlayer.getStartTime());
+  			}
+  			else{
+  				Sound.soundError = "Please select sound folder!";
+  			}
+  			
+  		});
+  		toolBar2.getChildren().add(reloadSButton);
+  		
+  		//Next Sound Button
+  		Button nextSButton = new Button();
+  		nextSButton.setText("Next");
+  		nextSButton.setPrefHeight(defaultButtonHeight);
+  		nextSButton.setOnAction((ActionEvent e) -> {
+  			if(Sound.soundFolderSelected == true){
+  				Sound.next();
+  			}
+  			else{
+  				Sound.soundError = "Please select sound folder!";
+  			}
+  			
+  		});
+  		toolBar2.getChildren().add(nextSButton);
   		
   		//sVolume Slider
   		sVolumeSlider = new Slider();
@@ -674,13 +696,6 @@ public class UI {
 		tabPane.setTabMinHeight(45);
 		tabPane.getTabs().clear();
 		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		tabPane.getStylesheets().clear();
-		try{
-			tabPane.getStylesheets().add("tab-pane");
-		}
-		catch(Exception e){
-			
-		}
 		
 		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
@@ -772,6 +787,7 @@ public class UI {
 			}
 			
 			mi.setOnAction((ActionEvent e) ->{
+				tabPane.getSelectionModel().select(tmusic);
 				tabPaneCategories.getSelectionModel().select(t);
 			});
 			
@@ -779,17 +795,15 @@ public class UI {
 			music.getItems().add(mi);
 		}
 		
-		Tab music = new Tab();
-		music.setClosable(false);
-		music.setText("Music");
-		music.setContent(bp);
-		tabPane.getTabs().add(music);
+		tmusic.setClosable(false);
+		tmusic.setText("Music");
+		tmusic.setContent(bp);
+		tabPane.getTabs().add(tmusic);
 		
-		Tab sound = new Tab();
 		sound.setClosable(false);
 		sound.setText("Sounds");
+		ScrollPane s = new ScrollPane();
 		try {
-			ScrollPane s = new ScrollPane();
 			s.setBackground(null);
 			s.setFitToWidth(true);
 			s.setContent(UI.addSoundTilePane());
@@ -798,13 +812,39 @@ public class UI {
 			System.out.println("ERROR: Could not create Sound Buttons");
 			e1.printStackTrace();
 		}
+		Runnable r2 = new Runnable(){
+			@Override
+			public void run() {
+				if(new File(resourceFolder+"Backgrounds/"+"Sounds.png").exists()){
+					URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.png").toURI();
+					BackgroundImage bi= new BackgroundImage(
+							new Image(bip.toString(), 0, 0, true, true),
+					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+					        BackgroundSize.DEFAULT);
+					s.setBackground(new Background(bi));
+				}
+				else if(new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").exists()){
+					URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").toURI();
+					BackgroundImage bi= new BackgroundImage(
+							new Image(bip.toString(), 0, 0, true, true),
+					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+					        BackgroundSize.DEFAULT);
+					s.setBackground(new Background(bi));
+				}
+				else{
+					s.setBackground(null);
+				}
+			}
+		};
+	
+		executor.submit(r2);
+		
 		tabPane.getTabs().add(sound);
 		
-		Tab gm = new Tab();
-		gm.setClosable(false);
-		gm.setText("GM Help");
-		gm.setContent(GM.GMHelp());
-		tabPane.getTabs().add(gm);
+		tgm.setClosable(false);
+		tgm.setText("GM Help");
+		tgm.setContent(GM.GMHelp());
+		tabPane.getTabs().add(tgm);
 		
 	}
 	
