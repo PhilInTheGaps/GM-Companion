@@ -134,6 +134,7 @@ public class Main extends Application {
         borderPane.setTop(UI.menu()); //UI.addToolBar() new VBox().getChildren().addAll(UI.menu(), UI.addToolBar())
         borderPane.setCenter(UI.tabPane);
 		borderPane.setLeft(UI.addVBox());
+		borderPane.getStyleClass().add("border-pane");
 		try {
 			borderPane.setBottom(UI.addBotBox());
 		} catch (IOException e) {
@@ -142,6 +143,7 @@ public class Main extends Application {
 		UI.addTabPane();
 		
 		//Setting Background Image
+		/*
 		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
 		 
 			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
@@ -159,6 +161,7 @@ public class Main extends Application {
 			        BackgroundSize.DEFAULT);
 			borderPane.setBackground(new Background(bi));
 		}
+		*/
 		
         scene = new Scene(borderPane, 1280, 720);
         //scene.setFill(Color.WHITE);
