@@ -24,13 +24,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -75,6 +80,7 @@ public class UI {
 	public static ListView<String> lv = new ListView<String>();
 	public static ObservableList<String> items =FXCollections.observableArrayList();
 	public static ExecutorService executor = Executors.newCachedThreadPool();
+	public static MenuBar menu = new MenuBar();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -130,6 +136,99 @@ public class UI {
 	public static double defaultFolderButtonHeight = 150;
 	public static double folderButtonWidth;
 	
+	//Menus
+	public static Menu options = new Menu("Options");
+	public static Menu music = new Menu("Music");
+	public static Menu sounds = new Menu("Sounds");
+	public static Menu gmh = new Menu("GM Help");
+	
+	//Adds Menu
+	public static MenuBar menu(){
+		//Add Menus to the MenuBar
+        menu.getMenus().addAll(gmh, music, sounds, options);
+        
+		//Menu Items
+        //Random Mode
+        CheckMenuItem random = new CheckMenuItem("Random Mode");
+        if(randomTrack == true){
+  			random.setSelected(true);
+  		}
+  		else{
+  			random.setSelected(false);
+  		}
+        random.setOnAction((ActionEvent e) ->{
+        	if(random.isSelected()){
+				randomTrack = true;
+			}
+			else{
+				randomTrack = false;
+			}
+        });
+        
+        //Single Track Mode
+        CheckMenuItem single = new CheckMenuItem("Single Track Mode");
+        if(singleTrack == true){
+  			single.setSelected(true);
+  		}
+  		else{
+  			single.setSelected(false);
+  		}
+        random.setOnAction((ActionEvent e) ->{
+        	if(single.isSelected()){
+				singleTrack = true;
+			}
+			else{
+				singleTrack = false;
+			}
+        });
+        
+        //Online Mode
+        CheckMenuItem online = new CheckMenuItem("Online Mode");
+  		if(onlineMode == true){
+  			online.setSelected(true);
+  		}
+  		else{
+  			online.setSelected(false);
+  		}
+  		online.setOnAction((ActionEvent e) -> {
+  			if(localOnline == true){
+  				localOnline = false;
+  			}
+  			else{
+  				localOnline = true;
+  			}
+  		});
+  		
+  		//Update Folders
+  		MenuItem fupdate = new MenuItem("Update Folders");
+  		fupdate.setOnAction((ActionEvent e) -> {
+  			System.out.println("Updating Folders...");
+  			try {
+  				onlineMode = localOnline;
+  				if(Music.musicFolderSelected == true){
+  					Music.mediaPlayer.pause();
+  	  			}
+  	  			if(Sound.soundFolderSelected == true){
+  	  				Sound.soundPlayer.pause();
+  	  			}
+  	  			
+  	  			updating = true;
+  	  			
+  	  			music.getItems().clear();
+  	  			
+  	  			addTabPane();
+				addSoundTilePane();
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+  		});
+		
+        //Adding Items to Menus
+  		options.getItems().addAll(random, single, online, fupdate);
+        
+		return menu;
+	}
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -296,108 +395,10 @@ public class UI {
   			
   		});
   		
-  		//Toggle Random
-  		Button toggleRandomButton = new Button();
-  		toggleRandomButton.setPrefHeight(defaultButtonHeight);
-  		if(randomTrack == true){
-  			toggleRandomButton.setText("Disable Random Mode");
-  		}
-  		else{
-  			toggleRandomButton.setText("Enable Random Mode");
-  		}
-  		toggleRandomButton.setOnAction((ActionEvent e) -> {
-  			if(randomTrack == true){
-  				randomTrack = false;
-  				toggleRandomButton.setText("Enable Random Mode");
-  			}
-  			else{
-  				randomTrack = true;
-  				toggleRandomButton.setText("Disable Random Mode");
-  			}
-  		});
-  		
-  		//Random CheckBox
-  		CheckBox randomMode = new CheckBox();
-  		randomMode.setPrefHeight(defaultButtonHeight);
-  		randomMode.setText("Random Mode");
-  		if(randomTrack == true){
-  			randomMode.setSelected(true);
-  		}
-  		else{
-  			randomMode.setSelected(false);
-  		}
-  		randomMode.setOnAction((ActionEvent e) -> {
-			if(randomMode.isSelected()){
-				randomTrack = true;
-			}
-			else{
-				randomTrack = false;
-			}
-  			
-  		});
-  		
-  		//Toggle Single Track
-  		Button toggleSingleButton = new Button();
-  		toggleSingleButton.setPrefHeight(defaultButtonHeight);
-  		if(singleTrack == true){
-  			toggleSingleButton.setText("Disable Single Mode");
-  		}
-  		else{
-  			toggleSingleButton.setText("Enable Single Mode");
-  		}
-  		toggleSingleButton.setOnAction((ActionEvent e) -> {
-  			if(singleTrack == true){
-  				singleTrack = false;
-  				toggleSingleButton.setText("Enable Single Mode");
-  			}
-  			else{
-  				singleTrack = true;
-  				toggleSingleButton.setText("Disable Single Mode");
-  			}
-  			
-  		});
-  		
-  		//SingleTrack CheckBox
-  		CheckBox singleTrackBox = new CheckBox();
-  		singleTrackBox.setPrefHeight(defaultButtonHeight);
-  		singleTrackBox.setText("Single Track Mode");
-  		if(singleTrack == true){
-  			singleTrackBox.setSelected(true);
-  		}
-  		else{
-  			singleTrackBox.setSelected(false);
-  		}
-  		singleTrackBox.setOnAction((ActionEvent e) -> {
-			if(singleTrackBox.isSelected()){
-				singleTrack = true;
-			}
-			else{
-				singleTrack = false;
-			}
-  			
-  		});
   		
   		
-  		//Online Mode Button
-  		Button toggleOnline = new Button();
-  		toggleOnline.setPrefHeight(defaultButtonHeight);
-  		if(onlineMode == true){
-  			toggleOnline.setText("Use Local Files");
-  		}
-  		else{
-  			toggleOnline.setText("Use Server Files");
-  		}
-  		toggleOnline.setOnAction((ActionEvent e) -> {
-  			if(localOnline == true){
-  				localOnline = false;
-  				toggleOnline.setText("Use Server Files");
-  			}
-  			else{
-  				localOnline = true;
-  				toggleOnline.setText("Use Local Files");
-  			}
-  			
-  		});
+  		
+  		
   		
   		//SpacerLabel1
   		Label spacerLabel1 = new Label();
@@ -433,33 +434,6 @@ public class UI {
   			Sound.serverSoundsURL = serverURL + "sounds/";
   		});
   		
-  		//Update Folders
-  		Button updateFolders = new Button();
-  		updateFolders.setPrefHeight(defaultButtonHeight);
-  		//updateFolders.setPrefWidth(75);
-  		updateFolders.setText("Update");
-  		updateFolders.setOnAction((ActionEvent e) -> {
-  			System.out.println("Updating Folders...");
-  			try {
-  				onlineMode = localOnline;
-  				if(Music.musicFolderSelected == true){
-  					Music.mediaPlayer.pause();
-  	  			}
-  	  			if(Sound.soundFolderSelected == true){
-  	  				Sound.soundPlayer.pause();
-  	  			}
-  	  			
-  	  			updating = true;
-  	  			
-  	  			addTabPane();
-				//addMusicTilePane();
-				addSoundTilePane();
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-  		});
-  		
   		//Set Slow Server Mode CheckBox
   		CheckBox slow = new CheckBox();
   		slow.setPrefHeight(defaultButtonHeight);
@@ -484,8 +458,8 @@ public class UI {
   		settings.setText("Settings");
   		
   		//Add everything to ToolBar
-  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton, toggleOnline, updateFolders, randomMode);
-  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, serverField, setServerURL, singleTrackBox); //, slow
+  		toolBar1.getChildren().addAll(playButton, pauseMButton, reloadMButton, nextMButton);
+  		toolBar2.getChildren().addAll(pauseButton, pauseSButton, reloadSButton, nextSButton, serverField, setServerURL); //, slow
   		
   		//Set Button Width
   		//int buttonCount = toolBar1.getChildren().toArray().length;
@@ -699,9 +673,19 @@ public class UI {
 		tabPane.setTabMinWidth(200);
 		tabPane.setTabMinHeight(45);
 		tabPane.getTabs().clear();
+		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		tabPane.getStylesheets().clear();
+		try{
+			tabPane.getStylesheets().add("tab-pane");
+		}
+		catch(Exception e){
+			
+		}
+		
 		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
 		TabPane tabPaneCategories = new TabPane();
+		tabPaneCategories.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
 		
@@ -739,8 +723,12 @@ public class UI {
 		//Adding Category Tabs
 		for(int i = 0; i<catCount;i++){
 			Tab t = new Tab();
+			MenuItem mi = new MenuItem();
+			String name = catArray[i];
 			t.setClosable(false);
-			t.setText(catArray[i]);
+			t.setId(name);
+			t.setText(name);
+			mi.setText(name);
 			//Setting Background Image
 			Runnable r = new Runnable(){
 				@Override
@@ -782,7 +770,13 @@ public class UI {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			mi.setOnAction((ActionEvent e) ->{
+				tabPaneCategories.getSelectionModel().select(t);
+			});
+			
 			tabPaneCategories.getTabs().add(t);
+			music.getItems().add(mi);
 		}
 		
 		Tab music = new Tab();
