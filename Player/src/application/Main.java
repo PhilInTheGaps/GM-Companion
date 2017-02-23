@@ -21,6 +21,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -36,7 +37,6 @@ public class Main extends Application {
 		
 	//Main
 	public static void main(String[] args){
-		
 		launch(args);
 	}
 	
@@ -49,9 +49,10 @@ public class Main extends Application {
 		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
+        scene.getStylesheets().add(getClass().getResource("DarkMode.css").toExternalForm());
         
         //primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
+        primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setMaximized(true);
@@ -71,7 +72,6 @@ public class Main extends Application {
         }
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
-        scene.getStylesheets().add(getClass().getResource("DarkMode.css").toExternalForm());
 	}
 	
 	//Defining Scene
@@ -131,8 +131,8 @@ public class Main extends Application {
 		
 		//Add Components
         borderPane = new BorderPane();
-        borderPane.setTop(UI.addToolBar());
-        borderPane.setCenter(UI.tabPane);	
+        borderPane.setTop(UI.menu()); //UI.addToolBar() new VBox().getChildren().addAll(UI.menu(), UI.addToolBar())
+        borderPane.setCenter(UI.tabPane);
 		borderPane.setLeft(UI.addVBox());
 		try {
 			borderPane.setBottom(UI.addBotBox());
@@ -143,6 +143,7 @@ public class Main extends Application {
 		
 		//Setting Background Image
 		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
+		 
 			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
 			BackgroundImage bi= new BackgroundImage(
 					new Image(bip.toString(), 0, 0, true, true),
@@ -201,8 +202,6 @@ public class Main extends Application {
 	         	}	
 			}
 		);
-        
-        
         
         return scene;
         
