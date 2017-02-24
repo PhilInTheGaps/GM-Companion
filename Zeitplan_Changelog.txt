@@ -121,3 +121,4 @@ Weihnachtsferien 2016
 24.02.2017
 - "BrightMode" für UI hinzugefügt
 - Option zum Umschalten zwischen "DarkMode" und "BrightMode" hinzugefügt
+- Bug Fixes (Zu kurze ProgressBar, Vom Anfang startende Musik beim Entpausieren)
