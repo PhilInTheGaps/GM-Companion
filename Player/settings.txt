@@ -1,10 +1,10 @@
 #Settings
-#Music Path:
-C:\Users\Phil\Desktop\RPG Music Player\Music\
+#Music Path: C:\Users\Phil\Desktop\RPG Music Player\Music\
+C:\Users\Phil\Google Drive\test\music\
 #Sound Path:
 C:\Users\Phil\Desktop\RPG Music Player\Sounds\
 #Default Server URL
-http://rpgmsp.ddns.net/
+https://drive.google.com/drive/folders/0B2lW8fcqYF5IdHlZeGNUSEVjQ2c?usp=sharing
 #Fade Out
 True
 #AutoPlay
@@ -13,3 +13,5 @@ True
 5
 #Resource Path
 C:\Users\Phil\Desktop\RPG Music Player\Resources\
+#UI Mode
+dark

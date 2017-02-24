@@ -1,9 +1,16 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property
+ * Colors:
+ * #ffffff
+ * #f2f2f2
+ * #e2e2e2
+ * #dbdbdb
+ */
+ /*Default Button*/
 .button {
 	-fx-opacity: 1;
     -fx-text-fill: black;
     -fx-font-size: 14px;
-    -fx-background-color: #666666;
+    -fx-background-color: #f2f2f2;
     -fx-border-width: 1;
     -fx-background-radius: 0, 0;
     -fx-background-insets: 0, 1;
@@ -12,14 +19,16 @@
     -fx-background-repeat : stretch;
 }
 .button:hover {
-    -fx-background-color: derive(lightgrey,30%);
+    -fx-background-color: derive(#e2e2e2,30%);
     -fx-opacity: 1;
 }
+
+/*Default Text Field */
 .text-field{
 	-fx-opacity: 1;
     -fx-text-fill: black;
     -fx-font-size: 14px;
-    -fx-background-color: white;
+    -fx-background-color: #f2f2f2;
     -fx-border-width: 1;
     -fx-background-radius: 0, 0;
     -fx-background-insets: 0, 1;
@@ -27,15 +36,20 @@
     -fx-background-position: center center;
     -fx-background-repeat : stretch;
 }
+
+/*Default Label */
 .label{
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
+	-fx-text-fill: black;
 }
+
+/*Custom Folder Button */
 .button1 {
 	-fx-opacity: 0.9;
     -fx-text-fill: black;
     -fx-font-size: 14px;
-    -fx-background-color: white;
+    -fx-background-color: #f2f2f2;
     -fx-border-width: 2;
     -fx-background-radius: 6, 5;
     -fx-background-insets: 1, 1;
@@ -46,72 +60,111 @@
     -fx-background-repeat : stretch;
 }
 .button1:hover {
-    -fx-background-color: derive(lightgrey,30%);
+    -fx-background-color: derive(black,90%);
     -fx-opacity: 1;
 }
+
+/*Default ScrollPane */
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
-.scroll-pane > .scroll-bar > .thumb{
-    -fx-background-color: grey;
- 	-fx-border-color: transparent;
+.scroll-bar{
+ -fx-background-color: #e2e2e2;
+ -fx-background-radius: 0;
+}
+.scroll-bar > .thumb{
+    -fx-background-color: #f2f2f2;
+ 	-fx-border-color: #e2e2e2;
  	-fx-background-radius: 0em;
+}
+.scroll-bar > .track{
+    -fx-background-color: #e2e2e2;
+ 	-fx-border-color: #e2e2e2;
+ 	-fx-background-radius: 0em;
+}
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+ -fx-background-color: transparent;
+ -fx-border-color:transparent;
+ -fx-background-radius: 0em;
+}
+.scroll-bar:vertical .track-background,
+.scroll-bar:horizontal .track-background {
+ -fx-background-color: transparent;
+ -fx-background-insets: 0;
+ -fx-background-radius: 0em;
 }
 .scroll-bar:vertical > .increment-button, 
 .scroll-bar:vertical > .decrement-button {
     -fx-padding: 0.25em 0.5em  ;
+    -fx-background-color: #e2e2e2;
+    -fx-border-color: #e2e2e2;
+    -fx-background-radius: 0;
 }
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: white;
-    -fx-opacity: 1;
+.scroll-bar:vertical > .increment-arrow, 
+.scroll-bar:vertical > .decrement-arrow {
+    -fx-background-color: #e2e2e2;
+    -fx-border-color: #e2e2e2;
 }
 
+/*Default TabPane */
 .tab-pane
 {
-    -fx-tab-min-width:150px;
+    -fx-tab-max-width: 0;
+    -fx-tab-max-height: 0;
+}
+.tab-pane .tab-header-area{
+	visibility: hidden ;
 }
 
-.tab{
-    -fx-background-insets: 0 1 0 1,0,0;
-}
-.tab-pane .tab{
-    -fx-opacity: 1;
-    -fx-text-fill: black;
-    -fx-font-size: 14px;
-    -fx-background-color: white;
-    -fx-border-width: 2;
-    -fx-background-radius: 2, 0;
-    -fx-background-insets: 2, 2;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
-    -fx-padding: 0.25em 0.5em  ;
-}
-
-.tab-pane .tab:selected
-{
-    -fx-background-color: white;
-}
-
-.tab .tab-label { 
-    -fx-alignment: CENTER;
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-}
-.tab:selected .tab-label { 
-    -fx-alignment: CENTER;
-    -fx-text-fill: white;
-}
-.tab-pane:top *.tab-header-area {
-    -fx-background-insets: 0, 0 0 1 0;
- /* -fx-padding: 0.416667em 0.166667em 0.0em 0.833em; /* 5 2 0 10 */
-    -fx-padding: 0.416667em 0.166667em 0.0em 0.0em; /* overriden as 5 2 0 0 */
-}
+/*Default BorderPane */
 .border-pane{
-	-fx-background-color: white;
+	-fx-background-color: #e2e2e2;
 }
-.vbox{
-	-fx-background-color: white;
+
+/*Default vBox */
+.vbox {
+	-fx-background-color: #e2e2e2;
 }
-.hbox{
-	-fx-background-color: white;
+
+/*Default hBox */
+.hbox {
+	-fx-background-color: #e2e2e2;
 }
+
+/*Default MenuBar */
+.menu-bar {
+	-fx-background-color: #dbdbdb;
+}
+.menu{
+	-fx-background-color: #dbdbdb;
+}
+.menu:showing{
+	-fx-background-color: #ffffff;
+}
+.context-menu {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em;
+}
+.menu-item:focused {
+     -fx-background-color: #f2f2f2;
+}
+
+/*Default ListView */
+.list-view{
+	-fx-background-color: #f2f2f2;
+}
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-text-fill: black;
+    -fx-background-color: #f2f2f2;
+}
+.list-cell{
+	-fx-text-fill: black;
+}
+.list-cell:even {
+    -fx-background-color: #e2e2e2;
+}
+.list-cell:odd {
+    -fx-background-color: #dbdbdb;
+}
+

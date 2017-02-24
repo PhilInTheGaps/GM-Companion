@@ -483,10 +483,12 @@ public class Music {
   			try(Stream<Path> paths = Files.walk(Paths.get(defaultMusicPath))) {
   			    paths.forEach(filePath -> {
   			        if (Files.isRegularFile(filePath)) {
-  			        	System.out.println("Path: "+filePath);
-  			            String tempPath = filePath.toString();
-  			            musicPathList[currentTrackID] = tempPath;
-  			            currentTrackID ++;
+  			        	if(filePath.toString().contains(".mp3")){
+  			        		System.out.println("Path: "+filePath);
+  	  			            String tempPath = filePath.toString();
+  	  			            musicPathList[currentTrackID] = tempPath;
+  	  			            currentTrackID ++;
+  			        	}
   			        }
   			    });
   			} catch (IOException e) {
