@@ -203,6 +203,8 @@ public class UI {
   			}
   		});
   		
+  		
+  		
   		//Update Folders
   		MenuItem fupdate = new MenuItem("Update Folders");
   		fupdate.setOnAction((ActionEvent e) -> {
@@ -381,8 +383,9 @@ public class UI {
   		//Play Button
   		Button playButton = new Button();
   		playButton.setText("Play");
-  		playButton.setMinHeight(25);
-  		playButton.setMaxHeight(defaultButtonHeight);
+  		playButton.setMinSize(50, 25);
+  		playButton.setMaxSize(100, 50);
+  		playButton.setPrefSize(100, 50);
   		playButton.setOnAction((ActionEvent e) ->{
   			if(Music.isPaused){
   				Music.mediaPlayer.play();
@@ -402,8 +405,9 @@ public class UI {
   		//Pause Music Button
   		Button pauseMButton = new Button();
   		pauseMButton.setText("Pause");
-  		pauseMButton.setMinHeight(25);
-  		pauseMButton.setMaxHeight(defaultButtonHeight);
+  		pauseMButton.setMinSize(50, 25);
+  		pauseMButton.setMaxSize(100, 50);
+  		pauseMButton.setPrefSize(100, 50);
   		pauseMButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.mediaPlayer.pause();
@@ -417,8 +421,9 @@ public class UI {
   		//Reload Music Button
   		Button reloadMButton = new Button();
   		reloadMButton.setText("Replay");
-  		reloadMButton.setMinHeight(25);
-  		reloadMButton.setMaxHeight(defaultButtonHeight);
+  		reloadMButton.setMinSize(50, 25);
+  		reloadMButton.setMaxSize(100, 50);
+  		reloadMButton.setPrefSize(100, 50);
   		reloadMButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.mediaPlayer.seek(Music.mediaPlayer.getStartTime());
@@ -433,8 +438,9 @@ public class UI {
   		//Next Music Button
   		Button nextMButton = new Button();
   		nextMButton.setText("Next");
-  		nextMButton.setMinHeight(25);
-  		nextMButton.setMaxHeight(defaultButtonHeight);
+  		nextMButton.setMinSize(50, 25);
+  		nextMButton.setMaxSize(100, 50);
+  		nextMButton.setPrefSize(100, 50);
   		nextMButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.next();
@@ -483,7 +489,9 @@ public class UI {
   		//Play Button
   		Button playSButton = new Button();
   		playSButton.setText("Play");
-  		playSButton.setPrefHeight(defaultButtonHeight);
+  		playSButton.setMinSize(50, 25);
+  		playSButton.setMaxSize(100, 50);
+  		playSButton.setPrefSize(100, 50);
   		playSButton.setOnAction((ActionEvent e) ->{
   			if(Sound.isPaused){
   				Sound.soundPlayer.play();
@@ -503,7 +511,9 @@ public class UI {
   		//Pause Sound Button
   		Button pauseSButton = new Button();
   		pauseSButton.setText("Pause");
-  		pauseSButton.setPrefHeight(defaultButtonHeight);
+  		pauseSButton.setMinSize(50, 25);
+  		pauseSButton.setMaxSize(100, 50);
+  		pauseSButton.setPrefSize(100, 50);
   		pauseSButton.setOnAction((ActionEvent e) -> {
   			if(Sound.soundFolderSelected == true){
   				Sound.soundPlayer.pause();
@@ -517,7 +527,9 @@ public class UI {
   		//Reload Sound Button
   		Button reloadSButton = new Button();
   		reloadSButton.setText("Replay");
-  		reloadSButton.setPrefHeight(defaultButtonHeight);
+  		reloadSButton.setMinSize(50, 25);
+  		reloadSButton.setMaxSize(100, 50);
+  		reloadSButton.setPrefSize(100, 50);
   		reloadSButton.setOnAction((ActionEvent e) -> {
   			if(Sound.soundFolderSelected == true){
   				Sound.soundPlayer.seek(Sound.soundPlayer.getStartTime());
@@ -532,7 +544,9 @@ public class UI {
   		//Next Sound Button
   		Button nextSButton = new Button();
   		nextSButton.setText("Next");
-  		nextSButton.setPrefHeight(defaultButtonHeight);
+  		nextSButton.setMinSize(50, 25);
+  		nextSButton.setMaxSize(100, 50);
+  		nextSButton.setPrefSize(100, 50);
   		nextSButton.setOnAction((ActionEvent e) -> {
   			if(Sound.soundFolderSelected == true){
   				Sound.next();
@@ -1092,7 +1106,7 @@ public class UI {
 
 	  		}
   		
-  		Main.adjustUI();
+  		//Main.adjustUI();
   		
   		updating = false;
   		

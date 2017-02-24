@@ -58,7 +58,7 @@
     -fx-background-repeat : stretch;
 }
 .button1:hover {
-    -fx-background-color: derive(#222222,30%);
+    -fx-background-color: derive(black,30%);
     -fx-opacity: 1;
 }
 
@@ -66,19 +66,19 @@
 .scroll-pane > .viewport {
    -fx-background-color: transparent;
 }
-.scroll-pane > .scroll-bar > .thumb{
+.scroll-bar{
+ -fx-background-color: #222222;
+ -fx-background-radius: 0;
+}
+.scroll-bar > .thumb{
     -fx-background-color: #666666;
  	-fx-border-color: #222222;
  	-fx-background-radius: 0em;
 }
-.scroll-pane > .scroll-bar > .track{
+.scroll-bar > .track{
     -fx-background-color: #222222;
  	-fx-border-color: #222222;
  	-fx-background-radius: 0em;
-}
-.scroll-bar{
- -fx-background-color: #222222;
- -fx-background-radius: 0;
 }
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
@@ -150,7 +150,7 @@
 
 /*Default ListView */
 .list-view{
-	-fx-background-color: #666666;
+	-fx-background-color: #222222;
 }
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
     -fx-text-fill: white;

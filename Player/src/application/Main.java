@@ -29,7 +29,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 	
 	//Defining Variables
-	Scene scene;
+	static Scene scene;
 	BorderPane borderPane;
 	double height;
 	double width;
@@ -49,12 +49,13 @@ public class Main extends Application {
 		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
-        scene.getStylesheets().add(getClass().getResource("DarkMode.css").toExternalForm());
+        scene.getStylesheets().addAll(
+        		getClass().getResource("DarkMode.css").toExternalForm(), 
+        		getClass().getResource("BrightMode.css").toExternalForm());
+        //UIMODE("dark");
         
         //primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
-        primaryStage.setScene(scene);
-        primaryStage.show();
         primaryStage.setMaximized(true);
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
         	if(new File(UI.resourceFolder+"icon.png").exists()){
@@ -70,8 +71,17 @@ public class Main extends Application {
                 System.out.println(UI.resourceFolder);
         	}
         }
+        primaryStage.setScene(scene);
+        //Set UI Mode
+    	if(settings.get(16).equals("dark")){
+    		UIMODE("dark");
+    	}
+    	else{
+    		UIMODE("bright");
+    	}
+        primaryStage.show();
         UI.defaultWidth = (double) scene.getWidth();
-        adjustUI();
+        //adjustUI();
 	}
 	
 	//Defining Scene
@@ -164,16 +174,16 @@ public class Main extends Application {
 		*/
 		
         scene = new Scene(borderPane, 1280, 720);
-        //scene.setFill(Color.WHITE);
         UI.defaultWidth = (double) scene.getWidth();
-        adjustUI();
+        //adjustUI();
         
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override 
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
             	//System.out.println("Width: " + newSceneWidth);
             	UI.defaultWidth = (double) newSceneWidth;
-            	adjustUI();
+            	UI.pb.setPrefWidth((double) newSceneWidth);
+            	//adjustUI();
             }
         });
         
@@ -210,27 +220,16 @@ public class Main extends Application {
         
 	}
   	
-	//Adjusting UI
-	public static void adjustUI(){
-        
-        UI.toolBar1.setPrefWidth(UI.defaultWidth);
-        Object[] bArray1 = UI.toolBar1.getChildren().toArray();
-        Object[] bArray2 = UI.toolBar2.getChildren().toArray();
-        int bCount = bArray1.length;
-        int bCount2 = bArray2.length;
-        UI.defaultButtonWidth = UI.defaultWidth/bCount;
-		
-    	//Adjusting ToolBar button width
-        for(int i = 0; i < bCount; i++){
-        	((Region) bArray1[i]).setPrefWidth(UI.defaultButtonWidth);
-        }
-        for(int i = 0; i < bCount2; i++){
-        	((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
-        }
-        
-        //Adjusting ProgressBar Width
-        
-        UI.pb.setPrefWidth(UI.defaultWidth);
+	//Adjusting UI Mode
+	public static void UIMODE(String mode){
+		if(mode.equals("dark")){
+			scene.getStylesheets().remove(1);
+			System.out.println("DarkMode Activated");
+		}
+		else{
+			scene.getStylesheets().remove(0);
+			System.out.println("BrightMode Activated");
+		}
 	}
 	
 	@Override
