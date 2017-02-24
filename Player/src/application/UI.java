@@ -411,6 +411,7 @@ public class UI {
   		pauseMButton.setOnAction((ActionEvent e) -> {
   			if(Music.musicFolderSelected == true){
   				Music.mediaPlayer.pause();
+  				Music.isPaused = true;
   			}
   			else{
   				Music.musicError = "Please select sound folder!";
@@ -517,6 +518,7 @@ public class UI {
   		pauseSButton.setOnAction((ActionEvent e) -> {
   			if(Sound.soundFolderSelected == true){
   				Sound.soundPlayer.pause();
+  				Sound.isPaused = true;
   			}
   			else{
   				Sound.soundError = "Please select sound folder!";
