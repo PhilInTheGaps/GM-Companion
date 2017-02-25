@@ -1129,8 +1129,8 @@ public class UI {
         File file = dc.showDialog(null);
         
         String folder = file.getAbsolutePath();
-        //folder = folder.replace("\\", "/");
-        folder += "\\";
+        folder = folder.replace("\\", "/");
+        folder += "/";
         System.out.println(folder);
         return folder;
 	}
