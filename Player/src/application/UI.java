@@ -871,7 +871,7 @@ public class UI {
   		String[] catArrayTemp = new String[500];
   		List<String> cats = new ArrayList<String>();
   		
-  		File file = new File(Main.settings.get(2));
+  		File file = new File(Music.defaultMusicPath);
   		System.out.println(file);
   		
   		if(onlineMode){
@@ -924,7 +924,7 @@ public class UI {
   	  		
   	  		if(names != null){
 	  	  		for(String name : names){
-	  	  		    if (new File(Main.settings.get(2)+ name).isDirectory()){
+	  	  		    if (new File(Music.defaultMusicPath+ name).isDirectory()){
 	  	  		        System.out.println(name);
 	  	  		        cats.add(name);
 	  	  		    }
@@ -978,7 +978,7 @@ public class UI {
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
   		
-  		File file = new File(Main.settings.get(2)+directory+"/");
+  		File file = new File(Music.defaultMusicPath+directory+"/");
   		//System.out.println(file);
   		
   		if(onlineMode){
@@ -1033,7 +1033,7 @@ public class UI {
   	  		
   	  		if(names !=null){
 	  	  		for(String name : names){
-					if (new File(Main.settings.get(2)+directory+"/" + name).isDirectory()){
+					if (new File(Music.defaultMusicPath+directory+"/" + name).isDirectory()){
 						System.out.println(name);
 						folders.add(name);
 					}
@@ -1079,7 +1079,7 @@ public class UI {
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+nbName;
+		  	  				Music.defaultMusicPath = Music.musicDirectory+directory+"/"+nbName;
   		  				}
   		  				
   		  				musicFolder = directory+"/"+nbName;
@@ -1132,7 +1132,7 @@ public class UI {
   		
   		String[] folderArray = new String[500];
   		
-  		File file = new File(Main.settings.get(4));
+  		File file = new File(Sound.defaultSoundPath);
   		
   		if(onlineMode){
   		//Get all foldernames from server
@@ -1187,7 +1187,7 @@ public class UI {
   	  		if(names != null){
 	  	  		for(String name : names)
 	  	  		{
-	  	  		    if (new File(Main.settings.get(4) + name).isDirectory())
+	  	  		    if (new File(Sound.defaultSoundPath + name).isDirectory())
 	  	  		    {
 	  	  		        System.out.println(name);
 	  	  		        folders.add(name);
@@ -1218,7 +1218,7 @@ public class UI {
 		  					Sound.defaultSoundPath = bName;
 		  				}
 		  				else{
-			  	  			Sound.defaultSoundPath = Main.settings.get(4)+bName;
+			  	  			Sound.defaultSoundPath = Sound.soundDirectory+bName;
 		  				}
 		  				
 		  				soundFolder = bName;

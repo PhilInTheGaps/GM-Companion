@@ -54,8 +54,9 @@ public class Music {
 	static int scenID = 0;
 	static int musicID = 1;
 	
-	public static String defaultMusicPath = Main.settings.get(2);
-	public static String serverMusicURL = UI.serverURL + "music/";
+	public static String musicDirectory = "";
+	public static String defaultMusicPath = "";
+	public static String serverMusicURL = "";
 	
 	public static void play(){
 		System.out.println("Converting File Path...");
@@ -480,6 +481,7 @@ public class Music {
   			}
   		}
   		else{
+  			System.out.println(defaultMusicPath);
   			try(Stream<Path> paths = Files.walk(Paths.get(defaultMusicPath))) {
   			    paths.forEach(filePath -> {
   			        if (Files.isRegularFile(filePath)) {

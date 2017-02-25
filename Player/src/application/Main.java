@@ -26,6 +26,7 @@ public class Main extends Application {
 	double height;
 	double width;
 	public static ArrayList<String> settings = new ArrayList<String>();
+	static String uim = "";
 		
 	//Main
 	public static void main(String[] args){
@@ -44,11 +45,10 @@ public class Main extends Application {
         scene.getStylesheets().addAll(
         		getClass().getResource("DarkMode.css").toExternalForm(), 
         		getClass().getResource("BrightMode.css").toExternalForm());
-        //UIMODE("dark");
-        
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
+  		
         primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
         primaryStage.setMaximized(true);
+        
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
         	if(new File(UI.resourceFolder+"icon.png").exists()){
         		URI icon = new File(UI.resourceFolder+"icon.png").toURI();
@@ -64,8 +64,9 @@ public class Main extends Application {
         	}
         }
         primaryStage.setScene(scene);
+        
         //Set UI Mode
-    	if(settings.get(16).equals("dark")){
+    	if(uim.equals("dark")){
     		UIMODE("dark");
     	}
     	else{
@@ -73,7 +74,6 @@ public class Main extends Application {
     	}
         primaryStage.show();
         UI.defaultWidth = (double) scene.getWidth();
-        //adjustUI();
 	}
 	
 	//Defining Scene
@@ -89,45 +89,69 @@ public class Main extends Application {
         	for(String line = null; (line = br.readLine()) != null;){
         		settings.add(line);
         	}
-        	
-        	//Set Server URL
-        	UI.serverURL = settings.get(6);
-        	System.out.println("Set Server URL to "+UI.serverURL);
-        	
-        	//Set Autoplay
-        	if(settings.get(10).equals("True")){
-        		UI.autoplay = true;
-        	}
-        	else{
-        		UI.autoplay = false;
-        	}
-        	System.out.println("Set Autoplay to "+UI.autoplay);
-        	
-        	//Set FadeOut
-        	if(settings.get(8).equals("True")){
-        		UI.fadeOut = true;
-        	}
-        	else{
-        		UI.fadeOut = false;
-        	}
-        	System.out.println("Set Fade Out to "+UI.fadeOut);
-        	
-        	//Set Fade Duration
-        	UI.fadeDuration = Integer.parseInt(settings.get(12));
-        	System.out.println("Set Fade Duration to "+UI.fadeDuration);
-        	
-        	//Set Resource Folder
-        	if(settings.get(14).equals(" ") || settings.get(14).equals(null)){
-        		System.out.println("Resource folder not set");
-        	}
-        	else{
-        		UI.resourceFolder = settings.get(14);
-        	}
-        	
-		} catch (IOException e) {
+		}
+        catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
 		}
+        
+        for(String s : settings){
+        	if(s.contains("SERVER_URL=")){
+        		String surl = s.substring("SERVER_URL=".length());
+        		UI.serverURL = surl;
+        		Music.serverMusicURL = surl+"music/";
+        		Sound.serverSoundsURL = surl+"sounds/";
+        		System.out.println("Set Server URL to "+ surl);
+        	}
+        	if(s.contains("AUTO_PLAY=")){
+        		String ap = s.substring("AUTO_PLAY=".length());
+        		if(ap.toLowerCase().equals("true")){
+            		UI.autoplay = true;
+            	}
+            	else{
+            		UI.autoplay = false;
+            	}
+            	System.out.println("Set Autoplay to "+UI.autoplay);
+        	}
+        	if(s.contains("FADE_OUT=")){
+        		String fo = s.substring("FADE_OUT=".length());
+            	if(fo.toLowerCase().equals("true")){
+            		UI.fadeOut = true;
+            	}
+            	else{
+            		UI.fadeOut = false;
+            	}
+            	System.out.println("Set Fade Out to "+UI.fadeOut);
+        	}
+        	if(s.contains("FADE_DURATION=")){
+        		String fd = s.substring("FADE_DURATION=".length());
+            	UI.fadeDuration = Integer.parseInt(fd);
+            	System.out.println("Set Fade Duration to "+UI.fadeDuration);
+        	}
+        	if(s.contains("MUSIC_PATH=")){
+        		String MUSIC_PATH = s.substring("MUSIC_PATH=".length());
+        		Music.defaultMusicPath = MUSIC_PATH;
+        		Music.musicDirectory = MUSIC_PATH;
+        		System.out.println("Set Music Path to "+MUSIC_PATH);
+        	}
+        	if(s.contains("SOUND_PATH=")){
+        		String SOUND_PATH = s.substring("SOUND_PATH=".length());
+        		Sound.defaultSoundPath = SOUND_PATH;
+        		Sound.soundDirectory = SOUND_PATH;
+        		System.out.println("Set Sound Path to "+SOUND_PATH);
+        	}
+        	if(s.contains("RESOURCE_PATH=")){
+        		String RESOURCE_PATH = s.substring("RESOURCE_PATH=".length());
+        		UI.resourceFolder = RESOURCE_PATH;
+        		System.out.println("Set Resource Path to "+RESOURCE_PATH);
+        	}
+        	if(s.contains("UI_MODE=")){
+        		String UI_MODE = s.substring("UI_MODE=".length());
+        		uim = UI_MODE;
+        		System.out.println("Set UI Mode to "+UI_MODE);
+        	}
+        }
+        
         System.out.println("Finished Reading Settings");
         System.out.println("");
 		
@@ -146,23 +170,18 @@ public class Main extends Application {
 		
         scene = new Scene(borderPane, 1280, 720);
         UI.defaultWidth = (double) scene.getWidth();
-        //adjustUI();
         
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override 
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-            	//System.out.println("Width: " + newSceneWidth);
             	UI.defaultWidth = (double) newSceneWidth;
             	UI.pb.setPrefWidth((double) newSceneWidth);
-            	//adjustUI();
             }
         });
         
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                //System.out.println("Height: " + newSceneHeight);
             	UI.defaultHeight = (double) newSceneHeight;
-            	//UI.tile.setPrefHeight(UI.defaultHeight);
                 
             }
         });
@@ -191,6 +210,7 @@ public class Main extends Application {
         
 	}
   	
+	
 	//Adjusting UI Mode
 	public static void UIMODE(String mode){
 		if(mode.equals("dark")){
