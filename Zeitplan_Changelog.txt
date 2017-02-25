@@ -125,3 +125,5 @@ Weihnachtsferien 2016
 
 25.02.2017
 - Settings komplett überartbeitet (Reihenfolge ist jetzt egal, Programm startet auch, wenn nicht alle Optionen gesetzt sind)
+- Beta 2.5 Offiziell auf GitHub released (Hat Stand vom 21.02.2017, alles danach ist schon Beta 2.6)
+- Namensänderung zu "GM-Companion"
