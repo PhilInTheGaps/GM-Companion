@@ -122,3 +122,6 @@ Weihnachtsferien 2016
 - "BrightMode" für UI hinzugefügt
 - Option zum Umschalten zwischen "DarkMode" und "BrightMode" hinzugefügt
 - Bug Fixes (Zu kurze ProgressBar, Vom Anfang startende Musik beim Entpausieren)
+
+25.02.2017
+- Settings komplett überartbeitet (Reihenfolge ist jetzt egal, Programm startet auch, wenn nicht alle Optionen gesetzt sind)
