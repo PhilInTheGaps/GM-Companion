@@ -2,8 +2,12 @@ package application;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -14,6 +18,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,13 +27,20 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -62,6 +74,7 @@ public class UI {
 	public static TabPane tabPane = new TabPane();
 	public static ListView<String> lv = new ListView<String>();
 	public static ObservableList<String> items =FXCollections.observableArrayList();
+	public static ExecutorService executor = Executors.newCachedThreadPool();
 	
 	public static Boolean autoplay = true;
 	public static Boolean randomTrack = true;
@@ -86,6 +99,7 @@ public class UI {
 	public static String musicFolderName = "";
 	
 	public static String serverURL; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String resourceFolder;
 	
 	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
@@ -112,9 +126,10 @@ public class UI {
 	public static double defaultSliderWidth = 320;
 	
 	public static double defaultMusicAndSoundWidth = (defaultWidth - defaultSliderWidth - 2*defaultPadding);
-	public static double defaultFolderButtonWidth = 200;
+	public static double defaultFolderButtonWidth = 150;
+	public static double defaultFolderButtonHeight = 150;
 	public static double folderButtonWidth;
-	public static double defaultFolderButtonHeight = 100;
+	
 	
 	//Adds the toolbar on the top
 	public static VBox addToolBar() {
@@ -505,11 +520,12 @@ public class UI {
   		vBox.setStyle("-fx-background-color: White");
   		vBox.setMaxWidth(defaultSliderWidth+2*defaultPadding);
   		
+  		vBox.getChildren().clear();
+  		
   		Label mVolumeLabel = new Label();
   		mVolumeLabel.setText("Music Volume:");
+  		mVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(mVolumeLabel);
-  		
-  		vBox.getChildren().clear();
   		
   		//mVolume Slider
   		mVolumeSlider = new Slider();
@@ -532,6 +548,7 @@ public class UI {
   		
   		Label sVolumeLabel = new Label();
   		sVolumeLabel.setText("Sound Volume:");
+  		sVolumeLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(sVolumeLabel);
   		
   		//sVolume Slider
@@ -554,39 +571,38 @@ public class UI {
   		vBox.getChildren().add(sVolumeSlider);
   		
   		//Music Information
-  		Label spacerLabel2 = new Label();
-  		spacerLabel2.setText("");
-  		vBox.getChildren().add(spacerLabel2);
   		
   		Label trackLabel = new Label();
   		trackLabel.setText("Music Track Information:");
   		vBox.getChildren().add(trackLabel);
   		
   		musicFolderLabel.setText("Folder: " + musicFolder);
+  		musicFolderLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(musicFolderLabel);
   		
   		titleLabel.setText("Title: " + Title);
+  		titleLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(titleLabel);
   		
   		albumLabel.setText("Album: " + Title);
+  		albumLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(albumLabel);
   		
   		artistLabel.setText("Artist: " + Title);
+  		artistLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(artistLabel);
   		
   		yearLabel.setText("Year: " + Title);
+  		yearLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(yearLabel);
   		
   		//Sound Information
-  		Label spacerLabelS = new Label();
-  		spacerLabelS.setText("");
-  		vBox.getChildren().add(spacerLabelS);
-  		
   		Label soundInfoLabel = new Label();
   		soundInfoLabel.setText("Sound Information:");
   		vBox.getChildren().add(soundInfoLabel);
   		
   		soundFolderLabel.setText("Folder: " + soundFolder);
+  		soundFolderLabel.setStyle("-fx-font-weight: normal;");
   		vBox.getChildren().add(soundFolderLabel);
   		
   		//Debug Information
@@ -637,30 +653,27 @@ public class UI {
   		}
   		
   		if(debug){
-  		
-  		spacerLabel.setText("");
-  		vBox.getChildren().add(spacerLabel);
-  		
-  		debugLabel.setText("Debug Information:");
-  		vBox.getChildren().add(debugLabel);
-  		
-  		pathLabel.setText(".jar Path: " + mainPath);
-  		vBox.getChildren().add(pathLabel);
-  		
-  		pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
-  		vBox.getChildren().add(pathLabel2);
-  		
-  		pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
-  		vBox.getChildren().add(pathLabel3);
-  		
-  		osLabel.setText("OS: " + osName);
-  		vBox.getChildren().add(osLabel);
+	  		spacerLabel.setText("");
+	  		vBox.getChildren().add(spacerLabel);
+	  		
+	  		debugLabel.setText("Debug Information:");
+	  		vBox.getChildren().add(debugLabel);
+	  		
+	  		pathLabel.setText(".jar Path: " + mainPath);
+	  		vBox.getChildren().add(pathLabel);
+	  		
+	  		pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
+	  		vBox.getChildren().add(pathLabel2);
+	  		
+	  		pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
+	  		vBox.getChildren().add(pathLabel3);
+	  		
+	  		osLabel.setText("OS: " + osName);
+	  		vBox.getChildren().add(osLabel);
   		}
   		 
   		//Set Cover Image
   		//coverImage.setFitHeight(defaultSliderWidth-30);
-  		Label coverSpacerLabel = new Label();
-  		vBox.getChildren().add(coverSpacerLabel);
   		coverImage.setFitWidth(defaultSliderWidth);
   		coverImage.setPreserveRatio(true);
   		vBox.getChildren().add(coverImage);
@@ -689,11 +702,13 @@ public class UI {
 		tabPane.setTabMinWidth(200);
 		tabPane.setTabMinHeight(45);
 		tabPane.getTabs().clear();
+		tabPane.setStyle("-fx-background-color: transparent");
 		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
 		
 		TabPane tabPaneCategories = new TabPane();
 		tabPaneCategories.setTabMinWidth(200);
 		tabPaneCategories.setTabMinHeight(40);
+		tabPaneCategories.setStyle("-fx-background-color: transparent");
 		
 		lv.setMaxHeight(150);
 		lv.setFocusTraversable(false);
@@ -726,14 +741,49 @@ public class UI {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		//tabPaneCategories.getTabs().add(general);
+		//Adding Category Tabs
 		for(int i = 0; i<catCount;i++){
 			Tab t = new Tab();
 			t.setClosable(false);
 			t.setText(catArray[i]);
+			//Setting Background Image
+			Runnable r = new Runnable(){
+				@Override
+				public void run() {
+					if(new File(resourceFolder+"Backgrounds/"+t.getText()+".png").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".png").toURI();
+						BackgroundImage bi= new BackgroundImage(
+								new Image(bip.toString(), 0, 0, true, true),
+						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+						        BackgroundSize.DEFAULT);
+						bp.setBackground(new Background(bi));
+					}
+					else if(new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").toURI();
+						BackgroundImage bi= new BackgroundImage(
+								new Image(bip.toString(), 0, 0, true, true),
+						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+						        BackgroundSize.DEFAULT);
+						bp.setBackground(new Background(bi));
+					}
+					else{
+						bp.setBackground(null);
+						bp.setStyle("-fx-background-color: transparent");
+					}
+				}
+			};
+			t.setOnSelectionChanged((Event e) -> {
+				if(t.isSelected()){
+					executor.submit(r);
+				}
+	  		});
 			
 			try {
-				t.setContent(addMusicTilePane(catArray[i]));
+				ScrollPane s = new ScrollPane();
+				s.setBackground(null);
+				s.setFitToWidth(true);
+				s.setContent(addMusicTilePane(catArray[i]));
+				t.setContent(s);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -751,7 +801,11 @@ public class UI {
 		sound.setClosable(false);
 		sound.setText("Sounds");
 		try {
-			sound.setContent(UI.addSoundTilePane());
+			ScrollPane s = new ScrollPane();
+			s.setBackground(null);
+			s.setFitToWidth(true);
+			s.setContent(UI.addSoundTilePane());
+			sound.setContent(s);
 		} catch (IOException e1) {
 			System.out.println("ERROR: Could not create Sound Buttons");
 			e1.printStackTrace();
@@ -761,7 +815,7 @@ public class UI {
 		Tab gm = new Tab();
 		gm.setClosable(false);
 		gm.setText("GM Help");
-		gm.setContent(null);
+		gm.setContent(GM.GMHelp());
 		tabPane.getTabs().add(gm);
 		
 	}
@@ -779,7 +833,7 @@ public class UI {
   		if(onlineMode){
   			//Get all foldernames from server
   			Document doc = Jsoup.connect(Music.serverMusicURL).get();
-  	        //System.out.println(doc.toString());
+  	        System.out.println(doc.toString());
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
@@ -851,7 +905,7 @@ public class UI {
 
 	  		}
   		
-  		Main.adjustUI();
+  		//Main.adjustUI();
   		
   		updating = false;
   		
@@ -868,11 +922,15 @@ public class UI {
   		tile.setVgap(defaultPadding/4);
   		tile.setHgap(defaultPadding/4);
   		tile.setPrefColumns(3);
-  		tile.setStyle("-fx-background-color: LightGrey");
+  		//tile.setStyle("-fx-background-color: LightGrey");
+  		tile.setStyle("-fx-background-color: transparent");
   		tile.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
   		tile.getChildren().clear();
+  		
+  		ScrollPane sp = new ScrollPane();
+		sp.setContent(tile);
   		
   		String[] folderArray = new String[500];
   		String[] folderArrayTemp = new String[500];
@@ -952,27 +1010,38 @@ public class UI {
   		
   		for(int i  = 0; i < folderArray.length; i++){
   				if(folderArray[i] != null){
-  					String bName = folderArray[i].toString();
+  					String bName = new String();
+  					bName = folderArray[i].toString();
   		  			Button b = new Button(String.valueOf(i));
   		  			
-  		  			b.setText(bName);
+  		  			String nbName = bName.replace("%2520", "%20");
+  		  			System.out.println(nbName);
+  		  			b.setText(nbName.replace("%20", " "));
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			//b.setMaxSize(defaultFolderButtonWidth+100, defaultFolderButtonHeight);
-  		  			b.prefWidthProperty().bind(tabPane.widthProperty().divide(5).subtract(10));
+  		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.getStyleClass().add("button1");
+  		  			if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".png").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
+  		  			}
+  		  			else if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+  		  			}
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
   		  				if(onlineMode){
-  		  					Music.defaultMusicPath = directory+"/"+bName;
+  		  					Music.defaultMusicPath = directory+"/"+nbName;
   		  					System.out.println();
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+bName;
+		  	  				Music.defaultMusicPath = Main.settings.get(2)+directory+"/"+nbName;
   		  				}
   		  				
-  		  				musicFolder = directory+"/"+bName;
-  		  				musicFolderName = bName;
+  		  				musicFolder = directory+"/"+nbName;
+  		  				musicFolderName = nbName;
   		  	  			musicFolderLabel.setText("Folder: " + musicFolder);
   		  	  			Music.musicFolderSelected = true;
   		  	  			
@@ -1014,7 +1083,8 @@ public class UI {
   		tile2.setVgap(defaultPadding/4);
   		tile2.setHgap(defaultPadding/4);
   		tile2.setPrefColumns(3);
-  		tile2.setStyle("-fx-background-color: LightGrey");
+  		//tile2.setStyle("-fx-background-color: LightGrey");
+  		tile2.setStyle("-fx-background-color: transparent");
   		tile2.setPrefWidth(defaultMusicAndSoundWidth);
   		//tile.setPrefHeight(defaultHeight);
   		
@@ -1101,6 +1171,7 @@ public class UI {
 		  			
 		  			b.setText(bName);
 		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+		  			b.getStyleClass().add("button1");
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(onlineMode){

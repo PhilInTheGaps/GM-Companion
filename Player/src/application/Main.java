@@ -1,16 +1,24 @@
 package application;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.net.URI;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -41,20 +49,31 @@ public class Main extends Application {
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.4 Beta");
+        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.5 Beta");
         primaryStage.setScene(scene);
         primaryStage.show();
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true);
+        if(UI.resourceFolder != " " && UI.resourceFolder != null){
+        	if(new File(UI.resourceFolder+"icon.png").exists()){
+        		URI icon = new File(UI.resourceFolder+"icon.png").toURI();
+                primaryStage.getIcons().clear();
+                primaryStage.getIcons().add(new Image(icon.toString()));
+                System.out.println(UI.resourceFolder);
+        	}
+        	else if(new File(UI.resourceFolder+"icon.jpg").exists()){
+        		URI icon = new File(UI.resourceFolder+"icon.jpg").toURI();
+                primaryStage.getIcons().clear();
+                primaryStage.getIcons().add(new Image(icon.toString()));
+                System.out.println(UI.resourceFolder);
+        	}
+        }
         UI.defaultWidth = (double) scene.getWidth();
         adjustUI();
-        
-        
+        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	}
 	
 	//Defining Scene
 	public Scene setScene(double width, double height){
-		
-		borderPane = new BorderPane();
 		
 		//Check OS
 		checkOS();
@@ -93,6 +112,14 @@ public class Main extends Application {
         	UI.fadeDuration = Integer.parseInt(settings.get(12));
         	System.out.println("Set Fade Duration to "+UI.fadeDuration);
         	
+        	//Set Resource Folder
+        	if(settings.get(14).equals(" ") || settings.get(14).equals(null)){
+        		System.out.println("Resource folder not set");
+        	}
+        	else{
+        		UI.resourceFolder = settings.get(14);
+        	}
+        	
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
@@ -103,7 +130,7 @@ public class Main extends Application {
 		//Add Components
         borderPane = new BorderPane();
         borderPane.setTop(UI.addToolBar());
-        borderPane.setStyle("-fx-background-color: White");
+        //borderPane.setStyle("-fx-background-color: White");
         borderPane.setCenter(UI.tabPane);	
 		borderPane.setLeft(UI.addVBox());
 		try {
@@ -112,6 +139,27 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		UI.addTabPane();
+		
+		//Setting Background Image
+		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
+			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
+			BackgroundImage bi= new BackgroundImage(
+					new Image(bip.toString(), 0, 0, true, true),
+			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+			        BackgroundSize.DEFAULT);
+			borderPane.setBackground(new Background(bi));
+		}
+		else if(new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").exists()){
+			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").toURI();
+			BackgroundImage bi= new BackgroundImage(
+					new Image(bip.toString(), 0, 0, true, true),
+			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+			        BackgroundSize.DEFAULT);
+			borderPane.setBackground(new Background(bi));
+		}
+		else{
+			borderPane.setStyle("-fx-background-color: LightGrey");
+		}
 		
         scene = new Scene(borderPane, 1280, 720);
         scene.setFill(Color.WHITE);
@@ -165,56 +213,12 @@ public class Main extends Application {
 	//Adjusting UI
 	public static void adjustUI(){
         
-		/*
-    	UI.defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
-    	//System.out.println("Tabpane Width: " + UI.defaultMusicAndSoundWidth);
-    	
-    	
-        UI.tile.setPrefWidth(UI.defaultMusicAndSoundWidth);
-        UI.tile.setMinWidth(UI.defaultMusicAndSoundWidth);
-        UI.tile2.setPrefWidth(UI.defaultMusicAndSoundWidth);
-        UI.tile2.setMinWidth(UI.defaultMusicAndSoundWidth);
-        */
         UI.toolBar1.setPrefWidth(UI.defaultWidth);
         Object[] bArray1 = UI.toolBar1.getChildren().toArray();
         Object[] bArray2 = UI.toolBar2.getChildren().toArray();
         int bCount = bArray1.length;
         int bCount2 = bArray2.length;
         UI.defaultButtonWidth = UI.defaultWidth/bCount;
-        /*
-        Object[] bArrayMusic = UI.tile.getChildren().toArray();
-        int bCountMusic = bArrayMusic.length;
-        
-        System.out.println("Button Count: " + bCountMusic);
-        System.out.println("DefaultFolderButtonWidth: " + UI.defaultFolderButtonWidth);
-        System.out.println("FolderButtonWidth: " + UI.folderButtonWidth);
-        
-        Object[] bArraySounds = UI.tile2.getChildren().toArray();
-        int bCountSounds = bArraySounds.length;
-        
-        //Adjusting Music and Sound Button width
-        double buttonsFittingIn = (UI.defaultMusicAndSoundWidth-(UI.buttonRowCount)*UI.defaultPadding)/UI.defaultFolderButtonWidth;
-        double availableSpace = (UI.defaultMusicAndSoundWidth-2*UI.defaultPadding-(UI.buttonRowCount)*UI.defaultPadding/4);
-        UI.buttonRowCount = (int) Math.floor(buttonsFittingIn);
-        /*
-        System.out.println("Buttons Fitting in: "+buttonsFittingIn);
-        System.out.println("ButtonRowCount: "+UI.buttonRowCount);
-        System.out.println("Available Space: "+availableSpace);
-    	
-        UI.folderButtonWidth = (buttonsFittingIn/(UI.buttonRowCount))*UI.defaultFolderButtonWidth-1;
-        /*
-        System.out.println("CurrentWidth: "+UI.folderButtonWidth);
-        System.out.println("Space/Width: "+availableSpace/UI.folderButtonWidth);
-    	
-    	for(int i = 0; i < bCountMusic; i++){
-    		((Region) bArrayMusic[i]).setPrefWidth(UI.folderButtonWidth);
-    	}
-    	for(int i = 0; i < bCountSounds; i++){
-    		((Region) bArraySounds[i]).setPrefWidth(UI.folderButtonWidth);
-    	}
-    	
-    	//System.out.println("");
-    	*/
 		
     	//Adjusting ToolBar button width
         for(int i = 0; i < bCount; i++){
