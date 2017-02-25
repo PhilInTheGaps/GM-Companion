@@ -10,4 +10,6 @@ True
 #AutoPlay
 True
 #Fade Duration in Seconds
-10
+5
+#Resource Path
+C:\Users\Phil\Desktop\RPG Music Player\Resources\
