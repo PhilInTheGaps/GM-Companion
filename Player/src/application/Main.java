@@ -14,17 +14,9 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Main extends Application {
 	
@@ -141,7 +133,7 @@ public class Main extends Application {
 		
 		//Add Components
         borderPane = new BorderPane();
-        borderPane.setTop(UI.menu()); //UI.addToolBar() new VBox().getChildren().addAll(UI.menu(), UI.addToolBar())
+        borderPane.setTop(UI.menu());
         borderPane.setCenter(UI.tabPane);
 		borderPane.setLeft(UI.addVBox());
 		borderPane.getStyleClass().add("border-pane");
@@ -151,27 +143,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		UI.addTabPane();
-		
-		//Setting Background Image
-		/*
-		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
-		 
-			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
-			BackgroundImage bi= new BackgroundImage(
-					new Image(bip.toString(), 0, 0, true, true),
-			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-			        BackgroundSize.DEFAULT);
-			borderPane.setBackground(new Background(bi));
-		}
-		else if(new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").exists()){
-			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").toURI();
-			BackgroundImage bi= new BackgroundImage(
-					new Image(bip.toString(), 0, 0, true, true),
-			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-			        BackgroundSize.DEFAULT);
-			borderPane.setBackground(new Background(bi));
-		}
-		*/
 		
         scene = new Scene(borderPane, 1280, 720);
         UI.defaultWidth = (double) scene.getWidth();

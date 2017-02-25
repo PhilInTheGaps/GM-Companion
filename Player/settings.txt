@@ -1,8 +1,8 @@
 #Settings
 #Music Path: C:\Users\Phil\Desktop\RPG Music Player\Music\
-C:\Users\Phil\Google Drive\test\music\
+C:\Users\Phil\Google Drive\GM-Companion\Music\
 #Sound Path:
-C:\Users\Phil\Desktop\RPG Music Player\Sounds\
+C:\Users\Phil\Google Drive\GM-Companion\Sounds\
 #Default Server URL
 https://drive.google.com/drive/folders/0B2lW8fcqYF5IdHlZeGNUSEVjQ2c?usp=sharing
 #Fade Out
@@ -12,6 +12,6 @@ True
 #Fade Duration in Seconds
 5
 #Resource Path
-C:\Users\Phil\Desktop\RPG Music Player\Resources\
+C:\Users\Phil\Google Drive\GM-Companion\Resources\
 #UI Mode
 dark
