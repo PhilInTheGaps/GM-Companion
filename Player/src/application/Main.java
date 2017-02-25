@@ -150,6 +150,18 @@ public class Main extends Application {
         		uim = UI_MODE;
         		System.out.println("Set UI Mode to "+UI_MODE);
         	}
+        	if(s.contains("ONLINE_MODE=")){
+        		String ONLINE_MODE = s.substring("ONLINE_MODE=".length());
+        		if(ONLINE_MODE.toLowerCase().equals("true")){
+        			UI.localOnline = true;
+        			UI.onlineMode = true;
+        		}
+        		else{
+        			UI.localOnline = false;
+        			UI.onlineMode = false;
+        		}
+        		System.out.println("Set Online Mode to "+ONLINE_MODE);
+        	}
         }
         
         System.out.println("Finished Reading Settings");

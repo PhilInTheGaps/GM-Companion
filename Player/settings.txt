@@ -6,3 +6,4 @@ FADE_OUT=true
 FADE_DURATION=3
 AUTO_PLAY=true
 UI_MODE=dark
+ONLINE_MODE=false
