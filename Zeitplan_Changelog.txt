@@ -127,3 +127,8 @@ Weihnachtsferien 2016
 - Settings komplett überartbeitet (Reihenfolge ist jetzt egal, Programm startet auch, wenn nicht alle Optionen gesetzt sind)
 - Beta 2.5 Offiziell auf GitHub released (Hat Stand vom 21.02.2017, alles danach ist schon Beta 2.6)
 - Namensänderung zu "GM-Companion"
+- In-Programm Optionen für FadeOut, AutoPlay, UI_Mode und OnlineMode hinzugefügt (Option beeinflusst settings.txt)
+- DirectoryChooser für Musik-, Sound- und Resource-Ordner hinzugefügt
+- Bug Fix: Fehlerhaftes Updating der Musik Ordner
+- Bug Fix: Fehlerhafter Pfad unter Linux
+- Bug Fix: Menü-Optionen haben manchmal nichts geändert
