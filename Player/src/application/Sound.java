@@ -33,8 +33,9 @@ public class Sound {
 	
 	public static double soundVolume = 0.25;
 	
-	public static String defaultSoundPath = ("./Sounds/");
-	public static String serverSoundsURL = UI.serverURL + "sounds/";
+	public static String soundDirectory = "";
+	public static String defaultSoundPath = "";
+	public static String serverSoundsURL = "";
 	
 	public static void play(){
 		
