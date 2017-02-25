@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +33,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -52,6 +54,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
@@ -151,33 +154,35 @@ public class UI {
 		//Add Menus to the MenuBar
         menu.getMenus().addAll(gmh, music, sounds, options);
         
-		//Menu Items
+		//Menu Items:
         //Random Mode
-        CheckMenuItem random = new CheckMenuItem("Random Mode");
-        if(randomTrack == true){
+        CheckMenuItem random = new CheckMenuItem("Random Mode (Generate Random Playlists For Music Files)");
+        if(randomTrack){
   			random.setSelected(true);
   		}
   		else{
   			random.setSelected(false);
   		}
-        random.setOnAction((ActionEvent e) ->{
-        	if(random.isSelected()){
-				randomTrack = true;
+        random.setOnAction((ActionEvent e) -> {
+        	if(randomTrack){
+				randomTrack = false;
+				System.out.println("Disabled Random Track Mode");
 			}
 			else{
-				randomTrack = false;
+				randomTrack = true;
+				System.out.println("Enabled Random Track Mode");
 			}
         });
         
         //Single Track Mode
-        CheckMenuItem single = new CheckMenuItem("Single Track Mode");
+        CheckMenuItem single = new CheckMenuItem("Single Track Mode (Play Music Files One At A Time)");
         if(singleTrack == true){
   			single.setSelected(true);
   		}
   		else{
   			single.setSelected(false);
   		}
-        random.setOnAction((ActionEvent e) ->{
+        single.setOnAction((ActionEvent e) -> {
         	if(single.isSelected()){
 				singleTrack = true;
 			}
@@ -187,23 +192,73 @@ public class UI {
         });
         
         //Online Mode
-        CheckMenuItem online = new CheckMenuItem("Online Mode");
-  		if(onlineMode == true){
+        CheckMenuItem online = new CheckMenuItem("Online Mode (Use Server URL)");
+  		if(onlineMode){
   			online.setSelected(true);
   		}
   		else{
   			online.setSelected(false);
   		}
   		online.setOnAction((ActionEvent e) -> {
-  			if(localOnline == true){
+  			if(localOnline){
   				localOnline = false;
+  				onlineMode = false;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("ONLINE_MODE=")){
+  						newLine = "ONLINE_MODE=false";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
   			}
   			else{
   				localOnline = true;
+  				onlineMode = true;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("ONLINE_MODE=")){
+  						newLine = "ONLINE_MODE=true";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
   			}
   		});
-  		
-  		
   		
   		//Update Folders
   		MenuItem fupdate = new MenuItem("Update Folders");
@@ -232,6 +287,207 @@ public class UI {
 			}
   		});
   		
+  		//Set AutoPlay
+  		CheckMenuItem checkAutoPlay = new CheckMenuItem("AutoPlay (Start Playing When Button Is Clicked)");
+  		if(autoplay){
+  			checkAutoPlay.setSelected(true);
+  		}
+  		else{
+  			checkAutoPlay.setSelected(false);
+  		}
+  		checkAutoPlay.setOnAction((ActionEvent e) -> {
+  			if(autoplay){
+  				autoplay = false;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("AUTO_PLAY=")){
+  						newLine = "AUTO_PLAY=false";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  			else{
+  				autoplay = true;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("AUTO_PLAY=")){
+  						newLine = "AUTO_PLAY=true";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  		});
+  		
+  		//Set FadeOut
+  		CheckMenuItem checkFadeOut = new CheckMenuItem("FadeOut (Fade Out Music At End Of Song)");
+  		if(fadeOut){
+  			checkFadeOut.setSelected(true);
+  		}
+  		else{
+  			checkFadeOut.setSelected(false);
+  		}
+  		checkFadeOut.setOnAction((ActionEvent e) -> {
+  			if(fadeOut){
+  				fadeOut = false;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("FADE_OUT=")){
+  						newLine = "FADE_OUT=false";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  			else{
+  				fadeOut = true;
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("FADE_OUT=")){
+  						newLine = "FADE_OUT=true";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  		});
+  		
+  		//Set UI Mode
+  		CheckMenuItem checkUIMode = new CheckMenuItem("UI DarkMode (Requires Restart!)");
+  		if(Main.uim.equals("dark")){
+  			checkUIMode.setSelected(true);
+  		}
+  		else{
+  			checkUIMode.setSelected(false);
+  		}
+  		checkUIMode.setOnAction((ActionEvent e) -> {
+  			if(Main.uim.equals("dark")){
+  				Main.uim = "bright";
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("UI_MODE=")){
+  						newLine = "UI_MODE=bright";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  			else{
+  				Main.uim = "dark";
+  				File f = new File("settings.txt");
+  				List<String> lines = new ArrayList<String>();
+				try {
+					lines = Files.readAllLines(f.toPath());
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+  				List<String> newLines = new ArrayList<String>();
+  				for(String line : lines){
+  					String newLine;
+  					if(line.contains("UI_MODE=")){
+  						newLine = "UI_MODE=dark";
+  					}
+  					else{
+  						newLine = line;
+  					}
+  					newLines.add(newLine);
+  				}
+  				try {
+					Files.write(f.toPath(), newLines);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+  			}
+  		});
+  		
   		//All Sounds
   		MenuItem allS = new MenuItem("All");
   		allS.setOnAction((ActionEvent e) ->{
@@ -243,11 +499,185 @@ public class UI {
   		dice.setOnAction((ActionEvent e) ->{
   			tabPane.getSelectionModel().select(tgm);
   		});
+  		
+  		//Set Music Folder
+  		MenuItem setMusicFolder = new MenuItem("Set Music Folder");
+  		setMusicFolder.setOnAction((ActionEvent e) -> {
+  			String folder = chooser();
+  			Music.defaultMusicPath = folder;
+    		Music.musicDirectory = folder;
+    		
+    		System.out.println("Updating Folders...");
+  			try {
+  				onlineMode = localOnline;
+  				if(Music.musicFolderSelected == true){
+  					Music.mediaPlayer.pause();
+  	  			}
+  	  			if(Sound.soundFolderSelected == true){
+  	  				Sound.soundPlayer.pause();
+  	  			}
+  	  			
+  	  			updating = true;
+  	  			
+  	  			music.getItems().clear();
+  	  			
+  	  			addTabPane();
+				addSoundTilePane();
+				tabPane.getStylesheets().clear();
+				tabPane.getStyleClass().add(".tab-pane");
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+  			
+  			File f = new File("settings.txt");
+				List<String> lines = new ArrayList<String>();
+			try {
+				lines = Files.readAllLines(f.toPath());
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+				List<String> newLines = new ArrayList<String>();
+				for(String line : lines){
+					String newLine;
+					if(line.contains("MUSIC_PATH=")){
+						newLine = "MUSIC_PATH="+folder;
+					}
+					else{
+						newLine = line;
+					}
+					newLines.add(newLine);
+				}
+				try {
+				Files.write(f.toPath(), newLines);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+  		});
+  		
+  		//Set Sound Folder
+  		MenuItem setSoundFolder = new MenuItem("Set Sound Folder");
+  		setSoundFolder.setOnAction((ActionEvent e) -> {
+  			String folder = chooser();
+  			Sound.defaultSoundPath = folder;
+    		Sound.soundDirectory = folder;
+    		System.out.println("Updating Folders...");
+  			try {
+  				onlineMode = localOnline;
+  				if(Music.musicFolderSelected == true){
+  					Music.mediaPlayer.pause();
+  	  			}
+  	  			if(Sound.soundFolderSelected == true){
+  	  				Sound.soundPlayer.pause();
+  	  			}
+  	  			
+  	  			updating = true;
+  	  			
+  	  			music.getItems().clear();
+  	  			
+  	  			addTabPane();
+				addSoundTilePane();
+				tabPane.getStylesheets().clear();
+				tabPane.getStyleClass().add(".tab-pane");
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+  			
+  			File f = new File("settings.txt");
+			List<String> lines = new ArrayList<String>();
+			try {
+				lines = Files.readAllLines(f.toPath());
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			List<String> newLines = new ArrayList<String>();
+			for(String line : lines){
+				String newLine;
+				if(line.contains("SOUND_PATH=")){
+					newLine = "SOUND_PATH="+folder;
+				}
+				else{
+					newLine = line;
+				}
+				newLines.add(newLine);
+			}
+			try {
+			Files.write(f.toPath(), newLines);
+			} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+  		});
+  		
+  		//Set Resource Folder
+  		MenuItem setResourceFolder = new MenuItem("Set Resource Folder");
+  		setResourceFolder.setOnAction((ActionEvent e) -> {
+  			String folder = chooser();
+  			resourceFolder = folder;
+    		System.out.println("Updating Folders...");
+  			try {
+  				onlineMode = localOnline;
+  				if(Music.musicFolderSelected == true){
+  					Music.mediaPlayer.pause();
+  	  			}
+  	  			if(Sound.soundFolderSelected == true){
+  	  				Sound.soundPlayer.pause();
+  	  			}
+  	  			
+  	  			updating = true;
+  	  			
+  	  			music.getItems().clear();
+  	  			
+  	  			addTabPane();
+				addSoundTilePane();
+				tabPane.getStylesheets().clear();
+				tabPane.getStyleClass().add(".tab-pane");
+				
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+  			
+  			File f = new File("settings.txt");
+			List<String> lines = new ArrayList<String>();
+			try {
+				lines = Files.readAllLines(f.toPath());
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			List<String> newLines = new ArrayList<String>();
+			for(String line : lines){
+				String newLine;
+				if(line.contains("RESOURCE_PATH=")){
+					newLine = "RESOURCE_PATH="+folder;
+				}
+				else{
+					newLine = line;
+				}
+				newLines.add(newLine);
+			}
+			try {
+			Files.write(f.toPath(), newLines);
+			} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			}
+  		});
+  		
+  		//Seperator Item
+  		SeparatorMenuItem sep1 = new SeparatorMenuItem();
+  		SeparatorMenuItem sep2 = new SeparatorMenuItem();
 		
         //Adding Items to Menus
   		gmh.getItems().addAll(dice);
   		sounds.getItems().addAll(allS);
-  		options.getItems().addAll(random, single, online, fupdate);
+  		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2, 
+  				setMusicFolder, setSoundFolder, setResourceFolder, sep1, 
+  				fupdate);
         
 		return menu;
 	}
@@ -580,7 +1010,6 @@ public class UI {
   		vBox.getChildren().add(sVolumeSlider);
   		
   		//Music Information
-  		
   		Label trackLabel = new Label();
   		trackLabel.setText("Music Track Information:");
   		vBox.getChildren().add(trackLabel);
@@ -691,19 +1120,19 @@ public class UI {
   	}
 	
 	//A FileChooser only used for debugging purposes, normally not implemented
-	public static void chooser(){
+	public static String chooser(){
 		System.out.println("Opening FileChooser...");
 		System.out.println("");
 		
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File(Music.defaultMusicPath));
-		fc.getExtensionFilters().addAll(new ExtensionFilter("Sound Files", "*.mp3"));
-        File file = fc.showOpenDialog(null);
+		DirectoryChooser dc = new DirectoryChooser();
+		//dc.setInitialDirectory(new File(Music.musicDirectory));
+        File file = dc.showDialog(null);
         
-        Music.musicPath = file.getAbsolutePath();
-        Music.musicPath = Music.musicPath.replace("\\", "/");
-        
-        Music.play();
+        String folder = file.getAbsolutePath();
+        //folder = folder.replace("\\", "/");
+        folder += "\\";
+        System.out.println(folder);
+        return folder;
 	}
 	
 	//Add TabPane
@@ -871,7 +1300,7 @@ public class UI {
   		String[] catArrayTemp = new String[500];
   		List<String> cats = new ArrayList<String>();
   		
-  		File file = new File(Music.defaultMusicPath);
+  		File file = new File(Music.musicDirectory);
   		System.out.println(file);
   		
   		if(onlineMode){
@@ -924,7 +1353,7 @@ public class UI {
   	  		
   	  		if(names != null){
 	  	  		for(String name : names){
-	  	  		    if (new File(Music.defaultMusicPath+ name).isDirectory()){
+	  	  		    if (new File(Music.musicDirectory+ name).isDirectory()){
 	  	  		        System.out.println(name);
 	  	  		        cats.add(name);
 	  	  		    }
@@ -948,8 +1377,6 @@ public class UI {
   				}
 
 	  		}
-  		
-  		//Main.adjustUI();
   		
   		updating = false;
   		
@@ -978,7 +1405,7 @@ public class UI {
   		String[] folderArrayTemp = new String[500];
   		List<String> folders = new ArrayList<String>();
   		
-  		File file = new File(Music.defaultMusicPath+directory+"/");
+  		File file = new File(Music.musicDirectory+directory+"/");
   		//System.out.println(file);
   		
   		if(onlineMode){
@@ -1033,7 +1460,7 @@ public class UI {
   	  		
   	  		if(names !=null){
 	  	  		for(String name : names){
-					if (new File(Music.defaultMusicPath+directory+"/" + name).isDirectory()){
+					if (new File(Music.musicDirectory+directory+"/" + name).isDirectory()){
 						System.out.println(name);
 						folders.add(name);
 					}
@@ -1132,7 +1559,7 @@ public class UI {
   		
   		String[] folderArray = new String[500];
   		
-  		File file = new File(Sound.defaultSoundPath);
+  		File file = new File(Sound.soundDirectory);
   		
   		if(onlineMode){
   		//Get all foldernames from server
@@ -1187,7 +1614,7 @@ public class UI {
   	  		if(names != null){
 	  	  		for(String name : names)
 	  	  		{
-	  	  		    if (new File(Sound.defaultSoundPath + name).isDirectory())
+	  	  		    if (new File(Sound.soundDirectory + name).isDirectory())
 	  	  		    {
 	  	  		        System.out.println(name);
 	  	  		        folders.add(name);
