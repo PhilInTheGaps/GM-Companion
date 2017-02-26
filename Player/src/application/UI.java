@@ -152,6 +152,7 @@ public class UI {
 	//Adds Menu
 	public static MenuBar menu(){
 		//Add Menus to the MenuBar
+		music.setMnemonicParsing(false);
         menu.getMenus().addAll(gmh, music, sounds, options);
         
 		//Menu Items:
@@ -1188,6 +1189,7 @@ public class UI {
 			t.setClosable(false);
 			t.setId(name);
 			t.setText(name);
+			mi.setMnemonicParsing(false);
 			mi.setText(name);
 			//Setting Background Image
 			Runnable r = new Runnable(){
@@ -1482,6 +1484,7 @@ public class UI {
   					String bName = new String();
   					bName = folderArray[i].toString();
   		  			Button b = new Button(String.valueOf(i));
+  		  			b.setMnemonicParsing(false);
   		  			
   		  			String nbName = bName.replace("%2520", "%20");
   		  			System.out.println(nbName);
@@ -1635,6 +1638,7 @@ public class UI {
 				if(folderArray[i] != null){
 					String bName = folderArray[i].toString();
 		  			Button b = new Button(String.valueOf(i));
+		  			b.setMnemonicParsing(false);
 		  			
 		  			b.setText(bName.replace("_", " "));
 		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
