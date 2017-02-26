@@ -132,3 +132,8 @@ Weihnachtsferien 2016
 - Bug Fix: Fehlerhaftes Updating der Musik Ordner
 - Bug Fix: Fehlerhafter Pfad unter Linux
 - Bug Fix: Menü-Optionen haben manchmal nichts geändert
+
+26.02.2017
+- Bug Fix: Der erste Underscore im Dateinamen ist verschwunden
+- Underscores in Ordnernamen werden jetzt als Leerzeichen dargestellt
+- Ordnernamen werden jetzt unter dem Ordner Icon angezeigt
