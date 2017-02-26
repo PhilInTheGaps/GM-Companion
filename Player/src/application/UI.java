@@ -1485,7 +1485,7 @@ public class UI {
   		  			
   		  			String nbName = bName.replace("%2520", "%20");
   		  			System.out.println(nbName);
-  		  			b.setText(nbName.replace("%20", " "));
+  		  			b.setText(nbName.replace("%20", " ").replace("_", " "));
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
@@ -1636,7 +1636,7 @@ public class UI {
 					String bName = folderArray[i].toString();
 		  			Button b = new Button(String.valueOf(i));
 		  			
-		  			b.setText(bName);
+		  			b.setText(bName.replace("_", " "));
 		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 		  			b.getStyleClass().add("button1");
 		  			
