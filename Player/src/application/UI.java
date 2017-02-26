@@ -26,6 +26,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
@@ -54,6 +55,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -1120,7 +1122,7 @@ public class UI {
   		return vBox;
   	}
 	
-	//A FileChooser only used for debugging purposes, normally not implemented
+	//The Directory Chooser used to select folders
 	public static String chooser(){
 		System.out.println("Opening FileChooser...");
 		System.out.println("");
@@ -1486,10 +1488,26 @@ public class UI {
   					bName = folderArray[i].toString();
   		  			Button b = new Button(String.valueOf(i));
   		  			b.setMnemonicParsing(false);
+  		  			b.setText("");
+  		  			
+  		  			VBox v = new VBox();
+  		  			v.setMaxWidth(150);
+  		  			v.setAlignment(Pos.TOP_CENTER);
+  		  			VBox v2 = new VBox();
+  		  			v2.setMaxWidth(150);
+  		  			v2.setAlignment(Pos.CENTER);
+  		  			Label l = new Label();
+  		  			l.setWrapText(true);
+  		  			//l.setMaxWidth(150);
+  		  			l.setMaxWidth(Double.MAX_VALUE);
+  		  			
+  		  			l.setTextAlignment(TextAlignment.CENTER);
+  		  			l.setContentDisplay(ContentDisplay.CENTER);
   		  			
   		  			String nbName = bName.replace("%2520", "%20");
   		  			System.out.println(nbName);
-  		  			b.setText(nbName.replace("%20", " ").replace("_", " "));
+  		  			//b.setText(nbName.replace("%20", " ").replace("_", " "));
+  		  			l.setText(nbName.replace("%20", " ").replace("_", " "));
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
   		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
@@ -1534,7 +1552,9 @@ public class UI {
   		  	  			}
   		  	  		});
   		  			
-  		  			tile.getChildren().add(b);
+  		  			v2.getChildren().add(l);
+  		  			v.getChildren().addAll(b, v2);
+  		  			tile.getChildren().add(v);
   				}
 
 	  		}
