@@ -40,6 +40,7 @@
 	-fx-font-size: 14px;
 	-fx-font-weight: bold;
 	-fx-text-fill: white;
+	-fx-alignment: center;
 }
 
 /*Custom Folder Button */
