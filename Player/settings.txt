@@ -1,4 +1,4 @@
-MUSIC_PATH=C:\Users\Phil\Google Drive\GM-Companion\Music\
+MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/
 SOUND_PATH=C:\Users\Phil\Google Drive\GM-Companion\Sounds\
 RESOURCE_PATH=C:\Users\Phil\Google Drive\GM-Companion\Resources\
 SERVER_URL=http://rpgmsp.ddns.net/
