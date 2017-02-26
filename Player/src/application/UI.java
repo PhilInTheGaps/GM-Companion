@@ -1186,25 +1186,26 @@ public class UI {
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
 			String name = catArray[i];
+			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
-			t.setText(name);
+			t.setText(nName);
 			mi.setMnemonicParsing(false);
-			mi.setText(name);
+			mi.setText(nName);
 			//Setting Background Image
 			Runnable r = new Runnable(){
 				@Override
 				public void run() {
-					if(new File(resourceFolder+"Backgrounds/"+t.getText()+".png").exists()){
-						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".png").toURI();
+					if(new File(resourceFolder+"Backgrounds/"+name+".png").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+name+".png").toURI();
 						BackgroundImage bi= new BackgroundImage(
 								new Image(bip.toString(), 0, 0, true, true),
 						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
 						        BackgroundSize.DEFAULT);
 						bp.setBackground(new Background(bi));
 					}
-					else if(new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").exists()){
-						URI bip = new File(resourceFolder+"Backgrounds/"+t.getText()+".jpg").toURI();
+					else if(new File(resourceFolder+"Backgrounds/"+name+".jpg").exists()){
+						URI bip = new File(resourceFolder+"Backgrounds/"+name+".jpg").toURI();
 						BackgroundImage bi= new BackgroundImage(
 								new Image(bip.toString(), 0, 0, true, true),
 						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
