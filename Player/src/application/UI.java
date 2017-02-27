@@ -1489,6 +1489,8 @@ public class UI {
   		  			Button b = new Button(String.valueOf(i));
   		  			b.setMnemonicParsing(false);
   		  			b.setText("");
+  		  			b.setWrapText(true);
+  		  			b.setAlignment(Pos.CENTER);
   		  			
   		  			VBox v = new VBox();
   		  			v.setMaxWidth(150);
@@ -1498,14 +1500,12 @@ public class UI {
   		  			v2.setAlignment(Pos.CENTER);
   		  			Label l = new Label();
   		  			l.setWrapText(true);
-  		  			//l.setMaxWidth(150);
   		  			l.setMaxWidth(Double.MAX_VALUE);
   		  			
   		  			l.setTextAlignment(TextAlignment.CENTER);
   		  			l.setContentDisplay(ContentDisplay.CENTER);
   		  			
   		  			String nbName = bName.replace("%2520", "%20");
-  		  			System.out.println(nbName);
   		  			//b.setText(nbName.replace("%20", " ").replace("_", " "));
   		  			l.setText(nbName.replace("%20", " ").replace("_", " "));
   		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
@@ -1519,6 +1519,9 @@ public class UI {
   		  			else if(new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").exists()){
   		  				URI pic = new File(resourceFolder+"Icons/"+directory+"/"+bName+".jpg").toURI();
 		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+  		  			}
+  		  			else{
+  		  				b.setText(nbName.replace("_", " "));
   		  			}
   		  			
   		  			b.setOnAction((ActionEvent e) -> {
@@ -1661,9 +1664,35 @@ public class UI {
 		  			Button b = new Button(String.valueOf(i));
 		  			b.setMnemonicParsing(false);
 		  			
-		  			b.setText(bName.replace("_", " "));
+		  			VBox v = new VBox();
+  		  			v.setMaxWidth(150);
+  		  			v.setAlignment(Pos.TOP_CENTER);
+  		  			VBox v2 = new VBox();
+  		  			v2.setMaxWidth(150);
+  		  			v2.setAlignment(Pos.CENTER);
+  		  			Label l = new Label();
+  		  			l.setWrapText(true);
+  		  			l.setMaxWidth(Double.MAX_VALUE);
+  		  			
+  		  			l.setTextAlignment(TextAlignment.CENTER);
+  		  			l.setContentDisplay(ContentDisplay.CENTER);
+		  			
+		  			b.setText("");
+		  			l.setText(bName.replace("_", " "));
 		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 		  			b.getStyleClass().add("button1");
+		  			
+		  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
+  		  			}
+  		  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+  		  			}
+  		  			else{
+  		  				b.setText(bName.replace("_", " "));
+  		  			}
 		  			
 		  			b.setOnAction((ActionEvent e) -> {
 		  				if(onlineMode){
@@ -1691,7 +1720,9 @@ public class UI {
 		  	  			Sound.play();
 		  	  		});
 		  			
-		  			tile2.getChildren().add(b);
+		  			v2.getChildren().add(l);
+  		  			v.getChildren().addAll(b, v2);
+  		  			tile2.getChildren().add(v);
 				}
 
   			}
