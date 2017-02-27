@@ -1,6 +1,0 @@
-Buttonhintergrund_Oben: HBox
-http://stackoverflow.com/questions/9738146/javafx-how-to-set-scene-background-image
-
-Buttonhintergrund_Unten: TilePane
-
-Alle mit javafx
