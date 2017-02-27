@@ -1,15 +1,9 @@
-#Settings
-#Music Path:
-C:\Users\Phil\Desktop\RPG Music Player\Music\
-#Sound Path:
-C:\Users\Phil\Desktop\RPG Music Player\Sounds\
-#Default Server URL
-http://rpgmsp.ddns.net/
-#Fade Out
-True
-#AutoPlay
-True
-#Fade Duration in Seconds
-5
-#Resource Path
-C:\Users\Phil\Desktop\RPG Music Player\Resources\
+MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/
+SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds/
+RESOURCE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources/
+SERVER_URL=http://rpgmsp.ddns.net/
+FADE_OUT=true
+FADE_DURATION=3
+AUTO_PLAY=true
+UI_MODE=dark
+ONLINE_MODE=false
