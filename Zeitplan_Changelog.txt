@@ -137,3 +137,9 @@ Weihnachtsferien 2016
 - Bug Fix: Der erste Underscore im Dateinamen ist verschwunden
 - Underscores in Ordnernamen werden jetzt als Leerzeichen dargestellt
 - Ordnernamen werden jetzt unter dem Ordner Icon angezeigt
+
+27.02.2017
+- Sounds können jetzt auch Icons zugewiesen bekommen (/Resources/Sounds/Sound.png)
+- Bug Fix: Es kam zu einem Error, wenn noch andere nicht-mp3 Dateien im Sound Ordner lagen
+- Hintergrund Bilder verbessert (Skalieren jetzt etwas mit und passen sich der Bildschirmgröße an)
+- Beta 2.6 Released
