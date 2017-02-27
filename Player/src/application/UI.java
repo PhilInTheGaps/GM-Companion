@@ -1192,27 +1192,18 @@ public class UI {
 			t.setText(nName);
 			mi.setMnemonicParsing(false);
 			mi.setText(nName);
+			
 			//Setting Background Image
 			Runnable r = new Runnable(){
 				@Override
 				public void run() {
 					if(new File(resourceFolder+"Backgrounds/"+name+".png").exists()){
 						URI bip = new File(resourceFolder+"Backgrounds/"+name+".png").toURI();
-						BackgroundImage bi= new BackgroundImage(
-								new Image(bip.toString(), 0, 0, true, true),
-						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
-						        BackgroundSize.DEFAULT);
-						//bp.setBackground(new Background(bi));
 						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
 						
 					}
 					else if(new File(resourceFolder+"Backgrounds/"+name+".jpg").exists()){
 						URI bip = new File(resourceFolder+"Backgrounds/"+name+".jpg").toURI();
-						BackgroundImage bi= new BackgroundImage(
-								new Image(bip.toString(), 0, 0, true, true),
-						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
-						        BackgroundSize.DEFAULT);
-						//bp.setBackground(new Background(bi));
 						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
 					}
 					else{
