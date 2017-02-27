@@ -14,28 +14,22 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
 	//Defining Variables
-	Scene scene;
+	static Scene scene;
 	BorderPane borderPane;
 	double height;
 	double width;
 	public static ArrayList<String> settings = new ArrayList<String>();
+	static String uim = "";
 		
 	//Main
 	public static void main(String[] args){
-		
 		launch(args);
 	}
 	
@@ -48,11 +42,13 @@ public class Main extends Application {
 		
         scene = setScene(this.width, this.height);
         scene.setFill(Color.BLACK);
-
-        primaryStage.setTitle("RPG Music and Sound Player | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.5 Beta");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        //primaryStage.setMaximized(true);
+        scene.getStylesheets().addAll(
+        		getClass().getResource("DarkMode.css").toExternalForm(), 
+        		getClass().getResource("BrightMode.css").toExternalForm());
+  		
+        primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
+        primaryStage.setMaximized(true);
+        
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
         	if(new File(UI.resourceFolder+"icon.png").exists()){
         		URI icon = new File(UI.resourceFolder+"icon.png").toURI();
@@ -67,9 +63,17 @@ public class Main extends Application {
                 System.out.println(UI.resourceFolder);
         	}
         }
+        primaryStage.setScene(scene);
+        
+        //Set UI Mode
+    	if(uim.equals("dark")){
+    		UIMODE("dark");
+    	}
+    	else{
+    		UIMODE("bright");
+    	}
+        primaryStage.show();
         UI.defaultWidth = (double) scene.getWidth();
-        adjustUI();
-        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	}
 	
 	//Defining Scene
@@ -85,54 +89,90 @@ public class Main extends Application {
         	for(String line = null; (line = br.readLine()) != null;){
         		settings.add(line);
         	}
-        	
-        	//Set Server URL
-        	UI.serverURL = settings.get(6);
-        	System.out.println("Set Server URL to "+UI.serverURL);
-        	
-        	//Set Autoplay
-        	if(settings.get(10).equals("True")){
-        		UI.autoplay = true;
-        	}
-        	else{
-        		UI.autoplay = false;
-        	}
-        	System.out.println("Set Autoplay to "+UI.autoplay);
-        	
-        	//Set FadeOut
-        	if(settings.get(8).equals("True")){
-        		UI.fadeOut = true;
-        	}
-        	else{
-        		UI.fadeOut = false;
-        	}
-        	System.out.println("Set Fade Out to "+UI.fadeOut);
-        	
-        	//Set Fade Duration
-        	UI.fadeDuration = Integer.parseInt(settings.get(12));
-        	System.out.println("Set Fade Duration to "+UI.fadeDuration);
-        	
-        	//Set Resource Folder
-        	if(settings.get(14).equals(" ") || settings.get(14).equals(null)){
-        		System.out.println("Resource folder not set");
-        	}
-        	else{
-        		UI.resourceFolder = settings.get(14);
-        	}
-        	
-		} catch (IOException e) {
+		}
+        catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
 		}
+        
+        for(String s : settings){
+        	if(s.contains("SERVER_URL=")){
+        		String surl = s.substring("SERVER_URL=".length());
+        		UI.serverURL = surl;
+        		Music.serverMusicURL = surl+"music/";
+        		Sound.serverSoundsURL = surl+"sounds/";
+        		System.out.println("Set Server URL to "+ surl);
+        	}
+        	if(s.contains("AUTO_PLAY=")){
+        		String ap = s.substring("AUTO_PLAY=".length());
+        		if(ap.toLowerCase().equals("true")){
+            		UI.autoplay = true;
+            	}
+            	else{
+            		UI.autoplay = false;
+            	}
+            	System.out.println("Set Autoplay to "+UI.autoplay);
+        	}
+        	if(s.contains("FADE_OUT=")){
+        		String fo = s.substring("FADE_OUT=".length());
+            	if(fo.toLowerCase().equals("true")){
+            		UI.fadeOut = true;
+            	}
+            	else{
+            		UI.fadeOut = false;
+            	}
+            	System.out.println("Set Fade Out to "+UI.fadeOut);
+        	}
+        	if(s.contains("FADE_DURATION=")){
+        		String fd = s.substring("FADE_DURATION=".length());
+            	UI.fadeDuration = Integer.parseInt(fd);
+            	System.out.println("Set Fade Duration to "+UI.fadeDuration);
+        	}
+        	if(s.contains("MUSIC_PATH=")){
+        		String MUSIC_PATH = s.substring("MUSIC_PATH=".length());
+        		Music.defaultMusicPath = MUSIC_PATH;
+        		Music.musicDirectory = MUSIC_PATH;
+        		System.out.println("Set Music Path to "+MUSIC_PATH);
+        	}
+        	if(s.contains("SOUND_PATH=")){
+        		String SOUND_PATH = s.substring("SOUND_PATH=".length());
+        		Sound.defaultSoundPath = SOUND_PATH;
+        		Sound.soundDirectory = SOUND_PATH;
+        		System.out.println("Set Sound Path to "+SOUND_PATH);
+        	}
+        	if(s.contains("RESOURCE_PATH=")){
+        		String RESOURCE_PATH = s.substring("RESOURCE_PATH=".length());
+        		UI.resourceFolder = RESOURCE_PATH;
+        		System.out.println("Set Resource Path to "+RESOURCE_PATH);
+        	}
+        	if(s.contains("UI_MODE=")){
+        		String UI_MODE = s.substring("UI_MODE=".length());
+        		uim = UI_MODE;
+        		System.out.println("Set UI Mode to "+UI_MODE);
+        	}
+        	if(s.contains("ONLINE_MODE=")){
+        		String ONLINE_MODE = s.substring("ONLINE_MODE=".length());
+        		if(ONLINE_MODE.toLowerCase().equals("true")){
+        			UI.localOnline = true;
+        			UI.onlineMode = true;
+        		}
+        		else{
+        			UI.localOnline = false;
+        			UI.onlineMode = false;
+        		}
+        		System.out.println("Set Online Mode to "+ONLINE_MODE);
+        	}
+        }
+        
         System.out.println("Finished Reading Settings");
         System.out.println("");
 		
 		//Add Components
         borderPane = new BorderPane();
-        borderPane.setTop(UI.addToolBar());
-        //borderPane.setStyle("-fx-background-color: White");
-        borderPane.setCenter(UI.tabPane);	
+        borderPane.setTop(UI.menu());
+        borderPane.setCenter(UI.tabPane);
 		borderPane.setLeft(UI.addVBox());
+		borderPane.getStyleClass().add("border-pane");
 		try {
 			borderPane.setBottom(UI.addBotBox());
 		} catch (IOException e) {
@@ -140,46 +180,20 @@ public class Main extends Application {
 		}
 		UI.addTabPane();
 		
-		//Setting Background Image
-		if(new File(UI.resourceFolder+"Backgrounds/"+"bg.png").exists()){
-			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.png").toURI();
-			BackgroundImage bi= new BackgroundImage(
-					new Image(bip.toString(), 0, 0, true, true),
-			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-			        BackgroundSize.DEFAULT);
-			borderPane.setBackground(new Background(bi));
-		}
-		else if(new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").exists()){
-			URI bip = new File(UI.resourceFolder+"Backgrounds/"+"bg.jpg").toURI();
-			BackgroundImage bi= new BackgroundImage(
-					new Image(bip.toString(), 0, 0, true, true),
-			        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-			        BackgroundSize.DEFAULT);
-			borderPane.setBackground(new Background(bi));
-		}
-		else{
-			borderPane.setStyle("-fx-background-color: LightGrey");
-		}
-		
         scene = new Scene(borderPane, 1280, 720);
-        scene.setFill(Color.WHITE);
         UI.defaultWidth = (double) scene.getWidth();
-        adjustUI();
         
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override 
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-            	//System.out.println("Width: " + newSceneWidth);
             	UI.defaultWidth = (double) newSceneWidth;
-            	adjustUI();
+            	UI.pb.setPrefWidth((double) newSceneWidth);
             }
         });
         
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                //System.out.println("Height: " + newSceneHeight);
             	UI.defaultHeight = (double) newSceneHeight;
-            	//UI.tile.setPrefHeight(UI.defaultHeight);
                 
             }
         });
@@ -204,33 +218,21 @@ public class Main extends Application {
 			}
 		);
         
-        
-        
         return scene;
         
 	}
   	
-	//Adjusting UI
-	public static void adjustUI(){
-        
-        UI.toolBar1.setPrefWidth(UI.defaultWidth);
-        Object[] bArray1 = UI.toolBar1.getChildren().toArray();
-        Object[] bArray2 = UI.toolBar2.getChildren().toArray();
-        int bCount = bArray1.length;
-        int bCount2 = bArray2.length;
-        UI.defaultButtonWidth = UI.defaultWidth/bCount;
-		
-    	//Adjusting ToolBar button width
-        for(int i = 0; i < bCount; i++){
-        	((Region) bArray1[i]).setPrefWidth(UI.defaultButtonWidth);
-        }
-        for(int i = 0; i < bCount2; i++){
-        	((Region) bArray2[i]).setPrefWidth(UI.defaultButtonWidth);
-        }
-        
-        //Adjusting ProgressBar Width
-        
-        UI.pb.setPrefWidth(UI.defaultWidth);
+	
+	//Adjusting UI Mode
+	public static void UIMODE(String mode){
+		if(mode.equals("dark")){
+			scene.getStylesheets().remove(1);
+			System.out.println("DarkMode Activated");
+		}
+		else{
+			scene.getStylesheets().remove(0);
+			System.out.println("BrightMode Activated");
+		}
 	}
 	
 	@Override
@@ -256,7 +258,7 @@ public class Main extends Application {
 			System.out.println("OS detected as Linux");
 		}
 		else{
-			System.out.println("OS currently not supportet, maybe it will work, maybe not.");
+			System.out.println("OS currently not natively supportet, maybe it will work, maybe not.");
 			UI.windows = true;
 		}
 		System.out.println("");

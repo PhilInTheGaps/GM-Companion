@@ -13,10 +13,8 @@ import javafx.scene.layout.GridPane;
 public class GM {
 	public static BorderPane GMHelp(){
 		BorderPane gm = new BorderPane();
-		gm.setStyle("-fx-background-color: transparent");
 		
 		GridPane grid = new GridPane();
-		grid.setStyle("-fx-background-color: white");
 		grid.setAlignment(Pos.TOP_LEFT);
 		grid.setHgap(20);
 		grid.setVgap(10);

@@ -33,8 +33,9 @@ public class Sound {
 	
 	public static double soundVolume = 0.25;
 	
-	public static String defaultSoundPath = ("./Sounds/");
-	public static String serverSoundsURL = UI.serverURL + "sounds/";
+	public static String soundDirectory = "";
+	public static String defaultSoundPath = "";
+	public static String serverSoundsURL = "";
 	
 	public static void play(){
 		
@@ -124,9 +125,11 @@ public class Sound {
   			try(Stream<Path> paths = Files.walk(Paths.get(defaultSoundPath))) {
   			    paths.forEach(filePath -> {
   			        if (Files.isRegularFile(filePath)) {
-  			            String tempPath = filePath.toString();
-  			            soundPathList[currentSoundID] = tempPath;
-  			            currentSoundID ++;
+  			        	if(filePath.toString().contains(".mp3")){
+  			        		String tempPath = filePath.toString();
+  	  			            soundPathList[currentSoundID] = tempPath;
+  	  			            currentSoundID ++;
+  			        	}
   			        }
   			    });
   			} catch (IOException e) {

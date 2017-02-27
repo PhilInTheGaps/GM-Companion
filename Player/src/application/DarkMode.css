@@ -1,0 +1,169 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property
+ * Colors:
+ * #222222
+ * #666666
+ */
+ /*Default Button*/
+.button {
+	-fx-opacity: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-color: #666666;
+    -fx-border-width: 1;
+    -fx-background-radius: 0, 0;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-background-position: center center;
+    -fx-background-repeat : stretch;
+}
+.button:hover {
+    -fx-background-color: derive(#222222,30%);
+    -fx-opacity: 1;
+}
+
+/*Default Text Field */
+.text-field{
+	-fx-opacity: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-color: #666666;
+    -fx-border-width: 1;
+    -fx-background-radius: 0, 0;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-background-position: center center;
+    -fx-background-repeat : stretch;
+}
+
+/*Default Label */
+.label{
+	-fx-font-size: 14px;
+	-fx-font-weight: bold;
+	-fx-text-fill: white;
+	-fx-alignment: center;
+}
+
+/*Custom Folder Button */
+.button1 {
+	-fx-opacity: 0.9;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-color: #666666;
+    -fx-border-width: 2;
+    -fx-background-radius: 6, 5;
+    -fx-background-insets: 1, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
+    -fx-background-size: 150 150;
+    -fx-font-weight: bold;
+    -fx-background-position: center center;
+    -fx-background-repeat : stretch;
+}
+.button1:hover {
+    -fx-background-color: derive(black,30%);
+    -fx-opacity: 1;
+}
+
+/*Default ScrollPane */
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+.scroll-bar{
+ -fx-background-color: #222222;
+ -fx-background-radius: 0;
+}
+.scroll-bar > .thumb{
+    -fx-background-color: #666666;
+ 	-fx-border-color: #222222;
+ 	-fx-background-radius: 0em;
+}
+.scroll-bar > .track{
+    -fx-background-color: #222222;
+ 	-fx-border-color: #222222;
+ 	-fx-background-radius: 0em;
+}
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+ -fx-background-color: transparent;
+ -fx-border-color:transparent;
+ -fx-background-radius: 0em;
+}
+.scroll-bar:vertical .track-background,
+.scroll-bar:horizontal .track-background {
+ -fx-background-color: transparent;
+ -fx-background-insets: 0;
+ -fx-background-radius: 0em;
+}
+.scroll-bar:vertical > .increment-button, 
+.scroll-bar:vertical > .decrement-button {
+    -fx-padding: 0.25em 0.5em  ;
+    -fx-background-color: #222222;
+    -fx-border-color: #222222;
+    -fx-background-radius: 0;
+}
+.scroll-bar:vertical > .increment-arrow, 
+.scroll-bar:vertical > .decrement-arrow {
+    -fx-background-color: #222222;
+    -fx-border-color: #222222;
+}
+
+/*Default TabPane */
+.tab-pane
+{
+    -fx-tab-max-width: 0;
+    -fx-tab-max-height: 0;
+}
+.tab-pane .tab-header-area{
+	visibility: hidden ;
+}
+
+/*Default BorderPane */
+.border-pane{
+	-fx-background-color: #222222;
+}
+
+/*Default vBox */
+.vbox {
+	-fx-background-color: #222222;
+}
+
+/*Default hBox */
+.hbox {
+	-fx-background-color: #222222;
+}
+
+/*Default MenuBar */
+.menu-bar {
+	-fx-background-color: #666666;
+}
+.menu{
+	-fx-background-color: #666666;
+}
+.menu:showing{
+	-fx-background-color: #222222;
+}
+.context-menu {
+    -fx-background-color: #222222;
+    -fx-padding: 0.333333em 0.083333em 0.666667em 0.083333em;
+}
+.menu-item:focused {
+     -fx-background-color: #666666;
+}
+
+/*Default ListView */
+.list-view{
+	-fx-background-color: #222222;
+}
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-text-fill: white;
+    -fx-background-color: #666666;
+}
+.list-cell{
+	-fx-text-fill: white;
+}
+.list-cell:even {
+    -fx-background-color: #222222;
+}
+.list-cell:odd {
+    -fx-background-color: #333333;
+}
+
