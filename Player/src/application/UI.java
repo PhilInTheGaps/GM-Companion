@@ -1202,7 +1202,9 @@ public class UI {
 								new Image(bip.toString(), 0, 0, true, true),
 						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
 						        BackgroundSize.DEFAULT);
-						bp.setBackground(new Background(bi));
+						//bp.setBackground(new Background(bi));
+						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
+						
 					}
 					else if(new File(resourceFolder+"Backgrounds/"+name+".jpg").exists()){
 						URI bip = new File(resourceFolder+"Backgrounds/"+name+".jpg").toURI();
@@ -1210,7 +1212,8 @@ public class UI {
 								new Image(bip.toString(), 0, 0, true, true),
 						        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
 						        BackgroundSize.DEFAULT);
-						bp.setBackground(new Background(bi));
+						//bp.setBackground(new Background(bi));
+						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
 					}
 					else{
 						bp.setBackground(null);
