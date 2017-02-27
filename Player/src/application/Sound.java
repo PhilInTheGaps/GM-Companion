@@ -125,9 +125,11 @@ public class Sound {
   			try(Stream<Path> paths = Files.walk(Paths.get(defaultSoundPath))) {
   			    paths.forEach(filePath -> {
   			        if (Files.isRegularFile(filePath)) {
-  			            String tempPath = filePath.toString();
-  			            soundPathList[currentSoundID] = tempPath;
-  			            currentSoundID ++;
+  			        	if(filePath.toString().contains(".mp3")){
+  			        		String tempPath = filePath.toString();
+  	  			            soundPathList[currentSoundID] = tempPath;
+  	  			            currentSoundID ++;
+  			        	}
   			        }
   			    });
   			} catch (IOException e) {
