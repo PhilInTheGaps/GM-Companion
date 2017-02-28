@@ -143,3 +143,6 @@ Weihnachtsferien 2016
 - Bug Fix: Es kam zu einem Error, wenn noch andere nicht-mp3 Dateien im Sound Ordner lagen
 - Hintergrund Bilder verbessert (Skalieren jetzt etwas mit und passen sich der Bildschirmgröße an)
 - Beta 2.6 Released
+
+28.02.2017 (Schule)
+- Feature Planung
