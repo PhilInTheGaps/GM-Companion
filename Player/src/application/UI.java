@@ -107,10 +107,8 @@ public class UI {
 	
 	public static String musicFolderName = "";
 	
-	public static String serverURL; //http://192.168.178.55/ http://rpgmsp.ddns.net/
+	public static String serverURL;
 	public static String resourceFolder;
-	
-	public static String defaultLinuxFolder = "/home/phil/RPGMusicPlayer/";
 	
 	public static double defaultWidth = 1366;
 	public static double defaultHeight = 768;
@@ -119,8 +117,8 @@ public class UI {
 	public static double currentWidth;
 	
 	public static Boolean updating = false;
-	public static int catCount = 0;
-	public static String[] catArray = new String[500];
+	public static List<String> mCatList = new ArrayList<String>();
+	public static List<String> sCatList = new ArrayList<String>();
 	
 	//The default space between different elements like buttons
 	public static double defaultSpacing = 10;
@@ -140,7 +138,7 @@ public class UI {
 	public static double folderButtonWidth;
 	
 	public static Tab tmusic = new Tab();
-	public static Tab sound = new Tab();
+	public static Tab tsound = new Tab();
 	public static Tab tgm = new Tab();
 	
 	//Menus
@@ -209,7 +207,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -226,7 +223,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -238,7 +234,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -255,7 +250,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -265,27 +259,22 @@ public class UI {
   		MenuItem fupdate = new MenuItem("Update Folders");
   		fupdate.setOnAction((ActionEvent e) -> {
   			System.out.println("Updating Folders...");
-  			try {
-  				onlineMode = localOnline;
-  				if(Music.musicFolderSelected == true){
-  					Music.mediaPlayer.pause();
-  	  			}
-  	  			if(Sound.soundFolderSelected == true){
-  	  				Sound.soundPlayer.pause();
-  	  			}
-  	  			
-  	  			updating = true;
-  	  			
-  	  			music.getItems().clear();
-  	  			
-  	  			addTabPane();
-				addSoundTilePane();
-				tabPane.getStylesheets().clear();
-				tabPane.getStyleClass().add(".tab-pane");
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
+  			onlineMode = localOnline;
+			if(Music.musicFolderSelected == true){
+				Music.mediaPlayer.pause();
 			}
+			if(Sound.soundFolderSelected == true){
+				Sound.soundPlayer.pause();
+			}
+			
+			updating = true;
+			
+			music.getItems().clear();
+			sounds.getItems().clear();
+			
+			addTabPane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
   		});
   		
   		//Set AutoPlay
@@ -304,7 +293,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -321,7 +309,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -332,7 +319,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -349,7 +335,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -371,7 +356,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -388,7 +372,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -399,7 +382,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -416,7 +398,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -438,7 +419,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -455,7 +435,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -466,7 +445,6 @@ public class UI {
 				try {
 					lines = Files.readAllLines(f.toPath());
 				} catch (IOException e2) {
-					// TODO Auto-generated catch block
 					e2.printStackTrace();
 				}
   				List<String> newLines = new ArrayList<String>();
@@ -483,7 +461,6 @@ public class UI {
   				try {
 					Files.write(f.toPath(), newLines);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
   			}
@@ -492,7 +469,7 @@ public class UI {
   		//All Sounds
   		MenuItem allS = new MenuItem("All");
   		allS.setOnAction((ActionEvent e) ->{
-  			tabPane.getSelectionModel().select(sound);
+  			tabPane.getSelectionModel().select(tsound);
   		});
   		
   		//Dice
@@ -509,34 +486,29 @@ public class UI {
     		Music.musicDirectory = folder;
     		
     		System.out.println("Updating Folders...");
-  			try {
-  				onlineMode = localOnline;
-  				if(Music.musicFolderSelected == true){
-  					Music.mediaPlayer.pause();
-  	  			}
-  	  			if(Sound.soundFolderSelected == true){
-  	  				Sound.soundPlayer.pause();
-  	  			}
-  	  			
-  	  			updating = true;
-  	  			
-  	  			music.getItems().clear();
-  	  			
-  	  			addTabPane();
-				addSoundTilePane();
-				tabPane.getStylesheets().clear();
-				tabPane.getStyleClass().add(".tab-pane");
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
+  			onlineMode = localOnline;
+			if(Music.musicFolderSelected == true){
+				Music.mediaPlayer.pause();
 			}
+			if(Sound.soundFolderSelected == true){
+				Sound.soundPlayer.pause();
+			}
+			
+			updating = true;
+			
+			music.getItems().clear();
+			sounds.getItems().clear();
+			
+			addTabPane();
+			//addSoundTilePane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
   			
   			File f = new File("settings.txt");
 				List<String> lines = new ArrayList<String>();
 			try {
 				lines = Files.readAllLines(f.toPath());
 			} catch (IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 				List<String> newLines = new ArrayList<String>();
@@ -553,7 +525,6 @@ public class UI {
 				try {
 				Files.write(f.toPath(), newLines);
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
   		});
@@ -565,34 +536,29 @@ public class UI {
   			Sound.defaultSoundPath = folder;
     		Sound.soundDirectory = folder;
     		System.out.println("Updating Folders...");
-  			try {
-  				onlineMode = localOnline;
-  				if(Music.musicFolderSelected == true){
-  					Music.mediaPlayer.pause();
-  	  			}
-  	  			if(Sound.soundFolderSelected == true){
-  	  				Sound.soundPlayer.pause();
-  	  			}
-  	  			
-  	  			updating = true;
-  	  			
-  	  			music.getItems().clear();
-  	  			
-  	  			addTabPane();
-				addSoundTilePane();
-				tabPane.getStylesheets().clear();
-				tabPane.getStyleClass().add(".tab-pane");
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
+  			onlineMode = localOnline;
+			if(Music.musicFolderSelected == true){
+				Music.mediaPlayer.pause();
 			}
+			if(Sound.soundFolderSelected == true){
+				Sound.soundPlayer.pause();
+			}
+			
+			updating = true;
+			
+			music.getItems().clear();
+			sounds.getItems().clear();
+			
+			addTabPane();
+			//addSoundTilePane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
   			
   			File f = new File("settings.txt");
 			List<String> lines = new ArrayList<String>();
 			try {
 				lines = Files.readAllLines(f.toPath());
 			} catch (IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			List<String> newLines = new ArrayList<String>();
@@ -609,7 +575,6 @@ public class UI {
 			try {
 			Files.write(f.toPath(), newLines);
 			} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			}
   		});
@@ -620,34 +585,28 @@ public class UI {
   			String folder = chooser();
   			resourceFolder = folder;
     		System.out.println("Updating Folders...");
-  			try {
-  				onlineMode = localOnline;
-  				if(Music.musicFolderSelected == true){
-  					Music.mediaPlayer.pause();
-  	  			}
-  	  			if(Sound.soundFolderSelected == true){
-  	  				Sound.soundPlayer.pause();
-  	  			}
-  	  			
-  	  			updating = true;
-  	  			
-  	  			music.getItems().clear();
-  	  			
-  	  			addTabPane();
-				addSoundTilePane();
-				tabPane.getStylesheets().clear();
-				tabPane.getStyleClass().add(".tab-pane");
-				
-			} catch (IOException e1) {
-				e1.printStackTrace();
+  			onlineMode = localOnline;
+			if(Music.musicFolderSelected == true){
+				Music.mediaPlayer.pause();
 			}
+			if(Sound.soundFolderSelected == true){
+				Sound.soundPlayer.pause();
+			}
+			
+			updating = true;
+			
+			music.getItems().clear();
+			
+			addTabPane();
+			//addSoundTilePane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
   			
   			File f = new File("settings.txt");
 			List<String> lines = new ArrayList<String>();
 			try {
 				lines = Files.readAllLines(f.toPath());
 			} catch (IOException e2) {
-				// TODO Auto-generated catch block
 				e2.printStackTrace();
 			}
 			List<String> newLines = new ArrayList<String>();
@@ -664,7 +623,6 @@ public class UI {
 			try {
 			Files.write(f.toPath(), newLines);
 			} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			}
   		});
@@ -675,118 +633,14 @@ public class UI {
 		
         //Adding Items to Menus
   		gmh.getItems().addAll(dice);
-  		sounds.getItems().addAll(allS);
+  		//sounds.getItems().addAll(allS);
   		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2, 
   				setMusicFolder, setSoundFolder, setResourceFolder, sep1, 
   				fupdate);
         
 		return menu;
 	}
-	
-	//Adds the toolbar at the top
-	public static VBox addToolBar() {
-		System.out.println("Adding toolbar...");
-		//Adding a VBox that contains 2 HBoxes
-		VBox toolBox = new VBox();
-  		
-  		//Pause Button
-  		Button pauseButton = new Button();
-  		pauseButton.setText("Pause Both");
-  		pauseButton.setPrefHeight(defaultButtonHeight);
-  		pauseButton.setOnAction((ActionEvent e) -> {
-  			if(Music.musicFolderSelected == true){
-  				Music.mediaPlayer.pause();
-  				Music.isPaused = true;
-  			}
-  			else{
-  				Music.musicError = "Please select music folder!";
-  			}
-  			if(Sound.soundFolderSelected == true){
-  				Sound.soundPlayer.pause();
-  				Sound.isPaused = true;
-  			}
-  			else{
-  				Sound.soundError = "Please select sound folder!";
-  			}
-  		});
-  		
-  		//Files Button
-  		Button filesButton = new Button();
-  		filesButton.setText("Files");
-  		filesButton.setPrefHeight(defaultButtonHeight);
-  		filesButton.setOnAction((ActionEvent e) -> {
-  			Music.mediaPlayer.stop();
-  			chooser();
-  		});
-  		
-  		//Server URL
-  		TextField serverField = new TextField();
-  		serverField.setPromptText("Server URL");
-  		serverField.setPrefHeight(defaultButtonHeight);
-  		if(serverURL != ""){
-  			serverField.setText(serverURL);
-  		}
-  		
-  		//Set Server URL
-  		Button setServerURL = new Button();
-  		setServerURL.setPrefHeight(defaultButtonHeight);
-  		//setServerURL.setPrefWidth(75);
-  		setServerURL.setText("Set URL");
-  		setServerURL.setOnAction((ActionEvent e) -> {
-  			serverURL = serverField.getText();
-  			int i = serverURL.length();
-  			if(serverURL.charAt(i-1)!= ("/").toCharArray()[0]){
-  				serverURL = serverURL + "/";
-  			}
-  			if(serverURL.contains("http://") == false){
-  				serverURL = "http://" + serverURL;
-  			}
-  			Music.serverMusicURL = serverURL + "music/";
-  			Sound.serverSoundsURL = serverURL + "sounds/";
-  		});
-  		
-  		//Set Slow Server Mode CheckBox
-  		CheckBox slow = new CheckBox();
-  		slow.setPrefHeight(defaultButtonHeight);
-  		slow.setText("Slow Server Mode");
-  		slow.setOnAction((ActionEvent e) -> {
-			if(slow.isSelected()){
-				slowServer = true;
-				System.out.println("Activating Slow Server Mode...");
-				Music.setDownloadFile();
-			}
-			else{
-				System.out.println("Disabling Slow Server Mode...");
-				slowServer = false;
-				stopDownload = true;
-			}
-  			
-  		});
-  		
-  		//Settings Button
-  		Button settings = new Button();
-  		settings.setPrefHeight(defaultButtonHeight);
-  		settings.setText("Settings");
-  		
-  		Object[] bArray1 = toolBar1.getChildren().toArray();
-        Object[] bArray2 = toolBar2.getChildren().toArray();
-        int bCount = bArray1.length;
-        int bCount2 = bArray2.length;
-        defaultButtonWidth = defaultWidth/bCount;
-        
-  		for(int i = 0; i < bCount; i++){
-        	((Region) bArray1[i]).setPrefWidth(defaultButtonWidth);
-        }
-  		for(int i = 0; i < bCount2; i++){
-        	((Region) bArray2[i]).setPrefWidth(defaultButtonWidth);
-        }
-  		
-  		toolBox.getChildren().add(toolBar1);
-  		toolBox.getChildren().add(toolBar2);
-  		toolBox.getStyleClass().add("hbox");
-  		return toolBox;
-  		}
-	
+
 	//Adds the VerticalBox on the left
 	public static VBox addVBox(){
 		System.out.println("Adding MediaInfo Box...");
@@ -1143,23 +997,27 @@ public class UI {
 		tabPane.getTabs().clear();
 		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		
-		defaultMusicAndSoundWidth = UI.defaultWidth-2*UI.defaultPadding-UI.defaultSliderWidth;
+		TabPane tabPaneMusicCategories = new TabPane();
+		tabPaneMusicCategories.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		tabPaneMusicCategories.setTabMinWidth(200);
+		tabPaneMusicCategories.setTabMinHeight(40);
 		
-		TabPane tabPaneCategories = new TabPane();
-		tabPaneCategories.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		tabPaneCategories.setTabMinWidth(200);
-		tabPaneCategories.setTabMinHeight(40);
+		TabPane tabPaneSoundCategories = new TabPane();
+		tabPaneSoundCategories.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		tabPaneSoundCategories.setTabMinWidth(200);
+		tabPaneSoundCategories.setTabMinHeight(40);
+		
+		mCatList.clear();
+		sCatList.clear();
 		
 		lv.setMaxHeight(150);
 		lv.setFocusTraversable(false);
-		//lv.setMouseTransparent(true);
 		lv.setItems(items);
 		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
 		    @Override
 		    public void handle(MouseEvent mouseEvent) {
 		        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
 		            if(mouseEvent.getClickCount() == 2){
-		                System.out.println("Double clicked");
 		                Music.currentTrackID = lv.getSelectionModel().getSelectedIndex()-1;
 		                Music.next();
 		            }
@@ -1167,25 +1025,25 @@ public class UI {
 		    }
 		});
 		
-		BorderPane bp = new BorderPane();
-		bp.setCenter(tabPaneCategories);
-		bp.setBottom(lv);
+		BorderPane mbp = new BorderPane();
+		mbp.setCenter(tabPaneMusicCategories);
+		mbp.setBottom(lv);
 		
-		Tab general = new Tab();
-		general.setClosable(false);
-		general.setText("All");
+		BorderPane sbp = new BorderPane();
+		sbp.setCenter(tabPaneSoundCategories);
 
-		catCount = 0;
 		try {
 			addMusicCategories();
+			addSoundCategories();
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		//Adding Category Tabs
-		for(int i = 0; i<catCount;i++){
+		for(String folder : mCatList){
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
-			String name = catArray[i];
+			String name = folder;
 			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
@@ -1199,18 +1057,19 @@ public class UI {
 				public void run() {
 					if(new File(resourceFolder+"Backgrounds/"+name+".png").exists()){
 						URI bip = new File(resourceFolder+"Backgrounds/"+name+".png").toURI();
-						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
+						mbp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
 						
 					}
 					else if(new File(resourceFolder+"Backgrounds/"+name+".jpg").exists()){
 						URI bip = new File(resourceFolder+"Backgrounds/"+name+".jpg").toURI();
-						bp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
+						mbp.setStyle("-fx-background-image: url('"+ bip +"'); -fx-background-size: auto; -fx-background-position: center;");
 					}
 					else{
-						bp.setBackground(null);
+						mbp.setBackground(null);
 					}
 				}
 			};
+			
 			t.setOnSelectionChanged((Event e) -> {
 				if(t.isSelected()){
 					executor.submit(r);
@@ -1221,39 +1080,62 @@ public class UI {
 				ScrollPane s = new ScrollPane();
 				s.setBackground(null);
 				s.setFitToWidth(true);
-				s.setContent(addMusicTilePane(catArray[i]));
+				s.setContent(addMusicTilePane(folder));
 				t.setContent(s);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Could not create Scrollbar for music folders");
 			}
 			
 			mi.setOnAction((ActionEvent e) ->{
 				tabPane.getSelectionModel().select(tmusic);
-				tabPaneCategories.getSelectionModel().select(t);
+				tabPaneMusicCategories.getSelectionModel().select(t);
 			});
 			
-			tabPaneCategories.getTabs().add(t);
+			tabPaneMusicCategories.getTabs().add(t);
 			music.getItems().add(mi);
+		}
+		
+		for(String folder : sCatList){
+			Tab t = new Tab();
+			MenuItem mi = new MenuItem();
+			String name = folder;
+			String nName = name.replace("_", " ");
+			t.setClosable(false);
+			t.setId(name);
+			t.setText(nName);
+			mi.setMnemonicParsing(false);
+			mi.setText(nName);
+			
+			try {
+				ScrollPane s = new ScrollPane();
+				s.setBackground(null);
+				s.setFitToWidth(true);
+				s.setContent(addSoundTilePane(folder));
+				t.setContent(s);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			mi.setOnAction((ActionEvent e) ->{
+				tabPane.getSelectionModel().select(tsound);
+				tabPaneSoundCategories.getSelectionModel().select(t);
+			});
+			
+			tabPaneSoundCategories.getTabs().add(t);
+			sounds.getItems().add(mi);
 		}
 		
 		tmusic.setClosable(false);
 		tmusic.setText("Music");
-		tmusic.setContent(bp);
+		tmusic.setContent(mbp);
 		tabPane.getTabs().add(tmusic);
 		
-		sound.setClosable(false);
-		sound.setText("Sounds");
+		tsound.setClosable(false);
+		tsound.setText("Sounds");
+		tsound.setContent(sbp);
+		tabPane.getTabs().add(tsound);
+		
 		ScrollPane s = new ScrollPane();
-		try {
-			s.setBackground(null);
-			s.setFitToWidth(true);
-			s.setContent(UI.addSoundTilePane());
-			sound.setContent(s);
-		} catch (IOException e1) {
-			System.out.println("ERROR: Could not create Sound Buttons");
-			e1.printStackTrace();
-		}
 		Runnable r2 = new Runnable(){
 			@Override
 			public void run() {
@@ -1281,21 +1163,15 @@ public class UI {
 	
 		executor.submit(r2);
 		
-		tabPane.getTabs().add(sound);
-		
 		tgm.setClosable(false);
 		tgm.setText("GM Help");
 		tgm.setContent(GM.GMHelp());
 		tabPane.getTabs().add(tgm);
-		
 	}
 	
 	//Add Music Category Tabs
 	public static void addMusicCategories() throws IOException{
 		System.out.println("Generating music categories...");
-  		
-  		String[] catArrayTemp = new String[500];
-  		List<String> cats = new ArrayList<String>();
   		
   		File file = new File(Music.musicDirectory);
   		System.out.println(file);
@@ -1310,14 +1186,12 @@ public class UI {
   	        int lastIndex2 = 10;
   	        ArrayList<String> folderNames = new ArrayList<String>();
   	        String test = new String();
-  	        int count = 0;
   	        
   	        System.out.println("Found the following music category folders:");
   	        while(lastIndex1 != -1){
 
   	            lastIndex1 = str.indexOf(findStr,lastIndex1);
   	            lastIndex2 = str.indexOf("/", lastIndex1);
-  	            
   	            
   	            if(lastIndex1 != -1){
   	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2; i++){
@@ -1326,21 +1200,13 @@ public class UI {
   	            	System.out.println(test);
   	            	folderNames.add(test);
   	            	test = "";
-  	            	count += 1;
   	                lastIndex1 += findStr.length();
   	            }
   	        }
-  	        for(int i = 0; i< folderNames.size(); i++){
-  	        	String temp = folderNames.get(i).toString();
-  	        	catArray[i] = temp;
+  	        for(String folder : folderNames){
+  	        	//String temp = folderNames.get(i).toString();
+  	        	mCatList.add(folder);
   	        }
-  	        
-  	        for(int i = 1; i < count; i++){
-  	        	//System.out.println(i);
-  	        	//System.out.println(folderArray[i]);
-  	        	catArrayTemp[i-1] = catArray[i].toString();
-  	        }
-  	        catArray = catArrayTemp;
   	        
   		}
   		else{
@@ -1352,32 +1218,15 @@ public class UI {
 	  	  		for(String name : names){
 	  	  		    if (new File(Music.musicDirectory+ name).isDirectory()){
 	  	  		        System.out.println(name);
-	  	  		        cats.add(name);
+	  	  		        mCatList.add(name);
 	  	  		    }
 	  	  		}
-	  	  		
-		        for(int i = 0; i < cats.size(); i++){
-		        	//System.out.println(i);
-		        	//System.out.println(folders.get(i));
-		        	catArrayTemp[i] = cats.get(i).toString();
-		        }
   	  		}
-  	  		
-	        catArray = catArrayTemp; 
   		}
-  		
-  		for(int i  = 0; i < catArray.length; i++){
-  				if(catArray[i] != null){
-  					catCount++;
-  					//System.out.println("Category Count: "+catCount);
-  		  			
-  				}
-
-	  		}
   		
   		updating = false;
   		
-  		System.out.println("Added music category buttons");
+  		System.out.println("Added music category tabs");
   		System.out.println("");
   	}
 	
@@ -1563,9 +1412,70 @@ public class UI {
 		return tile;
   	}
 	
+	//Add Sound Category Tabs
+	public static void addSoundCategories() throws IOException{
+			System.out.println("Generating sound categories...");
+	  		
+	  		File file = new File(Sound.soundDirectory);
+	  		System.out.println(file);
+	  		
+	  		if(onlineMode){
+	  			//Get all foldernames from server
+	  			Document doc = Jsoup.connect(Sound.soundDirectory).get();
+	  	        System.out.println(doc.toString());
+	  	        String str = doc.toString();
+	  	        String findStr = "<li><a href=";
+	  	        int lastIndex1 = 0;
+	  	        int lastIndex2 = 10;
+	  	        ArrayList<String> folderNames = new ArrayList<String>();
+	  	        String test = new String();
+	  	        
+	  	        System.out.println("Found the following sound category folders:");
+	  	        while(lastIndex1 != -1){
+
+	  	            lastIndex1 = str.indexOf(findStr,lastIndex1);
+	  	            lastIndex2 = str.indexOf("/", lastIndex1);
+	  	            
+	  	            
+	  	            if(lastIndex1 != -1){
+	  	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2; i++){
+	  	            		test += str.charAt(i);
+	  	            	}
+	  	            	System.out.println(test);
+	  	            	folderNames.add(test);
+	  	            	test = "";
+	  	                lastIndex1 += findStr.length();
+	  	            }
+	  	        }
+	  	        for(String folder : folderNames){
+	  	        	//String temp = folderNames.get(i).toString();
+	  	        	sCatList.add(folder);
+	  	        }
+	  		}
+	  		else{
+	  			String[] names = file.list();
+	  			
+	  	  		System.out.println("Found the following sound category folders:");
+	  	  		
+	  	  		if(names != null){
+		  	  		for(String name : names){
+		  	  		    if (new File(Sound.soundDirectory+ name).isDirectory()){
+		  	  		        System.out.println(name);
+		  	  		        sCatList.add(name);
+		  	  		    }
+		  	  		}
+	  	  		}
+	  		}
+	  		
+	  		updating = false;
+	  		
+	  		System.out.println("Added sound category tabs");
+	  		System.out.println("");
+	  	}
+	
 	//Add Sound Buttons
-	public static TilePane addSoundTilePane() throws IOException{
-		System.out.println("Generating sound buttons...");
+	public static TilePane addSoundTilePane(String directory) throws IOException{
+		System.out.println("Generating music buttons for directory: "+directory);
 		
   		tile2.setPadding(new Insets(defaultPadding, defaultPadding, defaultPadding, defaultPadding/2));
   		tile2.setVgap(defaultPadding/4);
@@ -1576,21 +1486,25 @@ public class UI {
   		
   		tile2.getChildren().clear();
   		
-  		String[] folderArray = new String[500];
+  		ScrollPane sp = new ScrollPane();
+		sp.setContent(tile2);
   		
-  		File file = new File(Sound.soundDirectory);
+  		List<String> folders = new ArrayList<String>();
+  		
+  		File file = new File(Sound.soundDirectory+directory+"/");
+  		
+  		
   		
   		if(onlineMode){
-  		//Get all foldernames from server
-  			Document doc = Jsoup.connect(Sound.serverSoundsURL).get();
+  			//Get all foldernames from server
+  			Document doc = Jsoup.connect(Sound.serverSoundsURL+directory+"/").get();
   	        //System.out.println(doc.toString());
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
   	        int lastIndex2 = 10;
-  	        ArrayList<String> folderNames = new ArrayList<String>();
-  	        String test = new String();
-  	        int count = 0;
+  	        folders.clear();
+  	        String temp = new String();
   	        
   	        System.out.println("Found the following sound folders:");
   	        while(lastIndex1 != -1){
@@ -1601,123 +1515,109 @@ public class UI {
   	            
   	            if(lastIndex1 != -1){
   	            	for(int i = lastIndex1+findStr.length()+1; i < lastIndex2; i++){
-  	            		test += str.charAt(i);
+  	            		temp += str.charAt(i);
   	            	}
-  	            	System.out.println(test);
-  	            	folderNames.add(test);
-  	            	test = "";
-  	            	count += 1;
+  	            	System.out.println(temp);
+  	            	folders.add(temp);
+  	            	temp = "";
   	                lastIndex1 += findStr.length();
   	            }
   	        }
-  	        for(int i = 0; i< folderNames.size(); i++){
-  	        	String temp = folderNames.get(i).toString();
-  	        	folderArray[i] = temp;
-  	        }
   	        
-  	        String[] folderArrayTemp = new String[500];
-  	        for(int i = 1; i < count; i++){
-  	        	//System.out.println(i);
-  	        	//System.out.println(folderArray[i]);
-				folderArrayTemp[i-1] = folderArray[i].toString();
-  	        }
-  	        folderArray = folderArrayTemp;
   	        
+  	        
+  	   
   		}
   		else{
   			String[] names = file.list();
-  	  		List<String> folders = new ArrayList<String>();
+  	  		folders.clear();
   	  		
   	  		System.out.println("Found the following sound folders:");
   	  		
   	  		if(names != null){
 	  	  		for(String name : names)
 	  	  		{
-	  	  		    if (new File(Sound.soundDirectory + name).isDirectory())
+	  	  		    if (new File(Sound.soundDirectory+directory+"/" + name).isDirectory())
 	  	  		    {
 	  	  		        System.out.println(name);
 	  	  		        folders.add(name);
 	  	  		    }
 	  	  		}
-	  	  		String[] folderArrayTemp = new String[500];
-		        for(int i = 0; i < folders.size(); i++){
-		        	//System.out.println(i);
-		        	//System.out.println(folders.get(i));
-		        	folderArrayTemp[i] = folders.get(i).toString();
-		        }
-		        folderArray = folderArrayTemp;
   	  		}
-	        
   		}
   		
-  		for(int i  = 0; i < folderArray.length; i++){
-				if(folderArray[i] != null){
-					String bName = folderArray[i].toString();
-		  			Button b = new Button(String.valueOf(i));
-		  			b.setMnemonicParsing(false);
-		  			
-		  			VBox v = new VBox();
-  		  			v.setMaxWidth(150);
-  		  			v.setAlignment(Pos.TOP_CENTER);
-  		  			VBox v2 = new VBox();
-  		  			v2.setMaxWidth(150);
-  		  			v2.setAlignment(Pos.CENTER);
-  		  			Label l = new Label();
-  		  			l.setWrapText(true);
-  		  			l.setMaxWidth(Double.MAX_VALUE);
-  		  			
-  		  			l.setTextAlignment(TextAlignment.CENTER);
-  		  			l.setContentDisplay(ContentDisplay.CENTER);
-		  			
-		  			b.setText("");
-		  			l.setText(bName.replace("_", " "));
-		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-		  			b.getStyleClass().add("button1");
-		  			
-		  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
-  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
-  		  			}
-  		  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
-  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
-  		  			}
-  		  			else{
-  		  				b.setText(bName.replace("_", " "));
-  		  			}
-		  			
-		  			b.setOnAction((ActionEvent e) -> {
-		  				if(onlineMode){
-		  					Sound.defaultSoundPath = bName;
-		  				}
-		  				else{
-			  	  			Sound.defaultSoundPath = Sound.soundDirectory+bName;
-		  				}
-		  				
-		  				soundFolder = bName;
-		  	  			soundFolderLabel.setText("Folder: " + soundFolder);
-		  	  			Sound.soundFolderSelected = true;
-		  	  			
-		  	  			Sound.initialPress = true;
-		  	  			
-		  	  			if (Sound.soundIsPlaying == true){
-		  	  				Sound.soundPlayer.stop();
-		  	  			}
-		  	  			
-		  	  			try {
-		  	  				Sound.get();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-		  	  			Sound.play();
-		  	  		});
-		  			
-		  			v2.getChildren().add(l);
-  		  			v.getChildren().addAll(b, v2);
-  		  			tile2.getChildren().add(v);
-				}
-
+  		for(String folder : folders){
+			String bName = folder;
+  			Button b = new Button();
+  			b.setMnemonicParsing(false);
+  			b.setText("");
+  			b.setWrapText(true);
+  			b.setAlignment(Pos.CENTER);
+  			
+  			VBox v = new VBox();
+  			v.setMaxWidth(150);
+  			v.setAlignment(Pos.TOP_CENTER);
+  			VBox v2 = new VBox();
+  			v2.setMaxWidth(150);
+  			v2.setAlignment(Pos.CENTER);
+  			Label l = new Label();
+  			l.setWrapText(true);
+  			l.setMaxWidth(Double.MAX_VALUE);
+  			
+  			l.setTextAlignment(TextAlignment.CENTER);
+  			l.setContentDisplay(ContentDisplay.CENTER);
+  			
+  			String nbName = bName.replace("%2520", "%20");
+  			l.setText(nbName.replace("%20", " ").replace("_", " "));
+  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  			b.getStyleClass().add("button1");
+  			
+  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
+  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
+  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
   			}
+  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
+  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
+  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+  			}
+  			else{
+  				b.setText(bName.replace("_", " "));
+  			}
+  			
+  			
+  			
+  			b.setOnAction((ActionEvent e) -> {
+  				if(onlineMode){
+  					Sound.defaultSoundPath = directory+"/"+bName;
+  				}
+  				else{
+	  	  			Sound.defaultSoundPath = Sound.soundDirectory+directory+"/"+bName;
+  				}
+  				
+  				soundFolder = directory+"/"+bName;
+  	  			soundFolderLabel.setText("Folder: " + soundFolder);
+  	  			Sound.soundFolderSelected = true;
+  	  			
+  	  			Sound.initialPress = true;
+  	  			
+  	  			if (Sound.soundIsPlaying == true){
+  	  				Sound.soundPlayer.stop();
+  	  			}
+  	  			
+  	  			try {
+  	  				Sound.get();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+  	  			if(autoplay){
+  	  				Sound.play();
+  	  			}
+  	  		});
+  			
+  			v2.getChildren().add(l);
+  			v.getChildren().addAll(b, v2);
+  			tile2.getChildren().add(v);	
+  		}
 		
 		System.out.println("Added sound buttons");
 		System.out.println("");
