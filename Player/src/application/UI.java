@@ -24,7 +24,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -39,7 +38,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -52,7 +50,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
@@ -1106,8 +1103,6 @@ public class UI {
 			mi.setMnemonicParsing(false);
 			mi.setText(nName);
 			
-			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ "+folder);
-			
 			ScrollPane s = new ScrollPane();
 			try {
 				
@@ -1587,7 +1582,7 @@ public class UI {
   		  					//Music.slowFolder = directory;
   		  				}
   		  				else{
-  		  					Sound.defaultSoundPath = Sound.defaultSoundPath+directory+"/"+nbName;
+  		  					Sound.defaultSoundPath = Sound.soundDirectory+directory+"/"+nbName;
   		  				}
   		  				
   		  				soundFolder = directory+"/"+nbName;
