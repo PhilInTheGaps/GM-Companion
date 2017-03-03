@@ -46,7 +46,7 @@ public class Main extends Application {
         		getClass().getResource("DarkMode.css").toExternalForm(), 
         		getClass().getResource("BrightMode.css").toExternalForm());
   		
-        primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.6 Beta");
+        primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.7 Beta");
         primaryStage.setMaximized(true);
         
         if(UI.resourceFolder != " " && UI.resourceFolder != null){
