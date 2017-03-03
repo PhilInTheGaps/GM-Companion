@@ -1106,12 +1106,43 @@ public class UI {
 			mi.setMnemonicParsing(false);
 			mi.setText(nName);
 			
+			System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ "+folder);
+			
+			ScrollPane s = new ScrollPane();
 			try {
-				ScrollPane s = new ScrollPane();
+				
 				s.setBackground(null);
 				s.setFitToWidth(true);
 				s.setContent(addSoundTilePane(folder));
 				t.setContent(s);
+				tabPaneSoundCategories.getTabs().add(t);
+				
+				Runnable r2 = new Runnable(){
+					@Override
+					public void run() {
+						if(new File(resourceFolder+"Backgrounds/"+"Sounds.png").exists()){
+							URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.png").toURI();
+							BackgroundImage bi= new BackgroundImage(
+									new Image(bip.toString(), 0, 0, true, true),
+							        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+							        BackgroundSize.DEFAULT);
+							s.setBackground(new Background(bi));
+						}
+						else if(new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").exists()){
+							URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").toURI();
+							BackgroundImage bi= new BackgroundImage(
+									new Image(bip.toString(), 0, 0, true, true),
+							        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
+							        BackgroundSize.DEFAULT);
+							s.setBackground(new Background(bi));
+						}
+						else{
+							s.setBackground(null);
+						}
+					}
+				};
+				executor.submit(r2);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -1121,7 +1152,7 @@ public class UI {
 				tabPaneSoundCategories.getSelectionModel().select(t);
 			});
 			
-			tabPaneSoundCategories.getTabs().add(t);
+			
 			sounds.getItems().add(mi);
 		}
 		
@@ -1134,34 +1165,6 @@ public class UI {
 		tsound.setText("Sounds");
 		tsound.setContent(sbp);
 		tabPane.getTabs().add(tsound);
-		
-		ScrollPane s = new ScrollPane();
-		Runnable r2 = new Runnable(){
-			@Override
-			public void run() {
-				if(new File(resourceFolder+"Backgrounds/"+"Sounds.png").exists()){
-					URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.png").toURI();
-					BackgroundImage bi= new BackgroundImage(
-							new Image(bip.toString(), 0, 0, true, true),
-					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
-					        BackgroundSize.DEFAULT);
-					s.setBackground(new Background(bi));
-				}
-				else if(new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").exists()){
-					URI bip = new File(resourceFolder+"Backgrounds/"+"Sounds.jpg").toURI();
-					BackgroundImage bi= new BackgroundImage(
-							new Image(bip.toString(), 0, 0, true, true),
-					        BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER,
-					        BackgroundSize.DEFAULT);
-					s.setBackground(new Background(bi));
-				}
-				else{
-					s.setBackground(null);
-				}
-			}
-		};
-	
-		executor.submit(r2);
 		
 		tgm.setClosable(false);
 		tgm.setText("GM Help");
@@ -1475,38 +1478,35 @@ public class UI {
 	
 	//Add Sound Buttons
 	public static TilePane addSoundTilePane(String directory) throws IOException{
-		System.out.println("Generating music buttons for directory: "+directory);
+		System.out.println("Generating sound buttons for directory: "+directory);
 		
-  		tile2.setPadding(new Insets(defaultPadding, defaultPadding, defaultPadding, defaultPadding/2));
-  		tile2.setVgap(defaultPadding/4);
-  		tile2.setHgap(defaultPadding/4);
-  		tile2.setPrefColumns(3);
-  		tile2.setPrefWidth(defaultMusicAndSoundWidth);
-  		//tile.setPrefHeight(defaultHeight);
+		TilePane tile = new TilePane();
+  		tile.setPadding(new Insets(defaultPadding, defaultPadding/2, defaultPadding, defaultPadding));
+  		tile.setVgap(defaultPadding/4);
+  		tile.setHgap(defaultPadding/4);
+  		tile.setPrefColumns(3);
+  		tile.setPrefWidth(defaultMusicAndSoundWidth);
   		
-  		tile2.getChildren().clear();
+  		tile.getChildren().clear();
   		
   		ScrollPane sp = new ScrollPane();
-		sp.setContent(tile2);
+		sp.setContent(tile);
   		
   		List<String> folders = new ArrayList<String>();
   		
   		File file = new File(Sound.soundDirectory+directory+"/");
-  		
-  		
+  		//System.out.println(file);
   		
   		if(onlineMode){
   			//Get all foldernames from server
-  			Document doc = Jsoup.connect(Sound.serverSoundsURL+directory+"/").get();
-  	        //System.out.println(doc.toString());
+  			Document doc = Jsoup.connect(Sound.soundDirectory+directory+"/").get();
   	        String str = doc.toString();
   	        String findStr = "<li><a href=";
   	        int lastIndex1 = 0;
   	        int lastIndex2 = 10;
-  	        folders.clear();
   	        String temp = new String();
   	        
-  	        System.out.println("Found the following sound folders:");
+  	        System.out.println("Found the following music folders:");
   	        while(lastIndex1 != -1){
 
   	            lastIndex1 = str.indexOf(findStr,lastIndex1);
@@ -1523,105 +1523,107 @@ public class UI {
   	                lastIndex1 += findStr.length();
   	            }
   	        }
-  	        
-  	        
-  	        
-  	   
   		}
   		else{
   			String[] names = file.list();
-  	  		folders.clear();
-  	  		
   	  		System.out.println("Found the following sound folders:");
   	  		
-  	  		if(names != null){
-	  	  		for(String name : names)
-	  	  		{
-	  	  		    if (new File(Sound.soundDirectory+directory+"/" + name).isDirectory())
-	  	  		    {
-	  	  		        System.out.println(name);
-	  	  		        folders.add(name);
-	  	  		    }
+  	  		if(names !=null){
+	  	  		for(String name : names){
+					if (new File(Sound.soundDirectory+directory+"/" + name).isDirectory()){
+						System.out.println(name);
+						folders.add(name);
+					}
 	  	  		}
-  	  		}
+  	  		} 
   		}
   		
   		for(String folder : folders){
-			String bName = folder;
-  			Button b = new Button();
-  			b.setMnemonicParsing(false);
-  			b.setText("");
-  			b.setWrapText(true);
-  			b.setAlignment(Pos.CENTER);
-  			
-  			VBox v = new VBox();
-  			v.setMaxWidth(150);
-  			v.setAlignment(Pos.TOP_CENTER);
-  			VBox v2 = new VBox();
-  			v2.setMaxWidth(150);
-  			v2.setAlignment(Pos.CENTER);
-  			Label l = new Label();
-  			l.setWrapText(true);
-  			l.setMaxWidth(Double.MAX_VALUE);
-  			
-  			l.setTextAlignment(TextAlignment.CENTER);
-  			l.setContentDisplay(ContentDisplay.CENTER);
-  			
-  			String nbName = bName.replace("%2520", "%20");
-  			l.setText(nbName.replace("%20", " ").replace("_", " "));
-  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  			b.getStyleClass().add("button1");
-  			
-  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
-  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
-  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
-  			}
-  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
-  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
-  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
-  			}
-  			else{
-  				b.setText(bName.replace("_", " "));
-  			}
-  			
-  			
-  			
-  			b.setOnAction((ActionEvent e) -> {
-  				if(onlineMode){
-  					Sound.defaultSoundPath = directory+"/"+bName;
+  				if(folder != null){
+  					String bName = new String();
+  					bName = folder;
+  		  			Button b = new Button();
+  		  			b.setMnemonicParsing(false);
+  		  			b.setText("");
+  		  			b.setWrapText(true);
+  		  			b.setAlignment(Pos.CENTER);
+  		  			
+  		  			VBox v = new VBox();
+  		  			v.setMaxWidth(150);
+  		  			v.setAlignment(Pos.TOP_CENTER);
+  		  			VBox v2 = new VBox();
+  		  			v2.setMaxWidth(150);
+  		  			v2.setAlignment(Pos.CENTER);
+  		  			Label l = new Label();
+  		  			l.setWrapText(true);
+  		  			l.setMaxWidth(Double.MAX_VALUE);
+  		  			
+  		  			l.setTextAlignment(TextAlignment.CENTER);
+  		  			l.setContentDisplay(ContentDisplay.CENTER);
+  		  			
+  		  			String nbName = bName.replace("%2520", "%20");
+  		  			//b.setText(nbName.replace("%20", " ").replace("_", " "));
+  		  			l.setText(nbName.replace("%20", " ").replace("_", " "));
+  		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+  		  			b.getStyleClass().add("button1");
+  		  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
+  		  			}
+  		  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
+  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
+		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+  		  			}
+  		  			else{
+  		  				b.setText(nbName.replace("_", " "));
+  		  			}
+  		  			
+  		  			b.setOnAction((ActionEvent e) -> {
+  		  				if(onlineMode){
+  		  					Sound.defaultSoundPath = directory+"/"+nbName;
+  		  					System.out.println();
+  		  					//Music.slowFolder = directory;
+  		  				}
+  		  				else{
+  		  					Sound.defaultSoundPath = Sound.defaultSoundPath+directory+"/"+nbName;
+  		  				}
+  		  				
+  		  				soundFolder = directory+"/"+nbName;
+  		  	  			soundFolderLabel.setText("Folder: " + musicFolder);
+  		  	  			Sound.soundFolderSelected = true;
+  		  	  			
+  		  	  			Sound.initialPress = true;
+  		  	  			
+  		  	  			if (Sound.soundIsPlaying == true){
+  		  	  				Sound.soundPlayer.stop();
+  		  	  			}
+  		  	  			
+  		  	  			try {
+  		  	  				Sound.get();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+  		  	  			if(autoplay){
+  		  	  				Sound.play();
+  		  	  			}
+  		  	  		});
+  		  			
+  		  			v2.getChildren().add(l);
+  		  			v.getChildren().addAll(b, v2);
+  		  			tile.getChildren().add(v);
   				}
-  				else{
-	  	  			Sound.defaultSoundPath = Sound.soundDirectory+directory+"/"+bName;
-  				}
-  				
-  				soundFolder = directory+"/"+bName;
-  	  			soundFolderLabel.setText("Folder: " + soundFolder);
-  	  			Sound.soundFolderSelected = true;
-  	  			
-  	  			Sound.initialPress = true;
-  	  			
-  	  			if (Sound.soundIsPlaying == true){
-  	  				Sound.soundPlayer.stop();
-  	  			}
-  	  			
-  	  			try {
-  	  				Sound.get();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-  	  			if(autoplay){
-  	  				Sound.play();
-  	  			}
-  	  		});
-  			
-  			v2.getChildren().add(l);
-  			v.getChildren().addAll(b, v2);
-  			tile2.getChildren().add(v);	
-  		}
-		
-		System.out.println("Added sound buttons");
-		System.out.println("");
-		return tile2;
+
+	  		}
+  		
+  		//Main.adjustUI();
+  		
+  		updating = false;
+  		
+  		System.out.println("Added music buttons");
+  		System.out.println("");
+		return tile;
 	}
 	
 	//Updates the ProgressBar
