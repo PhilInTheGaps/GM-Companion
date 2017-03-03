@@ -146,3 +146,7 @@ Weihnachtsferien 2016
 
 28.02.2017 (Schule)
 - Feature Planung
+
+03.03.2017
+- Jede Menge alten Code gelöscht und/oder überarbeitet
+- Kategorien für Sounds hinzugefügt
