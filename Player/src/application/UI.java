@@ -137,12 +137,14 @@ public class UI {
 	public static Tab tmusic = new Tab();
 	public static Tab tsound = new Tab();
 	public static Tab tgm = new Tab();
+	public static Tab tmusicL = new Tab();
 	
 	//Menus
 	public static Menu options = new Menu("Options");
 	public static Menu music = new Menu("Music");
 	public static Menu sounds = new Menu("Sounds");
 	public static Menu gmh = new Menu("GM Help");
+	public static Menu musicL = new Menu("Music Library");
 	
 	//Adds Menu
 	public static MenuBar menu(){
@@ -1534,93 +1536,93 @@ public class UI {
   		}
   		
   		for(String folder : folders){
-  				if(folder != null){
-  					String bName = new String();
-  					bName = folder;
-  		  			Button b = new Button();
-  		  			b.setMnemonicParsing(false);
-  		  			b.setText("");
-  		  			b.setWrapText(true);
-  		  			b.setAlignment(Pos.CENTER);
-  		  			
-  		  			VBox v = new VBox();
-  		  			v.setMaxWidth(150);
-  		  			v.setAlignment(Pos.TOP_CENTER);
-  		  			VBox v2 = new VBox();
-  		  			v2.setMaxWidth(150);
-  		  			v2.setAlignment(Pos.CENTER);
-  		  			Label l = new Label();
-  		  			l.setWrapText(true);
-  		  			l.setMaxWidth(Double.MAX_VALUE);
-  		  			
-  		  			l.setTextAlignment(TextAlignment.CENTER);
-  		  			l.setContentDisplay(ContentDisplay.CENTER);
-  		  			
-  		  			String nbName = bName.replace("%2520", "%20");
-  		  			//b.setText(nbName.replace("%20", " ").replace("_", " "));
-  		  			l.setText(nbName.replace("%20", " ").replace("_", " "));
-  		  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
-  		  			b.getStyleClass().add("button1");
-  		  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
-  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
-  		  			}
-  		  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
-  		  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
-		  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
-  		  			}
-  		  			else{
-  		  				b.setText(nbName.replace("_", " "));
-  		  			}
-  		  			
-  		  			b.setOnAction((ActionEvent e) -> {
-  		  				if(onlineMode){
-  		  					Sound.defaultSoundPath = directory+"/"+nbName;
-  		  					System.out.println();
-  		  					//Music.slowFolder = directory;
-  		  				}
-  		  				else{
-  		  					Sound.defaultSoundPath = Sound.soundDirectory+directory+"/"+nbName;
-  		  				}
-  		  				
-  		  				soundFolder = directory+"/"+nbName;
-  		  	  			soundFolderLabel.setText("Folder: " + musicFolder);
-  		  	  			Sound.soundFolderSelected = true;
-  		  	  			
-  		  	  			Sound.initialPress = true;
-  		  	  			
-  		  	  			if (Sound.soundIsPlaying == true){
-  		  	  				Sound.soundPlayer.stop();
-  		  	  			}
-  		  	  			
-  		  	  			try {
-  		  	  				Sound.get();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-  		  	  			if(autoplay){
-  		  	  				Sound.play();
-  		  	  			}
-  		  	  		});
-  		  			
-  		  			v2.getChildren().add(l);
-  		  			v.getChildren().addAll(b, v2);
-  		  			tile.getChildren().add(v);
-  				}
+			if(folder != null){
+				String bName = new String();
+				bName = folder;
+	  			Button b = new Button();
+	  			b.setMnemonicParsing(false);
+	  			b.setText("");
+	  			b.setWrapText(true);
+	  			b.setAlignment(Pos.CENTER);
+	  			
+	  			VBox v = new VBox();
+	  			v.setMaxWidth(150);
+	  			v.setAlignment(Pos.TOP_CENTER);
+	  			VBox v2 = new VBox();
+	  			v2.setMaxWidth(150);
+	  			v2.setAlignment(Pos.CENTER);
+	  			Label l = new Label();
+	  			l.setWrapText(true);
+	  			l.setMaxWidth(Double.MAX_VALUE);
+	  			
+	  			l.setTextAlignment(TextAlignment.CENTER);
+	  			l.setContentDisplay(ContentDisplay.CENTER);
+	  			
+	  			String nbName = bName.replace("%2520", "%20");
+	  			//b.setText(nbName.replace("%20", " ").replace("_", " "));
+	  			l.setText(nbName.replace("%20", " ").replace("_", " "));
+	  			b.setPrefSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+	  			b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+	  			b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
+	  			b.getStyleClass().add("button1");
+	  			if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").exists()){
+	  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".png").toURI();
+	  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9; -fx-text-fill: white");
+	  			}
+	  			else if(new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").exists()){
+	  				URI pic = new File(resourceFolder+"Icons/"+"Sounds"+"/"+bName+".jpg").toURI();
+	  				b.setStyle("-fx-background-image: url('"+ pic +"'); -fx-opacity: 0.9;");
+	  			}
+	  			else{
+	  				b.setText(nbName.replace("_", " "));
+	  			}
+	  			
+	  			b.setOnAction((ActionEvent e) -> {
+	  				if(onlineMode){
+	  					Sound.defaultSoundPath = directory+"/"+nbName;
+	  					System.out.println();
+	  					//Music.slowFolder = directory;
+	  				}
+	  				else{
+	  					Sound.defaultSoundPath = Sound.soundDirectory+directory+"/"+nbName;
+	  				}
+	  				
+	  				soundFolder = directory+"/"+nbName;
+	  	  			soundFolderLabel.setText("Folder: " + musicFolder);
+	  	  			Sound.soundFolderSelected = true;
+	  	  			
+	  	  			Sound.initialPress = true;
+	  	  			
+	  	  			if (Sound.soundIsPlaying == true){
+	  	  				Sound.soundPlayer.stop();
+	  	  			}
+	  	  			
+	  	  			try {
+	  	  				Sound.get();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	  	  			if(autoplay){
+	  	  				Sound.play();
+	  	  			}
+	  	  		});
+	  			
+	  			v2.getChildren().add(l);
+	  			v.getChildren().addAll(b, v2);
+	  			tile.getChildren().add(v);
+			}
 
-	  		}
+  		}
   		
   		//Main.adjustUI();
   		
   		updating = false;
   		
-  		System.out.println("Added music buttons");
+  		System.out.println("Added sound buttons");
   		System.out.println("");
 		return tile;
 	}
-	
+		
 	//Updates the ProgressBar
 	public static void updatePB(){
 		ChangeListener<Duration> progressChangeListener;
