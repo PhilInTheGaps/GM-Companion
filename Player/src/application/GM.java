@@ -1,14 +1,27 @@
 package application;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class GM {
 	public static BorderPane GMHelp(){
@@ -236,5 +249,66 @@ public class GM {
 		
 		gm.setTop(grid);
 		return gm;
+	}
+	public static BorderPane Database(){
+		BorderPane db = new BorderPane();
+		
+		List<List<Integer>> twoDim = new ArrayList<List<Integer>>();
+
+        String[] inputLines = { "0 1 0 1 0", "0 1 1 0 1", "0 0 0 1 0" };
+
+        for (String line : inputLines) {
+            List<Integer> row = new ArrayList<Integer>();
+
+            @SuppressWarnings("resource")
+			Scanner s = new Scanner(line);
+            while (s.hasNextInt()){
+            	row.add(s.nextInt());
+            }
+            twoDim.add(row);
+        }
+		
+		String s = new String();
+        ArrayList<String> a = new ArrayList<String>();
+        ArrayList<String> tables = new ArrayList<String>();
+        VBox v = new VBox();
+ 
+        FileReader fr;
+		try {
+			fr = new FileReader(new File("C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql"));
+			BufferedReader br = new BufferedReader(fr);
+
+	        while((s = br.readLine()) != null){
+	        	if(s.contains("CREATE TABLE")){
+	        		int i1 = ("CREATE TABLE").length()+2;
+	        		int i2 = s.indexOf("`", i1);
+	        		tables.add(s.substring(i1, i2));
+	        	}
+	        	a.add(s);
+	        }
+	        for(String t : tables){
+	        	GridPane g = new GridPane();
+	        	g.add(new Label(t), 0, 0);
+	        	v.getChildren().add(g);
+	        }
+	        
+	        br.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Database file not found!");
+			//e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+		ListView<String> lv = new ListView<String>();
+		ObservableList<String> items =FXCollections.observableArrayList();
+		for(Object i : a){
+			items.add(i.toString());
+		}
+		lv.setItems(items);
+		
+		db.setTop(v);
+		db.setCenter(lv);
+		return db;
 	}
 }
