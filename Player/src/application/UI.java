@@ -137,6 +137,7 @@ public class UI {
 	public static Tab tmusic = new Tab();
 	public static Tab tsound = new Tab();
 	public static Tab tgm = new Tab();
+	public static Tab tdb = new Tab();
 	public static Tab tmusicL = new Tab();
 	
 	//Menus
@@ -477,6 +478,12 @@ public class UI {
   			tabPane.getSelectionModel().select(tgm);
   		});
   		
+  		//Database
+  		MenuItem db = new MenuItem("Database");
+  		db.setOnAction((ActionEvent e) ->{
+  			tabPane.getSelectionModel().select(tdb);
+  		});
+  		
   		//Set Music Folder
   		MenuItem setMusicFolder = new MenuItem("Set Music Folder");
   		setMusicFolder.setOnAction((ActionEvent e) -> {
@@ -631,7 +638,7 @@ public class UI {
   		SeparatorMenuItem sep2 = new SeparatorMenuItem();
 		
         //Adding Items to Menus
-  		gmh.getItems().addAll(dice);
+  		gmh.getItems().addAll(dice, db);
   		//sounds.getItems().addAll(allS);
   		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2, 
   				setMusicFolder, setSoundFolder, setResourceFolder, sep1, 
@@ -1167,6 +1174,11 @@ public class UI {
 		tgm.setText("GM Help");
 		tgm.setContent(GM.GMHelp());
 		tabPane.getTabs().add(tgm);
+		
+		tdb.setClosable(false);
+		tdb.setText("Database");
+		tdb.setContent(GM.Database());
+		tabPane.getTabs().add(tdb);
 	}
 	
 	//Add Music Category Tabs
