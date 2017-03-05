@@ -7,3 +7,4 @@ FADE_DURATION=3
 AUTO_PLAY=true
 UI_MODE=dark
 ONLINE_MODE=false
+DATABASE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql/

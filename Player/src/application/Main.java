@@ -1,8 +1,6 @@
 package application;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -11,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -111,6 +107,7 @@ public class Main extends Application {
         Boolean resource_path = false;
         Boolean ui_mode = false;
         Boolean online_mode = false;
+        Boolean database_path = false;
         
         for(String s : settings){
         	if(s.contains("SERVER_URL=")){
@@ -188,6 +185,12 @@ public class Main extends Application {
         		}
         		System.out.println("Set Online Mode to "+ONLINE_MODE);
         	}
+        	if(s.contains("DATABASE_PATH=")){
+        		database_path = true;
+        		String DATABASE_PATH = s.substring("DATABASE_PATH=".length());
+        		GM.databasePath = DATABASE_PATH;
+        		System.out.println("Set Database Path to "+DATABASE_PATH);
+        	}
         }
         
         if(!server_url){
@@ -216,6 +219,9 @@ public class Main extends Application {
         }
         if(!online_mode){
         	settings.add("ONLINE_MODE=");
+        }
+        if(!database_path){
+        	settings.add("DATABASE_PATH=");
         }
         
         Path p = Paths.get(sp);

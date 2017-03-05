@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,6 +24,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class GM {
+	public static String databasePath;
+	
 	public static BorderPane GMHelp(){
 		BorderPane gm = new BorderPane();
 		
@@ -246,6 +247,7 @@ public class GM {
 			}
 			
 			grid.add(roll, 3, i);
+			grid.getStyleClass().add("grid-pane");
 		}
 		
 		gm.setTop(grid);
@@ -282,7 +284,7 @@ public class GM {
         	
         FileReader fr;
 		try {
-			fr = new FileReader(new File("C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql"));
+			fr = new FileReader(new File(databasePath));
 			BufferedReader br = new BufferedReader(fr);
 
 	        while((s = br.readLine()) != null){
@@ -327,7 +329,8 @@ public class GM {
 		        	tables.get(tableIndex).add(new Label(tableName), 0, 0);
 		        	tables.get(tableIndex).setHgap(20);
 		        	tables.get(tableIndex).setVgap(5);
-		        	tables.get(tableIndex).setGridLinesVisible(true);
+		        	//tables.get(tableIndex).setGridLinesVisible(true);
+		        	tables.get(tableIndex).getStyleClass().add("grid-pane");
 		        	v.getChildren().add(tables.get(tableIndex));
 		        	v.getChildren().add(new Label(""));
 	        	}
@@ -364,7 +367,7 @@ public class GM {
 		//db.setTop(sp);
 		db.setCenter(sp);
 		//db.setCenter(lv);
-		db.setBottom(lv);
+		//db.setBottom(lv);
 		return db;
 	}
 }
