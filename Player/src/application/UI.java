@@ -658,6 +658,15 @@ public class UI {
 			tabPane.getStylesheets().clear();
 			tabPane.getStyleClass().add(".tab-pane");
   			
+			if(GM.databasePath != null && GM.databasePath.toCharArray().length>3){
+	  			for(int i = 0; i<gmh.getItems().toArray().length; i++){
+	  	  			if(gmh.getItems().get(i).equals(dice)){
+	  	  				gmh.getItems().add(i+1, db);
+	  	  				System.out.println("Added Database Tab");
+	  	  			}
+	  	  		}
+	  		}
+			
   			File f = new File("settings.txt");
 			List<String> lines = new ArrayList<String>();
 			try {
@@ -688,12 +697,20 @@ public class UI {
   		SeparatorMenuItem sep2 = new SeparatorMenuItem();
 		
         //Adding Items to Menus
-  		gmh.getItems().addAll(dice, db);
+  		gmh.getItems().addAll(dice);
   		//sounds.getItems().addAll(allS);
   		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2, 
   				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, sep1, 
   				fupdate);
-        
+  		System.out.println("DATABASE_PATH: "+GM.databasePath);
+  		if(GM.databasePath != null && GM.databasePath.toCharArray().length>3){
+  			for(int i = 0; i<gmh.getItems().toArray().length; i++){
+  	  			if(gmh.getItems().get(i).equals(dice)){
+  	  				gmh.getItems().add(i+1, db);
+  	  				System.out.println("Added Database Tab");
+  	  			}
+  	  		}
+  		}
 		return menu;
 	}
 
