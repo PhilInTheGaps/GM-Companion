@@ -94,17 +94,12 @@
  -fx-background-insets: 0;
  -fx-background-radius: 0em;
 }
-.scroll-bar:vertical > .increment-button, 
-.scroll-bar:vertical > .decrement-button {
-    -fx-padding: 0.25em 0.5em  ;
+.scroll-bar > .increment-button, 
+.scroll-bar > .decrement-button {
+    -fx-padding: 0.5em  ;
     -fx-background-color: #e2e2e2;
     -fx-border-color: #e2e2e2;
     -fx-background-radius: 0;
-}
-.scroll-bar:vertical > .increment-arrow, 
-.scroll-bar:vertical > .decrement-arrow {
-    -fx-background-color: #e2e2e2;
-    -fx-border-color: #e2e2e2;
 }
 
 /*Default TabPane */
@@ -167,4 +162,11 @@
 .list-cell:odd {
     -fx-background-color: #dbdbdb;
 }
-
+.grid-pane{
+	-fx-padding: 10;
+  	-fx-border-style: solid inside;
+  	-fx-border-width: 5;
+  	-fx-border-insets: 5; 
+  	-fx-border-radius: 1; 
+  	-fx-border-color: #dbdbdb;
+}

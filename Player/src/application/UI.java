@@ -54,6 +54,8 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import javafx.util.Duration;
 
 public class UI {
@@ -633,6 +635,54 @@ public class UI {
 			}
   		});
   		
+  		//Set Database Path
+  		MenuItem setDatabasePath = new MenuItem("Set Database Path (BETA)");
+  		setDatabasePath.setOnAction((ActionEvent e) -> {
+  			String path = fchooser();
+  			GM.databasePath = path;
+    		System.out.println("Updating Folders...");
+  			onlineMode = localOnline;
+			if(Music.musicFolderSelected == true){
+				Music.mediaPlayer.pause();
+			}
+			if(Sound.soundFolderSelected == true){
+				Sound.soundPlayer.pause();
+			}
+			
+			updating = true;
+			
+			music.getItems().clear();
+			
+			addTabPane();
+			//addSoundTilePane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
+  			
+  			File f = new File("settings.txt");
+			List<String> lines = new ArrayList<String>();
+			try {
+				lines = Files.readAllLines(f.toPath());
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			List<String> newLines = new ArrayList<String>();
+			for(String line : lines){
+				String newLine;
+				if(line.contains("DATABASE_PATH=")){
+					newLine = "DATABASE_PATH="+path;
+				}
+				else{
+					newLine = line;
+				}
+				newLines.add(newLine);
+			}
+			try {
+			Files.write(f.toPath(), newLines);
+			} catch (IOException e1) {
+			e1.printStackTrace();
+			}
+  		});
+  		
   		//Seperator Item
   		SeparatorMenuItem sep1 = new SeparatorMenuItem();
   		SeparatorMenuItem sep2 = new SeparatorMenuItem();
@@ -641,7 +691,7 @@ public class UI {
   		gmh.getItems().addAll(dice, db);
   		//sounds.getItems().addAll(allS);
   		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2, 
-  				setMusicFolder, setSoundFolder, setResourceFolder, sep1, 
+  				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, sep1, 
   				fupdate);
         
 		return menu;
@@ -982,7 +1032,7 @@ public class UI {
 	
 	//The Directory Chooser used to select folders
 	public static String chooser(){
-		System.out.println("Opening FileChooser...");
+		System.out.println("Opening Directory Chooser...");
 		System.out.println("");
 		
 		DirectoryChooser dc = new DirectoryChooser();
@@ -994,6 +1044,21 @@ public class UI {
         folder += "/";
         System.out.println(folder);
         return folder;
+	}
+	
+	//The File Chooser used to select files
+	public static String fchooser(){
+		System.out.println("Opening File Chooser...");
+		System.out.println("");
+		
+		FileChooser fc = new FileChooser();
+        File file = fc.showOpenDialog(null);
+        
+        String path = file.getAbsolutePath();
+        path = path.replace("\\", "/");
+        path += "/";
+        System.out.println(path);
+        return path;
 	}
 	
 	//Add TabPane
