@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -269,27 +270,76 @@ public class GM {
         }
 		
 		String s = new String();
-        ArrayList<String> a = new ArrayList<String>();
-        ArrayList<String> tables = new ArrayList<String>();
+		ArrayList<String> a = new ArrayList<String>();
+        ArrayList<GridPane> tables = new ArrayList<GridPane>();
         VBox v = new VBox();
- 
+        Boolean openColumns = false;
+        Boolean openRows = false;
+        String tableName;
+        int tableIndex = -1;
+        int tableRow = 0;
+        int tableColumn = 0;
+        	
         FileReader fr;
 		try {
 			fr = new FileReader(new File("C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql"));
 			BufferedReader br = new BufferedReader(fr);
 
 	        while((s = br.readLine()) != null){
+	        	if(s.contains(") ENGINE=")){
+	        		openColumns = false;
+	        	}
+	        	
+	        	if(openColumns){
+	        		tableColumn ++;
+	        		int i1 = s.indexOf("`");
+	        		int i2 = s.indexOf("`", i1+1);
+	        		String text = s.substring(i1+1, i2);
+	        		tables.get(tableIndex).add(new Label(text), tableColumn, tableRow);
+	        	}
+	        	
+	        	if(openRows){
+	        		tableColumn = 0;
+	        		tableRow ++;
+	        		int i1 = 0;
+	        		while(s.indexOf(",", i1+1)>0){
+	        			int i2 = s.indexOf(",", i1+1);
+		        		String text = s.substring(i1+1, i2);
+		        		text = text.replace("`", "").replace("'", "").replace("\"", "").replace(")", "").replace("(", "");
+		        		Label l = new Label(text);
+		        		l.setStyle("-fx-font-weight: normal;");
+		        		tables.get(tableIndex).add(l, tableColumn, tableRow);
+		        		i1 = i2;
+		        		tableColumn ++;
+	        		}
+	        	}
+	        	
 	        	if(s.contains("CREATE TABLE")){
+	        		openColumns = true;
 	        		int i1 = ("CREATE TABLE").length()+2;
 	        		int i2 = s.indexOf("`", i1);
-	        		tables.add(s.substring(i1, i2));
+	        		tableName = s.substring(i1, i2);
+	        		tables.add(new GridPane());
+	        		tableIndex ++;
+	        		tableRow = 1;
+	        		tableColumn = -1;
+	        		
+		        	tables.get(tableIndex).add(new Label(tableName), 0, 0);
+		        	tables.get(tableIndex).setHgap(20);
+		        	tables.get(tableIndex).setVgap(5);
+		        	tables.get(tableIndex).setGridLinesVisible(true);
+		        	v.getChildren().add(tables.get(tableIndex));
+		        	v.getChildren().add(new Label(""));
+	        	}
+	        	
+	        	if(s.contains("INSERT INTO")){
+	        		openRows = true;
+	        	}
+	        	
+	        	if(s.contains(";")){
+	        		openRows = false;
 	        	}
 	        	a.add(s);
-	        }
-	        for(String t : tables){
-	        	GridPane g = new GridPane();
-	        	g.add(new Label(t), 0, 0);
-	        	v.getChildren().add(g);
 	        }
 	        
 	        br.close();
@@ -307,8 +357,14 @@ public class GM {
 		}
 		lv.setItems(items);
 		
-		db.setTop(v);
-		db.setCenter(lv);
+		ScrollPane sp = new ScrollPane();
+		sp.setStyle("-fx-background-color: transparent");
+		sp.setContent(v);
+		
+		//db.setTop(sp);
+		db.setCenter(sp);
+		//db.setCenter(lv);
+		db.setBottom(lv);
 		return db;
 	}
 }
