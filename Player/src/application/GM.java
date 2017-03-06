@@ -12,8 +12,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -26,7 +28,7 @@ import javafx.scene.layout.VBox;
 public class GM {
 	public static String databasePath;
 
-	public static BorderPane GMHelp() {
+	public static BorderPane Dice() {
 		BorderPane gm = new BorderPane();
 		int[] dice = {3, 4, 6, 8, 10, 12, 20};
 
@@ -110,11 +112,13 @@ public class GM {
 		grid.add(roll, 3, row);
 		grid.add(rc, 4, row);
 		
+		//Add grid to BorderPane and set style
 		grid.getStyleClass().add("grid-pane");
 		gm.setTop(grid);
 		return gm;
 	}
 
+	@SuppressWarnings("static-access")
 	public static BorderPane Database() {
 		BorderPane db = new BorderPane();
 		if (databasePath != null) {
@@ -159,7 +163,9 @@ public class GM {
 						int i1 = s.indexOf("`");
 						int i2 = s.indexOf("`", i1 + 1);
 						String text = s.substring(i1 + 1, i2);
-						tables.get(tableIndex).add(new Label(text), tableColumn, tableRow);
+						Label l = new Label(text);
+						l.setId(text);
+						tables.get(tableIndex).add(l, tableColumn, tableRow);
 					}
 
 					if (openRows) {
@@ -172,6 +178,7 @@ public class GM {
 							text = text.replace("`", "").replace("'", "").replace("\"", "").replace(")", "")
 									.replace("(", "");
 							Label l = new Label(text);
+							l.setId(text);
 							l.setStyle("-fx-font-weight: normal;");
 							tables.get(tableIndex).add(l, tableColumn, tableRow);
 							i1 = i2;
@@ -188,11 +195,48 @@ public class GM {
 						tableIndex++;
 						tableRow = 1;
 						tableColumn = -1;
-
+						
+						TextField tCharacter = new TextField();
+						tCharacter.setPromptText("Character");
+						TextField tItem = new TextField();
+						tItem.setPromptText("Column");
+						TextField tResult = new TextField();
+						tResult.setPromptText("Search Result");
+						tResult.setEditable(false);
+						
+						Button search = new Button("Search");
+						int ti = tableIndex;
+						search.setOnAction((ActionEvent e) -> {
+							String result = " ";
+							String character = tCharacter.getText();;
+							String item = tItem.getText();
+							int row = 0;
+							int column = 0;
+							
+							for(Node node : tables.get(ti).getChildren()){
+								if (node.getId() != null && node.getId().equals(character)){
+									row = tables.get(ti).getRowIndex(node);
+								}
+								if (node.getId() != null && node.getId().equals(item)){
+									column = tables.get(ti).getColumnIndex(node);
+								}
+							}
+							for (Node node : tables.get(ti).getChildren()){
+						        if(tables.get(ti).getRowIndex(node) == row && tables.get(ti).getColumnIndex(node) == column) {
+						            result = node.getId();
+						            break;
+						        }
+						    }
+							tResult.setText(result);
+						});
+						
 						tables.get(tableIndex).add(new Label(tableName), 0, 0);
+						tables.get(tableIndex).add(tCharacter, 1, 0);
+						tables.get(tableIndex).add(tItem, 2, 0);
+						tables.get(tableIndex).add(search, 3, 0);
+						tables.get(tableIndex).add(tResult, 4, 0);
 						tables.get(tableIndex).setHgap(20);
 						tables.get(tableIndex).setVgap(5);
-						// tables.get(tableIndex).setGridLinesVisible(true);
 						tables.get(tableIndex).getStyleClass().add("grid-pane");
 						v.getChildren().add(tables.get(tableIndex));
 						v.getChildren().add(new Label(""));
@@ -227,10 +271,7 @@ public class GM {
 			sp.setStyle("-fx-background-color: transparent");
 			sp.setContent(v);
 
-			// db.setTop(sp);
 			db.setCenter(sp);
-			// db.setCenter(lv);
-			// db.setBottom(lv);
 		}
 
 		return db;

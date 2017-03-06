@@ -1215,7 +1215,7 @@ public class UI {
 
 		tgm.setClosable(false);
 		tgm.setText("GM Help");
-		tgm.setContent(GM.GMHelp());
+		tgm.setContent(GM.Dice());
 		tabPane.getTabs().add(tgm);
 
 		tdb.setClosable(false);
