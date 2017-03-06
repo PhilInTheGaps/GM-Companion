@@ -30,7 +30,7 @@ public class GM {
 
 	public static BorderPane Dice() {
 		BorderPane gm = new BorderPane();
-		int[] dice = {3, 4, 6, 8, 10, 12, 20};
+		int[] dice = { 3, 4, 6, 8, 10, 12, 20 };
 
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.TOP_LEFT);
@@ -43,49 +43,49 @@ public class GM {
 		Label number = new Label("Number");
 		Label mod = new Label("Modifier");
 		Label result = new Label("Result");
-		
+
 		grid.add(number, 0, 0);
 		grid.add(die, 1, 0);
 		grid.add(mod, 2, 0);
 		grid.add(result, 4, 0);
-		
-		//Regular Dice
+
+		// Regular Dice
 		int row = 1;
-		for(int i : dice){
-			Label l = new Label("D"+i);
-			
+		for (int i : dice) {
+			Label l = new Label("D" + i);
+
 			TextField r = new TextField();
 			r.setEditable(false);
-			
+
 			TextField n = new TextField();
 			n.setText("1");
 			n.setMaxWidth(60);
-			
+
 			TextField m = new TextField();
-			
+
 			Button roll = new Button();
 			roll.setText("Roll");
 			roll.setOnAction(ActionEvent -> {
 				int res = 0;
 				for (int f = 0; f < Integer.valueOf(n.getText()); f++) {
-					res += ThreadLocalRandom.current().nextInt(1, i+1);
+					res += ThreadLocalRandom.current().nextInt(1, i + 1);
 				}
 				if (!m.getText().isEmpty()) {
 					res += Integer.valueOf(m.getText());
 				}
 				r.setText(res + "");
 			});
-			
+
 			grid.add(n, 0, row);
 			grid.add(l, 1, row);
 			grid.add(m, 2, row);
 			grid.add(roll, 3, row);
 			grid.add(r, 4, row);
-			
+
 			row++;
 		}
-		
-		//Custom Die
+
+		// Custom Die
 		TextField dc = new TextField();
 		dc.setMaxWidth(50);
 		TextField rc = new TextField();
@@ -99,7 +99,7 @@ public class GM {
 		roll.setOnAction(ActionEvent -> {
 			int res = 0;
 			for (int f = 0; f < Integer.valueOf(nc.getText()); f++) {
-				res += ThreadLocalRandom.current().nextInt(1, Integer.valueOf(dc.getText())+1);
+				res += ThreadLocalRandom.current().nextInt(1, Integer.valueOf(dc.getText()) + 1);
 			}
 			if (!mc.getText().isEmpty()) {
 				res += Integer.valueOf(mc.getText());
@@ -111,8 +111,8 @@ public class GM {
 		grid.add(mc, 2, row);
 		grid.add(roll, 3, row);
 		grid.add(rc, 4, row);
-		
-		//Add grid to BorderPane and set style
+
+		// Add grid to BorderPane and set style
 		grid.getStyleClass().add("grid-pane");
 		gm.setTop(grid);
 		return gm;
@@ -195,7 +195,7 @@ public class GM {
 						tableIndex++;
 						tableRow = 1;
 						tableColumn = -1;
-						
+
 						TextField tCharacter = new TextField();
 						tCharacter.setPromptText("Character");
 						TextField tItem = new TextField();
@@ -203,33 +203,35 @@ public class GM {
 						TextField tResult = new TextField();
 						tResult.setPromptText("Search Result");
 						tResult.setEditable(false);
-						
+
 						Button search = new Button("Search");
 						int ti = tableIndex;
 						search.setOnAction((ActionEvent e) -> {
 							String result = " ";
-							String character = tCharacter.getText();;
+							String character = tCharacter.getText();
+							;
 							String item = tItem.getText();
 							int row = 0;
 							int column = 0;
-							
-							for(Node node : tables.get(ti).getChildren()){
-								if (node.getId() != null && node.getId().equals(character)){
+
+							for (Node node : tables.get(ti).getChildren()) {
+								if (node.getId() != null && node.getId().equals(character)) {
 									row = tables.get(ti).getRowIndex(node);
 								}
-								if (node.getId() != null && node.getId().equals(item)){
+								if (node.getId() != null && node.getId().equals(item)) {
 									column = tables.get(ti).getColumnIndex(node);
 								}
 							}
-							for (Node node : tables.get(ti).getChildren()){
-						        if(tables.get(ti).getRowIndex(node) == row && tables.get(ti).getColumnIndex(node) == column) {
-						            result = node.getId();
-						            break;
-						        }
-						    }
+							for (Node node : tables.get(ti).getChildren()) {
+								if (tables.get(ti).getRowIndex(node) == row
+										&& tables.get(ti).getColumnIndex(node) == column) {
+									result = node.getId();
+									break;
+								}
+							}
 							tResult.setText(result);
 						});
-						
+
 						tables.get(tableIndex).add(new Label(tableName), 0, 0);
 						tables.get(tableIndex).add(tCharacter, 1, 0);
 						tables.get(tableIndex).add(tItem, 2, 0);
