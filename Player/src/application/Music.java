@@ -480,7 +480,7 @@ public class Music {
 			try (Stream<Path> paths = Files.walk(Paths.get(defaultMusicPath))) {
 				paths.forEach(filePath -> {
 					if (Files.isRegularFile(filePath)) {
-						if (filePath.toString().contains(".mp3")) {
+						if (filePath.toString().contains(".mp3") || filePath.toString().contains(".wav")) {
 							System.out.println("Path: " + filePath);
 							String tempPath = filePath.toString();
 							musicPathList[currentTrackID] = tempPath;
