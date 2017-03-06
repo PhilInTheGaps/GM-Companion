@@ -150,3 +150,7 @@ Weihnachtsferien 2016
 03.03.2017
 - Jede Menge alten Code gelöscht und/oder überarbeitet
 - Kategorien für Sounds hinzugefügt
+
+04.03.2017/05.03.2017
+- Möglichkeit zum Ansehen einer Charakter-Datenbank hinzugefügt
+- DATABASE_PATH Option hinzugefügt
