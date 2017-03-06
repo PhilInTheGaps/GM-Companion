@@ -122,7 +122,7 @@ public class Sound {
 			try (Stream<Path> paths = Files.walk(Paths.get(defaultSoundPath))) {
 				paths.forEach(filePath -> {
 					if (Files.isRegularFile(filePath)) {
-						if (filePath.toString().contains(".mp3")) {
+						if (filePath.toString().contains(".mp3") || filePath.toString().contains(".wav")) {
 							String tempPath = filePath.toString();
 							files.add(tempPath);
 							currentSoundID++;
