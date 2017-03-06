@@ -119,14 +119,12 @@ public class UI {
 	public static List<String> sCatList = new ArrayList<String>();
 
 	// The default space between different elements like buttons
-	public static double defaultSpacing = 10;
-	public static double defaultPadding = 10;
+	static double defaultSpacing = 10;
+	static double defaultPadding = 10;
 
 	// Default values of the buttons in the top toolbar
-	public static double defaultButtonHeight = 50;
-	public static double defaultButtonWidth = 175; // Currently not used,
-													// generates from window
-													// width
+	static double defaultButtonHeight = 50;
+	static double defaultButtonWidth = 175;
 
 	// The size of the volume sliders
 	public static double defaultSliderHeight = 50;
@@ -136,7 +134,8 @@ public class UI {
 	public static double defaultFolderButtonWidth = 150;
 	public static double defaultFolderButtonHeight = 150;
 	public static double folderButtonWidth;
-
+	
+	//Menu Tabs
 	public static Tab tmusic = new Tab();
 	public static Tab tsound = new Tab();
 	public static Tab tgm = new Tab();
