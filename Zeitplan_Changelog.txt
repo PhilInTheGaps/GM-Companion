@@ -154,3 +154,7 @@ Weihnachtsferien 2016
 04.03.2017/05.03.2017
 - Möglichkeit zum Ansehen einer Charakter-Datenbank hinzugefügt
 - DATABASE_PATH Option hinzugefügt
+
+06.03.2017
+- Angefangen, alten Code aufzuräumen und zu verkürzen
+- Simple Suchfunktion zu Datenbanken hinzugefügt
