@@ -277,7 +277,6 @@ public class Main extends Application {
 		});
 
 		return scene;
-
 	}
 
 	// Adjusting UI Mode
