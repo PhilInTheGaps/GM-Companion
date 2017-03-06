@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -79,9 +78,6 @@ public class Main extends Application {
 
 	// Defining Scene
 	public Scene setScene(double width, double height) {
-
-		// Check OS
-		checkOS();
 
 		// Read Settings
 		String sp = "settings.txt";
@@ -266,12 +262,6 @@ public class Main extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
-				System.out.println("PRESSED KEY: " + keyEvent.getCode());
-				System.out.println("PRESSED KEY: " + keyEvent.getCharacter());
-				System.out.println("PRESSED KEY: " + keyEvent.getText());
-				System.out.println("PRESSED KEY: " + keyEvent.getClass());
-				System.out.println("PRESSED KEY: " + keyEvent.getSource());
-				System.out.println("PRESSED KEY: " + keyEvent.getTarget());
 				if (keyEvent.getCode() == KeyCode.F1) {
 					System.out.println("Dev Mode Activated!");
 					if (UI.devV) {
@@ -305,26 +295,5 @@ public class Main extends Application {
 	public void stop() {
 		System.out.println("Closing...");
 		UI.stopDownload = true;
-	}
-
-	// Checking the Operating System
-	public static void checkOS() {
-
-		UI.mainPath = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-
-		UI.osName = System.getProperty("os.name");
-		System.out.println("Operating System: " + UI.osName);
-
-		if (UI.osName.toLowerCase().contains("windows")) {
-			UI.windows = true;
-			System.out.println("OS detected as Windows");
-		} else if (UI.osName.toLowerCase().contains("linux")) {
-			UI.linux = true;
-			System.out.println("OS detected as Linux");
-		} else {
-			System.out.println("OS currently not natively supportet, maybe it will work, maybe not.");
-			UI.windows = true;
-		}
-		System.out.println("");
 	}
 }
