@@ -158,3 +158,4 @@ Weihnachtsferien 2016
 06.03.2017
 - Angefangen, alten Code aufzuräumen und zu verkürzen
 - Simple Suchfunktion zu Datenbanken hinzugefügt
+- Schwerwiegenden Bug gefixed: Sounds wurden nicht gestoppt, sondern haben unendlich lange weiter gespielt und sich überlagert
