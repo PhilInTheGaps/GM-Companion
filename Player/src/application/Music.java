@@ -44,7 +44,6 @@ public class Music {
 	static String slowFolder;
 	static ArrayList<String> slowFileNames = new ArrayList<String>();
 	public static ExecutorService executor = Executors.newCachedThreadPool();
-	public static Boolean isPaused = false;
 	public static Boolean fading = false;
 
 	static int folderCount = 0;
