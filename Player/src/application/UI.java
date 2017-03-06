@@ -1594,7 +1594,7 @@ public class UI {
 					}
 
 					soundFolder = directory + "/" + nbName;
-					soundFolderLabel.setText("Folder: " + musicFolder);
+					soundFolderLabel.setText("Folder: " + soundFolder);
 					Sound.soundFolderSelected = true;
 
 					Sound.initialPress = true;
