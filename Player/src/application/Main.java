@@ -18,18 +18,17 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	// Defining Variables
-	static Scene scene;
 	BorderPane borderPane;
 	double height;
 	double width;
-	public static ArrayList<String> settings = new ArrayList<String>();
+	static Scene scene;
 	static String uim = "";
+	public static ArrayList<String> settings = new ArrayList<String>();
 
 	// Main
 	public static void main(String[] args) {
@@ -43,43 +42,47 @@ public class Main extends Application {
 		System.out.println("Initializing...");
 		System.out.println("");
 
+		// Builds UI
 		scene = setScene(this.width, this.height);
-		scene.setFill(Color.BLACK);
+
+		// Adds DarkMode and BrightMode CSS files
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
 
+		// Sets TitleBar text, starts the program maximized and sets "scene" as
+		// default scene
 		primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version 0.2.7 Beta");
 		primaryStage.setMaximized(true);
+		primaryStage.setScene(scene);
 
+		// Adds the icon
 		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
 			if (new File(UI.resourceFolder + "icon.png").exists()) {
 				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
 				primaryStage.getIcons().clear();
 				primaryStage.getIcons().add(new Image(icon.toString()));
-				System.out.println(UI.resourceFolder);
 			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
 				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
 				primaryStage.getIcons().clear();
 				primaryStage.getIcons().add(new Image(icon.toString()));
-				System.out.println(UI.resourceFolder);
 			}
 		}
-		primaryStage.setScene(scene);
 
-		// Set UI Mode
+		// Sets UI Mode according to settings
 		if (uim.equals("dark")) {
 			UIMODE("dark");
 		} else {
 			UIMODE("bright");
 		}
+
 		primaryStage.show();
-		UI.defaultWidth = (double) scene.getWidth();
+		UI.defaultWidth = scene.getWidth();
 	}
 
 	// Defining Scene
 	public Scene setScene(double width, double height) {
 
-		// Read Settings
+		// Reads Settings.txt (Located next to the .jar when exported)
 		String sp = "settings.txt";
 		System.out.println("Reading Settings...");
 		try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
@@ -90,7 +93,8 @@ public class Main extends Application {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
 		}
-
+		
+		// Variables indicate, whether specific setting was found in "settings.txt"
 		Boolean server_url = false;
 		Boolean auto_play = false;
 		Boolean fade_out = false;
@@ -101,7 +105,8 @@ public class Main extends Application {
 		Boolean ui_mode = false;
 		Boolean online_mode = false;
 		Boolean database_path = false;
-
+		
+		// Reads the setting value and sets the variables accordingly
 		for (String s : settings) {
 			if (s.contains("SERVER_URL=")) {
 				server_url = true;
@@ -182,7 +187,8 @@ public class Main extends Application {
 				System.out.println("Set Database Path to " + DATABASE_PATH);
 			}
 		}
-
+		
+		// If a setting was not found, it is added to the list
 		if (!server_url) {
 			settings.add("SERVER_URL=");
 		}
@@ -213,7 +219,8 @@ public class Main extends Application {
 		if (!database_path) {
 			settings.add("DATABASE_PATH=");
 		}
-
+		
+		// Writes new settings to file
 		Path p = Paths.get(sp);
 		try {
 			Files.write(p, settings);
@@ -225,7 +232,7 @@ public class Main extends Application {
 		System.out.println("Finished Reading Settings");
 		System.out.println("");
 
-		// Add Components
+		// Adds Components to BorderPane
 		borderPane = new BorderPane();
 		borderPane.setTop(UI.menu());
 		borderPane.setCenter(UI.tabPane);
@@ -237,10 +244,13 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		UI.addTabPane();
-
+		
+		// Defines scene size (Does not really matter because it starts maximized anyways)
 		scene = new Scene(borderPane, 1280, 720);
-		UI.defaultWidth = (double) scene.getWidth();
-
+		UI.defaultWidth = scene.getWidth();
+		
+		// Listens to window-size changes and updates the variables
+		// (Necessary because somehow objects like the ProgressBar are not updated when the window is resized by default)
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
@@ -258,7 +268,9 @@ public class Main extends Application {
 
 			}
 		});
-
+		
+		// Activates a debug mode when F1 is pressed
+		// (Currently not really useful for anything, was needed in early testing stages)
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
@@ -289,7 +301,9 @@ public class Main extends Application {
 			System.out.println("BrightMode Activated");
 		}
 	}
-
+	
+	// Sets UI.stopDownload to true when program is closed
+	// (Only used by the currently disabled "Slow Server Mode")
 	@Override
 	public void stop() {
 		System.out.println("Closing...");
