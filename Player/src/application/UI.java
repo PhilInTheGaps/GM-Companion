@@ -100,7 +100,7 @@ public class UI {
 	public static Boolean slowServer = false;
 	public static Boolean stopDownload = false;
 	public static Boolean fadeOut = true;
-	public static int fadeDuration = 10;
+	public static int fadeDuration = 3;
 	public static String serverURL;
 	public static String resourceFolder;
 
