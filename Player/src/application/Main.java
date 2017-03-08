@@ -34,7 +34,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
 	// Start of Program
 	@Override
 	public void start(Stage primaryStage) {
@@ -74,7 +74,7 @@ public class Main extends Application {
 		} else {
 			UIMODE("bright");
 		}
-
+		
 		primaryStage.show();
 		UI.defaultWidth = scene.getWidth();
 	}
@@ -139,8 +139,15 @@ public class Main extends Application {
 			if (s.contains("FADE_DURATION=")) {
 				fade_duration = true;
 				String fd = s.substring("FADE_DURATION=".length());
-				UI.fadeDuration = Integer.parseInt(fd);
-				System.out.println("Set Fade Duration to " + UI.fadeDuration);
+				try{
+					UI.fadeDuration = Integer.parseInt(fd);
+					System.out.println("Set Fade Duration to " + UI.fadeDuration);
+				}
+				catch(Exception e){
+					System.out.println("WARNING: FADE_DURATION is not set!");
+					System.out.println("Set Fade Duration to " + UI.fadeDuration + "(Default)");
+				}
+				
 			}
 			if (s.contains("MUSIC_PATH=")) {
 				music_path = true;
