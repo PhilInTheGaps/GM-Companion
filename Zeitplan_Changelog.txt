@@ -160,3 +160,6 @@ Weihnachtsferien 2016
 - Simple Suchfunktion zu Datenbanken hinzugefügt
 - Schwerwiegenden Bug gefixed: Sounds wurden nicht gestoppt, sondern haben unendlich lange weiter gespielt und sich überlagert
 - lokalen Support für .wav Dateien hinzugefügt
+
+08.03.2017
+- Kritischer Bug Fix: Das Programm startete nach dem ersten Start nicht mehr aufgrund eines Errors beim Settings-Auslesen
