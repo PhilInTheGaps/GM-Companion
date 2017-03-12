@@ -49,8 +49,7 @@ public class Main extends Application {
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
 
-		// Sets TitleBar text, starts the program maximized and sets "scene" as
-		// default scene
+		// Sets TitleBar text, starts the program maximized and sets "scene" as default scene
 		primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.7 PRE 4 (0.2.7)");
 		primaryStage.setMaximized(true);
 		primaryStage.setScene(scene);

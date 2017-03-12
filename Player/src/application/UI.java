@@ -576,6 +576,7 @@ public class UI {
 			updating = true;
 
 			music.getItems().clear();
+			sounds.getItems().clear();
 
 			addTabPane();
 			tabPane.getStylesheets().clear();
@@ -622,6 +623,7 @@ public class UI {
 			updating = true;
 
 			music.getItems().clear();
+			sounds.getItems().clear();
 
 			addTabPane();
 			tabPane.getStylesheets().clear();
@@ -1294,6 +1296,7 @@ public class UI {
 		sp.setContent(tile);
 
 		List<String> folders = new ArrayList<String>();
+		folders.clear();
 
 		File file = new File(Music.musicDirectory + directory + "/");
 
