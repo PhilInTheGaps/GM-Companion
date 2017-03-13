@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javafx.collections.FXCollections;
@@ -122,20 +120,6 @@ public class GM {
 	public static BorderPane Database() {
 		BorderPane db = new BorderPane();
 		if (databasePath != null) {
-			List<List<Integer>> twoDim = new ArrayList<List<Integer>>();
-
-			String[] inputLines = { "0 1 0 1 0", "0 1 1 0 1", "0 0 0 1 0" };
-
-			for (String line : inputLines) {
-				List<Integer> row = new ArrayList<Integer>();
-
-				@SuppressWarnings("resource")
-				Scanner s = new Scanner(line);
-				while (s.hasNextInt()) {
-					row.add(s.nextInt());
-				}
-				twoDim.add(row);
-			}
 
 			String s = new String();
 			ArrayList<String> a = new ArrayList<String>();
@@ -154,6 +138,7 @@ public class GM {
 				BufferedReader br = new BufferedReader(fr);
 
 				while ((s = br.readLine()) != null) {
+					System.out.println(s);
 					if (s.contains(") ENGINE=")) {
 						openColumns = false;
 					}

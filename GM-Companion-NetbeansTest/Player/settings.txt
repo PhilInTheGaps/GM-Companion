@@ -1,0 +1,10 @@
+SERVER_URL=
+AUTO_PLAY=true
+FADE_OUT=true
+FADE_DURATION=3
+MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/
+SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds/
+RESOURCE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources/
+UI_MODE=dark
+ONLINE_MODE=false
+DATABASE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql/
