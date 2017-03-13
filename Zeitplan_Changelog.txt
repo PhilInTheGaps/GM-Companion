@@ -163,3 +163,9 @@ Weihnachtsferien 2016
 
 08.03.2017
 - Kritischer Bug Fix: Das Programm startete nach dem ersten Start nicht mehr aufgrund eines Errors beim Settings-Auslesen
+
+12.03.2017
+- Bug Fix: Beim Ändern des Datenbank-Pfades wurden Sound-Kategorien nochmal hinzugefügt, sodass sie mehrfach vorhanden waren
+
+13.03.2017
+- Kategorien und Buttons für Musik und Sounds werden jetzt alphabetisch sortiert
