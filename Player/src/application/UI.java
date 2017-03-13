@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -1272,7 +1273,9 @@ public class UI {
 				}
 			}
 		}
-
+		
+		Collections.sort(mCatList);
+		
 		updating = false;
 
 		System.out.println("Added music category tabs");
@@ -1340,7 +1343,9 @@ public class UI {
 				}
 			}
 		}
-
+		
+		Collections.sort(folders);
+		
 		for (String folder : folders) {
 			String bName = new String();
 			bName = folder;
@@ -1472,7 +1477,9 @@ public class UI {
 				}
 			}
 		}
-
+		
+		Collections.sort(sCatList);
+		
 		updating = false;
 
 		System.out.println("Added sound category tabs");
@@ -1538,7 +1545,9 @@ public class UI {
 				}
 			}
 		}
-
+		
+		Collections.sort(folders);
+		
 		for (String folder : folders) {
 			if (folder != null) {
 				String bName = new String();

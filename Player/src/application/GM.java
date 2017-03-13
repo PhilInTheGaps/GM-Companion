@@ -138,7 +138,6 @@ public class GM {
 				BufferedReader br = new BufferedReader(fr);
 
 				while ((s = br.readLine()) != null) {
-					System.out.println(s);
 					if (s.contains(") ENGINE=")) {
 						openColumns = false;
 					}
