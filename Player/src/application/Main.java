@@ -9,23 +9,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	// Defining Variables
 	BorderPane borderPane;
-	double height;
-	double width;
 	static Scene scene;
 	static String uim = "";
 	public static ArrayList<String> settings = new ArrayList<String>();
@@ -34,7 +38,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	// Start of Program
 	@Override
 	public void start(Stage primaryStage) {
@@ -43,16 +47,16 @@ public class Main extends Application {
 		System.out.println("");
 
 		// Builds UI
-		scene = setScene(this.width, this.height);
+		scene = setScene();
 
 		// Adds DarkMode and BrightMode CSS files
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
 
-		// Sets TitleBar text, starts the program maximized and sets "scene" as default scene
-		primaryStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.7.1 (0.2.7.1)");
-		primaryStage.setMaximized(true);
-		primaryStage.setScene(scene);
+		// Sets TitleBar text, starts the program maximized and sets "scene" as
+		// default scene
+		primaryStage
+				.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE1 (0.2.8)");
 
 		// Adds the icon
 		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
@@ -73,13 +77,23 @@ public class Main extends Application {
 		} else {
 			UIMODE("bright");
 		}
-		
+
+		;
+		primaryStage.hide();
+		primaryStage.setScene(scene);
+
+		// Start on screen 1
+		Rectangle2D bounds = Screen.getScreens().get(0).getVisualBounds();
+		primaryStage.setWidth(bounds.getWidth());
+		primaryStage.setHeight(bounds.getHeight());
+		primaryStage.centerOnScreen();
+		primaryStage.setMaximized(true);
 		primaryStage.show();
 		UI.defaultWidth = scene.getWidth();
 	}
 
 	// Defining Scene
-	public Scene setScene(double width, double height) {
+	public Scene setScene() {
 
 		// Reads Settings.txt (Located next to the .jar when exported)
 		String sp = "settings.txt";
@@ -92,8 +106,9 @@ public class Main extends Application {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
 		}
-		
-		// Variables indicate, whether specific setting was found in "settings.txt"
+
+		// Variables indicate, whether specific setting was found in
+		// "settings.txt"
 		Boolean server_url = false;
 		Boolean auto_play = false;
 		Boolean fade_out = false;
@@ -104,7 +119,8 @@ public class Main extends Application {
 		Boolean ui_mode = false;
 		Boolean online_mode = false;
 		Boolean database_path = false;
-		
+		Boolean maps_path = false;
+
 		// Reads the setting value and sets the variables accordingly
 		for (String s : settings) {
 			if (s.contains("SERVER_URL=")) {
@@ -138,15 +154,13 @@ public class Main extends Application {
 			if (s.contains("FADE_DURATION=")) {
 				fade_duration = true;
 				String fd = s.substring("FADE_DURATION=".length());
-				try{
+				try {
 					UI.fadeDuration = Integer.parseInt(fd);
 					System.out.println("Set Fade Duration to " + UI.fadeDuration);
-				}
-				catch(Exception e){
+				} catch (Exception e) {
 					System.out.println("WARNING: FADE_DURATION is not set!");
 					System.out.println("Set Fade Duration to " + UI.fadeDuration + "(Default)");
 				}
-				
 			}
 			if (s.contains("MUSIC_PATH=")) {
 				music_path = true;
@@ -167,6 +181,12 @@ public class Main extends Application {
 				String RESOURCE_PATH = s.substring("RESOURCE_PATH=".length());
 				UI.resourceFolder = RESOURCE_PATH;
 				System.out.println("Set Resource Path to " + RESOURCE_PATH);
+			}
+			if (s.contains("MAPS_PATH=")) {
+				maps_path = true;
+				String MAPS_PATH = s.substring("MAPS_PATH=".length());
+				UI.mapsFolder = MAPS_PATH;
+				System.out.println("Set Maps Path to " + MAPS_PATH);
 			}
 			if (s.contains("UI_MODE=")) {
 				ui_mode = true;
@@ -193,7 +213,7 @@ public class Main extends Application {
 				System.out.println("Set Database Path to " + DATABASE_PATH);
 			}
 		}
-		
+
 		// If a setting was not found, it is added to the list
 		if (!server_url) {
 			settings.add("SERVER_URL=");
@@ -216,6 +236,9 @@ public class Main extends Application {
 		if (!resource_path) {
 			settings.add("RESOURCE_PATH=");
 		}
+		if (!maps_path) {
+			settings.add("MAPS_PATH=");
+		}
 		if (!ui_mode) {
 			settings.add("UI_MODE=");
 		}
@@ -225,7 +248,7 @@ public class Main extends Application {
 		if (!database_path) {
 			settings.add("DATABASE_PATH=");
 		}
-		
+
 		// Writes new settings to file
 		Path p = Paths.get(sp);
 		try {
@@ -250,13 +273,15 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		UI.addTabPane();
-		
-		// Defines scene size (Does not really matter because it starts maximized anyways)
-		scene = new Scene(borderPane, 1280, 720);
+
+		// Defines scene size (Does not really matter because it starts
+		// maximized anyways)
+		scene = new Scene(borderPane);
 		UI.defaultWidth = scene.getWidth();
-		
+
 		// Listens to window-size changes and updates the variables
-		// (Necessary because somehow objects like the ProgressBar are not updated when the window is resized by default)
+		// (Necessary because somehow objects like the ProgressBar are not
+		// updated when the window is resized by default)
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
@@ -274,9 +299,10 @@ public class Main extends Application {
 
 			}
 		});
-		
+
 		// Activates a debug mode when F1 is pressed
-		// (Currently not really useful for anything, was needed in early testing stages)
+		// (Currently not really useful for anything, was needed in early
+		// testing stages)
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
@@ -307,7 +333,7 @@ public class Main extends Application {
 			System.out.println("BrightMode Activated");
 		}
 	}
-	
+
 	// Sets UI.stopDownload to true when program is closed
 	// (Only used by the currently disabled "Slow Server Mode")
 	@Override
