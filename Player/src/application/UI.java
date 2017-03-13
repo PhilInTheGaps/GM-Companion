@@ -1258,7 +1258,7 @@ public class UI {
 				// String temp = folderNames.get(i).toString();
 				mCatList.add(folder);
 			}
-
+			mCatList.remove(0);
 		} else {
 			String[] names = file.list();
 
@@ -1328,6 +1328,7 @@ public class UI {
 					lastIndex1 += findStr.length();
 				}
 			}
+			folders.remove(0);
 
 		} else {
 			String[] names = file.list();
@@ -1435,7 +1436,7 @@ public class UI {
 
 		if (onlineMode) {
 			// Get all foldernames from server
-			Document doc = Jsoup.connect(Sound.soundDirectory).get();
+			Document doc = Jsoup.connect(serverURL+"/sounds/").get();
 			System.out.println(doc.toString());
 			String str = doc.toString();
 			String findStr = "<li><a href=";
@@ -1463,6 +1464,7 @@ public class UI {
 			for (String folder : folderNames) {
 				sCatList.add(folder);
 			}
+			sCatList.remove(0);
 		} else {
 			String[] names = file.list();
 
@@ -1509,7 +1511,7 @@ public class UI {
 
 		if (onlineMode) {
 			// Get all foldernames from server
-			Document doc = Jsoup.connect(Sound.soundDirectory + directory + "/").get();
+			Document doc = Jsoup.connect(serverURL +"sounds/" + directory + "/").get();
 			String str = doc.toString();
 			String findStr = "<li><a href=";
 			int lastIndex1 = 0;
@@ -1532,6 +1534,7 @@ public class UI {
 					lastIndex1 += findStr.length();
 				}
 			}
+			folders.remove(0);
 		} else {
 			String[] names = file.list();
 			System.out.println("Found the following sound folders:");

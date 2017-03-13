@@ -91,7 +91,7 @@ public class Sound {
 
 		if (UI.onlineMode) {
 			// Get all sound files from server
-			Document doc = Jsoup.connect(serverSoundsURL + defaultSoundPath).get();
+			Document doc = Jsoup.connect(UI.serverURL+ "sounds/" + UI.soundFolder).get();
 			// System.out.println(doc.toString());
 			String str = doc.toString();
 			String findStr = "href=";
@@ -115,8 +115,9 @@ public class Sound {
 				}
 			}
 			for (String name : fileNames) {
-				files.add(serverSoundsURL + UI.soundFolder + "/" + name);
+				files.add(UI.serverURL +"sounds/" + UI.soundFolder +"/" + name);
 			}
+			files.remove(0);
 
 		} else {
 			try (Stream<Path> paths = Files.walk(Paths.get(defaultSoundPath))) {
