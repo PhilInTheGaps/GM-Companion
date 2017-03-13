@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -104,6 +107,7 @@ public class UI {
 	public static int fadeDuration = 3;
 	public static String serverURL;
 	public static String resourceFolder;
+	public static String mapsFolder = "";
 
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -120,6 +124,7 @@ public class UI {
 
 	public static List<String> mCatList = new ArrayList<String>();
 	public static List<String> sCatList = new ArrayList<String>();
+	public static ArrayList<File> mapsList = new ArrayList<File>();
 
 	// The default space between different elements like buttons
 	static double defaultSpacing = 10;
@@ -140,6 +145,7 @@ public class UI {
 	public static Menu music = new Menu("Music");
 	public static Menu sounds = new Menu("Sounds");
 	public static Menu gmh = new Menu("GM Help");
+	public static Menu maps = new Menu("Maps");
 
 	// Menu Tabs
 	public static Tab tmusic = new Tab();
@@ -147,6 +153,7 @@ public class UI {
 	public static Tab tgm = new Tab();
 	public static Tab tdb = new Tab();
 	public static Tab tmusicL = new Tab();
+	public static Tab tmaps = new Tab();
 
 	// Adds Menu
 	public static MenuBar menu() {
@@ -156,7 +163,7 @@ public class UI {
 		music.setMnemonicParsing(false);
 
 		// Adds Menus
-		menu.getMenus().addAll(gmh, music, sounds, options);
+		menu.getMenus().addAll(gmh, music, sounds, maps, options);
 
 		// Menu Items:
 		// Random Mode
@@ -531,6 +538,7 @@ public class UI {
 
 			music.getItems().clear();
 			sounds.getItems().clear();
+			maps.getItems().clear();
 
 			addTabPane();
 			tabPane.getStylesheets().clear();
@@ -578,6 +586,7 @@ public class UI {
 
 			music.getItems().clear();
 			sounds.getItems().clear();
+			maps.getItems().clear();
 
 			addTabPane();
 			tabPane.getStylesheets().clear();
@@ -625,6 +634,7 @@ public class UI {
 
 			music.getItems().clear();
 			sounds.getItems().clear();
+			maps.getItems().clear();
 
 			addTabPane();
 			tabPane.getStylesheets().clear();
@@ -663,6 +673,54 @@ public class UI {
 			}
 		});
 
+		// Set Maps Folder
+		MenuItem setMapsFolder = new MenuItem("Set Maps Folder");
+		setMapsFolder.setOnAction((ActionEvent e) -> {
+			String folder = chooser();
+			mapsFolder = folder;
+			System.out.println("Updating Folders...");
+			onlineMode = localOnline;
+			if (Music.musicFolderSelected == true) {
+				Music.mediaPlayer.pause();
+			}
+			if (Sound.soundFolderSelected == true) {
+				Sound.soundPlayer.pause();
+			}
+
+			updating = true;
+
+			music.getItems().clear();
+			sounds.getItems().clear();
+			maps.getItems().clear();
+
+			addTabPane();
+			tabPane.getStylesheets().clear();
+			tabPane.getStyleClass().add(".tab-pane");
+
+			File f = new File("settings.txt");
+			List<String> lines = new ArrayList<String>();
+			try {
+				lines = Files.readAllLines(f.toPath());
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
+			List<String> newLines = new ArrayList<String>();
+			for (String line : lines) {
+				String newLine;
+				if (line.contains("MAPS_PATH=")) {
+					newLine = "MAPS_PATH=" + folder;
+				} else {
+					newLine = line;
+				}
+				newLines.add(newLine);
+			}
+			try {
+				Files.write(f.toPath(), newLines);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+
 		// Seperator Items
 		SeparatorMenuItem sep1 = new SeparatorMenuItem();
 		SeparatorMenuItem sep2 = new SeparatorMenuItem();
@@ -670,7 +728,7 @@ public class UI {
 		// Adding Items to Menus
 		gmh.getItems().addAll(dice);
 		options.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2,
-				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, sep1, fupdate);
+				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, setMapsFolder, sep1, fupdate);
 
 		// If Database Path was set, database tab is shown in menu
 		if (GM.databasePath != null && GM.databasePath.toCharArray().length > 3) {
@@ -1050,9 +1108,16 @@ public class UI {
 		tabPaneSoundCategories.setTabMinWidth(200);
 		tabPaneSoundCategories.setTabMinHeight(40);
 
+		// Maps TabPane
+		TabPane tabPaneMaps = new TabPane();
+		tabPaneMaps.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		tabPaneMaps.setTabMinWidth(200);
+		tabPaneMaps.setTabMinHeight(40);
+
 		// Clearing Categories
 		mCatList.clear();
 		sCatList.clear();
+		mapsList.clear();
 
 		// Setting up ListView that displays music files
 		lv.setMaxHeight(150);
@@ -1078,10 +1143,14 @@ public class UI {
 		BorderPane sbp = new BorderPane();
 		sbp.setCenter(tabPaneSoundCategories);
 
+		BorderPane mapsbp = new BorderPane();
+		mapsbp.setCenter(tabPaneMaps);
+
 		// Tries to add Music and Sound categories
 		try {
 			addMusicCategories();
 			addSoundCategories();
+			addMaps();
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
@@ -1199,6 +1268,37 @@ public class UI {
 			sounds.getItems().add(mi);
 		}
 
+		// Maps
+		for (File map : mapsList) {
+			Tab t = new Tab();
+			MenuItem mi = new MenuItem();
+			String name = map.getName().toString().substring(0, map.getName().indexOf("."));
+			String nName = name.replace("_", " ");
+			t.setClosable(false);
+			t.setId(name);
+			t.setText(nName);
+			mi.setMnemonicParsing(false);
+			mi.setText(nName);
+
+			Image img = new Image(map.toURI().toString());
+			ImageView iv = new ImageView(img);
+			iv.setPreserveRatio(true);
+			iv.autosize();
+
+			ScrollPane s = new ScrollPane();
+			s.setBackground(null);
+			s.setFitToWidth(true);
+			s.setContent(iv);
+			t.setContent(s);
+			tabPaneMaps.getTabs().add(t);
+
+			mi.setOnAction((ActionEvent e) -> {
+				tabPane.getSelectionModel().select(tmaps);
+				tabPaneMaps.getSelectionModel().select(t);
+			});
+			maps.getItems().add(mi);
+		}
+
 		tmusic.setClosable(false);
 		tmusic.setText("Music");
 		tmusic.setContent(mbp);
@@ -1218,6 +1318,35 @@ public class UI {
 		tdb.setText("Database");
 		tdb.setContent(GM.Database());
 		tabPane.getTabs().add(tdb);
+
+		tmaps.setClosable(false);
+		tmaps.setText("Maps");
+		tmaps.setContent(mapsbp);
+		tabPane.getTabs().add(tmaps);
+	}
+
+	// tabPaneMaps
+	public static void addMaps() {
+		System.out.println("Getting Maps...");
+		File file = new File(mapsFolder);
+		if (mapsFolder != "" && mapsFolder != " ") {
+			System.out.println(file);
+			try (Stream<Path> paths = Files.walk(Paths.get(mapsFolder))) {
+				paths.forEach(filePath -> {
+					if (Files.isRegularFile(filePath)) {
+						if (filePath.toString().contains(".jpg") || filePath.toString().contains(".jpeg")
+								|| filePath.toString().contains(".png")) {
+							System.out.println("Path: " + filePath);
+							File f = new File(filePath.toString());
+							mapsList.add(f);
+						}
+					}
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Collections.sort(mapsList);
 	}
 
 	// Add Music Category Tabs
@@ -1273,9 +1402,9 @@ public class UI {
 				}
 			}
 		}
-		
+
 		Collections.sort(mCatList);
-		
+
 		updating = false;
 
 		System.out.println("Added music category tabs");
@@ -1344,9 +1473,9 @@ public class UI {
 				}
 			}
 		}
-		
+
 		Collections.sort(folders);
-		
+
 		for (String folder : folders) {
 			String bName = new String();
 			bName = folder;
@@ -1436,7 +1565,7 @@ public class UI {
 
 		if (onlineMode) {
 			// Get all foldernames from server
-			Document doc = Jsoup.connect(serverURL+"/sounds/").get();
+			Document doc = Jsoup.connect(serverURL + "/sounds/").get();
 			System.out.println(doc.toString());
 			String str = doc.toString();
 			String findStr = "<li><a href=";
@@ -1479,9 +1608,9 @@ public class UI {
 				}
 			}
 		}
-		
+
 		Collections.sort(sCatList);
-		
+
 		updating = false;
 
 		System.out.println("Added sound category tabs");
@@ -1511,7 +1640,7 @@ public class UI {
 
 		if (onlineMode) {
 			// Get all foldernames from server
-			Document doc = Jsoup.connect(serverURL +"sounds/" + directory + "/").get();
+			Document doc = Jsoup.connect(serverURL + "sounds/" + directory + "/").get();
 			String str = doc.toString();
 			String findStr = "<li><a href=";
 			int lastIndex1 = 0;
@@ -1548,9 +1677,9 @@ public class UI {
 				}
 			}
 		}
-		
+
 		Collections.sort(folders);
-		
+
 		for (String folder : folders) {
 			if (folder != null) {
 				String bName = new String();
@@ -1594,11 +1723,11 @@ public class UI {
 				b.setOnAction((ActionEvent e) -> {
 					Boolean initial = Sound.Initial();
 					System.out.println(initial);
-					if(initial == false){
+					if (initial == false) {
 						Sound.soundPlayer.pause();
 						Sound.soundPlayer.stop();
 					}
-					if(Sound.soundFolderSelected){
+					if (Sound.soundFolderSelected) {
 						Sound.soundPlayer.stop();
 					}
 					if (onlineMode) {
