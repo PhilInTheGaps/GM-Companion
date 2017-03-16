@@ -9,6 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import com.sun.javafx.application.LauncherImpl;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,50 +25,30 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+@SuppressWarnings("restriction")
 public class Main extends Application {
 
-	// Defining Variables
+	// Declaring Variables
 	BorderPane borderPane;
 	static Scene scene;
 	static String uim = "";
 	public static ArrayList<String> settings = new ArrayList<String>();
+	private Stage mainStage = new Stage();
 
 	// Main
 	public static void main(String[] args) {
-		launch(args);
+		LauncherImpl.launchApplication(Main.class, PreloadScreen.class, args);
+		// launch(args);
 	}
 
-	// Start of Program
 	@Override
-	public void start(Stage primaryStage) {
-
-		System.out.println("Initializing...");
-		System.out.println("");
-
+	public void init() throws Exception {
 		// Builds UI
 		scene = setScene();
-
+		
 		// Adds DarkMode and BrightMode CSS files
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
-
-		// Sets TitleBar text, starts the program maximized and sets "scene" as
-		// default scene
-		primaryStage
-				.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE1 (0.2.8)");
-
-		// Adds the icon
-		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
-			if (new File(UI.resourceFolder + "icon.png").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
-				primaryStage.getIcons().clear();
-				primaryStage.getIcons().add(new Image(icon.toString()));
-			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
-				primaryStage.getIcons().clear();
-				primaryStage.getIcons().add(new Image(icon.toString()));
-			}
-		}
 
 		// Sets UI Mode according to settings
 		if (uim.equals("dark")) {
@@ -74,18 +57,42 @@ public class Main extends Application {
 			UIMODE("bright");
 		}
 
-		;
-		primaryStage.hide();
-		primaryStage.setScene(scene);
+		// Sets TitleBar text, starts the program maximized and sets "scene" as
+		// default scene
+		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
 
+		// Adds the icon
+		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
+			if (new File(UI.resourceFolder + "icon.png").exists()) {
+				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
+				mainStage.getIcons().clear();
+				mainStage.getIcons().add(new Image(icon.toString()));
+			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
+				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
+				mainStage.getIcons().clear();
+				mainStage.getIcons().add(new Image(icon.toString()));
+			}
+		}
+		
 		// Start on screen 1
 		Rectangle2D bounds = Screen.getScreens().get(0).getVisualBounds();
-		primaryStage.setWidth(bounds.getWidth());
-		primaryStage.setHeight(bounds.getHeight());
-		primaryStage.centerOnScreen();
-		primaryStage.setMaximized(true);
-		primaryStage.show();
+		mainStage.setWidth(bounds.getWidth());
+		mainStage.setHeight(bounds.getHeight());
+		mainStage.centerOnScreen();
+		mainStage.setMaximized(true);
+		
 		UI.defaultWidth = scene.getWidth();
+		
+	}
+
+	// Start of Program
+	@Override
+	public void start(Stage primaryStage) {
+
+		primaryStage = mainStage;
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
 	}
 
 	// Defining Scene
