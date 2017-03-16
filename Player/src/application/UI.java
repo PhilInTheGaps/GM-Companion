@@ -154,6 +154,9 @@ public class UI {
 	public static Tab tdb = new Tab();
 	public static Tab tmusicL = new Tab();
 	public static Tab tmaps = new Tab();
+	
+	public static int screenWidth = 1000;
+	public static int screenHeight = 1000;
 
 	// Adds Menu
 	public static MenuBar menu() {
@@ -1280,7 +1283,7 @@ public class UI {
 			mi.setMnemonicParsing(false);
 			mi.setText(nName);
 
-			Image img = new Image(map.toURI().toString());
+			Image img = new Image(map.toURI().toString(), 2*screenWidth, 2*screenHeight, true, true);
 			ImageView iv = new ImageView(img);
 			iv.setPreserveRatio(true);
 			iv.autosize();
@@ -1802,8 +1805,6 @@ public class UI {
 
 		pb.setPrefWidth(defaultWidth);
 		pb.setPrefHeight(5);
-		pb.setStyle(
-				"-fx-control-inner-background: Grey; -fx-text-box-border: Grey; -fx-accent: LightGrey; -fx-background-color: Grey;");
 		pb.setProgress(0);
 		botBox.getChildren().add(pb);
 

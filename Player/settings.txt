@@ -8,4 +8,4 @@ FADE_DURATION=3
 AUTO_PLAY=true
 UI_MODE=dark
 ONLINE_MODE=false
-MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Charaktere/
+MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Regelwerk und Co_/DSA5/Karten/
