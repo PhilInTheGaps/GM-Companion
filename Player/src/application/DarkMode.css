@@ -175,3 +175,9 @@
   	-fx-border-radius: 1; 
   	-fx-border-color: #333333;
 }
+.progress-bar{
+	-fx-control-inner-background: Grey; 
+	-fx-text-box-border: Grey; 
+	-fx-accent: LightGrey; 
+	-fx-background-color: Grey;
+}
