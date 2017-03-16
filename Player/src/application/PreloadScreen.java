@@ -9,6 +9,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.application.Preloader.StateChangeNotification.Type;
 import javafx.geometry.Pos;
 
@@ -42,6 +43,7 @@ public class PreloadScreen extends Preloader {
 		
 		Scene scene = new Scene(root);
 		
+		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.setWidth(400);
 		primaryStage.setHeight(200);
 		primaryStage.setScene(scene);
