@@ -9,6 +9,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.sun.javafx.application.LauncherImpl;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,50 +27,28 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+@SuppressWarnings("restriction")
 public class Main extends Application {
 
-	// Defining Variables
+	// Declaring Variables
 	BorderPane borderPane;
-	static Scene scene;
-	static String uim = "";
-	public static ArrayList<String> settings = new ArrayList<String>();
+	private static Scene scene;
+	protected static String uim = "";
+	private Stage mainStage = new Stage();
 
 	// Main
 	public static void main(String[] args) {
-		launch(args);
+		LauncherImpl.launchApplication(Main.class, PreloadScreen.class, args);
 	}
 
-	// Start of Program
 	@Override
-	public void start(Stage primaryStage) {
-
-		System.out.println("Initializing...");
-		System.out.println("");
-
+	public void init() throws Exception {
 		// Builds UI
 		scene = setScene();
 
 		// Adds DarkMode and BrightMode CSS files
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
-
-		// Sets TitleBar text, starts the program maximized and sets "scene" as
-		// default scene
-		primaryStage
-				.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE1 (0.2.8)");
-
-		// Adds the icon
-		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
-			if (new File(UI.resourceFolder + "icon.png").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
-				primaryStage.getIcons().clear();
-				primaryStage.getIcons().add(new Image(icon.toString()));
-			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
-				primaryStage.getIcons().clear();
-				primaryStage.getIcons().add(new Image(icon.toString()));
-			}
-		}
 
 		// Sets UI Mode according to settings
 		if (uim.equals("dark")) {
@@ -74,26 +57,50 @@ public class Main extends Application {
 			UIMODE("bright");
 		}
 
-		;
-		primaryStage.hide();
-		primaryStage.setScene(scene);
+		// Sets TitleBar text, starts the program maximized and sets "scene" as
+		// default scene
+		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
+
+		// Adds the icon
+		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
+			if (new File(UI.resourceFolder + "icon.png").exists()) {
+				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
+				mainStage.getIcons().clear();
+				mainStage.getIcons().add(new Image(icon.toString()));
+			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
+				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
+				mainStage.getIcons().clear();
+				mainStage.getIcons().add(new Image(icon.toString()));
+			}
+		}
 
 		// Start on screen 1
 		Rectangle2D bounds = Screen.getScreens().get(0).getVisualBounds();
-		primaryStage.setWidth(bounds.getWidth());
-		primaryStage.setHeight(bounds.getHeight());
-		primaryStage.centerOnScreen();
-		primaryStage.setMaximized(true);
-		primaryStage.show();
+		mainStage.setWidth(bounds.getWidth());
+		mainStage.setHeight(bounds.getHeight());
+		mainStage.centerOnScreen();
+		mainStage.setMaximized(true);
+
 		UI.defaultWidth = scene.getWidth();
+
 	}
 
-	// Defining Scene
-	public Scene setScene() {
+	// Start of Program
+	@Override
+	public void start(Stage primaryStage) {
 
-		// Reads Settings.txt (Located next to the .jar when exported)
+		primaryStage = mainStage;
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
+	}
+
+	public static String readSettings(String findString) {
+		ArrayList<String> settings = new ArrayList<String>();
+		String setting = "";
+		Boolean exists = false;
 		String sp = "settings.txt";
-		System.out.println("Reading Settings...");
+		
 		try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
 			for (String line = null; (line = br.readLine()) != null;) {
 				settings.add(line);
@@ -103,146 +110,17 @@ public class Main extends Application {
 			System.out.println("Reading Settings Failed");
 		}
 
-		// Variables indicate, whether specific setting was found in
-		// "settings.txt"
-		Boolean server_url = false;
-		Boolean auto_play = false;
-		Boolean fade_out = false;
-		Boolean fade_duration = false;
-		Boolean music_path = false;
-		Boolean sound_path = false;
-		Boolean resource_path = false;
-		Boolean ui_mode = false;
-		Boolean online_mode = false;
-		Boolean database_path = false;
-		Boolean maps_path = false;
-
-		// Reads the setting value and sets the variables accordingly
 		for (String s : settings) {
-			if (s.contains("SERVER_URL=")) {
-				server_url = true;
-				String surl = s.substring("SERVER_URL=".length());
-				UI.serverURL = surl;
-				Music.serverMusicURL = surl + "music/";
-				Sound.serverSoundsURL = surl + "sounds/";
-				System.out.println("Set Server URL to " + surl);
-			}
-			if (s.contains("AUTO_PLAY=")) {
-				auto_play = true;
-				String ap = s.substring("AUTO_PLAY=".length());
-				if (ap.toLowerCase().equals("true")) {
-					UI.autoplay = true;
-				} else {
-					UI.autoplay = false;
-				}
-				System.out.println("Set Autoplay to " + UI.autoplay);
-			}
-			if (s.contains("FADE_OUT=")) {
-				fade_out = true;
-				String fo = s.substring("FADE_OUT=".length());
-				if (fo.toLowerCase().equals("true")) {
-					UI.fadeOut = true;
-				} else {
-					UI.fadeOut = false;
-				}
-				System.out.println("Set Fade Out to " + UI.fadeOut);
-			}
-			if (s.contains("FADE_DURATION=")) {
-				fade_duration = true;
-				String fd = s.substring("FADE_DURATION=".length());
-				try {
-					UI.fadeDuration = Integer.parseInt(fd);
-					System.out.println("Set Fade Duration to " + UI.fadeDuration);
-				} catch (Exception e) {
-					System.out.println("WARNING: FADE_DURATION is not set!");
-					System.out.println("Set Fade Duration to " + UI.fadeDuration + "(Default)");
-				}
-			}
-			if (s.contains("MUSIC_PATH=")) {
-				music_path = true;
-				String MUSIC_PATH = s.substring("MUSIC_PATH=".length());
-				Music.defaultMusicPath = MUSIC_PATH;
-				Music.musicDirectory = MUSIC_PATH;
-				System.out.println("Set Music Path to " + MUSIC_PATH);
-			}
-			if (s.contains("SOUND_PATH=")) {
-				sound_path = true;
-				String SOUND_PATH = s.substring("SOUND_PATH=".length());
-				Sound.defaultSoundPath = SOUND_PATH;
-				Sound.soundDirectory = SOUND_PATH;
-				System.out.println("Set Sound Path to " + SOUND_PATH);
-			}
-			if (s.contains("RESOURCE_PATH=")) {
-				resource_path = true;
-				String RESOURCE_PATH = s.substring("RESOURCE_PATH=".length());
-				UI.resourceFolder = RESOURCE_PATH;
-				System.out.println("Set Resource Path to " + RESOURCE_PATH);
-			}
-			if (s.contains("MAPS_PATH=")) {
-				maps_path = true;
-				String MAPS_PATH = s.substring("MAPS_PATH=".length());
-				UI.mapsFolder = MAPS_PATH;
-				System.out.println("Set Maps Path to " + MAPS_PATH);
-			}
-			if (s.contains("UI_MODE=")) {
-				ui_mode = true;
-				String UI_MODE = s.substring("UI_MODE=".length());
-				uim = UI_MODE;
-				System.out.println("Set UI Mode to " + UI_MODE);
-			}
-			if (s.contains("ONLINE_MODE=")) {
-				online_mode = true;
-				String ONLINE_MODE = s.substring("ONLINE_MODE=".length());
-				if (ONLINE_MODE.toLowerCase().equals("true")) {
-					UI.localOnline = true;
-					UI.onlineMode = true;
-				} else {
-					UI.localOnline = false;
-					UI.onlineMode = false;
-				}
-				System.out.println("Set Online Mode to " + ONLINE_MODE);
-			}
-			if (s.contains("DATABASE_PATH=")) {
-				database_path = true;
-				String DATABASE_PATH = s.substring("DATABASE_PATH=".length());
-				GM.databasePath = DATABASE_PATH;
-				System.out.println("Set Database Path to " + DATABASE_PATH);
+			if (s.contains(findString)) {
+				exists = true;
+				String temp = s.substring(findString.length());
+				setting = temp;
+				System.out.println(s);
 			}
 		}
 
-		// If a setting was not found, it is added to the list
-		if (!server_url) {
-			settings.add("SERVER_URL=");
-		}
-		if (!auto_play) {
-			settings.add("AUTO_PLAY=");
-		}
-		if (!fade_out) {
-			settings.add("FADE_OUT=");
-		}
-		if (!fade_duration) {
-			settings.add("FADE_DURATION=");
-		}
-		if (!music_path) {
-			settings.add("MUSIC_PATH=");
-		}
-		if (!sound_path) {
-			settings.add("SOUND_PATH=");
-		}
-		if (!resource_path) {
-			settings.add("RESOURCE_PATH=");
-		}
-		if (!maps_path) {
-			settings.add("MAPS_PATH=");
-		}
-		if (!ui_mode) {
-			settings.add("UI_MODE=");
-		}
-		if (!online_mode) {
-			settings.add("ONLINE_MODE=");
-		}
-		if (!database_path) {
-			settings.add("DATABASE_PATH=");
+		if (!exists) {
+			settings.add(findString);
 		}
 
 		// Writes new settings to file
@@ -254,9 +132,88 @@ public class Main extends Application {
 			e1.printStackTrace();
 		}
 
-		System.out.println("Finished Reading Settings");
 		System.out.println("");
 
+		return setting;
+	}
+
+	// Defining Scene
+	public Scene setScene() {
+
+		// Reads the setting value and sets the variables accordingly
+		
+		// Server URL
+		UI.serverURL = readSettings("SERVER_URL=");
+		System.out.println("Set Server URL to " + UI.serverURL);
+		
+		// Auto Play
+		if (readSettings("AUTO_PLAY=").toLowerCase().equals("true")) {
+			UI.autoplay = true;
+		} else {
+			UI.autoplay = false;
+		}
+		System.out.println("Set Autoplay to " + UI.autoplay);
+		
+		// Fade Out
+		if (readSettings("FADE_OUT=").toLowerCase().equals("true")) {
+			UI.fadeOut = true;
+		} else {
+			UI.fadeOut = false;
+		}
+		System.out.println("Set Fade Out to " + UI.fadeOut);
+		
+		// Fade Duration
+		try {
+			UI.fadeDuration = Integer.parseInt(readSettings("FADE_DURATION="));
+			System.out.println("Set Fade Duration to " + UI.fadeDuration);
+		} catch (Exception e) {
+			System.out.println("WARNING: FADE_DURATION is not set!");
+			System.out.println("Set Fade Duration to " + UI.fadeDuration + "(Default)");
+		}
+		
+		// Music Path
+		String MUSIC_PATH = readSettings("MUSIC_PATH=");
+		Music.defaultMusicPath = MUSIC_PATH;
+		Music.musicDirectory = MUSIC_PATH;
+		System.out.println("Set Music Path to " + MUSIC_PATH);	
+		
+		// Sound Path
+		String SOUND_PATH = readSettings("SOUND_PATH=");
+		Sound.defaultSoundPath = SOUND_PATH;
+		Sound.soundDirectory = SOUND_PATH;
+		System.out.println("Set Sound Path to " + SOUND_PATH);
+		
+		// Resource Path
+		String RESOURCE_PATH = readSettings("RESOURCE_PATH=");
+		UI.resourceFolder = RESOURCE_PATH;
+		System.out.println("Set Resource Path to " + RESOURCE_PATH);	
+		
+		// Maps Path
+		String MAPS_PATH = readSettings("MAPS_PATH=");
+		UI.mapsFolder = MAPS_PATH;
+		System.out.println("Set Maps Path to " + MAPS_PATH);
+		
+		// UI Mode
+		String UI_MODE = readSettings("UI_MODE=");
+		uim = UI_MODE;
+		System.out.println("Set UI Mode to " + UI_MODE);
+		
+		// Online Mode
+		String ONLINE_MODE = readSettings("ONLINE_MODE=");
+		if (ONLINE_MODE.toLowerCase().equals("true")) {
+			UI.localOnline = true;
+			UI.onlineMode = true;
+		} else {
+			UI.localOnline = false;
+			UI.onlineMode = false;
+		}
+		System.out.println("Set Online Mode to " + ONLINE_MODE);
+		
+		// Database Path
+		String DATABASE_PATH = readSettings("DATABASE_PATH=");
+		GM.databasePath = DATABASE_PATH;
+		System.out.println("Set Database Path to " + DATABASE_PATH);
+		
 		// Adds Components to BorderPane
 		borderPane = new BorderPane();
 		borderPane.setTop(UI.menu());
