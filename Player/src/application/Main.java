@@ -9,9 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.sun.javafx.application.LauncherImpl;
 
 import javafx.application.Application;
@@ -60,7 +57,7 @@ public class Main extends Application {
 		// Sets TitleBar text, starts the program maximized and sets "scene" as
 		// default scene
 		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
-
+		
 		// Adds the icon
 		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
 			if (new File(UI.resourceFolder + "icon.png").exists()) {
@@ -88,11 +85,9 @@ public class Main extends Application {
 	// Start of Program
 	@Override
 	public void start(Stage primaryStage) {
-
 		primaryStage = mainStage;
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
 	}
 
 	public static String readSettings(String findString) {

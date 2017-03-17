@@ -6,6 +6,6 @@ SERVER_URL=http://rpgmsp.ddns.net/
 FADE_OUT=true
 FADE_DURATION=3
 AUTO_PLAY=true
-UI_MODE=dark
+UI_MODE=bright
 ONLINE_MODE=false
 MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Regelwerk und Co_/DSA5/Karten/

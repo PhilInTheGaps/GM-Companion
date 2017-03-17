@@ -176,8 +176,26 @@
   	-fx-border-color: #333333;
 }
 .progress-bar{
-	-fx-control-inner-background: Grey; 
-	-fx-text-box-border: Grey; 
-	-fx-accent: LightGrey; 
-	-fx-background-color: Grey;
+	-fx-background-color: #666666;
+	-fx-control-inner-background: #666666; 
+	-fx-text-box-border: #666666; 
+	-fx-accent: #666666;
+	-fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .track {
+    -fx-background-color: #666666;
+    -fx-background-insets: 0, 0 0 1 0, 1 1 2 1;
+    -fx-background-radius: 1, 1, 1;
+}
+.progress-bar > .bar {
+    -fx-background-color: #222222;
+    -fx-background-insets: 1 1 1 1;
+    -fx-background-radius: 2;
+    -fx-padding: 0.75em;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: #222222;
 }
