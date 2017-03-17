@@ -169,3 +169,12 @@ Weihnachtsferien 2016
 
 13.03.2017
 - Kategorien und Buttons für Musik und Sounds werden jetzt alphabetisch sortiert
+
+16.03.2017
+- Preloader Class hinzugefügt
+- Settings werden jetzt besser eingelesen
+- Arbeitsspeicherverbrauch von Karten verringert (um ca. 50%, immernoch zu hoch, aber schon besser)
+
+17.03.2017
+- Design von ProgressBars verbessert
+- Neues Icon hinzugefügt (Wird mitgeliefert; Verschiedene Größen, für unterschiedliche Darstellung)
