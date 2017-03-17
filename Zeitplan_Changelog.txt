@@ -178,3 +178,5 @@ Weihnachtsferien 2016
 17.03.2017
 - Design von ProgressBars verbessert
 - Neues Icon hinzugefügt (Wird mitgeliefert; Verschiedene Größen, für unterschiedliche Darstellung)
+- Aufgrund von riesigem Arbeitsspeicher-Verbrauch: Intensives Debugging --> Ergebnis: Die Datenbank-Implementierung und (wie zu erwarten) die Karten benötigen riesige Mengen an Arbeitsspeicher
+- Umfangreiches Re-Writing des Codes
