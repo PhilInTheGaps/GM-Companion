@@ -120,8 +120,9 @@ public class GM {
 	public static BorderPane Database() {
 		BorderPane db = new BorderPane();
 		if (databasePath != null) {
-
-			String s = new String();
+			
+			//String s = new String();
+			ArrayList<String> database = new ArrayList<String>();
 			ArrayList<String> a = new ArrayList<String>();
 			ArrayList<GridPane> tables = new ArrayList<GridPane>();
 			VBox v = new VBox();
@@ -131,13 +132,22 @@ public class GM {
 			int tableIndex = -1;
 			int tableRow = 0;
 			int tableColumn = 0;
-
+			
 			FileReader fr;
+			
 			try {
 				fr = new FileReader(new File(databasePath));
 				BufferedReader br = new BufferedReader(fr);
+				int index = 0;
+				String temp;
+				while ((temp = br.readLine()) != null) {
+					database.add(index, temp);
+					index++;
+				}
+				fr.close();
+				br.close();
 
-				while ((s = br.readLine()) != null) {
+				for (String s : database) {
 					if (s.contains(") ENGINE=")) {
 						openColumns = false;
 					}
@@ -238,20 +248,12 @@ public class GM {
 					a.add(s);
 				}
 
-				br.close();
 			} catch (FileNotFoundException e) {
 				System.out.println("Database file not found!");
 				// e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			ListView<String> lv = new ListView<String>();
-			ObservableList<String> items = FXCollections.observableArrayList();
-			for (Object i : a) {
-				items.add(i.toString());
-			}
-			lv.setItems(items);
 
 			ScrollPane sp = new ScrollPane();
 			sp.setStyle("-fx-background-color: transparent");
