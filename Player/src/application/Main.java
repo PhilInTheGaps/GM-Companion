@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -8,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.sun.javafx.application.LauncherImpl;
 
 import javafx.application.Application;
@@ -41,7 +44,7 @@ public class Main extends Application {
 	public void init() throws Exception {
 		// Builds UI
 		scene = setScene();
-
+		
 		// Adds DarkMode and BrightMode CSS files
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
@@ -55,12 +58,12 @@ public class Main extends Application {
 
 		// Sets TitleBar text, starts the program maximized and sets "scene" as
 		// default scene
-		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
-		
+		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 (0.2.8)");
+
 		// Adds the icon
-		String[] icons = {"icon32.png", "icon64.png", "icon128.png", "icon256.png"};
+		String[] icons = { "icon32.png", "icon64.png", "icon128.png", "icon256.png" };
 		mainStage.getIcons().clear();
-		for (String icon : icons){
+		for (String icon : icons) {
 			URL iconURL = getClass().getResource(icon);
 			mainStage.getIcons().add(new Image(iconURL.toExternalForm()));
 		}
@@ -73,6 +76,7 @@ public class Main extends Application {
 		mainStage.setMaximized(true);
 
 		UI.defaultWidth = scene.getWidth();
+		
 
 	}
 
@@ -84,16 +88,18 @@ public class Main extends Application {
 		primaryStage.show();
 	}
 
+	// Reads the Settings
 	public static String readSettings(String findString) {
 		ArrayList<String> settings = new ArrayList<String>();
 		String setting = "";
 		Boolean exists = false;
 		String sp = "settings.txt";
-		
+
 		try (LineNumberReader br = new LineNumberReader(new FileReader(sp))) {
 			for (String line = null; (line = br.readLine()) != null;) {
 				settings.add(line);
 			}
+			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Reading Settings Failed");
@@ -120,21 +126,47 @@ public class Main extends Application {
 			System.out.println("Could not write settings");
 			e1.printStackTrace();
 		}
-
 		System.out.println("");
 
 		return setting;
 	}
-
+	
+	public static void writeSettings(String findString, String replaceString){
+		File f = new File("settings.txt");
+		
+		List<String> lines = new ArrayList<String>();
+		try {
+			lines = Files.readAllLines(f.toPath());
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
+		List<String> newLines = new ArrayList<String>();
+		for (String line : lines) {
+			String newLine;
+			if (line.contains(findString)) {
+				newLine = replaceString;
+			} else {
+				newLine = line;
+			}
+			newLines.add(newLine);
+		}
+		try {
+			Files.write(f.toPath(), newLines);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	// Defining Scene
 	public Scene setScene() {
-
-		// Reads the setting value and sets the variables accordingly
 		
+		// Reads the setting value and sets the variables accordingly
+
 		// Server URL
 		UI.serverURL = readSettings("SERVER_URL=");
 		System.out.println("Set Server URL to " + UI.serverURL);
-		
+
 		// Auto Play
 		if (readSettings("AUTO_PLAY=").toLowerCase().equals("true")) {
 			UI.autoplay = true;
@@ -142,7 +174,7 @@ public class Main extends Application {
 			UI.autoplay = false;
 		}
 		System.out.println("Set Autoplay to " + UI.autoplay);
-		
+
 		// Fade Out
 		if (readSettings("FADE_OUT=").toLowerCase().equals("true")) {
 			UI.fadeOut = true;
@@ -150,7 +182,7 @@ public class Main extends Application {
 			UI.fadeOut = false;
 		}
 		System.out.println("Set Fade Out to " + UI.fadeOut);
-		
+
 		// Fade Duration
 		try {
 			UI.fadeDuration = Integer.parseInt(readSettings("FADE_DURATION="));
@@ -159,45 +191,43 @@ public class Main extends Application {
 			System.out.println("WARNING: FADE_DURATION is not set!");
 			System.out.println("Set Fade Duration to " + UI.fadeDuration + "(Default)");
 		}
-		
+
 		// Music Path
 		String MUSIC_PATH = readSettings("MUSIC_PATH=");
 		Music.defaultMusicPath = MUSIC_PATH;
 		Music.musicDirectory = MUSIC_PATH;
-		System.out.println("Set Music Path to " + MUSIC_PATH);	
-		
+		System.out.println("Set Music Path to " + MUSIC_PATH);
+
 		// Sound Path
 		String SOUND_PATH = readSettings("SOUND_PATH=");
 		Sound.defaultSoundPath = SOUND_PATH;
 		Sound.soundDirectory = SOUND_PATH;
 		System.out.println("Set Sound Path to " + SOUND_PATH);
-		
+
 		// Resource Path
 		String RESOURCE_PATH = readSettings("RESOURCE_PATH=");
 		UI.resourceFolder = RESOURCE_PATH;
-		System.out.println("Set Resource Path to " + RESOURCE_PATH);	
-		
+		System.out.println("Set Resource Path to " + RESOURCE_PATH);
+
 		// Maps Path
 		String MAPS_PATH = readSettings("MAPS_PATH=");
 		UI.mapsFolder = MAPS_PATH;
 		System.out.println("Set Maps Path to " + MAPS_PATH);
-		
+
 		// UI Mode
 		String UI_MODE = readSettings("UI_MODE=");
 		uim = UI_MODE;
 		System.out.println("Set UI Mode to " + UI_MODE);
-		
+
 		// Online Mode
 		String ONLINE_MODE = readSettings("ONLINE_MODE=");
 		if (ONLINE_MODE.toLowerCase().equals("true")) {
-			UI.localOnline = true;
 			UI.onlineMode = true;
 		} else {
-			UI.localOnline = false;
 			UI.onlineMode = false;
 		}
 		System.out.println("Set Online Mode to " + ONLINE_MODE);
-		
+
 		// Database Path
 		String DATABASE_PATH = readSettings("DATABASE_PATH=");
 		GM.databasePath = DATABASE_PATH;
@@ -206,7 +236,7 @@ public class Main extends Application {
 		// Adds Components to BorderPane
 		borderPane = new BorderPane();
 		borderPane.setTop(UI.menu());
-		borderPane.setCenter(UI.tabPane);
+		borderPane.setCenter(UI.addTabPane());
 		borderPane.setLeft(UI.addVBox());
 		borderPane.getStyleClass().add("border-pane");
 		try {
@@ -214,7 +244,6 @@ public class Main extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		UI.addTabPane();
 
 		// Defines scene size (Does not really matter because it starts
 		// maximized anyways)
@@ -232,16 +261,7 @@ public class Main extends Application {
 				UI.pb.setPrefWidth((double) newSceneWidth);
 			}
 		});
-
-		scene.heightProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
-					Number newSceneHeight) {
-				UI.defaultHeight = (double) newSceneHeight;
-
-			}
-		});
-
+		
 		// Activates a debug mode when F1 is pressed
 		// (Currently not really useful for anything, was needed in early
 		// testing stages)
@@ -274,13 +294,5 @@ public class Main extends Application {
 			scene.getStylesheets().remove(0);
 			System.out.println("BrightMode Activated");
 		}
-	}
-
-	// Sets UI.stopDownload to true when program is closed
-	// (Only used by the currently disabled "Slow Server Mode")
-	@Override
-	public void stop() {
-		System.out.println("Closing...");
-		UI.stopDownload = true;
 	}
 }

@@ -23,10 +23,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.apache.commons.io.FileUtils;
-
 public class Music {
 	public static MediaPlayer mediaPlayer;
 	public static Media mMedia;
@@ -68,11 +64,8 @@ public class Music {
 		UI.lv.getSelectionModel().select(currentTrackID);
 
 		if (UI.onlineMode) {
-			if (UI.slowServer) {
-				mMedia = new Media(new File(musicPath).toURI().toString());
-			} else {
-				mMedia = new Media(musicPath);
-			}
+			mMedia = new Media(musicPath);
+			
 		} else {
 			mMedia = new Media(new File(musicPath).toURI().toString());
 		}
@@ -157,259 +150,8 @@ public class Music {
 		UI.coverImage.setImage((Image) mediaPlayer.getMedia().getMetadata().get("image"));
 	}
 
-	public static void downloadFile(String downloadPath, String downloadUrl) throws MalformedURLException, IOException {
-		System.out.println(downloadPath);
-		if (new File(downloadPath).isFile()) {
-			System.out.println("Is already downloaded, switching to next one");
-			System.out.println("");
-			System.out.println("FolderID: " + folderID);
-			System.out.println("folderCount: " + folderCount);
-			System.out.println("scenID: " + scenID);
-			System.out.println("scenCount: " + scenCount);
-			if (folderID >= folderCount) {
-
-				if (scenID < scenCount - 1) {
-					System.out.println("Switching to next scenario");
-					scenID++;
-				} else {
-					System.out.println("Setting Scene ID 0");
-					scenID = 0;
-					musicID++;
-				}
-				System.out.println("Folder = 0");
-				folderID = 0;
-			} else {
-				System.out.println("Switching to next folder");
-				folderID++;
-			}
-
-			if (UI.stopDownload == false) {
-				setDownloadFile();
-			}
-		} else {
-			System.out.println("Starting Downloading to " + downloadPath);
-			try {
-				FileUtils.copyURLToFile(new URL(downloadUrl), new File(downloadPath));
-			} catch (IOException e) {
-				System.out.println("Something went wrong");
-			}
-			System.out.println("Finished Downloading");
-			System.out.println("");
-
-			folderID++;
-			if (UI.stopDownload == false) {
-				setDownloadFile();
-			}
-		}
-	}
-
-	public static void setDownloadFile() {
-		Runnable r = new Runnable() {
-			public void run() {
-
-				// System.out.println("Getting Scenarios...");
-
-				String[] scenArrayTemp = new String[500];
-				String[] scenArray = new String[500];
-
-				Document doc = null;
-				try {
-					doc = Jsoup.connect(Music.serverMusicURL).get();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// System.out.println(doc.toString());
-
-				String str = doc.toString();
-				String findStr = "<li><a href=";
-				int lastIndex1 = 0;
-				int lastIndex2 = 10;
-
-				ArrayList<String> folderNames = new ArrayList<String>();
-
-				String test = new String();
-				int count = 0;
-
-				// Finding Scenario Folders
-				// System.out.println("Found the following scenario folders:");
-				while (lastIndex1 != -1) {
-
-					lastIndex1 = str.indexOf(findStr, lastIndex1);
-					lastIndex2 = str.indexOf("/", lastIndex1);
-
-					if (lastIndex1 != -1) {
-						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2; i++) {
-							test += str.charAt(i);
-						}
-						// System.out.println(test);
-						folderNames.add(test);
-						test = "";
-						count += 1;
-						lastIndex1 += findStr.length();
-					}
-				}
-
-				// System.out.println("");
-
-				// Adding Scenarios to array
-				for (int i = 0; i < folderNames.size(); i++) {
-					String temp = folderNames.get(i).toString();
-					scenArray[i] = temp;
-				}
-
-				// Shifting array +1 because of the "Parent Directory" link
-				for (int i = 1; i < count; i++) {
-					scenArrayTemp[i - 1] = scenArray[i].toString();
-				}
-				scenArray = scenArrayTemp;
-
-				// Setting amount of scenarios
-				scenCount = 0;
-				for (int i = 0; i < scenArray.length; i++) {
-					if (scenArray[i] != null) {
-						scenCount++;
-					}
-				}
-
-				// Getting Music Folders at scenario
-				String[] folderArray = new String[500];
-				String[] folderArrayTemp = new String[500];
-
-				// Get all foldernames from server
-				try {
-					doc = Jsoup.connect(Music.serverMusicURL + scenArray[scenID] + "/").get();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// System.out.println(doc.toString());
-				str = doc.toString();
-
-				lastIndex1 = 0;
-				lastIndex2 = 10;
-				folderNames = new ArrayList<String>();
-				count = 0;
-
-				// System.out.println("Found the following music folders:");
-				while (lastIndex1 != -1) {
-
-					lastIndex1 = str.indexOf(findStr, lastIndex1);
-					lastIndex2 = str.indexOf("/", lastIndex1);
-
-					if (lastIndex1 != -1) {
-						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2; i++) {
-							test += str.charAt(i);
-						}
-						// System.out.println(test);
-						folderNames.add(test);
-						test = "";
-						count += 1;
-						lastIndex1 += findStr.length();
-					}
-				}
-				// System.out.println("");
-
-				for (int i = 0; i < folderNames.size(); i++) {
-					String temp = folderNames.get(i).toString();
-					folderArray[i] = temp;
-				}
-
-				for (int i = 1; i < count; i++) {
-					folderArrayTemp[i - 1] = folderArray[i].toString();
-				}
-				folderCount = count - 2;
-				folderArray = folderArrayTemp;
-				slowFolder = folderArray[folderID];
-
-				// This finds every music file in the folder and writes them
-				// into a list
-				// System.out.println("Finding music files in folder...");
-
-				currentTrackID = 0;
-
-				for (int i = 0; i < 500; i++) {
-					musicPathList[i] = "";
-				}
-
-				// Get all music files from server
-				try {
-					doc = Jsoup.connect(serverMusicURL + scenArray[scenID] + "/" + folderArray[folderID] + "/").get();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				// System.out.println(doc.toString());
-				str = doc.toString();
-				findStr = "href=";
-				lastIndex1 = 0;
-				lastIndex2 = 10;
-				ArrayList<String> fileNames = new ArrayList<String>();
-				test = new String();
-				count = 0;
-
-				while (lastIndex1 != -1) {
-
-					lastIndex1 = str.indexOf(findStr, lastIndex1);
-					lastIndex2 = str.indexOf(".mp3", lastIndex1);
-
-					if (lastIndex1 != -1) {
-						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2 + 4; i++) {
-							test += str.charAt(i);
-						}
-						fileNames.add(test);
-						// System.out.println(test);
-						test = "";
-						lastIndex1 += findStr.length();
-					}
-				}
-				maxTrackCount = count;
-
-				currentTrackID = 0;
-
-				// Prints out the name of every music file in the folder
-				// System.out.println("Found the following files:");
-				for (int i = 1; i < maxTrackCount; i++) {
-					// System.out.println(fileNames.get(i));
-				}
-				// System.out.println("");
-
-				// Check if download directory exists
-				if (new File("Download/" + UI.serverURL.substring(7, UI.serverURL.length() - 2) + "Music/"
-						+ scenArray[scenID] + "/" + folderArray[folderID] + "/").isFile()) {
-					System.out.println("Directory exists, downloading...");
-				} else {
-					System.out.println("Directory does not exist, creating...");
-					new File("Download/" + UI.serverURL.substring(7, UI.serverURL.length() - 2) + "Music/"
-							+ scenArray[scenID] + "/" + folderArray[folderID] + "/").mkdirs();
-				}
-
-				// Download File
-				try {
-					downloadFile(
-							"Download/" + UI.serverURL.substring(7, UI.serverURL.length()) + "Music/"
-									+ scenArray[scenID] + "/" + folderArray[folderID] + "/" + fileNames.get(musicID),
-							serverMusicURL + scenArray[scenID] + "/" + folderArray[folderID] + "/"
-									+ fileNames.get(musicID));
-				} catch (MalformedURLException e) {
-					System.out.println("ERROR: Malformed URL");
-					e.printStackTrace();
-				} catch (IOException e) {
-					System.out.println("ERROR: Something went wrong");
-					e.printStackTrace();
-				}
-			}
-		};
-		executor.submit(r);
-	}
-
 	public static void get() throws IOException {
 		// This finds every music file in the folder and writes them into a list
-
-		// System.out.println("Finding music files in folder:
-		// "+"Download/"+UI.serverURL.substring(7,
-		// UI.serverURL.length())+"Music/"+defaultMusicPath+"/");
 
 		currentTrackID = 0;
 
@@ -418,63 +160,42 @@ public class Music {
 		}
 
 		if (UI.onlineMode) {
-			if (UI.slowServer) {
-				try (Stream<Path> paths = Files.walk(Paths.get("Download/"
-						+ UI.serverURL.substring(7, UI.serverURL.length()) + "Music/" + defaultMusicPath + "/"))) {
-					paths.forEach(filePath -> {
-						if (Files.isRegularFile(filePath)) {
-							System.out.println("Path: " + filePath);
-							String tempPath = filePath.toString();
-							musicPathList[currentTrackID] = tempPath;
-							currentTrackID++;
-						}
-					});
-					defaultMusicPath = "Download/" + UI.serverURL.substring(7, UI.serverURL.length()) + "Music/"
-							+ defaultMusicPath + "/";
-				} catch (IOException e) {
-					System.out.println("Directory not existing, creating it...");
-					new File(defaultMusicPath).mkdirs();
-					// e.printStackTrace();
-				}
-
-				maxTrackCount = currentTrackID;
-				System.out.println(maxTrackCount);
-			} else {
-				// Get all music files from server
-				Document doc = Jsoup.connect(serverMusicURL + defaultMusicPath).get();
-
-				System.out.println(doc.toString());
-				String str = doc.toString();
-				String findStr = "href=";
-				int lastIndex1 = 0;
-				int lastIndex2 = 10;
-				ArrayList<String> fileNames = new ArrayList<String>();
-				String test = new String();
-				int count = 0;
-
-				while (lastIndex1 != -1) {
-
-					lastIndex1 = str.indexOf(findStr, lastIndex1);
-					lastIndex2 = str.indexOf(".mp3", lastIndex1);
-
-					if (lastIndex1 != -1) {
-						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2 + 4; i++) {
-							test += str.charAt(i);
-						}
-						fileNames.add(test);
-						test = "";
-						lastIndex1 += findStr.length();
+			
+			// Get all music files from server
+			Document doc = Jsoup.connect(serverMusicURL + defaultMusicPath).get();
+	
+			System.out.println(doc.toString());
+			String str = doc.toString();
+			String findStr = "href=";
+			int lastIndex1 = 0;
+			int lastIndex2 = 10;
+			ArrayList<String> fileNames = new ArrayList<String>();
+			String test = new String();
+			int count = 0;
+	
+			while (lastIndex1 != -1) {
+	
+				lastIndex1 = str.indexOf(findStr, lastIndex1);
+				lastIndex2 = str.indexOf(".mp3", lastIndex1);
+	
+				if (lastIndex1 != -1) {
+					for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2 + 4; i++) {
+						test += str.charAt(i);
 					}
+					fileNames.add(test);
+					test = "";
+					lastIndex1 += findStr.length();
 				}
-				int f = 0;
-				for (int i = 1; i < fileNames.size(); i++) {
-					String temp = fileNames.get(i).toString();
-					musicPathList[f] = serverMusicURL + UI.musicFolder + "/" + temp;
-					f++;
-					count += 1;
-				}
-				maxTrackCount = count;
 			}
+			int f = 0;
+			for (int i = 1; i < fileNames.size(); i++) {
+				String temp = fileNames.get(i).toString();
+				musicPathList[f] = serverMusicURL + UI.musicFolder + "/" + temp;
+				f++;
+				count += 1;
+			}
+			maxTrackCount = count;
+			
 		} else {
 			System.out.println(defaultMusicPath);
 			try (Stream<Path> paths = Files.walk(Paths.get(defaultMusicPath))) {
