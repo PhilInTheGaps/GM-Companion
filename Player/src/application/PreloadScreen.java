@@ -32,8 +32,7 @@ public class PreloadScreen extends Preloader {
 		ProgressBar pb = new ProgressBar();
 		pb.setPrefWidth(350);
 		
-		loading.getChildren().addAll(new Label(" "), pb);
-		loading.getChildren().add(new Label("Please wait..."));
+		loading.getChildren().addAll(new Label(" "), pb, new Label("Please wait..."));
 		
 		BorderPane root = new BorderPane(loading);
 		root.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm());
