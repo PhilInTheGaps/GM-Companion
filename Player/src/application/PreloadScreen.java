@@ -44,9 +44,12 @@ public class PreloadScreen extends Preloader {
 		Scene scene = new Scene(root);
 		
 		// Adds the icon
-		URL iconURL = getClass().getResource("icon.png");
+		String[] icons = {"icon32.png", "icon64.png", "icon128.png", "icon256.png"};
 		primaryStage.getIcons().clear();
-		primaryStage.getIcons().add(new Image(iconURL.toExternalForm()));
+		for (String icon : icons){
+			URL iconURL = getClass().getResource(icon);
+			primaryStage.getIcons().add(new Image(iconURL.toExternalForm()));
+		}
 		
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.setWidth(400);

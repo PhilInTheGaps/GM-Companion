@@ -1,10 +1,8 @@
 package application;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
-import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,9 +58,12 @@ public class Main extends Application {
 		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
 		
 		// Adds the icon
-		URL iconURL = getClass().getResource("icon.png");
+		String[] icons = {"icon32.png", "icon64.png", "icon128.png", "icon256.png"};
 		mainStage.getIcons().clear();
-		mainStage.getIcons().add(new Image(iconURL.toExternalForm()));
+		for (String icon : icons){
+			URL iconURL = getClass().getResource(icon);
+			mainStage.getIcons().add(new Image(iconURL.toExternalForm()));
+		}
 
 		// Start on screen 1
 		Rectangle2D bounds = Screen.getScreens().get(0).getVisualBounds();
