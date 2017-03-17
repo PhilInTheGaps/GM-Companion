@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,17 +60,9 @@ public class Main extends Application {
 		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8 PRE2 (0.2.8)");
 		
 		// Adds the icon
-		if (UI.resourceFolder != " " && UI.resourceFolder != null) {
-			if (new File(UI.resourceFolder + "icon.png").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.png").toURI();
-				mainStage.getIcons().clear();
-				mainStage.getIcons().add(new Image(icon.toString()));
-			} else if (new File(UI.resourceFolder + "icon.jpg").exists()) {
-				URI icon = new File(UI.resourceFolder + "icon.jpg").toURI();
-				mainStage.getIcons().clear();
-				mainStage.getIcons().add(new Image(icon.toString()));
-			}
-		}
+		URL iconURL = getClass().getResource("icon.png");
+		mainStage.getIcons().clear();
+		mainStage.getIcons().add(new Image(iconURL.toExternalForm()));
 
 		// Start on screen 1
 		Rectangle2D bounds = Screen.getScreens().get(0).getVisualBounds();
