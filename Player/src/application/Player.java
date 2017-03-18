@@ -42,8 +42,8 @@ public class Player {
 	public static Random randomSoundID = new Random();
 	public static Random randomTrackID = new Random();
 
-	public static int currentSoundID;
-	public static int currentTrackID;
+	public static int currentSoundID = 0;
+	public static int currentTrackID = 0;
 
 	public static Boolean soundsInitialPress = true;
 	public static Boolean initialPress = false;
@@ -72,7 +72,7 @@ public class Player {
 		if (type.equals("Music")) {
 			// Gets the path to the current music file and converts it, so the
 			// MediaPlayer can read it
-			
+
 			musicPath = musicFiles.get(currentTrackID);
 			musicPath = musicPath.replace("\\", "/");
 
@@ -153,12 +153,12 @@ public class Player {
 			if (!initialPress) {
 				soundPlayer.stop();
 			}
-			
+
 			soundPlayer = new MediaPlayer(sMedia);
 			soundPlayer.setAutoPlay(true);
 			soundPlayer.setVolume(soundVolume);
 			soundIsPlaying = true;
-			
+
 			// If the sound folder button was pressed, generate a new random
 			// playlist
 			if (initialPress) {
@@ -334,32 +334,25 @@ public class Player {
 			// last
 			// one in the playlist
 
-			if (UI.randomTrack == true) {
-				if (musicFiles.size() != 0) {
-					System.out.println("Generating new random music playlist...");
-					Collections.shuffle(musicFiles);
+			if (currentTrackID >= musicFiles.size() - 1) {
+				if (UI.randomTrack == true) {
+					if (musicFiles.size() != 0) {
+						System.out.println("Generating new random music playlist...");
+						Collections.shuffle(musicFiles);
+						System.out.println("Random music playlist generated!");
+						UI.items.clear();
 
-					System.out.println("Random music playlist generated:");
-					if (UI.debug) {
-						for (String file : musicFiles) {
-							System.out.println(file);
+						for (int i = 0; i < musicFiles.size(); i++) {
+							UI.items.add(i, musicFiles.get(i));
 						}
+						System.out.println("");
 					}
-					UI.items.clear();
-					for (int i = 0; i < musicFiles.size(); i++) {
-						UI.items.add(i, musicFiles.get(i));
-					}
-					System.out.println("");
-				} else {
-					currentTrackID++;
-				}
-
-			} else {
-				if (currentTrackID < musicFiles.size() - 1) {
-					currentTrackID++;
+					currentTrackID = 0;
 				} else {
 					currentTrackID = 0;
 				}
+			} else {
+				currentTrackID++;
 			}
 
 			play("Music");
@@ -372,16 +365,20 @@ public class Player {
 				soundPlayer.stop();
 			}
 
-			if (UI.randomTrack == true) {
-				if (soundFiles.size() != 0) {
-					Collections.shuffle(soundFiles);
-				}
-			} else {
-				if (currentSoundID < soundFiles.size() - 1) {
-					currentSoundID++;
+			if (currentSoundID >= soundFiles.size() - 1) {
+				if (UI.randomTrack == true) {
+					if (soundFiles.size() != 0) {
+						System.out.println("Generating new random sound playlist...");
+						Collections.shuffle(soundFiles);
+						System.out.println("Random sound playlist generated!");
+					}
+					currentSoundID = 0;
 				} else {
 					currentSoundID = 0;
 				}
+
+			} else {
+				currentSoundID++;
 			}
 
 			play("Sounds");
