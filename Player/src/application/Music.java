@@ -50,7 +50,7 @@ public class Music {
 
 	public static String musicDirectory = "";
 	public static String defaultMusicPath = "";
-	public static String serverMusicURL = "";
+	public static String serverMusicURL = UI.serverURL+"music/";
 
 	public static void play() {
 		System.out.println("Converting File Path...");
