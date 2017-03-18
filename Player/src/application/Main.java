@@ -194,14 +194,14 @@ public class Main extends Application {
 
 		// Music Path
 		String MUSIC_PATH = readSettings("MUSIC_PATH=");
-		Music.defaultMusicPath = MUSIC_PATH;
-		Music.musicDirectory = MUSIC_PATH;
+		Player.defaultMusicPath = MUSIC_PATH;
+		Player.musicDirectory = MUSIC_PATH;
 		System.out.println("Set Music Path to " + MUSIC_PATH);
 
 		// Sound Path
 		String SOUND_PATH = readSettings("SOUND_PATH=");
-		Sound.defaultSoundPath = SOUND_PATH;
-		Sound.soundDirectory = SOUND_PATH;
+		Player.defaultSoundPath = SOUND_PATH;
+		Player.soundDirectory = SOUND_PATH;
 		System.out.println("Set Sound Path to " + SOUND_PATH);
 
 		// Resource Path

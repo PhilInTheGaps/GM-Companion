@@ -294,8 +294,8 @@ public class UI {
 		setMusicFolder.setOnAction((ActionEvent e) -> {
 			String folder = chooser();
 
-			Music.defaultMusicPath = folder;
-			Music.musicDirectory = folder;
+			Player.defaultMusicPath = folder;
+			Player.musicDirectory = folder;
 
 			updateMenu(musicMenu);
 
@@ -307,8 +307,8 @@ public class UI {
 		setSoundFolder.setOnAction((ActionEvent e) -> {
 			String folder = chooser();
 
-			Sound.defaultSoundPath = folder;
-			Sound.soundDirectory = folder;
+			Player.defaultSoundPath = folder;
+			Player.soundDirectory = folder;
 
 			updateMenu(soundsMenu);
 
@@ -371,16 +371,16 @@ public class UI {
 		updating = true;
 
 		if (menu == musicMenu) {
-			if (Music.musicIsPlaying) {
-				Music.mediaPlayer.pause();
+			if (Player.musicIsPlaying) {
+				Player.mediaPlayer.pause();
 
 			}
 			musicPane.setCenter(addMusicTabPane());
 		}
 
 		if (menu == soundsMenu) {
-			if (Sound.soundIsPlaying) {
-				Sound.soundPlayer.pause();
+			if (Player.soundIsPlaying) {
+				Player.soundPlayer.pause();
 
 			}
 			soundsPane.setCenter(addSoundsTabPane());
@@ -457,13 +457,11 @@ public class UI {
 		playButton.setMaxSize(100, 50);
 		playButton.setPrefSize(100, 50);
 		playButton.setOnAction((ActionEvent e) -> {
-			if (Music.mediaPlayer.getStatus() == Status.PAUSED) {
-				Music.mediaPlayer.play();
-			} else if (Music.mediaPlayer.getStatus() != Status.PLAYING) {
-				if (Music.musicFolderSelected == true) {
-					Music.play();
-				} else {
-					Music.musicError = "Please select music folder!";
+			if (Player.mediaPlayer.getStatus() == Status.PAUSED) {
+				Player.mediaPlayer.play();
+			} else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
+				if (Player.musicFolderSelected == true) {
+					Player.play("Music");
 				}
 			}
 		});
@@ -476,10 +474,8 @@ public class UI {
 		pauseMButton.setMaxSize(100, 50);
 		pauseMButton.setPrefSize(100, 50);
 		pauseMButton.setOnAction((ActionEvent e) -> {
-			if (Music.musicFolderSelected == true) {
-				Music.mediaPlayer.pause();
-			} else {
-				Music.musicError = "Please select sound folder!";
+			if (Player.musicFolderSelected == true) {
+				Player.mediaPlayer.pause();
 			}
 		});
 		toolBar1.getChildren().add(pauseMButton);
@@ -491,10 +487,8 @@ public class UI {
 		reloadMButton.setMaxSize(100, 50);
 		reloadMButton.setPrefSize(100, 50);
 		reloadMButton.setOnAction((ActionEvent e) -> {
-			if (Music.musicFolderSelected == true) {
-				Music.mediaPlayer.seek(Music.mediaPlayer.getStartTime());
-			} else {
-				Music.musicError = "Please select music folder!";
+			if (Player.musicFolderSelected == true) {
+				Player.mediaPlayer.seek(Player.mediaPlayer.getStartTime());
 			}
 
 		});
@@ -507,10 +501,8 @@ public class UI {
 		nextMButton.setMaxSize(100, 50);
 		nextMButton.setPrefSize(100, 50);
 		nextMButton.setOnAction((ActionEvent e) -> {
-			if (Music.musicFolderSelected == true) {
-				Music.next();
-			} else {
-				Music.musicError = "Please select music folder!";
+			if (Player.musicFolderSelected == true) {
+				Player.next("Music");
 			}
 
 		});
@@ -526,9 +518,9 @@ public class UI {
 		mVolumeSlider.valueProperty().addListener(new InvalidationListener() {
 			public void invalidated(Observable ov) {
 				if (mVolumeSlider.isPressed()) {
-					Music.musicVolume = mVolumeSlider.getValue() / 100.0;
-					if (Music.musicIsPlaying == true) {
-						Music.mediaPlayer.setVolume(mVolumeSlider.getValue() / 100.0);
+					Player.musicVolume = mVolumeSlider.getValue() / 100.0;
+					if (Player.musicIsPlaying == true) {
+						Player.mediaPlayer.setVolume(mVolumeSlider.getValue() / 100.0);
 					}
 				}
 			}
@@ -557,15 +549,13 @@ public class UI {
 		playSButton.setMaxSize(100, 50);
 		playSButton.setPrefSize(100, 50);
 		playSButton.setOnAction((ActionEvent e) -> {
-			if (Sound.soundPlayer.getStatus() != Status.PAUSED) {
-				Sound.soundPlayer.play();
+			if (Player.soundPlayer.getStatus() != Status.PAUSED) {
+				Player.soundPlayer.play();
 			}
 
-			else if (Sound.soundPlayer.getStatus() != Status.PLAYING) {
-				if (Sound.soundFolderSelected == true) {
-					Sound.play();
-				} else {
-					Sound.soundError = "Please select sound folder!";
+			else if (Player.soundPlayer.getStatus() != Status.PLAYING) {
+				if (Player.soundFolderSelected == true) {
+					Player.play("Sounds");
 				}
 			}
 		});
@@ -578,10 +568,8 @@ public class UI {
 		pauseSButton.setMaxSize(100, 50);
 		pauseSButton.setPrefSize(100, 50);
 		pauseSButton.setOnAction((ActionEvent e) -> {
-			if (Sound.soundFolderSelected == true) {
-				Sound.soundPlayer.pause();
-			} else {
-				Sound.soundError = "Please select sound folder!";
+			if (Player.soundFolderSelected == true) {
+				Player.soundPlayer.pause();
 			}
 		});
 		toolBar2.getChildren().add(pauseSButton);
@@ -593,10 +581,8 @@ public class UI {
 		reloadSButton.setMaxSize(100, 50);
 		reloadSButton.setPrefSize(100, 50);
 		reloadSButton.setOnAction((ActionEvent e) -> {
-			if (Sound.soundFolderSelected == true) {
-				Sound.soundPlayer.seek(Sound.soundPlayer.getStartTime());
-			} else {
-				Sound.soundError = "Please select sound folder!";
+			if (Player.soundFolderSelected == true) {
+				Player.soundPlayer.seek(Player.soundPlayer.getStartTime());
 			}
 
 		});
@@ -609,10 +595,8 @@ public class UI {
 		nextSButton.setMaxSize(100, 50);
 		nextSButton.setPrefSize(100, 50);
 		nextSButton.setOnAction((ActionEvent e) -> {
-			if (Sound.soundFolderSelected == true) {
-				Sound.next();
-			} else {
-				Sound.soundError = "Please select sound folder!";
+			if (Player.soundFolderSelected == true) {
+				Player.next("Sounds");
 			}
 
 		});
@@ -628,9 +612,9 @@ public class UI {
 		sVolumeSlider.valueProperty().addListener(new InvalidationListener() {
 			public void invalidated(Observable ov) {
 				if (sVolumeSlider.isPressed()) {
-					Sound.soundVolume = sVolumeSlider.getValue() / 100.0;
-					if (Sound.soundIsPlaying == true) {
-						Sound.soundPlayer.setVolume(sVolumeSlider.getValue() / 100.0);
+					Player.soundVolume = sVolumeSlider.getValue() / 100.0;
+					if (Player.soundIsPlaying == true) {
+						Player.soundPlayer.setVolume(sVolumeSlider.getValue() / 100.0);
 					}
 				}
 			}
@@ -702,10 +686,10 @@ public class UI {
 				pathLabel.setText(".jar Path: " + mainPath);
 				vBox.getChildren().add(pathLabel);
 
-				pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
+				pathLabel2.setText("Music Path: " + Player.defaultMusicPath);
 				vBox.getChildren().add(pathLabel2);
 
-				pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
+				pathLabel3.setText("Sound Path: " + Player.defaultSoundPath);
 				vBox.getChildren().add(pathLabel3);
 
 			}
@@ -725,10 +709,10 @@ public class UI {
 			pathLabel.setText(".jar Path: " + mainPath);
 			vBox.getChildren().add(pathLabel);
 
-			pathLabel2.setText("Music Path: " + Music.defaultMusicPath);
+			pathLabel2.setText("Music Path: " + Player.defaultMusicPath);
 			vBox.getChildren().add(pathLabel2);
 
-			pathLabel3.setText("Sound Path: " + Sound.defaultSoundPath);
+			pathLabel3.setText("Sound Path: " + Player.defaultSoundPath);
 			vBox.getChildren().add(pathLabel3);
 
 		}
@@ -800,6 +784,7 @@ public class UI {
 		System.out.println("Generating categories...");
 
 		File file = new File(directory);
+		System.out.println(directory);
 		System.out.println(file);
 
 		if (onlineMode) {
@@ -846,7 +831,7 @@ public class UI {
 
 			if (names != null) {
 				for (String name : names) {
-					if (new File(Music.musicDirectory + name).isDirectory()) {
+					if (new File(Player.musicDirectory + name).isDirectory()) {
 						System.out.println(name);
 						list.add(name);
 					}
@@ -915,10 +900,8 @@ public class UI {
 		tp.setTabMinHeight(40);
 
 		// Generation Tabs
-		ArrayList<String> categories = generateCategories(list, Music.musicDirectory, Music.serverMusicURL);
-		generateTabs(categories, tp, tmusic, musicMenu, true, "Music", Music.defaultMusicPath, Music.serverMusicURL);
-
-		tp.getSelectionModel().select(0);
+		ArrayList<String> categories = generateCategories(list, Player.musicDirectory, Player.serverMusicURL);
+		generateTabs(categories, tp, tmusic, musicMenu, true, "Music", Player.defaultMusicPath, Player.serverMusicURL);
 
 		return tp;
 	}
@@ -931,8 +914,8 @@ public class UI {
 		tp.setTabMinWidth(200);
 		tp.setTabMinHeight(40);
 
-		generateTabs(generateCategories(list, Sound.soundDirectory, Sound.serverSoundsURL), tp, tsound, soundsMenu,
-				true, "Sounds", Sound.defaultSoundPath, Sound.serverSoundsURL);
+		generateTabs(generateCategories(list, Player.soundDirectory, Player.serverSoundsURL), tp, tsound, soundsMenu,
+				true, "Sounds", Player.defaultSoundPath, Player.serverSoundsURL);
 
 		return tp;
 	}
@@ -1100,7 +1083,7 @@ public class UI {
 				b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.getStyleClass().add("button1");
-				
+
 				if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
 					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
 							.toURI();
@@ -1116,67 +1099,67 @@ public class UI {
 
 				b.setOnAction((ActionEvent e) -> {
 					if (type.equals("Sounds")) {
-						Boolean initial = Sound.Initial();
+						Boolean initial = Player.Initial();
 						System.out.println(initial);
 						if (initial == false) {
-							Sound.soundPlayer.pause();
-							Sound.soundPlayer.stop();
+							Player.soundPlayer.pause();
+							Player.soundPlayer.stop();
 						}
-						if (Sound.soundFolderSelected) {
-							Sound.soundPlayer.stop();
+						if (Player.soundFolderSelected) {
+							Player.soundPlayer.stop();
 						}
 						if (onlineMode) {
-							Sound.defaultSoundPath = directory + "/" + nbName;
+							Player.defaultSoundPath = directory + "/" + nbName;
 							System.out.println();
 						} else {
-							Sound.defaultSoundPath = Sound.soundDirectory + directory + "/" + nbName;
+							Player.defaultSoundPath = Player.soundDirectory + directory + "/" + nbName;
 						}
 
 						soundFolder = directory + "/" + nbName;
 						soundFolderLabel.setText("Folder: " + soundFolder);
-						Sound.soundFolderSelected = true;
+						Player.soundFolderSelected = true;
 
-						Sound.initialPress = true;
+						Player.initialPress = true;
 
-						if (Sound.soundIsPlaying == true) {
-							Sound.soundPlayer.stop();
+						if (Player.soundIsPlaying == true) {
+							Player.soundPlayer.stop();
 						}
 
 						try {
-							Sound.get();
+							Player.get("Sounds");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 						if (autoplay) {
-							Sound.play();
+							Player.play("Sounds");
 						}
 					}
 					if (type.equals("Music")) {
 						if (onlineMode) {
-							Music.defaultMusicPath = directory + "/" + nbName;
+							Player.defaultMusicPath = directory + "/" + nbName;
 							System.out.println();
 						} else {
-							Music.defaultMusicPath = Music.musicDirectory + directory + "/" + nbName;
+							Player.defaultMusicPath = Player.musicDirectory + directory + "/" + nbName;
 						}
 
 						musicFolder = directory + "/" + nbName;
 						musicFolderName = nbName;
 						musicFolderLabel.setText("Folder: " + musicFolder);
-						Music.musicFolderSelected = true;
+						Player.musicFolderSelected = true;
 
-						Music.initialPress = true;
+						Player.initialPress = true;
 
-						if (Music.musicIsPlaying == true) {
-							Music.mediaPlayer.stop();
+						if (Player.musicIsPlaying == true) {
+							Player.mediaPlayer.stop();
 						}
 
 						try {
-							Music.get();
+							Player.get("Music");
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 						if (autoplay) {
-							Music.play();
+							Player.play("Music");
 						}
 					}
 
@@ -1207,8 +1190,8 @@ public class UI {
 			public void handle(MouseEvent mouseEvent) {
 				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 					if (mouseEvent.getClickCount() == 2) {
-						Music.currentTrackID = lv.getSelectionModel().getSelectedIndex() - 1;
-						Music.next();
+						Player.currentTrackID = lv.getSelectionModel().getSelectedIndex() - 1;
+						Player.next("Music");
 					}
 				}
 			}
@@ -1270,23 +1253,23 @@ public class UI {
 			@Override
 			public void changed(ObservableValue<? extends Duration> observableValue, Duration oldValue,
 					Duration newValue) {
-				pb.setProgress(1.0 * Music.mediaPlayer.getCurrentTime().toMillis()
-						/ Music.mediaPlayer.getTotalDuration().toMillis());
+				pb.setProgress(1.0 * Player.mediaPlayer.getCurrentTime().toMillis()
+						/ Player.mediaPlayer.getTotalDuration().toMillis());
 
 				// Fade Out
 				if (fadeOut) {
-					if (Music.mediaPlayer.getCurrentTime()
-							.toSeconds() > Music.mediaPlayer.getTotalDuration().toSeconds() - fadeDuration) {
-						if (Music.fading == false) {
-							Music.fading = true;
-							System.out.println("Fading Music...");
-							Music.fade();
+					if (Player.mediaPlayer.getCurrentTime()
+							.toSeconds() > Player.mediaPlayer.getTotalDuration().toSeconds() - fadeDuration) {
+						if (Player.fading == false) {
+							Player.fading = true;
+							System.out.println("Fading Player...");
+							Player.fade();
 						}
 					}
 				}
 			}
 		};
-		Music.mediaPlayer.currentTimeProperty().addListener(progressChangeListener);
+		Player.mediaPlayer.currentTimeProperty().addListener(progressChangeListener);
 	}
 
 	// Adds ProgressBar
