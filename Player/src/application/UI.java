@@ -897,8 +897,6 @@ public class UI {
 			mi.setOnAction((ActionEvent e) -> {
 				tabPane.getSelectionModel().select(tab);
 				tp.getSelectionModel().select(t);
-				System.out.println(tp.getId());
-				System.out.println(t.getId());
 			});
 
 			tp.getTabs().add(t);
@@ -1102,7 +1100,7 @@ public class UI {
 				b.setMinSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.getStyleClass().add("button1");
-
+				
 				if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
 					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
 							.toURI();

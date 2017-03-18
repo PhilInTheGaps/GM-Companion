@@ -35,7 +35,7 @@ public class Sound {
 
 	public static String soundDirectory = "";
 	public static String defaultSoundPath = "";
-	public static String serverSoundsURL = "";
+	public static String serverSoundsURL = UI.serverURL+"sounds/";
 
 	public static void play() {
 		// Plays the sound file
