@@ -180,3 +180,11 @@ Weihnachtsferien 2016
 - Neues Icon hinzugefügt (Wird mitgeliefert; Verschiedene Größen, für unterschiedliche Darstellung)
 - Aufgrund von riesigem Arbeitsspeicher-Verbrauch: Intensives Debugging --> Ergebnis: Die Datenbank-Implementierung und (wie zu erwarten) die Karten benötigen riesige Mengen an Arbeitsspeicher
 - Umfangreiches Re-Writing des Codes
+
+18.03.2017
+- Online Mode gefixt
+- Player.next() gefixt (Es wurde jedes mal eine neue playlist generiert, wenn die nächste Datei abgespielt werden sollte
+- Karten weiter optimiert (Werden jetzt on-demand geladen und nicht beim Start
+- Arbeitsspeicher-Verbrauch verringert
+- Für Windows gibt es das Programm jetzt auch als .exe (Empfohlen, da weniger Arbeitsspeicher-Verbrauch)
+- Beta 2.8 released
