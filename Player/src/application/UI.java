@@ -458,7 +458,10 @@ public class UI {
 		playButton.setPrefSize(100, 50);
 		playButton.setOnAction((ActionEvent e) -> {
 			if (Player.musicFolderSelected == true) {
-				if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
+				if (Player.mediaPlayer.getStatus() == Status.PAUSED){
+					Player.mediaPlayer.play();
+				}
+				else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Music");
 				}
 			}
@@ -549,7 +552,10 @@ public class UI {
 		playSButton.setMaxSize(100, 50);
 		playSButton.setPrefSize(100, 50);
 		playSButton.setOnAction((ActionEvent e) -> {
-			if (Player.soundFolderSelected == true) {
+			if (Player.soundPlayer.getStatus() == Status.PAUSED){
+				Player.soundPlayer.play();
+			}
+			else if (Player.soundFolderSelected == true) {
 				if (Player.soundPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Sounds");
 				}
@@ -880,7 +886,6 @@ public class UI {
 			mi.setOnAction((ActionEvent e) -> {
 				tabPane.getSelectionModel().select(tab);
 				tp.getSelectionModel().select(t);
-				System.gc();
 			});
 
 			tp.getTabs().add(t);
