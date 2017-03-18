@@ -457,10 +457,8 @@ public class UI {
 		playButton.setMaxSize(100, 50);
 		playButton.setPrefSize(100, 50);
 		playButton.setOnAction((ActionEvent e) -> {
-			if (Player.mediaPlayer.getStatus() == Status.PAUSED) {
-				Player.mediaPlayer.play();
-			} else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
-				if (Player.musicFolderSelected == true) {
+			if (Player.musicFolderSelected == true) {
+				if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Music");
 				}
 			}
@@ -551,12 +549,8 @@ public class UI {
 		playSButton.setMaxSize(100, 50);
 		playSButton.setPrefSize(100, 50);
 		playSButton.setOnAction((ActionEvent e) -> {
-			if (Player.soundPlayer.getStatus() != Status.PAUSED) {
-				Player.soundPlayer.play();
-			}
-
-			else if (Player.soundPlayer.getStatus() != Status.PLAYING) {
-				if (Player.soundFolderSelected == true) {
+			if (Player.soundFolderSelected == true) {
+				if (Player.soundPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Sounds");
 				}
 			}
@@ -886,6 +880,7 @@ public class UI {
 			mi.setOnAction((ActionEvent e) -> {
 				tabPane.getSelectionModel().select(tab);
 				tp.getSelectionModel().select(t);
+				System.gc();
 			});
 
 			tp.getTabs().add(t);
@@ -958,6 +953,7 @@ public class UI {
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
 			String name = map.substring(0, map.indexOf("."));
+			name = name.substring(name.lastIndexOf("\\")+1);
 			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
@@ -981,6 +977,9 @@ public class UI {
 				
 				s.setContent(iv);
 				t.setContent(s);
+				f = null;
+				img = null;
+				System.gc();
 			});
 			mapsMenu.getItems().add(mi);
 		}
