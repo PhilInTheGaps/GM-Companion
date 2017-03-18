@@ -65,12 +65,6 @@ public class Player {
 
 	public static Boolean fading = false;
 
-	// static int folderCount = 0;
-	// static int folderID = 0;
-	// static int scenCount = 0;
-	// static int scenID = 0;
-	// static int musicID = 1;
-
 	public static void play(String type) {
 		// Plays the file
 		System.out.println("Converting File Path...");
@@ -159,9 +153,12 @@ public class Player {
 			if (!initialPress) {
 				soundPlayer.stop();
 			}
+			
 			soundPlayer = new MediaPlayer(sMedia);
 			soundPlayer.setAutoPlay(true);
 			soundPlayer.setVolume(soundVolume);
+			soundIsPlaying = true;
+			
 			// If the sound folder button was pressed, generate a new random
 			// playlist
 			if (initialPress) {
@@ -183,7 +180,7 @@ public class Player {
 	}
 
 	public static Boolean Initial() {
-		return initialPress;
+		return soundsInitialPress;
 	}
 
 	public static void get(String type) throws IOException {
@@ -419,7 +416,7 @@ public class Player {
 
 	public static void fade() {
 		Timeline timeline = new Timeline(
-				new KeyFrame(Duration.seconds(UI.fadeDuration), new KeyValue(Music.mediaPlayer.volumeProperty(), 0)));
+				new KeyFrame(Duration.seconds(UI.fadeDuration), new KeyValue(mediaPlayer.volumeProperty(), 0)));
 		timeline.play();
 	}
 }

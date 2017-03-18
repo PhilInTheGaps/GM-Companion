@@ -387,7 +387,7 @@ public class UI {
 		}
 
 		if (menu == mapsMenu) {
-			addMapsTabPane();
+			mapsPane.setCenter(addMapsTabPane());
 		}
 
 		System.gc();
@@ -514,13 +514,15 @@ public class UI {
 		mVolumeSlider.setPrefHeight(defaultSliderHeight);
 		mVolumeSlider.setMinWidth(30);
 		mVolumeSlider.setValue(50);
+		mVolumeSlider.setMin(0);
+		mVolumeSlider.setMax(75);
 
 		mVolumeSlider.valueProperty().addListener(new InvalidationListener() {
 			public void invalidated(Observable ov) {
 				if (mVolumeSlider.isPressed()) {
 					Player.musicVolume = mVolumeSlider.getValue() / 100.0;
 					if (Player.musicIsPlaying == true) {
-						Player.mediaPlayer.setVolume(mVolumeSlider.getValue() / 100.0);
+						Player.mediaPlayer.setVolume(Player.musicVolume);
 					}
 				}
 			}
@@ -608,13 +610,15 @@ public class UI {
 		sVolumeSlider.setPrefHeight(defaultSliderHeight);
 		sVolumeSlider.setMinWidth(30);
 		sVolumeSlider.setValue(25);
+		sVolumeSlider.setMin(0);
+		sVolumeSlider.setMax(75);
 
 		sVolumeSlider.valueProperty().addListener(new InvalidationListener() {
 			public void invalidated(Observable ov) {
 				if (sVolumeSlider.isPressed()) {
 					Player.soundVolume = sVolumeSlider.getValue() / 100.0;
 					if (Player.soundIsPlaying == true) {
-						Player.soundPlayer.setVolume(sVolumeSlider.getValue() / 100.0);
+						Player.soundPlayer.setVolume(Player.soundVolume);
 					}
 				}
 			}
@@ -892,9 +896,7 @@ public class UI {
 	// Adds Music TabPane
 	private static TabPane addMusicTabPane() {
 		TabPane tp = new TabPane();
-		tp.setId("TEST ID");
 		ArrayList<String> list = new ArrayList<String>();
-		list.clear();
 		tp.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		tp.setTabMinWidth(200);
 		tp.setTabMinHeight(40);
@@ -914,8 +916,9 @@ public class UI {
 		tp.setTabMinWidth(200);
 		tp.setTabMinHeight(40);
 
-		generateTabs(generateCategories(list, Player.soundDirectory, Player.serverSoundsURL), tp, tsound, soundsMenu,
-				true, "Sounds", Player.defaultSoundPath, Player.serverSoundsURL);
+		ArrayList<String> categories = generateCategories(list, Player.soundDirectory, Player.serverSoundsURL);
+		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.defaultSoundPath,
+				Player.serverSoundsURL);
 
 		return tp;
 	}
@@ -923,7 +926,7 @@ public class UI {
 	// Adds Maps TabPane
 	private static TabPane addMapsTabPane() {
 		TabPane tp = new TabPane();
-		ArrayList<File> list = new ArrayList<File>();
+		ArrayList<String> list = new ArrayList<String>();
 		tp.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 		tp.setTabMinWidth(200);
 		tp.setTabMinHeight(40);
@@ -938,8 +941,7 @@ public class UI {
 						if (filePath.toString().contains(".jpg") || filePath.toString().contains(".jpeg")
 								|| filePath.toString().contains(".png")) {
 							System.out.println("Path: " + filePath);
-							File f = new File(filePath.toString());
-							list.add(f);
+							list.add(filePath.toString());
 						}
 					}
 				});
@@ -952,10 +954,10 @@ public class UI {
 
 		// Generating Tabs
 
-		for (File map : list) {
+		for (String map : list) {
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
-			String name = map.getName().toString().substring(0, map.getName().indexOf("."));
+			String name = map.substring(0, map.indexOf("."));
 			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
@@ -963,21 +965,22 @@ public class UI {
 			mi.setMnemonicParsing(false);
 			mi.setText(nName);
 
-			Image img = new Image(map.toURI().toString(), 2 * screenWidth, 2 * screenHeight, true, true);
-			ImageView iv = new ImageView(img);
-			iv.setPreserveRatio(true);
-			iv.autosize();
-
 			ScrollPane s = new ScrollPane();
 			s.setBackground(null);
 			s.setFitToWidth(true);
-			s.setContent(iv);
-			t.setContent(s);
 			tp.getTabs().add(t);
 
 			mi.setOnAction((ActionEvent e) -> {
 				tabPane.getSelectionModel().select(tmaps);
 				tp.getSelectionModel().select(t);
+				File f = new File(map);
+				Image img = new Image(f.toURI().toString(), 2 * screenWidth, 2 * screenHeight, true, true);
+				ImageView iv = new ImageView(img);
+				iv.setPreserveRatio(true);
+				iv.autosize();
+				
+				s.setContent(iv);
+				t.setContent(s);
 			});
 			mapsMenu.getItems().add(mi);
 		}
