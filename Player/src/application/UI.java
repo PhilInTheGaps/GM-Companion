@@ -903,7 +903,7 @@ public class UI {
 
 		// Generation Tabs
 		ArrayList<String> categories = generateCategories(list, Player.musicDirectory, Player.serverMusicURL);
-		generateTabs(categories, tp, tmusic, musicMenu, true, "Music", Player.defaultMusicPath, Player.serverMusicURL);
+		generateTabs(categories, tp, tmusic, musicMenu, true, "Music", Player.musicDirectory, Player.serverMusicURL);
 
 		return tp;
 	}
@@ -917,7 +917,7 @@ public class UI {
 		tp.setTabMinHeight(40);
 
 		ArrayList<String> categories = generateCategories(list, Player.soundDirectory, Player.serverSoundsURL);
-		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.defaultSoundPath,
+		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.soundDirectory,
 				Player.serverSoundsURL);
 
 		return tp;
@@ -995,7 +995,7 @@ public class UI {
 	// Adds Buttons for folders in categories
 	private static TilePane addButtons(String directory, String mainDirectory, String serverURL, String type,
 			String iconFolder) {
-		System.out.println("Generating buttons for directory: " + directory);
+		System.out.println("Generating buttons for directory: " + mainDirectory + directory);
 
 		TilePane tile = new TilePane();
 		tile.setPadding(new Insets(defaultPadding, defaultPadding / 2, defaultPadding, defaultPadding));
