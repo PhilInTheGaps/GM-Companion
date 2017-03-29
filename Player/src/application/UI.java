@@ -100,6 +100,7 @@ public class UI {
 	public static String serverURL;
 	public static String resourceFolder;
 	public static String mapsFolder = "";
+	public static Boolean listViewRight = false;
 
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -1188,8 +1189,15 @@ public class UI {
 
 	// Adds ListView with Music files
 	private static ListView<String> addListView() {
-
-		lv.setMaxHeight(150);
+		
+		if(listViewRight){
+			//lv.setMaxHeight();
+			lv.setMaxWidth(defaultSliderWidth + 2 * defaultPadding);
+			lv.setPrefWidth(250);
+		}else{
+			lv.setMaxHeight(150);
+		}
+		
 		lv.setFocusTraversable(false);
 		lv.setItems(items);
 		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -1218,7 +1226,11 @@ public class UI {
 
 		// Music TabPane
 		musicPane.setCenter(addMusicTabPane());
-		musicPane.setBottom(addListView());
+		if(listViewRight){
+			musicPane.setRight(addListView());
+		}else{
+			musicPane.setBottom(addListView());
+		}
 
 		// Sound TabPane
 		soundsPane.setCenter(addSoundsTabPane());
