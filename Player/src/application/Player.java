@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
@@ -29,6 +31,7 @@ public class Player {
 
 	public static Media sMedia;
 	public static Media mMedia;
+	private static Media tempMedia;
 
 	public static String soundPath;
 	public static String musicPath;
@@ -246,7 +249,7 @@ public class Player {
 			UI.items.clear();
 			for (int i = 0; i < musicFiles.size(); i++) {
 				String temp = musicFiles.get(i);
-				UI.items.add(i, temp.substring(temp.lastIndexOf("\\")+1));
+				UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
 			}
 
 			currentTrackID = 0;
@@ -345,7 +348,8 @@ public class Player {
 
 						for (int i = 0; i < musicFiles.size(); i++) {
 							String temp = musicFiles.get(i);
-							UI.items.add(i, temp.substring(temp.lastIndexOf("\\")+1));
+							UI.items.add(i,
+							temp.substring(temp.lastIndexOf("\\")+1));
 						}
 						System.out.println("");
 					}
@@ -410,7 +414,25 @@ public class Player {
 			System.out.println("Year: " + UI.Year);
 			break;
 		}
+
 		UI.coverImage.setImage((Image) mediaPlayer.getMedia().getMetadata().get("image"));
+	}
+
+	public static String addTitleToList(String key, Object value, String file) {
+		String title = "";
+		switch (key) {
+		case ("album"):
+			break;
+		case ("artist"):
+			break;
+		case ("title"):
+			System.out.println("Title: " + value.toString());
+			title = value.toString();
+			return null;
+		case ("year"):
+			break;
+		}
+		return title;
 	}
 
 	public static void fade() {
