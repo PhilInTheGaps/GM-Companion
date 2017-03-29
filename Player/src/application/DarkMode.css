@@ -154,6 +154,9 @@
 .list-view{
 	-fx-background-color: #222222;
 }
+.list-view .corner{
+	-fx-background-color: transparent;
+}
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
     -fx-text-fill: white;
     -fx-background-color: #666666;

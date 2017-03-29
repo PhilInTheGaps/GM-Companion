@@ -245,7 +245,8 @@ public class Player {
 			// Display Song List in ListView
 			UI.items.clear();
 			for (int i = 0; i < musicFiles.size(); i++) {
-				UI.items.add(i, musicFiles.get(i));
+				String temp = musicFiles.get(i);
+				UI.items.add(i, temp.substring(temp.lastIndexOf("\\")+1));
 			}
 
 			currentTrackID = 0;
@@ -343,7 +344,8 @@ public class Player {
 						UI.items.clear();
 
 						for (int i = 0; i < musicFiles.size(); i++) {
-							UI.items.add(i, musicFiles.get(i));
+							String temp = musicFiles.get(i);
+							UI.items.add(i, temp.substring(temp.lastIndexOf("\\")+1));
 						}
 						System.out.println("");
 					}

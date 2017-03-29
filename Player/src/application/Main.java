@@ -58,7 +58,7 @@ public class Main extends Application {
 
 		// Sets TitleBar text, starts the program maximized and sets "scene" as
 		// default scene
-		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.8.1 (0.2.8.1)");
+		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.9 (0.2.9)");
 
 		// Adds the icon
 		String[] icons = { "icon32.png", "icon64.png", "icon128.png", "icon256.png" };
