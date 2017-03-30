@@ -100,7 +100,7 @@ public class UI {
 	public static String serverURL;
 	public static String resourceFolder;
 	public static String mapsFolder = "";
-	public static Boolean listViewRight = true;
+	public static Boolean listViewRight = false;
 
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -1160,7 +1160,9 @@ public class UI {
 						if (Player.musicIsPlaying == true) {
 							Player.mediaPlayer.stop();
 						}
-
+						
+						UI.addListViewToPane(true);
+						
 						try {
 							Player.get("Music");
 						} catch (IOException e1) {
@@ -1186,7 +1188,21 @@ public class UI {
 
 		return tile;
 	}
-
+	
+	// Adds or removes the listView
+	public static void addListViewToPane(Boolean add){
+		if(add){
+			if(UI.listViewRight){
+				musicPane.setRight(addListView());
+			}else{
+				musicPane.setBottom(addListView());
+			}
+		}else{
+			musicPane.setRight(null);
+			musicPane.setBottom(null);
+		}
+	}
+	
 	// Adds ListView with Music files
 	private static ListView<String> addListView() {
 		
@@ -1226,11 +1242,12 @@ public class UI {
 
 		// Music TabPane
 		musicPane.setCenter(addMusicTabPane());
-		if(listViewRight){
-			musicPane.setRight(addListView());
-		}else{
-			musicPane.setBottom(addListView());
-		}
+//		addListViewToPane(true, true);
+//		if(listViewRight){
+//			musicPane.setRight(addListView());
+//		}else{
+//			musicPane.setBottom(addListView());
+//		}
 
 		// Sound TabPane
 		soundsPane.setCenter(addSoundsTabPane());
