@@ -481,7 +481,7 @@ public class UI {
 					Player.mediaPlayer.play();
 				}
 				else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
-					Player.play("Music");
+					Player.play("Music", true);
 				}
 			}
 		});
@@ -522,7 +522,7 @@ public class UI {
 		nextMButton.setPrefSize(100, 50);
 		nextMButton.setOnAction((ActionEvent e) -> {
 			if (Player.musicFolderSelected == true) {
-				Player.next("Music");
+				Player.next("Music", true);
 			}
 
 		});
@@ -576,7 +576,7 @@ public class UI {
 			}
 			else if (Player.soundFolderSelected == true) {
 				if (Player.soundPlayer.getStatus() != Status.PLAYING) {
-					Player.play("Sounds");
+					Player.play("Sounds", true);
 				}
 			}
 		});
@@ -617,7 +617,7 @@ public class UI {
 		nextSButton.setPrefSize(100, 50);
 		nextSButton.setOnAction((ActionEvent e) -> {
 			if (Player.soundFolderSelected == true) {
-				Player.next("Sounds");
+				Player.next("Sounds", true);
 			}
 
 		});
@@ -1122,75 +1122,83 @@ public class UI {
 				} else {
 					b.setText(nbName.replace("_", " "));
 				}
+				
+				b.setOnMouseClicked(new EventHandler<MouseEvent>(){
+					@Override
+					public void handle(MouseEvent event) {
+						if (type.equals("Sounds")) {
+							Boolean initial = Player.Initial();
+							System.out.println(initial);
+							if (initial == false) {
+								Player.soundPlayer.pause();
+								Player.soundPlayer.stop();
+							}
+							if (Player.soundFolderSelected) {
+								Player.soundPlayer.stop();
+							}
+							if (onlineMode) {
+								Player.defaultSoundPath = directory + "/" + nbName;
+								System.out.println();
+							} else {
+								Player.defaultSoundPath = Player.soundDirectory + directory + "/" + nbName;
+							}
 
-				b.setOnAction((ActionEvent e) -> {
-					if (type.equals("Sounds")) {
-						Boolean initial = Player.Initial();
-						System.out.println(initial);
-						if (initial == false) {
-							Player.soundPlayer.pause();
-							Player.soundPlayer.stop();
+							soundFolder = directory + "/" + nbName;
+							soundFolderLabel.setText("Folder: " + soundFolder);
+							Player.soundFolderSelected = true;
+
+							Player.initialPress = true;
+
+							if (Player.soundIsPlaying == true) {
+								Player.soundPlayer.stop();
+							}
+
+							try {
+								Player.get("Sounds");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							if (event.getButton().equals(MouseButton.SECONDARY)){
+								Player.play("Sounds", false);
+							}else{
+								if (autoplay) {
+									Player.play("Sounds", true);
+								}
+							}
 						}
-						if (Player.soundFolderSelected) {
-							Player.soundPlayer.stop();
-						}
-						if (onlineMode) {
-							Player.defaultSoundPath = directory + "/" + nbName;
-							System.out.println();
-						} else {
-							Player.defaultSoundPath = Player.soundDirectory + directory + "/" + nbName;
-						}
+						if (type.equals("Music")) {
+							if (onlineMode) {
+								Player.defaultMusicPath = directory + "/" + nbName;
+								System.out.println();
+							} else {
+								Player.defaultMusicPath = Player.musicDirectory + directory + "/" + nbName;
+							}
 
-						soundFolder = directory + "/" + nbName;
-						soundFolderLabel.setText("Folder: " + soundFolder);
-						Player.soundFolderSelected = true;
+							musicFolder = directory + "/" + nbName;
+							musicFolderName = nbName;
+							musicFolderLabel.setText("Folder: " + musicFolder);
+							Player.musicFolderSelected = true;
 
-						Player.initialPress = true;
+							Player.initialPress = true;
 
-						if (Player.soundIsPlaying == true) {
-							Player.soundPlayer.stop();
-						}
-
-						try {
-							Player.get("Sounds");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						if (autoplay) {
-							Player.play("Sounds");
-						}
-					}
-					if (type.equals("Music")) {
-						if (onlineMode) {
-							Player.defaultMusicPath = directory + "/" + nbName;
-							System.out.println();
-						} else {
-							Player.defaultMusicPath = Player.musicDirectory + directory + "/" + nbName;
-						}
-
-						musicFolder = directory + "/" + nbName;
-						musicFolderName = nbName;
-						musicFolderLabel.setText("Folder: " + musicFolder);
-						Player.musicFolderSelected = true;
-
-						Player.initialPress = true;
-
-						if (Player.musicIsPlaying == true) {
-							Player.mediaPlayer.stop();
+							if (Player.musicIsPlaying == true) {
+								Player.mediaPlayer.stop();
+							}
+							
+							UI.addListViewToPane(true);
+							
+							try {
+								Player.get("Music");
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							if (autoplay) {
+								Player.play("Music", true);
+							}
 						}
 						
-						UI.addListViewToPane(true);
-						
-						try {
-							Player.get("Music");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						if (autoplay) {
-							Player.play("Music");
-						}
 					}
-
+					
 				});
 
 				v2.getChildren().add(l);
@@ -1233,7 +1241,7 @@ public class UI {
 				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 					if (mouseEvent.getClickCount() == 2) {
 						Player.currentTrackID = lv.getSelectionModel().getSelectedIndex() - 1;
-						Player.next("Music");
+						Player.next("Music", true);
 					}
 				}
 			}
