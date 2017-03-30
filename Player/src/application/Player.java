@@ -12,6 +12,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -249,7 +257,27 @@ public class Player {
 			UI.items.clear();
 			for (int i = 0; i < musicFiles.size(); i++) {
 				String temp = musicFiles.get(i);
-				UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				try {
+					AudioFile f = AudioFileIO.read(new File(musicFiles.get(i)));
+					Tag tag = f.getTag();
+					String title = tag.getFirst(FieldKey.TITLE);
+					UI.items.add(i, title);
+				} catch (CannotReadException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (IOException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (TagException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (ReadOnlyFileException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (InvalidAudioFrameException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				}
 			}
 
 			currentTrackID = 0;
@@ -348,8 +376,27 @@ public class Player {
 
 						for (int i = 0; i < musicFiles.size(); i++) {
 							String temp = musicFiles.get(i);
-							UI.items.add(i,
-							temp.substring(temp.lastIndexOf("\\")+1));
+							try {
+								AudioFile f = AudioFileIO.read(new File(musicFiles.get(i)));
+								Tag tag = f.getTag();
+								String title = tag.getFirst(FieldKey.TITLE);
+								UI.items.add(i, title);
+							} catch (CannotReadException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (IOException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (TagException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (ReadOnlyFileException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (InvalidAudioFrameException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							}
 						}
 						System.out.println("");
 					}

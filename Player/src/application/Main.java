@@ -174,6 +174,14 @@ public class Main extends Application {
 			UI.autoplay = false;
 		}
 		System.out.println("Set Autoplay to " + UI.autoplay);
+		
+		// Auto Play
+		if (readSettings("LIST_VIEW_RIGHT=").toLowerCase().equals("true")) {
+			UI.listViewRight = true;
+		} else {
+			UI.listViewRight = false;
+		}
+		System.out.println("Set ListView Mode to " + UI.listViewRight);
 
 		// Fade Out
 		if (readSettings("FADE_OUT=").toLowerCase().equals("true")) {
