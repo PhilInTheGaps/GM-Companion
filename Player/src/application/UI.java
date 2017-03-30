@@ -258,6 +258,24 @@ public class UI {
 				Main.writeSettings("FADE_OUT=", "FADE_OUT=true");
 			}
 		});
+		
+		// Set FadeOut
+		CheckMenuItem checkListViewRight = new CheckMenuItem("Song List Position (True = Right, False = Bottom)");
+		if (listViewRight) {
+			checkListViewRight.setSelected(true);
+		} else {
+			checkListViewRight.setSelected(false);
+		}
+		checkListViewRight.setOnAction((ActionEvent e) -> {
+			if (listViewRight) {
+				listViewRight = false;
+				Main.writeSettings("LIST_VIEW_RIGHT=", "LIST_VIEW_RIGHT=false");
+
+			} else {
+				listViewRight = true;
+				Main.writeSettings("LIST_VIEW_RIGHT=", "LIST_VIEW_RIGHT=true");
+			}
+		});
 
 		// Set UI Mode
 		CheckMenuItem checkUIMode = new CheckMenuItem("UI DarkMode (Requires Restart!)");
@@ -356,7 +374,7 @@ public class UI {
 
 		// Adding Items to Menus
 		gmhMenu.getItems().addAll(dice);
-		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2,
+		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, checkListViewRight, sep2,
 				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, setMapsFolder, sep1, fupdate);
 
 		// If Database Path was set, database tab is shown in menu
@@ -1191,28 +1209,21 @@ public class UI {
 	
 	// Adds or removes the listView
 	public static void addListViewToPane(Boolean add){
+		musicPane.setRight(null);
+		musicPane.setBottom(null);
 		if(add){
-			if(UI.listViewRight){
+			if(listViewRight){
 				musicPane.setRight(addListView());
+				lv.setPrefSize(250, screenHeight);
 			}else{
 				musicPane.setBottom(addListView());
+				lv.setPrefSize(screenWidth, 150);
 			}
-		}else{
-			musicPane.setRight(null);
-			musicPane.setBottom(null);
 		}
 	}
 	
 	// Adds ListView with Music files
 	private static ListView<String> addListView() {
-		
-		if(listViewRight){
-			//lv.setMaxHeight();
-			lv.setMaxWidth(defaultSliderWidth + 2 * defaultPadding);
-			lv.setPrefWidth(250);
-		}else{
-			lv.setMaxHeight(150);
-		}
 		
 		lv.setFocusTraversable(false);
 		lv.setItems(items);

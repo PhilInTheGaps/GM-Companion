@@ -8,8 +8,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import org.jaudiotagger.audio.AudioFile;
@@ -39,7 +37,6 @@ public class Player {
 
 	public static Media sMedia;
 	public static Media mMedia;
-	private static Media tempMedia;
 
 	public static String soundPath;
 	public static String musicPath;
