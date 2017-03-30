@@ -73,7 +73,7 @@ public class Player {
 
 	public static Boolean fading = false;
 
-	public static void play(String type) {
+	public static void play(String type, Boolean loop) {
 		// Plays the file
 		System.out.println("Converting File Path...");
 
@@ -114,7 +114,7 @@ public class Player {
 			if (initialPress) {
 				initialPress = false;
 				currentTrackID = musicFiles.size() - 1;
-				next("Music");
+				next("Music", true);
 			}
 
 			// Get Metadata
@@ -133,7 +133,7 @@ public class Player {
 				@Override
 				public void run() {
 					if (UI.singleTrack == false) {
-						next("Music");
+						next("Music", true);
 					}
 				}
 			});
@@ -172,18 +172,20 @@ public class Player {
 			if (initialPress) {
 				initialPress = false;
 				currentSoundID = soundFiles.size() - 1;
-				next("Sounds");
+				next("Sounds", loop);
 			}
-
+			
 			// Switches to next sound if current one ends
-			soundPlayer.setOnEndOfMedia(new Runnable() {
-				@Override
-				public void run() {
-					if (UI.singleTrack == false) {
-						next("Sounds");
+			if (loop){
+				soundPlayer.setOnEndOfMedia(new Runnable() {
+					@Override
+					public void run() {
+						if (UI.singleTrack == false) {
+							next("Sounds", loop);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
@@ -345,7 +347,7 @@ public class Player {
 		}
 	}
 
-	public static void next(String type) {
+	public static void next(String type, Boolean loop) {
 
 		if (type.equals("Music")) {
 			// Switches to the next music file
@@ -405,7 +407,7 @@ public class Player {
 				currentTrackID++;
 			}
 
-			play("Music");
+			play("Music", true);
 		} else {
 			// Switches to next sound
 			System.out.println("");
@@ -431,7 +433,7 @@ public class Player {
 				currentSoundID++;
 			}
 
-			play("Sounds");
+			play("Sounds", loop);
 		}
 	}
 
