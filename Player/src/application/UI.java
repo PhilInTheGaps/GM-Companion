@@ -1175,7 +1175,7 @@ public class UI {
 							}
 
 							try {
-								Player.get("Sounds");
+								Player.get("Sounds", false);
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
@@ -1208,11 +1208,20 @@ public class UI {
 							
 							UI.addListViewToPane(true);
 							
-							try {
-								Player.get("Music");
-							} catch (IOException e1) {
-								e1.printStackTrace();
+							if (event.isShiftDown()){
+								try {
+									Player.get("Music", true);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+							}else{
+								try {
+									Player.get("Music", false);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
 							}
+							
 							if (autoplay) {
 								Player.play("Music", true);
 							}

@@ -193,7 +193,7 @@ public class Player {
 		return soundsInitialPress;
 	}
 
-	public static void get(String type) throws IOException {
+	public static void get(String type, Boolean add) throws IOException {
 		// This finds every sound file in the folder and writes them into a list
 		System.out.println("Finding sound files in folder: /" + defaultSoundPath);
 
@@ -201,7 +201,10 @@ public class Player {
 			// This finds every music file in the folder and writes them into a
 			// list
 			currentTrackID = 0;
-			musicFiles.clear();
+			
+			if (!add){
+				musicFiles.clear();
+			}
 
 			if (UI.onlineMode) {
 
