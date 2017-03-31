@@ -74,6 +74,8 @@ public class Main extends Application {
 		mainStage.setHeight(bounds.getHeight());
 		mainStage.centerOnScreen();
 		mainStage.setMaximized(true);
+		UI.screenWidth=(int) bounds.getWidth();
+		UI.screenHeight=(int) bounds.getHeight();
 
 		UI.defaultWidth = scene.getWidth();
 		

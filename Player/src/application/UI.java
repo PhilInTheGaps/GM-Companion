@@ -27,6 +27,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContentDisplay;
@@ -53,8 +54,11 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class UI {
@@ -135,6 +139,7 @@ public class UI {
 	private static Menu soundsMenu = new Menu("Sounds");
 	private static Menu gmhMenu = new Menu("GM Help");
 	private static Menu mapsMenu = new Menu("Maps");
+	private static Menu helpMenu = new Menu("Help");
 
 	// Menu Tabs
 	private static Tab tmusic = new Tab();
@@ -154,7 +159,7 @@ public class UI {
 	public static MenuBar menu() {
 		// Add Menus to the MenuBar
 		// Adds Menus
-		menu.getMenus().addAll(gmhMenu, musicMenu, soundsMenu, mapsMenu, optionsMenu);
+		menu.getMenus().addAll(gmhMenu, musicMenu, soundsMenu, mapsMenu, optionsMenu, helpMenu);
 
 		// Disables MnemonicParsing because it led to underscores not being
 		// shown
@@ -367,6 +372,21 @@ public class UI {
 
 			Main.writeSettings("MAPS_PATH=", "MAPS_PATH=" + folder);
 		});
+		
+		// Open Help Window
+		MenuItem openHelp = new MenuItem("GM-Companion Wiki");
+		openHelp.setOnAction((ActionEvent e) -> {
+			BorderPane root = new BorderPane();
+			WebView wiki = new WebView();
+			WebEngine webEngine = wiki.getEngine();
+			webEngine.load("https://github.com/PhilInTheGaps/GM-Companion/wiki");
+			root.setCenter(wiki);
+			
+			Stage stage = new Stage();
+            stage.setTitle("GM-Companion Wiki");
+            stage.setScene(new Scene(root, screenWidth-100, screenHeight-100));
+            stage.show();
+		});
 
 		// Seperator Items
 		SeparatorMenuItem sep1 = new SeparatorMenuItem();
@@ -374,6 +394,7 @@ public class UI {
 
 		// Adding Items to Menus
 		gmhMenu.getItems().addAll(dice);
+		helpMenu.getItems().addAll(openHelp);
 		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, checkListViewRight, sep2,
 				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, setMapsFolder, sep1, fupdate);
 
