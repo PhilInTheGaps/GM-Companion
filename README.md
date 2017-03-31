@@ -1,4 +1,3 @@
-# GM-Companion / RPGMSPlayer
+# GM-Companion
 
 Ein Informatik Projekt von Phil Hoffmann  und Niklas Lüdtke.
-
