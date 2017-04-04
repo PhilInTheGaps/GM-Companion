@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.sun.javafx.application.LauncherImpl;
 
 import javafx.application.Application;
@@ -34,6 +33,7 @@ public class Main extends Application {
 	private static Scene scene;
 	protected static String uim = "";
 	private Stage mainStage = new Stage();
+	public static double versionNumber = 0.29;
 
 	// Main
 	public static void main(String[] args) {
@@ -78,8 +78,6 @@ public class Main extends Application {
 		UI.screenHeight=(int) bounds.getHeight();
 
 		UI.defaultWidth = scene.getWidth();
-		
-
 	}
 
 	// Start of Program
@@ -88,6 +86,7 @@ public class Main extends Application {
 		primaryStage = mainStage;
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		
 	}
 
 	// Reads the Settings
