@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +28,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -60,6 +62,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.awt.Desktop;
 
 public class UI {
 
@@ -228,6 +232,61 @@ public class UI {
 
 		});
 
+		// Check for Version Updates
+		MenuItem checkForUpdates = new MenuItem("Check for Updates");
+		checkForUpdates.setOnAction((ActionEvent e) -> {
+			Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					try {
+						System.out.println("Checking for newer versions...");
+						Document doc = Jsoup.connect("https://github.com/PhilInTheGaps/GM-Companion/releases").get();
+						String str = doc.toString();
+						String findStr = "<li> <a href=\"/PhilInTheGaps/GM-Companion/tree";
+						int lastIndex1 = 0;
+						int lastIndex2 = 1;
+						String version = new String();
+
+						lastIndex1 = str.indexOf(findStr, lastIndex1);
+						lastIndex2 = str.indexOf("\" class=\"css-truncate\">", lastIndex1);
+
+						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2; i++) {
+							version += str.charAt(i);
+						}
+
+						int firstDot = version.indexOf(".");
+						int fullReleaseNumber = Integer.parseInt(version.substring(0, firstDot));
+
+						String subNumber = "";
+						for (int i = firstDot + 1; i < version.toCharArray().length; i++) {
+							if (version.toCharArray()[i] != (".").toCharArray()[0]) {
+								subNumber += version.toCharArray()[i];
+							}
+						}
+						String newestVersionNumberString = fullReleaseNumber + "." + subNumber;
+
+						if (Double.parseDouble(newestVersionNumberString) > Main.versionNumber) {
+							System.out.println("NEWER VERSION AVAILABLE!");
+							if (Desktop.isDesktopSupported()) {
+								Desktop.getDesktop()
+										.browse(new URI("https://github.com/PhilInTheGaps/GM-Companion/releases"));
+							}
+						} else {
+							System.out.println("Newest Version is already installed!");
+						}
+					} catch (IOException eio) {
+						System.out.println(
+								"Could not connect to GitHub to get the newest release version. Please check your internet connection!");
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			};
+			executor.submit(r);
+
+		});
+
 		// Set AutoPlay
 		CheckMenuItem checkAutoPlay = new CheckMenuItem("AutoPlay (Start Playing When Button Is Clicked)");
 		if (autoplay) {
@@ -263,7 +322,7 @@ public class UI {
 				Main.writeSettings("FADE_OUT=", "FADE_OUT=true");
 			}
 		});
-		
+
 		// Set FadeOut
 		CheckMenuItem checkListViewRight = new CheckMenuItem("Song List Position (True = Right, False = Bottom)");
 		if (listViewRight) {
@@ -372,7 +431,7 @@ public class UI {
 
 			Main.writeSettings("MAPS_PATH=", "MAPS_PATH=" + folder);
 		});
-		
+
 		// Open Help Window
 		MenuItem openHelp = new MenuItem("GM-Companion Wiki");
 		openHelp.setOnAction((ActionEvent e) -> {
@@ -381,11 +440,11 @@ public class UI {
 			WebEngine webEngine = wiki.getEngine();
 			webEngine.load("https://github.com/PhilInTheGaps/GM-Companion/wiki");
 			root.setCenter(wiki);
-			
+
 			Stage stage = new Stage();
-            stage.setTitle("GM-Companion Wiki");
-            stage.setScene(new Scene(root, screenWidth-100, screenHeight-100));
-            stage.show();
+			stage.setTitle("GM-Companion Wiki");
+			stage.setScene(new Scene(root, screenWidth - 100, screenHeight - 100));
+			stage.show();
 		});
 
 		// Seperator Items
@@ -395,8 +454,9 @@ public class UI {
 		// Adding Items to Menus
 		gmhMenu.getItems().addAll(dice);
 		helpMenu.getItems().addAll(openHelp);
-		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, checkListViewRight, sep2,
-				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, setMapsFolder, sep1, fupdate);
+		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode,
+				checkListViewRight, sep2, setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath,
+				setMapsFolder, sep1, fupdate, checkForUpdates);
 
 		// If Database Path was set, database tab is shown in menu
 		showDatabaseTab(dice, db);
@@ -498,10 +558,9 @@ public class UI {
 		playButton.setPrefSize(100, 50);
 		playButton.setOnAction((ActionEvent e) -> {
 			if (Player.musicFolderSelected == true) {
-				if (Player.mediaPlayer.getStatus() == Status.PAUSED){
+				if (Player.mediaPlayer.getStatus() == Status.PAUSED) {
 					Player.mediaPlayer.play();
-				}
-				else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
+				} else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Music", true);
 				}
 			}
@@ -592,10 +651,9 @@ public class UI {
 		playSButton.setMaxSize(100, 50);
 		playSButton.setPrefSize(100, 50);
 		playSButton.setOnAction((ActionEvent e) -> {
-			if (Player.soundPlayer.getStatus() == Status.PAUSED){
+			if (Player.soundPlayer.getStatus() == Status.PAUSED) {
 				Player.soundPlayer.play();
-			}
-			else if (Player.soundFolderSelected == true) {
+			} else if (Player.soundFolderSelected == true) {
 				if (Player.soundPlayer.getStatus() != Status.PLAYING) {
 					Player.play("Sounds", true);
 				}
@@ -917,16 +975,22 @@ public class UI {
 			s.setBackground(null);
 			s.setFitToWidth(true);
 
+			TilePane tilePane = null;
 			if (generateTiles) {
-				s.setContent(addButtons(folder, defaultPath, serverURL, type, folder.toString()));
+				tilePane = addButtons(folder, defaultPath, serverURL, type, folder.toString());
+				s.setContent(tilePane);
+				ObservableList<Node> buttons = tilePane.getChildren();
+
+				mi.setOnAction((ActionEvent e) -> {
+					tabPane.getSelectionModel().select(tab);
+					tp.getSelectionModel().select(t);
+					for (Node n : buttons) {
+						System.out.println(n.getId());
+					}
+				});
 			}
 
 			t.setContent(s);
-
-			mi.setOnAction((ActionEvent e) -> {
-				tabPane.getSelectionModel().select(tab);
-				tp.getSelectionModel().select(t);
-			});
 
 			tp.getTabs().add(t);
 			menu.getItems().add(mi);
@@ -957,8 +1021,7 @@ public class UI {
 		tp.setTabMinHeight(40);
 
 		ArrayList<String> categories = generateCategories(list, Player.soundDirectory, Player.serverSoundsURL);
-		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.soundDirectory,
-				Player.serverSoundsURL);
+		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.soundDirectory, Player.serverSoundsURL);
 
 		return tp;
 	}
@@ -998,7 +1061,7 @@ public class UI {
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
 			String name = map.substring(0, map.indexOf("."));
-			name = name.substring(name.lastIndexOf("\\")+1);
+			name = name.substring(name.lastIndexOf("\\") + 1);
 			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
@@ -1019,7 +1082,7 @@ public class UI {
 				ImageView iv = new ImageView(img);
 				iv.setPreserveRatio(true);
 				iv.autosize();
-				
+
 				s.setContent(iv);
 				t.setContent(s);
 				f = null;
@@ -1112,6 +1175,7 @@ public class UI {
 				b.setAlignment(Pos.CENTER);
 
 				VBox v = new VBox();
+				v.setId(bName);
 				v.setMaxWidth(150);
 				v.setAlignment(Pos.TOP_CENTER);
 				VBox v2 = new VBox();
@@ -1143,8 +1207,8 @@ public class UI {
 				} else {
 					b.setText(nbName.replace("_", " "));
 				}
-				
-				b.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+				b.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
 						if (type.equals("Sounds")) {
@@ -1179,9 +1243,9 @@ public class UI {
 							} catch (IOException e1) {
 								e1.printStackTrace();
 							}
-							if (event.getButton().equals(MouseButton.SECONDARY)){
+							if (event.getButton().equals(MouseButton.SECONDARY)) {
 								Player.play("Sounds", false);
-							}else{
+							} else {
 								if (autoplay) {
 									Player.play("Sounds", true);
 								}
@@ -1205,30 +1269,30 @@ public class UI {
 							if (Player.musicIsPlaying == true) {
 								Player.mediaPlayer.stop();
 							}
-							
+
 							UI.addListViewToPane(true);
-							
-							if (event.isShiftDown()){
+
+							if (event.isShiftDown()) {
 								try {
 									Player.get("Music", true);
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}
-							}else{
+							} else {
 								try {
 									Player.get("Music", false);
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}
 							}
-							
+
 							if (autoplay) {
 								Player.play("Music", true);
 							}
 						}
-						
+
 					}
-					
+
 				});
 
 				v2.getChildren().add(l);
@@ -1244,25 +1308,25 @@ public class UI {
 
 		return tile;
 	}
-	
+
 	// Adds or removes the listView
-	public static void addListViewToPane(Boolean add){
+	public static void addListViewToPane(Boolean add) {
 		musicPane.setRight(null);
 		musicPane.setBottom(null);
-		if(add){
-			if(listViewRight){
+		if (add) {
+			if (listViewRight) {
 				musicPane.setRight(addListView());
 				lv.setPrefSize(250, screenHeight);
-			}else{
+			} else {
 				musicPane.setBottom(addListView());
 				lv.setPrefSize(screenWidth, 150);
 			}
 		}
 	}
-	
+
 	// Adds ListView with Music files
 	private static ListView<String> addListView() {
-		
+
 		lv.setFocusTraversable(false);
 		lv.setItems(items);
 		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -1291,12 +1355,12 @@ public class UI {
 
 		// Music TabPane
 		musicPane.setCenter(addMusicTabPane());
-//		addListViewToPane(true, true);
-//		if(listViewRight){
-//			musicPane.setRight(addListView());
-//		}else{
-//			musicPane.setBottom(addListView());
-//		}
+		// addListViewToPane(true, true);
+		// if(listViewRight){
+		// musicPane.setRight(addListView());
+		// }else{
+		// musicPane.setBottom(addListView());
+		// }
 
 		// Sound TabPane
 		soundsPane.setCenter(addSoundsTabPane());
