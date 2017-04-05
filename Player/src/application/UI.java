@@ -3,6 +3,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +28,8 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ContentDisplay;
@@ -53,9 +56,14 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.awt.Desktop;
 
 public class UI {
 
@@ -100,6 +108,7 @@ public class UI {
 	public static String serverURL;
 	public static String resourceFolder;
 	public static String mapsFolder = "";
+	public static Boolean listViewRight = false;
 
 	public static String Album = "Unknown";
 	public static String Title = "Unknown";
@@ -134,6 +143,7 @@ public class UI {
 	private static Menu soundsMenu = new Menu("Sounds");
 	private static Menu gmhMenu = new Menu("GM Help");
 	private static Menu mapsMenu = new Menu("Maps");
+	private static Menu helpMenu = new Menu("Help");
 
 	// Menu Tabs
 	private static Tab tmusic = new Tab();
@@ -153,7 +163,7 @@ public class UI {
 	public static MenuBar menu() {
 		// Add Menus to the MenuBar
 		// Adds Menus
-		menu.getMenus().addAll(gmhMenu, musicMenu, soundsMenu, mapsMenu, optionsMenu);
+		menu.getMenus().addAll(gmhMenu, musicMenu, soundsMenu, mapsMenu, optionsMenu, helpMenu);
 
 		// Disables MnemonicParsing because it led to underscores not being
 		// shown
@@ -222,6 +232,61 @@ public class UI {
 
 		});
 
+		// Check for Version Updates
+		MenuItem checkForUpdates = new MenuItem("Check for Updates");
+		checkForUpdates.setOnAction((ActionEvent e) -> {
+			Runnable r = new Runnable() {
+				@Override
+				public void run() {
+					try {
+						System.out.println("Checking for newer versions...");
+						Document doc = Jsoup.connect("https://github.com/PhilInTheGaps/GM-Companion/releases").get();
+						String str = doc.toString();
+						String findStr = "<li> <a href=\"/PhilInTheGaps/GM-Companion/tree";
+						int lastIndex1 = 0;
+						int lastIndex2 = 1;
+						String version = new String();
+
+						lastIndex1 = str.indexOf(findStr, lastIndex1);
+						lastIndex2 = str.indexOf("\" class=\"css-truncate\">", lastIndex1);
+
+						for (int i = lastIndex1 + findStr.length() + 1; i < lastIndex2; i++) {
+							version += str.charAt(i);
+						}
+
+						int firstDot = version.indexOf(".");
+						int fullReleaseNumber = Integer.parseInt(version.substring(0, firstDot));
+
+						String subNumber = "";
+						for (int i = firstDot + 1; i < version.toCharArray().length; i++) {
+							if (version.toCharArray()[i] != (".").toCharArray()[0]) {
+								subNumber += version.toCharArray()[i];
+							}
+						}
+						String newestVersionNumberString = fullReleaseNumber + "." + subNumber;
+
+						if (Double.parseDouble(newestVersionNumberString) > Main.versionNumber) {
+							System.out.println("NEWER VERSION AVAILABLE!");
+							if (Desktop.isDesktopSupported()) {
+								Desktop.getDesktop()
+										.browse(new URI("https://github.com/PhilInTheGaps/GM-Companion/releases"));
+							}
+						} else {
+							System.out.println("Newest Version is already installed!");
+						}
+					} catch (IOException eio) {
+						System.out.println(
+								"Could not connect to GitHub to get the newest release version. Please check your internet connection!");
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			};
+			executor.submit(r);
+
+		});
+
 		// Set AutoPlay
 		CheckMenuItem checkAutoPlay = new CheckMenuItem("AutoPlay (Start Playing When Button Is Clicked)");
 		if (autoplay) {
@@ -255,6 +320,24 @@ public class UI {
 			} else {
 				fadeOut = true;
 				Main.writeSettings("FADE_OUT=", "FADE_OUT=true");
+			}
+		});
+
+		// Set FadeOut
+		CheckMenuItem checkListViewRight = new CheckMenuItem("Song List Position (True = Right, False = Bottom)");
+		if (listViewRight) {
+			checkListViewRight.setSelected(true);
+		} else {
+			checkListViewRight.setSelected(false);
+		}
+		checkListViewRight.setOnAction((ActionEvent e) -> {
+			if (listViewRight) {
+				listViewRight = false;
+				Main.writeSettings("LIST_VIEW_RIGHT=", "LIST_VIEW_RIGHT=false");
+
+			} else {
+				listViewRight = true;
+				Main.writeSettings("LIST_VIEW_RIGHT=", "LIST_VIEW_RIGHT=true");
 			}
 		});
 
@@ -349,14 +432,31 @@ public class UI {
 			Main.writeSettings("MAPS_PATH=", "MAPS_PATH=" + folder);
 		});
 
+		// Open Help Window
+		MenuItem openHelp = new MenuItem("GM-Companion Wiki");
+		openHelp.setOnAction((ActionEvent e) -> {
+			BorderPane root = new BorderPane();
+			WebView wiki = new WebView();
+			WebEngine webEngine = wiki.getEngine();
+			webEngine.load("https://github.com/PhilInTheGaps/GM-Companion/wiki");
+			root.setCenter(wiki);
+
+			Stage stage = new Stage();
+			stage.setTitle("GM-Companion Wiki");
+			stage.setScene(new Scene(root, screenWidth - 100, screenHeight - 100));
+			stage.show();
+		});
+
 		// Seperator Items
 		SeparatorMenuItem sep1 = new SeparatorMenuItem();
 		SeparatorMenuItem sep2 = new SeparatorMenuItem();
 
 		// Adding Items to Menus
 		gmhMenu.getItems().addAll(dice);
-		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode, sep2,
-				setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath, setMapsFolder, sep1, fupdate);
+		helpMenu.getItems().addAll(openHelp);
+		optionsMenu.getItems().addAll(random, single, online, checkAutoPlay, checkFadeOut, checkUIMode,
+				checkListViewRight, sep2, setMusicFolder, setSoundFolder, setResourceFolder, setDatabasePath,
+				setMapsFolder, sep1, fupdate, checkForUpdates);
 
 		// If Database Path was set, database tab is shown in menu
 		showDatabaseTab(dice, db);
@@ -458,11 +558,10 @@ public class UI {
 		playButton.setPrefSize(100, 50);
 		playButton.setOnAction((ActionEvent e) -> {
 			if (Player.musicFolderSelected == true) {
-				if (Player.mediaPlayer.getStatus() == Status.PAUSED){
+				if (Player.mediaPlayer.getStatus() == Status.PAUSED) {
 					Player.mediaPlayer.play();
-				}
-				else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
-					Player.play("Music");
+				} else if (Player.mediaPlayer.getStatus() != Status.PLAYING) {
+					Player.play("Music", true);
 				}
 			}
 		});
@@ -503,7 +602,7 @@ public class UI {
 		nextMButton.setPrefSize(100, 50);
 		nextMButton.setOnAction((ActionEvent e) -> {
 			if (Player.musicFolderSelected == true) {
-				Player.next("Music");
+				Player.next("Music", true);
 			}
 
 		});
@@ -552,12 +651,11 @@ public class UI {
 		playSButton.setMaxSize(100, 50);
 		playSButton.setPrefSize(100, 50);
 		playSButton.setOnAction((ActionEvent e) -> {
-			if (Player.soundPlayer.getStatus() == Status.PAUSED){
+			if (Player.soundPlayer.getStatus() == Status.PAUSED) {
 				Player.soundPlayer.play();
-			}
-			else if (Player.soundFolderSelected == true) {
+			} else if (Player.soundFolderSelected == true) {
 				if (Player.soundPlayer.getStatus() != Status.PLAYING) {
-					Player.play("Sounds");
+					Player.play("Sounds", true);
 				}
 			}
 		});
@@ -598,7 +696,7 @@ public class UI {
 		nextSButton.setPrefSize(100, 50);
 		nextSButton.setOnAction((ActionEvent e) -> {
 			if (Player.soundFolderSelected == true) {
-				Player.next("Sounds");
+				Player.next("Sounds", true);
 			}
 
 		});
@@ -877,16 +975,22 @@ public class UI {
 			s.setBackground(null);
 			s.setFitToWidth(true);
 
+			TilePane tilePane = null;
 			if (generateTiles) {
-				s.setContent(addButtons(folder, defaultPath, serverURL, type, folder.toString()));
+				tilePane = addButtons(folder, defaultPath, serverURL, type, folder.toString());
+				s.setContent(tilePane);
+				ObservableList<Node> buttons = tilePane.getChildren();
+
+				mi.setOnAction((ActionEvent e) -> {
+					tabPane.getSelectionModel().select(tab);
+					tp.getSelectionModel().select(t);
+					for (Node n : buttons) {
+						System.out.println(n.getId());
+					}
+				});
 			}
 
 			t.setContent(s);
-
-			mi.setOnAction((ActionEvent e) -> {
-				tabPane.getSelectionModel().select(tab);
-				tp.getSelectionModel().select(t);
-			});
 
 			tp.getTabs().add(t);
 			menu.getItems().add(mi);
@@ -917,8 +1021,7 @@ public class UI {
 		tp.setTabMinHeight(40);
 
 		ArrayList<String> categories = generateCategories(list, Player.soundDirectory, Player.serverSoundsURL);
-		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.soundDirectory,
-				Player.serverSoundsURL);
+		generateTabs(categories, tp, tsound, soundsMenu, true, "Sounds", Player.soundDirectory, Player.serverSoundsURL);
 
 		return tp;
 	}
@@ -958,7 +1061,7 @@ public class UI {
 			Tab t = new Tab();
 			MenuItem mi = new MenuItem();
 			String name = map.substring(0, map.indexOf("."));
-			name = name.substring(name.lastIndexOf("\\")+1);
+			name = name.substring(name.lastIndexOf("\\") + 1);
 			String nName = name.replace("_", " ");
 			t.setClosable(false);
 			t.setId(name);
@@ -979,7 +1082,7 @@ public class UI {
 				ImageView iv = new ImageView(img);
 				iv.setPreserveRatio(true);
 				iv.autosize();
-				
+
 				s.setContent(iv);
 				t.setContent(s);
 				f = null;
@@ -991,7 +1094,23 @@ public class UI {
 
 		return tp;
 	}
-
+	
+	private static void setButtonImage(Button b, String type, String iconFolder, String bName, String nbName){
+	
+		if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
+			URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
+					.toURI();
+			b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9; -fx-text-fill: white");
+		} else if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
+				.exists()) {
+			URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
+					.toURI();
+			b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9;");
+		} else {
+			b.setText(nbName.replace("_", " "));
+		}
+	}
+	
 	// Adds Buttons for folders in categories
 	private static TilePane addButtons(String directory, String mainDirectory, String serverURL, String type,
 			String iconFolder) {
@@ -1072,6 +1191,7 @@ public class UI {
 				b.setAlignment(Pos.CENTER);
 
 				VBox v = new VBox();
+				v.setId(bName);
 				v.setMaxWidth(150);
 				v.setAlignment(Pos.TOP_CENTER);
 				VBox v2 = new VBox();
@@ -1091,83 +1211,91 @@ public class UI {
 				b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.getStyleClass().add("button1");
 
-				if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
-					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
-							.toURI();
-					b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9; -fx-text-fill: white");
-				} else if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
-						.exists()) {
-					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
-							.toURI();
-					b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9;");
-				} else {
-					b.setText(nbName.replace("_", " "));
-				}
+				setButtonImage(b, type, iconFolder, bName, nbName);
 
-				b.setOnAction((ActionEvent e) -> {
-					if (type.equals("Sounds")) {
-						Boolean initial = Player.Initial();
-						System.out.println(initial);
-						if (initial == false) {
-							Player.soundPlayer.pause();
-							Player.soundPlayer.stop();
+				b.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						if (type.equals("Sounds")) {
+							Boolean initial = Player.Initial();
+							System.out.println(initial);
+							if (initial == false) {
+								Player.soundPlayer.pause();
+								Player.soundPlayer.stop();
+							}
+							if (Player.soundFolderSelected) {
+								Player.soundPlayer.stop();
+							}
+							if (onlineMode) {
+								Player.defaultSoundPath = directory + "/" + nbName;
+								System.out.println();
+							} else {
+								Player.defaultSoundPath = Player.soundDirectory + directory + "/" + nbName;
+							}
+
+							soundFolder = directory + "/" + nbName;
+							soundFolderLabel.setText("Folder: " + soundFolder);
+							Player.soundFolderSelected = true;
+
+							Player.initialPress = true;
+
+							if (Player.soundIsPlaying == true) {
+								Player.soundPlayer.stop();
+							}
+
+							try {
+								Player.get("Sounds", false);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							}
+							if (event.getButton().equals(MouseButton.SECONDARY)) {
+								Player.play("Sounds", false);
+							} else {
+								if (autoplay) {
+									Player.play("Sounds", true);
+								}
+							}
 						}
-						if (Player.soundFolderSelected) {
-							Player.soundPlayer.stop();
-						}
-						if (onlineMode) {
-							Player.defaultSoundPath = directory + "/" + nbName;
-							System.out.println();
-						} else {
-							Player.defaultSoundPath = Player.soundDirectory + directory + "/" + nbName;
+						if (type.equals("Music")) {
+							if (onlineMode) {
+								Player.defaultMusicPath = directory + "/" + nbName;
+								System.out.println();
+							} else {
+								Player.defaultMusicPath = Player.musicDirectory + directory + "/" + nbName;
+							}
+
+							musicFolder = directory + "/" + nbName;
+							musicFolderName = nbName;
+							musicFolderLabel.setText("Folder: " + musicFolder);
+							Player.musicFolderSelected = true;
+
+							Player.initialPress = true;
+
+							if (Player.musicIsPlaying == true) {
+								Player.mediaPlayer.stop();
+							}
+
+							UI.addListViewToPane(true);
+
+							if (event.isShiftDown()) {
+								try {
+									Player.get("Music", true);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+							} else {
+								try {
+									Player.get("Music", false);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								}
+							}
+
+							if (autoplay) {
+								Player.play("Music", true);
+							}
 						}
 
-						soundFolder = directory + "/" + nbName;
-						soundFolderLabel.setText("Folder: " + soundFolder);
-						Player.soundFolderSelected = true;
-
-						Player.initialPress = true;
-
-						if (Player.soundIsPlaying == true) {
-							Player.soundPlayer.stop();
-						}
-
-						try {
-							Player.get("Sounds");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						if (autoplay) {
-							Player.play("Sounds");
-						}
-					}
-					if (type.equals("Music")) {
-						if (onlineMode) {
-							Player.defaultMusicPath = directory + "/" + nbName;
-							System.out.println();
-						} else {
-							Player.defaultMusicPath = Player.musicDirectory + directory + "/" + nbName;
-						}
-
-						musicFolder = directory + "/" + nbName;
-						musicFolderName = nbName;
-						musicFolderLabel.setText("Folder: " + musicFolder);
-						Player.musicFolderSelected = true;
-
-						Player.initialPress = true;
-
-						if (Player.musicIsPlaying == true) {
-							Player.mediaPlayer.stop();
-						}
-
-						try {
-							Player.get("Music");
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						if (autoplay) {
-							Player.play("Music");
-						}
 					}
 
 				});
@@ -1186,10 +1314,24 @@ public class UI {
 		return tile;
 	}
 
+	// Adds or removes the listView
+	public static void addListViewToPane(Boolean add) {
+		musicPane.setRight(null);
+		musicPane.setBottom(null);
+		if (add) {
+			if (listViewRight) {
+				musicPane.setRight(addListView());
+				lv.setPrefSize(250, screenHeight);
+			} else {
+				musicPane.setBottom(addListView());
+				lv.setPrefSize(screenWidth, 150);
+			}
+		}
+	}
+
 	// Adds ListView with Music files
 	private static ListView<String> addListView() {
 
-		lv.setMaxHeight(150);
 		lv.setFocusTraversable(false);
 		lv.setItems(items);
 		lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -1198,7 +1340,7 @@ public class UI {
 				if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 					if (mouseEvent.getClickCount() == 2) {
 						Player.currentTrackID = lv.getSelectionModel().getSelectedIndex() - 1;
-						Player.next("Music");
+						Player.next("Music", true);
 					}
 				}
 			}
@@ -1218,7 +1360,12 @@ public class UI {
 
 		// Music TabPane
 		musicPane.setCenter(addMusicTabPane());
-		musicPane.setBottom(addListView());
+		// addListViewToPane(true, true);
+		// if(listViewRight){
+		// musicPane.setRight(addListView());
+		// }else{
+		// musicPane.setBottom(addListView());
+		// }
 
 		// Sound TabPane
 		soundsPane.setCenter(addSoundsTabPane());
