@@ -1094,7 +1094,23 @@ public class UI {
 
 		return tp;
 	}
-
+	
+	private static void setButtonImage(Button b, String type, String iconFolder, String bName, String nbName){
+	
+		if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
+			URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
+					.toURI();
+			b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9; -fx-text-fill: white");
+		} else if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
+				.exists()) {
+			URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
+					.toURI();
+			b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9;");
+		} else {
+			b.setText(nbName.replace("_", " "));
+		}
+	}
+	
 	// Adds Buttons for folders in categories
 	private static TilePane addButtons(String directory, String mainDirectory, String serverURL, String type,
 			String iconFolder) {
@@ -1195,18 +1211,7 @@ public class UI {
 				b.setMaxSize(defaultFolderButtonWidth, defaultFolderButtonHeight);
 				b.getStyleClass().add("button1");
 
-				if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png").exists()) {
-					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".png")
-							.toURI();
-					b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9; -fx-text-fill: white");
-				} else if (new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
-						.exists()) {
-					URI pic = new File(resourceFolder + "Icons/" + type + "/" + iconFolder + "/" + bName + ".jpg")
-							.toURI();
-					b.setStyle("-fx-background-image: url('" + pic + "'); -fx-opacity: 0.9;");
-				} else {
-					b.setText(nbName.replace("_", " "));
-				}
+				setButtonImage(b, type, iconFolder, bName, nbName);
 
 				b.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override

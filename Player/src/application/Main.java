@@ -18,6 +18,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -46,10 +47,12 @@ public class Main extends Application {
 		scene = setScene();
 		
 		// Adds DarkMode and BrightMode CSS files
+		System.out.println("Adding Sylesheets...");
 		scene.getStylesheets().addAll(getClass().getResource("DarkMode.css").toExternalForm(),
 				getClass().getResource("BrightMode.css").toExternalForm());
 
 		// Sets UI Mode according to settings
+		System.out.println("Setting UI Mode...");
 		if (uim.equals("dark")) {
 			UIMODE("dark");
 		} else {
@@ -58,9 +61,11 @@ public class Main extends Application {
 
 		// Sets TitleBar text, starts the program maximized and sets "scene" as
 		// default scene
+		System.out.println("Setting Title Bar...");
 		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.9 (0.2.9)");
 
 		// Adds the icon
+		System.out.println("Adding Icons...");
 		String[] icons = { "icon32.png", "icon64.png", "icon128.png", "icon256.png" };
 		mainStage.getIcons().clear();
 		for (String icon : icons) {
@@ -167,7 +172,7 @@ public class Main extends Application {
 		// Server URL
 		UI.serverURL = readSettings("SERVER_URL=");
 		System.out.println("Set Server URL to " + UI.serverURL);
-
+		
 		// Auto Play
 		if (readSettings("AUTO_PLAY=").toLowerCase().equals("true")) {
 			UI.autoplay = true;
@@ -243,9 +248,10 @@ public class Main extends Application {
 		System.out.println("Set Database Path to " + DATABASE_PATH);
 		
 		// Adds Components to BorderPane
+		TabPane tp = UI.addTabPane();
 		borderPane = new BorderPane();
 		borderPane.setTop(UI.menu());
-		borderPane.setCenter(UI.addTabPane());
+		borderPane.setCenter(tp);
 		borderPane.setLeft(UI.addVBox());
 		borderPane.getStyleClass().add("border-pane");
 		try {
@@ -290,7 +296,9 @@ public class Main extends Application {
 				}
 			}
 		});
-
+		
+		System.out.println("Built Scene !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
 		return scene;
 	}
 
