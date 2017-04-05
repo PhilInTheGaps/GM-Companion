@@ -34,7 +34,7 @@ public class Main extends Application {
 	private static Scene scene;
 	protected static String uim = "";
 	private Stage mainStage = new Stage();
-	public static double versionNumber = 0.29;
+	public static double versionNumber = 0.291;
 
 	// Main
 	public static void main(String[] args) {
@@ -62,7 +62,7 @@ public class Main extends Application {
 		// Sets TitleBar text, starts the program maximized and sets "scene" as
 		// default scene
 		System.out.println("Setting Title Bar...");
-		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.9 (0.2.9)");
+		mainStage.setTitle("GM-Companion | © 2016-2017 Phil Hoffmann, Niklas Lüdtke | Version Beta 2.9.1 (0.2.9.1)");
 
 		// Adds the icon
 		System.out.println("Adding Icons...");
@@ -248,10 +248,9 @@ public class Main extends Application {
 		System.out.println("Set Database Path to " + DATABASE_PATH);
 		
 		// Adds Components to BorderPane
-		TabPane tp = UI.addTabPane();
 		borderPane = new BorderPane();
 		borderPane.setTop(UI.menu());
-		borderPane.setCenter(tp);
+		borderPane.setCenter(UI.addTabPane());
 		borderPane.setLeft(UI.addVBox());
 		borderPane.getStyleClass().add("border-pane");
 		try {
@@ -297,7 +296,7 @@ public class Main extends Application {
 			}
 		});
 		
-		System.out.println("Built Scene !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println("Built Scene!");
 		
 		return scene;
 	}
