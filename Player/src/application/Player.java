@@ -10,6 +10,14 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -65,7 +73,7 @@ public class Player {
 
 	public static Boolean fading = false;
 
-	public static void play(String type) {
+	public static void play(String type, Boolean loop) {
 		// Plays the file
 		System.out.println("Converting File Path...");
 
@@ -106,7 +114,7 @@ public class Player {
 			if (initialPress) {
 				initialPress = false;
 				currentTrackID = musicFiles.size() - 1;
-				next("Music");
+				next("Music", true);
 			}
 
 			// Get Metadata
@@ -125,7 +133,7 @@ public class Player {
 				@Override
 				public void run() {
 					if (UI.singleTrack == false) {
-						next("Music");
+						next("Music", true);
 					}
 				}
 			});
@@ -164,18 +172,20 @@ public class Player {
 			if (initialPress) {
 				initialPress = false;
 				currentSoundID = soundFiles.size() - 1;
-				next("Sounds");
+				next("Sounds", loop);
 			}
-
+			
 			// Switches to next sound if current one ends
-			soundPlayer.setOnEndOfMedia(new Runnable() {
-				@Override
-				public void run() {
-					if (UI.singleTrack == false) {
-						next("Sounds");
+			if (loop){
+				soundPlayer.setOnEndOfMedia(new Runnable() {
+					@Override
+					public void run() {
+						if (UI.singleTrack == false) {
+							next("Sounds", loop);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
@@ -183,7 +193,7 @@ public class Player {
 		return soundsInitialPress;
 	}
 
-	public static void get(String type) throws IOException {
+	public static void get(String type, Boolean add) throws IOException {
 		// This finds every sound file in the folder and writes them into a list
 		System.out.println("Finding sound files in folder: /" + defaultSoundPath);
 
@@ -191,7 +201,10 @@ public class Player {
 			// This finds every music file in the folder and writes them into a
 			// list
 			currentTrackID = 0;
-			musicFiles.clear();
+			
+			if (!add){
+				musicFiles.clear();
+			}
 
 			if (UI.onlineMode) {
 
@@ -245,7 +258,28 @@ public class Player {
 			// Display Song List in ListView
 			UI.items.clear();
 			for (int i = 0; i < musicFiles.size(); i++) {
-				UI.items.add(i, musicFiles.get(i));
+				String temp = musicFiles.get(i);
+				try {
+					AudioFile f = AudioFileIO.read(new File(musicFiles.get(i)));
+					Tag tag = f.getTag();
+					String title = tag.getFirst(FieldKey.TITLE);
+					UI.items.add(i, title);
+				} catch (CannotReadException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (IOException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (TagException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (ReadOnlyFileException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				} catch (InvalidAudioFrameException e) {
+					e.printStackTrace();
+					UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+				}
 			}
 
 			currentTrackID = 0;
@@ -316,7 +350,7 @@ public class Player {
 		}
 	}
 
-	public static void next(String type) {
+	public static void next(String type, Boolean loop) {
 
 		if (type.equals("Music")) {
 			// Switches to the next music file
@@ -343,7 +377,28 @@ public class Player {
 						UI.items.clear();
 
 						for (int i = 0; i < musicFiles.size(); i++) {
-							UI.items.add(i, musicFiles.get(i));
+							String temp = musicFiles.get(i);
+							try {
+								AudioFile f = AudioFileIO.read(new File(musicFiles.get(i)));
+								Tag tag = f.getTag();
+								String title = tag.getFirst(FieldKey.TITLE);
+								UI.items.add(i, title);
+							} catch (CannotReadException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (IOException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (TagException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (ReadOnlyFileException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							} catch (InvalidAudioFrameException e) {
+								e.printStackTrace();
+								UI.items.add(i, temp.substring(temp.lastIndexOf("\\") + 1));
+							}
 						}
 						System.out.println("");
 					}
@@ -355,7 +410,7 @@ public class Player {
 				currentTrackID++;
 			}
 
-			play("Music");
+			play("Music", true);
 		} else {
 			// Switches to next sound
 			System.out.println("");
@@ -381,7 +436,7 @@ public class Player {
 				currentSoundID++;
 			}
 
-			play("Sounds");
+			play("Sounds", loop);
 		}
 	}
 
@@ -408,7 +463,25 @@ public class Player {
 			System.out.println("Year: " + UI.Year);
 			break;
 		}
+
 		UI.coverImage.setImage((Image) mediaPlayer.getMedia().getMetadata().get("image"));
+	}
+
+	public static String addTitleToList(String key, Object value, String file) {
+		String title = "";
+		switch (key) {
+		case ("album"):
+			break;
+		case ("artist"):
+			break;
+		case ("title"):
+			System.out.println("Title: " + value.toString());
+			title = value.toString();
+			return null;
+		case ("year"):
+			break;
+		}
+		return title;
 	}
 
 	public static void fade() {
