@@ -1,9 +1,12 @@
-MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/
-SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds/
-RESOURCE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources/
 SERVER_URL=http://rpgmsp.ddns.net/
 FADE_OUT=true
-FADE_DURATION=3
+FADE_DURATION=1
 AUTO_PLAY=true
 UI_MODE=dark
 ONLINE_MODE=false
+MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/
+SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds/
+RESOURCE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources/
+DATABASE_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Datenbanken/CharakterDatenbank.sql/
+MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Regelwerk und Co_/DSA5/Karten/
+LIST_VIEW_RIGHT=true
