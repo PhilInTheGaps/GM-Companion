@@ -71,6 +71,12 @@
  -fx-background-color: #222222;
  -fx-background-radius: 0;
 }
+.scroll-pane .filler{
+	-fx-background-color: transparent;
+}
+.scroll-pane .corner{
+	-fx-background-color: transparent;
+}
 .scroll-bar > .thumb{
     -fx-background-color: #666666;
  	-fx-border-color: #222222;
@@ -93,17 +99,12 @@
  -fx-background-insets: 0;
  -fx-background-radius: 0em;
 }
-.scroll-bar:vertical > .increment-button, 
-.scroll-bar:vertical > .decrement-button {
-    -fx-padding: 0.25em 0.5em  ;
+.scroll-bar > .increment-button, 
+.scroll-bar > .decrement-button {
+    -fx-padding: 0.5em  ;
     -fx-background-color: #222222;
     -fx-border-color: #222222;
     -fx-background-radius: 0;
-}
-.scroll-bar:vertical > .increment-arrow, 
-.scroll-bar:vertical > .decrement-arrow {
-    -fx-background-color: #222222;
-    -fx-border-color: #222222;
 }
 
 /*Default TabPane */
@@ -153,6 +154,9 @@
 .list-view{
 	-fx-background-color: #222222;
 }
+.list-view .corner{
+	-fx-background-color: transparent;
+}
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
     -fx-text-fill: white;
     -fx-background-color: #666666;
@@ -166,4 +170,35 @@
 .list-cell:odd {
     -fx-background-color: #333333;
 }
-
+.grid-pane{
+	-fx-padding: 10;
+  	-fx-border-style: solid inside;
+  	-fx-border-width: 5;
+  	-fx-border-insets: 5; 
+  	-fx-border-radius: 1; 
+  	-fx-border-color: #333333;
+}
+.progress-bar{
+	-fx-background-color: #666666;
+	-fx-control-inner-background: #666666; 
+	-fx-text-box-border: #666666; 
+	-fx-accent: #666666;
+	-fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .track {
+    -fx-background-color: #666666;
+    -fx-background-insets: 0, 0 0 1 0, 1 1 2 1;
+    -fx-background-radius: 1, 1, 1;
+}
+.progress-bar > .bar {
+    -fx-background-color: #222222;
+    -fx-background-insets: 1 1 1 1;
+    -fx-background-radius: 2;
+    -fx-padding: 0.75em;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: #222222;
+}

@@ -94,17 +94,12 @@
  -fx-background-insets: 0;
  -fx-background-radius: 0em;
 }
-.scroll-bar:vertical > .increment-button, 
-.scroll-bar:vertical > .decrement-button {
-    -fx-padding: 0.25em 0.5em  ;
+.scroll-bar > .increment-button, 
+.scroll-bar > .decrement-button {
+    -fx-padding: 0.5em  ;
     -fx-background-color: #e2e2e2;
     -fx-border-color: #e2e2e2;
     -fx-background-radius: 0;
-}
-.scroll-bar:vertical > .increment-arrow, 
-.scroll-bar:vertical > .decrement-arrow {
-    -fx-background-color: #e2e2e2;
-    -fx-border-color: #e2e2e2;
 }
 
 /*Default TabPane */
@@ -167,4 +162,35 @@
 .list-cell:odd {
     -fx-background-color: #dbdbdb;
 }
-
+.grid-pane{
+	-fx-padding: 10;
+  	-fx-border-style: solid inside;
+  	-fx-border-width: 5;
+  	-fx-border-insets: 5; 
+  	-fx-border-radius: 1; 
+  	-fx-border-color: #dbdbdb;
+}
+.progress-bar{
+	-fx-background-color: #dbdbdb;
+	-fx-control-inner-background: #dbdbdb; 
+	-fx-text-box-border: #dbdbdb; 
+	-fx-accent: #dbdbdb;
+	-fx-indeterminate-bar-length: 60;
+    -fx-indeterminate-bar-escape: true;
+    -fx-indeterminate-bar-flip: true;
+    -fx-indeterminate-bar-animation-time: 2;
+}
+.progress-bar > .track {
+    -fx-background-color: #dbdbdb;
+    -fx-background-insets: 0, 0 0 1 0, 1 1 2 1;
+    -fx-background-radius: 1, 1, 1;
+}
+.progress-bar > .bar {
+    -fx-background-color: #666666;
+    -fx-background-insets: 1 1 1 1;
+    -fx-background-radius: 2;
+    -fx-padding: 0.75em;
+}
+.progress-bar:indeterminate > .bar {
+    -fx-background-color: #666666;
+}
