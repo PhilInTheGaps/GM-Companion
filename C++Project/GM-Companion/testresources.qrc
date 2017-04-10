@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/icons/png">
+        <file>resources/icon32.png</file>
+        <file>resources/icon64.png</file>
+        <file>resources/icon128.png</file>
+        <file>resources/icon256.png</file>
+    </qresource>
+    <qresource prefix="/icons/ico">
+        <file>resources/icon256.ico</file>
+    </qresource>
+    <qresource prefix="/splash">
+        <file>resources/splash.jpg</file>
+    </qresource>
+</RCC>
