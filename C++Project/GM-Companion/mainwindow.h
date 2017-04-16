@@ -15,8 +15,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+
 private:
     Ui::MainWindow *ui;
+//    void getTextFile();
 };
 
 #endif // MAINWINDOW_H
