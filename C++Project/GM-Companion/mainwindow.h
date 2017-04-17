@@ -16,10 +16,10 @@ public:
     ~MainWindow();
 
 private slots:
+    void playMusic();
 
 private:
     Ui::MainWindow *ui;
-//    void getTextFile();
 };
 
 #endif // MAINWINDOW_H
