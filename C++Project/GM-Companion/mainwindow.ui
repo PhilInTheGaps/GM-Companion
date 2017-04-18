@@ -65,6 +65,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="musicPauseButton">
+          <property name="text">
+           <string>Pause</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="musicReplayButton">
           <property name="text">
            <string>Replay</string>
@@ -125,6 +132,13 @@
          <widget class="QPushButton" name="soundPlayButton">
           <property name="text">
            <string>Play</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="soundPauseButton">
+          <property name="text">
+           <string>Pause</string>
           </property>
          </widget>
         </item>
@@ -328,7 +342,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QToolBox" name="toolBox">
+         <widget class="QToolBox" name="toolBoxMusic">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -336,66 +350,15 @@
            </sizepolicy>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
-          <widget class="QWidget" name="page">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>924</width>
-             <height>380</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>Page 1</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QScrollArea" name="scrollArea">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="widgetResizable">
-               <bool>true</bool>
-              </property>
-              <widget class="QWidget" name="scrollAreaWidgetContents">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>904</width>
-                 <height>360</height>
-                </rect>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_2"/>
-              </widget>
-             </widget>
-            </item>
-           </layout>
-          </widget>
           <widget class="QWidget" name="page_2">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>924</width>
-             <height>380</height>
+             <width>884</width>
+             <height>407</height>
             </rect>
            </property>
            <attribute name="label">
@@ -425,11 +388,8 @@
             <bold>false</bold>
            </font>
           </property>
-          <property name="styleSheet">
-           <string notr="true">color: rgb(255, 255, 255);</string>
-          </property>
           <attribute name="headerVisible">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <attribute name="headerCascadingSectionResizes">
            <bool>false</bool>
@@ -485,12 +445,30 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>922</width>
+             <width>882</width>
              <height>630</height>
             </rect>
            </property>
-           <layout class="QGridLayout" name="gridLayout"/>
           </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Page</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QTextEdit" name="textEdit">
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Test Text&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
          </widget>
         </item>
        </layout>
@@ -550,6 +528,10 @@ background-color: rgb(102, 102, 102);</string>
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionSet_Music_Folder"/>
+    <addaction name="actionSet_Sound_Folder"/>
+    <addaction name="actionSet_Maps_Folder"/>
+    <addaction name="actionSet_Resources_Folder"/>
    </widget>
    <addaction name="menuGM_Help"/>
    <addaction name="menuOptions"/>
@@ -562,6 +544,32 @@ background-color: rgb(102, 102, 102);</string>
   <action name="actionDatabase">
    <property name="text">
     <string>Database</string>
+   </property>
+  </action>
+  <action name="actionSet_Music_Folder">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Set Music Folder</string>
+   </property>
+  </action>
+  <action name="actionSet_Sound_Folder">
+   <property name="text">
+    <string>Set Sound Folder</string>
+   </property>
+  </action>
+  <action name="actionSet_Maps_Folder">
+   <property name="text">
+    <string>Set Maps Folder</string>
+   </property>
+  </action>
+  <action name="actionSet_Resources_Folder">
+   <property name="text">
+    <string>Set Resources Folder</string>
    </property>
   </action>
  </widget>

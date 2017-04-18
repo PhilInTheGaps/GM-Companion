@@ -12,6 +12,6 @@
         <file>resources/splash.jpg</file>
     </qresource>
     <qresource prefix="/textFiles">
-        <file>testTextFile.txt</file>
+        <file>settings.txt</file>
     </qresource>
 </RCC>
