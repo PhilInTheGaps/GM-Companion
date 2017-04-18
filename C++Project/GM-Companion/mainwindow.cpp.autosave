@@ -145,6 +145,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     QStringList musicCategories = getFolders(musicPath); // List of all categories
     for (QString folder : musicCategories){
+        
         if (!folder.contains(".")){
             QFrame *frame = new QFrame;
             toolBoxMusic->addItem(frame, cleanText(folder));

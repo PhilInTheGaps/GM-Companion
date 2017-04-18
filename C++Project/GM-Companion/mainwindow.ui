@@ -20,7 +20,7 @@
    <string>GM-Companion</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="testresources.qrc">
+   <iconset resource="resources.qrc">
     <normaloff>:/icons/ico/resources/icon256.ico</normaloff>:/icons/ico/resources/icon256.ico</iconset>
   </property>
   <property name="autoFillBackground">
@@ -340,119 +340,11 @@
        <attribute name="title">
         <string>Music</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QToolBox" name="toolBoxMusic">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="currentIndex">
-           <number>0</number>
-          </property>
-          <widget class="QWidget" name="page_2">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>884</width>
-             <height>407</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>Page 2</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_4"/>
-          </widget>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTreeWidget" name="treeWidget">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>350</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <attribute name="headerVisible">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="headerCascadingSectionResizes">
-           <bool>false</bool>
-          </attribute>
-          <attribute name="headerDefaultSectionSize">
-           <number>150</number>
-          </attribute>
-          <attribute name="headerHighlightSections">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="headerShowSortIndicator" stdset="0">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="headerStretchLastSection">
-           <bool>true</bool>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Title</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Album</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Artist</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Year</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
       </widget>
       <widget class="QWidget" name="tabSound">
        <attribute name="title">
         <string>Sound</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QScrollArea" name="scrollArea_2">
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents_2">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>882</width>
-             <height>630</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -575,7 +467,7 @@ background-color: rgb(102, 102, 102);</string>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="testresources.qrc"/>
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>
