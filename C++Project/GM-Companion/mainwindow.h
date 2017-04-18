@@ -8,6 +8,8 @@
 #include <QMediaPlaylist>
 #include <QUrl>
 #include <QSignalMapper>
+#include <QTreeWidget>
+#include <QTableWidget>
 
 namespace Ui {
 class MainWindow;
@@ -33,7 +35,15 @@ private slots:
 
     void on_musicNextButton_clicked();
 
+    void on_setMusicFolder_clicked();
+
+    void on_setSoundFolder_clicked();
+
+    void on_setMapsFolder_clicked();
+
     void on_setResourcesFolder_clicked();
+
+    void on_tableDoubleClicked(int,int);
 
 private:
     Ui::MainWindow *ui;
@@ -47,6 +57,9 @@ private:
 
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
+
+    QTableWidget *musicTable;
+    QTreeWidgetItem *folderItem;
 
     QMediaPlayer *soundPlayer;
     QMediaPlaylist *soundPlaylist;

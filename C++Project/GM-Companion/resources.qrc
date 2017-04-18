@@ -11,7 +11,4 @@
     <qresource prefix="/splash">
         <file>resources/splash.jpg</file>
     </qresource>
-    <qresource prefix="/textFiles">
-        <file>settings.txt</file>
-    </qresource>
 </RCC>
