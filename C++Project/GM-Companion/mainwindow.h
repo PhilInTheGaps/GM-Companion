@@ -22,10 +22,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void addToPlaylist(QUrl url);
+    void addToPlaylist(QUrl url, bool music);
 
 private slots:
     void playMusic(QString);
+
+    void playSound(QString);
+
+    void updateMetaData();
 
     void on_musicPauseButton_clicked();
 
@@ -45,6 +49,14 @@ private slots:
 
     void on_tableDoubleClicked(int,int);
 
+    void on_soundPlayButton_clicked();
+
+    void on_soundPauseButton_clicked();
+
+    void on_soundReplayButton_clicked();
+
+    void on_soundNextButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -53,10 +65,12 @@ private:
     QString mapsPath;
     QString resourcesPath;
 
-    QSignalMapper *signalMapper;
+    QSignalMapper *signalMapperMusic;
+    QSignalMapper *signalMapperSound;
 
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
+    QMediaPlayer *metaPlayer;
 
     QTableWidget *musicTable;
     QTreeWidgetItem *folderItem;
