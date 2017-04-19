@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
+    <width>1300</width>
     <height>720</height>
    </rect>
   </property>
@@ -59,6 +59,24 @@
         </property>
         <item>
          <widget class="QPushButton" name="musicPlayButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Play</string>
           </property>
@@ -66,6 +84,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="musicPauseButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Pause</string>
           </property>
@@ -73,6 +109,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="musicReplayButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Replay</string>
           </property>
@@ -80,6 +134,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="musicNextButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Next</string>
           </property>
@@ -130,6 +202,24 @@
        <layout class="QHBoxLayout" name="soundControls">
         <item>
          <widget class="QPushButton" name="soundPlayButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Play</string>
           </property>
@@ -137,6 +227,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="soundPauseButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Pause</string>
           </property>
@@ -144,6 +252,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="soundReplayButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Replay</string>
           </property>
@@ -151,6 +277,24 @@
         </item>
         <item>
          <widget class="QPushButton" name="soundNextButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>65</width>
+            <height>45</height>
+           </size>
+          </property>
           <property name="text">
            <string>Next</string>
           </property>
@@ -219,7 +363,7 @@
       <item>
        <widget class="QLabel" name="musicAlbumLabel">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -296,15 +440,21 @@
       </item>
       <item>
        <widget class="Line" name="line_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QGraphicsView" name="coverView">
+       <widget class="QLabel" name="musicCoverLabel">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -314,6 +464,49 @@
           <width>300</width>
           <height>300</height>
          </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="musicProgressBar">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="value">
+         <number>22</number>
+        </property>
+        <property name="textVisible">
+         <bool>true</bool>
+        </property>
+        <property name="textDirection">
+         <enum>QProgressBar::TopToBottom</enum>
+        </property>
+        <property name="format">
+         <string>%p%</string>
         </property>
        </widget>
       </item>
@@ -340,10 +533,16 @@
        <attribute name="title">
         <string>Music</string>
        </attribute>
+       <zorder>soundPauseButton</zorder>
       </widget>
       <widget class="QWidget" name="tabSound">
        <attribute name="title">
         <string>Sound</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabMaps">
+       <attribute name="title">
+        <string>Maps</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tab">
@@ -377,7 +576,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1280</width>
+     <width>1300</width>
      <height>25</height>
     </rect>
    </property>
