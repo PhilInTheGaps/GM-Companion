@@ -29,3 +29,9 @@ DISTFILES +=
 
 RESOURCES += \
     resources.qrc
+
+
+unix|win32: LIBS += -L$$PWD/'../../../../../../Program Files (x86)/taglib/lib/' -llibtag.dll
+
+INCLUDEPATH += $$PWD/'../../../../../../Program Files (x86)/taglib/include/taglib'
+DEPENDPATH += $$PWD/'../../../../../../Program Files (x86)/taglib/include/taglib'
