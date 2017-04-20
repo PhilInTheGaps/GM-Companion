@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1300</width>
-    <height>720</height>
+    <height>727</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion</string>
+   <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 01</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -25,6 +25,181 @@
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	background-color: #222222;
+	color: rgb(255, 255, 255);
+}
+
+QMenuBar{
+background-color: rgb(102, 102, 102);
+}
+
+QPushButton{
+background-color: rgb(102, 102, 102);
+border: 1px;
+padding: 5px;
+min-width: 40px;
+min-height: 30px;
+}
+
+QPushButton:pressed{
+background-color: rgb(51, 51, 51);
+}
+
+QPushButton:hover:!pressed{
+background-color: rgb(85, 85, 85);
+}
+
+QSlider::groove:horizontal {
+    border: transparent;
+	height: 10px;
+	background-color: rgb(102, 102, 102);
+    margin: 5px 0;
+}
+
+QSlider::handle:horizontal {
+    background: white;
+    border: transparent;
+    width: 15px;
+    margin: -3px 0;
+    border-radius: 3px;
+}
+
+QProgressBar {
+    border: 2px solid grey;
+	background-color: rgb(102, 102, 102);
+    border-radius: 0px;
+	text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: #222222;
+    width: 1px;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+    border: 1px solid #555555;
+}
+
+QTabWidget::tab-bar {
+    left: 0px;
+}
+
+QTabBar::tab {
+	background-color: rgb(102, 102, 102);
+    border: 1px solid #555555;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    min-width: 100px;
+    padding: 5px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: #555555;
+}
+
+QTabBar::tab:selected {
+    border-color: #333333;
+    border-bottom-color: #555555; /* same as pane color */
+	background-color: rgb(68, 68, 68);
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+}
+
+QToolBox::tab {
+background-color: rgb(102, 102, 102);
+    border-radius: 1px;
+}
+
+QToolBox::tab:hover:!pressed {
+background-color: rgb(85, 85, 85);
+}
+
+QToolBox::tab:!pressed {
+background-color: rgb(51, 51, 51);
+}
+
+QToolBox::tab:selected { 
+    font: italic, bold;
+}
+
+QTableView{
+selection-background-color: rgb(68, 68, 68);
+}
+
+QTableView QTableCornerButton::section {
+background-color: rgb(34, 34, 34);
+}
+
+QTableView::item {
+    hborder: 5px solid rgba(68, 119, 170, 150);
+	
+	background-color: #333333;
+}
+
+QTableView::item:selected {
+	background-color: #777777;
+}
+
+QTableView, QHeaderView::section {    
+	background-color: rgb(34, 34, 34);
+}
+
+QScrollBar:horizontal {
+    border: 2px solid #222222;
+    background-color: #333333;
+    height: 15px;
+    margin: 0px 20px 0 20px;
+}
+QScrollBar::handle:horizontal {
+    background-color: #222222;
+    min-width: 20px;
+}
+QScrollBar::add-line:horizontal {
+    border: 2px solid #444444;
+    background: #222222;
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 2px solid #444444;
+    background: #222222;
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:vertical {
+    border: 2px solid #222222;
+    background-color: #333333;
+    width: 15px;
+    margin: 20px 0px 20 0px;
+}
+QScrollBar::handle:vertical {
+    background-color: #222222;
+    min-height: 20px;
+}
+QScrollBar::add-line:vertical {
+    border: 2px solid #444444;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 2px solid #444444;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}</string>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Triangular</enum>
@@ -47,6 +222,13 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Music</string>
         </property>
@@ -67,18 +249,34 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Play</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -92,15 +290,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Pause</string>
@@ -117,15 +322,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Replay</string>
@@ -142,15 +354,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Next</string>
@@ -173,6 +392,12 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Music Volume</string>
+        </property>
+        <property name="value">
+         <number>20</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -193,6 +418,13 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Sound</string>
         </property>
@@ -210,15 +442,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Play</string>
@@ -235,15 +474,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Pause</string>
@@ -260,15 +506,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Replay</string>
@@ -285,15 +538,22 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>65</width>
-            <height>45</height>
+            <width>50</width>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>65</width>
+            <width>68</width>
             <height>45</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
           <property name="text">
            <string>Next</string>
@@ -315,6 +575,12 @@
           <width>300</width>
           <height>0</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Sound Volume</string>
+        </property>
+        <property name="value">
+         <number>20</number>
         </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -342,6 +608,13 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Music Information</string>
         </property>
@@ -354,6 +627,11 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Title</string>
@@ -368,6 +646,11 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Album</string>
         </property>
@@ -381,6 +664,11 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Artist</string>
         </property>
@@ -393,6 +681,11 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Year</string>
@@ -420,6 +713,13 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Sound Information</string>
         </property>
@@ -432,6 +732,11 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>11</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Name</string>
@@ -466,7 +771,7 @@
          </size>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Box</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Plain</enum>
@@ -496,8 +801,20 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Current Music Progress</string>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="maximum">
+         <number>1</number>
+        </property>
         <property name="value">
-         <number>22</number>
+         <number>0</number>
         </property>
         <property name="textVisible">
          <bool>true</bool>
@@ -533,7 +850,6 @@
        <attribute name="title">
         <string>Music</string>
        </attribute>
-       <zorder>soundPauseButton</zorder>
       </widget>
       <widget class="QWidget" name="tabSound">
        <attribute name="title">
@@ -544,10 +860,146 @@
        <attribute name="title">
         <string>Maps</string>
        </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QFrame" name="mapsControlFrame">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="mapsZoomInButton">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Zoom In</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="mapsZoomOutButton">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Zoom Out</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="mapsFitToViewButton">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Fit to View</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="mapsResetSizeButton">
+             <property name="minimumSize">
+              <size>
+               <width>50</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Reset Size</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="mapsVBox">
+          <item>
+           <widget class="QFrame" name="mapsButtonFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Page</string>
+        <string>DEBUG</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
@@ -605,10 +1057,16 @@ p, li { white-space: pre-wrap; }
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(102, 102, 102);</string>
+    <string notr="true"/>
    </property>
    <widget class="QMenu" name="menuGM_Help">
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="title">
      <string>GM-Help</string>
     </property>
@@ -616,6 +1074,13 @@ background-color: rgb(102, 102, 102);</string>
     <addaction name="actionDatabase"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="title">
      <string>Options</string>
     </property>
@@ -630,6 +1095,12 @@ background-color: rgb(102, 102, 102);</string>
   <action name="actionDice">
    <property name="text">
     <string>Dice</string>
+   </property>
+   <property name="font">
+    <font>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionDatabase">
