@@ -20,8 +20,8 @@
 #include <QMediaMetaData>
 #include <QMediaObject>
 #include <QPixmap>
-#include <taglib.h>
-#include <fileref.h>
+#include <cstdlib>
+#include <QScrollArea>
 
 // Gets all folders in directory
 QStringList getFolders(QString path){
@@ -45,6 +45,9 @@ QStringList getFiles(QString folder){
 QString cleanText(QString text){
     text.replace("_", " ");
     text.replace(".mp3", "");
+    text.replace(".wav", "");
+    text.replace(".png", "");
+    text.replace(".jpg", "");
     return text;
 }
 
@@ -70,14 +73,16 @@ QString getSettings(QString indicator){
 
 
 // Writes a setting to settings.txt
-void writeSettings(QString content, QString indicator, QString newSetting){
+void MainWindow::writeSettings(QString content, QString indicator, QString newSetting){
     QFile file(QDir::currentPath()+"/settings.txt");
     file.open(QIODevice::WriteOnly);
     QTextStream output(&file);
+
     int i1 = content.indexOf(indicator);
     if (i1 > -1){
-        int i2 = content.indexOf(";", i1);
-        content.remove(i1, i2);
+        int i2 = content.indexOf(";", i1+1);
+        content.remove(i1, i2-i1);
+
         content.insert(i1, indicator+newSetting);
     }
     else{
@@ -89,7 +94,7 @@ void writeSettings(QString content, QString indicator, QString newSetting){
 }
 
 // Reads all the settings as one string
-QString readSettings(){
+QString MainWindow::readSettings(){
     QFile file(QDir::currentPath()+"/settings.txt");
     file.open(QIODevice::ReadOnly);
     QTextStream textStream(&file);
@@ -99,7 +104,7 @@ QString readSettings(){
 }
 
 // Opens a Directory Chooser to set the new folder location
-void setFolderLocations(QString indicator){
+void MainWindow::setFolderLocations(QString indicator){
     QString path;
     QFileDialog *fileDialog = new QFileDialog;
     fileDialog->setFileMode(QFileDialog::DirectoryOnly);
@@ -123,12 +128,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
-
-    //TagLib::File *f ;//= new TagLib::File("C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/OSTs/Abzu/Abzu OST - Architeuthis.mp3");
-
+    signalMapperMaps = new QSignalMapper(this);
 
     // Sets player and playlist for music
     musicPlayer = new QMediaPlayer(this);
+    musicPlayer->setVolume(ui->musicVolumeSlider->value());
     metaPlayer = new QMediaPlayer;
     musicPlaylist = new QMediaPlaylist();
     musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random); //QMediaPlaylist::PlaybackMode::Loop|
@@ -136,10 +140,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Sets player and playlist for sound
     soundPlayer = new QMediaPlayer(this);
+    soundPlayer->setVolume(ui->soundVolumeSlider->value());
     soundPlaylist = new QMediaPlaylist();
     soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random); //QMediaPlaylist::PlaybackMode::Loop|
     soundPlayer->setPlaylist(soundPlaylist);
 
+    connect(musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(updateProgressBar()));
     connect(musicPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(updateMetaData()));
 
     // Connects the Menu signals with the according event slots
@@ -149,9 +155,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionSet_Resources_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setResourcesFolder_clicked()));
 
     // Creates Tab for music
-    QHBoxLayout *tabMusicLayout = new QHBoxLayout; // Layout inside the music tab
+    tabMusicLayout = new QHBoxLayout; // Layout inside the music tab
     ui->tabMusic->setLayout(tabMusicLayout);
 
+    // Creates TableWidget to display song titles
+    initialMusicPlay = true;
     musicTable = new QTableWidget;
     musicTable->setMaximumWidth(250);
     musicTable->setColumnWidth(0, 250);
@@ -169,6 +177,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             QFrame *frame = new QFrame;
             toolBoxMusic->addItem(frame, cleanText(folder));
 
+            if (QFile(resourcesPath+"/Backgrounds/"+folder+".png").exists()){
+                frame->setStyleSheet("QFrame{background-image: url("+resourcesPath+"/Backgrounds/"+folder+".png);}");
+            }
+            else if (QFile(resourcesPath+"/Backgrounds/"+folder+".jpg").exists()){
+                frame->setStyleSheet("QFrame{background-image: url("+resourcesPath+"/Backgrounds/"+folder+".jpg);}");
+            }
+
+
             // Generating musicButtons
             QString path = musicPath+"/"+folder; //"C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/OSTs"
             QStringList musicFolders = getFolders(path);
@@ -179,6 +195,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             for (QString s : musicFolders){
                 if (!s.contains(".")){
                     QPushButton *b = new QPushButton(); //cleanText(s)
+                    b->setStyleSheet("min-width: 155; min-height: 155; padding: 1px; border-radius: 2px");
                     connect(b, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
                     signalMapperMusic->setMapping(b, musicPath+"/"+folder+"/"+s);
 
@@ -197,7 +214,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
                         b->setText(cleanText(s));
                     }
 
-                    b->setFixedSize(160, 160);
+                    b->setFixedSize(155, 155);
                     b->setToolTip(cleanText(s));
 
                     flowLayoutMusic->addWidget(b);
@@ -206,7 +223,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         }  
     }
 
-    tabMusicLayout->addWidget(musicTable);
+    //tabMusicLayout->addWidget(musicTable);
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
     // Creates Tab for sound
@@ -233,6 +250,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             for (QString s : soundFolders){
                 if (!s.contains(".")){
                     QPushButton *b = new QPushButton();
+                    b->setStyleSheet("min-width: 155; min-height: 155; padding: 1px; border-radius: 2px");
                     connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
                     signalMapperSound->setMapping(b, soundPath+"/"+folder+"/"+s);
 
@@ -251,7 +269,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
                         b->setText(cleanText(s));
                     }
 
-                    b->setFixedSize(160, 160);
+                    b->setFixedSize(155, 155);
                     b->setToolTip(cleanText(s));
 
                     flowLayoutSound->addWidget(b);
@@ -261,6 +279,48 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
 
     connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
+
+    // Creates Tab for maps
+    QStringList mapsList = getFiles(mapsPath);
+
+    mapsImageLabel = new QLabel();
+    mapsImageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    mapsImageLabel->setScaledContents(true);
+
+    QScrollArea *mapsScrollArea = new QScrollArea;
+    mapsScrollArea->setWidget(mapsImageLabel);
+
+    FlowLayout *mapsFlowLayout = new FlowLayout;
+    ui->mapsButtonFrame->setLayout(mapsFlowLayout);
+
+    ui->mapsVBox->addWidget(mapsScrollArea);
+
+    for (QString mapName : mapsList){
+        if (mapName.contains(".png") || mapName.contains(".jpg")){
+            QString mapPath = mapsPath+"/"+mapName;
+
+            QPushButton *imageButton = new QPushButton;
+            imageButton->setText(cleanText(mapName));
+            mapsFlowLayout->addWidget(imageButton);
+
+            connect(imageButton, SIGNAL(clicked()), signalMapperMaps, SLOT(map()));
+            signalMapperMaps->setMapping(imageButton, mapPath);
+
+//            mapsImageLabel->setPixmap(QPixmap(mapPath));
+//            mapsImageLabel->adjustSize();
+
+            ui->textEdit->append(mapPath+"\n");
+        }
+    }
+
+    connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
+
+}
+
+void MainWindow::setMap(QString mapPath){
+    ui->textEdit->append("Map: "+mapPath+"\n");
+    mapsImageLabel->setPixmap(QPixmap(mapPath));
+    mapsImageLabel->adjustSize();
 }
 
 void MainWindow::addToPlaylist(QUrl url, bool music){
@@ -272,29 +332,57 @@ void MainWindow::addToPlaylist(QUrl url, bool music){
     }
 }
 
+QStringList shuffleStringList(QStringList list){
+    for (int i = 0; i < list.size()*5; i++){
+        int  index1 = rand() % list.size();
+        int  index2 = rand() % list.size();
+        list.swap(index1, index2);
+    }
+    return list;
+}
+
 void MainWindow::playSound(QString folder){
     QString folderName = folder;
     int index = folderName.lastIndexOf("/")+1;
     folderName = cleanText(folderName.mid(index));
 
     QStringList files = getFiles(folder);
+    files = shuffleStringList(files);
+
 
     soundPlaylist->clear();
 
     for (QString file : files){
-        addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), false);
+        if (file.contains(".mp3") || file.contains(".wav")){
+            addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), false);
+        }
     }
 
-    soundPlayer->setVolume(10);
     soundPlayer->play();
+
+    ui->soundNameLabel->setText("Folder: "+folderName);
 }
 
 void MainWindow::playMusic(QString folder){
     QString folderName = folder;
     int index = folderName.lastIndexOf("/")+1;
     folderName = cleanText(folderName.mid(index));
+    ui->textEdit->append("Index: "+QString::number(index)+"\n");
+    ui->textEdit->append("FolderName: "+folderName+"\n");
+
+    QString category = folder;
+    index = category.lastIndexOf("/", index-2);
+    category = category.mid(index);
+    ui->textEdit->append("Index: "+QString::number(index)+"\n");
+    ui->textEdit->append("Category: "+category+"\n");
 
     QStringList files = getFiles(folder);
+    files = shuffleStringList(files);
+
+    if (initialMusicPlay){
+        tabMusicLayout->addWidget(musicTable);
+        initialMusicPlay = false;
+    }
 
     musicTable->setRowCount(files.size());
     if (files.size() > 9){
@@ -319,21 +407,46 @@ void MainWindow::playMusic(QString folder){
         }
     }
 
-    musicPlayer->setVolume(10);
     musicPlayer->play();
+
+    //Setting Image
+    if (QFile(resourcesPath+"/Icons/Music"+category+".png").exists()){
+        //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".png");
+        ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".png").scaledToWidth(300));
+    }
+    else if (QFile(resourcesPath+"/Icons/Music"+category+".jpg").exists()){
+        //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".jpg");
+        ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".jpg").scaledToWidth(300));
+    }
+
+}
+
+void MainWindow::updateProgressBar(){
+    if (musicPlayer->duration() == 0){
+        ui->musicProgressBar->setMaximum(1);
+        ui->musicProgressBar->setValue(0);
+    }
+    else{
+        ui->musicProgressBar->setMaximum(musicPlayer->duration());
+        ui->musicProgressBar->setValue(musicPlayer->position());
+    }
 }
 
 void MainWindow::updateMetaData(){
+    QString title = musicPlayer->metaData(QStringLiteral("Title")).toString();
+    QString album = musicPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
     if (musicPlayer->isMetaDataAvailable()){
-        ui->musicTitleLabel->setText("Title: "+musicPlayer->metaData(QStringLiteral("Title")).toString());
-        ui->musicAlbumLabel->setText("Album: "+musicPlayer->metaData(QStringLiteral("AlbumTitle")).toString());
+        ui->musicTitleLabel->setText("Title: "+title);
+        ui->musicAlbumLabel->setText("Album: "+album);
         ui->musicArtistLabel->setText("Artist: "+musicPlayer->metaData(QStringLiteral("Author")).toString());
         ui->musicYearLabel->setText("Year: "+musicPlayer->metaData(QStringLiteral("Year")).toString());
 
-        //QPixmap *image = new QPixmap(resourcesPath+"/Icons/Music/Fantasy/Action.png");
-        //ui->musicCoverLabel->setPixmap(QPixmap("C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources/Icons/Music/Fantasy/Action.png").scaledToWidth(300));
-        ui->musicCoverLabel->setPixmap(QPixmap::fromImage(musicPlayer->metaData("PosterImage").value<QImage>()));
-        //ui->textEdit->append(musicPlayer->metaData(QStringLiteral("PosterUrl")).toString());
+        ui->musicCoverLabel->setToolTip(album+": "+title);
+
+        QTableWidgetItem *i = new QTableWidgetItem;
+        i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+        i->setText(title);
+        musicTable->setItem(musicPlaylist->currentIndex(), 0, i);
     }
     else{
         ui->musicTitleLabel->setText("Title: Unknown");
@@ -341,6 +454,7 @@ void MainWindow::updateMetaData(){
         ui->musicArtistLabel->setText("Artist: Unknown");
         ui->musicYearLabel->setText("Year: Unknown");
     }
+    musicTable->selectRow(musicPlaylist->currentIndex());
 }
 
 MainWindow::~MainWindow()
@@ -406,4 +520,51 @@ void MainWindow::on_soundReplayButton_clicked()
 void MainWindow::on_soundNextButton_clicked()
 {
     soundPlaylist->next();
+}
+
+void MainWindow::on_musicVolumeSlider_valueChanged(int value)
+{
+    musicPlayer->setVolume(value);
+}
+
+void MainWindow::on_soundVolumeSlider_valueChanged(int value)
+{
+    soundPlayer->setVolume(value);
+}
+
+void MainWindow::on_mapsZoomInButton_clicked()
+{
+    double factor = 1.5 * mapsZoomFactor;
+    mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+    mapsZoomFactor = factor;
+}
+
+void MainWindow::on_mapsZoomOutButton_clicked()
+{
+    double factor = 0.75 * mapsZoomFactor;
+    mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+    mapsZoomFactor = factor;
+}
+
+void MainWindow::on_mapsFitToViewButton_clicked()
+{
+    double width = mapsImageLabel->width();
+    double height = mapsImageLabel->height();
+    double ratio = width/height;
+    double factor = 1;
+    if (ratio >=1){
+        factor = ui->mapsButtonFrame->width() / width;
+        mapsImageLabel->resize(factor * mapsImageLabel->size());
+    }
+    else{
+        factor = ui->mapsControlFrame->height() / height;
+        mapsImageLabel->resize(factor * mapsImageLabel->size());
+    }
+    mapsZoomFactor = mapsZoomFactor*factor;
+}
+
+void MainWindow::on_mapsResetSizeButton_clicked()
+{
+    mapsImageLabel->resize(mapsImageLabel->pixmap()->size());
+    mapsZoomFactor = 1.0;
 }
