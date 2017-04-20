@@ -17,7 +17,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
            mainwindow.cpp \
-           musicbuttons.cpp \
     flowlayout.cpp
 
 HEADERS  += mainwindow.h \
@@ -25,13 +24,9 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-DISTFILES +=
+DISTFILES += \
+    lib/id3lib.exp \
+    lib/id3lib.dll
 
 RESOURCES += \
     resources.qrc
-
-
-unix|win32: LIBS += -L$$PWD/'../../../../../../Program Files (x86)/taglib/lib/' -llibtag.dll
-
-INCLUDEPATH += $$PWD/'../../../../../../Program Files (x86)/taglib/include/taglib'
-DEPENDPATH += $$PWD/'../../../../../../Program Files (x86)/taglib/include/taglib'
