@@ -752,7 +752,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 01", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
