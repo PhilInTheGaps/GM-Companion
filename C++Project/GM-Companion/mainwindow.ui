@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1300</width>
-    <height>727</height>
+    <height>766</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 01</string>
+   <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 02</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -34,6 +34,37 @@
 
 QMenuBar{
 background-color: rgb(102, 102, 102);
+}
+
+QMenuBar::item {
+    spacing: 10px;
+	padding: 4px;
+    background: transparent;
+    border-radius: 2px;
+}
+
+QMenuBar::item:selected {
+    background: #444444;
+}
+
+QMenuBar::item:hover:!pressed {
+    background: #555555;
+}
+
+QMenuBar::item:pressed {
+    background: #333333;
+}
+
+QMenu {
+    background-color: #666666;
+}
+
+QMenu::item {
+    background-color: transparent;
+}
+
+QMenu::item:selected {
+    background-color: #333333;
 }
 
 QPushButton{
@@ -628,6 +659,12 @@ QScrollBar::sub-line:vertical {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -635,6 +672,9 @@ QScrollBar::sub-line:vertical {
         </property>
         <property name="text">
          <string>Title</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -646,6 +686,12 @@ QScrollBar::sub-line:vertical {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -653,6 +699,9 @@ QScrollBar::sub-line:vertical {
         </property>
         <property name="text">
          <string>Album</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -664,6 +713,12 @@ QScrollBar::sub-line:vertical {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -671,6 +726,9 @@ QScrollBar::sub-line:vertical {
         </property>
         <property name="text">
          <string>Artist</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -682,6 +740,12 @@ QScrollBar::sub-line:vertical {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>11</pointsize>
@@ -689,6 +753,9 @@ QScrollBar::sub-line:vertical {
         </property>
         <property name="text">
          <string>Year</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -733,13 +800,22 @@ QScrollBar::sub-line:vertical {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <pointsize>11</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Name</string>
+         <string>&lt;No Sound Folder Selected&gt;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -830,37 +906,264 @@ QScrollBar::sub-line:vertical {
      </layout>
     </item>
     <item>
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="tabPosition">
-       <enum>QTabWidget::North</enum>
-      </property>
-      <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
-      </property>
+     <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
-      <widget class="QWidget" name="tabMusic">
-       <property name="toolTip">
-        <string>Music</string>
-       </property>
-       <property name="accessibleName">
-        <string>Music</string>
-       </property>
-       <attribute name="title">
-        <string>Music</string>
-       </attribute>
+      <widget class="QWidget" name="pageGMHelp">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTabWidget" name="tabWidgetGMHelp">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tabDice">
+           <attribute name="title">
+            <string>Dice</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QFrame" name="frame">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>450</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QSpinBox" name="amountSpinBox">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>75</width>
+                     <height>150</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>40</pointsize>
+                    </font>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999</number>
+                   </property>
+                   <property name="value">
+                    <number>1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_2">
+                   <property name="font">
+                    <font>
+                     <pointsize>30</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string> x </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="diceFrame">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>400</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_3"/>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_3">
+                   <property name="font">
+                    <font>
+                     <pointsize>30</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string> + </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="modifierSpinBox">
+                   <property name="minimumSize">
+                    <size>
+                     <width>150</width>
+                     <height>150</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <pointsize>40</pointsize>
+                    </font>
+                   </property>
+                   <property name="minimum">
+                    <number>-999</number>
+                   </property>
+                   <property name="maximum">
+                    <number>999</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="font">
+                      <font>
+                       <pointsize>35</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Result:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="diceOutputLabel">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>300</width>
+                       <height>300</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>80</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                       <underline>false</underline>
+                       <strikeout>false</strikeout>
+                       <kerning>true</kerning>
+                      </font>
+                     </property>
+                     <property name="layoutDirection">
+                      <enum>Qt::LeftToRight</enum>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::Box</enum>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="textFormat">
+                      <enum>Qt::AutoText</enum>
+                     </property>
+                     <property name="margin">
+                      <number>0</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Database (Coming Soon)</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Debug / Test Page</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>GM-Help</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTextEdit" name="textEdit">
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;DEBUG TEXT-EDIT:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+       <zorder>tabWidget</zorder>
+       <zorder>tabWidgetGMHelp</zorder>
       </widget>
-      <widget class="QWidget" name="tabSound">
-       <attribute name="title">
-        <string>Sound</string>
-       </attribute>
+      <widget class="QWidget" name="pageMusic">
+       <layout class="QHBoxLayout" name="horizontalLayout_5"/>
       </widget>
-      <widget class="QWidget" name="tabMaps">
-       <attribute name="title">
-        <string>Maps</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+      <widget class="QWidget" name="pageSound">
+       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+      </widget>
+      <widget class="QWidget" name="pageMaps">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
          <widget class="QFrame" name="mapsControlFrame">
           <property name="sizePolicy">
@@ -997,25 +1300,6 @@ QScrollBar::sub-line:vertical {
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>DEBUG</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QTextEdit" name="textEdit">
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Test Text&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
     <item>
@@ -1029,7 +1313,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1300</width>
-     <height>25</height>
+     <height>28</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -1052,6 +1336,7 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="font">
     <font>
+     <pointsize>11</pointsize>
      <weight>75</weight>
      <bold>true</bold>
     </font>
@@ -1062,9 +1347,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QMenu" name="menuGM_Help">
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="title">
@@ -1072,35 +1357,96 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionDice"/>
     <addaction name="actionDatabase"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Database_Path"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionSet_Music_Folder"/>
-    <addaction name="actionSet_Sound_Folder"/>
-    <addaction name="actionSet_Maps_Folder"/>
     <addaction name="actionSet_Resources_Folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionCheck_for_Updates"/>
+   </widget>
+   <widget class="QMenu" name="menuMusic">
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Music</string>
+    </property>
+    <addaction name="actionMusic_Player"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Music_Folder"/>
+   </widget>
+   <widget class="QMenu" name="menuSound">
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Sound</string>
+    </property>
+    <addaction name="actionSound_Player"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Sound_Folder"/>
+   </widget>
+   <widget class="QMenu" name="menuMaps">
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Maps</string>
+    </property>
+    <addaction name="actionMap_Viewer"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Maps_Folder"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionOpen_Wiki"/>
+    <addaction name="actionReport_a_Bug"/>
+    <addaction name="separator"/>
+    <addaction name="actionI_want_to_use_an_older_Version"/>
    </widget>
    <addaction name="menuGM_Help"/>
+   <addaction name="menuMusic"/>
+   <addaction name="menuSound"/>
+   <addaction name="menuMaps"/>
    <addaction name="menuOptions"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionDice">
    <property name="text">
     <string>Dice</string>
    </property>
    <property name="font">
-    <font>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
+    <font/>
    </property>
   </action>
   <action name="actionDatabase">
@@ -1132,6 +1478,46 @@ p, li { white-space: pre-wrap; }
   <action name="actionSet_Resources_Folder">
    <property name="text">
     <string>Set Resources Folder</string>
+   </property>
+  </action>
+  <action name="actionMusic_Player">
+   <property name="text">
+    <string>Music Player</string>
+   </property>
+  </action>
+  <action name="actionSound_Player">
+   <property name="text">
+    <string>Sound Player</string>
+   </property>
+  </action>
+  <action name="actionMap_Viewer">
+   <property name="text">
+    <string>Map Viewer</string>
+   </property>
+  </action>
+  <action name="actionSet_Database_Path">
+   <property name="text">
+    <string>Set Database Path</string>
+   </property>
+  </action>
+  <action name="actionOpen_Wiki">
+   <property name="text">
+    <string>Open Wiki</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Updates">
+   <property name="text">
+    <string>Check for Updates</string>
+   </property>
+  </action>
+  <action name="actionReport_a_Bug">
+   <property name="text">
+    <string>Report a Bug</string>
+   </property>
+  </action>
+  <action name="actionI_want_to_use_an_older_Version">
+   <property name="text">
+    <string>I want to use an older version!</string>
    </property>
   </action>
  </widget>

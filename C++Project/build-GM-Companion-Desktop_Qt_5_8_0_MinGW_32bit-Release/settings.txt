@@ -1,2 +1,4 @@
 RESOURCES_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources (New);
 MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music;
+MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Regelwerk und Co_/DSA5/Karten;
+SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds;

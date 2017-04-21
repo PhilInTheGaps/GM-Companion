@@ -24,6 +24,8 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
@@ -40,6 +42,14 @@ public:
     QAction *actionSet_Sound_Folder;
     QAction *actionSet_Maps_Folder;
     QAction *actionSet_Resources_Folder;
+    QAction *actionMusic_Player;
+    QAction *actionSound_Player;
+    QAction *actionMap_Viewer;
+    QAction *actionSet_Database_Path;
+    QAction *actionOpen_Wiki;
+    QAction *actionCheck_for_Updates;
+    QAction *actionReport_a_Bug;
+    QAction *actionI_want_to_use_an_older_Version;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *infoBox;
@@ -70,11 +80,36 @@ public:
     QFrame *line_4;
     QLabel *musicCoverLabel;
     QProgressBar *musicProgressBar;
-    QTabWidget *tabWidget;
-    QWidget *tabMusic;
-    QWidget *tabSound;
-    QWidget *tabMaps;
+    QStackedWidget *stackedWidget;
+    QWidget *pageGMHelp;
+    QVBoxLayout *verticalLayout_2;
+    QTabWidget *tabWidgetGMHelp;
+    QWidget *tabDice;
+    QVBoxLayout *verticalLayout_5;
+    QFrame *frame;
+    QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout;
+    QSpinBox *amountSpinBox;
+    QLabel *label_2;
+    QFrame *diceFrame;
+    QVBoxLayout *verticalLayout_3;
+    QLabel *label_3;
+    QSpinBox *modifierSpinBox;
+    QVBoxLayout *verticalLayout_8;
+    QLabel *label_4;
+    QLabel *diceOutputLabel;
+    QSpacerItem *verticalSpacer_2;
+    QWidget *tab_2;
+    QWidget *tab_3;
+    QVBoxLayout *verticalLayout_6;
+    QLabel *label;
+    QTextEdit *textEdit;
+    QWidget *pageMusic;
+    QHBoxLayout *horizontalLayout_5;
+    QWidget *pageSound;
+    QHBoxLayout *horizontalLayout_3;
+    QWidget *pageMaps;
+    QHBoxLayout *horizontalLayout_6;
     QFrame *mapsControlFrame;
     QVBoxLayout *verticalLayout_4;
     QPushButton *mapsZoomInButton;
@@ -85,19 +120,20 @@ public:
     QSpacerItem *verticalSpacer;
     QVBoxLayout *mapsVBox;
     QFrame *mapsButtonFrame;
-    QWidget *tab;
-    QVBoxLayout *verticalLayout_6;
-    QTextEdit *textEdit;
     QVBoxLayout *verticalLayout;
     QMenuBar *menuBar;
     QMenu *menuGM_Help;
     QMenu *menuOptions;
+    QMenu *menuMusic;
+    QMenu *menuSound;
+    QMenu *menuMaps;
+    QMenu *menuHelp;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1300, 727);
+        MainWindow->resize(1300, 766);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -116,6 +152,37 @@ public:
 "background-color: rgb(102, 102, 102);\n"
 "}\n"
 "\n"
+"QMenuBar::item {\n"
+"    spacing: 10px;\n"
+"	padding: 4px;\n"
+"    background: transparent;\n"
+"    border-radius: 2px;\n"
+"}\n"
+"\n"
+"QMenuBar::item:selected {\n"
+"    background: #444444;\n"
+"}\n"
+"\n"
+"QMenuBar::item:hover:!pressed {\n"
+"    background: #555555;\n"
+"}\n"
+"\n"
+"QMenuBar::item:pressed {\n"
+"    background: #333333;\n"
+"}\n"
+"\n"
+"QMenu {\n"
+"    background-color: #666666;\n"
+"}\n"
+"\n"
+"QMenu::item {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"QMenu::item:selected {\n"
+"    background-color: #333333;\n"
+"}\n"
+"\n"
 "QPushButton{\n"
 "background-color: rgb(102, 102, 102);\n"
 "border: 1px;\n"
@@ -132,7 +199,8 @@ public:
 "background-color: rgb(85, 85, 85);\n"
 "}\n"
 "\n"
-"QSlider::groove:horizontal {\n"
+"QSlider::groove"
+                        ":horizontal {\n"
 "    border: transparent;\n"
 "	height: 10px;\n"
 "	background-color: rgb(102, 102, 102);\n"
@@ -156,8 +224,7 @@ public:
 "\n"
 "QProgressBar::chunk {\n"
 "    background-color: #222222;\n"
-"    width: 1px"
-                        ";\n"
+"    width: 1px;\n"
 "}\n"
 "\n"
 "QTabWidget::pane { /* The tab widget frame */\n"
@@ -179,7 +246,8 @@ public:
 "\n"
 "QTabBar::tab:selected, QTabBar::tab:hover {\n"
 "    background: #555555;\n"
-"}\n"
+""
+                        "}\n"
 "\n"
 "QTabBar::tab:selected {\n"
 "    border-color: #333333;\n"
@@ -203,8 +271,7 @@ public:
 "QToolBox::tab:!pressed {\n"
 "background-color: rgb(51, 51, 51);\n"
 "}\n"
-""
-                        "\n"
+"\n"
 "QToolBox::tab:selected { \n"
 "    font: italic, bold;\n"
 "}\n"
@@ -227,7 +294,8 @@ public:
 "	background-color: #777777;\n"
 "}\n"
 "\n"
-"QTableView, QHeaderView::section {    \n"
+"QTableView, QHeaderView::secti"
+                        "on {    \n"
 "	background-color: rgb(34, 34, 34);\n"
 "}\n"
 "\n"
@@ -249,8 +317,7 @@ public:
 "    subcontrol-origin: margin;\n"
 "}\n"
 "\n"
-"QScrollBar::sub-line:"
-                        "horizontal {\n"
+"QScrollBar::sub-line:horizontal {\n"
 "    border: 2px solid #444444;\n"
 "    background: #222222;\n"
 "    width: 20px;\n"
@@ -269,7 +336,8 @@ public:
 "    min-height: 20px;\n"
 "}\n"
 "QScrollBar::add-line:vertical {\n"
-"    border: 2px solid #444444;\n"
+""
+                        "    border: 2px solid #444444;\n"
 "    background: #222222;\n"
 "    height: 20px;\n"
 "    subcontrol-position: bottom;\n"
@@ -287,8 +355,6 @@ public:
         actionDice = new QAction(MainWindow);
         actionDice->setObjectName(QStringLiteral("actionDice"));
         QFont font;
-        font.setBold(false);
-        font.setWeight(50);
         actionDice->setFont(font);
         actionDatabase = new QAction(MainWindow);
         actionDatabase->setObjectName(QStringLiteral("actionDatabase"));
@@ -302,6 +368,22 @@ public:
         actionSet_Maps_Folder->setObjectName(QStringLiteral("actionSet_Maps_Folder"));
         actionSet_Resources_Folder = new QAction(MainWindow);
         actionSet_Resources_Folder->setObjectName(QStringLiteral("actionSet_Resources_Folder"));
+        actionMusic_Player = new QAction(MainWindow);
+        actionMusic_Player->setObjectName(QStringLiteral("actionMusic_Player"));
+        actionSound_Player = new QAction(MainWindow);
+        actionSound_Player->setObjectName(QStringLiteral("actionSound_Player"));
+        actionMap_Viewer = new QAction(MainWindow);
+        actionMap_Viewer->setObjectName(QStringLiteral("actionMap_Viewer"));
+        actionSet_Database_Path = new QAction(MainWindow);
+        actionSet_Database_Path->setObjectName(QStringLiteral("actionSet_Database_Path"));
+        actionOpen_Wiki = new QAction(MainWindow);
+        actionOpen_Wiki->setObjectName(QStringLiteral("actionOpen_Wiki"));
+        actionCheck_for_Updates = new QAction(MainWindow);
+        actionCheck_for_Updates->setObjectName(QStringLiteral("actionCheck_for_Updates"));
+        actionReport_a_Bug = new QAction(MainWindow);
+        actionReport_a_Bug->setObjectName(QStringLiteral("actionReport_a_Bug"));
+        actionI_want_to_use_an_older_Version = new QAction(MainWindow);
+        actionI_want_to_use_an_older_Version->setObjectName(QStringLiteral("actionI_want_to_use_an_older_Version"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -495,9 +577,11 @@ public:
         musicTitleLabel->setObjectName(QStringLiteral("musicTitleLabel"));
         sizePolicy1.setHeightForWidth(musicTitleLabel->sizePolicy().hasHeightForWidth());
         musicTitleLabel->setSizePolicy(sizePolicy1);
+        musicTitleLabel->setMaximumSize(QSize(300, 16777215));
         QFont font3;
         font3.setPointSize(11);
         musicTitleLabel->setFont(font3);
+        musicTitleLabel->setWordWrap(true);
 
         infoBox->addWidget(musicTitleLabel);
 
@@ -505,7 +589,9 @@ public:
         musicAlbumLabel->setObjectName(QStringLiteral("musicAlbumLabel"));
         sizePolicy1.setHeightForWidth(musicAlbumLabel->sizePolicy().hasHeightForWidth());
         musicAlbumLabel->setSizePolicy(sizePolicy1);
+        musicAlbumLabel->setMaximumSize(QSize(300, 16777215));
         musicAlbumLabel->setFont(font3);
+        musicAlbumLabel->setWordWrap(true);
 
         infoBox->addWidget(musicAlbumLabel);
 
@@ -516,7 +602,9 @@ public:
         sizePolicy6.setVerticalStretch(0);
         sizePolicy6.setHeightForWidth(musicArtistLabel->sizePolicy().hasHeightForWidth());
         musicArtistLabel->setSizePolicy(sizePolicy6);
+        musicArtistLabel->setMaximumSize(QSize(300, 16777215));
         musicArtistLabel->setFont(font3);
+        musicArtistLabel->setWordWrap(true);
 
         infoBox->addWidget(musicArtistLabel);
 
@@ -524,7 +612,9 @@ public:
         musicYearLabel->setObjectName(QStringLiteral("musicYearLabel"));
         sizePolicy6.setHeightForWidth(musicYearLabel->sizePolicy().hasHeightForWidth());
         musicYearLabel->setSizePolicy(sizePolicy6);
+        musicYearLabel->setMaximumSize(QSize(300, 16777215));
         musicYearLabel->setFont(font3);
+        musicYearLabel->setWordWrap(true);
 
         infoBox->addWidget(musicYearLabel);
 
@@ -549,7 +639,9 @@ public:
         soundNameLabel->setObjectName(QStringLiteral("soundNameLabel"));
         sizePolicy6.setHeightForWidth(soundNameLabel->sizePolicy().hasHeightForWidth());
         soundNameLabel->setSizePolicy(sizePolicy6);
+        soundNameLabel->setMaximumSize(QSize(300, 16777215));
         soundNameLabel->setFont(font3);
+        soundNameLabel->setWordWrap(true);
 
         infoBox->addWidget(soundNameLabel);
 
@@ -593,29 +685,186 @@ public:
 
         horizontalLayout_2->addLayout(infoBox);
 
-        tabWidget = new QTabWidget(centralWidget);
-        tabWidget->setObjectName(QStringLiteral("tabWidget"));
-        tabWidget->setTabPosition(QTabWidget::North);
-        tabWidget->setTabShape(QTabWidget::Rounded);
-        tabMusic = new QWidget();
-        tabMusic->setObjectName(QStringLiteral("tabMusic"));
-        tabWidget->addTab(tabMusic, QString());
-        tabSound = new QWidget();
-        tabSound->setObjectName(QStringLiteral("tabSound"));
-        tabWidget->addTab(tabSound, QString());
-        tabMaps = new QWidget();
-        tabMaps->setObjectName(QStringLiteral("tabMaps"));
-        horizontalLayout = new QHBoxLayout(tabMaps);
+        stackedWidget = new QStackedWidget(centralWidget);
+        stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
+        pageGMHelp = new QWidget();
+        pageGMHelp->setObjectName(QStringLiteral("pageGMHelp"));
+        verticalLayout_2 = new QVBoxLayout(pageGMHelp);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        tabWidgetGMHelp = new QTabWidget(pageGMHelp);
+        tabWidgetGMHelp->setObjectName(QStringLiteral("tabWidgetGMHelp"));
+        tabDice = new QWidget();
+        tabDice->setObjectName(QStringLiteral("tabDice"));
+        verticalLayout_5 = new QVBoxLayout(tabDice);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        frame = new QFrame(tabDice);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setMaximumSize(QSize(16777215, 450));
+        frame->setFrameShape(QFrame::Box);
+        frame->setFrameShadow(QFrame::Raised);
+        verticalLayout_7 = new QVBoxLayout(frame);
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        mapsControlFrame = new QFrame(tabMaps);
-        mapsControlFrame->setObjectName(QStringLiteral("mapsControlFrame"));
-        QSizePolicy sizePolicy8(QSizePolicy::Maximum, QSizePolicy::Expanding);
+        amountSpinBox = new QSpinBox(frame);
+        amountSpinBox->setObjectName(QStringLiteral("amountSpinBox"));
+        sizePolicy5.setHeightForWidth(amountSpinBox->sizePolicy().hasHeightForWidth());
+        amountSpinBox->setSizePolicy(sizePolicy5);
+        amountSpinBox->setMinimumSize(QSize(75, 150));
+        QFont font4;
+        font4.setPointSize(40);
+        amountSpinBox->setFont(font4);
+        amountSpinBox->setMinimum(1);
+        amountSpinBox->setMaximum(999);
+        amountSpinBox->setValue(1);
+
+        horizontalLayout->addWidget(amountSpinBox);
+
+        label_2 = new QLabel(frame);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        QFont font5;
+        font5.setPointSize(30);
+        label_2->setFont(font5);
+
+        horizontalLayout->addWidget(label_2);
+
+        diceFrame = new QFrame(frame);
+        diceFrame->setObjectName(QStringLiteral("diceFrame"));
+        QSizePolicy sizePolicy8(QSizePolicy::Expanding, QSizePolicy::Preferred);
         sizePolicy8.setHorizontalStretch(0);
         sizePolicy8.setVerticalStretch(0);
-        sizePolicy8.setHeightForWidth(mapsControlFrame->sizePolicy().hasHeightForWidth());
-        mapsControlFrame->setSizePolicy(sizePolicy8);
+        sizePolicy8.setHeightForWidth(diceFrame->sizePolicy().hasHeightForWidth());
+        diceFrame->setSizePolicy(sizePolicy8);
+        diceFrame->setMinimumSize(QSize(0, 0));
+        diceFrame->setMaximumSize(QSize(400, 16777215));
+        diceFrame->setFrameShape(QFrame::StyledPanel);
+        diceFrame->setFrameShadow(QFrame::Raised);
+        verticalLayout_3 = new QVBoxLayout(diceFrame);
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+
+        horizontalLayout->addWidget(diceFrame);
+
+        label_3 = new QLabel(frame);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setFont(font5);
+
+        horizontalLayout->addWidget(label_3);
+
+        modifierSpinBox = new QSpinBox(frame);
+        modifierSpinBox->setObjectName(QStringLiteral("modifierSpinBox"));
+        modifierSpinBox->setMinimumSize(QSize(150, 150));
+        modifierSpinBox->setFont(font4);
+        modifierSpinBox->setMinimum(-999);
+        modifierSpinBox->setMaximum(999);
+
+        horizontalLayout->addWidget(modifierSpinBox);
+
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        label_4 = new QLabel(frame);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        QFont font6;
+        font6.setPointSize(35);
+        label_4->setFont(font6);
+
+        verticalLayout_8->addWidget(label_4);
+
+        diceOutputLabel = new QLabel(frame);
+        diceOutputLabel->setObjectName(QStringLiteral("diceOutputLabel"));
+        sizePolicy.setHeightForWidth(diceOutputLabel->sizePolicy().hasHeightForWidth());
+        diceOutputLabel->setSizePolicy(sizePolicy);
+        diceOutputLabel->setMinimumSize(QSize(300, 300));
+        QFont font7;
+        font7.setPointSize(80);
+        font7.setBold(true);
+        font7.setUnderline(false);
+        font7.setWeight(75);
+        font7.setStrikeOut(false);
+        font7.setKerning(true);
+        diceOutputLabel->setFont(font7);
+        diceOutputLabel->setLayoutDirection(Qt::LeftToRight);
+        diceOutputLabel->setFrameShape(QFrame::Box);
+        diceOutputLabel->setTextFormat(Qt::AutoText);
+        diceOutputLabel->setMargin(0);
+
+        verticalLayout_8->addWidget(diceOutputLabel);
+
+
+        horizontalLayout->addLayout(verticalLayout_8);
+
+
+        verticalLayout_7->addLayout(horizontalLayout);
+
+
+        verticalLayout_5->addWidget(frame);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_5->addItem(verticalSpacer_2);
+
+        tabWidgetGMHelp->addTab(tabDice, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QStringLiteral("tab_2"));
+        tabWidgetGMHelp->addTab(tab_2, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QStringLiteral("tab_3"));
+        verticalLayout_6 = new QVBoxLayout(tab_3);
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        label = new QLabel(tab_3);
+        label->setObjectName(QStringLiteral("label"));
+
+        verticalLayout_6->addWidget(label);
+
+        textEdit = new QTextEdit(tab_3);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+
+        verticalLayout_6->addWidget(textEdit);
+
+        tabWidgetGMHelp->addTab(tab_3, QString());
+
+        verticalLayout_2->addWidget(tabWidgetGMHelp);
+
+        stackedWidget->addWidget(pageGMHelp);
+        tabWidgetGMHelp->raise();
+        pageMusic = new QWidget();
+        pageMusic->setObjectName(QStringLiteral("pageMusic"));
+        horizontalLayout_5 = new QHBoxLayout(pageMusic);
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        stackedWidget->addWidget(pageMusic);
+        pageSound = new QWidget();
+        pageSound->setObjectName(QStringLiteral("pageSound"));
+        horizontalLayout_3 = new QHBoxLayout(pageSound);
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        stackedWidget->addWidget(pageSound);
+        pageMaps = new QWidget();
+        pageMaps->setObjectName(QStringLiteral("pageMaps"));
+        horizontalLayout_6 = new QHBoxLayout(pageMaps);
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        mapsControlFrame = new QFrame(pageMaps);
+        mapsControlFrame->setObjectName(QStringLiteral("mapsControlFrame"));
+        QSizePolicy sizePolicy9(QSizePolicy::Maximum, QSizePolicy::Expanding);
+        sizePolicy9.setHorizontalStretch(0);
+        sizePolicy9.setVerticalStretch(0);
+        sizePolicy9.setHeightForWidth(mapsControlFrame->sizePolicy().hasHeightForWidth());
+        mapsControlFrame->setSizePolicy(sizePolicy9);
         mapsControlFrame->setFrameShape(QFrame::StyledPanel);
         mapsControlFrame->setFrameShadow(QFrame::Raised);
         verticalLayout_4 = new QVBoxLayout(mapsControlFrame);
@@ -625,31 +874,31 @@ public:
         mapsZoomInButton = new QPushButton(mapsControlFrame);
         mapsZoomInButton->setObjectName(QStringLiteral("mapsZoomInButton"));
         mapsZoomInButton->setMinimumSize(QSize(50, 40));
-        QFont font4;
-        font4.setBold(true);
-        font4.setWeight(75);
-        mapsZoomInButton->setFont(font4);
+        QFont font8;
+        font8.setBold(true);
+        font8.setWeight(75);
+        mapsZoomInButton->setFont(font8);
 
         verticalLayout_4->addWidget(mapsZoomInButton);
 
         mapsZoomOutButton = new QPushButton(mapsControlFrame);
         mapsZoomOutButton->setObjectName(QStringLiteral("mapsZoomOutButton"));
         mapsZoomOutButton->setMinimumSize(QSize(50, 40));
-        mapsZoomOutButton->setFont(font4);
+        mapsZoomOutButton->setFont(font8);
 
         verticalLayout_4->addWidget(mapsZoomOutButton);
 
         mapsFitToViewButton = new QPushButton(mapsControlFrame);
         mapsFitToViewButton->setObjectName(QStringLiteral("mapsFitToViewButton"));
         mapsFitToViewButton->setMinimumSize(QSize(50, 40));
-        mapsFitToViewButton->setFont(font4);
+        mapsFitToViewButton->setFont(font8);
 
         verticalLayout_4->addWidget(mapsFitToViewButton);
 
         mapsResetSizeButton = new QPushButton(mapsControlFrame);
         mapsResetSizeButton->setObjectName(QStringLiteral("mapsResetSizeButton"));
         mapsResetSizeButton->setMinimumSize(QSize(50, 40));
-        mapsResetSizeButton->setFont(font4);
+        mapsResetSizeButton->setFont(font8);
 
         verticalLayout_4->addWidget(mapsResetSizeButton);
 
@@ -665,41 +914,26 @@ public:
         verticalLayout_4->addItem(verticalSpacer);
 
 
-        horizontalLayout->addWidget(mapsControlFrame);
+        horizontalLayout_6->addWidget(mapsControlFrame);
 
         mapsVBox = new QVBoxLayout();
         mapsVBox->setSpacing(6);
         mapsVBox->setObjectName(QStringLiteral("mapsVBox"));
-        mapsButtonFrame = new QFrame(tabMaps);
+        mapsButtonFrame = new QFrame(pageMaps);
         mapsButtonFrame->setObjectName(QStringLiteral("mapsButtonFrame"));
-        QSizePolicy sizePolicy9(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy9.setHorizontalStretch(0);
-        sizePolicy9.setVerticalStretch(0);
-        sizePolicy9.setHeightForWidth(mapsButtonFrame->sizePolicy().hasHeightForWidth());
-        mapsButtonFrame->setSizePolicy(sizePolicy9);
+        sizePolicy8.setHeightForWidth(mapsButtonFrame->sizePolicy().hasHeightForWidth());
+        mapsButtonFrame->setSizePolicy(sizePolicy8);
         mapsButtonFrame->setFrameShape(QFrame::StyledPanel);
         mapsButtonFrame->setFrameShadow(QFrame::Raised);
 
         mapsVBox->addWidget(mapsButtonFrame);
 
 
-        horizontalLayout->addLayout(mapsVBox);
+        horizontalLayout_6->addLayout(mapsVBox);
 
-        tabWidget->addTab(tabMaps, QString());
-        tab = new QWidget();
-        tab->setObjectName(QStringLiteral("tab"));
-        verticalLayout_6 = new QVBoxLayout(tab);
-        verticalLayout_6->setSpacing(6);
-        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        textEdit = new QTextEdit(tab);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
+        stackedWidget->addWidget(pageMaps);
 
-        verticalLayout_6->addWidget(textEdit);
-
-        tabWidget->addTab(tab, QString());
-
-        horizontalLayout_2->addWidget(tabWidget);
+        horizontalLayout_2->addWidget(stackedWidget);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(6);
@@ -710,7 +944,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1300, 25));
+        menuBar->setGeometry(QRect(0, 0, 1300, 28));
         QSizePolicy sizePolicy10(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         sizePolicy10.setHorizontalStretch(0);
         sizePolicy10.setVerticalStretch(0);
@@ -718,33 +952,66 @@ public:
         menuBar->setSizePolicy(sizePolicy10);
         menuBar->setMinimumSize(QSize(0, 25));
         menuBar->setBaseSize(QSize(0, 25));
-        menuBar->setFont(font4);
+        menuBar->setFont(font1);
         menuBar->setStyleSheet(QStringLiteral(""));
         menuGM_Help = new QMenu(menuBar);
         menuGM_Help->setObjectName(QStringLiteral("menuGM_Help"));
-        QFont font5;
-        font5.setPointSize(12);
-        font5.setBold(true);
-        font5.setWeight(75);
-        menuGM_Help->setFont(font5);
+        QFont font9;
+        font9.setPointSize(10);
+        font9.setBold(false);
+        font9.setWeight(50);
+        menuGM_Help->setFont(font9);
         menuOptions = new QMenu(menuBar);
         menuOptions->setObjectName(QStringLiteral("menuOptions"));
-        menuOptions->setFont(font5);
+        menuOptions->setFont(font9);
+        menuMusic = new QMenu(menuBar);
+        menuMusic->setObjectName(QStringLiteral("menuMusic"));
+        menuMusic->setFont(font9);
+        menuSound = new QMenu(menuBar);
+        menuSound->setObjectName(QStringLiteral("menuSound"));
+        menuSound->setFont(font9);
+        menuMaps = new QMenu(menuBar);
+        menuMaps->setObjectName(QStringLiteral("menuMaps"));
+        menuMaps->setFont(font9);
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
+        QFont font10;
+        font10.setPointSize(10);
+        menuHelp->setFont(font10);
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuGM_Help->menuAction());
+        menuBar->addAction(menuMusic->menuAction());
+        menuBar->addAction(menuSound->menuAction());
+        menuBar->addAction(menuMaps->menuAction());
         menuBar->addAction(menuOptions->menuAction());
+        menuBar->addAction(menuHelp->menuAction());
         menuGM_Help->addAction(actionDice);
         menuGM_Help->addAction(actionDatabase);
-        menuOptions->addAction(actionSet_Music_Folder);
-        menuOptions->addAction(actionSet_Sound_Folder);
-        menuOptions->addAction(actionSet_Maps_Folder);
+        menuGM_Help->addSeparator();
+        menuGM_Help->addAction(actionSet_Database_Path);
         menuOptions->addAction(actionSet_Resources_Folder);
+        menuOptions->addSeparator();
+        menuOptions->addAction(actionCheck_for_Updates);
+        menuMusic->addAction(actionMusic_Player);
+        menuMusic->addSeparator();
+        menuMusic->addAction(actionSet_Music_Folder);
+        menuSound->addAction(actionSound_Player);
+        menuSound->addSeparator();
+        menuSound->addAction(actionSet_Sound_Folder);
+        menuMaps->addAction(actionMap_Viewer);
+        menuMaps->addSeparator();
+        menuMaps->addAction(actionSet_Maps_Folder);
+        menuHelp->addAction(actionOpen_Wiki);
+        menuHelp->addAction(actionReport_a_Bug);
+        menuHelp->addSeparator();
+        menuHelp->addAction(actionI_want_to_use_an_older_Version);
 
         retranslateUi(MainWindow);
 
         musicPlayButton->setDefault(false);
-        tabWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
+        tabWidgetGMHelp->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -752,13 +1019,21 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 01", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 02", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
         actionSet_Sound_Folder->setText(QApplication::translate("MainWindow", "Set Sound Folder", Q_NULLPTR));
         actionSet_Maps_Folder->setText(QApplication::translate("MainWindow", "Set Maps Folder", Q_NULLPTR));
         actionSet_Resources_Folder->setText(QApplication::translate("MainWindow", "Set Resources Folder", Q_NULLPTR));
+        actionMusic_Player->setText(QApplication::translate("MainWindow", "Music Player", Q_NULLPTR));
+        actionSound_Player->setText(QApplication::translate("MainWindow", "Sound Player", Q_NULLPTR));
+        actionMap_Viewer->setText(QApplication::translate("MainWindow", "Map Viewer", Q_NULLPTR));
+        actionSet_Database_Path->setText(QApplication::translate("MainWindow", "Set Database Path", Q_NULLPTR));
+        actionOpen_Wiki->setText(QApplication::translate("MainWindow", "Open Wiki", Q_NULLPTR));
+        actionCheck_for_Updates->setText(QApplication::translate("MainWindow", "Check for Updates", Q_NULLPTR));
+        actionReport_a_Bug->setText(QApplication::translate("MainWindow", "Report a Bug", Q_NULLPTR));
+        actionI_want_to_use_an_older_Version->setText(QApplication::translate("MainWindow", "I want to use an older version!", Q_NULLPTR));
         musicLabel->setText(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
         musicPlayButton->setText(QApplication::translate("MainWindow", "Play", Q_NULLPTR));
         musicPauseButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
@@ -781,34 +1056,35 @@ public:
         musicArtistLabel->setText(QApplication::translate("MainWindow", "Artist", Q_NULLPTR));
         musicYearLabel->setText(QApplication::translate("MainWindow", "Year", Q_NULLPTR));
         soundInfoLabel->setText(QApplication::translate("MainWindow", "Sound Information", Q_NULLPTR));
-        soundNameLabel->setText(QApplication::translate("MainWindow", "Name", Q_NULLPTR));
+        soundNameLabel->setText(QApplication::translate("MainWindow", "<No Sound Folder Selected>", Q_NULLPTR));
         musicCoverLabel->setText(QString());
 #ifndef QT_NO_TOOLTIP
         musicProgressBar->setToolTip(QApplication::translate("MainWindow", "Current Music Progress", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         musicProgressBar->setFormat(QApplication::translate("MainWindow", "%p%", Q_NULLPTR));
-#ifndef QT_NO_TOOLTIP
-        tabMusic->setToolTip(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
-#endif // QT_NO_TOOLTIP
-#ifndef QT_NO_ACCESSIBILITY
-        tabMusic->setAccessibleName(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
-#endif // QT_NO_ACCESSIBILITY
-        tabWidget->setTabText(tabWidget->indexOf(tabMusic), QApplication::translate("MainWindow", "Music", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabSound), QApplication::translate("MainWindow", "Sound", Q_NULLPTR));
-        mapsZoomInButton->setText(QApplication::translate("MainWindow", "Zoom In", Q_NULLPTR));
-        mapsZoomOutButton->setText(QApplication::translate("MainWindow", "Zoom Out", Q_NULLPTR));
-        mapsFitToViewButton->setText(QApplication::translate("MainWindow", "Fit to View", Q_NULLPTR));
-        mapsResetSizeButton->setText(QApplication::translate("MainWindow", "Reset Size", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tabMaps), QApplication::translate("MainWindow", "Maps", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", " x ", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", " + ", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindow", "Result:", Q_NULLPTR));
+        diceOutputLabel->setText(QString());
+        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabDice), QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
+        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tab_2), QApplication::translate("MainWindow", "Database (Coming Soon)", Q_NULLPTR));
+        label->setText(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Test Text</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "DEBUG", Q_NULLPTR));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">DEBUG TEXT-EDIT:</p></body></html>", Q_NULLPTR));
+        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tab_3), QApplication::translate("MainWindow", "Debug / Test Page", Q_NULLPTR));
+        mapsZoomInButton->setText(QApplication::translate("MainWindow", "Zoom In", Q_NULLPTR));
+        mapsZoomOutButton->setText(QApplication::translate("MainWindow", "Zoom Out", Q_NULLPTR));
+        mapsFitToViewButton->setText(QApplication::translate("MainWindow", "Fit to View", Q_NULLPTR));
+        mapsResetSizeButton->setText(QApplication::translate("MainWindow", "Reset Size", Q_NULLPTR));
         menuGM_Help->setTitle(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         menuOptions->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
+        menuMusic->setTitle(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
+        menuSound->setTitle(QApplication::translate("MainWindow", "Sound", Q_NULLPTR));
+        menuMaps->setTitle(QApplication::translate("MainWindow", "Maps", Q_NULLPTR));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", Q_NULLPTR));
     } // retranslateUi
 
 };
