@@ -13,6 +13,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QScrollArea>
+#include <QNetworkReply>
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void addToPlaylist(QUrl url, bool music);
+
+    void setVersion(QString);
+    QString getVersion();
 
 private slots:
     void playMusic(QString);
@@ -44,6 +48,24 @@ private slots:
     void on_setSoundFolder_clicked();
     void on_setMapsFolder_clicked();
     void on_setResourcesFolder_clicked();
+    void on_setDatabasePath_clicked();
+
+    void on_menuGM_Help_triggered();
+    void on_menuMusic_triggered();
+    void on_menuSound_triggered();
+    void on_menuMaps_triggered();
+
+    void on_actionMusicPlayer_clicked();
+    void on_actionSoundPlayer_clicked();
+    void on_actionMapsViewer_clicked();
+
+    void on_actionDice_clicked();
+    void on_actionDatabase_clicked();
+
+    void on_openWiki_clicked();
+    void on_checkForUpdates_clicked();
+    void on_reportABug_clicked();
+    void on_iWantToUseAnOlderVersionClicked();
 
     void on_tableDoubleClicked(int,int);
 
@@ -53,19 +75,21 @@ private slots:
     void on_soundNextButton_clicked();
 
     void on_musicVolumeSlider_valueChanged(int value);
-
     void on_soundVolumeSlider_valueChanged(int value);
 
     void on_mapsZoomInButton_clicked();
-
     void on_mapsZoomOutButton_clicked();
-
     void on_mapsFitToViewButton_clicked();
-
     void on_mapsResetSizeButton_clicked();
+
+    void rollDice(int);
+    void on_networkAccessManagerFinished(QNetworkReply*);
 
 private:
     Ui::MainWindow *ui;
+
+    int versionNumber;
+    QString versionString;
 
     QString musicPath;
     QString soundPath;
@@ -75,6 +99,9 @@ private:
     QSignalMapper *signalMapperMusic;
     QSignalMapper *signalMapperSound;
     QSignalMapper *signalMapperMaps;
+    QSignalMapper *signalMapperDice;
+
+    QNetworkAccessManager *networkManager;
 
     QHBoxLayout *tabMusicLayout;
 
@@ -87,6 +114,8 @@ private:
 
     QMediaPlayer *soundPlayer;
     QMediaPlaylist *soundPlaylist;
+
+    void generateDiceFrame();
 
     QScrollArea *mapsScrollArea;
     QLabel *mapsImageLabel;
