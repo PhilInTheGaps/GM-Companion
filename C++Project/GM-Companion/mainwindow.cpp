@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "flowlayout.h"
+#include "database.h"
+
 #include <QFile>
 #include <QTextStream>
 #include <QVector>
@@ -22,6 +24,11 @@
 #include <QPixmap>
 #include <cstdlib>
 #include <QScrollArea>
+#include <QDesktopServices>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 
 // Gets all folders in directory
 QStringList getFolders(QString path){
@@ -117,6 +124,40 @@ void MainWindow::setFolderLocations(QString indicator){
     writeSettings(readSettings(), indicator, path);
 }
 
+void MainWindow::rollDice(int sides){
+
+    int amount = ui->amountSpinBox->value();
+    int modifier = ui->modifierSpinBox->value();
+    int result = 0;
+
+    for (int i = 0; i<amount; i++){
+        int temp = rand() % sides+1;
+        result += temp;
+    }
+
+    result += modifier;
+
+    ui->diceOutputLabel->setText(QString::number(result));
+}
+
+void MainWindow::generateDiceFrame(){
+    int sidesArray[6] = {2, 3, 4, 6, 12, 20};
+
+    ui->diceOutputLabel->setAlignment(Qt::AlignCenter);
+
+    for (int sides : sidesArray){
+        QPushButton *button = new QPushButton;
+        button->setText("D"+QString::number(sides));
+
+        ui->diceFrame->layout()->addWidget(button);
+
+        connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()));
+        signalMapperDice->setMapping(button, sides);
+    }
+
+    connect(signalMapperDice, SIGNAL(mapped(int)), this, SLOT(rollDice(int)));
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
@@ -129,6 +170,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
     signalMapperMaps = new QSignalMapper(this);
+    signalMapperDice = new QSignalMapper(this);
+
+    // Generates the dice page
+    generateDiceFrame();
 
     // Sets player and playlist for music
     musicPlayer = new QMediaPlayer(this);
@@ -153,10 +198,31 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionSet_Sound_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setSoundFolder_clicked()));
     connect(ui->actionSet_Maps_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setMapsFolder_clicked()));
     connect(ui->actionSet_Resources_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setResourcesFolder_clicked()));
+    connect(ui->actionSet_Database_Path, SIGNAL(triggered(bool)), this, SLOT(on_setDatabasePath_clicked()));
+
+    connect(ui->menuGM_Help, SIGNAL(triggered(QAction*)), this, SLOT(on_menuGM_Help_triggered()));
+    connect(ui->menuMusic, SIGNAL(triggered(QAction*)), this, SLOT(on_menuMusic_triggered()));
+    connect(ui->menuSound, SIGNAL(triggered(QAction*)), this, SLOT(on_menuSound_triggered()));
+    connect(ui->menuMaps, SIGNAL(triggered(QAction*)), this, SLOT(on_menuMaps_triggered()));
+
+    connect(ui->actionDice, SIGNAL(triggered(bool)), this, SLOT(on_actionDice_clicked()));
+    connect(ui->actionDatabase, SIGNAL(triggered(bool)), this, SLOT(on_actionDatabase_clicked()));
+
+    connect(ui->actionMusic_Player, SIGNAL(triggered(bool)), this, SLOT(on_actionMusicPlayer_clicked()));
+    connect(ui->actionSound_Player, SIGNAL(triggered(bool)), this, SLOT(on_actionSoundPlayer_clicked()));
+    connect(ui->actionMap_Viewer, SIGNAL(triggered(bool)), this, SLOT(on_actionMapsViewer_clicked()));
+
+    connect(ui->actionOpen_Wiki, SIGNAL(triggered(bool)), this, SLOT(on_openWiki_clicked()));
+    connect(ui->actionReport_a_Bug, SIGNAL(triggered(bool)), this, SLOT(on_reportABug_clicked()));
+    connect(ui->actionI_want_to_use_an_older_Version, SIGNAL(triggered(bool)), this, SLOT(on_iWantToUseAnOlderVersionClicked()));
+    connect(ui->actionCheck_for_Updates, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdates_clicked()));
+
+    // Network Stuff
+    networkManager = new QNetworkAccessManager;
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_networkAccessManagerFinished(QNetworkReply*)));
+
 
     // Creates Tab for music
-    tabMusicLayout = new QHBoxLayout; // Layout inside the music tab
-    ui->tabMusic->setLayout(tabMusicLayout);
 
     // Creates TableWidget to display song titles
     initialMusicPlay = true;
@@ -167,15 +233,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     musicTable->setHorizontalHeaderLabels(QString("Title").split(";"));
     connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int,int)));
 
-    QToolBox *toolBoxMusic = new QToolBox; // ToolBox for the different Categories
-    tabMusicLayout->addWidget(toolBoxMusic);
+    QTabWidget *tabWidgetMusic = new QTabWidget;
+    ui->pageMusic->layout()->addWidget(tabWidgetMusic);
 
     QStringList musicCategories = getFolders(musicPath); // List of all categories
     for (QString folder : musicCategories){
 
         if (!folder.contains(".")){
+            QScrollArea *scrollArea = new QScrollArea;
             QFrame *frame = new QFrame;
-            toolBoxMusic->addItem(frame, cleanText(folder));
+
+            tabWidgetMusic->addTab(scrollArea, cleanText(folder));
+            scrollArea->setWidget(frame);
+            scrollArea->setWidgetResizable(true);
 
             if (QFile(resourcesPath+"/Backgrounds/"+folder+".png").exists()){
                 frame->setStyleSheet("QFrame{background-image: url("+resourcesPath+"/Backgrounds/"+folder+".png);}");
@@ -227,18 +297,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
     // Creates Tab for sound
-    QHBoxLayout *tabSoundLayout = new QHBoxLayout; // Layout inside the sound tab
-    ui->tabSound->setLayout(tabSoundLayout);
 
-    QToolBox *toolBoxSound = new QToolBox; // ToolBox for the different Categories
-    tabSoundLayout->addWidget(toolBoxSound);
+    QTabWidget *tabWidgetSound = new QTabWidget;
+    ui->pageSound->layout()->addWidget(tabWidgetSound);
 
     QStringList soundCategories = getFolders(soundPath); // List of all categories
     for (QString folder : soundCategories){
 
         if (!folder.contains(".")){
+            QScrollArea *scrollArea = new QScrollArea;
             QFrame *frame = new QFrame;
-            toolBoxSound->addItem(frame, cleanText(folder));
+
+            tabWidgetSound->addTab(scrollArea, cleanText(folder));
+            scrollArea->setWidget(frame);
+            scrollArea->setWidgetResizable(true);
 
             // Generating musicButtons
             QString path = soundPath+"/"+folder;
@@ -380,8 +452,14 @@ void MainWindow::playMusic(QString folder){
     files = shuffleStringList(files);
 
     if (initialMusicPlay){
-        tabMusicLayout->addWidget(musicTable);
+        ui->pageMusic->layout()->addWidget(musicTable);
         initialMusicPlay = false;
+    }
+
+    for (int i = 0; i < files.size(); i++){
+        if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
+            files.removeAt(i);
+        }
     }
 
     musicTable->setRowCount(files.size());
@@ -462,6 +540,81 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_openWiki_clicked(){
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
+}
+
+void MainWindow::setVersion(QString versionAsString){
+    versionString = versionAsString;
+    versionNumber = 0;
+    QString temp = versionAsString.replace(".", "");
+    versionNumber = temp.toInt();
+
+    ui->textEdit->append("Version Number: "+QString::number(versionNumber));
+
+}
+
+void MainWindow::on_checkForUpdates_clicked(){
+    networkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/version.html")));
+}
+
+void MainWindow::on_networkAccessManagerFinished(QNetworkReply* reply){
+    QString replyString = reply->readAll();
+    ui->textEdit->clear();
+    ui->textEdit->append(replyString+"\n");
+
+    int index1 = replyString.indexOf("VERSION=");
+    int index2 = replyString.indexOf(";", index1);
+
+    int onlineVersion = 0;
+
+    QString onlineVersionString = replyString.mid(index1+8, index2-index1-8);
+    QString onlineVersionWithDots = onlineVersionString;
+    QString temp = onlineVersionString.replace(".", "");
+    onlineVersion = temp.toInt();
+    ui->textEdit->append("Most Current Version Number: "+QString::number(onlineVersion));
+
+    if (versionNumber < onlineVersion){
+        QFrame *dialogFrame = new QFrame;
+        dialogFrame->setWindowTitle("Update Available!");
+        dialogFrame->setMinimumSize(400, 50);
+        QVBoxLayout *dialogLayout = new QVBoxLayout;
+        dialogFrame->setLayout(dialogLayout);
+        QLabel *l1 = new QLabel;
+        l1->setText("A new version has been found:");
+        QLabel *l2 = new QLabel;
+        l2->setText(onlineVersionWithDots);
+
+        QFrame *btnFrame = new QFrame;
+        QHBoxLayout *btnLayout = new QHBoxLayout;
+        btnFrame->setLayout(btnLayout);
+
+        QPushButton *openButton = new QPushButton;
+        openButton->setText("Open Download Page");
+        QPushButton *closeButton = new QPushButton;
+        closeButton->setText("Close");
+        btnLayout->addWidget(openButton);
+        btnLayout->addWidget(closeButton);
+
+        dialogLayout->addWidget(l1);
+        dialogLayout->addWidget(l2);
+        dialogLayout->addWidget(btnFrame);
+
+        connect(openButton, SIGNAL(clicked(bool)), SLOT(on_iWantToUseAnOlderVersionClicked()));
+        connect(closeButton, SIGNAL(clicked(bool)), dialogFrame, SLOT(close()));
+
+        dialogFrame->show();
+    }
+}
+
+void MainWindow::on_reportABug_clicked(){
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/issues/new"));
+}
+
+void MainWindow::on_iWantToUseAnOlderVersionClicked(){
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/releases"));
+}
+
 void MainWindow::on_tableDoubleClicked(int row, int column){
     musicPlaylist->setCurrentIndex(row);
 }
@@ -483,7 +636,9 @@ void MainWindow::on_musicReplayButton_clicked()
 
 void MainWindow::on_musicNextButton_clicked()
 {
-    musicPlaylist->next();
+    if (!musicPlaylist->isEmpty()){
+        musicPlaylist->next();
+    }
 }
 
 void MainWindow::on_setMusicFolder_clicked(){
@@ -500,6 +655,46 @@ void MainWindow::on_setMapsFolder_clicked(){
 
 void MainWindow::on_setResourcesFolder_clicked(){
     setFolderLocations("RESOURCES_PATH=");
+}
+
+void MainWindow::on_setDatabasePath_clicked(){
+
+}
+
+void MainWindow::on_menuGM_Help_triggered(){
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_actionDice_clicked(){
+    //ui->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_actionDatabase_clicked(){
+
+}
+
+void MainWindow::on_menuMusic_triggered(){
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void MainWindow::on_actionMusicPlayer_clicked(){
+
+}
+
+void MainWindow::on_menuSound_triggered(){
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_actionSoundPlayer_clicked(){
+
+}
+
+void MainWindow::on_menuMaps_triggered(){
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+void MainWindow::on_actionMapsViewer_clicked(){
+
 }
 
 void MainWindow::on_soundPlayButton_clicked()
@@ -519,7 +714,9 @@ void MainWindow::on_soundReplayButton_clicked()
 
 void MainWindow::on_soundNextButton_clicked()
 {
-    soundPlaylist->next();
+    if (!soundPlaylist->isEmpty()){
+        soundPlaylist->next();
+    }
 }
 
 void MainWindow::on_musicVolumeSlider_valueChanged(int value)
