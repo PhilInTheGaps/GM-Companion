@@ -17,13 +17,13 @@ CXXFLAGS      = -pipe -fno-keep-inline-dllexport -O2 -std=gnu++11 -frtti -Wall -
 INCPATH       = -I..\GM-Companion -I. -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtMultimediaWidgets -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtMultimedia -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtWidgets -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtGui -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtANGLE -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtNetwork -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtSql -IC:\Qt\Qt5.8.0\5.8\mingw53_32\include\QtCore -Irelease -I. -IC:\Qt\Qt5.8.0\5.8\mingw53_32\mkspecs\win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,windows -mthreads
-LIBS        =        -lmingw32 -LC:\Qt\Qt5.8.0\5.8\mingw53_32\lib C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libqtmain.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5MultimediaWidgets.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Multimedia.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Widgets.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Gui.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Network.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Sql.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Core.a 
+LIBS        =        -lmingw32 -LC:\Qt\Qt5.8.0\5.8\mingw53_32\lib C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libqtmain.a -LC:\utils\my_sql\my_sql\lib -LC:\utils\postgresql\pgsql\lib -lshell32 C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5MultimediaWidgets.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Multimedia.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Widgets.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Gui.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Network.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Sql.a C:\Qt\Qt5.8.0\5.8\mingw53_32\lib\libQt5Core.a release\GM-Companion_res.o 
 QMAKE         = C:\Qt\Qt5.8.0\5.8\mingw53_32\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = release\GM-Companion_res.o
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -71,8 +71,11 @@ DESTDIR_TARGET = release\GM-Companion.exe
 first: all
 all: Makefile.Release  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwindow.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwindow.h $(OBJECTS) release/GM-Companion_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
+
+release/GM-Companion_res.o: ../GM-Companion/GM-Companion.rc
+	windres -i ..\GM-Companion\GM-Companion.rc -o release\GM-Companion_res.o --include-dir=./../GM-Companion $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Release ..\GM-Companion\GM-Companion.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -84,6 +87,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) release\main.o release\mainwindow.o release\flowlayout.o release\database.o release\qrc_resources.o release\moc_mainwindow.o
+	-$(DEL_FILE) release\GM-Companion_res.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -110,7 +114,10 @@ release/qrc_resources.cpp: ../GM-Companion/resources.qrc \
 		../GM-Companion/resources/icon128.png \
 		../GM-Companion/resources/icon32.png \
 		../GM-Companion/resources/icon256.png \
-		../GM-Companion/resources/icon256.ico
+		../GM-Companion/resources/icon256.ico \
+		../GM-Companion/resources/radio/radioRivendell01.png \
+		../GM-Companion/resources/radio/logo-radio-rivendell.png \
+		../GM-Companion/resources/radio/logo-mmorp-radio-de.png
 	C:\Qt\Qt5.8.0\5.8\mingw53_32\bin\rcc.exe -name resources ..\GM-Companion\resources.qrc -o release\qrc_resources.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h
@@ -285,6 +292,30 @@ release/moc_mainwindow.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMain
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QScrollArea \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkReply \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkreply.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QIODevice \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkRequest \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkAccessManager \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkaccessmanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslConfiguration \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslconfiguration.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslerror.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslcertificate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qssl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFlags \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QMetaType \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbasictimer.h \
 		../GM-Companion/mainwindow.h \
 		release/moc_predefs.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/bin/moc.exe
@@ -475,6 +506,30 @@ release/main.o: ../GM-Companion/main.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QScrollArea \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkReply \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkreply.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QIODevice \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkRequest \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkAccessManager \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkaccessmanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslConfiguration \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslconfiguration.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslerror.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslcertificate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qssl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFlags \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QMetaType \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbasictimer.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QApplication \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcoreapplication.h \
@@ -648,6 +703,30 @@ release/mainwindow.o: ../GM-Companion/mainwindow.cpp ../GM-Companion/mainwindow.
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QScrollArea \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkReply \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkreply.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QIODevice \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkRequest \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkAccessManager \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkaccessmanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslConfiguration \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslconfiguration.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslerror.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslcertificate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qssl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFlags \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QMetaType \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbasictimer.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
