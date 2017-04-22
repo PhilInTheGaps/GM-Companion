@@ -30,5 +30,7 @@ FORMS    += mainwindow.ui
 
 DISTFILES += \
 
+RC_FILE = GM-Companion.rc
+
 RESOURCES += \
     resources.qrc

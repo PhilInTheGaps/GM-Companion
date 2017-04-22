@@ -29,6 +29,7 @@
 #include <QSpinBox>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QSpacerItem>
 
 // Gets all folders in directory
 QStringList getFolders(QString path){
@@ -130,9 +131,24 @@ void MainWindow::rollDice(int sides){
     int modifier = ui->modifierSpinBox->value();
     int result = 0;
 
+    ui->diceResultTableWidget->insertRow(0);
+
     for (int i = 0; i<amount; i++){
+        QTableWidgetItem *i1 = new QTableWidgetItem;
+        QTableWidgetItem *i2 = new QTableWidgetItem;
+        QTableWidgetItem *i3 = new QTableWidgetItem;
+
         int temp = rand() % sides+1;
+        i1->setText(QString::number(i+1)+"D"+QString::number(sides));
+        i2->setText(QString::number(temp));
         result += temp;
+        i3->setText(QString::number(result));
+
+        ui->diceResultTableWidget->insertRow(0);
+
+        ui->diceResultTableWidget->setItem(0, 0, i1);
+        ui->diceResultTableWidget->setItem(0, 1, i2);
+        ui->diceResultTableWidget->setItem(0, 2, i3);
     }
 
     result += modifier;
@@ -144,18 +160,129 @@ void MainWindow::generateDiceFrame(){
     int sidesArray[6] = {2, 3, 4, 6, 12, 20};
 
     ui->diceOutputLabel->setAlignment(Qt::AlignCenter);
+    FlowLayout *diceFlowLayout = new FlowLayout;
+    ui->diceFrame->setLayout(diceFlowLayout);
 
     for (int sides : sidesArray){
         QPushButton *button = new QPushButton;
         button->setText("D"+QString::number(sides));
+        //button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        //button->setMinimumSize(200, 200);
+        button->setStyleSheet("min-width: 50; min-height: 50; max-width: 200; max-height: 200;");
+        //button->setMaximumSize(100, 100);
 
-        ui->diceFrame->layout()->addWidget(button);
+        diceFlowLayout->addWidget(button);
+        diceFlowLayout->setAlignment(Qt::AlignCenter);
 
         connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()));
         signalMapperDice->setMapping(button, sides);
     }
 
     connect(signalMapperDice, SIGNAL(mapped(int)), this, SLOT(rollDice(int)));
+}
+
+void MainWindow::generateNamesTab(){
+    QStringList folderList = getFolders(QDir::currentPath()+"/names");
+    for (QString folder : folderList){
+        if (!folder.contains(".")){
+            QScrollArea *scrollArea = new QScrollArea;
+            scrollArea->setWidgetResizable(true);
+            QFrame *frame = new QFrame;
+            scrollArea->setWidget(frame);
+            QVBoxLayout *frameLayout = new QVBoxLayout;
+            frame->setLayout(frameLayout);
+            ui->nameTabWidget->addTab(scrollArea, folder);
+
+            folder = QDir::currentPath()+"/names/"+folder;
+
+//            QTabWidget *tabWidget = new QTabWidget;
+//            frameLayout->addWidget(tabWidget);
+
+
+            QStringList subfolderList = getFolders(folder);
+
+            for (QString subfolder : subfolderList){
+                if (!subfolder.contains(".")){
+                    QFrame *subFrame = new QFrame;
+                    //tabWidget->addTab(subFrame, subfolder);
+                    frameLayout->addWidget(subFrame);
+
+                    QHBoxLayout *hbox = new QHBoxLayout;
+                    subFrame->setLayout(hbox);
+
+                    QLabel *subfolderLabel = new QLabel(subfolder);
+                    hbox->addWidget(subfolderLabel);
+
+                    QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
+                    hbox->addSpacerItem(spacer);
+
+                    QFrame *buttonFrame = new QFrame;
+                    QHBoxLayout *buttonLayout = new QHBoxLayout;
+                    buttonFrame->setLayout(buttonLayout);
+                    buttonFrame->setMaximumWidth(200);
+                    hbox->addWidget(buttonFrame);
+
+                    QPushButton *maleButton = new QPushButton;
+                    maleButton->setText("Male");
+                    buttonLayout->addWidget(maleButton);
+
+                    QPushButton *femaleButton = new QPushButton;
+                    femaleButton->setText("Female");
+                    buttonLayout->addWidget(femaleButton);
+
+                    QStringList files = getFiles(folder+"/"+subfolder);
+
+                    QString maleFile = folder+"/"+subfolder+"/male.txt";
+                    QString femaleFile = folder+"/"+subfolder+"/female.txt";
+
+                    connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
+                    signalMapperNames->setMapping(maleButton, maleFile);
+
+                    connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
+                    signalMapperNames->setMapping(femaleButton, femaleFile);
+                }
+            }
+            QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+            frameLayout->addSpacerItem(spacer);
+        }
+    }
+    connect(signalMapperNames, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
+}
+
+void MainWindow::on_generateNames(QString file){
+    ui->nameTextEdit->clear();
+    int index = file.lastIndexOf("/");
+    QString path = file.left(index);
+
+    QString surnamesPath = path+"/surname.txt";
+
+//    ui->nameTextEdit->append(path);
+//    ui->nameTextEdit->append(file);
+//    ui->nameTextEdit->append(surnamesPath);
+
+    QFile nameFile(file);
+    nameFile.open(QIODevice::ReadOnly);
+    QString namesAsString = nameFile.readAll();
+    QStringList names = namesAsString.split(",");
+    nameFile.close();
+
+    QFile surnamesFile(surnamesPath);
+    surnamesFile.open(QIODevice::ReadOnly);
+    QString surnamesAsString = surnamesFile.readAll();
+    QStringList surnames = surnamesAsString.split(",");
+    surnamesFile.close();
+
+    for (int i = 0; i<20; i++){
+        QString name = names.at(rand() % names.size());
+        QString surname = surnames.at(rand() % surnames.size());
+
+        if (name.at(0)==" "){
+            name = name.mid(1);
+        }
+
+        ui->nameTextEdit->append(name+" "+surname);
+    }
+
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -171,6 +298,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     signalMapperSound = new QSignalMapper(this);
     signalMapperMaps = new QSignalMapper(this);
     signalMapperDice = new QSignalMapper(this);
+    signalMapperNames = new QSignalMapper(this);
 
     // Generates the dice page
     generateDiceFrame();
@@ -182,6 +310,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     musicPlaylist = new QMediaPlaylist();
     musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random); //QMediaPlaylist::PlaybackMode::Loop|
     musicPlayer->setPlaylist(musicPlaylist);
+
+    // Radio Stuff
+    radioPlayer = new QMediaPlayer(this);
+    radioPlayer->setVolume(ui->musicVolumeSlider->value());
+    radioNetworkManager = new QNetworkAccessManager;
+    connect(radioNetworkManager, SIGNAL(finished(QNetworkReply*)), SLOT(on_radioNetworkAccessManager_finished(QNetworkReply*)));
+    radioTimer = new QTimer;
+    radioTimerDuration = 10000; // Update Interval in Milliseconds
+    radioTimer->setInterval(radioTimerDuration);
+    connect(radioTimer, SIGNAL(timeout()), SLOT(on_radioTimer_timeout()));
+
+    // Name Generator
+    generateNamesTab();
 
     // Sets player and playlist for sound
     soundPlayer = new QMediaPlayer(this);
@@ -216,6 +357,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionReport_a_Bug, SIGNAL(triggered(bool)), this, SLOT(on_reportABug_clicked()));
     connect(ui->actionI_want_to_use_an_older_Version, SIGNAL(triggered(bool)), this, SLOT(on_iWantToUseAnOlderVersionClicked()));
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdates_clicked()));
+
+    connect(ui->actionInternet_Radio, SIGNAL(triggered(bool)), this, SLOT(on_actionRadio_clicked()));
 
     // Network Stuff
     networkManager = new QNetworkAccessManager;
@@ -436,6 +579,12 @@ void MainWindow::playSound(QString folder){
 }
 
 void MainWindow::playMusic(QString folder){
+    radioActive = false;
+    radioPlayer->stop();
+
+    ui->musicNextButton->setEnabled(true);
+    ui->musicReplayButton->setEnabled(true);
+
     QString folderName = folder;
     int index = folderName.lastIndexOf("/")+1;
     folderName = cleanText(folderName.mid(index));
@@ -621,12 +770,24 @@ void MainWindow::on_tableDoubleClicked(int row, int column){
 
 void MainWindow::on_musicPauseButton_clicked()
 {
-    musicPlayer->pause();
+    if (radioActive){
+        radioPlayer->pause();
+        radioTimer->stop();
+    }
+    else{
+        musicPlayer->pause();
+    }
 }
 
 void MainWindow::on_musicPlayButton_clicked()
 {
-    musicPlayer->play();
+    if (radioActive){
+        radioPlayer->play();
+        radioTimer->start();
+    }
+    else{
+        musicPlayer->play();
+    }
 }
 
 void MainWindow::on_musicReplayButton_clicked()
@@ -722,6 +883,7 @@ void MainWindow::on_soundNextButton_clicked()
 void MainWindow::on_musicVolumeSlider_valueChanged(int value)
 {
     musicPlayer->setVolume(value);
+    radioPlayer->setVolume(value);
 }
 
 void MainWindow::on_soundVolumeSlider_valueChanged(int value)
@@ -764,4 +926,195 @@ void MainWindow::on_mapsResetSizeButton_clicked()
 {
     mapsImageLabel->resize(mapsImageLabel->pixmap()->size());
     mapsZoomFactor = 1.0;
+}
+
+void MainWindow::on_actionRadio_clicked(){
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+void MainWindow::on_rivendellPlayButton_clicked()
+{
+    radioTimer->start();
+    radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
+    musicPlayer->stop();
+    radioActive = true;
+    radioID = 0;
+    radioPlayer->play();
+
+    ui->musicTitleLabel->setText("Radio: Radio Rivendell");
+    ui->musicAlbumLabel->setText("");
+    ui->musicArtistLabel->setText("");
+    ui->musicYearLabel->setText("");
+
+    ui->musicNextButton->setDisabled(true);
+    ui->musicReplayButton->setDisabled(true);
+}
+
+void MainWindow::on_rivendellReloadButton_clicked()
+{
+    if (radioActive){
+        radioPlayer->pause();
+        radioTimer->start();
+        radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
+
+        ui->musicTitleLabel->setText("Radio: Radio Rivendell");
+        ui->musicAlbumLabel->setText("");
+        ui->musicArtistLabel->setText("");
+        ui->musicYearLabel->setText("");
+
+        radioPlayer->play();
+    }
+}
+
+void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
+    ui->textEdit->clear();
+    ui->textEdit->append("FINISHED \n");
+    ui->textEdit->append(QString::number(radioID)+"\n");
+
+    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    ui->textEdit->append(redirectionTarget.toString());
+
+    if (!redirectionTarget.isNull()) {
+        QUrl newUrl = QUrl(redirectionTarget.toUrl());
+        QNetworkRequest request(newUrl);
+        radioNetworkManager->get(request);
+    } else {
+        QString replyString = reply->readAll();
+
+        switch(radioID){
+        case 0:
+        {
+            QTextDocument doc;
+            doc.setHtml(replyString);
+            replyString = doc.toPlainText();
+            doc.clear();
+            doc.deleteLater();
+
+            // Gets Meta Info from string
+            int startIndex = replyString.indexOf("GMT +1.");
+            int timeIndex = replyString.indexOf(":", startIndex);
+            QString temp = replyString;
+            temp = temp.mid(startIndex, timeIndex-startIndex);
+
+            ui->textEdit->append(temp+"\n");
+
+            int nowIndex = temp.indexOf("Now");
+            int lineIndex = temp.indexOf("\n", nowIndex+5);
+
+            QString title = temp.mid(nowIndex+4);
+            QString artist = temp.mid(lineIndex+1);
+
+            title = title.replace(artist, "");
+            title = title.replace("Spotify", "");
+            title = title.left(title.length()-1);
+            artist = artist.left(artist.length()-3);
+
+            ui->textEdit->append("Title: "+title);
+            ui->textEdit->append("Artist: "+artist);
+
+            ui->musicAlbumLabel->setText("Title: "+title);
+            ui->musicArtistLabel->setText("Artist: "+artist);
+
+            replyString.clear();
+            temp.clear();
+            break;
+        }
+        case 1:
+        {
+            QTextDocument doc;
+            doc.setHtml(replyString);
+            replyString = doc.toPlainText();
+            ui->textEdit->append(replyString+"\n");
+            doc.clear();
+            doc.deleteLater();
+
+            // Gets Meta Info from string
+            int artistStartIndex = replyString.indexOf("Jetzt läuft ");
+            int titleStartIndex = replyString.indexOf("mit dem Titel »", artistStartIndex);
+            int albumStartIndex = replyString.indexOf("vom Album »", titleStartIndex);
+            int albumEndIndex = replyString.indexOf("«", albumStartIndex);
+            QString temp = replyString;
+
+            temp = temp.mid(artistStartIndex, albumEndIndex-artistStartIndex);
+
+
+//            int nowIndex = temp.indexOf("Now");
+//            int lineIndex = temp.indexOf("\n", nowIndex+5);
+
+//            QString title = temp.mid(nowIndex+4);
+//            QString artist = temp.mid(lineIndex+1);
+
+//            title = title.replace(artist, "");
+//            title = title.replace("Spotify", "");
+//            title = title.left(title.length()-1);
+//            artist = artist.left(artist.length()-3);
+
+//            ui->textEdit->append("Title: "+title);
+//            ui->textEdit->append("Artist: "+artist);
+
+//            ui->musicAlbumLabel->setText("Title: "+title);
+//            ui->musicArtistLabel->setText("Artist: "+artist);
+
+//            replyString.clear();
+//            temp.clear();
+            break;
+        }
+        default:
+        {
+            ui->textEdit->append("Invalid RadioID \n");
+        }
+        }
+    }
+    reply->deleteLater();
+}
+
+void MainWindow::on_radioTimer_timeout(){
+    ui->textEdit->append("TIMER FINISHED");
+    switch (radioID) {
+    case 0:
+        radioNetworkManager->get(QNetworkRequest(QUrl("https://www.radiorivendell.com/page/last-played/")));
+        radioTimer->start();
+        break;
+    case 1:
+        radioNetworkManager->get(QNetworkRequest(QUrl("http://laut.fm/mmorpg")));
+        break;
+    default:
+        ui->textEdit->append("ERROR: RadioID is not correct \n");
+        break;
+    }
+}
+
+
+void MainWindow::on_mmorpgPlayButton_clicked()
+{
+    //radioTimer->start();
+    radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
+    musicPlayer->stop();
+    radioActive = true;
+    radioID = 1;
+    radioPlayer->play();
+
+    ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+    ui->musicAlbumLabel->setText("Metadata Information");
+    ui->musicArtistLabel->setText("are currently not");
+    ui->musicYearLabel->setText("support. Sorry.");
+
+    ui->musicNextButton->setDisabled(true);
+    ui->musicReplayButton->setDisabled(true);
+}
+
+void MainWindow::on_mmorpgReloadButton_clicked()
+{
+    if (radioActive){
+        //radioTimer->start();
+        radioPlayer->pause();
+        radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
+
+        ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+        ui->musicAlbumLabel->setText("Metadata Information");
+        ui->musicArtistLabel->setText("are currently not");
+        ui->musicYearLabel->setText("supported. Sorry.");
+
+        radioPlayer->play();
+    }
 }
