@@ -1,0 +1,9 @@
+NAME=Gythlinde;
+PLAYER=Phil;
+SYSTEM=DSA5;
+
+CONTENT
+NAME=Gythlinde;
+SURNAME=die Blinde;
+SPECIES=Mensch;
+PROFESSION=Hexe;
