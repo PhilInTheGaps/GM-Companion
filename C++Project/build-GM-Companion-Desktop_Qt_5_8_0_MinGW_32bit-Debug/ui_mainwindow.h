@@ -17,6 +17,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -54,6 +55,8 @@ public:
     QAction *actionI_want_to_use_an_older_Version;
     QAction *actionInternet_Radio;
     QAction *actionCheck_for_Updates_on_Program_Start;
+    QAction *actionNamne_Generator;
+    QAction *actionCharacters;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *infoBox;
@@ -109,7 +112,10 @@ public:
     QHBoxLayout *horizontalLayout_9;
     QTabWidget *nameTabWidget;
     QTextEdit *nameTextEdit;
-    QWidget *tab_2;
+    QWidget *tabCharacters;
+    QHBoxLayout *horizontalLayout_10;
+    QListWidget *charactersListWidget;
+    QStackedWidget *charactersStackedWidget;
     QWidget *tab_3;
     QVBoxLayout *verticalLayout_6;
     QLabel *label;
@@ -327,14 +333,14 @@ public:
 "}\n"
 "\n"
 "QTableView::item {\n"
-"    hborder: 5px solid rgba(68, 119, 170, 150);\n"
+"   /* border: 5px solid rgba(68, 119, 170, 150);*/\n"
 "	\n"
 "	background-color: #333333;\n"
 "}\n"
 "\n"
 "QTableView::item:selected {\n"
-"	b"
-                        "ackground-color: #777777;\n"
+""
+                        "	background-color: #777777;\n"
 "}\n"
 "\n"
 "QTableView, QHeaderView::section {    \n"
@@ -374,8 +380,8 @@ public:
 "    margin: 20px 0px 20 0px;\n"
 "}\n"
 "QScrollBar::handle:vertical {\n"
-"    background-color: #222222;"
-                        "\n"
+"    background-color: #22222"
+                        "2;\n"
 "    min-height: 20px;\n"
 "}\n"
 "QScrollBar::add-line:vertical {\n"
@@ -435,6 +441,10 @@ public:
         actionCheck_for_Updates_on_Program_Start->setObjectName(QStringLiteral("actionCheck_for_Updates_on_Program_Start"));
         actionCheck_for_Updates_on_Program_Start->setCheckable(true);
         actionCheck_for_Updates_on_Program_Start->setAutoRepeat(true);
+        actionNamne_Generator = new QAction(MainWindow);
+        actionNamne_Generator->setObjectName(QStringLiteral("actionNamne_Generator"));
+        actionCharacters = new QAction(MainWindow);
+        actionCharacters->setObjectName(QStringLiteral("actionCharacters"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -935,9 +945,36 @@ public:
         horizontalLayout_9->addWidget(nameTextEdit);
 
         tabWidgetGMHelp->addTab(tabNames, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QStringLiteral("tab_2"));
-        tabWidgetGMHelp->addTab(tab_2, QString());
+        tabCharacters = new QWidget();
+        tabCharacters->setObjectName(QStringLiteral("tabCharacters"));
+        horizontalLayout_10 = new QHBoxLayout(tabCharacters);
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        charactersListWidget = new QListWidget(tabCharacters);
+        charactersListWidget->setObjectName(QStringLiteral("charactersListWidget"));
+        charactersListWidget->setMinimumSize(QSize(150, 0));
+        charactersListWidget->setMaximumSize(QSize(200, 16777215));
+        charactersListWidget->setEditTriggers(QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked);
+        charactersListWidget->setDragDropMode(QAbstractItemView::NoDragDrop);
+        charactersListWidget->setDefaultDropAction(Qt::IgnoreAction);
+        charactersListWidget->setTextElideMode(Qt::ElideLeft);
+        charactersListWidget->setMovement(QListView::Static);
+        charactersListWidget->setProperty("isWrapping", QVariant(false));
+        charactersListWidget->setViewMode(QListView::ListMode);
+        charactersListWidget->setUniformItemSizes(false);
+        charactersListWidget->setWordWrap(false);
+        charactersListWidget->setSelectionRectVisible(true);
+        charactersListWidget->setSortingEnabled(false);
+
+        horizontalLayout_10->addWidget(charactersListWidget);
+
+        charactersStackedWidget = new QStackedWidget(tabCharacters);
+        charactersStackedWidget->setObjectName(QStringLiteral("charactersStackedWidget"));
+
+        horizontalLayout_10->addWidget(charactersStackedWidget);
+
+        tabWidgetGMHelp->addTab(tabCharacters, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
         verticalLayout_6 = new QVBoxLayout(tab_3);
@@ -1070,7 +1107,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 634));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 628));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -1368,6 +1405,8 @@ public:
         menuBar->addAction(menuHelp->menuAction());
         menuGM_Help->addAction(actionDice);
         menuGM_Help->addAction(actionDatabase);
+        menuGM_Help->addAction(actionNamne_Generator);
+        menuGM_Help->addAction(actionCharacters);
         menuGM_Help->addSeparator();
         menuGM_Help->addAction(actionSet_Database_Path);
         menuOptions->addAction(actionSet_Resources_Folder);
@@ -1393,7 +1432,7 @@ public:
 
         musicPlayButton->setDefault(false);
         stackedWidget->setCurrentIndex(0);
-        tabWidgetGMHelp->setCurrentIndex(1);
+        tabWidgetGMHelp->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1401,7 +1440,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 03", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 04", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1418,6 +1457,8 @@ public:
         actionI_want_to_use_an_older_Version->setText(QApplication::translate("MainWindow", "I want to use an older version!", Q_NULLPTR));
         actionInternet_Radio->setText(QApplication::translate("MainWindow", "Internet Radio", Q_NULLPTR));
         actionCheck_for_Updates_on_Program_Start->setText(QApplication::translate("MainWindow", "Check for Updates on Program Start", Q_NULLPTR));
+        actionNamne_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
+        actionCharacters->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         musicLabel->setText(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
         musicPlayButton->setText(QApplication::translate("MainWindow", "Play", Q_NULLPTR));
         musicPauseButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
@@ -1463,7 +1504,7 @@ public:
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:20pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabNames), QApplication::translate("MainWindow", "Names", Q_NULLPTR));
-        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tab_2), QApplication::translate("MainWindow", "Database (Coming Soon)", Q_NULLPTR));
+        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1499,8 +1540,11 @@ public:
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><title>Infos</title><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; font-weight:600;\">MMORP-Radio.de:</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; font-weight:600;\">&quot;Das Webradio f\303\274r Gamer, Mittelalterfans und Nerds.&quot;</span></p></body></html>", Q_NULLPTR));
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; font-weight:600;\">MMORPG-Radio.de:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:16pt; font-weight:600;\">&quot;Das Webradio f\303\274r Gamer, Mittelalterfans und Nerds.&quot;</span></p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600;\"><br /></p>\n"
+"<p style"
+                        "=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://mmorpg-radio.de/\"><span style=\" font-size:16pt; text-decoration: underline; color:#a7cdff;\">Visit MMORPG Radio</span></a></p></body></html>", Q_NULLPTR));
         menuGM_Help->setTitle(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         menuOptions->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
         menuMusic->setTitle(QApplication::translate("MainWindow", "Music", Q_NULLPTR));

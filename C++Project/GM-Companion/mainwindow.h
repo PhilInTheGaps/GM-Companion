@@ -16,6 +16,9 @@
 #include <QNetworkReply>
 #include <QTimer>
 
+QStringList getFiles(QString folder);
+QStringList getFolders(QString path);
+
 namespace Ui {
 class MainWindow;
 }
@@ -39,6 +42,7 @@ private slots:
 
     void updateMetaData();
     void updateProgressBar();
+    void on_metaPlayerGotMetadata();
 
     void on_musicPauseButton_clicked();
     void on_musicPlayButton_clicked();
@@ -86,8 +90,9 @@ private slots:
     void rollDice(int);
     void on_networkAccessManagerFinished(QNetworkReply*);
 
-    void on_rivendellPlayButton_clicked();
+    void on_radioMetaDataChanged();
 
+    void on_rivendellPlayButton_clicked();
     void on_rivendellReloadButton_clicked();
     void on_actionRadio_clicked();
 
@@ -95,10 +100,15 @@ private slots:
     void on_radioNetworkAccessManager_finished(QNetworkReply*);
 
     void on_mmorpgPlayButton_clicked();
-
     void on_mmorpgReloadButton_clicked();
 
     void on_generateNames(QString);
+    void on_actionNameGenerator_clicked();
+    void on_checkForUpdatesOnStart(bool);
+
+    void on_characterListClicked(int);
+
+    void on_actionCharacters_clicked();
 private:
     Ui::MainWindow *ui;
 
@@ -111,6 +121,7 @@ private:
     QString soundPath;
     QString mapsPath;
     QString resourcesPath;
+    QString checkForUpdatesOnStart;
 
     QSignalMapper *signalMapperMusic;
     QSignalMapper *signalMapperSound;
@@ -134,6 +145,7 @@ private:
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
     QMediaPlayer *metaPlayer;
+    QMediaPlaylist *metaPlaylist;
 
     QTableWidget *musicTable;
     QTreeWidgetItem *folderItem;

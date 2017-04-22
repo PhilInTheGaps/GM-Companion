@@ -8,7 +8,5 @@ int main(int argc, char *argv[])
     w.show();
     w.showMaximized();
 
-    w.setVersion("0.3.0.0");
-
     return app.exec();
 }

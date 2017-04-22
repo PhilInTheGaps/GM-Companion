@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "flowlayout.h"
-#include "database.h"
+#include "characters.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -30,6 +30,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QSpacerItem>
+#include <QKeyEvent>
 
 // Gets all folders in directory
 QStringList getFolders(QString path){
@@ -262,13 +263,14 @@ void MainWindow::on_generateNames(QString file){
 
     QFile nameFile(file);
     nameFile.open(QIODevice::ReadOnly);
-    QString namesAsString = nameFile.readAll();
+    QString namesAsString = QString::fromUtf8(nameFile.readAll());
     QStringList names = namesAsString.split(",");
     nameFile.close();
 
     QFile surnamesFile(surnamesPath);
     surnamesFile.open(QIODevice::ReadOnly);
-    QString surnamesAsString = surnamesFile.readAll();
+    QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
+    ui->textEdit->append(surnamesAsString);
     QStringList surnames = surnamesAsString.split(",");
     surnamesFile.close();
 
@@ -288,11 +290,17 @@ void MainWindow::on_generateNames(QString file){
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
+    setVersion("0.3.0.0");
+
     // Sets the paths
     musicPath = getSettings("MUSIC_PATH");
     soundPath = getSettings("SOUND_PATH");
     mapsPath = getSettings("MAPS_PATH");
     resourcesPath = getSettings("RESOURCES_PATH");
+    checkForUpdatesOnStart = getSettings("CHECK_FOR_UPDATES_ON_START");
+    ui->textEdit->append(checkForUpdatesOnStart);
+
+    int checkUpdates = QString::compare(checkForUpdatesOnStart, "1", Qt::CaseInsensitive);
 
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
@@ -310,6 +318,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     musicPlaylist = new QMediaPlaylist();
     musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random); //QMediaPlaylist::PlaybackMode::Loop|
     musicPlayer->setPlaylist(musicPlaylist);
+    metaPlaylist = new QMediaPlaylist();
+    metaPlayer->setPlaylist(metaPlaylist);
 
     // Radio Stuff
     radioPlayer = new QMediaPlayer(this);
@@ -333,6 +343,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(updateProgressBar()));
     connect(musicPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(updateMetaData()));
+    connect(metaPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(on_metaPlayerGotMetadata()));
+    connect(radioPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(on_radioMetaDataChanged()));
 
     // Connects the Menu signals with the according event slots
     connect(ui->actionSet_Music_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setMusicFolder_clicked()));
@@ -340,6 +352,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionSet_Maps_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setMapsFolder_clicked()));
     connect(ui->actionSet_Resources_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setResourcesFolder_clicked()));
     connect(ui->actionSet_Database_Path, SIGNAL(triggered(bool)), this, SLOT(on_setDatabasePath_clicked()));
+    connect(ui->actionCheck_for_Updates_on_Program_Start, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdatesOnStart(bool)));
 
     connect(ui->menuGM_Help, SIGNAL(triggered(QAction*)), this, SLOT(on_menuGM_Help_triggered()));
     connect(ui->menuMusic, SIGNAL(triggered(QAction*)), this, SLOT(on_menuMusic_triggered()));
@@ -359,6 +372,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionCheck_for_Updates, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdates_clicked()));
 
     connect(ui->actionInternet_Radio, SIGNAL(triggered(bool)), this, SLOT(on_actionRadio_clicked()));
+    connect(ui->actionNamne_Generator, SIGNAL(triggered(bool)), this, SLOT(on_actionNameGenerator_clicked()));
+    connect(ui->actionCharacters, SIGNAL(triggered(bool)), this, SLOT(on_actionCharacters_clicked()));
 
     // Network Stuff
     networkManager = new QNetworkAccessManager;
@@ -530,6 +545,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
+    // Character View
+    QStringList characterList = getCharacterList();
+    for (QString character : characterList){
+        //QScrollArea *characterScrollArea = new QScrollArea;
+        QFrame *frame = getCharacterPage(character);
+//        characterScrollArea->setWidget(characterScrollArea);
+//        characterScrollArea->setWidgetResizable(true);
+        ui->charactersStackedWidget->addWidget(frame);
+
+        QListWidgetItem *listItem = new QListWidgetItem;
+        listItem->setText(frame->toolTip());
+        ui->charactersListWidget->addItem(listItem);
+    }
+    connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
+
+    // Checks for updates on program start
+    if (checkUpdates == 0){
+        ui->actionCheck_for_Updates_on_Program_Start->setChecked(true);
+        on_checkForUpdates_clicked();
+    }
+
+}
+
+void MainWindow::on_characterListClicked(int index){
+    //int row = index.row();
+    ui->charactersStackedWidget->setCurrentIndex(index);
 }
 
 void MainWindow::setMap(QString mapPath){
@@ -541,6 +582,7 @@ void MainWindow::setMap(QString mapPath){
 void MainWindow::addToPlaylist(QUrl url, bool music){
     if (music){
         musicPlaylist->addMedia(url);
+        //metaPlaylist->addMedia(url);
     }
     else{
         soundPlaylist->addMedia(url);
@@ -579,73 +621,128 @@ void MainWindow::playSound(QString folder){
 }
 
 void MainWindow::playMusic(QString folder){
-    radioActive = false;
-    radioPlayer->stop();
+    if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier) &&!initialMusicPlay)
+    {
+        ui->textEdit->append("SHIFT IS PRESSED");
 
-    ui->musicNextButton->setEnabled(true);
-    ui->musicReplayButton->setEnabled(true);
+        QString folderName = folder;
+        int index = folderName.lastIndexOf("/")+1;
+        folderName = cleanText(folderName.mid(index));
+        ui->textEdit->append("Index: "+QString::number(index)+"\n");
+        ui->textEdit->append("FolderName: "+folderName+"\n");
 
-    QString folderName = folder;
-    int index = folderName.lastIndexOf("/")+1;
-    folderName = cleanText(folderName.mid(index));
-    ui->textEdit->append("Index: "+QString::number(index)+"\n");
-    ui->textEdit->append("FolderName: "+folderName+"\n");
+        QString category = folder;
+        index = category.lastIndexOf("/", index-2);
+        category = category.mid(index);
+        ui->textEdit->append("Index: "+QString::number(index)+"\n");
+        ui->textEdit->append("Category: "+category+"\n");
 
-    QString category = folder;
-    index = category.lastIndexOf("/", index-2);
-    category = category.mid(index);
-    ui->textEdit->append("Index: "+QString::number(index)+"\n");
-    ui->textEdit->append("Category: "+category+"\n");
+        QStringList files = getFiles(folder);
+        files = shuffleStringList(files);
 
-    QStringList files = getFiles(folder);
-    files = shuffleStringList(files);
-
-    if (initialMusicPlay){
-        ui->pageMusic->layout()->addWidget(musicTable);
-        initialMusicPlay = false;
-    }
-
-    for (int i = 0; i < files.size(); i++){
-        if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
-            files.removeAt(i);
+        for (int i = 0; i < files.size(); i++){
+            if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
+                files.removeAt(i);
+            }
         }
-    }
 
-    musicTable->setRowCount(files.size());
-    if (files.size() > 9){
-        musicTable->setColumnWidth(0, 220);
+        int row = musicTable->rowCount();
+        musicTable->setRowCount(musicTable->rowCount()+files.size());
+
+        if (musicTable->rowCount() > 9){
+            musicTable->setColumnWidth(0, 220);
+        }
+        else{
+            musicTable->setColumnWidth(0, 230);
+        }
+
+        for (QString file : files){
+            if (file.contains(".mp3") || file.contains(".wav")){
+                QTableWidgetItem *i = new QTableWidgetItem;
+                i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+                i->setText(cleanText(file).replace(folderName, ""));
+                musicTable->setItem(row, 0, i);
+
+                addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
+                ui->textEdit->append(file + "\n");
+                row++;
+            }
+        }
+
+        musicPlayer->play();
     }
     else{
-        musicTable->setColumnWidth(0, 230);
-    }
-    musicPlaylist->clear();
+        radioActive = false;
+        radioPlayer->stop();
 
-    int row = 0;
-    for (QString file : files){
-        if (file.contains(".mp3") || file.contains(".wav")){
-            QTableWidgetItem *i = new QTableWidgetItem;
-            i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-            i->setText(cleanText(file).replace(folderName, ""));
-            musicTable->setItem(row, 0, i);
+        ui->musicNextButton->setEnabled(true);
+        ui->musicReplayButton->setEnabled(true);
 
-            addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
-            ui->textEdit->append(file + "\n");
-            row++;
+        if (initialMusicPlay){
+            ui->pageMusic->layout()->addWidget(musicTable);
+            initialMusicPlay = false;
+        }
+
+        QString folderName = folder;
+        int index = folderName.lastIndexOf("/")+1;
+        folderName = cleanText(folderName.mid(index));
+        ui->textEdit->append("Index: "+QString::number(index)+"\n");
+        ui->textEdit->append("FolderName: "+folderName+"\n");
+
+        QString category = folder;
+        index = category.lastIndexOf("/", index-2);
+        category = category.mid(index);
+        ui->textEdit->append("Index: "+QString::number(index)+"\n");
+        ui->textEdit->append("Category: "+category+"\n");
+
+        QStringList files = getFiles(folder);
+        files = shuffleStringList(files);
+
+        for (int i = 0; i < files.size(); i++){
+            if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
+                files.removeAt(i);
+            }
+        }
+
+        musicTable->setRowCount(files.size());
+        if (files.size() > 9){
+            musicTable->setColumnWidth(0, 220);
+        }
+        else{
+            musicTable->setColumnWidth(0, 230);
+        }
+        musicPlaylist->clear();
+
+        int row = 0;
+        for (QString file : files){
+            if (file.contains(".mp3") || file.contains(".wav")){
+                QTableWidgetItem *i = new QTableWidgetItem;
+                i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+                i->setText(cleanText(file).replace(folderName, ""));
+                musicTable->setItem(row, 0, i);
+
+                addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
+                ui->textEdit->append(file + "\n");
+                row++;
+            }
+        }
+
+        musicPlayer->play();
+
+        //Setting Image
+        if (QFile(resourcesPath+"/Icons/Music"+category+".png").exists()){
+            //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".png");
+            ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".png").scaledToWidth(300));
+        }
+        else if (QFile(resourcesPath+"/Icons/Music"+category+".jpg").exists()){
+            //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".jpg");
+            ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".jpg").scaledToWidth(300));
         }
     }
-
-    musicPlayer->play();
-
-    //Setting Image
-    if (QFile(resourcesPath+"/Icons/Music"+category+".png").exists()){
-        //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".png");
-        ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".png").scaledToWidth(300));
-    }
-    else if (QFile(resourcesPath+"/Icons/Music"+category+".jpg").exists()){
-        //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".jpg");
-        ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".jpg").scaledToWidth(300));
-    }
-
+//    ui->textEdit->append(QString::number(metaPlaylist->mediaCount()));
+//    metaPlaylist->setCurrentIndex(0);
+//    metaPlayer->setVolume(0);
+//    metaPlayer->play();
 }
 
 void MainWindow::updateProgressBar(){
@@ -657,6 +754,24 @@ void MainWindow::updateProgressBar(){
         ui->musicProgressBar->setMaximum(musicPlayer->duration());
         ui->musicProgressBar->setValue(musicPlayer->position());
     }
+}
+
+void MainWindow::on_metaPlayerGotMetadata(){
+//    if (musicPlayer->isMetaDataAvailable()){
+//        ui->textEdit->append("FOUND SOMETHING");
+//        QString title = metaPlayer->metaData(QStringLiteral("Title")).toString();
+//        ui->textEdit->append(title);
+////        QTableWidgetItem *i = new QTableWidgetItem;
+////        i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+////        i->setText(title);
+////        musicTable->setItem(metaPlaylist->currentIndex(), 0, i);
+
+////        //metaPlaylist->removeMedia(metaPlaylist->currentIndex());
+//        ui->textEdit->append(QString::number(metaPlaylist->currentIndex()));
+//        if (metaPlaylist->currentIndex()<2){
+//            metaPlaylist->next();
+//        }
+//    }
 }
 
 void MainWindow::updateMetaData(){
@@ -822,12 +937,24 @@ void MainWindow::on_setDatabasePath_clicked(){
 
 }
 
+void MainWindow::on_checkForUpdatesOnStart(bool checked){
+    writeSettings(readSettings(), "CHECK_FOR_UPDATES_ON_START=", QString::number(checked));
+}
+
 void MainWindow::on_menuGM_Help_triggered(){
     ui->stackedWidget->setCurrentIndex(0);
 }
 
 void MainWindow::on_actionDice_clicked(){
-    //ui->stackedWidget->setCurrentIndex(0);
+    ui->tabWidgetGMHelp->setCurrentIndex(0);
+}
+
+void MainWindow::on_actionNameGenerator_clicked(){
+    ui->tabWidgetGMHelp->setCurrentIndex(1);
+}
+
+void MainWindow::on_actionCharacters_clicked(){
+    ui->tabWidgetGMHelp->setCurrentIndex(2);
 }
 
 void MainWindow::on_actionDatabase_clicked(){
@@ -1097,7 +1224,7 @@ void MainWindow::on_mmorpgPlayButton_clicked()
     ui->musicTitleLabel->setText("Radio: MMORPG Radio");
     ui->musicAlbumLabel->setText("Metadata Information");
     ui->musicArtistLabel->setText("are currently not");
-    ui->musicYearLabel->setText("support. Sorry.");
+    ui->musicYearLabel->setText("supported. Sorry.");
 
     ui->musicNextButton->setDisabled(true);
     ui->musicReplayButton->setDisabled(true);
@@ -1116,5 +1243,23 @@ void MainWindow::on_mmorpgReloadButton_clicked()
         ui->musicYearLabel->setText("supported. Sorry.");
 
         radioPlayer->play();
+    }
+}
+
+void MainWindow::on_radioMetaDataChanged(){
+    QString title = radioPlayer->metaData(QStringLiteral("Title")).toString();
+    QString album = radioPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
+    QString artist = musicPlayer->metaData(QStringLiteral("Author")).toString();
+    if (radioPlayer->isMetaDataAvailable()){
+        ui->musicAlbumLabel->setText("Title: "+title);
+        ui->musicArtistLabel->setText("Artist: "+artist);
+        ui->musicYearLabel->setText("Album: "+album);
+
+        ui->musicCoverLabel->setToolTip(album+": "+title);
+    }
+    else{
+        ui->musicAlbumLabel->setText("Metadata Information");
+        ui->musicArtistLabel->setText("are currently not");
+        ui->musicYearLabel->setText("supported. Sorry.");
     }
 }

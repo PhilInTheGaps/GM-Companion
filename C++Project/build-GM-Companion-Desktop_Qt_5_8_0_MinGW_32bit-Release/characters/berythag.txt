@@ -1,0 +1,15 @@
+NAME=Berythag Appelfass;
+PLAYER=Phil;
+SYSTEM=DSA5;
+
+CONTENT
+
+GENERAL CHARACTER INFO
+NAME=Berythag;
+SURNAME=Appelfass;
+SPECIES=Zwerg;
+PROFESSION=Händler;
+CULTURE=Hügelzwerg;
+AGE=32;
+SIZE=137;
+WEIGHT=92;
