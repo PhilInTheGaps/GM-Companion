@@ -11,4 +11,11 @@
     <qresource prefix="/splash">
         <file>resources/splash.jpg</file>
     </qresource>
+    <qresource prefix="/radio/RadioRivendell">
+        <file>resources/radio/logo-radio-rivendell.png</file>
+        <file>resources/radio/radioRivendell01.png</file>
+    </qresource>
+    <qresource prefix="/radio/RadioMMORPG_de">
+        <file>resources/radio/logo-mmorp-radio-de.png</file>
+    </qresource>
 </RCC>

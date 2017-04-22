@@ -14,6 +14,7 @@
 #include <QLabel>
 #include <QScrollArea>
 #include <QNetworkReply>
+#include <QTimer>
 
 namespace Ui {
 class MainWindow;
@@ -85,8 +86,23 @@ private slots:
     void rollDice(int);
     void on_networkAccessManagerFinished(QNetworkReply*);
 
+    void on_rivendellPlayButton_clicked();
+
+    void on_rivendellReloadButton_clicked();
+    void on_actionRadio_clicked();
+
+    void on_radioTimer_timeout();
+    void on_radioNetworkAccessManager_finished(QNetworkReply*);
+
+    void on_mmorpgPlayButton_clicked();
+
+    void on_mmorpgReloadButton_clicked();
+
+    void on_generateNames(QString);
 private:
     Ui::MainWindow *ui;
+
+    void generateNamesTab();
 
     int versionNumber;
     QString versionString;
@@ -100,9 +116,19 @@ private:
     QSignalMapper *signalMapperSound;
     QSignalMapper *signalMapperMaps;
     QSignalMapper *signalMapperDice;
+    QSignalMapper *signalMapperNames;
 
     QNetworkAccessManager *networkManager;
 
+    //Radio
+    QMediaPlayer *radioPlayer;
+    QNetworkAccessManager *radioNetworkManager;
+    QTimer *radioTimer;
+    int radioTimerDuration;
+    bool radioActive;
+    int radioID;
+
+    // Music
     QHBoxLayout *tabMusicLayout;
 
     QMediaPlayer *musicPlayer;
