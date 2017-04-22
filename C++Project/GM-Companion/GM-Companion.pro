@@ -20,11 +20,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
            mainwindow.cpp \
     flowlayout.cpp \
-    database.cpp
+    characters.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
-    database.h
+    characters.h
 
 FORMS    += mainwindow.ui
 
