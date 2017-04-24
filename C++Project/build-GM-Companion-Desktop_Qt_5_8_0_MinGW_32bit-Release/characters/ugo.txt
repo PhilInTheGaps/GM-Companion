@@ -1,9 +1,0 @@
-NAME=Ugo;
-PLAYER=Phil;
-SYSTEM=DSA5;
-
-CONTENT
-NAME=Ugo;
-SURNAME=Bachfegerin von Wasserknick;
-SPECIES=Mensch;
-PROFESSION=Ritter;

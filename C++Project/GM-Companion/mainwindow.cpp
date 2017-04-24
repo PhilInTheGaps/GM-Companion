@@ -2,6 +2,10 @@
 #include "ui_mainwindow.h"
 #include "flowlayout.h"
 #include "characters.h"
+#include "functions.h"
+#include "settingsmanager.h"
+#include "dicemanager.h"
+#include "charactereditor.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -31,285 +35,26 @@
 #include <QNetworkAccessManager>
 #include <QSpacerItem>
 #include <QKeyEvent>
-
-// Gets all folders in directory
-QStringList getFolders(QString path){
-
-    QDir myDir(path);
-    myDir.setFilter(QDir::Dirs);
-    QStringList folders = myDir.entryList();
-
-    return folders;
-}
-
-// Gets all files in directory
-QStringList getFiles(QString folder){
-    QDir myDir(folder);
-    myDir.setFilter(QDir::Files);
-    QStringList files = myDir.entryList(); //QDir::Files
-    return files;
-}
-
-// Replaces all undescores with whitespaces and removes .mp3
-QString cleanText(QString text){
-    text.replace("_", " ");
-    text.replace(".mp3", "");
-    text.replace(".wav", "");
-    text.replace(".png", "");
-    text.replace(".jpg", "");
-    return text;
-}
-
-// Gets a specific setting from settings.txt
-QString getSettings(QString indicator){
-    QString setting = "";
-    QFile file(QDir::currentPath()+"/settings.txt");
-
-    file.open(QIODevice::ReadOnly);
-    QTextStream stream(&file);
-    QString content = stream.readAll();
-    int begin = content.indexOf(indicator);
-    if (begin > -1){
-        int argStart = content.indexOf("=", begin)+1;
-        int argEnd = content.indexOf(";", begin);
-        int argLength = argEnd-argStart;
-        setting = content.mid(argStart, argLength);
-    }
-    file.close();
-
-    return setting;
-}
-
-
-// Writes a setting to settings.txt
-void MainWindow::writeSettings(QString content, QString indicator, QString newSetting){
-    QFile file(QDir::currentPath()+"/settings.txt");
-    file.open(QIODevice::WriteOnly);
-    QTextStream output(&file);
-
-    int i1 = content.indexOf(indicator);
-    if (i1 > -1){
-        int i2 = content.indexOf(";", i1+1);
-        content.remove(i1, i2-i1);
-
-        content.insert(i1, indicator+newSetting);
-    }
-    else{
-        content.append(indicator+newSetting+";"+"\n");
-    }
-
-    output << content;
-    file.close();
-}
-
-// Reads all the settings as one string
-QString MainWindow::readSettings(){
-    QFile file(QDir::currentPath()+"/settings.txt");
-    file.open(QIODevice::ReadOnly);
-    QTextStream textStream(&file);
-    QString content = textStream.readAll();
-    file.close();
-    return content;
-}
-
-// Opens a Directory Chooser to set the new folder location
-void MainWindow::setFolderLocations(QString indicator){
-    QString path;
-    QFileDialog *fileDialog = new QFileDialog;
-    fileDialog->setFileMode(QFileDialog::DirectoryOnly);
-    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog->setWindowTitle("Open Files");
-    if (fileDialog->exec() == QDialog::Accepted){
-        QStringList paths = fileDialog->selectedFiles();
-        path = paths.at(0);
-    }
-    writeSettings(readSettings(), indicator, path);
-}
-
-void MainWindow::rollDice(int sides){
-
-    int amount = ui->amountSpinBox->value();
-    int modifier = ui->modifierSpinBox->value();
-    int result = 0;
-
-    ui->diceResultTableWidget->insertRow(0);
-
-    for (int i = 0; i<amount; i++){
-        QTableWidgetItem *i1 = new QTableWidgetItem;
-        QTableWidgetItem *i2 = new QTableWidgetItem;
-        QTableWidgetItem *i3 = new QTableWidgetItem;
-
-        int temp = rand() % sides+1;
-        i1->setText(QString::number(i+1)+"D"+QString::number(sides));
-        i2->setText(QString::number(temp));
-        result += temp;
-        i3->setText(QString::number(result));
-
-        ui->diceResultTableWidget->insertRow(0);
-
-        ui->diceResultTableWidget->setItem(0, 0, i1);
-        ui->diceResultTableWidget->setItem(0, 1, i2);
-        ui->diceResultTableWidget->setItem(0, 2, i3);
-    }
-
-    result += modifier;
-
-    ui->diceOutputLabel->setText(QString::number(result));
-}
-
-void MainWindow::generateDiceFrame(){
-    int sidesArray[6] = {2, 3, 4, 6, 12, 20};
-
-    ui->diceOutputLabel->setAlignment(Qt::AlignCenter);
-    FlowLayout *diceFlowLayout = new FlowLayout;
-    ui->diceFrame->setLayout(diceFlowLayout);
-
-    for (int sides : sidesArray){
-        QPushButton *button = new QPushButton;
-        button->setText("D"+QString::number(sides));
-        //button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        //button->setMinimumSize(200, 200);
-        button->setStyleSheet("min-width: 50; min-height: 50; max-width: 200; max-height: 200;");
-        //button->setMaximumSize(100, 100);
-
-        diceFlowLayout->addWidget(button);
-        diceFlowLayout->setAlignment(Qt::AlignCenter);
-
-        connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()));
-        signalMapperDice->setMapping(button, sides);
-    }
-
-    connect(signalMapperDice, SIGNAL(mapped(int)), this, SLOT(rollDice(int)));
-}
-
-void MainWindow::generateNamesTab(){
-    QStringList folderList = getFolders(QDir::currentPath()+"/names");
-    for (QString folder : folderList){
-        if (!folder.contains(".")){
-            QScrollArea *scrollArea = new QScrollArea;
-            scrollArea->setWidgetResizable(true);
-            QFrame *frame = new QFrame;
-            scrollArea->setWidget(frame);
-            QVBoxLayout *frameLayout = new QVBoxLayout;
-            frame->setLayout(frameLayout);
-            ui->nameTabWidget->addTab(scrollArea, folder);
-
-            folder = QDir::currentPath()+"/names/"+folder;
-
-//            QTabWidget *tabWidget = new QTabWidget;
-//            frameLayout->addWidget(tabWidget);
-
-
-            QStringList subfolderList = getFolders(folder);
-
-            for (QString subfolder : subfolderList){
-                if (!subfolder.contains(".")){
-                    QFrame *subFrame = new QFrame;
-                    //tabWidget->addTab(subFrame, subfolder);
-                    frameLayout->addWidget(subFrame);
-
-                    QHBoxLayout *hbox = new QHBoxLayout;
-                    subFrame->setLayout(hbox);
-
-                    QLabel *subfolderLabel = new QLabel(subfolder);
-                    hbox->addWidget(subfolderLabel);
-
-                    QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
-                    hbox->addSpacerItem(spacer);
-
-                    QFrame *buttonFrame = new QFrame;
-                    QHBoxLayout *buttonLayout = new QHBoxLayout;
-                    buttonFrame->setLayout(buttonLayout);
-                    buttonFrame->setMaximumWidth(200);
-                    hbox->addWidget(buttonFrame);
-
-                    QPushButton *maleButton = new QPushButton;
-                    maleButton->setText("Male");
-                    buttonLayout->addWidget(maleButton);
-
-                    QPushButton *femaleButton = new QPushButton;
-                    femaleButton->setText("Female");
-                    buttonLayout->addWidget(femaleButton);
-
-                    QStringList files = getFiles(folder+"/"+subfolder);
-
-                    QString maleFile = folder+"/"+subfolder+"/male.txt";
-                    QString femaleFile = folder+"/"+subfolder+"/female.txt";
-
-                    connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                    signalMapperNames->setMapping(maleButton, maleFile);
-
-                    connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                    signalMapperNames->setMapping(femaleButton, femaleFile);
-                }
-            }
-            QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-            frameLayout->addSpacerItem(spacer);
-        }
-    }
-    connect(signalMapperNames, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
-}
-
-void MainWindow::on_generateNames(QString file){
-    ui->nameTextEdit->clear();
-    int index = file.lastIndexOf("/");
-    QString path = file.left(index);
-
-    QString surnamesPath = path+"/surname.txt";
-
-//    ui->nameTextEdit->append(path);
-//    ui->nameTextEdit->append(file);
-//    ui->nameTextEdit->append(surnamesPath);
-
-    QFile nameFile(file);
-    nameFile.open(QIODevice::ReadOnly);
-    QString namesAsString = QString::fromUtf8(nameFile.readAll());
-    QStringList names = namesAsString.split(",");
-    nameFile.close();
-
-    QFile surnamesFile(surnamesPath);
-    surnamesFile.open(QIODevice::ReadOnly);
-    QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
-    ui->textEdit->append(surnamesAsString);
-    QStringList surnames = surnamesAsString.split(",");
-    surnamesFile.close();
-
-    for (int i = 0; i<20; i++){
-        QString name = names.at(rand() % names.size());
-        QString surname = surnames.at(rand() % surnames.size());
-
-        if (name.at(0)==" "){
-            name = name.mid(1);
-        }
-
-        ui->nameTextEdit->append(name+" "+surname);
-    }
-
-}
+#include <QStandardItemModel>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
     setVersion("0.3.0.0");
 
-    // Sets the paths
-    musicPath = getSettings("MUSIC_PATH");
-    soundPath = getSettings("SOUND_PATH");
-    mapsPath = getSettings("MAPS_PATH");
-    resourcesPath = getSettings("RESOURCES_PATH");
-    checkForUpdatesOnStart = getSettings("CHECK_FOR_UPDATES_ON_START");
-    ui->textEdit->append(checkForUpdatesOnStart);
-
-    int checkUpdates = QString::compare(checkForUpdatesOnStart, "1", Qt::CaseInsensitive);
+    // Gets all settings
+    settingsManager = new SettingsManager;
+    settingsManager->readSettings();
+    int checkUpdates = QString::compare(settingsManager->getSetting(Setting::checkForUpdatesOnStart), "1", Qt::CaseInsensitive);
 
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
     signalMapperMaps = new QSignalMapper(this);
-    signalMapperDice = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
 
     // Generates the dice page
-    generateDiceFrame();
+    diceManager = new DiceManager;
+    ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
 
     // Sets player and playlist for music
     musicPlayer = new QMediaPlayer(this);
@@ -351,7 +96,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionSet_Sound_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setSoundFolder_clicked()));
     connect(ui->actionSet_Maps_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setMapsFolder_clicked()));
     connect(ui->actionSet_Resources_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setResourcesFolder_clicked()));
-    connect(ui->actionSet_Database_Path, SIGNAL(triggered(bool)), this, SLOT(on_setDatabasePath_clicked()));
     connect(ui->actionCheck_for_Updates_on_Program_Start, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdatesOnStart(bool)));
 
     connect(ui->menuGM_Help, SIGNAL(triggered(QAction*)), this, SLOT(on_menuGM_Help_triggered()));
@@ -379,9 +123,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     networkManager = new QNetworkAccessManager;
     connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_networkAccessManagerFinished(QNetworkReply*)));
 
-
     // Creates Tab for music
-
     // Creates TableWidget to display song titles
     initialMusicPlay = true;
     musicTable = new QTableWidget;
@@ -391,173 +133,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     musicTable->setHorizontalHeaderLabels(QString("Title").split(";"));
     connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int,int)));
 
-    QTabWidget *tabWidgetMusic = new QTabWidget;
-    ui->pageMusic->layout()->addWidget(tabWidgetMusic);
-
-    QStringList musicCategories = getFolders(musicPath); // List of all categories
-    for (QString folder : musicCategories){
-
-        if (!folder.contains(".")){
-            QScrollArea *scrollArea = new QScrollArea;
-            QFrame *frame = new QFrame;
-
-            tabWidgetMusic->addTab(scrollArea, cleanText(folder));
-            scrollArea->setWidget(frame);
-            scrollArea->setWidgetResizable(true);
-
-            if (QFile(resourcesPath+"/Backgrounds/"+folder+".png").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+resourcesPath+"/Backgrounds/"+folder+".png);}");
-            }
-            else if (QFile(resourcesPath+"/Backgrounds/"+folder+".jpg").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+resourcesPath+"/Backgrounds/"+folder+".jpg);}");
-            }
-
-
-            // Generating musicButtons
-            QString path = musicPath+"/"+folder; //"C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/OSTs"
-            QStringList musicFolders = getFolders(path);
-
-            FlowLayout *flowLayoutMusic = new FlowLayout;
-            frame->setLayout(flowLayoutMusic);
-
-            for (QString s : musicFolders){
-                if (!s.contains(".")){
-                    QPushButton *b = new QPushButton(); //cleanText(s)
-                    b->setStyleSheet("min-width: 155; min-height: 155; padding: 1px; border-radius: 2px");
-                    connect(b, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
-                    signalMapperMusic->setMapping(b, musicPath+"/"+folder+"/"+s);
-
-                    //Setting Icon
-                    if (QFile(resourcesPath+"/Icons/Music/"+folder+"/"+s+".png").exists()){
-                        QIcon *icon = new QIcon(resourcesPath+"/Icons/Music/"+folder+"/"+s+".png");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
-                    }
-                    else if (QFile(resourcesPath+"/Icons/Music/"+folder+"/"+s+".jpg").exists()){
-                        QIcon *icon = new QIcon(resourcesPath+"/Icons/Music/"+folder+"/"+s+".jpg");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
-                    }
-                    else{
-                        b->setText(cleanText(s));
-                    }
-
-                    b->setFixedSize(155, 155);
-                    b->setToolTip(cleanText(s));
-
-                    flowLayoutMusic->addWidget(b);
-                }
-            }
-        }  
-    }
-
-    //tabMusicLayout->addWidget(musicTable);
+    generateMusicButtons();
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
     // Creates Tab for sound
-
-    QTabWidget *tabWidgetSound = new QTabWidget;
-    ui->pageSound->layout()->addWidget(tabWidgetSound);
-
-    QStringList soundCategories = getFolders(soundPath); // List of all categories
-    for (QString folder : soundCategories){
-
-        if (!folder.contains(".")){
-            QScrollArea *scrollArea = new QScrollArea;
-            QFrame *frame = new QFrame;
-
-            tabWidgetSound->addTab(scrollArea, cleanText(folder));
-            scrollArea->setWidget(frame);
-            scrollArea->setWidgetResizable(true);
-
-            // Generating musicButtons
-            QString path = soundPath+"/"+folder;
-            QStringList soundFolders = getFolders(path);
-
-            FlowLayout *flowLayoutSound = new FlowLayout;
-            frame->setLayout(flowLayoutSound);
-
-            for (QString s : soundFolders){
-                if (!s.contains(".")){
-                    QPushButton *b = new QPushButton();
-                    b->setStyleSheet("min-width: 155; min-height: 155; padding: 1px; border-radius: 2px");
-                    connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
-                    signalMapperSound->setMapping(b, soundPath+"/"+folder+"/"+s);
-
-                    //Setting Icon
-                    if (QFile(resourcesPath+"/Icons/Sounds/"+folder+"/"+s+".png").exists()){
-                        QIcon *icon = new QIcon(resourcesPath+"/Icons/Sounds/"+folder+"/"+s+".png");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
-                    }
-                    else if (QFile(resourcesPath+"/Icons/Sounds/"+folder+"/"+s+".jpg").exists()){
-                        QIcon *icon = new QIcon(resourcesPath+"/Icons/Sounds/"+folder+"/"+s+".jpg");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
-                    }
-                    else{
-                        b->setText(cleanText(s));
-                    }
-
-                    b->setFixedSize(155, 155);
-                    b->setToolTip(cleanText(s));
-
-                    flowLayoutSound->addWidget(b);
-                }
-            }
-        }
-    }
-
+    generateSoundButtons();
     connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
 
     // Creates Tab for maps
-    QStringList mapsList = getFiles(mapsPath);
-
-    mapsImageLabel = new QLabel();
-    mapsImageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    mapsImageLabel->setScaledContents(true);
-
-    QScrollArea *mapsScrollArea = new QScrollArea;
-    mapsScrollArea->setWidget(mapsImageLabel);
-
-    FlowLayout *mapsFlowLayout = new FlowLayout;
-    ui->mapsButtonFrame->setLayout(mapsFlowLayout);
-
-    ui->mapsVBox->addWidget(mapsScrollArea);
-
-    for (QString mapName : mapsList){
-        if (mapName.contains(".png") || mapName.contains(".jpg")){
-            QString mapPath = mapsPath+"/"+mapName;
-
-            QPushButton *imageButton = new QPushButton;
-            imageButton->setText(cleanText(mapName));
-            mapsFlowLayout->addWidget(imageButton);
-
-            connect(imageButton, SIGNAL(clicked()), signalMapperMaps, SLOT(map()));
-            signalMapperMaps->setMapping(imageButton, mapPath);
-
-//            mapsImageLabel->setPixmap(QPixmap(mapPath));
-//            mapsImageLabel->adjustSize();
-
-            ui->textEdit->append(mapPath+"\n");
-        }
-    }
-
+    generateMaps();
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
     // Character View
     QStringList characterList = getCharacterList();
     for (QString character : characterList){
-        //QScrollArea *characterScrollArea = new QScrollArea;
         QFrame *frame = getCharacterPage(character);
-//        characterScrollArea->setWidget(characterScrollArea);
-//        characterScrollArea->setWidgetResizable(true);
         ui->charactersStackedWidget->addWidget(frame);
 
         QListWidgetItem *listItem = new QListWidgetItem;
         listItem->setText(frame->toolTip());
+        listItem->setToolTip(cleanText(character));
         ui->charactersListWidget->addItem(listItem);
     }
+    on_characterListClicked(0);
     connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 
     // Checks for updates on program start
@@ -566,17 +164,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         on_checkForUpdates_clicked();
     }
 
+    programStart = false;
+
 }
 
 void MainWindow::on_characterListClicked(int index){
-    //int row = index.row();
-    ui->charactersStackedWidget->setCurrentIndex(index);
-}
+    if (index >= 0){
+        ui->charactersStackedWidget->setCurrentIndex(index);
 
-void MainWindow::setMap(QString mapPath){
-    ui->textEdit->append("Map: "+mapPath+"\n");
-    mapsImageLabel->setPixmap(QPixmap(mapPath));
-    mapsImageLabel->adjustSize();
+        ui->textEdit->append(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png");
+        ui->textEdit->append(ui->charactersListWidget->item(index)->toolTip());
+
+        if (QFile(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png").exists()){
+            QPixmap charIcon(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png");
+            ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
+            ui->characterIconLabel->adjustSize();
+        }
+        else if (QFile(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".jpg").exists()){
+            QPixmap charIcon(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".jpg");
+            ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
+            ui->characterIconLabel->adjustSize();
+        }
+        else{
+            ui->characterIconLabel->clear();
+        }
+    }
+    ui->textEdit->append(QString::number(index));
 }
 
 void MainWindow::addToPlaylist(QUrl url, bool music){
@@ -621,6 +234,7 @@ void MainWindow::playSound(QString folder){
 }
 
 void MainWindow::playMusic(QString folder){
+    radioTimer->stop();
     if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier) &&!initialMusicPlay)
     {
         ui->textEdit->append("SHIFT IS PRESSED");
@@ -730,13 +344,13 @@ void MainWindow::playMusic(QString folder){
         musicPlayer->play();
 
         //Setting Image
-        if (QFile(resourcesPath+"/Icons/Music"+category+".png").exists()){
+        if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".png").exists()){
             //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".png");
-            ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".png").scaledToWidth(300));
+            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".png").scaledToWidth(300));
         }
-        else if (QFile(resourcesPath+"/Icons/Music"+category+".jpg").exists()){
+        else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").exists()){
             //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".jpg");
-            ui->musicCoverLabel->setPixmap(QPixmap(resourcesPath+"/Icons/Music"+category+".jpg").scaledToWidth(300));
+            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").scaledToWidth(300));
         }
     }
 //    ui->textEdit->append(QString::number(metaPlaylist->mediaCount()));
@@ -918,27 +532,69 @@ void MainWindow::on_musicNextButton_clicked()
 }
 
 void MainWindow::on_setMusicFolder_clicked(){
-    setFolderLocations("MUSIC_PATH=");
+    settingsManager->setSetting(Setting::musicPath, true);
+    QLayoutItem *child;
+    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    musicPlayer->stop();
+    musicPlaylist->clear();
+    tabWidgetMusic = NULL;
+    initialMusicPlay = true;
+    generateMusicButtons();
 }
 
 void MainWindow::on_setSoundFolder_clicked(){
-    setFolderLocations("SOUND_PATH=");
+    settingsManager->setSetting(Setting::soundPath, true);
+    QLayoutItem *child;
+    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    soundPlayer->stop();
+    soundPlaylist->clear();
+    tabWidgetSound = NULL;
+    generateSoundButtons();
 }
 
 void MainWindow::on_setMapsFolder_clicked(){
-    setFolderLocations("MAPS_PATH=");
+    settingsManager->setSetting(Setting::mapsPath, true);
+    QLayoutItem *child;
+    while ((child = ui->mapsVBox->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    generateMaps();
 }
 
 void MainWindow::on_setResourcesFolder_clicked(){
-    setFolderLocations("RESOURCES_PATH=");
-}
+    settingsManager->setSetting(Setting::resourcesPath, true);
 
-void MainWindow::on_setDatabasePath_clicked(){
+    QLayoutItem *child;
+    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    soundPlayer->stop();
+    soundPlaylist->clear();
+    tabWidgetSound = NULL;
+    generateSoundButtons();
+
+    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    musicPlayer->stop();
+    musicPlaylist->clear();
+    tabWidgetMusic = NULL;
+    initialMusicPlay = true;
+    generateMusicButtons();
 
 }
 
 void MainWindow::on_checkForUpdatesOnStart(bool checked){
-    writeSettings(readSettings(), "CHECK_FOR_UPDATES_ON_START=", QString::number(checked));
+    settingsManager->setSetting(Setting::checkForUpdatesOnStart, checked);
 }
 
 void MainWindow::on_menuGM_Help_triggered(){
@@ -1020,246 +676,78 @@ void MainWindow::on_soundVolumeSlider_valueChanged(int value)
 
 void MainWindow::on_mapsZoomInButton_clicked()
 {
-    double factor = 1.5 * mapsZoomFactor;
-    mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
-    mapsZoomFactor = factor;
+    if (mapsImageLabel->pixmap() != 0){
+        double factor = 1.5 * mapsZoomFactor;
+        mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = factor;
+    }
 }
 
 void MainWindow::on_mapsZoomOutButton_clicked()
 {
-    double factor = 0.75 * mapsZoomFactor;
-    mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
-    mapsZoomFactor = factor;
+    if (mapsImageLabel->pixmap() != 0){
+        double factor = 0.75 * mapsZoomFactor;
+        mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = factor;
+    }
 }
 
 void MainWindow::on_mapsFitToViewButton_clicked()
 {
-    double width = mapsImageLabel->width();
-    double height = mapsImageLabel->height();
-    double ratio = width/height;
-    double factor = 1;
-    if (ratio >=1){
-        factor = ui->mapsButtonFrame->width() / width;
-        mapsImageLabel->resize(factor * mapsImageLabel->size());
+    if (mapsImageLabel->pixmap() != 0){
+        double width = mapsImageLabel->width();
+        double height = mapsImageLabel->height();
+        double ratio = width/height;
+        double factor = 1;
+        if (ratio >=1){
+            factor = ui->mapsVBox->geometry().width() / width;
+            mapsImageLabel->resize(factor * mapsImageLabel->size());
+        }
+        else{
+            factor = ui->mapsControlFrame->height() / height;
+            mapsImageLabel->resize(factor * mapsImageLabel->size());
+        }
+        mapsZoomFactor = mapsZoomFactor*factor;
     }
-    else{
-        factor = ui->mapsControlFrame->height() / height;
-        mapsImageLabel->resize(factor * mapsImageLabel->size());
-    }
-    mapsZoomFactor = mapsZoomFactor*factor;
 }
 
 void MainWindow::on_mapsResetSizeButton_clicked()
 {
-    mapsImageLabel->resize(mapsImageLabel->pixmap()->size());
-    mapsZoomFactor = 1.0;
+    if (mapsImageLabel->pixmap() != 0){
+        mapsImageLabel->resize(mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = 1.0;
+    }
 }
 
-void MainWindow::on_actionRadio_clicked(){
-    ui->stackedWidget->setCurrentIndex(4);
-}
-
-void MainWindow::on_rivendellPlayButton_clicked()
+void MainWindow::on_createCharacterButton_clicked()
 {
-    radioTimer->start();
-    radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
-    musicPlayer->stop();
-    radioActive = true;
-    radioID = 0;
-    radioPlayer->play();
-
-    ui->musicTitleLabel->setText("Radio: Radio Rivendell");
-    ui->musicAlbumLabel->setText("");
-    ui->musicArtistLabel->setText("");
-    ui->musicYearLabel->setText("");
-
-    ui->musicNextButton->setDisabled(true);
-    ui->musicReplayButton->setDisabled(true);
+    characterEditor = new CharacterEditor;
+    characterEditor->open();
 }
 
-void MainWindow::on_rivendellReloadButton_clicked()
+void MainWindow::on_updateCharactersButton_clicked()
 {
-    if (radioActive){
-        radioPlayer->pause();
-        radioTimer->start();
-        radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
-
-        ui->musicTitleLabel->setText("Radio: Radio Rivendell");
-        ui->musicAlbumLabel->setText("");
-        ui->musicArtistLabel->setText("");
-        ui->musicYearLabel->setText("");
-
-        radioPlayer->play();
+    for(int i = ui->charactersStackedWidget->count(); i >= 0; i--)
+    {
+        QWidget* widget = ui->charactersStackedWidget->widget(i);
+        ui->charactersStackedWidget->removeWidget(widget);
+        widget->deleteLater();
     }
-}
 
-void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
-    ui->textEdit->clear();
-    ui->textEdit->append("FINISHED \n");
-    ui->textEdit->append(QString::number(radioID)+"\n");
+    ui->charactersListWidget->clear();
+    //disconnect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(on_characterListClicked(int)));
 
-    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    ui->textEdit->append(redirectionTarget.toString());
+    QStringList characterList = getCharacterList();
+    for (QString character : characterList){
+        QFrame *frame = getCharacterPage(character);
+        ui->charactersStackedWidget->addWidget(frame);
 
-    if (!redirectionTarget.isNull()) {
-        QUrl newUrl = QUrl(redirectionTarget.toUrl());
-        QNetworkRequest request(newUrl);
-        radioNetworkManager->get(request);
-    } else {
-        QString replyString = reply->readAll();
-
-        switch(radioID){
-        case 0:
-        {
-            QTextDocument doc;
-            doc.setHtml(replyString);
-            replyString = doc.toPlainText();
-            doc.clear();
-            doc.deleteLater();
-
-            // Gets Meta Info from string
-            int startIndex = replyString.indexOf("GMT +1.");
-            int timeIndex = replyString.indexOf(":", startIndex);
-            QString temp = replyString;
-            temp = temp.mid(startIndex, timeIndex-startIndex);
-
-            ui->textEdit->append(temp+"\n");
-
-            int nowIndex = temp.indexOf("Now");
-            int lineIndex = temp.indexOf("\n", nowIndex+5);
-
-            QString title = temp.mid(nowIndex+4);
-            QString artist = temp.mid(lineIndex+1);
-
-            title = title.replace(artist, "");
-            title = title.replace("Spotify", "");
-            title = title.left(title.length()-1);
-            artist = artist.left(artist.length()-3);
-
-            ui->textEdit->append("Title: "+title);
-            ui->textEdit->append("Artist: "+artist);
-
-            ui->musicAlbumLabel->setText("Title: "+title);
-            ui->musicArtistLabel->setText("Artist: "+artist);
-
-            replyString.clear();
-            temp.clear();
-            break;
-        }
-        case 1:
-        {
-            QTextDocument doc;
-            doc.setHtml(replyString);
-            replyString = doc.toPlainText();
-            ui->textEdit->append(replyString+"\n");
-            doc.clear();
-            doc.deleteLater();
-
-            // Gets Meta Info from string
-            int artistStartIndex = replyString.indexOf("Jetzt läuft ");
-            int titleStartIndex = replyString.indexOf("mit dem Titel »", artistStartIndex);
-            int albumStartIndex = replyString.indexOf("vom Album »", titleStartIndex);
-            int albumEndIndex = replyString.indexOf("«", albumStartIndex);
-            QString temp = replyString;
-
-            temp = temp.mid(artistStartIndex, albumEndIndex-artistStartIndex);
-
-
-//            int nowIndex = temp.indexOf("Now");
-//            int lineIndex = temp.indexOf("\n", nowIndex+5);
-
-//            QString title = temp.mid(nowIndex+4);
-//            QString artist = temp.mid(lineIndex+1);
-
-//            title = title.replace(artist, "");
-//            title = title.replace("Spotify", "");
-//            title = title.left(title.length()-1);
-//            artist = artist.left(artist.length()-3);
-
-//            ui->textEdit->append("Title: "+title);
-//            ui->textEdit->append("Artist: "+artist);
-
-//            ui->musicAlbumLabel->setText("Title: "+title);
-//            ui->musicArtistLabel->setText("Artist: "+artist);
-
-//            replyString.clear();
-//            temp.clear();
-            break;
-        }
-        default:
-        {
-            ui->textEdit->append("Invalid RadioID \n");
-        }
-        }
+        QListWidgetItem *listItem = new QListWidgetItem;
+        listItem->setText(frame->toolTip());
+        listItem->setToolTip(cleanText(character));
+        ui->charactersListWidget->addItem(listItem);
     }
-    reply->deleteLater();
-}
-
-void MainWindow::on_radioTimer_timeout(){
-    ui->textEdit->append("TIMER FINISHED");
-    switch (radioID) {
-    case 0:
-        radioNetworkManager->get(QNetworkRequest(QUrl("https://www.radiorivendell.com/page/last-played/")));
-        radioTimer->start();
-        break;
-    case 1:
-        radioNetworkManager->get(QNetworkRequest(QUrl("http://laut.fm/mmorpg")));
-        break;
-    default:
-        ui->textEdit->append("ERROR: RadioID is not correct \n");
-        break;
-    }
-}
-
-
-void MainWindow::on_mmorpgPlayButton_clicked()
-{
-    //radioTimer->start();
-    radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
-    musicPlayer->stop();
-    radioActive = true;
-    radioID = 1;
-    radioPlayer->play();
-
-    ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-    ui->musicAlbumLabel->setText("Metadata Information");
-    ui->musicArtistLabel->setText("are currently not");
-    ui->musicYearLabel->setText("supported. Sorry.");
-
-    ui->musicNextButton->setDisabled(true);
-    ui->musicReplayButton->setDisabled(true);
-}
-
-void MainWindow::on_mmorpgReloadButton_clicked()
-{
-    if (radioActive){
-        //radioTimer->start();
-        radioPlayer->pause();
-        radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
-
-        ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-        ui->musicAlbumLabel->setText("Metadata Information");
-        ui->musicArtistLabel->setText("are currently not");
-        ui->musicYearLabel->setText("supported. Sorry.");
-
-        radioPlayer->play();
-    }
-}
-
-void MainWindow::on_radioMetaDataChanged(){
-    QString title = radioPlayer->metaData(QStringLiteral("Title")).toString();
-    QString album = radioPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
-    QString artist = musicPlayer->metaData(QStringLiteral("Author")).toString();
-    if (radioPlayer->isMetaDataAvailable()){
-        ui->musicAlbumLabel->setText("Title: "+title);
-        ui->musicArtistLabel->setText("Artist: "+artist);
-        ui->musicYearLabel->setText("Album: "+album);
-
-        ui->musicCoverLabel->setToolTip(album+": "+title);
-    }
-    else{
-        ui->musicAlbumLabel->setText("Metadata Information");
-        ui->musicArtistLabel->setText("are currently not");
-        ui->musicYearLabel->setText("supported. Sorry.");
-    }
+    ui->charactersListWidget->setCurrentRow(0);
+    on_characterListClicked(0);
+    //connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 }

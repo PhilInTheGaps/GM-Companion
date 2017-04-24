@@ -1,6 +1,7 @@
 #include "characters.h"
 #include "mainwindow.h"
 #include "flowlayout.h"
+#include "charactereditor.h"
 
 #include <QDir>
 #include <QListWidget>
@@ -8,7 +9,13 @@
 
 QStringList getCharacterList(){
     QString folderPath = QDir::currentPath()+"/characters";
-    QStringList characterFileNames = getFiles(folderPath);
+    QStringList files = getFiles(folderPath);
+    QStringList characterFileNames;
+    for (QString file : files){
+        if (file.contains(".txt")){
+            characterFileNames.push_back(file);
+        }
+    }
     return characterFileNames;
 }
 
@@ -30,6 +37,34 @@ QFrame* createLabelFrame(QString first, QString second){
     return frame;
 }
 
+QFrame* generateFrame(QString indicator, QString headline, QString characterFileContent, int maxWidth=210){
+    QFrame *frame = new QFrame;
+    frame->setFrameShape(QFrame::Box);
+    frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    frame->setMaximumWidth(maxWidth);
+    QVBoxLayout *layout = new QVBoxLayout;
+    frame->setLayout(layout);
+
+    QLabel *label = new QLabel;
+    label->setText(headline);
+    layout->addWidget(label);
+
+    QListWidget *listWidget = new QListWidget;
+    layout->addWidget(listWidget);
+
+    int index1 = characterFileContent.indexOf(indicator);
+    int index2 = characterFileContent.indexOf("};", index1);
+    QString string = characterFileContent.mid(index1+indicator.length(), index2-index1-indicator.length());
+
+    QStringList list = string.split(",");
+
+    for (QString item : list){
+        listWidget->addItem(item);
+    }
+
+    return frame;
+}
+
 QFrame* getCharacterPage(QString character){
     QFile characterFile(QDir::currentPath()+"/characters/"+character);
     characterFile.open(QIODevice::ReadOnly);
@@ -42,17 +77,26 @@ QFrame* getCharacterPage(QString character){
     QHBoxLayout *baseLayout = new QHBoxLayout;
     baseFrame->setLayout(baseLayout);
 
+    QFrame *leftFrame = new QFrame;
+    QVBoxLayout *leftLayout = new QVBoxLayout;
+    leftFrame->setLayout(leftLayout);
+    baseLayout->addWidget(leftFrame);
+
+    QLabel* infoLabel = new QLabel;
+    infoLabel->setText("Info");
+    leftLayout->addWidget(infoLabel);
+
     QFrame *mainFrame = new QFrame;
-    mainFrame->setMinimumWidth(200);
     mainFrame->setFrameShape(QFrame::Box);
     FlowLayout *mainLayout = new FlowLayout;
     mainFrame->setLayout(mainLayout);
 
     QScrollArea *mainScrollArea = new QScrollArea;
-    mainScrollArea->setWidgetResizable(true);
+    mainScrollArea->setMinimumWidth(200);
     mainScrollArea->setWidget(mainFrame);
+    mainScrollArea->setWidgetResizable(true);
 
-    baseLayout->addWidget(mainScrollArea);
+    leftLayout->addWidget(mainScrollArea);
 
     index1 = characterFileContent.indexOf("NAME=");
     index2 = characterFileContent.indexOf(";", index1);
@@ -71,240 +115,72 @@ QFrame* getCharacterPage(QString character){
         system = DSA5;
     }
     else{
-        system = Unknown;
+        system = Unspecific;
     }
 
-    QFrame *generalInfoFrame = new QFrame;
-    generalInfoFrame->setFrameShape(QFrame::Box);
+    // General Character Info
+    QFrame* generalInfoFrame = generateFrame("GENERAL_CHARACTER_INFO={", "General Character Info", characterFileContent);
     mainLayout->addWidget(generalInfoFrame);
-    QVBoxLayout *generalInfoFrameLayout = new QVBoxLayout;
-    generalInfoFrame->setLayout(generalInfoFrameLayout);
 
-    QLabel *generalInfoLabel = new QLabel;
-    generalInfoLabel->setText("General Character Info");
-    generalInfoFrameLayout->addWidget(generalInfoLabel);
+    // Fight Stats
+    QLabel* fightLabel = new QLabel;
+    fightLabel->setText("Fight");
+    leftLayout->addWidget(fightLabel);
 
-    index1 = characterFileContent.indexOf("CONTENT");
+    QFrame *fightFrame = new QFrame;
+    fightFrame->setFrameShape(QFrame::Box);
+    FlowLayout *fightLayout = new FlowLayout;
+    fightFrame->setLayout(fightLayout);
 
-    // Character Name
-    index1 = characterFileContent.indexOf("NAME=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString characterName = characterFileContent.mid(index1+5, index2-index1-5);
-    QFrame *nameFrame = createLabelFrame("Name: ", characterName);
-    generalInfoFrameLayout->addWidget(nameFrame);
+    QScrollArea *fightScrollArea = new QScrollArea;
+    fightScrollArea->setMinimumWidth(200);
+    fightScrollArea->setWidget(fightFrame);
+    fightScrollArea->setWidgetResizable(true);
 
-    // Character Surname
-    index1 = characterFileContent.indexOf("SURNAME=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString characterSurname = characterFileContent.mid(index1+8, index2-index1-8);
-    QFrame *surnameFrame = createLabelFrame("Surname: ", characterSurname);
-    generalInfoFrameLayout->addWidget(surnameFrame);
+    leftLayout->addWidget(fightScrollArea);
 
-    // Character Species
-    index1 = characterFileContent.indexOf("SPECIES=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString species = characterFileContent.mid(index1+8, index2-index1-8);
-    QFrame *speciesFrame = createLabelFrame("Species: ", species);
-    generalInfoFrameLayout->addWidget(speciesFrame);
+    // Weapons
+    QFrame* weaponFrame = generateFrame("WEAPONS={", "Weapons", characterFileContent, 400);
+    fightLayout->addWidget(weaponFrame);
 
-    // Character Profession
-    index1 = characterFileContent.indexOf("PROFESSION=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString profession = characterFileContent.mid(index1+11, index2-index1-11);
-    QFrame *professionFrame = createLabelFrame("Profession: ", profession);
-    generalInfoFrameLayout->addWidget(professionFrame);
-
-    // Character Culture
-    index1 = characterFileContent.indexOf("CULTURE=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString culture = characterFileContent.mid(index1+8, index2-index1-8);
-    QFrame *cultureFrame = createLabelFrame("Culture: ", culture);
-    generalInfoFrameLayout->addWidget(cultureFrame);
-
-    // Character Age
-    index1 = characterFileContent.indexOf("AGE=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString age = characterFileContent.mid(index1+4, index2-index1-4);
-    QFrame *ageFrame = createLabelFrame("Age: ", age);
-    generalInfoFrameLayout->addWidget(ageFrame);
-
-    // Character Size
-    index1 = characterFileContent.indexOf("SIZE=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString size = characterFileContent.mid(index1+5, index2-index1-5);
-    QFrame *sizeFrame = createLabelFrame("Size: ", size);
-    generalInfoFrameLayout->addWidget(sizeFrame);
-
-    // Character Weight
-    index1 = characterFileContent.indexOf("WEIGHT=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString weight = characterFileContent.mid(index1+7, index2-index1-7);
-    QFrame *weightFrame = createLabelFrame("Weight: ", weight);
-    generalInfoFrameLayout->addWidget(weightFrame);
+    // Armor
+    QFrame* armorFrame = generateFrame("ARMOR={", "Armor", characterFileContent, 400);
+    fightLayout->addWidget(armorFrame);
 
     // SYSTEM SPECIFIC INFORMATION
     switch (system) {
     case DSA5:{
         // Base Stats
-        QFrame *baseStatsFrame = new QFrame;
-        baseStatsFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *baseStatsFrameLayout = new QVBoxLayout;
-        baseStatsFrame->setLayout(baseStatsFrameLayout);
-
-        index1 = characterFileContent.indexOf("EIGENSCHAFTEN");
-
-        QLabel *baseStatsLabel = new QLabel;
-        baseStatsLabel->setText("Eigenschaften");
-        baseStatsFrameLayout->addWidget(baseStatsLabel);
-
-        QStringList indicators = {"MUT=", "KLUGHEIT=", "INTUITION=", "CHARISMA=",
-                                  "FINGERFERTIGKEIT=", "GESCHICKLICHKEIT=", "KONSTITUTION=", "KOERPERKRAFT="};
-        QStringList titles = {"Mut: ", "Klugheit: ", "Intuition: ", "Charisma: ",
-                              "Fingerfertigkeit: ", "Geschicklichkeit: ", "Konstitution: ", "Koerperkraft: "};
-
-        for (int i = 0; i<indicators.size(); i++){
-            QString s1 = indicators.at(i);
-            index1 = characterFileContent.indexOf(s1, index1);
-            index2 = characterFileContent.indexOf(";", index1);
-            QString s2 = characterFileContent.mid(index1+s1.length(), index2-index1-s1.length());
-            QFrame *f = createLabelFrame(titles.at(i), s2);
-            baseStatsFrameLayout->addWidget(f);
-        }
-
-        mainLayout->addWidget(baseStatsFrame);
+        QFrame *eigenschaftenFrame = generateFrame("EIGENSCHAFTEN={", "Eigenschaften", characterFileContent);
+        mainLayout->addWidget(eigenschaftenFrame);
 
         // AP
-        QFrame *apFrame = new QFrame;
-        apFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *apFrameLayout = new QVBoxLayout;
-        apFrame->setLayout(apFrameLayout);
-
-        index1 = characterFileContent.indexOf("AP");
-
-        QLabel *apLabel = new QLabel;
-        apLabel->setText("Eigenschaften");
-        apFrameLayout->addWidget(apLabel);
-
-        QStringList apindicators = {"ERFAHRUNGSGRAD=", "GESAMT=", "GESAMMELT=", "AUSGEGEBEN="};
-        QStringList aptitles = {"Erfahrungsgrad: ", "AP Gesamt: ", "AP Gesammelt: ", "AP Ausgegeben: "};
-
-        for (int i = 0; i<apindicators.size(); i++){
-            QString s1 = apindicators.at(i);
-            index1 = characterFileContent.indexOf(s1, index1);
-            index2 = characterFileContent.indexOf(";", index1);
-            QString s2 = characterFileContent.mid(index1+s1.length(), index2-index1-s1.length());
-            QFrame *f = createLabelFrame(aptitles.at(i), s2);
-            apFrameLayout->addWidget(f);
-        }
-
+        QFrame *apFrame = generateFrame("AP={", "AP", characterFileContent);
         mainLayout->addWidget(apFrame);
 
         // Vorteile
-        QFrame *vorteileFrame = new QFrame;
-        vorteileFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *vorteileFrameLayout = new QVBoxLayout;
-        vorteileFrame->setLayout(vorteileFrameLayout);
-
-        QLabel *vorteileLabel = new QLabel;
-        vorteileLabel->setText("Vorteile");
-        vorteileFrameLayout->addWidget(vorteileLabel);
-
-        QListWidget *vorteileListWidget = new QListWidget;
-        vorteileFrameLayout->addWidget(vorteileListWidget);
-
-        index1 = characterFileContent.indexOf("VORTEILE={");
-        index2 = characterFileContent.indexOf("};", index1);
-        QString vorteileString = characterFileContent.mid(index1+10, index2-index1-10);
-
-        QStringList vorteileList = vorteileString.split(",");
-
-        for (QString vorteil : vorteileList){
-            vorteileListWidget->addItem(vorteil);
-        }
-
+        QFrame *vorteileFrame = generateFrame("VORTEILE={", "Vorteile", characterFileContent);
         mainLayout->addWidget(vorteileFrame);
 
         // Nachteile
-        QFrame *nachteileFrame = new QFrame;
-        nachteileFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *nachteileFrameLayout = new QVBoxLayout;
-        nachteileFrame->setLayout(nachteileFrameLayout);
-
-        QLabel *nachteileLabel = new QLabel;
-        nachteileLabel->setText("Nachteile");
-        nachteileFrameLayout->addWidget(nachteileLabel);
-
-        QListWidget *nachteileListWidget = new QListWidget;
-        nachteileFrameLayout->addWidget(nachteileListWidget);
-
-        index1 = characterFileContent.indexOf("NACHTEILE={");
-        index2 = characterFileContent.indexOf("};", index1);
-        QString nachteileString = characterFileContent.mid(index1+11, index2-index1-11);
-
-        QStringList nachteileList = nachteileString.split(",");
-
-        for (QString nachteil : nachteileList){
-            nachteileListWidget->addItem(nachteil);
-        }
-
+        QFrame *nachteileFrame = generateFrame("NACHTEILE={", "Nachteile", characterFileContent);
         mainLayout->addWidget(nachteileFrame);
 
         // Allgemeine Sonderfertigkeiten
-        QFrame *sonderfertigkeitenFrame = new QFrame;
-        sonderfertigkeitenFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *sonderfertigkeitenFrameLayout = new QVBoxLayout;
-        sonderfertigkeitenFrame->setLayout(sonderfertigkeitenFrameLayout);
-
-        QLabel *sonderfertigkeitenLabel = new QLabel;
-        sonderfertigkeitenLabel->setText("Allgemeine Sonderfertigkeiten");
-        sonderfertigkeitenFrameLayout->addWidget(sonderfertigkeitenLabel);
-
-        QListWidget *sonderfertigkeitenListWidget = new QListWidget;
-        sonderfertigkeitenFrameLayout->addWidget(sonderfertigkeitenListWidget);
-
-        index1 = characterFileContent.indexOf("ALLGEMEINE_SONDERFERTIGKEITEN={");
-        index2 = characterFileContent.indexOf("};", index1);
-        QString sonderfertigkeitenString = characterFileContent.mid(index1+31, index2-index1-31);
-
-        QStringList sonderfertigkeitenList = sonderfertigkeitenString.split(",");
-
-        for (QString sonderfertigkeit : sonderfertigkeitenList){
-            sonderfertigkeitenListWidget->addItem(sonderfertigkeit);
-        }
-
+        QFrame *sonderfertigkeitenFrame = generateFrame("ALLGEMEINE_SONDERFERTIGKEITEN={", "Allgemeine Sonderfertigkeiten", characterFileContent);
         mainLayout->addWidget(sonderfertigkeitenFrame);
 
         // Grundwerte
-        QFrame *grundwerteFrame = new QFrame;
-        grundwerteFrame->setFrameShape(QFrame::Box);
-        QVBoxLayout *grundwerteFrameLayout = new QVBoxLayout;
-        grundwerteFrame->setLayout(grundwerteFrameLayout);
-
-        index1 = characterFileContent.indexOf("GRUNDWERTE");
-
-        QLabel *grundwerteLabel = new QLabel;
-        grundwerteLabel->setText("Grundwerte");
-        grundwerteFrameLayout->addWidget(grundwerteLabel);
-
-        QStringList grundwerteindicators = {"LEBENSENERGIE_MAX=", "ASTRALENERGIE_MAX=", "KARMAENERGIE_MAX=", "SEELENKRAFT_MAX=",
-                                            "ZAEHIGKEIT_MAX=", "AUSWEICHEN_MAX=", "INITIATIVE_MAX=", "GESCHWINDIGKEIT_MAX=",
-                                            "SCHICKSALSPUNKTE_AKTUELL=", "SCHICKSALSPUNKTE_MAX="};
-        QStringList grundwertetitles = {"Lebensenergie (Max.): ", "Astralenergie (Max.): ", "Karmaenergie (Max.): ",
-                                        "Seelenkraft (Max.): ", "Zaehigkeit (Max.): ", "Ausweichen (Max.): ",
-                                        "Initiative (Max.): ", "Geschwindigkeit (Max.): ", "Schicksalspunkte (Aktuell): ",
-                                        "Schicksalspunkte (Max.): "};
-
-        for (int i = 0; i<grundwerteindicators.size(); i++){
-            QString s1 = grundwerteindicators.at(i);
-            index1 = characterFileContent.indexOf(s1, index1);
-            index2 = characterFileContent.indexOf(";", index1);
-            QString s2 = characterFileContent.mid(index1+s1.length(), index2-index1-s1.length());
-            QFrame *f = createLabelFrame(grundwertetitles.at(i), s2);
-            grundwerteFrameLayout->addWidget(f);
-        }
-
+        QFrame *grundwerteFrame = generateFrame("GRUNDWERTE={", "Grundwerte",characterFileContent);
         mainLayout->addWidget(grundwerteFrame);
 
+        // Kampftechniken
+        QFrame* ktFrame = generateFrame("KAMPFTECHNIKEN={", "Kampftechniken", characterFileContent);
+        fightLayout->addWidget(ktFrame);
+
+        // Kampfsonderfertigkeiten
+        QFrame* ksfFrame = generateFrame("KAMPFSONDERFERTIGKEITEN={", "Kampfsonderfertigkeiten", characterFileContent);
+        fightLayout->addWidget(ksfFrame);
 
         break;}
     default:

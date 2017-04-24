@@ -20,11 +20,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
            mainwindow.cpp \
     flowlayout.cpp \
-    characters.cpp
+    characters.cpp \
+    functions.cpp \
+    settingsmanager.cpp \
+    dicemanager.cpp \
+    music.cpp \
+    sound.cpp \
+    names.cpp \
+    radio.cpp \
+    maps.cpp \
+    charactereditor.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
-    characters.h
+    characters.h \
+    functions.h \
+    settingsmanager.h \
+    dicemanager.h \
+    charactereditor.h
 
 FORMS    += mainwindow.ui
 
