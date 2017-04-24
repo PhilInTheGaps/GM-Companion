@@ -8,7 +8,8 @@ QStringList getCharacterList();
 QFrame *getCharacterPage(QString character);
 
 enum System{
-    DSA5, Unknown
+    Unspecific,
+    DSA5
 };
 
 #endif // CHARACTERS_H

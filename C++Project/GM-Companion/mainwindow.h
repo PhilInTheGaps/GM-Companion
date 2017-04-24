@@ -15,16 +15,18 @@
 #include <QScrollArea>
 #include <QNetworkReply>
 #include <QTimer>
+#include <QTabWidget>
 
-QStringList getFiles(QString folder);
-QStringList getFolders(QString path);
+#include "settingsmanager.h"
+#include "dicemanager.h"
+#include "functions.h"
+#include "charactereditor.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
@@ -53,7 +55,6 @@ private slots:
     void on_setSoundFolder_clicked();
     void on_setMapsFolder_clicked();
     void on_setResourcesFolder_clicked();
-    void on_setDatabasePath_clicked();
 
     void on_menuGM_Help_triggered();
     void on_menuMusic_triggered();
@@ -87,7 +88,6 @@ private slots:
     void on_mapsFitToViewButton_clicked();
     void on_mapsResetSizeButton_clicked();
 
-    void rollDice(int);
     void on_networkAccessManagerFinished(QNetworkReply*);
 
     void on_radioMetaDataChanged();
@@ -109,24 +109,34 @@ private slots:
     void on_characterListClicked(int);
 
     void on_actionCharacters_clicked();
+
+    void on_createCharacterButton_clicked();
+
+    void on_updateCharactersButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+
+    bool programStart = true;
+
+    void generateMusicButtons();
+    void generateSoundButtons();
+    void generateMaps();
+    QTabWidget *tabWidgetMusic;
+    QTabWidget *tabWidgetSound;
+
+    SettingsManager* settingsManager;
+    DiceManager* diceManager;
+    CharacterEditor* characterEditor;
 
     void generateNamesTab();
 
     int versionNumber;
     QString versionString;
 
-    QString musicPath;
-    QString soundPath;
-    QString mapsPath;
-    QString resourcesPath;
-    QString checkForUpdatesOnStart;
-
     QSignalMapper *signalMapperMusic;
     QSignalMapper *signalMapperSound;
     QSignalMapper *signalMapperMaps;
-    QSignalMapper *signalMapperDice;
     QSignalMapper *signalMapperNames;
 
     QNetworkAccessManager *networkManager;
@@ -147,13 +157,14 @@ private:
     QMediaPlayer *metaPlayer;
     QMediaPlaylist *metaPlaylist;
 
+    QTabWidget* musicTabWidget;
     QTableWidget *musicTable;
     QTreeWidgetItem *folderItem;
 
     QMediaPlayer *soundPlayer;
     QMediaPlaylist *soundPlaylist;
 
-    void generateDiceFrame();
+    //void generateDiceFrame();
 
     QScrollArea *mapsScrollArea;
     QLabel *mapsImageLabel;
