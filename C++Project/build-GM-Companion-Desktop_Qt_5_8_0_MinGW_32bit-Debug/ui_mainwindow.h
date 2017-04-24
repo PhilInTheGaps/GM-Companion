@@ -26,10 +26,8 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
-#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -93,28 +91,19 @@ public:
     QTabWidget *tabWidgetGMHelp;
     QWidget *tabDice;
     QHBoxLayout *horizontalLayout_8;
-    QFrame *frame;
-    QVBoxLayout *verticalLayout_7;
-    QHBoxLayout *horizontalLayout;
-    QSpinBox *amountSpinBox;
-    QLabel *label_2;
-    QFrame *diceFrame;
-    QLabel *label_3;
-    QSpinBox *modifierSpinBox;
-    QVBoxLayout *verticalLayout_8;
-    QLabel *label_4;
-    QLabel *diceOutputLabel;
-    QScrollArea *scrollArea_2;
-    QWidget *scrollAreaWidgetContents_2;
-    QVBoxLayout *verticalLayout_5;
-    QTableWidget *diceResultTableWidget;
     QWidget *tabNames;
     QHBoxLayout *horizontalLayout_9;
     QTabWidget *nameTabWidget;
     QTextEdit *nameTextEdit;
     QWidget *tabCharacters;
     QHBoxLayout *horizontalLayout_10;
+    QFrame *frame;
+    QVBoxLayout *verticalLayout_5;
+    QLabel *label_2;
     QListWidget *charactersListWidget;
+    QLabel *characterIconLabel;
+    QPushButton *createCharacterButton;
+    QPushButton *updateCharactersButton;
     QStackedWidget *charactersStackedWidget;
     QWidget *tab_3;
     QVBoxLayout *verticalLayout_6;
@@ -135,7 +124,6 @@ public:
     QFrame *line_5;
     QSpacerItem *verticalSpacer;
     QVBoxLayout *mapsVBox;
-    QFrame *mapsButtonFrame;
     QWidget *pageRadio;
     QVBoxLayout *verticalLayout_9;
     QLabel *label_5;
@@ -762,165 +750,6 @@ public:
         horizontalLayout_8->setSpacing(6);
         horizontalLayout_8->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
-        frame = new QFrame(tabDice);
-        frame->setObjectName(QStringLiteral("frame"));
-        sizePolicy.setHeightForWidth(frame->sizePolicy().hasHeightForWidth());
-        frame->setSizePolicy(sizePolicy);
-        frame->setMaximumSize(QSize(16777215, 16777215));
-        frame->setFrameShape(QFrame::Box);
-        frame->setFrameShadow(QFrame::Raised);
-        verticalLayout_7 = new QVBoxLayout(frame);
-        verticalLayout_7->setSpacing(6);
-        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        amountSpinBox = new QSpinBox(frame);
-        amountSpinBox->setObjectName(QStringLiteral("amountSpinBox"));
-        sizePolicy5.setHeightForWidth(amountSpinBox->sizePolicy().hasHeightForWidth());
-        amountSpinBox->setSizePolicy(sizePolicy5);
-        amountSpinBox->setMinimumSize(QSize(50, 150));
-        QFont font4;
-        font4.setPointSize(40);
-        amountSpinBox->setFont(font4);
-        amountSpinBox->setMinimum(1);
-        amountSpinBox->setMaximum(999);
-        amountSpinBox->setValue(1);
-
-        horizontalLayout->addWidget(amountSpinBox);
-
-        label_2 = new QLabel(frame);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        QFont font5;
-        font5.setPointSize(30);
-        label_2->setFont(font5);
-
-        horizontalLayout->addWidget(label_2);
-
-        diceFrame = new QFrame(frame);
-        diceFrame->setObjectName(QStringLiteral("diceFrame"));
-        QSizePolicy sizePolicy8(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy8.setHorizontalStretch(0);
-        sizePolicy8.setVerticalStretch(0);
-        sizePolicy8.setHeightForWidth(diceFrame->sizePolicy().hasHeightForWidth());
-        diceFrame->setSizePolicy(sizePolicy8);
-        diceFrame->setMinimumSize(QSize(150, 0));
-        diceFrame->setMaximumSize(QSize(400, 16777215));
-        diceFrame->setFrameShape(QFrame::StyledPanel);
-        diceFrame->setFrameShadow(QFrame::Raised);
-
-        horizontalLayout->addWidget(diceFrame);
-
-        label_3 = new QLabel(frame);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setFont(font5);
-
-        horizontalLayout->addWidget(label_3);
-
-        modifierSpinBox = new QSpinBox(frame);
-        modifierSpinBox->setObjectName(QStringLiteral("modifierSpinBox"));
-        QSizePolicy sizePolicy9(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy9.setHorizontalStretch(0);
-        sizePolicy9.setVerticalStretch(0);
-        sizePolicy9.setHeightForWidth(modifierSpinBox->sizePolicy().hasHeightForWidth());
-        modifierSpinBox->setSizePolicy(sizePolicy9);
-        modifierSpinBox->setMinimumSize(QSize(100, 150));
-        modifierSpinBox->setFont(font4);
-        modifierSpinBox->setFrame(true);
-        modifierSpinBox->setAccelerated(false);
-        modifierSpinBox->setMinimum(-999);
-        modifierSpinBox->setMaximum(999);
-
-        horizontalLayout->addWidget(modifierSpinBox);
-
-
-        verticalLayout_7->addLayout(horizontalLayout);
-
-        verticalLayout_8 = new QVBoxLayout();
-        verticalLayout_8->setSpacing(6);
-        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
-        label_4 = new QLabel(frame);
-        label_4->setObjectName(QStringLiteral("label_4"));
-        QFont font6;
-        font6.setPointSize(35);
-        label_4->setFont(font6);
-
-        verticalLayout_8->addWidget(label_4);
-
-        diceOutputLabel = new QLabel(frame);
-        diceOutputLabel->setObjectName(QStringLiteral("diceOutputLabel"));
-        sizePolicy.setHeightForWidth(diceOutputLabel->sizePolicy().hasHeightForWidth());
-        diceOutputLabel->setSizePolicy(sizePolicy);
-        diceOutputLabel->setMinimumSize(QSize(300, 300));
-        QFont font7;
-        font7.setPointSize(80);
-        font7.setBold(true);
-        font7.setUnderline(false);
-        font7.setWeight(75);
-        font7.setStrikeOut(false);
-        font7.setKerning(true);
-        diceOutputLabel->setFont(font7);
-        diceOutputLabel->setLayoutDirection(Qt::LeftToRight);
-        diceOutputLabel->setFrameShape(QFrame::Box);
-        diceOutputLabel->setTextFormat(Qt::AutoText);
-        diceOutputLabel->setMargin(0);
-
-        verticalLayout_8->addWidget(diceOutputLabel);
-
-
-        verticalLayout_7->addLayout(verticalLayout_8);
-
-
-        horizontalLayout_8->addWidget(frame);
-
-        scrollArea_2 = new QScrollArea(tabDice);
-        scrollArea_2->setObjectName(QStringLiteral("scrollArea_2"));
-        QSizePolicy sizePolicy10(QSizePolicy::Maximum, QSizePolicy::Expanding);
-        sizePolicy10.setHorizontalStretch(0);
-        sizePolicy10.setVerticalStretch(0);
-        sizePolicy10.setHeightForWidth(scrollArea_2->sizePolicy().hasHeightForWidth());
-        scrollArea_2->setSizePolicy(sizePolicy10);
-        scrollArea_2->setMinimumSize(QSize(350, 0));
-        scrollArea_2->setMaximumSize(QSize(350, 16777215));
-        QFont font8;
-        font8.setPointSize(10);
-        scrollArea_2->setFont(font8);
-        scrollArea_2->setWidgetResizable(true);
-        scrollAreaWidgetContents_2 = new QWidget();
-        scrollAreaWidgetContents_2->setObjectName(QStringLiteral("scrollAreaWidgetContents_2"));
-        scrollAreaWidgetContents_2->setGeometry(QRect(0, 0, 348, 656));
-        verticalLayout_5 = new QVBoxLayout(scrollAreaWidgetContents_2);
-        verticalLayout_5->setSpacing(6);
-        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-        diceResultTableWidget = new QTableWidget(scrollAreaWidgetContents_2);
-        if (diceResultTableWidget->columnCount() < 3)
-            diceResultTableWidget->setColumnCount(3);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        diceResultTableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        diceResultTableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        diceResultTableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        diceResultTableWidget->setObjectName(QStringLiteral("diceResultTableWidget"));
-        diceResultTableWidget->setFont(font8);
-        diceResultTableWidget->setFrameShadow(QFrame::Raised);
-        diceResultTableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-        diceResultTableWidget->setGridStyle(Qt::SolidLine);
-        diceResultTableWidget->setCornerButtonEnabled(false);
-        diceResultTableWidget->horizontalHeader()->setVisible(false);
-        diceResultTableWidget->horizontalHeader()->setCascadingSectionResizes(true);
-        diceResultTableWidget->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
-        diceResultTableWidget->horizontalHeader()->setStretchLastSection(true);
-        diceResultTableWidget->verticalHeader()->setVisible(false);
-
-        verticalLayout_5->addWidget(diceResultTableWidget);
-
-        scrollArea_2->setWidget(scrollAreaWidgetContents_2);
-
-        horizontalLayout_8->addWidget(scrollArea_2);
-
         tabWidgetGMHelp->addTab(tabDice, QString());
         tabNames = new QWidget();
         tabNames->setObjectName(QStringLiteral("tabNames"));
@@ -930,16 +759,19 @@ public:
         horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
         nameTabWidget = new QTabWidget(tabNames);
         nameTabWidget->setObjectName(QStringLiteral("nameTabWidget"));
-        sizePolicy10.setHeightForWidth(nameTabWidget->sizePolicy().hasHeightForWidth());
-        nameTabWidget->setSizePolicy(sizePolicy10);
+        QSizePolicy sizePolicy8(QSizePolicy::Maximum, QSizePolicy::Expanding);
+        sizePolicy8.setHorizontalStretch(0);
+        sizePolicy8.setVerticalStretch(0);
+        sizePolicy8.setHeightForWidth(nameTabWidget->sizePolicy().hasHeightForWidth());
+        nameTabWidget->setSizePolicy(sizePolicy8);
 
         horizontalLayout_9->addWidget(nameTabWidget);
 
         nameTextEdit = new QTextEdit(tabNames);
         nameTextEdit->setObjectName(QStringLiteral("nameTextEdit"));
-        QFont font9;
-        font9.setPointSize(20);
-        nameTextEdit->setFont(font9);
+        QFont font4;
+        font4.setPointSize(20);
+        nameTextEdit->setFont(font4);
         nameTextEdit->setOverwriteMode(false);
 
         horizontalLayout_9->addWidget(nameTextEdit);
@@ -951,7 +783,22 @@ public:
         horizontalLayout_10->setSpacing(6);
         horizontalLayout_10->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
-        charactersListWidget = new QListWidget(tabCharacters);
+        frame = new QFrame(tabCharacters);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setMinimumSize(QSize(200, 0));
+        frame->setMaximumSize(QSize(200, 16777215));
+        frame->setFrameShape(QFrame::StyledPanel);
+        frame->setFrameShadow(QFrame::Raised);
+        verticalLayout_5 = new QVBoxLayout(frame);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        label_2 = new QLabel(frame);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        verticalLayout_5->addWidget(label_2);
+
+        charactersListWidget = new QListWidget(frame);
         charactersListWidget->setObjectName(QStringLiteral("charactersListWidget"));
         charactersListWidget->setMinimumSize(QSize(150, 0));
         charactersListWidget->setMaximumSize(QSize(200, 16777215));
@@ -967,10 +814,38 @@ public:
         charactersListWidget->setSelectionRectVisible(true);
         charactersListWidget->setSortingEnabled(false);
 
-        horizontalLayout_10->addWidget(charactersListWidget);
+        verticalLayout_5->addWidget(charactersListWidget);
+
+        characterIconLabel = new QLabel(frame);
+        characterIconLabel->setObjectName(QStringLiteral("characterIconLabel"));
+        sizePolicy.setHeightForWidth(characterIconLabel->sizePolicy().hasHeightForWidth());
+        characterIconLabel->setSizePolicy(sizePolicy);
+        characterIconLabel->setMinimumSize(QSize(0, 0));
+        characterIconLabel->setMaximumSize(QSize(180, 180));
+        characterIconLabel->setFrameShape(QFrame::Box);
+        characterIconLabel->setFrameShadow(QFrame::Raised);
+
+        verticalLayout_5->addWidget(characterIconLabel);
+
+        createCharacterButton = new QPushButton(frame);
+        createCharacterButton->setObjectName(QStringLiteral("createCharacterButton"));
+        createCharacterButton->setCheckable(false);
+        createCharacterButton->setChecked(false);
+
+        verticalLayout_5->addWidget(createCharacterButton);
+
+        updateCharactersButton = new QPushButton(frame);
+        updateCharactersButton->setObjectName(QStringLiteral("updateCharactersButton"));
+
+        verticalLayout_5->addWidget(updateCharactersButton);
+
+
+        horizontalLayout_10->addWidget(frame);
 
         charactersStackedWidget = new QStackedWidget(tabCharacters);
         charactersStackedWidget->setObjectName(QStringLiteral("charactersStackedWidget"));
+        sizePolicy.setHeightForWidth(charactersStackedWidget->sizePolicy().hasHeightForWidth());
+        charactersStackedWidget->setSizePolicy(sizePolicy);
 
         horizontalLayout_10->addWidget(charactersStackedWidget);
 
@@ -1018,8 +893,8 @@ public:
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
         mapsControlFrame = new QFrame(pageMaps);
         mapsControlFrame->setObjectName(QStringLiteral("mapsControlFrame"));
-        sizePolicy10.setHeightForWidth(mapsControlFrame->sizePolicy().hasHeightForWidth());
-        mapsControlFrame->setSizePolicy(sizePolicy10);
+        sizePolicy8.setHeightForWidth(mapsControlFrame->sizePolicy().hasHeightForWidth());
+        mapsControlFrame->setSizePolicy(sizePolicy8);
         mapsControlFrame->setFrameShape(QFrame::StyledPanel);
         mapsControlFrame->setFrameShadow(QFrame::Raised);
         verticalLayout_4 = new QVBoxLayout(mapsControlFrame);
@@ -1029,31 +904,31 @@ public:
         mapsZoomInButton = new QPushButton(mapsControlFrame);
         mapsZoomInButton->setObjectName(QStringLiteral("mapsZoomInButton"));
         mapsZoomInButton->setMinimumSize(QSize(50, 40));
-        QFont font10;
-        font10.setBold(true);
-        font10.setWeight(75);
-        mapsZoomInButton->setFont(font10);
+        QFont font5;
+        font5.setBold(true);
+        font5.setWeight(75);
+        mapsZoomInButton->setFont(font5);
 
         verticalLayout_4->addWidget(mapsZoomInButton);
 
         mapsZoomOutButton = new QPushButton(mapsControlFrame);
         mapsZoomOutButton->setObjectName(QStringLiteral("mapsZoomOutButton"));
         mapsZoomOutButton->setMinimumSize(QSize(50, 40));
-        mapsZoomOutButton->setFont(font10);
+        mapsZoomOutButton->setFont(font5);
 
         verticalLayout_4->addWidget(mapsZoomOutButton);
 
         mapsFitToViewButton = new QPushButton(mapsControlFrame);
         mapsFitToViewButton->setObjectName(QStringLiteral("mapsFitToViewButton"));
         mapsFitToViewButton->setMinimumSize(QSize(50, 40));
-        mapsFitToViewButton->setFont(font10);
+        mapsFitToViewButton->setFont(font5);
 
         verticalLayout_4->addWidget(mapsFitToViewButton);
 
         mapsResetSizeButton = new QPushButton(mapsControlFrame);
         mapsResetSizeButton->setObjectName(QStringLiteral("mapsResetSizeButton"));
         mapsResetSizeButton->setMinimumSize(QSize(50, 40));
-        mapsResetSizeButton->setFont(font10);
+        mapsResetSizeButton->setFont(font5);
 
         verticalLayout_4->addWidget(mapsResetSizeButton);
 
@@ -1074,15 +949,6 @@ public:
         mapsVBox = new QVBoxLayout();
         mapsVBox->setSpacing(6);
         mapsVBox->setObjectName(QStringLiteral("mapsVBox"));
-        mapsButtonFrame = new QFrame(pageMaps);
-        mapsButtonFrame->setObjectName(QStringLiteral("mapsButtonFrame"));
-        sizePolicy8.setHeightForWidth(mapsButtonFrame->sizePolicy().hasHeightForWidth());
-        mapsButtonFrame->setSizePolicy(sizePolicy8);
-        mapsButtonFrame->setFrameShape(QFrame::StyledPanel);
-        mapsButtonFrame->setFrameShadow(QFrame::Raised);
-
-        mapsVBox->addWidget(mapsButtonFrame);
-
 
         horizontalLayout_6->addLayout(mapsVBox);
 
@@ -1097,7 +963,9 @@ public:
         label_5->setObjectName(QStringLiteral("label_5"));
         sizePolicy1.setHeightForWidth(label_5->sizePolicy().hasHeightForWidth());
         label_5->setSizePolicy(sizePolicy1);
-        label_5->setFont(font5);
+        QFont font6;
+        font6.setPointSize(30);
+        label_5->setFont(font6);
 
         verticalLayout_9->addWidget(label_5);
 
@@ -1125,7 +993,7 @@ public:
         verticalLayout_12->setObjectName(QStringLiteral("verticalLayout_12"));
         label_6 = new QLabel(radioRivendellFrame);
         label_6->setObjectName(QStringLiteral("label_6"));
-        label_6->setFont(font9);
+        label_6->setFont(font4);
 
         verticalLayout_12->addWidget(label_6);
 
@@ -1137,18 +1005,18 @@ public:
         verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
         rivendellPlayButton = new QPushButton(radioRivendellFrame);
         rivendellPlayButton->setObjectName(QStringLiteral("rivendellPlayButton"));
-        QSizePolicy sizePolicy11(QSizePolicy::Minimum, QSizePolicy::Expanding);
-        sizePolicy11.setHorizontalStretch(0);
-        sizePolicy11.setVerticalStretch(0);
-        sizePolicy11.setHeightForWidth(rivendellPlayButton->sizePolicy().hasHeightForWidth());
-        rivendellPlayButton->setSizePolicy(sizePolicy11);
+        QSizePolicy sizePolicy9(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        sizePolicy9.setHorizontalStretch(0);
+        sizePolicy9.setVerticalStretch(0);
+        sizePolicy9.setHeightForWidth(rivendellPlayButton->sizePolicy().hasHeightForWidth());
+        rivendellPlayButton->setSizePolicy(sizePolicy9);
         rivendellPlayButton->setMinimumSize(QSize(90, 40));
         rivendellPlayButton->setMaximumSize(QSize(100, 16777215));
-        QFont font11;
-        font11.setPointSize(15);
-        font11.setBold(false);
-        font11.setWeight(50);
-        rivendellPlayButton->setFont(font11);
+        QFont font7;
+        font7.setPointSize(15);
+        font7.setBold(false);
+        font7.setWeight(50);
+        rivendellPlayButton->setFont(font7);
         rivendellPlayButton->setStyleSheet(QLatin1String("QPushButton{\n"
 "background-color: rgb(102, 102, 102);\n"
 "border: 1px;\n"
@@ -1168,11 +1036,11 @@ public:
 
         rivendellReloadButton = new QPushButton(radioRivendellFrame);
         rivendellReloadButton->setObjectName(QStringLiteral("rivendellReloadButton"));
-        sizePolicy11.setHeightForWidth(rivendellReloadButton->sizePolicy().hasHeightForWidth());
-        rivendellReloadButton->setSizePolicy(sizePolicy11);
+        sizePolicy9.setHeightForWidth(rivendellReloadButton->sizePolicy().hasHeightForWidth());
+        rivendellReloadButton->setSizePolicy(sizePolicy9);
         rivendellReloadButton->setMinimumSize(QSize(90, 40));
         rivendellReloadButton->setMaximumSize(QSize(100, 16777215));
-        rivendellReloadButton->setFont(font11);
+        rivendellReloadButton->setFont(font7);
         rivendellReloadButton->setStyleSheet(QLatin1String("QPushButton{\n"
 "background-color: rgb(102, 102, 102);\n"
 "border: 1px;\n"
@@ -1198,8 +1066,11 @@ public:
         verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
         label_7 = new QLabel(radioRivendellFrame);
         label_7->setObjectName(QStringLiteral("label_7"));
-        sizePolicy9.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
-        label_7->setSizePolicy(sizePolicy9);
+        QSizePolicy sizePolicy10(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy10.setHorizontalStretch(0);
+        sizePolicy10.setVerticalStretch(0);
+        sizePolicy10.setHeightForWidth(label_7->sizePolicy().hasHeightForWidth());
+        label_7->setSizePolicy(sizePolicy10);
         label_7->setMinimumSize(QSize(300, 0));
         label_7->setMaximumSize(QSize(820, 2000));
         label_7->setPixmap(QPixmap(QString::fromUtf8(":/radio/RadioRivendell/resources/radio/logo-radio-rivendell.png")));
@@ -1209,11 +1080,11 @@ public:
 
         textEdit_2 = new QTextEdit(radioRivendellFrame);
         textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
-        QSizePolicy sizePolicy12(QSizePolicy::Expanding, QSizePolicy::Maximum);
-        sizePolicy12.setHorizontalStretch(0);
-        sizePolicy12.setVerticalStretch(0);
-        sizePolicy12.setHeightForWidth(textEdit_2->sizePolicy().hasHeightForWidth());
-        textEdit_2->setSizePolicy(sizePolicy12);
+        QSizePolicy sizePolicy11(QSizePolicy::Expanding, QSizePolicy::Maximum);
+        sizePolicy11.setHorizontalStretch(0);
+        sizePolicy11.setVerticalStretch(0);
+        sizePolicy11.setHeightForWidth(textEdit_2->sizePolicy().hasHeightForWidth());
+        textEdit_2->setSizePolicy(sizePolicy11);
         textEdit_2->setMaximumSize(QSize(820, 16777215));
         textEdit_2->setTabChangesFocus(false);
         textEdit_2->setReadOnly(true);
@@ -1247,7 +1118,7 @@ public:
         verticalLayout_14->setObjectName(QStringLiteral("verticalLayout_14"));
         label_8 = new QLabel(radioMmorpgDeFrame);
         label_8->setObjectName(QStringLiteral("label_8"));
-        label_8->setFont(font9);
+        label_8->setFont(font4);
 
         verticalLayout_14->addWidget(label_8);
 
@@ -1259,13 +1130,13 @@ public:
         verticalLayout_15->setObjectName(QStringLiteral("verticalLayout_15"));
         mmorpgPlayButton = new QPushButton(radioMmorpgDeFrame);
         mmorpgPlayButton->setObjectName(QStringLiteral("mmorpgPlayButton"));
-        sizePolicy11.setHeightForWidth(mmorpgPlayButton->sizePolicy().hasHeightForWidth());
-        mmorpgPlayButton->setSizePolicy(sizePolicy11);
+        sizePolicy9.setHeightForWidth(mmorpgPlayButton->sizePolicy().hasHeightForWidth());
+        mmorpgPlayButton->setSizePolicy(sizePolicy9);
         mmorpgPlayButton->setMinimumSize(QSize(90, 40));
         mmorpgPlayButton->setMaximumSize(QSize(100, 16777215));
-        QFont font12;
-        font12.setPointSize(15);
-        mmorpgPlayButton->setFont(font12);
+        QFont font8;
+        font8.setPointSize(15);
+        mmorpgPlayButton->setFont(font8);
         mmorpgPlayButton->setStyleSheet(QLatin1String("QPushButton{\n"
 "background-color: rgb(102, 102, 102);\n"
 "border: 1px;\n"
@@ -1285,11 +1156,11 @@ public:
 
         mmorpgReloadButton = new QPushButton(radioMmorpgDeFrame);
         mmorpgReloadButton->setObjectName(QStringLiteral("mmorpgReloadButton"));
-        sizePolicy11.setHeightForWidth(mmorpgReloadButton->sizePolicy().hasHeightForWidth());
-        mmorpgReloadButton->setSizePolicy(sizePolicy11);
+        sizePolicy9.setHeightForWidth(mmorpgReloadButton->sizePolicy().hasHeightForWidth());
+        mmorpgReloadButton->setSizePolicy(sizePolicy9);
         mmorpgReloadButton->setMinimumSize(QSize(90, 40));
         mmorpgReloadButton->setMaximumSize(QSize(100, 16777215));
-        mmorpgReloadButton->setFont(font12);
+        mmorpgReloadButton->setFont(font8);
         mmorpgReloadButton->setStyleSheet(QLatin1String("QPushButton{\n"
 "background-color: rgb(102, 102, 102);\n"
 "border: 1px;\n"
@@ -1315,8 +1186,8 @@ public:
         verticalLayout_16->setObjectName(QStringLiteral("verticalLayout_16"));
         label_9 = new QLabel(radioMmorpgDeFrame);
         label_9->setObjectName(QStringLiteral("label_9"));
-        sizePolicy9.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
-        label_9->setSizePolicy(sizePolicy9);
+        sizePolicy10.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
+        label_9->setSizePolicy(sizePolicy10);
         label_9->setMaximumSize(QSize(820, 16777215));
         label_9->setPixmap(QPixmap(QString::fromUtf8(":/radio/RadioMMORPG_de/resources/radio/logo-mmorp-radio-de.png")));
         label_9->setScaledContents(true);
@@ -1325,8 +1196,8 @@ public:
 
         textEdit_3 = new QTextEdit(radioMmorpgDeFrame);
         textEdit_3->setObjectName(QStringLiteral("textEdit_3"));
-        sizePolicy12.setHeightForWidth(textEdit_3->sizePolicy().hasHeightForWidth());
-        textEdit_3->setSizePolicy(sizePolicy12);
+        sizePolicy11.setHeightForWidth(textEdit_3->sizePolicy().hasHeightForWidth());
+        textEdit_3->setSizePolicy(sizePolicy11);
         textEdit_3->setMaximumSize(QSize(820, 16777215));
         textEdit_3->setReadOnly(true);
         textEdit_3->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
@@ -1364,37 +1235,39 @@ public:
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 1300, 28));
-        QSizePolicy sizePolicy13(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-        sizePolicy13.setHorizontalStretch(0);
-        sizePolicy13.setVerticalStretch(0);
-        sizePolicy13.setHeightForWidth(menuBar->sizePolicy().hasHeightForWidth());
-        menuBar->setSizePolicy(sizePolicy13);
+        QSizePolicy sizePolicy12(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+        sizePolicy12.setHorizontalStretch(0);
+        sizePolicy12.setVerticalStretch(0);
+        sizePolicy12.setHeightForWidth(menuBar->sizePolicy().hasHeightForWidth());
+        menuBar->setSizePolicy(sizePolicy12);
         menuBar->setMinimumSize(QSize(0, 25));
         menuBar->setBaseSize(QSize(0, 25));
         menuBar->setFont(font1);
         menuBar->setStyleSheet(QStringLiteral(""));
         menuGM_Help = new QMenu(menuBar);
         menuGM_Help->setObjectName(QStringLiteral("menuGM_Help"));
-        QFont font13;
-        font13.setPointSize(10);
-        font13.setBold(false);
-        font13.setWeight(50);
-        menuGM_Help->setFont(font13);
+        QFont font9;
+        font9.setPointSize(10);
+        font9.setBold(false);
+        font9.setWeight(50);
+        menuGM_Help->setFont(font9);
         menuOptions = new QMenu(menuBar);
         menuOptions->setObjectName(QStringLiteral("menuOptions"));
-        menuOptions->setFont(font13);
+        menuOptions->setFont(font9);
         menuMusic = new QMenu(menuBar);
         menuMusic->setObjectName(QStringLiteral("menuMusic"));
-        menuMusic->setFont(font13);
+        menuMusic->setFont(font9);
         menuSound = new QMenu(menuBar);
         menuSound->setObjectName(QStringLiteral("menuSound"));
-        menuSound->setFont(font13);
+        menuSound->setFont(font9);
         menuMaps = new QMenu(menuBar);
         menuMaps->setObjectName(QStringLiteral("menuMaps"));
-        menuMaps->setFont(font13);
+        menuMaps->setFont(font9);
         menuHelp = new QMenu(menuBar);
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
-        menuHelp->setFont(font8);
+        QFont font10;
+        font10.setPointSize(10);
+        menuHelp->setFont(font10);
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuGM_Help->menuAction());
@@ -1440,7 +1313,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 04", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 05", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1487,16 +1360,6 @@ public:
         musicProgressBar->setToolTip(QApplication::translate("MainWindow", "Current Music Progress", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         musicProgressBar->setFormat(QApplication::translate("MainWindow", "%p%", Q_NULLPTR));
-        label_2->setText(QApplication::translate("MainWindow", " x ", Q_NULLPTR));
-        label_3->setText(QApplication::translate("MainWindow", " + ", Q_NULLPTR));
-        label_4->setText(QApplication::translate("MainWindow", "Result:", Q_NULLPTR));
-        diceOutputLabel->setText(QString());
-        QTableWidgetItem *___qtablewidgetitem = diceResultTableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "dice", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem1 = diceResultTableWidget->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "roll", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem2 = diceResultTableWidget->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "result", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabDice), QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         nameTextEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
@@ -1504,6 +1367,10 @@ public:
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:20pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabNames), QApplication::translate("MainWindow", "Names", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
+        characterIconLabel->setText(QString());
+        createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
+        updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
