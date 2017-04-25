@@ -7,8 +7,7 @@
 QT       += core gui \
             multimedia \
             multimediawidgets \
-            sql \
-            network
+            sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

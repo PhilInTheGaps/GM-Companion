@@ -919,7 +919,7 @@ QScrollBar::sub-line:vertical {
         <item>
          <widget class="QTabWidget" name="tabWidgetGMHelp">
           <property name="currentIndex">
-           <number>2</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tabDice">
            <attribute name="title">
@@ -1111,6 +1111,12 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="tabWebTest">
+           <attribute name="title">
+            <string>Page</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_3"/>
+          </widget>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
             <string>Debug / Test Page</string>
@@ -1301,7 +1307,7 @@ p, li { white-space: pre-wrap; }
              <x>0</x>
              <y>0</y>
              <width>968</width>
-             <height>628</height>
+             <height>634</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1750,6 +1756,7 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="pageWelcome"/>
      </widget>
     </item>
     <item>

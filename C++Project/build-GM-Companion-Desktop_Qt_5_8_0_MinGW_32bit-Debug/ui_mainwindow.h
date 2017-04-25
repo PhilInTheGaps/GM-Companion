@@ -105,6 +105,8 @@ public:
     QPushButton *createCharacterButton;
     QPushButton *updateCharactersButton;
     QStackedWidget *charactersStackedWidget;
+    QWidget *tabWebTest;
+    QVBoxLayout *verticalLayout_3;
     QWidget *tab_3;
     QVBoxLayout *verticalLayout_6;
     QLabel *label;
@@ -152,6 +154,7 @@ public:
     QLabel *label_9;
     QTextEdit *textEdit_3;
     QSpacerItem *horizontalSpacer_2;
+    QWidget *pageWelcome;
     QVBoxLayout *verticalLayout;
     QMenuBar *menuBar;
     QMenu *menuGM_Help;
@@ -850,6 +853,13 @@ public:
         horizontalLayout_10->addWidget(charactersStackedWidget);
 
         tabWidgetGMHelp->addTab(tabCharacters, QString());
+        tabWebTest = new QWidget();
+        tabWebTest->setObjectName(QStringLiteral("tabWebTest"));
+        verticalLayout_3 = new QVBoxLayout(tabWebTest);
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        tabWidgetGMHelp->addTab(tabWebTest, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QStringLiteral("tab_3"));
         verticalLayout_6 = new QVBoxLayout(tab_3);
@@ -975,7 +985,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 628));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 634));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -1222,6 +1232,9 @@ public:
         verticalLayout_9->addWidget(scrollArea);
 
         stackedWidget->addWidget(pageRadio);
+        pageWelcome = new QWidget();
+        pageWelcome->setObjectName(QStringLiteral("pageWelcome"));
+        stackedWidget->addWidget(pageWelcome);
 
         horizontalLayout_2->addWidget(stackedWidget);
 
@@ -1305,7 +1318,7 @@ public:
 
         musicPlayButton->setDefault(false);
         stackedWidget->setCurrentIndex(0);
-        tabWidgetGMHelp->setCurrentIndex(2);
+        tabWidgetGMHelp->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1372,6 +1385,7 @@ public:
         createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
+        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabWebTest), QApplication::translate("MainWindow", "Page", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

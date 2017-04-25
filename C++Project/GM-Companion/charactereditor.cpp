@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QDir>
 #include <QTextStream>
+#include <QFileDialog>
 
 CharacterEditor::CharacterEditor(QObject *parent) : QObject(parent)
 {
@@ -50,6 +51,22 @@ void CharacterEditor::open(){
 
     playerEdit = new QLineEdit;
     optionsLayout->addWidget(playerEdit);
+
+    QLabel* iconPathLabel = new QLabel;
+    iconPathLabel->setText("Character Icon");
+    optionsLayout->addWidget(iconPathLabel);
+
+    QHBoxLayout* iconPathLayout = new QHBoxLayout;
+    optionsLayout->addLayout(iconPathLayout);
+
+    iconPathEdit = new QLineEdit;
+    iconPathLayout->addWidget(iconPathEdit);
+
+    QPushButton* iconPathButton = new QPushButton;
+    iconPathButton->setText("...");
+    iconPathButton->setMaximumWidth(25);
+    iconPathLayout->addWidget(iconPathButton);
+    connect(iconPathButton, SIGNAL(clicked(bool)), SLOT(setIconPath()));
 
     optionsLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Preferred, QSizePolicy::Expanding));
 
@@ -243,6 +260,7 @@ void CharacterEditor::save(){
     outStream << "NAME=" << displayNameEdit->text() << ";\n";
     outStream << "PLAYER=" << playerEdit->text() << ";\n";
     outStream << "SYSTEM=" << systemComboBox->currentText() << ";\n";
+    outStream << "ICON=" << iconPath << ";\n";
 
     switch (systemComboBox->currentIndex()) {
     case 0:
@@ -341,6 +359,20 @@ void CharacterEditor::save(){
 
 void CharacterEditor::cancel(){
     mainFrame->close();
+}
+
+void CharacterEditor::setIconPath(){
+    QString path;
+    QFileDialog *fileDialog = new QFileDialog;
+    fileDialog->setFileMode(QFileDialog::ExistingFile);
+    fileDialog->setNameFilter("Images (*.jpg *.jpeg *.png)");
+    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog->setWindowTitle("Character Icon");
+    if (fileDialog->exec() == QDialog::Accepted){
+        QStringList paths = fileDialog->selectedFiles();
+        iconPath = paths.at(0);
+    }
+    iconPathEdit->setText(iconPath);
 }
 
 void CharacterEditor::skills1AddSkill_u(){
