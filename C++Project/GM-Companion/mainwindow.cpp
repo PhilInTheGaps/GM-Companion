@@ -164,6 +164,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         on_checkForUpdates_clicked();
     }
 
+//    QWebEngineView *view = new QWebEngineView(parent);
+//    view->load(QUrl("http://www.qt.io/"));
+//    view->show();
+
     programStart = false;
 
 }
@@ -260,8 +264,8 @@ void MainWindow::playMusic(QString folder){
             }
         }
 
-        int row = musicTable->rowCount();
-        musicTable->setRowCount(musicTable->rowCount()+files.size());
+//        int row = musicTable->rowCount();
+//        musicTable->setRowCount(musicTable->rowCount()+files.size());
 
         if (musicTable->rowCount() > 9){
             musicTable->setColumnWidth(0, 220);
@@ -275,11 +279,11 @@ void MainWindow::playMusic(QString folder){
                 QTableWidgetItem *i = new QTableWidgetItem;
                 i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
                 i->setText(cleanText(file).replace(folderName, ""));
-                musicTable->setItem(row, 0, i);
+                musicTable->insertRow(musicTable->rowCount());
+                musicTable->setItem(musicTable->rowCount()-1, 0, i);
 
                 addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
                 ui->textEdit->append(file + "\n");
-                row++;
             }
         }
 
