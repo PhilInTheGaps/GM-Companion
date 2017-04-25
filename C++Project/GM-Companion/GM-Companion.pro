@@ -7,7 +7,6 @@
 QT       += core gui \
             multimedia \
             multimediawidgets \
-            sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,7 +27,7 @@ SOURCES += main.cpp\
     names.cpp \
     radio.cpp \
     maps.cpp \
-    charactereditor.cpp
+    chareditor.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -36,9 +35,10 @@ HEADERS  += mainwindow.h \
     functions.h \
     settingsmanager.h \
     dicemanager.h \
-    charactereditor.h
+    chareditor.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    chareditor.ui
 
 DISTFILES += \
 
