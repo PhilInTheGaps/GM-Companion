@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QDir>
+#include <QSettings>
 
 enum UI_Mode{
     dark
@@ -25,22 +26,10 @@ public:
     void setSetting(Setting setting, bool checked = true);
     QString getSetting(Setting);
 
-    void readSettings();
-    void saveSettings();
-
 private:
-    QString settingsPath = QDir::currentPath()+"/settings.txt";
-    QString musicPath;
-    QString soundPath;
-    QString mapsPath;
-    QString resourcesPath;
-    bool checkForUpdatesOnStart;
-    UI_Mode uiMode;
-
-    QString txtContent;
+    QSettings settings;
 
     QString setFolderLocation(QString windowTitle);
-    QString readSettingFromString(QString indicator);
 };
 
 #endif // SETTINGSMANAGER_H

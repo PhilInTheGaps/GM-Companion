@@ -5,7 +5,7 @@
 #include "functions.h"
 #include "settingsmanager.h"
 #include "dicemanager.h"
-#include "charactereditor.h"
+#include "chareditor.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -44,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Gets all settings
     settingsManager = new SettingsManager;
-    settingsManager->readSettings();
     int checkUpdates = QString::compare(settingsManager->getSetting(Setting::checkForUpdatesOnStart), "1", Qt::CaseInsensitive);
 
     signalMapperMusic = new QSignalMapper(this);
@@ -163,10 +162,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->actionCheck_for_Updates_on_Program_Start->setChecked(true);
         on_checkForUpdates_clicked();
     }
-
-//    QWebEngineView *view = new QWebEngineView(parent);
-//    view->load(QUrl("http://www.qt.io/"));
-//    view->show();
 
     programStart = false;
 
@@ -499,6 +494,7 @@ void MainWindow::on_iWantToUseAnOlderVersionClicked(){
 
 void MainWindow::on_tableDoubleClicked(int row, int column){
     musicPlaylist->setCurrentIndex(row);
+    int test = column;
 }
 
 void MainWindow::on_musicPauseButton_clicked()
@@ -725,8 +721,9 @@ void MainWindow::on_mapsResetSizeButton_clicked()
 
 void MainWindow::on_createCharacterButton_clicked()
 {
-    characterEditor = new CharacterEditor;
-    characterEditor->open();
+
+    CharEditor* charEditor = new CharEditor;
+    charEditor->show();
 }
 
 void MainWindow::on_updateCharactersButton_clicked()
