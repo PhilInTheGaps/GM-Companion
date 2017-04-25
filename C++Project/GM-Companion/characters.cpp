@@ -1,7 +1,6 @@
 #include "characters.h"
 #include "mainwindow.h"
 #include "flowlayout.h"
-#include "charactereditor.h"
 
 #include <QDir>
 #include <QListWidget>

@@ -20,8 +20,6 @@
 #include "settingsmanager.h"
 #include "dicemanager.h"
 #include "functions.h"
-#include "charactereditor.h"
-
 namespace Ui {
 class MainWindow;
 }
@@ -127,7 +125,6 @@ private:
 
     SettingsManager* settingsManager;
     DiceManager* diceManager;
-    CharacterEditor* characterEditor;
 
     void generateNamesTab();
 
