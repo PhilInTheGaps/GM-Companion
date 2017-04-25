@@ -44,11 +44,15 @@ private slots:
     void inv1RemRow_u();
     void inv2RemRow_u();
 
+    void setIconPath();
+
 private:
     QFrame* mainFrame;
     QHBoxLayout* mainLayout;
     System systemEnum;
     QStackedWidget* stackedWidget;
+    QString iconPath;
+    QLineEdit* iconPathEdit;
 
     // General Options
     QComboBox* systemComboBox;

@@ -367,6 +367,21 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMainWi
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		../GM-Companion/mainwindow.h \
 		debug/moc_predefs.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/bin/moc.exe
@@ -515,10 +530,11 @@ debug/moc_dicemanager.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFrame
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/bin/moc.exe
 	C:\Qt\Qt5.8.0\5.8\mingw53_32\bin\moc.exe $(DEFINES) --include debug/moc_predefs.h -IC:/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/win32-g++ -IC:/Users/Phil/git/RPGMSPlayer/C++Project/GM-Companion -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimediaWidgets -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtANGLE -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtSql -IC:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore -I. -I"C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++" -I"C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/mingw32" -I"C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include/c++/backward" -I"C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include" -I"C:/Program Files (x86)/CodeBlocks/MinGW/include" -I"C:/Program Files (x86)/CodeBlocks/MinGW/lib/gcc/mingw32/4.9.2/include-fixed" ..\GM-Companion\dicemanager.h -o debug\moc_dicemanager.cpp
 
-debug/moc_charactereditor.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnamespace.h \
+debug/moc_charactereditor.cpp: ../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFrame \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qframe.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgetsglobal.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtguiglobal.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qglobal.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qconfig-bootstrapped.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qconfig.h \
@@ -541,7 +557,15 @@ debug/moc_charactereditor.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObje
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qmutex.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnumeric.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qversiontagging.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtgui-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgets-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnamespace.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qstring.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qchar.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbytearray.h \
@@ -563,15 +587,6 @@ debug/moc_charactereditor.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObje
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcontainerfwd.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject_impl.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFrame \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgetsglobal.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtguiglobal.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtgui-config.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgets-config.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs_win.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qmargins.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpaintdevice.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qrect.h \
@@ -618,11 +633,45 @@ debug/moc_charactereditor.cpp: C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObje
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlayout.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlayoutitem.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qboxlayout.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qvalidator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qregularexpression.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qicon.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qslider.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtabwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTableWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtablewidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtableview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		../GM-Companion/charactereditor.h \
 		debug/moc_predefs.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/bin/moc.exe
@@ -853,6 +902,21 @@ debug/main.o: ../GM-Companion/main.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QApplication \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcoreapplication.h \
@@ -1066,6 +1130,21 @@ debug/mainwindow.o: ../GM-Companion/mainwindow.cpp ../GM-Companion/mainwindow.h 
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -1081,9 +1160,6 @@ debug/mainwindow.o: ../GM-Companion/mainwindow.cpp ../GM-Companion/mainwindow.h 
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -1095,19 +1171,11 @@ debug/mainwindow.o: ../GM-Companion/mainwindow.cpp ../GM-Companion/mainwindow.h 
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget \
-		../GM-Companion/characters.h \
-		../GM-Companion/charactereditor.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFile \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTextStream \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QVector \
@@ -1127,8 +1195,6 @@ debug/mainwindow.o: ../GM-Companion/mainwindow.cpp ../GM-Companion/mainwindow.h 
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QPixmap \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QDesktopServices \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qdesktopservices.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QKeyEvent \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QStandardItemModel \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qstandarditemmodel.h
@@ -1796,6 +1862,16 @@ debug/characters.o: ../GM-Companion/characters.cpp ../GM-Companion/characters.h 
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
 		../GM-Companion/charactereditor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h
@@ -2319,6 +2395,21 @@ debug/music.o: ../GM-Companion/music.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -2334,9 +2425,6 @@ debug/music.o: ../GM-Companion/music.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -2348,15 +2436,9 @@ debug/music.o: ../GM-Companion/music.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\music.o ..\GM-Companion\music.cpp
@@ -2565,6 +2647,21 @@ debug/sound.o: ../GM-Companion/sound.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -2580,9 +2677,6 @@ debug/sound.o: ../GM-Companion/sound.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -2594,15 +2688,9 @@ debug/sound.o: ../GM-Companion/sound.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\sound.o ..\GM-Companion\sound.cpp
@@ -2811,6 +2899,21 @@ debug/names.o: ../GM-Companion/names.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -2826,9 +2929,6 @@ debug/names.o: ../GM-Companion/names.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -2840,15 +2940,9 @@ debug/names.o: ../GM-Companion/names.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\names.o ..\GM-Companion\names.cpp
@@ -3057,6 +3151,21 @@ debug/radio.o: ../GM-Companion/radio.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -3072,9 +3181,6 @@ debug/radio.o: ../GM-Companion/radio.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -3086,15 +3192,9 @@ debug/radio.o: ../GM-Companion/radio.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\radio.o ..\GM-Companion\radio.cpp
@@ -3303,6 +3403,21 @@ debug/maps.o: ../GM-Companion/maps.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
 		../GM-Companion/functions.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		../GM-Companion/charactereditor.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		ui_mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
@@ -3318,9 +3433,6 @@ debug/maps.o: ../GM-Companion/maps.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
@@ -3332,24 +3444,19 @@ debug/maps.o: ../GM-Companion/maps.cpp ../GM-Companion/mainwindow.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\maps.o ..\GM-Companion\maps.cpp
 
 debug/charactereditor.o: ../GM-Companion/charactereditor.cpp ../GM-Companion/charactereditor.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnamespace.h \
+		../GM-Companion/characters.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFrame \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qframe.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgetsglobal.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtguiglobal.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qglobal.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qconfig-bootstrapped.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qconfig.h \
@@ -3372,7 +3479,15 @@ debug/charactereditor.o: ../GM-Companion/charactereditor.cpp ../GM-Companion/cha
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qmutex.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnumeric.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qversiontagging.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtgui-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgets-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qnamespace.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qstring.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qchar.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbytearray.h \
@@ -3394,15 +3509,6 @@ debug/charactereditor.o: ../GM-Companion/charactereditor.cpp ../GM-Companion/cha
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcontainerfwd.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qobject_impl.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFrame \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgetsglobal.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtguiglobal.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtgui-config.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtwidgets-config.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qwidget.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qwindowdefs_win.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qmargins.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpaintdevice.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qrect.h \
@@ -3449,11 +3555,157 @@ debug/charactereditor.o: ../GM-Companion/charactereditor.cpp ../GM-Companion/cha
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qvector2d.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QObject \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLayout \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlayout.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlayoutitem.h \
 		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qboxlayout.h \
-		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qgridlayout.h
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextformat.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qpen.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QComboBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qvalidator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qregularexpression.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qicon.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qslider.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtabwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTableWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtablewidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtableview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QStringList \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QListWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlistview.h \
+		ui_mainwindow.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QVariant \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QAction \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qaction.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qactiongroup.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QApplication \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qapplication.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcoreapplication.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qeventloop.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qdesktopwidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qguiapplication.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qinputmethod.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QButtonGroup \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QHeaderView \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qheaderview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QLabel \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMainWindow \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmainwindow.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenu \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenu.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QMenuBar \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qmenubar.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QProgressBar \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QPushButton \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSlider \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpacerItem \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTextEdit \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtextedit.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qtextdocument.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QWidget \
+		../GM-Companion/mainwindow.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QString \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/QMediaPlayer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaplayer.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaobject.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qtmultimediaglobal.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qtmultimedia-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmultimedia.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediacontent.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaresource.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkrequest.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtnetworkglobal.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtnetwork-config.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QSharedDataPointer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QUrl \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaenumdebug.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qmetaobject.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qaudio.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkconfiguration.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/QMediaPlayerControl \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaplayercontrol.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediacontrol.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediatimerange.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/QMediaPlaylist \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediaplaylist.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtMultimedia/qmediabindableinterface.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QSignalMapper \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qsignalmapper.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTreeWidget \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtreewidget.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtreeview.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qtreewidgetitemiterator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkReply \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkreply.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QIODevice \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkRequest \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QNetworkAccessManager \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qnetworkaccessmanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslConfiguration \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslconfiguration.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qtcpsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qabstractsocket.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslerror.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslcertificate.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qdatetime.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qssl.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFlags \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/QSslPreSharedKeyAuthenticator \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtNetwork/qsslpresharedkeyauthenticator.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QMetaType \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTimer \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qtimer.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qbasictimer.h \
+		../GM-Companion/settingsmanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QDir \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qdir.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/qfileinfo.h \
+		../GM-Companion/dicemanager.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QList \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qspinbox.h \
+		../GM-Companion/flowlayout.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QRect \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStyle \
+		../GM-Companion/functions.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QFile \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QTextStream \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\charactereditor.o ..\GM-Companion\charactereditor.cpp
 
 debug/qrc_resources.o: debug/qrc_resources.cpp 
