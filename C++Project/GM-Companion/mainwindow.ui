@@ -919,7 +919,7 @@ QScrollBar::sub-line:vertical {
         <item>
          <widget class="QTabWidget" name="tabWidgetGMHelp">
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tabDice">
            <attribute name="title">
@@ -1108,6 +1108,9 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
              </widget>
+            </item>
+            <item>
+             <widget class="QWidget" name="widget" native="true"/>
             </item>
            </layout>
           </widget>

@@ -20,6 +20,7 @@
 #include "settingsmanager.h"
 #include "dicemanager.h"
 #include "functions.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -111,6 +112,7 @@ private slots:
     void on_createCharacterButton_clicked();
 
     void on_updateCharactersButton_clicked();
+    void charactersFolderChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -161,8 +163,6 @@ private:
     QMediaPlayer *soundPlayer;
     QMediaPlaylist *soundPlaylist;
 
-    //void generateDiceFrame();
-
     QScrollArea *mapsScrollArea;
     QLabel *mapsImageLabel;
     double mapsZoomFactor = 1.0;
@@ -172,6 +172,9 @@ private:
     QString readSettings();
 
     bool initialMusicPlay;
+
+    // Characters
+    void updateCharacters();
 };
 
 #endif // MAINWINDOW_H

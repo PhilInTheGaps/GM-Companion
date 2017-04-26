@@ -5,7 +5,18 @@
 
 QStringList getCharacterList();
 
-QFrame *getCharacterPage(QString character);
+QWidget *getCharacterPage(QString character);
+
+struct TableContent {
+    QString leftEntry;
+    QString rightEntry;
+};
+
+struct TableContent3C {
+    QString leftEntry;
+    QString midEntry;
+    QString rightEntry;
+};
 
 enum System{
     Unspecific,
