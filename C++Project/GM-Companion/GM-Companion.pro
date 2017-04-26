@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     names.cpp \
     radio.cpp \
     maps.cpp \
-    chareditor.cpp
+    chareditor.cpp \
+    characterpage.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -35,10 +36,12 @@ HEADERS  += mainwindow.h \
     functions.h \
     settingsmanager.h \
     dicemanager.h \
-    chareditor.h
+    chareditor.h \
+    characterpage.h
 
 FORMS    += mainwindow.ui \
-    chareditor.ui
+    chareditor.ui \
+    characterpage.ui
 
 DISTFILES += \
 

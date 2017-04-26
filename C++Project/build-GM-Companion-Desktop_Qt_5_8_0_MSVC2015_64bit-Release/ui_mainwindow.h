@@ -105,6 +105,7 @@ public:
     QPushButton *createCharacterButton;
     QPushButton *updateCharactersButton;
     QStackedWidget *charactersStackedWidget;
+    QWidget *widget;
     QWidget *tabWebTest;
     QVBoxLayout *verticalLayout_3;
     QWidget *tab_3;
@@ -852,6 +853,11 @@ public:
 
         horizontalLayout_10->addWidget(charactersStackedWidget);
 
+        widget = new QWidget(tabCharacters);
+        widget->setObjectName(QStringLiteral("widget"));
+
+        horizontalLayout_10->addWidget(widget);
+
         tabWidgetGMHelp->addTab(tabCharacters, QString());
         tabWebTest = new QWidget();
         tabWebTest->setObjectName(QStringLiteral("tabWebTest"));
@@ -1318,7 +1324,7 @@ public:
 
         musicPlayButton->setDefault(false);
         stackedWidget->setCurrentIndex(0);
-        tabWidgetGMHelp->setCurrentIndex(1);
+        tabWidgetGMHelp->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);

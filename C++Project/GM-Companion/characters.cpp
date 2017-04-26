@@ -1,17 +1,25 @@
 #include "characters.h"
 #include "mainwindow.h"
 #include "flowlayout.h"
+#include "characterpage.h"
 
 #include <QDir>
 #include <QListWidget>
 #include <QScrollArea>
+#include <QSettings>
+#include <QDebug>
 
 QStringList getCharacterList(){
     QString folderPath = QDir::currentPath()+"/characters";
     QStringList files = getFiles(folderPath);
     QStringList characterFileNames;
+//    for (QString file : files){
+//        if (file.contains(".txt")){
+//            characterFileNames.push_back(file);
+//        }
+//    }
     for (QString file : files){
-        if (file.contains(".txt")){
+        if (file.contains(".ini")){
             characterFileNames.push_back(file);
         }
     }
@@ -64,219 +72,145 @@ QFrame* generateFrame(QString indicator, QString headline, QString characterFile
     return frame;
 }
 
-QFrame* getCharacterPage(QString character){
-    QFile characterFile(QDir::currentPath()+"/characters/"+character);
-    characterFile.open(QIODevice::ReadOnly);
-    QString characterFileContent = characterFile.readAll();
+QWidget* getCharacterPage(QString character){
+    CharacterPage* charPage = new CharacterPage;
 
-    int index1 = 0;
-    int index2 = 0;
+    QSettings charSettings("characters/"+character, QSettings::IniFormat);
 
-    QFrame *baseFrame = new QFrame;
-    QHBoxLayout *baseLayout = new QHBoxLayout;
-    baseFrame->setLayout(baseLayout);
+    QString version = charSettings.value("Version", "SHOULD NOT BE VISIBLE").toString();
+    QString name = charSettings.value("Name", "SHOULD NOT BE VISIBLE").toString();
+    QString player = charSettings.value("Player", "SHOULD NOT BE VISIBLE").toString();
+    int systemID = charSettings.value("System", 0).toInt();
+    charPage->systemID = systemID;
 
-    QFrame *leftFrame = new QFrame;
-    QVBoxLayout *leftLayout = new QVBoxLayout;
-    leftFrame->setLayout(leftLayout);
-    baseLayout->addWidget(leftFrame);
+    QString iconPath = charSettings.value("Icon", "SHOULD NOT BE VISIBLE").toString();
 
-    QLabel* infoLabel = new QLabel;
-    infoLabel->setText("Info");
-    leftLayout->addWidget(infoLabel);
+    qDebug() << character;
+    qDebug() << name;
+    qDebug() << player;
+    qDebug() << "SystemID: " << systemID;
 
-    QFrame *mainFrame = new QFrame;
-    mainFrame->setFrameShape(QFrame::Box);
-    FlowLayout *mainLayout = new FlowLayout;
-    mainFrame->setLayout(mainLayout);
+    charPage->setToolTip(name+" ("+player+")");
+    charPage->setAccessibleName(iconPath);
 
-    QScrollArea *mainScrollArea = new QScrollArea;
-    mainScrollArea->setMinimumWidth(200);
-    mainScrollArea->setWidget(mainFrame);
-    mainScrollArea->setWidgetResizable(true);
+    switch (systemID) {
+    case 0:{
+        // General Character Info
+        QList<TableContent>* generalInfo_generic = new QList<TableContent>;
+        int size = charSettings.beginReadArray("generalInfos");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            generalInfo_generic->push_back(content);
+        }
+        charPage->generalInfo_generic = generalInfo_generic;
+        charSettings.endArray();
 
-    leftLayout->addWidget(mainScrollArea);
+        // Skills
+        QList<TableContent>* skills1_generic = new QList<TableContent>;
+        size = charSettings.beginReadArray("skills1");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            skills1_generic->push_back(content);
+        }
+        charPage->skills1_generic = skills1_generic;
+        charSettings.endArray();
 
-    index1 = characterFileContent.indexOf("NAME=");
-    index2 = characterFileContent.indexOf(";", index1);
-    QString name = characterFileContent.mid(index1+5, index2-index1-5);
-    index1 = characterFileContent.indexOf("PLAYER=", index1);
-    index2 = characterFileContent.indexOf(";", index1);
-    QString player = characterFileContent.mid(index1+7, index2-index1-7);
-    baseFrame->setToolTip(name+ " ("+player+")");
+        QList<TableContent>* skills2_generic = new QList<TableContent>;
+        size = charSettings.beginReadArray("skills2");
+        qDebug() << size;
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            skills2_generic->push_back(content);
+        }
+        charPage->skills2_generic = skills2_generic;
+        charSettings.endArray();
 
-    // Checks for which system the character was created
-    index1 = characterFileContent.indexOf("SYSTEM=");
-    index2 = characterFileContent.indexOf(";", index1);
-    QString systemString = characterFileContent.mid(index1+7, index2-index1-7);
-    System system;
-    if (QString::compare(systemString, "DSA5") == 0){
-        system = DSA5;
+        QList<TableContent>* skills3_generic = new QList<TableContent>;
+        size = charSettings.beginReadArray("skills3");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            skills3_generic->push_back(content);
+        }
+        charPage->skills3_generic = skills3_generic;
+        charSettings.endArray();
+
+        // Weapons
+        QList<TableContent3C>* weapons_generic = new QList<TableContent3C>;
+        size = charSettings.beginReadArray("weapons");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent3C content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.midEntry = charSettings.value("midEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            weapons_generic->push_back(content);
+        }
+        charPage->weapons_generic = weapons_generic;
+        charSettings.endArray();
+
+        // Armor
+        QList<TableContent3C>* armor_generic = new QList<TableContent3C>;
+        size = charSettings.beginReadArray("armor");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent3C content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.midEntry = charSettings.value("midEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            armor_generic->push_back(content);
+        }
+        charPage->armor_generic = armor_generic;
+        charSettings.endArray();
+
+        // Inventory
+        QList<TableContent3C>* inv1_generic = new QList<TableContent3C>;
+        size = charSettings.beginReadArray("inventory1");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent3C content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.midEntry = charSettings.value("midEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            inv1_generic->push_back(content);
+        }
+        charPage->inv1_generic = inv1_generic;
+        charSettings.endArray();
+
+        QList<TableContent3C>* inv2_generic = new QList<TableContent3C>;
+        size = charSettings.beginReadArray("inventory2");
+        for (int i = 0; i<size; i++){
+            charSettings.setArrayIndex(i);
+            TableContent3C content;
+            content.leftEntry = charSettings.value("leftEntry").toString();
+            content.midEntry = charSettings.value("midEntry").toString();
+            content.rightEntry = charSettings.value("rightEntry").toString();
+            inv2_generic->push_back(content);
+        }
+        charPage->inv2_generic = inv2_generic;
+        charSettings.endArray();
+
+        break;
     }
-    else{
-        system = Unspecific;
-    }
+    case 1:
 
-    // General Character Info
-    QFrame* generalInfoFrame = generateFrame("GENERAL_CHARACTER_INFO={", "General Character Info", characterFileContent);
-    mainLayout->addWidget(generalInfoFrame);
 
-    // Fight Stats
-    QLabel* fightLabel = new QLabel;
-    fightLabel->setText("Fight");
-    leftLayout->addWidget(fightLabel);
-
-    QFrame *fightFrame = new QFrame;
-    fightFrame->setFrameShape(QFrame::Box);
-    FlowLayout *fightLayout = new FlowLayout;
-    fightFrame->setLayout(fightLayout);
-
-    QScrollArea *fightScrollArea = new QScrollArea;
-    fightScrollArea->setMinimumWidth(200);
-    fightScrollArea->setWidget(fightFrame);
-    fightScrollArea->setWidgetResizable(true);
-
-    leftLayout->addWidget(fightScrollArea);
-
-    // Weapons
-    QFrame* weaponFrame = generateFrame("WEAPONS={", "Weapons", characterFileContent, 400);
-    fightLayout->addWidget(weaponFrame);
-
-    // Armor
-    QFrame* armorFrame = generateFrame("ARMOR={", "Armor", characterFileContent, 400);
-    fightLayout->addWidget(armorFrame);
-
-    // SYSTEM SPECIFIC INFORMATION
-    switch (system) {
-    case DSA5:{
-        // Base Stats
-        QFrame *eigenschaftenFrame = generateFrame("EIGENSCHAFTEN={", "Eigenschaften", characterFileContent);
-        mainLayout->addWidget(eigenschaftenFrame);
-
-        // AP
-        QFrame *apFrame = generateFrame("AP={", "AP", characterFileContent);
-        mainLayout->addWidget(apFrame);
-
-        // Vorteile
-        QFrame *vorteileFrame = generateFrame("VORTEILE={", "Vorteile", characterFileContent);
-        mainLayout->addWidget(vorteileFrame);
-
-        // Nachteile
-        QFrame *nachteileFrame = generateFrame("NACHTEILE={", "Nachteile", characterFileContent);
-        mainLayout->addWidget(nachteileFrame);
-
-        // Allgemeine Sonderfertigkeiten
-        QFrame *sonderfertigkeitenFrame = generateFrame("ALLGEMEINE_SONDERFERTIGKEITEN={", "Allgemeine Sonderfertigkeiten", characterFileContent);
-        mainLayout->addWidget(sonderfertigkeitenFrame);
-
-        // Grundwerte
-        QFrame *grundwerteFrame = generateFrame("GRUNDWERTE={", "Grundwerte",characterFileContent);
-        mainLayout->addWidget(grundwerteFrame);
-
-        // Kampftechniken
-        QFrame* ktFrame = generateFrame("KAMPFTECHNIKEN={", "Kampftechniken", characterFileContent);
-        fightLayout->addWidget(ktFrame);
-
-        // Kampfsonderfertigkeiten
-        QFrame* ksfFrame = generateFrame("KAMPFSONDERFERTIGKEITEN={", "Kampfsonderfertigkeiten", characterFileContent);
-        fightLayout->addWidget(ksfFrame);
-
-        break;}
+        break;
     default:
         break;
     }
 
-    // Everything on the right side
-    QFrame *rightFrame = new QFrame;
-    QVBoxLayout *rightLayout = new QVBoxLayout;
-    rightFrame->setLayout(rightLayout);
-
-    baseLayout->addWidget(rightFrame);
-
-    // Skills
-    QFrame *skillsFrame = new QFrame;
-    QHBoxLayout *skillsLayout = new QHBoxLayout;
-    skillsFrame->setLayout(skillsLayout);
-    skillsFrame->setFrameShape(QFrame::Box);
-
-    QLabel *skillsLabel = new QLabel;
-    skillsLabel->setText("Skills");
-    rightLayout->addWidget(skillsLabel);
-
-    index1 = characterFileContent.indexOf("SKILLS1={");
-    index2 = characterFileContent.indexOf("};", index1);
-    QString skills1String = characterFileContent.mid(index1+9, index2-index1-9);
-
-    QStringList skillsList1 = skills1String.split(",");
-
-    QListWidget *skillsList1Widget = new QListWidget;
-    skillsLayout->addWidget(skillsList1Widget);
-    for (QString skill : skillsList1){
-        skillsList1Widget->addItem(skill);
-    }
-
-    index1 = characterFileContent.indexOf("SKILLS2={");
-    index2 = characterFileContent.indexOf("};", index1);
-    QString skills2String = characterFileContent.mid(index1+9, index2-index1-9);
-
-    QStringList skillsList2 = skills2String.split(",");
-
-    QListWidget *skillsList2Widget = new QListWidget;
-    skillsLayout->addWidget(skillsList2Widget);
-    for (QString skill : skillsList2){
-        skillsList2Widget->addItem(skill);
-    }
-
-    index1 = characterFileContent.indexOf("SKILLS3={");
-    index2 = characterFileContent.indexOf("};", index1);
-    QString skills3String = characterFileContent.mid(index1+9, index2-index1-9);
-
-    QStringList skillsList3 = skills3String.split(",");
-
-    QListWidget *skillsList3Widget = new QListWidget;
-    skillsLayout->addWidget(skillsList3Widget);
-    for (QString skill : skillsList3){
-        skillsList3Widget->addItem(skill);
-    }
-
-    rightLayout->addWidget(skillsFrame);
-
-    // Inventory
-    QFrame *inventoryFrame = new QFrame;
-    inventoryFrame->setFrameShape(QFrame::Box);
-    QHBoxLayout *inventoryLayout = new QHBoxLayout;
-    inventoryFrame->setLayout(inventoryLayout);
-
-    QLabel *inventoryLabel = new QLabel;
-    inventoryLabel->setText("Inventory");
-    rightLayout->addWidget(inventoryLabel);
-
-    index1 = characterFileContent.indexOf("INVENTORY1={");
-    index2 = characterFileContent.indexOf("};", index1);
-    QString inventory1String = characterFileContent.mid(index1+12, index2-index1-12);
-
-    QStringList inventoryList1 = inventory1String.split(",");
-
-    QListWidget *inventoryList1Widget = new QListWidget;
-    inventoryLayout->addWidget(inventoryList1Widget);
-    for (QString item : inventoryList1){
-        inventoryList1Widget->addItem(item);
-    }
-
-    index1 = characterFileContent.indexOf("INVENTORY2={");
-    index2 = characterFileContent.indexOf("};", index1);
-    QString inventory2String = characterFileContent.mid(index1+12, index2-index1-12);
-
-    QStringList inventoryList2 = inventory2String.split(",");
-
-    QListWidget *inventoryList2Widget = new QListWidget;
-    inventoryLayout->addWidget(inventoryList2Widget);
-    for (QString item : inventoryList2){
-        inventoryList2Widget->addItem(item);
-    }
-
-    rightLayout->addWidget(inventoryFrame);
-
-    characterFile.close();
-    return baseFrame;
+    charPage->updateUi();
+    return charPage;
 }

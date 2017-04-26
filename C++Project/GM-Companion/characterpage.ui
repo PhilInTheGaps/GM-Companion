@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CharacterPage</class>
+ <widget class="QStackedWidget" name="CharacterPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>706</width>
+    <height>658</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>StackedWidget</string>
+  </property>
+  <property name="currentIndex">
+   <number>1</number>
+  </property>
+  <widget class="QWidget" name="pageGeneric">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabGeneral_generic">
+       <attribute name="title">
+        <string>General Info</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QTableWidget" name="generalInfoTable_generic">
+          <property name="columnCount">
+           <number>1</number>
+          </property>
+          <attribute name="horizontalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <row>
+           <property name="text">
+            <string/>
+           </property>
+          </row>
+          <column/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSkills_generic">
+       <attribute name="title">
+        <string>Skills</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Skills 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="skills1Table_generic">
+            <property name="columnCount">
+             <number>2</number>
+            </property>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>120</number>
+            </attribute>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>80</number>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Skill</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Value</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Skills 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="skills2Table_generic">
+            <property name="columnCount">
+             <number>2</number>
+            </property>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>120</number>
+            </attribute>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>80</number>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Skill</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Value</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Skills 3</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="skills3Table_generic">
+            <property name="columnCount">
+             <number>2</number>
+            </property>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>120</number>
+            </attribute>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>80</number>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Skill</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Value</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabFight_generic">
+       <attribute name="title">
+        <string>Fight</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Weapons</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="weaponsTable_generic">
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>200</number>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Name</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Damage</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Armor</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="armorTable_generic">
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>200</number>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Type</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Protection</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Modifiers</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabInventory_generic">
+       <attribute name="title">
+        <string>Inventory</string>
+       </attribute>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Inventory 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="inv1Table_generic">
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Item</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Where</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Weight</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Inventory 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="inv2Table_generic">
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>Item</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Where</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Weight</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="pageDSA5">
+   <layout class="QVBoxLayout" name="verticalLayout_8">
+    <item>
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Persönliche Daten</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Spielwerte</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
