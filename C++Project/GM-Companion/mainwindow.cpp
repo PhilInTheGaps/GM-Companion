@@ -36,6 +36,7 @@
 #include <QSpacerItem>
 #include <QKeyEvent>
 #include <QStandardItemModel>
+#include <QFileSystemWatcher>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -146,16 +147,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Character View
     QStringList characterList = getCharacterList();
     for (QString character : characterList){
-        QFrame *frame = getCharacterPage(character);
-        ui->charactersStackedWidget->addWidget(frame);
+        QWidget* widget = getCharacterPage(character);
+        ui->charactersStackedWidget->addWidget(widget);
 
         QListWidgetItem *listItem = new QListWidgetItem;
-        listItem->setText(frame->toolTip());
+        listItem->setText(widget->toolTip());
         listItem->setToolTip(cleanText(character));
         ui->charactersListWidget->addItem(listItem);
     }
     on_characterListClicked(0);
     connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
+
+    // Characters File System Watcher Updates the list when file is added
+    QFileSystemWatcher* charactersWatcher = new QFileSystemWatcher;
+    charactersWatcher->addPath(QDir::currentPath()+"/characters");
+    connect(charactersWatcher, SIGNAL(directoryChanged(QString)), SLOT(charactersFolderChanged()));
 
     // Checks for updates on program start
     if (checkUpdates == 0){
@@ -726,8 +732,7 @@ void MainWindow::on_createCharacterButton_clicked()
     charEditor->show();
 }
 
-void MainWindow::on_updateCharactersButton_clicked()
-{
+void MainWindow::updateCharacters(){
     for(int i = ui->charactersStackedWidget->count(); i >= 0; i--)
     {
         QWidget* widget = ui->charactersStackedWidget->widget(i);
@@ -736,19 +741,27 @@ void MainWindow::on_updateCharactersButton_clicked()
     }
 
     ui->charactersListWidget->clear();
-    //disconnect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(on_characterListClicked(int)));
 
     QStringList characterList = getCharacterList();
     for (QString character : characterList){
-        QFrame *frame = getCharacterPage(character);
-        ui->charactersStackedWidget->addWidget(frame);
+        QWidget* widget = getCharacterPage(character);
+        ui->charactersStackedWidget->addWidget(widget);
 
         QListWidgetItem *listItem = new QListWidgetItem;
-        listItem->setText(frame->toolTip());
+        listItem->setText(widget->toolTip());
         listItem->setToolTip(cleanText(character));
         ui->charactersListWidget->addItem(listItem);
     }
+
     ui->charactersListWidget->setCurrentRow(0);
     on_characterListClicked(0);
-    //connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
+}
+
+void MainWindow::on_updateCharactersButton_clicked()
+{
+    updateCharacters();
+}
+
+void MainWindow::charactersFolderChanged(){
+    updateCharacters();
 }

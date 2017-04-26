@@ -52,7 +52,7 @@
          </item>
          <item>
           <property name="text">
-           <string>DSA5</string>
+           <string>DSA5 (Noch nicht implementiert)</string>
           </property>
          </item>
         </widget>
@@ -94,10 +94,10 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="lineEdit_3"/>
+          <widget class="QLineEdit" name="iconLineEdit"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="iconButton">
            <property name="maximumSize">
             <size>
              <width>25</width>
@@ -158,7 +158,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <property name="elideMode">
            <enum>Qt::ElideNone</enum>
@@ -196,7 +196,7 @@
                <item>
                 <widget class="QTableWidget" name="generalInfoTable">
                  <property name="alternatingRowColors">
-                  <bool>false</bool>
+                  <bool>true</bool>
                  </property>
                  <property name="cornerButtonEnabled">
                   <bool>false</bool>
@@ -515,7 +515,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTableWidget" name="tableWidget_5">
+                <widget class="QTableWidget" name="weaponsTable_generic">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>
@@ -583,7 +583,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTableWidget" name="tableWidget_4">
+                <widget class="QTableWidget" name="armorTable_generic">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>
@@ -658,7 +658,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTableWidget" name="tableWidget_6">
+                <widget class="QTableWidget" name="inv1Table_generic">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>
@@ -723,7 +723,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QTableWidget" name="tableWidget_7">
+                <widget class="QTableWidget" name="inv2Table_generic">
                  <property name="alternatingRowColors">
                   <bool>true</bool>
                  </property>
@@ -777,7 +777,1485 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageDSA5"/>
+      <widget class="QWidget" name="pageDSA5">
+       <layout class="QVBoxLayout" name="verticalLayout_11">
+        <item>
+         <widget class="QTabWidget" name="tabWidget_2">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>Persönliche Daten</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_12">
+            <item>
+             <widget class="QFrame" name="frame_10">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>110</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_16">
+               <item>
+                <widget class="QLabel" name="label_13">
+                 <property name="maximumSize">
+                  <size>
+                   <width>300</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>20</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Das Schwarze Auge 5</string>
+                 </property>
+                 <property name="scaledContents">
+                  <bool>false</bool>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTableWidget" name="tableWidget_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>10</pointsize>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <attribute name="horizontalHeaderCascadingSectionResizes">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>75</number>
+                 </attribute>
+                 <row>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>25</pointsize>
+                   </font>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>MU</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>KL</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>IN</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>CH</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>FF</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>GE</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>KO</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>KK</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>15</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignCenter</set>
+                  </property>
+                 </column>
+                 <item row="0" column="0">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="1">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="2">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="3">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>25</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="4">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="5">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="6">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                 <item row="0" column="7">
+                  <property name="text">
+                   <string>8</string>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>30</pointsize>
+                   </font>
+                  </property>
+                  <property name="textAlignment">
+                   <set>AlignHCenter|AlignTop</set>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <item>
+               <widget class="QFrame" name="frame_12">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_20">
+                   <item>
+                    <widget class="QTableWidget" name="tableWidget_4">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>242</height>
+                      </size>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>Name</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Familie</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Geburtsdatum</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Spezies</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Haarfarbe</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Kultur</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Titel</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Charakteristika</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="tableWidget_5">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>242</height>
+                      </size>
+                     </property>
+                     <attribute name="horizontalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>Geburtsort</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Alter</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Geschlecht</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Größe</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Gewicht</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Augenfarbe</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Profession</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Sozialstatus</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_19">
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_15">
+                     <item>
+                      <widget class="QLabel" name="label_14">
+                       <property name="text">
+                        <string>Vorteile</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QListWidget" name="listWidget"/>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_14">
+                       <item>
+                        <widget class="QPushButton" name="addVorteil_dsa5">
+                         <property name="text">
+                          <string>Reihe Hinzufügen</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="removeVorteil_dsa5">
+                         <property name="text">
+                          <string>Reihe Entfernen</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="verticalLayout_16">
+                     <item>
+                      <widget class="QLabel" name="label_15">
+                       <property name="text">
+                        <string>Nachteile</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QListWidget" name="listWidget_2"/>
+                     </item>
+                     <item>
+                      <layout class="QHBoxLayout" name="horizontalLayout_17">
+                       <item>
+                        <widget class="QPushButton" name="addNachteil_dsa5">
+                         <property name="text">
+                          <string>Reihe Hinzufügen</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="removeNachteil_dsa5">
+                         <property name="text">
+                          <string>Reihe Entfernen</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_16">
+                   <property name="text">
+                    <string>Allgemeine Sonderfertigkeiten</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QListWidget" name="listWidget_3"/>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_18">
+                   <item>
+                    <widget class="QPushButton" name="addSonderf_dsa5">
+                     <property name="text">
+                      <string>Reihe Hinzufügen</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="removeSonderf_dsa5">
+                     <property name="text">
+                      <string>Reihe Entfernen</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_11">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_13">
+                 <item>
+                  <widget class="QTableWidget" name="tableWidget_6">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>50</height>
+                    </size>
+                   </property>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>true</bool>
+                   </attribute>
+                   <row>
+                    <property name="text">
+                     <string>AP</string>
+                    </property>
+                   </row>
+                   <column>
+                    <property name="text">
+                     <string>Erfahrungsgrad</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Gesamt</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Gesammelt</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ausgegeben</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QTableWidget" name="tableWidget">
+                   <attribute name="horizontalHeaderDefaultSectionSize">
+                    <number>85</number>
+                   </attribute>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>true</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderDefaultSectionSize">
+                    <number>41</number>
+                   </attribute>
+                   <attribute name="verticalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
+                   <row>
+                    <property name="text">
+                     <string>Lebensenergie</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Astralenergie</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Karmaenergie</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Seelenkraft</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Zähigkeit</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Ausweichen</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Initiative</string>
+                    </property>
+                   </row>
+                   <row>
+                    <property name="text">
+                     <string>Geschwindigkeit</string>
+                    </property>
+                   </row>
+                   <column>
+                    <property name="text">
+                     <string>Wert</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Bonus/Malus</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Zukauf</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Max</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_17">
+                   <property name="text">
+                    <string>Schicksalspunkte</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QTableWidget" name="tableWidget_3">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>50</height>
+                    </size>
+                   </property>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>true</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderHighlightSections">
+                    <bool>true</bool>
+                   </attribute>
+                   <row>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </row>
+                   <column>
+                    <property name="text">
+                     <string>Wert</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Bonus</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Max</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Aktuell</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_6">
+           <attribute name="title">
+            <string>Spielwerte</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_17">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>Fertigkeiten</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_21">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_7">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderDefaultSectionSize">
+                 <number>57</number>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderDefaultSectionSize">
+                 <number>20</number>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>Körpertalente</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Fliegen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Gaukeleien</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Klettern</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Körperbeherrschung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Kraftakt</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Reiten</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Schwimmen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Selbstbeherrschung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Singen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Sinnesschärfe</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Tanzen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Taschendiebstahl</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Verbergen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Zechen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Gesellschaftstalente</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Bekehren &amp; Überzeugen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Betören</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Einschüchtern</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Etikette</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Gassenwissen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Menschenkenntnis</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Überreden</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Verkleiden</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Willenkskraft</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Naturtalente</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Fährtensuchen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Fesseln</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Fischen &amp; Angeln</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Orientierung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Pflanzenkunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Tierkunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Wildnisleben</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Probe</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>BE</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Stg.</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Fw</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>R</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Anmerkung</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="tableWidget_8">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderDefaultSectionSize">
+                 <number>57</number>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderDefaultSectionSize">
+                 <number>20</number>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>Wissenstalente</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Brett- &amp; Glücksspiel</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Geographie</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Geschichtswissen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Götter &amp; Kulte</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Kriegskunst</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Magiekunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Mechanik</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Rechnen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Rechtskunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Sagen &amp; Legenden</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Sphärenkunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Sternkunde</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Handwerkstalente</string>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Alchimie</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Boote &amp; Schiffe</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Fahrzeuge</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Handel</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Heilkunde Gift</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Heilkunde Krankheiten</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Heilkunde Seele</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Heilkunde Wunden</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Holzbearbeitung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Lebensmittelbearbeitung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Lederbearbeitung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Malen &amp; Zeichnen</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Metallbearbeitung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Musizieren</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Schlösserknacken</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Steinbearbeitung</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Stoffbearbeitung</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Probe</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>BE</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Stg.</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Fw</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>R</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Anmerkung</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_13">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>175</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_18">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_23">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_22">
+                   <item>
+                    <widget class="QLabel" name="label_18">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>10</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Sprachen</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_25">
+                     <item>
+                      <widget class="QTableWidget" name="tableWidget_9">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>100</height>
+                        </size>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_23">
+                       <item>
+                        <widget class="QPushButton" name="pushButton_2">
+                         <property name="maximumSize">
+                          <size>
+                           <width>20</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>+</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="pushButton">
+                         <property name="maximumSize">
+                          <size>
+                           <width>20</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>-</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_19">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>10</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Schriften</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_26">
+                     <item>
+                      <widget class="QTableWidget" name="tableWidget_10">
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>100</height>
+                        </size>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <layout class="QVBoxLayout" name="verticalLayout_24">
+                       <item>
+                        <widget class="QPushButton" name="pushButton_3">
+                         <property name="maximumSize">
+                          <size>
+                           <width>20</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>+</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="pushButton_4">
+                         <property name="maximumSize">
+                          <size>
+                           <width>20</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="text">
+                          <string>-</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_21">
+                   <item>
+                    <widget class="QLabel" name="label_20">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>10</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Eigenschaftsmodifikationen</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="tableWidget_11">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="alternatingRowColors">
+                      <bool>true</bool>
+                     </property>
+                     <attribute name="horizontalHeaderDefaultSectionSize">
+                      <number>64</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderDefaultSectionSize">
+                      <number>14</number>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>MU</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>KL</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>IN</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>CH</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>FF</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>GE</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>KO</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>KK</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string>-3</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>-2</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>-1</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>0</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>+1</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>+2</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>+3</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_7">
+           <attribute name="title">
+            <string>Kampf</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_8">
+           <attribute name="title">
+            <string>Besitz</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_9">
+           <attribute name="title">
+            <string>Zauber und Rituale</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_10">
+           <attribute name="title">
+            <string>Liturgien und Zeremonien</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
