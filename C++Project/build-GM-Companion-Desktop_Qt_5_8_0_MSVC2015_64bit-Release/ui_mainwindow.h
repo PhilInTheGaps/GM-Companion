@@ -102,7 +102,9 @@ public:
     QLabel *label_2;
     QListWidget *charactersListWidget;
     QLabel *characterIconLabel;
+    QHBoxLayout *horizontalLayout;
     QPushButton *createCharacterButton;
+    QPushButton *pushButton;
     QPushButton *updateCharactersButton;
     QStackedWidget *charactersStackedWidget;
     QWidget *widget;
@@ -831,12 +833,23 @@ public:
 
         verticalLayout_5->addWidget(characterIconLabel);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         createCharacterButton = new QPushButton(frame);
         createCharacterButton->setObjectName(QStringLiteral("createCharacterButton"));
         createCharacterButton->setCheckable(false);
         createCharacterButton->setChecked(false);
 
-        verticalLayout_5->addWidget(createCharacterButton);
+        horizontalLayout->addWidget(createCharacterButton);
+
+        pushButton = new QPushButton(frame);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        horizontalLayout->addWidget(pushButton);
+
+
+        verticalLayout_5->addLayout(horizontalLayout);
 
         updateCharactersButton = new QPushButton(frame);
         updateCharactersButton->setObjectName(QStringLiteral("updateCharactersButton"));
@@ -1332,7 +1345,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 05", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 06", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1389,6 +1402,7 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         characterIconLabel->setText(QString());
         createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
+        pushButton->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabWebTest), QApplication::translate("MainWindow", "Page", Q_NULLPTR));

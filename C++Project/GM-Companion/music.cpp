@@ -18,14 +18,14 @@ void MainWindow::generateMusicButtons(){
             scrollArea->setWidgetResizable(true);
 
             if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png);}");
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png); background-attachment: fixed;}");
             }
             else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg);}");
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg); background-attachment: fixed;}");
             }
 
             // Generating musicButtons
-            QString path = settingsManager->getSetting(Setting::musicPath)+"/"+folder; //"C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music/OSTs"
+            QString path = settingsManager->getSetting(Setting::musicPath)+"/"+folder;
             QStringList musicFolders = getFolders(path);
 
             FlowLayout *flowLayoutMusic = new FlowLayout;
@@ -50,6 +50,9 @@ void MainWindow::generateMusicButtons(){
                         b->setIconSize(QSize(150, 150));
                     }
                     else{
+                        QFont font;
+                        font.setPixelSize(25);
+                        b->setFont(font);
                         b->setText(cleanText(s));
                     }
 

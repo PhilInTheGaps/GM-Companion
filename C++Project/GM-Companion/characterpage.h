@@ -5,6 +5,7 @@
 #include <QStringList>
 #include "characters.h"
 #include <QList>
+#include <QTableWidget>
 
 namespace Ui {
 class CharacterPage;
@@ -22,20 +23,61 @@ public:
 
     int systemID = 0;
 
-    QList<TableContent>* generalInfo_generic;
+    // General
+    QString name;
+    QString player;
 
-    QList<TableContent>* skills1_generic;
-    QList<TableContent>* skills2_generic;
-    QList<TableContent>* skills3_generic;
+    // Generic
+    QList<QStringList>* generalInfo_generic;
 
-    QList<TableContent3C>* weapons_generic;
-    QList<TableContent3C>* armor_generic;
+    QList<QStringList>* skills1_generic;
+    QList<QStringList>* skills2_generic;
+    QList<QStringList>* skills3_generic;
 
-    QList<TableContent3C>* inv1_generic;
-    QList<TableContent3C>* inv2_generic;
+    QList<QStringList>* weapons_generic;
+    QList<QStringList>* armor_generic;
+
+    QList<QStringList>* inv1_generic;
+    QList<QStringList>* inv2_generic;
+
+    // DSA5
+    QList<QStringList>* persDaten1_dsa5;
+    QList<QStringList>* persDaten2_dsa5;
+
+    QList<QStringList>* eigenschaften_dsa5;
+    QList<QStringList>* vorteile_dsa5;
+    QList<QStringList>* nachteile_dsa5;
+    QList<QStringList>* sonderf_dsa5;
+
+    QList<QStringList>* ap_dsa5;
+    QList<QStringList>* allgemein_dsa5;
+    QList<QStringList>* schicksalsp_dsa5;
+
+    QList<QStringList>* fertigkeiten1_dsa5;
+    QList<QStringList>* fertigkeiten2_dsa5;
+    QList<QStringList>* sprachen_dsa5;
+    QList<QStringList>* schriften_dsa5;
+
+    QList<QStringList>* ktw_dsa5;
+    QList<QStringList>* lep_dsa5;
+    QList<QStringList>* nahkampfwaffen_dsa5;
+    QList<QStringList>* fernkampfwaffen_dsa5;
+    QList<QStringList>* ruestungen_dsa5;
+    QList<QStringList>* schild_dsa5;
+    QList<QStringList>* kSonderf_dsa5;
+
+    QList<QStringList>* ausruestung1_dsa5;
+    QList<QStringList>* ausruestung2_dsa5;
+    QList<QStringList>* geld_dsa5;
+    QList<QStringList>* tierAllgemein_dsa5;
+    QList<QStringList>* tierAngriff_dsa5;
+    QList<QStringList>* tierAktionen_dsa5;
+    QList<QStringList>* tierSonderf_dsa5;
 
 private:
     Ui::CharacterPage *ui;
+
+    void writeTable(QList<QStringList> *list, int columns, QTableWidget* table, bool updateTableSize = false);
 };
 
 #endif // CHARACTERPAGE_H

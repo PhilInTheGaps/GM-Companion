@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QTableWidget>
+#include <QListWidget>
+#include <QSettings>
 
 namespace Ui {
 class CharEditor;
@@ -15,6 +17,8 @@ class CharEditor : public QMainWindow
 public:
     explicit CharEditor(QWidget *parent = 0);
     ~CharEditor();
+
+    void load(int index);
 
 private slots:
     void on_systemComboBox_currentIndexChanged(int index);
@@ -53,6 +57,68 @@ private slots:
 
     void on_iconButton_clicked();
 
+    void on_addVorteil_dsa5_clicked();
+
+    void on_removeVorteil_dsa5_clicked();
+
+    void on_addNachteil_dsa5_clicked();
+
+    void on_removeNachteil_dsa5_clicked();
+
+    void on_addSonderf_dsa5_clicked();
+
+    void on_removeSonderf_dsa5_clicked();
+
+    void on_addSprache_dsa5_clicked();
+
+    void on_removeSprache_dsa5_clicked();
+
+    void on_addSchrift_dsa5_clicked();
+
+    void on_removeSchrift_dsa5_clicked();
+
+    void on_lepTable_dsa5_cellChanged(int row, int column);
+
+    void on_addKSonderf_dsa5_clicked();
+
+    void on_removeKSonderf_dsa5_clicked();
+
+    void on_addNahkampf_dsa5_clicked();
+
+    void on_removeNahkampf_dsa5_clicked();
+
+    void on_addRuestung_dsa5_clicked();
+
+    void on_removeRuestung_dsa5_clicked();
+
+    void on_addFernkampf_dsa5_clicked();
+
+    void on_removeFernkampf_dsa5_clicked();
+
+    void on_addSchild_dsa5_clicked();
+
+    void on_removeSchild_dsa5_clicked();
+
+    void on_addAusruestung1_dsa5_clicked();
+
+    void on_removeAusruestung1_dsa55_clicked();
+
+    void on_addAusruestung2_dsa5_clicked();
+
+    void on_removeAusruestung2_dsa5_clicked();
+
+    void on_addTierSonderf_dsa5_clicked();
+
+    void on_removeTierSonderf_dsa5_clicked();
+
+    void on_addTierAngriff_dsa5_clicked();
+
+    void on_removeTierAngriff_dsa5_clicked();
+
+    void on_addTierAktionen_dsa5_clicked();
+
+    void on_removeTierAktionen_dsa5_clicked();
+
 private:
     Ui::CharEditor *ui;
 
@@ -60,6 +126,14 @@ private:
 
     void addRow(QTableWidget* table);
     void removeRow(QTableWidget* table);
+
+    QString loadCharacterFile;
+
+    void writeTable(QString indicator, int columns, QTableWidget* table, bool updateTableSize = false);
+
+    void writeToFile(QTableWidget* table, QString indicator, int columns);
+
+    QString displayName;
 };
 
 #endif // CHAREDITOR_H

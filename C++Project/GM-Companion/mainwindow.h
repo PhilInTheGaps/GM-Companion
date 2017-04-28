@@ -16,6 +16,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 #include <QTabWidget>
+#include <QtWinExtras>
 
 #include "settingsmanager.h"
 #include "dicemanager.h"
@@ -35,6 +36,8 @@ public:
 
     void setVersion(QString);
     QString getVersion();
+
+    void createThumbnailToolbar();
 
 private slots:
     void playMusic(QString);
@@ -113,7 +116,9 @@ private slots:
 
     void on_updateCharactersButton_clicked();
     void charactersFolderChanged();
+    void charactersTimerFinished();
 
+    void on_pushButton_clicked();
 private:
     Ui::MainWindow *ui;
 
@@ -175,6 +180,13 @@ private:
 
     // Characters
     void updateCharacters();
+    QTimer* updateCharactersTimer;
+    bool listenForCharacterUpdaters = true;
+
+    // ThumbnailToolbar
+    QWinThumbnailToolButton* playToolButton;
+    QWinThumbnailToolButton* pauseToolButton;
+    QWinThumbnailToolButton* nextToolButton;
 };
 
 #endif // MAINWINDOW_H
