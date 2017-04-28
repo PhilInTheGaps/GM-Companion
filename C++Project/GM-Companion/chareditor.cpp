@@ -3,6 +3,7 @@
 #include "characters.h"
 #include <QSettings>
 #include <QFileDialog>
+#include <QDebug>
 
 CharEditor::CharEditor(QWidget *parent) :
     QMainWindow(parent),
@@ -10,6 +11,7 @@ CharEditor::CharEditor(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->generalInfoTable->verticalHeader()->setVisible(true);
+
 }
 
 CharEditor::~CharEditor()
@@ -17,9 +19,260 @@ CharEditor::~CharEditor()
     delete ui;
 }
 
+void CharEditor::writeTable(QString indicator, int columns, QTableWidget* table, bool updateTableSize){
+    QSettings settings("characters/"+loadCharacterFile, QSettings::IniFormat);
+
+    QList<QStringList>* list = new QList<QStringList>;
+    int size = settings.beginReadArray(indicator);
+    for (int row = 0; row<size; row++){
+        settings.setArrayIndex(row);
+        QStringList subList;
+        for (int column = 0; column<columns; column++){
+
+            subList.push_back(settings.value("entry"+QString::number(column+1)).toString());
+        }
+        list->push_back(subList);
+    }
+    settings.endArray();
+
+    if (updateTableSize){
+        table->setRowCount(size);
+        table->setColumnCount(columns);
+    }
+
+    for (int row = 0; row<size; row++){
+        for (int column = 0; column<columns; column++){
+            QString entry = list->at(row).at(column);
+            qDebug() << row << column << entry;
+
+            QTableWidgetItem* item = new QTableWidgetItem;
+            item->setText(entry);
+            table->setItem(row, column, item);
+        }
+    }
+}
+
+void CharEditor::load(int index){
+    QStringList characters = getCharacterList();
+    loadCharacterFile = characters.at(index);
+    qDebug() << loadCharacterFile;
+
+    QSettings settings("characters/"+loadCharacterFile, QSettings::IniFormat);
+
+    ui->displayNameLineEdit->setText(settings.value("Name").toString());
+    ui->playerLineEdit->setText(settings.value("Player").toString());
+
+    int systemID = settings.value("System", 0).toInt();
+    ui->systemComboBox->setCurrentIndex(systemID);
+    ui->stackedWidget->setCurrentIndex(systemID);
+    ui->iconLineEdit->setText(settings.value("Icon", " ").toString());
+
+    switch (systemID) {
+    case 0:{
+        // General Character Information
+        writeTable("generalInfos", 1, ui->generalInfoTable);
+
+        // Skills
+        writeTable("skills1", 2, ui->skillsTable1_generic, true);
+        writeTable("skills2", 2, ui->skillsTable2_generic, true);
+        writeTable("skills3", 2, ui->skillsTable3_generic, true);
+
+        // Weapons
+        writeTable("weapons", 3, ui->weaponsTable_generic, true);
+
+        // Armor
+        writeTable("armor", 3, ui->armorTable_generic, true);
+
+        // Inventory
+        writeTable("inventory1", 2, ui->inv1Table_generic, true);
+        writeTable("inventory2", 2, ui->inv2Table_generic, true);
+
+        break;
+    }
+    case 1:{
+        // Persönliche Daten
+        qDebug() << "Writing Persönliche Werte";
+        writeTable("persDaten1", 1, ui->persInf1Table_dsa5);
+        writeTable("persDaten2", 1, ui->persInf2Table_dsa5);
+
+        // Vorteile
+        qDebug() << "Writing Vorteile";
+        writeTable("vorteile", 1, ui->vorteileTable_dsa5, true);
+
+        // Nachteile
+        qDebug() << "Writing Nachteile";
+        writeTable("nachteile", 1, ui->nachteileTable_dsa5, true);
+
+        // Sonderfertigkeiten
+        qDebug() << "Writing Sonderfertigkeiten";
+        writeTable("sonderfertigkeiten", 1,ui->sonderfTable_dsa5, true);
+
+        // Eigenschaften
+        qDebug() << "Writing Eigenschaften";
+        writeTable("eigenschaften", 8,ui->eigenschaftenTable_dsa5);
+
+        // AP
+        qDebug() << "Writing AP";
+        writeTable("ap", 4, ui->apTable_dsa5);
+
+        // Allgemeine Werte
+        qDebug() << "Writing Allgemeine Werte";
+        writeTable("allgemein", 4, ui->allgWerteTable_dsa5);
+
+        // Schicksalspunkte
+        qDebug() << "Writing Schicksalspunkte";
+        writeTable("schicksalsp", 4, ui->schicksalspunkteTable_dsa5);
+
+        // Fertigkeiten
+        qDebug() << "Writing Fertigkeiten";
+        writeTable("fertigkeiten1", 6, ui->fertigkeiten1Table_dsa5);
+        writeTable("fertigkeiten2", 6, ui->fertigkeiten2Table_dsa5);
+
+        // Sprachen
+        qDebug() << "Writing Sprachen";
+        writeTable("sprachen", 1, ui->sprachenTable_dsa5, true);
+
+        // Schriften
+        qDebug() << "Writing Schriften";
+        writeTable("schriften", 1, ui->schriftenTable_dsa5, true);
+
+        // Kampftechniken
+        qDebug() << "Writing Kampftechniken";
+        writeTable("kampftechniken", 5, ui->ktwTable_dsa5);
+
+        // Lebenspunkte
+        qDebug() << "Writing Lebenspunkte";
+        writeTable("lep", 2, ui->lepTable_dsa5);
+
+        // Nahkampfwaffen
+        qDebug() << "Writing Nahkampfwaffen";
+        writeTable("nahkampfwaffen", 9, ui->nahkampfTable_dsa5, true);
+
+        // Fernkampfwaffen
+        qDebug() << "Writing Fernkampfwaffen";
+        writeTable("fernkampfwaffen", 8,ui->fernkampfTable_dsa5, true);
+
+        // Rüstungen
+        qDebug() << "Writing Rüstungen";
+        writeTable("ruestungen", 6, ui->ruestungenTable_dsa5, true);
+
+        // Schild / Parierwaffe
+        qDebug() << "Writing Schilde / Parierwaffen";
+        writeTable("schild", 4, ui->schildTable_dsa5, true);
+
+        // Kampfsonderfertigkeiten
+        qDebug() << "Writing Kampfsonderfertigkeiten";
+        writeTable("kampfsonderfertigkeiten", 1, ui->kSonderfTable_dsa5, true);
+
+        // Ausrüstung
+        qDebug() << "Writing Ausrüstung";
+        writeTable("ausruestung1", 3, ui->ausruestung1Table_dsa5, true);
+        writeTable("ausruestung2", 3, ui->ausruestung2Table_dsa5, true);
+
+        // Geldbeutel
+        qDebug() << "Writing Geldbeutel";
+        writeTable("geldbeutel", 1, ui->geldTable_dsa5);
+
+        // Tier Allgemein
+        qDebug() << "Writing Tier Allgemein";
+        writeTable("tierAllgmein", 1, ui->tierAllgemeinTable_dsa5);
+
+        // Tier Angriff
+        qDebug() << "Writing Tier Angriff";
+        writeTable("tierAngriff", 5, ui->tierAngriffTable_dsa5, true);
+
+        // Tier Sonderfertigkeiten
+        qDebug() << "Writing Tier Sonderfertigkeiten";
+        writeTable("tierSonderfertigkeiten", 1, ui->tierSonderfTable_dsa5, true);
+
+        // Tier Aktionen
+        qDebug() << "Writing Tier Aktionen";
+        writeTable("tierAktionen", 1, ui->tierAktionenTable_dsa5, true);
+
+        // Zauber
+        qDebug() << "Writing Zauber";
+        writeTable("zauber", 11, ui->zauberTable_dsa5, true);
+
+        // Zaubertricks
+        qDebug() << "Writing Zaubertricks";
+        writeTable("zaubertricks", 1, ui->zaubertricksTable_dsa5, true);
+
+        // Magische Sonderfertigkeiten
+        qDebug() << "Writing Magische Sonderfertigkeiten";
+        writeTable("magischeSonderfertigkeiten", 1, ui->mSonderfTable_dsa5, true);
+
+        // Leiteigenschaft / Merkmal
+        qDebug() << "Writing Leiteigenschaft / Merkmal";
+        writeTable("leiteigenschaftMerkmal", 2, ui->leiteigMerkmalTable_dsa5);
+
+        // Magische Tradition
+        qDebug() << "Writing Magische Tradition";
+        writeTable("mTradition", 1, ui->magiTraditionTable_dsa5);
+
+        // Liturgien
+        qDebug() << "Writing Liturgien";
+        writeTable("liturgien", 11, ui->liturgienTable_dsa5);
+
+        // Segnungen
+        qDebug() << "Writing Segnungen";
+        writeTable("segnungen", 1, ui->segnungenTable_dsa5);
+
+        // Klerikale Sonderfertigkeiten
+        qDebug() << "Writing Klerikale Sonderfertigkeiten";
+        writeTable("klerikaleSonderfertigkeiten", 1, ui->kleriSonderfTable_dsa5);
+
+        // Leiteigenschaft / Aspekt
+        qDebug() << "Writing Leiteigenschaft / Aspekt";
+        writeTable("leiteigenschaftAspekt", 2, ui->leiteigAspektTable_dsa5);
+
+        // Klerikale Tradition
+        qDebug() << "Writing Klerikale Tradition";
+        writeTable("kTradition", 1, ui->kleriTraditionTable_dsa5);
+
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns){
+    QSettings settings("characters/"+displayName+".ini", QSettings::IniFormat);
+    QList<QStringList> list;
+    qDebug() << "Indicator: " << indicator << "Columns: " << columns << "Table length: " << table->rowCount();
+    for (int i = 0; i<table->rowCount(); i++){
+        QStringList subList;
+        for (int column = 0; column<columns; column++){
+            qDebug() << "Row: " << i << "Column: " <<column;
+            if (table->item(i, 0) != 0){
+                if (!table->item(i, column) || table->item(i, column)->text().isEmpty()){
+                    subList.push_back(" ");
+                }
+                else{
+                    subList.push_back(table->item(i, column)->text());
+                }
+            }
+            else{
+                subList.push_back(" ");
+            }
+            qDebug() << "Item: " << subList.at(column);
+        }
+        list.push_back(subList);
+    }
+
+    settings.beginWriteArray(indicator);
+    for (int i = 0; i < list.size(); ++i) {
+        settings.setArrayIndex(i);
+        for (int column = 0; column < columns; column++){
+            settings.setValue("entry"+QString::number(column+1), list.at(i).at(column));
+        }
+    }
+    settings.endArray();
+}
+
 void CharEditor::save(){
 
-    QString displayName = ui->displayNameLineEdit->text();
+    displayName = ui->displayNameLineEdit->text();
     QString playerName = ui->playerLineEdit->text();
     int systemID = ui->systemComboBox->currentIndex();
 
@@ -34,180 +287,167 @@ void CharEditor::save(){
     switch (systemID) {
     case 0:{
         // General Character Info
-        QList<TableContent> generalInfos;
-        for (int i = 0; i<ui->generalInfoTable->rowCount(); i++){
-            if (ui->generalInfoTable->item(i, 0) != 0){
-                TableContent content;
-                content.leftEntry = ui->generalInfoTable->verticalHeaderItem(i)->text();
-                content.rightEntry = ui->generalInfoTable->item(i, 0)->text();
-                generalInfos.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("generalInfos");
-        for (int i = 0; i < generalInfos.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", generalInfos.at(i).leftEntry);
-            settings.setValue("rightEntry", generalInfos.at(i).rightEntry);
-        }
-        settings.endArray();
+        writeToFile(ui->generalInfoTable, "generalInfos", 1);
 
         // Skills
-        QList<TableContent> skills1;
-        for (int i = 0; i<ui->skillsTable1_generic->rowCount(); i++){
-            if (ui->skillsTable1_generic->item(i, 0) != 0 && ui->skillsTable1_generic->item(i, 1) != 0){
-                TableContent content;
-                content.leftEntry = ui->skillsTable1_generic->item(i, 0)->text();
-                content.rightEntry = ui->skillsTable1_generic->item(i, 1)->text();
-                skills1.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("skills1");
-        for (int i = 0; i < skills1.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", skills1.at(i).leftEntry);
-            settings.setValue("rightEntry", skills1.at(i).rightEntry);
-        }
-        settings.endArray();
-
-        QList<TableContent> skills2;
-        for (int i = 0; i<ui->skillsTable2_generic->rowCount(); i++){
-            if (ui->skillsTable2_generic->item(i, 0) != 0 && ui->skillsTable2_generic->item(i, 1) != 0){
-                TableContent content;
-                content.leftEntry = ui->skillsTable2_generic->item(i, 0)->text();
-                content.rightEntry = ui->skillsTable2_generic->item(i, 1)->text();
-                skills2.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("skills2");
-        for (int i = 0; i < skills2.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", skills2.at(i).leftEntry);
-            settings.setValue("rightEntry", skills2.at(i).rightEntry);
-        }
-        settings.endArray();
-
-        QList<TableContent> skills3;
-        for (int i = 0; i<ui->skillsTable3_generic->rowCount(); i++){
-            if (ui->skillsTable3_generic->item(i, 0) != 0 && ui->skillsTable3_generic->item(i, 1) != 0){
-                TableContent content;
-                content.leftEntry = ui->skillsTable3_generic->item(i, 0)->text();
-                content.rightEntry = ui->skillsTable3_generic->item(i, 1)->text();
-                skills3.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("skills3");
-        for (int i = 0; i < skills3.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", skills3.at(i).leftEntry);
-            settings.setValue("rightEntry", skills3.at(i).rightEntry);
-        }
-        settings.endArray();
+        writeToFile(ui->skillsTable1_generic, "skills1", 2);
+        writeToFile(ui->skillsTable2_generic, "skills2", 2);
+        writeToFile(ui->skillsTable3_generic, "skills3", 2);
 
         // Weapons
-        QList<TableContent3C> weapons;
-        for (int i = 0; i<ui->weaponsTable_generic->rowCount(); i++){
-            if (ui->weaponsTable_generic->item(i, 0) != 0 && ui->weaponsTable_generic->item(i, 1) != 0 && ui->weaponsTable_generic->item(i, 2) != 0){
-                TableContent3C content;
-                content.leftEntry = ui->weaponsTable_generic->item(i, 0)->text();
-                content.midEntry = ui->weaponsTable_generic->item(i, 1)->text();
-                content.rightEntry = ui->weaponsTable_generic->item(i, 2)->text();
-                weapons.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("weapons");
-        for (int i = 0; i < weapons.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", weapons.at(i).leftEntry);
-            settings.setValue("midEntry", weapons.at(i).midEntry);
-            settings.setValue("rightEntry", weapons.at(i).rightEntry);
-        }
-        settings.endArray();
+        writeToFile(ui->weaponsTable_generic, "weapons", 3);
 
         // Armor
-        QList<TableContent3C> armor;
-        for (int i = 0; i<ui->armorTable_generic->rowCount(); i++){
-            if (ui->armorTable_generic->item(i, 0) != 0 && ui->armorTable_generic->item(i, 1) != 0 && ui->armorTable_generic->item(i, 2) != 0){
-                TableContent3C content;
-                content.leftEntry = ui->armorTable_generic->item(i, 0)->text();
-                content.midEntry = ui->armorTable_generic->item(i, 1)->text();
-                content.rightEntry = ui->armorTable_generic->item(i, 2)->text();
-                armor.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("armor");
-        for (int i = 0; i < armor.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", armor.at(i).leftEntry);
-            settings.setValue("midEntry", armor.at(i).midEntry);
-            settings.setValue("rightEntry", armor.at(i).rightEntry);
-        }
-        settings.endArray();
+        writeToFile(ui->armorTable_generic, "armor", 3);
 
         // Inventory
-        QList<TableContent3C> inventory1;
-        for (int i = 0; i<ui->inv1Table_generic->rowCount(); i++){
-            if (ui->inv1Table_generic->item(i, 0) != 0){
-                TableContent3C content;
-                content.midEntry = " ";
-                content.rightEntry = " ";
-
-                content.leftEntry = ui->inv1Table_generic->item(i, 0)->text();
-                if (ui->inv1Table_generic->item(i, 1) != 0){
-                    content.midEntry = ui->inv1Table_generic->item(i, 1)->text();
-                }
-                if (ui->inv1Table_generic->item(i, 2) != 0){
-                    content.rightEntry = ui->inv1Table_generic->item(i, 2)->text();
-                }
-                inventory1.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("inventory1");
-        for (int i = 0; i < inventory1.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", inventory1.at(i).leftEntry);
-            settings.setValue("midEntry", inventory1.at(i).midEntry);
-            settings.setValue("rightEntry", inventory1.at(i).rightEntry);
-        }
-        settings.endArray();
-
-        QList<TableContent3C> inventory2;
-        for (int i = 0; i<ui->inv2Table_generic->rowCount(); i++){
-            if (ui->inv2Table_generic->item(i, 0) != 0){
-                TableContent3C content;
-                content.midEntry = " ";
-                content.rightEntry = " ";
-
-                content.leftEntry = ui->inv2Table_generic->item(i, 0)->text();
-                if (ui->inv2Table_generic->item(i, 1) != 0){
-                    content.midEntry = ui->inv2Table_generic->item(i, 1)->text();
-                }
-                if (ui->inv2Table_generic->item(i, 2) != 0){
-                    content.rightEntry = ui->inv2Table_generic->item(i, 2)->text();
-                }
-                inventory2.push_back(content);
-            }
-        }
-
-        settings.beginWriteArray("inventory2");
-        for (int i = 0; i < inventory2.size(); ++i) {
-            settings.setArrayIndex(i);
-            settings.setValue("leftEntry", inventory2.at(i).leftEntry);
-            settings.setValue("midEntry", inventory2.at(i).midEntry);
-            settings.setValue("rightEntry", inventory2.at(i).rightEntry);
-        }
-        settings.endArray();
+        writeToFile(ui->inv1Table_generic, "inventory1", 2);
+        writeToFile(ui->inv2Table_generic, "inventory2", 2);
 
         break;
     }
-    case 1:
+    case 1:{
+        // Persönliche Daten
+        qDebug() << "Writing Persönliche Werte";
+        writeToFile(ui->persInf1Table_dsa5, "persDaten1", 1);
+        writeToFile(ui->persInf2Table_dsa5, "persDaten2", 1);
+
+        // Vorteile
+        qDebug() << "Writing Vorteile";
+        writeToFile(ui->vorteileTable_dsa5, "vorteile", 1);
+
+        // Nachteile
+        qDebug() << "Writing Nachteile";
+        writeToFile(ui->nachteileTable_dsa5, "nachteile", 1);
+
+        // Sonderfertigkeiten
+        qDebug() << "Writing Sonderfertigkeiten";
+        writeToFile(ui->sonderfTable_dsa5, "sonderfertigkeiten", 1);
+
+        // Eigenschaften
+        qDebug() << "Writing Eigenschaften";
+        writeToFile(ui->eigenschaftenTable_dsa5, "eigenschaften", 8);
+
+        // AP
+        qDebug() << "Writing AP";
+        writeToFile(ui->apTable_dsa5, "ap", 4);
+
+        // Allgemeine Werte
+        qDebug() << "Writing Allgemeine Werte";
+        writeToFile(ui->allgWerteTable_dsa5, "allgemein", 4);
+
+        // Schicksalspunkte
+        qDebug() << "Writing Schicksalspunkte";
+        writeToFile(ui->schicksalspunkteTable_dsa5, "schicksalsp", 4);
+
+        // Fertigkeiten
+        qDebug() << "Writing Fertigkeiten";
+        writeToFile(ui->fertigkeiten1Table_dsa5, "fertigkeiten1", 6);
+        writeToFile(ui->fertigkeiten2Table_dsa5, "fertigkeiten2", 6);
+
+        // Sprachen
+        qDebug() << "Writing Sprachen";
+        writeToFile(ui->sprachenTable_dsa5, "sprachen", 1);
+
+        // Schriften
+        qDebug() << "Writing Schriften";
+        writeToFile(ui->schriftenTable_dsa5, "schriften", 1);
+
+        // Kampftechniken
+        qDebug() << "Writing Kampftechniken";
+        writeToFile(ui->ktwTable_dsa5, "kampftechniken", 5);
+
+        // Lebenspunkte
+        qDebug() << "Writing Lebenspunkte";
+        writeToFile(ui->lepTable_dsa5, "lep", 2);
+
+        // Nahkampfwaffen
+        qDebug() << "Writing Nahkampfwaffen";
+        writeToFile(ui->nahkampfTable_dsa5, "nahkampfwaffen", 9);
+
+        // Fernkampfwaffen
+        qDebug() << "Writing Fernkampfwaffen";
+        writeToFile(ui->fernkampfTable_dsa5, "fernkampfwaffen", 8);
+
+        // Rüstungen
+        qDebug() << "Writing Rüstungen";
+        writeToFile(ui->ruestungenTable_dsa5, "ruestungen", 6);
+
+        // Schild / Parierwaffe
+        qDebug() << "Writing Schilde / Parierwaffen";
+        writeToFile(ui->schildTable_dsa5, "schild", 4);
+
+        // Kampfsonderfertigkeiten
+        qDebug() << "Writing Kampfsonderfertigkeiten";
+        writeToFile(ui->kSonderfTable_dsa5, "kampfsonderfertigkeiten", 1);
+
+        // Ausrüstung
+        qDebug() << "Writing Ausrüstung";
+        writeToFile(ui->ausruestung1Table_dsa5, "ausruestung1", 3);
+        writeToFile(ui->ausruestung2Table_dsa5, "ausruestung2", 3);
+
+        // Geldbeutel
+        qDebug() << "Writing Geldbeutel";
+        writeToFile(ui->geldTable_dsa5, "geldbeutel", 1);
+
+        // Tier Allgemein
+        qDebug() << "Writing Tier Allgemein";
+        writeToFile(ui->tierAllgemeinTable_dsa5, "tierAllgmein", 1);
+
+        // Tier Angriff
+        qDebug() << "Writing Tier Angriff";
+        writeToFile(ui->tierAngriffTable_dsa5, "tierAngriff", 5);
+
+        // Tier Sonderfertigkeiten
+        qDebug() << "Writing Tier Sonderfertigkeiten";
+        writeToFile(ui->tierSonderfTable_dsa5, "tierSonderfertigkeiten", 1);
+
+        // Tier Aktionen
+        qDebug() << "Writing Tier Aktionen";
+        writeToFile(ui->tierAktionenTable_dsa5, "tierAktionen", 1);
+
+        // Zauber
+        qDebug() << "Writing Zauber";
+        writeToFile(ui->zauberTable_dsa5, "zauber", 11);
+
+        // Zaubertricks
+        qDebug() << "Writing Zaubertricks";
+        writeToFile(ui->zaubertricksTable_dsa5, "zaubertricks", 1);
+
+        // Magische Sonderfertigkeiten
+        qDebug() << "Writing Magische Sonderfertigkeiten";
+        writeToFile(ui->mSonderfTable_dsa5, "magischeSonderfertigkeiten", 1);
+
+        // Leiteigenschaft / Merkmal
+        qDebug() << "Writing Leiteigenschaft / Merkmal";
+        writeToFile(ui->leiteigMerkmalTable_dsa5, "leiteigenschaftMerkmal", 2);
+
+        // Magische Tradition
+        qDebug() << "Writing Magische Tradition";
+        writeToFile(ui->magiTraditionTable_dsa5, "mTradition", 1);
+
+        // Liturgien
+        qDebug() << "Writing Liturgien";
+        writeToFile(ui->liturgienTable_dsa5, "liturgien", 11);
+
+        // Segnungen
+        qDebug() << "Writing Segnungen";
+        writeToFile(ui->segnungenTable_dsa5, "segnungen", 1);
+
+        // Klerikale Sonderfertigkeiten
+        qDebug() << "Writing Klerikale Sonderfertigkeiten";
+        writeToFile(ui->kleriSonderfTable_dsa5, "klerikaleSonderfertigkeiten", 1);
+
+        // Leiteigenschaft / Aspekt
+        qDebug() << "Writing Leiteigenschaft / Aspekt";
+        writeToFile(ui->leiteigAspektTable_dsa5, "leiteigenschaftAspekt", 2);
+
+        // Klerikale Tradition
+        qDebug() << "Writing Klerikale Tradition";
+        writeToFile(ui->kleriTraditionTable_dsa5, "kTradition", 1);
+
         break;
+    }
     default:
         break;
     }
@@ -325,4 +565,162 @@ void CharEditor::on_iconButton_clicked()
             ui->iconLineEdit->setText(path);
         }
     }
+}
+
+void CharEditor::on_addVorteil_dsa5_clicked()
+{
+    addRow(ui->vorteileTable_dsa5);
+}
+
+void CharEditor::on_removeVorteil_dsa5_clicked()
+{
+    removeRow(ui->vorteileTable_dsa5);
+}
+
+void CharEditor::on_addNachteil_dsa5_clicked()
+{
+    addRow(ui->nachteileTable_dsa5);
+}
+
+void CharEditor::on_removeNachteil_dsa5_clicked()
+{
+    removeRow(ui->nachteileTable_dsa5);
+}
+
+void CharEditor::on_addSonderf_dsa5_clicked()
+{
+    addRow(ui->sonderfTable_dsa5);
+}
+
+void CharEditor::on_removeSonderf_dsa5_clicked()
+{
+    removeRow(ui->sonderfTable_dsa5);
+}
+
+void CharEditor::on_addSprache_dsa5_clicked()
+{
+    addRow(ui->sprachenTable_dsa5);
+}
+
+void CharEditor::on_removeSprache_dsa5_clicked()
+{
+    removeRow(ui->sprachenTable_dsa5);
+}
+
+void CharEditor::on_addSchrift_dsa5_clicked()
+{
+    addRow(ui->schriftenTable_dsa5);
+}
+
+void CharEditor::on_removeSchrift_dsa5_clicked()
+{
+    removeRow(ui->schriftenTable_dsa5);
+}
+
+void CharEditor::on_lepTable_dsa5_cellChanged(int row, int column)
+{
+    if (ui->lepTable_dsa5->item(0, 0) != 0 && ui->lepTable_dsa5->item(0, 1) != 0){
+        ui->lepProgressBar_dsa5->setMaximum(ui->lepTable_dsa5->item(0, 0)->text().toInt());
+        ui->lepProgressBar_dsa5->setValue(ui->lepTable_dsa5->item(0, 1)->text().toInt());
+    }
+}
+
+void CharEditor::on_addKSonderf_dsa5_clicked()
+{
+    addRow(ui->kSonderfTable_dsa5);
+}
+
+void CharEditor::on_removeKSonderf_dsa5_clicked()
+{
+    removeRow(ui->kSonderfTable_dsa5);
+}
+
+void CharEditor::on_addNahkampf_dsa5_clicked()
+{
+    addRow(ui->nahkampfTable_dsa5);
+}
+
+void CharEditor::on_removeNahkampf_dsa5_clicked()
+{
+    removeRow(ui->nahkampfTable_dsa5);
+}
+
+void CharEditor::on_addRuestung_dsa5_clicked()
+{
+    addRow(ui->ruestungenTable_dsa5);
+}
+
+void CharEditor::on_removeRuestung_dsa5_clicked()
+{
+    removeRow(ui->ruestungenTable_dsa5);
+}
+
+void CharEditor::on_addFernkampf_dsa5_clicked()
+{
+    addRow(ui->fernkampfTable_dsa5);
+}
+
+void CharEditor::on_removeFernkampf_dsa5_clicked()
+{
+    removeRow(ui->fernkampfTable_dsa5);
+}
+
+void CharEditor::on_addSchild_dsa5_clicked()
+{
+    addRow(ui->schildTable_dsa5);
+}
+
+void CharEditor::on_removeSchild_dsa5_clicked()
+{
+    removeRow(ui->schildTable_dsa5);
+}
+
+void CharEditor::on_addAusruestung1_dsa5_clicked()
+{
+    addRow(ui->ausruestung1Table_dsa5);
+}
+
+void CharEditor::on_removeAusruestung1_dsa55_clicked()
+{
+    removeRow(ui->ausruestung1Table_dsa5);
+}
+
+void CharEditor::on_addAusruestung2_dsa5_clicked()
+{
+    addRow(ui->ausruestung2Table_dsa5);
+}
+
+void CharEditor::on_removeAusruestung2_dsa5_clicked()
+{
+    removeRow(ui->ausruestung2Table_dsa5);
+}
+
+void CharEditor::on_addTierSonderf_dsa5_clicked()
+{
+    addRow(ui->tierSonderfTable_dsa5);
+}
+
+void CharEditor::on_removeTierSonderf_dsa5_clicked()
+{
+    removeRow(ui->tierSonderfTable_dsa5);
+}
+
+void CharEditor::on_addTierAngriff_dsa5_clicked()
+{
+    addRow(ui->tierAngriffTable_dsa5);
+}
+
+void CharEditor::on_removeTierAngriff_dsa5_clicked()
+{
+    removeRow(ui->tierAngriffTable_dsa5);
+}
+
+void CharEditor::on_addTierAktionen_dsa5_clicked()
+{
+    addRow(ui->tierAktionenTable_dsa5);
+}
+
+void CharEditor::on_removeTierAktionen_dsa5_clicked()
+{
+    removeRow(ui->tierAktionenTable_dsa5);
 }

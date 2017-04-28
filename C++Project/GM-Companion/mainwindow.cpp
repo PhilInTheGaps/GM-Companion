@@ -37,6 +37,7 @@
 #include <QKeyEvent>
 #include <QStandardItemModel>
 #include <QFileSystemWatcher>
+#include <QtWinExtras>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -146,22 +147,28 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Character View
     QStringList characterList = getCharacterList();
-    for (QString character : characterList){
-        QWidget* widget = getCharacterPage(character);
-        ui->charactersStackedWidget->addWidget(widget);
+    if (!characterList.empty()){
+        for (QString character : characterList){
+            QWidget* widget = getCharacterPage(character);
+            ui->charactersStackedWidget->addWidget(widget);
 
-        QListWidgetItem *listItem = new QListWidgetItem;
-        listItem->setText(widget->toolTip());
-        listItem->setToolTip(cleanText(character));
-        ui->charactersListWidget->addItem(listItem);
+            QListWidgetItem *listItem = new QListWidgetItem;
+            listItem->setText(widget->toolTip());
+            listItem->setToolTip(cleanText(character));
+            ui->charactersListWidget->addItem(listItem);
+        }
+        on_characterListClicked(0);
     }
-    on_characterListClicked(0);
     connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 
     // Characters File System Watcher Updates the list when file is added
     QFileSystemWatcher* charactersWatcher = new QFileSystemWatcher;
     charactersWatcher->addPath(QDir::currentPath()+"/characters");
-    connect(charactersWatcher, SIGNAL(directoryChanged(QString)), SLOT(charactersFolderChanged()));
+    //connect(charactersWatcher, SIGNAL(directoryChanged(QString)), SLOT(charactersFolderChanged()));
+
+    updateCharactersTimer = new QTimer;
+    updateCharactersTimer->setInterval(3000);
+    connect(updateCharactersTimer, SIGNAL(timeout()), SLOT(charactersTimerFinished()));
 
     // Checks for updates on program start
     if (checkUpdates == 0){
@@ -180,13 +187,10 @@ void MainWindow::on_characterListClicked(int index){
         ui->textEdit->append(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png");
         ui->textEdit->append(ui->charactersListWidget->item(index)->toolTip());
 
-        if (QFile(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png").exists()){
-            QPixmap charIcon(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png");
-            ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
-            ui->characterIconLabel->adjustSize();
-        }
-        else if (QFile(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".jpg").exists()){
-            QPixmap charIcon(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".jpg");
+        QStringList list = ui->charactersStackedWidget->currentWidget()->accessibleName().split(",");
+
+        if (QFile(list.at(0)).exists()){
+            QPixmap charIcon(list.at(0));
             ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
             ui->characterIconLabel->adjustSize();
         }
@@ -500,7 +504,6 @@ void MainWindow::on_iWantToUseAnOlderVersionClicked(){
 
 void MainWindow::on_tableDoubleClicked(int row, int column){
     musicPlaylist->setCurrentIndex(row);
-    int test = column;
 }
 
 void MainWindow::on_musicPauseButton_clicked()
@@ -729,7 +732,7 @@ void MainWindow::on_createCharacterButton_clicked()
 {
 
     CharEditor* charEditor = new CharEditor;
-    charEditor->show();
+    charEditor->showMaximized();
 }
 
 void MainWindow::updateCharacters(){
@@ -743,18 +746,19 @@ void MainWindow::updateCharacters(){
     ui->charactersListWidget->clear();
 
     QStringList characterList = getCharacterList();
-    for (QString character : characterList){
-        QWidget* widget = getCharacterPage(character);
-        ui->charactersStackedWidget->addWidget(widget);
+    qDebug() << "Character Files after passing: " << characterList.size();
+    if (!characterList.empty()){
+        for (QString character : characterList){
+            QWidget* widget = getCharacterPage(character);
+            ui->charactersStackedWidget->addWidget(widget);
 
-        QListWidgetItem *listItem = new QListWidgetItem;
-        listItem->setText(widget->toolTip());
-        listItem->setToolTip(cleanText(character));
-        ui->charactersListWidget->addItem(listItem);
+            QListWidgetItem *listItem = new QListWidgetItem;
+            listItem->setText(widget->toolTip());
+            listItem->setToolTip(cleanText(character));
+            ui->charactersListWidget->addItem(listItem);
+        }
+        on_characterListClicked(0);
     }
-
-    ui->charactersListWidget->setCurrentRow(0);
-    on_characterListClicked(0);
 }
 
 void MainWindow::on_updateCharactersButton_clicked()
@@ -763,5 +767,52 @@ void MainWindow::on_updateCharactersButton_clicked()
 }
 
 void MainWindow::charactersFolderChanged(){
+    if (listenForCharacterUpdaters){
+        listenForCharacterUpdaters = false;
+        qDebug() << "CHANGE DETECTED!!!";
+        updateCharactersTimer->start();
+    }
+}
+
+void MainWindow::charactersTimerFinished(){
     updateCharacters();
+    listenForCharacterUpdaters = true;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    int index = ui->charactersListWidget->currentRow();
+    if (index >= 0){
+        CharEditor* charEditor = new CharEditor;
+        charEditor->load(index);
+
+        charEditor->showMaximized();
+    }
+}
+
+void MainWindow::createThumbnailToolbar(){
+    QWinThumbnailToolBar* thumbnailToolBar = new QWinThumbnailToolBar(this);
+    thumbnailToolBar->setWindow(this->windowHandle());
+
+    playToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    playToolButton->setEnabled(true);
+    playToolButton->setToolTip(tr("Music: Play"));
+    playToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    connect(playToolButton, SIGNAL(clicked()), this, SLOT(on_musicPlayButton_clicked()));
+
+    pauseToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    pauseToolButton->setEnabled(true);
+    pauseToolButton->setToolTip(tr("Music: Pause"));
+    pauseToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    connect(pauseToolButton, SIGNAL(clicked()), this, SLOT(on_musicPauseButton_clicked()));
+
+    nextToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    nextToolButton->setEnabled(true);
+    nextToolButton->setToolTip(tr("Music: Next"));
+    nextToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    connect(nextToolButton, SIGNAL(clicked()), this, SLOT(on_musicNextButton_clicked()));
+
+    thumbnailToolBar->addButton(playToolButton);
+    thumbnailToolBar->addButton(pauseToolButton);
+    thumbnailToolBar->addButton(nextToolButton);
 }
