@@ -13,16 +13,13 @@ QStringList getCharacterList(){
     QString folderPath = QDir::currentPath()+"/characters";
     QStringList files = getFiles(folderPath);
     QStringList characterFileNames;
-//    for (QString file : files){
-//        if (file.contains(".txt")){
-//            characterFileNames.push_back(file);
-//        }
-//    }
+
     for (QString file : files){
         if (file.contains(".ini")){
             characterFileNames.push_back(file);
         }
     }
+    qDebug() << "Character Files: " << characterFileNames.size();
     return characterFileNames;
 }
 
@@ -72,6 +69,23 @@ QFrame* generateFrame(QString indicator, QString headline, QString characterFile
     return frame;
 }
 
+QList<QStringList>* writeList(QString character, QString indicator, int columns){
+    QSettings settings("characters/"+character, QSettings::IniFormat);
+    QList<QStringList>* list = new QList<QStringList>;
+    int size = settings.beginReadArray(indicator);
+    for (int row = 0; row<size; row++){
+        settings.setArrayIndex(row);
+        QStringList subList;
+        for (int column = 0; column<columns; column++){
+
+            subList.push_back(settings.value("entry"+QString::number(column+1)).toString());
+        }
+        list->push_back(subList);
+    }
+    settings.endArray();
+    return list;
+}
+
 QWidget* getCharacterPage(QString character){
     CharacterPage* charPage = new CharacterPage;
 
@@ -90,123 +104,112 @@ QWidget* getCharacterPage(QString character){
     qDebug() << player;
     qDebug() << "SystemID: " << systemID;
 
+    charPage->name = name;
+    charPage->player = player;
     charPage->setToolTip(name+" ("+player+")");
-    charPage->setAccessibleName(iconPath);
+    charPage->setAccessibleName(iconPath+","+QString::number(systemID));
 
     switch (systemID) {
     case 0:{
         // General Character Info
-        QList<TableContent>* generalInfo_generic = new QList<TableContent>;
-        int size = charSettings.beginReadArray("generalInfos");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            generalInfo_generic->push_back(content);
-        }
-        charPage->generalInfo_generic = generalInfo_generic;
-        charSettings.endArray();
+        charPage->generalInfo_generic = writeList(character, "generalInfos", 1);
 
         // Skills
-        QList<TableContent>* skills1_generic = new QList<TableContent>;
-        size = charSettings.beginReadArray("skills1");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            skills1_generic->push_back(content);
-        }
-        charPage->skills1_generic = skills1_generic;
-        charSettings.endArray();
-
-        QList<TableContent>* skills2_generic = new QList<TableContent>;
-        size = charSettings.beginReadArray("skills2");
-        qDebug() << size;
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            skills2_generic->push_back(content);
-        }
-        charPage->skills2_generic = skills2_generic;
-        charSettings.endArray();
-
-        QList<TableContent>* skills3_generic = new QList<TableContent>;
-        size = charSettings.beginReadArray("skills3");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            skills3_generic->push_back(content);
-        }
-        charPage->skills3_generic = skills3_generic;
-        charSettings.endArray();
+        charPage->skills1_generic = writeList(character, "skills1", 2);
+        charPage->skills2_generic = writeList(character, "skills2", 2);
+        charPage->skills3_generic = writeList(character, "skills3", 2);
 
         // Weapons
-        QList<TableContent3C>* weapons_generic = new QList<TableContent3C>;
-        size = charSettings.beginReadArray("weapons");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent3C content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.midEntry = charSettings.value("midEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            weapons_generic->push_back(content);
-        }
-        charPage->weapons_generic = weapons_generic;
-        charSettings.endArray();
+        charPage->weapons_generic = writeList(character, "weapons", 3);
 
         // Armor
-        QList<TableContent3C>* armor_generic = new QList<TableContent3C>;
-        size = charSettings.beginReadArray("armor");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent3C content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.midEntry = charSettings.value("midEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            armor_generic->push_back(content);
-        }
-        charPage->armor_generic = armor_generic;
-        charSettings.endArray();
+        charPage->armor_generic = writeList(character, "armor", 3);
 
         // Inventory
-        QList<TableContent3C>* inv1_generic = new QList<TableContent3C>;
-        size = charSettings.beginReadArray("inventory1");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent3C content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.midEntry = charSettings.value("midEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            inv1_generic->push_back(content);
-        }
-        charPage->inv1_generic = inv1_generic;
-        charSettings.endArray();
-
-        QList<TableContent3C>* inv2_generic = new QList<TableContent3C>;
-        size = charSettings.beginReadArray("inventory2");
-        for (int i = 0; i<size; i++){
-            charSettings.setArrayIndex(i);
-            TableContent3C content;
-            content.leftEntry = charSettings.value("leftEntry").toString();
-            content.midEntry = charSettings.value("midEntry").toString();
-            content.rightEntry = charSettings.value("rightEntry").toString();
-            inv2_generic->push_back(content);
-        }
-        charPage->inv2_generic = inv2_generic;
-        charSettings.endArray();
+        charPage->inv1_generic = writeList(character, "inventory1", 2);
+        charPage->inv2_generic = writeList(character, "inventory2", 2);
 
         break;
     }
-    case 1:
+    case 1:{
+        // Persönliche Daten
+        charPage->persDaten1_dsa5 = writeList(character, "persDaten1", 1);
+        charPage->persDaten2_dsa5 = writeList(character, "persDaten2", 1);
+
+        // Eigenschaften
+        charPage->eigenschaften_dsa5 = writeList(character, "eigenschaften", 8);
+
+        // Vorteile
+        charPage->vorteile_dsa5 = writeList(character, "vorteile", 1);
+
+        // Nachteile
+        charPage->nachteile_dsa5 = writeList(character, "nachteile", 1);
+
+        // Sonderfertigkeiten
+        charPage->sonderf_dsa5 = writeList(character, "sonderfertigkeiten", 1);
+
+        // Allgemeine Werte
+        charPage->allgemein_dsa5 = writeList(character, "allgemein", 4);
+
+        // AP
+        charPage->ap_dsa5 = writeList(character, "ap", 4);
+
+        // Schicksalspunkte
+        charPage->schicksalsp_dsa5 = writeList(character, "schicksalsp", 4);
+
+        // Fertigkeiten
+        charPage->fertigkeiten1_dsa5 = writeList(character, "fertigkeiten1", 6);
+        charPage->fertigkeiten2_dsa5 = writeList(character, "fertigkeiten2", 6);
+
+        // Sprachen
+        charPage->sprachen_dsa5 = writeList(character, "sprachen", 1);
+
+        // Schriften
+        charPage->schriften_dsa5 = writeList(character, "schriften", 1);
+
+        // Kampftechniken
+        charPage->ktw_dsa5 = writeList(character, "kampftechniken", 5);
+
+        // LEP
+        charPage->lep_dsa5 = writeList(character, "lep", 2);
+
+        // Nahkampfwaffen
+        charPage->nahkampfwaffen_dsa5 = writeList(character, "nahkampfwaffen", 9);
+
+        // Fernkampfwaffen
+        charPage->fernkampfwaffen_dsa5 = writeList(character, "fernkampfwaffen", 8);
+
+        // Rüstungen
+        charPage->ruestungen_dsa5 = writeList(character, "ruestungen", 6);
+
+        // Schild / Parierwaffe
+        charPage->schild_dsa5 = writeList(character, "schild", 4);
+
+        // Kampfsonderfertigkeiten
+        charPage->kSonderf_dsa5 = writeList(character, "kampfsonderfertigkeiten", 1);
+
+        // Ausrüstung
+        charPage->ausruestung1_dsa5 = writeList(character, "ausruestung1", 3);
+        charPage->ausruestung2_dsa5 = writeList(character, "ausruestung2", 3);
+
+        // Geldbeutel
+        charPage->geld_dsa5 = writeList(character, "geldbeutel", 1);
+
+        // Tier
+        charPage->tierAllgemein_dsa5 = writeList(character, "tierAllgemein", 1);
+
+        // Tier Angriff
+        charPage->tierAngriff_dsa5 = writeList(character, "tierAngriff", 5);
+
+        // Tier Aktionen
+        charPage->tierAktionen_dsa5 = writeList(character, "tierAktionen", 1);
+
+        // Tier Sonderf
+        charPage->tierSonderf_dsa5 = writeList(character, "tierSonderfertigkeiten", 1);
 
 
         break;
+    }
     default:
         break;
     }

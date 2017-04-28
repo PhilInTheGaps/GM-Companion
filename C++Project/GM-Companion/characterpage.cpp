@@ -16,149 +16,149 @@ CharacterPage::~CharacterPage()
     delete ui;
 }
 
+void CharacterPage::writeTable(QList<QStringList>* list, int columns, QTableWidget* table, bool updateTableSize){
+    int size = list->size();
+
+    if (updateTableSize){
+        table->setRowCount(size);
+        table->setColumnCount(columns);
+    }
+
+    for (int row = 0; row<size; row++){
+        for (int column = 0; column<columns; column++){
+            QString entry = list->at(row).at(column);
+            qDebug() << row << column << entry;
+
+            QTableWidgetItem* item = new QTableWidgetItem;
+            item->setText(entry);
+            table->setItem(row, column, item);
+        }
+    }
+}
+
 void CharacterPage::updateUi(){
-    qDebug() << systemID;
+    qDebug() << "Updating UI";
+    qDebug() << "SystemID" << systemID;
 
     switch (systemID) {
     case 0:
     {
         this->setCurrentIndex(0);
 
-        qDebug() << generalInfo_generic->count();
+        qDebug() << "Starting to write tables";
 
         // General Info
-        ui->generalInfoTable_generic->setRowCount(generalInfo_generic->size());
-        for (int i = 0; i<generalInfo_generic->size(); i++){
-            TableContent c = generalInfo_generic->at(i);
-
-            QTableWidgetItem* header = new QTableWidgetItem;
-            header->setText(c.leftEntry);
-            ui->generalInfoTable_generic->setVerticalHeaderItem(i, header);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->generalInfoTable_generic->setItem(i, 0, right);
-        }
+        qDebug() << "Writing General Info";
+        writeTable(generalInfo_generic, 1, ui->generalInfoTable_generic);
 
         // Skills
-        ui->skills1Table_generic->setRowCount(skills1_generic->size());
-        qDebug() << skills1_generic->size();
-        for (int i = 0; i<skills1_generic->size(); i++){
-            TableContent c = skills1_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->skills1Table_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->skills1Table_generic->setItem(i, 1, right);
-        }
-
-        ui->skills2Table_generic->setRowCount(skills2_generic->size());
-        for (int i = 0; i<skills2_generic->size(); i++){
-            TableContent c = skills2_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->skills2Table_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->skills2Table_generic->setItem(i, 1, right);
-        }
-
-        ui->skills3Table_generic->setRowCount(skills3_generic->size());
-        for (int i = 0; i<skills3_generic->size(); i++){
-            TableContent c = skills3_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->skills3Table_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->skills3Table_generic->setItem(i, 1, right);
-        }
+        qDebug() << "Writing Skills";
+        writeTable(skills1_generic, 2, ui->skills1Table_generic, true);
+        writeTable(skills2_generic, 2, ui->skills2Table_generic, true);
+        writeTable(skills3_generic, 2, ui->skills3Table_generic, true);
 
         // Weapons
-        ui->weaponsTable_generic->setRowCount(weapons_generic->size());
-        for (int i = 0; i<weapons_generic->size(); i++){
-            TableContent3C c = weapons_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->weaponsTable_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* mid = new QTableWidgetItem;
-            mid->setText(c.midEntry);
-            ui->weaponsTable_generic->setItem(i, 1, mid);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->weaponsTable_generic->setItem(i, 2, right);
-        }
+        qDebug() << "Writing Weapons";
+        writeTable(weapons_generic, 3, ui->weaponsTable_generic, true);
 
         // Armor
-        ui->armorTable_generic->setRowCount(armor_generic->size());
-        for (int i = 0; i<armor_generic->size(); i++){
-            TableContent3C c = armor_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->armorTable_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* mid = new QTableWidgetItem;
-            mid->setText(c.midEntry);
-            ui->armorTable_generic->setItem(i, 1, mid);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->armorTable_generic->setItem(i, 2, right);
-        }
+        qDebug() << "Writing Armor";
+        writeTable(armor_generic, 3, ui->armorTable_generic, true);
 
         // Inventory
-        ui->inv1Table_generic->setRowCount(inv1_generic->size());
-        for (int i = 0; i<inv1_generic->size(); i++){
-            TableContent3C c = inv1_generic->at(i);
+        qDebug() << "Writing Inventory";
+        writeTable(inv1_generic, 2, ui->inv1Table_generic, true);
+        writeTable(inv2_generic, 2, ui->inv2Table_generic, true);
 
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->inv1Table_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* mid = new QTableWidgetItem;
-            mid->setText(c.midEntry);
-            ui->inv1Table_generic->setItem(i, 1, mid);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->inv1Table_generic->setItem(i, 2, right);
-        }
-
-        ui->inv2Table_generic->setRowCount(inv2_generic->size());
-        for (int i = 0; i<inv2_generic->size(); i++){
-            TableContent3C c = inv2_generic->at(i);
-
-            QTableWidgetItem* left = new QTableWidgetItem;
-            left->setText(c.leftEntry);
-            ui->inv2Table_generic->setItem(i, 0, left);
-
-            QTableWidgetItem* mid = new QTableWidgetItem;
-            mid->setText(c.midEntry);
-            ui->inv2Table_generic->setItem(i, 1, mid);
-
-            QTableWidgetItem* right = new QTableWidgetItem;
-            right->setText(c.rightEntry);
-            ui->inv2Table_generic->setItem(i, 2, right);
-        }
-
+        qDebug() << "Finished Updating UI";
         break;
     }
-    case 1:
+    case 1:{
 
         this->setCurrentIndex(1);
 
+        // Persönliche Daten
+        writeTable(persDaten1_dsa5, 1, ui->persDaten1Table_dsa5);
+        writeTable(persDaten2_dsa5, 1, ui->persDaten2Table_dsa5);
+
+        // Eigenschaften
+        writeTable(eigenschaften_dsa5, 8, ui->eigenschaftenTable_dsa5);
+
+        // Vorteile
+        writeTable(vorteile_dsa5, 1, ui->vorteileTable_dsa5, true);
+
+        // Nachteile
+        writeTable(nachteile_dsa5, 1, ui->nachteileTable_dsa5, true);
+
+        // Sonderfertigkeiten
+        writeTable(sonderf_dsa5, 1, ui->sonderfTable_dsa5, true);
+
+        // AP
+        writeTable(ap_dsa5, 4, ui->apTable_dsa5);
+
+        // Schicksalspunke
+        writeTable(schicksalsp_dsa5, 4, ui->schicksalspTable_dsa5);
+
+        // Allgemeine Werte
+        writeTable(allgemein_dsa5, 4, ui->allgemeinTable_dsa5);
+
+        // Fertigkeiten
+        writeTable(fertigkeiten1_dsa5, 6, ui->fertigkeiten1Table_dsa5);
+        writeTable(fertigkeiten2_dsa5, 6, ui->fertigkeiten2Table_dsa5);
+
+        // Sprachen
+        writeTable(sprachen_dsa5, 1, ui->sprachenTable_dsa5, true);
+
+        // Schriften
+        writeTable(schriften_dsa5, 1, ui->schriftenTable_dsa5, true);
+
+        // Kampftechniken
+        writeTable(ktw_dsa5, 5, ui->ktwTable_dsa5);
+
+        // LEP
+        writeTable(lep_dsa5, 2, ui->lepTable_dsa5);
+
+        // LEP ProgressBar
+//        ui->lepProgressBar_dsa5->setMaximum(QString::number(ui->lepTable_dsa5->item(0, 0)->text()));
+//        ui->lepProgressBar_dsa5->setValue(QString::number(ui->lepTable_dsa5->item(0, 1)->text()));
+
+        // Nahkampfwaffen
+        writeTable(nahkampfwaffen_dsa5, 9, ui->nahkampfwaffenTable_dsa5, true);
+
+        // Fernkampfwaffen
+        writeTable(fernkampfwaffen_dsa5, 8, ui->fernkampfwaffenTable_dsa5, true);
+
+        // Rüstungen
+        writeTable(ruestungen_dsa5, 6, ui->ruestungenTable_dsa5, true);
+
+        // Schild / Parierwaffe
+        writeTable(schild_dsa5, 4, ui->schildTable_dsa5, true);
+
+        // Kampfsonderfertigkeiten
+        writeTable(kSonderf_dsa5, 1, ui->kSonderfTable_dsa5, true);
+
+        // Ausrüstung
+        writeTable(ausruestung1_dsa5, 3, ui->ausruestung1Table_dsa5, true);
+        writeTable(ausruestung2_dsa5, 3, ui->ausruestung2Table_dsa5, true);
+
+        // Geldbeutel
+        writeTable(geld_dsa5, 1, ui->geldTable_dsa5);
+
+        // Tier Allgemein
+        writeTable(tierAllgemein_dsa5, 1, ui->tierAllgemeinTable_dsa5);
+
+        // Tier Angriff
+        writeTable(tierAngriff_dsa5, 5, ui->tierAngrifTable_dsa5);
+
+        // Tier Aktionen
+        writeTable(tierAktionen_dsa5, 1, ui->tierAktionen_dsa5);
+
+        // Tier Sonderf
+        writeTable(tierSonderf_dsa5, 1, ui->tierSonderfTable_dsa5);
+
+
         break;
+    }
     default:
         break;
     }

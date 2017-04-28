@@ -17,7 +17,14 @@ void MainWindow::generateSoundButtons(){
             scrollArea->setWidget(frame);
             scrollArea->setWidgetResizable(true);
 
-            // Generating musicButtons
+            if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png").exists()){
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png); background-attachment: fixed;}");
+            }
+            else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg").exists()){
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg); background-attachment: fixed;}");
+            }
+
+            // Generating soundButtons
             QString path = settingsManager->getSetting(Setting::soundPath)+"/"+folder;
             QStringList soundFolders = getFolders(path);
 
@@ -43,6 +50,9 @@ void MainWindow::generateSoundButtons(){
                         b->setIconSize(QSize(150, 150));
                     }
                     else{
+                        QFont font;
+                        font.setPixelSize(25);
+                        b->setFont(font);
                         b->setText(cleanText(s));
                     }
 
