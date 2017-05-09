@@ -217,15 +217,25 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_resources.cpp
 release\qrc_resources.cpp: ..\GM-Companion\resources.qrc \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\rcc.exe \
-		..\GM-Companion\resources\splash.jpg \
 		..\GM-Companion\resources\icon64.png \
+		..\GM-Companion\resources\splash.jpg \
 		..\GM-Companion\resources\icon128.png \
+		..\GM-Companion\resources\icon256.ico \
 		..\GM-Companion\resources\icon32.png \
 		..\GM-Companion\resources\icon256.png \
-		..\GM-Companion\resources\icon256.ico \
+		..\GM-Companion\resources\mediaIcons\stop.png \
+		..\GM-Companion\resources\mediaIcons\play.png \
+		..\GM-Companion\resources\mediaIcons\shuffleOn.png \
+		..\GM-Companion\resources\mediaIcons\seekBack.png \
+		..\GM-Companion\resources\mediaIcons\skipBack.png \
+		..\GM-Companion\resources\mediaIcons\shuffleOff.png \
+		..\GM-Companion\resources\mediaIcons\seekForward.png \
+		..\GM-Companion\resources\mediaIcons\pause.png \
+		..\GM-Companion\resources\mediaIcons\playBackwards.png \
+		..\GM-Companion\resources\mediaIcons\skipForward.png \
 		..\GM-Companion\resources\radio\radioRivendell01.png \
-		..\GM-Companion\resources\radio\logo-radio-rivendell.png \
-		..\GM-Companion\resources\radio\logo-mmorp-radio-de.png
+		..\GM-Companion\resources\radio\logo-mmorp-radio-de.png \
+		..\GM-Companion\resources\radio\logo-radio-rivendell.png
 	C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\rcc.exe -name resources ..\GM-Companion\resources.qrc -o release\qrc_resources.cpp
 
 compiler_moc_predefs_make_all: release\moc_predefs.h
@@ -425,12 +435,229 @@ release\moc_mainwindow.cpp: C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\Qt
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		..\GM-Companion\settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		..\GM-Companion\settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		..\GM-Companion\dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -438,10 +665,8 @@ release\moc_mainwindow.cpp: C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\Qt
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		..\GM-Companion\flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		..\GM-Companion\functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		..\GM-Companion\mainwindow.h \
 		release\moc_predefs.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\moc.exe
@@ -715,6 +940,8 @@ release\moc_chareditor.cpp: C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\Qt
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
 		..\GM-Companion\chareditor.h \
 		release\moc_predefs.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\moc.exe
@@ -827,6 +1054,25 @@ release\moc_characterpage.cpp: C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include
 		..\GM-Companion\characters.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTableWidget \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtableview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvalidator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qregularexpression.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qicon.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyle.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qrubberband.h \
 		..\GM-Companion\characterpage.h \
 		release\moc_predefs.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\moc.exe
@@ -1050,12 +1296,229 @@ release\main.obj: ..\GM-Companion\main.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -1063,17 +1526,11 @@ release\main.obj: ..\GM-Companion\main.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QDesktopWidget
 
 release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindow.h \
@@ -1265,97 +1722,13 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
-		../GM-Companion/dicemanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpinBox \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
-		../GM-Companion/flowlayout.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
-		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
-		ui_mainwindow.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qheaderview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QMenu \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qmenu.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QMenuBar \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qmenubar.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QProgressBar \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qprogressbar.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QPushButton \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qpushbutton.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSlider \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpacerItem \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStackedWidget \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget \
-		../GM-Companion/characters.h \
-		../GM-Companion/chareditor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFile \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QTextStream \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QIcon \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFileDialog \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qfiledialog.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdialog.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStandardPaths \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QToolBox \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtoolbox.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\QMediaMetaData \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\qmediametadata.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\QMediaObject \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPixmap \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QDesktopServices \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLineEdit \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlineedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QKeyEvent \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QStandardItemModel \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFileSystemWatcher \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
@@ -1370,8 +1743,11 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
@@ -1379,6 +1755,8 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
@@ -1420,11 +1798,13 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
@@ -1450,9 +1830,14 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
@@ -1461,14 +1846,18 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
@@ -1512,6 +1901,7 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
@@ -1524,9 +1914,11 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
@@ -1543,11 +1935,77 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		../GM-Companion/dicemanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpinBox \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
+		../GM-Companion/flowlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
+		../GM-Companion/functions.h \
+		ui_mainwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QMenu \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qmenu.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QMenuBar \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qmenubar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QProgressBar \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qprogressbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QPushButton \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSlider \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpacerItem \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStackedWidget \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget \
+		../GM-Companion/characters.h \
+		../GM-Companion/chareditor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFile \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QTextStream \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QIcon \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFileDialog \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qfiledialog.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdialog.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStandardPaths \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QToolBox \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtoolbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\QMediaMetaData \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\qmediametadata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtMultimedia\QMediaObject \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPixmap \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QDesktopServices \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLineEdit \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlineedit.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QKeyEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QStandardItemModel \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFileSystemWatcher
 
 release\flowlayout.obj: ..\GM-Companion\flowlayout.cpp C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QtWidgets \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QtWidgetsDepends \
@@ -2195,29 +2653,243 @@ release\characters.obj: ..\GM-Companion\characters.cpp ../GM-Companion/character
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpinBox \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		../GM-Companion/characterpage.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStackedWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h
 
 release\functions.obj: ..\GM-Companion\functions.cpp ../GM-Companion/functions.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
@@ -2721,12 +3393,229 @@ release\music.obj: ..\GM-Companion\music.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -2734,21 +3623,15 @@ release\music.obj: ..\GM-Companion\music.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		ui_mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
@@ -2771,11 +3654,6 @@ release\music.obj: ..\GM-Companion\music.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget
 
@@ -2968,12 +3846,229 @@ release\sound.obj: ..\GM-Companion\sound.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -2981,21 +4076,15 @@ release\sound.obj: ..\GM-Companion\sound.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		ui_mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
@@ -3018,11 +4107,6 @@ release\sound.obj: ..\GM-Companion\sound.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget
 
@@ -3215,12 +4299,229 @@ release\names.obj: ..\GM-Companion\names.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -3228,21 +4529,15 @@ release\names.obj: ..\GM-Companion\names.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		ui_mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
@@ -3265,11 +4560,6 @@ release\names.obj: ..\GM-Companion\names.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget
 
@@ -3462,12 +4752,229 @@ release\radio.obj: ..\GM-Companion\radio.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -3475,21 +4982,15 @@ release\radio.obj: ..\GM-Companion\radio.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		ui_mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
@@ -3512,11 +5013,6 @@ release\radio.obj: ..\GM-Companion\radio.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget
 
@@ -3709,12 +5205,229 @@ release\maps.obj: ..\GM-Companion\maps.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbasictimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		../GM-Companion/settingsmanager.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtras \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\QtWinExtrasDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCore \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QtCoreDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracteventdispatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractnativeeventfilter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstracttransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydataops.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qarraydatapointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbitarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qbytearraymatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcollator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcommandlineparser.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdeadlinetimer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qelapsedtimer.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileinfo.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdiriterator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeasingcurve.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qendian.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventtransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qexception.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfactoryinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfileselector.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfilesystemwatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfinalstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfutureinterface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qrunnable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresultstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturesynchronizer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qfuturewatcher.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qhistorystate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qidentityproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonarray.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonvalue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsondocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qjsonobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibrary.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlibraryinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qversionnumber.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlinkedlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qlockfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qloggingcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmath.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmessageauthenticationcode.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedata.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimedatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qmimetype.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qobjectcleanuphandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qparallelanimationgroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpauseanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpointer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpluginloader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qprocess.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qpropertyanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qvariantanimation.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qqueue.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qreadwritelock.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qresource.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsavefile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qscopedvaluerollback.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsequentialanimationgroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsharedmemory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsignaltransition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsocketnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsortfilterproxymodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstack.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstandardpaths.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstatemachine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstorageinfo.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qstringlistmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsystemsemaphore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporarydir.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QScopedPointer \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtemporaryfile.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextboundaryfinder.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtextcodec.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadpool.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qthreadstorage.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimeline.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtimezone.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtranslator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\quuid.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwaitcondition.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qwineventnotifier.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qxmlstream.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qtcoreversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGui \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QtGuiDepends \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qabstracttextdocumentlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qglyphrun.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrawfont.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qfontdatabase.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessible.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessiblebridge.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qaccessibleplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbackingstore.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qbitmap.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qclipboard.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdesktopservices.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qdrag.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericmatrix.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qgenericpluginfactory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qiconengineplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimageiohandler.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagereader.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qimagewriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmatrix4x4.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector3d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvector4d.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qquaternion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qmovie.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qoffscreensurface.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglbuffer.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglcontext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QSurfaceFormat \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglversionfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengldebug.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglextrafunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglframebufferobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglpixeltransferoptions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglshaderprogram.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltexture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltextureblitter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix3x3 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QMatrix4x4 \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopengltimerquery.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglvertexarrayobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qopenglwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDeviceWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintdevicewindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QWindow \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QPaintDevice \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QOpenGLContext \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QImage \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagedpaintdevice.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagelayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpagesize.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpaintengine.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpainter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpdfwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpicture.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpictureformatplugin.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpixmapcache.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qrasterwindow.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qscreen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSize \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSizeF \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QTransform \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsessionmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstandarditemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstatictext.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qstylehints.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qsyntaxhighlighter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextobject.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentfragment.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocumentwriter.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextlist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtexttable.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtguiversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinextrasglobal.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinevent.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinfunctions.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplist.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistcategory.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinjumplistitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinmime.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVector \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwintaskbarprogress.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
+		../GM-Companion/settingsmanager.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
 		../GM-Companion/dicemanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
@@ -3722,21 +5435,15 @@ release\maps.obj: ..\GM-Companion\maps.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qspinbox.h \
 		../GM-Companion/flowlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLayout \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QRect \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		../GM-Companion/functions.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
 		ui_mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
@@ -3759,11 +5466,6 @@ release\maps.obj: ..\GM-Companion\maps.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget
 
@@ -3893,6 +5595,8 @@ release\chareditor.obj: ..\GM-Companion\chareditor.cpp ../GM-Companion/charedito
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
 		ui_chareditor.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVariant \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
@@ -3907,9 +5611,6 @@ release\chareditor.obj: ..\GM-Companion\chareditor.cpp ../GM-Companion/charedito
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QCheckBox \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qcheckbox.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QComboBox \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qcombobox.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
@@ -3932,6 +5633,7 @@ release\chareditor.obj: ..\GM-Companion\chareditor.cpp ../GM-Companion/charedito
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qprogressbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QPushButton \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qpushbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpacerItem \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStackedWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
@@ -3939,8 +5641,6 @@ release\chareditor.obj: ..\GM-Companion\chareditor.cpp ../GM-Companion/charedito
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget \
 		../GM-Companion/characters.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qsettings.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFileDialog \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qfiledialog.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qdir.h \
@@ -4056,11 +5756,29 @@ release\characterpage.obj: ..\GM-Companion\characterpage.cpp ../GM-Companion/cha
 		../GM-Companion/characters.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QFrame \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QList \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTableWidget \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtablewidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtableview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvalidator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qregularexpression.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qicon.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyle.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qrubberband.h \
 		ui_characterpage.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVariant \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qicon.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
@@ -4078,28 +5796,10 @@ release\characterpage.obj: ..\GM-Companion\characterpage.cpp ../GM-Companion/cha
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qgridlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qheaderview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractscrollarea.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemdelegate.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyleoption.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractspinbox.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvalidator.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qregularexpression.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qslider.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractslider.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyle.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabbar.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qrubberband.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLabel \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlabel.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpacerItem \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTableWidget \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtablewidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtableview.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTableWidgetItem \

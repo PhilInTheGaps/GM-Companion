@@ -1855,7 +1855,7 @@
                 </item>
                 <item row="0" column="1">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="0" column="2">
@@ -1875,7 +1875,7 @@
                 </item>
                 <item row="0" column="5">
                  <property name="text">
-                  <string>  </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="1" column="0">
@@ -1895,17 +1895,17 @@
                 </item>
                 <item row="1" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="1" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="1" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="2" column="0">
@@ -1925,17 +1925,17 @@
                 </item>
                 <item row="2" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="2" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="2" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="3" column="0">
@@ -1955,17 +1955,17 @@
                 </item>
                 <item row="3" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="3" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="3" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="4" column="0">
@@ -1985,17 +1985,17 @@
                 </item>
                 <item row="4" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="4" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="4" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="5" column="0">
@@ -2015,17 +2015,17 @@
                 </item>
                 <item row="5" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="5" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="5" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="6" column="0">
@@ -2045,17 +2045,17 @@
                 </item>
                 <item row="6" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="6" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="6" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="7" column="0">
@@ -2075,17 +2075,17 @@
                 </item>
                 <item row="7" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="7" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="7" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="8" column="0">
@@ -2105,17 +2105,17 @@
                 </item>
                 <item row="8" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="8" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="8" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="9" column="0">
@@ -2135,17 +2135,17 @@
                 </item>
                 <item row="9" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="9" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="9" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="10" column="0">
@@ -2165,17 +2165,17 @@
                 </item>
                 <item row="10" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="10" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="10" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="11" column="0">
@@ -2195,17 +2195,17 @@
                 </item>
                 <item row="11" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="11" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="11" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="12" column="0">
@@ -2225,17 +2225,17 @@
                 </item>
                 <item row="12" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="12" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="12" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="13" column="0">
@@ -2255,17 +2255,17 @@
                 </item>
                 <item row="13" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="13" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="13" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="14" column="0">
@@ -2285,47 +2285,47 @@
                 </item>
                 <item row="14" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="14" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="14" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="0">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="1">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="2">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="15" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="16" column="0">
@@ -2335,27 +2335,27 @@
                 </item>
                 <item row="16" column="1">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="16" column="2">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="16" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="16" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="16" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="17" column="0">
@@ -2375,17 +2375,17 @@
                 </item>
                 <item row="17" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="17" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="17" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="18" column="0">
@@ -2405,17 +2405,17 @@
                 </item>
                 <item row="18" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="18" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="18" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="19" column="0">
@@ -2435,17 +2435,17 @@
                 </item>
                 <item row="19" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="19" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="19" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="20" column="0">
@@ -2465,17 +2465,17 @@
                 </item>
                 <item row="20" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="20" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="20" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="21" column="0">
@@ -2495,17 +2495,17 @@
                 </item>
                 <item row="21" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="21" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="21" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="22" column="0">
@@ -2525,17 +2525,17 @@
                 </item>
                 <item row="22" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="22" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="22" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="23" column="0">
@@ -2555,17 +2555,17 @@
                 </item>
                 <item row="23" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="23" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="23" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="24" column="0">
@@ -2585,17 +2585,17 @@
                 </item>
                 <item row="24" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="24" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="24" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="25" column="0">
@@ -2615,47 +2615,47 @@
                 </item>
                 <item row="25" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="25" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="25" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="0">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="1">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="2">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="26" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="27" column="0">
@@ -2665,27 +2665,27 @@
                 </item>
                 <item row="27" column="1">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="27" column="2">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="27" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="27" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="27" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="28" column="0">
@@ -2705,17 +2705,17 @@
                 </item>
                 <item row="28" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="28" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="28" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="29" column="0">
@@ -2735,17 +2735,17 @@
                 </item>
                 <item row="29" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="29" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="29" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="30" column="0">
@@ -2765,17 +2765,17 @@
                 </item>
                 <item row="30" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="30" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="30" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="31" column="0">
@@ -2795,17 +2795,17 @@
                 </item>
                 <item row="31" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="31" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="31" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="32" column="0">
@@ -2825,17 +2825,17 @@
                 </item>
                 <item row="32" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="32" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="32" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="33" column="0">
@@ -2855,17 +2855,17 @@
                 </item>
                 <item row="33" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="33" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="33" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="34" column="0">
@@ -2885,17 +2885,17 @@
                 </item>
                 <item row="34" column="3">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="34" column="4">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                 <item row="34" column="5">
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </item>
                </widget>
@@ -5142,7 +5142,17 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QTableWidget" name="zaubertricksTable_dsa5"/>
+                   <widget class="QTableWidget" name="zaubertricksTable_dsa5">
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                   </widget>
                   </item>
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -5174,7 +5184,17 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QTableWidget" name="mSonderfTable_dsa5"/>
+                   <widget class="QTableWidget" name="mSonderfTable_dsa5">
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                   </widget>
                   </item>
                   <item>
                    <layout class="QHBoxLayout" name="horizontalLayout_40">
@@ -5343,14 +5363,14 @@ QProgressBar::chunk {
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_43">
               <item>
-               <widget class="QPushButton" name="pushButton_38">
+               <widget class="QPushButton" name="addLitugie_dsa5">
                 <property name="text">
                  <string>+</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QPushButton" name="pushButton_37">
+               <widget class="QPushButton" name="removeLiturgie_dsa5">
                 <property name="text">
                  <string>-</string>
                 </property>
@@ -5373,9 +5393,19 @@ QProgressBar::chunk {
                   </item>
                   <item>
                    <widget class="QTableWidget" name="segnungenTable_dsa5">
+                    <property name="columnCount">
+                     <number>1</number>
+                    </property>
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
                     <attribute name="verticalHeaderVisible">
                      <bool>false</bool>
                     </attribute>
+                    <column/>
                    </widget>
                   </item>
                   <item>
@@ -5409,9 +5439,19 @@ QProgressBar::chunk {
                   </item>
                   <item>
                    <widget class="QTableWidget" name="kleriSonderfTable_dsa5">
+                    <property name="columnCount">
+                     <number>1</number>
+                    </property>
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
                     <attribute name="verticalHeaderVisible">
                      <bool>false</bool>
                     </attribute>
+                    <column/>
                    </widget>
                   </item>
                   <item>
@@ -5437,12 +5477,12 @@ QProgressBar::chunk {
                </layout>
               </item>
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_45"/>
-              </item>
-              <item>
                <layout class="QVBoxLayout" name="verticalLayout_46">
                 <item>
                  <widget class="QTableWidget" name="leiteigAspektTable_dsa5">
+                  <property name="rowCount">
+                   <number>1</number>
+                  </property>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>300</number>
                   </attribute>
@@ -5452,6 +5492,10 @@ QProgressBar::chunk {
                   <attribute name="verticalHeaderVisible">
                    <bool>false</bool>
                   </attribute>
+                  <attribute name="verticalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row/>
                   <column>
                    <property name="text">
                     <string>Leiteigenschaft</string>
@@ -5466,12 +5510,19 @@ QProgressBar::chunk {
                 </item>
                 <item>
                  <widget class="QTableWidget" name="kleriTraditionTable_dsa5">
+                  <property name="rowCount">
+                   <number>1</number>
+                  </property>
                   <attribute name="horizontalHeaderStretchLastSection">
                    <bool>true</bool>
                   </attribute>
                   <attribute name="verticalHeaderVisible">
                    <bool>false</bool>
                   </attribute>
+                  <attribute name="verticalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row/>
                   <column>
                    <property name="text">
                     <string>Tradition</string>

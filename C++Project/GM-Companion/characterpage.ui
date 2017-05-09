@@ -14,7 +14,7 @@
    <string>StackedWidget</string>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <widget class="QWidget" name="pageGeneric">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -347,7 +347,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabPersDaten_dsa5">
        <attribute name="title">
@@ -1524,6 +1524,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="ktwTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <row>
                <property name="text">
                 <string>Armbrüste</string>
@@ -1635,6 +1638,9 @@
                 <height>100</height>
                </size>
               </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="rowCount">
                <number>1</number>
               </property>
@@ -1685,6 +1691,9 @@
                 <height>200</height>
                </size>
               </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1710,6 +1719,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="nahkampfwaffenTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1772,6 +1784,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="fernkampfwaffenTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1833,6 +1848,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="ruestungenTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1880,6 +1898,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="schildTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1938,6 +1959,9 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -1965,6 +1989,9 @@
                 <width>300</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
               </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
@@ -2006,6 +2033,9 @@
               <width>0</width>
               <height>300</height>
              </size>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="columnCount">
              <number>1</number>
@@ -2066,6 +2096,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="tierSonderfTable_dsa5">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderVisible">
              <bool>false</bool>
             </attribute>
@@ -2095,6 +2128,9 @@
               <width>0</width>
               <height>300</height>
              </size>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
             </property>
             <property name="columnCount">
              <number>1</number>
@@ -2206,6 +2242,9 @@
               <height>150</height>
              </size>
             </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -2251,6 +2290,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="tierAktionen_dsa5">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderVisible">
              <bool>false</bool>
             </attribute>
@@ -2261,6 +2303,414 @@
              <bool>false</bool>
             </attribute>
            </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabZauber_dsa5">
+       <attribute name="title">
+        <string>Zauber und Rituale</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_30">
+        <item>
+         <widget class="QTableWidget" name="zauberTable_dsa5">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>300</height>
+           </size>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Zaube / Ritual</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Probe</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fw</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Zauberdauer</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Reichweite</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Wirkungsdauer</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Merkmal</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sf.</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Wirkung</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>S.</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_28">
+            <item>
+             <widget class="QLabel" name="label_29">
+              <property name="text">
+               <string>Zaubertricks</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="zaubertricksTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="columnCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column/>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_30">
+              <property name="text">
+               <string>Magische Sonderfertigkeiten</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="magiSonderfTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="columnCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column/>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_29">
+            <item>
+             <widget class="QTableWidget" name="leiteigMerkmalTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="rowCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>300</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <row/>
+              <column>
+               <property name="text">
+                <string>Leiteigenschaft</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Merkmal</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="mTraditionTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="rowCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <row/>
+              <column>
+               <property name="text">
+                <string>Tradition</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabLiturgien_dsa5">
+       <attribute name="title">
+        <string>Liturgien und Zeremonien</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_25">
+        <item>
+         <widget class="QTableWidget" name="liturgienTable_dsa5">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>300</height>
+           </size>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Liturgie / Zeremonie</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Probe</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fw</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Kosten</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Liturgiedauer</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Reichweite</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Wirkungsdauer</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Aspekt</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sf</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Wirkung</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>S</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_27">
+            <item>
+             <widget class="QLabel" name="label_26">
+              <property name="text">
+               <string>Segnungen</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="segnungenTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="columnCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column/>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_28">
+              <property name="text">
+               <string>Klerikale Sonderfertigkeiten</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="kleriSonderfTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="columnCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column/>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_26">
+            <item>
+             <widget class="QTableWidget" name="leiteigAspektTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="rowCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>300</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <row/>
+              <column>
+               <property name="text">
+                <string>Leiteigenschaft</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Aspekt</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="kTraditionTable_dsa5">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="rowCount">
+               <number>1</number>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>300</number>
+              </attribute>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <row/>
+              <column>
+               <property name="text">
+                <string>Tradition</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>

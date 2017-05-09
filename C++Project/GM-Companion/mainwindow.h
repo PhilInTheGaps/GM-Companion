@@ -17,6 +17,7 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QtWinExtras>
+#include <QDebug>
 
 #include "settingsmanager.h"
 #include "dicemanager.h"
@@ -119,6 +120,10 @@ private slots:
     void charactersTimerFinished();
 
     void on_pushButton_clicked();
+    void on_musicRandomButton_clicked();
+
+    void on_soundRandomButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

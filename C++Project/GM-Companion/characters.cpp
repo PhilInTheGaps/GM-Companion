@@ -207,6 +207,35 @@ QWidget* getCharacterPage(QString character){
         // Tier Sonderf
         charPage->tierSonderf_dsa5 = writeList(character, "tierSonderfertigkeiten", 1);
 
+        // Zauber
+        charPage->zauber_dsa5 = writeList(character, "zauber", 11);
+
+        // Zaubertricks
+        charPage->zaubertricks_dsa5 = writeList(character, "zaubertricks", 1);
+
+        // Magische Sonderfertigkeiten
+        charPage->magischeSonderfertigkeiten_dsa5 = writeList(character, "magischeSonderfertigkeiten", 1);
+
+        // Leiteigenschaft / Merkmal
+        charPage->leiteigenschaftMerkmal_dsa5 = writeList(character, "leiteigenschaftMerkmal", 2);
+
+        // Magische Tradition
+        charPage->mTradition_dsa5 = writeList(character, "mTradition", 1);
+
+        // Liturgien
+        charPage->liturgien_dsa5 = writeList(character, "liturgien", 11);
+
+        // Segnungen
+        charPage->segnungen_dsa5 = writeList(character, "segnungen", 1);
+
+        // Klerikale Sonderfertigkeiten
+        charPage->klerikaleSonderfertigkeiten_dsa5 = writeList(character, "klerikaleSonderfertigkeiten", 1);
+
+        // Leiteigenschaft / Aspekt
+        charPage->leiteigenschaftAspekt_dsa5 = writeList(character, "leiteigenschaftAspekt", 2);
+
+        // Klerikale Tradition
+        charPage->kTradition_dsa5 = writeList(character, "kTradition", 1);
 
         break;
     }

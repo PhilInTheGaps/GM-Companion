@@ -38,6 +38,7 @@
 #include <QStandardItemModel>
 #include <QFileSystemWatcher>
 #include <QtWinExtras>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -184,8 +185,8 @@ void MainWindow::on_characterListClicked(int index){
     if (index >= 0){
         ui->charactersStackedWidget->setCurrentIndex(index);
 
-        ui->textEdit->append(QDir::currentPath()+"/characters/"+ui->charactersListWidget->item(index)->toolTip()+".png");
-        ui->textEdit->append(ui->charactersListWidget->item(index)->toolTip());
+        qDebug() << QDir::currentPath() << "/characters/" << ui->charactersListWidget->item(index)->toolTip() << ".png";
+        qDebug() << ui->charactersListWidget->item(index)->toolTip();
 
         QStringList list = ui->charactersStackedWidget->currentWidget()->accessibleName().split(",");
 
@@ -198,7 +199,7 @@ void MainWindow::on_characterListClicked(int index){
             ui->characterIconLabel->clear();
         }
     }
-    ui->textEdit->append(QString::number(index));
+    qDebug() << QString::number(index);
 }
 
 void MainWindow::addToPlaylist(QUrl url, bool music){
@@ -226,8 +227,7 @@ void MainWindow::playSound(QString folder){
     folderName = cleanText(folderName.mid(index));
 
     QStringList files = getFiles(folder);
-    files = shuffleStringList(files);
-
+    //files = shuffleStringList(files);
 
     soundPlaylist->clear();
 
@@ -237,6 +237,9 @@ void MainWindow::playSound(QString folder){
         }
     }
 
+    if (ui->soundRandomButton->isChecked()){
+        soundPlaylist->next();
+    }
     soundPlayer->play();
 
     ui->soundNameLabel->setText("Folder: "+folderName);
@@ -246,22 +249,22 @@ void MainWindow::playMusic(QString folder){
     radioTimer->stop();
     if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier) &&!initialMusicPlay)
     {
-        ui->textEdit->append("SHIFT IS PRESSED");
+        qDebug() << "SHIFT IS PRESSED";
 
         QString folderName = folder;
         int index = folderName.lastIndexOf("/")+1;
         folderName = cleanText(folderName.mid(index));
-        ui->textEdit->append("Index: "+QString::number(index)+"\n");
-        ui->textEdit->append("FolderName: "+folderName+"\n");
+        qDebug() << "Index: " << QString::number(index);
+        qDebug() << "FolderName: " << folderName;
 
         QString category = folder;
         index = category.lastIndexOf("/", index-2);
         category = category.mid(index);
-        ui->textEdit->append("Index: "+QString::number(index)+"\n");
-        ui->textEdit->append("Category: "+category+"\n");
+        qDebug() << "Index: " << QString::number(index);
+        qDebug() << "Category: " << category;
 
         QStringList files = getFiles(folder);
-        files = shuffleStringList(files);
+        //files = shuffleStringList(files);
 
         for (int i = 0; i < files.size(); i++){
             if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
@@ -288,7 +291,7 @@ void MainWindow::playMusic(QString folder){
                 musicTable->setItem(musicTable->rowCount()-1, 0, i);
 
                 addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
-                ui->textEdit->append(file + "\n");
+                qDebug() << file;
             }
         }
 
@@ -309,17 +312,17 @@ void MainWindow::playMusic(QString folder){
         QString folderName = folder;
         int index = folderName.lastIndexOf("/")+1;
         folderName = cleanText(folderName.mid(index));
-        ui->textEdit->append("Index: "+QString::number(index)+"\n");
-        ui->textEdit->append("FolderName: "+folderName+"\n");
+        qDebug() << "Index: "+QString::number(index);
+        qDebug() << "FolderName: "+folderName;
 
         QString category = folder;
         index = category.lastIndexOf("/", index-2);
         category = category.mid(index);
-        ui->textEdit->append("Index: "+QString::number(index)+"\n");
-        ui->textEdit->append("Category: "+category+"\n");
+        qDebug() << "Index: "+QString::number(index);
+        qDebug() << "Category: "+category;
 
         QStringList files = getFiles(folder);
-        files = shuffleStringList(files);
+        //files = shuffleStringList(files);
 
         for (int i = 0; i < files.size(); i++){
             if (!files.at(i).contains(".mp3") && !files.at(i).contains(".wav")){
@@ -345,11 +348,14 @@ void MainWindow::playMusic(QString folder){
                 musicTable->setItem(row, 0, i);
 
                 addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), true);
-                ui->textEdit->append(file + "\n");
+                qDebug() << file;
                 row++;
             }
         }
 
+        if (ui->musicRandomButton->isChecked()){
+            musicPlaylist->next();
+        }
         musicPlayer->play();
 
         //Setting Image
@@ -362,10 +368,6 @@ void MainWindow::playMusic(QString folder){
             ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").scaledToWidth(300));
         }
     }
-//    ui->textEdit->append(QString::number(metaPlaylist->mediaCount()));
-//    metaPlaylist->setCurrentIndex(0);
-//    metaPlayer->setVolume(0);
-//    metaPlayer->play();
 }
 
 void MainWindow::updateProgressBar(){
@@ -380,24 +382,19 @@ void MainWindow::updateProgressBar(){
 }
 
 void MainWindow::on_metaPlayerGotMetadata(){
-//    if (musicPlayer->isMetaDataAvailable()){
-//        ui->textEdit->append("FOUND SOMETHING");
-//        QString title = metaPlayer->metaData(QStringLiteral("Title")).toString();
-//        ui->textEdit->append(title);
-////        QTableWidgetItem *i = new QTableWidgetItem;
-////        i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-////        i->setText(title);
-////        musicTable->setItem(metaPlaylist->currentIndex(), 0, i);
-
-////        //metaPlaylist->removeMedia(metaPlaylist->currentIndex());
-//        ui->textEdit->append(QString::number(metaPlaylist->currentIndex()));
-//        if (metaPlaylist->currentIndex()<2){
-//            metaPlaylist->next();
-//        }
-//    }
 }
 
 void MainWindow::updateMetaData(){
+    qDebug() << "Average Audio Level: " << musicPlayer->metaData("AverageLevel").toString();
+    qDebug() << "Cover Image: " << musicPlayer->metaData("CoverArtImage").toString();
+    qDebug() << "Cover Image URL Small: " << musicPlayer->metaData("CoverArtUrlSmall").toString();
+    qDebug() << "Cover Image URL Large: " << musicPlayer->metaData("CoverArtUrlLarge").toString();
+    qDebug() << "Mood: " << musicPlayer->metaData("Mood").toString();
+    qDebug() << "Title: " << musicPlayer->metaData("Title").toString();
+    qDebug() << "Album: " << musicPlayer->metaData("AlbumTitle").toString();
+    qDebug() << "Artist: " << musicPlayer->metaData("Author").toString();
+    qDebug() << "Year: " << musicPlayer->metaData("Year").toString();
+
     QString title = musicPlayer->metaData(QStringLiteral("Title")).toString();
     QString album = musicPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
     if (musicPlayer->isMetaDataAvailable()){
@@ -437,7 +434,7 @@ void MainWindow::setVersion(QString versionAsString){
     QString temp = versionAsString.replace(".", "");
     versionNumber = temp.toInt();
 
-    ui->textEdit->append("Version Number: "+QString::number(versionNumber));
+    qDebug() << "Version Number: "+QString::number(versionNumber);
 
 }
 
@@ -447,8 +444,7 @@ void MainWindow::on_checkForUpdates_clicked(){
 
 void MainWindow::on_networkAccessManagerFinished(QNetworkReply* reply){
     QString replyString = reply->readAll();
-    ui->textEdit->clear();
-    ui->textEdit->append(replyString+"\n");
+    qDebug() << replyString;
 
     int index1 = replyString.indexOf("VERSION=");
     int index2 = replyString.indexOf(";", index1);
@@ -459,7 +455,7 @@ void MainWindow::on_networkAccessManagerFinished(QNetworkReply* reply){
     QString onlineVersionWithDots = onlineVersionString;
     QString temp = onlineVersionString.replace(".", "");
     onlineVersion = temp.toInt();
-    ui->textEdit->append("Most Current Version Number: "+QString::number(onlineVersion));
+    qDebug() << "Most Current Version Number: "+QString::number(onlineVersion);
 
     if (versionNumber < onlineVersion){
         QFrame *dialogFrame = new QFrame;
@@ -815,4 +811,28 @@ void MainWindow::createThumbnailToolbar(){
     thumbnailToolBar->addButton(playToolButton);
     thumbnailToolBar->addButton(pauseToolButton);
     thumbnailToolBar->addButton(nextToolButton);
+}
+
+void MainWindow::on_musicRandomButton_clicked()
+{
+    if (ui->musicRandomButton->isChecked()){
+        ui->musicRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOn.png"));
+        musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
+    }
+    else{
+        ui->musicRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOff.png"));
+        musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Loop);
+    }
+}
+
+void MainWindow::on_soundRandomButton_clicked()
+{
+    if (ui->soundRandomButton->isChecked()){
+        ui->soundRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOn.png"));
+        soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
+    }
+    else{
+        ui->soundRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOff.png"));
+        soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Loop);
+    }
 }
