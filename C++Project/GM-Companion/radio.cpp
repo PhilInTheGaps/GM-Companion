@@ -41,12 +41,11 @@ void MainWindow::on_rivendellReloadButton_clicked()
 }
 
 void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
-    ui->textEdit->clear();
-    ui->textEdit->append("FINISHED \n");
-    ui->textEdit->append(QString::number(radioID)+"\n");
+    qDebug() << "FINISHED";
+    qDebug() << QString::number(radioID);
 
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    ui->textEdit->append(redirectionTarget.toString());
+    qDebug() << redirectionTarget.toString();
 
     if (!redirectionTarget.isNull()) {
         QUrl newUrl = QUrl(redirectionTarget.toUrl());
@@ -70,7 +69,7 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
             QString temp = replyString;
             temp = temp.mid(startIndex, timeIndex-startIndex);
 
-            ui->textEdit->append(temp+"\n");
+            qDebug() << temp;
 
             int nowIndex = temp.indexOf("Now");
             int lineIndex = temp.indexOf("\n", nowIndex+5);
@@ -83,8 +82,8 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
             title = title.left(title.length()-1);
             artist = artist.left(artist.length()-3);
 
-            ui->textEdit->append("Title: "+title);
-            ui->textEdit->append("Artist: "+artist);
+            qDebug() << "Title: " << title;
+            qDebug() << "Artist: " << artist;
 
             ui->musicAlbumLabel->setText("Title: "+title);
             ui->musicArtistLabel->setText("Artist: "+artist);
@@ -98,7 +97,7 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
             QTextDocument doc;
             doc.setHtml(replyString);
             replyString = doc.toPlainText();
-            ui->textEdit->append(replyString+"\n");
+            qDebug() << replyString;
             doc.clear();
             doc.deleteLater();
 
@@ -116,31 +115,11 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
             ui->musicArtistLabel->setText("are currently not");
             ui->musicYearLabel->setText("supported. Sorry.");
 
-
-//            int nowIndex = temp.indexOf("Now");
-//            int lineIndex = temp.indexOf("\n", nowIndex+5);
-
-//            QString title = temp.mid(nowIndex+4);
-//            QString artist = temp.mid(lineIndex+1);
-
-//            title = title.replace(artist, "");
-//            title = title.replace("Spotify", "");
-//            title = title.left(title.length()-1);
-//            artist = artist.left(artist.length()-3);
-
-//            ui->textEdit->append("Title: "+title);
-//            ui->textEdit->append("Artist: "+artist);
-
-//            ui->musicAlbumLabel->setText("Title: "+title);
-//            ui->musicArtistLabel->setText("Artist: "+artist);
-
-//            replyString.clear();
-//            temp.clear();
             break;
         }
         default:
         {
-            ui->textEdit->append("Invalid RadioID \n");
+            qDebug() << "Invalid RadioID";
         }
         }
     }
@@ -148,7 +127,7 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
 }
 
 void MainWindow::on_radioTimer_timeout(){
-    ui->textEdit->append("TIMER FINISHED");
+    qDebug() << "TIMER FINISHED";
     switch (radioID) {
     case 0:
         radioNetworkManager->get(QNetworkRequest(QUrl("https://www.radiorivendell.com/page/last-played/")));
@@ -158,7 +137,7 @@ void MainWindow::on_radioTimer_timeout(){
         radioNetworkManager->get(QNetworkRequest(QUrl("http://laut.fm/mmorpg")));
         break;
     default:
-        ui->textEdit->append("ERROR: RadioID is not correct \n");
+        qDebug() << "ERROR: RadioID is not correct";
         break;
     }
 }

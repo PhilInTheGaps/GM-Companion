@@ -211,15 +211,15 @@ void CharEditor::load(int index){
 
         // Liturgien
         qDebug() << "Writing Liturgien";
-        writeTable("liturgien", 11, ui->liturgienTable_dsa5);
+        writeTable("liturgien", 11, ui->liturgienTable_dsa5, true);
 
         // Segnungen
         qDebug() << "Writing Segnungen";
-        writeTable("segnungen", 1, ui->segnungenTable_dsa5);
+        writeTable("segnungen", 1, ui->segnungenTable_dsa5, true);
 
         // Klerikale Sonderfertigkeiten
         qDebug() << "Writing Klerikale Sonderfertigkeiten";
-        writeTable("klerikaleSonderfertigkeiten", 1, ui->kleriSonderfTable_dsa5);
+        writeTable("klerikaleSonderfertigkeiten", 1, ui->kleriSonderfTable_dsa5, true);
 
         // Leiteigenschaft / Aspekt
         qDebug() << "Writing Leiteigenschaft / Aspekt";
@@ -723,4 +723,64 @@ void CharEditor::on_addTierAktionen_dsa5_clicked()
 void CharEditor::on_removeTierAktionen_dsa5_clicked()
 {
     removeRow(ui->tierAktionenTable_dsa5);
+}
+
+void CharEditor::on_addZauber_dsa5_clicked()
+{
+    addRow(ui->zauberTable_dsa5);
+}
+
+void CharEditor::on_removeZauber_dsa5_clicked()
+{
+    removeRow(ui->zauberTable_dsa5);
+}
+
+void CharEditor::on_addZaubertrick_dsa5_clicked()
+{
+    addRow(ui->zaubertricksTable_dsa5);
+}
+
+void CharEditor::on_removeZaubertrick_dsa5_clicked()
+{
+    removeRow(ui->zaubertricksTable_dsa5);
+}
+
+void CharEditor::on_addMSonderf_dsa5_clicked()
+{
+    addRow(ui->mSonderfTable_dsa5);
+}
+
+void CharEditor::on_removeMSonderf_dsa5_clicked()
+{
+    removeRow(ui->mSonderfTable_dsa5);
+}
+
+void CharEditor::on_addLitugie_dsa5_clicked()
+{
+    addRow(ui->liturgienTable_dsa5);
+}
+
+void CharEditor::on_removeLiturgie_dsa5_clicked()
+{
+    removeRow(ui->liturgienTable_dsa5);
+}
+
+void CharEditor::on_addSegnung_dsa5_clicked()
+{
+    addRow(ui->segnungenTable_dsa5);
+}
+
+void CharEditor::on_removeSegnung_dsa5_clicked()
+{
+    removeRow(ui->segnungenTable_dsa5);
+}
+
+void CharEditor::on_addKleriSonderf_dsa5_clicked()
+{
+    addRow(ui->kleriSonderfTable_dsa5);
+}
+
+void CharEditor::on_removeKleriSonderf_dsa5_clicked()
+{
+    removeRow(ui->kleriSonderfTable_dsa5);
 }

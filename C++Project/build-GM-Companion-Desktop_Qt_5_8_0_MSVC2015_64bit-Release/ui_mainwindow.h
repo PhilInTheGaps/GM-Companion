@@ -64,6 +64,7 @@ public:
     QPushButton *musicPauseButton;
     QPushButton *musicReplayButton;
     QPushButton *musicNextButton;
+    QPushButton *musicRandomButton;
     QSlider *musicVolumeSlider;
     QFrame *line_2;
     QLabel *soundLabel;
@@ -72,6 +73,7 @@ public:
     QPushButton *soundPauseButton;
     QPushButton *soundReplayButton;
     QPushButton *soundNextButton;
+    QPushButton *soundRandomButton;
     QSlider *soundVolumeSlider;
     QFrame *line;
     QLabel *musicInfoLabel;
@@ -108,12 +110,6 @@ public:
     QPushButton *updateCharactersButton;
     QStackedWidget *charactersStackedWidget;
     QWidget *widget;
-    QWidget *tabWebTest;
-    QVBoxLayout *verticalLayout_3;
-    QWidget *tab_3;
-    QVBoxLayout *verticalLayout_6;
-    QLabel *label;
-    QTextEdit *textEdit;
     QWidget *pageMusic;
     QHBoxLayout *horizontalLayout_5;
     QWidget *pageSound;
@@ -158,6 +154,13 @@ public:
     QTextEdit *textEdit_3;
     QSpacerItem *horizontalSpacer_2;
     QWidget *pageWelcome;
+    QVBoxLayout *verticalLayout_7;
+    QLabel *label_3;
+    QHBoxLayout *horizontalLayout_11;
+    QVBoxLayout *verticalLayout_8;
+    QLabel *label_4;
+    QLabel *label_10;
+    QTextEdit *textEdit_4;
     QVBoxLayout *verticalLayout;
     QMenuBar *menuBar;
     QMenu *menuGM_Help;
@@ -483,6 +486,10 @@ public:
         font2.setBold(true);
         font2.setWeight(75);
         musicPlayButton->setFont(font2);
+        QIcon icon1;
+        icon1.addFile(QStringLiteral(":/resources/mediaIcons/play.png"), QSize(), QIcon::Normal, QIcon::Off);
+        musicPlayButton->setIcon(icon1);
+        musicPlayButton->setIconSize(QSize(32, 32));
         musicPlayButton->setAutoDefault(false);
         musicPlayButton->setFlat(false);
 
@@ -498,6 +505,10 @@ public:
         musicPauseButton->setMinimumSize(QSize(50, 40));
         musicPauseButton->setMaximumSize(QSize(68, 45));
         musicPauseButton->setFont(font2);
+        QIcon icon2;
+        icon2.addFile(QStringLiteral(":/resources/mediaIcons/pause.png"), QSize(), QIcon::Normal, QIcon::Off);
+        musicPauseButton->setIcon(icon2);
+        musicPauseButton->setIconSize(QSize(32, 32));
 
         musicControls->addWidget(musicPauseButton);
 
@@ -508,6 +519,10 @@ public:
         musicReplayButton->setMinimumSize(QSize(50, 40));
         musicReplayButton->setMaximumSize(QSize(68, 45));
         musicReplayButton->setFont(font2);
+        QIcon icon3;
+        icon3.addFile(QStringLiteral(":/resources/mediaIcons/skipBack.png"), QSize(), QIcon::Normal, QIcon::Off);
+        musicReplayButton->setIcon(icon3);
+        musicReplayButton->setIconSize(QSize(32, 32));
 
         musicControls->addWidget(musicReplayButton);
 
@@ -518,8 +533,23 @@ public:
         musicNextButton->setMinimumSize(QSize(50, 40));
         musicNextButton->setMaximumSize(QSize(68, 45));
         musicNextButton->setFont(font2);
+        QIcon icon4;
+        icon4.addFile(QStringLiteral(":/resources/mediaIcons/seekForward.png"), QSize(), QIcon::Normal, QIcon::Off);
+        musicNextButton->setIcon(icon4);
+        musicNextButton->setIconSize(QSize(32, 32));
 
         musicControls->addWidget(musicNextButton);
+
+        musicRandomButton = new QPushButton(centralWidget);
+        musicRandomButton->setObjectName(QStringLiteral("musicRandomButton"));
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/resources/mediaIcons/shuffleOn.png"), QSize(), QIcon::Normal, QIcon::Off);
+        musicRandomButton->setIcon(icon5);
+        musicRandomButton->setIconSize(QSize(32, 32));
+        musicRandomButton->setCheckable(true);
+        musicRandomButton->setChecked(true);
+
+        musicControls->addWidget(musicRandomButton);
 
 
         infoBox->addLayout(musicControls);
@@ -562,6 +592,8 @@ public:
         soundPlayButton->setMinimumSize(QSize(50, 40));
         soundPlayButton->setMaximumSize(QSize(68, 45));
         soundPlayButton->setFont(font2);
+        soundPlayButton->setIcon(icon1);
+        soundPlayButton->setIconSize(QSize(32, 32));
 
         soundControls->addWidget(soundPlayButton);
 
@@ -572,6 +604,8 @@ public:
         soundPauseButton->setMinimumSize(QSize(50, 40));
         soundPauseButton->setMaximumSize(QSize(68, 45));
         soundPauseButton->setFont(font2);
+        soundPauseButton->setIcon(icon2);
+        soundPauseButton->setIconSize(QSize(32, 32));
 
         soundControls->addWidget(soundPauseButton);
 
@@ -582,6 +616,8 @@ public:
         soundReplayButton->setMinimumSize(QSize(50, 40));
         soundReplayButton->setMaximumSize(QSize(68, 45));
         soundReplayButton->setFont(font2);
+        soundReplayButton->setIcon(icon3);
+        soundReplayButton->setIconSize(QSize(32, 32));
 
         soundControls->addWidget(soundReplayButton);
 
@@ -592,8 +628,19 @@ public:
         soundNextButton->setMinimumSize(QSize(50, 40));
         soundNextButton->setMaximumSize(QSize(68, 45));
         soundNextButton->setFont(font2);
+        soundNextButton->setIcon(icon4);
+        soundNextButton->setIconSize(QSize(32, 32));
 
         soundControls->addWidget(soundNextButton);
+
+        soundRandomButton = new QPushButton(centralWidget);
+        soundRandomButton->setObjectName(QStringLiteral("soundRandomButton"));
+        soundRandomButton->setIcon(icon5);
+        soundRandomButton->setIconSize(QSize(32, 32));
+        soundRandomButton->setCheckable(true);
+        soundRandomButton->setChecked(true);
+
+        soundControls->addWidget(soundRandomButton);
 
 
         infoBox->addLayout(soundControls);
@@ -872,30 +919,6 @@ public:
         horizontalLayout_10->addWidget(widget);
 
         tabWidgetGMHelp->addTab(tabCharacters, QString());
-        tabWebTest = new QWidget();
-        tabWebTest->setObjectName(QStringLiteral("tabWebTest"));
-        verticalLayout_3 = new QVBoxLayout(tabWebTest);
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        tabWidgetGMHelp->addTab(tabWebTest, QString());
-        tab_3 = new QWidget();
-        tab_3->setObjectName(QStringLiteral("tab_3"));
-        verticalLayout_6 = new QVBoxLayout(tab_3);
-        verticalLayout_6->setSpacing(6);
-        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        label = new QLabel(tab_3);
-        label->setObjectName(QStringLiteral("label"));
-
-        verticalLayout_6->addWidget(label);
-
-        textEdit = new QTextEdit(tab_3);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-
-        verticalLayout_6->addWidget(textEdit);
-
-        tabWidgetGMHelp->addTab(tab_3, QString());
 
         verticalLayout_2->addWidget(tabWidgetGMHelp);
 
@@ -1004,7 +1027,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 628));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 634));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -1102,7 +1125,7 @@ public:
         label_7->setSizePolicy(sizePolicy10);
         label_7->setMinimumSize(QSize(300, 0));
         label_7->setMaximumSize(QSize(820, 2000));
-        label_7->setPixmap(QPixmap(QString::fromUtf8(":/radio/RadioRivendell/resources/radio/logo-radio-rivendell.png")));
+        label_7->setPixmap(QPixmap(QString::fromUtf8(":/resources/radio/logo-radio-rivendell.png")));
         label_7->setScaledContents(true);
 
         verticalLayout_11->addWidget(label_7);
@@ -1218,7 +1241,7 @@ public:
         sizePolicy10.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
         label_9->setSizePolicy(sizePolicy10);
         label_9->setMaximumSize(QSize(820, 16777215));
-        label_9->setPixmap(QPixmap(QString::fromUtf8(":/radio/RadioMMORPG_de/resources/radio/logo-mmorp-radio-de.png")));
+        label_9->setPixmap(QPixmap(QString::fromUtf8(":/resources/radio/logo-mmorp-radio-de.png")));
         label_9->setScaledContents(true);
 
         verticalLayout_16->addWidget(label_9);
@@ -1253,6 +1276,54 @@ public:
         stackedWidget->addWidget(pageRadio);
         pageWelcome = new QWidget();
         pageWelcome->setObjectName(QStringLiteral("pageWelcome"));
+        verticalLayout_7 = new QVBoxLayout(pageWelcome);
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        label_3 = new QLabel(pageWelcome);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setMaximumSize(QSize(16777215, 100));
+        QFont font9;
+        font9.setPointSize(50);
+        font9.setBold(false);
+        font9.setItalic(false);
+        font9.setUnderline(false);
+        font9.setWeight(50);
+        font9.setStrikeOut(false);
+        font9.setKerning(true);
+        font9.setStyleStrategy(QFont::PreferAntialias);
+        label_3->setFont(font9);
+        label_3->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+
+        verticalLayout_7->addWidget(label_3);
+
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        label_4 = new QLabel(pageWelcome);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        verticalLayout_8->addWidget(label_4);
+
+        label_10 = new QLabel(pageWelcome);
+        label_10->setObjectName(QStringLiteral("label_10"));
+
+        verticalLayout_8->addWidget(label_10);
+
+        textEdit_4 = new QTextEdit(pageWelcome);
+        textEdit_4->setObjectName(QStringLiteral("textEdit_4"));
+
+        verticalLayout_8->addWidget(textEdit_4);
+
+
+        horizontalLayout_11->addLayout(verticalLayout_8);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_11);
+
         stackedWidget->addWidget(pageWelcome);
 
         horizontalLayout_2->addWidget(stackedWidget);
@@ -1278,28 +1349,28 @@ public:
         menuBar->setStyleSheet(QStringLiteral(""));
         menuGM_Help = new QMenu(menuBar);
         menuGM_Help->setObjectName(QStringLiteral("menuGM_Help"));
-        QFont font9;
-        font9.setPointSize(10);
-        font9.setBold(false);
-        font9.setWeight(50);
-        menuGM_Help->setFont(font9);
-        menuOptions = new QMenu(menuBar);
-        menuOptions->setObjectName(QStringLiteral("menuOptions"));
-        menuOptions->setFont(font9);
-        menuMusic = new QMenu(menuBar);
-        menuMusic->setObjectName(QStringLiteral("menuMusic"));
-        menuMusic->setFont(font9);
-        menuSound = new QMenu(menuBar);
-        menuSound->setObjectName(QStringLiteral("menuSound"));
-        menuSound->setFont(font9);
-        menuMaps = new QMenu(menuBar);
-        menuMaps->setObjectName(QStringLiteral("menuMaps"));
-        menuMaps->setFont(font9);
-        menuHelp = new QMenu(menuBar);
-        menuHelp->setObjectName(QStringLiteral("menuHelp"));
         QFont font10;
         font10.setPointSize(10);
-        menuHelp->setFont(font10);
+        font10.setBold(false);
+        font10.setWeight(50);
+        menuGM_Help->setFont(font10);
+        menuOptions = new QMenu(menuBar);
+        menuOptions->setObjectName(QStringLiteral("menuOptions"));
+        menuOptions->setFont(font10);
+        menuMusic = new QMenu(menuBar);
+        menuMusic->setObjectName(QStringLiteral("menuMusic"));
+        menuMusic->setFont(font10);
+        menuSound = new QMenu(menuBar);
+        menuSound->setObjectName(QStringLiteral("menuSound"));
+        menuSound->setFont(font10);
+        menuMaps = new QMenu(menuBar);
+        menuMaps->setObjectName(QStringLiteral("menuMaps"));
+        menuMaps->setFont(font10);
+        menuHelp = new QMenu(menuBar);
+        menuHelp->setObjectName(QStringLiteral("menuHelp"));
+        QFont font11;
+        font11.setPointSize(10);
+        menuHelp->setFont(font11);
         MainWindow->setMenuBar(menuBar);
 
         menuBar->addAction(menuGM_Help->menuAction());
@@ -1336,8 +1407,8 @@ public:
         retranslateUi(MainWindow);
 
         musicPlayButton->setDefault(false);
-        stackedWidget->setCurrentIndex(0);
-        tabWidgetGMHelp->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(5);
+        tabWidgetGMHelp->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -1365,18 +1436,50 @@ public:
         actionNamne_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
         actionCharacters->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         musicLabel->setText(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
-        musicPlayButton->setText(QApplication::translate("MainWindow", "Play", Q_NULLPTR));
-        musicPauseButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
-        musicReplayButton->setText(QApplication::translate("MainWindow", "Replay", Q_NULLPTR));
-        musicNextButton->setText(QApplication::translate("MainWindow", "Next", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        musicPlayButton->setToolTip(QApplication::translate("MainWindow", "Play (Music)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        musicPlayButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        musicPauseButton->setToolTip(QApplication::translate("MainWindow", "Pause (Music)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        musicPauseButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        musicReplayButton->setToolTip(QApplication::translate("MainWindow", "Rewind (Music)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        musicReplayButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        musicNextButton->setToolTip(QApplication::translate("MainWindow", "Next (Music)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        musicNextButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        musicRandomButton->setToolTip(QApplication::translate("MainWindow", "Toggle Music Shuffle (bright = on, dark = off)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        musicRandomButton->setText(QString());
 #ifndef QT_NO_TOOLTIP
         musicVolumeSlider->setToolTip(QApplication::translate("MainWindow", "Music Volume", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
         soundLabel->setText(QApplication::translate("MainWindow", "Sound", Q_NULLPTR));
-        soundPlayButton->setText(QApplication::translate("MainWindow", "Play", Q_NULLPTR));
-        soundPauseButton->setText(QApplication::translate("MainWindow", "Pause", Q_NULLPTR));
-        soundReplayButton->setText(QApplication::translate("MainWindow", "Replay", Q_NULLPTR));
-        soundNextButton->setText(QApplication::translate("MainWindow", "Next", Q_NULLPTR));
+#ifndef QT_NO_TOOLTIP
+        soundPlayButton->setToolTip(QApplication::translate("MainWindow", "Play (Sound)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        soundPlayButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        soundPauseButton->setToolTip(QApplication::translate("MainWindow", "Pause (Sound)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        soundPauseButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        soundReplayButton->setToolTip(QApplication::translate("MainWindow", "Rewind (Sound)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        soundReplayButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        soundNextButton->setToolTip(QApplication::translate("MainWindow", "Next (Sound)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        soundNextButton->setText(QString());
+#ifndef QT_NO_TOOLTIP
+        soundRandomButton->setToolTip(QApplication::translate("MainWindow", "Toggle Sound Shuffle (bright = on, dark = off)", Q_NULLPTR));
+#endif // QT_NO_TOOLTIP
+        soundRandomButton->setText(QString());
 #ifndef QT_NO_TOOLTIP
         soundVolumeSlider->setToolTip(QApplication::translate("MainWindow", "Sound Volume", Q_NULLPTR));
 #endif // QT_NO_TOOLTIP
@@ -1405,14 +1508,6 @@ public:
         pushButton->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
-        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabWebTest), QApplication::translate("MainWindow", "Page", Q_NULLPTR));
-        label->setText(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
-        textEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">DEBUG TEXT-EDIT:</p></body></html>", Q_NULLPTR));
-        tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tab_3), QApplication::translate("MainWindow", "Debug / Test Page", Q_NULLPTR));
         mapsZoomInButton->setText(QApplication::translate("MainWindow", "Zoom In", Q_NULLPTR));
         mapsZoomOutButton->setText(QApplication::translate("MainWindow", "Zoom Out", Q_NULLPTR));
         mapsFitToViewButton->setText(QApplication::translate("MainWindow", "Fit to View", Q_NULLPTR));
@@ -1446,6 +1541,24 @@ public:
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:16pt; font-weight:600;\"><br /></p>\n"
 "<p style"
                         "=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://mmorpg-radio.de/\"><span style=\" font-size:16pt; text-decoration: underline; color:#a7cdff;\">Visit MMORPG Radio</span></a></p></body></html>", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", "Welcome!", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindow", "Version: Beta 3.0", Q_NULLPTR));
+        label_10->setText(QApplication::translate("MainWindow", "Changelog:", Q_NULLPTR));
+        textEdit_4->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Changed media control buttons to have icons instead of text</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added support for webradios</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added music controls when hovering icon in taskbar</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added name generator</p>\n"
+""
+                        "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added character overview</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Improved Maps-Viewer with zoom function</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Greatly improved memory usage</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added function to check for updates</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added function to open wiki</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Added function to report bugs</p></body></html>", Q_NULLPTR));
         menuGM_Help->setTitle(QApplication::translate("MainWindow", "GM-Help", Q_NULLPTR));
         menuOptions->setTitle(QApplication::translate("MainWindow", "Options", Q_NULLPTR));
         menuMusic->setTitle(QApplication::translate("MainWindow", "Music", Q_NULLPTR));

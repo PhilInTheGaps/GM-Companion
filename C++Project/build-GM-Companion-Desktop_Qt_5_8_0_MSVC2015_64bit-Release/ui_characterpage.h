@@ -140,6 +140,30 @@ public:
     QTableWidget *tierAngrifTable_dsa5;
     QLabel *label_27;
     QTableWidget *tierAktionen_dsa5;
+    QWidget *tabZauber_dsa5;
+    QVBoxLayout *verticalLayout_30;
+    QTableWidget *zauberTable_dsa5;
+    QHBoxLayout *horizontalLayout_15;
+    QVBoxLayout *verticalLayout_28;
+    QLabel *label_29;
+    QTableWidget *zaubertricksTable_dsa5;
+    QLabel *label_30;
+    QTableWidget *magiSonderfTable_dsa5;
+    QVBoxLayout *verticalLayout_29;
+    QTableWidget *leiteigMerkmalTable_dsa5;
+    QTableWidget *mTraditionTable_dsa5;
+    QWidget *tabLiturgien_dsa5;
+    QVBoxLayout *verticalLayout_25;
+    QTableWidget *liturgienTable_dsa5;
+    QHBoxLayout *horizontalLayout_14;
+    QVBoxLayout *verticalLayout_27;
+    QLabel *label_26;
+    QTableWidget *segnungenTable_dsa5;
+    QLabel *label_28;
+    QTableWidget *kleriSonderfTable_dsa5;
+    QVBoxLayout *verticalLayout_26;
+    QTableWidget *leiteigAspektTable_dsa5;
+    QTableWidget *kTraditionTable_dsa5;
 
     void setupUi(QStackedWidget *CharacterPage)
     {
@@ -1003,6 +1027,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem165 = new QTableWidgetItem();
         ktwTable_dsa5->setVerticalHeaderItem(12, __qtablewidgetitem165);
         ktwTable_dsa5->setObjectName(QStringLiteral("ktwTable_dsa5"));
+        ktwTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
         verticalLayout_18->addWidget(ktwTable_dsa5);
 
@@ -1031,6 +1056,7 @@ public:
         lepTable_dsa5->setItem(0, 1, __qtablewidgetitem169);
         lepTable_dsa5->setObjectName(QStringLiteral("lepTable_dsa5"));
         lepTable_dsa5->setMaximumSize(QSize(16777215, 100));
+        lepTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         lepTable_dsa5->setRowCount(1);
         lepTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         lepTable_dsa5->verticalHeader()->setVisible(false);
@@ -1046,6 +1072,7 @@ public:
         kSonderfTable_dsa5 = new QTableWidget(tabKampf_dsa5);
         kSonderfTable_dsa5->setObjectName(QStringLiteral("kSonderfTable_dsa5"));
         kSonderfTable_dsa5->setMinimumSize(QSize(0, 200));
+        kSonderfTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         kSonderfTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         kSonderfTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1088,6 +1115,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem178 = new QTableWidgetItem();
         nahkampfwaffenTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem178);
         nahkampfwaffenTable_dsa5->setObjectName(QStringLiteral("nahkampfwaffenTable_dsa5"));
+        nahkampfwaffenTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         nahkampfwaffenTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         nahkampfwaffenTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1118,6 +1146,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem186 = new QTableWidgetItem();
         fernkampfwaffenTable_dsa5->setHorizontalHeaderItem(7, __qtablewidgetitem186);
         fernkampfwaffenTable_dsa5->setObjectName(QStringLiteral("fernkampfwaffenTable_dsa5"));
+        fernkampfwaffenTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         fernkampfwaffenTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         fernkampfwaffenTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1149,6 +1178,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem192 = new QTableWidgetItem();
         ruestungenTable_dsa5->setHorizontalHeaderItem(5, __qtablewidgetitem192);
         ruestungenTable_dsa5->setObjectName(QStringLiteral("ruestungenTable_dsa5"));
+        ruestungenTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         ruestungenTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         ruestungenTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1171,6 +1201,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem196 = new QTableWidgetItem();
         schildTable_dsa5->setHorizontalHeaderItem(3, __qtablewidgetitem196);
         schildTable_dsa5->setObjectName(QStringLiteral("schildTable_dsa5"));
+        schildTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         schildTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         schildTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1207,6 +1238,7 @@ public:
         ausruestung1Table_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem199);
         ausruestung1Table_dsa5->setObjectName(QStringLiteral("ausruestung1Table_dsa5"));
         ausruestung1Table_dsa5->setMinimumSize(QSize(300, 0));
+        ausruestung1Table_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         ausruestung1Table_dsa5->horizontalHeader()->setStretchLastSection(true);
 
         horizontalLayout_13->addWidget(ausruestung1Table_dsa5);
@@ -1222,6 +1254,7 @@ public:
         ausruestung2Table_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem202);
         ausruestung2Table_dsa5->setObjectName(QStringLiteral("ausruestung2Table_dsa5"));
         ausruestung2Table_dsa5->setMinimumSize(QSize(300, 0));
+        ausruestung2Table_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         ausruestung2Table_dsa5->horizontalHeader()->setStretchLastSection(true);
 
         horizontalLayout_13->addWidget(ausruestung2Table_dsa5);
@@ -1260,6 +1293,7 @@ public:
         geldTable_dsa5->setVerticalHeaderItem(6, __qtablewidgetitem209);
         geldTable_dsa5->setObjectName(QStringLiteral("geldTable_dsa5"));
         geldTable_dsa5->setMinimumSize(QSize(0, 300));
+        geldTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         geldTable_dsa5->setColumnCount(1);
         geldTable_dsa5->horizontalHeader()->setVisible(false);
         geldTable_dsa5->horizontalHeader()->setStretchLastSection(true);
@@ -1274,6 +1308,7 @@ public:
 
         tierSonderfTable_dsa5 = new QTableWidget(tabBesitz_dsa5);
         tierSonderfTable_dsa5->setObjectName(QStringLiteral("tierSonderfTable_dsa5"));
+        tierSonderfTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tierSonderfTable_dsa5->horizontalHeader()->setVisible(false);
         tierSonderfTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         tierSonderfTable_dsa5->verticalHeader()->setHighlightSections(false);
@@ -1333,6 +1368,7 @@ public:
         tierAllgemeinTable_dsa5->setVerticalHeaderItem(17, __qtablewidgetitem227);
         tierAllgemeinTable_dsa5->setObjectName(QStringLiteral("tierAllgemeinTable_dsa5"));
         tierAllgemeinTable_dsa5->setMinimumSize(QSize(0, 300));
+        tierAllgemeinTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tierAllgemeinTable_dsa5->setColumnCount(1);
         tierAllgemeinTable_dsa5->horizontalHeader()->setVisible(false);
         tierAllgemeinTable_dsa5->horizontalHeader()->setStretchLastSection(true);
@@ -1354,6 +1390,7 @@ public:
         tierAngrifTable_dsa5->setHorizontalHeaderItem(4, __qtablewidgetitem232);
         tierAngrifTable_dsa5->setObjectName(QStringLiteral("tierAngrifTable_dsa5"));
         tierAngrifTable_dsa5->setMaximumSize(QSize(16777215, 150));
+        tierAngrifTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tierAngrifTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         tierAngrifTable_dsa5->verticalHeader()->setVisible(false);
         tierAngrifTable_dsa5->verticalHeader()->setDefaultSectionSize(20);
@@ -1367,6 +1404,7 @@ public:
 
         tierAktionen_dsa5 = new QTableWidget(tabBesitz_dsa5);
         tierAktionen_dsa5->setObjectName(QStringLiteral("tierAktionen_dsa5"));
+        tierAktionen_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tierAktionen_dsa5->horizontalHeader()->setVisible(false);
         tierAktionen_dsa5->horizontalHeader()->setStretchLastSection(true);
         tierAktionen_dsa5->verticalHeader()->setHighlightSections(false);
@@ -1377,6 +1415,249 @@ public:
         horizontalLayout_12->addLayout(verticalLayout_24);
 
         tabWidget_2->addTab(tabBesitz_dsa5, QString());
+        tabZauber_dsa5 = new QWidget();
+        tabZauber_dsa5->setObjectName(QStringLiteral("tabZauber_dsa5"));
+        verticalLayout_30 = new QVBoxLayout(tabZauber_dsa5);
+        verticalLayout_30->setObjectName(QStringLiteral("verticalLayout_30"));
+        zauberTable_dsa5 = new QTableWidget(tabZauber_dsa5);
+        if (zauberTable_dsa5->columnCount() < 10)
+            zauberTable_dsa5->setColumnCount(10);
+        QTableWidgetItem *__qtablewidgetitem233 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem233);
+        QTableWidgetItem *__qtablewidgetitem234 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem234);
+        QTableWidgetItem *__qtablewidgetitem235 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem235);
+        QTableWidgetItem *__qtablewidgetitem236 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(3, __qtablewidgetitem236);
+        QTableWidgetItem *__qtablewidgetitem237 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(4, __qtablewidgetitem237);
+        QTableWidgetItem *__qtablewidgetitem238 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(5, __qtablewidgetitem238);
+        QTableWidgetItem *__qtablewidgetitem239 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(6, __qtablewidgetitem239);
+        QTableWidgetItem *__qtablewidgetitem240 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(7, __qtablewidgetitem240);
+        QTableWidgetItem *__qtablewidgetitem241 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem241);
+        QTableWidgetItem *__qtablewidgetitem242 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(9, __qtablewidgetitem242);
+        zauberTable_dsa5->setObjectName(QStringLiteral("zauberTable_dsa5"));
+        zauberTable_dsa5->setMinimumSize(QSize(0, 300));
+        zauberTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        zauberTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        zauberTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_30->addWidget(zauberTable_dsa5);
+
+        horizontalLayout_15 = new QHBoxLayout();
+        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
+        verticalLayout_28 = new QVBoxLayout();
+        verticalLayout_28->setObjectName(QStringLiteral("verticalLayout_28"));
+        label_29 = new QLabel(tabZauber_dsa5);
+        label_29->setObjectName(QStringLiteral("label_29"));
+
+        verticalLayout_28->addWidget(label_29);
+
+        zaubertricksTable_dsa5 = new QTableWidget(tabZauber_dsa5);
+        if (zaubertricksTable_dsa5->columnCount() < 1)
+            zaubertricksTable_dsa5->setColumnCount(1);
+        zaubertricksTable_dsa5->setObjectName(QStringLiteral("zaubertricksTable_dsa5"));
+        zaubertricksTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        zaubertricksTable_dsa5->setColumnCount(1);
+        zaubertricksTable_dsa5->horizontalHeader()->setVisible(false);
+        zaubertricksTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        zaubertricksTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_28->addWidget(zaubertricksTable_dsa5);
+
+        label_30 = new QLabel(tabZauber_dsa5);
+        label_30->setObjectName(QStringLiteral("label_30"));
+
+        verticalLayout_28->addWidget(label_30);
+
+        magiSonderfTable_dsa5 = new QTableWidget(tabZauber_dsa5);
+        if (magiSonderfTable_dsa5->columnCount() < 1)
+            magiSonderfTable_dsa5->setColumnCount(1);
+        magiSonderfTable_dsa5->setObjectName(QStringLiteral("magiSonderfTable_dsa5"));
+        magiSonderfTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        magiSonderfTable_dsa5->setColumnCount(1);
+        magiSonderfTable_dsa5->horizontalHeader()->setVisible(false);
+        magiSonderfTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        magiSonderfTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_28->addWidget(magiSonderfTable_dsa5);
+
+
+        horizontalLayout_15->addLayout(verticalLayout_28);
+
+        verticalLayout_29 = new QVBoxLayout();
+        verticalLayout_29->setObjectName(QStringLiteral("verticalLayout_29"));
+        leiteigMerkmalTable_dsa5 = new QTableWidget(tabZauber_dsa5);
+        if (leiteigMerkmalTable_dsa5->columnCount() < 2)
+            leiteigMerkmalTable_dsa5->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem243 = new QTableWidgetItem();
+        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem243);
+        QTableWidgetItem *__qtablewidgetitem244 = new QTableWidgetItem();
+        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem244);
+        if (leiteigMerkmalTable_dsa5->rowCount() < 1)
+            leiteigMerkmalTable_dsa5->setRowCount(1);
+        leiteigMerkmalTable_dsa5->setObjectName(QStringLiteral("leiteigMerkmalTable_dsa5"));
+        leiteigMerkmalTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        leiteigMerkmalTable_dsa5->setRowCount(1);
+        leiteigMerkmalTable_dsa5->horizontalHeader()->setDefaultSectionSize(300);
+        leiteigMerkmalTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        leiteigMerkmalTable_dsa5->verticalHeader()->setVisible(false);
+        leiteigMerkmalTable_dsa5->verticalHeader()->setStretchLastSection(true);
+
+        verticalLayout_29->addWidget(leiteigMerkmalTable_dsa5);
+
+        mTraditionTable_dsa5 = new QTableWidget(tabZauber_dsa5);
+        if (mTraditionTable_dsa5->columnCount() < 1)
+            mTraditionTable_dsa5->setColumnCount(1);
+        QTableWidgetItem *__qtablewidgetitem245 = new QTableWidgetItem();
+        mTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem245);
+        if (mTraditionTable_dsa5->rowCount() < 1)
+            mTraditionTable_dsa5->setRowCount(1);
+        mTraditionTable_dsa5->setObjectName(QStringLiteral("mTraditionTable_dsa5"));
+        mTraditionTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        mTraditionTable_dsa5->setRowCount(1);
+        mTraditionTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        mTraditionTable_dsa5->verticalHeader()->setVisible(false);
+        mTraditionTable_dsa5->verticalHeader()->setStretchLastSection(true);
+
+        verticalLayout_29->addWidget(mTraditionTable_dsa5);
+
+
+        horizontalLayout_15->addLayout(verticalLayout_29);
+
+
+        verticalLayout_30->addLayout(horizontalLayout_15);
+
+        tabWidget_2->addTab(tabZauber_dsa5, QString());
+        tabLiturgien_dsa5 = new QWidget();
+        tabLiturgien_dsa5->setObjectName(QStringLiteral("tabLiturgien_dsa5"));
+        verticalLayout_25 = new QVBoxLayout(tabLiturgien_dsa5);
+        verticalLayout_25->setObjectName(QStringLiteral("verticalLayout_25"));
+        liturgienTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
+        if (liturgienTable_dsa5->columnCount() < 11)
+            liturgienTable_dsa5->setColumnCount(11);
+        QTableWidgetItem *__qtablewidgetitem246 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem246);
+        QTableWidgetItem *__qtablewidgetitem247 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem247);
+        QTableWidgetItem *__qtablewidgetitem248 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem248);
+        QTableWidgetItem *__qtablewidgetitem249 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(3, __qtablewidgetitem249);
+        QTableWidgetItem *__qtablewidgetitem250 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(4, __qtablewidgetitem250);
+        QTableWidgetItem *__qtablewidgetitem251 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(5, __qtablewidgetitem251);
+        QTableWidgetItem *__qtablewidgetitem252 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(6, __qtablewidgetitem252);
+        QTableWidgetItem *__qtablewidgetitem253 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(7, __qtablewidgetitem253);
+        QTableWidgetItem *__qtablewidgetitem254 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem254);
+        QTableWidgetItem *__qtablewidgetitem255 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(9, __qtablewidgetitem255);
+        QTableWidgetItem *__qtablewidgetitem256 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(10, __qtablewidgetitem256);
+        liturgienTable_dsa5->setObjectName(QStringLiteral("liturgienTable_dsa5"));
+        liturgienTable_dsa5->setMinimumSize(QSize(0, 300));
+        liturgienTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        liturgienTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        liturgienTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_25->addWidget(liturgienTable_dsa5);
+
+        horizontalLayout_14 = new QHBoxLayout();
+        horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
+        verticalLayout_27 = new QVBoxLayout();
+        verticalLayout_27->setObjectName(QStringLiteral("verticalLayout_27"));
+        label_26 = new QLabel(tabLiturgien_dsa5);
+        label_26->setObjectName(QStringLiteral("label_26"));
+
+        verticalLayout_27->addWidget(label_26);
+
+        segnungenTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
+        if (segnungenTable_dsa5->columnCount() < 1)
+            segnungenTable_dsa5->setColumnCount(1);
+        segnungenTable_dsa5->setObjectName(QStringLiteral("segnungenTable_dsa5"));
+        segnungenTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        segnungenTable_dsa5->setColumnCount(1);
+        segnungenTable_dsa5->horizontalHeader()->setVisible(false);
+        segnungenTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        segnungenTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_27->addWidget(segnungenTable_dsa5);
+
+        label_28 = new QLabel(tabLiturgien_dsa5);
+        label_28->setObjectName(QStringLiteral("label_28"));
+
+        verticalLayout_27->addWidget(label_28);
+
+        kleriSonderfTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
+        if (kleriSonderfTable_dsa5->columnCount() < 1)
+            kleriSonderfTable_dsa5->setColumnCount(1);
+        kleriSonderfTable_dsa5->setObjectName(QStringLiteral("kleriSonderfTable_dsa5"));
+        kleriSonderfTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        kleriSonderfTable_dsa5->setColumnCount(1);
+        kleriSonderfTable_dsa5->horizontalHeader()->setVisible(false);
+        kleriSonderfTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        kleriSonderfTable_dsa5->verticalHeader()->setVisible(false);
+
+        verticalLayout_27->addWidget(kleriSonderfTable_dsa5);
+
+
+        horizontalLayout_14->addLayout(verticalLayout_27);
+
+        verticalLayout_26 = new QVBoxLayout();
+        verticalLayout_26->setObjectName(QStringLiteral("verticalLayout_26"));
+        leiteigAspektTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
+        if (leiteigAspektTable_dsa5->columnCount() < 2)
+            leiteigAspektTable_dsa5->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem257 = new QTableWidgetItem();
+        leiteigAspektTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem257);
+        QTableWidgetItem *__qtablewidgetitem258 = new QTableWidgetItem();
+        leiteigAspektTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem258);
+        if (leiteigAspektTable_dsa5->rowCount() < 1)
+            leiteigAspektTable_dsa5->setRowCount(1);
+        leiteigAspektTable_dsa5->setObjectName(QStringLiteral("leiteigAspektTable_dsa5"));
+        leiteigAspektTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        leiteigAspektTable_dsa5->setRowCount(1);
+        leiteigAspektTable_dsa5->horizontalHeader()->setDefaultSectionSize(300);
+        leiteigAspektTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        leiteigAspektTable_dsa5->verticalHeader()->setVisible(false);
+        leiteigAspektTable_dsa5->verticalHeader()->setStretchLastSection(true);
+
+        verticalLayout_26->addWidget(leiteigAspektTable_dsa5);
+
+        kTraditionTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
+        if (kTraditionTable_dsa5->columnCount() < 1)
+            kTraditionTable_dsa5->setColumnCount(1);
+        QTableWidgetItem *__qtablewidgetitem259 = new QTableWidgetItem();
+        kTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem259);
+        if (kTraditionTable_dsa5->rowCount() < 1)
+            kTraditionTable_dsa5->setRowCount(1);
+        kTraditionTable_dsa5->setObjectName(QStringLiteral("kTraditionTable_dsa5"));
+        kTraditionTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        kTraditionTable_dsa5->setRowCount(1);
+        kTraditionTable_dsa5->horizontalHeader()->setDefaultSectionSize(300);
+        kTraditionTable_dsa5->horizontalHeader()->setStretchLastSection(true);
+        kTraditionTable_dsa5->verticalHeader()->setVisible(false);
+        kTraditionTable_dsa5->verticalHeader()->setStretchLastSection(true);
+
+        verticalLayout_26->addWidget(kTraditionTable_dsa5);
+
+
+        horizontalLayout_14->addLayout(verticalLayout_26);
+
+
+        verticalLayout_25->addLayout(horizontalLayout_14);
+
+        tabWidget_2->addTab(tabLiturgien_dsa5, QString());
 
         verticalLayout_8->addWidget(tabWidget_2);
 
@@ -1384,9 +1665,9 @@ public:
 
         retranslateUi(CharacterPage);
 
-        CharacterPage->setCurrentIndex(1);
+        CharacterPage->setCurrentIndex(0);
         tabWidget->setCurrentIndex(0);
-        tabWidget_2->setCurrentIndex(3);
+        tabWidget_2->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(CharacterPage);
@@ -1895,6 +2176,66 @@ public:
         ___qtablewidgetitem229->setText(QApplication::translate("CharacterPage", "RW", Q_NULLPTR));
         label_27->setText(QApplication::translate("CharacterPage", "Aktionen", Q_NULLPTR));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tabBesitz_dsa5), QApplication::translate("CharacterPage", "Besitz", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem230 = zauberTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem230->setText(QApplication::translate("CharacterPage", "Zaube / Ritual", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem231 = zauberTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem231->setText(QApplication::translate("CharacterPage", "Probe", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem232 = zauberTable_dsa5->horizontalHeaderItem(2);
+        ___qtablewidgetitem232->setText(QApplication::translate("CharacterPage", "Fw", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem233 = zauberTable_dsa5->horizontalHeaderItem(3);
+        ___qtablewidgetitem233->setText(QApplication::translate("CharacterPage", "Zauberdauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem234 = zauberTable_dsa5->horizontalHeaderItem(4);
+        ___qtablewidgetitem234->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem235 = zauberTable_dsa5->horizontalHeaderItem(5);
+        ___qtablewidgetitem235->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem236 = zauberTable_dsa5->horizontalHeaderItem(6);
+        ___qtablewidgetitem236->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem237 = zauberTable_dsa5->horizontalHeaderItem(7);
+        ___qtablewidgetitem237->setText(QApplication::translate("CharacterPage", "Sf.", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem238 = zauberTable_dsa5->horizontalHeaderItem(8);
+        ___qtablewidgetitem238->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem239 = zauberTable_dsa5->horizontalHeaderItem(9);
+        ___qtablewidgetitem239->setText(QApplication::translate("CharacterPage", "S.", Q_NULLPTR));
+        label_29->setText(QApplication::translate("CharacterPage", "Zaubertricks", Q_NULLPTR));
+        label_30->setText(QApplication::translate("CharacterPage", "Magische Sonderfertigkeiten", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem240 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem240->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem241 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem241->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem242 = mTraditionTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem242->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tabZauber_dsa5), QApplication::translate("CharacterPage", "Zauber und Rituale", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem243 = liturgienTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem243->setText(QApplication::translate("CharacterPage", "Liturgie / Zeremonie", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem244 = liturgienTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem244->setText(QApplication::translate("CharacterPage", "Probe", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem245 = liturgienTable_dsa5->horizontalHeaderItem(2);
+        ___qtablewidgetitem245->setText(QApplication::translate("CharacterPage", "Fw", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem246 = liturgienTable_dsa5->horizontalHeaderItem(3);
+        ___qtablewidgetitem246->setText(QApplication::translate("CharacterPage", "Kosten", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem247 = liturgienTable_dsa5->horizontalHeaderItem(4);
+        ___qtablewidgetitem247->setText(QApplication::translate("CharacterPage", "Liturgiedauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem248 = liturgienTable_dsa5->horizontalHeaderItem(5);
+        ___qtablewidgetitem248->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem249 = liturgienTable_dsa5->horizontalHeaderItem(6);
+        ___qtablewidgetitem249->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem250 = liturgienTable_dsa5->horizontalHeaderItem(7);
+        ___qtablewidgetitem250->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem251 = liturgienTable_dsa5->horizontalHeaderItem(8);
+        ___qtablewidgetitem251->setText(QApplication::translate("CharacterPage", "Sf", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem252 = liturgienTable_dsa5->horizontalHeaderItem(9);
+        ___qtablewidgetitem252->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem253 = liturgienTable_dsa5->horizontalHeaderItem(10);
+        ___qtablewidgetitem253->setText(QApplication::translate("CharacterPage", "S", Q_NULLPTR));
+        label_26->setText(QApplication::translate("CharacterPage", "Segnungen", Q_NULLPTR));
+        label_28->setText(QApplication::translate("CharacterPage", "Klerikale Sonderfertigkeiten", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem254 = leiteigAspektTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem254->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem255 = leiteigAspektTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem255->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem256 = kTraditionTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem256->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
+        tabWidget_2->setTabText(tabWidget_2->indexOf(tabLiturgien_dsa5), QApplication::translate("CharacterPage", "Liturgien und Zeremonien", Q_NULLPTR));
     } // retranslateUi
 
 };

@@ -119,6 +119,30 @@ private slots:
 
     void on_removeTierAktionen_dsa5_clicked();
 
+    void on_addZauber_dsa5_clicked();
+
+    void on_removeZauber_dsa5_clicked();
+
+    void on_addZaubertrick_dsa5_clicked();
+
+    void on_removeZaubertrick_dsa5_clicked();
+
+    void on_addMSonderf_dsa5_clicked();
+
+    void on_removeMSonderf_dsa5_clicked();
+
+    void on_addLitugie_dsa5_clicked();
+
+    void on_removeLiturgie_dsa5_clicked();
+
+    void on_addSegnung_dsa5_clicked();
+
+    void on_removeSegnung_dsa5_clicked();
+
+    void on_addKleriSonderf_dsa5_clicked();
+
+    void on_removeKleriSonderf_dsa5_clicked();
+
 private:
     Ui::CharEditor *ui;
 
