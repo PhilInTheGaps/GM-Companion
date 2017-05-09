@@ -32,14 +32,14 @@ void MainWindow::generateMaps(){
             connect(imageButton, SIGNAL(clicked()), signalMapperMaps, SLOT(map()));
             signalMapperMaps->setMapping(imageButton, mapPath);
 
-            ui->textEdit->append(mapPath+"\n");
+            qDebug() << mapPath;
         }
     }
 }
 
 void MainWindow::setMap(QString mapPath){
     mapsZoomFactor = 1.0;
-    ui->textEdit->append("Map: "+mapPath+"\n");
+    qDebug() << "Map: "+mapPath;
     mapsImageLabel->setPixmap(QPixmap(mapPath));
     mapsImageLabel->adjustSize();
 }

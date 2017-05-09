@@ -1,21 +1,23 @@
 <RCC>
-    <qresource prefix="/icons/png">
+    <qresource>
         <file>resources/icon32.png</file>
         <file>resources/icon64.png</file>
         <file>resources/icon128.png</file>
         <file>resources/icon256.png</file>
-    </qresource>
-    <qresource prefix="/icons/ico">
         <file>resources/icon256.ico</file>
-    </qresource>
-    <qresource prefix="/splash">
         <file>resources/splash.jpg</file>
-    </qresource>
-    <qresource prefix="/radio/RadioRivendell">
         <file>resources/radio/logo-radio-rivendell.png</file>
         <file>resources/radio/radioRivendell01.png</file>
-    </qresource>
-    <qresource prefix="/radio/RadioMMORPG_de">
         <file>resources/radio/logo-mmorp-radio-de.png</file>
+        <file>resources/mediaIcons/play.png</file>
+        <file>resources/mediaIcons/pause.png</file>
+        <file>resources/mediaIcons/playBackwards.png</file>
+        <file>resources/mediaIcons/seekBack.png</file>
+        <file>resources/mediaIcons/seekForward.png</file>
+        <file>resources/mediaIcons/shuffleOff.png</file>
+        <file>resources/mediaIcons/shuffleOn.png</file>
+        <file>resources/mediaIcons/skipBack.png</file>
+        <file>resources/mediaIcons/skipForward.png</file>
+        <file>resources/mediaIcons/stop.png</file>
     </qresource>
 </RCC>

@@ -217,15 +217,25 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_resources.cpp
 release\qrc_resources.cpp: ..\GM-Companion\resources.qrc \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\rcc.exe \
-		..\GM-Companion\resources\splash.jpg \
 		..\GM-Companion\resources\icon64.png \
+		..\GM-Companion\resources\splash.jpg \
 		..\GM-Companion\resources\icon128.png \
+		..\GM-Companion\resources\icon256.ico \
 		..\GM-Companion\resources\icon32.png \
 		..\GM-Companion\resources\icon256.png \
-		..\GM-Companion\resources\icon256.ico \
+		..\GM-Companion\resources\mediaIcons\stop.png \
+		..\GM-Companion\resources\mediaIcons\play.png \
+		..\GM-Companion\resources\mediaIcons\shuffleOn.png \
+		..\GM-Companion\resources\mediaIcons\seekBack.png \
+		..\GM-Companion\resources\mediaIcons\skipBack.png \
+		..\GM-Companion\resources\mediaIcons\shuffleOff.png \
+		..\GM-Companion\resources\mediaIcons\seekForward.png \
+		..\GM-Companion\resources\mediaIcons\pause.png \
+		..\GM-Companion\resources\mediaIcons\playBackwards.png \
+		..\GM-Companion\resources\mediaIcons\skipForward.png \
 		..\GM-Companion\resources\radio\radioRivendell01.png \
-		..\GM-Companion\resources\radio\logo-radio-rivendell.png \
-		..\GM-Companion\resources\radio\logo-mmorp-radio-de.png
+		..\GM-Companion\resources\radio\logo-mmorp-radio-de.png \
+		..\GM-Companion\resources\radio\logo-radio-rivendell.png
 	C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\bin\rcc.exe -name resources ..\GM-Companion\resources.qrc -o release\qrc_resources.cpp
 
 compiler_moc_predefs_make_all: release\moc_predefs.h
@@ -644,6 +654,7 @@ release\moc_mainwindow.cpp: C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\Qt
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		..\GM-Companion\settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -1504,6 +1515,7 @@ release\main.obj: ..\GM-Companion\main.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -1929,6 +1941,7 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -2859,6 +2872,7 @@ release\characters.obj: ..\GM-Companion\characters.cpp ../GM-Companion/character
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -2875,8 +2889,7 @@ release\characters.obj: ..\GM-Companion\characters.cpp ../GM-Companion/character
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstackedwidget.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QListWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistwidget.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlistview.h
 
 release\functions.obj: ..\GM-Companion\functions.cpp ../GM-Companion/functions.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QStringList \
@@ -3599,6 +3612,7 @@ release\music.obj: ..\GM-Companion\music.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -4051,6 +4065,7 @@ release\sound.obj: ..\GM-Companion\sound.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -4503,6 +4518,7 @@ release\names.obj: ..\GM-Companion\names.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -4955,6 +4971,7 @@ release\radio.obj: ..\GM-Companion\radio.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \
@@ -5407,6 +5424,7 @@ release\maps.obj: ..\GM-Companion\maps.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbar.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qwinthumbnailtoolbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWinExtras\qtwinextrasversion.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug \
 		../GM-Companion/settingsmanager.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDir \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QSettings \

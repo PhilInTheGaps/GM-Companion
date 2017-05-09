@@ -20,7 +20,7 @@
    <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 06</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset>
     <normaloff>:/icons/ico/resources/icon256.ico</normaloff>:/icons/ico/resources/icon256.ico</iconset>
   </property>
   <property name="autoFillBackground">
@@ -301,8 +301,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Play (Music)</string>
+          </property>
           <property name="text">
-           <string>Play</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
           <property name="autoDefault">
            <bool>false</bool>
@@ -342,8 +355,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Pause (Music)</string>
+          </property>
           <property name="text">
-           <string>Pause</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -374,8 +400,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Rewind (Music)</string>
+          </property>
           <property name="text">
-           <string>Replay</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -406,8 +445,47 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Next (Music)</string>
+          </property>
           <property name="text">
-           <string>Next</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="musicRandomButton">
+          <property name="toolTip">
+           <string>Toggle Music Shuffle (bright = on, dark = off)</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -494,8 +572,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Play (Sound)</string>
+          </property>
           <property name="text">
-           <string>Play</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -526,8 +617,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Pause (Sound)</string>
+          </property>
           <property name="text">
-           <string>Pause</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -558,8 +662,21 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Rewind (Sound)</string>
+          </property>
           <property name="text">
-           <string>Replay</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -590,8 +707,47 @@ QScrollBar::sub-line:vertical {
             <bold>true</bold>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Next (Sound)</string>
+          </property>
           <property name="text">
-           <string>Next</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="soundRandomButton">
+          <property name="toolTip">
+           <string>Toggle Sound Shuffle (bright = on, dark = off)</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -912,14 +1068,14 @@ QScrollBar::sub-line:vertical {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="pageGMHelp">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTabWidget" name="tabWidgetGMHelp">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabDice">
            <attribute name="title">
@@ -1125,37 +1281,6 @@ p, li { white-space: pre-wrap; }
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tabWebTest">
-           <attribute name="title">
-            <string>Page</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_3"/>
-          </widget>
-          <widget class="QWidget" name="tab_3">
-           <attribute name="title">
-            <string>Debug / Test Page</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>GM-Help</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="textEdit">
-              <property name="html">
-               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;DEBUG TEXT-EDIT:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </widget>
         </item>
        </layout>
@@ -1321,7 +1446,7 @@ p, li { white-space: pre-wrap; }
              <x>0</x>
              <y>0</y>
              <width>968</width>
-             <height>628</height>
+             <height>634</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1486,7 +1611,7 @@ background-color: rgb(85, 85, 85);
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap resource="resources.qrc">:/radio/RadioRivendell/resources/radio/logo-radio-rivendell.png</pixmap>
+                      <pixmap resource="resources.qrc">:/resources/radio/logo-radio-rivendell.png</pixmap>
                      </property>
                      <property name="scaledContents">
                       <bool>true</bool>
@@ -1702,7 +1827,7 @@ background-color: rgb(85, 85, 85);
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap resource="resources.qrc">:/radio/RadioMMORPG_de/resources/radio/logo-mmorp-radio-de.png</pixmap>
+                      <pixmap resource="resources.qrc">:/resources/radio/logo-mmorp-radio-de.png</pixmap>
                      </property>
                      <property name="scaledContents">
                       <bool>true</bool>
@@ -1770,7 +1895,80 @@ p, li { white-space: pre-wrap; }
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageWelcome"/>
+      <widget class="QWidget" name="pageWelcome">
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>50</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+            <underline>false</underline>
+            <strikeout>false</strikeout>
+            <stylestrategy>PreferAntialias</stylestrategy>
+            <kerning>true</kerning>
+           </font>
+          </property>
+          <property name="text">
+           <string>Welcome!</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Version: Beta 3.0</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Changelog:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTextEdit" name="textEdit_4">
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Changed media control buttons to have icons instead of text&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added support for webradios&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added music controls when hovering icon in taskbar&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added name generator&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added character overview&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Improved Maps-Viewer with zoom function&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Greatly improved memory usage&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to check for updates&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to open wiki&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to report bugs&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item>

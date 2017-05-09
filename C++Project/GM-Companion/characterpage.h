@@ -74,6 +74,18 @@ public:
     QList<QStringList>* tierAktionen_dsa5;
     QList<QStringList>* tierSonderf_dsa5;
 
+    QList<QStringList>* zauber_dsa5;
+    QList<QStringList>* zaubertricks_dsa5;
+    QList<QStringList>* magischeSonderfertigkeiten_dsa5;
+    QList<QStringList>* leiteigenschaftMerkmal_dsa5;
+    QList<QStringList>* mTradition_dsa5;
+
+    QList<QStringList>* liturgien_dsa5;
+    QList<QStringList>* segnungen_dsa5;
+    QList<QStringList>* klerikaleSonderfertigkeiten_dsa5;
+    QList<QStringList>* leiteigenschaftAspekt_dsa5;
+    QList<QStringList>* kTradition_dsa5;
+
 private:
     Ui::CharacterPage *ui;
 

@@ -16,16 +16,11 @@ void MainWindow::generateNamesTab(){
 
             folder = QDir::currentPath()+"/names/"+folder;
 
-            QTabWidget *tabWidget = new QTabWidget;
-            frameLayout->addWidget(tabWidget);
-
-
             QStringList subfolderList = getFolders(folder);
 
             for (QString subfolder : subfolderList){
                 if (!subfolder.contains(".")){
                     QFrame *subFrame = new QFrame;
-                    //tabWidget->addTab(subFrame, subfolder);
                     frameLayout->addWidget(subFrame);
 
                     QHBoxLayout *hbox = new QHBoxLayout;
@@ -34,33 +29,35 @@ void MainWindow::generateNamesTab(){
                     QLabel *subfolderLabel = new QLabel(subfolder);
                     hbox->addWidget(subfolderLabel);
 
-                    QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum);
-                    hbox->addSpacerItem(spacer);
-
                     QFrame *buttonFrame = new QFrame;
                     QHBoxLayout *buttonLayout = new QHBoxLayout;
                     buttonFrame->setLayout(buttonLayout);
                     buttonFrame->setMaximumWidth(200);
                     hbox->addWidget(buttonFrame);
 
-                    QPushButton *maleButton = new QPushButton;
-                    maleButton->setText("Male");
-                    buttonLayout->addWidget(maleButton);
+                    if (QFile(folder+"/"+subfolder+"/male.txt").exists()){
+                        QPushButton *maleButton = new QPushButton;
+                        maleButton->setMaximumWidth(200);
+                        maleButton->setText("Male");
+                        buttonLayout->addWidget(maleButton);
 
-                    QPushButton *femaleButton = new QPushButton;
-                    femaleButton->setText("Female");
-                    buttonLayout->addWidget(femaleButton);
+                        QString maleFile = folder+"/"+subfolder+"/male.txt";
 
-                    QStringList files = getFiles(folder+"/"+subfolder);
+                        connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
+                        signalMapperNames->setMapping(maleButton, maleFile);
+                    }
 
-                    QString maleFile = folder+"/"+subfolder+"/male.txt";
-                    QString femaleFile = folder+"/"+subfolder+"/female.txt";
+                    if (QFile(folder+"/"+subfolder+"/female.txt").exists()){
+                        QPushButton *femaleButton = new QPushButton;
+                        femaleButton->setMaximumWidth(200);
+                        femaleButton->setText("Female");
+                        buttonLayout->addWidget(femaleButton);
 
-                    connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                    signalMapperNames->setMapping(maleButton, maleFile);
+                        QString femaleFile = folder+"/"+subfolder+"/female.txt";
 
-                    connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                    signalMapperNames->setMapping(femaleButton, femaleFile);
+                        connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
+                        signalMapperNames->setMapping(femaleButton, femaleFile);
+                    }
                 }
             }
             QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -83,21 +80,31 @@ void MainWindow::on_generateNames(QString file){
     QStringList names = namesAsString.split(",");
     nameFile.close();
 
-    QFile surnamesFile(surnamesPath);
-    surnamesFile.open(QIODevice::ReadOnly);
-    QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
-    ui->textEdit->append(surnamesAsString);
-    QStringList surnames = surnamesAsString.split(",");
-    surnamesFile.close();
+    QStringList surnames;
+
+    if (QFile(surnamesPath).exists()){
+        QFile surnamesFile(surnamesPath);
+        surnamesFile.open(QIODevice::ReadOnly);
+        QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
+        qDebug() << surnamesAsString;
+        surnames = surnamesAsString.split(",");
+        surnamesFile.close();
+    }
 
     for (int i = 0; i<20; i++){
         QString name = names.at(rand() % names.size());
-        QString surname = surnames.at(rand() % surnames.size());
 
         if (name.at(0)==" "){
             name = name.mid(1);
         }
 
-        ui->nameTextEdit->append(name+" "+surname);
+        QString displayName = name;
+
+        if (QFile(surnamesPath).exists()){
+            QString surname = surnames.at(rand() % surnames.size());
+            displayName.append(" "+surname);
+        }
+
+        ui->nameTextEdit->append(displayName);
     }
 }

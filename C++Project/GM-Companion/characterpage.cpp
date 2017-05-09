@@ -156,6 +156,35 @@ void CharacterPage::updateUi(){
         // Tier Sonderf
         writeTable(tierSonderf_dsa5, 1, ui->tierSonderfTable_dsa5);
 
+        // Zauber
+        writeTable(zauber_dsa5, 11, ui->zauberTable_dsa5, true);
+
+        // Zaubertricks
+        writeTable(zaubertricks_dsa5, 1, ui->zaubertricksTable_dsa5, true);
+
+        // Magische Sonderfertigkeiten
+        writeTable(magischeSonderfertigkeiten_dsa5, 1, ui->magiSonderfTable_dsa5, true);
+
+        // Leiteigenschaft / Merkmal
+        writeTable(leiteigenschaftMerkmal_dsa5, 2, ui->leiteigMerkmalTable_dsa5);
+
+        // Magische Tradition
+        writeTable(mTradition_dsa5, 1, ui->mTraditionTable_dsa5);
+
+        // Liturgien
+        writeTable(liturgien_dsa5, 11, ui->liturgienTable_dsa5, true);
+
+        // Segnungen
+        writeTable(segnungen_dsa5, 1, ui->segnungenTable_dsa5, true);
+
+        // Klerikale Sonderfertigkeiten
+        writeTable(klerikaleSonderfertigkeiten_dsa5, 1, ui->kleriSonderfTable_dsa5, true);
+
+        // Leiteigenschaft / Aspekt
+        writeTable(leiteigenschaftAspekt_dsa5, 2, ui->leiteigAspektTable_dsa5);
+
+        // Klerikale Tradition
+        writeTable(kTradition_dsa5, 1, ui->kTraditionTable_dsa5);
 
         break;
     }
