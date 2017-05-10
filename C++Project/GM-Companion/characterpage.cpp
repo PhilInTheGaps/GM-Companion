@@ -102,9 +102,11 @@ void CharacterPage::updateUi(){
         // Allgemeine Werte
         writeTable(allgemein_dsa5, 4, ui->allgemeinTable_dsa5);
 
-        // Fertigkeiten
+        // Fertigkeiten        
         writeTable(fertigkeiten1_dsa5, 6, ui->fertigkeiten1Table_dsa5);
         writeTable(fertigkeiten2_dsa5, 6, ui->fertigkeiten2Table_dsa5);
+        ui->fertigkeiten1Table_dsa5->resizeColumnsToContents();
+        ui->fertigkeiten2Table_dsa5->resizeColumnsToContents();
 
         // Sprachen
         writeTable(sprachen_dsa5, 1, ui->sprachenTable_dsa5, true);
@@ -114,25 +116,26 @@ void CharacterPage::updateUi(){
 
         // Kampftechniken
         writeTable(ktw_dsa5, 5, ui->ktwTable_dsa5);
+        ui->ktwTable_dsa5->resizeColumnsToContents();
 
         // LEP
         writeTable(lep_dsa5, 2, ui->lepTable_dsa5);
 
-        // LEP ProgressBar
-//        ui->lepProgressBar_dsa5->setMaximum(QString::number(ui->lepTable_dsa5->item(0, 0)->text()));
-//        ui->lepProgressBar_dsa5->setValue(QString::number(ui->lepTable_dsa5->item(0, 1)->text()));
-
         // Nahkampfwaffen
         writeTable(nahkampfwaffen_dsa5, 9, ui->nahkampfwaffenTable_dsa5, true);
+        ui->nahkampfwaffenTable_dsa5->resizeColumnsToContents();
 
         // Fernkampfwaffen
         writeTable(fernkampfwaffen_dsa5, 8, ui->fernkampfwaffenTable_dsa5, true);
+        ui->fernkampfwaffenTable_dsa5->resizeColumnsToContents();
 
         // Rüstungen
         writeTable(ruestungen_dsa5, 6, ui->ruestungenTable_dsa5, true);
+        ui->ruestungenTable_dsa5->resizeColumnsToContents();
 
         // Schild / Parierwaffe
         writeTable(schild_dsa5, 4, ui->schildTable_dsa5, true);
+        ui->schildTable_dsa5->resizeColumnsToContents();
 
         // Kampfsonderfertigkeiten
         writeTable(kSonderf_dsa5, 1, ui->kSonderfTable_dsa5, true);
@@ -140,6 +143,8 @@ void CharacterPage::updateUi(){
         // Ausrüstung
         writeTable(ausruestung1_dsa5, 3, ui->ausruestung1Table_dsa5, true);
         writeTable(ausruestung2_dsa5, 3, ui->ausruestung2Table_dsa5, true);
+        ui->ausruestung1Table_dsa5->resizeColumnsToContents();
+        ui->ausruestung2Table_dsa5->resizeColumnsToContents();
 
         // Geldbeutel
         writeTable(geld_dsa5, 1, ui->geldTable_dsa5);
@@ -149,6 +154,7 @@ void CharacterPage::updateUi(){
 
         // Tier Angriff
         writeTable(tierAngriff_dsa5, 5, ui->tierAngrifTable_dsa5);
+        ui->tierAngrifTable_dsa5->resizeColumnsToContents();
 
         // Tier Aktionen
         writeTable(tierAktionen_dsa5, 1, ui->tierAktionen_dsa5);
@@ -158,6 +164,7 @@ void CharacterPage::updateUi(){
 
         // Zauber
         writeTable(zauber_dsa5, 11, ui->zauberTable_dsa5, true);
+        ui->zauberTable_dsa5->resizeColumnsToContents();
 
         // Zaubertricks
         writeTable(zaubertricks_dsa5, 1, ui->zaubertricksTable_dsa5, true);
@@ -173,6 +180,7 @@ void CharacterPage::updateUi(){
 
         // Liturgien
         writeTable(liturgien_dsa5, 11, ui->liturgienTable_dsa5, true);
+        ui->liturgienTable_dsa5->resizeColumnsToContents();
 
         // Segnungen
         writeTable(segnungen_dsa5, 1, ui->segnungenTable_dsa5, true);

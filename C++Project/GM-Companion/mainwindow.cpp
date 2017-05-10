@@ -39,6 +39,11 @@
 #include <QFileSystemWatcher>
 #include <QtWinExtras>
 #include <QDebug>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlTableModel>
+#include <QSqlRecord>
+#include <QSqlQueryModel>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -53,6 +58,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     signalMapperSound = new QSignalMapper(this);
     signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
+
+    // TESTING DATABASE
+    QString dbpath = "music.db";
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(dbpath);
+    db.open();
+    qDebug() << "Database Initialized";
+
+    QSqlQueryModel* model = new QSqlQueryModel();
+
+    QSqlQuery* query = new QSqlQuery(db);
+
+    query->prepare("SELECT * FROM songs ORDER BY album");
+    query->exec();
+
+    model->setQuery(*query);
+    ui->databaseView->setModel(model);
+
+    db.close();
+
+    qDebug() << "Database Row Count: " << model->rowCount();
+
+
+
 
     // Generates the dice page
     diceManager = new DiceManager;

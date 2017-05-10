@@ -1073,6 +1073,7 @@ public:
         kSonderfTable_dsa5->setObjectName(QStringLiteral("kSonderfTable_dsa5"));
         kSonderfTable_dsa5->setMinimumSize(QSize(0, 200));
         kSonderfTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        kSonderfTable_dsa5->horizontalHeader()->setVisible(false);
         kSonderfTable_dsa5->horizontalHeader()->setStretchLastSection(true);
         kSonderfTable_dsa5->verticalHeader()->setVisible(false);
 
@@ -1420,8 +1421,8 @@ public:
         verticalLayout_30 = new QVBoxLayout(tabZauber_dsa5);
         verticalLayout_30->setObjectName(QStringLiteral("verticalLayout_30"));
         zauberTable_dsa5 = new QTableWidget(tabZauber_dsa5);
-        if (zauberTable_dsa5->columnCount() < 10)
-            zauberTable_dsa5->setColumnCount(10);
+        if (zauberTable_dsa5->columnCount() < 11)
+            zauberTable_dsa5->setColumnCount(11);
         QTableWidgetItem *__qtablewidgetitem233 = new QTableWidgetItem();
         zauberTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem233);
         QTableWidgetItem *__qtablewidgetitem234 = new QTableWidgetItem();
@@ -1442,6 +1443,8 @@ public:
         zauberTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem241);
         QTableWidgetItem *__qtablewidgetitem242 = new QTableWidgetItem();
         zauberTable_dsa5->setHorizontalHeaderItem(9, __qtablewidgetitem242);
+        QTableWidgetItem *__qtablewidgetitem243 = new QTableWidgetItem();
+        zauberTable_dsa5->setHorizontalHeaderItem(10, __qtablewidgetitem243);
         zauberTable_dsa5->setObjectName(QStringLiteral("zauberTable_dsa5"));
         zauberTable_dsa5->setMinimumSize(QSize(0, 300));
         zauberTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -1496,10 +1499,10 @@ public:
         leiteigMerkmalTable_dsa5 = new QTableWidget(tabZauber_dsa5);
         if (leiteigMerkmalTable_dsa5->columnCount() < 2)
             leiteigMerkmalTable_dsa5->setColumnCount(2);
-        QTableWidgetItem *__qtablewidgetitem243 = new QTableWidgetItem();
-        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem243);
         QTableWidgetItem *__qtablewidgetitem244 = new QTableWidgetItem();
-        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem244);
+        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem244);
+        QTableWidgetItem *__qtablewidgetitem245 = new QTableWidgetItem();
+        leiteigMerkmalTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem245);
         if (leiteigMerkmalTable_dsa5->rowCount() < 1)
             leiteigMerkmalTable_dsa5->setRowCount(1);
         leiteigMerkmalTable_dsa5->setObjectName(QStringLiteral("leiteigMerkmalTable_dsa5"));
@@ -1515,8 +1518,8 @@ public:
         mTraditionTable_dsa5 = new QTableWidget(tabZauber_dsa5);
         if (mTraditionTable_dsa5->columnCount() < 1)
             mTraditionTable_dsa5->setColumnCount(1);
-        QTableWidgetItem *__qtablewidgetitem245 = new QTableWidgetItem();
-        mTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem245);
+        QTableWidgetItem *__qtablewidgetitem246 = new QTableWidgetItem();
+        mTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem246);
         if (mTraditionTable_dsa5->rowCount() < 1)
             mTraditionTable_dsa5->setRowCount(1);
         mTraditionTable_dsa5->setObjectName(QStringLiteral("mTraditionTable_dsa5"));
@@ -1542,28 +1545,28 @@ public:
         liturgienTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
         if (liturgienTable_dsa5->columnCount() < 11)
             liturgienTable_dsa5->setColumnCount(11);
-        QTableWidgetItem *__qtablewidgetitem246 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem246);
         QTableWidgetItem *__qtablewidgetitem247 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem247);
+        liturgienTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem247);
         QTableWidgetItem *__qtablewidgetitem248 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem248);
+        liturgienTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem248);
         QTableWidgetItem *__qtablewidgetitem249 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(3, __qtablewidgetitem249);
+        liturgienTable_dsa5->setHorizontalHeaderItem(2, __qtablewidgetitem249);
         QTableWidgetItem *__qtablewidgetitem250 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(4, __qtablewidgetitem250);
+        liturgienTable_dsa5->setHorizontalHeaderItem(3, __qtablewidgetitem250);
         QTableWidgetItem *__qtablewidgetitem251 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(5, __qtablewidgetitem251);
+        liturgienTable_dsa5->setHorizontalHeaderItem(4, __qtablewidgetitem251);
         QTableWidgetItem *__qtablewidgetitem252 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(6, __qtablewidgetitem252);
+        liturgienTable_dsa5->setHorizontalHeaderItem(5, __qtablewidgetitem252);
         QTableWidgetItem *__qtablewidgetitem253 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(7, __qtablewidgetitem253);
+        liturgienTable_dsa5->setHorizontalHeaderItem(6, __qtablewidgetitem253);
         QTableWidgetItem *__qtablewidgetitem254 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem254);
+        liturgienTable_dsa5->setHorizontalHeaderItem(7, __qtablewidgetitem254);
         QTableWidgetItem *__qtablewidgetitem255 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(9, __qtablewidgetitem255);
+        liturgienTable_dsa5->setHorizontalHeaderItem(8, __qtablewidgetitem255);
         QTableWidgetItem *__qtablewidgetitem256 = new QTableWidgetItem();
-        liturgienTable_dsa5->setHorizontalHeaderItem(10, __qtablewidgetitem256);
+        liturgienTable_dsa5->setHorizontalHeaderItem(9, __qtablewidgetitem256);
+        QTableWidgetItem *__qtablewidgetitem257 = new QTableWidgetItem();
+        liturgienTable_dsa5->setHorizontalHeaderItem(10, __qtablewidgetitem257);
         liturgienTable_dsa5->setObjectName(QStringLiteral("liturgienTable_dsa5"));
         liturgienTable_dsa5->setMinimumSize(QSize(0, 300));
         liturgienTable_dsa5->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -1618,10 +1621,10 @@ public:
         leiteigAspektTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
         if (leiteigAspektTable_dsa5->columnCount() < 2)
             leiteigAspektTable_dsa5->setColumnCount(2);
-        QTableWidgetItem *__qtablewidgetitem257 = new QTableWidgetItem();
-        leiteigAspektTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem257);
         QTableWidgetItem *__qtablewidgetitem258 = new QTableWidgetItem();
-        leiteigAspektTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem258);
+        leiteigAspektTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem258);
+        QTableWidgetItem *__qtablewidgetitem259 = new QTableWidgetItem();
+        leiteigAspektTable_dsa5->setHorizontalHeaderItem(1, __qtablewidgetitem259);
         if (leiteigAspektTable_dsa5->rowCount() < 1)
             leiteigAspektTable_dsa5->setRowCount(1);
         leiteigAspektTable_dsa5->setObjectName(QStringLiteral("leiteigAspektTable_dsa5"));
@@ -1637,8 +1640,8 @@ public:
         kTraditionTable_dsa5 = new QTableWidget(tabLiturgien_dsa5);
         if (kTraditionTable_dsa5->columnCount() < 1)
             kTraditionTable_dsa5->setColumnCount(1);
-        QTableWidgetItem *__qtablewidgetitem259 = new QTableWidgetItem();
-        kTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem259);
+        QTableWidgetItem *__qtablewidgetitem260 = new QTableWidgetItem();
+        kTraditionTable_dsa5->setHorizontalHeaderItem(0, __qtablewidgetitem260);
         if (kTraditionTable_dsa5->rowCount() < 1)
             kTraditionTable_dsa5->setRowCount(1);
         kTraditionTable_dsa5->setObjectName(QStringLiteral("kTraditionTable_dsa5"));
@@ -2183,58 +2186,60 @@ public:
         QTableWidgetItem *___qtablewidgetitem232 = zauberTable_dsa5->horizontalHeaderItem(2);
         ___qtablewidgetitem232->setText(QApplication::translate("CharacterPage", "Fw", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem233 = zauberTable_dsa5->horizontalHeaderItem(3);
-        ___qtablewidgetitem233->setText(QApplication::translate("CharacterPage", "Zauberdauer", Q_NULLPTR));
+        ___qtablewidgetitem233->setText(QApplication::translate("CharacterPage", "Kosten", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem234 = zauberTable_dsa5->horizontalHeaderItem(4);
-        ___qtablewidgetitem234->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
+        ___qtablewidgetitem234->setText(QApplication::translate("CharacterPage", "Zauberdauer", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem235 = zauberTable_dsa5->horizontalHeaderItem(5);
-        ___qtablewidgetitem235->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
+        ___qtablewidgetitem235->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem236 = zauberTable_dsa5->horizontalHeaderItem(6);
-        ___qtablewidgetitem236->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
+        ___qtablewidgetitem236->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem237 = zauberTable_dsa5->horizontalHeaderItem(7);
-        ___qtablewidgetitem237->setText(QApplication::translate("CharacterPage", "Sf.", Q_NULLPTR));
+        ___qtablewidgetitem237->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem238 = zauberTable_dsa5->horizontalHeaderItem(8);
-        ___qtablewidgetitem238->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
+        ___qtablewidgetitem238->setText(QApplication::translate("CharacterPage", "Sf.", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem239 = zauberTable_dsa5->horizontalHeaderItem(9);
-        ___qtablewidgetitem239->setText(QApplication::translate("CharacterPage", "S.", Q_NULLPTR));
+        ___qtablewidgetitem239->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem240 = zauberTable_dsa5->horizontalHeaderItem(10);
+        ___qtablewidgetitem240->setText(QApplication::translate("CharacterPage", "S.", Q_NULLPTR));
         label_29->setText(QApplication::translate("CharacterPage", "Zaubertricks", Q_NULLPTR));
         label_30->setText(QApplication::translate("CharacterPage", "Magische Sonderfertigkeiten", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem240 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(0);
-        ___qtablewidgetitem240->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem241 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(1);
-        ___qtablewidgetitem241->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem242 = mTraditionTable_dsa5->horizontalHeaderItem(0);
-        ___qtablewidgetitem242->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem241 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem241->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem242 = leiteigMerkmalTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem242->setText(QApplication::translate("CharacterPage", "Merkmal", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem243 = mTraditionTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem243->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tabZauber_dsa5), QApplication::translate("CharacterPage", "Zauber und Rituale", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem243 = liturgienTable_dsa5->horizontalHeaderItem(0);
-        ___qtablewidgetitem243->setText(QApplication::translate("CharacterPage", "Liturgie / Zeremonie", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem244 = liturgienTable_dsa5->horizontalHeaderItem(1);
-        ___qtablewidgetitem244->setText(QApplication::translate("CharacterPage", "Probe", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem245 = liturgienTable_dsa5->horizontalHeaderItem(2);
-        ___qtablewidgetitem245->setText(QApplication::translate("CharacterPage", "Fw", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem246 = liturgienTable_dsa5->horizontalHeaderItem(3);
-        ___qtablewidgetitem246->setText(QApplication::translate("CharacterPage", "Kosten", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem247 = liturgienTable_dsa5->horizontalHeaderItem(4);
-        ___qtablewidgetitem247->setText(QApplication::translate("CharacterPage", "Liturgiedauer", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem248 = liturgienTable_dsa5->horizontalHeaderItem(5);
-        ___qtablewidgetitem248->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem249 = liturgienTable_dsa5->horizontalHeaderItem(6);
-        ___qtablewidgetitem249->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem250 = liturgienTable_dsa5->horizontalHeaderItem(7);
-        ___qtablewidgetitem250->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem251 = liturgienTable_dsa5->horizontalHeaderItem(8);
-        ___qtablewidgetitem251->setText(QApplication::translate("CharacterPage", "Sf", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem252 = liturgienTable_dsa5->horizontalHeaderItem(9);
-        ___qtablewidgetitem252->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem253 = liturgienTable_dsa5->horizontalHeaderItem(10);
-        ___qtablewidgetitem253->setText(QApplication::translate("CharacterPage", "S", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem244 = liturgienTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem244->setText(QApplication::translate("CharacterPage", "Liturgie / Zeremonie", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem245 = liturgienTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem245->setText(QApplication::translate("CharacterPage", "Probe", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem246 = liturgienTable_dsa5->horizontalHeaderItem(2);
+        ___qtablewidgetitem246->setText(QApplication::translate("CharacterPage", "Fw", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem247 = liturgienTable_dsa5->horizontalHeaderItem(3);
+        ___qtablewidgetitem247->setText(QApplication::translate("CharacterPage", "Kosten", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem248 = liturgienTable_dsa5->horizontalHeaderItem(4);
+        ___qtablewidgetitem248->setText(QApplication::translate("CharacterPage", "Liturgiedauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem249 = liturgienTable_dsa5->horizontalHeaderItem(5);
+        ___qtablewidgetitem249->setText(QApplication::translate("CharacterPage", "Reichweite", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem250 = liturgienTable_dsa5->horizontalHeaderItem(6);
+        ___qtablewidgetitem250->setText(QApplication::translate("CharacterPage", "Wirkungsdauer", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem251 = liturgienTable_dsa5->horizontalHeaderItem(7);
+        ___qtablewidgetitem251->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem252 = liturgienTable_dsa5->horizontalHeaderItem(8);
+        ___qtablewidgetitem252->setText(QApplication::translate("CharacterPage", "Sf", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem253 = liturgienTable_dsa5->horizontalHeaderItem(9);
+        ___qtablewidgetitem253->setText(QApplication::translate("CharacterPage", "Wirkung", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem254 = liturgienTable_dsa5->horizontalHeaderItem(10);
+        ___qtablewidgetitem254->setText(QApplication::translate("CharacterPage", "S", Q_NULLPTR));
         label_26->setText(QApplication::translate("CharacterPage", "Segnungen", Q_NULLPTR));
         label_28->setText(QApplication::translate("CharacterPage", "Klerikale Sonderfertigkeiten", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem254 = leiteigAspektTable_dsa5->horizontalHeaderItem(0);
-        ___qtablewidgetitem254->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem255 = leiteigAspektTable_dsa5->horizontalHeaderItem(1);
-        ___qtablewidgetitem255->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem256 = kTraditionTable_dsa5->horizontalHeaderItem(0);
-        ___qtablewidgetitem256->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem255 = leiteigAspektTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem255->setText(QApplication::translate("CharacterPage", "Leiteigenschaft", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem256 = leiteigAspektTable_dsa5->horizontalHeaderItem(1);
+        ___qtablewidgetitem256->setText(QApplication::translate("CharacterPage", "Aspekt", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem257 = kTraditionTable_dsa5->horizontalHeaderItem(0);
+        ___qtablewidgetitem257->setText(QApplication::translate("CharacterPage", "Tradition", Q_NULLPTR));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tabLiturgien_dsa5), QApplication::translate("CharacterPage", "Liturgien und Zeremonien", Q_NULLPTR));
     } // retranslateUi
 

@@ -1694,6 +1694,9 @@
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
+              <attribute name="horizontalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -2343,6 +2346,11 @@
           <column>
            <property name="text">
             <string>Fw</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Kosten</string>
            </property>
           </column>
           <column>
