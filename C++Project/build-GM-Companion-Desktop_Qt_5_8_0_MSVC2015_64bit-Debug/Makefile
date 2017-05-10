@@ -252,6 +252,7 @@ Makefile: ..\GM-Companion\GM-Companion.pro C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc201
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5WinExtras.prl \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Gui.prl \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Network.prl \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Sql.prl \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Core.prl
 	$(QMAKE) -o Makefile ..\GM-Companion\GM-Companion.pro -spec win32-msvc2015 "CONFIG+=debug" "CONFIG+=qml_debug"
 C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\mkspecs\features\spec_pre.prf:
@@ -433,6 +434,7 @@ C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Widgets.prl:
 C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5WinExtras.prl:
 C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Gui.prl:
 C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Network.prl:
+C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Sql.prl:
 C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\lib\Qt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ..\GM-Companion\GM-Companion.pro -spec win32-msvc2015 "CONFIG+=debug" "CONFIG+=qml_debug"

@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
@@ -307,6 +308,47 @@ public:
     QVBoxLayout *verticalLayout_46;
     QTableWidget *leiteigAspektTable_dsa5;
     QTableWidget *kleriTraditionTable_dsa5;
+    QWidget *pageSIFRP;
+    QVBoxLayout *verticalLayout_45;
+    QTabWidget *tabWidget_3;
+    QWidget *tab_5;
+    QVBoxLayout *verticalLayout_49;
+    QHBoxLayout *horizontalLayout_39;
+    QLabel *label_20;
+    QLineEdit *lineEdit;
+    QHBoxLayout *horizontalLayout_45;
+    QLabel *label_41;
+    QLineEdit *lineEdit_2;
+    QLabel *label_38;
+    QLineEdit *lineEdit_3;
+    QLabel *label_35;
+    QLineEdit *lineEdit_4;
+    QLabel *label_42;
+    QHBoxLayout *horizontalLayout_49;
+    QTableWidget *tableWidget;
+    QTableWidget *tableWidget_2;
+    QHBoxLayout *horizontalLayout_50;
+    QLabel *label_43;
+    QLineEdit *lineEdit_5;
+    QHBoxLayout *horizontalLayout_51;
+    QVBoxLayout *verticalLayout_51;
+    QTableWidget *tableWidget_3;
+    QHBoxLayout *horizontalLayout_52;
+    QPushButton *pushButton_2;
+    QPushButton *pushButton;
+    QHBoxLayout *horizontalLayout_53;
+    QLabel *label_46;
+    QCheckBox *checkBox_8;
+    QCheckBox *checkBox_7;
+    QCheckBox *checkBox_6;
+    QCheckBox *checkBox_5;
+    QCheckBox *checkBox_4;
+    QCheckBox *checkBox_3;
+    QCheckBox *checkBox_2;
+    QCheckBox *checkBox;
+    QSpacerItem *horizontalSpacer_3;
+    QTableWidget *tableWidget_4;
+    QWidget *tab_6;
 
     void setupUi(QMainWindow *CharEditor)
     {
@@ -3249,6 +3291,316 @@ public:
         verticalLayout_11->addWidget(tabWidget_2);
 
         stackedWidget->addWidget(pageDSA5);
+        pageSIFRP = new QWidget();
+        pageSIFRP->setObjectName(QStringLiteral("pageSIFRP"));
+        verticalLayout_45 = new QVBoxLayout(pageSIFRP);
+        verticalLayout_45->setObjectName(QStringLiteral("verticalLayout_45"));
+        tabWidget_3 = new QTabWidget(pageSIFRP);
+        tabWidget_3->setObjectName(QStringLiteral("tabWidget_3"));
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QStringLiteral("tab_5"));
+        verticalLayout_49 = new QVBoxLayout(tab_5);
+        verticalLayout_49->setObjectName(QStringLiteral("verticalLayout_49"));
+        horizontalLayout_39 = new QHBoxLayout();
+        horizontalLayout_39->setObjectName(QStringLiteral("horizontalLayout_39"));
+        label_20 = new QLabel(tab_5);
+        label_20->setObjectName(QStringLiteral("label_20"));
+
+        horizontalLayout_39->addWidget(label_20);
+
+        lineEdit = new QLineEdit(tab_5);
+        lineEdit->setObjectName(QStringLiteral("lineEdit"));
+
+        horizontalLayout_39->addWidget(lineEdit);
+
+
+        verticalLayout_49->addLayout(horizontalLayout_39);
+
+        horizontalLayout_45 = new QHBoxLayout();
+        horizontalLayout_45->setObjectName(QStringLiteral("horizontalLayout_45"));
+        label_41 = new QLabel(tab_5);
+        label_41->setObjectName(QStringLiteral("label_41"));
+
+        horizontalLayout_45->addWidget(label_41);
+
+        lineEdit_2 = new QLineEdit(tab_5);
+        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
+
+        horizontalLayout_45->addWidget(lineEdit_2);
+
+        label_38 = new QLabel(tab_5);
+        label_38->setObjectName(QStringLiteral("label_38"));
+
+        horizontalLayout_45->addWidget(label_38);
+
+        lineEdit_3 = new QLineEdit(tab_5);
+        lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
+
+        horizontalLayout_45->addWidget(lineEdit_3);
+
+        label_35 = new QLabel(tab_5);
+        label_35->setObjectName(QStringLiteral("label_35"));
+
+        horizontalLayout_45->addWidget(label_35);
+
+        lineEdit_4 = new QLineEdit(tab_5);
+        lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
+
+        horizontalLayout_45->addWidget(lineEdit_4);
+
+
+        verticalLayout_49->addLayout(horizontalLayout_45);
+
+        label_42 = new QLabel(tab_5);
+        label_42->setObjectName(QStringLiteral("label_42"));
+
+        verticalLayout_49->addWidget(label_42);
+
+        horizontalLayout_49 = new QHBoxLayout();
+        horizontalLayout_49->setObjectName(QStringLiteral("horizontalLayout_49"));
+        tableWidget = new QTableWidget(tab_5);
+        if (tableWidget->columnCount() < 2)
+            tableWidget->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem610 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem610);
+        QTableWidgetItem *__qtablewidgetitem611 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem611);
+        if (tableWidget->rowCount() < 9)
+            tableWidget->setRowCount(9);
+        QTableWidgetItem *__qtablewidgetitem612 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(0, __qtablewidgetitem612);
+        QTableWidgetItem *__qtablewidgetitem613 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(1, __qtablewidgetitem613);
+        QTableWidgetItem *__qtablewidgetitem614 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(2, __qtablewidgetitem614);
+        QTableWidgetItem *__qtablewidgetitem615 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(3, __qtablewidgetitem615);
+        QTableWidgetItem *__qtablewidgetitem616 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(4, __qtablewidgetitem616);
+        QTableWidgetItem *__qtablewidgetitem617 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(5, __qtablewidgetitem617);
+        QTableWidgetItem *__qtablewidgetitem618 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(6, __qtablewidgetitem618);
+        QTableWidgetItem *__qtablewidgetitem619 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(7, __qtablewidgetitem619);
+        QTableWidgetItem *__qtablewidgetitem620 = new QTableWidgetItem();
+        tableWidget->setVerticalHeaderItem(8, __qtablewidgetitem620);
+        tableWidget->setObjectName(QStringLiteral("tableWidget"));
+        tableWidget->setMaximumSize(QSize(16777215, 300));
+        tableWidget->horizontalHeader()->setStretchLastSection(true);
+
+        horizontalLayout_49->addWidget(tableWidget);
+
+        tableWidget_2 = new QTableWidget(tab_5);
+        if (tableWidget_2->columnCount() < 2)
+            tableWidget_2->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem621 = new QTableWidgetItem();
+        tableWidget_2->setHorizontalHeaderItem(0, __qtablewidgetitem621);
+        QTableWidgetItem *__qtablewidgetitem622 = new QTableWidgetItem();
+        tableWidget_2->setHorizontalHeaderItem(1, __qtablewidgetitem622);
+        if (tableWidget_2->rowCount() < 9)
+            tableWidget_2->setRowCount(9);
+        QTableWidgetItem *__qtablewidgetitem623 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(0, __qtablewidgetitem623);
+        QTableWidgetItem *__qtablewidgetitem624 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(1, __qtablewidgetitem624);
+        QTableWidgetItem *__qtablewidgetitem625 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(2, __qtablewidgetitem625);
+        QTableWidgetItem *__qtablewidgetitem626 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(3, __qtablewidgetitem626);
+        QTableWidgetItem *__qtablewidgetitem627 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(4, __qtablewidgetitem627);
+        QTableWidgetItem *__qtablewidgetitem628 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(5, __qtablewidgetitem628);
+        QTableWidgetItem *__qtablewidgetitem629 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(6, __qtablewidgetitem629);
+        QTableWidgetItem *__qtablewidgetitem630 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(7, __qtablewidgetitem630);
+        QTableWidgetItem *__qtablewidgetitem631 = new QTableWidgetItem();
+        tableWidget_2->setVerticalHeaderItem(8, __qtablewidgetitem631);
+        tableWidget_2->setObjectName(QStringLiteral("tableWidget_2"));
+        tableWidget_2->setMaximumSize(QSize(16777215, 300));
+        tableWidget_2->horizontalHeader()->setStretchLastSection(true);
+
+        horizontalLayout_49->addWidget(tableWidget_2);
+
+
+        verticalLayout_49->addLayout(horizontalLayout_49);
+
+        horizontalLayout_50 = new QHBoxLayout();
+        horizontalLayout_50->setObjectName(QStringLiteral("horizontalLayout_50"));
+        label_43 = new QLabel(tab_5);
+        label_43->setObjectName(QStringLiteral("label_43"));
+
+        horizontalLayout_50->addWidget(label_43);
+
+        lineEdit_5 = new QLineEdit(tab_5);
+        lineEdit_5->setObjectName(QStringLiteral("lineEdit_5"));
+
+        horizontalLayout_50->addWidget(lineEdit_5);
+
+
+        verticalLayout_49->addLayout(horizontalLayout_50);
+
+        horizontalLayout_51 = new QHBoxLayout();
+        horizontalLayout_51->setObjectName(QStringLiteral("horizontalLayout_51"));
+        verticalLayout_51 = new QVBoxLayout();
+        verticalLayout_51->setObjectName(QStringLiteral("verticalLayout_51"));
+        tableWidget_3 = new QTableWidget(tab_5);
+        if (tableWidget_3->columnCount() < 1)
+            tableWidget_3->setColumnCount(1);
+        QTableWidgetItem *__qtablewidgetitem632 = new QTableWidgetItem();
+        tableWidget_3->setHorizontalHeaderItem(0, __qtablewidgetitem632);
+        tableWidget_3->setObjectName(QStringLiteral("tableWidget_3"));
+        tableWidget_3->setAlternatingRowColors(true);
+        tableWidget_3->horizontalHeader()->setStretchLastSection(true);
+        tableWidget_3->verticalHeader()->setVisible(false);
+
+        verticalLayout_51->addWidget(tableWidget_3);
+
+        horizontalLayout_52 = new QHBoxLayout();
+        horizontalLayout_52->setObjectName(QStringLiteral("horizontalLayout_52"));
+        pushButton_2 = new QPushButton(tab_5);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+
+        horizontalLayout_52->addWidget(pushButton_2);
+
+        pushButton = new QPushButton(tab_5);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        horizontalLayout_52->addWidget(pushButton);
+
+
+        verticalLayout_51->addLayout(horizontalLayout_52);
+
+        horizontalLayout_53 = new QHBoxLayout();
+        horizontalLayout_53->setObjectName(QStringLiteral("horizontalLayout_53"));
+        label_46 = new QLabel(tab_5);
+        label_46->setObjectName(QStringLiteral("label_46"));
+
+        horizontalLayout_53->addWidget(label_46);
+
+        checkBox_8 = new QCheckBox(tab_5);
+        checkBox_8->setObjectName(QStringLiteral("checkBox_8"));
+        checkBox_8->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_8);
+
+        checkBox_7 = new QCheckBox(tab_5);
+        checkBox_7->setObjectName(QStringLiteral("checkBox_7"));
+        checkBox_7->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_7);
+
+        checkBox_6 = new QCheckBox(tab_5);
+        checkBox_6->setObjectName(QStringLiteral("checkBox_6"));
+        checkBox_6->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_6);
+
+        checkBox_5 = new QCheckBox(tab_5);
+        checkBox_5->setObjectName(QStringLiteral("checkBox_5"));
+        checkBox_5->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_5);
+
+        checkBox_4 = new QCheckBox(tab_5);
+        checkBox_4->setObjectName(QStringLiteral("checkBox_4"));
+        checkBox_4->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_4);
+
+        checkBox_3 = new QCheckBox(tab_5);
+        checkBox_3->setObjectName(QStringLiteral("checkBox_3"));
+        checkBox_3->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_3);
+
+        checkBox_2 = new QCheckBox(tab_5);
+        checkBox_2->setObjectName(QStringLiteral("checkBox_2"));
+        checkBox_2->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox_2);
+
+        checkBox = new QCheckBox(tab_5);
+        checkBox->setObjectName(QStringLiteral("checkBox"));
+        checkBox->setMaximumSize(QSize(20, 16777215));
+
+        horizontalLayout_53->addWidget(checkBox);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_53->addItem(horizontalSpacer_3);
+
+
+        verticalLayout_51->addLayout(horizontalLayout_53);
+
+
+        horizontalLayout_51->addLayout(verticalLayout_51);
+
+        tableWidget_4 = new QTableWidget(tab_5);
+        if (tableWidget_4->columnCount() < 2)
+            tableWidget_4->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem633 = new QTableWidgetItem();
+        tableWidget_4->setHorizontalHeaderItem(0, __qtablewidgetitem633);
+        QTableWidgetItem *__qtablewidgetitem634 = new QTableWidgetItem();
+        tableWidget_4->setHorizontalHeaderItem(1, __qtablewidgetitem634);
+        if (tableWidget_4->rowCount() < 6)
+            tableWidget_4->setRowCount(6);
+        QTableWidgetItem *__qtablewidgetitem635 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(0, __qtablewidgetitem635);
+        QTableWidgetItem *__qtablewidgetitem636 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(1, __qtablewidgetitem636);
+        QTableWidgetItem *__qtablewidgetitem637 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(2, __qtablewidgetitem637);
+        QTableWidgetItem *__qtablewidgetitem638 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(3, __qtablewidgetitem638);
+        QTableWidgetItem *__qtablewidgetitem639 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(4, __qtablewidgetitem639);
+        QTableWidgetItem *__qtablewidgetitem640 = new QTableWidgetItem();
+        tableWidget_4->setVerticalHeaderItem(5, __qtablewidgetitem640);
+        QTableWidgetItem *__qtablewidgetitem641 = new QTableWidgetItem();
+        tableWidget_4->setItem(0, 0, __qtablewidgetitem641);
+        QTableWidgetItem *__qtablewidgetitem642 = new QTableWidgetItem();
+        tableWidget_4->setItem(0, 1, __qtablewidgetitem642);
+        QTableWidgetItem *__qtablewidgetitem643 = new QTableWidgetItem();
+        tableWidget_4->setItem(1, 0, __qtablewidgetitem643);
+        QTableWidgetItem *__qtablewidgetitem644 = new QTableWidgetItem();
+        tableWidget_4->setItem(1, 1, __qtablewidgetitem644);
+        QTableWidgetItem *__qtablewidgetitem645 = new QTableWidgetItem();
+        tableWidget_4->setItem(2, 0, __qtablewidgetitem645);
+        QTableWidgetItem *__qtablewidgetitem646 = new QTableWidgetItem();
+        tableWidget_4->setItem(2, 1, __qtablewidgetitem646);
+        QTableWidgetItem *__qtablewidgetitem647 = new QTableWidgetItem();
+        tableWidget_4->setItem(3, 0, __qtablewidgetitem647);
+        QTableWidgetItem *__qtablewidgetitem648 = new QTableWidgetItem();
+        tableWidget_4->setItem(3, 1, __qtablewidgetitem648);
+        QTableWidgetItem *__qtablewidgetitem649 = new QTableWidgetItem();
+        tableWidget_4->setItem(4, 0, __qtablewidgetitem649);
+        QTableWidgetItem *__qtablewidgetitem650 = new QTableWidgetItem();
+        tableWidget_4->setItem(5, 0, __qtablewidgetitem650);
+        QTableWidgetItem *__qtablewidgetitem651 = new QTableWidgetItem();
+        tableWidget_4->setItem(5, 1, __qtablewidgetitem651);
+        tableWidget_4->setObjectName(QStringLiteral("tableWidget_4"));
+        tableWidget_4->setAlternatingRowColors(false);
+        tableWidget_4->setWordWrap(true);
+        tableWidget_4->horizontalHeader()->setDefaultSectionSize(250);
+        tableWidget_4->horizontalHeader()->setStretchLastSection(true);
+        tableWidget_4->verticalHeader()->setVisible(false);
+
+        horizontalLayout_51->addWidget(tableWidget_4);
+
+
+        verticalLayout_49->addLayout(horizontalLayout_51);
+
+        tabWidget_3->addTab(tab_5, QString());
+        tab_6 = new QWidget();
+        tab_6->setObjectName(QStringLiteral("tab_6"));
+        tabWidget_3->addTab(tab_6, QString());
+
+        verticalLayout_45->addWidget(tabWidget_3);
+
+        stackedWidget->addWidget(pageSIFRP);
 
         horizontalLayout->addWidget(stackedWidget);
 
@@ -3256,9 +3608,10 @@ public:
 
         retranslateUi(CharEditor);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(2);
         tabWidget->setCurrentIndex(0);
         tabWidget_2->setCurrentIndex(0);
+        tabWidget_3->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(CharEditor);
@@ -3272,6 +3625,7 @@ public:
         systemComboBox->insertItems(0, QStringList()
          << QApplication::translate("CharEditor", "Generic", Q_NULLPTR)
          << QApplication::translate("CharEditor", "DSA5", Q_NULLPTR)
+         << QApplication::translate("CharEditor", "SIFRP", Q_NULLPTR)
         );
         label->setText(QApplication::translate("CharEditor", "Display Name", Q_NULLPTR));
         label_2->setText(QApplication::translate("CharEditor", "Player", Q_NULLPTR));
@@ -4363,6 +4717,96 @@ public:
         QTableWidgetItem *___qtablewidgetitem478 = kleriTraditionTable_dsa5->horizontalHeaderItem(0);
         ___qtablewidgetitem478->setText(QApplication::translate("CharEditor", "Tradition", Q_NULLPTR));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_10), QApplication::translate("CharEditor", "Liturgien und Zeremonien", Q_NULLPTR));
+        label_20->setText(QApplication::translate("CharEditor", "Name", Q_NULLPTR));
+        label_41->setText(QApplication::translate("CharEditor", "Age", Q_NULLPTR));
+        label_38->setText(QApplication::translate("CharEditor", "Gender", Q_NULLPTR));
+        label_35->setText(QApplication::translate("CharEditor", "House", Q_NULLPTR));
+        label_42->setText(QApplication::translate("CharEditor", "Abilities", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem479 = tableWidget->horizontalHeaderItem(0);
+        ___qtablewidgetitem479->setText(QApplication::translate("CharEditor", "Rating", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem480 = tableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem480->setText(QApplication::translate("CharEditor", "Specialties", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem481 = tableWidget->verticalHeaderItem(0);
+        ___qtablewidgetitem481->setText(QApplication::translate("CharEditor", "Agility", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem482 = tableWidget->verticalHeaderItem(1);
+        ___qtablewidgetitem482->setText(QApplication::translate("CharEditor", "Animal Handling", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem483 = tableWidget->verticalHeaderItem(2);
+        ___qtablewidgetitem483->setText(QApplication::translate("CharEditor", "Athletics", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem484 = tableWidget->verticalHeaderItem(3);
+        ___qtablewidgetitem484->setText(QApplication::translate("CharEditor", "Awareness", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem485 = tableWidget->verticalHeaderItem(4);
+        ___qtablewidgetitem485->setText(QApplication::translate("CharEditor", "Cunning", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem486 = tableWidget->verticalHeaderItem(5);
+        ___qtablewidgetitem486->setText(QApplication::translate("CharEditor", "Deception", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem487 = tableWidget->verticalHeaderItem(6);
+        ___qtablewidgetitem487->setText(QApplication::translate("CharEditor", "Endurance", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem488 = tableWidget->verticalHeaderItem(7);
+        ___qtablewidgetitem488->setText(QApplication::translate("CharEditor", "Fighting", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem489 = tableWidget->verticalHeaderItem(8);
+        ___qtablewidgetitem489->setText(QApplication::translate("CharEditor", "Healing", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem490 = tableWidget_2->horizontalHeaderItem(0);
+        ___qtablewidgetitem490->setText(QApplication::translate("CharEditor", "Rating", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem491 = tableWidget_2->horizontalHeaderItem(1);
+        ___qtablewidgetitem491->setText(QApplication::translate("CharEditor", "Specialites", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem492 = tableWidget_2->verticalHeaderItem(0);
+        ___qtablewidgetitem492->setText(QApplication::translate("CharEditor", "Knowledge", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem493 = tableWidget_2->verticalHeaderItem(1);
+        ___qtablewidgetitem493->setText(QApplication::translate("CharEditor", "Marksmanship", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem494 = tableWidget_2->verticalHeaderItem(2);
+        ___qtablewidgetitem494->setText(QApplication::translate("CharEditor", "Persuasion", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem495 = tableWidget_2->verticalHeaderItem(3);
+        ___qtablewidgetitem495->setText(QApplication::translate("CharEditor", "Status", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem496 = tableWidget_2->verticalHeaderItem(4);
+        ___qtablewidgetitem496->setText(QApplication::translate("CharEditor", "Stealth", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem497 = tableWidget_2->verticalHeaderItem(5);
+        ___qtablewidgetitem497->setText(QApplication::translate("CharEditor", "Survival", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem498 = tableWidget_2->verticalHeaderItem(6);
+        ___qtablewidgetitem498->setText(QApplication::translate("CharEditor", "Thievery", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem499 = tableWidget_2->verticalHeaderItem(7);
+        ___qtablewidgetitem499->setText(QApplication::translate("CharEditor", "Warfare", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem500 = tableWidget_2->verticalHeaderItem(8);
+        ___qtablewidgetitem500->setText(QApplication::translate("CharEditor", "Will", Q_NULLPTR));
+        label_43->setText(QApplication::translate("CharEditor", "Language", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem501 = tableWidget_3->horizontalHeaderItem(0);
+        ___qtablewidgetitem501->setText(QApplication::translate("CharEditor", "Qualities", Q_NULLPTR));
+        pushButton_2->setText(QApplication::translate("CharEditor", "+", Q_NULLPTR));
+        pushButton->setText(QApplication::translate("CharEditor", "-", Q_NULLPTR));
+        label_46->setText(QApplication::translate("CharEditor", "Destiny Points", Q_NULLPTR));
+        checkBox_8->setText(QString());
+        checkBox_7->setText(QString());
+        checkBox_6->setText(QString());
+        checkBox_5->setText(QString());
+        checkBox_4->setText(QString());
+        checkBox_3->setText(QString());
+        checkBox_2->setText(QString());
+        checkBox->setText(QString());
+        QTableWidgetItem *___qtablewidgetitem502 = tableWidget_4->horizontalHeaderItem(0);
+        ___qtablewidgetitem502->setText(QApplication::translate("CharEditor", "Intrigue", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem503 = tableWidget_4->horizontalHeaderItem(1);
+        ___qtablewidgetitem503->setText(QApplication::translate("CharEditor", "Combat", Q_NULLPTR));
+
+        const bool __sortingEnabled5 = tableWidget_4->isSortingEnabled();
+        tableWidget_4->setSortingEnabled(false);
+        QTableWidgetItem *___qtablewidgetitem504 = tableWidget_4->item(0, 0);
+        ___qtablewidgetitem504->setText(QApplication::translate("CharEditor", "Intrigue Defense", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem505 = tableWidget_4->item(0, 1);
+        ___qtablewidgetitem505->setText(QApplication::translate("CharEditor", "Combat Defense", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem506 = tableWidget_4->item(2, 0);
+        ___qtablewidgetitem506->setText(QApplication::translate("CharEditor", "Awareness + Cunning + Status", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem507 = tableWidget_4->item(2, 1);
+        ___qtablewidgetitem507->setText(QApplication::translate("CharEditor", "Agility + Athletics + Awareness + Defensive Bonus - Armor Penalty", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem508 = tableWidget_4->item(3, 0);
+        ___qtablewidgetitem508->setText(QApplication::translate("CharEditor", "Composure", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem509 = tableWidget_4->item(3, 1);
+        ___qtablewidgetitem509->setText(QApplication::translate("CharEditor", "Health", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem510 = tableWidget_4->item(5, 0);
+        ___qtablewidgetitem510->setText(QApplication::translate("CharEditor", "Will Ranks x 3", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem511 = tableWidget_4->item(5, 1);
+        ___qtablewidgetitem511->setText(QApplication::translate("CharEditor", "Endurance Ranks x 3", Q_NULLPTR));
+        tableWidget_4->setSortingEnabled(__sortingEnabled5);
+
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_5), QApplication::translate("CharEditor", "Page 1", Q_NULLPTR));
+        tabWidget_3->setTabText(tabWidget_3->indexOf(tab_6), QApplication::translate("CharEditor", "Page 2", Q_NULLPTR));
     } // retranslateUi
 
 };

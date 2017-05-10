@@ -28,6 +28,7 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableView>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -161,6 +162,7 @@ public:
     QLabel *label_4;
     QLabel *label_10;
     QTextEdit *textEdit_4;
+    QTableView *databaseView;
     QVBoxLayout *verticalLayout;
     QMenuBar *menuBar;
     QMenu *menuGM_Help;
@@ -1027,7 +1029,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 634));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 628));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -1317,6 +1319,11 @@ public:
         textEdit_4->setObjectName(QStringLiteral("textEdit_4"));
 
         verticalLayout_8->addWidget(textEdit_4);
+
+        databaseView = new QTableView(pageWelcome);
+        databaseView->setObjectName(QStringLiteral("databaseView"));
+
+        verticalLayout_8->addWidget(databaseView);
 
 
         horizontalLayout_11->addLayout(verticalLayout_8);
