@@ -39,11 +39,7 @@
 #include <QFileSystemWatcher>
 #include <QtWinExtras>
 #include <QDebug>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlTableModel>
-#include <QSqlRecord>
-#include <QSqlQueryModel>
+#include <QXmlStreamReader>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -52,34 +48,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Gets all settings
     settingsManager = new SettingsManager;
-    int checkUpdates = QString::compare(settingsManager->getSetting(Setting::checkForUpdatesOnStart), "1", Qt::CaseInsensitive);
+    int checkUpdates = settingsManager->getSetting(Setting::checkForUpdatesOnStart).toInt();
 
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
     signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
-
-    // TESTING DATABASE
-    QString dbpath = "music.db";
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(dbpath);
-    db.open();
-    qDebug() << "Database Initialized";
-
-    QSqlQueryModel* model = new QSqlQueryModel();
-
-    QSqlQuery* query = new QSqlQuery(db);
-
-    query->prepare("SELECT * FROM songs ORDER BY album");
-    query->exec();
-
-    model->setQuery(*query);
-    ui->databaseView->setModel(model);
-
-    db.close();
-
-    qDebug() << "Database Row Count: " << model->rowCount();
-
 
     // Generates the dice page
     diceManager = new DiceManager;
@@ -149,8 +123,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionCharacters, SIGNAL(triggered(bool)), this, SLOT(on_actionCharacters_clicked()));
 
     // Network Stuff
-    networkManager = new QNetworkAccessManager;
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_networkAccessManagerFinished(QNetworkReply*)));
+    qDebug() << "Support SSL:  " << QSslSocket::supportsSsl()
+            << "\nLib Version Number: " << QSslSocket::sslLibraryVersionNumber()
+            << "\nLib Version String: " << QSslSocket::sslLibraryVersionString()
+            << "\nLib Build Version Number: " << QSslSocket::sslLibraryBuildVersionNumber()
+            << "\nLib Build Version String: " << QSslSocket::sslLibraryBuildVersionString();
+
+    versionNetworkManager = new QNetworkAccessManager;
+    connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
+    blogNetworkManager = new QNetworkAccessManager;
+    connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
 
     // Creates Tab for music
     // Creates TableWidget to display song titles
@@ -199,10 +181,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(updateCharactersTimer, SIGNAL(timeout()), SLOT(charactersTimerFinished()));
 
     // Checks for updates on program start
+    qDebug() << "CheckUpdates:";
+    qDebug() << checkUpdates;
     if (checkUpdates == 0){
         ui->actionCheck_for_Updates_on_Program_Start->setChecked(true);
         on_checkForUpdates_clicked();
     }
+
+    // Get Blog Feed
+    blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
 
     programStart = false;
 
@@ -469,10 +456,51 @@ void MainWindow::setVersion(QString versionAsString){
 }
 
 void MainWindow::on_checkForUpdates_clicked(){
-    networkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/version.html")));
+    versionNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/version.html")));
 }
 
-void MainWindow::on_networkAccessManagerFinished(QNetworkReply* reply){
+void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
+    QString replyString = reply->readAll();
+    qDebug() << replyString;
+
+    QXmlStreamReader reader(replyString);
+
+    if (reader.readNextStartElement()) {
+            if (reader.name() == "feed"){
+                while(reader.readNextStartElement()){
+                    if(reader.name() == "entry"){
+                        while(reader.readNextStartElement()){
+                            if (reader.name() == "title"){
+                                ui->blogTextEdit->append("<h1>"+reader.readElementText()+"</h1>");
+                            }
+                            else if (reader.name() == "updated"){
+                                QString s = reader.readElementText();
+                                QString date = s.left(s.indexOf("T"));
+
+                                ui->blogTextEdit->append("(Last Update: "+date+")");
+                            }
+                            else if (reader.name() == "content"){
+                                ui->blogTextEdit->append(reader.readElementText());
+                                ui->blogTextEdit->append(" ");
+                            }
+                            else{
+                                reader.skipCurrentElement();
+                            }
+                        }
+                    }
+                    else
+                        reader.skipCurrentElement();
+                }
+            }
+            else
+                reader.raiseError(QObject::tr("Incorrect file"));
+    }
+
+    //ui->blogTextEdit->setText(replyString);
+
+}
+
+void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
     QString replyString = reply->readAll();
     qDebug() << replyString;
 
@@ -518,6 +546,7 @@ void MainWindow::on_networkAccessManagerFinished(QNetworkReply* reply){
 
         dialogFrame->show();
     }
+
 }
 
 void MainWindow::on_reportABug_clicked(){
@@ -629,7 +658,11 @@ void MainWindow::on_setResourcesFolder_clicked(){
 }
 
 void MainWindow::on_checkForUpdatesOnStart(bool checked){
-    settingsManager->setSetting(Setting::checkForUpdatesOnStart, checked);
+    if (checked){
+        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 0);
+    }else{
+        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 1);
+    }
 }
 
 void MainWindow::on_menuGM_Help_triggered(){

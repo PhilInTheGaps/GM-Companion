@@ -40,7 +40,7 @@ QString SettingsManager::getSetting(Setting setting){
 }
 
 // Sets a specific setting
-void SettingsManager::setSetting(Setting setting, bool checked){
+void SettingsManager::setSetting(Setting setting, int checked){
     QString path;
     QSettings settings("settings.ini", QSettings::IniFormat);
 

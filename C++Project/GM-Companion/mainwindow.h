@@ -91,7 +91,8 @@ private slots:
     void on_mapsFitToViewButton_clicked();
     void on_mapsResetSizeButton_clicked();
 
-    void on_networkAccessManagerFinished(QNetworkReply*);
+    void on_versionNetworkAccessManagerFinished(QNetworkReply*);
+    void on_blogNetworkAccessManagerFinished(QNetworkReply*);
 
     void on_radioMetaDataChanged();
 
@@ -148,7 +149,9 @@ private:
     QSignalMapper *signalMapperMaps;
     QSignalMapper *signalMapperNames;
 
-    QNetworkAccessManager *networkManager;
+    // Network
+    QNetworkAccessManager *versionNetworkManager;
+    QNetworkAccessManager *blogNetworkManager;
 
     //Radio
     QMediaPlayer *radioPlayer;
