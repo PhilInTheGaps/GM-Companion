@@ -76,7 +76,7 @@ private slots:
     void on_reportABug_clicked();
     void on_iWantToUseAnOlderVersionClicked();
 
-    void on_tableDoubleClicked(int,int);
+    void on_tableDoubleClicked(int);
 
     void on_soundPlayButton_clicked();
     void on_soundPauseButton_clicked();
