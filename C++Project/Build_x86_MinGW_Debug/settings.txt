@@ -1,0 +1,5 @@
+MUSIC_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Music;
+SOUND_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Sounds;
+MAPS_PATH=C:/Users/Phil/Google Drive/GM Boys/Regelwerk und Co_/DSA5/Karten;
+RESOURCES_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources (New);
+CHECK_FOR_UPDATES_ON_START=0;
