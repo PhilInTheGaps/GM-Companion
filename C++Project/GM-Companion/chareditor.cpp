@@ -231,6 +231,86 @@ void CharEditor::load(int index){
 
         break;
     }
+    case 2:{
+        // Name
+        ui->nameLineEdit_sifrp->setText(settings.value("charName").toString());
+
+        // Age
+        ui->ageLineEdit_sirfp->setText(settings.value("age").toString());
+
+        // Gender
+        ui->genderLineEdit_sifrp->setText(settings.value("gender").toString());
+
+        // House
+        ui->houseLineEdit_sifrp->setText(settings.value("house").toString());
+
+        // Abilities
+        writeTable("abilities1", 2, ui->abilitiesTable1_sifrp);
+        writeTable("abilities2", 2, ui->abilitiesTable2_sifrp);
+
+        // Qualities
+        writeTable("qualities", 1, ui->qualitiesTable_sifrp, true);
+
+        // Destiny Points
+        ui->destPoints1_sifrp->setChecked(settings.value("dest1", false).toBool());
+        ui->destPoints2_sifrp->setChecked(settings.value("dest2", false).toBool());
+        ui->destPoints3_sifrp->setChecked(settings.value("dest3", false).toBool());
+        ui->destPoints4_sifrp->setChecked(settings.value("dest4", false).toBool());
+        ui->destPoints5_sifrp->setChecked(settings.value("dest5", false).toBool());
+        ui->destPoints6_sifrp->setChecked(settings.value("dest6", false).toBool());
+        ui->destPoints7_sifrp->setChecked(settings.value("dest7", false).toBool());
+        ui->destPoints8_sifrp->setChecked(settings.value("dest8", false).toBool());
+
+        // Intrigue / Combat
+        writeTable("intrigueCombat", 2, ui->intrigueCombatTable_sifrp);
+
+        // Weapons
+        writeTable("weapons", 3, ui->weaponsTable_sifrp);
+
+        // Armor
+        writeTable("armor", 1, ui->armorTable_sifrp);
+
+        // Wounds
+        writeTable("wounds", 1, ui->woundsTable_sifrp);
+
+        // Equipment
+        writeTable("equipment", 1, ui->equipmentTable_sifrp, true);
+
+        // Appearance
+        writeTable("appearance", 4, ui->appearanceTable_sifrp);
+
+        // Mannerisms
+        ui->mannerismsTextEdit_sifrp->setText(settings.value("mannerisms", " ").toString());
+
+        // Distinguishing Features
+        ui->distFeaturesTextEdit_sifrp->setText(settings.value("distFeatures", " ").toString());
+
+        // Retainers
+        ui->retainersTextEdit_sifrp->setText(settings.value("retainers", " ").toString());
+
+        // Personal History
+        ui->personalHistoryTextEdit_sifrp->setText(settings.value("personalHistory", " ").toString());
+
+        // Allies
+        ui->alliesTextEdit_sifrp->setText(settings.value("allies", " ").toString());
+
+        // Heraldry
+        ui->heraldryTextEdit_sifrp->setText(settings.value("heraldry", " ").toString());
+
+        // Enemies
+        ui->enemiesTextEdit_sifrp->setText(settings.value("enemies", " ").toString());
+
+        // Portrait
+        ui->portraitTextEdit_sifrp->setText(settings.value("portrait", " ").toString());
+
+        // Oaths
+        ui->oathsTextEdit_sifrp->setText(settings.value("oaths", " ").toString());
+
+        // Motto
+        ui->mottoTextEdit_sifrp->setText(settings.value("motto", " ").toString());
+
+        break;
+    }
     default:
         break;
     }
@@ -445,6 +525,92 @@ void CharEditor::save(){
         // Klerikale Tradition
         qDebug() << "Writing Klerikale Tradition";
         writeToFile(ui->kleriTraditionTable_dsa5, "kTradition", 1);
+
+        break;
+    }
+
+    case 2:
+    {
+        // Name
+        qDebug() << "Writing Name";
+        settings.setValue("charName", ui->nameLineEdit_sifrp->text());
+
+        // Age
+        qDebug() << "Writing Age";
+        settings.setValue("age", ui->ageLineEdit_sirfp->text());
+
+        // Gender
+        qDebug() << "Writing Gender";
+        settings.setValue("gender", ui->genderLineEdit_sifrp->text());
+
+        // House
+        qDebug() << "Writing House";
+        settings.setValue("house", ui->houseLineEdit_sifrp->text());
+
+        // Abilities
+        writeToFile(ui->abilitiesTable1_sifrp, "abilities1", 2);
+        writeToFile(ui->abilitiesTable2_sifrp, "abilities2", 2);
+
+        // Qualities
+        writeToFile(ui->qualitiesTable_sifrp, "qualities", 1);
+
+        // Intrigue / Combat
+        writeToFile(ui->intrigueCombatTable_sifrp, "intrigueCombat", 2);
+
+        // Destiny Points
+        settings.setValue("dest1", ui->destPoints1_sifrp->isChecked());
+        settings.setValue("dest2", ui->destPoints2_sifrp->isChecked());
+        settings.setValue("dest3", ui->destPoints3_sifrp->isChecked());
+        settings.setValue("dest4", ui->destPoints4_sifrp->isChecked());
+        settings.setValue("dest5", ui->destPoints5_sifrp->isChecked());
+        settings.setValue("dest6", ui->destPoints6_sifrp->isChecked());
+        settings.setValue("dest7", ui->destPoints7_sifrp->isChecked());
+        settings.setValue("dest8", ui->destPoints8_sifrp->isChecked());
+
+        // Weapons
+        writeToFile(ui->weaponsTable_sifrp, "weapons", 3);
+
+        // Armor
+        writeToFile(ui->armorTable_sifrp, "armor", 1);
+
+        // Wounds
+        writeToFile(ui->woundsTable_sifrp, "wounds", 1);
+
+        // Equipment
+        writeToFile(ui->equipmentTable_sifrp, "equipment", 1);
+
+        // Appearance
+        writeToFile(ui->appearanceTable_sifrp, "appearance", 4);
+
+        // Mannerisms
+        settings.setValue("mannerisms", ui->mannerismsTextEdit_sifrp->toPlainText());
+
+        // Distinguishing Features
+        settings.setValue("distFeatures", ui->distFeaturesTextEdit_sifrp->toPlainText());
+
+        // Retainers
+        settings.setValue("retainers", ui->retainersTextEdit_sifrp->toPlainText());
+
+        // Personal History
+        settings.setValue("personalHistory", ui->personalHistoryTextEdit_sifrp->toPlainText());
+
+        // Allies
+        settings.setValue("allies", ui->alliesTextEdit_sifrp->toPlainText());
+
+        // Heraldry
+        settings.setValue("heraldry", ui->heraldryTextEdit_sifrp->toPlainText());
+
+        // Enemies
+        settings.setValue("enemies", ui->enemiesTextEdit_sifrp->toPlainText());
+
+        // Portrait
+        settings.setValue("portrait", ui->portraitTextEdit_sifrp->toPlainText());
+
+        // Oaths
+        settings.setValue("oaths", ui->oathsTextEdit_sifrp->toPlainText());
+
+        // Motto
+        settings.setValue("motto", ui->mottoTextEdit_sifrp->toPlainText());
 
         break;
     }
@@ -783,4 +949,24 @@ void CharEditor::on_addKleriSonderf_dsa5_clicked()
 void CharEditor::on_removeKleriSonderf_dsa5_clicked()
 {
     removeRow(ui->kleriSonderfTable_dsa5);
+}
+
+void CharEditor::on_addLineQualities_sifrp_clicked()
+{
+    addRow(ui->qualitiesTable_sifrp);
+}
+
+void CharEditor::on_removeLineQualities_sifrp_clicked()
+{
+    removeRow(ui->qualitiesTable_sifrp);
+}
+
+void CharEditor::on_addRowEquipment_sifrp_clicked()
+{
+    addRow(ui->equipmentTable_sifrp);
+}
+
+void CharEditor::on_removeRowEquipment_sifrp_clicked()
+{
+    removeRow(ui->equipmentTable_sifrp);
 }

@@ -51,7 +51,7 @@ void MainWindow::generateMusicButtons(){
                     }
                     else{
                         QFont font;
-                        font.setPixelSize(25);
+                        font.setPixelSize(15);
                         b->setFont(font);
                         b->setText(cleanText(s));
                     }
