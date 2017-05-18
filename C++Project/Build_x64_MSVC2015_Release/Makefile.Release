@@ -2007,17 +2007,7 @@ release\mainwindow.obj: ..\GM-Companion\mainwindow.cpp ../GM-Companion/mainwindo
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QKeyEvent \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\QStandardItemModel \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFileSystemWatcher \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\QSqlDatabase \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qsqldatabase.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qtsqlglobal.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\QSqlQuery \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qsqlquery.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\QSqlTableModel \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qsqltablemodel.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qsqlquerymodel.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\QSqlRecord \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\qsqlrecord.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtSql\QSqlQueryModel
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QXmlStreamReader
 
 release\flowlayout.obj: ..\GM-Companion\flowlayout.cpp C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QtWidgets \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QtWidgetsDepends \
@@ -3214,7 +3204,8 @@ release\dicemanager.obj: ..\GM-Companion\dicemanager.cpp ../GM-Companion/diceman
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QStyle \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QPushButton \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qpushbutton.h \
-		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QDebug
 
 release\music.obj: ..\GM-Companion\music.cpp ../GM-Companion/mainwindow.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QMainWindow \
@@ -5811,6 +5802,9 @@ release\characterpage.obj: ..\GM-Companion\characterpage.cpp ../GM-Companion/cha
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QCheckBox \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qcheckbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractbutton.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qboxlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlayout.h \
@@ -5820,8 +5814,17 @@ release\characterpage.obj: ..\GM-Companion\characterpage.cpp ../GM-Companion/cha
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qheaderview.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLabel \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlabel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLineEdit \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlineedit.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextcursor.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextformat.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qpen.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextoption.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QSpacerItem \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTabWidget \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTextEdit \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtextedit.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtextdocument.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QWidget \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QTableWidgetItem \

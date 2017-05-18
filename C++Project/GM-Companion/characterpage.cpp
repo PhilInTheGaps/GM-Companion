@@ -27,7 +27,6 @@ void CharacterPage::writeTable(QList<QStringList>* list, int columns, QTableWidg
     for (int row = 0; row<size; row++){
         for (int column = 0; column<columns; column++){
             QString entry = list->at(row).at(column);
-            qDebug() << row << column << entry;
 
             QTableWidgetItem* item = new QTableWidgetItem;
             item->setText(entry);
@@ -37,40 +36,31 @@ void CharacterPage::writeTable(QList<QStringList>* list, int columns, QTableWidg
 }
 
 void CharacterPage::updateUi(){
-    qDebug() << "Updating UI";
-    qDebug() << "SystemID" << systemID;
 
     switch (systemID) {
     case 0:
     {
         this->setCurrentIndex(0);
 
-        qDebug() << "Starting to write tables";
 
         // General Info
-        qDebug() << "Writing General Info";
         writeTable(generalInfo_generic, 1, ui->generalInfoTable_generic);
 
         // Skills
-        qDebug() << "Writing Skills";
         writeTable(skills1_generic, 2, ui->skills1Table_generic, true);
         writeTable(skills2_generic, 2, ui->skills2Table_generic, true);
         writeTable(skills3_generic, 2, ui->skills3Table_generic, true);
 
         // Weapons
-        qDebug() << "Writing Weapons";
         writeTable(weapons_generic, 3, ui->weaponsTable_generic, true);
 
         // Armor
-        qDebug() << "Writing Armor";
         writeTable(armor_generic, 3, ui->armorTable_generic, true);
 
         // Inventory
-        qDebug() << "Writing Inventory";
         writeTable(inv1_generic, 2, ui->inv1Table_generic, true);
         writeTable(inv2_generic, 2, ui->inv2Table_generic, true);
 
-        qDebug() << "Finished Updating UI";
         break;
     }
     case 1:{

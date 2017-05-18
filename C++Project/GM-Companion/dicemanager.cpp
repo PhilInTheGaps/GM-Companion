@@ -1,6 +1,7 @@
 #include "dicemanager.h"
 
 #include <QPushButton>
+#include <QDebug>
 
 DiceManager::DiceManager(QObject *parent) : QObject(parent)
 {
@@ -39,8 +40,6 @@ void DiceManager::rollDice(int sides){
 }
 
 QFrame* DiceManager::generateDiceFrame(){
-    signalMapperDice = new QSignalMapper;
-
     diceFrame = new QFrame;
     diceFrameLayout = new QHBoxLayout;
     diceFrame->setLayout(diceFrameLayout);
@@ -105,6 +104,40 @@ QFrame* DiceManager::generateDiceFrame(){
     resultFrame->setFrameShape(QFrame::Box);
     leftLayout->addWidget(resultFrame);
 
+    // Custom Buttons
+    customButtonFrame = new QFrame;
+    customButtonLayout = new QHBoxLayout;
+    customButtonLayout->setAlignment(Qt::AlignLeft);
+    customButtonFrame->setLayout(customButtonLayout);
+    customButtonFrame->setMinimumWidth(150);
+    customButtonFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    customButtonFrame->setFrameShape(QFrame::Box);
+    leftLayout->addWidget(customButtonFrame);
+
+    QLabel* cLabel = new QLabel("Custom Dice: ");
+    customButtonLayout->addWidget(cLabel);
+    cLabel->setFont(fs);
+
+    customButtonSpinBox = new QSpinBox;
+    customButtonSpinBox->setMaximum(999);
+    customButtonSpinBox->setMinimum(1);
+    customButtonSpinBox->setValue(1);
+    customButtonSpinBox->setFont(fs);
+    customButtonLayout->addWidget(customButtonSpinBox);
+
+    QPushButton* addButton = new QPushButton;
+    addButton->setText("Add Die");
+    addButton->setStyleSheet("min-width: 50; min-height: 50; max-height: 200;");
+    customButtonLayout->addWidget(addButton);
+    connect(addButton, SIGNAL(clicked()), SLOT(on_addButton_clicked()));
+
+    QPushButton* resetButton = new QPushButton;
+    resetButton->setText("Reset Dice");
+    resetButton->setStyleSheet("min-width: 50; min-height: 50; max-height: 200;");
+    customButtonLayout->addWidget(resetButton);
+    connect(resetButton, SIGNAL(clicked()), SLOT(on_resetButton_clicked()));
+
+    // Result
     QLabel* resultLabel = new QLabel;
     resultLabel->setText("Result:");
     QFont f( "MS Shell Dlg 2", 50, QFont::Bold);
@@ -126,6 +159,14 @@ QFrame* DiceManager::generateDiceFrame(){
     diceResultTableWidget->setMaximumWidth(350);
     diceFrameLayout->addWidget(diceResultTableWidget);
 
+    generateDice();
+
+    return diceFrame;
+}
+
+void DiceManager::generateDice(){
+    signalMapperDice = new QSignalMapper;
+
     for (int sides : sidesList){
         QPushButton *button = new QPushButton;
         button->setText("D"+QString::number(sides));
@@ -136,11 +177,49 @@ QFrame* DiceManager::generateDiceFrame(){
 
         diceButtonLayout->addWidget(button);
 
-        connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()));
+        connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()), Qt::UniqueConnection);
         signalMapperDice->setMapping(button, sides);
     }
 
     connect(signalMapperDice, SIGNAL(mapped(int)), this, SLOT(rollDice(int)));
+}
 
-    return diceFrame;
+void DiceManager::clearDice(){
+
+    qDebug() << "Clearing Dice";
+
+    signalMapperDice->deleteLater();
+
+    while (auto item = diceButtonLayout->takeAt(0)) {
+        delete item->widget();
+    }
+
+}
+
+void DiceManager::on_addButton_clicked(){
+    qDebug() << "Adding Die Button Clicked";
+
+    clearDice();
+    addDice(customButtonSpinBox->value());
+    generateDice();
+}
+
+void DiceManager::addDice(int sides){
+    qDebug() << "Adding Die";
+
+    sidesList.push_back(sides);
+}
+
+void DiceManager::on_resetButton_clicked(){
+    qDebug() << "Reset Dice Button Clicked";
+
+    clearDice();
+    resetDice();
+    generateDice();
+}
+
+void DiceManager::resetDice(){
+    qDebug() << "Reseting Dice";
+
+    sidesList = {2, 3, 4, 6, 12, 20};
 }
