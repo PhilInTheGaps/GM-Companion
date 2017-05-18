@@ -86,6 +86,46 @@ public:
     QList<QStringList>* leiteigenschaftAspekt_dsa5;
     QList<QStringList>* kTradition_dsa5;
 
+    // SIFRP
+    QString name_sifrp;
+    QString age_sifrp;
+    QString gender_sifrp;
+    QString house_sifrp;
+
+    QList<QStringList>* abilities1_sifrp;
+    QList<QStringList>* abilities2_sifrp;
+
+    QList<QStringList>* qualities_sifrp;
+    QList<QStringList>* intrigueCombat_sifrp;
+
+    bool dest1_sifrp;
+    bool dest2_sifrp;
+    bool dest3_sifrp;
+    bool dest4_sifrp;
+    bool dest5_sifrp;
+    bool dest6_sifrp;
+    bool dest7_sifrp;
+    bool dest8_sifrp;
+
+    QList<QStringList>* weapons_sifrp;
+    QList<QStringList>* armor_sifrp;
+
+    QList<QStringList>* wounds_sifrp;
+    QList<QStringList>* equipment_sifrp;
+    QList<QStringList>* appearance_sifrp;
+
+    QString mannerisms_sifrp;
+    QString distFeatures_sifrp;
+    QString retainers_sifrp;
+
+    QString personalHistory_sifrp;
+    QString allies_sifrp;
+    QString heraldry_sifrp;
+    QString enemies_sifrp;
+    QString portrait_sifrp;
+    QString oaths_sifrp;
+    QString motto_sifrp;
+
 private:
     Ui::CharacterPage *ui;
 

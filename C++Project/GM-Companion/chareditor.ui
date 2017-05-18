@@ -99,7 +99,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="iconLineEdit"/>
+          <widget class="QLineEdit" name="iconLineEdit">
+           <property name="placeholderText">
+            <string/>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="iconButton">
@@ -156,7 +160,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageGeneric">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -5567,7 +5571,7 @@ QProgressBar::chunk {
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit"/>
+               <widget class="QLineEdit" name="nameLineEdit_sifrp"/>
               </item>
              </layout>
             </item>
@@ -5581,7 +5585,7 @@ QProgressBar::chunk {
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_2"/>
+               <widget class="QLineEdit" name="ageLineEdit_sirfp"/>
               </item>
               <item>
                <widget class="QLabel" name="label_38">
@@ -5591,7 +5595,7 @@ QProgressBar::chunk {
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_3"/>
+               <widget class="QLineEdit" name="genderLineEdit_sifrp"/>
               </item>
               <item>
                <widget class="QLabel" name="label_35">
@@ -5601,7 +5605,7 @@ QProgressBar::chunk {
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_4"/>
+               <widget class="QLineEdit" name="houseLineEdit_sifrp"/>
               </item>
              </layout>
             </item>
@@ -5615,154 +5619,159 @@ QProgressBar::chunk {
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_49">
               <item>
-               <widget class="QTableWidget" name="tableWidget">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>300</height>
-                 </size>
-                </property>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <row>
-                 <property name="text">
-                  <string>Agility</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Animal Handling</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Athletics</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Awareness</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Cunning</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Deception</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Endurance</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Fighting</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Healing</string>
-                 </property>
-                </row>
-                <column>
-                 <property name="text">
-                  <string>Rating</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Specialties</string>
-                 </property>
-                </column>
-               </widget>
+               <layout class="QVBoxLayout" name="verticalLayout_57">
+                <item>
+                 <widget class="QTableWidget" name="abilitiesTable1_sifrp">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>325</height>
+                   </size>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string>Agility</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Animal Handling</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Athletics</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Awareness</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Cunning</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Deception</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Endurance</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Fighting</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Healing</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Language</string>
+                   </property>
+                  </row>
+                  <column>
+                   <property name="text">
+                    <string>Rating</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Specialties</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
               </item>
               <item>
-               <widget class="QTableWidget" name="tableWidget_2">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>300</height>
-                 </size>
-                </property>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <row>
-                 <property name="text">
-                  <string>Knowledge</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Marksmanship</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Persuasion</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Status</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Stealth</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Survival</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Thievery</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Warfare</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Will</string>
-                 </property>
-                </row>
-                <column>
-                 <property name="text">
-                  <string>Rating</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Specialties</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_50">
-              <item>
-               <widget class="QLabel" name="label_43">
-                <property name="text">
-                 <string>Language</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="lineEdit_5"/>
+               <layout class="QVBoxLayout" name="verticalLayout_58">
+                <item>
+                 <widget class="QTableWidget" name="abilitiesTable2_sifrp">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>300</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>325</height>
+                   </size>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string>Knowledge</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Marksmanship</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Persuasion</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Status</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Stealth</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Survival</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Thievery</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Warfare</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Will</string>
+                   </property>
+                  </row>
+                  <column>
+                   <property name="text">
+                    <string>Rating</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Specialties</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </item>
@@ -5771,7 +5780,7 @@ QProgressBar::chunk {
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_51">
                 <item>
-                 <widget class="QTableWidget" name="tableWidget_3">
+                 <widget class="QTableWidget" name="qualitiesTable_sifrp">
                   <property name="alternatingRowColors">
                    <bool>true</bool>
                   </property>
@@ -5791,14 +5800,14 @@ QProgressBar::chunk {
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_52">
                   <item>
-                   <widget class="QPushButton" name="pushButton_2">
+                   <widget class="QPushButton" name="addLineQualities_sifrp">
                     <property name="text">
                      <string>+</string>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="pushButton">
+                   <widget class="QPushButton" name="removeLineQualities_sifrp">
                     <property name="text">
                      <string>-</string>
                     </property>
@@ -5816,7 +5825,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_8">
+                   <widget class="QCheckBox" name="destPoints1_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5829,7 +5838,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_7">
+                   <widget class="QCheckBox" name="destPoints2_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5842,7 +5851,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_6">
+                   <widget class="QCheckBox" name="destPoints3_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5855,7 +5864,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_5">
+                   <widget class="QCheckBox" name="destPoints4_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5868,7 +5877,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_4">
+                   <widget class="QCheckBox" name="destPoints5_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5881,7 +5890,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_3">
+                   <widget class="QCheckBox" name="destPoints6_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5894,7 +5903,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox_2">
+                   <widget class="QCheckBox" name="destPoints7_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5907,7 +5916,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QCheckBox" name="checkBox">
+                   <widget class="QCheckBox" name="destPoints8_sifrp">
                     <property name="maximumSize">
                      <size>
                       <width>20</width>
@@ -5937,7 +5946,7 @@ QProgressBar::chunk {
                </layout>
               </item>
               <item>
-               <widget class="QTableWidget" name="tableWidget_4">
+               <widget class="QTableWidget" name="intrigueCombatTable_sifrp">
                 <property name="alternatingRowColors">
                  <bool>false</bool>
                 </property>
@@ -5997,55 +6006,261 @@ QProgressBar::chunk {
                  <property name="text">
                   <string>Intrigue Defense</string>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
                 </item>
                 <item row="0" column="1">
                  <property name="text">
                   <string>Combat Defense</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
                  </property>
                 </item>
                 <item row="1" column="0">
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
                 </item>
                 <item row="1" column="1">
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
                  </property>
                 </item>
                 <item row="2" column="0">
                  <property name="text">
                   <string>Awareness + Cunning + Status</string>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
                 </item>
                 <item row="2" column="1">
                  <property name="text">
                   <string>Agility + Athletics + Awareness + Defensive Bonus - Armor Penalty</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
                  </property>
                 </item>
                 <item row="3" column="0">
                  <property name="text">
                   <string>Composure</string>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
                 </item>
                 <item row="3" column="1">
                  <property name="text">
                   <string>Health</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
                  </property>
                 </item>
                 <item row="4" column="0">
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                </item>
+                <item row="4" column="1">
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
                 </item>
                 <item row="5" column="0">
                  <property name="text">
                   <string>Will Ranks x 3</string>
                  </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
                 </item>
                 <item row="5" column="1">
                  <property name="text">
                   <string>Endurance Ranks x 3</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_50">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_59">
+                <item>
+                 <widget class="QLabel" name="label_43">
+                  <property name="text">
+                   <string>Weapons</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableWidget" name="weaponsTable_sifrp">
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderStretchLastSection">
+                   <bool>false</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <column>
+                   <property name="text">
+                    <string>Attack</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Test Dice</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Weapon Damage</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="armorTable_sifrp">
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Armor</string>
+                 </property>
+                </column>
+                <item row="0" column="0">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </item>
+                <item row="1" column="0">
+                 <property name="text">
+                  <string>Armor Rating</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
+                 </property>
+                </item>
+                <item row="3" column="0">
+                 <property name="text">
+                  <string>Armor Penalty</string>
+                 </property>
+                 <property name="textAlignment">
+                  <set>AlignCenter</set>
+                 </property>
+                 <property name="flags">
+                  <set>ItemIsEnabled</set>
                  </property>
                 </item>
                </widget>
@@ -6058,6 +6273,321 @@ QProgressBar::chunk {
            <attribute name="title">
             <string>Page 2</string>
            </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_53">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_54">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_52">
+                <item>
+                 <widget class="QTableWidget" name="woundsTable_sifrp">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderHighlightSections">
+                   <bool>false</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <column>
+                   <property name="text">
+                    <string>Wounds</string>
+                   </property>
+                  </column>
+                  <item row="0" column="0">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableWidget" name="equipmentTable_sifrp">
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <column>
+                   <property name="text">
+                    <string>Equipment</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_56">
+                  <item>
+                   <widget class="QPushButton" name="addRowEquipment_sifrp">
+                    <property name="text">
+                     <string>+</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="removeRowEquipment_sifrp">
+                    <property name="text">
+                     <string>-</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_57"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_50">
+                <item>
+                 <widget class="QLabel" name="label_44">
+                  <property name="text">
+                   <string>Appearance</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableWidget" name="appearanceTable_sifrp">
+                  <attribute name="horizontalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="verticalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </row>
+                  <column>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </column>
+                  <item row="0" column="0">
+                   <property name="text">
+                    <string>Height</string>
+                   </property>
+                   <property name="flags">
+                    <set>ItemIsEnabled</set>
+                   </property>
+                  </item>
+                  <item row="0" column="1">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </item>
+                  <item row="0" column="2">
+                   <property name="text">
+                    <string>Weight</string>
+                   </property>
+                   <property name="flags">
+                    <set>ItemIsEnabled</set>
+                   </property>
+                  </item>
+                  <item row="0" column="3">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </item>
+                  <item row="1" column="0">
+                   <property name="text">
+                    <string>Eye Color</string>
+                   </property>
+                   <property name="flags">
+                    <set>ItemIsEnabled</set>
+                   </property>
+                  </item>
+                  <item row="1" column="1">
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </item>
+                  <item row="1" column="2">
+                   <property name="text">
+                    <string>Hair Color</string>
+                   </property>
+                   <property name="flags">
+                    <set>ItemIsEnabled</set>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_47">
+                  <property name="text">
+                   <string>Mannerisms</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="mannerismsTextEdit_sifrp"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_48">
+                  <property name="text">
+                   <string>Distinguishing Features</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_49">
+                  <property name="text">
+                   <string>Retainers</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="retainersTextEdit_sifrp"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_45">
+              <property name="text">
+               <string>Personal History</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp"/>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_55">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_56">
+                <item>
+                 <widget class="QLabel" name="label_50">
+                  <property name="text">
+                   <string>Allies</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="alliesTextEdit_sifrp"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_51">
+                  <property name="text">
+                   <string>Heraldry</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="heraldryTextEdit_sifrp"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_55">
+                <item>
+                 <widget class="QLabel" name="label_52">
+                  <property name="text">
+                   <string>Enemies</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="enemiesTextEdit_sifrp"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_53">
+                  <property name="text">
+                   <string>Portrait</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="portraitTextEdit_sifrp"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_54">
+                <item>
+                 <widget class="QLabel" name="label_54">
+                  <property name="text">
+                   <string>Oaths</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="oathsTextEdit_sifrp"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_55">
+                  <property name="text">
+                   <string>Motto</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTextEdit" name="mottoTextEdit_sifrp"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>

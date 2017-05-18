@@ -81,8 +81,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << "Database Row Count: " << model->rowCount();
 
 
-
-
     // Generates the dice page
     diceManager = new DiceManager;
     ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
@@ -114,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     soundPlayer = new QMediaPlayer(this);
     soundPlayer->setVolume(ui->soundVolumeSlider->value());
     soundPlaylist = new QMediaPlaylist();
-    soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random); //QMediaPlaylist::PlaybackMode::Loop|
+    soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
     soundPlayer->setPlaylist(soundPlaylist);
 
     connect(musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(updateProgressBar()));
@@ -162,7 +160,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     musicTable->setColumnWidth(0, 250);
     musicTable->setColumnCount(1);
     musicTable->setHorizontalHeaderLabels(QString("Title").split(";"));
-    connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int,int)));
+    connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int)));
 
     generateMusicButtons();
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
@@ -276,7 +274,11 @@ void MainWindow::playSound(QString folder){
 
 void MainWindow::playMusic(QString folder){
     radioTimer->stop();
-    if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier) &&!initialMusicPlay)
+    ui->musicNextButton->setEnabled(true);
+    ui->musicReplayButton->setEnabled(true);
+    ui->musicRandomButton->setEnabled(true);
+
+    if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier) &&!initialMusicPlay && radioActive == false)
     {
         qDebug() << "SHIFT IS PRESSED";
 
@@ -329,9 +331,6 @@ void MainWindow::playMusic(QString folder){
     else{
         radioActive = false;
         radioPlayer->stop();
-
-        ui->musicNextButton->setEnabled(true);
-        ui->musicReplayButton->setEnabled(true);
 
         if (initialMusicPlay){
             ui->pageMusic->layout()->addWidget(musicTable);
@@ -390,11 +389,11 @@ void MainWindow::playMusic(QString folder){
         //Setting Image
         if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".png").exists()){
             //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".png");
-            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".png").scaledToWidth(300));
+            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".png").scaledToWidth(ui->musicCoverLabel->width()));
         }
         else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").exists()){
             //QPixmap *cover = new QPixmap(resourcesPath+"/Icons/Music"+category+".jpg");
-            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").scaledToWidth(300));
+            ui->musicCoverLabel->setPixmap(QPixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music"+category+".jpg").scaledToWidth(ui->musicCoverLabel->width()));
         }
     }
 }
@@ -430,9 +429,12 @@ void MainWindow::updateMetaData(){
         ui->musicTitleLabel->setText("Title: "+title);
         ui->musicAlbumLabel->setText("Album: "+album);
         ui->musicArtistLabel->setText("Artist: "+musicPlayer->metaData(QStringLiteral("Author")).toString());
-        ui->musicYearLabel->setText("Year: "+musicPlayer->metaData(QStringLiteral("Year")).toString());
 
         ui->musicCoverLabel->setToolTip(album+": "+title);
+
+        QString musicInfo;
+        musicInfo.append(title+", "+album);
+        ui->musicLabel->setText("Music");
 
         QTableWidgetItem *i = new QTableWidgetItem;
         i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
@@ -440,10 +442,9 @@ void MainWindow::updateMetaData(){
         musicTable->setItem(musicPlaylist->currentIndex(), 0, i);
     }
     else{
-        ui->musicTitleLabel->setText("Title: Unknown");
-        ui->musicAlbumLabel->setText("Album: Unknown");
-        ui->musicArtistLabel->setText("Artist: Unknown");
-        ui->musicYearLabel->setText("Year: Unknown");
+        ui->musicTitleLabel->setText("");
+        ui->musicAlbumLabel->setText("");
+        ui->musicArtistLabel->setText("");
     }
     musicTable->selectRow(musicPlaylist->currentIndex());
 }
@@ -527,7 +528,7 @@ void MainWindow::on_iWantToUseAnOlderVersionClicked(){
     QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/releases"));
 }
 
-void MainWindow::on_tableDoubleClicked(int row, int column){
+void MainWindow::on_tableDoubleClicked(int row){
     musicPlaylist->setCurrentIndex(row);
 }
 

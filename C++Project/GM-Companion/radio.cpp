@@ -8,33 +8,34 @@ void MainWindow::on_actionRadio_clicked(){
 
 void MainWindow::on_rivendellPlayButton_clicked()
 {
-    radioTimer->start();
     radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
     musicPlayer->stop();
     radioActive = true;
     radioID = 0;
     radioPlayer->play();
 
+    ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: Radio Rivendell");
     ui->musicAlbumLabel->setText("");
     ui->musicArtistLabel->setText("");
-    ui->musicYearLabel->setText("");
+    ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
     ui->musicReplayButton->setDisabled(true);
+    ui->musicRandomButton->setDisabled(true);
 }
 
 void MainWindow::on_rivendellReloadButton_clicked()
 {
     if (radioActive){
         radioPlayer->pause();
-        radioTimer->start();
         radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
 
+        ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: Radio Rivendell");
         ui->musicAlbumLabel->setText("");
         ui->musicArtistLabel->setText("");
-        ui->musicYearLabel->setText("");
+        ui->musicCoverLabel->clear();
 
         radioPlayer->play();
     }
@@ -110,10 +111,10 @@ void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
 
             temp = temp.mid(artistStartIndex, albumEndIndex-artistStartIndex);
 
-            ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-            ui->musicAlbumLabel->setText("Metadata Information");
-            ui->musicArtistLabel->setText("are currently not");
-            ui->musicYearLabel->setText("supported. Sorry.");
+//            ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+//            ui->musicAlbumLabel->setText("Metadata Information");
+//            ui->musicArtistLabel->setText("are currently not");
+//            ui->musicYearLabel->setText("supported. Sorry.");
 
             break;
         }
@@ -145,55 +146,37 @@ void MainWindow::on_radioTimer_timeout(){
 
 void MainWindow::on_mmorpgPlayButton_clicked()
 {
-    //radioTimer->start();
     radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
     musicPlayer->stop();
     radioActive = true;
     radioID = 1;
     radioPlayer->play();
 
+    ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-    ui->musicAlbumLabel->setText("Metadata Information");
-    ui->musicArtistLabel->setText("are currently not");
-    ui->musicYearLabel->setText("supported. Sorry.");
+    ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
     ui->musicReplayButton->setDisabled(true);
+    ui->musicRandomButton->setDisabled(true);
 }
 
 void MainWindow::on_mmorpgReloadButton_clicked()
 {
     if (radioActive){
-        //radioTimer->start();
         radioPlayer->pause();
         radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
 
+        ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-        ui->musicAlbumLabel->setText("Metadata Information");
-        ui->musicArtistLabel->setText("are currently not");
-        ui->musicYearLabel->setText("supported. Sorry.");
+        ui->musicCoverLabel->clear();
 
         radioPlayer->play();
     }
 }
 
 void MainWindow::on_radioMetaDataChanged(){
-//    QString title = radioPlayer->metaData(QStringLiteral("Title")).toString();
-//    QString album = radioPlayer->metaData(QStringLiteral("AlbumTitle")).toString();
-//    QString artist = musicPlayer->metaData(QStringLiteral("Author")).toString();
-//    if (radioPlayer->isMetaDataAvailable()){
-//        ui->musicAlbumLabel->setText("Title: "+title);
-//        ui->musicArtistLabel->setText("Artist: "+artist);
-//        ui->musicYearLabel->setText("Album: "+album);
-
-//        ui->musicCoverLabel->setToolTip(album+": "+title);
-//    }
-//    else{
-//        ui->musicAlbumLabel->setText("Metadata Information");
-//        ui->musicArtistLabel->setText("are currently not");
-//        ui->musicYearLabel->setText("supported. Sorry.");
-//    }
-    ui->musicAlbumLabel->setText("Metadata Information");
-    ui->musicArtistLabel->setText("are currently not");
-    ui->musicYearLabel->setText("supported. Sorry.");
+//    ui->musicAlbumLabel->setText("Metadata Information");
+//    ui->musicArtistLabel->setText("are currently not");
+//    ui->musicYearLabel->setText("supported. Sorry.");
 }

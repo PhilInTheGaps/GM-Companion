@@ -143,6 +143,14 @@ private slots:
 
     void on_removeKleriSonderf_dsa5_clicked();
 
+    void on_addLineQualities_sifrp_clicked();
+
+    void on_removeLineQualities_sifrp_clicked();
+
+    void on_addRowEquipment_sifrp_clicked();
+
+    void on_removeRowEquipment_sifrp_clicked();
+
 private:
     Ui::CharEditor *ui;
 

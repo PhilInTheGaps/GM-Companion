@@ -97,7 +97,7 @@ QWidget* getCharacterPage(QString character){
     int systemID = charSettings.value("System", 0).toInt();
     charPage->systemID = systemID;
 
-    QString iconPath = charSettings.value("Icon", "SHOULD NOT BE VISIBLE").toString();
+    QString iconPath = charSettings.value("Icon", " ").toString();
 
     qDebug() << character;
     qDebug() << name;
@@ -236,6 +236,84 @@ QWidget* getCharacterPage(QString character){
 
         // Klerikale Tradition
         charPage->kTradition_dsa5 = writeList(character, "kTradition", 1);
+
+        break;
+    }
+
+    case 2:
+    {
+        // Name
+        charPage->name_sifrp = charSettings.value("charName", " ").toString();
+
+        // Age
+        charPage->age_sifrp = charSettings.value("age", " ").toString();
+
+        // Gender
+        charPage->gender_sifrp = charSettings.value("gender", " ").toString();
+
+        // House
+        charPage->house_sifrp = charSettings.value("house", " ").toString();
+
+        // Abilities
+        charPage->abilities1_sifrp = writeList(character, "abilities1", 2);
+        charPage->abilities2_sifrp = writeList(character, "abilities2", 2);
+
+        // Qualities
+        charPage->qualities_sifrp = writeList(character, "qualities", 1);
+        charPage->intrigueCombat_sifrp = writeList(character, "intrigueCombat", 2);
+
+        // Destiny Points
+        charPage->dest1_sifrp = charSettings.value("dest1", false).toBool();
+        charPage->dest2_sifrp = charSettings.value("dest2", false).toBool();
+        charPage->dest3_sifrp = charSettings.value("dest3", false).toBool();
+        charPage->dest4_sifrp = charSettings.value("dest4", false).toBool();
+        charPage->dest5_sifrp = charSettings.value("dest5", false).toBool();
+        charPage->dest6_sifrp = charSettings.value("dest6", false).toBool();
+        charPage->dest7_sifrp = charSettings.value("dest7", false).toBool();
+        charPage->dest8_sifrp = charSettings.value("dest8", false).toBool();
+
+        // Weapons
+        charPage->weapons_sifrp = writeList(character, "weapons", 3);
+        charPage->armor_sifrp = writeList(character, "armor", 1);
+
+        // Wounds
+        charPage->wounds_sifrp = writeList(character, "wounds", 1);
+
+        // Equipment
+        charPage->equipment_sifrp = writeList(character, "equipment", 1);
+
+        // Appearance
+        charPage->appearance_sifrp = writeList(character, "appearance", 4);
+
+        // Mannerisms
+        charPage->mannerisms_sifrp = charSettings.value("mannerisms", " ").toString();
+
+        // Distinguishing Features
+        charPage->distFeatures_sifrp = charSettings.value("distFeatures", " ").toString();
+
+        // Retainers
+        charPage->retainers_sifrp = charSettings.value("retainers", " ").toString();
+
+        // Personal History
+        charPage->personalHistory_sifrp = charSettings.value("personalHistory", " ").toString();
+
+        // Allies
+        charPage->allies_sifrp = charSettings.value("allies", " ").toString();
+
+        // Heraldry
+        charPage->heraldry_sifrp = charSettings.value("heraldry", " ").toString();
+
+        // Enemies
+        charPage->enemies_sifrp = charSettings.value("enemies", " ").toString();
+
+        // Portrait
+        charPage->portrait_sifrp = charSettings.value("portrait", " ").toString();
+
+        // Oaths
+        charPage->oaths_sifrp = charSettings.value("oaths", " ").toString();
+
+        // Motto
+        charPage->motto_sifrp = charSettings.value("motto", " ").toString();
 
         break;
     }

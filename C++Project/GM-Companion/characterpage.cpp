@@ -196,6 +196,90 @@ void CharacterPage::updateUi(){
 
         break;
     }
+
+    case 2:
+    {
+        this->setCurrentIndex(2);
+
+        // Name
+        ui->nameLineEdit_sifrp->setText(name_sifrp);
+
+        // Age
+        ui->ageLineEdit_sifrp->setText(age_sifrp);
+
+        // Gender
+        ui->genderLineEdit_sifrp->setText(gender_sifrp);
+
+        // House
+        ui->houseLineEdit_sifrp->setText(house_sifrp);
+
+        // Abilities
+        writeTable(abilities1_sifrp, 2, ui->abilitiesTable1_sifrp);
+        writeTable(abilities2_sifrp, 2, ui->abilitiesTable2_sifrp);
+
+        // Qualities
+        writeTable(qualities_sifrp, 1, ui->qualitiesTable_sifrp, true);
+
+        // Intrigue / Combat
+        writeTable(intrigueCombat_sifrp, 2, ui->intrigueCombatTable_sifrp, true);
+
+        // Destiny Points
+        ui->dest1_sifrp->setChecked(dest1_sifrp);
+        ui->dest2_sifrp->setChecked(dest2_sifrp);
+        ui->dest3_sifrp->setChecked(dest3_sifrp);
+        ui->dest4_sifrp->setChecked(dest4_sifrp);
+        ui->dest5_sifrp->setChecked(dest5_sifrp);
+        ui->dest6_sifrp->setChecked(dest6_sifrp);
+        ui->dest7_sifrp->setChecked(dest7_sifrp);
+        ui->dest8_sifrp->setChecked(dest8_sifrp);
+
+        // Weapons
+        writeTable(weapons_sifrp, 3, ui->weaponsTable_sifrp);
+
+        // Armor
+        writeTable(armor_sifrp, 1, ui->armorTable_sifrp, true);
+
+        // Wounds
+        writeTable(wounds_sifrp, 1, ui->woundsTable_sifrp);
+
+        // Equipment
+        writeTable(equipment_sifrp, 1, ui->equipmentTable_sifrp, true);
+
+        // Appearance
+        writeTable(appearance_sifrp, 4, ui->apperaranceTable_sifrp);
+
+        // Mannerisms
+        ui->mannerismsTextEdit_sifrp->setText(mannerisms_sifrp);
+
+        // Distinguishing Features
+        ui->distFeaturesTextEdit_sifrp->setText(distFeatures_sifrp);
+
+        // Retainers
+        ui->retainersTextEdit_sifrp->setText(retainers_sifrp);
+
+        // Personal History
+        ui->personalHistoryTextEdit_sifrp->setText(personalHistory_sifrp);
+
+        // Allies
+        ui->alliesTextEdit_sifrp->setText(allies_sifrp);
+
+        // Heraldry
+        ui->heraldryTextEdit_sifrp->setText(heraldry_sifrp);
+
+        // Enemies
+        ui->enemiesTextEdit_sifrp->setText(enemies_sifrp);
+
+        // Portrait
+        ui->portraitTextEdit_sifrp->setText(portrait_sifrp);
+
+        // Oaths
+        ui->oathsTextEdit_sifrp->setText(oaths_sifrp);
+
+        // Motto
+        ui->mottoTextEdit_sifrp->setText(motto_sifrp);
+
+        break;
+    }
     default:
         break;
     }

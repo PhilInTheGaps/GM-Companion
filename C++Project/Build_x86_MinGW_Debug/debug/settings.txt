@@ -1,0 +1,1 @@
+RESOURCES_PATH=C:/Users/Phil/Google Drive/GM Boys/GM-Companion/Resources (New);
