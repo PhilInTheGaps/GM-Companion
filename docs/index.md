@@ -1,8 +1,10 @@
 ---
 layout: archive
 permalink: /
-title: "Latest Posts"
+title: "Home"
 ---
+
+![](/images/site.png)
 
 <div class="tiles">
 {% for post in site.posts %}
