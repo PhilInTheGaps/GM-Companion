@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | DEV-BUILD Beta 3.0 RC1</string>
+   <string>GM-Companion | DEV-BUILD Beta 3.0 RC2</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -2293,7 +2293,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionInternet_Radio">
    <property name="text">
-    <string>Internet Radio</string>
+    <string>Webradio</string>
    </property>
   </action>
   <action name="actionCheck_for_Updates_on_Program_Start">

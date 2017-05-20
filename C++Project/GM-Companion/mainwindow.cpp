@@ -40,6 +40,7 @@
 #include <QtWinExtras>
 #include <QDebug>
 #include <QXmlStreamReader>
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
@@ -479,8 +480,9 @@ void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
                             else if (reader.name() == "updated"){
                                 QString s = reader.readElementText();
                                 QString date = s.left(s.indexOf("T"));
+                                QDate d = QDate::fromString(date, "yyyy-MM-dd");
 
-                                ui->blogTextEdit->append("(Last Update: "+date+")");
+                                ui->blogTextEdit->append("(Last Update: "+d.longMonthName(d.month())+" "+QString::number(d.day())+" "+QString::number(d.year())+")");
                             }
                             else if (reader.name() == "content"){
                                 ui->blogTextEdit->append(reader.readElementText());
