@@ -7,6 +7,7 @@ logo: icon128.png
 teaser: siteLabel.png
 locale: en
 url: https://philinthegaps.github.io/GM-Companion
+baseurl: https://philinthegaps.github.io/GM-Companion
 feed:
   path: feed.xml
 =======
