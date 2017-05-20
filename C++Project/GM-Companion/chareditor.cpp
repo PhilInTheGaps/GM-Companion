@@ -11,6 +11,7 @@ CharEditor::CharEditor(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->generalInfoTable->verticalHeader()->setVisible(true);
+    settingsManager = new SettingsManager;
 
 }
 
@@ -20,7 +21,7 @@ CharEditor::~CharEditor()
 }
 
 void CharEditor::writeTable(QString indicator, int columns, QTableWidget* table, bool updateTableSize){
-    QSettings settings("characters/"+loadCharacterFile, QSettings::IniFormat);
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+loadCharacterFile, QSettings::IniFormat);
 
     QList<QStringList>* list = new QList<QStringList>;
     int size = settings.beginReadArray(indicator);
@@ -57,7 +58,7 @@ void CharEditor::load(int index){
     loadCharacterFile = characters.at(index);
     qDebug() << loadCharacterFile;
 
-    QSettings settings("characters/"+loadCharacterFile, QSettings::IniFormat);
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+loadCharacterFile, QSettings::IniFormat);
 
     ui->displayNameLineEdit->setText(settings.value("Name").toString());
     ui->playerLineEdit->setText(settings.value("Player").toString());
@@ -317,7 +318,7 @@ void CharEditor::load(int index){
 }
 
 void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns){
-    QSettings settings("characters/"+displayName+".ini", QSettings::IniFormat);
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+displayName+".ini", QSettings::IniFormat);
     QList<QStringList> list;
     qDebug() << "Indicator: " << indicator << "Columns: " << columns << "Table length: " << table->rowCount();
     for (int i = 0; i<table->rowCount(); i++){
@@ -356,7 +357,7 @@ void CharEditor::save(){
     QString playerName = ui->playerLineEdit->text();
     int systemID = ui->systemComboBox->currentIndex();
 
-    QSettings settings("characters/"+displayName+".ini", QSettings::IniFormat);
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+displayName+".ini", QSettings::IniFormat);
 
     settings.setValue("Version", "1.0.0");
     settings.setValue("Name", displayName);
@@ -727,8 +728,15 @@ void CharEditor::on_iconButton_clicked()
     if (fileDialog->exec() == QDialog::Accepted){
         QStringList paths = fileDialog->selectedFiles();
         path = paths.at(0);
-        if (path.length() > 1){
-            ui->iconLineEdit->setText(path);
+        if (ui->displayNameLineEdit->text().length()>1){
+            if (QFile(settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png").exists())
+                QFile::remove(settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png");
+
+            QFile::copy(path, settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png");
+
+            if (path.length() > 1){
+                ui->iconLineEdit->setText(path);
+            }
         }
     }
 }

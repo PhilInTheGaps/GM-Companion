@@ -244,7 +244,219 @@ public:
     {
         if (CharacterPage->objectName().isEmpty())
             CharacterPage->setObjectName(QStringLiteral("CharacterPage"));
-        CharacterPage->resize(1041, 732);
+        CharacterPage->resize(1041, 769);
+        CharacterPage->setStyleSheet(QLatin1String("QWidget {\n"
+"	background-color: #222222;\n"
+"	color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QMenuBar{\n"
+"background-color: rgb(102, 102, 102);\n"
+"}\n"
+"\n"
+"QMenuBar::item {\n"
+"    spacing: 10px;\n"
+"	padding: 4px;\n"
+"    background: transparent;\n"
+"    border-radius: 2px;\n"
+"}\n"
+"\n"
+"QMenuBar::item:selected {\n"
+"    background: #444444;\n"
+"}\n"
+"\n"
+"QMenuBar::item:hover:!pressed {\n"
+"    background: #555555;\n"
+"}\n"
+"\n"
+"QMenuBar::item:pressed {\n"
+"    background: #333333;\n"
+"}\n"
+"\n"
+"QMenu {\n"
+"    background-color: #666666;\n"
+"}\n"
+"\n"
+"QMenu::item {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"QMenu::item:selected {\n"
+"    background-color: #333333;\n"
+"}\n"
+"\n"
+"QPushButton{\n"
+"background-color: rgb(102, 102, 102);\n"
+"border: 1px;\n"
+"padding: 5px;\n"
+"min-width: 40px;\n"
+"min-height: 30px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"background-color: rgb(51, 51, 51);\n"
+"}\n"
+"\n"
+"QPushButton:disabled {\n"
+"	background-color: #111111;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed{"
+                        "\n"
+"background-color: rgb(85, 85, 85);\n"
+"}\n"
+"\n"
+"QSlider::groove:horizontal {\n"
+"    border: transparent;\n"
+"	height: 10px;\n"
+"	background-color: rgb(102, 102, 102);\n"
+"    margin: 5px 0;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal {\n"
+"    background: white;\n"
+"    border: transparent;\n"
+"    width: 15px;\n"
+"    margin: -3px 0;\n"
+"    border-radius: 3px;\n"
+"}\n"
+"\n"
+"QProgressBar {\n"
+"    border: 2px solid grey;\n"
+"	background-color: rgb(102, 102, 102);\n"
+"    border-radius: 0px;\n"
+"	text-align: center;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #222222;\n"
+"    width: 1px;\n"
+"}\n"
+"\n"
+"QTabWidget::pane { /* The tab widget frame */\n"
+"    border: 1px solid #555555;\n"
+"}\n"
+"\n"
+"QTabWidget::tab-bar {\n"
+"    left: 0px;\n"
+"}\n"
+"\n"
+"QTabBar::tab {\n"
+"	background-color: rgb(102, 102, 102);\n"
+"    border: 1px solid #555555;\n"
+"    border-top-left-radius: 2px;\n"
+"    border-top-right-radius: 2px;\n"
+"    min-width: 100px;\n"
+"    padding: 5px;\n"
+"}\n"
+"\n"
+"QTabBa"
+                        "r::tab:selected, QTabBar::tab:hover {\n"
+"    background: #555555;\n"
+"}\n"
+"\n"
+"QTabBar::tab:selected {\n"
+"    border-color: #333333;\n"
+"    border-bottom-color: #555555; /* same as pane color */\n"
+"	background-color: rgb(68, 68, 68);\n"
+"}\n"
+"\n"
+"QTabBar::tab:!selected {\n"
+"    margin-top: 2px; /* make non-selected tabs look smaller */\n"
+"}\n"
+"\n"
+"QToolBox::tab {\n"
+"background-color: rgb(102, 102, 102);\n"
+"    border-radius: 1px;\n"
+"}\n"
+"\n"
+"QToolBox::tab:hover:!pressed {\n"
+"background-color: rgb(85, 85, 85);\n"
+"}\n"
+"\n"
+"QToolBox::tab:!pressed {\n"
+"background-color: rgb(51, 51, 51);\n"
+"}\n"
+"\n"
+"QToolBox::tab:selected { \n"
+"    font: italic, bold;\n"
+"}\n"
+"\n"
+"QTableView{\n"
+"selection-background-color: rgb(68, 68, 68);\n"
+"}\n"
+"\n"
+"QTableView QTableCornerButton::section {\n"
+"background-color: rgb(34, 34, 34);\n"
+"}\n"
+"\n"
+"QTableView::item {\n"
+"   /* border: 5px solid rgba(68, 119, 170, 150);*/\n"
+"	\n"
+"	background-color: #333333;\n"
+"}\n"
+"\n"
+"QTableView::item:selected {\n"
+""
+                        "	background-color: #777777;\n"
+"}\n"
+"\n"
+"QTableView, QHeaderView::section {    \n"
+"	background-color: rgb(34, 34, 34);\n"
+"}\n"
+"\n"
+"QScrollBar:horizontal {\n"
+"    border: 2px solid #222222;\n"
+"    background-color: #333333;\n"
+"    height: 15px;\n"
+"    margin: 0px 20px 0 20px;\n"
+"}\n"
+"QScrollBar::handle:horizontal {\n"
+"    background-color: #222222;\n"
+"    min-width: 20px;\n"
+"}\n"
+"QScrollBar::add-line:horizontal {\n"
+"    border: 2px solid #444444;\n"
+"    background: #222222;\n"
+"    width: 20px;\n"
+"    subcontrol-position: right;\n"
+"    subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:horizontal {\n"
+"    border: 2px solid #444444;\n"
+"    background: #222222;\n"
+"    width: 20px;\n"
+"    subcontrol-position: left;\n"
+"    subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar:vertical {\n"
+"    border: 2px solid #222222;\n"
+"    background-color: #333333;\n"
+"    width: 15px;\n"
+"    margin: 20px 0px 20 0px;\n"
+"}\n"
+"QScrollBar::handle:vertical {\n"
+"    background-color: #22222"
+                        "2;\n"
+"    min-height: 20px;\n"
+"}\n"
+"QScrollBar::add-line:vertical {\n"
+"    border: 2px solid #444444;\n"
+"    background: #222222;\n"
+"    height: 20px;\n"
+"    subcontrol-position: bottom;\n"
+"    subcontrol-origin: margin;\n"
+"}\n"
+"\n"
+"QScrollBar::sub-line:vertical {\n"
+"    border: 2px solid #444444;\n"
+"    background: #222222;\n"
+"    height: 20px;\n"
+"    subcontrol-position: top;\n"
+"    subcontrol-origin: margin;\n"
+"}"));
         pageGeneric = new QWidget();
         pageGeneric->setObjectName(QStringLiteral("pageGeneric"));
         verticalLayout = new QVBoxLayout(pageGeneric);
@@ -1759,6 +1971,9 @@ public:
 
         nameLineEdit_sifrp = new QLineEdit(tab);
         nameLineEdit_sifrp->setObjectName(QStringLiteral("nameLineEdit_sifrp"));
+        nameLineEdit_sifrp->setFrame(false);
+        nameLineEdit_sifrp->setReadOnly(true);
+        nameLineEdit_sifrp->setClearButtonEnabled(false);
 
         horizontalLayout_16->addWidget(nameLineEdit_sifrp);
 
@@ -1774,6 +1989,9 @@ public:
 
         ageLineEdit_sifrp = new QLineEdit(tab);
         ageLineEdit_sifrp->setObjectName(QStringLiteral("ageLineEdit_sifrp"));
+        ageLineEdit_sifrp->setFrame(false);
+        ageLineEdit_sifrp->setReadOnly(true);
+        ageLineEdit_sifrp->setClearButtonEnabled(false);
 
         horizontalLayout_17->addWidget(ageLineEdit_sifrp);
 
@@ -1784,6 +2002,9 @@ public:
 
         genderLineEdit_sifrp = new QLineEdit(tab);
         genderLineEdit_sifrp->setObjectName(QStringLiteral("genderLineEdit_sifrp"));
+        genderLineEdit_sifrp->setFrame(false);
+        genderLineEdit_sifrp->setReadOnly(true);
+        genderLineEdit_sifrp->setClearButtonEnabled(false);
 
         horizontalLayout_17->addWidget(genderLineEdit_sifrp);
 
@@ -1794,6 +2015,9 @@ public:
 
         houseLineEdit_sifrp = new QLineEdit(tab);
         houseLineEdit_sifrp->setObjectName(QStringLiteral("houseLineEdit_sifrp"));
+        houseLineEdit_sifrp->setFrame(false);
+        houseLineEdit_sifrp->setReadOnly(true);
+        houseLineEdit_sifrp->setClearButtonEnabled(false);
 
         horizontalLayout_17->addWidget(houseLineEdit_sifrp);
 
@@ -1837,6 +2061,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem272 = new QTableWidgetItem();
         abilitiesTable1_sifrp->setVerticalHeaderItem(9, __qtablewidgetitem272);
         abilitiesTable1_sifrp->setObjectName(QStringLiteral("abilitiesTable1_sifrp"));
+        abilitiesTable1_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         abilitiesTable1_sifrp->horizontalHeader()->setStretchLastSection(true);
 
         horizontalLayout_18->addWidget(abilitiesTable1_sifrp);
@@ -1869,6 +2094,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem283 = new QTableWidgetItem();
         abilitiesTable2_sifrp->setVerticalHeaderItem(8, __qtablewidgetitem283);
         abilitiesTable2_sifrp->setObjectName(QStringLiteral("abilitiesTable2_sifrp"));
+        abilitiesTable2_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         abilitiesTable2_sifrp->horizontalHeader()->setStretchLastSection(true);
 
         horizontalLayout_18->addWidget(abilitiesTable2_sifrp);
@@ -1886,6 +2112,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem284 = new QTableWidgetItem();
         qualitiesTable_sifrp->setHorizontalHeaderItem(0, __qtablewidgetitem284);
         qualitiesTable_sifrp->setObjectName(QStringLiteral("qualitiesTable_sifrp"));
+        qualitiesTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         qualitiesTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         qualitiesTable_sifrp->verticalHeader()->setVisible(false);
 
@@ -1900,41 +2127,49 @@ public:
 
         dest1_sifrp = new QCheckBox(tab);
         dest1_sifrp->setObjectName(QStringLiteral("dest1_sifrp"));
+        dest1_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest1_sifrp);
 
         dest2_sifrp = new QCheckBox(tab);
         dest2_sifrp->setObjectName(QStringLiteral("dest2_sifrp"));
+        dest2_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest2_sifrp);
 
         dest3_sifrp = new QCheckBox(tab);
         dest3_sifrp->setObjectName(QStringLiteral("dest3_sifrp"));
+        dest3_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest3_sifrp);
 
         dest4_sifrp = new QCheckBox(tab);
         dest4_sifrp->setObjectName(QStringLiteral("dest4_sifrp"));
+        dest4_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest4_sifrp);
 
         dest5_sifrp = new QCheckBox(tab);
         dest5_sifrp->setObjectName(QStringLiteral("dest5_sifrp"));
+        dest5_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest5_sifrp);
 
         dest6_sifrp = new QCheckBox(tab);
         dest6_sifrp->setObjectName(QStringLiteral("dest6_sifrp"));
+        dest6_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest6_sifrp);
 
         dest7_sifrp = new QCheckBox(tab);
         dest7_sifrp->setObjectName(QStringLiteral("dest7_sifrp"));
+        dest7_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest7_sifrp);
 
         dest8_sifrp = new QCheckBox(tab);
         dest8_sifrp->setObjectName(QStringLiteral("dest8_sifrp"));
+        dest8_sifrp->setCheckable(true);
 
         horizontalLayout_21->addWidget(dest8_sifrp);
 
@@ -1956,6 +2191,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem286 = new QTableWidgetItem();
         intrigueCombatTable_sifrp->setHorizontalHeaderItem(1, __qtablewidgetitem286);
         intrigueCombatTable_sifrp->setObjectName(QStringLiteral("intrigueCombatTable_sifrp"));
+        intrigueCombatTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         intrigueCombatTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         intrigueCombatTable_sifrp->verticalHeader()->setVisible(false);
 
@@ -1995,6 +2231,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem294 = new QTableWidgetItem();
         weaponsTable_sifrp->setVerticalHeaderItem(4, __qtablewidgetitem294);
         weaponsTable_sifrp->setObjectName(QStringLiteral("weaponsTable_sifrp"));
+        weaponsTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         weaponsTable_sifrp->setAlternatingRowColors(true);
         weaponsTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         weaponsTable_sifrp->verticalHeader()->setVisible(false);
@@ -2010,6 +2247,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem295 = new QTableWidgetItem();
         armorTable_sifrp->setHorizontalHeaderItem(0, __qtablewidgetitem295);
         armorTable_sifrp->setObjectName(QStringLiteral("armorTable_sifrp"));
+        armorTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         armorTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         armorTable_sifrp->verticalHeader()->setVisible(false);
 
@@ -2043,6 +2281,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem300 = new QTableWidgetItem();
         woundsTable_sifrp->setVerticalHeaderItem(3, __qtablewidgetitem300);
         woundsTable_sifrp->setObjectName(QStringLiteral("woundsTable_sifrp"));
+        woundsTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         woundsTable_sifrp->setAlternatingRowColors(true);
         woundsTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         woundsTable_sifrp->verticalHeader()->setVisible(false);
@@ -2055,6 +2294,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem301 = new QTableWidgetItem();
         equipmentTable_sifrp->setHorizontalHeaderItem(0, __qtablewidgetitem301);
         equipmentTable_sifrp->setObjectName(QStringLiteral("equipmentTable_sifrp"));
+        equipmentTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         equipmentTable_sifrp->setAlternatingRowColors(true);
         equipmentTable_sifrp->horizontalHeader()->setStretchLastSection(true);
         equipmentTable_sifrp->verticalHeader()->setVisible(false);
@@ -2089,6 +2329,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem307 = new QTableWidgetItem();
         apperaranceTable_sifrp->setVerticalHeaderItem(1, __qtablewidgetitem307);
         apperaranceTable_sifrp->setObjectName(QStringLiteral("apperaranceTable_sifrp"));
+        apperaranceTable_sifrp->setEditTriggers(QAbstractItemView::NoEditTriggers);
         apperaranceTable_sifrp->horizontalHeader()->setVisible(false);
         apperaranceTable_sifrp->horizontalHeader()->setStretchLastSection(false);
         apperaranceTable_sifrp->verticalHeader()->setVisible(false);
@@ -2102,6 +2343,7 @@ public:
 
         mannerismsTextEdit_sifrp = new QTextEdit(tab_2);
         mannerismsTextEdit_sifrp->setObjectName(QStringLiteral("mannerismsTextEdit_sifrp"));
+        mannerismsTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_35->addWidget(mannerismsTextEdit_sifrp);
 
@@ -2112,6 +2354,7 @@ public:
 
         distFeaturesTextEdit_sifrp = new QTextEdit(tab_2);
         distFeaturesTextEdit_sifrp->setObjectName(QStringLiteral("distFeaturesTextEdit_sifrp"));
+        distFeaturesTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_35->addWidget(distFeaturesTextEdit_sifrp);
 
@@ -2122,6 +2365,7 @@ public:
 
         retainersTextEdit_sifrp = new QTextEdit(tab_2);
         retainersTextEdit_sifrp->setObjectName(QStringLiteral("retainersTextEdit_sifrp"));
+        retainersTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_35->addWidget(retainersTextEdit_sifrp);
 
@@ -2138,6 +2382,7 @@ public:
 
         personalHistoryTextEdit_sifrp = new QTextEdit(tab_2);
         personalHistoryTextEdit_sifrp->setObjectName(QStringLiteral("personalHistoryTextEdit_sifrp"));
+        personalHistoryTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_37->addWidget(personalHistoryTextEdit_sifrp);
 
@@ -2152,6 +2397,7 @@ public:
 
         alliesTextEdit_sifrp = new QTextEdit(tab_2);
         alliesTextEdit_sifrp->setObjectName(QStringLiteral("alliesTextEdit_sifrp"));
+        alliesTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_40->addWidget(alliesTextEdit_sifrp);
 
@@ -2162,6 +2408,7 @@ public:
 
         heraldryTextEdit_sifrp = new QTextEdit(tab_2);
         heraldryTextEdit_sifrp->setObjectName(QStringLiteral("heraldryTextEdit_sifrp"));
+        heraldryTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_40->addWidget(heraldryTextEdit_sifrp);
 
@@ -2177,6 +2424,7 @@ public:
 
         enemiesTextEdit_sifrp = new QTextEdit(tab_2);
         enemiesTextEdit_sifrp->setObjectName(QStringLiteral("enemiesTextEdit_sifrp"));
+        enemiesTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_39->addWidget(enemiesTextEdit_sifrp);
 
@@ -2187,6 +2435,7 @@ public:
 
         portraitTextEdit_sifrp = new QTextEdit(tab_2);
         portraitTextEdit_sifrp->setObjectName(QStringLiteral("portraitTextEdit_sifrp"));
+        portraitTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_39->addWidget(portraitTextEdit_sifrp);
 
@@ -2202,6 +2451,7 @@ public:
 
         oathsTextEdit_sifrp = new QTextEdit(tab_2);
         oathsTextEdit_sifrp->setObjectName(QStringLiteral("oathsTextEdit_sifrp"));
+        oathsTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_38->addWidget(oathsTextEdit_sifrp);
 
@@ -2212,6 +2462,7 @@ public:
 
         mottoTextEdit_sifrp = new QTextEdit(tab_2);
         mottoTextEdit_sifrp->setObjectName(QStringLiteral("mottoTextEdit_sifrp"));
+        mottoTextEdit_sifrp->setReadOnly(true);
 
         verticalLayout_38->addWidget(mottoTextEdit_sifrp);
 

@@ -15,7 +15,8 @@ enum Setting{
     mapsPath,
     resourcesPath,
     checkForUpdatesOnStart,
-    uiMode
+    uiMode,
+    charactersPath
 };
 
 class SettingsManager
@@ -23,7 +24,7 @@ class SettingsManager
 public:
     SettingsManager();
 
-    void setSetting(Setting setting, bool checked = true);
+    void setSetting(Setting setting, int checked = 1);
     QString getSetting(Setting);
 
 private:

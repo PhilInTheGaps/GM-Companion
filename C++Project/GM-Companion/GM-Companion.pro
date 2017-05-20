@@ -8,7 +8,8 @@ QT       += core gui \
             multimedia \
             multimediawidgets \
             winextras \
-            sql
+            sql \
+            network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     settingsmanager.h \
     dicemanager.h \
     chareditor.h \
-    characterpage.h
+    characterpage.h \
+    version.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \

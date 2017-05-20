@@ -26,6 +26,9 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::resourcesPath:
         settingString = settings.value("resourcesPath", "").toString();
         break;
+    case Setting::charactersPath:
+        settingString = settings.value("charactersPath", "").toString();
+        break;
     case Setting::checkForUpdatesOnStart:
         settingString = settings.value("checkForUpdatesOnStart", "true").toString();
         break;
@@ -40,7 +43,7 @@ QString SettingsManager::getSetting(Setting setting){
 }
 
 // Sets a specific setting
-void SettingsManager::setSetting(Setting setting, bool checked){
+void SettingsManager::setSetting(Setting setting, int checked){
     QString path;
     QSettings settings("settings.ini", QSettings::IniFormat);
 
@@ -67,6 +70,12 @@ void SettingsManager::setSetting(Setting setting, bool checked){
         path = setFolderLocation("Set Resources Folder");
         if (path.length()>1){
             settings.setValue("resourcesPath", path);
+        }
+        break;
+    case Setting::charactersPath:
+        path = setFolderLocation("Set Characters Folder");
+        if (path.length()>1){
+            settings.setValue("charactersPath", path);
         }
         break;
     case Setting::checkForUpdatesOnStart:

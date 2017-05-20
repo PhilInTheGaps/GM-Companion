@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "functions.h"
 
+#include <QToolButton>
+
 void MainWindow::generateSoundButtons(){
     tabWidgetSound = new QTabWidget;
     ui->pageSound->layout()->addWidget(tabWidgetSound);
@@ -33,30 +35,65 @@ void MainWindow::generateSoundButtons(){
 
             for (QString s : soundFolders){
                 if (!s.contains(".")){
-                    QPushButton *b = new QPushButton();
-                    b->setStyleSheet("min-width: 155; min-height: 155; padding: 1px; border-radius: 2px");
+                    QToolButton* b = new QToolButton;
                     connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
                     signalMapperSound->setMapping(b, settingsManager->getSetting(Setting::soundPath)+"/"+folder+"/"+s);
 
-                    //Setting Icon
                     if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png").exists()){
-                        QIcon *icon = new QIcon(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
+                        b->setStyleSheet("QToolButton {min-width: 152; "
+                                         "min-height: 152; "
+                                         "padding: 1px; "
+                                         "border-radius: 2px; "
+                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png); "
+                                         "background-repeat: no-repeat; "
+                                         "background-position: center center;}"
+                                         "QToolButton QWidget{"
+                                         "color: white} ");
                     }
                     else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg").exists()){
-                        QIcon *icon = new QIcon(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg");
-                        b->setIcon(*icon);
-                        b->setIconSize(QSize(150, 150));
+                        b->setStyleSheet("QToolButton {min-width: 152; "
+                                         "min-height: 152; "
+                                         "padding: 1px; "
+                                         "border-radius: 2px; "
+                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg); "
+                                         "background-repeat: no-repeat; "
+                                         "background-position: center center;}"
+                                         "QToolButton QWidget{"
+                                         "color: white} ");
+                    }
+                    else if (QFile("resources/button.png").exists()){
+                        b->setStyleSheet("QToolButton {min-width: 152; "
+                                         "min-height: 152; "
+                                         "padding: 1px; "
+                                         "border-radius: 2px; "
+                                         "background-image: url(resources/button.png); "
+                                         "background-repeat: no-repeat; "
+                                         "background-position: center center;}"
+                                         "QToolButton QWidget{"
+                                         "color: white} ");
                     }
                     else{
-                        QFont font;
-                        font.setPixelSize(15);
-                        b->setFont(font);
-                        b->setText(cleanText(s));
+                        b->setStyleSheet("QToolButton {min-width: 152; "
+                                         "min-height: 152; "
+                                         "padding: 1px; "
+                                         "border-radius: 2px;");
                     }
 
-                    b->setFixedSize(155, 155);
+                    QFont font;
+                    font.setPixelSize(15);
+                    b->setFont(font);
+
+                    QString title = cleanText(s);
+
+                    if (title.length()>20){
+                        int i = title.indexOf(" ", 14);
+                        title.remove(i, 1);
+                        title.insert(i, "\n");
+                    }
+
+                    b->setText(title);
+
+                    b->setFixedSize(152, 152);
                     b->setToolTip(cleanText(s));
 
                     flowLayoutSound->addWidget(b);
