@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1041</width>
-    <height>732</height>
+    <height>769</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2960,7 +2960,17 @@ QScrollBar::sub-line:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="nameLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="nameLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -2974,7 +2984,17 @@ QScrollBar::sub-line:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="ageLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="ageLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_33">
@@ -2984,7 +3004,17 @@ QScrollBar::sub-line:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="genderLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="genderLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_32">
@@ -2994,7 +3024,17 @@ QScrollBar::sub-line:vertical {
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="houseLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="houseLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -3009,6 +3049,9 @@ QScrollBar::sub-line:vertical {
          <layout class="QHBoxLayout" name="horizontalLayout_18">
           <item>
            <widget class="QTableWidget" name="abilitiesTable1_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3076,6 +3119,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="abilitiesTable2_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3144,6 +3190,9 @@ QScrollBar::sub-line:vertical {
            <layout class="QVBoxLayout" name="verticalLayout_32">
             <item>
              <widget class="QTableWidget" name="qualitiesTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -3171,12 +3220,18 @@ QScrollBar::sub-line:vertical {
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest2_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3185,12 +3240,18 @@ QScrollBar::sub-line:vertical {
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest4_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3199,12 +3260,18 @@ QScrollBar::sub-line:vertical {
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest6_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3213,12 +3280,18 @@ QScrollBar::sub-line:vertical {
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest8_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3241,6 +3314,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="intrigueCombatTable_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3274,6 +3350,9 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="weaponsTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3329,6 +3408,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="armorTable_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3357,6 +3439,9 @@ QScrollBar::sub-line:vertical {
            <layout class="QVBoxLayout" name="verticalLayout_36">
             <item>
              <widget class="QTableWidget" name="woundsTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3395,6 +3480,9 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="equipmentTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3424,6 +3512,9 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="apperaranceTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderVisible">
                <bool>false</bool>
               </attribute>
@@ -3473,7 +3564,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="mannerismsTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="mannerismsTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_40">
@@ -3483,7 +3578,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_41">
@@ -3493,7 +3592,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="retainersTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="retainersTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3507,7 +3610,11 @@ QScrollBar::sub-line:vertical {
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp"/>
+         <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_24">
@@ -3521,7 +3628,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="alliesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="alliesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_46">
@@ -3531,7 +3642,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="heraldryTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="heraldryTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3545,7 +3660,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="enemiesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="enemiesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_47">
@@ -3555,7 +3674,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="portraitTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="portraitTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3569,7 +3692,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="oathsTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="oathsTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_48">
@@ -3579,7 +3706,11 @@ QScrollBar::sub-line:vertical {
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="mottoTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="mottoTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

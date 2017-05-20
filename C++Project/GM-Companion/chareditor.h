@@ -5,6 +5,7 @@
 #include <QTableWidget>
 #include <QListWidget>
 #include <QSettings>
+#include "settingsmanager.h"
 
 namespace Ui {
 class CharEditor;
@@ -153,6 +154,8 @@ private slots:
 
 private:
     Ui::CharEditor *ui;
+
+    SettingsManager* settingsManager;
 
     void save();
 
