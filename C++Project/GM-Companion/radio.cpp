@@ -154,6 +154,8 @@ void MainWindow::on_mmorpgPlayButton_clicked()
 
     ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+    ui->musicAlbumLabel->setText("");
+    ui->musicArtistLabel->setText("");
     ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
@@ -169,6 +171,8 @@ void MainWindow::on_mmorpgReloadButton_clicked()
 
         ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+        ui->musicAlbumLabel->setText("");
+        ui->musicArtistLabel->setText("");
         ui->musicCoverLabel->clear();
 
         radioPlayer->play();
