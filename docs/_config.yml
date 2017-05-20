@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Site wide configuration
 
 title: "My Site"
@@ -8,6 +9,14 @@ locale: en
 url:
 feed:
   path: atom.xml
+=======
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+# Permalinks
+permalink:        pretty
+>>>>>>> origin/master
 
 # Jekyll configuration
 
