@@ -4,7 +4,7 @@
     {% if link.url contains 'http' %}
         {% assign domain = '' %}
         {% else %}
-        {% assign domain = site.url %}
+        {% assign domain = site.baseurl %}
     {% endif %}
     <li><a href="{{ domain }}{{ link.url }}" {% if link.url contains 'http' %}target="_blank"{% endif %}>{{ link.title }}</a></li>
   {% endfor %}
