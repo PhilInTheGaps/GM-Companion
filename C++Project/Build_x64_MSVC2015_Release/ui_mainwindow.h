@@ -55,6 +55,7 @@ public:
     QAction *actionCheck_for_Updates_on_Program_Start;
     QAction *actionNamne_Generator;
     QAction *actionCharacters;
+    QAction *actionSet_Characters_Folder;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QStackedWidget *stackedWidget;
@@ -444,6 +445,8 @@ public:
         actionNamne_Generator->setObjectName(QStringLiteral("actionNamne_Generator"));
         actionCharacters = new QAction(MainWindow);
         actionCharacters->setObjectName(QStringLiteral("actionCharacters"));
+        actionSet_Characters_Folder = new QAction(MainWindow);
+        actionSet_Characters_Folder->setObjectName(QStringLiteral("actionSet_Characters_Folder"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -1441,22 +1444,19 @@ public:
         menuGM_Help->addAction(actionDatabase);
         menuGM_Help->addAction(actionNamne_Generator);
         menuGM_Help->addAction(actionCharacters);
-        menuGM_Help->addSeparator();
         menuGM_Help->addAction(actionSet_Database_Path);
+        menuOptions->addAction(actionSet_Music_Folder);
+        menuOptions->addAction(actionSet_Sound_Folder);
+        menuOptions->addAction(actionSet_Maps_Folder);
         menuOptions->addAction(actionSet_Resources_Folder);
+        menuOptions->addAction(actionSet_Characters_Folder);
         menuOptions->addSeparator();
         menuOptions->addAction(actionCheck_for_Updates);
         menuOptions->addAction(actionCheck_for_Updates_on_Program_Start);
         menuMusic->addAction(actionMusic_Player);
         menuMusic->addAction(actionInternet_Radio);
-        menuMusic->addSeparator();
-        menuMusic->addAction(actionSet_Music_Folder);
         menuSound->addAction(actionSound_Player);
-        menuSound->addSeparator();
-        menuSound->addAction(actionSet_Sound_Folder);
         menuMaps->addAction(actionMap_Viewer);
-        menuMaps->addSeparator();
-        menuMaps->addAction(actionSet_Maps_Folder);
         menuHelp->addAction(actionOpen_Wiki);
         menuHelp->addAction(actionReport_a_Bug);
         menuHelp->addSeparator();
@@ -1474,7 +1474,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 PRE 7", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 RC1", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1493,6 +1493,7 @@ public:
         actionCheck_for_Updates_on_Program_Start->setText(QApplication::translate("MainWindow", "Check for Updates on Program Start", Q_NULLPTR));
         actionNamne_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
         actionCharacters->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
+        actionSet_Characters_Folder->setText(QApplication::translate("MainWindow", "Set Characters Folder", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabDice), QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         nameTextEdit->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

@@ -58,6 +58,7 @@ private slots:
     void on_setSoundFolder_clicked();
     void on_setMapsFolder_clicked();
     void on_setResourcesFolder_clicked();
+    void on_setCharactersFolder_clicked();
 
     void on_menuGM_Help_triggered();
     void on_menuMusic_triggered();

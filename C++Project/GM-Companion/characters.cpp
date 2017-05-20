@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "flowlayout.h"
 #include "characterpage.h"
+#include "settingsmanager.h"
 
 #include <QDir>
 #include <QListWidget>
@@ -10,7 +11,8 @@
 #include <QDebug>
 
 QStringList getCharacterList(){
-    QString folderPath = QDir::currentPath()+"/characters";
+    SettingsManager* settingsManager = new SettingsManager;
+    QString folderPath = settingsManager->getSetting(Setting::charactersPath);
     QStringList files = getFiles(folderPath);
     QStringList characterFileNames;
 
@@ -89,7 +91,8 @@ QList<QStringList>* writeList(QString character, QString indicator, int columns)
 QWidget* getCharacterPage(QString character){
     CharacterPage* charPage = new CharacterPage;
 
-    QSettings charSettings("characters/"+character, QSettings::IniFormat);
+    SettingsManager* settingsManager = new SettingsManager;
+    QSettings charSettings(settingsManager->getSetting(Setting::charactersPath)+"/"+character, QSettings::IniFormat);
 
     QString version = charSettings.value("Version", "SHOULD NOT BE VISIBLE").toString();
     QString name = charSettings.value("Name", "SHOULD NOT BE VISIBLE").toString();
@@ -107,7 +110,7 @@ QWidget* getCharacterPage(QString character){
     charPage->name = name;
     charPage->player = player;
     charPage->setToolTip(name+" ("+player+")");
-    charPage->setAccessibleName(iconPath+","+QString::number(systemID));
+    charPage->setAccessibleName(name+","+QString::number(systemID));
 
     switch (systemID) {
     case 0:{

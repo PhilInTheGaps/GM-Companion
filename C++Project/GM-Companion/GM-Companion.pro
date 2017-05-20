@@ -40,7 +40,8 @@ HEADERS  += mainwindow.h \
     settingsmanager.h \
     dicemanager.h \
     chareditor.h \
-    characterpage.h
+    characterpage.h \
+    version.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \

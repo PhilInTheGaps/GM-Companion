@@ -26,6 +26,9 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::resourcesPath:
         settingString = settings.value("resourcesPath", "").toString();
         break;
+    case Setting::charactersPath:
+        settingString = settings.value("charactersPath", "").toString();
+        break;
     case Setting::checkForUpdatesOnStart:
         settingString = settings.value("checkForUpdatesOnStart", "true").toString();
         break;
@@ -67,6 +70,12 @@ void SettingsManager::setSetting(Setting setting, int checked){
         path = setFolderLocation("Set Resources Folder");
         if (path.length()>1){
             settings.setValue("resourcesPath", path);
+        }
+        break;
+    case Setting::charactersPath:
+        path = setFolderLocation("Set Characters Folder");
+        if (path.length()>1){
+            settings.setValue("charactersPath", path);
         }
         break;
     case Setting::checkForUpdatesOnStart:
