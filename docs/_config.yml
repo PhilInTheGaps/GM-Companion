@@ -1,14 +1,14 @@
 <<<<<<< HEAD
 # Site wide configuration
 
-title: "My Site"
-description: "This is a description of my awesome site."
-logo: # 120x120 px default image used for Twitter summary card
-teaser: # 400x250 px default teaser image used in image archive grid
+title: GM-Companion
+description: "GM-Companion is a tool for the gamemaster of a rpg session."
+logo: icon128.png
+teaser: siteLabel.png
 locale: en
-url:
+url: https://philinthegaps.github.io/GM-Companion
 feed:
-  path: atom.xml
+  path: feed.xml
 =======
 # Dependencies
 markdown:         kramdown
@@ -32,17 +32,16 @@ gems:
   - jekyll-gist
   - jekyll-feed
 
-
 # Site owner
 owner:
-  name:
+  name: Phil Hoffmann
   email:
   twitter:
   google:
     ad-client:
     ad-slot:
   bio:
-  avatar: bio-photo.jpg # 160x160 px image for author byline
+  avatar: icon128.png
   disqus-shortname:
 
 

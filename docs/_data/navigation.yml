@@ -1,6 +1,16 @@
 # Site navigation links
 
-- title:
-  url:
+- title: Download
+  url: https://github.com/PhilInTheGaps/GM-Companion/releases
+  excerpt:
+  image:
+  
+- title: Documentation
+  url: https://github.com/PhilInTheGaps/GM-Companion/wiki
+  excerpt:
+  image:
+  
+- title: View on GitHub
+  url: https://github.com/PhilInTheGaps/GM-Companion
   excerpt:
   image:
