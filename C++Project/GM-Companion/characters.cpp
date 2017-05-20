@@ -72,7 +72,8 @@ QFrame* generateFrame(QString indicator, QString headline, QString characterFile
 }
 
 QList<QStringList>* writeList(QString character, QString indicator, int columns){
-    QSettings settings("characters/"+character, QSettings::IniFormat);
+    SettingsManager* settingsManager = new SettingsManager;
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+character, QSettings::IniFormat);
     QList<QStringList>* list = new QList<QStringList>;
     int size = settings.beginReadArray(indicator);
     for (int row = 0; row<size; row++){
@@ -95,8 +96,8 @@ QWidget* getCharacterPage(QString character){
     QSettings charSettings(settingsManager->getSetting(Setting::charactersPath)+"/"+character, QSettings::IniFormat);
 
     QString version = charSettings.value("Version", "SHOULD NOT BE VISIBLE").toString();
-    QString name = charSettings.value("Name", "SHOULD NOT BE VISIBLE").toString();
-    QString player = charSettings.value("Player", "SHOULD NOT BE VISIBLE").toString();
+    QString name = charSettings.value("Name", character).toString();
+    QString player = charSettings.value("Player", "").toString();
     int systemID = charSettings.value("System", 0).toInt();
     charPage->systemID = systemID;
 
