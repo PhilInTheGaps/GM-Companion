@@ -4,7 +4,7 @@ permalink: /
 title: "Home"
 ---
 
-![](/images/site.png)
+![](/GM-Companion/images/site.png)
 
 <div class="tiles">
 {% for post in site.posts %}
