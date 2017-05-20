@@ -1,0 +1,26 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+relative_permalinks: true
+
+# Setup
+title:            GM-Companion
+tagline:          'A RPG assistant tool'
+description:      'The official GM-Companion blog / website'
+url:              https://philinthegaps.github.io/GM-Companion/
+baseurl:          /
+
+author:
+  name:           'Phil Hoffmann'
+  url:            https://twitter.com/TheGapPhiller
+
+paginate:         5
+
+# Custom vars
+version:          0.2.9.1
+
+github:
+  repo:           https://github.com/PhilInTheGaps/GM-Companion
