@@ -1,26 +1,64 @@
-# Dependencies
-markdown:         redcarpet
-highlighter:      pygments
+# Site wide configuration
 
-# Permalinks
-permalink:        pretty
-relative_permalinks: true
+title: "My Site"
+description: "This is a description of my awesome site."
+logo: # 120x120 px default image used for Twitter summary card
+teaser: # 400x250 px default teaser image used in image archive grid
+locale: en
+url:
+feed:
+  path: atom.xml
 
-# Setup
-title:            GM-Companion
-tagline:          'A RPG assistant tool'
-description:      'The official GM-Companion blog / website'
-url:              https://philinthegaps.github.io/GM-Companion/
-baseurl:          /
+# Jekyll configuration
 
-author:
-  name:           'Phil Hoffmann'
-  url:            https://twitter.com/TheGapPhiller
+sass:
+  sass_dir: _sass
+  style: compressed
+permalink: /:categories/:title/
+kramdown:
+  toc_levels: 1..2
+highlighter: rouge
+gems:
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
 
-paginate:         5
 
-# Custom vars
-version:          0.2.9.1
+# Site owner
+owner:
+  name:
+  email:
+  twitter:
+  google:
+    ad-client:
+    ad-slot:
+  bio:
+  avatar: bio-photo.jpg # 160x160 px image for author byline
+  disqus-shortname:
 
-github:
-  repo:           https://github.com/PhilInTheGaps/GM-Companion
+
+include:
+  - .htaccess
+exclude:
+  - "*.less"
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - .asset-cache
+  - .bundle
+  - .jekyll-assets-cache
+  - .sass-cache
+  - CHANGELOG
+  - Capfile
+  - Gemfile
+  - Gruntfile.js
+  - LICENSE
+  - README
+  - Rakefile
+  - config
+  - gulpfile.js
+  - lib
+  - log
+  - node_modules
+  - package.json
+  - spec
+  - tmp
