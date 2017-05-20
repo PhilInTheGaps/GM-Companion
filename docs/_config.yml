@@ -9,7 +9,7 @@ locale: en
 url: https://philinthegaps.github.io/GM-Companion
 baseurl: /GM-Companion
 feed:
-  path: feed.xml
+  path: GM-Companion/feed.xml
 =======
 # Dependencies
 markdown:         kramdown
