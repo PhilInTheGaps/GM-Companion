@@ -15,7 +15,8 @@ enum Setting{
     mapsPath,
     resourcesPath,
     checkForUpdatesOnStart,
-    uiMode
+    uiMode,
+    charactersPath
 };
 
 class SettingsManager

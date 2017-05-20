@@ -99,6 +99,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionSet_Sound_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setSoundFolder_clicked()));
     connect(ui->actionSet_Maps_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setMapsFolder_clicked()));
     connect(ui->actionSet_Resources_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setResourcesFolder_clicked()));
+    connect(ui->actionSet_Characters_Folder, SIGNAL(triggered(bool)), this, SLOT(on_setCharactersFolder_clicked()));
     connect(ui->actionCheck_for_Updates_on_Program_Start, SIGNAL(triggered(bool)), this, SLOT(on_checkForUpdatesOnStart(bool)));
 
     connect(ui->menuGM_Help, SIGNAL(triggered(QAction*)), this, SLOT(on_menuGM_Help_triggered()));
@@ -199,13 +200,15 @@ void MainWindow::on_characterListClicked(int index){
     if (index >= 0){
         ui->charactersStackedWidget->setCurrentIndex(index);
 
-        qDebug() << QDir::currentPath() << "/characters/" << ui->charactersListWidget->item(index)->toolTip() << ".png";
+        qDebug() << settingsManager->getSetting(Setting::charactersPath)<< "/" << ui->charactersListWidget->item(index)->toolTip() << ".png";
         qDebug() << ui->charactersListWidget->item(index)->toolTip();
 
         QStringList list = ui->charactersStackedWidget->currentWidget()->accessibleName().split(",");
+        qDebug() << "ICON PATH: " << list.at(0);
 
-        if (QFile(list.at(0)).exists()){
-            QPixmap charIcon(list.at(0));
+        if (QFile(settingsManager->getSetting(Setting::charactersPath)+"/"+list.at(0)+".png").exists()){
+            QPixmap charIcon(settingsManager->getSetting(Setting::charactersPath)+"/"+list.at(0)+".png");
+            qDebug() << settingsManager->getSetting(Setting::charactersPath)+"/"+list.at(0)+".png";
             ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
             ui->characterIconLabel->adjustSize();
         }
@@ -630,6 +633,11 @@ void MainWindow::on_setMapsFolder_clicked(){
         delete child;
     }
     generateMaps();
+}
+
+void MainWindow::on_setCharactersFolder_clicked(){
+    settingsManager->setSetting(Setting::charactersPath, true);
+    updateCharacters();
 }
 
 void MainWindow::on_setResourcesFolder_clicked(){

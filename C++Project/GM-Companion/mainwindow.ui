@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 7</string>
+   <string>GM-Companion | DEV-BUILD Beta 3.0 RC1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -1184,6 +1184,9 @@ p, li { white-space: pre-wrap; }
                 <pointsize>14</pointsize>
                </font>
               </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -2117,7 +2120,6 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionDatabase"/>
     <addaction name="actionNamne_Generator"/>
     <addaction name="actionCharacters"/>
-    <addaction name="separator"/>
     <addaction name="actionSet_Database_Path"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -2131,7 +2133,11 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionSet_Music_Folder"/>
+    <addaction name="actionSet_Sound_Folder"/>
+    <addaction name="actionSet_Maps_Folder"/>
     <addaction name="actionSet_Resources_Folder"/>
+    <addaction name="actionSet_Characters_Folder"/>
     <addaction name="separator"/>
     <addaction name="actionCheck_for_Updates"/>
     <addaction name="actionCheck_for_Updates_on_Program_Start"/>
@@ -2149,8 +2155,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionMusic_Player"/>
     <addaction name="actionInternet_Radio"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Music_Folder"/>
    </widget>
    <widget class="QMenu" name="menuSound">
     <property name="font">
@@ -2164,8 +2168,6 @@ p, li { white-space: pre-wrap; }
      <string>Sound</string>
     </property>
     <addaction name="actionSound_Player"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Sound_Folder"/>
    </widget>
    <widget class="QMenu" name="menuMaps">
     <property name="font">
@@ -2179,8 +2181,6 @@ p, li { white-space: pre-wrap; }
      <string>Maps</string>
     </property>
     <addaction name="actionMap_Viewer"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Maps_Folder"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="font">
@@ -2315,6 +2315,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionCharacters">
    <property name="text">
     <string>Characters</string>
+   </property>
+  </action>
+  <action name="actionSet_Characters_Folder">
+   <property name="text">
+    <string>Set Characters Folder</string>
    </property>
   </action>
  </widget>
