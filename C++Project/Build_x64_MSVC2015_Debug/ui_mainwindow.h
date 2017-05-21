@@ -78,7 +78,9 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *createCharacterButton;
     QPushButton *pushButton;
+    QHBoxLayout *horizontalLayout_15;
     QPushButton *updateCharactersButton;
+    QPushButton *deleteCharacterButton;
     QStackedWidget *charactersStackedWidget;
     QWidget *widget;
     QWidget *pageMusic;
@@ -603,10 +605,21 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout);
 
+        horizontalLayout_15 = new QHBoxLayout();
+        horizontalLayout_15->setSpacing(6);
+        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
         updateCharactersButton = new QPushButton(frame);
         updateCharactersButton->setObjectName(QStringLiteral("updateCharactersButton"));
 
-        verticalLayout_5->addWidget(updateCharactersButton);
+        horizontalLayout_15->addWidget(updateCharactersButton);
+
+        deleteCharacterButton = new QPushButton(frame);
+        deleteCharacterButton->setObjectName(QStringLiteral("deleteCharacterButton"));
+
+        horizontalLayout_15->addWidget(deleteCharacterButton);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_15);
 
 
         horizontalLayout_10->addWidget(frame);
@@ -1507,6 +1520,7 @@ public:
         createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
+        deleteCharacterButton->setText(QApplication::translate("MainWindow", "Delete Selected", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         mapsZoomInButton->setText(QApplication::translate("MainWindow", "Zoom In", Q_NULLPTR));
         mapsZoomOutButton->setText(QApplication::translate("MainWindow", "Zoom Out", Q_NULLPTR));
