@@ -487,6 +487,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
         generalInfoTable_generic->setVerticalHeaderItem(6, __qtablewidgetitem6);
         generalInfoTable_generic->setObjectName(QStringLiteral("generalInfoTable_generic"));
+        generalInfoTable_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         generalInfoTable_generic->setColumnCount(1);
         generalInfoTable_generic->horizontalHeader()->setVisible(false);
 
@@ -512,6 +513,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
         skills1Table_generic->setHorizontalHeaderItem(1, __qtablewidgetitem8);
         skills1Table_generic->setObjectName(QStringLiteral("skills1Table_generic"));
+        skills1Table_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         skills1Table_generic->setColumnCount(2);
         skills1Table_generic->horizontalHeader()->setDefaultSectionSize(120);
         skills1Table_generic->horizontalHeader()->setMinimumSectionSize(80);
@@ -537,6 +539,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         skills2Table_generic->setHorizontalHeaderItem(1, __qtablewidgetitem10);
         skills2Table_generic->setObjectName(QStringLiteral("skills2Table_generic"));
+        skills2Table_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         skills2Table_generic->setColumnCount(2);
         skills2Table_generic->horizontalHeader()->setDefaultSectionSize(120);
         skills2Table_generic->horizontalHeader()->setMinimumSectionSize(80);
@@ -562,6 +565,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
         skills3Table_generic->setHorizontalHeaderItem(1, __qtablewidgetitem12);
         skills3Table_generic->setObjectName(QStringLiteral("skills3Table_generic"));
+        skills3Table_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         skills3Table_generic->setColumnCount(2);
         skills3Table_generic->horizontalHeader()->setDefaultSectionSize(120);
         skills3Table_generic->horizontalHeader()->setMinimumSectionSize(80);
@@ -592,6 +596,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
         weaponsTable_generic->setHorizontalHeaderItem(2, __qtablewidgetitem15);
         weaponsTable_generic->setObjectName(QStringLiteral("weaponsTable_generic"));
+        weaponsTable_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         weaponsTable_generic->horizontalHeader()->setDefaultSectionSize(200);
         weaponsTable_generic->horizontalHeader()->setStretchLastSection(true);
 
@@ -612,6 +617,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem18 = new QTableWidgetItem();
         armorTable_generic->setHorizontalHeaderItem(2, __qtablewidgetitem18);
         armorTable_generic->setObjectName(QStringLiteral("armorTable_generic"));
+        armorTable_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         armorTable_generic->horizontalHeader()->setDefaultSectionSize(200);
         armorTable_generic->horizontalHeader()->setStretchLastSection(true);
 
@@ -639,6 +645,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem21 = new QTableWidgetItem();
         inv1Table_generic->setHorizontalHeaderItem(2, __qtablewidgetitem21);
         inv1Table_generic->setObjectName(QStringLiteral("inv1Table_generic"));
+        inv1Table_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         inv1Table_generic->horizontalHeader()->setStretchLastSection(true);
 
         verticalLayout_6->addWidget(inv1Table_generic);
@@ -663,6 +670,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem24 = new QTableWidgetItem();
         inv2Table_generic->setHorizontalHeaderItem(2, __qtablewidgetitem24);
         inv2Table_generic->setObjectName(QStringLiteral("inv2Table_generic"));
+        inv2Table_generic->setEditTriggers(QAbstractItemView::NoEditTriggers);
         inv2Table_generic->horizontalHeader()->setStretchLastSection(true);
 
         verticalLayout_7->addWidget(inv2Table_generic);

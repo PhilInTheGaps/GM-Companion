@@ -240,6 +240,9 @@ QScrollBar::sub-line:vertical {
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QTableWidget" name="generalInfoTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <property name="columnCount">
            <number>1</number>
           </property>
@@ -302,6 +305,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="skills1Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -339,6 +345,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="skills2Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -376,6 +385,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="skills3Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -418,6 +430,9 @@ QScrollBar::sub-line:vertical {
         </item>
         <item>
          <widget class="QTableWidget" name="weaponsTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>200</number>
           </attribute>
@@ -450,6 +465,9 @@ QScrollBar::sub-line:vertical {
         </item>
         <item>
          <widget class="QTableWidget" name="armorTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>200</number>
           </attribute>
@@ -491,6 +509,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="inv1Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -524,6 +545,9 @@ QScrollBar::sub-line:vertical {
           </item>
           <item>
            <widget class="QTableWidget" name="inv2Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>

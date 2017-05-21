@@ -493,11 +493,22 @@ p, li { white-space: pre-wrap; }
                 </layout>
                </item>
                <item>
-                <widget class="QPushButton" name="updateCharactersButton">
-                 <property name="text">
-                  <string>Update</string>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                 <item>
+                  <widget class="QPushButton" name="updateCharactersButton">
+                   <property name="text">
+                    <string>Update</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="deleteCharacterButton">
+                   <property name="text">
+                    <string>Delete Selected</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>

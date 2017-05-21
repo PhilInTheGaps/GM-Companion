@@ -6,6 +6,7 @@
 #include "settingsmanager.h"
 #include "dicemanager.h"
 #include "chareditor.h"
+#include "deletecharacterdialog.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -187,6 +188,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << checkUpdates;
     if (checkUpdates == 0){
         ui->actionCheck_for_Updates_on_Program_Start->setChecked(true);
+        onStartUpdateCheck = true;
         on_checkForUpdates_clicked();
     }
 
@@ -551,7 +553,27 @@ void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
 
         dialogFrame->show();
     }
+    else{
+        if(!onStartUpdateCheck){
+            QFrame* f = new QFrame;
+            f->setMinimumSize(300, 100);
+            QVBoxLayout* l = new QVBoxLayout;
+            f->setLayout(l);
 
+            QLabel* label = new QLabel("No updates have been found!");
+            l->addWidget(label);
+
+            QPushButton* ok = new QPushButton;
+            ok->setText("Ok");
+            l->addWidget(ok);
+
+            connect(ok, SIGNAL(clicked(bool)), f, SLOT(close()));
+
+            f->show();
+        }
+    }
+
+    onStartUpdateCheck = false;
 }
 
 void MainWindow::on_reportABug_clicked(){
@@ -908,4 +930,15 @@ void MainWindow::on_soundRandomButton_clicked()
         ui->soundRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOff.png"));
         soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Loop);
     }
+}
+
+void MainWindow::on_deleteCharacterButton_clicked()
+{
+    QStringList characters = getCharacterList();
+    QString characterFile = characters.at(ui->charactersListWidget->currentRow());
+
+    DeleteCharacterDialog* dialog = new DeleteCharacterDialog;
+    dialog->setCharacterFile(settingsManager->getSetting(Setting::charactersPath)+"/"+characterFile);
+
+    dialog->show();
 }
