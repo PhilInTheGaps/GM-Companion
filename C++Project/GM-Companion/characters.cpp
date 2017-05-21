@@ -9,6 +9,7 @@
 #include <QScrollArea>
 #include <QSettings>
 #include <QDebug>
+#include <QCoreApplication>
 
 QStringList getCharacterList(){
     SettingsManager* settingsManager = new SettingsManager;
@@ -21,6 +22,8 @@ QStringList getCharacterList(){
             characterFileNames.push_back(file);
         }
     }
+    qDebug() << "Application Path" << QCoreApplication::applicationDirPath();
+    qDebug() << "Characters Path: " << settingsManager->getSetting(Setting::charactersPath);
     qDebug() << "Character Files: " << characterFileNames.size();
     return characterFileNames;
 }

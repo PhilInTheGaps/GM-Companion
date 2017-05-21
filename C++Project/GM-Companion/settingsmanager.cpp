@@ -2,6 +2,7 @@
 
 #include <QTextStream>
 #include <QFileDialog>
+#include <QCoreApplication>
 
 SettingsManager::SettingsManager()
 {
@@ -11,23 +12,23 @@ SettingsManager::SettingsManager()
 QString SettingsManager::getSetting(Setting setting){
     QString settingString;
 
-    QSettings settings("settings.ini", QSettings::IniFormat);
+    QSettings settings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
-        settingString = settings.value("musicPath", "").toString();
+        settingString = settings.value("musicPath", QCoreApplication::applicationDirPath()+"/music").toString();
         break;
     case Setting::soundPath:
-        settingString = settings.value("soundPath", "").toString();
+        settingString = settings.value("soundPath", QCoreApplication::applicationDirPath()+"/sounds").toString();
         break;
     case Setting::mapsPath:
-        settingString = settings.value("mapsPath", "").toString();
+        settingString = settings.value("mapsPath", QCoreApplication::applicationDirPath()+"/maps").toString();
         break;
     case Setting::resourcesPath:
-        settingString = settings.value("resourcesPath", "").toString();
+        settingString = settings.value("resourcesPath", QCoreApplication::applicationDirPath()+"/resources").toString();
         break;
     case Setting::charactersPath:
-        settingString = settings.value("charactersPath", "").toString();
+        settingString = settings.value("charactersPath", QCoreApplication::applicationDirPath()+"/characters").toString();
         break;
     case Setting::checkForUpdatesOnStart:
         settingString = settings.value("checkForUpdatesOnStart", "true").toString();
@@ -45,7 +46,7 @@ QString SettingsManager::getSetting(Setting setting){
 // Sets a specific setting
 void SettingsManager::setSetting(Setting setting, int checked){
     QString path;
-    QSettings settings("settings.ini", QSettings::IniFormat);
+    QSettings settings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:

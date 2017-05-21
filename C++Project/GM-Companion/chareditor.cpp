@@ -729,10 +729,12 @@ void CharEditor::on_iconButton_clicked()
         QStringList paths = fileDialog->selectedFiles();
         path = paths.at(0);
         if (ui->displayNameLineEdit->text().length()>1){
+            QFile::copy(path, settingsManager->getSetting(Setting::charactersPath)+"/temp.png");
             if (QFile(settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png").exists())
                 QFile::remove(settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png");
 
-            QFile::copy(path, settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png");
+            QFile::copy(settingsManager->getSetting(Setting::charactersPath)+"/temp.png", settingsManager->getSetting(Setting::charactersPath)+"/"+ui->displayNameLineEdit->text()+".png");
+            QFile::remove(settingsManager->getSetting(Setting::charactersPath)+"/temp.png");
 
             if (path.length() > 1){
                 ui->iconLineEdit->setText(path);

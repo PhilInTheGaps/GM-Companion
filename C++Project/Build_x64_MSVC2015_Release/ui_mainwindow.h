@@ -78,7 +78,9 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *createCharacterButton;
     QPushButton *pushButton;
+    QHBoxLayout *horizontalLayout_15;
     QPushButton *updateCharactersButton;
+    QPushButton *deleteCharacterButton;
     QStackedWidget *charactersStackedWidget;
     QWidget *widget;
     QWidget *pageMusic;
@@ -603,10 +605,21 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout);
 
+        horizontalLayout_15 = new QHBoxLayout();
+        horizontalLayout_15->setSpacing(6);
+        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
         updateCharactersButton = new QPushButton(frame);
         updateCharactersButton->setObjectName(QStringLiteral("updateCharactersButton"));
 
-        verticalLayout_5->addWidget(updateCharactersButton);
+        horizontalLayout_15->addWidget(updateCharactersButton);
+
+        deleteCharacterButton = new QPushButton(frame);
+        deleteCharacterButton->setObjectName(QStringLiteral("deleteCharacterButton"));
+
+        horizontalLayout_15->addWidget(deleteCharacterButton);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_15);
 
 
         horizontalLayout_10->addWidget(frame);
@@ -1022,6 +1035,7 @@ public:
         textEdit_4 = new QTextEdit(pageWelcome);
         textEdit_4->setObjectName(QStringLiteral("textEdit_4"));
         textEdit_4->setFont(font7);
+        textEdit_4->setReadOnly(true);
 
         verticalLayout_8->addWidget(textEdit_4);
 
@@ -1474,7 +1488,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 RC1", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 RC2", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1489,7 +1503,7 @@ public:
         actionCheck_for_Updates->setText(QApplication::translate("MainWindow", "Check for Updates", Q_NULLPTR));
         actionReport_a_Bug->setText(QApplication::translate("MainWindow", "Report a Bug", Q_NULLPTR));
         actionI_want_to_use_an_older_Version->setText(QApplication::translate("MainWindow", "I want to use an older version!", Q_NULLPTR));
-        actionInternet_Radio->setText(QApplication::translate("MainWindow", "Internet Radio", Q_NULLPTR));
+        actionInternet_Radio->setText(QApplication::translate("MainWindow", "Webradio", Q_NULLPTR));
         actionCheck_for_Updates_on_Program_Start->setText(QApplication::translate("MainWindow", "Check for Updates on Program Start", Q_NULLPTR));
         actionNamne_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
         actionCharacters->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
@@ -1506,6 +1520,7 @@ public:
         createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
         pushButton->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
+        deleteCharacterButton->setText(QApplication::translate("MainWindow", "Delete Selected", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         mapsZoomInButton->setText(QApplication::translate("MainWindow", "Zoom In", Q_NULLPTR));
         mapsZoomOutButton->setText(QApplication::translate("MainWindow", "Zoom Out", Q_NULLPTR));

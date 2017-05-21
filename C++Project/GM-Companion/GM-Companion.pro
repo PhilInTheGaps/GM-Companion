@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     radio.cpp \
     maps.cpp \
     chareditor.cpp \
-    characterpage.cpp
+    characterpage.cpp \
+    deletecharacterdialog.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -41,11 +42,13 @@ HEADERS  += mainwindow.h \
     dicemanager.h \
     chareditor.h \
     characterpage.h \
-    version.h
+    version.h \
+    deletecharacterdialog.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
-    characterpage.ui
+    characterpage.ui \
+    deletecharacterdialog.ui
 
 DISTFILES += \
 

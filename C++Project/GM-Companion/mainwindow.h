@@ -126,10 +126,13 @@ private slots:
 
     void on_soundRandomButton_clicked();
 
+    void on_deleteCharacterButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     bool programStart = true;
+    bool onStartUpdateCheck = false;
 
     void generateMusicButtons();
     void generateSoundButtons();
