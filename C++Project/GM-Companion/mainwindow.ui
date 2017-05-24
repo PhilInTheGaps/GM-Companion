@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | DEV-BUILD Beta 3.0 RC2</string>
+   <string>GM-Companion | Beta 3.0.1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -523,9 +523,6 @@ p, li { white-space: pre-wrap; }
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QWidget" name="widget" native="true"/>
-            </item>
            </layout>
           </widget>
          </widget>
@@ -692,7 +689,7 @@ p, li { white-space: pre-wrap; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>968</width>
+             <width>1243</width>
              <height>628</height>
             </rect>
            </property>
@@ -1254,7 +1251,10 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:35pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="textInteractionFlags">
-               <set>Qt::TextSelectableByMouse</set>
+               <set>Qt::TextBrowserInteraction</set>
+              </property>
+              <property name="placeholderText">
+               <string>loading...</string>
               </property>
              </widget>
             </item>

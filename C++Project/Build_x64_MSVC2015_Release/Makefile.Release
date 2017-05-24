@@ -6066,6 +6066,47 @@ release\deletecharacterdialog.obj: ..\GM-Companion\deletecharacterdialog.cpp ../
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qtouchdevice.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QString \
 		ui_deletecharacterdialog.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QVariant \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QAction \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qaction.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qicon.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qactiongroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QApplication \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qcoreapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qeventloop.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qguiapplication.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qinputmethod.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QButtonGroup \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qbuttongroup.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QDialogButtonBox \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qdialogbuttonbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QHeaderView \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qheaderview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemview.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractscrollarea.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qframe.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qabstractitemmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qitemselectionmodel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractitemdelegate.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyleoption.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractspinbox.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtGui\qvalidator.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\qregularexpression.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qabstractslider.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qstyle.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabbar.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qtabwidget.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qrubberband.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QLabel \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlabel.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\QVBoxLayout \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qboxlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlayout.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qlayoutitem.h \
+		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtWidgets\qgridlayout.h \
 		C:\Qt\Qt5.8.0_msvc2015_64\5.8\msvc2015_64\include\QtCore\QFile
 
 release\qrc_resources.obj: release\qrc_resources.cpp 

@@ -66,7 +66,7 @@ void MainWindow::generateSoundButtons(){
                                          "min-height: 152; "
                                          "padding: 1px; "
                                          "border-radius: 2px; "
-                                         "background-image: url(resources/button.png); "
+                                         "background-image: url("+QApplication::applicationDirPath()+"/resources/button.png); "
                                          "background-repeat: no-repeat; "
                                          "background-position: center center;}"
                                          "QToolButton QWidget{"

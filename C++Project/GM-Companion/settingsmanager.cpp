@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QFileDialog>
 #include <QCoreApplication>
+#include <QDir>
 
 SettingsManager::SettingsManager()
 {
@@ -12,23 +13,23 @@ SettingsManager::SettingsManager()
 QString SettingsManager::getSetting(Setting setting){
     QString settingString;
 
-    QSettings settings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
-        settingString = settings.value("musicPath", QCoreApplication::applicationDirPath()+"/music").toString();
+        settingString = settings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString();
         break;
     case Setting::soundPath:
-        settingString = settings.value("soundPath", QCoreApplication::applicationDirPath()+"/sounds").toString();
+        settingString = settings.value("soundPath", QDir::homePath()+"/.gm-companion/sounds").toString();
         break;
     case Setting::mapsPath:
-        settingString = settings.value("mapsPath", QCoreApplication::applicationDirPath()+"/maps").toString();
+        settingString = settings.value("mapsPath", QDir::homePath()+"/.gm-companion/maps").toString();
         break;
     case Setting::resourcesPath:
-        settingString = settings.value("resourcesPath", QCoreApplication::applicationDirPath()+"/resources").toString();
+        settingString = settings.value("resourcesPath", QDir::homePath()+"/.gm-companion/resources").toString();
         break;
     case Setting::charactersPath:
-        settingString = settings.value("charactersPath", QCoreApplication::applicationDirPath()+"/characters").toString();
+        settingString = settings.value("charactersPath", QDir::homePath()+"/.gm-companion/characters").toString();
         break;
     case Setting::checkForUpdatesOnStart:
         settingString = settings.value("checkForUpdatesOnStart", "true").toString();
@@ -46,7 +47,7 @@ QString SettingsManager::getSetting(Setting setting){
 // Sets a specific setting
 void SettingsManager::setSetting(Setting setting, int checked){
     QString path;
-    QSettings settings(QCoreApplication::applicationDirPath()+"/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:

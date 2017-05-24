@@ -253,13 +253,13 @@ QWidget* getCharacterPage(QString character){
         charPage->name_sifrp = charSettings.value("charName", " ").toString();
 
         // Age
-        charPage->age_sifrp = charSettings.value("age", " ").toString();
+        charPage->age_sifrp = charSettings.value("Age", " ").toString();
 
         // Gender
-        charPage->gender_sifrp = charSettings.value("gender", " ").toString();
+        charPage->gender_sifrp = charSettings.value("Gender", " ").toString();
 
         // House
-        charPage->house_sifrp = charSettings.value("house", " ").toString();
+        charPage->house_sifrp = charSettings.value("House", " ").toString();
 
         // Abilities
         charPage->abilities1_sifrp = writeList(character, "abilities1", 2);
