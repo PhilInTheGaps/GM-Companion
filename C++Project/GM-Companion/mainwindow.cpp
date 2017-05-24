@@ -42,11 +42,59 @@
 #include <QDebug>
 #include <QXmlStreamReader>
 #include <QDateTime>
+#include <QScrollBar>
+#include <QApplication>
+
+void checkIfFoldersExist(){
+
+    QStringList dirList = {"music", "sounds", "maps", "characters", "names", "addons", "resources"};
+
+    QDir lDir(QDir::homePath()+"/.gm-companion");
+    if (!lDir.exists()){
+        qDebug() << QDir::homePath()+"/.gm-companion does not exist. Creating...";
+        lDir.mkpath(".");
+    }
+
+    for (QString path : dirList){
+        QDir dir(QDir::homePath()+"/.gm-companion/"+path);
+        if (!dir.exists()){
+            qDebug() << QDir::homePath()+"/.gm-companion/"+path+" does not exist. Creating...";
+            dir.mkpath(".");
+        }
+    }
+
+    for (QString folder : getFolders(QApplication::applicationDirPath()+"/names")){
+        if (!folder.contains(".")){
+            QDir dir(QDir::homePath()+"/.gm-companion/names/"+folder);
+            if (!dir.exists()){
+                dir.mkpath(".");
+            }
+
+            for (QString subfolder : getFolders(QApplication::applicationDirPath()+"/names/"+folder)){
+                if (!subfolder.contains(".")){
+                    QDir dir2(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder);
+                    qDebug() << QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder;
+                    if(!dir2.exists()){
+                        dir2.mkpath(".");
+                    }
+
+                    for (QString file : getFiles(QApplication::applicationDirPath()+"/names/"+folder+"/"+subfolder)){
+                        QFile f(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
+                        if (!f.exists())
+                            QFile::copy(QApplication::applicationDirPath()+"/names/"+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
+                    }
+                }
+            }
+        }
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
-    setVersion("0.3.0.0");
+    setVersion("0.3.0.1");
+
+    checkIfFoldersExist();
 
     // Gets all settings
     settingsManager = new SettingsManager;
@@ -467,7 +515,6 @@ void MainWindow::on_checkForUpdates_clicked(){
 
 void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
     QString replyString = reply->readAll();
-    qDebug() << replyString;
 
     QXmlStreamReader reader(replyString);
 
@@ -503,6 +550,7 @@ void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
                 reader.raiseError(QObject::tr("Incorrect file"));
     }
 
+    ui->blogTextEdit->verticalScrollBar()->setValue(0);
     //ui->blogTextEdit->setText(replyString);
 
 }

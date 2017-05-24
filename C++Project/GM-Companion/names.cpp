@@ -3,7 +3,7 @@
 #include "functions.h"
 
 void MainWindow::generateNamesTab(){
-    QStringList folderList = getFolders(QDir::currentPath()+"/names");
+    QStringList folderList = getFolders(QDir::homePath()+"/.gm-companion/names");
     for (QString folder : folderList){
         if (!folder.contains(".")){
             QScrollArea *scrollArea = new QScrollArea;
@@ -14,7 +14,7 @@ void MainWindow::generateNamesTab(){
             frame->setLayout(frameLayout);
             ui->nameTabWidget->addTab(scrollArea, folder);
 
-            folder = QDir::currentPath()+"/names/"+folder;
+            folder = QDir::homePath()+"/.gm-companion/names/"+folder;
 
             QStringList subfolderList = getFolders(folder);
 
