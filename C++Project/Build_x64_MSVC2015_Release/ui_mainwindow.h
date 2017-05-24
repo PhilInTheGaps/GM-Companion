@@ -82,7 +82,6 @@ public:
     QPushButton *updateCharactersButton;
     QPushButton *deleteCharacterButton;
     QStackedWidget *charactersStackedWidget;
-    QWidget *widget;
     QWidget *pageMusic;
     QHBoxLayout *horizontalLayout_5;
     QWidget *pageSound;
@@ -631,11 +630,6 @@ public:
 
         horizontalLayout_10->addWidget(charactersStackedWidget);
 
-        widget = new QWidget(tabCharacters);
-        widget->setObjectName(QStringLiteral("widget"));
-
-        horizontalLayout_10->addWidget(widget);
-
         tabWidgetGMHelp->addTab(tabCharacters, QString());
 
         verticalLayout_2->addWidget(tabWidgetGMHelp);
@@ -748,7 +742,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 628));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1243, 628));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -1055,7 +1049,7 @@ public:
         blogTextEdit->setObjectName(QStringLiteral("blogTextEdit"));
         blogTextEdit->setFont(font7);
         blogTextEdit->setReadOnly(true);
-        blogTextEdit->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        blogTextEdit->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
         verticalLayout_3->addWidget(blogTextEdit);
 
@@ -1488,7 +1482,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | DEV-BUILD Beta 3.0 RC2", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | Beta 3.0.1", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1583,6 +1577,7 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:35pt;\"><br /></p></body></html>", Q_NULLPTR));
+        blogTextEdit->setPlaceholderText(QApplication::translate("MainWindow", "loading...", Q_NULLPTR));
         musicLabel->setText(QApplication::translate("MainWindow", "Music", Q_NULLPTR));
 #ifndef QT_NO_TOOLTIP
         musicPlayButton->setToolTip(QApplication::translate("MainWindow", "Play (Music)", Q_NULLPTR));

@@ -7,8 +7,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     MainWindow w;
 
-    QRect rec = QApplication::desktop()->screenGeometry();
-    w.resize(rec.width(), rec.height());
+    w.resize(QApplication::primaryScreen()->availableGeometry().width(), QApplication::primaryScreen()->availableGeometry().height());
+
 
     w.showMaximized();
     w.createThumbnailToolbar();
