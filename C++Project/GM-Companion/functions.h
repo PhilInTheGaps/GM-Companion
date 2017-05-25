@@ -9,4 +9,6 @@ QStringList getFiles(QString folder);
 
 QString cleanText(QString text);
 
+QStringList shuffleStringList(QStringList list);
+
 #endif // FUNCTIONS_H
