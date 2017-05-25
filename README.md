@@ -1,3 +1,5 @@
 # GM-Companion
 
-Ein Informatik Projekt von Phil Hoffmann  und Niklas Lüdtke.
+A gamemaster tool.
+
+[Official Website](https://philinthegaps.github.io/GM-Companion/)
