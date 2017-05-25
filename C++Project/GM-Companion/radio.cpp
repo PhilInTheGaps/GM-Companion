@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "functions.h"
 
-void MainWindow::on_actionRadio_clicked(){
+void MainWindow::on_actionInternet_Radio_triggered(){
     ui->stackedWidget->setCurrentIndex(4);
 }
 
@@ -41,109 +41,6 @@ void MainWindow::on_rivendellReloadButton_clicked()
     }
 }
 
-void MainWindow::on_radioNetworkAccessManager_finished(QNetworkReply* reply){
-    qDebug() << "FINISHED";
-    qDebug() << QString::number(radioID);
-
-    QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
-    qDebug() << redirectionTarget.toString();
-
-    if (!redirectionTarget.isNull()) {
-        QUrl newUrl = QUrl(redirectionTarget.toUrl());
-        QNetworkRequest request(newUrl);
-        radioNetworkManager->get(request);
-    } else {
-        QString replyString = reply->readAll();
-
-        switch(radioID){
-        case 0:
-        {
-            QTextDocument doc;
-            doc.setHtml(replyString);
-            replyString = doc.toPlainText();
-            doc.clear();
-            doc.deleteLater();
-
-            // Gets Meta Info from string
-            int startIndex = replyString.indexOf("GMT +1.");
-            int timeIndex = replyString.indexOf(":", startIndex);
-            QString temp = replyString;
-            temp = temp.mid(startIndex, timeIndex-startIndex);
-
-            qDebug() << temp;
-
-            int nowIndex = temp.indexOf("Now");
-            int lineIndex = temp.indexOf("\n", nowIndex+5);
-
-            QString title = temp.mid(nowIndex+4);
-            QString artist = temp.mid(lineIndex+1);
-
-            title = title.replace(artist, "");
-            title = title.replace("Spotify", "");
-            title = title.left(title.length()-1);
-            artist = artist.left(artist.length()-3);
-
-            qDebug() << "Title: " << title;
-            qDebug() << "Artist: " << artist;
-
-            ui->musicAlbumLabel->setText("Title: "+title);
-            ui->musicArtistLabel->setText("Artist: "+artist);
-
-            replyString.clear();
-            temp.clear();
-            break;
-        }
-        case 1:
-        {
-            QTextDocument doc;
-            doc.setHtml(replyString);
-            replyString = doc.toPlainText();
-            qDebug() << replyString;
-            doc.clear();
-            doc.deleteLater();
-
-            // Gets Meta Info from string
-            int artistStartIndex = replyString.indexOf("Jetzt läuft ");
-            int titleStartIndex = replyString.indexOf("mit dem Titel »", artistStartIndex);
-            int albumStartIndex = replyString.indexOf("vom Album »", titleStartIndex);
-            int albumEndIndex = replyString.indexOf("«", albumStartIndex);
-            QString temp = replyString;
-
-            temp = temp.mid(artistStartIndex, albumEndIndex-artistStartIndex);
-
-//            ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-//            ui->musicAlbumLabel->setText("Metadata Information");
-//            ui->musicArtistLabel->setText("are currently not");
-//            ui->musicYearLabel->setText("supported. Sorry.");
-
-            break;
-        }
-        default:
-        {
-            qDebug() << "Invalid RadioID";
-        }
-        }
-    }
-    reply->deleteLater();
-}
-
-void MainWindow::on_radioTimer_timeout(){
-    qDebug() << "TIMER FINISHED";
-    switch (radioID) {
-    case 0:
-        radioNetworkManager->get(QNetworkRequest(QUrl("https://www.radiorivendell.com/page/last-played/")));
-        radioTimer->start();
-        break;
-    case 1:
-        radioNetworkManager->get(QNetworkRequest(QUrl("http://laut.fm/mmorpg")));
-        break;
-    default:
-        qDebug() << "ERROR: RadioID is not correct";
-        break;
-    }
-}
-
-
 void MainWindow::on_mmorpgPlayButton_clicked()
 {
     radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
@@ -154,6 +51,8 @@ void MainWindow::on_mmorpgPlayButton_clicked()
 
     ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+    ui->musicAlbumLabel->setText("");
+    ui->musicArtistLabel->setText("");
     ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
@@ -169,6 +68,8 @@ void MainWindow::on_mmorpgReloadButton_clicked()
 
         ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: MMORPG Radio");
+        ui->musicAlbumLabel->setText("");
+        ui->musicArtistLabel->setText("");
         ui->musicCoverLabel->clear();
 
         radioPlayer->play();
@@ -176,7 +77,5 @@ void MainWindow::on_mmorpgReloadButton_clicked()
 }
 
 void MainWindow::on_radioMetaDataChanged(){
-//    ui->musicAlbumLabel->setText("Metadata Information");
-//    ui->musicArtistLabel->setText("are currently not");
-//    ui->musicYearLabel->setText("supported. Sorry.");
+
 }

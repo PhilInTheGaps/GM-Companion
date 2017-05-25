@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | DEV-BUILD Beta 3.0 PRE 06</string>
+   <string>GM-Companion | Beta 3.1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -27,214 +27,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color: #222222;
-	color: rgb(255, 255, 255);
-}
-
-QMenuBar{
-background-color: rgb(102, 102, 102);
-}
-
-QMenuBar::item {
-    spacing: 10px;
-	padding: 4px;
-    background: transparent;
-    border-radius: 2px;
-}
-
-QMenuBar::item:selected {
-    background: #444444;
-}
-
-QMenuBar::item:hover:!pressed {
-    background: #555555;
-}
-
-QMenuBar::item:pressed {
-    background: #333333;
-}
-
-QMenu {
-    background-color: #666666;
-}
-
-QMenu::item {
-    background-color: transparent;
-}
-
-QMenu::item:selected {
-    background-color: #333333;
-}
-
-QPushButton{
-background-color: rgb(102, 102, 102);
-border: 1px;
-padding: 5px;
-min-width: 40px;
-min-height: 30px;
-}
-
-QPushButton:pressed{
-background-color: rgb(51, 51, 51);
-}
-
-QPushButton:disabled {
-	background-color: #111111;
-}
-
-QPushButton:hover:!pressed{
-background-color: rgb(85, 85, 85);
-}
-
-QSlider::groove:horizontal {
-    border: transparent;
-	height: 10px;
-	background-color: rgb(102, 102, 102);
-    margin: 5px 0;
-}
-
-QSlider::handle:horizontal {
-    background: white;
-    border: transparent;
-    width: 15px;
-    margin: -3px 0;
-    border-radius: 3px;
-}
-
-QProgressBar {
-    border: 2px solid grey;
-	background-color: rgb(102, 102, 102);
-    border-radius: 0px;
-	text-align: center;
-}
-
-QProgressBar::chunk {
-    background-color: #222222;
-    width: 1px;
-}
-
-QTabWidget::pane { /* The tab widget frame */
-    border: 1px solid #555555;
-}
-
-QTabWidget::tab-bar {
-    left: 0px;
-}
-
-QTabBar::tab {
-	background-color: rgb(102, 102, 102);
-    border: 1px solid #555555;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    min-width: 100px;
-    padding: 5px;
-}
-
-QTabBar::tab:selected, QTabBar::tab:hover {
-    background: #555555;
-}
-
-QTabBar::tab:selected {
-    border-color: #333333;
-    border-bottom-color: #555555; /* same as pane color */
-	background-color: rgb(68, 68, 68);
-}
-
-QTabBar::tab:!selected {
-    margin-top: 2px; /* make non-selected tabs look smaller */
-}
-
-QToolBox::tab {
-background-color: rgb(102, 102, 102);
-    border-radius: 1px;
-}
-
-QToolBox::tab:hover:!pressed {
-background-color: rgb(85, 85, 85);
-}
-
-QToolBox::tab:!pressed {
-background-color: rgb(51, 51, 51);
-}
-
-QToolBox::tab:selected { 
-    font: italic, bold;
-}
-
-QTableView{
-selection-background-color: rgb(68, 68, 68);
-}
-
-QTableView QTableCornerButton::section {
-background-color: rgb(34, 34, 34);
-}
-
-QTableView::item {
-   /* border: 5px solid rgba(68, 119, 170, 150);*/
-	
-	background-color: #333333;
-}
-
-QTableView::item:selected {
-	background-color: #777777;
-}
-
-QTableView, QHeaderView::section {    
-	background-color: rgb(34, 34, 34);
-}
-
-QScrollBar:horizontal {
-    border: 2px solid #222222;
-    background-color: #333333;
-    height: 15px;
-    margin: 0px 20px 0 20px;
-}
-QScrollBar::handle:horizontal {
-    background-color: #222222;
-    min-width: 20px;
-}
-QScrollBar::add-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
-QScrollBar:vertical {
-    border: 2px solid #222222;
-    background-color: #333333;
-    width: 15px;
-    margin: 20px 0px 20 0px;
-}
-QScrollBar::handle:vertical {
-    background-color: #222222;
-    min-height: 20px;
-}
-QScrollBar::add-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}</string>
+   <string notr="true"/>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Triangular</enum>
@@ -283,6 +76,54 @@ QScrollBar::sub-line:vertical {
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QTabWidget::pane { /* The tab widget frame */
+    border: 1px solid #555555;
+}
+
+QTabWidget::tab-bar {
+    left: 0px;
+}
+
+QTabBar::tab {
+	background-color: rgb(102, 102, 102);
+    border: 1px solid #555555;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    min-height: 100px;
+	min-width: 5px;
+    padding: 5px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: #555555;
+}
+
+QTabBar::tab:selected {
+    border-color: #333333;
+    border-bottom-color: #555555; /* same as pane color */
+	background-color: rgb(68, 68, 68);
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+}</string>
+              </property>
+              <property name="tabPosition">
+               <enum>QTabWidget::West</enum>
+              </property>
+              <property name="movable">
+               <bool>true</bool>
+              </property>
+              <property name="tabBarAutoHide">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -436,7 +277,7 @@ p, li { white-space: pre-wrap; }
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="editCharacter">
                    <property name="text">
                     <string>Edit Selected</string>
                    </property>
@@ -445,11 +286,22 @@ p, li { white-space: pre-wrap; }
                 </layout>
                </item>
                <item>
-                <widget class="QPushButton" name="updateCharactersButton">
-                 <property name="text">
-                  <string>Update</string>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                 <item>
+                  <widget class="QPushButton" name="updateCharactersButton">
+                   <property name="text">
+                    <string>Update</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="deleteCharacterButton">
+                   <property name="text">
+                    <string>Delete Selected</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </widget>
@@ -463,9 +315,6 @@ p, li { white-space: pre-wrap; }
                </sizepolicy>
               </property>
              </widget>
-            </item>
-            <item>
-             <widget class="QWidget" name="widget" native="true"/>
             </item>
            </layout>
           </widget>
@@ -634,7 +483,7 @@ p, li { white-space: pre-wrap; }
              <x>0</x>
              <y>0</y>
              <width>968</width>
-             <height>628</height>
+             <height>618</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -686,7 +535,7 @@ p, li { white-space: pre-wrap; }
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -734,7 +583,7 @@ background-color: rgb(85, 85, 85);
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -912,7 +761,7 @@ p, li { white-space: pre-wrap; }
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -958,7 +807,7 @@ background-color: rgb(85, 85, 85);
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1119,40 +968,75 @@ p, li { white-space: pre-wrap; }
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
              <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Version: Beta 3.0</string>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+               </font>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>Changelog:</string>
+               <string>Version: Beta 3.1</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QTextEdit" name="textEdit_4">
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
               <property name="html">
                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Changed media control buttons to have icons instead of text&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added support for webradios&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added music controls when hovering icon in taskbar&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added name generator&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added character overview&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Improved Maps-Viewer with zoom function&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Greatly improved memory usage&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to check for updates&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to open wiki&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to report bugs&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changelog:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>GM-Companion Blog:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QTableView" name="databaseView"/>
+             <widget class="QTextEdit" name="blogTextEdit">
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+               </font>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:35pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::TextBrowserInteraction</set>
+              </property>
+              <property name="placeholderText">
+               <string>loading...</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -1165,762 +1049,764 @@ p, li { white-space: pre-wrap; }
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0,0,0">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMaximumSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QLabel" name="musicLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Music</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="musicControls">
-          <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <widget class="QPushButton" name="musicPlayButton">
+           <widget class="QLabel" name="musicLabel">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
-            <property name="toolTip">
-             <string>Play (Music)</string>
-            </property>
             <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="autoDefault">
-             <bool>false</bool>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
+             <string>Music</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="musicPauseButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+           <layout class="QHBoxLayout" name="musicControls">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
             </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Pause (Music)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="musicReplayButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Rewind (Music)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="musicNextButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Next (Music)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="musicRandomButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Toggle Music Shuffle (bright = on, dark = off)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QSlider" name="musicVolumeSlider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Music Volume</string>
-          </property>
-          <property name="value">
-           <number>20</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_18">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_12">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_19">
             <item>
-             <widget class="QLabel" name="musicTitleLabel">
+             <widget class="QPushButton" name="musicPlayButton">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+               <sizepolicy hsizetype="Fixed" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>16777215</height>
+                <width>68</width>
+                <height>45</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>8</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
               </property>
-              <property name="text">
-               <string>&lt;No Music Selected&gt;</string>
+              <property name="toolTip">
+               <string>Play (Music)</string>
               </property>
-              <property name="wordWrap">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
+              <property name="default">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
                <bool>false</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="musicAlbumLabel">
+             <widget class="QPushButton" name="musicPauseButton">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>16777215</height>
+                <width>68</width>
+                <height>45</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>8</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
                </font>
+              </property>
+              <property name="toolTip">
+               <string>Pause (Music)</string>
               </property>
               <property name="text">
                <string/>
               </property>
-              <property name="wordWrap">
-               <bool>false</bool>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="musicArtistLabel">
+             <widget class="QPushButton" name="musicReplayButton">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Rewind (Music)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="musicNextButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Next (Music)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="musicRandomButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="maximumSize">
                <size>
-                <width>300</width>
-                <height>16777215</height>
+                <width>68</width>
+                <height>45</height>
                </size>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>8</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
+              <property name="toolTip">
+               <string>Toggle Music Shuffle (bright = on, dark = off)</string>
               </property>
               <property name="text">
                <string/>
               </property>
-              <property name="wordWrap">
-               <bool>false</bool>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QSlider" name="musicVolumeSlider">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Music Volume</string>
+            </property>
+            <property name="value">
+             <number>20</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
-         <widget class="QProgressBar" name="musicProgressBar">
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_19">
+              <item>
+               <widget class="QLabel" name="musicTitleLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>8</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>&lt;No Music Selected&gt;</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="musicAlbumLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>8</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="musicArtistLabel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>300</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>8</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="wordWrap">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="musicProgressBar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>300</width>
+              <height>15</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Current Music Progress</string>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="maximum">
+             <number>1</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="textVisible">
+             <bool>true</bool>
+            </property>
+            <property name="textDirection">
+             <enum>QProgressBar::TopToBottom</enum>
+            </property>
+            <property name="format">
+             <string>%p%</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="musicCoverLabel">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
+           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize">
            <size>
-            <width>300</width>
-            <height>0</height>
+            <width>85</width>
+            <height>85</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>300</width>
-            <height>15</height>
+            <width>85</width>
+            <height>85</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string>Current Music Progress</string>
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
           </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
           </property>
-          <property name="styleSheet">
-           <string notr="true"/>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
           </property>
-          <property name="maximum">
-           <number>1</number>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="textVisible">
-           <bool>true</bool>
-          </property>
-          <property name="textDirection">
-           <enum>QProgressBar::TopToBottom</enum>
-          </property>
-          <property name="format">
-           <string>%p%</string>
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="musicCoverLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="0,0,0">
+        <property name="spacing">
+         <number>10</number>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>85</width>
-          <height>85</height>
-         </size>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMaximumSize</enum>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>85</width>
-          <height>85</height>
-         </size>
+        <property name="leftMargin">
+         <number>0</number>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_17">
         <item>
-         <widget class="QLabel" name="soundLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Sound</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="soundControls">
+         <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
-           <widget class="QPushButton" name="soundPlayButton">
+           <widget class="QLabel" name="soundLabel">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Sound</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="soundControls">
+            <item>
+             <widget class="QPushButton" name="soundPlayButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Play (Sound)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="soundPauseButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Pause (Sound)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="soundReplayButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Rewind (Sound)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="soundNextButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>Next (Sound)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="soundRandomButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>68</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Toggle Sound Shuffle (bright = on, dark = off)</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QSlider" name="soundVolumeSlider">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Play (Sound)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="soundPauseButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Pause (Sound)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/pause.png</normaloff>:/resources/mediaIcons/pause.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="soundReplayButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Rewind (Sound)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/skipBack.png</normaloff>:/resources/mediaIcons/skipBack.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="soundNextButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>10</pointsize>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string>Next (Sound)</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/seekForward.png</normaloff>:/resources/mediaIcons/seekForward.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="soundRandomButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>68</width>
-              <height>45</height>
+              <width>300</width>
+              <height>0</height>
              </size>
             </property>
             <property name="toolTip">
-             <string>Toggle Sound Shuffle (bright = on, dark = off)</string>
+             <string>Sound Volume</string>
             </property>
-            <property name="text">
-             <string/>
+            <property name="value">
+             <number>20</number>
             </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item>
-         <widget class="QSlider" name="soundVolumeSlider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Sound Volume</string>
-          </property>
-          <property name="value">
-           <number>20</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
          <widget class="QLabel" name="soundNameLabel">
           <property name="sizePolicy">
@@ -1928,6 +1814,12 @@ p, li { white-space: pre-wrap; }
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="maximumSize">
            <size>
@@ -1948,20 +1840,20 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
@@ -1973,7 +1865,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1300</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -2017,9 +1909,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionDice"/>
     <addaction name="actionDatabase"/>
-    <addaction name="actionNamne_Generator"/>
+    <addaction name="actionName_Generator"/>
     <addaction name="actionCharacters"/>
-    <addaction name="separator"/>
     <addaction name="actionSet_Database_Path"/>
    </widget>
    <widget class="QMenu" name="menuOptions">
@@ -2033,7 +1924,11 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Options</string>
     </property>
+    <addaction name="actionSet_Music_Folder"/>
+    <addaction name="actionSet_Sound_Folder"/>
+    <addaction name="actionSet_Maps_Folder"/>
     <addaction name="actionSet_Resources_Folder"/>
+    <addaction name="actionSet_Characters_Folder"/>
     <addaction name="separator"/>
     <addaction name="actionCheck_for_Updates"/>
     <addaction name="actionCheck_for_Updates_on_Program_Start"/>
@@ -2051,8 +1946,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionMusic_Player"/>
     <addaction name="actionInternet_Radio"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Music_Folder"/>
    </widget>
    <widget class="QMenu" name="menuSound">
     <property name="font">
@@ -2066,8 +1959,6 @@ p, li { white-space: pre-wrap; }
      <string>Sound</string>
     </property>
     <addaction name="actionSound_Player"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Sound_Folder"/>
    </widget>
    <widget class="QMenu" name="menuMaps">
     <property name="font">
@@ -2081,8 +1972,6 @@ p, li { white-space: pre-wrap; }
      <string>Maps</string>
     </property>
     <addaction name="actionMap_Viewer"/>
-    <addaction name="separator"/>
-    <addaction name="actionSet_Maps_Folder"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="font">
@@ -2195,7 +2084,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionInternet_Radio">
    <property name="text">
-    <string>Internet Radio</string>
+    <string>Webradio</string>
    </property>
   </action>
   <action name="actionCheck_for_Updates_on_Program_Start">
@@ -2209,7 +2098,7 @@ p, li { white-space: pre-wrap; }
     <bool>true</bool>
    </property>
   </action>
-  <action name="actionNamne_Generator">
+  <action name="actionName_Generator">
    <property name="text">
     <string>Name Generator</string>
    </property>
@@ -2217,6 +2106,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionCharacters">
    <property name="text">
     <string>Characters</string>
+   </property>
+  </action>
+  <action name="actionSet_Characters_Folder">
+   <property name="text">
+    <string>Set Characters Folder</string>
    </property>
   </action>
  </widget>

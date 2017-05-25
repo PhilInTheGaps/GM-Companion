@@ -1,16 +1,105 @@
 #include "characters.h"
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "flowlayout.h"
 #include "characterpage.h"
+#include "settingsmanager.h"
+#include "chareditor.h"
+#include "deletecharacterdialog.h"
 
 #include <QDir>
 #include <QListWidget>
 #include <QScrollArea>
 #include <QSettings>
 #include <QDebug>
+#include <QCoreApplication>
 
+// When New Button is clicked
+void MainWindow::on_createCharacterButton_clicked()
+{
+    CharEditor* charEditor = new CharEditor;
+    charEditor->showMaximized();
+}
+
+// Update list of characters
+void MainWindow::updateCharacters(){
+    for(int i = ui->charactersStackedWidget->count(); i >= 0; i--)
+    {
+        QWidget* widget = ui->charactersStackedWidget->widget(i);
+        ui->charactersStackedWidget->removeWidget(widget);
+        widget->deleteLater();
+    }
+
+    ui->charactersListWidget->clear();
+
+    QStringList characterList = getCharacterList();
+    if (!characterList.empty()){
+        for (QString character : characterList){
+            QWidget* widget = getCharacterPage(character);
+            ui->charactersStackedWidget->addWidget(widget);
+
+            QListWidgetItem *listItem = new QListWidgetItem;
+            listItem->setText(widget->toolTip());
+            listItem->setToolTip(cleanText(character));
+            ui->charactersListWidget->addItem(listItem);
+        }
+        on_characterListClicked(0);
+    }
+}
+
+// When Update Button is clicked
+void MainWindow::on_updateCharactersButton_clicked()
+{
+    updateCharacters();
+}
+
+// Edit currently selected character
+void MainWindow::on_editCharacter_clicked()
+{
+    int index = ui->charactersListWidget->currentRow();
+    if (index >= 0){
+        CharEditor* charEditor = new CharEditor;
+        charEditor->load(index);
+
+        charEditor->showMaximized();
+    }
+}
+
+// Delete currently selected character
+void MainWindow::on_deleteCharacterButton_clicked()
+{
+    QStringList characters = getCharacterList();
+    QString characterFile = characters.at(ui->charactersListWidget->currentRow());
+
+    DeleteCharacterDialog* dialog = new DeleteCharacterDialog;
+    dialog->setCharacterFile(settingsManager->getSetting(Setting::charactersPath)+"/"+characterFile);
+
+    dialog->show();
+}
+
+// Change selected character
+void MainWindow::on_characterListClicked(int index){
+    if (index >= 0){
+        ui->charactersStackedWidget->setCurrentIndex(index);
+
+        QStringList list = ui->charactersStackedWidget->currentWidget()->accessibleName().split(",");
+
+        if (QFile(settingsManager->getSetting(Setting::charactersPath)+"/"+list.at(0)+".png").exists()){
+            QPixmap charIcon(settingsManager->getSetting(Setting::charactersPath)+"/"+list.at(0)+".png");
+            ui->characterIconLabel->setPixmap(charIcon.scaled(180, 180));
+            ui->characterIconLabel->adjustSize();
+        }
+        else{
+            ui->characterIconLabel->clear();
+        }
+    }
+}
+
+// Returns list of all character files in character path
 QStringList getCharacterList(){
-    QString folderPath = QDir::currentPath()+"/characters";
+    qDebug() << "Getting Characters...";
+    SettingsManager* settingsManager = new SettingsManager;
+    QString folderPath = settingsManager->getSetting(Setting::charactersPath);
     QStringList files = getFiles(folderPath);
     QStringList characterFileNames;
 
@@ -19,58 +108,15 @@ QStringList getCharacterList(){
             characterFileNames.push_back(file);
         }
     }
-    qDebug() << "Character Files: " << characterFileNames.size();
+
+    qDebug() << "Found "+QString::number(characterFileNames.length())+" characters.";
     return characterFileNames;
 }
 
-QFrame* createLabelFrame(QString first, QString second){
-    QFrame *frame = new QFrame;
-    QHBoxLayout *frameLayout = new QHBoxLayout;
-    frameLayout->setAlignment(Qt::AlignLeft);
-    frame->setLayout(frameLayout);
-
-    QLabel *label1 = new QLabel;
-    label1->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    label1->setText(first);
-    frameLayout->addWidget(label1);
-
-    QLabel *label2 = new QLabel;
-    label2->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    label2->setText(second);
-    frameLayout->addWidget(label2);
-    return frame;
-}
-
-QFrame* generateFrame(QString indicator, QString headline, QString characterFileContent, int maxWidth=210){
-    QFrame *frame = new QFrame;
-    frame->setFrameShape(QFrame::Box);
-    frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    frame->setMaximumWidth(maxWidth);
-    QVBoxLayout *layout = new QVBoxLayout;
-    frame->setLayout(layout);
-
-    QLabel *label = new QLabel;
-    label->setText(headline);
-    layout->addWidget(label);
-
-    QListWidget *listWidget = new QListWidget;
-    layout->addWidget(listWidget);
-
-    int index1 = characterFileContent.indexOf(indicator);
-    int index2 = characterFileContent.indexOf("};", index1);
-    QString string = characterFileContent.mid(index1+indicator.length(), index2-index1-indicator.length());
-
-    QStringList list = string.split(",");
-
-    for (QString item : list){
-        listWidget->addItem(item);
-    }
-
-    return frame;
-}
-
+// Writes everyhing from an array into a ListView
 QList<QStringList>* writeList(QString character, QString indicator, int columns){
-    QSettings settings("characters/"+character, QSettings::IniFormat);
+    SettingsManager* settingsManager = new SettingsManager;
+    QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+character, QSettings::IniFormat);
     QList<QStringList>* list = new QList<QStringList>;
     int size = settings.beginReadArray(indicator);
     for (int row = 0; row<size; row++){
@@ -86,28 +132,25 @@ QList<QStringList>* writeList(QString character, QString indicator, int columns)
     return list;
 }
 
+// Returns the completed character page with all the information
 QWidget* getCharacterPage(QString character){
     CharacterPage* charPage = new CharacterPage;
 
-    QSettings charSettings("characters/"+character, QSettings::IniFormat);
+    SettingsManager* settingsManager = new SettingsManager;
+    QSettings charSettings(settingsManager->getSetting(Setting::charactersPath)+"/"+character, QSettings::IniFormat);
 
     QString version = charSettings.value("Version", "SHOULD NOT BE VISIBLE").toString();
-    QString name = charSettings.value("Name", "SHOULD NOT BE VISIBLE").toString();
-    QString player = charSettings.value("Player", "SHOULD NOT BE VISIBLE").toString();
+    QString name = charSettings.value("Name", character).toString();
+    QString player = charSettings.value("Player", "").toString();
     int systemID = charSettings.value("System", 0).toInt();
     charPage->systemID = systemID;
 
     QString iconPath = charSettings.value("Icon", " ").toString();
 
-    qDebug() << character;
-    qDebug() << name;
-    qDebug() << player;
-    qDebug() << "SystemID: " << systemID;
-
     charPage->name = name;
     charPage->player = player;
     charPage->setToolTip(name+" ("+player+")");
-    charPage->setAccessibleName(iconPath+","+QString::number(systemID));
+    charPage->setAccessibleName(name+","+QString::number(systemID));
 
     switch (systemID) {
     case 0:{
@@ -246,13 +289,13 @@ QWidget* getCharacterPage(QString character){
         charPage->name_sifrp = charSettings.value("charName", " ").toString();
 
         // Age
-        charPage->age_sifrp = charSettings.value("age", " ").toString();
+        charPage->age_sifrp = charSettings.value("Age", " ").toString();
 
         // Gender
-        charPage->gender_sifrp = charSettings.value("gender", " ").toString();
+        charPage->gender_sifrp = charSettings.value("Gender", " ").toString();
 
         // House
-        charPage->house_sifrp = charSettings.value("house", " ").toString();
+        charPage->house_sifrp = charSettings.value("House", " ").toString();
 
         // Abilities
         charPage->abilities1_sifrp = writeList(character, "abilities1", 2);
