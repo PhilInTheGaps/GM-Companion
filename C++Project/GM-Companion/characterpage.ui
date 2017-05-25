@@ -7,11 +7,221 @@
     <x>0</x>
     <y>0</y>
     <width>1041</width>
-    <height>732</height>
+    <height>769</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>StackedWidget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+	background-color: #222222;
+	color: rgb(255, 255, 255);
+}
+
+QMenuBar{
+background-color: rgb(102, 102, 102);
+}
+
+QMenuBar::item {
+    spacing: 10px;
+	padding: 4px;
+    background: transparent;
+    border-radius: 2px;
+}
+
+QMenuBar::item:selected {
+    background: #444444;
+}
+
+QMenuBar::item:hover:!pressed {
+    background: #555555;
+}
+
+QMenuBar::item:pressed {
+    background: #333333;
+}
+
+QMenu {
+    background-color: #666666;
+}
+
+QMenu::item {
+    background-color: transparent;
+}
+
+QMenu::item:selected {
+    background-color: #333333;
+}
+
+QPushButton{
+background-color: rgb(102, 102, 102);
+border: 1px;
+padding: 5px;
+min-width: 40px;
+min-height: 30px;
+}
+
+QPushButton:pressed{
+background-color: rgb(51, 51, 51);
+}
+
+QPushButton:disabled {
+	background-color: #111111;
+}
+
+QPushButton:hover:!pressed{
+background-color: rgb(85, 85, 85);
+}
+
+QSlider::groove:horizontal {
+    border: transparent;
+	height: 10px;
+	background-color: rgb(102, 102, 102);
+    margin: 5px 0;
+}
+
+QSlider::handle:horizontal {
+    background: white;
+    border: transparent;
+    width: 15px;
+    margin: -3px 0;
+    border-radius: 3px;
+}
+
+QProgressBar {
+    border: 2px solid grey;
+	background-color: rgb(102, 102, 102);
+    border-radius: 0px;
+	text-align: center;
+}
+
+QProgressBar::chunk {
+    background-color: #222222;
+    width: 1px;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+    border: 1px solid #555555;
+}
+
+QTabWidget::tab-bar {
+    left: 0px;
+}
+
+QTabBar::tab {
+	background-color: rgb(102, 102, 102);
+    border: 1px solid #555555;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    min-width: 100px;
+    padding: 5px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: #555555;
+}
+
+QTabBar::tab:selected {
+    border-color: #333333;
+    border-bottom-color: #555555; /* same as pane color */
+	background-color: rgb(68, 68, 68);
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+}
+
+QToolBox::tab {
+background-color: rgb(102, 102, 102);
+    border-radius: 1px;
+}
+
+QToolBox::tab:hover:!pressed {
+background-color: rgb(85, 85, 85);
+}
+
+QToolBox::tab:!pressed {
+background-color: rgb(51, 51, 51);
+}
+
+QToolBox::tab:selected { 
+    font: italic, bold;
+}
+
+QTableView{
+selection-background-color: rgb(68, 68, 68);
+}
+
+QTableView QTableCornerButton::section {
+background-color: rgb(34, 34, 34);
+}
+
+QTableView::item {
+   /* border: 5px solid rgba(68, 119, 170, 150);*/
+	
+	background-color: #333333;
+}
+
+QTableView::item:selected {
+	background-color: #777777;
+}
+
+QTableView, QHeaderView::section {    
+	background-color: rgb(34, 34, 34);
+}
+
+QScrollBar:horizontal {
+    border: 2px solid #222222;
+    background-color: #333333;
+    height: 15px;
+    margin: 0px 20px 0 20px;
+}
+QScrollBar::handle:horizontal {
+    background-color: #222222;
+    min-width: 20px;
+}
+QScrollBar::add-line:horizontal {
+    border: 2px solid #444444;
+    background: #222222;
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 2px solid #444444;
+    background: #222222;
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+QScrollBar:vertical {
+    border: 2px solid #222222;
+    background-color: #333333;
+    width: 15px;
+    margin: 20px 0px 20 0px;
+}
+QScrollBar::handle:vertical {
+    background-color: #222222;
+    min-height: 20px;
+}
+QScrollBar::add-line:vertical {
+    border: 2px solid #444444;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 2px solid #444444;
+    background: #222222;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}</string>
   </property>
   <property name="currentIndex">
    <number>0</number>
@@ -30,6 +240,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QTableWidget" name="generalInfoTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <property name="columnCount">
            <number>1</number>
           </property>
@@ -92,6 +305,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="skills1Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -129,6 +345,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="skills2Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -166,6 +385,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="skills3Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <property name="columnCount">
              <number>2</number>
             </property>
@@ -208,6 +430,9 @@
         </item>
         <item>
          <widget class="QTableWidget" name="weaponsTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>200</number>
           </attribute>
@@ -240,6 +465,9 @@
         </item>
         <item>
          <widget class="QTableWidget" name="armorTable_generic">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>200</number>
           </attribute>
@@ -281,6 +509,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="inv1Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -314,6 +545,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="inv2Table_generic">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -2750,7 +2984,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="nameLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="nameLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -2764,7 +3008,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="ageLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="ageLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_33">
@@ -2774,7 +3028,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="genderLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="genderLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_32">
@@ -2784,7 +3048,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="houseLineEdit_sifrp"/>
+           <widget class="QLineEdit" name="houseLineEdit_sifrp">
+            <property name="frame">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -2799,6 +3073,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_18">
           <item>
            <widget class="QTableWidget" name="abilitiesTable1_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -2866,6 +3143,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="abilitiesTable2_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -2934,6 +3214,9 @@
            <layout class="QVBoxLayout" name="verticalLayout_32">
             <item>
              <widget class="QTableWidget" name="qualitiesTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
@@ -2961,12 +3244,18 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest2_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2975,12 +3264,18 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest4_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2989,12 +3284,18 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest6_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3003,12 +3304,18 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="dest8_sifrp">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -3031,6 +3338,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="intrigueCombatTable_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3064,6 +3374,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="weaponsTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3119,6 +3432,9 @@
           </item>
           <item>
            <widget class="QTableWidget" name="armorTable_sifrp">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -3147,6 +3463,9 @@
            <layout class="QVBoxLayout" name="verticalLayout_36">
             <item>
              <widget class="QTableWidget" name="woundsTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3185,6 +3504,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="equipmentTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
               </property>
@@ -3214,6 +3536,9 @@
             </item>
             <item>
              <widget class="QTableWidget" name="apperaranceTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <attribute name="horizontalHeaderVisible">
                <bool>false</bool>
               </attribute>
@@ -3263,7 +3588,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="mannerismsTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="mannerismsTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_40">
@@ -3273,7 +3602,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_41">
@@ -3283,7 +3616,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="retainersTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="retainersTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3297,7 +3634,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp"/>
+         <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_24">
@@ -3311,7 +3652,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="alliesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="alliesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_46">
@@ -3321,7 +3666,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="heraldryTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="heraldryTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3335,7 +3684,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="enemiesTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="enemiesTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_47">
@@ -3345,7 +3698,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="portraitTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="portraitTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -3359,7 +3716,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="oathsTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="oathsTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_48">
@@ -3369,7 +3730,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="mottoTextEdit_sifrp"/>
+             <widget class="QTextEdit" name="mottoTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>

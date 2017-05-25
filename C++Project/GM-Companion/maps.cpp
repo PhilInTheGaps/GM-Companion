@@ -2,6 +2,56 @@
 #include "ui_mainwindow.h"
 #include "functions.h"
 
+// Zoom In
+void MainWindow::on_mapsZoomInButton_clicked()
+{
+    if (mapsImageLabel->pixmap() != 0){
+        double factor = 1.5 * mapsZoomFactor;
+        mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = factor;
+    }
+}
+
+// Zoom Out
+void MainWindow::on_mapsZoomOutButton_clicked()
+{
+    if (mapsImageLabel->pixmap() != 0){
+        double factor = 0.75 * mapsZoomFactor;
+        mapsImageLabel->resize(factor * mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = factor;
+    }
+}
+
+// Resize maps to fit to view
+void MainWindow::on_mapsFitToViewButton_clicked()
+{
+    if (mapsImageLabel->pixmap() != 0){
+        double width = mapsImageLabel->width();
+        double height = mapsImageLabel->height();
+        double ratio = width/height;
+        double factor = 1;
+        if (ratio >=1){
+            factor = ui->mapsVBox->geometry().width() / width;
+            mapsImageLabel->resize(factor * mapsImageLabel->size());
+        }
+        else{
+            factor = ui->mapsControlFrame->height() / height;
+            mapsImageLabel->resize(factor * mapsImageLabel->size());
+        }
+        mapsZoomFactor = mapsZoomFactor*factor;
+    }
+}
+
+// Reset Map Size
+void MainWindow::on_mapsResetSizeButton_clicked()
+{
+    if (mapsImageLabel->pixmap() != 0){
+        mapsImageLabel->resize(mapsImageLabel->pixmap()->size());
+        mapsZoomFactor = 1.0;
+    }
+}
+
+// Generate UI
 void MainWindow::generateMaps(){
     QStringList mapsList = getFiles(settingsManager->getSetting(Setting::mapsPath));
 
@@ -32,14 +82,13 @@ void MainWindow::generateMaps(){
             connect(imageButton, SIGNAL(clicked()), signalMapperMaps, SLOT(map()));
             signalMapperMaps->setMapping(imageButton, mapPath);
 
-            qDebug() << mapPath;
         }
     }
 }
 
+// Display a map
 void MainWindow::setMap(QString mapPath){
     mapsZoomFactor = 1.0;
-    qDebug() << "Map: "+mapPath;
     mapsImageLabel->setPixmap(QPixmap(mapPath));
     mapsImageLabel->adjustSize();
 }

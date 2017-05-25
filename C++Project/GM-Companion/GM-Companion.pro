@@ -7,8 +7,9 @@
 QT       += core gui \
             multimedia \
             multimediawidgets \
-            winextras \
-            sql
+            network
+
+win32:QT += winextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +31,11 @@ SOURCES += main.cpp\
     radio.cpp \
     maps.cpp \
     chareditor.cpp \
-    characterpage.cpp
+    characterpage.cpp \
+    deletecharacterdialog.cpp \
+    filemanager.cpp \
+    network.cpp \
+    windows.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -39,11 +44,15 @@ HEADERS  += mainwindow.h \
     settingsmanager.h \
     dicemanager.h \
     chareditor.h \
-    characterpage.h
+    characterpage.h \
+    version.h \
+    deletecharacterdialog.h \
+    filemanager.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
-    characterpage.ui
+    characterpage.ui \
+    deletecharacterdialog.ui
 
 DISTFILES += \
 
