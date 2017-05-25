@@ -1,1 +1,0 @@
-Ant,Beetle,Bug,Crawler,Creep,Creeper,Cricket,Curse,Dog,Flea,Fly,Frog,Grub,Insect,Larva,Leech,Maggot,Mite,Mole,Mongrel,Moth,Mouse,Mule,Mutt,Nit,Parasite,Pest,Pig,Rabbit,Rat,Roach,Rodent,Scrub,Shrimp,Snail,Spider,Squirmer,Termite,Tick,Toad,Vermin,Weasel,Weevil,Whelp,Worm,Wriggler,Runt,Slug,Oaf,Prawn,Louse,Skunk
