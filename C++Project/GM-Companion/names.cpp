@@ -86,7 +86,6 @@ void MainWindow::on_generateNames(QString file){
         QFile surnamesFile(surnamesPath);
         surnamesFile.open(QIODevice::ReadOnly);
         QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
-        qDebug() << surnamesAsString;
         surnames = surnamesAsString.split(",");
         surnamesFile.close();
     }

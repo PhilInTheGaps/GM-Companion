@@ -1,7 +1,6 @@
 #include "dicemanager.h"
 
 #include <QPushButton>
-#include <QDebug>
 
 DiceManager::DiceManager(QObject *parent) : QObject(parent)
 {
@@ -185,9 +184,6 @@ void DiceManager::generateDice(){
 }
 
 void DiceManager::clearDice(){
-
-    qDebug() << "Clearing Dice";
-
     signalMapperDice->deleteLater();
 
     while (auto item = diceButtonLayout->takeAt(0)) {
@@ -197,29 +193,21 @@ void DiceManager::clearDice(){
 }
 
 void DiceManager::on_addButton_clicked(){
-    qDebug() << "Adding Die Button Clicked";
-
     clearDice();
     addDice(customButtonSpinBox->value());
     generateDice();
 }
 
 void DiceManager::addDice(int sides){
-    qDebug() << "Adding Die";
-
     sidesList.push_back(sides);
 }
 
 void DiceManager::on_resetButton_clicked(){
-    qDebug() << "Reset Dice Button Clicked";
-
     clearDice();
     resetDice();
     generateDice();
 }
 
 void DiceManager::resetDice(){
-    qDebug() << "Reseting Dice";
-
     sidesList = {2, 3, 4, 6, 12, 20};
 }

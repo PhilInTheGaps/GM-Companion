@@ -53,7 +53,7 @@ public:
     QAction *actionI_want_to_use_an_older_Version;
     QAction *actionInternet_Radio;
     QAction *actionCheck_for_Updates_on_Program_Start;
-    QAction *actionNamne_Generator;
+    QAction *actionName_Generator;
     QAction *actionCharacters;
     QAction *actionSet_Characters_Folder;
     QWidget *centralWidget;
@@ -77,7 +77,7 @@ public:
     QLabel *characterIconLabel;
     QHBoxLayout *horizontalLayout;
     QPushButton *createCharacterButton;
-    QPushButton *pushButton;
+    QPushButton *editCharacter;
     QHBoxLayout *horizontalLayout_15;
     QPushButton *updateCharactersButton;
     QPushButton *deleteCharacterButton;
@@ -188,218 +188,7 @@ public:
         icon.addFile(QStringLiteral(":/icons/ico/resources/icon256.ico"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
         MainWindow->setAutoFillBackground(false);
-        MainWindow->setStyleSheet(QLatin1String("QWidget {\n"
-"	background-color: #222222;\n"
-"	color: rgb(255, 255, 255);\n"
-"}\n"
-"\n"
-"QMenuBar{\n"
-"background-color: rgb(102, 102, 102);\n"
-"}\n"
-"\n"
-"QMenuBar::item {\n"
-"    spacing: 10px;\n"
-"	padding: 4px;\n"
-"    background: transparent;\n"
-"    border-radius: 2px;\n"
-"}\n"
-"\n"
-"QMenuBar::item:selected {\n"
-"    background: #444444;\n"
-"}\n"
-"\n"
-"QMenuBar::item:hover:!pressed {\n"
-"    background: #555555;\n"
-"}\n"
-"\n"
-"QMenuBar::item:pressed {\n"
-"    background: #333333;\n"
-"}\n"
-"\n"
-"QMenu {\n"
-"    background-color: #666666;\n"
-"}\n"
-"\n"
-"QMenu::item {\n"
-"    background-color: transparent;\n"
-"}\n"
-"\n"
-"QMenu::item:selected {\n"
-"    background-color: #333333;\n"
-"}\n"
-"\n"
-"QPushButton{\n"
-"background-color: rgb(102, 102, 102);\n"
-"border: 1px;\n"
-"padding: 5px;\n"
-"min-width: 40px;\n"
-"min-height: 30px;\n"
-"}\n"
-"\n"
-"QPushButton:pressed{\n"
-"background-color: rgb(51, 51, 51);\n"
-"}\n"
-"\n"
-"QPushButton:disabled {\n"
-"	background-color: #111111;\n"
-"}\n"
-"\n"
-"QPushButton:hover:!pressed{"
-                        "\n"
-"background-color: rgb(85, 85, 85);\n"
-"}\n"
-"\n"
-"QSlider::groove:horizontal {\n"
-"    border: transparent;\n"
-"	height: 10px;\n"
-"	background-color: rgb(102, 102, 102);\n"
-"    margin: 5px 0;\n"
-"}\n"
-"\n"
-"QSlider::handle:horizontal {\n"
-"    background: white;\n"
-"    border: transparent;\n"
-"    width: 15px;\n"
-"    margin: -3px 0;\n"
-"    border-radius: 3px;\n"
-"}\n"
-"\n"
-"QProgressBar {\n"
-"    border: 2px solid grey;\n"
-"	background-color: rgb(102, 102, 102);\n"
-"    border-radius: 0px;\n"
-"	text-align: center;\n"
-"}\n"
-"\n"
-"QProgressBar::chunk {\n"
-"    background-color: #222222;\n"
-"    width: 1px;\n"
-"}\n"
-"\n"
-"QTabWidget::pane { /* The tab widget frame */\n"
-"    border: 1px solid #555555;\n"
-"}\n"
-"\n"
-"QTabWidget::tab-bar {\n"
-"    left: 0px;\n"
-"}\n"
-"\n"
-"QTabBar::tab {\n"
-"	background-color: rgb(102, 102, 102);\n"
-"    border: 1px solid #555555;\n"
-"    border-top-left-radius: 2px;\n"
-"    border-top-right-radius: 2px;\n"
-"    min-width: 100px;\n"
-"    padding: 5px;\n"
-"}\n"
-"\n"
-"QTabBa"
-                        "r::tab:selected, QTabBar::tab:hover {\n"
-"    background: #555555;\n"
-"}\n"
-"\n"
-"QTabBar::tab:selected {\n"
-"    border-color: #333333;\n"
-"    border-bottom-color: #555555; /* same as pane color */\n"
-"	background-color: rgb(68, 68, 68);\n"
-"}\n"
-"\n"
-"QTabBar::tab:!selected {\n"
-"    margin-top: 2px; /* make non-selected tabs look smaller */\n"
-"}\n"
-"\n"
-"QToolBox::tab {\n"
-"background-color: rgb(102, 102, 102);\n"
-"    border-radius: 1px;\n"
-"}\n"
-"\n"
-"QToolBox::tab:hover:!pressed {\n"
-"background-color: rgb(85, 85, 85);\n"
-"}\n"
-"\n"
-"QToolBox::tab:!pressed {\n"
-"background-color: rgb(51, 51, 51);\n"
-"}\n"
-"\n"
-"QToolBox::tab:selected { \n"
-"    font: italic, bold;\n"
-"}\n"
-"\n"
-"QTableView{\n"
-"selection-background-color: rgb(68, 68, 68);\n"
-"}\n"
-"\n"
-"QTableView QTableCornerButton::section {\n"
-"background-color: rgb(34, 34, 34);\n"
-"}\n"
-"\n"
-"QTableView::item {\n"
-"   /* border: 5px solid rgba(68, 119, 170, 150);*/\n"
-"	\n"
-"	background-color: #333333;\n"
-"}\n"
-"\n"
-"QTableView::item:selected {\n"
-""
-                        "	background-color: #777777;\n"
-"}\n"
-"\n"
-"QTableView, QHeaderView::section {    \n"
-"	background-color: rgb(34, 34, 34);\n"
-"}\n"
-"\n"
-"QScrollBar:horizontal {\n"
-"    border: 2px solid #222222;\n"
-"    background-color: #333333;\n"
-"    height: 15px;\n"
-"    margin: 0px 20px 0 20px;\n"
-"}\n"
-"QScrollBar::handle:horizontal {\n"
-"    background-color: #222222;\n"
-"    min-width: 20px;\n"
-"}\n"
-"QScrollBar::add-line:horizontal {\n"
-"    border: 2px solid #444444;\n"
-"    background: #222222;\n"
-"    width: 20px;\n"
-"    subcontrol-position: right;\n"
-"    subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:horizontal {\n"
-"    border: 2px solid #444444;\n"
-"    background: #222222;\n"
-"    width: 20px;\n"
-"    subcontrol-position: left;\n"
-"    subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar:vertical {\n"
-"    border: 2px solid #222222;\n"
-"    background-color: #333333;\n"
-"    width: 15px;\n"
-"    margin: 20px 0px 20 0px;\n"
-"}\n"
-"QScrollBar::handle:vertical {\n"
-"    background-color: #22222"
-                        "2;\n"
-"    min-height: 20px;\n"
-"}\n"
-"QScrollBar::add-line:vertical {\n"
-"    border: 2px solid #444444;\n"
-"    background: #222222;\n"
-"    height: 20px;\n"
-"    subcontrol-position: bottom;\n"
-"    subcontrol-origin: margin;\n"
-"}\n"
-"\n"
-"QScrollBar::sub-line:vertical {\n"
-"    border: 2px solid #444444;\n"
-"    background: #222222;\n"
-"    height: 20px;\n"
-"    subcontrol-position: top;\n"
-"    subcontrol-origin: margin;\n"
-"}"));
+        MainWindow->setStyleSheet(QStringLiteral(""));
         MainWindow->setTabShape(QTabWidget::Triangular);
         actionDice = new QAction(MainWindow);
         actionDice->setObjectName(QStringLiteral("actionDice"));
@@ -442,8 +231,8 @@ public:
         actionCheck_for_Updates_on_Program_Start->setObjectName(QStringLiteral("actionCheck_for_Updates_on_Program_Start"));
         actionCheck_for_Updates_on_Program_Start->setCheckable(true);
         actionCheck_for_Updates_on_Program_Start->setAutoRepeat(true);
-        actionNamne_Generator = new QAction(MainWindow);
-        actionNamne_Generator->setObjectName(QStringLiteral("actionNamne_Generator"));
+        actionName_Generator = new QAction(MainWindow);
+        actionName_Generator->setObjectName(QStringLiteral("actionName_Generator"));
         actionCharacters = new QAction(MainWindow);
         actionCharacters->setObjectName(QStringLiteral("actionCharacters"));
         actionSet_Characters_Folder = new QAction(MainWindow);
@@ -596,10 +385,10 @@ public:
 
         horizontalLayout->addWidget(createCharacterButton);
 
-        pushButton = new QPushButton(frame);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        editCharacter = new QPushButton(frame);
+        editCharacter->setObjectName(QStringLiteral("editCharacter"));
 
-        horizontalLayout->addWidget(pushButton);
+        horizontalLayout->addWidget(editCharacter);
 
 
         verticalLayout_5->addLayout(horizontalLayout);
@@ -742,7 +531,7 @@ public:
         scrollArea->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1243, 628));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 968, 618));
         verticalLayout_13 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_13->setSpacing(6);
         verticalLayout_13->setContentsMargins(11, 11, 11, 11);
@@ -777,7 +566,7 @@ public:
         sizePolicy3.setVerticalStretch(0);
         sizePolicy3.setHeightForWidth(rivendellPlayButton->sizePolicy().hasHeightForWidth());
         rivendellPlayButton->setSizePolicy(sizePolicy3);
-        rivendellPlayButton->setMinimumSize(QSize(90, 40));
+        rivendellPlayButton->setMinimumSize(QSize(90, 0));
         rivendellPlayButton->setMaximumSize(QSize(100, 16777215));
         QFont font4;
         font4.setPointSize(15);
@@ -805,7 +594,7 @@ public:
         rivendellReloadButton->setObjectName(QStringLiteral("rivendellReloadButton"));
         sizePolicy3.setHeightForWidth(rivendellReloadButton->sizePolicy().hasHeightForWidth());
         rivendellReloadButton->setSizePolicy(sizePolicy3);
-        rivendellReloadButton->setMinimumSize(QSize(90, 40));
+        rivendellReloadButton->setMinimumSize(QSize(90, 0));
         rivendellReloadButton->setMaximumSize(QSize(100, 16777215));
         rivendellReloadButton->setFont(font4);
         rivendellReloadButton->setStyleSheet(QLatin1String("QPushButton{\n"
@@ -899,7 +688,7 @@ public:
         mmorpgPlayButton->setObjectName(QStringLiteral("mmorpgPlayButton"));
         sizePolicy3.setHeightForWidth(mmorpgPlayButton->sizePolicy().hasHeightForWidth());
         mmorpgPlayButton->setSizePolicy(sizePolicy3);
-        mmorpgPlayButton->setMinimumSize(QSize(90, 40));
+        mmorpgPlayButton->setMinimumSize(QSize(90, 0));
         mmorpgPlayButton->setMaximumSize(QSize(100, 16777215));
         QFont font5;
         font5.setPointSize(15);
@@ -925,7 +714,7 @@ public:
         mmorpgReloadButton->setObjectName(QStringLiteral("mmorpgReloadButton"));
         sizePolicy3.setHeightForWidth(mmorpgReloadButton->sizePolicy().hasHeightForWidth());
         mmorpgReloadButton->setSizePolicy(sizePolicy3);
-        mmorpgReloadButton->setMinimumSize(QSize(90, 40));
+        mmorpgReloadButton->setMinimumSize(QSize(90, 0));
         mmorpgReloadButton->setMaximumSize(QSize(100, 16777215));
         mmorpgReloadButton->setFont(font5);
         mmorpgReloadButton->setStyleSheet(QLatin1String("QPushButton{\n"
@@ -1402,7 +1191,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1300, 28));
+        menuBar->setGeometry(QRect(0, 0, 1300, 25));
         QSizePolicy sizePolicy13(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         sizePolicy13.setHorizontalStretch(0);
         sizePolicy13.setVerticalStretch(0);
@@ -1450,7 +1239,7 @@ public:
         menuBar->addAction(menuHelp->menuAction());
         menuGM_Help->addAction(actionDice);
         menuGM_Help->addAction(actionDatabase);
-        menuGM_Help->addAction(actionNamne_Generator);
+        menuGM_Help->addAction(actionName_Generator);
         menuGM_Help->addAction(actionCharacters);
         menuGM_Help->addAction(actionSet_Database_Path);
         menuOptions->addAction(actionSet_Music_Folder);
@@ -1482,7 +1271,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | Beta 3.0", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "GM-Companion | Beta 3.1", Q_NULLPTR));
         actionDice->setText(QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
         actionDatabase->setText(QApplication::translate("MainWindow", "Database", Q_NULLPTR));
         actionSet_Music_Folder->setText(QApplication::translate("MainWindow", "Set Music Folder", Q_NULLPTR));
@@ -1499,7 +1288,7 @@ public:
         actionI_want_to_use_an_older_Version->setText(QApplication::translate("MainWindow", "I want to use an older version!", Q_NULLPTR));
         actionInternet_Radio->setText(QApplication::translate("MainWindow", "Webradio", Q_NULLPTR));
         actionCheck_for_Updates_on_Program_Start->setText(QApplication::translate("MainWindow", "Check for Updates on Program Start", Q_NULLPTR));
-        actionNamne_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
+        actionName_Generator->setText(QApplication::translate("MainWindow", "Name Generator", Q_NULLPTR));
         actionCharacters->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         actionSet_Characters_Folder->setText(QApplication::translate("MainWindow", "Set Characters Folder", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabDice), QApplication::translate("MainWindow", "Dice", Q_NULLPTR));
@@ -1512,7 +1301,7 @@ public:
         label_2->setText(QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
         characterIconLabel->setText(QString());
         createCharacterButton->setText(QApplication::translate("MainWindow", "Add New", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
+        editCharacter->setText(QApplication::translate("MainWindow", "Edit Selected", Q_NULLPTR));
         updateCharactersButton->setText(QApplication::translate("MainWindow", "Update", Q_NULLPTR));
         deleteCharacterButton->setText(QApplication::translate("MainWindow", "Delete Selected", Q_NULLPTR));
         tabWidgetGMHelp->setTabText(tabWidgetGMHelp->indexOf(tabCharacters), QApplication::translate("MainWindow", "Characters", Q_NULLPTR));
