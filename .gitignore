@@ -1,10 +1,8 @@
 /GM-Companion-NetbeansTest/Player/nbproject/private/
 /GM-Companion-NetbeansTest/Player/build/
 /GM-Companion-NetbeansTest/Player/dist/
-/C++Project/build-GM-Companion-Desktop_Qt_5_8_0_MinGW_32bit-Debug/
-/C++Project/Build_x64_MSVC2015_Debug/
-/C++Project/Build_x64_MSVC2015_Release/
-/C++Project/Build_x86_MinGW_Debug/
-/C++Project/Build_x86_MinGW_Release/
-/C++Project/Build_x86_MSVC2015_Debug/
-/C++Project/Build_x86_MSVC2015_Release/
+C++Project/build-GM-Companion-Desktop_Qt_5_8_0_MinGW_32bit-Debug/
+C++Project/Build_x64_MSVC2015_Debug/
+C++Project/Build_x64_MSVC2015_Release/
+C++Project/Build_x86_MSVC2015_Debug/
+C++Project/Build_x86_MSVC2015_Release/
