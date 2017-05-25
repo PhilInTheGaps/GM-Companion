@@ -44,7 +44,6 @@ void CharEditor::writeTable(QString indicator, int columns, QTableWidget* table,
     for (int row = 0; row<size; row++){
         for (int column = 0; column<columns; column++){
             QString entry = list->at(row).at(column);
-            qDebug() << row << column << entry;
 
             QTableWidgetItem* item = new QTableWidgetItem;
             item->setText(entry);
@@ -56,10 +55,10 @@ void CharEditor::writeTable(QString indicator, int columns, QTableWidget* table,
 void CharEditor::load(int index){
     QStringList characters = getCharacterList();
     loadCharacterFile = characters.at(index);
-    qDebug() << loadCharacterFile;
 
     QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+loadCharacterFile, QSettings::IniFormat);
 
+    qDebug() << "Loading Character" << settings.value("Name").toString() << "...";
     ui->displayNameLineEdit->setText(settings.value("Name").toString());
     ui->playerLineEdit->setText(settings.value("Player").toString());
 
@@ -92,142 +91,108 @@ void CharEditor::load(int index){
     }
     case 1:{
         // Persönliche Daten
-        qDebug() << "Writing Persönliche Werte";
         writeTable("persDaten1", 1, ui->persInf1Table_dsa5);
         writeTable("persDaten2", 1, ui->persInf2Table_dsa5);
 
         // Vorteile
-        qDebug() << "Writing Vorteile";
         writeTable("vorteile", 1, ui->vorteileTable_dsa5, true);
 
         // Nachteile
-        qDebug() << "Writing Nachteile";
         writeTable("nachteile", 1, ui->nachteileTable_dsa5, true);
 
         // Sonderfertigkeiten
-        qDebug() << "Writing Sonderfertigkeiten";
         writeTable("sonderfertigkeiten", 1,ui->sonderfTable_dsa5, true);
 
         // Eigenschaften
-        qDebug() << "Writing Eigenschaften";
         writeTable("eigenschaften", 8,ui->eigenschaftenTable_dsa5);
 
         // AP
-        qDebug() << "Writing AP";
         writeTable("ap", 4, ui->apTable_dsa5);
 
         // Allgemeine Werte
-        qDebug() << "Writing Allgemeine Werte";
         writeTable("allgemein", 4, ui->allgWerteTable_dsa5);
 
         // Schicksalspunkte
-        qDebug() << "Writing Schicksalspunkte";
         writeTable("schicksalsp", 4, ui->schicksalspunkteTable_dsa5);
 
         // Fertigkeiten
-        qDebug() << "Writing Fertigkeiten";
         writeTable("fertigkeiten1", 6, ui->fertigkeiten1Table_dsa5);
         writeTable("fertigkeiten2", 6, ui->fertigkeiten2Table_dsa5);
 
         // Sprachen
-        qDebug() << "Writing Sprachen";
         writeTable("sprachen", 1, ui->sprachenTable_dsa5, true);
 
         // Schriften
-        qDebug() << "Writing Schriften";
         writeTable("schriften", 1, ui->schriftenTable_dsa5, true);
 
         // Kampftechniken
-        qDebug() << "Writing Kampftechniken";
         writeTable("kampftechniken", 5, ui->ktwTable_dsa5);
 
         // Lebenspunkte
-        qDebug() << "Writing Lebenspunkte";
         writeTable("lep", 2, ui->lepTable_dsa5);
 
         // Nahkampfwaffen
-        qDebug() << "Writing Nahkampfwaffen";
         writeTable("nahkampfwaffen", 9, ui->nahkampfTable_dsa5, true);
 
         // Fernkampfwaffen
-        qDebug() << "Writing Fernkampfwaffen";
         writeTable("fernkampfwaffen", 8,ui->fernkampfTable_dsa5, true);
 
         // Rüstungen
-        qDebug() << "Writing Rüstungen";
         writeTable("ruestungen", 6, ui->ruestungenTable_dsa5, true);
 
         // Schild / Parierwaffe
-        qDebug() << "Writing Schilde / Parierwaffen";
         writeTable("schild", 4, ui->schildTable_dsa5, true);
 
         // Kampfsonderfertigkeiten
-        qDebug() << "Writing Kampfsonderfertigkeiten";
         writeTable("kampfsonderfertigkeiten", 1, ui->kSonderfTable_dsa5, true);
 
         // Ausrüstung
-        qDebug() << "Writing Ausrüstung";
         writeTable("ausruestung1", 3, ui->ausruestung1Table_dsa5, true);
         writeTable("ausruestung2", 3, ui->ausruestung2Table_dsa5, true);
 
         // Geldbeutel
-        qDebug() << "Writing Geldbeutel";
         writeTable("geldbeutel", 1, ui->geldTable_dsa5);
 
         // Tier Allgemein
-        qDebug() << "Writing Tier Allgemein";
         writeTable("tierAllgmein", 1, ui->tierAllgemeinTable_dsa5);
 
         // Tier Angriff
-        qDebug() << "Writing Tier Angriff";
         writeTable("tierAngriff", 5, ui->tierAngriffTable_dsa5, true);
 
         // Tier Sonderfertigkeiten
-        qDebug() << "Writing Tier Sonderfertigkeiten";
         writeTable("tierSonderfertigkeiten", 1, ui->tierSonderfTable_dsa5, true);
 
         // Tier Aktionen
-        qDebug() << "Writing Tier Aktionen";
         writeTable("tierAktionen", 1, ui->tierAktionenTable_dsa5, true);
 
         // Zauber
-        qDebug() << "Writing Zauber";
         writeTable("zauber", 11, ui->zauberTable_dsa5, true);
 
         // Zaubertricks
-        qDebug() << "Writing Zaubertricks";
         writeTable("zaubertricks", 1, ui->zaubertricksTable_dsa5, true);
 
         // Magische Sonderfertigkeiten
-        qDebug() << "Writing Magische Sonderfertigkeiten";
         writeTable("magischeSonderfertigkeiten", 1, ui->mSonderfTable_dsa5, true);
 
         // Leiteigenschaft / Merkmal
-        qDebug() << "Writing Leiteigenschaft / Merkmal";
         writeTable("leiteigenschaftMerkmal", 2, ui->leiteigMerkmalTable_dsa5);
 
         // Magische Tradition
-        qDebug() << "Writing Magische Tradition";
         writeTable("mTradition", 1, ui->magiTraditionTable_dsa5);
 
         // Liturgien
-        qDebug() << "Writing Liturgien";
         writeTable("liturgien", 11, ui->liturgienTable_dsa5, true);
 
         // Segnungen
-        qDebug() << "Writing Segnungen";
         writeTable("segnungen", 1, ui->segnungenTable_dsa5, true);
 
         // Klerikale Sonderfertigkeiten
-        qDebug() << "Writing Klerikale Sonderfertigkeiten";
         writeTable("klerikaleSonderfertigkeiten", 1, ui->kleriSonderfTable_dsa5, true);
 
         // Leiteigenschaft / Aspekt
-        qDebug() << "Writing Leiteigenschaft / Aspekt";
         writeTable("leiteigenschaftAspekt", 2, ui->leiteigAspektTable_dsa5);
 
         // Klerikale Tradition
-        qDebug() << "Writing Klerikale Tradition";
         writeTable("kTradition", 1, ui->kleriTraditionTable_dsa5);
 
         break;
@@ -315,16 +280,15 @@ void CharEditor::load(int index){
     default:
         break;
     }
+    qDebug() << "Done.";
 }
 
 void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns){
     QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+displayName+".ini", QSettings::IniFormat);
     QList<QStringList> list;
-    qDebug() << "Indicator: " << indicator << "Columns: " << columns << "Table length: " << table->rowCount();
     for (int i = 0; i<table->rowCount(); i++){
         QStringList subList;
         for (int column = 0; column<columns; column++){
-            qDebug() << "Row: " << i << "Column: " <<column;
             if (table->item(i, 0) != 0){
                 if (!table->item(i, column) || table->item(i, column)->text().isEmpty()){
                     subList.push_back(" ");
@@ -336,7 +300,6 @@ void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns
             else{
                 subList.push_back(" ");
             }
-            qDebug() << "Item: " << subList.at(column);
         }
         list.push_back(subList);
     }
@@ -354,6 +317,9 @@ void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns
 void CharEditor::save(){
 
     displayName = ui->displayNameLineEdit->text();
+
+    qDebug() << "Saving Character" << displayName << "...";
+
     QString playerName = ui->playerLineEdit->text();
     int systemID = ui->systemComboBox->currentIndex();
 
@@ -389,142 +355,108 @@ void CharEditor::save(){
     }
     case 1:{
         // Persönliche Daten
-        qDebug() << "Writing Persönliche Werte";
         writeToFile(ui->persInf1Table_dsa5, "persDaten1", 1);
         writeToFile(ui->persInf2Table_dsa5, "persDaten2", 1);
 
         // Vorteile
-        qDebug() << "Writing Vorteile";
         writeToFile(ui->vorteileTable_dsa5, "vorteile", 1);
 
         // Nachteile
-        qDebug() << "Writing Nachteile";
         writeToFile(ui->nachteileTable_dsa5, "nachteile", 1);
 
         // Sonderfertigkeiten
-        qDebug() << "Writing Sonderfertigkeiten";
         writeToFile(ui->sonderfTable_dsa5, "sonderfertigkeiten", 1);
 
         // Eigenschaften
-        qDebug() << "Writing Eigenschaften";
         writeToFile(ui->eigenschaftenTable_dsa5, "eigenschaften", 8);
 
         // AP
-        qDebug() << "Writing AP";
         writeToFile(ui->apTable_dsa5, "ap", 4);
 
         // Allgemeine Werte
-        qDebug() << "Writing Allgemeine Werte";
         writeToFile(ui->allgWerteTable_dsa5, "allgemein", 4);
 
         // Schicksalspunkte
-        qDebug() << "Writing Schicksalspunkte";
         writeToFile(ui->schicksalspunkteTable_dsa5, "schicksalsp", 4);
 
         // Fertigkeiten
-        qDebug() << "Writing Fertigkeiten";
         writeToFile(ui->fertigkeiten1Table_dsa5, "fertigkeiten1", 6);
         writeToFile(ui->fertigkeiten2Table_dsa5, "fertigkeiten2", 6);
 
         // Sprachen
-        qDebug() << "Writing Sprachen";
         writeToFile(ui->sprachenTable_dsa5, "sprachen", 1);
 
         // Schriften
-        qDebug() << "Writing Schriften";
         writeToFile(ui->schriftenTable_dsa5, "schriften", 1);
 
         // Kampftechniken
-        qDebug() << "Writing Kampftechniken";
         writeToFile(ui->ktwTable_dsa5, "kampftechniken", 5);
 
         // Lebenspunkte
-        qDebug() << "Writing Lebenspunkte";
         writeToFile(ui->lepTable_dsa5, "lep", 2);
 
         // Nahkampfwaffen
-        qDebug() << "Writing Nahkampfwaffen";
         writeToFile(ui->nahkampfTable_dsa5, "nahkampfwaffen", 9);
 
         // Fernkampfwaffen
-        qDebug() << "Writing Fernkampfwaffen";
         writeToFile(ui->fernkampfTable_dsa5, "fernkampfwaffen", 8);
 
         // Rüstungen
-        qDebug() << "Writing Rüstungen";
         writeToFile(ui->ruestungenTable_dsa5, "ruestungen", 6);
 
         // Schild / Parierwaffe
-        qDebug() << "Writing Schilde / Parierwaffen";
         writeToFile(ui->schildTable_dsa5, "schild", 4);
 
         // Kampfsonderfertigkeiten
-        qDebug() << "Writing Kampfsonderfertigkeiten";
         writeToFile(ui->kSonderfTable_dsa5, "kampfsonderfertigkeiten", 1);
 
         // Ausrüstung
-        qDebug() << "Writing Ausrüstung";
         writeToFile(ui->ausruestung1Table_dsa5, "ausruestung1", 3);
         writeToFile(ui->ausruestung2Table_dsa5, "ausruestung2", 3);
 
         // Geldbeutel
-        qDebug() << "Writing Geldbeutel";
         writeToFile(ui->geldTable_dsa5, "geldbeutel", 1);
 
         // Tier Allgemein
-        qDebug() << "Writing Tier Allgemein";
         writeToFile(ui->tierAllgemeinTable_dsa5, "tierAllgmein", 1);
 
         // Tier Angriff
-        qDebug() << "Writing Tier Angriff";
         writeToFile(ui->tierAngriffTable_dsa5, "tierAngriff", 5);
 
         // Tier Sonderfertigkeiten
-        qDebug() << "Writing Tier Sonderfertigkeiten";
         writeToFile(ui->tierSonderfTable_dsa5, "tierSonderfertigkeiten", 1);
 
         // Tier Aktionen
-        qDebug() << "Writing Tier Aktionen";
         writeToFile(ui->tierAktionenTable_dsa5, "tierAktionen", 1);
 
         // Zauber
-        qDebug() << "Writing Zauber";
         writeToFile(ui->zauberTable_dsa5, "zauber", 11);
 
         // Zaubertricks
-        qDebug() << "Writing Zaubertricks";
         writeToFile(ui->zaubertricksTable_dsa5, "zaubertricks", 1);
 
         // Magische Sonderfertigkeiten
-        qDebug() << "Writing Magische Sonderfertigkeiten";
         writeToFile(ui->mSonderfTable_dsa5, "magischeSonderfertigkeiten", 1);
 
         // Leiteigenschaft / Merkmal
-        qDebug() << "Writing Leiteigenschaft / Merkmal";
         writeToFile(ui->leiteigMerkmalTable_dsa5, "leiteigenschaftMerkmal", 2);
 
         // Magische Tradition
-        qDebug() << "Writing Magische Tradition";
         writeToFile(ui->magiTraditionTable_dsa5, "mTradition", 1);
 
         // Liturgien
-        qDebug() << "Writing Liturgien";
         writeToFile(ui->liturgienTable_dsa5, "liturgien", 11);
 
         // Segnungen
-        qDebug() << "Writing Segnungen";
         writeToFile(ui->segnungenTable_dsa5, "segnungen", 1);
 
         // Klerikale Sonderfertigkeiten
-        qDebug() << "Writing Klerikale Sonderfertigkeiten";
         writeToFile(ui->kleriSonderfTable_dsa5, "klerikaleSonderfertigkeiten", 1);
 
         // Leiteigenschaft / Aspekt
-        qDebug() << "Writing Leiteigenschaft / Aspekt";
         writeToFile(ui->leiteigAspektTable_dsa5, "leiteigenschaftAspekt", 2);
 
         // Klerikale Tradition
-        qDebug() << "Writing Klerikale Tradition";
         writeToFile(ui->kleriTraditionTable_dsa5, "kTradition", 1);
 
         break;
@@ -533,19 +465,15 @@ void CharEditor::save(){
     case 2:
     {
         // Name
-        qDebug() << "Writing Name";
         settings.setValue("charName", ui->nameLineEdit_sifrp->text());
 
         // Age
-        qDebug() << "Writing Age";
         settings.setValue("age", ui->ageLineEdit_sirfp->text());
 
         // Gender
-        qDebug() << "Writing Gender";
         settings.setValue("gender", ui->genderLineEdit_sifrp->text());
 
         // House
-        qDebug() << "Writing House";
         settings.setValue("house", ui->houseLineEdit_sifrp->text());
 
         // Abilities
@@ -619,6 +547,7 @@ void CharEditor::save(){
         break;
     }
 
+    qDebug() << "Done.";
 }
 
 void CharEditor::addRow(QTableWidget* table){
@@ -793,7 +722,7 @@ void CharEditor::on_removeSchrift_dsa5_clicked()
     removeRow(ui->schriftenTable_dsa5);
 }
 
-void CharEditor::on_lepTable_dsa5_cellChanged(int row, int column)
+void CharEditor::on_lepTable_dsa5_cellChanged()
 {
     if (ui->lepTable_dsa5->item(0, 0) != 0 && ui->lepTable_dsa5->item(0, 1) != 0){
         ui->lepProgressBar_dsa5->setMaximum(ui->lepTable_dsa5->item(0, 0)->text().toInt());

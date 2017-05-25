@@ -5,6 +5,7 @@
 #include <QToolButton>
 
 void MainWindow::generateSoundButtons(){
+    qDebug() << "Generating Sound Buttons...";
     tabWidgetSound = new QTabWidget;
     ui->pageSound->layout()->addWidget(tabWidgetSound);
 
@@ -61,7 +62,7 @@ void MainWindow::generateSoundButtons(){
                                          "QToolButton QWidget{"
                                          "color: white} ");
                     }
-                    else if (QFile("resources/button.png").exists()){
+                    else if (QFile(QApplication::applicationDirPath()+"/resources/button.png").exists()){
                         b->setStyleSheet("QToolButton {min-width: 152; "
                                          "min-height: 152; "
                                          "padding: 1px; "
@@ -100,5 +101,77 @@ void MainWindow::generateSoundButtons(){
                 }
             }
         }
+    }
+}
+
+// Plays a sound from the selected folder
+void MainWindow::playSound(QString folder){
+    QString folderName = folder;
+    int index = folderName.lastIndexOf("/")+1;
+    folderName = cleanText(folderName.mid(index));
+
+    QStringList files = getFiles(folder);
+
+    soundPlaylist->clear(); // Clear sound playlist
+
+    for (QString file : files){
+        if (file.contains(".mp3") || file.contains(".wav")){ // There could be other files in the folder
+            addToPlaylist(QUrl::fromLocalFile(folder+"/"+file), false);
+        }
+    }
+
+    // If mode is Random, skip to next sound, so it does not always start with the same
+    if (ui->soundRandomButton->isChecked()){
+        soundPlaylist->next();
+    }
+
+    soundPlayer->play();
+
+    // Display the selected sound folder
+    ui->soundNameLabel->setText("Folder: "+folderName);
+}
+
+// Toggles Random mode
+void MainWindow::on_soundRandomButton_clicked()
+{
+    if (ui->soundRandomButton->isChecked()){
+        ui->soundRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOn.png"));
+        soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
+    }
+    else{
+        ui->soundRandomButton->setIcon(QIcon(":/resources/mediaIcons/shuffleOff.png"));
+        soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Loop);
+    }
+}
+
+// Change Sound Volume
+void MainWindow::on_soundVolumeSlider_valueChanged(int value)
+{
+    soundPlayer->setVolume(value);
+}
+
+// Play
+void MainWindow::on_soundPlayButton_clicked()
+{
+    soundPlayer->play();
+}
+
+// Pause
+void MainWindow::on_soundPauseButton_clicked()
+{
+    soundPlayer->pause();
+}
+
+// Replay
+void MainWindow::on_soundReplayButton_clicked()
+{
+    soundPlayer->setPosition(0);
+}
+
+// Next
+void MainWindow::on_soundNextButton_clicked()
+{
+    if (!soundPlaylist->isEmpty()){
+        soundPlaylist->next();
     }
 }

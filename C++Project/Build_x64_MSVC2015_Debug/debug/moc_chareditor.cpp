@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_CharEditor_t {
-    QByteArrayData data[70];
-    char stringdata0[2012];
+    QByteArrayData data[68];
+    char stringdata0[2001];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -63,44 +63,42 @@ QT_MOC_LITERAL(28, 759, 29), // "on_removeSprache_dsa5_clicked"
 QT_MOC_LITERAL(29, 789, 26), // "on_addSchrift_dsa5_clicked"
 QT_MOC_LITERAL(30, 816, 29), // "on_removeSchrift_dsa5_clicked"
 QT_MOC_LITERAL(31, 846, 28), // "on_lepTable_dsa5_cellChanged"
-QT_MOC_LITERAL(32, 875, 3), // "row"
-QT_MOC_LITERAL(33, 879, 6), // "column"
-QT_MOC_LITERAL(34, 886, 27), // "on_addKSonderf_dsa5_clicked"
-QT_MOC_LITERAL(35, 914, 30), // "on_removeKSonderf_dsa5_clicked"
-QT_MOC_LITERAL(36, 945, 27), // "on_addNahkampf_dsa5_clicked"
-QT_MOC_LITERAL(37, 973, 30), // "on_removeNahkampf_dsa5_clicked"
-QT_MOC_LITERAL(38, 1004, 27), // "on_addRuestung_dsa5_clicked"
-QT_MOC_LITERAL(39, 1032, 30), // "on_removeRuestung_dsa5_clicked"
-QT_MOC_LITERAL(40, 1063, 28), // "on_addFernkampf_dsa5_clicked"
-QT_MOC_LITERAL(41, 1092, 31), // "on_removeFernkampf_dsa5_clicked"
-QT_MOC_LITERAL(42, 1124, 25), // "on_addSchild_dsa5_clicked"
-QT_MOC_LITERAL(43, 1150, 28), // "on_removeSchild_dsa5_clicked"
-QT_MOC_LITERAL(44, 1179, 31), // "on_addAusruestung1_dsa5_clicked"
-QT_MOC_LITERAL(45, 1211, 35), // "on_removeAusruestung1_dsa55_c..."
-QT_MOC_LITERAL(46, 1247, 31), // "on_addAusruestung2_dsa5_clicked"
-QT_MOC_LITERAL(47, 1279, 34), // "on_removeAusruestung2_dsa5_cl..."
-QT_MOC_LITERAL(48, 1314, 30), // "on_addTierSonderf_dsa5_clicked"
-QT_MOC_LITERAL(49, 1345, 33), // "on_removeTierSonderf_dsa5_cli..."
-QT_MOC_LITERAL(50, 1379, 30), // "on_addTierAngriff_dsa5_clicked"
-QT_MOC_LITERAL(51, 1410, 33), // "on_removeTierAngriff_dsa5_cli..."
-QT_MOC_LITERAL(52, 1444, 31), // "on_addTierAktionen_dsa5_clicked"
-QT_MOC_LITERAL(53, 1476, 34), // "on_removeTierAktionen_dsa5_cl..."
-QT_MOC_LITERAL(54, 1511, 25), // "on_addZauber_dsa5_clicked"
-QT_MOC_LITERAL(55, 1537, 28), // "on_removeZauber_dsa5_clicked"
-QT_MOC_LITERAL(56, 1566, 30), // "on_addZaubertrick_dsa5_clicked"
-QT_MOC_LITERAL(57, 1597, 33), // "on_removeZaubertrick_dsa5_cli..."
-QT_MOC_LITERAL(58, 1631, 27), // "on_addMSonderf_dsa5_clicked"
-QT_MOC_LITERAL(59, 1659, 30), // "on_removeMSonderf_dsa5_clicked"
-QT_MOC_LITERAL(60, 1690, 26), // "on_addLitugie_dsa5_clicked"
-QT_MOC_LITERAL(61, 1717, 30), // "on_removeLiturgie_dsa5_clicked"
-QT_MOC_LITERAL(62, 1748, 26), // "on_addSegnung_dsa5_clicked"
-QT_MOC_LITERAL(63, 1775, 29), // "on_removeSegnung_dsa5_clicked"
-QT_MOC_LITERAL(64, 1805, 31), // "on_addKleriSonderf_dsa5_clicked"
-QT_MOC_LITERAL(65, 1837, 34), // "on_removeKleriSonderf_dsa5_cl..."
-QT_MOC_LITERAL(66, 1872, 33), // "on_addLineQualities_sifrp_cli..."
-QT_MOC_LITERAL(67, 1906, 36), // "on_removeLineQualities_sifrp_..."
-QT_MOC_LITERAL(68, 1943, 32), // "on_addRowEquipment_sifrp_clicked"
-QT_MOC_LITERAL(69, 1976, 35) // "on_removeRowEquipment_sifrp_c..."
+QT_MOC_LITERAL(32, 875, 27), // "on_addKSonderf_dsa5_clicked"
+QT_MOC_LITERAL(33, 903, 30), // "on_removeKSonderf_dsa5_clicked"
+QT_MOC_LITERAL(34, 934, 27), // "on_addNahkampf_dsa5_clicked"
+QT_MOC_LITERAL(35, 962, 30), // "on_removeNahkampf_dsa5_clicked"
+QT_MOC_LITERAL(36, 993, 27), // "on_addRuestung_dsa5_clicked"
+QT_MOC_LITERAL(37, 1021, 30), // "on_removeRuestung_dsa5_clicked"
+QT_MOC_LITERAL(38, 1052, 28), // "on_addFernkampf_dsa5_clicked"
+QT_MOC_LITERAL(39, 1081, 31), // "on_removeFernkampf_dsa5_clicked"
+QT_MOC_LITERAL(40, 1113, 25), // "on_addSchild_dsa5_clicked"
+QT_MOC_LITERAL(41, 1139, 28), // "on_removeSchild_dsa5_clicked"
+QT_MOC_LITERAL(42, 1168, 31), // "on_addAusruestung1_dsa5_clicked"
+QT_MOC_LITERAL(43, 1200, 35), // "on_removeAusruestung1_dsa55_c..."
+QT_MOC_LITERAL(44, 1236, 31), // "on_addAusruestung2_dsa5_clicked"
+QT_MOC_LITERAL(45, 1268, 34), // "on_removeAusruestung2_dsa5_cl..."
+QT_MOC_LITERAL(46, 1303, 30), // "on_addTierSonderf_dsa5_clicked"
+QT_MOC_LITERAL(47, 1334, 33), // "on_removeTierSonderf_dsa5_cli..."
+QT_MOC_LITERAL(48, 1368, 30), // "on_addTierAngriff_dsa5_clicked"
+QT_MOC_LITERAL(49, 1399, 33), // "on_removeTierAngriff_dsa5_cli..."
+QT_MOC_LITERAL(50, 1433, 31), // "on_addTierAktionen_dsa5_clicked"
+QT_MOC_LITERAL(51, 1465, 34), // "on_removeTierAktionen_dsa5_cl..."
+QT_MOC_LITERAL(52, 1500, 25), // "on_addZauber_dsa5_clicked"
+QT_MOC_LITERAL(53, 1526, 28), // "on_removeZauber_dsa5_clicked"
+QT_MOC_LITERAL(54, 1555, 30), // "on_addZaubertrick_dsa5_clicked"
+QT_MOC_LITERAL(55, 1586, 33), // "on_removeZaubertrick_dsa5_cli..."
+QT_MOC_LITERAL(56, 1620, 27), // "on_addMSonderf_dsa5_clicked"
+QT_MOC_LITERAL(57, 1648, 30), // "on_removeMSonderf_dsa5_clicked"
+QT_MOC_LITERAL(58, 1679, 26), // "on_addLitugie_dsa5_clicked"
+QT_MOC_LITERAL(59, 1706, 30), // "on_removeLiturgie_dsa5_clicked"
+QT_MOC_LITERAL(60, 1737, 26), // "on_addSegnung_dsa5_clicked"
+QT_MOC_LITERAL(61, 1764, 29), // "on_removeSegnung_dsa5_clicked"
+QT_MOC_LITERAL(62, 1794, 31), // "on_addKleriSonderf_dsa5_clicked"
+QT_MOC_LITERAL(63, 1826, 34), // "on_removeKleriSonderf_dsa5_cl..."
+QT_MOC_LITERAL(64, 1861, 33), // "on_addLineQualities_sifrp_cli..."
+QT_MOC_LITERAL(65, 1895, 36), // "on_removeLineQualities_sifrp_..."
+QT_MOC_LITERAL(66, 1932, 32), // "on_addRowEquipment_sifrp_clicked"
+QT_MOC_LITERAL(67, 1965, 35) // "on_removeRowEquipment_sifrp_c..."
 
     },
     "CharEditor\0on_systemComboBox_currentIndexChanged\0"
@@ -129,8 +127,8 @@ QT_MOC_LITERAL(69, 1976, 35) // "on_removeRowEquipment_sifrp_c..."
     "on_removeSprache_dsa5_clicked\0"
     "on_addSchrift_dsa5_clicked\0"
     "on_removeSchrift_dsa5_clicked\0"
-    "on_lepTable_dsa5_cellChanged\0row\0"
-    "column\0on_addKSonderf_dsa5_clicked\0"
+    "on_lepTable_dsa5_cellChanged\0"
+    "on_addKSonderf_dsa5_clicked\0"
     "on_removeKSonderf_dsa5_clicked\0"
     "on_addNahkampf_dsa5_clicked\0"
     "on_removeNahkampf_dsa5_clicked\0"
@@ -211,43 +209,43 @@ static const uint qt_meta_data_CharEditor[] = {
       28,    0,  366,    2, 0x08 /* Private */,
       29,    0,  367,    2, 0x08 /* Private */,
       30,    0,  368,    2, 0x08 /* Private */,
-      31,    2,  369,    2, 0x08 /* Private */,
-      34,    0,  374,    2, 0x08 /* Private */,
-      35,    0,  375,    2, 0x08 /* Private */,
-      36,    0,  376,    2, 0x08 /* Private */,
-      37,    0,  377,    2, 0x08 /* Private */,
-      38,    0,  378,    2, 0x08 /* Private */,
-      39,    0,  379,    2, 0x08 /* Private */,
-      40,    0,  380,    2, 0x08 /* Private */,
-      41,    0,  381,    2, 0x08 /* Private */,
-      42,    0,  382,    2, 0x08 /* Private */,
-      43,    0,  383,    2, 0x08 /* Private */,
-      44,    0,  384,    2, 0x08 /* Private */,
-      45,    0,  385,    2, 0x08 /* Private */,
-      46,    0,  386,    2, 0x08 /* Private */,
-      47,    0,  387,    2, 0x08 /* Private */,
-      48,    0,  388,    2, 0x08 /* Private */,
-      49,    0,  389,    2, 0x08 /* Private */,
-      50,    0,  390,    2, 0x08 /* Private */,
-      51,    0,  391,    2, 0x08 /* Private */,
-      52,    0,  392,    2, 0x08 /* Private */,
-      53,    0,  393,    2, 0x08 /* Private */,
-      54,    0,  394,    2, 0x08 /* Private */,
-      55,    0,  395,    2, 0x08 /* Private */,
-      56,    0,  396,    2, 0x08 /* Private */,
-      57,    0,  397,    2, 0x08 /* Private */,
-      58,    0,  398,    2, 0x08 /* Private */,
-      59,    0,  399,    2, 0x08 /* Private */,
-      60,    0,  400,    2, 0x08 /* Private */,
-      61,    0,  401,    2, 0x08 /* Private */,
-      62,    0,  402,    2, 0x08 /* Private */,
-      63,    0,  403,    2, 0x08 /* Private */,
-      64,    0,  404,    2, 0x08 /* Private */,
-      65,    0,  405,    2, 0x08 /* Private */,
-      66,    0,  406,    2, 0x08 /* Private */,
-      67,    0,  407,    2, 0x08 /* Private */,
-      68,    0,  408,    2, 0x08 /* Private */,
-      69,    0,  409,    2, 0x08 /* Private */,
+      31,    0,  369,    2, 0x08 /* Private */,
+      32,    0,  370,    2, 0x08 /* Private */,
+      33,    0,  371,    2, 0x08 /* Private */,
+      34,    0,  372,    2, 0x08 /* Private */,
+      35,    0,  373,    2, 0x08 /* Private */,
+      36,    0,  374,    2, 0x08 /* Private */,
+      37,    0,  375,    2, 0x08 /* Private */,
+      38,    0,  376,    2, 0x08 /* Private */,
+      39,    0,  377,    2, 0x08 /* Private */,
+      40,    0,  378,    2, 0x08 /* Private */,
+      41,    0,  379,    2, 0x08 /* Private */,
+      42,    0,  380,    2, 0x08 /* Private */,
+      43,    0,  381,    2, 0x08 /* Private */,
+      44,    0,  382,    2, 0x08 /* Private */,
+      45,    0,  383,    2, 0x08 /* Private */,
+      46,    0,  384,    2, 0x08 /* Private */,
+      47,    0,  385,    2, 0x08 /* Private */,
+      48,    0,  386,    2, 0x08 /* Private */,
+      49,    0,  387,    2, 0x08 /* Private */,
+      50,    0,  388,    2, 0x08 /* Private */,
+      51,    0,  389,    2, 0x08 /* Private */,
+      52,    0,  390,    2, 0x08 /* Private */,
+      53,    0,  391,    2, 0x08 /* Private */,
+      54,    0,  392,    2, 0x08 /* Private */,
+      55,    0,  393,    2, 0x08 /* Private */,
+      56,    0,  394,    2, 0x08 /* Private */,
+      57,    0,  395,    2, 0x08 /* Private */,
+      58,    0,  396,    2, 0x08 /* Private */,
+      59,    0,  397,    2, 0x08 /* Private */,
+      60,    0,  398,    2, 0x08 /* Private */,
+      61,    0,  399,    2, 0x08 /* Private */,
+      62,    0,  400,    2, 0x08 /* Private */,
+      63,    0,  401,    2, 0x08 /* Private */,
+      64,    0,  402,    2, 0x08 /* Private */,
+      65,    0,  403,    2, 0x08 /* Private */,
+      66,    0,  404,    2, 0x08 /* Private */,
+      67,    0,  405,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -278,7 +276,7 @@ static const uint qt_meta_data_CharEditor[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,   32,   33,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -353,7 +351,7 @@ void CharEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 25: _t->on_removeSprache_dsa5_clicked(); break;
         case 26: _t->on_addSchrift_dsa5_clicked(); break;
         case 27: _t->on_removeSchrift_dsa5_clicked(); break;
-        case 28: _t->on_lepTable_dsa5_cellChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 28: _t->on_lepTable_dsa5_cellChanged(); break;
         case 29: _t->on_addKSonderf_dsa5_clicked(); break;
         case 30: _t->on_removeKSonderf_dsa5_clicked(); break;
         case 31: _t->on_addNahkampf_dsa5_clicked(); break;

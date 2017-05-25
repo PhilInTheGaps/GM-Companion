@@ -78,7 +78,7 @@ private slots:
 
     void on_removeSchrift_dsa5_clicked();
 
-    void on_lepTable_dsa5_cellChanged(int row, int column);
+    void on_lepTable_dsa5_cellChanged();
 
     void on_addKSonderf_dsa5_clicked();
 

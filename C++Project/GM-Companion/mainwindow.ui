@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | Beta 3.0.1</string>
+   <string>GM-Companion | Beta 3.1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -27,214 +27,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color: #222222;
-	color: rgb(255, 255, 255);
-}
-
-QMenuBar{
-background-color: rgb(102, 102, 102);
-}
-
-QMenuBar::item {
-    spacing: 10px;
-	padding: 4px;
-    background: transparent;
-    border-radius: 2px;
-}
-
-QMenuBar::item:selected {
-    background: #444444;
-}
-
-QMenuBar::item:hover:!pressed {
-    background: #555555;
-}
-
-QMenuBar::item:pressed {
-    background: #333333;
-}
-
-QMenu {
-    background-color: #666666;
-}
-
-QMenu::item {
-    background-color: transparent;
-}
-
-QMenu::item:selected {
-    background-color: #333333;
-}
-
-QPushButton{
-background-color: rgb(102, 102, 102);
-border: 1px;
-padding: 5px;
-min-width: 40px;
-min-height: 30px;
-}
-
-QPushButton:pressed{
-background-color: rgb(51, 51, 51);
-}
-
-QPushButton:disabled {
-	background-color: #111111;
-}
-
-QPushButton:hover:!pressed{
-background-color: rgb(85, 85, 85);
-}
-
-QSlider::groove:horizontal {
-    border: transparent;
-	height: 10px;
-	background-color: rgb(102, 102, 102);
-    margin: 5px 0;
-}
-
-QSlider::handle:horizontal {
-    background: white;
-    border: transparent;
-    width: 15px;
-    margin: -3px 0;
-    border-radius: 3px;
-}
-
-QProgressBar {
-    border: 2px solid grey;
-	background-color: rgb(102, 102, 102);
-    border-radius: 0px;
-	text-align: center;
-}
-
-QProgressBar::chunk {
-    background-color: #222222;
-    width: 1px;
-}
-
-QTabWidget::pane { /* The tab widget frame */
-    border: 1px solid #555555;
-}
-
-QTabWidget::tab-bar {
-    left: 0px;
-}
-
-QTabBar::tab {
-	background-color: rgb(102, 102, 102);
-    border: 1px solid #555555;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    min-width: 100px;
-    padding: 5px;
-}
-
-QTabBar::tab:selected, QTabBar::tab:hover {
-    background: #555555;
-}
-
-QTabBar::tab:selected {
-    border-color: #333333;
-    border-bottom-color: #555555; /* same as pane color */
-	background-color: rgb(68, 68, 68);
-}
-
-QTabBar::tab:!selected {
-    margin-top: 2px; /* make non-selected tabs look smaller */
-}
-
-QToolBox::tab {
-background-color: rgb(102, 102, 102);
-    border-radius: 1px;
-}
-
-QToolBox::tab:hover:!pressed {
-background-color: rgb(85, 85, 85);
-}
-
-QToolBox::tab:!pressed {
-background-color: rgb(51, 51, 51);
-}
-
-QToolBox::tab:selected { 
-    font: italic, bold;
-}
-
-QTableView{
-selection-background-color: rgb(68, 68, 68);
-}
-
-QTableView QTableCornerButton::section {
-background-color: rgb(34, 34, 34);
-}
-
-QTableView::item {
-   /* border: 5px solid rgba(68, 119, 170, 150);*/
-	
-	background-color: #333333;
-}
-
-QTableView::item:selected {
-	background-color: #777777;
-}
-
-QTableView, QHeaderView::section {    
-	background-color: rgb(34, 34, 34);
-}
-
-QScrollBar:horizontal {
-    border: 2px solid #222222;
-    background-color: #333333;
-    height: 15px;
-    margin: 0px 20px 0 20px;
-}
-QScrollBar::handle:horizontal {
-    background-color: #222222;
-    min-width: 20px;
-}
-QScrollBar::add-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
-QScrollBar:vertical {
-    border: 2px solid #222222;
-    background-color: #333333;
-    width: 15px;
-    margin: 20px 0px 20 0px;
-}
-QScrollBar::handle:vertical {
-    background-color: #222222;
-    min-height: 20px;
-}
-QScrollBar::add-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}</string>
+   <string notr="true"/>
   </property>
   <property name="tabShape">
    <enum>QTabWidget::Triangular</enum>
@@ -484,7 +277,7 @@ p, li { white-space: pre-wrap; }
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="editCharacter">
                    <property name="text">
                     <string>Edit Selected</string>
                    </property>
@@ -689,8 +482,8 @@ p, li { white-space: pre-wrap; }
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1243</width>
-             <height>628</height>
+             <width>968</width>
+             <height>618</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -742,7 +535,7 @@ p, li { white-space: pre-wrap; }
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -790,7 +583,7 @@ background-color: rgb(85, 85, 85);
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -968,7 +761,7 @@ p, li { white-space: pre-wrap; }
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1014,7 +807,7 @@ background-color: rgb(85, 85, 85);
                      <property name="minimumSize">
                       <size>
                        <width>90</width>
-                       <height>40</height>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1181,7 +974,7 @@ p, li { white-space: pre-wrap; }
                </font>
               </property>
               <property name="text">
-               <string>Version: Beta 3.0</string>
+               <string>Version: Beta 3.1</string>
               </property>
              </widget>
             </item>
@@ -1200,20 +993,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changelog:&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added rss feed from the gm-companion blog&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Changed media control buttons to have icons instead of text&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Moved media controls to the bottom of the screen to save space&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added a changelog&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added support for webradios&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added music controls when hovering icon in taskbar&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added name generator&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added character overview&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Improved Maps-Viewer with zoom function&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Greatly improved memory usage&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to check for updates&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to open wiki&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added function to report bugs&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changelog:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -2085,7 +1865,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1300</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -2129,7 +1909,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionDice"/>
     <addaction name="actionDatabase"/>
-    <addaction name="actionNamne_Generator"/>
+    <addaction name="actionName_Generator"/>
     <addaction name="actionCharacters"/>
     <addaction name="actionSet_Database_Path"/>
    </widget>
@@ -2318,7 +2098,7 @@ p, li { white-space: pre-wrap; }
     <bool>true</bool>
    </property>
   </action>
-  <action name="actionNamne_Generator">
+  <action name="actionName_Generator">
    <property name="text">
     <string>Name Generator</string>
    </property>
