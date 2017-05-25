@@ -2,7 +2,6 @@
 #include "ui_characterpage.h"
 
 #include "QTableWidgetItem"
-#include <QDebug>
 
 CharacterPage::CharacterPage(QWidget *parent) :
     QStackedWidget(parent),
