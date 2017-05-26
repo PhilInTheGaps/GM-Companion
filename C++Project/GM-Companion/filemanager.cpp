@@ -15,7 +15,7 @@ void FileManager::copyFiles(){
         lDir.mkpath(".");
     }
 
-    QStringList dirList = {"music", "sounds", "maps", "characters", "names", "addons", "resources", "styles"};
+    QStringList dirList = {"music", "sounds", "maps", "characters", "names", "addons", "resources", "styles", "notes"};
 
     for (QString path : dirList){
         QDir dir(QDir::homePath()+"/.gm-companion/"+path);

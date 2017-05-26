@@ -3,6 +3,7 @@
 #include "characters.h"
 #include "filemanager.h"
 #include "optionsdialog.h"
+#include "sifrp.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -75,7 +76,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     generateSoundButtons();
     connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
 
+    // Notes
+    getNotes();
+    notesWatcher = new QFileSystemWatcher;
+    notesWatcher->addPath(QDir::homePath()+"/.gm-companion/notes");
+    connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
+
+    // Addons
+    qDebug() << "Getting Addons...";
+    SIFRP* sifrp = new SIFRP;
+    ui->tabWidgetGMHelp->addTab(sifrp, "SIFRP");
+
     // Initialize Radio
+    qDebug() << "Initializing Radio...";
     radioPlayer = new QMediaPlayer(this);
     radioPlayer->setVolume(ui->musicVolumeSlider->value());
 
@@ -289,6 +302,5 @@ void MainWindow::on_menuMaps_triggered(){
 // Open Options Dialog
 void MainWindow::on_actionOptions_triggered(){
     OptionsDialog* options = new OptionsDialog(this);
-
     options->show();
 }
