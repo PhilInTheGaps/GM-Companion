@@ -29,10 +29,10 @@ kramdown:
   toc_levels: 1..2
 highlighter: rouge
 gems:
+  - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
-  - jekyll-seo-tag
 
 # Site owner
 owner:
