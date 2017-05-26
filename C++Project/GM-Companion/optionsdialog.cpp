@@ -72,6 +72,7 @@ void OptionsDialog::getAddons(){
     }
 }
 
+// Save Addon Settings
 void OptionsDialog::writeAddonSettings(){
     for (QCheckBox* b : officialAddons){
         settings->setAddonEnabled(b->text(), b->isChecked());
@@ -79,6 +80,7 @@ void OptionsDialog::writeAddonSettings(){
     for (QCheckBox* b : inofficialAddons){
         settings->setAddonEnabled(b->text(), b->isChecked());
     }
+    w->getNotes();
 }
 
 // Generates Music and Sound Buttons
