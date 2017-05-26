@@ -993,7 +993,8 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changelog:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Changelog:&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- Added Settings-Window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -1924,14 +1925,20 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Options</string>
     </property>
-    <addaction name="actionSet_Music_Folder"/>
-    <addaction name="actionSet_Sound_Folder"/>
-    <addaction name="actionSet_Maps_Folder"/>
-    <addaction name="actionSet_Resources_Folder"/>
-    <addaction name="actionSet_Characters_Folder"/>
+    <widget class="QMenu" name="menuSet_Paths">
+     <property name="title">
+      <string>Set Paths</string>
+     </property>
+     <addaction name="actionSet_Music_Folder"/>
+     <addaction name="actionSet_Sound_Folder"/>
+     <addaction name="actionSet_Maps_Folder"/>
+     <addaction name="actionSet_Resources_Folder"/>
+     <addaction name="actionSet_Characters_Folder"/>
+    </widget>
+    <addaction name="actionOptions"/>
+    <addaction name="menuSet_Paths"/>
     <addaction name="separator"/>
     <addaction name="actionCheck_for_Updates"/>
-    <addaction name="actionCheck_for_Updates_on_Program_Start"/>
    </widget>
    <widget class="QMenu" name="menuMusic">
     <property name="font">
@@ -2111,6 +2118,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionSet_Characters_Folder">
    <property name="text">
     <string>Set Characters Folder</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options...</string>
    </property>
   </action>
  </widget>

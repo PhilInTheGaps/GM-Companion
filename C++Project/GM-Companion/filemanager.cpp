@@ -48,7 +48,7 @@ void FileManager::copyFiles(){
                         QFile f(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
                         if (!f.exists()){
                             copied = true;
-                            QFile::copy("/usr/share/gm-companion/names/+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
+                            QFile::copy("/usr/share/gm-companion/names/"+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
                         }
                     }
                 }
