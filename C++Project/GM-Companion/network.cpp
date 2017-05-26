@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QScrollBar>
+#include <QXmlStreamReader>
 
 // Check for Updates
 void MainWindow::on_actionCheck_for_Updates_triggered(){

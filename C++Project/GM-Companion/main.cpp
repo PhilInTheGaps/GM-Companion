@@ -34,7 +34,9 @@ int main(int argc, char *argv[])
 
     w.showMaximized();
 
+    #ifdef _WIN32
     w.createThumbnailToolbar();
+    #endif
 
     return app.exec();
 }

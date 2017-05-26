@@ -32,7 +32,7 @@ QString SettingsManager::getSetting(Setting setting){
         settingString = settings.value("charactersPath", QDir::homePath()+"/.gm-companion/characters").toString();
         break;
     case Setting::checkForUpdatesOnStart:
-        settingString = settings.value("checkForUpdatesOnStart", "true").toString();
+        settingString = settings.value("checkForUpdatesOnStart", 1).toInt();
         break;
     case Setting::uiMode:
         settingString = settings.value("uiMode", "dark").toString();
@@ -81,7 +81,12 @@ void SettingsManager::setSetting(Setting setting, int checked){
         }
         break;
     case Setting::checkForUpdatesOnStart:
-        settings.setValue("checkForUpdatesOnStart", checked);
+        if (checked){
+            settings.setValue("checkForUpdatesOnStart", 1);
+        }else{
+            settings.setValue("checkForUpdatesOnStart", 0);
+        }
+
         break;
     default:
         break;
@@ -101,4 +106,41 @@ QString SettingsManager::setFolderLocation(QString windowTitle){
     }
 
     return path;
+}
+
+// Set addon disabled or enabled
+void SettingsManager::setAddonEnabled(QString addon, bool enabled){
+    QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    addonSettings.beginGroup("Addons");
+
+    if (enabled){
+        addonSettings.setValue(addon, 1);
+    }else{
+        addonSettings.setValue(addon, 0);
+    }
+
+    addonSettings.endGroup();
+}
+
+// Returns if addon is enabled
+bool SettingsManager::getIsAddonEnabled(QString addon){
+    bool enabled;
+
+    QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    addonSettings.beginGroup("Addons");
+
+    if (addonSettings.value(addon).toInt() == 1){
+        enabled = true;
+    }else{
+        enabled = false;
+    }
+
+    addonSettings.endGroup();
+
+    return enabled;
+}
+
+// Returns Official Addons
+QStringList SettingsManager::getOfficialAddons(){
+    return officialAddons;
 }
