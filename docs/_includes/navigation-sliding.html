@@ -2,7 +2,7 @@
   <h5>{{ site.title }} <span>{{ site.data.messages.locales[site.locale].toc }}</span></h5>
   <ul class="menu-item">
     {% for link in site.data.navigation %}<li>
-      <a href="{{ site.baseurl }}{{ link.url }}">
+      <a href="{{ link.url }}">
         {% if link.image %}<img src="{{ site.baseurl }}/images/{{ link.image }}" alt="teaser" class="teaser">{% endif %}
         <div class="title">{{ link.title }}</div>
         {% if link.excerpt %}<p class="excerpt">{{ link.excerpt }}</p>{% endif %}
