@@ -2,11 +2,13 @@
 #include "ui_mainwindow.h"
 #include "characters.h"
 #include "filemanager.h"
+#include "optionsdialog.h"
 
 #include <QStringList>
 #include <cstdlib>
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
+#include <QSettings>
 
 #include <QApplication>
 
@@ -23,7 +25,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Initialize SettingsManager
     qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
-    int checkUpdates = settingsManager->getSetting(Setting::checkForUpdatesOnStart).toInt(); //0 if true
+
+    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    int checkUpdates = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
 
     // Initialize Signal Mappers
     signalMapperMusic = new QSignalMapper(this);
@@ -112,8 +116,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 
     // Checks for updates on program start
-    if (checkUpdates == 0){
-        ui->actionCheck_for_Updates_on_Program_Start->setChecked(true);
+    if (checkUpdates == 1){
         onStartUpdateCheck = true;
         on_actionCheck_for_Updates_triggered();
     }
@@ -238,14 +241,14 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
     generateMusicButtons();
 }
 
-// Toggle Check for Updates on program start
-void MainWindow::on_actionCheck_for_Updates_on_Program_Start_triggered(bool checked){
-    if (checked){
-        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 0);
-    }else{
-        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 1);
-    }
-}
+//// Toggle Check for Updates on program start
+//void MainWindow::on_actionCheck_for_Updates_on_Program_Start_triggered(bool checked){
+//    if (checked){
+//        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 0);
+//    }else{
+//        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 1);
+//    }
+//}
 
 // Change to GM-Help
 void MainWindow::on_menuGM_Help_triggered(){
@@ -281,4 +284,11 @@ void MainWindow::on_menuSound_triggered(){
 // Change to Maps
 void MainWindow::on_menuMaps_triggered(){
     ui->stackedWidget->setCurrentIndex(3);
+}
+
+// Open Options Dialog
+void MainWindow::on_actionOptions_triggered(){
+    OptionsDialog* options = new OptionsDialog(this);
+
+    options->show();
 }
