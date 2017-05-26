@@ -35,7 +35,11 @@ SOURCES += main.cpp\
     deletecharacterdialog.cpp \
     filemanager.cpp \
     network.cpp \
-    windows.cpp
+    windows.cpp \
+    optionsdialog.cpp \
+    notes.cpp \
+    notesdialog.cpp \
+    sifrp.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -47,12 +51,18 @@ HEADERS  += mainwindow.h \
     characterpage.h \
     version.h \
     deletecharacterdialog.h \
-    filemanager.h
+    filemanager.h \
+    optionsdialog.h \
+    notesdialog.h \
+    sifrp.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
     characterpage.ui \
-    deletecharacterdialog.ui
+    deletecharacterdialog.ui \
+    optionsdialog.ui \
+    notesdialog.ui \
+    sifrp.ui
 
 DISTFILES += \
 

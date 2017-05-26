@@ -17,6 +17,7 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QString>
+#include <QFileSystemWatcher>
 
 #include "settingsmanager.h"
 #include "dicemanager.h"
@@ -41,6 +42,10 @@ public:
 
     void setVersion(QString); // Set Version Number (String)
     QString getVersion(); // Get Version Number (String)
+
+    void regenerateButtons();
+
+    void getNotes();
 
     #ifdef Q_OS_WIN
     void createThumbnailToolbar();
@@ -79,13 +84,13 @@ private slots:
     void on_mapsResetSizeButton_clicked();
 
     // Options
+    void on_actionOptions_triggered(); // OptionsDialog
     void on_actionSet_Music_Folder_triggered(); // Music
     void on_actionSet_Sound_Folder_triggered(); // Sound
     void on_actionSet_Maps_Folder_triggered(); // Maps
     void on_actionSet_Resources_Folder_triggered(); // Resources
     void on_actionSet_Characters_Folder_triggered(); // Characters
     void on_actionCheck_for_Updates_triggered(); // Check Updates
-    void on_actionCheck_for_Updates_on_Program_Start_triggered(bool checked); // Check Updates on Start
 
     // GM-Help
     void on_menuGM_Help_triggered();
@@ -121,6 +126,20 @@ private slots:
     void on_actionInternet_Radio_triggered();
     void on_mmorpgPlayButton_clicked();
     void on_mmorpgReloadButton_clicked();
+
+    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
+
+    void on_notesTextEdit_textChanged();
+
+    void on_addNoteButton_clicked();
+
+    void on_addCategoryButton_clicked();
+
+    void on_deleteNoteButton_clicked();
+
+    void on_deleteCategoryButton_clicked();
+
+    void notesWatcher_directoryChanged();
 
 private:
     Ui::MainWindow *ui;
@@ -168,6 +187,14 @@ private:
     // Name Generator
     QSignalMapper *signalMapperNames;
     void generateNamesTab();
+
+    // Notes
+    void readNotes(QString file);
+    void addNotes();
+    void addCategory();
+    void deleteNotes();
+    void deleteCategory();
+    QFileSystemWatcher* notesWatcher;
 
     // Network
     QNetworkAccessManager *versionNetworkManager;
