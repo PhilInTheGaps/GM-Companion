@@ -3,7 +3,7 @@
 
 title: GM-Companion
 description: "GM-Companion is a tool for the gamemaster of a rpg session."
-logo: icon128.png
+logo: /images/icon128.png
 teaser: siteLabel.png
 locale: en
 url: https://philinthegaps.github.io/GM-Companion
@@ -32,17 +32,18 @@ gems:
   - jekyll-sitemap
   - jekyll-gist
   - jekyll-feed
+  - jekyll-seo-tag
 
 # Site owner
 owner:
   name: Phil Hoffmann
-  email:
+  email: phil.hoffmann@inbox.com
   twitter:
   google:
     ad-client:
     ad-slot:
   bio:
-  avatar: icon128.png
+  avatar: /images/icon128.png
   disqus-shortname:
 
 
