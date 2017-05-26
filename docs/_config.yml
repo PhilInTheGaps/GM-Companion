@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Site wide configuration
 
 title: GM-Companion
@@ -17,10 +17,14 @@ highlighter:      rouge
 
 # Permalinks
 permalink:        pretty
->>>>>>> origin/master
 
 # Jekyll configuration
-
+gems:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  
 sass:
   sass_dir: _sass
   style: compressed
@@ -28,11 +32,6 @@ permalink: /:categories/:title/
 kramdown:
   toc_levels: 1..2
 highlighter: rouge
-gems:
-  - jekyll-seo-tag
-  - jekyll-sitemap
-  - jekyll-gist
-  - jekyll-feed
 
 # Site owner
 owner:
@@ -59,7 +58,6 @@ exclude:
   - .sass-cache
   - CHANGELOG
   - Capfile
-  - Gemfile
   - Gruntfile.js
   - LICENSE
   - README
