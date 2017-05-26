@@ -17,6 +17,7 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QString>
+#include <QFileSystemWatcher>
 
 #include "settingsmanager.h"
 #include "dicemanager.h"
@@ -43,6 +44,8 @@ public:
     QString getVersion(); // Get Version Number (String)
 
     void regenerateButtons();
+
+    void getNotes();
 
     #ifdef Q_OS_WIN
     void createThumbnailToolbar();
@@ -124,6 +127,20 @@ private slots:
     void on_mmorpgPlayButton_clicked();
     void on_mmorpgReloadButton_clicked();
 
+    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
+
+    void on_notesTextEdit_textChanged();
+
+    void on_addNoteButton_clicked();
+
+    void on_addCategoryButton_clicked();
+
+    void on_deleteNoteButton_clicked();
+
+    void on_deleteCategoryButton_clicked();
+
+    void notesWatcher_directoryChanged();
+
 private:
     Ui::MainWindow *ui;
 
@@ -170,6 +187,14 @@ private:
     // Name Generator
     QSignalMapper *signalMapperNames;
     void generateNamesTab();
+
+    // Notes
+    void readNotes(QString file);
+    void addNotes();
+    void addCategory();
+    void deleteNotes();
+    void deleteCategory();
+    QFileSystemWatcher* notesWatcher;
 
     // Network
     QNetworkAccessManager *versionNetworkManager;
