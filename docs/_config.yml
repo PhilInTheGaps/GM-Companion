@@ -59,7 +59,7 @@ exclude:
   - .sass-cache
   - CHANGELOG
   - Capfile
-  - Gemfile
+#  - Gemfile
   - Gruntfile.js
   - LICENSE
   - README
