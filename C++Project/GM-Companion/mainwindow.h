@@ -110,6 +110,9 @@ private slots:
     void on_editCharacter_clicked();
     void on_deleteCharacterButton_clicked();
 
+    // Notes
+    void on_actionNotes_triggered();
+
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
     void on_actionReport_a_Bug_triggered(); // Report Bug
