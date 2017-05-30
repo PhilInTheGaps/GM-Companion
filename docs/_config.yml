@@ -1,4 +1,3 @@
-
 # Site wide configuration
 
 title: GM-Companion
@@ -10,7 +9,8 @@ url: https://philinthegaps.github.io/GM-Companion
 baseurl: /GM-Companion
 feed:
   path: /feed.xml
-=======
+#=======
+
 # Dependencies
 markdown:         kramdown
 highlighter:      rouge
@@ -44,7 +44,6 @@ owner:
   bio:
   avatar: /images/icon128.png
   disqus-shortname:
-
 
 include:
   - .htaccess
