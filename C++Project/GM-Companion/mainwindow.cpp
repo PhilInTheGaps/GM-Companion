@@ -276,12 +276,12 @@ void MainWindow::on_actionDice_triggered(bool t){
 
 // Change to Name Generator
 void MainWindow::on_actionName_Generator_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(1);
+    ui->tabWidgetGMHelp->setCurrentIndex(2);
 }
 
 // Change to Characters
 void MainWindow::on_actionCharacters_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(2);
+    ui->tabWidgetGMHelp->setCurrentIndex(3);
 }
 
 // Change to Music
@@ -303,4 +303,9 @@ void MainWindow::on_menuMaps_triggered(){
 void MainWindow::on_actionOptions_triggered(){
     OptionsDialog* options = new OptionsDialog(this);
     options->show();
+}
+
+// Change to Notes
+void MainWindow::on_actionNotes_triggered(){
+    ui->tabWidgetGMHelp->setCurrentIndex(1);
 }

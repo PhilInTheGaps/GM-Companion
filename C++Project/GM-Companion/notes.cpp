@@ -69,7 +69,7 @@ void MainWindow::readNotes(QString file){
     QFile f(file);
     if (f.exists()){
         f.open(QFile::ReadOnly);
-        QString content = f.readAll();
+        QString content = QString::fromUtf8(f.readAll());
         ui->notesTextEdit->setText(content);
         ui->notesTextEdit->verticalScrollBar()->setValue(0);
         f.close();
@@ -160,7 +160,9 @@ void MainWindow::on_notesTextEdit_textChanged(){
         if (file.exists()){
             file.open(QFile::WriteOnly);
             QTextStream stream(&file);
-            stream << ui->notesTextEdit->document()->toPlainText();
+            stream.setCodec("UTF-8");
+            QString output = ui->notesTextEdit->document()->toPlainText().toUtf8();
+            stream << output;
             file.close();
         }
     }else if (ui->notesTree->currentItem()->type() == 3){
@@ -169,7 +171,9 @@ void MainWindow::on_notesTextEdit_textChanged(){
         if (file.exists()){
             file.open(QFile::WriteOnly);
             QTextStream stream(&file);
-            stream << ui->notesTextEdit->document()->toPlainText();
+            stream.setCodec("UTF-8");
+            QString output = ui->notesTextEdit->document()->toPlainText().toUtf8();
+            stream << output;
             file.close();
         }
     }
