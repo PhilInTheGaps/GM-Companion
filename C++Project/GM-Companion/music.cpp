@@ -149,7 +149,7 @@ void MainWindow::generateMusicButtons(){
                             settings.setArrayIndex(j);
                             QString value = settings.value("folder").toString();
 
-                            if (title == value){
+                            if (s == value){
                                 inGroup = true;
 
                                 QFrame* gFrame = groupFrames.at(gIndex);
