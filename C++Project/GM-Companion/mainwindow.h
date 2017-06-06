@@ -144,6 +144,8 @@ private slots:
 
     void notesWatcher_directoryChanged();
 
+    void on_musicProgressSlider_sliderReleased();
+
 private:
     Ui::MainWindow *ui;
 
