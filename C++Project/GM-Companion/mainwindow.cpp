@@ -14,7 +14,7 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    qDebug() << "Starting...";
+    qDebug() << "Starting GM-Companion...";
     ui->setupUi(this);
 
     setVersion("0.3.1.0");
@@ -269,9 +269,8 @@ void MainWindow::on_menuGM_Help_triggered(){
 }
 
 // Change to Dice
-void MainWindow::on_actionDice_triggered(bool t){
-    if (t)
-        ui->tabWidgetGMHelp->setCurrentIndex(0);
+void MainWindow::on_actionDice_triggered(){
+    ui->tabWidgetGMHelp->setCurrentIndex(0);
 }
 
 // Change to Name Generator

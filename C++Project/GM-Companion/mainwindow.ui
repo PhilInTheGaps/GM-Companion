@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | Beta 3.1</string>
+   <string>GM-Companion | Beta 3.1 DEV-BUILD</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -49,14 +49,14 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="pageGMHelp">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QTabWidget" name="tabWidgetGMHelp">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tabDice">
            <attribute name="title">

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QTableWidgetItem>
 
+// Start
 SIFRP::SIFRP(QWidget *parent) : QWidget(parent), ui(new Ui::SIFRP){
     ui->setupUi(this);
 
@@ -12,6 +13,7 @@ SIFRP::SIFRP(QWidget *parent) : QWidget(parent), ui(new Ui::SIFRP){
     ui->eventComboBox->setEnabled(false);
     ui->eventRandomButton->setEnabled(false);
     ui->eventApplyButton->setDisabled(true);
+    ui->nextButton->setEnabled(false);
 
     resourceModifiers = {
         { 5,  -5,  -5,  20,   5,  -5,  -5},
@@ -33,6 +35,7 @@ SIFRP::~SIFRP(){
     delete ui;
 }
 
+// Roll D6 dice
 int SIFRP::rollDice(int amount){
     int result = 0;
     for (int i = 0; i<amount; i++){
@@ -43,6 +46,7 @@ int SIFRP::rollDice(int amount){
     return result;
 }
 
+// Returns a string from a .ini file
 QString SIFRP::getString(QString s){
     QSettings settings(QDir::homePath()+"/.gm-companion/addons/SIFRP/house/generator.ini", QSettings::IniFormat);
     QString setting;
@@ -51,6 +55,28 @@ QString SIFRP::getString(QString s){
 
     return setting;
 }
+
+// Next Button
+void SIFRP::on_nextButton_clicked(){
+    if (ui->stackedWidget->currentIndex() == 3 && ui->step4StackedWidget->currentIndex() != ui->step4StackedWidget->count()-1){
+        ui->step4StackedWidget->setCurrentIndex(ui->step4StackedWidget->currentIndex()+1);
+
+    }else{
+        ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()+1);
+    }
+
+    if (ui->stackedWidget->currentIndex() == 1){
+        generateStartingResources();
+    }
+
+    if (ui->stackedWidget->currentIndex() == ui->stackedWidget->count()-1){
+        lastStep();
+    }
+
+    ui->nextButton->setEnabled(false);
+}
+
+/* Step 1 - Select Realm */
 
 // When Realm Combo Box Changes
 void SIFRP::on_realmComboBox_currentIndexChanged(int index){
@@ -101,6 +127,7 @@ void SIFRP::on_realmComboBox_currentIndexChanged(int index){
     ui->resourcesTable->setItem(0, 1, i2);
 }
 
+// Select a random realm
 void SIFRP::on_randomRealm_clicked(){
     int i = rollDice(3);
     int index;
@@ -130,26 +157,21 @@ void SIFRP::on_randomRealm_clicked(){
     ui->realmComboBox->setCurrentIndex(index);
 
     ui->randomRealm->setDisabled(true);
+    ui->step1SetRealmButton->setDisabled(true);
+    ui->nextButton->setEnabled(true);
 }
 
-// Next Button
-void SIFRP::on_nextButton_clicked(){
-    if (ui->stackedWidget->currentIndex() == 3 && ui->step4StackedWidget->currentIndex() != ui->step4StackedWidget->count()-1){
-        ui->step4StackedWidget->setCurrentIndex(ui->step4StackedWidget->currentIndex()+1);
-
-    }else{
-        ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex()+1);
-    }
-
-    if (ui->stackedWidget->currentIndex() == 1){
-        generateStartingResources();
-    }
-
-    if (ui->stackedWidget->currentIndex() == ui->stackedWidget->count()-1){
-        ui->nextButton->setDisabled(true);
-    }
+// When a realm is manually set
+void SIFRP::on_step1SetRealmButton_clicked(){
+    ui->nextButton->setEnabled(true);
+    ui->randomRealm->setEnabled(false);
+    ui->realmComboBox->setEnabled(false);
+    ui->step1SetRealmButton->setEnabled(false);
 }
 
+/* Step 2 - Generate Resources */
+
+// Set Player count
 void SIFRP::on_step2SetPlayersButton_clicked(){
     playerCount = ui->playersSpinBox->value();
     ui->playersSpinBox->setDisabled(true);
@@ -162,6 +184,7 @@ void SIFRP::on_step2SetPlayersButton_clicked(){
     ui->stepTwoResourceComboBox->setEnabled(true);
 }
 
+// Add modifier to a resource
 void SIFRP::on_step2AddButton_clicked(){
     int index = ui->stepTwoResourceComboBox->currentIndex();
 
@@ -179,6 +202,8 @@ void SIFRP::on_step2AddButton_clicked(){
         ui->step2AddButton->setDisabled(true);
         ui->stepTwoResourceComboBox->setDisabled(true);
         ui->step2RolledValue->setValue(0);
+
+        ui->nextButton->setEnabled(true);
     }else {
         ui->step2RolledValue->setValue(rollDice(1));
     }
@@ -186,6 +211,7 @@ void SIFRP::on_step2AddButton_clicked(){
     updateResourceDescriptions();
 }
 
+// Display the description
 void SIFRP::updateResourceDescriptions(){
     QSettings settings(QDir::homePath()+"/.gm-companion/addons/SIFRP/house/generator.ini", QSettings::IniFormat);
 
@@ -221,9 +247,15 @@ void SIFRP::updateResourceDescriptions(){
         QTableWidgetItem* item = new QTableWidgetItem;
         item->setText(description);
         ui->resourcesTable->setItem(j+1, 1, item);
+
+        // Last Table
+        QTableWidgetItem* item2 = new QTableWidgetItem;
+        item2->setText(description);
+        ui->step5ResourceTable->setItem(j, 1, item2);
     }
 }
 
+// Generate the starting resources
 void SIFRP::generateStartingResources(){
     for (int i = 0; i<resourcesList.size(); i++){
         int value = rollDice(7);
@@ -242,6 +274,7 @@ void SIFRP::generateStartingResources(){
     updateResourceDescriptions();
 }
 
+// Display a founding example
 void SIFRP::updateFoundingExample(int index){
     ui->foundingExampleLineEdit->setText(foundingExamples.at(index));
 }
@@ -250,6 +283,7 @@ void SIFRP::on_foundingComboBox_currentIndexChanged(int index){
     updateFoundingExample(index);
 }
 
+// Choose a random founding time
 void SIFRP::on_foundingRandomButton_clicked(){
     int index = rollDice(1);
     ui->foundingComboBox->setCurrentIndex(index-1);
@@ -278,6 +312,7 @@ void SIFRP::updateEventDescription(int index){
     settings.endArray();
 }
 
+// Apply founding time
 void SIFRP::on_foundingApplyButton_clicked(){
     ui->eventComboBox->setEnabled(true);
     ui->eventRandomButton->setEnabled(true);
@@ -292,6 +327,9 @@ void SIFRP::on_foundingApplyButton_clicked(){
     calculateMinEventCount();
 }
 
+/* Step 3 - Events */
+
+// Calculate the minimum amount of events the house must have
 void SIFRP::calculateMinEventCount(){
     int index = ui->foundingComboBox->currentIndex();
 
@@ -334,6 +372,9 @@ void SIFRP::calculateEventCount(){
 
 void SIFRP::on_eventApplyButton_clicked(){
     calculateEventMods();
+    if (remainingMinEventCount == 0){
+        ui->nextButton->setEnabled(true);
+    }
 }
 
 void SIFRP::on_eventRandomButton_clicked(){
@@ -341,6 +382,10 @@ void SIFRP::on_eventRandomButton_clicked(){
     ui->eventComboBox->setCurrentIndex(index);
 
     calculateEventMods();
+
+    if (remainingMinEventCount == 0){
+        ui->nextButton->setEnabled(true);
+    }
 }
 
 void SIFRP::calculateEventMods(){
@@ -510,6 +555,8 @@ void SIFRP::on_step4InvestInDefenseButton_clicked(){
         ui->step4InvestedDefenseLine->setText(QString::number(invDefense+cost));
         addHolding(Defense, secondColumn, thirdColumn);
     }
+
+    ui->nextButton->setEnabled(true);
 }
 
 void SIFRP::addHolding(Holding holding, QString secondColumn, QString thirdColumn){
@@ -520,6 +567,10 @@ void SIFRP::addHolding(Holding holding, QString secondColumn, QString thirdColum
     case Defense:
         table = ui->step4InvestedDefenseHoldingsTable;
         box = ui->step4DefenseHoldingComboBox;
+        break;
+    case Influence:
+        table = ui->step4HeirTable;
+        box = ui->step4HeirComboBox;
         break;
     default:
         table = ui->step4InvestedDefenseHoldingsTable;
@@ -540,4 +591,50 @@ void SIFRP::addHolding(Holding holding, QString secondColumn, QString thirdColum
     i3->setText(thirdColumn);
     table->setItem(0, 2, i3);
 
+}
+
+//Influence Holdings
+
+void SIFRP::on_step4InvestInHeirButton_clicked(){
+    ui->nextButton->setEnabled(true);
+
+    int influence = resources[1];
+    int invInfluence = ui->step4InvestedInfluenceLine->text().toInt();
+    int cost = 0;
+    QString secondColumn;
+
+    switch (ui->step4HeirComboBox->currentIndex()) {
+    case 0:
+        cost = 20;
+        secondColumn = "Minimum-1";
+        break;
+    case 1:
+        cost = 10;
+        secondColumn = "Minimum-2";
+        break;
+    case 2:
+        cost = 5;
+        secondColumn = "Minimum-3";
+        break;
+    default:
+        break;
+    }
+
+    if (invInfluence+cost <= influence){
+        addHolding(Holding::Influence, secondColumn, QString::number(cost));
+        ui->step4InvestedInfluenceLine->setText(QString::number(invInfluence+cost));
+    }
+}
+
+// Display everything in the last step
+void SIFRP::lastStep(){
+    for (int i = 0; i<7; i++){
+        int v = resources[i];
+
+        QTableWidgetItem* item1 = new QTableWidgetItem;
+        item1->setText(QString::number(v));
+        ui->step5ResourceTable->setItem(i, 0, item1);
+    }
+
+    updateResourceDescriptions();
 }
