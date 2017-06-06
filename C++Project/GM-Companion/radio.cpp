@@ -3,7 +3,7 @@
 #include "functions.h"
 
 void MainWindow::on_actionInternet_Radio_triggered(){
-    ui->stackedWidget->setCurrentIndex(4);
+//    ui->stackedWidget->setCurrentIndex(4);
 }
 
 void MainWindow::on_rivendellPlayButton_clicked()
@@ -14,10 +14,10 @@ void MainWindow::on_rivendellPlayButton_clicked()
     radioID = 0;
     radioPlayer->play();
 
-    ui->musicLabel->setText("Radio");
+//    ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: Radio Rivendell");
-    ui->musicAlbumLabel->setText("");
-    ui->musicArtistLabel->setText("");
+//    ui->musicAlbumLabel->setText("");
+//    ui->musicArtistLabel->setText("");
     ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
@@ -31,10 +31,10 @@ void MainWindow::on_rivendellReloadButton_clicked()
         radioPlayer->pause();
         radioPlayer->setMedia(QUrl("http://radiorivendell.de/"));
 
-        ui->musicLabel->setText("Radio");
+//        ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: Radio Rivendell");
-        ui->musicAlbumLabel->setText("");
-        ui->musicArtistLabel->setText("");
+//        ui->musicAlbumLabel->setText("");
+//        ui->musicArtistLabel->setText("");
         ui->musicCoverLabel->clear();
 
         radioPlayer->play();
@@ -49,10 +49,10 @@ void MainWindow::on_mmorpgPlayButton_clicked()
     radioID = 1;
     radioPlayer->play();
 
-    ui->musicLabel->setText("Radio");
+//    ui->musicLabel->setText("Radio");
     ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-    ui->musicAlbumLabel->setText("");
-    ui->musicArtistLabel->setText("");
+//    ui->musicAlbumLabel->setText("");
+//    ui->musicArtistLabel->setText("");
     ui->musicCoverLabel->clear();
 
     ui->musicNextButton->setDisabled(true);
@@ -66,10 +66,10 @@ void MainWindow::on_mmorpgReloadButton_clicked()
         radioPlayer->pause();
         radioPlayer->setMedia(QUrl("http://stream3.laut.fm/mmorpg"));
 
-        ui->musicLabel->setText("Radio");
+//        ui->musicLabel->setText("Radio");
         ui->musicTitleLabel->setText("Radio: MMORPG Radio");
-        ui->musicAlbumLabel->setText("");
-        ui->musicArtistLabel->setText("");
+//        ui->musicAlbumLabel->setText("");
+//        ui->musicArtistLabel->setText("");
         ui->musicCoverLabel->clear();
 
         radioPlayer->play();

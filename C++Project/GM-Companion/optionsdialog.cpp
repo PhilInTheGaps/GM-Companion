@@ -85,27 +85,27 @@ void OptionsDialog::writeAddonSettings(){
 
 // Generates Music and Sound Buttons
 void MainWindow::regenerateButtons(){
-    qDebug() << "Paths changed, generating buttons...";
+//    qDebug() << "Paths changed, generating buttons...";
 
-    QLayoutItem *child;
-    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
+//    QLayoutItem *child;
+//    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    soundPlayer->stop();
+//    soundPlaylist->clear();
+//    tabWidgetSound = NULL;
+//    generateSoundButtons();
 
-    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
+//    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    musicPlayer->stop();
+//    musicPlaylist->clear();
+//    tabWidgetMusic = NULL;
+//    initialMusicPlay = true;
+//    generateMusicButtons();
 }
 
 void OptionsDialog::on_checkForUpdatesOnProgramStart_toggled(bool checked)

@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Addons
     qDebug() << "Getting Addons...";
     SIFRP* sifrp = new SIFRP;
-    ui->tabWidgetGMHelp->addTab(sifrp, "SIFRP");
+//    ui->tabWidgetGMHelp->addTab(sifrp, "SIFRP");
 
     // Initialize Radio
     qDebug() << "Initializing Radio...";
@@ -185,31 +185,31 @@ void MainWindow::actionI_want_to_use_an_older_Version_triggered(){
 
 // Set Music Path
 void MainWindow::on_actionSet_Music_Folder_triggered(){
-    settingsManager->setSetting(Setting::musicPath, true);
-    QLayoutItem *child;
-    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
+//    settingsManager->setSetting(Setting::musicPath, true);
+//    QLayoutItem *child;
+//    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    musicPlayer->stop();
+//    musicPlaylist->clear();
+//    tabWidgetMusic = NULL;
+//    initialMusicPlay = true;
+//    generateMusicButtons();
 }
 
 // Set Sound Path
 void MainWindow::on_actionSet_Sound_Folder_triggered(){
-    settingsManager->setSetting(Setting::soundPath, true);
-    QLayoutItem *child;
-    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
+//    settingsManager->setSetting(Setting::soundPath, true);
+//    QLayoutItem *child;
+//    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    soundPlayer->stop();
+//    soundPlaylist->clear();
+//    tabWidgetSound = NULL;
+//    generateSoundButtons();
 }
 
 // Set Maps Path
@@ -231,27 +231,27 @@ void MainWindow::on_actionSet_Characters_Folder_triggered(){
 
 // Set resources path
 void MainWindow::on_actionSet_Resources_Folder_triggered(){
-    settingsManager->setSetting(Setting::resourcesPath, true);
+//    settingsManager->setSetting(Setting::resourcesPath, true);
 
-    QLayoutItem *child;
-    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
+//    QLayoutItem *child;
+//    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    soundPlayer->stop();
+//    soundPlaylist->clear();
+//    tabWidgetSound = NULL;
+//    generateSoundButtons();
 
-    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
+//    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
+//        delete child->widget();
+//        delete child;
+//    }
+//    musicPlayer->stop();
+//    musicPlaylist->clear();
+//    tabWidgetMusic = NULL;
+//    initialMusicPlay = true;
+//    generateMusicButtons();
 }
 
 //// Toggle Check for Updates on program start
@@ -265,37 +265,37 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
 
 // Change to GM-Help
 void MainWindow::on_menuGM_Help_triggered(){
-    ui->stackedWidget->setCurrentIndex(0);
+//    ui->stackedWidget->setCurrentIndex(0);
 }
 
 // Change to Dice
 void MainWindow::on_actionDice_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(0);
+//    ui->tabWidgetGMHelp->setCurrentIndex(0);
 }
 
 // Change to Name Generator
 void MainWindow::on_actionName_Generator_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(2);
+//    ui->tabWidgetGMHelp->setCurrentIndex(2);
 }
 
 // Change to Characters
 void MainWindow::on_actionCharacters_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(3);
+//    ui->tabWidgetGMHelp->setCurrentIndex(3);
 }
 
 // Change to Music
 void MainWindow::on_menuMusic_triggered(){
-    ui->stackedWidget->setCurrentIndex(1);
+//    ui->stackedWidget->setCurrentIndex(1);
 }
 
 // Change to Sounds
 void MainWindow::on_menuSound_triggered(){
-    ui->stackedWidget->setCurrentIndex(2);
+//    ui->stackedWidget->setCurrentIndex(2);
 }
 
 // Change to Maps
 void MainWindow::on_menuMaps_triggered(){
-    ui->stackedWidget->setCurrentIndex(3);
+//    ui->stackedWidget->setCurrentIndex(3);
 }
 
 // Open Options Dialog
@@ -306,5 +306,5 @@ void MainWindow::on_actionOptions_triggered(){
 
 // Change to Notes
 void MainWindow::on_actionNotes_triggered(){
-    ui->tabWidgetGMHelp->setCurrentIndex(1);
+//    ui->tabWidgetGMHelp->setCurrentIndex(1);
 }

@@ -1,6 +1,7 @@
 #include "dicemanager.h"
 
 #include <QPushButton>
+#include <QHeaderView>
 
 DiceManager::DiceManager(QObject *parent) : QObject(parent)
 {
@@ -154,6 +155,7 @@ QFrame* DiceManager::generateDiceFrame(){
     diceResultTableWidget = new QTableWidget;
     diceResultTableWidget->setColumnCount(3);
     diceResultTableWidget->setHorizontalHeaderLabels(headerLabels);
+    diceResultTableWidget->horizontalHeader()->stretchLastSection();
     diceResultTableWidget->setMinimumWidth(350);
     diceResultTableWidget->setMaximumWidth(350);
     diceFrameLayout->addWidget(diceResultTableWidget);
