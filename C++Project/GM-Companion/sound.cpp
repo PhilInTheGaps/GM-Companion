@@ -7,7 +7,7 @@
 void MainWindow::generateSoundButtons(){
     qDebug() << "Generating Sound Buttons...";
     tabWidgetSound = new QTabWidget;
-    ui->pageSound->layout()->addWidget(tabWidgetSound);
+    ui->tabSound->layout()->addWidget(tabWidgetSound);
 
     QStringList soundCategories = getFolders(settingsManager->getSetting(Setting::soundPath)); // List of all categories
     for (QString folder : soundCategories){

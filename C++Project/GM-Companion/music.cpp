@@ -5,15 +5,35 @@
 #include <qtoolbutton.h>
 #include <QSettings>
 
+QString getStyleSheet(QString url){
+    QString styleSheet = "QToolButton {"
+                         "color: #b1b1b1;"
+                         "min-width: 152; "
+                         "min-height: 152; "
+                         "padding: 1px; "
+                         "border-width: 1px; "
+                         "border-color: #1e1e1e; "
+                         "border-style: solid; "
+                         "border-radius: 6; "
+                         "background-color: #222222;"
+                         "background-image: url("+url+"); "
+                         "background-repeat: no-repeat; "
+                         "background-position: center center;}"
+                         "QToolButton QWidget{"
+                         "color: white"
+                         "} ";
+
+    return styleSheet;
+}
+
 void MainWindow::generateMusicButtons(){
     qDebug() << "Generating Music Buttons...";
 
     tabWidgetMusic = new QTabWidget;
-    ui->pageMusic->layout()->addWidget(tabWidgetMusic);
+    ui->tabMusic->layout()->addWidget(tabWidgetMusic);
 
     QStringList musicCategories = getFolders(settingsManager->getSetting(Setting::musicPath)); // List of all categories
     for (QString folder : musicCategories){
-
         if (!folder.contains(".")){
             QScrollArea *scrollArea = new QScrollArea;
             QFrame *frame = new QFrame;
@@ -81,47 +101,59 @@ void MainWindow::generateMusicButtons(){
                     signalMapperMusic->setMapping(b, settingsManager->getSetting(Setting::musicPath)+"/"+folder+"/"+s);
 
                     if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-color: #222222;"
-                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
+//                        b->setStyleSheet("QToolButton {min-width: 152; "
+//                                         "min-height: 152; "
+//                                         "padding: 1px; "
+//                                         "border-radius: 2px; "
+//                                         "background-color: #222222;"
+//                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png); "
+//                                         "background-repeat: no-repeat; "
+//                                         "background-position: center center;}"
+//                                         "QToolButton QWidget{"
+//                                         "color: white} ");
+                        b->setStyleSheet(getStyleSheet(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png"));
                     }
                     else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-color: #222222;"
-                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
+//                        b->setStyleSheet("QToolButton {min-width: 152; "
+//                                         "min-height: 152; "
+//                                         "padding: 1px; "
+//                                         "border-radius: 2px; "
+//                                         "background-color: #222222;"
+//                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg); "
+//                                         "background-repeat: no-repeat; "
+//                                         "background-position: center center;}"
+//                                         "QToolButton QWidget{"
+//                                         "color: white} ");
+                        b->setStyleSheet(getStyleSheet(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg"));
                     }
                     else if (QFile(QApplication::applicationDirPath()+"/resources/button.png").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-color: #222222;"
-                                         "background-image: url("+QApplication::applicationDirPath()+"/resources/button.png); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
+//                        b->setStyleSheet("QToolButton {min-width: 152; "
+//                                         "min-height: 152; "
+//                                         "padding: 1px; "
+//                                         "border-radius: 2px; "
+//                                         "background-color: #222222;"
+//                                         "background-image: url("+QApplication::applicationDirPath()+"/resources/button.png); "
+//                                         "background-repeat: no-repeat; "
+//                                         "background-position: center center;}"
+//                                         "QToolButton QWidget{"
+//                                         "color: white} ");
+                       b->setStyleSheet(getStyleSheet(QApplication::applicationDirPath()+"/resources/button.png"));
                     }
                     else{
-                        b->setStyleSheet("QToolButton {min-width: 152; "
+                        b->setStyleSheet("QToolButton {"
+                                         "color: #b1b1b1;"
+                                         "min-width: 152; "
                                          "min-height: 152; "
                                          "padding: 1px; "
+                                         "border-width: 1px; "
+                                         "border-color: #1e1e1e; "
+                                         "border-style: solid; "
+                                         "border-radius: 6; "
                                          "background-color: #222222;"
-                                         "border-radius: 2px;");
+                                         "background-position: center center;}"
+                                         "QToolButton QWidget{"
+                                         "color: white"
+                                         "} ");
                     }
 
                     QFont font;
@@ -228,7 +260,7 @@ void MainWindow::playMusic(QString folder){
 
             // Add ListView
             if (initialMusicPlay){
-                ui->pageMusic->layout()->addWidget(musicTable);
+//                ui->pageMusic->layout()->addWidget(musicTable);
                 initialMusicPlay = false;
             }
 
@@ -290,13 +322,18 @@ void MainWindow::playMusic(QString folder){
 // Update the music progress bar
 void MainWindow::updateProgressBar(){
     if (musicPlayer->duration() == 0){ // Needed because PB kind of escalates when 0 is maximum, minimum and current value
-        ui->musicProgressBar->setMaximum(1);
-        ui->musicProgressBar->setValue(0);
+        ui->musicProgressSlider->setMaximum(1);
+        ui->musicProgressSlider->setValue(0);
     }
     else{
-        ui->musicProgressBar->setMaximum(musicPlayer->duration());
-        ui->musicProgressBar->setValue(musicPlayer->position());
+        ui->musicProgressSlider->setMaximum(musicPlayer->duration());
+        ui->musicProgressSlider->setValue(musicPlayer->position());
     }
+}
+
+// When user moves and releases slider, set music position
+void MainWindow::on_musicProgressSlider_sliderReleased(){
+    musicPlayer->setPosition(ui->musicProgressSlider->value());
 }
 
 // If new metadata is available, update the displayed stuff
@@ -313,19 +350,19 @@ void MainWindow::updateMetaData(){
         }
 
         if (album.length() > 1){
-            ui->musicAlbumLabel->setText("Album: "+album);
+//            ui->musicAlbumLabel->setText("Album: "+album);
         }else{
             ui->musicTitleLabel->setText("Album: Unknown");
         }
         if (artist.length() > 1){
-            ui->musicArtistLabel->setText("Artist: "+artist);
+//            ui->musicArtistLabel->setText("Artist: "+artist);
         }else{
             ui->musicTitleLabel->setText("Artist: Unknown");
         }
 
         ui->musicCoverLabel->setToolTip(album+": "+title);
 
-        ui->musicLabel->setText("Music");
+//        ui->musicLabel->setText("Music");
 
         // Replace ListView item with title
         QTableWidgetItem *i = new QTableWidgetItem;
@@ -335,8 +372,8 @@ void MainWindow::updateMetaData(){
     }
     else{
         ui->musicTitleLabel->setText("Title: Unknown");
-        ui->musicAlbumLabel->setText("Album: Unknown");
-        ui->musicArtistLabel->setText("Artist: Unknown");
+//        ui->musicAlbumLabel->setText("Album: Unknown");
+//        ui->musicArtistLabel->setText("Artist: Unknown");
     }
 
     // Select currently played song in ListView
