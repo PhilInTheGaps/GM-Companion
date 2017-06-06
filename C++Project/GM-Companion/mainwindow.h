@@ -96,7 +96,7 @@ private slots:
     void on_menuGM_Help_triggered();
 
     // Dice
-    void on_actionDice_triggered(bool t);
+    void on_actionDice_triggered();
 
     // Name Generator
     void on_generateNames(QString);

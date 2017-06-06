@@ -42,6 +42,10 @@ private slots:
 
     void on_step4InvestInDefenseButton_clicked();
 
+    void on_step1SetRealmButton_clicked();
+
+    void on_step4InvestInHeirButton_clicked();
+
 private:
     Ui::SIFRP *ui;
 
@@ -122,6 +126,8 @@ private:
     };
 
     void addHolding(Holding holding, QString secondColumn, QString thirdColumn);
+
+    void lastStep();
 };
 
 #endif // SIFRP_H
