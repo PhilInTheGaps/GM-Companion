@@ -1,6 +1,7 @@
 #include "dicemanager.h"
 
 #include <QPushButton>
+#include <QHeaderView>
 
 DiceManager::DiceManager(QObject *parent) : QObject(parent)
 {
@@ -21,7 +22,7 @@ void DiceManager::rollDice(int sides){
         QTableWidgetItem *i3 = new QTableWidgetItem;
 
         int temp = rand() % sides+1;
-        i1->setText(QString::number(i+1)+"D"+QString::number(sides));
+        i1->setText(QString::number(i+1)+tr("D")+QString::number(sides));
         i2->setText(QString::number(temp));
         result += temp;
         i3->setText(QString::number(result));
@@ -113,7 +114,7 @@ QFrame* DiceManager::generateDiceFrame(){
     customButtonFrame->setFrameShape(QFrame::Box);
     leftLayout->addWidget(customButtonFrame);
 
-    QLabel* cLabel = new QLabel("Custom Dice: ");
+    QLabel* cLabel = new QLabel(tr("Custom Dice: "));
     customButtonLayout->addWidget(cLabel);
     cLabel->setFont(fs);
 
@@ -125,20 +126,20 @@ QFrame* DiceManager::generateDiceFrame(){
     customButtonLayout->addWidget(customButtonSpinBox);
 
     QPushButton* addButton = new QPushButton;
-    addButton->setText("Add Die");
+    addButton->setText(tr("Add Die"));
     addButton->setStyleSheet("min-width: 50; min-height: 50; max-height: 200;");
     customButtonLayout->addWidget(addButton);
     connect(addButton, SIGNAL(clicked()), SLOT(on_addButton_clicked()));
 
     QPushButton* resetButton = new QPushButton;
-    resetButton->setText("Reset Dice");
+    resetButton->setText(tr("Reset Dice"));
     resetButton->setStyleSheet("min-width: 50; min-height: 50; max-height: 200;");
     customButtonLayout->addWidget(resetButton);
     connect(resetButton, SIGNAL(clicked()), SLOT(on_resetButton_clicked()));
 
     // Result
     QLabel* resultLabel = new QLabel;
-    resultLabel->setText("Result:");
+    resultLabel->setText(tr("Result:"));
     QFont f( "MS Shell Dlg 2", 50, QFont::Bold);
     resultLabel->setFont(f);
     resultLayout->addWidget(resultLabel);
@@ -154,6 +155,7 @@ QFrame* DiceManager::generateDiceFrame(){
     diceResultTableWidget = new QTableWidget;
     diceResultTableWidget->setColumnCount(3);
     diceResultTableWidget->setHorizontalHeaderLabels(headerLabels);
+    diceResultTableWidget->horizontalHeader()->stretchLastSection();
     diceResultTableWidget->setMinimumWidth(350);
     diceResultTableWidget->setMaximumWidth(350);
     diceFrameLayout->addWidget(diceResultTableWidget);
@@ -168,7 +170,7 @@ void DiceManager::generateDice(){
 
     for (int sides : sidesList){
         QPushButton *button = new QPushButton;
-        button->setText("D"+QString::number(sides));
+        button->setText(tr("D")+QString::number(sides));
         //button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         //button->setMinimumSize(200, 200);
         button->setStyleSheet("min-width: 50; min-height: 50; max-width: 200; max-height: 200;");

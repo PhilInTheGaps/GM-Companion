@@ -11,7 +11,7 @@ FileManager::FileManager(){
 void FileManager::copyFiles(){
     QDir lDir(QDir::homePath()+"/.gm-companion");
     if (!lDir.exists()){
-        qDebug() << QDir::homePath()+"/.gm-companion does not exist. Creating...";
+        qDebug() << QDir::homePath()+"/.gm-companion"+QCoreApplication::translate("","does not exist. Creating...");
         lDir.mkpath(".");
     }
 
@@ -20,13 +20,13 @@ void FileManager::copyFiles(){
     for (QString path : dirList){
         QDir dir(QDir::homePath()+"/.gm-companion/"+path);
         if (!dir.exists()){
-            qDebug() << QDir::homePath()+"/.gm-companion/"+path+" does not exist. Creating...";
+            qDebug() << QDir::homePath()+"/.gm-companion/"+path+QCoreApplication::translate("", " does not exist. Creating...");
             dir.mkpath(".");
         }
     }
 
     bool copied = false;
-    qDebug() << "Copying files to " << QDir::homePath()+"/.gm-companion ...";
+    qDebug() << QCoreApplication::translate("" ,"Copying files to ") << QDir::homePath()+"/.gm-companion ...";
 
     // Checks the OS and copies the files to a writable directory accordingly
     #ifdef __linux__
@@ -63,6 +63,18 @@ void FileManager::copyFiles(){
             QFile::copy("/usr/share/gm-companion/styles/"+style, QDir::homePath()+"/.gm-companion/styles/"+style);
         }
     }
+
+    QFile f(QDir::homePath()+"/.gm-companion/units.ini");
+    if (!f.exists()){
+        copied = true;
+        QFile::copy("/usr/share/gm-companion/units.ini", QDir::homePath()+"/.gm-companion/units.ini");
+    }
+
+    QFile f2(QDir::homePath()+"/.gm-companion/radios.ini");
+    if (!f2.exists()){
+        copied = true;
+        QFile::copy("/usr/share/gm-companion/radios.ini", QDir::homePath()+"/.gm-companion/radios.ini");
+    }
     #elif _WIN32
     for (QString folder : getFolders(QApplication::applicationDirPath()+"/names")){
         if (!folder.contains(".")){
@@ -97,14 +109,28 @@ void FileManager::copyFiles(){
             QFile::copy(QApplication::applicationDirPath()+"/styles/"+style, QDir::homePath()+"/.gm-companion/styles/"+style);
         }
     }
+
+    QFile f(QDir::homePath()+"/.gm-companion/units.ini");
+    if (!f.exists()){
+        copied = true;
+        QFile::copy(QApplication::applicationDirPath()+"/units.ini", QDir::homePath()+"/.gm-companion/units.ini");
+    }
+
+    QFile f2(QDir::homePath()+"/.gm-companion/radios.ini");
+    if (!f2.exists()){
+        copied = true;
+        QFile::copy(QApplication::applicationDirPath()+"/radios.ini", QDir::homePath()+"/.gm-companion/radios.ini");
+    }
+
+
     #else
-        qDebug() << "This OS is not supported.";
+        qDebug() << QCoreApplication::translate("","This OS is not supported.");
     #endif
 
     if (copied){
-        qDebug() << "Done.";
+        qDebug() << QCoreApplication::translate("","Done.");
     }else{
-        qDebug() << "Files already exist.";
+        qDebug() << QCoreApplication::translate("","Files already exist.");
     }
 
 }

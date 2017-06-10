@@ -6,10 +6,6 @@
 #include <QDir>
 #include <QSettings>
 
-enum UI_Mode{
-    dark
-};
-
 enum Setting{
     musicPath,
     soundPath,
@@ -17,7 +13,12 @@ enum Setting{
     resourcesPath,
     checkForUpdatesOnStart,
     uiMode,
-    charactersPath
+    charactersPath,
+    buttonStyle,
+    enableMusicTrackList,
+    openWhatIsNewWindow,
+    language,
+    version
 };
 
 class SettingsManager
@@ -25,7 +26,7 @@ class SettingsManager
 public:
     SettingsManager();
 
-    void setSetting(Setting setting, int checked = 1);
+    void setSetting(Setting setting, int checked = 1, QString value = "");
     QString getSetting(Setting);
 
     void setAddonEnabled(QString addon, bool enabled);

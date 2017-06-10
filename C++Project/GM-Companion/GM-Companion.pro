@@ -39,7 +39,9 @@ SOURCES += main.cpp\
     optionsdialog.cpp \
     notes.cpp \
     notesdialog.cpp \
-    sifrp.cpp
+    sifrp.cpp \
+    converter.cpp \
+    whatisnewwindow.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -54,7 +56,8 @@ HEADERS  += mainwindow.h \
     filemanager.h \
     optionsdialog.h \
     notesdialog.h \
-    sifrp.h
+    sifrp.h \
+    whatisnewwindow.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
@@ -62,7 +65,8 @@ FORMS    += mainwindow.ui \
     deletecharacterdialog.ui \
     optionsdialog.ui \
     notesdialog.ui \
-    sifrp.ui
+    sifrp.ui \
+    whatisnewwindow.ui
 
 DISTFILES += \
 
@@ -70,3 +74,6 @@ RC_FILE = GM-Companion.rc
 
 RESOURCES += \
     resources.qrc
+
+TRANSLATIONS+=  translations/gm-companion_en.ts
+TRANSLATIONS+=  translations/gm-companion_de.ts
