@@ -14,7 +14,7 @@
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    qDebug() << "Starting GM-Companion...";
+    qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
     setVersion("0.3.1.0");
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     fileManager->copyFiles();
 
     // Initialize SettingsManager
-    qDebug() << "Initializing settings...";
+    qDebug() << tr("Initializing settings...");
     settingsManager = new SettingsManager;
 
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
@@ -83,24 +83,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
 
     // Addons
-    qDebug() << "Getting Addons...";
+    qDebug() << tr("Getting Addons...");
     SIFRP* sifrp = new SIFRP;
 //    ui->tabWidgetGMHelp->addTab(sifrp, "SIFRP");
+    ui->tabWidget->addTab(sifrp, "SIFRP");
 
     // Initialize Radio
-    qDebug() << "Initializing Radio...";
+    qDebug() << tr("Initializing Radio...");
     radioPlayer = new QMediaPlayer(this);
     radioPlayer->setVolume(ui->musicVolumeSlider->value());
 
+    displayRadios();
     connect(radioPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(on_radioMetaDataChanged()));
 
     // Initialize Name Generator
     generateNamesTab();
 
     // Check if openSSL is installed
-    qDebug() << "SSL is supported:  " << QSslSocket::supportsSsl();
+    qDebug() << tr("SSL is supported:  ") << QSslSocket::supportsSsl();
     if (!QSslSocket::supportsSsl())
-        qDebug() << "Please install openSSL";
+        qDebug() << tr("Please install openSSL");
 
     // Initialize Version and Blog Network Managers
     versionNetworkManager = new QNetworkAccessManager;
@@ -126,7 +128,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         }
         on_characterListClicked(0);
     }
+
     connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
+
+    // Initialize Converter
+    initializeUnits();
 
     // Checks for updates on program start
     if (checkUpdates == 1){
@@ -135,7 +141,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
 
     // Get Blog Feed
-    qDebug() << "Getting blog feed...";
+    qDebug() << tr("Getting blog feed...");
     blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
 
     // Some functions behave differently when the program is just starting
@@ -169,8 +175,23 @@ void MainWindow::setVersion(QString versionAsString){
     QString temp = versionAsString.replace(".", "");
     versionNumber = temp.toInt();
 
-    qDebug() << "Version: "+versionString;
+    qDebug() << tr("Version: ")+versionString;
 
+}
+
+// Returns version as String with dots
+QString MainWindow::getVersion(){
+    return versionString;
+}
+
+// Returns version as int
+int MainWindow::getVersionNumber(){
+    return versionNumber;
+}
+
+// Update the settings version
+void MainWindow::updateSettingsVersion(){
+    settingsManager->setSetting(Setting::version, true, QString::number(versionNumber));
 }
 
 // Opens Issues GitHub Page
@@ -185,31 +206,31 @@ void MainWindow::actionI_want_to_use_an_older_Version_triggered(){
 
 // Set Music Path
 void MainWindow::on_actionSet_Music_Folder_triggered(){
-//    settingsManager->setSetting(Setting::musicPath, true);
-//    QLayoutItem *child;
-//    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
-//        delete child->widget();
-//        delete child;
-//    }
-//    musicPlayer->stop();
-//    musicPlaylist->clear();
-//    tabWidgetMusic = NULL;
-//    initialMusicPlay = true;
-//    generateMusicButtons();
+    settingsManager->setSetting(Setting::musicPath, true);
+    QLayoutItem *child;
+    while ((child = ui->tabMusic->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    musicPlayer->stop();
+    musicPlaylist->clear();
+    tabWidgetMusic = NULL;
+    initialMusicPlay = true;
+    generateMusicButtons();
 }
 
 // Set Sound Path
 void MainWindow::on_actionSet_Sound_Folder_triggered(){
-//    settingsManager->setSetting(Setting::soundPath, true);
-//    QLayoutItem *child;
-//    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
-//        delete child->widget();
-//        delete child;
-//    }
-//    soundPlayer->stop();
-//    soundPlaylist->clear();
-//    tabWidgetSound = NULL;
-//    generateSoundButtons();
+    settingsManager->setSetting(Setting::soundPath, true);
+    QLayoutItem *child;
+    while ((child = ui->tabSound->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    soundPlayer->stop();
+    soundPlaylist->clear();
+    tabWidgetSound = NULL;
+    generateSoundButtons();
 }
 
 // Set Maps Path
@@ -231,80 +252,31 @@ void MainWindow::on_actionSet_Characters_Folder_triggered(){
 
 // Set resources path
 void MainWindow::on_actionSet_Resources_Folder_triggered(){
-//    settingsManager->setSetting(Setting::resourcesPath, true);
+    settingsManager->setSetting(Setting::resourcesPath, true);
 
-//    QLayoutItem *child;
-//    while ((child = ui->pageSound->layout()->takeAt(0)) != 0) {
-//        delete child->widget();
-//        delete child;
-//    }
-//    soundPlayer->stop();
-//    soundPlaylist->clear();
-//    tabWidgetSound = NULL;
-//    generateSoundButtons();
+    QLayoutItem *child;
+    while ((child = ui->tabSound->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    soundPlayer->stop();
+    soundPlaylist->clear();
+    tabWidgetSound = NULL;
+    generateSoundButtons();
 
-//    while ((child = ui->pageMusic->layout()->takeAt(0)) != 0) {
-//        delete child->widget();
-//        delete child;
-//    }
-//    musicPlayer->stop();
-//    musicPlaylist->clear();
-//    tabWidgetMusic = NULL;
-//    initialMusicPlay = true;
-//    generateMusicButtons();
-}
-
-//// Toggle Check for Updates on program start
-//void MainWindow::on_actionCheck_for_Updates_on_Program_Start_triggered(bool checked){
-//    if (checked){
-//        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 0);
-//    }else{
-//        settingsManager->setSetting(Setting::checkForUpdatesOnStart, 1);
-//    }
-//}
-
-// Change to GM-Help
-void MainWindow::on_menuGM_Help_triggered(){
-//    ui->stackedWidget->setCurrentIndex(0);
-}
-
-// Change to Dice
-void MainWindow::on_actionDice_triggered(){
-//    ui->tabWidgetGMHelp->setCurrentIndex(0);
-}
-
-// Change to Name Generator
-void MainWindow::on_actionName_Generator_triggered(){
-//    ui->tabWidgetGMHelp->setCurrentIndex(2);
-}
-
-// Change to Characters
-void MainWindow::on_actionCharacters_triggered(){
-//    ui->tabWidgetGMHelp->setCurrentIndex(3);
-}
-
-// Change to Music
-void MainWindow::on_menuMusic_triggered(){
-//    ui->stackedWidget->setCurrentIndex(1);
-}
-
-// Change to Sounds
-void MainWindow::on_menuSound_triggered(){
-//    ui->stackedWidget->setCurrentIndex(2);
-}
-
-// Change to Maps
-void MainWindow::on_menuMaps_triggered(){
-//    ui->stackedWidget->setCurrentIndex(3);
+    while ((child = ui->tabMusic->layout()->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
+    }
+    musicPlayer->stop();
+    musicPlaylist->clear();
+    tabWidgetMusic = NULL;
+    initialMusicPlay = true;
+    generateMusicButtons();
 }
 
 // Open Options Dialog
 void MainWindow::on_actionOptions_triggered(){
     OptionsDialog* options = new OptionsDialog(this);
     options->show();
-}
-
-// Change to Notes
-void MainWindow::on_actionNotes_triggered(){
-//    ui->tabWidgetGMHelp->setCurrentIndex(1);
 }
