@@ -28,6 +28,11 @@
 #include <QtWinExtras>
 #endif
 
+struct Unit{
+    QString name;
+    double refUnits;
+};
+
 namespace Ui {
 class MainWindow;
 }
@@ -41,7 +46,9 @@ public:
     void addToPlaylist(QUrl url, bool music); // Add audio file to playlist. Bool true if music, false if sound
 
     void setVersion(QString); // Set Version Number (String)
-    QString getVersion(); // Get Version Number (String)
+    QString getVersion(); // Get Version Number (String), e.g. 1.3.1.0
+    int getVersionNumber(); // Get Version Number (int), e.g. 1310
+    void updateSettingsVersion(); // Sets version in settings to current version
 
     void regenerateButtons();
 
@@ -61,13 +68,12 @@ private slots:
     void on_musicReplayButton_clicked();
     void on_musicNextButton_clicked();
     void on_musicRandomButton_clicked();
-    void on_menuMusic_triggered();
     void on_tableDoubleClicked(int);
     void on_musicVolumeSlider_valueChanged(int value);
+    void on_musicProgressSlider_sliderReleased();
 
     // Sound
     void playSound(QString);
-    void on_menuSound_triggered();
     void on_soundPlayButton_clicked();
     void on_soundPauseButton_clicked();
     void on_soundReplayButton_clicked();
@@ -77,7 +83,6 @@ private slots:
 
     // Maps
     void setMap(QString mapPath);
-    void on_menuMaps_triggered();
     void on_mapsZoomInButton_clicked();
     void on_mapsZoomOutButton_clicked();
     void on_mapsFitToViewButton_clicked();
@@ -92,26 +97,24 @@ private slots:
     void on_actionSet_Characters_Folder_triggered(); // Characters
     void on_actionCheck_for_Updates_triggered(); // Check Updates
 
-    // GM-Help
-    void on_menuGM_Help_triggered();
-
-    // Dice
-    void on_actionDice_triggered();
-
     // Name Generator
     void on_generateNames(QString);
-    void on_actionName_Generator_triggered();
 
     // Characters
     void on_characterListClicked(int);
-    void on_actionCharacters_triggered();
     void on_createCharacterButton_clicked();
     void on_updateCharactersButton_clicked();
     void on_editCharacter_clicked();
     void on_deleteCharacterButton_clicked();
 
     // Notes
-    void on_actionNotes_triggered();
+    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
+    void on_notesTextEdit_textChanged();
+    void on_addNoteButton_clicked();
+    void on_addCategoryButton_clicked();
+    void on_deleteNoteButton_clicked();
+    void on_deleteCategoryButton_clicked();
+    void notesWatcher_directoryChanged();
 
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
@@ -124,27 +127,30 @@ private slots:
 
     // Radío
     void on_radioMetaDataChanged();
-    void on_rivendellPlayButton_clicked();
-    void on_rivendellReloadButton_clicked();
-    void on_actionInternet_Radio_triggered();
-    void on_mmorpgPlayButton_clicked();
-    void on_mmorpgReloadButton_clicked();
+    void displayRadios();
+    void on_addRadioButton_clicked();
+    void on_radioPlayButton_clicked();
 
-    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
+    // Converter
+    void on_addUnitButton_clicked();
+    void on_converterTypeComboBox_currentIndexChanged(int index);
+    void on_length1ComboBox_currentIndexChanged(int index);
+    void on_length2ComboBox_currentIndexChanged(int index);
+    void on_area1ComboBox_currentIndexChanged(int index);
+    void on_area2ComboBox_currentIndexChanged(int index);
+    void on_length1SpinBox_valueChanged(double value);
+    void on_area1SpinBox_valueChanged(double value);
+    void on_volume1ComboBox_currentIndexChanged(int index);
+    void on_volume2ComboBox_currentIndexChanged(int index);
+    void on_volume1SpinBox_valueChanged(double arg1);
+    void on_weight1ComboBox_currentIndexChanged(int index);
+    void on_weight2ComboBox_currentIndexChanged(int index);
+    void on_weight1SpinBox_valueChanged(double arg1);
+    void on_money1ComboBox_currentIndexChanged(int index);
+    void on_money2ComboBox_currentIndexChanged(int index);
+    void on_money1SpinBox_valueChanged(double arg1);
 
-    void on_notesTextEdit_textChanged();
-
-    void on_addNoteButton_clicked();
-
-    void on_addCategoryButton_clicked();
-
-    void on_deleteNoteButton_clicked();
-
-    void on_deleteCategoryButton_clicked();
-
-    void notesWatcher_directoryChanged();
-
-    void on_musicProgressSlider_sliderReleased();
+    void on_musicTitleComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
@@ -209,11 +215,25 @@ private:
     QMediaPlayer *radioPlayer;
     bool radioActive;
     int radioID;
+    QStringList radioURLs;
 
     // Characters
     void updateCharacters();
     QTimer* updateCharactersTimer;
     bool listenForCharacterUpdaters = true;
+
+    // Converter
+    QList<Unit> lengthUnits;
+    QList<Unit> areaUnits;
+    QList<Unit> volumeUnits;
+    QList<Unit> weightUnits;
+    QList<Unit> moneyUnits;
+    void initializeUnits();
+    void convertLength(int index1, int index2, double units);
+    void convertArea(int index1, int index2, double units);
+    void convertVolume(int index1, int index2, double units);
+    void convertWeight(int index1, int index2, double units);
+    void convertMoney(int index1, int index2, double units);
 
     // ThumbnailToolbar (Windows Only)
     #ifdef Q_OS_WIN

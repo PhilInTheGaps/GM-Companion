@@ -11,13 +11,13 @@
 #include <QTextStream>
 
 void MainWindow::getNotes(){
-    qDebug() << "Getting Notes...";
+    qDebug() << tr("Getting Notes...");
 
     ui->notesTree->clear();
 
     QString notesFolder = QDir::homePath()+"/.gm-companion/notes";
 
-    qDebug() << "Getting Custom Notes...";
+    qDebug() << tr("Getting Custom Notes...");
     // Notes inside /.gm-companion/notes
     for (QString category : getFolders(notesFolder)){
         if (!category.contains(".")){
@@ -38,7 +38,7 @@ void MainWindow::getNotes(){
         }
     }
 
-    qDebug() << "Getting Addon Notes...";
+    qDebug() << tr("Getting Addon Notes...");
     // Notes inside addons
     QString addonsFolder = QDir::homePath()+"/.gm-companion/addons";
     for (QString addon : getFolders(addonsFolder)){
@@ -62,7 +62,7 @@ void MainWindow::getNotes(){
             }
         }
     }
-    qDebug() << "Finished getting Notes.";
+    qDebug() << tr("Finished getting Notes.");
 }
 
 void MainWindow::readNotes(QString file){
@@ -122,7 +122,7 @@ void MainWindow::deleteNotes(){
         if (ui->notesTree->currentItem()->type() == 1){
             QString folder = ui->notesTree->currentItem()->parent()->text(0);
             QFile file(QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt");
-            qDebug() << "Removing Note: "+QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt";
+            qDebug() << tr("Removing Note: ")+QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt";
             file.remove();
             getNotes();
         }
@@ -132,7 +132,7 @@ void MainWindow::deleteNotes(){
 void MainWindow::deleteCategory(){
     if (ui->notesTree->currentItem() != NULL){
         if (ui->notesTree->currentItem()->type() == 0){
-            qDebug() << "Removing Note Directory: "+QDir::homePath()+"/.gm-companion/notes/"+ui->notesTree->currentItem()->text(0);
+            qDebug() << tr("Removing Note Directory: ")+QDir::homePath()+"/.gm-companion/notes/"+ui->notesTree->currentItem()->text(0);
             QDir().rmdir(QDir::homePath()+"/.gm-companion/notes/"+ui->notesTree->currentItem()->text(0));
             getNotes();
         }

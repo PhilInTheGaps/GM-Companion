@@ -58,7 +58,7 @@ void CharEditor::load(int index){
 
     QSettings settings(settingsManager->getSetting(Setting::charactersPath)+"/"+loadCharacterFile, QSettings::IniFormat);
 
-    qDebug() << "Loading Character" << settings.value("Name").toString() << "...";
+    qDebug() << tr("Loading Character") << settings.value("Name").toString() << "...";
     ui->displayNameLineEdit->setText(settings.value("Name").toString());
     ui->playerLineEdit->setText(settings.value("Player").toString());
 
@@ -280,7 +280,7 @@ void CharEditor::load(int index){
     default:
         break;
     }
-    qDebug() << "Done.";
+    qDebug() << tr("Done.");
 }
 
 void CharEditor::writeToFile(QTableWidget* table, QString indicator, int columns){
@@ -318,7 +318,7 @@ void CharEditor::save(){
 
     displayName = ui->displayNameLineEdit->text();
 
-    qDebug() << "Saving Character" << displayName << "...";
+    qDebug() << tr("Saving Character") << displayName << "...";
 
     QString playerName = ui->playerLineEdit->text();
     int systemID = ui->systemComboBox->currentIndex();
@@ -547,7 +547,7 @@ void CharEditor::save(){
         break;
     }
 
-    qDebug() << "Done.";
+    qDebug() << tr("Done.");
 }
 
 void CharEditor::addRow(QTableWidget* table){
