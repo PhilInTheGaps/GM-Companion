@@ -35,7 +35,22 @@ QString SettingsManager::getSetting(Setting setting){
         settingString = settings.value("checkForUpdatesOnStart", 1).toInt();
         break;
     case Setting::uiMode:
-        settingString = settings.value("uiMode", "dark").toString();
+        settingString = settings.value("uiMode", "DarkStyle").toString();
+        break;
+    case Setting::buttonStyle:
+        settingString = settings.value("buttonStyle", "small").toString();
+        break;
+    case Setting::enableMusicTrackList:
+        settingString = settings.value("enableMusicTrackList", 0).toInt();
+        break;
+    case Setting::openWhatIsNewWindow:
+        settingString = settings.value("openWhatIsNewWindow", 1).toInt();
+        break;
+    case Setting::language:
+        settingString = settings.value("language", "en").toString();
+        break;
+    case Setting::version:
+        settingString = QString::number(settings.value("version", 0).toInt());
         break;
     default:
         settingString = "";
@@ -45,7 +60,7 @@ QString SettingsManager::getSetting(Setting setting){
 }
 
 // Sets a specific setting
-void SettingsManager::setSetting(Setting setting, int checked){
+void SettingsManager::setSetting(Setting setting, int checked, QString value){
     QString path;
     QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
 
@@ -86,8 +101,31 @@ void SettingsManager::setSetting(Setting setting, int checked){
         }else{
             settings.setValue("checkForUpdatesOnStart", 0);
         }
-
         break;
+    case Setting::uiMode:
+        settings.setValue("uiMode", value);
+        break;
+    case Setting::buttonStyle:
+        settings.setValue("buttonStyle", value);
+        break;
+    case Setting::enableMusicTrackList:
+        if (checked){
+            settings.setValue("enableMusicTrackList", 1);
+        }else{
+            settings.setValue("enableMusicTrackList", 0);
+        }
+        break;
+    case Setting::openWhatIsNewWindow:
+        if (checked){
+            settings.setValue("openWhatIsNewWindow", 1);
+        }else{
+            settings.setValue("openWhatIsNewWindow", 0);
+        }
+        break;
+    case Setting::language:
+        settings.setValue("language", value);
+    case Setting::version:
+        settings.setValue("version", value);
     default:
         break;
     }

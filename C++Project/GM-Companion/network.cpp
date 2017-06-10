@@ -6,7 +6,7 @@
 
 // Check for Updates
 void MainWindow::on_actionCheck_for_Updates_triggered(){
-    qDebug() << "Checking for updates...";
+    qDebug() << tr("Checking for updates...");
     versionNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/version.html")));
 }
 
@@ -25,15 +25,15 @@ void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
     onlineVersion = temp.toInt();
 
     if (versionNumber < onlineVersion){
-        qDebug() << "New version has been found!";
+        qDebug() << tr("New version has been found!");
 
         QFrame *dialogFrame = new QFrame;
-        dialogFrame->setWindowTitle("Update Available!");
+        dialogFrame->setWindowTitle(tr("Update Available!"));
         dialogFrame->setMinimumSize(400, 50);
         QVBoxLayout *dialogLayout = new QVBoxLayout;
         dialogFrame->setLayout(dialogLayout);
         QLabel *l1 = new QLabel;
-        l1->setText("A new version has been found:");
+        l1->setText(tr("A new version has been found:"));
         QLabel *l2 = new QLabel;
         l2->setText(onlineVersionWithDots);
 
@@ -42,9 +42,9 @@ void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
         btnFrame->setLayout(btnLayout);
 
         QPushButton *openButton = new QPushButton;
-        openButton->setText("Open Download Page");
+        openButton->setText(tr("Open Download Page"));
         QPushButton *closeButton = new QPushButton;
-        closeButton->setText("Close");
+        closeButton->setText(tr("Close"));
         btnLayout->addWidget(openButton);
         btnLayout->addWidget(closeButton);
 
@@ -59,7 +59,7 @@ void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
     }
     else{
 
-        qDebug() << "No updates found.";
+        qDebug() << tr("No updates found.");
 
         if(!onStartUpdateCheck){
             QFrame* f = new QFrame;
@@ -67,11 +67,11 @@ void MainWindow::on_versionNetworkAccessManagerFinished(QNetworkReply* reply){
             QVBoxLayout* l = new QVBoxLayout;
             f->setLayout(l);
 
-            QLabel* label = new QLabel("No updates have been found!");
+            QLabel* label = new QLabel(tr("No updates have been found!"));
             l->addWidget(label);
 
             QPushButton* ok = new QPushButton;
-            ok->setText("Ok");
+            ok->setText(tr("Ok"));
             l->addWidget(ok);
 
             connect(ok, SIGNAL(clicked(bool)), f, SLOT(close()));

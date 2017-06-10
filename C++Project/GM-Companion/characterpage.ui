@@ -7,221 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>1041</width>
-    <height>769</height>
+    <height>732</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>StackedWidget</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color: #222222;
-	color: rgb(255, 255, 255);
-}
-
-QMenuBar{
-background-color: rgb(102, 102, 102);
-}
-
-QMenuBar::item {
-    spacing: 10px;
-	padding: 4px;
-    background: transparent;
-    border-radius: 2px;
-}
-
-QMenuBar::item:selected {
-    background: #444444;
-}
-
-QMenuBar::item:hover:!pressed {
-    background: #555555;
-}
-
-QMenuBar::item:pressed {
-    background: #333333;
-}
-
-QMenu {
-    background-color: #666666;
-}
-
-QMenu::item {
-    background-color: transparent;
-}
-
-QMenu::item:selected {
-    background-color: #333333;
-}
-
-QPushButton{
-background-color: rgb(102, 102, 102);
-border: 1px;
-padding: 5px;
-min-width: 40px;
-min-height: 30px;
-}
-
-QPushButton:pressed{
-background-color: rgb(51, 51, 51);
-}
-
-QPushButton:disabled {
-	background-color: #111111;
-}
-
-QPushButton:hover:!pressed{
-background-color: rgb(85, 85, 85);
-}
-
-QSlider::groove:horizontal {
-    border: transparent;
-	height: 10px;
-	background-color: rgb(102, 102, 102);
-    margin: 5px 0;
-}
-
-QSlider::handle:horizontal {
-    background: white;
-    border: transparent;
-    width: 15px;
-    margin: -3px 0;
-    border-radius: 3px;
-}
-
-QProgressBar {
-    border: 2px solid grey;
-	background-color: rgb(102, 102, 102);
-    border-radius: 0px;
-	text-align: center;
-}
-
-QProgressBar::chunk {
-    background-color: #222222;
-    width: 1px;
-}
-
-QTabWidget::pane { /* The tab widget frame */
-    border: 1px solid #555555;
-}
-
-QTabWidget::tab-bar {
-    left: 0px;
-}
-
-QTabBar::tab {
-	background-color: rgb(102, 102, 102);
-    border: 1px solid #555555;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    min-width: 100px;
-    padding: 5px;
-}
-
-QTabBar::tab:selected, QTabBar::tab:hover {
-    background: #555555;
-}
-
-QTabBar::tab:selected {
-    border-color: #333333;
-    border-bottom-color: #555555; /* same as pane color */
-	background-color: rgb(68, 68, 68);
-}
-
-QTabBar::tab:!selected {
-    margin-top: 2px; /* make non-selected tabs look smaller */
-}
-
-QToolBox::tab {
-background-color: rgb(102, 102, 102);
-    border-radius: 1px;
-}
-
-QToolBox::tab:hover:!pressed {
-background-color: rgb(85, 85, 85);
-}
-
-QToolBox::tab:!pressed {
-background-color: rgb(51, 51, 51);
-}
-
-QToolBox::tab:selected { 
-    font: italic, bold;
-}
-
-QTableView{
-selection-background-color: rgb(68, 68, 68);
-}
-
-QTableView QTableCornerButton::section {
-background-color: rgb(34, 34, 34);
-}
-
-QTableView::item {
-   /* border: 5px solid rgba(68, 119, 170, 150);*/
-	
-	background-color: #333333;
-}
-
-QTableView::item:selected {
-	background-color: #777777;
-}
-
-QTableView, QHeaderView::section {    
-	background-color: rgb(34, 34, 34);
-}
-
-QScrollBar:horizontal {
-    border: 2px solid #222222;
-    background-color: #333333;
-    height: 15px;
-    margin: 0px 20px 0 20px;
-}
-QScrollBar::handle:horizontal {
-    background-color: #222222;
-    min-width: 20px;
-}
-QScrollBar::add-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal {
-    border: 2px solid #444444;
-    background: #222222;
-    width: 20px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
-QScrollBar:vertical {
-    border: 2px solid #222222;
-    background-color: #333333;
-    width: 15px;
-    margin: 20px 0px 20 0px;
-}
-QScrollBar::handle:vertical {
-    background-color: #222222;
-    min-height: 20px;
-}
-QScrollBar::add-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:vertical {
-    border: 2px solid #444444;
-    background: #222222;
-    height: 20px;
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-}</string>
+   <string notr="true"/>
   </property>
   <property name="currentIndex">
    <number>0</number>
@@ -248,6 +41,12 @@ QScrollBar::sub-line:vertical {
           </property>
           <attribute name="horizontalHeaderVisible">
            <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="horizontalHeaderStretchLastSection">
+           <bool>true</bool>
           </attribute>
           <row>
            <property name="text">
@@ -592,6 +391,12 @@ QScrollBar::sub-line:vertical {
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
            <widget class="QLabel" name="dsa5Label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <pointsize>50</pointsize>
@@ -605,23 +410,16 @@ QScrollBar::sub-line:vertical {
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <widget class="QTableWidget" name="eigenschaftenTable_dsa5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
-              <width>805</width>
+              <width>0</width>
               <height>0</height>
              </size>
             </property>
@@ -696,166 +494,267 @@ QScrollBar::sub-line:vertical {
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_11">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_5">
-              <item>
-               <widget class="QTableWidget" name="persDaten1Table_dsa5">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="editTriggers">
-                 <set>QAbstractItemView::NoEditTriggers</set>
-                </property>
-                <property name="alternatingRowColors">
-                 <bool>true</bool>
-                </property>
-                <property name="columnCount">
-                 <number>1</number>
-                </property>
-                <attribute name="horizontalHeaderVisible">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <row>
-                 <property name="text">
-                  <string>Name</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Familie</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Geburtsdatum</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Spezies</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Haarfarbe</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Kultur</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Titel</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Charakteristika</string>
-                 </property>
-                </row>
-                <column/>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTableWidget" name="persDaten2Table_dsa5">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>250</height>
-                 </size>
-                </property>
-                <property name="editTriggers">
-                 <set>QAbstractItemView::NoEditTriggers</set>
-                </property>
-                <property name="alternatingRowColors">
-                 <bool>true</bool>
-                </property>
-                <property name="columnCount">
-                 <number>1</number>
-                </property>
-                <attribute name="horizontalHeaderVisible">
-                 <bool>false</bool>
-                </attribute>
-                <attribute name="horizontalHeaderStretchLastSection">
-                 <bool>true</bool>
-                </attribute>
-                <row>
-                 <property name="text">
-                  <string>Geburtsort</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Alter</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Geschlecht</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Größe</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Gewicht</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Augenfarbe</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Profession</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>Sozialstatus</string>
-                 </property>
-                </row>
-                <column/>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_13">
+             <widget class="QToolBox" name="toolBox">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="page_3">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>495</width>
+                 <height>282</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Allgemeine Daten</string>
+               </attribute>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
                 <item>
-                 <widget class="QLabel" name="label_9">
-                  <property name="text">
-                   <string>Vorteile</string>
+                 <widget class="QTableWidget" name="persDaten1Table_dsa5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>250</height>
+                   </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>250</height>
+                   </size>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::NoEditTriggers</set>
+                  </property>
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <property name="columnCount">
+                   <number>1</number>
+                  </property>
+                  <attribute name="horizontalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string>Name</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Familie</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Geburtsdatum</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Spezies</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Haarfarbe</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Kultur</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Titel</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Charakteristika</string>
+                   </property>
+                  </row>
+                  <column/>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QTableWidget" name="vorteileTable_dsa5">
+                 <widget class="QTableWidget" name="persDaten2Table_dsa5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>250</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>250</height>
+                   </size>
+                  </property>
+                  <property name="editTriggers">
+                   <set>QAbstractItemView::NoEditTriggers</set>
+                  </property>
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <property name="columnCount">
+                   <number>1</number>
+                  </property>
+                  <attribute name="horizontalHeaderVisible">
+                   <bool>false</bool>
+                  </attribute>
+                  <attribute name="horizontalHeaderStretchLastSection">
+                   <bool>true</bool>
+                  </attribute>
+                  <row>
+                   <property name="text">
+                    <string>Geburtsort</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Alter</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Geschlecht</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Größe</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Gewicht</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Augenfarbe</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Profession</string>
+                   </property>
+                  </row>
+                  <row>
+                   <property name="text">
+                    <string>Sozialstatus</string>
+                   </property>
+                  </row>
+                  <column/>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>168</width>
+                 <height>109</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Vorteile / Nachteile</string>
+               </attribute>
+               <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="QLabel" name="label_9">
+                    <property name="text">
+                     <string>Vorteile</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="vorteileTable_dsa5">
+                    <property name="editTriggers">
+                     <set>QAbstractItemView::NoEditTriggers</set>
+                    </property>
+                    <property name="alternatingRowColors">
+                     <bool>true</bool>
+                    </property>
+                    <property name="columnCount">
+                     <number>1</number>
+                    </property>
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <column/>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_12">
+                  <item>
+                   <widget class="QLabel" name="label_8">
+                    <property name="text">
+                     <string>Nachteile</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="nachteileTable_dsa5">
+                    <property name="editTriggers">
+                     <set>QAbstractItemView::NoEditTriggers</set>
+                    </property>
+                    <property name="alternatingRowColors">
+                     <bool>true</bool>
+                    </property>
+                    <property name="columnCount">
+                     <number>1</number>
+                    </property>
+                    <attribute name="horizontalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>true</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <column/>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_2">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>98</width>
+                 <height>88</height>
+                </rect>
+               </property>
+               <attribute name="label">
+                <string>Allgemeine Sonderfertigkeiten</string>
+               </attribute>
+               <layout class="QVBoxLayout" name="verticalLayout_41">
+                <item>
+                 <widget class="QTableWidget" name="sonderfTable_dsa5">
                   <property name="editTriggers">
                    <set>QAbstractItemView::NoEditTriggers</set>
                   </property>
@@ -878,71 +777,7 @@ QScrollBar::sub-line:vertical {
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_12">
-                <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="text">
-                   <string>Nachteile</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTableWidget" name="nachteileTable_dsa5">
-                  <property name="editTriggers">
-                   <set>QAbstractItemView::NoEditTriggers</set>
-                  </property>
-                  <property name="alternatingRowColors">
-                   <bool>true</bool>
-                  </property>
-                  <property name="columnCount">
-                   <number>1</number>
-                  </property>
-                  <attribute name="horizontalHeaderVisible">
-                   <bool>false</bool>
-                  </attribute>
-                  <attribute name="horizontalHeaderStretchLastSection">
-                   <bool>true</bool>
-                  </attribute>
-                  <attribute name="verticalHeaderVisible">
-                   <bool>false</bool>
-                  </attribute>
-                  <column/>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_10">
-              <property name="text">
-               <string>Allgemeine Sonderfertigkeiten</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTableWidget" name="sonderfTable_dsa5">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>true</bool>
-              </property>
-              <property name="columnCount">
-               <number>1</number>
-              </property>
-              <attribute name="horizontalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="horizontalHeaderStretchLastSection">
-               <bool>true</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <column/>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -1154,6 +989,19 @@ QScrollBar::sub-line:vertical {
            </layout>
           </item>
          </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -1761,6 +1609,12 @@ QScrollBar::sub-line:vertical {
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>70</number>
+              </attribute>
+              <attribute name="verticalHeaderDefaultSectionSize">
+               <number>25</number>
+              </attribute>
               <row>
                <property name="text">
                 <string>Armbrüste</string>
@@ -1922,7 +1776,7 @@ QScrollBar::sub-line:vertical {
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>200</height>
+                <height>0</height>
                </size>
               </property>
               <property name="editTriggers">
@@ -2192,7 +2046,7 @@ QScrollBar::sub-line:vertical {
              <widget class="QTableWidget" name="ausruestung1Table_dsa5">
               <property name="minimumSize">
                <size>
-                <width>300</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -2223,7 +2077,7 @@ QScrollBar::sub-line:vertical {
              <widget class="QTableWidget" name="ausruestung2Table_dsa5">
               <property name="minimumSize">
                <size>
-                <width>300</width>
+                <width>0</width>
                 <height>0</height>
                </size>
               </property>
@@ -2255,227 +2109,336 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_23">
+         <layout class="QVBoxLayout" name="verticalLayout_42">
           <item>
-           <widget class="QLabel" name="label_23">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_23">
+              <item>
+               <widget class="QLabel" name="label_23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Geldbeutel</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="geldTable_dsa5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>160</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="columnCount">
+                 <number>1</number>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderDefaultSectionSize">
+                 <number>40</number>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>Dukaten</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Silbertaler</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Heller</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Kreuzer</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Edelsteine</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Schmuck</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Sonstiges</string>
+                 </property>
+                </row>
+                <column/>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_25">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Tier-Sonderfertigkeiten</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="tierSonderfTable_dsa5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>160</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderHighlightSections">
+                 <bool>false</bool>
+                </attribute>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_24">
+              <item>
+               <widget class="QLabel" name="label_24">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Tier</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="tierAllgemeinTable_dsa5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="columnCount">
+                 <number>1</number>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>Name</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Typus</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>Größenkategorie</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>MU</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>KL</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>IN</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>CH</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>FF</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>GE</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>KO</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>KK</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>LeP</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>AsP</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>SK</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>ZK</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>RS</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>INI</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>GS</string>
+                 </property>
+                </row>
+                <column/>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="tierAktionen_dsa5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderHighlightSections">
+                 <bool>false</bool>
+                </attribute>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_27">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
-             <string>Geldbeutel</string>
+             <string>Aktionen</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="geldTable_dsa5">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>300</height>
-             </size>
-            </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <property name="columnCount">
-             <number>1</number>
-            </property>
-            <attribute name="horizontalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderDefaultSectionSize">
-             <number>40</number>
-            </attribute>
-            <row>
-             <property name="text">
-              <string>Dukaten</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Silbertaler</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Heller</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Kreuzer</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Edelsteine</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Schmuck</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Sonstiges</string>
-             </property>
-            </row>
-            <column/>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_25">
-            <property name="text">
-             <string>Tier-Sonderfertigkeiten</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="tierSonderfTable_dsa5">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="verticalLayout_24">
-          <item>
-           <widget class="QLabel" name="label_24">
-            <property name="text">
-             <string>Tier</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="tierAllgemeinTable_dsa5">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>300</height>
-             </size>
-            </property>
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <property name="columnCount">
-             <number>1</number>
-            </property>
-            <attribute name="horizontalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <row>
-             <property name="text">
-              <string>Name</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Typus</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Größenkategorie</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>MU</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>KL</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>IN</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>CH</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>FF</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>GE</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>KO</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>KK</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>LeP</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>AsP</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>SK</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>ZK</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>RS</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>INI</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>GS</string>
-             </property>
-            </row>
-            <column/>
            </widget>
           </item>
           <item>
            <widget class="QTableWidget" name="tierAngrifTable_dsa5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
+              <width>400</width>
               <height>150</height>
              </size>
             </property>
@@ -2518,29 +2481,6 @@ QScrollBar::sub-line:vertical {
             </column>
            </widget>
           </item>
-          <item>
-           <widget class="QLabel" name="label_27">
-            <property name="text">
-             <string>Aktionen</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="tierAktionen_dsa5">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderHighlightSections">
-             <bool>false</bool>
-            </attribute>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
@@ -2552,10 +2492,16 @@ QScrollBar::sub-line:vertical {
        <layout class="QVBoxLayout" name="verticalLayout_30">
         <item>
          <widget class="QTableWidget" name="zauberTable_dsa5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>300</height>
+            <height>0</height>
            </size>
           </property>
           <property name="editTriggers">
@@ -2637,6 +2583,12 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="zaubertricksTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>150</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2664,6 +2616,12 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="magiSonderfTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>150</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2688,6 +2646,12 @@ QScrollBar::sub-line:vertical {
            <layout class="QVBoxLayout" name="verticalLayout_29">
             <item>
              <widget class="QTableWidget" name="leiteigMerkmalTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>100</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2695,10 +2659,10 @@ QScrollBar::sub-line:vertical {
                <number>1</number>
               </property>
               <attribute name="horizontalHeaderDefaultSectionSize">
-               <number>300</number>
+               <number>140</number>
               </attribute>
               <attribute name="horizontalHeaderStretchLastSection">
-               <bool>true</bool>
+               <bool>false</bool>
               </attribute>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
@@ -2721,6 +2685,12 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="mTraditionTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2757,10 +2727,16 @@ QScrollBar::sub-line:vertical {
        <layout class="QVBoxLayout" name="verticalLayout_25">
         <item>
          <widget class="QTableWidget" name="liturgienTable_dsa5">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>300</height>
+            <height>0</height>
            </size>
           </property>
           <property name="editTriggers">
@@ -2842,6 +2818,12 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="segnungenTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>150</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2869,6 +2851,12 @@ QScrollBar::sub-line:vertical {
             </item>
             <item>
              <widget class="QTableWidget" name="kleriSonderfTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>150</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2893,6 +2881,12 @@ QScrollBar::sub-line:vertical {
            <layout class="QVBoxLayout" name="verticalLayout_26">
             <item>
              <widget class="QTableWidget" name="leiteigAspektTable_dsa5">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>100</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -2900,10 +2894,10 @@ QScrollBar::sub-line:vertical {
                <number>1</number>
               </property>
               <attribute name="horizontalHeaderDefaultSectionSize">
-               <number>300</number>
+               <number>140</number>
               </attribute>
               <attribute name="horizontalHeaderStretchLastSection">
-               <bool>true</bool>
+               <bool>false</bool>
               </attribute>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
@@ -3063,322 +3057,303 @@ QScrollBar::sub-line:vertical {
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label_35">
-          <property name="text">
-           <string>Abilities</string>
+         <widget class="QToolBox" name="toolBox_2">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_18">
-          <item>
-           <widget class="QTableWidget" name="abilitiesTable1_sifrp">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <row>
-             <property name="text">
-              <string>Agility</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Animal Handling</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Athletics</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Awareness</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Cunning</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Deception</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Endurance</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Fighting</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Healing</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Language</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>Rating</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Specialties</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="abilitiesTable2_sifrp">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <row>
-             <property name="text">
-              <string>Knowledge</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Marksmanship</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Persuasion</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Stealth</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Survival</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Thievery</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Warfare</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>Will</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>Rating</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Specialties</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_19">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_32">
+          <widget class="QWidget" name="page_4">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1001</width>
+             <height>532</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Abilites</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_25">
             <item>
-             <widget class="QTableWidget" name="qualitiesTable_sifrp">
+             <widget class="QTableWidget" name="abilitiesTable1_sifrp">
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
               </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
+              <row>
+               <property name="text">
+                <string>Agility</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Animal Handling</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Athletics</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Awareness</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Cunning</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Deception</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Endurance</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Fighting</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Healing</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Language</string>
+               </property>
+              </row>
               <column>
                <property name="text">
-                <string>Qualities</string>
+                <string>Rating</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Specialties</string>
                </property>
               </column>
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <widget class="QTableWidget" name="abilitiesTable2_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <row>
+               <property name="text">
+                <string>Knowledge</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Marksmanship</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Persuasion</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Stealth</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Survival</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Thievery</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Warfare</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>Will</string>
+               </property>
+              </row>
+              <column>
+               <property name="text">
+                <string>Rating</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Specialties</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_5">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>332</width>
+             <height>118</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Qualities / Intrigue / Combat / Destiny Points</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_18">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_32">
               <item>
-               <widget class="QLabel" name="label_36">
-                <property name="text">
-                 <string>Destiny Points</string>
+               <widget class="QTableWidget" name="qualitiesTable_sifrp">
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
                 </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest1_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
+                <attribute name="horizontalHeaderStretchLastSection">
                  <bool>true</bool>
-                </property>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>Qualities</string>
+                 </property>
+                </column>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="dest2_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest3_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest4_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest5_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest6_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest7_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="dest8_sifrp">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
+               <layout class="QHBoxLayout" name="horizontalLayout_21">
+                <item>
+                 <widget class="QLabel" name="label_36">
+                  <property name="text">
+                   <string>Destiny Points</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest1_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest2_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest3_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest4_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest5_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest6_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest7_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="dest8_sifrp">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
               </item>
              </layout>
             </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="intrigueCombatTable_sifrp">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <column>
-             <property name="text">
-              <string>Intrigue</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Combat</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_22">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_33">
             <item>
-             <widget class="QLabel" name="label_37">
-              <property name="text">
-               <string>Weapons</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTableWidget" name="weaponsTable_sifrp">
+             <widget class="QTableWidget" name="intrigueCombatTable_sifrp">
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>true</bool>
               </property>
               <attribute name="horizontalHeaderStretchLastSection">
                <bool>true</bool>
@@ -3386,69 +3361,121 @@ QScrollBar::sub-line:vertical {
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
               </attribute>
-              <row>
-               <property name="text">
-                <string/>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string/>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string/>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string/>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string/>
-               </property>
-              </row>
               <column>
                <property name="text">
-                <string>Attack</string>
+                <string>Intrigue</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Test Dice</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>Weapon Damage</string>
+                <string>Combat</string>
                </property>
               </column>
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="armorTable_sifrp">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <column>
-             <property name="text">
-              <string>Armor</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
+          </widget>
+          <widget class="QWidget" name="page_6">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1001</width>
+             <height>532</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Weapons / Armor</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_19">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_33">
+              <item>
+               <widget class="QLabel" name="label_37">
+                <property name="text">
+                 <string>Weapons</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="weaponsTable_sifrp">
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Attack</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Test Dice</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Weapon Damage</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="armorTable_sifrp">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <attribute name="horizontalHeaderStretchLastSection">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>Armor</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -3460,285 +3487,404 @@ QScrollBar::sub-line:vertical {
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_23">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_36">
-            <item>
-             <widget class="QTableWidget" name="woundsTable_sifrp">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>true</bool>
-              </property>
-              <attribute name="horizontalHeaderStretchLastSection">
-               <bool>true</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <row>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>2</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>3</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>4</string>
-               </property>
-              </row>
-              <column>
-               <property name="text">
-                <string>Wounds</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTableWidget" name="equipmentTable_sifrp">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <property name="alternatingRowColors">
-               <bool>true</bool>
-              </property>
-              <attribute name="horizontalHeaderStretchLastSection">
-               <bool>true</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <column>
-               <property name="text">
-                <string>Equipment</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QToolBox" name="toolBox_3">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_7">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>98</width>
+               <height>88</height>
+              </rect>
+             </property>
+             <attribute name="label">
+              <string>Wounds</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_43">
+              <item>
+               <widget class="QTableWidget" name="woundsTable_sifrp">
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>2</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>3</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>4</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>Wounds</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_8">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>98</width>
+               <height>88</height>
+              </rect>
+             </property>
+             <attribute name="label">
+              <string>Equipment</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_44">
+              <item>
+               <widget class="QTableWidget" name="equipmentTable_sifrp">
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>Equipment</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_35">
-            <item>
-             <widget class="QLabel" name="label_38">
-              <property name="text">
-               <string>Appearance</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTableWidget" name="apperaranceTable_sifrp">
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <attribute name="horizontalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="horizontalHeaderStretchLastSection">
-               <bool>false</bool>
-              </attribute>
-              <attribute name="verticalHeaderVisible">
-               <bool>false</bool>
-              </attribute>
-              <row>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </row>
-              <row>
-               <property name="text">
-                <string>2</string>
-               </property>
-              </row>
-              <column>
-               <property name="text">
-                <string>1</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>2</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>3</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>4</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_39">
-              <property name="text">
-               <string>Mannerisms</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="mannerismsTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_40">
-              <property name="text">
-               <string>Distinguishing Features</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_41">
-              <property name="text">
-               <string>Retainers</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="retainersTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QToolBox" name="toolBox_4">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_9">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>98</width>
+               <height>202</height>
+              </rect>
+             </property>
+             <attribute name="label">
+              <string>Appearance / Mannerisms</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_45">
+              <item>
+               <widget class="QLabel" name="label_38">
+                <property name="text">
+                 <string>Appearance</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="apperaranceTable_sifrp">
+                <property name="editTriggers">
+                 <set>QAbstractItemView::NoEditTriggers</set>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </row>
+                <row>
+                 <property name="text">
+                  <string>2</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>2</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>3</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>4</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_39">
+                <property name="text">
+                 <string>Mannerisms</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="mannerismsTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_10">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>129</width>
+               <height>202</height>
+              </rect>
+             </property>
+             <attribute name="label">
+              <string>Distinguishing Features / Retainers</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_46">
+              <item>
+               <widget class="QLabel" name="label_40">
+                <property name="text">
+                 <string>Distinguishing Features</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="distFeaturesTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_41">
+                <property name="text">
+                 <string>Retainers</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="retainersTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="label_42">
-          <property name="text">
-           <string>Personal History</string>
+         <widget class="QToolBox" name="toolBox_5">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
+          <widget class="QWidget" name="page_11">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>98</width>
+             <height>88</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Personal History</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_47">
+            <item>
+             <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_12">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>246</width>
+             <height>109</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Allies / Enemies / Oaths</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_22">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_50">
+              <item>
+               <widget class="QLabel" name="label_45">
+                <property name="text">
+                 <string>Allies</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="alliesTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_48">
+              <item>
+               <widget class="QLabel" name="label_44">
+                <property name="text">
+                 <string>Enemies</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="enemiesTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_49">
+              <item>
+               <widget class="QLabel" name="label_43">
+                <property name="text">
+                 <string>Oaths</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="oathsTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_13">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>246</width>
+             <height>109</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Heraldry / Portrait / Motto</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_26">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_35">
+              <item>
+               <widget class="QLabel" name="label_46">
+                <property name="text">
+                 <string>Heraldry</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="heraldryTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_36">
+              <item>
+               <widget class="QLabel" name="label_47">
+                <property name="text">
+                 <string>Portrait</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="portraitTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_51">
+              <item>
+               <widget class="QLabel" name="label_48">
+                <property name="text">
+                 <string>Motto</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="mottoTextEdit_sifrp">
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </widget>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="personalHistoryTextEdit_sifrp">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_24">
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_40">
-            <item>
-             <widget class="QLabel" name="label_45">
-              <property name="text">
-               <string>Allies</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="alliesTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_46">
-              <property name="text">
-               <string>Heraldry</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="heraldryTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_39">
-            <item>
-             <widget class="QLabel" name="label_44">
-              <property name="text">
-               <string>Enemies</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="enemiesTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_47">
-              <property name="text">
-               <string>Portrait</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="portraitTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_38">
-            <item>
-             <widget class="QLabel" name="label_43">
-              <property name="text">
-               <string>Oaths</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="oathsTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_48">
-              <property name="text">
-               <string>Motto</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="mottoTextEdit_sifrp">
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
         </item>
        </layout>
       </widget>

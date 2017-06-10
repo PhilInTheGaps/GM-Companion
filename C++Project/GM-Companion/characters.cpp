@@ -97,7 +97,7 @@ void MainWindow::on_characterListClicked(int index){
 
 // Returns list of all character files in character path
 QStringList getCharacterList(){
-    qDebug() << "Getting Characters...";
+    qDebug() << QCoreApplication::translate("","Getting Characters...");
     SettingsManager* settingsManager = new SettingsManager;
     QString folderPath = settingsManager->getSetting(Setting::charactersPath);
     QStringList files = getFiles(folderPath);
@@ -109,7 +109,7 @@ QStringList getCharacterList(){
         }
     }
 
-    qDebug() << "Found "+QString::number(characterFileNames.length())+" characters.";
+    qDebug() << QCoreApplication::translate("","Characters found: ")+QString::number(characterFileNames.length());
     return characterFileNames;
 }
 

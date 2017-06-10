@@ -28,6 +28,24 @@ private slots:
 
     void on_step2AddButton_clicked();
 
+    void on_foundingComboBox_currentIndexChanged(int index);
+
+    void on_foundingRandomButton_clicked();
+
+    void on_eventComboBox_currentIndexChanged(int index);
+
+    void on_eventRandomButton_clicked();
+
+    void on_foundingApplyButton_clicked();
+
+    void on_eventApplyButton_clicked();
+
+    void on_step4InvestInDefenseButton_clicked();
+
+    void on_step1SetRealmButton_clicked();
+
+    void on_step4InvestInHeirButton_clicked();
+
 private:
     Ui::SIFRP *ui;
 
@@ -35,7 +53,7 @@ private:
 
     int rollDice(int amount);
 
-    int resources [7] = {0, 0, 0, 0, 0, 0, 0};
+    int resources[7] = {0, 0, 0, 0, 0, 0, 0};
 
     QStringList realms{
         "KingsLanding",
@@ -70,17 +88,46 @@ private:
     QStringList powerDesc;
     QStringList wealthDesc;
 
-    int resourceModifiers[10][7]={
-        {5, -5, -5, 20, 5, -5, -5},
-        {20, -5, -5, 5, 0, 0, -5},
-        {5, 10, 20, -10, -5, -5, -5}
-
-    };
+    QList<QList<int>> resourceModifiers;
 
     int playerCount;
     int currentResourceModifyingPlayer;
 
     void updateResourceDescriptions();
+
+    void updateFoundingExample(int index);
+
+    QStringList foundingExamples = {
+        "Age of Heroes",
+        "Andal Invasion",
+        "Rhoynar Invasion",
+        "Aegon’s Conquest",
+        "Blackfyre Rebellion",
+        "War of the Usurper"
+    };
+
+    void updateEventDescription(int index);
+
+    void calculateEventCount();
+
+    void calculateMinEventCount();
+
+    int remainingMinEventCount;
+
+    void calculateEventMods();
+
+    enum Holding{
+        Defense,
+        Influence,
+        Land,
+        Law,
+        Population,
+        Wealth
+    };
+
+    void addHolding(Holding holding, QString secondColumn, QString thirdColumn);
+
+    void lastStep();
 };
 
 #endif // SIFRP_H

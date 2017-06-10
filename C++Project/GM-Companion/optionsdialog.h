@@ -40,6 +40,26 @@ private slots:
 
     void on_deselectAll_clicked();
 
+    void on_styleComboBox_currentTextChanged(const QString &arg1);
+
+    void on_buttonStyleComboBox_currentIndexChanged(int index);
+
+    void on_musicTrackListCheckBox_toggled(bool checked);
+
+    void on_groupsMusicFolderComboBox_currentTextChanged(const QString &arg1);
+
+    void on_groupsComboBox_currentTextChanged(const QString &arg1);
+
+    void on_addGroupButton_clicked();
+
+    void on_groupsSaveFolders_clicked();
+
+    void on_removeGroupButton_clicked();
+
+    void on_groupsSelectFoldersButton_clicked();
+
+    void on_languageComboBox_currentIndexChanged(int index);
+
 private:
     Ui::OptionsDialog *ui;
 

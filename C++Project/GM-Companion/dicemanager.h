@@ -65,7 +65,7 @@ private:
     QTableWidget* diceResultTableWidget;
     QLabel* diceOutputLabel;
 
-    QStringList headerLabels = {"dice", "roll", "result"};
+    QStringList headerLabels = {tr("dice"), tr("roll"), tr("result")};
 };
 
 #endif // DICEMANAGER_H
