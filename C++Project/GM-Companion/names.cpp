@@ -38,7 +38,7 @@ void MainWindow::generateNamesTab(){
                     if (QFile(folder+"/"+subfolder+"/male.txt").exists()){
                         QPushButton *maleButton = new QPushButton;
                         maleButton->setMaximumWidth(200);
-                        maleButton->setText("Male");
+                        maleButton->setText(tr("Male"));
                         buttonLayout->addWidget(maleButton);
 
                         QString maleFile = folder+"/"+subfolder+"/male.txt";
@@ -50,7 +50,7 @@ void MainWindow::generateNamesTab(){
                     if (QFile(folder+"/"+subfolder+"/female.txt").exists()){
                         QPushButton *femaleButton = new QPushButton;
                         femaleButton->setMaximumWidth(200);
-                        femaleButton->setText("Female");
+                        femaleButton->setText(tr("Female"));
                         buttonLayout->addWidget(femaleButton);
 
                         QString femaleFile = folder+"/"+subfolder+"/female.txt";
@@ -90,7 +90,7 @@ void MainWindow::on_generateNames(QString file){
         surnamesFile.close();
     }
 
-    for (int i = 0; i<20; i++){
+    for (int i = 0; i<ui->namesAmountSpinBox->value(); i++){
         QString name = names.at(rand() % names.size());
 
         if (name.at(0)==" "){

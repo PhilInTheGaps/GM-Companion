@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>865</width>
-    <height>640</height>
+    <width>886</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,9 @@
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
+     </property>
+     <property name="tabBarAutoHide">
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="tabHouseGenerator">
       <attribute name="title">
@@ -118,6 +121,25 @@
                  <string>Dorne</string>
                 </property>
                </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="step1SetRealmButton">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Set Realm</string>
+               </property>
               </widget>
              </item>
              <item>
@@ -349,6 +371,9 @@ p, li { white-space: pre-wrap; }
                    <pointsize>30</pointsize>
                   </font>
                  </property>
+                 <property name="value">
+                  <number>1</number>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -527,6 +552,1349 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="text">
               <string>Step Three: House History</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>House Founding</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QComboBox" name="foundingComboBox">
+               <property name="minimumSize">
+                <size>
+                 <width>250</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Ancient</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Very Old</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Old</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Established</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Recent</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>New</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="foundingExampleLineEdit">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="foundingApplyButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Apply</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="foundingRandomButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Random</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Historical Events</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QComboBox" name="eventComboBox">
+               <property name="minimumSize">
+                <size>
+                 <width>250</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Doom</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Defeat</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Catastrophe</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Madness</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Invasion / Revolt</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Scandal</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Treachery</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Decline</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Infrastructure</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Ascent</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Favor</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Victory</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Villain</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Glory</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Conquest</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Windfall</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="eventInfoLineEdit">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="eventApplyButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Apply</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="eventRandomButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Random</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="eventDescriptionTextEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>150</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8.25pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="eventTableWidget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Events:</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Notes:</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_4">
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Step Four: Holdings</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="step3ResourcesTable">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>New Row</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Defense</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Influence</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Lands</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Law</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Population</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Power</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Wealth</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QStackedWidget" name="step4StackedWidget">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="page_5">
+              <layout class="QVBoxLayout" name="verticalLayout_11">
+               <item>
+                <widget class="QLabel" name="label_10">
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Defense Holdings</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_12">
+                   <item>
+                    <widget class="QLabel" name="label_12">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Defense Value:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="step4DefenseLine">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_11">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Invested Defense:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="step4InvestedDefenseLine">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="step4DefenseHoldingComboBox">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Superior Castle</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Castle</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Small Castle</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Hall</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Tower</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="step4InvestInDefenseButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Invest in Holding</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_13">
+                   <item>
+                    <widget class="QTableWidget" name="step4DefenseHoldingsTable">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>186</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>175</height>
+                      </size>
+                     </property>
+                     <attribute name="horizontalHeaderDefaultSectionSize">
+                      <number>150</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string>Superior Castle</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Castle</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Small Castle</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Hall</string>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string>Tower</string>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string>Investment</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignLeading|AlignVCenter</set>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Build Time</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignLeading|AlignVCenter</set>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Benefit</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignLeading|AlignVCenter</set>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Explanation</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignLeading|AlignVCenter</set>
+                      </property>
+                     </column>
+                     <item row="0" column="0">
+                      <property name="text">
+                       <string>50</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                     </item>
+                     <item row="0" column="1">
+                      <property name="text">
+                       <string>144 +10D6 Months</string>
+                      </property>
+                     </item>
+                     <item row="0" column="2">
+                      <property name="text">
+                       <string>Units defending a superior castle gain a +12 bonus to their Defense.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Units defending a superior castle gain a +12 bonus to their Defense.</string>
+                      </property>
+                     </item>
+                     <item row="0" column="3">
+                      <property name="text">
+                       <string>A superior castle is a massive stronghold in the vein of Harrenhal, the Eyrie, Storm’s End, Dragonstone, and Winterfell. A superior castle has several towers, structures, and smaller buildings, all surrounded by a steep curtain wall and likely a moat as well.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>A superior castle is a massive stronghold in the vein of Harrenhal, the Eyrie, Storm’s End, Dragonstone, and Winterfell. A superior castle has several towers, structures, and smaller buildings, all surrounded by a steep curtain wall and likely a moat as well. </string>
+                      </property>
+                     </item>
+                     <item row="1" column="0">
+                      <property name="text">
+                       <string>40</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                     </item>
+                     <item row="1" column="1">
+                      <property name="text">
+                       <string>90 + 10D6 Months</string>
+                      </property>
+                     </item>
+                     <item row="1" column="2">
+                      <property name="text">
+                       <string>Units defending a castle gain a +8 bonus to their Defense.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Units defending a castle gain a +8 bonus to their Defense.</string>
+                      </property>
+                     </item>
+                     <item row="1" column="3">
+                      <property name="text">
+                       <string>Castles are impressive fortified strongholds but are not as large or as imposing as a superior castle. Most castles incorporate at least one central keep and several towers connected by walls and surrounded by a moat. Example castles include Deepwood Motte, the Twins, and Riverrun.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Castles are impressive fortified strongholds but are not as large or as imposing as a superior castle. Most castles incorporate at least one central keep and several towers connected by walls and surrounded by a moat. Example castles include Deepwood Motte, the Twins, and Riverrun.</string>
+                      </property>
+                     </item>
+                     <item row="2" column="0">
+                      <property name="text">
+                       <string>30</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                     </item>
+                     <item row="2" column="1">
+                      <property name="text">
+                       <string>72 +10D6 Months</string>
+                      </property>
+                     </item>
+                     <item row="2" column="2">
+                      <property name="text">
+                       <string>Units defending a small castle gain a +6 bonus to their Defense.
+</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Units defending a small castle gain a +6 bonus to their Defense.</string>
+                      </property>
+                     </item>
+                     <item row="2" column="3">
+                      <property name="text">
+                       <string>A small castle is simply a smaller version of a standard castle. It usually has no more than a single keep, perhaps two towers and a wall. Examples of small castles include Bronzegate, Honeyholt, and Yronwood.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>A small castle is simply a smaller version of a standard castle. It usually has no more than a single keep, perhaps two towers and a wall. Examples of small castles include Bronzegate, Honeyholt, and Yronwood.</string>
+                      </property>
+                     </item>
+                     <item row="3" column="0">
+                      <property name="text">
+                       <string>20</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                     </item>
+                     <item row="3" column="1">
+                      <property name="text">
+                       <string>60 + 10D6 Months</string>
+                      </property>
+                     </item>
+                     <item row="3" column="2">
+                      <property name="text">
+                       <string>Units defending a hall gain a +4 bonus to their Defense.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Units defending a hall gain a +4 bonus to their Defense.</string>
+                      </property>
+                     </item>
+                     <item row="3" column="3">
+                      <property name="text">
+                       <string>A hall (or keep) is usually a small, fortified building. It may or may not be surrounded by a wall, and it could have a tower, though it’s unlikely. Examples of halls include Acorn Hall, Cider Hall, and Longbow Hall. </string>
+                      </property>
+                      <property name="toolTip">
+                       <string>A hall (or keep) is usually a small, fortified building. It may or may not be surrounded by a wall, and it could have a tower, though it’s unlikely. Examples of halls include Acorn Hall, Cider Hall, and Longbow Hall. </string>
+                      </property>
+                     </item>
+                     <item row="4" column="0">
+                      <property name="text">
+                       <string>10</string>
+                      </property>
+                      <property name="textAlignment">
+                       <set>AlignCenter</set>
+                      </property>
+                     </item>
+                     <item row="4" column="1">
+                      <property name="text">
+                       <string>36 + 10D6 Months</string>
+                      </property>
+                     </item>
+                     <item row="4" column="2">
+                      <property name="text">
+                       <string>Units defending a tower gain a +3 bonus to their Defense.</string>
+                      </property>
+                      <property name="toolTip">
+                       <string> Units defending a tower gain a +3 bonus to their Defense.</string>
+                      </property>
+                     </item>
+                     <item row="4" column="3">
+                      <property name="text">
+                       <string>Towers are single free-standing stone or timber structures that thrust up from the ground. If they have any outbuildings, they are small and unprotected. Petyr Baelish’s holdings in the Fingers included a single tower. </string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Towers are single free-standing stone or timber structures that thrust up from the ground. If they have any outbuildings, they are small and unprotected. Petyr Baelish’s holdings in the Fingers included a single tower. </string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_13">
+                     <property name="text">
+                      <string>Your Defense Holdings:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="step4InvestedDefenseHoldingsTable">
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <column>
+                      <property name="text">
+                       <string>Type</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Investment</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Build Time</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="page_6">
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <widget class="QLabel" name="label_14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Influence Holdings</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_19">
+                   <item>
+                    <widget class="QLabel" name="label_19">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Your Influence</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="step4InfluenceLine">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>false</bool>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_21">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Invested Influence</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="step4InvestedInfluenceLine">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>0</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="dragEnabled">
+                      <bool>false</bool>
+                     </property>
+                     <property name="readOnly">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="Line" name="line_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="step4HeirComboBox">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>First-Born Son</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Second Son</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Other Children</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="step4InvestInHeirButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>50</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Invest in Heir</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_20">
+                   <item>
+                    <widget class="QTableWidget" name="tableWidget">
+                     <attribute name="horizontalHeaderDefaultSectionSize">
+                      <number>204</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderCascadingSectionResizes">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+                      <bool>false</bool>
+                     </attribute>
+                     <row>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </row>
+                     <row>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </row>
+                     <column>
+                      <property name="text">
+                       <string>Heir's Status</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Example</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Cost</string>
+                      </property>
+                     </column>
+                     <item row="0" column="0">
+                      <property name="text">
+                       <string>Maximum-1</string>
+                      </property>
+                     </item>
+                     <item row="0" column="1">
+                      <property name="text">
+                       <string>First-born son (or daughter in Dorne)</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>First-born son (or daughter in Dorne)</string>
+                      </property>
+                     </item>
+                     <item row="0" column="2">
+                      <property name="text">
+                       <string>20</string>
+                      </property>
+                     </item>
+                     <item row="1" column="0">
+                      <property name="text">
+                       <string>Maximum-2</string>
+                      </property>
+                     </item>
+                     <item row="1" column="1">
+                      <property name="text">
+                       <string>Second son (or daughter in Dorne),  or first-born daughter</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Second son (or daughter in Dorne),  or first-born daughter</string>
+                      </property>
+                     </item>
+                     <item row="1" column="2">
+                      <property name="text">
+                       <string>10</string>
+                      </property>
+                     </item>
+                     <item row="2" column="0">
+                      <property name="text">
+                       <string>Maximum-3</string>
+                      </property>
+                     </item>
+                     <item row="2" column="1">
+                      <property name="text">
+                       <string>Other children (not including bastards)</string>
+                      </property>
+                      <property name="toolTip">
+                       <string>Other children (not including bastards)</string>
+                      </property>
+                     </item>
+                     <item row="2" column="2">
+                      <property name="text">
+                       <string>5</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_20">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Your Heirs:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QTableWidget" name="step4HeirTable">
+                     <attribute name="horizontalHeaderDefaultSectionSize">
+                      <number>200</number>
+                     </attribute>
+                     <attribute name="horizontalHeaderHighlightSections">
+                      <bool>false</bool>
+                     </attribute>
+                     <attribute name="horizontalHeaderStretchLastSection">
+                      <bool>true</bool>
+                     </attribute>
+                     <attribute name="verticalHeaderVisible">
+                      <bool>false</bool>
+                     </attribute>
+                     <column>
+                      <property name="text">
+                       <string>Example</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Heir's Status</string>
+                      </property>
+                     </column>
+                     <column>
+                      <property name="text">
+                       <string>Cost</string>
+                      </property>
+                     </column>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_12">
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QLabel" name="label_24">
+             <property name="font">
+              <font>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Result</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="step5ResourceTable">
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>Defense</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Influence</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Lands</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Law</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Population</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Power</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Wealth</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Value</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Description</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEdit_2">
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;ToDo:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Land Holdings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Law Holdings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Population Holdings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Power Holdings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Wealth Holdings&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;- Motto und Wappen&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>

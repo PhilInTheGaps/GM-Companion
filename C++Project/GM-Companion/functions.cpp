@@ -27,6 +27,7 @@ QString cleanText(QString text){
     text.replace(".jpg", "");
     text.replace(".txt", "");
     text.replace(".ini", "");
+    text.replace(".qss", "");
     return text;
 }
 
