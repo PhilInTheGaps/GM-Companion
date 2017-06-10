@@ -41,7 +41,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Aegon (Phil)</string>
+        <string notr="true"/>
        </property>
       </widget>
      </item>

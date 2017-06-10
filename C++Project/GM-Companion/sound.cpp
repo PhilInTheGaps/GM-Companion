@@ -4,8 +4,25 @@
 
 #include <QToolButton>
 
+QString getSoundStyleSheet(QString url){
+    QString styleSheet = "QToolButton {"
+                         "min-width: 152; "
+                         "min-height: 152; "
+                         "padding: 1px; "
+                         "border-radius: 2px; "
+                         "background-color: #222222;"
+                         "background-image: url("+url+"); "
+                         "background-repeat: no-repeat; "
+                         "background-position: center center;}"
+                         "QToolButton QWidget{"
+                         "color: white"
+                         "} ";
+
+    return styleSheet;
+}
+
 void MainWindow::generateSoundButtons(){
-    qDebug() << "Generating Sound Buttons...";
+    qDebug() << tr("Generating Sound Buttons...");
     tabWidgetSound = new QTabWidget;
     ui->tabSound->layout()->addWidget(tabWidgetSound);
 
@@ -21,10 +38,12 @@ void MainWindow::generateSoundButtons(){
             scrollArea->setWidgetResizable(true);
 
             if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png); background-attachment: fixed;}");
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png);"
+                                     "background-position: center top;}");
             }
             else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg); background-attachment: fixed;}");
+                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg);"
+                                     "background-position: center top;}");
             }
 
             // Generating soundButtons
@@ -40,44 +59,50 @@ void MainWindow::generateSoundButtons(){
                     connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
                     signalMapperSound->setMapping(b, settingsManager->getSetting(Setting::soundPath)+"/"+folder+"/"+s);
 
-                    if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
-                    }
-                    else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
-                    }
-                    else if (QFile(QApplication::applicationDirPath()+"/resources/button.png").exists()){
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px; "
-                                         "background-image: url("+QApplication::applicationDirPath()+"/resources/button.png); "
-                                         "background-repeat: no-repeat; "
-                                         "background-position: center center;}"
-                                         "QToolButton QWidget{"
-                                         "color: white} ");
-                    }
-                    else{
-                        b->setStyleSheet("QToolButton {min-width: 152; "
-                                         "min-height: 152; "
-                                         "padding: 1px; "
-                                         "border-radius: 2px;");
+                    if (settingsManager->getSetting(Setting::buttonStyle) == "small"){
+
+                        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+                        b->setIconSize(QSize(64,64));
+                        b->setMinimumWidth(150);
+                        b->setMinimumHeight(90);
+                        b->setStyleSheet("background-color: #222222;");
+
+                        if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png").exists()){
+                            QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png");
+                            QIcon icon(pixmap);
+                            b->setIcon(icon);
+                        }
+                        else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg").exists()){
+                            QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg");
+                            QIcon icon(pixmap);
+                            b->setIcon(icon);
+                        }
+
+
+                    }else{
+                        if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png").exists()){
+                            b->setStyleSheet(getSoundStyleSheet(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".png"));
+                        }
+                        else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpg").exists()){
+                            b->setStyleSheet(getSoundStyleSheet(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Sounds/"+folder+"/"+s+".jpf"));
+                        }
+                        else if (QFile(QApplication::applicationDirPath()+"/resources/button.png").exists()){
+                            b->setStyleSheet(getSoundStyleSheet(QApplication::applicationDirPath()+"/resources/button.png"));
+                        }
+                        else{
+                            b->setStyleSheet("QToolButton {"
+                                             "min-width: 152; "
+                                             "min-height: 152; "
+                                             "padding: 1px; "
+                                             "border-radius: 2px; "
+                                             "background-color: #222222;"
+                                             "background-position: center center;}"
+                                             "QToolButton QWidget{"
+                                             "color: white"
+                                             "} ");
+                        }
+
+                        b->setFixedSize(152, 152);
                     }
 
                     QFont font;
@@ -94,7 +119,6 @@ void MainWindow::generateSoundButtons(){
 
                     b->setText(title);
 
-                    b->setFixedSize(152, 152);
                     b->setToolTip(cleanText(s));
 
                     flowLayoutSound->addWidget(b);
@@ -128,7 +152,7 @@ void MainWindow::playSound(QString folder){
     soundPlayer->play();
 
     // Display the selected sound folder
-    ui->soundNameLabel->setText("Folder: "+folderName);
+    ui->soundNameLabel->setText(tr("Folder: ")+folderName);
 }
 
 // Toggles Random mode

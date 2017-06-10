@@ -1,5 +1,5 @@
 <RCC>
-    <qresource>
+    <qresource prefix="/">
         <file>resources/icon32.png</file>
         <file>resources/icon64.png</file>
         <file>resources/icon128.png</file>
@@ -19,5 +19,7 @@
         <file>resources/mediaIcons/skipBack.png</file>
         <file>resources/mediaIcons/skipForward.png</file>
         <file>resources/mediaIcons/stop.png</file>
+        <file>resources/NewFeatures/groups.png</file>
+        <file>resources/NewFeatures/buttonStyle.png</file>
     </qresource>
 </RCC>
