@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>org.apache.commons.io.input (Apache Commons IO 2.5 API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="org.apache.commons.io.input (Apache Commons IO 2.5 API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/filefilter/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../org/apache/commons/io/monitor/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h1 title="Package" class="title">Package&nbsp;org.apache.commons.io.input</h1>
+<div class="docSummary">
+<div class="block">
+This package provides implementations of input classes, such as
+<code>InputStream</code> and <code>Reader</code>.</div>
+</div>
+<p>See:&nbsp;<a href="#package_description">Description</a></p>
+</div>
+<div class="contentContainer">
+<ul class="blockList">
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Interface Summary table, listing interfaces, and an explanation">
+<caption><span>Interface Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Interface</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/TailerListener.html" title="interface in org.apache.commons.io.input">TailerListener</a></td>
+<td class="colLast">
+<div class="block">Listener for events from a <a href="../../../../../org/apache/commons/io/input/Tailer.html" title="class in org.apache.commons.io.input"><code>Tailer</code></a>.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Class Summary table, listing classes, and an explanation">
+<caption><span>Class Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/AutoCloseInputStream.html" title="class in org.apache.commons.io.input">AutoCloseInputStream</a></td>
+<td class="colLast">
+<div class="block">Proxy stream that closes and discards the underlying stream as soon as the
+ end of input has been reached or when the stream is explicitly closed.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/BOMInputStream.html" title="class in org.apache.commons.io.input">BOMInputStream</a></td>
+<td class="colLast">
+<div class="block">This class is used to wrap a stream that includes an encoded <a href="../../../../../org/apache/commons/io/ByteOrderMark.html" title="class in org.apache.commons.io"><code>ByteOrderMark</code></a> as its first bytes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/BoundedInputStream.html" title="class in org.apache.commons.io.input">BoundedInputStream</a></td>
+<td class="colLast">
+<div class="block">This is a stream that will only supply bytes up to a certain length - if its
+ position goes above that, it will stop.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/BoundedReader.html" title="class in org.apache.commons.io.input">BoundedReader</a></td>
+<td class="colLast">
+<div class="block">A reader that imposes a limit to the number of characters that can be read from
+ an underlying reader, returning eof when this limit is reached -regardless of state of
+ underlying reader.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/BrokenInputStream.html" title="class in org.apache.commons.io.input">BrokenInputStream</a></td>
+<td class="colLast">
+<div class="block">Broken input stream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/CharSequenceInputStream.html" title="class in org.apache.commons.io.input">CharSequenceInputStream</a></td>
+<td class="colLast">
+<div class="block"><a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io"><code>InputStream</code></a> implementation that can read from String, StringBuffer,
+ StringBuilder or CharBuffer.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/CharSequenceReader.html" title="class in org.apache.commons.io.input">CharSequenceReader</a></td>
+<td class="colLast">
+<div class="block"><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a> implementation that can read from String, StringBuffer,
+ StringBuilder or CharBuffer.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ClassLoaderObjectInputStream.html" title="class in org.apache.commons.io.input">ClassLoaderObjectInputStream</a></td>
+<td class="colLast">
+<div class="block">A special ObjectInputStream that loads a class based on a specified
+ <code>ClassLoader</code> rather than the system default.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ClosedInputStream.html" title="class in org.apache.commons.io.input">ClosedInputStream</a></td>
+<td class="colLast">
+<div class="block">Closed input stream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/CloseShieldInputStream.html" title="class in org.apache.commons.io.input">CloseShieldInputStream</a></td>
+<td class="colLast">
+<div class="block">Proxy stream that prevents the underlying input stream from being closed.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/CountingInputStream.html" title="class in org.apache.commons.io.input">CountingInputStream</a></td>
+<td class="colLast">
+<div class="block">A decorating input stream that counts the number of bytes that have passed
+ through the stream so far.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/DemuxInputStream.html" title="class in org.apache.commons.io.input">DemuxInputStream</a></td>
+<td class="colLast">
+<div class="block">Data written to this stream is forwarded to a stream that has been associated
+ with this thread.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/NullInputStream.html" title="class in org.apache.commons.io.input">NullInputStream</a></td>
+<td class="colLast">
+<div class="block">A functional, light weight <a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io"><code>InputStream</code></a> that emulates
+ a stream of a specified size.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/NullReader.html" title="class in org.apache.commons.io.input">NullReader</a></td>
+<td class="colLast">
+<div class="block">A functional, light weight <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a> that emulates
+ a reader of a specified size.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html" title="class in org.apache.commons.io.input">ProxyInputStream</a></td>
+<td class="colLast">
+<div class="block">A Proxy stream which acts as expected, that is it passes the method
+ calls on to the proxied stream and doesn't change which methods are
+ being called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ProxyReader.html" title="class in org.apache.commons.io.input">ProxyReader</a></td>
+<td class="colLast">
+<div class="block">A Proxy stream which acts as expected, that is it passes the method 
+ calls on to the proxied stream and doesn't change which methods are 
+ being called.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ReaderInputStream.html" title="class in org.apache.commons.io.input">ReaderInputStream</a></td>
+<td class="colLast">
+<div class="block"><a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io"><code>InputStream</code></a> implementation that reads a character stream from a <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io"><code>Reader</code></a>
+ and transforms it to a byte stream using a specified charset encoding.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/ReversedLinesFileReader.html" title="class in org.apache.commons.io.input">ReversedLinesFileReader</a></td>
+<td class="colLast">
+<div class="block">Reads lines in a file reversely (similar to a BufferedReader, but starting at
+ the last line).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html" title="class in org.apache.commons.io.input">SwappedDataInputStream</a></td>
+<td class="colLast">
+<div class="block">DataInput for systems relying on little endian data formats.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/TaggedInputStream.html" title="class in org.apache.commons.io.input">TaggedInputStream</a></td>
+<td class="colLast">
+<div class="block">An input stream decorator that tags potential exceptions so that the
+ stream that caused the exception can easily be identified.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/Tailer.html" title="class in org.apache.commons.io.input">Tailer</a></td>
+<td class="colLast">
+<div class="block">Simple implementation of the unix "tail -f" functionality.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/TailerListenerAdapter.html" title="class in org.apache.commons.io.input">TailerListenerAdapter</a></td>
+<td class="colLast">
+<div class="block"><a href="../../../../../org/apache/commons/io/input/TailerListener.html" title="interface in org.apache.commons.io.input"><code>TailerListener</code></a> Adapter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/TeeInputStream.html" title="class in org.apache.commons.io.input">TeeInputStream</a></td>
+<td class="colLast">
+<div class="block">InputStream proxy that transparently writes a copy of all bytes read
+ from the proxied stream to a given OutputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/UnixLineEndingInputStream.html" title="class in org.apache.commons.io.input">UnixLineEndingInputStream</a></td>
+<td class="colLast">
+<div class="block">A filtering input stream that ensures the content will have unix-style line endings, LF.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/WindowsLineEndingInputStream.html" title="class in org.apache.commons.io.input">WindowsLineEndingInputStream</a></td>
+<td class="colLast">
+<div class="block">A filtering input stream that ensures the content will have windows line endings, CRLF.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html" title="class in org.apache.commons.io.input">XmlStreamReader</a></td>
+<td class="colLast">
+<div class="block">Character stream that handles all the necessary Voodo to figure out the
+ charset encoding of the XML document within the stream.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="packageSummary" border="0" cellpadding="3" cellspacing="0" summary="Exception Summary table, listing exceptions, and an explanation">
+<caption><span>Exception Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Exception</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input">XmlStreamReaderException</a></td>
+<td class="colLast">
+<div class="block">The XmlStreamReaderException is thrown by the XmlStreamReader constructors if
+ the charset encoding can not be determined according to the XML 1.0
+ specification and RFC 3023.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<a name="package_description">
+<!--   -->
+</a>
+<h2 title="Package org.apache.commons.io.input Description">Package org.apache.commons.io.input Description</h2>
+<div class="block"><p>
+This package provides implementations of input classes, such as
+<code>InputStream</code> and <code>Reader</code>.
+</p></div>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li class="navBarCell1Rev">Package</li>
+<li>Class</li>
+<li><a href="package-use.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/filefilter/package-summary.html">Prev Package</a></li>
+<li><a href="../../../../../org/apache/commons/io/monitor/package-summary.html">Next Package</a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/package-summary.html" target="_top">Frames</a></li>
+<li><a href="package-summary.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2002&#x2013;2016 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>
+</body>
+</html>
