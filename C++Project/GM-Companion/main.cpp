@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     // Open WhatIsNewWindow
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     if (checkSettings.value("openWhatIsNewWindow", 1).toInt() == 1 || w.getVersionNumber() > checkSettings.value("version", 0).toInt()){
+        qDebug() << w.getVersionNumber();
+
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
         w.updateSettingsVersion();

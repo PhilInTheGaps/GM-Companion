@@ -24,10 +24,16 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="1a237" class="javax.swing.JLabel">
+            <constraints/>
+            <properties>
+              <text value="Installing new addons requires restarting the GM-Companion"/>
+            </properties>
+          </component>
           <component id="e245b" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
             <constraints/>
             <properties>
-              <text value="Cancel"/>
+              <text value="Close"/>
             </properties>
           </component>
         </children>

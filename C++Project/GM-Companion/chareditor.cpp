@@ -722,14 +722,6 @@ void CharEditor::on_removeSchrift_dsa5_clicked()
     removeRow(ui->schriftenTable_dsa5);
 }
 
-void CharEditor::on_lepTable_dsa5_cellChanged()
-{
-    if (ui->lepTable_dsa5->item(0, 0) != 0 && ui->lepTable_dsa5->item(0, 1) != 0){
-        ui->lepProgressBar_dsa5->setMaximum(ui->lepTable_dsa5->item(0, 0)->text().toInt());
-        ui->lepProgressBar_dsa5->setValue(ui->lepTable_dsa5->item(0, 1)->text().toInt());
-    }
-}
-
 void CharEditor::on_addKSonderf_dsa5_clicked()
 {
     addRow(ui->kSonderfTable_dsa5);
