@@ -13,7 +13,7 @@ win32:QT += winextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = GM-Companion
+TARGET = gm-companion
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -77,3 +77,21 @@ RESOURCES += \
 
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
+
+linux-g++ { # For Linux
+    target.path = /usr/bin
+    INSTALLS += target
+
+    data.path = /usr/share/gm-companion
+    data.files = data/share/gm-companion/*
+
+    resources.path = /usr/share/gm-companion/resources
+    resources.files += data/share/resources/*
+
+    desktop.path = /usr/share/applications
+    desktop.files = data/share/applications/*
+
+    INSTALLS += data
+    INSTALLS += desktop
+    INSTALLS += resources
+}

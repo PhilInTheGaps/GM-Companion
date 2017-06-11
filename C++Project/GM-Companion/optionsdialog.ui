@@ -21,7 +21,7 @@
    <item alignment="Qt::AlignTop">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabUpdates">
       <attribute name="title">
@@ -552,6 +552,24 @@
             </size>
            </property>
           </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>To download and install addons use the Addon Manager (Requires Java)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addonManagerButton">
+           <property name="text">
+            <string>Open Addon Manager</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
