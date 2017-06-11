@@ -1,0 +1,737 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>XmlStreamReader (Apache Commons IO 2.5 API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="XmlStreamReader (Apache Commons IO 2.5 API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/XmlStreamReader.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/input/WindowsLineEndingInputStream.html" title="class in org.apache.commons.io.input"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/XmlStreamReader.html" target="_top">Frames</a></li>
+<li><a href="XmlStreamReader.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.commons.io.input</div>
+<h2 title="Class XmlStreamReader" class="title">Class XmlStreamReader</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">java.io.Reader</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.commons.io.input.XmlStreamReader</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Readable.html?is-external=true" title="class or interface in java.lang">Readable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">XmlStreamReader</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a></pre>
+<div class="block">Character stream that handles all the necessary Voodo to figure out the
+ charset encoding of the XML document within the stream.
+ <p>
+ IMPORTANT: This class is not related in any way to the org.xml.sax.XMLReader.
+ This one IS a character stream.
+ <p>
+ All this has to be done without consuming characters from the stream, if not
+ the XML parser will not recognized the document as a valid XML. This is not
+ 100% true, but it's close enough (UTF-8 BOM is not handled by all parsers
+ right now, XmlStreamReader handles it and things work in all parsers).
+ <p>
+ The XmlStreamReader class handles the charset encoding of XML documents in
+ Files, raw streams and HTTP streams by offering a wide set of constructors.
+ <p>
+ By default the charset encoding detection is lenient, the constructor with
+ the lenient flag can be used for an script (following HTTP MIME and XML
+ specifications). All this is nicely explained by Mark Pilgrim in his blog, <a
+ href="http://diveintomark.org/archives/2004/02/13/xml-media-types">
+ Determining the character encoding of a feed</a>.
+ <p>
+ Originally developed for <a href="http://rome.dev.java.net">ROME</a> under
+ Apache License 2.0.</div>
+<dl><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">Version:</span></dt>
+  <dd>$Id: XmlStreamReader.java 1686747 2015-06-21 18:44:49Z krosenvold $</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/output/XmlStreamWriter.html" title="class in org.apache.commons.io.output"><code>XmlStreamWriter</code></a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#ENCODING_PATTERN">ENCODING_PATTERN</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_java.io.Reader">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#lock" title="class or interface in java.io">lock</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.File)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
+<div class="block">Creates a Reader for a File.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is)</code>
+<div class="block">Creates a Reader for a raw InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream,%20boolean)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               boolean&nbsp;lenient)</code>
+<div class="block">Creates a Reader for a raw InputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream,%20boolean,%20java.lang.String)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               boolean&nbsp;lenient,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)</code>
+<div class="block">Creates a Reader for a raw InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream,%20java.lang.String)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType)</code>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream,%20java.lang.String,%20boolean)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType,
+               boolean&nbsp;lenient)</code>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.io.InputStream,%20java.lang.String,%20boolean,%20java.lang.String)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType,
+               boolean&nbsp;lenient,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)</code>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.net.URL)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)</code>
+<div class="block">Creates a Reader using the InputStream of a URL.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#XmlStreamReader(java.net.URLConnection,%20java.lang.String)">XmlStreamReader</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html?is-external=true" title="class or interface in java.net">URLConnection</a>&nbsp;conn,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)</code>
+<div class="block">Creates a Reader using the InputStream of a URLConnection.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#close()">close</a></strong>()</code>
+<div class="block">Closes the XmlStreamReader stream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#getDefaultEncoding()">getDefaultEncoding</a></strong>()</code>
+<div class="block">Returns the default encoding to use if none is set in HTTP content-type,
+ XML prolog and the rules based on content-type are not adequate.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#getEncoding()">getEncoding</a></strong>()</code>
+<div class="block">Returns the charset encoding of the XmlStreamReader.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/XmlStreamReader.html#read(char[],%20int,%20int)">read</a></strong>(char[]&nbsp;buf,
+    int&nbsp;offset,
+    int&nbsp;len)</code>
+<div class="block">Invokes the underlying reader's <code>read(char[], int, int)</code> method.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.io.Reader">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#mark(int)" title="class or interface in java.io">mark</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#markSupported()" title="class or interface in java.io">markSupported</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#read()" title="class or interface in java.io">read</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#read(char[])" title="class or interface in java.io">read</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#read(java.nio.CharBuffer)" title="class or interface in java.io">read</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#ready()" title="class or interface in java.io">ready</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#reset()" title="class or interface in java.io">reset</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#skip(long)" title="class or interface in java.io">skip</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="ENCODING_PATTERN">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ENCODING_PATTERN</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html?is-external=true" title="class or interface in java.util.regex">Pattern</a> ENCODING_PATTERN</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="XmlStreamReader(java.io.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader for a File.
+ <p>
+ It looks for the UTF-8 BOM first, if none sniffs the XML prolog charset,
+ if this is also missing defaults to UTF-8.
+ <p>
+ It does a lenient charset encoding detection, check the constructor with
+ the lenient parameter for details.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>file</code> - File to create a Reader from.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the file.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader for a raw InputStream.
+ <p>
+ It follows the same logic used for files.
+ <p>
+ It does a lenient charset encoding detection, check the constructor with
+ the lenient parameter for details.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create a Reader from.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the stream.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               boolean&nbsp;lenient)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader for a raw InputStream.
+ <p>
+ It follows the same logic used for files.
+ <p>
+ If lenient detection is indicated and the detection above fails as per
+ specifications it then attempts the following:
+ <p>
+ If the content type was 'text/html' it replaces it with 'text/xml' and
+ tries the detection again.
+ <p>
+ Else if the XML prolog had a charset encoding that encoding is used.
+ <p>
+ Else if the content type had a charset encoding that encoding is used.
+ <p>
+ Else 'UTF-8' is used.
+ <p>
+ If lenient detection is indicated an XmlStreamReaderException is never
+ thrown.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create a Reader from.</dd><dd><code>lenient</code> - indicates if the charset encoding detection should be
+        relaxed.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the stream.</dd>
+<dd><code><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input">XmlStreamReaderException</a></code> - thrown if the charset encoding could not
+         be determined according to the specs.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream, boolean, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               boolean&nbsp;lenient,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader for a raw InputStream.
+ <p>
+ It follows the same logic used for files.
+ <p>
+ If lenient detection is indicated and the detection above fails as per
+ specifications it then attempts the following:
+ <p>
+ If the content type was 'text/html' it replaces it with 'text/xml' and
+ tries the detection again.
+ <p>
+ Else if the XML prolog had a charset encoding that encoding is used.
+ <p>
+ Else if the content type had a charset encoding that encoding is used.
+ <p>
+ Else 'UTF-8' is used.
+ <p>
+ If lenient detection is indicated an XmlStreamReaderException is never
+ thrown.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create a Reader from.</dd><dd><code>lenient</code> - indicates if the charset encoding detection should be
+        relaxed.</dd><dd><code>defaultEncoding</code> - The default encoding</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the stream.</dd>
+<dd><code><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input">XmlStreamReaderException</a></code> - thrown if the charset encoding could not
+         be determined according to the specs.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.net.URL)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader using the InputStream of a URL.
+ <p>
+ If the URL is not of type HTTP and there is not 'content-type' header in
+ the fetched data it uses the same logic used for Files.
+ <p>
+ If the URL is a HTTP Url or there is a 'content-type' header in the
+ fetched data it uses the same logic used for an InputStream with
+ content-type.
+ <p>
+ It does a lenient charset encoding detection, check the constructor with
+ the lenient parameter for details.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>url</code> - URL to create a Reader from.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the stream of
+         the URL.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.net.URLConnection, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html?is-external=true" title="class or interface in java.net">URLConnection</a>&nbsp;conn,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader using the InputStream of a URLConnection.
+ <p>
+ If the URLConnection is not of type HttpURLConnection and there is not
+ 'content-type' header in the fetched data it uses the same logic used for
+ files.
+ <p>
+ If the URLConnection is a HTTP Url or there is a 'content-type' header in
+ the fetched data it uses the same logic used for an InputStream with
+ content-type.
+ <p>
+ It does a lenient charset encoding detection, check the constructor with
+ the lenient parameter for details.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>conn</code> - URLConnection to create a Reader from.</dd><dd><code>defaultEncoding</code> - The default encoding</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the stream of
+         the URLConnection.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header.
+ <p>
+ First it checks if the stream has BOM. If there is not BOM checks the
+ content-type encoding. If there is not content-type encoding checks the
+ XML prolog encoding. If there is not XML prolog encoding uses the default
+ encoding mandated by the content-type MIME type.
+ <p>
+ It does a lenient charset encoding detection, check the constructor with
+ the lenient parameter for details.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create the reader from.</dd><dd><code>httpContentType</code> - content-type header to use for the resolution of
+        the charset encoding.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the file.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream, java.lang.String, boolean, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType,
+               boolean&nbsp;lenient,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;defaultEncoding)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header. This constructor is lenient regarding the encoding detection.
+ <p>
+ First it checks if the stream has BOM. If there is not BOM checks the
+ content-type encoding. If there is not content-type encoding checks the
+ XML prolog encoding. If there is not XML prolog encoding uses the default
+ encoding mandated by the content-type MIME type.
+ <p>
+ If lenient detection is indicated and the detection above fails as per
+ specifications it then attempts the following:
+ <p>
+ If the content type was 'text/html' it replaces it with 'text/xml' and
+ tries the detection again.
+ <p>
+ Else if the XML prolog had a charset encoding that encoding is used.
+ <p>
+ Else if the content type had a charset encoding that encoding is used.
+ <p>
+ Else 'UTF-8' is used.
+ <p>
+ If lenient detection is indicated an XmlStreamReaderException is never
+ thrown.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create the reader from.</dd><dd><code>httpContentType</code> - content-type header to use for the resolution of
+        the charset encoding.</dd><dd><code>lenient</code> - indicates if the charset encoding detection should be
+        relaxed.</dd><dd><code>defaultEncoding</code> - The default encoding</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the file.</dd>
+<dd><code><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input">XmlStreamReaderException</a></code> - thrown if the charset encoding could not
+         be determined according to the specs.</dd></dl>
+</li>
+</ul>
+<a name="XmlStreamReader(java.io.InputStream, java.lang.String, boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>XmlStreamReader</h4>
+<pre>public&nbsp;XmlStreamReader(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;is,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;httpContentType,
+               boolean&nbsp;lenient)
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Creates a Reader using an InputStream an the associated content-type
+ header. This constructor is lenient regarding the encoding detection.
+ <p>
+ First it checks if the stream has BOM. If there is not BOM checks the
+ content-type encoding. If there is not content-type encoding checks the
+ XML prolog encoding. If there is not XML prolog encoding uses the default
+ encoding mandated by the content-type MIME type.
+ <p>
+ If lenient detection is indicated and the detection above fails as per
+ specifications it then attempts the following:
+ <p>
+ If the content type was 'text/html' it replaces it with 'text/xml' and
+ tries the detection again.
+ <p>
+ Else if the XML prolog had a charset encoding that encoding is used.
+ <p>
+ Else if the content type had a charset encoding that encoding is used.
+ <p>
+ Else 'UTF-8' is used.
+ <p>
+ If lenient detection is indicated an XmlStreamReaderException is never
+ thrown.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>is</code> - InputStream to create the reader from.</dd><dd><code>httpContentType</code> - content-type header to use for the resolution of
+        the charset encoding.</dd><dd><code>lenient</code> - indicates if the charset encoding detection should be
+        relaxed.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there is a problem reading the file.</dd>
+<dd><code><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input">XmlStreamReaderException</a></code> - thrown if the charset encoding could not
+         be determined according to the specs.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getDefaultEncoding()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultEncoding</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getDefaultEncoding()</pre>
+<div class="block">Returns the default encoding to use if none is set in HTTP content-type,
+ XML prolog and the rules based on content-type are not adequate.
+ <p>
+ If it is NULL the content-type based rules are used.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the default encoding to use.</dd></dl>
+</li>
+</ul>
+<a name="getEncoding()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEncoding</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getEncoding()</pre>
+<div class="block">Returns the charset encoding of the XmlStreamReader.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>charset encoding.</dd></dl>
+</li>
+</ul>
+<a name="read(char[], int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>read</h4>
+<pre>public&nbsp;int&nbsp;read(char[]&nbsp;buf,
+       int&nbsp;offset,
+       int&nbsp;len)
+         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Invokes the underlying reader's <code>read(char[], int, int)</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#read(char[],%20int,%20int)" title="class or interface in java.io">read</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>buf</code> - the buffer to read the characters into</dd><dd><code>offset</code> - The start offset</dd><dd><code>len</code> - The number of bytes to read</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of characters read or -1 if the end of stream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="close()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>close</h4>
+<pre>public&nbsp;void&nbsp;close()
+           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Closes the XmlStreamReader stream.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true#close()" title="class or interface in java.io">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close()" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true#close()" title="class or interface in java.io">close</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Reader.html?is-external=true" title="class or interface in java.io">Reader</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - thrown if there was a problem closing the stream.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/XmlStreamReader.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/input/WindowsLineEndingInputStream.html" title="class in org.apache.commons.io.input"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/input/XmlStreamReaderException.html" title="class in org.apache.commons.io.input"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/XmlStreamReader.html" target="_top">Frames</a></li>
+<li><a href="XmlStreamReader.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2002&#x2013;2016 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>
+</body>
+</html>

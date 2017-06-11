@@ -1,0 +1,1259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>FileFilterUtils (Apache Commons IO 2.5 API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="FileFilterUtils (Apache Commons IO 2.5 API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/FileFilterUtils.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/filefilter/FileFileFilter.html" title="class in org.apache.commons.io.filefilter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/filefilter/HiddenFileFilter.html" title="class in org.apache.commons.io.filefilter"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/filefilter/FileFilterUtils.html" target="_top">Frames</a></li>
+<li><a href="FileFilterUtils.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.commons.io.filefilter</div>
+<h2 title="Class FileFilterUtils" class="title">Class FileFilterUtils</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.commons.io.filefilter.FileFilterUtils</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">FileFilterUtils</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Useful utilities for working with file filters. It provides access to all
+ file filter implementations in this package so you don't have to import
+ every class you use.</div>
+<dl><dt><span class="strong">Since:</span></dt>
+  <dd>1.0</dd>
+<dt><span class="strong">Version:</span></dt>
+  <dd>$Id: FileFilterUtils.java 1471767 2013-04-24 23:24:19Z sebb $</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#FileFilterUtils()">FileFilterUtils</a></strong>()</code>
+<div class="block">FileFilterUtils is not normally instantiated.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(java.util.Date)">ageFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;cutoffDate)</code>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified cutoff date.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(java.util.Date,%20boolean)">ageFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;cutoffDate,
+             boolean&nbsp;acceptOlder)</code>
+<div class="block">Returns a filter that filters files based on a cutoff date.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(java.io.File)">ageFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;cutoffReference)</code>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified reference file.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(java.io.File,%20boolean)">ageFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;cutoffReference,
+             boolean&nbsp;acceptOlder)</code>
+<div class="block">Returns a filter that filters files based on a cutoff reference file.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(long)">ageFileFilter</a></strong>(long&nbsp;cutoff)</code>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified cutoff time.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#ageFileFilter(long,%20boolean)">ageFileFilter</a></strong>(long&nbsp;cutoff,
+             boolean&nbsp;acceptOlder)</code>
+<div class="block">Returns a filter that filters files based on a cutoff time.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#and(org.apache.commons.io.filefilter.IOFileFilter...)">and</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</code>
+<div class="block">Returns a filter that ANDs the specified filters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#andFileFilter(org.apache.commons.io.filefilter.IOFileFilter,%20org.apache.commons.io.filefilter.IOFileFilter)">andFileFilter</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter1,
+             <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter2)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>use <a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#and(org.apache.commons.io.filefilter.IOFileFilter...)"><code>and(IOFileFilter...)</code></a></i></div>
+</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#asFileFilter(java.io.FileFilter)">asFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileFilter.html?is-external=true" title="class or interface in java.io">FileFilter</a>&nbsp;filter)</code>
+<div class="block">Returns an <code>IOFileFilter</code> that wraps the
+ <code>FileFilter</code> instance.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#asFileFilter(java.io.FilenameFilter)">asFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/FilenameFilter.html?is-external=true" title="class or interface in java.io">FilenameFilter</a>&nbsp;filter)</code>
+<div class="block">Returns an <code>IOFileFilter</code> that wraps the
+ <code>FilenameFilter</code> instance.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#directoryFileFilter()">directoryFileFilter</a></strong>()</code>
+<div class="block">Returns a filter that checks if the file is a directory.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#falseFileFilter()">falseFileFilter</a></strong>()</code>
+<div class="block">Returns a filter that always returns false.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#fileFileFilter()">fileFileFilter</a></strong>()</code>
+<div class="block">Returns a filter that checks if the file is a file (and not a directory).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filter(org.apache.commons.io.filefilter.IOFileFilter,%20java.io.File...)">filter</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filter(org.apache.commons.io.filefilter.IOFileFilter,%20java.lang.Iterable)">filter</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filterList(org.apache.commons.io.filefilter.IOFileFilter,%20java.io.File...)">filterList</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filterList(org.apache.commons.io.filefilter.IOFileFilter,%20java.lang.Iterable)">filterList</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filterSet(org.apache.commons.io.filefilter.IOFileFilter,%20java.io.File...)">filterSet</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#filterSet(org.apache.commons.io.filefilter.IOFileFilter,%20java.lang.Iterable)">filterSet</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</code>
+<div class="block">
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#magicNumberFileFilter(byte[])">magicNumberFileFilter</a></strong>(byte[]&nbsp;magicNumber)</code>
+<div class="block">Returns a filter that accepts files that begin with the provided magic
+ number.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#magicNumberFileFilter(byte[],%20long)">magicNumberFileFilter</a></strong>(byte[]&nbsp;magicNumber,
+                     long&nbsp;offset)</code>
+<div class="block">Returns a filter that accepts files that contains the provided magic
+ number at a specified offset within the file.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#magicNumberFileFilter(java.lang.String)">magicNumberFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;magicNumber)</code>
+<div class="block">Returns a filter that accepts files that begin with the provided magic
+ number.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#magicNumberFileFilter(java.lang.String,%20long)">magicNumberFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;magicNumber,
+                     long&nbsp;offset)</code>
+<div class="block">Returns a filter that accepts files that contains the provided magic
+ number at a specified offset within the file.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#makeCVSAware(org.apache.commons.io.filefilter.IOFileFilter)">makeCVSAware</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</code>
+<div class="block">Decorates a filter to make it ignore CVS directories.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#makeDirectoryOnly(org.apache.commons.io.filefilter.IOFileFilter)">makeDirectoryOnly</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</code>
+<div class="block">Decorates a filter so that it only applies to directories and not to files.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#makeFileOnly(org.apache.commons.io.filefilter.IOFileFilter)">makeFileOnly</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</code>
+<div class="block">Decorates a filter so that it only applies to files and not to directories.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#makeSVNAware(org.apache.commons.io.filefilter.IOFileFilter)">makeSVNAware</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</code>
+<div class="block">Decorates a filter to make it ignore SVN directories.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#nameFileFilter(java.lang.String)">nameFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
+<div class="block">Returns a filter that returns true if the filename matches the specified text.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#nameFileFilter(java.lang.String,%20org.apache.commons.io.IOCase)">nameFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+              <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</code>
+<div class="block">Returns a filter that returns true if the filename matches the specified text.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#notFileFilter(org.apache.commons.io.filefilter.IOFileFilter)">notFileFilter</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</code>
+<div class="block">Returns a filter that NOTs the specified filter.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#or(org.apache.commons.io.filefilter.IOFileFilter...)">or</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</code>
+<div class="block">Returns a filter that ORs the specified filters.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#orFileFilter(org.apache.commons.io.filefilter.IOFileFilter,%20org.apache.commons.io.filefilter.IOFileFilter)">orFileFilter</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter1,
+            <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter2)</code>
+<div class="block"><strong>Deprecated.</strong>&nbsp;
+<div class="block"><i>use <a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#or(org.apache.commons.io.filefilter.IOFileFilter...)"><code>or(IOFileFilter...)</code></a></i></div>
+</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#prefixFileFilter(java.lang.String)">prefixFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</code>
+<div class="block">Returns a filter that returns true if the filename starts with the specified text.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#prefixFileFilter(java.lang.String,%20org.apache.commons.io.IOCase)">prefixFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix,
+                <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</code>
+<div class="block">Returns a filter that returns true if the filename starts with the specified text.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#sizeFileFilter(long)">sizeFileFilter</a></strong>(long&nbsp;threshold)</code>
+<div class="block">Returns a filter that returns true if the file is bigger than a certain size.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#sizeFileFilter(long,%20boolean)">sizeFileFilter</a></strong>(long&nbsp;threshold,
+              boolean&nbsp;acceptLarger)</code>
+<div class="block">Returns a filter that filters based on file size.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#sizeRangeFileFilter(long,%20long)">sizeRangeFileFilter</a></strong>(long&nbsp;minSizeInclusive,
+                   long&nbsp;maxSizeInclusive)</code>
+<div class="block">Returns a filter that accepts files whose size is &gt;= minimum size
+ and &lt;= maximum size.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#suffixFileFilter(java.lang.String)">suffixFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;suffix)</code>
+<div class="block">Returns a filter that returns true if the filename ends with the specified text.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#suffixFileFilter(java.lang.String,%20org.apache.commons.io.IOCase)">suffixFileFilter</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;suffix,
+                <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</code>
+<div class="block">Returns a filter that returns true if the filename ends with the specified text.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#toList(org.apache.commons.io.filefilter.IOFileFilter...)">toList</a></strong>(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</code>
+<div class="block">Create a List of file filters.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#trueFileFilter()">trueFileFilter</a></strong>()</code>
+<div class="block">Returns a filter that always returns true.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="FileFilterUtils()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>FileFilterUtils</h4>
+<pre>public&nbsp;FileFilterUtils()</pre>
+<div class="block">FileFilterUtils is not normally instantiated.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="filter(org.apache.commons.io.filefilter.IOFileFilter, java.io.File...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filter</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>[]&nbsp;filter(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting array is a subset of the original file list that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ Set&lt;File&gt; allFiles = ...
+ Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     FileFilterUtils.suffixFileFilter(".java"));
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to the set of files.</dd><dd><code>files</code> - the array of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="filter(org.apache.commons.io.filefilter.IOFileFilter, java.lang.Iterable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filter</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>[]&nbsp;filter(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting array is a subset of the original file list that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ Set&lt;File&gt; allFiles = ...
+ Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     FileFilterUtils.suffixFileFilter(".java"));
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to the set of files.</dd><dd><code>files</code> - the array of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="filterList(org.apache.commons.io.filefilter.IOFileFilter, java.lang.Iterable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filterList</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;filterList(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting list is a subset of the original files that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ List&lt;File&gt; filesAndDirectories = ...
+ List&lt;File&gt; directories = FileFilterUtils.filterList(filesAndDirectories,
+     FileFilterUtils.directoryFileFilter());
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to each files in the list.</dd><dd><code>files</code> - the collection of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="filterList(org.apache.commons.io.filefilter.IOFileFilter, java.io.File...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filterList</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;filterList(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting list is a subset of the original files that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util"><code>List</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ List&lt;File&gt; filesAndDirectories = ...
+ List&lt;File&gt; directories = FileFilterUtils.filterList(filesAndDirectories,
+     FileFilterUtils.directoryFileFilter());
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to each files in the list.</dd><dd><code>files</code> - the collection of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="filterSet(org.apache.commons.io.filefilter.IOFileFilter, java.io.File...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filterSet</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;filterSet(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>...&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting set is a subset of the original file list that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ Set&lt;File&gt; allFiles = ...
+ Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     FileFilterUtils.suffixFileFilter(".java"));
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to the set of files.</dd><dd><code>files</code> - the collection of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="filterSet(org.apache.commons.io.filefilter.IOFileFilter, java.lang.Iterable)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>filterSet</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;filterSet(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&gt;&nbsp;files)</pre>
+<div class="block"><p>
+ Applies an <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter"><code>IOFileFilter</code></a> to the provided <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io"><code>File</code></a>
+ objects. The resulting set is a subset of the original file list that
+ matches the provided filter.
+ </p>
+
+ <p>
+ The <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util"><code>Set</code></a> returned by this method is not guaranteed to be thread safe.
+ </p>
+
+ <pre>
+ Set&lt;File&gt; allFiles = ...
+ Set&lt;File&gt; javaFiles = FileFilterUtils.filterSet(allFiles,
+     FileFilterUtils.suffixFileFilter(".java"));
+ </pre></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to apply to the set of files.</dd><dd><code>files</code> - the collection of files to apply the filter to.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a subset of <code>files</code> that is accepted by the
+         file filter.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filter is <code>null</code>
+         or <code>files</code> contains a <code>null</code> value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="prefixFileFilter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prefixFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;prefixFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix)</pre>
+<div class="block">Returns a filter that returns true if the filename starts with the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>prefix</code> - the filename prefix</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a prefix checking filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/PrefixFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>PrefixFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="prefixFileFilter(java.lang.String, org.apache.commons.io.IOCase)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prefixFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;prefixFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;prefix,
+                            <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</pre>
+<div class="block">Returns a filter that returns true if the filename starts with the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>prefix</code> - the filename prefix</dd><dd><code>caseSensitivity</code> - how to handle case sensitivity, null means case-sensitive</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a prefix checking filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/PrefixFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>PrefixFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="suffixFileFilter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>suffixFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;suffixFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;suffix)</pre>
+<div class="block">Returns a filter that returns true if the filename ends with the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>suffix</code> - the filename suffix</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a suffix checking filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/SuffixFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>SuffixFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="suffixFileFilter(java.lang.String, org.apache.commons.io.IOCase)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>suffixFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;suffixFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;suffix,
+                            <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</pre>
+<div class="block">Returns a filter that returns true if the filename ends with the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>suffix</code> - the filename suffix</dd><dd><code>caseSensitivity</code> - how to handle case sensitivity, null means case-sensitive</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a suffix checking filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/SuffixFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>SuffixFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="nameFileFilter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nameFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;nameFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<div class="block">Returns a filter that returns true if the filename matches the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the filename</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a name checking filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/NameFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>NameFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="nameFileFilter(java.lang.String, org.apache.commons.io.IOCase)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nameFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;nameFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                          <a href="../../../../../org/apache/commons/io/IOCase.html" title="enum in org.apache.commons.io">IOCase</a>&nbsp;caseSensitivity)</pre>
+<div class="block">Returns a filter that returns true if the filename matches the specified text.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>name</code> - the filename</dd><dd><code>caseSensitivity</code> - how to handle case sensitivity, null means case-sensitive</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a name checking filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/NameFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>NameFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="directoryFileFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>directoryFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;directoryFileFilter()</pre>
+<div class="block">Returns a filter that checks if the file is a directory.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>file filter that accepts only directories and not files</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/DirectoryFileFilter.html#DIRECTORY"><code>DirectoryFileFilter.DIRECTORY</code></a></dd></dl>
+</li>
+</ul>
+<a name="fileFileFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fileFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;fileFileFilter()</pre>
+<div class="block">Returns a filter that checks if the file is a file (and not a directory).</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>file filter that accepts only files and not directories</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/FileFileFilter.html#FILE"><code>FileFileFilter.FILE</code></a></dd></dl>
+</li>
+</ul>
+<a name="andFileFilter(org.apache.commons.io.filefilter.IOFileFilter, org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>andFileFilter</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;andFileFilter(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter1,
+                                    <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter2)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>use <a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#and(org.apache.commons.io.filefilter.IOFileFilter...)"><code>and(IOFileFilter...)</code></a></i></div>
+<div class="block">Returns a filter that ANDs the two specified filters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter1</code> - the first filter</dd><dd><code>filter2</code> - the second filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a filter that ANDs the two specified filters</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#and(org.apache.commons.io.filefilter.IOFileFilter...)"><code>and(IOFileFilter...)</code></a>, 
+<a href="../../../../../org/apache/commons/io/filefilter/AndFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AndFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="orFileFilter(org.apache.commons.io.filefilter.IOFileFilter, org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>orFileFilter</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;orFileFilter(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter1,
+                                   <a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter2)</pre>
+<div class="block"><span class="strong">Deprecated.</span>&nbsp;<i>use <a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#or(org.apache.commons.io.filefilter.IOFileFilter...)"><code>or(IOFileFilter...)</code></a></i></div>
+<div class="block">Returns a filter that ORs the two specified filters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter1</code> - the first filter</dd><dd><code>filter2</code> - the second filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a filter that ORs the two specified filters</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/FileFilterUtils.html#or(org.apache.commons.io.filefilter.IOFileFilter...)"><code>or(IOFileFilter...)</code></a>, 
+<a href="../../../../../org/apache/commons/io/filefilter/OrFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>OrFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="and(org.apache.commons.io.filefilter.IOFileFilter...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>and</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;and(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</pre>
+<div class="block">Returns a filter that ANDs the specified filters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filters</code> - the IOFileFilters that will be ANDed together.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a filter that ANDs the specified filters</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filters are null or contain a
+         null value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AndFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AndFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="or(org.apache.commons.io.filefilter.IOFileFilter...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>or</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;or(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</pre>
+<div class="block">Returns a filter that ORs the specified filters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filters</code> - the IOFileFilters that will be ORed together.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a filter that ORs the specified filters</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filters are null or contain a
+         null value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/OrFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>OrFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="toList(org.apache.commons.io.filefilter.IOFileFilter...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toList</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&gt;&nbsp;toList(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>...&nbsp;filters)</pre>
+<div class="block">Create a List of file filters.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filters</code> - The file filters</dd>
+<dt><span class="strong">Returns:</span></dt><dd>The list of file filters</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if the filters are null or contain a
+         null value.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd></dl>
+</li>
+</ul>
+<a name="notFileFilter(org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>notFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;notFileFilter(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</pre>
+<div class="block">Returns a filter that NOTs the specified filter.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to invert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a filter that NOTs the specified filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/NotFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>NotFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="trueFileFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>trueFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;trueFileFilter()</pre>
+<div class="block">Returns a filter that always returns true.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a true filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/TrueFileFilter.html#TRUE"><code>TrueFileFilter.TRUE</code></a></dd></dl>
+</li>
+</ul>
+<a name="falseFileFilter()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>falseFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;falseFileFilter()</pre>
+<div class="block">Returns a filter that always returns false.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>a false filter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/FalseFileFilter.html#FALSE"><code>FalseFileFilter.FALSE</code></a></dd></dl>
+</li>
+</ul>
+<a name="asFileFilter(java.io.FileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;asFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileFilter.html?is-external=true" title="class or interface in java.io">FileFilter</a>&nbsp;filter)</pre>
+<div class="block">Returns an <code>IOFileFilter</code> that wraps the
+ <code>FileFilter</code> instance.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to be wrapped</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new filter that implements IOFileFilter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/DelegateFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>DelegateFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="asFileFilter(java.io.FilenameFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;asFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/FilenameFilter.html?is-external=true" title="class or interface in java.io">FilenameFilter</a>&nbsp;filter)</pre>
+<div class="block">Returns an <code>IOFileFilter</code> that wraps the
+ <code>FilenameFilter</code> instance.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to be wrapped</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new filter that implements IOFileFilter</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/DelegateFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>DelegateFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(long&nbsp;cutoff)</pre>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified cutoff time.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoff</code> - the time threshold</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(long, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(long&nbsp;cutoff,
+                         boolean&nbsp;acceptOlder)</pre>
+<div class="block">Returns a filter that filters files based on a cutoff time.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoff</code> - the time threshold</dd><dd><code>acceptOlder</code> - if true, older files get accepted, if false, newer</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;cutoffDate)</pre>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified cutoff date.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoffDate</code> - the time threshold</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(java.util.Date, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;cutoffDate,
+                         boolean&nbsp;acceptOlder)</pre>
+<div class="block">Returns a filter that filters files based on a cutoff date.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoffDate</code> - the time threshold</dd><dd><code>acceptOlder</code> - if true, older files get accepted, if false, newer</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(java.io.File)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;cutoffReference)</pre>
+<div class="block">Returns a filter that returns true if the file was last modified after
+ the specified reference file.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoffReference</code> - the file whose last modification
+        time is usesd as the threshold age of the files</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="ageFileFilter(java.io.File, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ageFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;ageFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;cutoffReference,
+                         boolean&nbsp;acceptOlder)</pre>
+<div class="block">Returns a filter that filters files based on a cutoff reference file.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cutoffReference</code> - the file whose last modification
+        time is usesd as the threshold age of the files</dd><dd><code>acceptOlder</code> - if true, older files get accepted, if false, newer</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured age file filter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/AgeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>AgeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="sizeFileFilter(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sizeFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;sizeFileFilter(long&nbsp;threshold)</pre>
+<div class="block">Returns a filter that returns true if the file is bigger than a certain size.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>threshold</code> - the file size threshold</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured SizeFileFilter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/SizeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>SizeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="sizeFileFilter(long, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sizeFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;sizeFileFilter(long&nbsp;threshold,
+                          boolean&nbsp;acceptLarger)</pre>
+<div class="block">Returns a filter that filters based on file size.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>threshold</code> - the file size threshold</dd><dd><code>acceptLarger</code> - if true, larger files get accepted, if false, smaller</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured SizeFileFilter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.2</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/SizeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>SizeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="sizeRangeFileFilter(long, long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sizeRangeFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;sizeRangeFileFilter(long&nbsp;minSizeInclusive,
+                               long&nbsp;maxSizeInclusive)</pre>
+<div class="block">Returns a filter that accepts files whose size is &gt;= minimum size
+ and &lt;= maximum size.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>minSizeInclusive</code> - the minimum file size (inclusive)</dd><dd><code>maxSizeInclusive</code> - the maximum file size (inclusive)</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an appropriately configured IOFileFilter</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.3</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/SizeFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>SizeFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="magicNumberFileFilter(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>magicNumberFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;magicNumberFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;magicNumber)</pre>
+<div class="block">Returns a filter that accepts files that begin with the provided magic
+ number.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>magicNumber</code> - the magic number (byte sequence) to match at the
+        beginning of each file.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an IOFileFilter that accepts files beginning with the provided
+         magic number.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>magicNumber</code> is
+         <code>null</code> or the empty String.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/MagicNumberFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>MagicNumberFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="magicNumberFileFilter(java.lang.String, long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>magicNumberFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;magicNumberFileFilter(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;magicNumber,
+                                 long&nbsp;offset)</pre>
+<div class="block">Returns a filter that accepts files that contains the provided magic
+ number at a specified offset within the file.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>magicNumber</code> - the magic number (byte sequence) to match at the
+        provided offset in each file.</dd><dd><code>offset</code> - the offset within the files to look for the magic number.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an IOFileFilter that accepts files containing the magic number
+         at the specified offset.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>magicNumber</code> is
+         <code>null</code> or the empty String, or if offset is a
+         negative number.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/MagicNumberFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>MagicNumberFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="magicNumberFileFilter(byte[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>magicNumberFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;magicNumberFileFilter(byte[]&nbsp;magicNumber)</pre>
+<div class="block">Returns a filter that accepts files that begin with the provided magic
+ number.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>magicNumber</code> - the magic number (byte sequence) to match at the
+        beginning of each file.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an IOFileFilter that accepts files beginning with the provided
+         magic number.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>magicNumber</code> is
+         <code>null</code> or is of length zero.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/MagicNumberFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>MagicNumberFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="magicNumberFileFilter(byte[], long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>magicNumberFileFilter</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;magicNumberFileFilter(byte[]&nbsp;magicNumber,
+                                 long&nbsp;offset)</pre>
+<div class="block">Returns a filter that accepts files that contains the provided magic
+ number at a specified offset within the file.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>magicNumber</code> - the magic number (byte sequence) to match at the
+        provided offset in each file.</dd><dd><code>offset</code> - the offset within the files to look for the magic number.</dd>
+<dt><span class="strong">Returns:</span></dt><dd>an IOFileFilter that accepts files containing the magic number
+         at the specified offset.</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang">IllegalArgumentException</a></code> - if <code>magicNumber</code> is
+         <code>null</code>, or contains no bytes, or <code>offset</code>
+         is a negative number.</dd><dt><span class="strong">Since:</span></dt>
+  <dd>2.0</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/MagicNumberFileFilter.html" title="class in org.apache.commons.io.filefilter"><code>MagicNumberFileFilter</code></a></dd></dl>
+</li>
+</ul>
+<a name="makeCVSAware(org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeCVSAware</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;makeCVSAware(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</pre>
+<div class="block">Decorates a filter to make it ignore CVS directories.
+ Passing in <code>null</code> will return a filter that accepts everything
+ except CVS directories.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to decorate, null means an unrestricted filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the decorated filter, never null</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.1 (method existed but had bug in 1.0)</dd></dl>
+</li>
+</ul>
+<a name="makeSVNAware(org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeSVNAware</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;makeSVNAware(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</pre>
+<div class="block">Decorates a filter to make it ignore SVN directories.
+ Passing in <code>null</code> will return a filter that accepts everything
+ except SVN directories.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to decorate, null means an unrestricted filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the decorated filter, never null</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.1</dd></dl>
+</li>
+</ul>
+<a name="makeDirectoryOnly(org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeDirectoryOnly</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;makeDirectoryOnly(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</pre>
+<div class="block">Decorates a filter so that it only applies to directories and not to files.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to decorate, null means an unrestricted filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the decorated filter, never null</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.3</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/DirectoryFileFilter.html#DIRECTORY"><code>DirectoryFileFilter.DIRECTORY</code></a></dd></dl>
+</li>
+</ul>
+<a name="makeFileOnly(org.apache.commons.io.filefilter.IOFileFilter)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>makeFileOnly</h4>
+<pre>public static&nbsp;<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;makeFileOnly(<a href="../../../../../org/apache/commons/io/filefilter/IOFileFilter.html" title="interface in org.apache.commons.io.filefilter">IOFileFilter</a>&nbsp;filter)</pre>
+<div class="block">Decorates a filter so that it only applies to files and not to directories.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>filter</code> - the filter to decorate, null means an unrestricted filter</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the decorated filter, never null</dd><dt><span class="strong">Since:</span></dt>
+  <dd>1.3</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../org/apache/commons/io/filefilter/FileFileFilter.html#FILE"><code>FileFileFilter.FILE</code></a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/FileFilterUtils.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/filefilter/FileFileFilter.html" title="class in org.apache.commons.io.filefilter"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/filefilter/HiddenFileFilter.html" title="class in org.apache.commons.io.filefilter"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/filefilter/FileFilterUtils.html" target="_top">Frames</a></li>
+<li><a href="FileFilterUtils.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2002&#x2013;2016 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>
+</body>
+</html>
