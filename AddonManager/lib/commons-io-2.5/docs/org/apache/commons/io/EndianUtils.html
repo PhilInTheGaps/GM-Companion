@@ -1,0 +1,879 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>EndianUtils (Apache Commons IO 2.5 API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="EndianUtils (Apache Commons IO 2.5 API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/EndianUtils.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/commons/io/DirectoryWalker.CancelException.html" title="class in org.apache.commons.io"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/commons/io/FileCleaner.html" title="class in org.apache.commons.io"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/commons/io/EndianUtils.html" target="_top">Frames</a></li>
+<li><a href="EndianUtils.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.commons.io</div>
+<h2 title="Class EndianUtils" class="title">Class EndianUtils</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.commons.io.EndianUtils</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">EndianUtils</span>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">Utility code for dealing with different endian systems.
+ <p>
+ Different computer architectures adopt different conventions for
+ byte ordering. In so-called "Little Endian" architectures (eg Intel),
+ the low-order byte is stored in memory at the lowest address, and
+ subsequent bytes at higher addresses. For "Big Endian" architectures
+ (eg Motorola), the situation is reversed.
+ This class helps you solve this incompatibility.
+ <p>
+ Origin of code: Excalibur</div>
+<dl><dt><span class="strong">Version:</span></dt>
+  <dd>$Id: EndianUtils.java 1686450 2015-06-19 16:43:48Z krosenvold $</dd>
+<dt><span class="strong">See Also:</span></dt><dd><a href="../../../../org/apache/commons/io/input/SwappedDataInputStream.html" title="class in org.apache.commons.io.input"><code>SwappedDataInputStream</code></a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#EndianUtils()">EndianUtils</a></strong>()</code>
+<div class="block">Instances should NOT be constructed in standard programming.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedDouble(byte[],%20int)">readSwappedDouble</a></strong>(byte[]&nbsp;data,
+                 int&nbsp;offset)</code>
+<div class="block">Reads a "double" value from a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedDouble(java.io.InputStream)">readSwappedDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a "double" value from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedFloat(byte[],%20int)">readSwappedFloat</a></strong>(byte[]&nbsp;data,
+                int&nbsp;offset)</code>
+<div class="block">Reads a "float" value from a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedFloat(java.io.InputStream)">readSwappedFloat</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a "float" value from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedInteger(byte[],%20int)">readSwappedInteger</a></strong>(byte[]&nbsp;data,
+                  int&nbsp;offset)</code>
+<div class="block">Reads a "int" value from a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedInteger(java.io.InputStream)">readSwappedInteger</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a "int" value from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedLong(byte[],%20int)">readSwappedLong</a></strong>(byte[]&nbsp;data,
+               int&nbsp;offset)</code>
+<div class="block">Reads a "long" value from a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedLong(java.io.InputStream)">readSwappedLong</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a "long" value from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedShort(byte[],%20int)">readSwappedShort</a></strong>(byte[]&nbsp;data,
+                int&nbsp;offset)</code>
+<div class="block">Reads a "short" value from a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedShort(java.io.InputStream)">readSwappedShort</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a "short" value from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedInteger(byte[],%20int)">readSwappedUnsignedInteger</a></strong>(byte[]&nbsp;data,
+                          int&nbsp;offset)</code>
+<div class="block">Reads an unsigned integer (32-bit) value from a byte array at a given
+ offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedInteger(java.io.InputStream)">readSwappedUnsignedInteger</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a unsigned integer (32-bit) from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedShort(byte[],%20int)">readSwappedUnsignedShort</a></strong>(byte[]&nbsp;data,
+                        int&nbsp;offset)</code>
+<div class="block">Reads an unsigned short (16-bit) value from a byte array at a given
+ offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedShort(java.io.InputStream)">readSwappedUnsignedShort</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Reads a unsigned short (16-bit) from an InputStream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#swapDouble(double)">swapDouble</a></strong>(double&nbsp;value)</code>
+<div class="block">Converts a "double" value between endian systems.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#swapFloat(float)">swapFloat</a></strong>(float&nbsp;value)</code>
+<div class="block">Converts a "float" value between endian systems.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#swapInteger(int)">swapInteger</a></strong>(int&nbsp;value)</code>
+<div class="block">Converts a "int" value between endian systems.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#swapLong(long)">swapLong</a></strong>(long&nbsp;value)</code>
+<div class="block">Converts a "long" value between endian systems.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static short</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#swapShort(short)">swapShort</a></strong>(short&nbsp;value)</code>
+<div class="block">Converts a "short" value between endian systems.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedDouble(byte[],%20int,%20double)">writeSwappedDouble</a></strong>(byte[]&nbsp;data,
+                  int&nbsp;offset,
+                  double&nbsp;value)</code>
+<div class="block">Writes a "double" value to a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedDouble(java.io.OutputStream,%20double)">writeSwappedDouble</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                  double&nbsp;value)</code>
+<div class="block">Writes a "double" value to an OutputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedFloat(byte[],%20int,%20float)">writeSwappedFloat</a></strong>(byte[]&nbsp;data,
+                 int&nbsp;offset,
+                 float&nbsp;value)</code>
+<div class="block">Writes a "float" value to a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedFloat(java.io.OutputStream,%20float)">writeSwappedFloat</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                 float&nbsp;value)</code>
+<div class="block">Writes a "float" value to an OutputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedInteger(byte[],%20int,%20int)">writeSwappedInteger</a></strong>(byte[]&nbsp;data,
+                   int&nbsp;offset,
+                   int&nbsp;value)</code>
+<div class="block">Writes a "int" value to a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedInteger(java.io.OutputStream,%20int)">writeSwappedInteger</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                   int&nbsp;value)</code>
+<div class="block">Writes a "int" value to an OutputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedLong(byte[],%20int,%20long)">writeSwappedLong</a></strong>(byte[]&nbsp;data,
+                int&nbsp;offset,
+                long&nbsp;value)</code>
+<div class="block">Writes a "long" value to a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedLong(java.io.OutputStream,%20long)">writeSwappedLong</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                long&nbsp;value)</code>
+<div class="block">Writes a "long" value to an OutputStream.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedShort(byte[],%20int,%20short)">writeSwappedShort</a></strong>(byte[]&nbsp;data,
+                 int&nbsp;offset,
+                 short&nbsp;value)</code>
+<div class="block">Writes a "short" value to a byte array at a given offset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><strong><a href="../../../../org/apache/commons/io/EndianUtils.html#writeSwappedShort(java.io.OutputStream,%20short)">writeSwappedShort</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                 short&nbsp;value)</code>
+<div class="block">Writes a "short" value to an OutputStream.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="EndianUtils()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>EndianUtils</h4>
+<pre>public&nbsp;EndianUtils()</pre>
+<div class="block">Instances should NOT be constructed in standard programming.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="swapShort(short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>swapShort</h4>
+<pre>public static&nbsp;short&nbsp;swapShort(short&nbsp;value)</pre>
+<div class="block">Converts a "short" value between endian systems.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the converted value</dd></dl>
+</li>
+</ul>
+<a name="swapInteger(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>swapInteger</h4>
+<pre>public static&nbsp;int&nbsp;swapInteger(int&nbsp;value)</pre>
+<div class="block">Converts a "int" value between endian systems.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the converted value</dd></dl>
+</li>
+</ul>
+<a name="swapLong(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>swapLong</h4>
+<pre>public static&nbsp;long&nbsp;swapLong(long&nbsp;value)</pre>
+<div class="block">Converts a "long" value between endian systems.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the converted value</dd></dl>
+</li>
+</ul>
+<a name="swapFloat(float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>swapFloat</h4>
+<pre>public static&nbsp;float&nbsp;swapFloat(float&nbsp;value)</pre>
+<div class="block">Converts a "float" value between endian systems.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the converted value</dd></dl>
+</li>
+</ul>
+<a name="swapDouble(double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>swapDouble</h4>
+<pre>public static&nbsp;double&nbsp;swapDouble(double&nbsp;value)</pre>
+<div class="block">Converts a "double" value between endian systems.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - value to convert</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the converted value</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedShort(byte[], int, short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedShort</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedShort(byte[]&nbsp;data,
+                     int&nbsp;offset,
+                     short&nbsp;value)</pre>
+<div class="block">Writes a "short" value to a byte array at a given offset. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - target byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd><dd><code>value</code> - value to write</dd></dl>
+</li>
+</ul>
+<a name="readSwappedShort(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedShort</h4>
+<pre>public static&nbsp;short&nbsp;readSwappedShort(byte[]&nbsp;data,
+                     int&nbsp;offset)</pre>
+<div class="block">Reads a "short" value from a byte array at a given offset. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="readSwappedUnsignedShort(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedUnsignedShort</h4>
+<pre>public static&nbsp;int&nbsp;readSwappedUnsignedShort(byte[]&nbsp;data,
+                           int&nbsp;offset)</pre>
+<div class="block">Reads an unsigned short (16-bit) value from a byte array at a given
+ offset. The value is converted to the opposed endian system while
+ reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedInteger(byte[], int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedInteger</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedInteger(byte[]&nbsp;data,
+                       int&nbsp;offset,
+                       int&nbsp;value)</pre>
+<div class="block">Writes a "int" value to a byte array at a given offset. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - target byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd><dd><code>value</code> - value to write</dd></dl>
+</li>
+</ul>
+<a name="readSwappedInteger(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedInteger</h4>
+<pre>public static&nbsp;int&nbsp;readSwappedInteger(byte[]&nbsp;data,
+                     int&nbsp;offset)</pre>
+<div class="block">Reads a "int" value from a byte array at a given offset. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="readSwappedUnsignedInteger(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedUnsignedInteger</h4>
+<pre>public static&nbsp;long&nbsp;readSwappedUnsignedInteger(byte[]&nbsp;data,
+                              int&nbsp;offset)</pre>
+<div class="block">Reads an unsigned integer (32-bit) value from a byte array at a given
+ offset. The value is converted to the opposed endian system while
+ reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedLong(byte[], int, long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedLong</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedLong(byte[]&nbsp;data,
+                    int&nbsp;offset,
+                    long&nbsp;value)</pre>
+<div class="block">Writes a "long" value to a byte array at a given offset. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - target byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd><dd><code>value</code> - value to write</dd></dl>
+</li>
+</ul>
+<a name="readSwappedLong(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedLong</h4>
+<pre>public static&nbsp;long&nbsp;readSwappedLong(byte[]&nbsp;data,
+                   int&nbsp;offset)</pre>
+<div class="block">Reads a "long" value from a byte array at a given offset. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedFloat(byte[], int, float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedFloat</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedFloat(byte[]&nbsp;data,
+                     int&nbsp;offset,
+                     float&nbsp;value)</pre>
+<div class="block">Writes a "float" value to a byte array at a given offset. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - target byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd><dd><code>value</code> - value to write</dd></dl>
+</li>
+</ul>
+<a name="readSwappedFloat(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedFloat</h4>
+<pre>public static&nbsp;float&nbsp;readSwappedFloat(byte[]&nbsp;data,
+                     int&nbsp;offset)</pre>
+<div class="block">Reads a "float" value from a byte array at a given offset. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedDouble(byte[], int, double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedDouble</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedDouble(byte[]&nbsp;data,
+                      int&nbsp;offset,
+                      double&nbsp;value)</pre>
+<div class="block">Writes a "double" value to a byte array at a given offset. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - target byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd><dd><code>value</code> - value to write</dd></dl>
+</li>
+</ul>
+<a name="readSwappedDouble(byte[], int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedDouble</h4>
+<pre>public static&nbsp;double&nbsp;readSwappedDouble(byte[]&nbsp;data,
+                       int&nbsp;offset)</pre>
+<div class="block">Reads a "double" value from a byte array at a given offset. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - source byte array</dd><dd><code>offset</code> - starting offset in the byte array</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value read</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedShort(java.io.OutputStream, short)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedShort</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedShort(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                     short&nbsp;value)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes a "short" value to an OutputStream. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>output</code> - target OutputStream</dd><dd><code>value</code> - value to write</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedShort(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedShort</h4>
+<pre>public static&nbsp;short&nbsp;readSwappedShort(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a "short" value from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedUnsignedShort(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedUnsignedShort</h4>
+<pre>public static&nbsp;int&nbsp;readSwappedUnsignedShort(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a unsigned short (16-bit) from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedInteger(java.io.OutputStream, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedInteger</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedInteger(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                       int&nbsp;value)
+                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes a "int" value to an OutputStream. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>output</code> - target OutputStream</dd><dd><code>value</code> - value to write</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedInteger(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedInteger</h4>
+<pre>public static&nbsp;int&nbsp;readSwappedInteger(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a "int" value from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedUnsignedInteger(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedUnsignedInteger</h4>
+<pre>public static&nbsp;long&nbsp;readSwappedUnsignedInteger(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a unsigned integer (32-bit) from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedLong(java.io.OutputStream, long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedLong</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedLong(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                    long&nbsp;value)
+                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes a "long" value to an OutputStream. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>output</code> - target OutputStream</dd><dd><code>value</code> - value to write</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedLong(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedLong</h4>
+<pre>public static&nbsp;long&nbsp;readSwappedLong(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a "long" value from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedFloat(java.io.OutputStream, float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedFloat</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedFloat(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                     float&nbsp;value)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes a "float" value to an OutputStream. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>output</code> - target OutputStream</dd><dd><code>value</code> - value to write</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedFloat(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readSwappedFloat</h4>
+<pre>public static&nbsp;float&nbsp;readSwappedFloat(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a "float" value from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="writeSwappedDouble(java.io.OutputStream, double)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeSwappedDouble</h4>
+<pre>public static&nbsp;void&nbsp;writeSwappedDouble(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                      double&nbsp;value)
+                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes a "double" value to an OutputStream. The value is
+ converted to the opposed endian system while writing.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>output</code> - target OutputStream</dd><dd><code>value</code> - value to write</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+<a name="readSwappedDouble(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>readSwappedDouble</h4>
+<pre>public static&nbsp;double&nbsp;readSwappedDouble(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)
+                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Reads a "double" value from an InputStream. The value is
+ converted to the opposed endian system while reading.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - source InputStream</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the value just read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - in case of an I/O problem</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/EndianUtils.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+<li><a href="../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../org/apache/commons/io/DirectoryWalker.CancelException.html" title="class in org.apache.commons.io"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../org/apache/commons/io/FileCleaner.html" title="class in org.apache.commons.io"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../index.html?org/apache/commons/io/EndianUtils.html" target="_top">Frames</a></li>
+<li><a href="EndianUtils.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2002&#x2013;2016 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>
+</body>
+</html>

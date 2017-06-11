@@ -1,0 +1,676 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>SwappedDataInputStream (Apache Commons IO 2.5 API)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SwappedDataInputStream (Apache Commons IO 2.5 API)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SwappedDataInputStream.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/input/ReversedLinesFileReader.html" title="class in org.apache.commons.io.input"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/input/TaggedInputStream.html" title="class in org.apache.commons.io.input"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/SwappedDataInputStream.html" target="_top">Frames</a></li>
+<li><a href="SwappedDataInputStream.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_java.io.FilterInputStream">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">org.apache.commons.io.input</div>
+<h2 title="Class SwappedDataInputStream" class="title">Class SwappedDataInputStream</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">java.io.InputStream</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/io/FilterInputStream.html?is-external=true" title="class or interface in java.io">java.io.FilterInputStream</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html" title="class in org.apache.commons.io.input">org.apache.commons.io.input.ProxyInputStream</a></li>
+<li>
+<ul class="inheritance">
+<li>org.apache.commons.io.input.SwappedDataInputStream</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">SwappedDataInputStream</span>
+extends <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html" title="class in org.apache.commons.io.input">ProxyInputStream</a>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></pre>
+<div class="block">DataInput for systems relying on little endian data formats.
+ When read, values will be changed from little endian to big 
+ endian formats for internal usage. 
+ <p>
+ <b>Origin of code: </b>Avalon Excalibur (IO)</div>
+<dl><dt><span class="strong">Version:</span></dt>
+  <dd>CVS $Revision: 1302050 $</dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_java.io.FilterInputStream">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/FilterInputStream.html?is-external=true" title="class or interface in java.io">FilterInputStream</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/FilterInputStream.html?is-external=true#in" title="class or interface in java.io">in</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#SwappedDataInputStream(java.io.InputStream)">SwappedDataInputStream</a></strong>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</code>
+<div class="block">Constructs a SwappedDataInputStream.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readBoolean()">readBoolean</a></strong>()</code>
+<div class="block">Return <code><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readByte()"><code>readByte()</code></a> != 0</code></div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readByte()">readByte</a></strong>()</code>
+<div class="block">Invokes the delegate's <code>read()</code> method.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>char</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readChar()">readChar</a></strong>()</code>
+<div class="block">Reads a character delegating to <a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readShort()"><code>readShort()</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readDouble()">readDouble</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedDouble(java.io.InputStream)"><code>EndianUtils.readSwappedDouble(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readFloat()">readFloat</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedFloat(java.io.InputStream)"><code>EndianUtils.readSwappedFloat(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readFully(byte[])">readFully</a></strong>(byte[]&nbsp;data)</code>
+<div class="block">Invokes the delegate's <code>read(byte[] data, int, int)</code> method.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readFully(byte[],%20int,%20int)">readFully</a></strong>(byte[]&nbsp;data,
+         int&nbsp;offset,
+         int&nbsp;length)</code>
+<div class="block">Invokes the delegate's <code>read(byte[] data, int, int)</code> method.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readInt()">readInt</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedInteger(java.io.InputStream)"><code>EndianUtils.readSwappedInteger(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readLine()">readLine</a></strong>()</code>
+<div class="block">Not currently supported - throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang"><code>UnsupportedOperationException</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readLong()">readLong</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedLong(java.io.InputStream)"><code>EndianUtils.readSwappedLong(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readShort()">readShort</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedShort(java.io.InputStream)"><code>EndianUtils.readSwappedShort(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readUnsignedByte()">readUnsignedByte</a></strong>()</code>
+<div class="block">Invokes the delegate's <code>read()</code> method.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readUnsignedShort()">readUnsignedShort</a></strong>()</code>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedShort(java.io.InputStream)"><code>EndianUtils.readSwappedUnsignedShort(InputStream)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readUTF()">readUTF</a></strong>()</code>
+<div class="block">Not currently supported - throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang"><code>UnsupportedOperationException</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#skipBytes(int)">skipBytes</a></strong>(int&nbsp;count)</code>
+<div class="block">Invokes the delegate's <code>skip(int)</code> method.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_org.apache.commons.io.input.ProxyInputStream">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.apache.commons.io.input.<a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html" title="class in org.apache.commons.io.input">ProxyInputStream</a></h3>
+<code><a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#afterRead(int)">afterRead</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#available()">available</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#beforeRead(int)">beforeRead</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#close()">close</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#handleIOException(java.io.IOException)">handleIOException</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#mark(int)">mark</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#markSupported()">markSupported</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#read()">read</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#read(byte[])">read</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#read(byte[],%20int,%20int)">read</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#reset()">reset</a>, <a href="../../../../../org/apache/commons/io/input/ProxyInputStream.html#skip(long)">skip</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait(long,%20int)" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="SwappedDataInputStream(java.io.InputStream)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>SwappedDataInputStream</h4>
+<pre>public&nbsp;SwappedDataInputStream(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;input)</pre>
+<div class="block">Constructs a SwappedDataInputStream.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>input</code> - InputStream to read from</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="readBoolean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readBoolean</h4>
+<pre>public&nbsp;boolean&nbsp;readBoolean()
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                           <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Return <code><a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readByte()"><code>readByte()</code></a> != 0</code></div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readBoolean()" title="class or interface in java.io">readBoolean</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>false if the byte read is zero, otherwise true</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd></dl>
+</li>
+</ul>
+<a name="readByte()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readByte</h4>
+<pre>public&nbsp;byte&nbsp;readByte()
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Invokes the delegate's <code>read()</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readByte()" title="class or interface in java.io">readByte</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the byte read or -1 if the end of stream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd></dl>
+</li>
+</ul>
+<a name="readChar()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readChar</h4>
+<pre>public&nbsp;char&nbsp;readChar()
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Reads a character delegating to <a href="../../../../../org/apache/commons/io/input/SwappedDataInputStream.html#readShort()"><code>readShort()</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readChar()" title="class or interface in java.io">readChar</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the byte read or -1 if the end of stream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd></dl>
+</li>
+</ul>
+<a name="readDouble()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readDouble</h4>
+<pre>public&nbsp;double&nbsp;readDouble()
+                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedDouble(java.io.InputStream)"><code>EndianUtils.readSwappedDouble(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readDouble()" title="class or interface in java.io">readDouble</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd></dl>
+</li>
+</ul>
+<a name="readFloat()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readFloat</h4>
+<pre>public&nbsp;float&nbsp;readFloat()
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedFloat(java.io.InputStream)"><code>EndianUtils.readSwappedFloat(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readFloat()" title="class or interface in java.io">readFloat</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd></dl>
+</li>
+</ul>
+<a name="readFully(byte[])">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readFully</h4>
+<pre>public&nbsp;void&nbsp;readFully(byte[]&nbsp;data)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Invokes the delegate's <code>read(byte[] data, int, int)</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readFully(byte[])" title="class or interface in java.io">readFully</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - the buffer to read the bytes into</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readFully(byte[], int, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readFully</h4>
+<pre>public&nbsp;void&nbsp;readFully(byte[]&nbsp;data,
+             int&nbsp;offset,
+             int&nbsp;length)
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Invokes the delegate's <code>read(byte[] data, int, int)</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readFully(byte[],%20int,%20int)" title="class or interface in java.io">readFully</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>data</code> - the buffer to read the bytes into</dd><dd><code>offset</code> - The start offset</dd><dd><code>length</code> - The number of bytes to read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readInt()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readInt</h4>
+<pre>public&nbsp;int&nbsp;readInt()
+            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedInteger(java.io.InputStream)"><code>EndianUtils.readSwappedInteger(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readInt()" title="class or interface in java.io">readInt</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readLine()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readLine</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;readLine()
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Not currently supported - throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang"><code>UnsupportedOperationException</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readLine()" title="class or interface in java.io">readLine</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the line read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readLong()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readLong</h4>
+<pre>public&nbsp;long&nbsp;readLong()
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedLong(java.io.InputStream)"><code>EndianUtils.readSwappedLong(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readLong()" title="class or interface in java.io">readLong</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readShort()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readShort</h4>
+<pre>public&nbsp;short&nbsp;readShort()
+                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedShort(java.io.InputStream)"><code>EndianUtils.readSwappedShort(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readShort()" title="class or interface in java.io">readShort</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readUnsignedByte()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readUnsignedByte</h4>
+<pre>public&nbsp;int&nbsp;readUnsignedByte()
+                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Invokes the delegate's <code>read()</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readUnsignedByte()" title="class or interface in java.io">readUnsignedByte</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the byte read or -1 if the end of stream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readUnsignedShort()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readUnsignedShort</h4>
+<pre>public&nbsp;int&nbsp;readUnsignedShort()
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Delegates to <a href="../../../../../org/apache/commons/io/EndianUtils.html#readSwappedUnsignedShort(java.io.InputStream)"><code>EndianUtils.readSwappedUnsignedShort(InputStream)</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readUnsignedShort()" title="class or interface in java.io">readUnsignedShort</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>the read long</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="readUTF()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>readUTF</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;readUTF()
+               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                      <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Not currently supported - throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang"><code>UnsupportedOperationException</code></a>.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#readUTF()" title="class or interface in java.io">readUTF</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>UTF String read</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+<a name="skipBytes(int)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>skipBytes</h4>
+<pre>public&nbsp;int&nbsp;skipBytes(int&nbsp;count)
+              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></pre>
+<div class="block">Invokes the delegate's <code>skip(int)</code> method.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true#skipBytes(int)" title="class or interface in java.io">skipBytes</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>count</code> - the number of bytes to skip</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the number of bytes to skipped or -1 if the end of stream</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/EOFException.html?is-external=true" title="class or interface in java.io">EOFException</a></code> - if an end of file is reached unexpectedly</dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if an I/O error occurs</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/SwappedDataInputStream.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../org/apache/commons/io/input/ReversedLinesFileReader.html" title="class in org.apache.commons.io.input"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../org/apache/commons/io/input/TaggedInputStream.html" title="class in org.apache.commons.io.input"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?org/apache/commons/io/input/SwappedDataInputStream.html" target="_top">Frames</a></li>
+<li><a href="SwappedDataInputStream.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_java.io.FilterInputStream">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+<p class="legalCopy"><small>Copyright &#169; 2002&#x2013;2016 <a href="http://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>
+</body>
+</html>
