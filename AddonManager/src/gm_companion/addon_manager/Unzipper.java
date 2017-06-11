@@ -1,6 +1,8 @@
 package gm_companion.addon_manager;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -35,6 +37,9 @@ public class Unzipper {
             entry = zipIn.getNextEntry();
         }
         zipIn.close();
+
+        File zipFile = new File(filePath);
+        zipFile.delete();
 
         System.out.println("Done.");
     }

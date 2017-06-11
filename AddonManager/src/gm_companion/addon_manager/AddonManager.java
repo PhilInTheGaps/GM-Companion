@@ -154,12 +154,12 @@ public class AddonManager {
                         statusLabel.setText("Update Available");
                         installButton.setText("Update");
                     }else {
-                        statusLabel.setText("Already Installed");
+                        statusLabel.setText("Installed");
                         installButton.setEnabled(false);
                     }
 
                 }else {
-                    statusLabel.setText("Already Installed");
+                    statusLabel.setText("Installed");
                     installButton.setEnabled(false);
                 }
             }
@@ -169,7 +169,9 @@ public class AddonManager {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Downloading "+name+"...");
-                    download(addonURLString, name);
+                    download(addonURLString, name+"_"+version);
+                    installButton.setEnabled(false);
+                    statusLabel.setText("Installed");
                 }
             });
 
