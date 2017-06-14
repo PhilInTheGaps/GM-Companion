@@ -51,8 +51,14 @@ int main(int argc, char *argv[])
 
     // Open WhatIsNewWindow
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
-    if (checkSettings.value("openWhatIsNewWindow", 1).toInt() == 1 || w.getVersionNumber() > checkSettings.value("version", 0).toInt()){
-        qDebug() << w.getVersionNumber();
+    int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
+    int settingsVersion = checkSettings.value("version", 0).toInt();
+    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion){
+        if (w.getVersionNumber() > settingsVersion){
+            qDebug() << "Opening New Features Window because of an Update...";
+        }else if (openNewFeatures == 1){
+            qDebug() << "Opening New Features Window because of the settings preferences...";
+        }
 
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();

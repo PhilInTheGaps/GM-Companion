@@ -23,7 +23,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>GM-Companion | Beta 3.1 DEV-BUILD</string>
+   <string>GM-Companion | Beta 3.1 RC1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -834,7 +834,7 @@ p, li { white-space: pre-wrap; }
          <widget class="QFrame" name="frame_2">
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>250</width>
             <height>16777215</height>
            </size>
           </property>
@@ -869,17 +869,17 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
-              <widget class="QPushButton" name="deleteCategoryButton">
-               <property name="text">
-                <string>Delete Category</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
               <widget class="QPushButton" name="addCategoryButton">
                <property name="text">
                 <string>Add Category</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="deleteCategoryButton">
+               <property name="text">
+                <string>Delete Category</string>
                </property>
               </widget>
              </item>
