@@ -71,6 +71,7 @@ private slots:
     void on_tableDoubleClicked(int);
     void on_musicVolumeSlider_valueChanged(int value);
     void on_musicProgressSlider_sliderReleased();
+    void on_musicTitleComboBox_currentIndexChanged(int index);
 
     // Sound
     void playSound(QString);
@@ -149,8 +150,6 @@ private slots:
     void on_money1ComboBox_currentIndexChanged(int index);
     void on_money2ComboBox_currentIndexChanged(int index);
     void on_money1SpinBox_valueChanged(double arg1);
-
-    void on_musicTitleComboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

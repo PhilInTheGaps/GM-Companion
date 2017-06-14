@@ -35,7 +35,7 @@ private slots:
 private:
     Ui::NotesDialog *ui;
 
-    MainWindow* w;
+    MainWindow *w;
 
     QString folder;
     QString filename;

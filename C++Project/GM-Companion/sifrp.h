@@ -1,6 +1,9 @@
 #ifndef SIFRP_H
 #define SIFRP_H
 
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
 #include <QWidget>
 #include <QSettings>
 #include <QStringList>
@@ -14,7 +17,7 @@ class SIFRP : public QWidget{
     Q_OBJECT
 
 public:
-    explicit SIFRP(QWidget *parent = 0);
+    explicit SIFRP(MainWindow *parent = 0);
     ~SIFRP();
 
 private slots:
@@ -46,8 +49,30 @@ private slots:
 
     void on_step4InvestInHeirButton_clicked();
 
+    void on_step4SetTerrainButton_clicked();
+
+    void on_step4AddFeatureButton_clicked();
+
+    void on_step4CreateDomainButton_clicked();
+
+    void on_step4UnitsComboBox_currentIndexChanged(int index);
+
+    void on_step4BuyUnitsButton_clicked();
+
+    void on_step4InvestInBannerHouse_clicked();
+
+    void on_step4WealthHoldingComboBox_currentIndexChanged(int index);
+
+    void on_step4InvestInWealthHoldingButton_clicked();
+
+    void on_saveHouseButton_clicked();
+
+    void on_startNewHouseButton_clicked();
+
 private:
     Ui::SIFRP *ui;
+
+    MainWindow* w;
 
     QString getString(QString s);
 
@@ -127,7 +152,7 @@ private:
 
     void addHolding(Holding holding, QString secondColumn, QString thirdColumn);
 
-    void lastStep();
+    void initializeStepFour();
 };
 
 #endif // SIFRP_H
