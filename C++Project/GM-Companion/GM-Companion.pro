@@ -78,7 +78,7 @@ RESOURCES += \
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
 
-linux-g++ { # For Linux
+linux-g++ {
     target.path = /usr/bin
     INSTALLS += target
 
