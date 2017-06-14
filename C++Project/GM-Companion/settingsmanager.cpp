@@ -124,8 +124,10 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         break;
     case Setting::language:
         settings.setValue("language", value);
+        break;
     case Setting::version:
         settings.setValue("version", value);
+        break;
     default:
         break;
     }

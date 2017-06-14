@@ -60,6 +60,8 @@ private slots:
 
     void on_languageComboBox_currentIndexChanged(int index);
 
+    void on_addonManagerButton_clicked();
+
 private:
     Ui::OptionsDialog *ui;
 
