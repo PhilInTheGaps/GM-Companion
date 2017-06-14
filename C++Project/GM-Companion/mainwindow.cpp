@@ -10,7 +10,7 @@
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
 #include <QSettings>
-
+#include <QScrollBar>
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -84,9 +84,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Addons
     qDebug() << tr("Getting Addons...");
-    SIFRP* sifrp = new SIFRP;
-//    ui->tabWidgetGMHelp->addTab(sifrp, "SIFRP");
-    ui->tabWidget->addTab(sifrp, "SIFRP");
+    if (settingsManager->getIsAddonEnabled("SIFRP")){
+        SIFRP* sifrp = new SIFRP(this);
+        ui->tabWidget->addTab(sifrp, "SIFRP");
+    }
 
     // Initialize Radio
     qDebug() << tr("Initializing Radio...");
@@ -100,9 +101,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     generateNamesTab();
 
     // Check if openSSL is installed
-    qDebug() << tr("SSL is supported:  ") << QSslSocket::supportsSsl();
-    if (!QSslSocket::supportsSsl())
+    qDebug() << tr("Checking SSL installation...");
+    if (!QSslSocket::supportsSsl()){
         qDebug() << tr("Please install openSSL");
+    }else{
+        qDebug() << tr("SSL is installed.");
+    }
 
     // Initialize Version and Blog Network Managers
     versionNetworkManager = new QNetworkAccessManager;
@@ -143,6 +147,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Get Blog Feed
     qDebug() << tr("Getting blog feed...");
     blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
+    ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
     // Some functions behave differently when the program is just starting
     programStart = false;

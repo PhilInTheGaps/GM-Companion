@@ -84,6 +84,7 @@ OptionsDialog::~OptionsDialog()
 void OptionsDialog::onClose(){
     if (pathsChanged)
         w->regenerateButtons();
+
     writeAddonSettings();
 }
 
@@ -461,4 +462,15 @@ void OptionsDialog::on_languageComboBox_currentIndexChanged(int index)
         settings->setSetting(Setting::language, true, "en");
         break;
     }
+}
+
+void OptionsDialog::on_addonManagerButton_clicked()
+{
+    #ifdef __linux__
+        QProcess::startDetached("java", {"-jar", "/usr/share/gm-companion/AddonManager.jar"});
+    #elif _WIN32
+        QProcess::startDetached("java", {"-jar", QApplication::applicationDirPath()+"/AddonManager.jar"});
+    #else
+    qDebug() << QCoreApplication::translate("","This OS is not supported. Cannot launch Addon Manager.");
+    #endif
 }
