@@ -1,0 +1,64 @@
+Description: Fixed some files not being unpacked correctly
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ gm-companion-dev (0.3.1-1ubuntu2) zesty; urgency=medium
+ .
+   * Fixed files not being unpacked to their correct location
+Author: Phil Hoffmann <phil.hoffmann@inbox.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2017-06-14
+
+--- gm-companion-dev-0.3.1.orig/GM-Companion.pro
++++ gm-companion-dev-0.3.1/GM-Companion.pro
+@@ -78,20 +78,19 @@ RESOURCES += \
+ TRANSLATIONS+=  translations/gm-companion_en.ts
+ TRANSLATIONS+=  translations/gm-companion_de.ts
+ 
+-linux-g++ { # For Linux
+-    target.path = /usr/bin
+-    INSTALLS += target
+-
+-    data.path = /usr/share/gm-companion
+-    data.files = data/share/gm-companion/*
+-
+-    resources.path = /usr/share/gm-companion/resources
+-    resources.files += data/share/resources/*
+-
+-    desktop.path = /usr/share/applications
+-    desktop.files = data/share/applications/*
+-
+-    INSTALLS += data
+-    INSTALLS += desktop
+-    INSTALLS += resources
+-}
++target.path = /usr/bin
++INSTALLS += target
++
++data.path = /usr/share/gm-companion
++data.files = data/share/gm-companion/*
++
++resources.path = /usr/share/gm-companion/resources
++resources.files += data/share/resources/*
++
++desktop.path = /usr/share/applications
++desktop.files = data/share/applications/*
++
++INSTALLS += data
++INSTALLS += desktop
++INSTALLS += resources
++
