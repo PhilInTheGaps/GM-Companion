@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDir>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -13,9 +14,17 @@ int main(int argc, char *argv[])
     // Translator
     SettingsManager* settings = new SettingsManager;
     QTranslator* translator = new QTranslator();
+
+    #ifdef _WIN32
     if (translator->load("gm-companion_"+settings->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
         app.installTranslator(translator);
     }
+    #else
+    if (translator->load("gm-companion_"+settings->getSetting(Setting::language), "/usr/share/gm-companion/translations")) {
+        app.installTranslator(translator);
+    }
+    #endif
+
 
     MainWindow w;
 
