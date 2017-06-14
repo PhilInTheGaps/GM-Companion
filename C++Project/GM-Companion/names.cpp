@@ -93,10 +93,6 @@ void MainWindow::on_generateNames(QString file){
     for (int i = 0; i<ui->namesAmountSpinBox->value(); i++){
         QString name = names.at(rand() % names.size());
 
-        if (name.at(0)==" "){
-            name = name.mid(1);
-        }
-
         QString displayName = name;
 
         if (QFile(surnamesPath).exists()){
