@@ -1,0 +1,77 @@
+gm-companion-dev (0.3.1-1ubuntu2) zesty; urgency=medium
+
+  * Fixed files not being unpacked to their correct location
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Thu, 15 Jun 2017 00:24:27 +0200
+
+gm-companion-dev (0.3.1-1) zesty; urgency=medium
+
+  * Update to Beta 3.1
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Wed, 14 Jun 2017 22:43:00 +0200
+
+gm-companion-dev (0.3.0-11) zesty; urgency=medium
+
+  * Converted this to the dev-build version
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Wed, 24 May 2017 00:12:00 +0200
+
+gm-companion-dev (0.3.0-10) zesty; urgency=medium
+
+  * Fixed names files not beeing copied
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 22:48:00 +0200
+
+gm-companion-dev (0.3.0-9) zesty; urgency=medium
+
+  * Hopefully fixed launchpad issues now
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 22:48:00 +0200
+
+gm-companion-dev (0.3.0-8) zesty; urgency=medium
+
+  * This fixing is getting out of hand! Now there are 8 of them!
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 22:48:00 +0200
+
+gm-companion-dev (0.3.0-7) zesty; urgency=medium
+
+  * Again, file path fixes
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 22:31:00 +0200
+
+gm-companion-dev (0.3.0-6) zesty; urgency=medium
+
+  * Fixed local folder not creating
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 22:25:00 +0200
+
+gm-companion-dev (0.3.0-5) zesty; urgency=medium
+
+  * Fixed names.cpp
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 21:52:00 +0200
+
+gm-companion-dev (0.3.0-4) zesty; urgency=medium
+
+  * Fixed file paths. For real this time ;)
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 21:52:00 +0200
+
+gm-companion-dev (0.3.0-3) zesty; urgency=medium
+
+  * Fixed file paths
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 16:36:00 +0200
+
+gm-companion-dev (0.3.0-2) zesty; urgency=low
+
+  * Included cdbs in build dependencies
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 15:43:00 +0200
+
+gm-companion-dev (0.3.0-1) zesty; urgency=low
+
+  * Initial release
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Tue, 23 May 2017 12:20:00 +0200
