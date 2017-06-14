@@ -84,6 +84,7 @@ OptionsDialog::~OptionsDialog()
 void OptionsDialog::onClose(){
     if (pathsChanged)
         w->regenerateButtons();
+
     writeAddonSettings();
 }
 
