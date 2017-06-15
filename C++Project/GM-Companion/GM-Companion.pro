@@ -78,7 +78,12 @@ RESOURCES += \
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
 
+win32 {
+    message("Building on Windows...")
+}
+
 linux-g++ {
+    message("Building on Linux...")
     target.path = /usr/bin
     INSTALLS += target
 
