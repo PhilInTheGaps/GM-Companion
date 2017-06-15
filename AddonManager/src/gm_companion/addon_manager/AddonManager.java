@@ -31,7 +31,7 @@ public class AddonManager {
             String bytesString = newUrl.openConnection().getHeaderField("Content-Length");
             int bytesInt = Integer.parseInt(bytesString);
 
-            File f = new File("C:/Users/Phil/.gm-companion/addons/"+name+".zip");
+            File f = new File(System.getProperty("user.home")+"/.gm-companion/addons/"+name+".zip");
 
             FileUtils.copyURLToFile(newUrl, f);
 
@@ -44,8 +44,8 @@ public class AddonManager {
 
         // Unzipping
         try{
-            String zipFile = "C:/Users/Phil/.gm-companion/addons/"+name+".zip";
-            String outputFolder = "C:/Users/Phil/.gm-companion/addons";
+            String zipFile = System.getProperty("user.home")+"/.gm-companion/addons/"+name+".zip";
+            String outputFolder = System.getProperty("user.home")+"/.gm-companion/addons";
 
             Unzipper u = new Unzipper();
             u.unzip(zipFile, outputFolder);
@@ -79,8 +79,9 @@ public class AddonManager {
         String addonsPath = homeDirectory+"/.gm-companion/addons";
         File dir = new File(addonsPath);
         if (!dir.exists()) {
-            System.out.println("GM-Companion directory does not exist. Creating...");
-            dir.mkdir();
+            System.out.println("GM-Companion directory does not exist.");
+            System.out.println(addonsPath);
+            dir.mkdirs();
         }
 
         // Read available Addons from URL
