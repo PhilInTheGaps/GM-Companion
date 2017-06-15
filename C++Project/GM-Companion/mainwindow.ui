@@ -2111,22 +2111,22 @@ p, li { white-space: pre-wrap; }
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Set Music Folder</string>
+    <string>Music</string>
    </property>
   </action>
   <action name="actionSet_Sound_Folder">
    <property name="text">
-    <string>Set Sound Folder</string>
+    <string>Sound</string>
    </property>
   </action>
   <action name="actionSet_Maps_Folder">
    <property name="text">
-    <string>Set Maps Folder</string>
+    <string>Maps</string>
    </property>
   </action>
   <action name="actionSet_Resources_Folder">
    <property name="text">
-    <string>Set Resources Folder</string>
+    <string>Resources</string>
    </property>
   </action>
   <action name="actionMusic_Player">
@@ -2200,7 +2200,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionSet_Characters_Folder">
    <property name="text">
-    <string>Set Characters Folder</string>
+    <string>Characters</string>
    </property>
   </action>
   <action name="actionOptions">
