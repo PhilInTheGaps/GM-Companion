@@ -7,6 +7,7 @@
 #include <QSettings>
 #include <QLabel>
 #include <QFileDialog>
+#include <QProcess>
 
 OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::OptionsDialog){
     ui->setupUi(this);
