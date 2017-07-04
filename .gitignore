@@ -1,10 +1,2 @@
-/C++Project/Build_x64_MSVC2015_Debug/
-/C++Project/Build_x64_MSVC2015_Release/
-/C++Project/Build_x86_MSVC2015_Debug/
-/C++Project/Build_x86_MSVC2015_Release/
-/C++Project/DEPLOYMENT_MSVC_64/
-/C++Project/DEPLOYMENT_MSVC_86/
-/C++Project/DEPLOY 32-bit/
-/C++Project/DEPLOY 64-bit/
 /AddonManager/out/
-/C++Project/Installer Scripts/
+/deploy/
