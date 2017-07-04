@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: gm_companion.addon_manager.AddonManager
-
