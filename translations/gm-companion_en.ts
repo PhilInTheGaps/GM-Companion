@@ -3860,11 +3860,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="26"/>
-        <source>GM-Companion | Beta 3.1 RC2</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="77"/>
         <source>Start</source>
         <translation></translation>
@@ -4058,6 +4053,11 @@
         <location filename="../mainwindow.ui" line="875"/>
         <source>Add Category</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="26"/>
+        <source>GM-Companion | Beta 3.1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="889"/>
