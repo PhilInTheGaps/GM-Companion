@@ -1,0 +1,3 @@
+[submodule "AddonManager"]
+	path = AddonManager
+	url = https://github.com/PhilInTheGaps/GMC-AddonManager
