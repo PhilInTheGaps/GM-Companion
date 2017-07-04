@@ -82,8 +82,8 @@ win32 {
     message("Building on Windows...")
 }
 
-linux-g++ {
-    message("Building on Linux...")
+!win32 {
+    message("Not building on Windows...")
     target.path = /usr/bin
     INSTALLS += target
 
