@@ -1,14 +1,14 @@
-Source: gm-companion-dev
+Source: gm-companion
 Section: misc
 Priority: optional
 Maintainer: Phil Hoffmann <phil.hoffmann@inbox.com>
 Build-Depends: qt5-default, qtbase5-dev, qtmultimedia5-dev, qtdeclarative5-dev, debhelper (>= 9), cdbs
 Standards-Version: 3.9.8
 Homepage: https://philinthegaps.github.io/GM-Companion/
-#Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion-dev.git
-#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gm-companion-dev.git
+#Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gm-companion.git
 
-Package: gm-companion-dev
+Package: gm-companion
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5gui5, libqt5multimedia5, libqt5network5, libqt5widgets5
 Description: A tool for the gamemaster of a tabletop rpg session.
