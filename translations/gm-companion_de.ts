@@ -1908,52 +1908,52 @@
     <message>
         <location filename="../chareditor.ui" line="5662"/>
         <source>Page 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seite 1</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5684"/>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alter</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5694"/>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geschlecht</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5704"/>
         <source>House</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haus</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5728"/>
         <source>Abilities</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fertigkeiten</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5746"/>
         <source>Agility</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agilität</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5751"/>
         <source>Animal Handling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Umgang mit Tieren</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5756"/>
         <source>Athletics</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Athletik</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5761"/>
         <source>Awareness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aufmerksamkeit</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5766"/>
         <source>Cunning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gerissenheit</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5771"/>
@@ -1973,7 +1973,7 @@
     <message>
         <location filename="../chareditor.ui" line="5786"/>
         <source>Healing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heilung</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5791"/>
@@ -2195,37 +2195,37 @@
     <message>
         <location filename="../chareditor.ui" line="6683"/>
         <source>Personal History</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persönliche Geschichte</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6697"/>
         <source>Allies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verbündete</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6707"/>
         <source>Heraldry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heraldik</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6721"/>
         <source>Enemies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gegner</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6731"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potrait</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6745"/>
         <source>Oaths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eide</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6755"/>
         <source>Motto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Motto</translation>
     </message>
     <message>
         <location filename="../chareditor.cpp" line="61"/>
@@ -3579,7 +3579,7 @@
     <message>
         <location filename="../characterpage.ui" line="3132"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3137"/>
@@ -3957,7 +3957,7 @@
     <message>
         <location filename="../mainwindow.ui" line="364"/>
         <source>Description</source>
-        <translation>Beschreibungd</translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="377"/>
@@ -4807,12 +4807,12 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     <message>
         <location filename="../sifrp.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation>Formular</translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="30"/>
         <source>House Generator</source>
-        <translation>Haus Generator</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="56"/>
@@ -4879,7 +4879,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <location filename="../sifrp.ui" line="694"/>
         <location filename="../sifrp.ui" line="878"/>
         <source>Random</source>
-        <translation>Zufällig Auswählen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="180"/>
@@ -4952,13 +4952,13 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="286"/>
         <source>Value</source>
-        <translation>Wert</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="291"/>
         <location filename="../sifrp.ui" line="2950"/>
         <source>Description</source>
-        <translation>Beschreibung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="296"/>
@@ -4990,22 +4990,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="354"/>
         <source>Players:</source>
-        <translation>Spieler:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="390"/>
         <source>Set Player Count</source>
-        <translation>Spieleranzahl festlegen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="406"/>
         <source>Rolled Value</source>
-        <translation>Gewürfelter Wert</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="520"/>
         <source>Add Value To Resource</source>
-        <translation>Wert zu Resource hinzufügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="534"/>
@@ -5167,7 +5167,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="933"/>
         <source>Notes:</source>
-        <translation>Notizen:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="950"/>
@@ -5241,17 +5241,17 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1272"/>
         <location filename="../sifrp.ui" line="1468"/>
         <source>Build Time</source>
-        <translation>Bauzeit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1280"/>
         <source>Benefit</source>
-        <translation>Vorteil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1288"/>
         <source>Explanation</source>
-        <translation>Erklärung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1296"/>
@@ -5261,7 +5261,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="1304"/>
         <source>144 +10D6 Months</source>
-        <translation>144 + 10W6 Monate</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1309"/>
@@ -5287,7 +5287,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="1333"/>
         <source>90 + 10D6 Months</source>
-        <translation>90 + 10W6 Monate</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1338"/>
@@ -5309,7 +5309,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="1362"/>
         <source>72 +10D6 Months</source>
-        <translation>72 + 10W6 Monate</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1511"/>
@@ -5750,7 +5750,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="1391"/>
         <source>60 + 10D6 Months</source>
-        <translation>60 + 10W6 Monate</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1396"/>
@@ -5777,7 +5777,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="1420"/>
         <source>36 + 10D6 Months</source>
-        <translation>36 + 10W6 Monate</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1425"/>
@@ -5808,7 +5808,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1458"/>
         <location filename="../sifrp.ui" line="2626"/>
         <source>Type</source>
-        <translation>Art</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1495"/>
@@ -5850,14 +5850,14 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1710"/>
         <location filename="../sifrp.ui" line="1805"/>
         <source>Example</source>
-        <translation>Beispiel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1715"/>
         <location filename="../sifrp.ui" line="1815"/>
         <location filename="../sifrp.ui" line="2636"/>
         <source>Cost</source>
-        <translation>Kosten</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1720"/>
@@ -5868,7 +5868,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1725"/>
         <location filename="../sifrp.ui" line="1728"/>
         <source>First-born son (or daughter in Dorne)</source>
-        <translation>Erstgeborener Sohn (Oder Tochter in Dorne)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1738"/>
@@ -5879,18 +5879,18 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1743"/>
         <location filename="../sifrp.ui" line="1746"/>
         <source>Second son (or daughter in Dorne),  or first-born daughter</source>
-        <translation>Zweitgeborener Sohn (Oder Tochter in Dorne)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1756"/>
         <source>Maximum-3</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1761"/>
         <location filename="../sifrp.ui" line="1764"/>
         <source>Other children (not including bastards)</source>
-        <translation>Andere Kinder (Keine Bastarde)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1769"/>
@@ -5914,12 +5914,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.cpp" line="1231"/>
         <source>Saving SIFRP House...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichere SIFRP Haus...</translation>
     </message>
     <message>
         <location filename="../sifrp.cpp" line="1240"/>
         <source>SIFRP House directory does not exist. Creating...</source>
-        <translation type="unfinished"></translation>
+        <translation>SIFRP Haus Ordner existiert noch nicht. Wird erstellt...</translation>
     </message>
     <message>
         <location filename="../sifrp.cpp" line="1343"/>
