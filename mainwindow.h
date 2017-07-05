@@ -151,6 +151,8 @@ private slots:
     void on_money2ComboBox_currentIndexChanged(int index);
     void on_money1SpinBox_valueChanged(double arg1);
 
+    void on_notesEncryptButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 

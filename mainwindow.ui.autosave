@@ -55,7 +55,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>8</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -117,7 +117,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Version: Beta 3.1</string>
+               <string>Version: Beta 3.1.1</string>
               </property>
              </widget>
             </item>
