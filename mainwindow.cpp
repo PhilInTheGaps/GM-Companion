@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
-    setVersion("0.3.1.0");
+    setVersion("0.3.1.1");
 
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
