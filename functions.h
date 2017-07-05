@@ -11,4 +11,6 @@ QString cleanText(QString text);
 
 QStringList shuffleStringList(QStringList list);
 
+QString rot13(QString s);
+
 #endif // FUNCTIONS_H
