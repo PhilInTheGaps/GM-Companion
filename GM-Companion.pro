@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     notesdialog.cpp \
     sifrp.cpp \
     converter.cpp \
-    whatisnewwindow.cpp
+    whatisnewwindow.cpp \
+    dicetool.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     optionsdialog.h \
     notesdialog.h \
     sifrp.h \
-    whatisnewwindow.h
+    whatisnewwindow.h \
+    dicetool.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
@@ -66,7 +68,8 @@ FORMS    += mainwindow.ui \
     optionsdialog.ui \
     notesdialog.ui \
     sifrp.ui \
-    whatisnewwindow.ui
+    whatisnewwindow.ui \
+    dicetool.ui
 
 DISTFILES += \
 

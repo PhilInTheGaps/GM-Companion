@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>837</height>
+    <width>862</width>
+    <height>402</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -160,7 +160,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pageGeneric">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -292,7 +292,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>502</width>
+                <width>500</width>
                 <height>20</height>
                </size>
               </property>
@@ -819,7 +819,7 @@
                <item>
                 <widget class="QLabel" name="label_13">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -838,34 +838,21 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>Das Schwarze Auge 5</string>
+                  <string>Das Schwarze Auge 5 </string>
                  </property>
                  <property name="scaledContents">
                   <bool>false</bool>
                  </property>
                  <property name="wordWrap">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </property>
                 </widget>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
                </item>
                <item>
                 <widget class="QTableWidget" name="eigenschaftenTable_dsa5">
                  <property name="minimumSize">
                   <size>
-                   <width>802</width>
+                   <width>0</width>
                    <height>0</height>
                   </size>
                  </property>
@@ -1141,8 +1128,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>517</width>
-                      <height>537</height>
+                      <width>431</width>
+                      <height>122</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -1282,8 +1269,8 @@
                      <rect>
                       <x>0</x>
                       <y>0</y>
-                      <width>517</width>
-                      <height>537</height>
+                      <width>417</width>
+                      <height>140</height>
                      </rect>
                     </property>
                     <attribute name="label">
@@ -1398,6 +1385,14 @@
                     </layout>
                    </widget>
                    <widget class="QWidget" name="page_8">
+                    <property name="geometry">
+                     <rect>
+                      <x>0</x>
+                      <y>0</y>
+                      <width>325</width>
+                      <height>122</height>
+                     </rect>
+                    </property>
                     <attribute name="label">
                      <string>Allgemeine Sonderfertigkeiten</string>
                     </attribute>
@@ -3818,8 +3813,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>675</height>
+                 <width>698</width>
+                 <height>240</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -4211,8 +4206,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>750</height>
+                 <width>366</width>
+                 <height>140</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -4442,6 +4437,14 @@
                </layout>
               </widget>
               <widget class="QWidget" name="page_11">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>366</width>
+                 <height>148</height>
+                </rect>
+               </property>
                <attribute name="label">
                 <string>Fernkampfwaffen / Schild / Parierwaffen</string>
                </attribute>
@@ -5082,8 +5085,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>702</height>
+                 <width>698</width>
+                 <height>267</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -5189,8 +5192,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>702</height>
+                 <width>270</width>
+                 <height>268</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -5372,8 +5375,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>702</height>
+                 <width>698</width>
+                 <height>267</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -5476,8 +5479,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>702</height>
+                 <width>270</width>
+                 <height>268</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -5720,8 +5723,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>718</height>
+                 <width>166</width>
+                 <height>326</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -5899,8 +5902,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>718</height>
+                 <width>334</width>
+                 <height>149</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -6258,6 +6261,14 @@
                </layout>
               </widget>
               <widget class="QWidget" name="page_3">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>168</width>
+                 <height>111</height>
+                </rect>
+               </property>
                <attribute name="label">
                 <string>Weapons / Armor</string>
                </attribute>
@@ -6427,8 +6438,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>805</height>
+                 <width>309</width>
+                 <height>396</height>
                 </rect>
                </property>
                <attribute name="label">
@@ -6669,8 +6680,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>1081</width>
-                 <height>805</height>
+                 <width>248</width>
+                 <height>301</height>
                 </rect>
                </property>
                <attribute name="label">
