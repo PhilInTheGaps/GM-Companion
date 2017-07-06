@@ -118,7 +118,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     generateMaps();
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
-    // Initialize Character View
+    //Initialize Character View
     QStringList characterList = getCharacterList();
     if (!characterList.empty()){
         for (QString character : characterList){

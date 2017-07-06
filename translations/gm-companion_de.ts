@@ -215,15 +215,15 @@
     </message>
     <message>
         <location filename="../chareditor.ui" line="525"/>
-        <location filename="../chareditor.ui" line="6272"/>
+        <location filename="../chareditor.ui" line="6283"/>
         <source>Weapons</source>
         <translation>Waffen</translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="545"/>
-        <location filename="../chareditor.ui" line="1170"/>
-        <location filename="../chareditor.ui" line="4881"/>
-        <location filename="../chareditor.ui" line="5670"/>
+        <location filename="../chareditor.ui" line="1157"/>
+        <location filename="../chareditor.ui" line="4884"/>
+        <location filename="../chareditor.ui" line="5673"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
@@ -240,7 +240,7 @@
     </message>
     <message>
         <location filename="../chareditor.ui" line="593"/>
-        <location filename="../chareditor.ui" line="6375"/>
+        <location filename="../chareditor.ui" line="6386"/>
         <source>Armor</source>
         <translation>Rüstung</translation>
     </message>
@@ -279,7 +279,7 @@
     <message>
         <location filename="../chareditor.ui" line="695"/>
         <location filename="../chareditor.ui" line="760"/>
-        <location filename="../chareditor.ui" line="6597"/>
+        <location filename="../chareditor.ui" line="6608"/>
         <source>Weight</source>
         <translation>Gewicht</translation>
     </message>
@@ -294,69 +294,74 @@
         <translation>Persönliche Daten</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="841"/>
         <source>Das Schwarze Auge 5</source>
-        <translation>Das Schwarze Auge 5</translation>
+        <translation type="vanished">Das Schwarze Auge 5</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="912"/>
-        <location filename="../chareditor.ui" line="4896"/>
+        <location filename="../chareditor.ui" line="841"/>
+        <source>Das Schwarze Auge 5 </source>
+        <translation type="unfinished">Das Schwarze Auge 5 </translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="899"/>
+        <location filename="../chareditor.ui" line="4899"/>
         <source>MU</source>
         <translation>MU</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="925"/>
-        <location filename="../chareditor.ui" line="4901"/>
+        <location filename="../chareditor.ui" line="912"/>
+        <location filename="../chareditor.ui" line="4904"/>
         <source>KL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="938"/>
-        <location filename="../chareditor.ui" line="4906"/>
+        <location filename="../chareditor.ui" line="925"/>
+        <location filename="../chareditor.ui" line="4909"/>
         <source>IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="951"/>
-        <location filename="../chareditor.ui" line="4911"/>
+        <location filename="../chareditor.ui" line="938"/>
+        <location filename="../chareditor.ui" line="4914"/>
         <source>CH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="964"/>
-        <location filename="../chareditor.ui" line="3940"/>
-        <location filename="../chareditor.ui" line="3960"/>
-        <location filename="../chareditor.ui" line="4075"/>
-        <location filename="../chareditor.ui" line="4916"/>
+        <location filename="../chareditor.ui" line="951"/>
+        <location filename="../chareditor.ui" line="3935"/>
+        <location filename="../chareditor.ui" line="3955"/>
+        <location filename="../chareditor.ui" line="4070"/>
+        <location filename="../chareditor.ui" line="4919"/>
         <source>FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="977"/>
-        <location filename="../chareditor.ui" line="3980"/>
-        <location filename="../chareditor.ui" line="3990"/>
-        <location filename="../chareditor.ui" line="4921"/>
+        <location filename="../chareditor.ui" line="964"/>
+        <location filename="../chareditor.ui" line="3975"/>
+        <location filename="../chareditor.ui" line="3985"/>
+        <location filename="../chareditor.ui" line="4924"/>
         <source>GE</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="990"/>
-        <location filename="../chareditor.ui" line="4926"/>
+        <location filename="../chareditor.ui" line="977"/>
+        <location filename="../chareditor.ui" line="4929"/>
         <source>KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1003"/>
-        <location filename="../chareditor.ui" line="4000"/>
-        <location filename="../chareditor.ui" line="4010"/>
-        <location filename="../chareditor.ui" line="4040"/>
-        <location filename="../chareditor.ui" line="4095"/>
-        <location filename="../chareditor.ui" line="4105"/>
-        <location filename="../chareditor.ui" line="4931"/>
+        <location filename="../chareditor.ui" line="990"/>
+        <location filename="../chareditor.ui" line="3995"/>
+        <location filename="../chareditor.ui" line="4005"/>
+        <location filename="../chareditor.ui" line="4035"/>
+        <location filename="../chareditor.ui" line="4090"/>
+        <location filename="../chareditor.ui" line="4100"/>
+        <location filename="../chareditor.ui" line="4934"/>
         <source>KK</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../chareditor.ui" line="1003"/>
         <location filename="../chareditor.ui" line="1016"/>
         <location filename="../chareditor.ui" line="1029"/>
         <location filename="../chareditor.ui" line="1042"/>
@@ -364,1866 +369,1865 @@
         <location filename="../chareditor.ui" line="1068"/>
         <location filename="../chareditor.ui" line="1081"/>
         <location filename="../chareditor.ui" line="1094"/>
-        <location filename="../chareditor.ui" line="1107"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1149"/>
+        <location filename="../chareditor.ui" line="1136"/>
         <source>Allgemeine Daten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1175"/>
+        <location filename="../chareditor.ui" line="1162"/>
         <source>Familie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1180"/>
+        <location filename="../chareditor.ui" line="1167"/>
         <source>Geburtsdatum</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1185"/>
+        <location filename="../chareditor.ui" line="1172"/>
         <source>Spezies</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1190"/>
+        <location filename="../chareditor.ui" line="1177"/>
         <source>Haarfarbe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1195"/>
+        <location filename="../chareditor.ui" line="1182"/>
         <source>Kultur</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1200"/>
+        <location filename="../chareditor.ui" line="1187"/>
         <source>Titel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1205"/>
+        <location filename="../chareditor.ui" line="1192"/>
         <source>Charakteristika</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1231"/>
+        <location filename="../chareditor.ui" line="1218"/>
         <source>Geburtsort</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1236"/>
+        <location filename="../chareditor.ui" line="1223"/>
         <source>Alter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1241"/>
+        <location filename="../chareditor.ui" line="1228"/>
         <source>Geschlecht</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1246"/>
+        <location filename="../chareditor.ui" line="1233"/>
         <source>Größe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1251"/>
-        <location filename="../chareditor.ui" line="4280"/>
-        <location filename="../chareditor.ui" line="4374"/>
-        <location filename="../chareditor.ui" line="4502"/>
-        <location filename="../chareditor.ui" line="4585"/>
-        <location filename="../chareditor.ui" line="4674"/>
-        <location filename="../chareditor.ui" line="4728"/>
+        <location filename="../chareditor.ui" line="1238"/>
+        <location filename="../chareditor.ui" line="4275"/>
+        <location filename="../chareditor.ui" line="4369"/>
+        <location filename="../chareditor.ui" line="4505"/>
+        <location filename="../chareditor.ui" line="4588"/>
+        <location filename="../chareditor.ui" line="4677"/>
+        <location filename="../chareditor.ui" line="4731"/>
         <source>Gewicht</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1256"/>
+        <location filename="../chareditor.ui" line="1243"/>
         <source>Augenfarbe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1261"/>
+        <location filename="../chareditor.ui" line="1248"/>
         <source>Profession</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1266"/>
+        <location filename="../chareditor.ui" line="1253"/>
         <source>Sozialstatus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1290"/>
+        <location filename="../chareditor.ui" line="1277"/>
         <source>Vorteile / Nachteile</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1300"/>
+        <location filename="../chareditor.ui" line="1287"/>
         <source>Vorteile</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1326"/>
-        <location filename="../chareditor.ui" line="1381"/>
-        <location filename="../chareditor.ui" line="1436"/>
+        <location filename="../chareditor.ui" line="1313"/>
+        <location filename="../chareditor.ui" line="1368"/>
+        <location filename="../chareditor.ui" line="1431"/>
         <source>Reihe Hinzufügen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1333"/>
-        <location filename="../chareditor.ui" line="1388"/>
-        <location filename="../chareditor.ui" line="1443"/>
+        <location filename="../chareditor.ui" line="1320"/>
+        <location filename="../chareditor.ui" line="1375"/>
+        <location filename="../chareditor.ui" line="1438"/>
         <source>Reihe Entfernen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1346"/>
+        <location filename="../chareditor.ui" line="1333"/>
         <source>Nachteile</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1402"/>
+        <location filename="../chareditor.ui" line="1397"/>
         <source>Allgemeine Sonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1478"/>
+        <location filename="../chareditor.ui" line="1473"/>
         <source>AP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1483"/>
+        <location filename="../chareditor.ui" line="1478"/>
         <source>Erfahrungsgrad</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1488"/>
+        <location filename="../chareditor.ui" line="1483"/>
         <source>Gesamt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1493"/>
+        <location filename="../chareditor.ui" line="1488"/>
         <source>Gesammelt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1498"/>
+        <location filename="../chareditor.ui" line="1493"/>
         <source>Ausgegeben</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1519"/>
-        <location filename="../chareditor.ui" line="4122"/>
+        <location filename="../chareditor.ui" line="1514"/>
+        <location filename="../chareditor.ui" line="4117"/>
         <source>Lebensenergie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1524"/>
+        <location filename="../chareditor.ui" line="1519"/>
         <source>Astralenergie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1529"/>
+        <location filename="../chareditor.ui" line="1524"/>
         <source>Karmaenergie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1534"/>
+        <location filename="../chareditor.ui" line="1529"/>
         <source>Seelenkraft</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1539"/>
+        <location filename="../chareditor.ui" line="1534"/>
         <source>Zähigkeit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1544"/>
+        <location filename="../chareditor.ui" line="1539"/>
         <source>Ausweichen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1549"/>
+        <location filename="../chareditor.ui" line="1544"/>
         <source>Initiative</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1554"/>
+        <location filename="../chareditor.ui" line="1549"/>
         <source>Geschwindigkeit</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1559"/>
-        <location filename="../chareditor.ui" line="1616"/>
+        <location filename="../chareditor.ui" line="1554"/>
+        <location filename="../chareditor.ui" line="1611"/>
         <source>Wert</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1564"/>
+        <location filename="../chareditor.ui" line="1559"/>
         <source>Bonus/Malus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1569"/>
+        <location filename="../chareditor.ui" line="1564"/>
         <source>Zukauf</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1574"/>
-        <location filename="../chareditor.ui" line="1626"/>
-        <location filename="../chareditor.ui" line="4155"/>
+        <location filename="../chareditor.ui" line="1569"/>
+        <location filename="../chareditor.ui" line="1621"/>
+        <location filename="../chareditor.ui" line="4150"/>
         <source>Max</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1582"/>
+        <location filename="../chareditor.ui" line="1577"/>
         <source>Schicksalspunkte</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1621"/>
+        <location filename="../chareditor.ui" line="1616"/>
         <source>Bonus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1631"/>
-        <location filename="../chareditor.ui" line="4160"/>
+        <location filename="../chareditor.ui" line="1626"/>
+        <location filename="../chareditor.ui" line="4155"/>
         <source>Aktuell</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1645"/>
+        <location filename="../chareditor.ui" line="1640"/>
         <source>Spielwerte</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1651"/>
+        <location filename="../chareditor.ui" line="1646"/>
         <source>Fertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1676"/>
+        <location filename="../chareditor.ui" line="1671"/>
         <source>Körpertalente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1687"/>
+        <location filename="../chareditor.ui" line="1682"/>
         <source>Fliegen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1692"/>
+        <location filename="../chareditor.ui" line="1687"/>
         <source>Gaukeleien</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1697"/>
+        <location filename="../chareditor.ui" line="1692"/>
         <source>Klettern</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1702"/>
+        <location filename="../chareditor.ui" line="1697"/>
         <source>Körperbeherrschung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1707"/>
+        <location filename="../chareditor.ui" line="1702"/>
         <source>Kraftakt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1712"/>
+        <location filename="../chareditor.ui" line="1707"/>
         <source>Reiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1717"/>
+        <location filename="../chareditor.ui" line="1712"/>
         <source>Schwimmen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1722"/>
+        <location filename="../chareditor.ui" line="1717"/>
         <source>Selbstbeherrschung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1727"/>
+        <location filename="../chareditor.ui" line="1722"/>
         <source>Singen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1732"/>
+        <location filename="../chareditor.ui" line="1727"/>
         <source>Sinnesschärfe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1737"/>
+        <location filename="../chareditor.ui" line="1732"/>
         <source>Tanzen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1742"/>
+        <location filename="../chareditor.ui" line="1737"/>
         <source>Taschendiebstahl</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1747"/>
+        <location filename="../chareditor.ui" line="1742"/>
         <source>Verbergen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1752"/>
+        <location filename="../chareditor.ui" line="1747"/>
         <source>Zechen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1762"/>
+        <location filename="../chareditor.ui" line="1757"/>
         <source>Gesellschaftstalente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1773"/>
+        <location filename="../chareditor.ui" line="1768"/>
         <source>Bekehren &amp; Überzeugen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1778"/>
+        <location filename="../chareditor.ui" line="1773"/>
         <source>Betören</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1783"/>
+        <location filename="../chareditor.ui" line="1778"/>
         <source>Einschüchtern</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1788"/>
+        <location filename="../chareditor.ui" line="1783"/>
         <source>Etikette</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1793"/>
+        <location filename="../chareditor.ui" line="1788"/>
         <source>Gassenwissen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1798"/>
+        <location filename="../chareditor.ui" line="1793"/>
         <source>Menschenkenntnis</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1803"/>
+        <location filename="../chareditor.ui" line="1798"/>
         <source>Überreden</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1808"/>
+        <location filename="../chareditor.ui" line="1803"/>
         <source>Verkleiden</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1813"/>
+        <location filename="../chareditor.ui" line="1808"/>
         <source>Willenkskraft</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1823"/>
+        <location filename="../chareditor.ui" line="1818"/>
         <source>Naturtalente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1834"/>
+        <location filename="../chareditor.ui" line="1829"/>
         <source>Fährtensuchen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1839"/>
+        <location filename="../chareditor.ui" line="1834"/>
         <source>Fesseln</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1844"/>
+        <location filename="../chareditor.ui" line="1839"/>
         <source>Fischen &amp; Angeln</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1849"/>
+        <location filename="../chareditor.ui" line="1844"/>
         <source>Orientierung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1854"/>
+        <location filename="../chareditor.ui" line="1849"/>
         <source>Pflanzenkunde</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1859"/>
+        <location filename="../chareditor.ui" line="1854"/>
         <source>Tierkunde</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1864"/>
+        <location filename="../chareditor.ui" line="1859"/>
         <source>Wildnisleben</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="1864"/>
+        <location filename="../chareditor.ui" line="3135"/>
+        <location filename="../chareditor.ui" line="5120"/>
+        <location filename="../chareditor.ui" line="5407"/>
+        <source>Probe</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="1869"/>
         <location filename="../chareditor.ui" line="3140"/>
-        <location filename="../chareditor.ui" line="5117"/>
-        <location filename="../chareditor.ui" line="5404"/>
-        <source>Probe</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="1874"/>
-        <location filename="../chareditor.ui" line="3145"/>
-        <location filename="../chareditor.ui" line="4364"/>
+        <location filename="../chareditor.ui" line="4359"/>
         <source>BE</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1879"/>
+        <location filename="../chareditor.ui" line="1874"/>
         <source>Stg</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="1879"/>
+        <location filename="../chareditor.ui" line="3150"/>
+        <location filename="../chareditor.ui" line="5125"/>
+        <location filename="../chareditor.ui" line="5412"/>
+        <source>Fw</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="1884"/>
         <location filename="../chareditor.ui" line="3155"/>
-        <location filename="../chareditor.ui" line="5122"/>
-        <location filename="../chareditor.ui" line="5409"/>
-        <source>Fw</source>
+        <source>R</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="1889"/>
         <location filename="../chareditor.ui" line="3160"/>
-        <source>R</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="1894"/>
-        <location filename="../chareditor.ui" line="3165"/>
         <source>Anmerkung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1899"/>
-        <location filename="../chareditor.ui" line="1959"/>
-        <location filename="../chareditor.ui" line="1989"/>
+        <location filename="../chareditor.ui" line="1894"/>
+        <location filename="../chareditor.ui" line="1954"/>
+        <location filename="../chareditor.ui" line="1984"/>
         <source>MU/GE/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1929"/>
+        <location filename="../chareditor.ui" line="1924"/>
         <source>MU/CH/FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1934"/>
-        <location filename="../chareditor.ui" line="1964"/>
-        <location filename="../chareditor.ui" line="1994"/>
-        <location filename="../chareditor.ui" line="2024"/>
-        <location filename="../chareditor.ui" line="2054"/>
-        <location filename="../chareditor.ui" line="2084"/>
-        <location filename="../chareditor.ui" line="2114"/>
-        <location filename="../chareditor.ui" line="2234"/>
-        <location filename="../chareditor.ui" line="2264"/>
-        <location filename="../chareditor.ui" line="2294"/>
-        <location filename="../chareditor.ui" line="2744"/>
-        <location filename="../chareditor.ui" line="2894"/>
-        <location filename="../chareditor.ui" line="2924"/>
-        <location filename="../chareditor.ui" line="3370"/>
-        <location filename="../chareditor.ui" line="3385"/>
-        <location filename="../chareditor.ui" line="3400"/>
-        <location filename="../chareditor.ui" line="3430"/>
-        <location filename="../chareditor.ui" line="3445"/>
-        <location filename="../chareditor.ui" line="3475"/>
-        <location filename="../chareditor.ui" line="3490"/>
-        <location filename="../chareditor.ui" line="3505"/>
-        <location filename="../chareditor.ui" line="3520"/>
-        <location filename="../chareditor.ui" line="3535"/>
-        <location filename="../chareditor.ui" line="3550"/>
-        <location filename="../chareditor.ui" line="3565"/>
-        <location filename="../chareditor.ui" line="3580"/>
-        <location filename="../chareditor.ui" line="3595"/>
-        <location filename="../chareditor.ui" line="3610"/>
+        <location filename="../chareditor.ui" line="1929"/>
+        <location filename="../chareditor.ui" line="1959"/>
+        <location filename="../chareditor.ui" line="1989"/>
+        <location filename="../chareditor.ui" line="2019"/>
+        <location filename="../chareditor.ui" line="2049"/>
+        <location filename="../chareditor.ui" line="2079"/>
+        <location filename="../chareditor.ui" line="2109"/>
+        <location filename="../chareditor.ui" line="2229"/>
+        <location filename="../chareditor.ui" line="2259"/>
+        <location filename="../chareditor.ui" line="2289"/>
+        <location filename="../chareditor.ui" line="2739"/>
+        <location filename="../chareditor.ui" line="2889"/>
+        <location filename="../chareditor.ui" line="2919"/>
+        <location filename="../chareditor.ui" line="3365"/>
+        <location filename="../chareditor.ui" line="3380"/>
+        <location filename="../chareditor.ui" line="3395"/>
+        <location filename="../chareditor.ui" line="3425"/>
+        <location filename="../chareditor.ui" line="3440"/>
+        <location filename="../chareditor.ui" line="3470"/>
+        <location filename="../chareditor.ui" line="3485"/>
+        <location filename="../chareditor.ui" line="3500"/>
+        <location filename="../chareditor.ui" line="3515"/>
+        <location filename="../chareditor.ui" line="3530"/>
+        <location filename="../chareditor.ui" line="3545"/>
+        <location filename="../chareditor.ui" line="3560"/>
+        <location filename="../chareditor.ui" line="3575"/>
+        <location filename="../chareditor.ui" line="3590"/>
+        <location filename="../chareditor.ui" line="3605"/>
         <source>Ja</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="1939"/>
-        <location filename="../chareditor.ui" line="1999"/>
-        <location filename="../chareditor.ui" line="2059"/>
-        <location filename="../chareditor.ui" line="2089"/>
-        <location filename="../chareditor.ui" line="2119"/>
-        <location filename="../chareditor.ui" line="2269"/>
-        <location filename="../chareditor.ui" line="2419"/>
-        <location filename="../chareditor.ui" line="2449"/>
-        <location filename="../chareditor.ui" line="2479"/>
-        <location filename="../chareditor.ui" line="2509"/>
-        <location filename="../chareditor.ui" line="2629"/>
-        <location filename="../chareditor.ui" line="2839"/>
-        <location filename="../chareditor.ui" line="3205"/>
-        <location filename="../chareditor.ui" line="3220"/>
-        <location filename="../chareditor.ui" line="3235"/>
-        <location filename="../chareditor.ui" line="3250"/>
-        <location filename="../chareditor.ui" line="3280"/>
-        <location filename="../chareditor.ui" line="3325"/>
-        <location filename="../chareditor.ui" line="3340"/>
-        <location filename="../chareditor.ui" line="3390"/>
-        <location filename="../chareditor.ui" line="3420"/>
-        <location filename="../chareditor.ui" line="3435"/>
-        <location filename="../chareditor.ui" line="3450"/>
-        <location filename="../chareditor.ui" line="3465"/>
-        <location filename="../chareditor.ui" line="3495"/>
-        <location filename="../chareditor.ui" line="3525"/>
-        <location filename="../chareditor.ui" line="3945"/>
-        <location filename="../chareditor.ui" line="3985"/>
-        <location filename="../chareditor.ui" line="4035"/>
-        <location filename="../chareditor.ui" line="4080"/>
-        <source>B</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="1969"/>
-        <location filename="../chareditor.ui" line="2179"/>
-        <location filename="../chareditor.ui" line="2239"/>
-        <location filename="../chareditor.ui" line="2329"/>
-        <location filename="../chareditor.ui" line="2779"/>
-        <location filename="../chareditor.ui" line="2809"/>
-        <location filename="../chareditor.ui" line="3190"/>
-        <location filename="../chareditor.ui" line="3295"/>
-        <location filename="../chareditor.ui" line="3310"/>
-        <location filename="../chareditor.ui" line="3355"/>
-        <location filename="../chareditor.ui" line="3405"/>
-        <location filename="../chareditor.ui" line="3510"/>
-        <location filename="../chareditor.ui" line="3540"/>
-        <location filename="../chareditor.ui" line="3570"/>
-        <location filename="../chareditor.ui" line="3600"/>
-        <location filename="../chareditor.ui" line="3615"/>
-        <source>A</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2019"/>
-        <source>GE/GE/KO</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2029"/>
-        <location filename="../chareditor.ui" line="2149"/>
-        <location filename="../chareditor.ui" line="2209"/>
-        <location filename="../chareditor.ui" line="2659"/>
-        <location filename="../chareditor.ui" line="3480"/>
-        <source>D</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2049"/>
-        <source>KO/KK/KK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2079"/>
-        <source>CH/GE/KK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2109"/>
-        <source>GE/KO/KK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2139"/>
-        <source>MU/MU/KO</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2144"/>
-        <location filename="../chareditor.ui" line="2324"/>
+        <location filename="../chareditor.ui" line="1934"/>
+        <location filename="../chareditor.ui" line="1994"/>
+        <location filename="../chareditor.ui" line="2054"/>
+        <location filename="../chareditor.ui" line="2084"/>
+        <location filename="../chareditor.ui" line="2114"/>
+        <location filename="../chareditor.ui" line="2264"/>
         <location filename="../chareditor.ui" line="2414"/>
+        <location filename="../chareditor.ui" line="2444"/>
         <location filename="../chareditor.ui" line="2474"/>
-        <location filename="../chareditor.ui" line="2564"/>
-        <location filename="../chareditor.ui" line="2594"/>
-        <location filename="../chareditor.ui" line="2654"/>
+        <location filename="../chareditor.ui" line="2504"/>
+        <location filename="../chareditor.ui" line="2624"/>
         <location filename="../chareditor.ui" line="2834"/>
-        <location filename="../chareditor.ui" line="3185"/>
         <location filename="../chareditor.ui" line="3200"/>
         <location filename="../chareditor.ui" line="3215"/>
         <location filename="../chareditor.ui" line="3230"/>
         <location filename="../chareditor.ui" line="3245"/>
-        <location filename="../chareditor.ui" line="3260"/>
         <location filename="../chareditor.ui" line="3275"/>
-        <location filename="../chareditor.ui" line="3290"/>
-        <location filename="../chareditor.ui" line="3305"/>
         <location filename="../chareditor.ui" line="3320"/>
         <location filename="../chareditor.ui" line="3335"/>
-        <location filename="../chareditor.ui" line="3350"/>
+        <location filename="../chareditor.ui" line="3385"/>
         <location filename="../chareditor.ui" line="3415"/>
+        <location filename="../chareditor.ui" line="3430"/>
+        <location filename="../chareditor.ui" line="3445"/>
         <location filename="../chareditor.ui" line="3460"/>
-        <source>Nein</source>
+        <location filename="../chareditor.ui" line="3490"/>
+        <location filename="../chareditor.ui" line="3520"/>
+        <location filename="../chareditor.ui" line="3940"/>
+        <location filename="../chareditor.ui" line="3980"/>
+        <location filename="../chareditor.ui" line="4030"/>
+        <location filename="../chareditor.ui" line="4075"/>
+        <source>B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2169"/>
-        <source>KL/CH/KO</source>
-        <translation></translation>
-    </message>
-    <message>
+        <location filename="../chareditor.ui" line="1964"/>
         <location filename="../chareditor.ui" line="2174"/>
-        <location filename="../chareditor.ui" line="2204"/>
-        <location filename="../chareditor.ui" line="2444"/>
-        <location filename="../chareditor.ui" line="2504"/>
-        <location filename="../chareditor.ui" line="2534"/>
-        <location filename="../chareditor.ui" line="2624"/>
+        <location filename="../chareditor.ui" line="2234"/>
+        <location filename="../chareditor.ui" line="2324"/>
         <location filename="../chareditor.ui" line="2774"/>
         <location filename="../chareditor.ui" line="2804"/>
-        <location filename="../chareditor.ui" line="2864"/>
-        <source>Evtl.</source>
+        <location filename="../chareditor.ui" line="3185"/>
+        <location filename="../chareditor.ui" line="3290"/>
+        <location filename="../chareditor.ui" line="3305"/>
+        <location filename="../chareditor.ui" line="3350"/>
+        <location filename="../chareditor.ui" line="3400"/>
+        <location filename="../chareditor.ui" line="3505"/>
+        <location filename="../chareditor.ui" line="3535"/>
+        <location filename="../chareditor.ui" line="3565"/>
+        <location filename="../chareditor.ui" line="3595"/>
+        <location filename="../chareditor.ui" line="3610"/>
+        <source>A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2199"/>
-        <location filename="../chareditor.ui" line="2829"/>
-        <source>KL/IN/IN</source>
+        <location filename="../chareditor.ui" line="2014"/>
+        <source>GE/GE/KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2229"/>
-        <source>KL/CH/GE</source>
+        <location filename="../chareditor.ui" line="2024"/>
+        <location filename="../chareditor.ui" line="2144"/>
+        <location filename="../chareditor.ui" line="2204"/>
+        <location filename="../chareditor.ui" line="2654"/>
+        <location filename="../chareditor.ui" line="3475"/>
+        <source>D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2259"/>
-        <source>MU/FF/GE</source>
+        <location filename="../chareditor.ui" line="2044"/>
+        <source>KO/KK/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2289"/>
-        <location filename="../chareditor.ui" line="2739"/>
-        <source>MU/IN/GE</source>
+        <location filename="../chareditor.ui" line="2074"/>
+        <source>CH/GE/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="2299"/>
-        <location filename="../chareditor.ui" line="2539"/>
-        <location filename="../chareditor.ui" line="2569"/>
-        <location filename="../chareditor.ui" line="2599"/>
-        <location filename="../chareditor.ui" line="2749"/>
-        <location filename="../chareditor.ui" line="2869"/>
-        <location filename="../chareditor.ui" line="2899"/>
-        <location filename="../chareditor.ui" line="2929"/>
-        <location filename="../chareditor.ui" line="3265"/>
-        <location filename="../chareditor.ui" line="3375"/>
-        <location filename="../chareditor.ui" line="3555"/>
-        <location filename="../chareditor.ui" line="3585"/>
-        <location filename="../chareditor.ui" line="3965"/>
-        <location filename="../chareditor.ui" line="3995"/>
-        <location filename="../chareditor.ui" line="4005"/>
-        <location filename="../chareditor.ui" line="4015"/>
-        <location filename="../chareditor.ui" line="4045"/>
-        <location filename="../chareditor.ui" line="4055"/>
-        <location filename="../chareditor.ui" line="4065"/>
-        <location filename="../chareditor.ui" line="4100"/>
-        <location filename="../chareditor.ui" line="4110"/>
-        <source>C</source>
+        <location filename="../chareditor.ui" line="2104"/>
+        <source>GE/KO/KK</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../chareditor.ui" line="2134"/>
+        <source>MU/MU/KO</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2139"/>
         <location filename="../chareditor.ui" line="2319"/>
-        <source>KL/KO/KK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2379"/>
-        <source>IN/CH/CH</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../chareditor.ui" line="2409"/>
-        <source>MU/KL/CH</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2439"/>
-        <source>MU/CH/CH</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../chareditor.ui" line="2469"/>
+        <location filename="../chareditor.ui" line="2559"/>
         <location filename="../chareditor.ui" line="2589"/>
         <location filename="../chareditor.ui" line="2649"/>
-        <source>MU/IN/CH</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2499"/>
-        <location filename="../chareditor.ui" line="2529"/>
-        <location filename="../chareditor.ui" line="2559"/>
-        <location filename="../chareditor.ui" line="3410"/>
-        <source>KL/IN/CH</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2619"/>
-        <source>IN/CH/GE</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2709"/>
-        <location filename="../chareditor.ui" line="2919"/>
-        <source>MU/GE/KO</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2769"/>
-        <source>KL/FF/KK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2799"/>
-        <location filename="../chareditor.ui" line="3515"/>
-        <source>FF/GE/KO</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2859"/>
-        <source>KL/FF/KO</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2889"/>
-        <source>MU/MU/CH</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2968"/>
-        <source>Wissenstalente</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2979"/>
-        <source>Brett- &amp; Glücksspiel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2984"/>
-        <source>Geographie</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2989"/>
-        <source>Geschichtswissen</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2994"/>
-        <source>Götter &amp; Kulte</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="2999"/>
-        <source>Kriegskunst</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3004"/>
-        <source>Magiekunde</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3009"/>
-        <source>Mechanik</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3014"/>
-        <source>Rechnen</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3019"/>
-        <source>Rechtskunde</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3024"/>
-        <source>Sagen &amp; Legenden</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3029"/>
-        <source>Sphärenkunde</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3034"/>
-        <source>Sternkunde</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3044"/>
-        <source>Handwerkstalente</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3055"/>
-        <source>Alchimie</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3060"/>
-        <source>Boote &amp; Schiffe</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3065"/>
-        <source>Fahrzeuge</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3070"/>
-        <source>Handel</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3075"/>
-        <source>Heilkunde Gift</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3080"/>
-        <source>Heilkunde Krankheiten</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3085"/>
-        <source>Heilkunde Seele</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3090"/>
-        <source>Heilkunde Wunden</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3095"/>
-        <source>Holzbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3100"/>
-        <source>Lebensmittelbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3105"/>
-        <source>Lederbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3110"/>
-        <source>Malen &amp; Zeichnen</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3115"/>
-        <source>Metallbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3120"/>
-        <source>Musizieren</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3125"/>
-        <source>Schlösserknacken</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3130"/>
-        <source>Steinbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3135"/>
-        <source>Stoffbearbeitung</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3150"/>
-        <source>Stg.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../chareditor.ui" line="3170"/>
+        <location filename="../chareditor.ui" line="2829"/>
         <location filename="../chareditor.ui" line="3180"/>
         <location filename="../chareditor.ui" line="3195"/>
         <location filename="../chareditor.ui" line="3210"/>
         <location filename="../chareditor.ui" line="3225"/>
+        <location filename="../chareditor.ui" line="3240"/>
         <location filename="../chareditor.ui" line="3255"/>
         <location filename="../chareditor.ui" line="3270"/>
+        <location filename="../chareditor.ui" line="3285"/>
         <location filename="../chareditor.ui" line="3300"/>
         <location filename="../chareditor.ui" line="3315"/>
         <location filename="../chareditor.ui" line="3330"/>
         <location filename="../chareditor.ui" line="3345"/>
+        <location filename="../chareditor.ui" line="3410"/>
+        <location filename="../chareditor.ui" line="3455"/>
+        <source>Nein</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2164"/>
+        <source>KL/CH/KO</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2169"/>
+        <location filename="../chareditor.ui" line="2199"/>
+        <location filename="../chareditor.ui" line="2439"/>
+        <location filename="../chareditor.ui" line="2499"/>
+        <location filename="../chareditor.ui" line="2529"/>
+        <location filename="../chareditor.ui" line="2619"/>
+        <location filename="../chareditor.ui" line="2769"/>
+        <location filename="../chareditor.ui" line="2799"/>
+        <location filename="../chareditor.ui" line="2859"/>
+        <source>Evtl.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2194"/>
+        <location filename="../chareditor.ui" line="2824"/>
+        <source>KL/IN/IN</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2224"/>
+        <source>KL/CH/GE</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2254"/>
+        <source>MU/FF/GE</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2284"/>
+        <location filename="../chareditor.ui" line="2734"/>
+        <source>MU/IN/GE</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2294"/>
+        <location filename="../chareditor.ui" line="2534"/>
+        <location filename="../chareditor.ui" line="2564"/>
+        <location filename="../chareditor.ui" line="2594"/>
+        <location filename="../chareditor.ui" line="2744"/>
+        <location filename="../chareditor.ui" line="2864"/>
+        <location filename="../chareditor.ui" line="2894"/>
+        <location filename="../chareditor.ui" line="2924"/>
+        <location filename="../chareditor.ui" line="3260"/>
+        <location filename="../chareditor.ui" line="3370"/>
+        <location filename="../chareditor.ui" line="3550"/>
+        <location filename="../chareditor.ui" line="3580"/>
+        <location filename="../chareditor.ui" line="3960"/>
+        <location filename="../chareditor.ui" line="3990"/>
+        <location filename="../chareditor.ui" line="4000"/>
+        <location filename="../chareditor.ui" line="4010"/>
+        <location filename="../chareditor.ui" line="4040"/>
+        <location filename="../chareditor.ui" line="4050"/>
+        <location filename="../chareditor.ui" line="4060"/>
+        <location filename="../chareditor.ui" line="4095"/>
+        <location filename="../chareditor.ui" line="4105"/>
+        <source>C</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2314"/>
+        <source>KL/KO/KK</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2374"/>
+        <source>IN/CH/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2404"/>
+        <source>MU/KL/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2434"/>
+        <source>MU/CH/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2464"/>
+        <location filename="../chareditor.ui" line="2584"/>
+        <location filename="../chareditor.ui" line="2644"/>
+        <source>MU/IN/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2494"/>
+        <location filename="../chareditor.ui" line="2524"/>
+        <location filename="../chareditor.ui" line="2554"/>
+        <location filename="../chareditor.ui" line="3405"/>
+        <source>KL/IN/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2614"/>
+        <source>IN/CH/GE</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2704"/>
+        <location filename="../chareditor.ui" line="2914"/>
+        <source>MU/GE/KO</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2764"/>
+        <source>KL/FF/KK</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2794"/>
+        <location filename="../chareditor.ui" line="3510"/>
+        <source>FF/GE/KO</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2854"/>
+        <source>KL/FF/KO</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2884"/>
+        <source>MU/MU/CH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2963"/>
+        <source>Wissenstalente</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2974"/>
+        <source>Brett- &amp; Glücksspiel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2979"/>
+        <source>Geographie</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2984"/>
+        <source>Geschichtswissen</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2989"/>
+        <source>Götter &amp; Kulte</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2994"/>
+        <source>Kriegskunst</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="2999"/>
+        <source>Magiekunde</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3004"/>
+        <source>Mechanik</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3009"/>
+        <source>Rechnen</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3014"/>
+        <source>Rechtskunde</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3019"/>
+        <source>Sagen &amp; Legenden</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3024"/>
+        <source>Sphärenkunde</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3029"/>
+        <source>Sternkunde</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3039"/>
+        <source>Handwerkstalente</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3050"/>
+        <source>Alchimie</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3055"/>
+        <source>Boote &amp; Schiffe</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3060"/>
+        <source>Fahrzeuge</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3065"/>
+        <source>Handel</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3070"/>
+        <source>Heilkunde Gift</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3075"/>
+        <source>Heilkunde Krankheiten</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3080"/>
+        <source>Heilkunde Seele</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3085"/>
+        <source>Heilkunde Wunden</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3090"/>
+        <source>Holzbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3095"/>
+        <source>Lebensmittelbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3100"/>
+        <source>Lederbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3105"/>
+        <source>Malen &amp; Zeichnen</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3110"/>
+        <source>Metallbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3115"/>
+        <source>Musizieren</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3120"/>
+        <source>Schlösserknacken</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3125"/>
+        <source>Steinbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3130"/>
+        <source>Stoffbearbeitung</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3145"/>
+        <source>Stg.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../chareditor.ui" line="3165"/>
+        <location filename="../chareditor.ui" line="3175"/>
+        <location filename="../chareditor.ui" line="3190"/>
+        <location filename="../chareditor.ui" line="3205"/>
+        <location filename="../chareditor.ui" line="3220"/>
+        <location filename="../chareditor.ui" line="3250"/>
+        <location filename="../chareditor.ui" line="3265"/>
+        <location filename="../chareditor.ui" line="3295"/>
+        <location filename="../chareditor.ui" line="3310"/>
+        <location filename="../chareditor.ui" line="3325"/>
+        <location filename="../chareditor.ui" line="3340"/>
         <source>KL/KL/IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3240"/>
-        <location filename="../chareditor.ui" line="3425"/>
+        <location filename="../chareditor.ui" line="3235"/>
+        <location filename="../chareditor.ui" line="3420"/>
         <source>MU/KL/IN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3285"/>
+        <location filename="../chareditor.ui" line="3280"/>
         <source>KL/KL/FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3360"/>
+        <location filename="../chareditor.ui" line="3355"/>
         <source>FF/FF/KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3365"/>
+        <location filename="../chareditor.ui" line="3360"/>
         <source>MU/KL/FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3380"/>
-        <location filename="../chareditor.ui" line="3485"/>
+        <location filename="../chareditor.ui" line="3375"/>
+        <location filename="../chareditor.ui" line="3480"/>
         <source>FF/GE/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3395"/>
-        <location filename="../chareditor.ui" line="3560"/>
+        <location filename="../chareditor.ui" line="3390"/>
+        <location filename="../chareditor.ui" line="3555"/>
         <source>CH/FF/KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3440"/>
+        <location filename="../chareditor.ui" line="3435"/>
         <source>MU/IN/KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3455"/>
+        <location filename="../chareditor.ui" line="3450"/>
         <source>IN/CH/KO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3470"/>
-        <location filename="../chareditor.ui" line="3605"/>
+        <location filename="../chareditor.ui" line="3465"/>
+        <location filename="../chareditor.ui" line="3600"/>
         <source>KL/FF/FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3500"/>
-        <location filename="../chareditor.ui" line="3530"/>
-        <location filename="../chareditor.ui" line="3575"/>
+        <location filename="../chareditor.ui" line="3495"/>
+        <location filename="../chareditor.ui" line="3525"/>
+        <location filename="../chareditor.ui" line="3570"/>
         <source>IN/FF/FF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3545"/>
+        <location filename="../chareditor.ui" line="3540"/>
         <source>FF/KO/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3590"/>
+        <location filename="../chareditor.ui" line="3585"/>
         <source>FF/FF/KK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3635"/>
+        <location filename="../chareditor.ui" line="3630"/>
         <source>Sprachen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3684"/>
-        <location filename="../chareditor.ui" line="3773"/>
-        <location filename="../chareditor.ui" line="4190"/>
-        <location filename="../chareditor.ui" line="4333"/>
-        <location filename="../chareditor.ui" line="4432"/>
-        <location filename="../chareditor.ui" line="4543"/>
-        <location filename="../chareditor.ui" line="4626"/>
-        <location filename="../chareditor.ui" line="4689"/>
-        <location filename="../chareditor.ui" line="4743"/>
-        <location filename="../chareditor.ui" line="4841"/>
-        <location filename="../chareditor.ui" line="5018"/>
-        <location filename="../chareditor.ui" line="5053"/>
-        <location filename="../chareditor.ui" line="5172"/>
-        <location filename="../chareditor.ui" line="5231"/>
-        <location filename="../chareditor.ui" line="5273"/>
-        <location filename="../chareditor.ui" line="5459"/>
-        <location filename="../chareditor.ui" line="5522"/>
-        <location filename="../chareditor.ui" line="5568"/>
-        <location filename="../chareditor.ui" line="5937"/>
-        <location filename="../chareditor.ui" line="6517"/>
+        <location filename="../chareditor.ui" line="3679"/>
+        <location filename="../chareditor.ui" line="3768"/>
+        <location filename="../chareditor.ui" line="4185"/>
+        <location filename="../chareditor.ui" line="4328"/>
+        <location filename="../chareditor.ui" line="4427"/>
+        <location filename="../chareditor.ui" line="4546"/>
+        <location filename="../chareditor.ui" line="4629"/>
+        <location filename="../chareditor.ui" line="4692"/>
+        <location filename="../chareditor.ui" line="4746"/>
+        <location filename="../chareditor.ui" line="4844"/>
+        <location filename="../chareditor.ui" line="5021"/>
+        <location filename="../chareditor.ui" line="5056"/>
+        <location filename="../chareditor.ui" line="5175"/>
+        <location filename="../chareditor.ui" line="5234"/>
+        <location filename="../chareditor.ui" line="5276"/>
+        <location filename="../chareditor.ui" line="5462"/>
+        <location filename="../chareditor.ui" line="5525"/>
+        <location filename="../chareditor.ui" line="5571"/>
+        <location filename="../chareditor.ui" line="5940"/>
+        <location filename="../chareditor.ui" line="6528"/>
         <source>+</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3703"/>
-        <location filename="../chareditor.ui" line="3792"/>
-        <location filename="../chareditor.ui" line="4197"/>
-        <location filename="../chareditor.ui" line="4308"/>
-        <location filename="../chareditor.ui" line="4407"/>
-        <location filename="../chareditor.ui" line="4524"/>
-        <location filename="../chareditor.ui" line="4607"/>
-        <location filename="../chareditor.ui" line="4696"/>
-        <location filename="../chareditor.ui" line="4750"/>
-        <location filename="../chareditor.ui" line="4848"/>
-        <location filename="../chareditor.ui" line="5025"/>
-        <location filename="../chareditor.ui" line="5060"/>
-        <location filename="../chareditor.ui" line="5179"/>
-        <location filename="../chareditor.ui" line="5238"/>
-        <location filename="../chareditor.ui" line="5280"/>
-        <location filename="../chareditor.ui" line="5466"/>
-        <location filename="../chareditor.ui" line="5529"/>
-        <location filename="../chareditor.ui" line="5575"/>
-        <location filename="../chareditor.ui" line="5944"/>
-        <location filename="../chareditor.ui" line="6524"/>
+        <location filename="../chareditor.ui" line="3698"/>
+        <location filename="../chareditor.ui" line="3787"/>
+        <location filename="../chareditor.ui" line="4192"/>
+        <location filename="../chareditor.ui" line="4303"/>
+        <location filename="../chareditor.ui" line="4402"/>
+        <location filename="../chareditor.ui" line="4527"/>
+        <location filename="../chareditor.ui" line="4610"/>
+        <location filename="../chareditor.ui" line="4699"/>
+        <location filename="../chareditor.ui" line="4753"/>
+        <location filename="../chareditor.ui" line="4851"/>
+        <location filename="../chareditor.ui" line="5028"/>
+        <location filename="../chareditor.ui" line="5063"/>
+        <location filename="../chareditor.ui" line="5182"/>
+        <location filename="../chareditor.ui" line="5241"/>
+        <location filename="../chareditor.ui" line="5283"/>
+        <location filename="../chareditor.ui" line="5469"/>
+        <location filename="../chareditor.ui" line="5532"/>
+        <location filename="../chareditor.ui" line="5578"/>
+        <location filename="../chareditor.ui" line="5947"/>
+        <location filename="../chareditor.ui" line="6535"/>
         <source>-</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3724"/>
+        <location filename="../chareditor.ui" line="3719"/>
         <source>Schriften</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3808"/>
+        <location filename="../chareditor.ui" line="3803"/>
         <source>Kampf</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3826"/>
+        <location filename="../chareditor.ui" line="3821"/>
         <source>Kampftechniken / Lebensenergie / Kampfsonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3836"/>
+        <location filename="../chareditor.ui" line="3831"/>
         <source>Kampftechniken</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3850"/>
+        <location filename="../chareditor.ui" line="3845"/>
         <source>Armbrüste</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3855"/>
+        <location filename="../chareditor.ui" line="3850"/>
         <source>Bögen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3860"/>
+        <location filename="../chareditor.ui" line="3855"/>
         <source>Dolche</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3865"/>
+        <location filename="../chareditor.ui" line="3860"/>
         <source>Fechtwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3870"/>
+        <location filename="../chareditor.ui" line="3865"/>
         <source>Hiebwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3875"/>
+        <location filename="../chareditor.ui" line="3870"/>
         <source>Kettenwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3880"/>
+        <location filename="../chareditor.ui" line="3875"/>
         <source>Raufen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3885"/>
+        <location filename="../chareditor.ui" line="3880"/>
         <source>Schilde</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3890"/>
+        <location filename="../chareditor.ui" line="3885"/>
         <source>Schwerter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3895"/>
+        <location filename="../chareditor.ui" line="3890"/>
         <source>Stangenwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3900"/>
+        <location filename="../chareditor.ui" line="3895"/>
         <source>Wurfwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3905"/>
+        <location filename="../chareditor.ui" line="3900"/>
         <source>Zweihandhiebwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3910"/>
+        <location filename="../chareditor.ui" line="3905"/>
         <source>Zweihandschwerter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3915"/>
+        <location filename="../chareditor.ui" line="3910"/>
         <source>Leiteig.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3920"/>
-        <location filename="../chareditor.ui" line="5152"/>
+        <location filename="../chareditor.ui" line="3915"/>
+        <location filename="../chareditor.ui" line="5155"/>
         <source>Sf.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3925"/>
+        <location filename="../chareditor.ui" line="3920"/>
         <source>Ktw.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3930"/>
+        <location filename="../chareditor.ui" line="3925"/>
         <source>AT/FK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3935"/>
-        <location filename="../chareditor.ui" line="4275"/>
-        <location filename="../chareditor.ui" line="4998"/>
+        <location filename="../chareditor.ui" line="3930"/>
+        <location filename="../chareditor.ui" line="4270"/>
+        <location filename="../chareditor.ui" line="5001"/>
         <source>PA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="3955"/>
-        <location filename="../chareditor.ui" line="3975"/>
-        <location filename="../chareditor.ui" line="4025"/>
-        <location filename="../chareditor.ui" line="4090"/>
+        <location filename="../chareditor.ui" line="3950"/>
+        <location filename="../chareditor.ui" line="3970"/>
+        <location filename="../chareditor.ui" line="4020"/>
+        <location filename="../chareditor.ui" line="4085"/>
         <source>X</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4030"/>
-        <location filename="../chareditor.ui" line="4050"/>
-        <location filename="../chareditor.ui" line="4060"/>
+        <location filename="../chareditor.ui" line="4025"/>
+        <location filename="../chareditor.ui" line="4045"/>
+        <location filename="../chareditor.ui" line="4055"/>
         <source>GE/KK</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../chareditor.ui" line="4160"/>
         <location filename="../chareditor.ui" line="4165"/>
-        <location filename="../chareditor.ui" line="4170"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4178"/>
+        <location filename="../chareditor.ui" line="4173"/>
         <source>Kampfsonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4219"/>
+        <location filename="../chareditor.ui" line="4214"/>
         <source>Nahkampfwaffen / Rüstungen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4229"/>
+        <location filename="../chareditor.ui" line="4224"/>
         <source>Nahkampfwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4240"/>
-        <location filename="../chareditor.ui" line="4467"/>
+        <location filename="../chareditor.ui" line="4235"/>
+        <location filename="../chareditor.ui" line="4470"/>
         <source>Waffe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4245"/>
-        <location filename="../chareditor.ui" line="4472"/>
+        <location filename="../chareditor.ui" line="4240"/>
+        <location filename="../chareditor.ui" line="4475"/>
         <source>Kampftechnik</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4250"/>
+        <location filename="../chareditor.ui" line="4245"/>
         <source>Schadensbonus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4255"/>
-        <location filename="../chareditor.ui" line="4482"/>
-        <location filename="../chareditor.ui" line="5003"/>
+        <location filename="../chareditor.ui" line="4250"/>
+        <location filename="../chareditor.ui" line="4485"/>
+        <location filename="../chareditor.ui" line="5006"/>
         <source>TP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4260"/>
-        <location filename="../chareditor.ui" line="4580"/>
+        <location filename="../chareditor.ui" line="4255"/>
+        <location filename="../chareditor.ui" line="4583"/>
         <source>AT/PA Mod.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4265"/>
-        <location filename="../chareditor.ui" line="4487"/>
-        <location filename="../chareditor.ui" line="5137"/>
-        <location filename="../chareditor.ui" line="5424"/>
+        <location filename="../chareditor.ui" line="4260"/>
+        <location filename="../chareditor.ui" line="4490"/>
+        <location filename="../chareditor.ui" line="5140"/>
+        <location filename="../chareditor.ui" line="5427"/>
         <source>Reichweite</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4270"/>
-        <location filename="../chareditor.ui" line="4993"/>
+        <location filename="../chareditor.ui" line="4265"/>
+        <location filename="../chareditor.ui" line="4996"/>
         <source>AT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4346"/>
+        <location filename="../chareditor.ui" line="4341"/>
         <source>Rüstungen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4354"/>
+        <location filename="../chareditor.ui" line="4349"/>
         <source>Rüstung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4359"/>
-        <location filename="../chareditor.ui" line="4956"/>
+        <location filename="../chareditor.ui" line="4354"/>
+        <location filename="../chareditor.ui" line="4959"/>
         <source>RS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4369"/>
+        <location filename="../chareditor.ui" line="4364"/>
         <source>Zus. Abzüge</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4379"/>
+        <location filename="../chareditor.ui" line="4374"/>
         <source>Reise, Schlacht...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4446"/>
+        <location filename="../chareditor.ui" line="4449"/>
         <source>Fernkampfwaffen / Schild / Parierwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4456"/>
+        <location filename="../chareditor.ui" line="4459"/>
         <source>Fernkampfwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4477"/>
+        <location filename="../chareditor.ui" line="4480"/>
         <source>Ladezeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4492"/>
+        <location filename="../chareditor.ui" line="4495"/>
         <source>Fernkampf</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4497"/>
+        <location filename="../chareditor.ui" line="4500"/>
         <source>Munition</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4559"/>
+        <location filename="../chareditor.ui" line="4562"/>
         <source>Schild / Parierwaffen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4570"/>
+        <location filename="../chareditor.ui" line="4573"/>
         <source>Schild / Parierwaffe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4575"/>
+        <location filename="../chareditor.ui" line="4578"/>
         <source>Strukturp.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4647"/>
+        <location filename="../chareditor.ui" line="4650"/>
         <source>Besitz</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4655"/>
+        <location filename="../chareditor.ui" line="4658"/>
         <source>Ausrüstung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4669"/>
-        <location filename="../chareditor.ui" line="4723"/>
+        <location filename="../chareditor.ui" line="4672"/>
+        <location filename="../chareditor.ui" line="4726"/>
         <source>Gegenstand</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4679"/>
-        <location filename="../chareditor.ui" line="4733"/>
+        <location filename="../chareditor.ui" line="4682"/>
+        <location filename="../chareditor.ui" line="4736"/>
         <source>Wo getragen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4763"/>
+        <location filename="../chareditor.ui" line="4766"/>
         <source>Geldbeutel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4783"/>
+        <location filename="../chareditor.ui" line="4786"/>
         <source>Dukaten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4788"/>
+        <location filename="../chareditor.ui" line="4791"/>
         <source>Silbertaler</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4793"/>
+        <location filename="../chareditor.ui" line="4796"/>
         <source>Heller</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4798"/>
+        <location filename="../chareditor.ui" line="4801"/>
         <source>Kreuzer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4803"/>
+        <location filename="../chareditor.ui" line="4806"/>
         <source>Edelsteine</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4808"/>
+        <location filename="../chareditor.ui" line="4811"/>
         <source>Schmuck</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4813"/>
+        <location filename="../chareditor.ui" line="4816"/>
         <source>Sonstiges</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4822"/>
+        <location filename="../chareditor.ui" line="4825"/>
         <source>Tier-Sonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4861"/>
+        <location filename="../chareditor.ui" line="4864"/>
         <source>Tier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4886"/>
+        <location filename="../chareditor.ui" line="4889"/>
         <source>Typus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4891"/>
+        <location filename="../chareditor.ui" line="4894"/>
         <source>Größenkategorie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4936"/>
+        <location filename="../chareditor.ui" line="4939"/>
         <source>LeP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4941"/>
+        <location filename="../chareditor.ui" line="4944"/>
         <source>AsP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4946"/>
+        <location filename="../chareditor.ui" line="4949"/>
         <source>SK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4951"/>
+        <location filename="../chareditor.ui" line="4954"/>
         <source>ZK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4961"/>
+        <location filename="../chareditor.ui" line="4964"/>
         <source>INI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4966"/>
+        <location filename="../chareditor.ui" line="4969"/>
         <source>GS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="4988"/>
+        <location filename="../chareditor.ui" line="4991"/>
         <source>Angriff</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5008"/>
+        <location filename="../chareditor.ui" line="5011"/>
         <source>RW</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5034"/>
+        <location filename="../chareditor.ui" line="5037"/>
         <source>Aktionen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5072"/>
+        <location filename="../chareditor.ui" line="5075"/>
         <source>Zauber und Rituale</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5090"/>
+        <location filename="../chareditor.ui" line="5093"/>
         <source>Zauber / Rituale</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5112"/>
+        <location filename="../chareditor.ui" line="5115"/>
         <source>Zauber &amp; Ritual</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5127"/>
-        <location filename="../chareditor.ui" line="5414"/>
+        <location filename="../chareditor.ui" line="5130"/>
+        <location filename="../chareditor.ui" line="5417"/>
         <source>Kosten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5132"/>
+        <location filename="../chareditor.ui" line="5135"/>
         <source>Zauberdauer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5142"/>
-        <location filename="../chareditor.ui" line="5429"/>
+        <location filename="../chareditor.ui" line="5145"/>
+        <location filename="../chareditor.ui" line="5432"/>
         <source>Wirkungsdauer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5147"/>
-        <location filename="../chareditor.ui" line="5323"/>
+        <location filename="../chareditor.ui" line="5150"/>
+        <location filename="../chareditor.ui" line="5326"/>
         <source>Merkmal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5157"/>
-        <location filename="../chareditor.ui" line="5444"/>
+        <location filename="../chareditor.ui" line="5160"/>
+        <location filename="../chareditor.ui" line="5447"/>
         <source>Wirkung</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5162"/>
+        <location filename="../chareditor.ui" line="5165"/>
         <source>S.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5197"/>
+        <location filename="../chareditor.ui" line="5200"/>
         <source>Zaubertricks / Sonderfertigkeiten...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5209"/>
+        <location filename="../chareditor.ui" line="5212"/>
         <source>Zaubertricks</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5251"/>
+        <location filename="../chareditor.ui" line="5254"/>
         <source>Magische Sonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5318"/>
-        <location filename="../chareditor.ui" line="5607"/>
+        <location filename="../chareditor.ui" line="5321"/>
+        <location filename="../chareditor.ui" line="5610"/>
         <source>Leiteigenschaft</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5345"/>
-        <location filename="../chareditor.ui" line="5634"/>
+        <location filename="../chareditor.ui" line="5348"/>
+        <location filename="../chareditor.ui" line="5637"/>
         <source>Tradition</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5362"/>
+        <location filename="../chareditor.ui" line="5365"/>
         <source>Liturgien und Zeremonien</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5380"/>
+        <location filename="../chareditor.ui" line="5383"/>
         <source>Liturgien / Zeremonien</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5399"/>
+        <location filename="../chareditor.ui" line="5402"/>
         <source>Liturgie / Zeremonie</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5419"/>
+        <location filename="../chareditor.ui" line="5422"/>
         <source>Liturgiedauer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5434"/>
-        <location filename="../chareditor.ui" line="5612"/>
+        <location filename="../chareditor.ui" line="5437"/>
+        <location filename="../chareditor.ui" line="5615"/>
         <source>Aspekt</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5439"/>
+        <location filename="../chareditor.ui" line="5442"/>
         <source>Sf</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5449"/>
+        <location filename="../chareditor.ui" line="5452"/>
         <source>S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5484"/>
+        <location filename="../chareditor.ui" line="5487"/>
         <source>Segnungen / Sonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5496"/>
+        <location filename="../chareditor.ui" line="5499"/>
         <source>Segnungen</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5542"/>
+        <location filename="../chareditor.ui" line="5545"/>
         <source>Klerikale Sonderfertigkeiten</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5662"/>
+        <location filename="../chareditor.ui" line="5665"/>
         <source>Page 1</source>
         <translation type="unfinished">Seite 1</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5684"/>
+        <location filename="../chareditor.ui" line="5687"/>
         <source>Age</source>
         <translation type="unfinished">Alter</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5694"/>
+        <location filename="../chareditor.ui" line="5697"/>
         <source>Gender</source>
         <translation type="unfinished">Geschlecht</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5704"/>
+        <location filename="../chareditor.ui" line="5707"/>
         <source>House</source>
         <translation type="unfinished">Haus</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5728"/>
+        <location filename="../chareditor.ui" line="5731"/>
         <source>Abilities</source>
         <translation type="unfinished">Fertigkeiten</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5746"/>
+        <location filename="../chareditor.ui" line="5749"/>
         <source>Agility</source>
         <translation type="unfinished">Agilität</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5751"/>
+        <location filename="../chareditor.ui" line="5754"/>
         <source>Animal Handling</source>
         <translation type="unfinished">Umgang mit Tieren</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5756"/>
+        <location filename="../chareditor.ui" line="5759"/>
         <source>Athletics</source>
         <translation type="unfinished">Athletik</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5761"/>
+        <location filename="../chareditor.ui" line="5764"/>
         <source>Awareness</source>
         <translation type="unfinished">Aufmerksamkeit</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5766"/>
+        <location filename="../chareditor.ui" line="5769"/>
         <source>Cunning</source>
         <translation type="unfinished">Gerissenheit</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5771"/>
+        <location filename="../chareditor.ui" line="5774"/>
         <source>Deception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5776"/>
+        <location filename="../chareditor.ui" line="5779"/>
         <source>Endurance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5781"/>
+        <location filename="../chareditor.ui" line="5784"/>
         <source>Fighting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5786"/>
+        <location filename="../chareditor.ui" line="5789"/>
         <source>Healing</source>
         <translation type="unfinished">Heilung</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5791"/>
+        <location filename="../chareditor.ui" line="5794"/>
         <source>Language</source>
         <translation type="unfinished">Sprache</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5796"/>
-        <location filename="../chareditor.ui" line="5870"/>
+        <location filename="../chareditor.ui" line="5799"/>
+        <location filename="../chareditor.ui" line="5873"/>
         <source>Rating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5801"/>
-        <location filename="../chareditor.ui" line="5875"/>
+        <location filename="../chareditor.ui" line="5804"/>
+        <location filename="../chareditor.ui" line="5878"/>
         <source>Specialties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5825"/>
+        <location filename="../chareditor.ui" line="5828"/>
         <source>Knowledge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5830"/>
+        <location filename="../chareditor.ui" line="5833"/>
         <source>Marksmanship</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5835"/>
+        <location filename="../chareditor.ui" line="5838"/>
         <source>Persuasion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5840"/>
+        <location filename="../chareditor.ui" line="5843"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5845"/>
+        <location filename="../chareditor.ui" line="5848"/>
         <source>Stealth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5850"/>
+        <location filename="../chareditor.ui" line="5853"/>
         <source>Survival</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5855"/>
+        <location filename="../chareditor.ui" line="5858"/>
         <source>Thievery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5860"/>
+        <location filename="../chareditor.ui" line="5863"/>
         <source>Warfare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5865"/>
+        <location filename="../chareditor.ui" line="5868"/>
         <source>Will</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5907"/>
+        <location filename="../chareditor.ui" line="5910"/>
         <source>Qualities / Intrigue / Combat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5927"/>
+        <location filename="../chareditor.ui" line="5930"/>
         <source>Qualities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="5955"/>
+        <location filename="../chareditor.ui" line="5958"/>
         <source>Destiny Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6129"/>
+        <location filename="../chareditor.ui" line="6132"/>
         <source>Intrigue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6134"/>
+        <location filename="../chareditor.ui" line="6137"/>
         <source>Combat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6139"/>
+        <location filename="../chareditor.ui" line="6142"/>
         <source>Intrigue Defense</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6150"/>
+        <location filename="../chareditor.ui" line="6153"/>
         <source>Combat Defense</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6177"/>
+        <location filename="../chareditor.ui" line="6180"/>
         <source>Awareness + Cunning + Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6188"/>
+        <location filename="../chareditor.ui" line="6191"/>
         <source>Agility + Athletics + Awareness + Defensive Bonus - Armor Penalty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6199"/>
+        <location filename="../chareditor.ui" line="6202"/>
         <source>Composure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6210"/>
+        <location filename="../chareditor.ui" line="6213"/>
         <source>Health</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6234"/>
+        <location filename="../chareditor.ui" line="6237"/>
         <source>Will Ranks x 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6245"/>
+        <location filename="../chareditor.ui" line="6248"/>
         <source>Endurance Ranks x 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6262"/>
+        <location filename="../chareditor.ui" line="6273"/>
         <source>Weapons / Armor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6317"/>
+        <location filename="../chareditor.ui" line="6328"/>
         <source>Attack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6322"/>
+        <location filename="../chareditor.ui" line="6333"/>
         <source>Test Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6327"/>
+        <location filename="../chareditor.ui" line="6338"/>
         <source>Weapon Damage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6385"/>
+        <location filename="../chareditor.ui" line="6396"/>
         <source>Armor Rating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6396"/>
+        <location filename="../chareditor.ui" line="6407"/>
         <source>Armor Penalty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6417"/>
+        <location filename="../chareditor.ui" line="6428"/>
         <source>Page 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6435"/>
+        <location filename="../chareditor.ui" line="6446"/>
         <source>Wounds / Equipment / Appearance...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6484"/>
+        <location filename="../chareditor.ui" line="6495"/>
         <source>Wounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6507"/>
+        <location filename="../chareditor.ui" line="6518"/>
         <source>Equipment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6540"/>
+        <location filename="../chareditor.ui" line="6551"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6584"/>
+        <location filename="../chareditor.ui" line="6595"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6610"/>
+        <location filename="../chareditor.ui" line="6621"/>
         <source>Eye Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6623"/>
+        <location filename="../chareditor.ui" line="6634"/>
         <source>Hair Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6634"/>
+        <location filename="../chareditor.ui" line="6645"/>
         <source>Mannerisms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6644"/>
+        <location filename="../chareditor.ui" line="6655"/>
         <source>Distinguishing Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6654"/>
+        <location filename="../chareditor.ui" line="6665"/>
         <source>Retainers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6677"/>
+        <location filename="../chareditor.ui" line="6688"/>
         <source>Personal History / Allies / Enemies / Oaths...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6683"/>
+        <location filename="../chareditor.ui" line="6694"/>
         <source>Personal History</source>
         <translation type="unfinished">Persönliche Geschichte</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6697"/>
+        <location filename="../chareditor.ui" line="6708"/>
         <source>Allies</source>
         <translation type="unfinished">Verbündete</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6707"/>
+        <location filename="../chareditor.ui" line="6718"/>
         <source>Heraldry</source>
         <translation type="unfinished">Heraldik</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6721"/>
+        <location filename="../chareditor.ui" line="6732"/>
         <source>Enemies</source>
         <translation type="unfinished">Gegner</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6731"/>
+        <location filename="../chareditor.ui" line="6742"/>
         <source>Portrait</source>
         <translation type="unfinished">Potrait</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6745"/>
+        <location filename="../chareditor.ui" line="6756"/>
         <source>Oaths</source>
         <translation type="unfinished">Eide</translation>
     </message>
     <message>
-        <location filename="../chareditor.ui" line="6755"/>
+        <location filename="../chareditor.ui" line="6766"/>
         <source>Motto</source>
         <translation type="unfinished">Motto</translation>
     </message>
@@ -3509,22 +3513,22 @@
     <message>
         <location filename="../characterpage.ui" line="2968"/>
         <source>Page 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seite 1</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3000"/>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alter</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3020"/>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geschlecht</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3040"/>
         <source>House</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Haus</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3074"/>
@@ -3534,27 +3538,27 @@
     <message>
         <location filename="../characterpage.ui" line="3087"/>
         <source>Agility</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agilität</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3092"/>
         <source>Animal Handling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Umgang mit Tieren</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3097"/>
         <source>Athletics</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Athletik</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3102"/>
         <source>Awareness</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aufmerksamkeit</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3107"/>
         <source>Cunning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gerissenheit</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3112"/>
@@ -3574,12 +3578,12 @@
     <message>
         <location filename="../characterpage.ui" line="3127"/>
         <source>Healing</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heilung</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3132"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sprache</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3137"/>
@@ -3752,7 +3756,7 @@
     <message>
         <location filename="../characterpage.ui" line="3737"/>
         <source>Personal History</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Persönliche Geschichte</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3759"/>
@@ -3762,17 +3766,17 @@
     <message>
         <location filename="../characterpage.ui" line="3767"/>
         <source>Allies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verbündete</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3785"/>
         <source>Enemies</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gegner</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3803"/>
         <source>Oaths</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eide</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3828"/>
@@ -3782,17 +3786,17 @@
     <message>
         <location filename="../characterpage.ui" line="3836"/>
         <source>Heraldry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heraldik</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3854"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Potrait</translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3872"/>
         <source>Motto</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Motto</translation>
     </message>
 </context>
 <context>
@@ -3816,28 +3820,28 @@
 <context>
     <name>DiceManager</name>
     <message>
-        <location filename="../dicemanager.cpp" line="25"/>
-        <location filename="../dicemanager.cpp" line="173"/>
+        <location filename="../dicemanager.cpp" line="26"/>
+        <location filename="../dicemanager.cpp" line="174"/>
         <source>D</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../dicemanager.cpp" line="117"/>
+        <location filename="../dicemanager.cpp" line="118"/>
         <source>Custom Dice: </source>
         <translation>Eigene Würfel: </translation>
     </message>
     <message>
-        <location filename="../dicemanager.cpp" line="129"/>
+        <location filename="../dicemanager.cpp" line="130"/>
         <source>Add Die</source>
         <translation>Würfel Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../dicemanager.cpp" line="135"/>
+        <location filename="../dicemanager.cpp" line="136"/>
         <source>Reset Dice</source>
         <translation>Würfel zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../dicemanager.cpp" line="142"/>
+        <location filename="../dicemanager.cpp" line="143"/>
         <source>Result:</source>
         <translation>Ergebnis:</translation>
     </message>
@@ -3855,6 +3859,14 @@
         <location filename="../dicemanager.h" line="68"/>
         <source>result</source>
         <translation>Ergebnis</translation>
+    </message>
+</context>
+<context>
+    <name>DiceTool</name>
+    <message>
+        <location filename="../dicetool.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished">Formular</translation>
     </message>
 </context>
 <context>
@@ -3883,11 +3895,6 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="26"/>
-        <source>GM-Companion | Beta 3.1 RC2</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="77"/>
         <source>Start</source>
         <translation></translation>
@@ -3898,192 +3905,239 @@
         <translation>Willkommen!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="120"/>
-        <source>Version: Beta 3.1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="165"/>
+        <location filename="../mainwindow.ui" line="191"/>
         <source>GM-Companion Blog:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="190"/>
+        <location filename="../mainwindow.ui" line="216"/>
         <source>loading...</source>
         <translation>lade...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="202"/>
-        <location filename="../mainwindow.ui" line="2114"/>
+        <location filename="../mainwindow.ui" line="228"/>
+        <location filename="../mainwindow.ui" line="2132"/>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="208"/>
+        <location filename="../mainwindow.ui" line="234"/>
         <source>Radio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="225"/>
+        <location filename="../mainwindow.ui" line="251"/>
         <source>Internet Radio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="257"/>
+        <location filename="../mainwindow.ui" line="283"/>
         <source>Select Radio:</source>
         <translation>Radio auswhählen:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="275"/>
+        <location filename="../mainwindow.ui" line="301"/>
         <source>Play</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="289"/>
+        <location filename="../mainwindow.ui" line="315"/>
         <source>Internet Radio Stations:</source>
         <translation>Internet Radio Stationen:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.ui" line="405"/>
+        <location filename="../mainwindow.ui" line="368"/>
+        <location filename="../mainwindow.ui" line="431"/>
         <source>Add Radio</source>
         <translation>Radio hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="377"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="364"/>
+        <location filename="../mainwindow.ui" line="390"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="377"/>
+        <location filename="../mainwindow.ui" line="403"/>
         <source>The displayed radio name</source>
         <translation>Der angezeigte Name des Radiosenders</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="384"/>
+        <location filename="../mainwindow.ui" line="410"/>
         <source>A short description of the radio</source>
         <translation>Eine kurze Beschreibung des Radiosenders</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="391"/>
+        <location filename="../mainwindow.ui" line="417"/>
         <source>URL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="398"/>
+        <location filename="../mainwindow.ui" line="424"/>
         <source>URL to the direct music stream</source>
         <translation>URL des direkten Musik-Streams</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="433"/>
-        <location filename="../mainwindow.ui" line="2119"/>
+        <location filename="../mainwindow.ui" line="459"/>
+        <location filename="../mainwindow.ui" line="2137"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="439"/>
-        <location filename="../mainwindow.ui" line="2124"/>
+        <location filename="../mainwindow.ui" line="465"/>
+        <location filename="../mainwindow.ui" line="2142"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="472"/>
+        <location filename="../mainwindow.ui" line="498"/>
         <source>Zoom In</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="491"/>
+        <location filename="../mainwindow.ui" line="517"/>
         <source>Zoom Out</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="510"/>
+        <location filename="../mainwindow.ui" line="536"/>
         <source>Fit to View</source>
         <translation>Größe anpassen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="529"/>
+        <location filename="../mainwindow.ui" line="555"/>
         <source>Reset Size</source>
         <translation>Größe Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="563"/>
+        <location filename="../mainwindow.ui" line="589"/>
         <source>Dice Tool</source>
         <translation>Würfel Tool</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="569"/>
-        <location filename="../mainwindow.ui" line="2193"/>
+        <location filename="../mainwindow.ui" line="595"/>
+        <location filename="../mainwindow.ui" line="2211"/>
         <source>Name Generator</source>
         <translation>Namensgenerator</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="607"/>
+        <location filename="../mainwindow.ui" line="633"/>
         <source>Amount of generated names:</source>
         <translation>Anzahl der zu generierenden Namen:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="664"/>
-        <location filename="../mainwindow.ui" line="691"/>
-        <location filename="../mainwindow.ui" line="2198"/>
-        <location filename="../mainwindow.ui" line="2203"/>
+        <location filename="../mainwindow.ui" line="690"/>
+        <location filename="../mainwindow.ui" line="717"/>
+        <location filename="../mainwindow.ui" line="2216"/>
+        <location filename="../mainwindow.ui" line="2221"/>
         <source>Characters</source>
         <translation>Charaktere</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="780"/>
+        <location filename="../mainwindow.ui" line="806"/>
         <source>Add New</source>
         <translation>Neuer Charakter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="793"/>
+        <location filename="../mainwindow.ui" line="819"/>
         <source>Edit Selected</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="800"/>
+        <location filename="../mainwindow.ui" line="826"/>
         <source>Update</source>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="807"/>
+        <location filename="../mainwindow.ui" line="833"/>
         <source>Delete Selected</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="830"/>
-        <location filename="../mainwindow.ui" line="858"/>
-        <location filename="../mainwindow.ui" line="2213"/>
+        <location filename="../mainwindow.ui" line="856"/>
+        <location filename="../mainwindow.ui" line="884"/>
+        <location filename="../mainwindow.ui" line="2231"/>
         <source>Notes</source>
         <translation>Notizen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="868"/>
+        <location filename="../mainwindow.ui" line="894"/>
         <source>Delete Note</source>
         <translation>Notiz Löschen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="882"/>
+        <location filename="../mainwindow.ui" line="908"/>
         <source>Delete Category</source>
         <translation>Kategorie Löschen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2129"/>
+        <location filename="../mainwindow.ui" line="924"/>
+        <source>Encrypt rot13</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2147"/>
         <source>Resources</source>
         <translation>Resourcen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="875"/>
+        <location filename="../mainwindow.ui" line="901"/>
         <source>Add Category</source>
         <translation>Neue Kategorie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="889"/>
+        <location filename="../mainwindow.ui" line="26"/>
+        <source>GM-Companion | Beta 3.1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="120"/>
+        <source>Version: Beta 3.1.1 (0.3.1.1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="133"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Release Notes:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;This update fixes some issues with the german translation and adds rot13 encryption for notes to prevent other users from accidentally reading your notes.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="153"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Changelog:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Beta 3.1.1:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Additions&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added notes rot13 encryption&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added release notes&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Fixes&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Fixed typos in german translation&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Beta 3.1:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added translation support (Currently only English and German)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added grouping feature for music&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added a second music and sound button style&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added option to set the amount of generated names&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Fixed glitchy window size on monitors smaller than full hd&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Custom internet radio stations can now be added&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added Qt-StyleSheet support&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Improved (?) UI&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added Settings-Window&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added Notes&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="915"/>
         <source>Add Note</source>
         <translation>Neue Notiz</translation>
     </message>
@@ -4092,105 +4146,105 @@
         <translation type="vanished">Notizen Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="933"/>
+        <location filename="../mainwindow.ui" line="966"/>
         <source>Unit Converter</source>
         <translation>Einheiten Rechner</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="965"/>
+        <location filename="../mainwindow.ui" line="998"/>
         <source>Lengths</source>
         <translation>Längen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="972"/>
+        <location filename="../mainwindow.ui" line="1005"/>
         <source>Areas</source>
         <translation>Flächen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1049"/>
-        <location filename="../mainwindow.ui" line="1186"/>
+        <location filename="../mainwindow.ui" line="1082"/>
+        <location filename="../mainwindow.ui" line="1219"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1056"/>
-        <location filename="../mainwindow.ui" line="1196"/>
+        <location filename="../mainwindow.ui" line="1089"/>
+        <location filename="../mainwindow.ui" line="1229"/>
         <source>Money</source>
         <translation>Geld</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1118"/>
-        <location filename="../mainwindow.ui" line="1191"/>
+        <location filename="../mainwindow.ui" line="1151"/>
+        <location filename="../mainwindow.ui" line="1224"/>
         <source>Weight</source>
         <translation>Gewicht</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1168"/>
+        <location filename="../mainwindow.ui" line="1201"/>
         <source>Add Units</source>
         <translation>Einheit hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1176"/>
+        <location filename="../mainwindow.ui" line="1209"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1181"/>
+        <location filename="../mainwindow.ui" line="1214"/>
         <source>Area</source>
         <translation>Fläche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1206"/>
+        <location filename="../mainwindow.ui" line="1239"/>
         <source>Unit Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1216"/>
+        <location filename="../mainwindow.ui" line="1249"/>
         <source>Meters</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1235"/>
+        <location filename="../mainwindow.ui" line="1268"/>
         <source>Add Unit</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1309"/>
+        <location filename="../mainwindow.ui" line="1340"/>
         <source>Play (Music)</source>
         <translation>Play (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1363"/>
+        <location filename="../mainwindow.ui" line="1394"/>
         <source>Pause (Music)</source>
         <translation>Pausieren (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1408"/>
+        <location filename="../mainwindow.ui" line="1439"/>
         <source>Rewind (Music)</source>
         <translation>Zurückspulen (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1453"/>
+        <location filename="../mainwindow.ui" line="1484"/>
         <source>Next (Music)</source>
         <translation>Nächstes Stück (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1504"/>
+        <location filename="../mainwindow.ui" line="1535"/>
         <source>Toggle Music Shuffle (bright = on, dark = off)</source>
         <translation>Zufallswiedergabe (hell = an, dunkel = aus)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1552"/>
+        <location filename="../mainwindow.ui" line="1581"/>
         <source>Music Volume</source>
         <translation>Musik Lautstärke</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1598"/>
+        <location filename="../mainwindow.ui" line="1623"/>
         <source>&lt;No Music Selected&gt;</source>
         <translation>&lt;Keine Musik ausgewählt&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1622"/>
+        <location filename="../mainwindow.ui" line="1643"/>
         <source>Music Progress</source>
         <translation>Musik Fortschritt</translation>
     </message>
@@ -4199,62 +4253,62 @@
         <translation type="vanished">Song auswählen:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1721"/>
+        <location filename="../mainwindow.ui" line="1739"/>
         <source>Play (Sound)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1766"/>
+        <location filename="../mainwindow.ui" line="1784"/>
         <source>Pause (Sound)</source>
         <translation>Pausieren (Sound)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1811"/>
+        <location filename="../mainwindow.ui" line="1829"/>
         <source>Rewind (Sound)</source>
         <translation>Zurückspulen (Sound)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1856"/>
+        <location filename="../mainwindow.ui" line="1874"/>
         <source>Next (Sound)</source>
         <translation>Nächster Sound</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1894"/>
+        <location filename="../mainwindow.ui" line="1912"/>
         <source>Toggle Sound Shuffle (bright = on, dark = off)</source>
         <translation>Zufallswiedergabe (hell = an, dunkel = aus)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1942"/>
+        <location filename="../mainwindow.ui" line="1960"/>
         <source>Sound Volume</source>
         <translation>Sound Lautstärke</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1978"/>
+        <location filename="../mainwindow.ui" line="1996"/>
         <source>&lt;No Sounds Selected&gt;</source>
         <translation>&lt;Keine Sounds ausgewählt&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2053"/>
+        <location filename="../mainwindow.ui" line="2071"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2057"/>
+        <location filename="../mainwindow.ui" line="2075"/>
         <source>Set Paths</source>
         <translation>Pfade festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2077"/>
+        <location filename="../mainwindow.ui" line="2095"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2089"/>
+        <location filename="../mainwindow.ui" line="2107"/>
         <source>Dice</source>
         <translation>Würfel</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2100"/>
+        <location filename="../mainwindow.ui" line="2118"/>
         <source>Database</source>
         <translation>Datenbank</translation>
     </message>
@@ -4275,52 +4329,52 @@
         <translation type="vanished">Resourcen Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2134"/>
+        <location filename="../mainwindow.ui" line="2152"/>
         <source>Music Player</source>
         <translation>Musik Player</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2139"/>
+        <location filename="../mainwindow.ui" line="2157"/>
         <source>Sound Player</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2144"/>
+        <location filename="../mainwindow.ui" line="2162"/>
         <source>Map Viewer</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2149"/>
+        <location filename="../mainwindow.ui" line="2167"/>
         <source>Set Database Path</source>
         <translation>Datenbank Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2157"/>
+        <location filename="../mainwindow.ui" line="2175"/>
         <source>Open Wiki</source>
         <translation>Wiki öffnen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2162"/>
+        <location filename="../mainwindow.ui" line="2180"/>
         <source>Check for Updates</source>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2167"/>
+        <location filename="../mainwindow.ui" line="2185"/>
         <source>Report a Bug</source>
         <translation>Fehler melden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2172"/>
+        <location filename="../mainwindow.ui" line="2190"/>
         <source>I want to use an older version!</source>
         <translation>Ich möchte eine ältere Version verwenden!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2177"/>
+        <location filename="../mainwindow.ui" line="2195"/>
         <source>Webradio</source>
         <translation>Internet Radio</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2185"/>
+        <location filename="../mainwindow.ui" line="2203"/>
         <source>Check for Updates on Program Start</source>
         <translation>Beim Programmstart nach Updates suchen</translation>
     </message>
@@ -4329,7 +4383,7 @@
         <translation type="vanished">Charakter Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2208"/>
+        <location filename="../mainwindow.ui" line="2226"/>
         <source>Options...</source>
         <translation>Optionen...</translation>
     </message>
@@ -4458,32 +4512,32 @@
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="14"/>
+        <location filename="../notes.cpp" line="24"/>
         <source>Getting Notes...</source>
         <translation>Lade Notizen...</translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="20"/>
+        <location filename="../notes.cpp" line="30"/>
         <source>Getting Custom Notes...</source>
         <translation>Lade Benutzer-Notizen...</translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="41"/>
+        <location filename="../notes.cpp" line="51"/>
         <source>Getting Addon Notes...</source>
         <translation>Lade Addon-Notizen...</translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="65"/>
+        <location filename="../notes.cpp" line="75"/>
         <source>Finished getting Notes.</source>
         <translation>Notizen geladen.</translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="125"/>
+        <location filename="../notes.cpp" line="135"/>
         <source>Removing Note: </source>
         <translation>Entferne Notiz: </translation>
     </message>
     <message>
-        <location filename="../notes.cpp" line="135"/>
+        <location filename="../notes.cpp" line="145"/>
         <source>Removing Note Directory: </source>
         <translation>Entferne Notizen-Ordner: </translation>
     </message>
@@ -4788,6 +4842,19 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     </message>
 </context>
 <context>
+    <name>Program Start</name>
+    <message>
+        <location filename="../main.cpp" line="68"/>
+        <source>Opening New Features Window because of an Update...</source>
+        <translation>Öffne &quot;Neue Features&quot; Fenster aufgrund eines Updates...</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="70"/>
+        <source>Opening New Features Window because of the settings preferences...</source>
+        <translation type="unfinished">Öffne &quot;Neue Features&quot; Fenster, wie in den Optionen eingestellt...</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <location filename="../network.cpp" line="121"/>
@@ -4876,8 +4943,8 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="163"/>
-        <location filename="../sifrp.ui" line="694"/>
-        <location filename="../sifrp.ui" line="878"/>
+        <location filename="../sifrp.ui" line="724"/>
+        <location filename="../sifrp.ui" line="908"/>
         <source>Random</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4902,63 +4969,63 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../sifrp.ui" line="251"/>
-        <location filename="../sifrp.ui" line="462"/>
-        <location filename="../sifrp.ui" line="972"/>
+        <location filename="../sifrp.ui" line="486"/>
+        <location filename="../sifrp.ui" line="1002"/>
         <source>Defense</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="256"/>
-        <location filename="../sifrp.ui" line="467"/>
-        <location filename="../sifrp.ui" line="977"/>
+        <location filename="../sifrp.ui" line="491"/>
+        <location filename="../sifrp.ui" line="1007"/>
         <source>Influence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="261"/>
-        <location filename="../sifrp.ui" line="472"/>
-        <location filename="../sifrp.ui" line="982"/>
+        <location filename="../sifrp.ui" line="496"/>
+        <location filename="../sifrp.ui" line="1012"/>
         <source>Lands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="266"/>
-        <location filename="../sifrp.ui" line="477"/>
-        <location filename="../sifrp.ui" line="987"/>
+        <location filename="../sifrp.ui" line="501"/>
+        <location filename="../sifrp.ui" line="1017"/>
         <source>Law</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="271"/>
-        <location filename="../sifrp.ui" line="482"/>
-        <location filename="../sifrp.ui" line="992"/>
+        <location filename="../sifrp.ui" line="506"/>
+        <location filename="../sifrp.ui" line="1022"/>
         <source>Population</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="276"/>
-        <location filename="../sifrp.ui" line="487"/>
-        <location filename="../sifrp.ui" line="997"/>
+        <location filename="../sifrp.ui" line="511"/>
+        <location filename="../sifrp.ui" line="1027"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="281"/>
-        <location filename="../sifrp.ui" line="492"/>
-        <location filename="../sifrp.ui" line="1002"/>
+        <location filename="../sifrp.ui" line="516"/>
+        <location filename="../sifrp.ui" line="1032"/>
         <source>Wealth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="286"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wert</translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="291"/>
-        <location filename="../sifrp.ui" line="2950"/>
+        <location filename="../sifrp.ui" line="3007"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Beschreibung</translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="296"/>
@@ -4973,42 +5040,42 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="321"/>
         <location filename="../sifrp.ui" line="326"/>
         <location filename="../sifrp.ui" line="331"/>
-        <location filename="../sifrp.ui" line="1068"/>
-        <location filename="../sifrp.ui" line="1116"/>
-        <location filename="../sifrp.ui" line="1535"/>
-        <location filename="../sifrp.ui" line="1580"/>
-        <location filename="../sifrp.ui" line="1871"/>
-        <location filename="../sifrp.ui" line="1905"/>
-        <location filename="../sifrp.ui" line="2269"/>
-        <location filename="../sifrp.ui" line="2291"/>
-        <location filename="../sifrp.ui" line="2593"/>
-        <location filename="../sifrp.ui" line="2702"/>
-        <location filename="../sifrp.ui" line="2736"/>
+        <location filename="../sifrp.ui" line="1098"/>
+        <location filename="../sifrp.ui" line="1146"/>
+        <location filename="../sifrp.ui" line="1565"/>
+        <location filename="../sifrp.ui" line="1610"/>
+        <location filename="../sifrp.ui" line="1891"/>
+        <location filename="../sifrp.ui" line="1937"/>
+        <location filename="../sifrp.ui" line="2309"/>
+        <location filename="../sifrp.ui" line="2331"/>
+        <location filename="../sifrp.ui" line="2642"/>
+        <location filename="../sifrp.ui" line="2753"/>
+        <location filename="../sifrp.ui" line="2787"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="354"/>
+        <location filename="../sifrp.ui" line="360"/>
         <source>Players:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="390"/>
+        <location filename="../sifrp.ui" line="402"/>
         <source>Set Player Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="406"/>
+        <location filename="../sifrp.ui" line="424"/>
         <source>Rolled Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="520"/>
+        <location filename="../sifrp.ui" line="544"/>
         <source>Add Value To Resource</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="534"/>
+        <location filename="../sifrp.ui" line="564"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -5020,138 +5087,138 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="557"/>
+        <location filename="../sifrp.ui" line="587"/>
         <source>Step Three: House History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="569"/>
+        <location filename="../sifrp.ui" line="599"/>
         <source>House Founding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="590"/>
+        <location filename="../sifrp.ui" line="620"/>
         <source>Ancient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="595"/>
+        <location filename="../sifrp.ui" line="625"/>
         <source>Very Old</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="600"/>
+        <location filename="../sifrp.ui" line="630"/>
         <source>Old</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="605"/>
+        <location filename="../sifrp.ui" line="635"/>
         <source>Established</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="610"/>
+        <location filename="../sifrp.ui" line="640"/>
         <source>Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="615"/>
+        <location filename="../sifrp.ui" line="645"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="664"/>
-        <location filename="../sifrp.ui" line="848"/>
+        <location filename="../sifrp.ui" line="694"/>
+        <location filename="../sifrp.ui" line="878"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="708"/>
+        <location filename="../sifrp.ui" line="738"/>
         <source>Historical Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="729"/>
+        <location filename="../sifrp.ui" line="759"/>
         <source>Doom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="734"/>
+        <location filename="../sifrp.ui" line="764"/>
         <source>Defeat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="739"/>
+        <location filename="../sifrp.ui" line="769"/>
         <source>Catastrophe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="744"/>
+        <location filename="../sifrp.ui" line="774"/>
         <source>Madness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="749"/>
+        <location filename="../sifrp.ui" line="779"/>
         <source>Invasion / Revolt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="754"/>
+        <location filename="../sifrp.ui" line="784"/>
         <source>Scandal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="759"/>
+        <location filename="../sifrp.ui" line="789"/>
         <source>Treachery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="764"/>
+        <location filename="../sifrp.ui" line="794"/>
         <source>Decline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="769"/>
+        <location filename="../sifrp.ui" line="799"/>
         <source>Infrastructure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="774"/>
+        <location filename="../sifrp.ui" line="804"/>
         <source>Ascent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="779"/>
+        <location filename="../sifrp.ui" line="809"/>
         <source>Favor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="784"/>
+        <location filename="../sifrp.ui" line="814"/>
         <source>Victory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="789"/>
+        <location filename="../sifrp.ui" line="819"/>
         <source>Villain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="794"/>
+        <location filename="../sifrp.ui" line="824"/>
         <source>Glory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="799"/>
+        <location filename="../sifrp.ui" line="829"/>
         <source>Conquest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="804"/>
+        <location filename="../sifrp.ui" line="834"/>
         <source>Windfall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="907"/>
+        <location filename="../sifrp.ui" line="937"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -5160,421 +5227,426 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="928"/>
+        <location filename="../sifrp.ui" line="958"/>
         <source>Events:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="933"/>
+        <location filename="../sifrp.ui" line="963"/>
         <source>Notes:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="950"/>
+        <location filename="../sifrp.ui" line="980"/>
         <source>Step Four: Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="967"/>
+        <location filename="../sifrp.ui" line="997"/>
         <source>New Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1022"/>
+        <location filename="../sifrp.ui" line="1052"/>
         <source>Defense Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1044"/>
+        <location filename="../sifrp.ui" line="1074"/>
         <source>Defense Value:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1092"/>
+        <location filename="../sifrp.ui" line="1122"/>
         <source>Invested Defense:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1148"/>
-        <location filename="../sifrp.ui" line="1239"/>
+        <location filename="../sifrp.ui" line="1178"/>
+        <location filename="../sifrp.ui" line="1269"/>
         <source>Superior Castle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1153"/>
-        <location filename="../sifrp.ui" line="1244"/>
+        <location filename="../sifrp.ui" line="1183"/>
+        <location filename="../sifrp.ui" line="1274"/>
         <source>Castle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1158"/>
-        <location filename="../sifrp.ui" line="1249"/>
+        <location filename="../sifrp.ui" line="1188"/>
+        <location filename="../sifrp.ui" line="1279"/>
         <source>Small Castle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1163"/>
-        <location filename="../sifrp.ui" line="1254"/>
+        <location filename="../sifrp.ui" line="1193"/>
+        <location filename="../sifrp.ui" line="1284"/>
         <source>Hall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1168"/>
-        <location filename="../sifrp.ui" line="1259"/>
+        <location filename="../sifrp.ui" line="1198"/>
+        <location filename="../sifrp.ui" line="1289"/>
         <source>Tower</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1187"/>
-        <location filename="../sifrp.ui" line="2902"/>
+        <location filename="../sifrp.ui" line="1217"/>
+        <location filename="../sifrp.ui" line="2959"/>
         <source>Invest in Holding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1264"/>
-        <location filename="../sifrp.ui" line="1463"/>
-        <location filename="../sifrp.ui" line="2940"/>
+        <location filename="../sifrp.ui" line="1294"/>
+        <location filename="../sifrp.ui" line="1493"/>
+        <location filename="../sifrp.ui" line="2997"/>
         <source>Investment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1272"/>
-        <location filename="../sifrp.ui" line="1468"/>
+        <location filename="../sifrp.ui" line="1302"/>
+        <location filename="../sifrp.ui" line="1498"/>
         <source>Build Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1280"/>
+        <location filename="../sifrp.ui" line="1310"/>
         <source>Benefit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1288"/>
+        <location filename="../sifrp.ui" line="1318"/>
         <source>Explanation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1296"/>
+        <location filename="../sifrp.ui" line="1326"/>
         <source>50</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1304"/>
+        <location filename="../sifrp.ui" line="1334"/>
         <source>144 +10D6 Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1309"/>
-        <location filename="../sifrp.ui" line="1312"/>
+        <location filename="../sifrp.ui" line="1339"/>
+        <location filename="../sifrp.ui" line="1342"/>
         <source>Units defending a superior castle gain a +12 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1317"/>
+        <location filename="../sifrp.ui" line="1347"/>
         <source>A superior castle is a massive stronghold in the vein of Harrenhal, the Eyrie, Storm’s End, Dragonstone, and Winterfell. A superior castle has several towers, structures, and smaller buildings, all surrounded by a steep curtain wall and likely a moat as well.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1320"/>
+        <location filename="../sifrp.ui" line="1350"/>
         <source>A superior castle is a massive stronghold in the vein of Harrenhal, the Eyrie, Storm’s End, Dragonstone, and Winterfell. A superior castle has several towers, structures, and smaller buildings, all surrounded by a steep curtain wall and likely a moat as well. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1325"/>
+        <location filename="../sifrp.ui" line="1355"/>
         <source>40</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1333"/>
+        <location filename="../sifrp.ui" line="1363"/>
         <source>90 + 10D6 Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1338"/>
-        <location filename="../sifrp.ui" line="1341"/>
+        <location filename="../sifrp.ui" line="1368"/>
+        <location filename="../sifrp.ui" line="1371"/>
         <source>Units defending a castle gain a +8 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1346"/>
-        <location filename="../sifrp.ui" line="1349"/>
+        <location filename="../sifrp.ui" line="1376"/>
+        <location filename="../sifrp.ui" line="1379"/>
         <source>Castles are impressive fortified strongholds but are not as large or as imposing as a superior castle. Most castles incorporate at least one central keep and several towers connected by walls and surrounded by a moat. Example castles include Deepwood Motte, the Twins, and Riverrun.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1354"/>
+        <location filename="../sifrp.ui" line="1384"/>
         <source>30</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1362"/>
+        <location filename="../sifrp.ui" line="1392"/>
         <source>72 +10D6 Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1511"/>
+        <location filename="../sifrp.ui" line="1541"/>
         <source>Your Influence:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1836"/>
+        <location filename="../sifrp.ui" line="1866"/>
         <source>Land Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1852"/>
+        <location filename="../sifrp.ui" line="1906"/>
         <source>Your Lands:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1886"/>
+        <location filename="../sifrp.ui" line="1918"/>
         <source>Invested Lands:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1922"/>
+        <location filename="../sifrp.ui" line="1958"/>
         <source>Select Terrain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1945"/>
+        <location filename="../sifrp.ui" line="1971"/>
         <source>Set Terrain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1952"/>
+        <location filename="../sifrp.ui" line="1988"/>
         <source>Select a Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1975"/>
+        <location filename="../sifrp.ui" line="2011"/>
         <source>Add Feature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1995"/>
+        <location filename="../sifrp.ui" line="2033"/>
         <source>Create Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2019"/>
+        <location filename="../sifrp.ui" line="2057"/>
         <source>Your Domains:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2033"/>
+        <location filename="../sifrp.ui" line="2071"/>
         <source>Terrain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2038"/>
+        <location filename="../sifrp.ui" line="2076"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2053"/>
+        <location filename="../sifrp.ui" line="2091"/>
         <source>Currently Created Domain:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2076"/>
+        <location filename="../sifrp.ui" line="2114"/>
         <source>Terrain: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2083"/>
+        <location filename="../sifrp.ui" line="2121"/>
         <source>Features: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2105"/>
+        <location filename="../sifrp.ui" line="2143"/>
         <source>Law Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2119"/>
+        <location filename="../sifrp.ui" line="2157"/>
         <source>Your Lawscore:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2131"/>
-        <location filename="../sifrp.ui" line="2195"/>
+        <location filename="../sifrp.ui" line="2169"/>
+        <location filename="../sifrp.ui" line="2233"/>
         <source>House Fortune Modifier:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2169"/>
+        <location filename="../sifrp.ui" line="2207"/>
         <source>Population Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2183"/>
+        <location filename="../sifrp.ui" line="2221"/>
         <source>Your Populationscore:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2240"/>
+        <location filename="../sifrp.ui" line="2278"/>
         <source>Power Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2262"/>
+        <location filename="../sifrp.ui" line="2302"/>
         <source>Your Power:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2284"/>
+        <location filename="../sifrp.ui" line="2324"/>
         <source>Invested Power:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2313"/>
+        <location filename="../sifrp.ui" line="2355"/>
         <source>Units:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2320"/>
+        <location filename="../sifrp.ui" line="2388"/>
         <source>Select Training: (C = Base Cost, D = Discipline, E = Experience)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2328"/>
+        <location filename="../sifrp.ui" line="2365"/>
         <source>Green (C:1, D:9, E:20)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2333"/>
+        <location filename="../sifrp.ui" line="2370"/>
         <source>Trained (C:3, D:6, E:60)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2338"/>
+        <location filename="../sifrp.ui" line="2375"/>
         <source>Veteran (C:5, D:3, E:100)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2343"/>
+        <location filename="../sifrp.ui" line="2380"/>
         <source>Elite (C:7, D:0, E:140)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2356"/>
+        <location filename="../sifrp.ui" line="2391"/>
+        <source>Select Training:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../sifrp.ui" line="2403"/>
         <source>Select Unit Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2364"/>
+        <location filename="../sifrp.ui" line="2411"/>
         <source>Archers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2369"/>
+        <location filename="../sifrp.ui" line="2416"/>
         <source>Cavalry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2374"/>
+        <location filename="../sifrp.ui" line="2421"/>
         <source>Criminals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2379"/>
+        <location filename="../sifrp.ui" line="2426"/>
         <source>Crusaders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2384"/>
+        <location filename="../sifrp.ui" line="2431"/>
         <source>Engineers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2389"/>
+        <location filename="../sifrp.ui" line="2436"/>
         <source>Garrison</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2394"/>
+        <location filename="../sifrp.ui" line="2441"/>
         <source>Guerillas</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2399"/>
+        <location filename="../sifrp.ui" line="2446"/>
         <source>Infantry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2404"/>
+        <location filename="../sifrp.ui" line="2451"/>
         <source>Peasant Levies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2409"/>
+        <location filename="../sifrp.ui" line="2456"/>
         <source>Personal Guards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2414"/>
+        <location filename="../sifrp.ui" line="2461"/>
         <source>Raiders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2419"/>
+        <location filename="../sifrp.ui" line="2466"/>
         <source>Sailors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2424"/>
+        <location filename="../sifrp.ui" line="2471"/>
         <source>Scouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2429"/>
+        <location filename="../sifrp.ui" line="2476"/>
         <source>Special</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2434"/>
+        <location filename="../sifrp.ui" line="2481"/>
         <source>Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2439"/>
+        <location filename="../sifrp.ui" line="2486"/>
         <source>Warships</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2449"/>
+        <location filename="../sifrp.ui" line="2498"/>
         <source>Power Cost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2456"/>
+        <location filename="../sifrp.ui" line="2505"/>
         <source>Discipline Modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2463"/>
-        <location filename="../sifrp.ui" line="2646"/>
+        <location filename="../sifrp.ui" line="2512"/>
+        <location filename="../sifrp.ui" line="2695"/>
         <source>Key Abilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2491"/>
+        <location filename="../sifrp.ui" line="2540"/>
         <source>Buy Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2514"/>
+        <location filename="../sifrp.ui" line="2563"/>
         <source>Banner Houses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2526"/>
+        <location filename="../sifrp.ui" line="2575"/>
         <source>Cost:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2542"/>
+        <location filename="../sifrp.ui" line="2591"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -5585,320 +5657,320 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2560"/>
+        <location filename="../sifrp.ui" line="2609"/>
         <source>Invest in Banner House</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2586"/>
+        <location filename="../sifrp.ui" line="2635"/>
         <source>Amount of Banner Houses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2612"/>
+        <location filename="../sifrp.ui" line="2661"/>
         <source>Your Units:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2631"/>
+        <location filename="../sifrp.ui" line="2680"/>
         <source>Training</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2641"/>
+        <location filename="../sifrp.ui" line="2690"/>
         <source>Discipline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2667"/>
+        <location filename="../sifrp.ui" line="2716"/>
         <source>Wealth Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2689"/>
+        <location filename="../sifrp.ui" line="2740"/>
         <source>Wealth:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2723"/>
+        <location filename="../sifrp.ui" line="2774"/>
         <source>Invested Wealth:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2770"/>
+        <location filename="../sifrp.ui" line="2823"/>
         <source>Select Holding:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2784"/>
+        <location filename="../sifrp.ui" line="2837"/>
         <source>Artisan (10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2789"/>
+        <location filename="../sifrp.ui" line="2842"/>
         <source>Godswood (5)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2794"/>
+        <location filename="../sifrp.ui" line="2847"/>
         <source>Guilds (15)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2799"/>
+        <location filename="../sifrp.ui" line="2852"/>
         <source>Maester (10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2804"/>
+        <location filename="../sifrp.ui" line="2857"/>
         <source>Marketplace (10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2809"/>
+        <location filename="../sifrp.ui" line="2862"/>
         <source>Mine (10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2814"/>
+        <location filename="../sifrp.ui" line="2867"/>
         <source>Port (10)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2819"/>
+        <location filename="../sifrp.ui" line="2872"/>
         <source>Sept (15)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2832"/>
+        <location filename="../sifrp.ui" line="2887"/>
         <source>Description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2854"/>
+        <location filename="../sifrp.ui" line="2909"/>
         <source>Requirement:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2876"/>
+        <location filename="../sifrp.ui" line="2931"/>
         <source>Time:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2918"/>
+        <location filename="../sifrp.ui" line="2975"/>
         <source>Your wealth investments:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2935"/>
+        <location filename="../sifrp.ui" line="2992"/>
         <source>Wealth Holding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2945"/>
+        <location filename="../sifrp.ui" line="3002"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2975"/>
+        <location filename="../sifrp.ui" line="3032"/>
         <source>Last Step</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2984"/>
+        <location filename="../sifrp.ui" line="3041"/>
         <source>House Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2991"/>
+        <location filename="../sifrp.ui" line="3048"/>
         <source>House Words:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="2998"/>
+        <location filename="../sifrp.ui" line="3055"/>
         <source>House </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="3031"/>
+        <location filename="../sifrp.ui" line="3088"/>
         <source>Save to Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="3044"/>
+        <location filename="../sifrp.ui" line="3101"/>
         <source>Start new House</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1367"/>
-        <location filename="../sifrp.ui" line="1370"/>
+        <location filename="../sifrp.ui" line="1397"/>
+        <location filename="../sifrp.ui" line="1400"/>
         <source>Units defending a small castle gain a +6 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1375"/>
-        <location filename="../sifrp.ui" line="1378"/>
+        <location filename="../sifrp.ui" line="1405"/>
+        <location filename="../sifrp.ui" line="1408"/>
         <source>A small castle is simply a smaller version of a standard castle. It usually has no more than a single keep, perhaps two towers and a wall. Examples of small castles include Bronzegate, Honeyholt, and Yronwood.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1383"/>
-        <location filename="../sifrp.ui" line="1733"/>
+        <location filename="../sifrp.ui" line="1413"/>
+        <location filename="../sifrp.ui" line="1763"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1391"/>
+        <location filename="../sifrp.ui" line="1421"/>
         <source>60 + 10D6 Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1396"/>
-        <location filename="../sifrp.ui" line="1399"/>
+        <location filename="../sifrp.ui" line="1426"/>
+        <location filename="../sifrp.ui" line="1429"/>
         <source>Units defending a hall gain a +4 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1404"/>
+        <location filename="../sifrp.ui" line="1434"/>
         <source>A hall (or keep) is usually a small, fortified building. It may or may not be surrounded by a wall, and it could have a tower, though it’s unlikely. Examples of halls include Acorn Hall, Cider Hall, and Longbow Hall.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1407"/>
+        <location filename="../sifrp.ui" line="1437"/>
         <source>A hall (or keep) is usually a small, fortified building. It may or may not be surrounded by a wall, and it could have a tower, though it’s unlikely. Examples of halls include Acorn Hall, Cider Hall, and Longbow Hall. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1412"/>
-        <location filename="../sifrp.ui" line="1751"/>
+        <location filename="../sifrp.ui" line="1442"/>
+        <location filename="../sifrp.ui" line="1781"/>
         <source>10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1420"/>
+        <location filename="../sifrp.ui" line="1450"/>
         <source>36 + 10D6 Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1425"/>
+        <location filename="../sifrp.ui" line="1455"/>
         <source>Units defending a tower gain a +3 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1428"/>
+        <location filename="../sifrp.ui" line="1458"/>
         <source> Units defending a tower gain a +3 bonus to their Defense.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1433"/>
+        <location filename="../sifrp.ui" line="1463"/>
         <source>Towers are single free-standing stone or timber structures that thrust up from the ground. If they have any outbuildings, they are small and unprotected. Petyr Baelish’s holdings in the Fingers included a single tower.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1436"/>
+        <location filename="../sifrp.ui" line="1466"/>
         <source>Towers are single free-standing stone or timber structures that thrust up from the ground. If they have any outbuildings, they are small and unprotected. Petyr Baelish’s holdings in the Fingers included a single tower. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1444"/>
+        <location filename="../sifrp.ui" line="1474"/>
         <source>Your Defense Holdings:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1458"/>
-        <location filename="../sifrp.ui" line="2626"/>
+        <location filename="../sifrp.ui" line="1488"/>
+        <location filename="../sifrp.ui" line="2675"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Art</translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1495"/>
+        <location filename="../sifrp.ui" line="1525"/>
         <source>Influence Holdings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1556"/>
+        <location filename="../sifrp.ui" line="1586"/>
         <source>Invested Influence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1615"/>
+        <location filename="../sifrp.ui" line="1645"/>
         <source>First-Born Son</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1620"/>
+        <location filename="../sifrp.ui" line="1650"/>
         <source>Second Son</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1625"/>
+        <location filename="../sifrp.ui" line="1655"/>
         <source>Other Children</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1644"/>
+        <location filename="../sifrp.ui" line="1674"/>
         <source>Invest in Heir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1705"/>
-        <location filename="../sifrp.ui" line="1810"/>
+        <location filename="../sifrp.ui" line="1735"/>
+        <location filename="../sifrp.ui" line="1840"/>
         <source>Heir&apos;s Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1710"/>
-        <location filename="../sifrp.ui" line="1805"/>
+        <location filename="../sifrp.ui" line="1740"/>
+        <location filename="../sifrp.ui" line="1835"/>
         <source>Example</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1715"/>
-        <location filename="../sifrp.ui" line="1815"/>
-        <location filename="../sifrp.ui" line="2636"/>
+        <location filename="../sifrp.ui" line="1745"/>
+        <location filename="../sifrp.ui" line="1845"/>
+        <location filename="../sifrp.ui" line="2685"/>
         <source>Cost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1720"/>
+        <location filename="../sifrp.ui" line="1750"/>
         <source>Maximum-1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1725"/>
-        <location filename="../sifrp.ui" line="1728"/>
+        <location filename="../sifrp.ui" line="1755"/>
+        <location filename="../sifrp.ui" line="1758"/>
         <source>First-born son (or daughter in Dorne)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1738"/>
+        <location filename="../sifrp.ui" line="1768"/>
         <source>Maximum-2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1743"/>
-        <location filename="../sifrp.ui" line="1746"/>
+        <location filename="../sifrp.ui" line="1773"/>
+        <location filename="../sifrp.ui" line="1776"/>
         <source>Second son (or daughter in Dorne),  or first-born daughter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1756"/>
+        <location filename="../sifrp.ui" line="1786"/>
         <source>Maximum-3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1761"/>
-        <location filename="../sifrp.ui" line="1764"/>
+        <location filename="../sifrp.ui" line="1791"/>
+        <location filename="../sifrp.ui" line="1794"/>
         <source>Other children (not including bastards)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1769"/>
+        <location filename="../sifrp.ui" line="1799"/>
         <source>5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="1782"/>
+        <location filename="../sifrp.ui" line="1812"/>
         <source>Your Heirs:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5907,7 +5979,7 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Ergebnis</translation>
     </message>
     <message>
-        <location filename="../sifrp.ui" line="3095"/>
+        <location filename="../sifrp.ui" line="3152"/>
         <source>Next</source>
         <translation>Weiter</translation>
     </message>
