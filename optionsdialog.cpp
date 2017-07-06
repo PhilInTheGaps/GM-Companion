@@ -472,6 +472,6 @@ void OptionsDialog::on_addonManagerButton_clicked()
     #elif _WIN32
         QProcess::startDetached("java", {"-jar", QApplication::applicationDirPath()+"/AddonManager.jar"});
     #else
-    qDebug() << QCoreApplication::translate("","This OS is not supported. Cannot launch Addon Manager.");
+    qDebug() << QCoreApplication::translate("AddonManager", "This OS is not supported. Cannot launch Addon Manager.");
     #endif
 }
