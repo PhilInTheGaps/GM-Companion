@@ -4,48 +4,47 @@
 <context>
     <name></name>
     <message>
-        <location filename="../characters.cpp" line="100"/>
         <source>Getting Characters...</source>
-        <translation>Lade Charaktere...</translation>
+        <translation type="vanished">Lade Charaktere...</translation>
     </message>
     <message>
-        <location filename="../characters.cpp" line="112"/>
         <source>Characters found: </source>
-        <translation>Charaktere gefunden: </translation>
+        <translation type="vanished">Charaktere gefunden: </translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="14"/>
         <source>does not exist. Creating...</source>
-        <translation>nicht vorhanden. Wird erstellt...</translation>
+        <translation type="vanished">nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="23"/>
         <source> does not exist. Creating...</source>
-        <translation>nicht vorhanden. Wird erstellt...</translation>
+        <translation type="vanished">nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="29"/>
         <source>Copying files to </source>
-        <translation>Kopiere Dateien nach </translation>
+        <translation type="vanished">Kopiere Dateien nach </translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="127"/>
         <source>This OS is not supported.</source>
-        <translation>Dieses Betriebssystem wird leider nicht unterstützt.</translation>
+        <translation type="vanished">Dieses Betriebssystem wird leider nicht unterstützt.</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="131"/>
         <source>Done.</source>
-        <translation>Fertig.</translation>
+        <translation type="vanished">Fertig.</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="133"/>
         <source>Files already exist.</source>
-        <translation>Dateien existieren bereits.</translation>
+        <translation type="vanished">Dateien existieren bereits.</translation>
     </message>
+    <message>
+        <location filename="../whatisnewwindow.cpp" line="86"/>
+        <source>This OS is not supported. Cannot launch Addon Manager.</source>
+        <translation>Dieses Betriebssystem wird nicht unterstützt. Addon Manager kann nicht gestartet werden.</translation>
+    </message>
+</context>
+<context>
+    <name>AddonManager</name>
     <message>
         <location filename="../optionsdialog.cpp" line="475"/>
-        <location filename="../whatisnewwindow.cpp" line="86"/>
         <source>This OS is not supported. Cannot launch Addon Manager.</source>
         <translation>Dieses Betriebssystem wird nicht unterstützt. Addon Manager kann nicht gestartet werden.</translation>
     </message>
@@ -300,7 +299,7 @@
     <message>
         <location filename="../chareditor.ui" line="841"/>
         <source>Das Schwarze Auge 5 </source>
-        <translation type="unfinished">Das Schwarze Auge 5 </translation>
+        <translation>Das Schwarze Auge 5 </translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="899"/>
@@ -1912,52 +1911,52 @@
     <message>
         <location filename="../chareditor.ui" line="5665"/>
         <source>Page 1</source>
-        <translation type="unfinished">Seite 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5687"/>
         <source>Age</source>
-        <translation type="unfinished">Alter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5697"/>
         <source>Gender</source>
-        <translation type="unfinished">Geschlecht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5707"/>
         <source>House</source>
-        <translation type="unfinished">Haus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5731"/>
         <source>Abilities</source>
-        <translation type="unfinished">Fertigkeiten</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5749"/>
         <source>Agility</source>
-        <translation type="unfinished">Agilität</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5754"/>
         <source>Animal Handling</source>
-        <translation type="unfinished">Umgang mit Tieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5759"/>
         <source>Athletics</source>
-        <translation type="unfinished">Athletik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5764"/>
         <source>Awareness</source>
-        <translation type="unfinished">Aufmerksamkeit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5769"/>
         <source>Cunning</source>
-        <translation type="unfinished">Gerissenheit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5774"/>
@@ -1977,12 +1976,12 @@
     <message>
         <location filename="../chareditor.ui" line="5789"/>
         <source>Healing</source>
-        <translation type="unfinished">Heilung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5794"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="5799"/>
@@ -2199,37 +2198,37 @@
     <message>
         <location filename="../chareditor.ui" line="6694"/>
         <source>Personal History</source>
-        <translation type="unfinished">Persönliche Geschichte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6708"/>
         <source>Allies</source>
-        <translation type="unfinished">Verbündete</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6718"/>
         <source>Heraldry</source>
-        <translation type="unfinished">Heraldik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6732"/>
         <source>Enemies</source>
-        <translation type="unfinished">Gegner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6742"/>
         <source>Portrait</source>
-        <translation type="unfinished">Potrait</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6756"/>
         <source>Oaths</source>
-        <translation type="unfinished">Eide</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.ui" line="6766"/>
         <source>Motto</source>
-        <translation type="unfinished">Motto</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../chareditor.cpp" line="61"/>
@@ -2253,7 +2252,7 @@
     <message>
         <location filename="../characterpage.ui" line="14"/>
         <source>StackedWidget</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="31"/>
@@ -3513,22 +3512,22 @@
     <message>
         <location filename="../characterpage.ui" line="2968"/>
         <source>Page 1</source>
-        <translation type="unfinished">Seite 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3000"/>
         <source>Age</source>
-        <translation type="unfinished">Alter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3020"/>
         <source>Gender</source>
-        <translation type="unfinished">Geschlecht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3040"/>
         <source>House</source>
-        <translation type="unfinished">Haus</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3074"/>
@@ -3538,27 +3537,27 @@
     <message>
         <location filename="../characterpage.ui" line="3087"/>
         <source>Agility</source>
-        <translation type="unfinished">Agilität</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3092"/>
         <source>Animal Handling</source>
-        <translation type="unfinished">Umgang mit Tieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3097"/>
         <source>Athletics</source>
-        <translation type="unfinished">Athletik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3102"/>
         <source>Awareness</source>
-        <translation type="unfinished">Aufmerksamkeit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3107"/>
         <source>Cunning</source>
-        <translation type="unfinished">Gerissenheit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3112"/>
@@ -3578,12 +3577,12 @@
     <message>
         <location filename="../characterpage.ui" line="3127"/>
         <source>Healing</source>
-        <translation type="unfinished">Heilung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3132"/>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3137"/>
@@ -3756,7 +3755,7 @@
     <message>
         <location filename="../characterpage.ui" line="3737"/>
         <source>Personal History</source>
-        <translation type="unfinished">Persönliche Geschichte</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3759"/>
@@ -3766,17 +3765,17 @@
     <message>
         <location filename="../characterpage.ui" line="3767"/>
         <source>Allies</source>
-        <translation type="unfinished">Verbündete</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3785"/>
         <source>Enemies</source>
-        <translation type="unfinished">Gegner</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3803"/>
         <source>Oaths</source>
-        <translation type="unfinished">Eide</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3828"/>
@@ -3786,17 +3785,30 @@
     <message>
         <location filename="../characterpage.ui" line="3836"/>
         <source>Heraldry</source>
-        <translation type="unfinished">Heraldik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3854"/>
         <source>Portrait</source>
-        <translation type="unfinished">Potrait</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../characterpage.ui" line="3872"/>
         <source>Motto</source>
-        <translation type="unfinished">Motto</translation>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Characters</name>
+    <message>
+        <location filename="../characters.cpp" line="100"/>
+        <source>Getting Characters...</source>
+        <translation>Lade Charaktere...</translation>
+    </message>
+    <message>
+        <location filename="../characters.cpp" line="112"/>
+        <source>Characters found: </source>
+        <translation>Charaktere gefunden: </translation>
     </message>
 </context>
 <context>
@@ -3866,30 +3878,40 @@
     <message>
         <location filename="../dicetool.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished">Formular</translation>
+        <translation>Formular</translation>
     </message>
 </context>
 <context>
     <name>FileManager</name>
     <message>
+        <location filename="../filemanager.cpp" line="14"/>
         <source>does not exist. Creating...</source>
-        <translation type="vanished">nicht vorhanden. Wird erstellt...</translation>
+        <translation>nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
+        <location filename="../filemanager.cpp" line="23"/>
         <source> does not exist. Creating...</source>
-        <translation type="vanished">nicht vorhanden. Wird erstellt...</translation>
+        <translation>nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
+        <location filename="../filemanager.cpp" line="29"/>
         <source>Copying files to </source>
-        <translation type="vanished">Kopiere Dateien nach </translation>
+        <translation>Kopiere Dateien nach </translation>
     </message>
     <message>
+        <location filename="../filemanager.cpp" line="127"/>
+        <source>This OS is not supported.</source>
+        <translation>Dieses Betriebssystem wird leider nicht unterstützt.</translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="131"/>
         <source>Done.</source>
-        <translation type="vanished">Fertig.</translation>
+        <translation>Fertig.</translation>
     </message>
     <message>
+        <location filename="../filemanager.cpp" line="133"/>
         <source>Files already exist.</source>
-        <translation type="vanished">Dateien existieren bereits.</translation>
+        <translation>Dateien existieren bereits.</translation>
     </message>
 </context>
 <context>
@@ -4077,7 +4099,7 @@
     <message>
         <location filename="../mainwindow.ui" line="924"/>
         <source>Encrypt rot13</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschlüsseln (rot13)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="2147"/>
@@ -4844,12 +4866,12 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
 <context>
     <name>Program Start</name>
     <message>
-        <location filename="../main.cpp" line="68"/>
+        <location filename="../main.cpp" line="67"/>
         <source>Opening New Features Window because of an Update...</source>
         <translation>Öffne &quot;Neue Features&quot; Fenster aufgrund eines Updates...</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="70"/>
+        <location filename="../main.cpp" line="69"/>
         <source>Opening New Features Window because of the settings preferences...</source>
         <translation type="unfinished">Öffne &quot;Neue Features&quot; Fenster, wie in den Optionen eingestellt...</translation>
     </message>
@@ -5019,13 +5041,13 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../sifrp.ui" line="286"/>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="291"/>
         <location filename="../sifrp.ui" line="3007"/>
         <source>Description</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="296"/>
@@ -5880,7 +5902,7 @@ p, li { white-space: pre-wrap; }
         <location filename="../sifrp.ui" line="1488"/>
         <location filename="../sifrp.ui" line="2675"/>
         <source>Type</source>
-        <translation type="unfinished">Art</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../sifrp.ui" line="1525"/>
