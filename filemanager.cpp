@@ -11,7 +11,7 @@ FileManager::FileManager(){
 void FileManager::copyFiles(){
     QDir lDir(QDir::homePath()+"/.gm-companion");
     if (!lDir.exists()){
-        qDebug() << QDir::homePath()+"/.gm-companion"+QCoreApplication::translate("","does not exist. Creating...");
+        qDebug() << QDir::homePath()+"/.gm-companion"+QCoreApplication::translate("FileManager","does not exist. Creating...");
         lDir.mkpath(".");
     }
 
@@ -20,13 +20,13 @@ void FileManager::copyFiles(){
     for (QString path : dirList){
         QDir dir(QDir::homePath()+"/.gm-companion/"+path);
         if (!dir.exists()){
-            qDebug() << QDir::homePath()+"/.gm-companion/"+path+QCoreApplication::translate("", " does not exist. Creating...");
+            qDebug() << QDir::homePath()+"/.gm-companion/"+path+QCoreApplication::translate("FileManager", " does not exist. Creating...");
             dir.mkpath(".");
         }
     }
 
     bool copied = false;
-    qDebug() << QCoreApplication::translate("" ,"Copying files to ") << QDir::homePath()+"/.gm-companion ...";
+    qDebug() << QCoreApplication::translate("FileManager" ,"Copying files to ") << QDir::homePath()+"/.gm-companion ...";
 
     // Checks the OS and copies the files to a writable directory accordingly
     #ifdef __linux__
@@ -124,13 +124,13 @@ void FileManager::copyFiles(){
 
 
     #else
-        qDebug() << QCoreApplication::translate("","This OS is not supported.");
+        qDebug() << QCoreApplication::translate("FileManager","This OS is not supported.");
     #endif
 
     if (copied){
-        qDebug() << QCoreApplication::translate("","Done.");
+        qDebug() << QCoreApplication::translate("FileManager","Done.");
     }else{
-        qDebug() << QCoreApplication::translate("","Files already exist.");
+        qDebug() << QCoreApplication::translate("FileManager","Files already exist.");
     }
 
 }
