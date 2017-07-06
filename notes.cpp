@@ -10,6 +10,16 @@
 #include <QScrollBar>
 #include <QTextStream>
 
+// Encrypt Note
+void MainWindow::on_notesEncryptButton_clicked(){
+    QString content = ui->notesTextEdit->toPlainText();
+
+    content = rot13(content);
+
+    ui->notesTextEdit->setText(content);
+    ui->notesTextEdit->verticalScrollBar()->setValue(0);
+}
+
 void MainWindow::getNotes(){
     qDebug() << tr("Getting Notes...");
 

@@ -1,6 +1,7 @@
 #include "functions.h"
 
 #include <QDir>
+#include <QDebug>
 
 // Gets all folders in directory
 QStringList getFolders(QString path){
@@ -39,4 +40,36 @@ QStringList shuffleStringList(QStringList list){
         list.swap(index1, index2);
     }
     return list;
+}
+
+// Takes a string and encrypts it in ROT13 encryption
+QString rot13(QString s){
+    qDebug() << "Encrypting...";
+
+    QString lowCaps = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+    QString upperCaps = "ABCDEFGHIJKLMNOPQRSTUVPXYZABCDEFGHIJKLMNOPQRSTUVPXYZ";
+
+    QString encrypted = "";
+
+    for (int i = 0; i<s.length(); i++){
+        if (lowCaps.contains(s.at(i))){
+
+            int index = lowCaps.indexOf(s.at(i));
+            encrypted.append(lowCaps.at(index+13));
+
+        } else if (upperCaps.contains(s.at(i))){
+
+            int index = upperCaps.indexOf(s.at(i));
+            encrypted.append(upperCaps.at(index+13));
+
+        } else {
+
+            encrypted.append(s.at(i));
+
+        }
+    }
+
+    qDebug() << "Done.";
+
+    return encrypted;
 }
