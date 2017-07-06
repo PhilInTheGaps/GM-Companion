@@ -4,50 +4,17 @@
 <context>
     <name></name>
     <message>
-        <location filename="../characters.cpp" line="100"/>
-        <source>Getting Characters...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../characters.cpp" line="112"/>
-        <source>Characters found: </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="14"/>
-        <source>does not exist. Creating...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="23"/>
-        <source> does not exist. Creating...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="29"/>
-        <source>Copying files to </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="127"/>
-        <source>This OS is not supported.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="131"/>
-        <source>Done.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../filemanager.cpp" line="133"/>
-        <source>Files already exist.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../optionsdialog.cpp" line="475"/>
         <location filename="../whatisnewwindow.cpp" line="86"/>
         <source>This OS is not supported. Cannot launch Addon Manager.</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>AddonManager</name>
+    <message>
+        <location filename="../optionsdialog.cpp" line="475"/>
+        <source>This OS is not supported. Cannot launch Addon Manager.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3796,6 +3763,19 @@
     </message>
 </context>
 <context>
+    <name>Characters</name>
+    <message>
+        <location filename="../characters.cpp" line="100"/>
+        <source>Getting Characters...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../characters.cpp" line="112"/>
+        <source>Characters found: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DeleteCharacterDialog</name>
     <message>
         <location filename="../deletecharacterdialog.ui" line="14"/>
@@ -3862,6 +3842,39 @@
     <message>
         <location filename="../dicetool.ui" line="14"/>
         <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileManager</name>
+    <message>
+        <location filename="../filemanager.cpp" line="14"/>
+        <source>does not exist. Creating...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="23"/>
+        <source> does not exist. Creating...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="29"/>
+        <source>Copying files to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="127"/>
+        <source>This OS is not supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="131"/>
+        <source>Done.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../filemanager.cpp" line="133"/>
+        <source>Files already exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4783,12 +4796,12 @@ Please select a user defined category!</source>
 <context>
     <name>Program Start</name>
     <message>
-        <location filename="../main.cpp" line="68"/>
+        <location filename="../main.cpp" line="67"/>
         <source>Opening New Features Window because of an Update...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="70"/>
+        <location filename="../main.cpp" line="69"/>
         <source>Opening New Features Window because of the settings preferences...</source>
         <translation type="unfinished"></translation>
     </message>
