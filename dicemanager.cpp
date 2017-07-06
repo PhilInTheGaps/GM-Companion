@@ -2,6 +2,7 @@
 
 #include <QPushButton>
 #include <QHeaderView>
+#include <QDebug>
 
 DiceManager::DiceManager(QObject *parent) : QObject(parent)
 {
@@ -62,7 +63,7 @@ QFrame* DiceManager::generateDiceFrame(){
     amountSpinBox->setMinimum(1);
     amountSpinBox->setValue(1);
     amountSpinBox->setFont(fs);
-    amountSpinBox->setMinimumSize(50, 150);
+    amountSpinBox->setMinimumSize(50, 0); //50, 150
     amountSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     leftTopLayout->addWidget(amountSpinBox);
 
@@ -93,7 +94,7 @@ QFrame* DiceManager::generateDiceFrame(){
     modifierSpinBox->setMinimum(-999);
     modifierSpinBox->setValue(0);
     modifierSpinBox->setFont(fs);
-    modifierSpinBox->setMinimumSize(100, 150);
+    modifierSpinBox->setMinimumSize(100, 0); //100, 150
     modifierSpinBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     leftTopLayout->addWidget(modifierSpinBox);
 
@@ -146,7 +147,7 @@ QFrame* DiceManager::generateDiceFrame(){
 
     diceOutputLabel = new QLabel;
     diceOutputLabel->setAlignment(Qt::AlignCenter);
-    diceOutputLabel->setMinimumSize(300, 300);
+    diceOutputLabel->setMinimumSize(300, 0); //300, 300
     QFont fr( "MS Shell Dlg 2", 80);
     diceOutputLabel->setFont(fr);
     diceOutputLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -171,10 +172,7 @@ void DiceManager::generateDice(){
     for (int sides : sidesList){
         QPushButton *button = new QPushButton;
         button->setText(tr("D")+QString::number(sides));
-        //button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        //button->setMinimumSize(200, 200);
         button->setStyleSheet("min-width: 50; min-height: 50; max-width: 200; max-height: 200;");
-        //button->setMaximumSize(100, 100);
 
         diceButtonLayout->addWidget(button);
 

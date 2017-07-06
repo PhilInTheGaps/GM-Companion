@@ -6,6 +6,7 @@
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTranslator>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -63,17 +64,15 @@ int main(int argc, char *argv[])
     int settingsVersion = checkSettings.value("version", 0).toInt();
     if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion){
         if (w.getVersionNumber() > settingsVersion){
-            qDebug() << "Opening New Features Window because of an Update...";
+            qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
         }else if (openNewFeatures == 1){
-            qDebug() << "Opening New Features Window because of the settings preferences...";
+            qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
         }
 
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
         w.updateSettingsVersion();
     }
-
-
 
     return app.exec();
 }
