@@ -3884,38 +3884,42 @@
 <context>
     <name>FileManager</name>
     <message>
-        <location filename="../filemanager.cpp" line="14"/>
+        <location filename="../filemanager.cpp" line="76"/>
         <source>does not exist. Creating...</source>
         <translation>nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="23"/>
+        <location filename="../filemanager.cpp" line="84"/>
         <source> does not exist. Creating...</source>
         <translation>nicht vorhanden. Wird erstellt...</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="29"/>
+        <location filename="../filemanager.cpp" line="90"/>
         <source>Copying files to </source>
         <translation>Kopiere Dateien nach </translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="127"/>
+        <location filename="../filemanager.cpp" line="99"/>
         <source>This OS is not supported.</source>
         <translation>Dieses Betriebssystem wird leider nicht unterstützt.</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="131"/>
+        <location filename="../filemanager.cpp" line="163"/>
         <source>Done.</source>
         <translation>Fertig.</translation>
     </message>
     <message>
-        <location filename="../filemanager.cpp" line="133"/>
         <source>Files already exist.</source>
-        <translation>Dateien existieren bereits.</translation>
+        <translation type="vanished">Dateien existieren bereits.</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
+    <message>
+        <location filename="../mainwindow.ui" line="26"/>
+        <source>GM-Companion | Beta 3.1.1</source>
+        <translation></translation>
+    </message>
     <message>
         <location filename="../mainwindow.ui" line="77"/>
         <source>Start</source>
@@ -3925,211 +3929,6 @@
         <location filename="../mainwindow.ui" line="101"/>
         <source>Welcome!</source>
         <translation>Willkommen!</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="191"/>
-        <source>GM-Companion Blog:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="216"/>
-        <source>loading...</source>
-        <translation>lade...</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="228"/>
-        <location filename="../mainwindow.ui" line="2132"/>
-        <source>Music</source>
-        <translation>Musik</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="234"/>
-        <source>Radio</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="251"/>
-        <source>Internet Radio</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="283"/>
-        <source>Select Radio:</source>
-        <translation>Radio auswhählen:</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="301"/>
-        <source>Play</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="315"/>
-        <source>Internet Radio Stations:</source>
-        <translation>Internet Radio Stationen:</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="368"/>
-        <location filename="../mainwindow.ui" line="431"/>
-        <source>Add Radio</source>
-        <translation>Radio hinzufügen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="377"/>
-        <source>Name</source>
-        <translation>Name</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="390"/>
-        <source>Description</source>
-        <translation>Beschreibung</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="403"/>
-        <source>The displayed radio name</source>
-        <translation>Der angezeigte Name des Radiosenders</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="410"/>
-        <source>A short description of the radio</source>
-        <translation>Eine kurze Beschreibung des Radiosenders</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="417"/>
-        <source>URL</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="424"/>
-        <source>URL to the direct music stream</source>
-        <translation>URL des direkten Musik-Streams</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="459"/>
-        <location filename="../mainwindow.ui" line="2137"/>
-        <source>Sound</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="465"/>
-        <location filename="../mainwindow.ui" line="2142"/>
-        <source>Maps</source>
-        <translation>Karten</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="498"/>
-        <source>Zoom In</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="517"/>
-        <source>Zoom Out</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="536"/>
-        <source>Fit to View</source>
-        <translation>Größe anpassen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="555"/>
-        <source>Reset Size</source>
-        <translation>Größe Zurücksetzen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="589"/>
-        <source>Dice Tool</source>
-        <translation>Würfel Tool</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="595"/>
-        <location filename="../mainwindow.ui" line="2211"/>
-        <source>Name Generator</source>
-        <translation>Namensgenerator</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="633"/>
-        <source>Amount of generated names:</source>
-        <translation>Anzahl der zu generierenden Namen:</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="690"/>
-        <location filename="../mainwindow.ui" line="717"/>
-        <location filename="../mainwindow.ui" line="2216"/>
-        <location filename="../mainwindow.ui" line="2221"/>
-        <source>Characters</source>
-        <translation>Charaktere</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="806"/>
-        <source>Add New</source>
-        <translation>Neuer Charakter</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="819"/>
-        <source>Edit Selected</source>
-        <translation>Bearbeiten</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="826"/>
-        <source>Update</source>
-        <translation>Aktualisieren</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="833"/>
-        <source>Delete Selected</source>
-        <translation>Löschen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="856"/>
-        <location filename="../mainwindow.ui" line="884"/>
-        <location filename="../mainwindow.ui" line="2231"/>
-        <source>Notes</source>
-        <translation>Notizen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="894"/>
-        <source>Delete Note</source>
-        <translation>Notiz Löschen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="908"/>
-        <source>Delete Category</source>
-        <translation>Kategorie Löschen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="924"/>
-        <source>Encrypt rot13</source>
-        <translation>Verschlüsseln (rot13)</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="2147"/>
-        <source>Resources</source>
-        <translation>Resourcen</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="901"/>
-        <source>Add Category</source>
-        <translation>Neue Kategorie</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="26"/>
-        <source>GM-Companion | Beta 3.1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="120"/>
-        <source>Version: Beta 3.1.1 (0.3.1.1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="133"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Release Notes:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;This update fixes some issues with the german translation and adds rot13 encryption for notes to prevent other users from accidentally reading your notes.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="153"/>
@@ -4142,6 +3941,8 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Additions&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added notes rot13 encryption&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added release notes&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Improvements&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Obsolete files should now be removed when updating to a newer version&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Fixes&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Fixed typos in german translation&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -4156,10 +3957,239 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Improved (?) UI&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added Settings-Window&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Added Notes&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Changelog:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Beta 3.1.1:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Neue Features:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Notizen rot13 Verschlüsselung hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Versionshinweise hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Verbesserungen&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Nicht mehr benötigte Dateien werden jetzt beim Update entfernt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Fixes&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Typos in der deutschen Übersetzung entfernt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;Beta 3.1:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Übersetzungen hinzugefügt (Derzeit nur Englisch und Deutsch)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Gruppierungs-Feature für Musik hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Einen zweiten Musik und Sound Interface Stil hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Die Anzahl der generierten Namen kann jetzt eingestellt werden&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Optimierung für Monitore mit einer geringeren Auflösung als Full HD&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Internet Radiosender können jetzt hinzugefügt werden&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Qt StyleSheet unterstützung hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- UI verbessert (?)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Optionsmenü hinzugefügt&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;MS Shell Dlg 2&apos;;&quot;&gt;- Notizensystem hinzugefügt&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="915"/>
+        <location filename="../mainwindow.ui" line="193"/>
+        <source>GM-Companion Blog:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="218"/>
+        <source>loading...</source>
+        <translation>lade...</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="230"/>
+        <location filename="../mainwindow.ui" line="2134"/>
+        <source>Music</source>
+        <translation>Musik</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="236"/>
+        <source>Radio</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="253"/>
+        <source>Internet Radio</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="285"/>
+        <source>Select Radio:</source>
+        <translation>Radio auswhählen:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="303"/>
+        <source>Play</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="317"/>
+        <source>Internet Radio Stations:</source>
+        <translation>Internet Radio Stationen:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="370"/>
+        <location filename="../mainwindow.ui" line="433"/>
+        <source>Add Radio</source>
+        <translation>Radio hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="379"/>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="392"/>
+        <source>Description</source>
+        <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="405"/>
+        <source>The displayed radio name</source>
+        <translation>Der angezeigte Name des Radiosenders</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="412"/>
+        <source>A short description of the radio</source>
+        <translation>Eine kurze Beschreibung des Radiosenders</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="419"/>
+        <source>URL</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="426"/>
+        <source>URL to the direct music stream</source>
+        <translation>URL des direkten Musik-Streams</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="461"/>
+        <location filename="../mainwindow.ui" line="2139"/>
+        <source>Sound</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="467"/>
+        <location filename="../mainwindow.ui" line="2144"/>
+        <source>Maps</source>
+        <translation>Karten</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="500"/>
+        <source>Zoom In</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="519"/>
+        <source>Zoom Out</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="538"/>
+        <source>Fit to View</source>
+        <translation>Größe anpassen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="557"/>
+        <source>Reset Size</source>
+        <translation>Größe Zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="591"/>
+        <source>Dice Tool</source>
+        <translation>Würfel Tool</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="597"/>
+        <location filename="../mainwindow.ui" line="2213"/>
+        <source>Name Generator</source>
+        <translation>Namensgenerator</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="635"/>
+        <source>Amount of generated names:</source>
+        <translation>Anzahl der zu generierenden Namen:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="692"/>
+        <location filename="../mainwindow.ui" line="719"/>
+        <location filename="../mainwindow.ui" line="2218"/>
+        <location filename="../mainwindow.ui" line="2223"/>
+        <source>Characters</source>
+        <translation>Charaktere</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="808"/>
+        <source>Add New</source>
+        <translation>Neuer Charakter</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="821"/>
+        <source>Edit Selected</source>
+        <translation>Bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="828"/>
+        <source>Update</source>
+        <translation>Aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="835"/>
+        <source>Delete Selected</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="858"/>
+        <location filename="../mainwindow.ui" line="886"/>
+        <location filename="../mainwindow.ui" line="2233"/>
+        <source>Notes</source>
+        <translation>Notizen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="896"/>
+        <source>Delete Note</source>
+        <translation>Notiz Löschen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="910"/>
+        <source>Delete Category</source>
+        <translation>Kategorie Löschen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="926"/>
+        <source>Encrypt rot13</source>
+        <translation>Verschlüsseln (rot13)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="2149"/>
+        <source>Resources</source>
+        <translation>Resourcen</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="903"/>
+        <source>Add Category</source>
+        <translation>Neue Kategorie</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="120"/>
+        <source>Version: Beta 3.1.1 (0.3.1.1)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="133"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Release Notes:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;This update fixes some issues with the german translation and adds rot13 encryption for notes to prevent other users from accidentally reading your notes.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Malgun Gothic&apos;; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Versionshinweise:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Dieses Update behebt einige Probleme mit der deutschen Übersetzung und fügt eine &quot;rot13&quot; Verschlüsselung für Notizen hinzu, um zu verhindern, dass sie versehentlich von anderen gelesen werden.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="917"/>
         <source>Add Note</source>
         <translation>Neue Notiz</translation>
     </message>
@@ -4168,105 +4198,105 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Notizen Aktualisieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="966"/>
+        <location filename="../mainwindow.ui" line="968"/>
         <source>Unit Converter</source>
         <translation>Einheiten Rechner</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="998"/>
+        <location filename="../mainwindow.ui" line="1000"/>
         <source>Lengths</source>
         <translation>Längen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1005"/>
+        <location filename="../mainwindow.ui" line="1007"/>
         <source>Areas</source>
         <translation>Flächen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1082"/>
-        <location filename="../mainwindow.ui" line="1219"/>
+        <location filename="../mainwindow.ui" line="1084"/>
+        <location filename="../mainwindow.ui" line="1221"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1089"/>
-        <location filename="../mainwindow.ui" line="1229"/>
+        <location filename="../mainwindow.ui" line="1091"/>
+        <location filename="../mainwindow.ui" line="1231"/>
         <source>Money</source>
         <translation>Geld</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1151"/>
-        <location filename="../mainwindow.ui" line="1224"/>
+        <location filename="../mainwindow.ui" line="1153"/>
+        <location filename="../mainwindow.ui" line="1226"/>
         <source>Weight</source>
         <translation>Gewicht</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1201"/>
+        <location filename="../mainwindow.ui" line="1203"/>
         <source>Add Units</source>
         <translation>Einheit hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1209"/>
+        <location filename="../mainwindow.ui" line="1211"/>
         <source>Length</source>
         <translation>Länge</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1214"/>
+        <location filename="../mainwindow.ui" line="1216"/>
         <source>Area</source>
         <translation>Fläche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1239"/>
+        <location filename="../mainwindow.ui" line="1241"/>
         <source>Unit Name</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1249"/>
+        <location filename="../mainwindow.ui" line="1251"/>
         <source>Meters</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1268"/>
+        <location filename="../mainwindow.ui" line="1270"/>
         <source>Add Unit</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1340"/>
+        <location filename="../mainwindow.ui" line="1342"/>
         <source>Play (Music)</source>
         <translation>Play (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1394"/>
+        <location filename="../mainwindow.ui" line="1396"/>
         <source>Pause (Music)</source>
         <translation>Pausieren (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1439"/>
+        <location filename="../mainwindow.ui" line="1441"/>
         <source>Rewind (Music)</source>
         <translation>Zurückspulen (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1484"/>
+        <location filename="../mainwindow.ui" line="1486"/>
         <source>Next (Music)</source>
         <translation>Nächstes Stück (Musik)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1535"/>
+        <location filename="../mainwindow.ui" line="1537"/>
         <source>Toggle Music Shuffle (bright = on, dark = off)</source>
         <translation>Zufallswiedergabe (hell = an, dunkel = aus)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1581"/>
+        <location filename="../mainwindow.ui" line="1583"/>
         <source>Music Volume</source>
         <translation>Musik Lautstärke</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1623"/>
+        <location filename="../mainwindow.ui" line="1625"/>
         <source>&lt;No Music Selected&gt;</source>
         <translation>&lt;Keine Musik ausgewählt&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1643"/>
+        <location filename="../mainwindow.ui" line="1645"/>
         <source>Music Progress</source>
         <translation>Musik Fortschritt</translation>
     </message>
@@ -4275,62 +4305,62 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Song auswählen:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1739"/>
+        <location filename="../mainwindow.ui" line="1741"/>
         <source>Play (Sound)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1784"/>
+        <location filename="../mainwindow.ui" line="1786"/>
         <source>Pause (Sound)</source>
         <translation>Pausieren (Sound)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1829"/>
+        <location filename="../mainwindow.ui" line="1831"/>
         <source>Rewind (Sound)</source>
         <translation>Zurückspulen (Sound)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1874"/>
+        <location filename="../mainwindow.ui" line="1876"/>
         <source>Next (Sound)</source>
         <translation>Nächster Sound</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1912"/>
+        <location filename="../mainwindow.ui" line="1914"/>
         <source>Toggle Sound Shuffle (bright = on, dark = off)</source>
         <translation>Zufallswiedergabe (hell = an, dunkel = aus)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1960"/>
+        <location filename="../mainwindow.ui" line="1962"/>
         <source>Sound Volume</source>
         <translation>Sound Lautstärke</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1996"/>
+        <location filename="../mainwindow.ui" line="1998"/>
         <source>&lt;No Sounds Selected&gt;</source>
         <translation>&lt;Keine Sounds ausgewählt&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2071"/>
+        <location filename="../mainwindow.ui" line="2073"/>
         <source>Options</source>
         <translation>Optionen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2075"/>
+        <location filename="../mainwindow.ui" line="2077"/>
         <source>Set Paths</source>
         <translation>Pfade festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2095"/>
+        <location filename="../mainwindow.ui" line="2097"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2107"/>
+        <location filename="../mainwindow.ui" line="2109"/>
         <source>Dice</source>
         <translation>Würfel</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2118"/>
+        <location filename="../mainwindow.ui" line="2120"/>
         <source>Database</source>
         <translation>Datenbank</translation>
     </message>
@@ -4351,52 +4381,52 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Resourcen Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2152"/>
+        <location filename="../mainwindow.ui" line="2154"/>
         <source>Music Player</source>
         <translation>Musik Player</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2157"/>
+        <location filename="../mainwindow.ui" line="2159"/>
         <source>Sound Player</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2162"/>
+        <location filename="../mainwindow.ui" line="2164"/>
         <source>Map Viewer</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2167"/>
+        <location filename="../mainwindow.ui" line="2169"/>
         <source>Set Database Path</source>
         <translation>Datenbank Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2175"/>
+        <location filename="../mainwindow.ui" line="2177"/>
         <source>Open Wiki</source>
         <translation>Wiki öffnen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2180"/>
+        <location filename="../mainwindow.ui" line="2182"/>
         <source>Check for Updates</source>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2185"/>
+        <location filename="../mainwindow.ui" line="2187"/>
         <source>Report a Bug</source>
         <translation>Fehler melden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2190"/>
+        <location filename="../mainwindow.ui" line="2192"/>
         <source>I want to use an older version!</source>
         <translation>Ich möchte eine ältere Version verwenden!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2195"/>
+        <location filename="../mainwindow.ui" line="2197"/>
         <source>Webradio</source>
         <translation>Internet Radio</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2203"/>
+        <location filename="../mainwindow.ui" line="2205"/>
         <source>Check for Updates on Program Start</source>
         <translation>Beim Programmstart nach Updates suchen</translation>
     </message>
@@ -4405,7 +4435,7 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Charakter Pfad festlegen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="2226"/>
+        <location filename="../mainwindow.ui" line="2228"/>
         <source>Options...</source>
         <translation>Optionen...</translation>
     </message>
@@ -4873,7 +4903,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>Opening New Features Window because of the settings preferences...</source>
-        <translation type="unfinished">Öffne &quot;Neue Features&quot; Fenster, wie in den Optionen eingestellt...</translation>
+        <translation>Öffne &quot;Neue Features&quot; Fenster (Ist in den Einstellungen eingeschaltet)...</translation>
     </message>
 </context>
 <context>
