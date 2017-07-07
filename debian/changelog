@@ -1,3 +1,9 @@
+gm-companion (0.3.1.1-1ubuntu1) zesty; urgency=medium
+
+  * Various Fixes
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Fri, 07 Jul 2017 23:11:00 +0200
+
 gm-companion (0.3.1-1ubuntu10) zesty; urgency=medium
 
   * Made project buildable from master branch
