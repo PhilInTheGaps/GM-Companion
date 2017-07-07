@@ -65,6 +65,9 @@ void FileManager::copyFiles(){
     // List of all directories to be created
     QStringList dirList = {"addons", "characters", "maps", "music", "notes", "resources", "sounds", "styles", "notes"};
 
+    // List of files to be copied
+    QStringList fileList = {"radios.ini", "units.ini"};
+
     // List of all files to be deleted
 //    filesToBeDeleted = {""};
 
@@ -108,6 +111,13 @@ void FileManager::copyFiles(){
             for (QString file : getFiles(topPathString)){
                 copyContents(topPathString+"/"+file, origPath+"/"+folder+"/"+file);
             }
+        }
+    }
+
+    // Copy files
+    for (QString file : fileList){
+        if (QFile(origPath+"/"+file).exists()){
+            copyContents(origPath+"/"+file, QDir::homePath()+"/.gm-companion/"+file);
         }
     }
 
