@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: gm-companion
-Source: https://github.com/PhilInTheGaps/GM-Companion/archive/0.3.1.0.tar.gz
+Source: https://github.com/PhilInTheGaps/GM-Companion/archive/0.3.1.1.tar.gz
 
 Files: *
 Copyright: 2017 Phil Hoffmann <phil.hoffmann@inbox.com>
