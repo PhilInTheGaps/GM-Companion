@@ -46,16 +46,20 @@ void FileManager::copyContents(QString path, QString destination){
         QFileInfo newInfo (destination);
         QDateTime newTime (newInfo.lastModified());
 
-        if (newTime.operator <=(oldTime)){
+        if (newTime.operator >=(oldTime)){
             copy = false;
+        } else {
+            QFile(destination).remove();
             qDebug() << path + " is newer, replacing...";
         }
+
     } else {
         qDebug() << "copying " + path;
     }
 
-    if (copy)
+    if (copy){
         QFile::copy(path, destination);
+    }
 }
 
 void FileManager::copyFiles(){
@@ -109,7 +113,7 @@ void FileManager::copyFiles(){
 
         if (topPath.exists()){
             for (QString file : getFiles(topPathString)){
-                copyContents(topPathString+"/"+file, origPath+"/"+folder+"/"+file);
+                copyContents(topPathString+"/"+file, QDir::homePath()+"/.gm-companion/"+folder+"/"+file);
             }
         }
     }
