@@ -2,7 +2,11 @@
 
 A tool for the gamemaster of a tabletop RPG session.
 
-[Official Website](https://philinthegaps.github.io/GM-Companion/)
+[Official Website](https://philinthegaps.github.io/GM-Companion/)  
+[Launchpad Repository](https://launchpad.net/~rophil/+archive/ubuntu/gm-companion)  
+[GM-Companion at itch.io](https://philinthegaps.itch.io/gm-companion)  
+
+[Documentation](https://github.com/PhilInTheGaps/GM-Companion/wiki)
 
 The GM-Companion is written in C++ using Qt5.
 The Addon Manager requires Java to run.
