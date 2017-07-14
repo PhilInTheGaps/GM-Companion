@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QCoreApplication>
 #include <QDir>
+#include <QDebug>
 
 SettingsManager::SettingsManager()
 {
@@ -17,19 +18,34 @@ QString SettingsManager::getSetting(Setting setting){
 
     switch (setting) {
     case Setting::musicPath:
+        settings.beginGroup("Paths");
         settingString = settings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString();
+        settings.endGroup();
         break;
     case Setting::soundPath:
+        settings.beginGroup("Paths");
         settingString = settings.value("soundPath", QDir::homePath()+"/.gm-companion/sounds").toString();
+        settings.endGroup();
         break;
     case Setting::mapsPath:
+        settings.beginGroup("Paths");
         settingString = settings.value("mapsPath", QDir::homePath()+"/.gm-companion/maps").toString();
+        settings.endGroup();
         break;
     case Setting::resourcesPath:
+        settings.beginGroup("Paths");
         settingString = settings.value("resourcesPath", QDir::homePath()+"/.gm-companion/resources").toString();
+        settings.endGroup();
         break;
     case Setting::charactersPath:
+        settings.beginGroup("Paths");
         settingString = settings.value("charactersPath", QDir::homePath()+"/.gm-companion/characters").toString();
+        settings.endGroup();
+        break;
+    case Setting::notesPath:
+        settings.beginGroup("Paths");
+        settingString = settings.value("notesPath", QDir::homePath()+"/.gm-companion/notes").toString();
+        settings.endGroup();
         break;
     case Setting::checkForUpdatesOnStart:
         settingString = settings.value("checkForUpdatesOnStart", 1).toInt();
@@ -52,9 +68,6 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::version:
         settingString = QString::number(settings.value("version", 0).toInt());
         break;
-    case Setting::notesPath:
-        settingString = settings.value("notesPath", QDir::homePath()+"/.gm-companion/notes").toString();
-        break;
     default:
         settingString = "";
         break;
@@ -71,31 +84,49 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
     case Setting::musicPath:
         path = setFolderLocation("Set Music Folder");
         if (path.length()>1){
+            settings.beginGroup("Paths");
             settings.setValue("musicPath", path);
+            settings.endGroup();
         }
         break;
     case Setting::soundPath:
         path = setFolderLocation("Set Sound Folder");
         if (path.length()>1){
+            settings.beginGroup("Paths");
             settings.setValue("soundPath", path);
+            settings.endGroup();
         }
         break;
     case Setting::mapsPath:
         path = setFolderLocation("Set Maps Folder");
         if (path.length()>1){
+            settings.beginGroup("Paths");
             settings.setValue("mapsPath", path);
+            settings.endGroup();
         }
         break;
     case Setting::resourcesPath:
         path = setFolderLocation("Set Resources Folder");
         if (path.length()>1){
+            settings.beginGroup("Paths");
             settings.setValue("resourcesPath", path);
+            settings.endGroup();
         }
         break;
     case Setting::charactersPath:
         path = setFolderLocation("Set Characters Folder");
         if (path.length()>1){
+            settings.beginGroup("Paths");
             settings.setValue("charactersPath", path);
+            settings.endGroup();
+        }
+        break;
+    case Setting::notesPath:
+        path = setFolderLocation("Set Notes Folder");
+        if (path.length()>1){
+            settings.beginGroup("Paths");
+            settings.setValue("notesPath", path);
+            settings.endGroup();
         }
         break;
     case Setting::checkForUpdatesOnStart:
@@ -130,12 +161,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         break;
     case Setting::version:
         settings.setValue("version", value);
-        break;
-    case Setting::notesPath:
-        path = setFolderLocation("Set Notes Folder");
-        if (path.length()>1){
-            settings.setValue("notesPath", path);
-        }
         break;
     default:
         break;
@@ -192,4 +217,29 @@ bool SettingsManager::getIsAddonEnabled(QString addon){
 // Returns Official Addons
 QStringList SettingsManager::getOfficialAddons(){
     return officialAddons;
+}
+
+// Updates the settings if something changed from a previous version
+void SettingsManager::updateSettings(){
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+
+    if (settings.value("version").toInt() < 320){
+        qDebug() << "Updating settings file...";
+
+        QStringList paths = {
+            "musicPath", "charactersPath", "resourcesPath", "soundPath", "mapsPath", "notesPath"
+        };
+
+        for (QString path : paths){
+            if (settings.value(path).isValid()){
+                QString temp;
+                temp = settings.value(path).toString();
+                settings.remove(path);
+
+                settings.beginGroup("Paths");
+                settings.setValue(path, temp);
+                settings.endGroup();
+            }
+        }
+    }
 }

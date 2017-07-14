@@ -72,7 +72,8 @@ FORMS    += mainwindow.ui \
     notesdialog.ui \
     sifrp.ui \
     whatisnewwindow.ui \
-    dicetool.ui
+    dicetool.ui \
+    preloader.ui
 
 DISTFILES += \
 
