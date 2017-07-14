@@ -19,6 +19,9 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
 SOURCES += main.cpp\
            mainwindow.cpp \
     flowlayout.cpp \
