@@ -18,7 +18,8 @@ enum Setting{
     enableMusicTrackList,
     openWhatIsNewWindow,
     language,
-    version
+    version,
+    notesPath
 };
 
 class SettingsManager

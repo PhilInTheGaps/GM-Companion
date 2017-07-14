@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include <mainwindow.h>
+#include "settingsmanager.h"
 
 namespace Ui {
     class NotesDialog;
@@ -36,6 +37,8 @@ private:
     Ui::NotesDialog *ui;
 
     MainWindow *w;
+
+    SettingsManager *settingsManager;
 
     QString folder;
     QString filename;
