@@ -2,15 +2,15 @@ Source: gm-companion
 Section: misc
 Priority: optional
 Maintainer: Phil Hoffmann <phil.hoffmann@inbox.com>
-Build-Depends: g++, qtbase5-dev, qt5-default, qttools5-dev, qttools5-dev-tools, qtmultimedia5-dev, libqt5opengl5-dev, qtscript5-dev, libqt5webkit5-dev, libqt5x11extras5-dev, libqt5xmlpatterns5-dev, qtdeclarative5-dev
+Build-Depends: g++, debhelper (>= 9), cdbs, qtbase5-dev, qt5-default, qttools5-dev, qttools5-dev-tools, qtmultimedia5-dev, libqt5opengl5-dev, qtscript5-dev, libqt5webkit5-dev, libqt5x11extras5-dev, libqt5xmlpatterns5-dev, qtdeclarative5-dev
 Standards-Version: 3.9.8
 Homepage: https://philinthegaps.github.io/GM-Companion/
 #Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion.git
 #Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gm-companion.git
 
 Package: gm-companion
-Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5
 Description: A tool for the gamemaster of a tabletop rpg session.
  The "GM-Companion" is a tool for the gamemaster of a tabletop rpg session.
  .
