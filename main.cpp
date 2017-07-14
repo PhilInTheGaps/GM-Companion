@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     // Set StyleSheet
-    QString style = settings->getSetting(Setting::uiMode);
+    QString style = settings->getSetting(uiMode);
 
     QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
     if (file.exists()){
