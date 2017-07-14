@@ -12,8 +12,15 @@
 #include <QSettings>
 #include <QScrollBar>
 #include <QApplication>
+#include <QSplashScreen>
+#include <QPlainTextEdit>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+    // Show splash screen
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap(":/resources/splash.jpg"));
+    splash->show();
+
     qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
@@ -79,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Notes
     getNotes();
     notesWatcher = new QFileSystemWatcher;
-    notesWatcher->addPath(QDir::homePath()+"/.gm-companion/notes");
+    notesWatcher->addPath(settingsManager->getSetting(Setting::notesPath));
     connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
 
     // Addons
@@ -293,19 +300,4 @@ void MainWindow::on_actionOptions_triggered(){
     options->show();
 }
 
-void MainWindow::on_notesFontBox_currentTextChanged(const QString &arg1)
-{
-    ui->notesTextEdit->setFontFamily(arg1);
-    updateText();
-}
 
-void MainWindow::on_notesFontSizeSpinBox_valueChanged(int arg1)
-{
-    ui->notesTextEdit->setFontPointSize(arg1);
-    updateText();
-}
-
-void MainWindow::updateText(){
-    QString text = ui->notesTextEdit->toPlainText();
-    ui->notesTextEdit->setText(text);
-}

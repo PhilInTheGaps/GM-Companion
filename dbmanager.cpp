@@ -1,5 +1,7 @@
 #include "dbmanager.h"
+
 #include <QCoreApplication>
+#include <QDebug>
 
 DbManager::DbManager(const QString &path)
 {

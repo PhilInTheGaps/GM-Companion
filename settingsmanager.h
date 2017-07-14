@@ -35,6 +35,8 @@ public:
 
     QStringList getOfficialAddons();
 
+    void updateSettings();
+
 private:
     // Normal Settings
     QSettings settings;
