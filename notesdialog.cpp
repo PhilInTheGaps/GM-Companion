@@ -10,6 +10,8 @@ NotesDialog::NotesDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::Notes
     ui->setupUi(this);
 
     w = parent;
+
+    settingsManager = new SettingsManager;
 }
 
 NotesDialog::~NotesDialog(){
@@ -27,7 +29,7 @@ void NotesDialog::setFolder(QString f){
 void NotesDialog::on_createNoteDialog_accepted(){
     filename = ui->noteNameLine->text()+".txt";
 
-    QFile file(QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+filename);
+    QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+folder+"/"+filename);
     if (!file.exists()){
         file.open(QIODevice::WriteOnly);
         file.close();
@@ -48,7 +50,7 @@ void NotesDialog::on_errorNoteDialog_rejected(){
 void NotesDialog::on_addCategoryDialog_accepted(){
     folder = ui->categoryLine->text();
 
-    QDir dir(QDir::homePath()+"/.gm-companion/notes/"+folder);
+    QDir dir(settingsManager->getSetting(Setting::notesPath)+"/"+folder);
     if (!dir.exists()){
         dir.mkpath(".");
     }

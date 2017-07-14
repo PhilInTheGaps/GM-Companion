@@ -62,6 +62,8 @@ private slots:
 
     void on_addonManagerButton_clicked();
 
+    void on_setNotesPath_clicked();
+
 private:
     Ui::OptionsDialog *ui;
 

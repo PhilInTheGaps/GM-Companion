@@ -97,6 +97,7 @@ private slots:
     void on_actionSet_Resources_Folder_triggered(); // Resources
     void on_actionSet_Characters_Folder_triggered(); // Characters
     void on_actionCheck_for_Updates_triggered(); // Check Updates
+    void on_actionNotes_2_triggered(); // Set Notes Path
 
     // Name Generator
     void on_generateNames(QString);
@@ -116,6 +117,7 @@ private slots:
     void on_deleteNoteButton_clicked();
     void on_deleteCategoryButton_clicked();
     void notesWatcher_directoryChanged();
+    void on_notesEncryptButton_clicked();
 
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
@@ -151,7 +153,6 @@ private slots:
     void on_money2ComboBox_currentIndexChanged(int index);
     void on_money1SpinBox_valueChanged(double arg1);
 
-    void on_notesEncryptButton_clicked();
 
 private:
     Ui::MainWindow *ui;

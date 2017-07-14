@@ -196,12 +196,20 @@ void OptionsDialog::on_setCharactersPath_clicked()
     updatePaths();
 }
 
+void OptionsDialog::on_setNotesPath_clicked()
+{
+    settings->setSetting(Setting::notesPath);
+    pathsChanged = true;
+    updatePaths();
+}
+
 void OptionsDialog::updatePaths(){
     ui->musicPath->setText(settings->getSetting(Setting::musicPath));
     ui->soundPath->setText(settings->getSetting(Setting::soundPath));
     ui->mapsPath->setText(settings->getSetting(Setting::mapsPath));
     ui->resourcesPath->setText(settings->getSetting(Setting::resourcesPath));
     ui->charactersPath->setText(settings->getSetting(Setting::charactersPath));
+    ui->notesPath->setText(settings->getSetting(Setting::notesPath));
 }
 
 
@@ -450,6 +458,7 @@ void OptionsDialog::on_groupsSelectFoldersButton_clicked()
     }
 }
 
+// Set New Language
 void OptionsDialog::on_languageComboBox_currentIndexChanged(int index)
 {
     switch (index) {
@@ -465,6 +474,7 @@ void OptionsDialog::on_languageComboBox_currentIndexChanged(int index)
     }
 }
 
+// Open Addon Manager
 void OptionsDialog::on_addonManagerButton_clicked()
 {
     #ifdef __linux__
