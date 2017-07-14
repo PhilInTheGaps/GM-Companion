@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         app.installTranslator(translator);
     }
     #else
-    if (translator->load("gm-companion_"+settings->getSetting(Setting::language), "/usr/share/gm-companion/translations")) {
+    if (translator->load("gm-companion_"+settings->getSetting(language), "/usr/share/gm-companion/translations")) {
         app.installTranslator(translator);
     }
     #endif
