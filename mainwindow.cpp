@@ -37,6 +37,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     int checkUpdates = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
 
+    // Set tool tabs closeable
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
     // Initialize Signal Mappers
     signalMapperMusic = new QSignalMapper(this);
     signalMapperSound = new QSignalMapper(this);
@@ -46,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Generates the dice page
     diceManager = new DiceManager;
     ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
+    //ui->tabDice->
 
     // Initialize player and playlist for music
     musicPlayer = new QMediaPlayer(this);
@@ -288,7 +292,8 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
 }
 
 // Set Notes Path
-void MainWindow::on_actionNotes_2_triggered(){
+void MainWindow::on_actionSet_Notes_Folder_triggered()
+{
     settingsManager->setSetting(Setting::notesPath, true);
 
     getNotes();
@@ -300,4 +305,7 @@ void MainWindow::on_actionOptions_triggered(){
     options->show();
 }
 
-
+// Remove a tab from the tab widget
+void MainWindow::closeTab(int index){
+    delete ui->tabWidget->widget(index);
+}

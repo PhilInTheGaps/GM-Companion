@@ -66,11 +66,14 @@
       <property name="documentMode">
        <bool>false</bool>
       </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
       <property name="movable">
        <bool>true</bool>
       </property>
       <property name="tabBarAutoHide">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <widget class="QWidget" name="Start">
        <attribute name="title">
@@ -163,6 +166,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;- Improvements&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;  - The notes directory can now be changed&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;  - Improved settings.ini grouping&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2';&quot;&gt;- Fixes&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2';&quot;&gt;&lt;br /&gt;&lt;/p&gt;
@@ -283,7 +287,7 @@ p, li { white-space: pre-wrap; }
                <x>0</x>
                <y>0</y>
                <width>840</width>
-               <height>546</height>
+               <height>539</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_22">
@@ -2181,9 +2185,24 @@ p, li { white-space: pre-wrap; }
      <addaction name="actionSet_Maps_Folder"/>
      <addaction name="actionSet_Resources_Folder"/>
      <addaction name="actionSet_Characters_Folder"/>
-     <addaction name="actionNotes_2"/>
+     <addaction name="actionSet_Notes_Folder"/>
+    </widget>
+    <widget class="QMenu" name="menuTools">
+     <property name="title">
+      <string>Tools</string>
+     </property>
+     <addaction name="actionToggle_Music_Tool"/>
+     <addaction name="actionToggle_Sound_Tool"/>
+     <addaction name="actionToggle_Radio_Tool"/>
+     <addaction name="actionToggle_Maps_Tool"/>
+     <addaction name="actionToggle_Dice_Tool"/>
+     <addaction name="actionToggle_Name_Generator_Tool"/>
+     <addaction name="actionToggle_Characters_Tool"/>
+     <addaction name="actionToggle_Notes_Tool"/>
+     <addaction name="actionToggle_Unit_Converter_Tool"/>
     </widget>
     <addaction name="actionOptions"/>
+    <addaction name="menuTools"/>
     <addaction name="menuSet_Paths"/>
     <addaction name="separator"/>
     <addaction name="actionCheck_for_Updates"/>
@@ -2329,14 +2348,87 @@ p, li { white-space: pre-wrap; }
     <string>Options...</string>
    </property>
   </action>
-  <action name="actionNotes">
+  <action name="actionSet_Notes_Folder">
    <property name="text">
     <string>Notes</string>
    </property>
   </action>
-  <action name="actionNotes_2">
+  <action name="actionToggle_Music_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Music</string>
+   </property>
+  </action>
+  <action name="actionToggle_Sound_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Sound</string>
+   </property>
+  </action>
+  <action name="actionToggle_Radio_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Radio</string>
+   </property>
+  </action>
+  <action name="actionToggle_Maps_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Maps</string>
+   </property>
+  </action>
+  <action name="actionToggle_Dice_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dice</string>
+   </property>
+  </action>
+  <action name="actionToggle_Name_Generator_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Name Generator</string>
+   </property>
+  </action>
+  <action name="actionToggle_Characters_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Characters</string>
+   </property>
+  </action>
+  <action name="actionToggle_Notes_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Notes</string>
+   </property>
+  </action>
+  <action name="actionToggle_Unit_Converter_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Unit Converter</string>
    </property>
   </action>
  </widget>
