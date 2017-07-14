@@ -7,7 +7,8 @@
 QT       += core gui \
             multimedia \
             multimediawidgets \
-            network
+            network \
+            sql
 
 win32:QT += winextras
 
@@ -42,7 +43,8 @@ SOURCES += main.cpp\
     sifrp.cpp \
     converter.cpp \
     whatisnewwindow.cpp \
-    dicetool.cpp
+    dicetool.cpp \
+    dbmanager.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -59,7 +61,8 @@ HEADERS  += mainwindow.h \
     notesdialog.h \
     sifrp.h \
     whatisnewwindow.h \
-    dicetool.h
+    dicetool.h \
+    dbmanager.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \

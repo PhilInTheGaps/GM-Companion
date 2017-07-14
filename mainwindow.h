@@ -118,6 +118,8 @@ private slots:
     void on_deleteCategoryButton_clicked();
     void notesWatcher_directoryChanged();
     void on_notesEncryptButton_clicked();
+    void on_notesFontBox_currentTextChanged(const QString &arg1);
+    void on_notesFontSizeSpinBox_valueChanged(int arg1);
 
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
@@ -152,7 +154,6 @@ private slots:
     void on_money1ComboBox_currentIndexChanged(int index);
     void on_money2ComboBox_currentIndexChanged(int index);
     void on_money1SpinBox_valueChanged(double arg1);
-
 
 private:
     Ui::MainWindow *ui;
@@ -207,6 +208,7 @@ private:
     void addCategory();
     void deleteNotes();
     void deleteCategory();
+    void updateText();
     QFileSystemWatcher* notesWatcher;
 
     // Network
