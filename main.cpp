@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     }
     #endif
 
+    // Start mainwindow
     MainWindow w;
 
     // Set StyleSheet
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
 
     // Open Window Maximized
     w.showMaximized();
+    w.focusWidget();
 
     // Create Thumbnail Toolbar if system is windows
     #ifdef _WIN32
@@ -71,6 +73,9 @@ int main(int argc, char *argv[])
 
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
+
+        settings->updateSettings();
+
         w.updateSettingsVersion();
     }
 
