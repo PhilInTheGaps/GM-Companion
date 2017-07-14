@@ -79,8 +79,9 @@ DISTFILES += \
 
 RC_FILE = GM-Companion.rc
 
-RESOURCES += \
-    resources.qrc
+RESOURCES += resources.qrc \
+    styles/qdarkstyle/style.qrc
+
 
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
