@@ -208,3 +208,20 @@ void MainWindow::on_deleteNoteButton_clicked(){
 void MainWindow::on_deleteCategoryButton_clicked(){
     deleteCategory();
 }
+
+void MainWindow::on_notesFontBox_currentTextChanged(const QString &arg1)
+{
+    ui->notesTextEdit->setFontFamily(arg1);
+    updateText();
+}
+
+void MainWindow::on_notesFontSizeSpinBox_valueChanged(int arg1)
+{
+    ui->notesTextEdit->setFontPointSize(arg1);
+    updateText();
+}
+
+void MainWindow::updateText(){
+    QString text = ui->notesTextEdit->toPlainText();
+    ui->notesTextEdit->setText(text);
+}
