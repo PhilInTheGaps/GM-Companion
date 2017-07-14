@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
-    setVersion("0.3.1.1");
+    setVersion("0.3.2.0");
 
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
@@ -278,6 +278,13 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
     tabWidgetMusic = NULL;
     initialMusicPlay = true;
     generateMusicButtons();
+}
+
+// Set Notes Path
+void MainWindow::on_actionNotes_2_triggered(){
+    settingsManager->setSetting(Setting::notesPath, true);
+
+    getNotes();
 }
 
 // Open Options Dialog

@@ -25,10 +25,10 @@ void MainWindow::getNotes(){
 
     ui->notesTree->clear();
 
-    QString notesFolder = QDir::homePath()+"/.gm-companion/notes";
+    QString notesFolder = settingsManager->getSetting(Setting::notesPath); //QDir::homePath()+"/.gm-companion/notes"
 
     qDebug() << tr("Getting Custom Notes...");
-    // Notes inside /.gm-companion/notes
+    // Notes inside notes directory
     for (QString category : getFolders(notesFolder)){
         if (!category.contains(".")){
             QTreeWidgetItem* ti = new QTreeWidgetItem(0);
@@ -131,8 +131,8 @@ void MainWindow::deleteNotes(){
     if (ui->notesTree->currentItem() != NULL){
         if (ui->notesTree->currentItem()->type() == 1){
             QString folder = ui->notesTree->currentItem()->parent()->text(0);
-            QFile file(QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt");
-            qDebug() << tr("Removing Note: ")+QDir::homePath()+"/.gm-companion/notes/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt";
+            QFile file(settingsManager->getSetting(Setting::notesPath)+"/+"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt");
+            qDebug() << tr("Removing Note: ")+settingsManager->getSetting(Setting::notesPath)+"/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt";
             file.remove();
             getNotes();
         }
@@ -142,8 +142,8 @@ void MainWindow::deleteNotes(){
 void MainWindow::deleteCategory(){
     if (ui->notesTree->currentItem() != NULL){
         if (ui->notesTree->currentItem()->type() == 0){
-            qDebug() << tr("Removing Note Directory: ")+QDir::homePath()+"/.gm-companion/notes/"+ui->notesTree->currentItem()->text(0);
-            QDir().rmdir(QDir::homePath()+"/.gm-companion/notes/"+ui->notesTree->currentItem()->text(0));
+            qDebug() << tr("Removing Note Directory: ")+settingsManager->getSetting(Setting::notesPath)+"/"+ui->notesTree->currentItem()->text(0);
+            QDir().rmdir(settingsManager->getSetting(Setting::notesPath)+"/"+ui->notesTree->currentItem()->text(0));
             getNotes();
         }
     }
@@ -152,7 +152,7 @@ void MainWindow::deleteCategory(){
 void MainWindow::on_notesTree_itemClicked(QTreeWidgetItem *item, int column){
     if (item->type() == 1){
         ui->notesTextEdit->setReadOnly(false);
-        readNotes(QDir::homePath()+"/.gm-companion/notes/"+item->parent()->text(column)+"/"+item->text(column)+".txt");
+        readNotes(settingsManager->getSetting(Setting::notesPath)+"/"+item->parent()->text(column)+"/"+item->text(column)+".txt");
     }else if (item->type() == 3){
         ui->notesTextEdit->setReadOnly(false);
         readNotes(QDir::homePath()+"/.gm-companion/addons/"+item->parent()->text(column)+"/notes/"+item->text(column)+".txt");
@@ -165,7 +165,7 @@ void MainWindow::on_notesTextEdit_textChanged(){
     QString parent = ui->notesTree->currentItem()->parent()->text(column);
 
     if (ui->notesTree->currentItem()->type() == 1){
-        QFile file(QDir::homePath()+"/.gm-companion/notes/"+parent+"/"+filename);
+        QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+parent+"/"+filename);
 
         if (file.exists()){
             file.open(QFile::WriteOnly);

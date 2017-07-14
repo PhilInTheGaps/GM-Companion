@@ -52,6 +52,9 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::version:
         settingString = QString::number(settings.value("version", 0).toInt());
         break;
+    case Setting::notesPath:
+        settingString = settings.value("notesPath", QDir::homePath()+"/.gm-companion/notes").toString();
+        break;
     default:
         settingString = "";
         break;
@@ -127,6 +130,12 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         break;
     case Setting::version:
         settings.setValue("version", value);
+        break;
+    case Setting::notesPath:
+        path = setFolderLocation("Set Notes Folder");
+        if (path.length()>1){
+            settings.setValue("notesPath", path);
+        }
         break;
     default:
         break;
