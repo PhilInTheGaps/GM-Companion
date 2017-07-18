@@ -5,6 +5,9 @@
 #include "optionsdialog.h"
 #include "sifrp.h"
 
+#include "tools/testtool.h"
+#include "tools/musictool.h"
+
 #include <QStringList>
 #include <cstdlib>
 #include <QDesktopServices>
@@ -46,10 +49,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
 
+    // Adding Tools
+    MusicTool *musicTool = new MusicTool;
+    ui->tabWidget->addTab(musicTool, "Music Tool");
+
     // Generates the dice page
     diceManager = new DiceManager;
     ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
-    //ui->tabDice->
 
     // Initialize player and playlist for music
     musicPlayer = new QMediaPlayer(this);
@@ -307,5 +313,79 @@ void MainWindow::on_actionOptions_triggered(){
 
 // Remove a tab from the tab widget
 void MainWindow::closeTab(int index){
-    delete ui->tabWidget->widget(index);
+    //delete ui->tabWidget->widget(index);
+    ui->tabWidget->removeTab(index);
+}
+
+void MainWindow::on_actionToggle_Sound_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding sound tool...";
+
+        generateSoundButtons();
+    }
+}
+
+void MainWindow::on_actionToggle_Radio_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding radio tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Maps_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding maps tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Dice_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding dice tool...";
+
+        diceManager = new DiceManager;
+        ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
+    }
+}
+
+void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding name generator tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Characters_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding characters tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Notes_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding notes tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Unit_Converter_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding unit converter tool...";
+    }
+}
+
+void MainWindow::on_addTestToolButton_clicked()
+{
+    TestTool *testTool = new TestTool;
+    ui->tabWidget->addTab(testTool, "Test Tool");
+}
+
+void MainWindow::on_actionAdd_Music_Tool_triggered()
+{
+    MusicTool *musicTool = new MusicTool;
+    ui->tabWidget->addTab(musicTool, "Music Tool");
 }
