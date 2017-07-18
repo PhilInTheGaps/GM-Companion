@@ -20,7 +20,6 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
-QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
            mainwindow.cpp \
@@ -47,7 +46,9 @@ SOURCES += main.cpp\
     converter.cpp \
     whatisnewwindow.cpp \
     dicetool.cpp \
-    dbmanager.cpp
+    dbmanager.cpp \
+    tools/testtool.cpp \
+    tools/musictool.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -65,7 +66,9 @@ HEADERS  += mainwindow.h \
     sifrp.h \
     whatisnewwindow.h \
     dicetool.h \
-    dbmanager.h
+    dbmanager.h \
+    tools/testtool.h \
+    tools/musictool.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
@@ -76,7 +79,9 @@ FORMS    += mainwindow.ui \
     sifrp.ui \
     whatisnewwindow.ui \
     dicetool.ui \
-    preloader.ui
+    preloader.ui \
+    tools/testtool.ui \
+    tools/musictool.ui
 
 DISTFILES += \
 
@@ -95,6 +100,8 @@ win32 {
 
 !win32 {
     message("Not building on Windows...")
+    QMAKE_CXXFLAGS += -std=c++11
+
     target.path = /usr/bin
     INSTALLS += target
 

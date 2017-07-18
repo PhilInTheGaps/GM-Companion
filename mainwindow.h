@@ -157,6 +157,17 @@ private slots:
 
     // Tools
     void closeTab(int index);
+    void on_actionToggle_Sound_Tool_toggled(bool arg1);
+    void on_actionToggle_Radio_Tool_toggled(bool arg1);
+    void on_actionToggle_Maps_Tool_toggled(bool arg1);
+    void on_actionToggle_Dice_Tool_toggled(bool arg1);
+    void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
+    void on_actionToggle_Characters_Tool_toggled(bool arg1);
+    void on_actionToggle_Notes_Tool_toggled(bool arg1);
+    void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
+    void on_addTestToolButton_clicked();
+
+    void on_actionAdd_Music_Tool_triggered();
 
 private:
     Ui::MainWindow *ui;
