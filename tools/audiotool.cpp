@@ -25,6 +25,11 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     QStringList categories = getCategories();
 
     generateSmallButtons(categories);
+
+    generateCategoryList(categories);
+
+    FlowLayout *elementLayout = new FlowLayout;
+    ui->frame_elements->setLayout(elementLayout);
 }
 
 AudioTool::~AudioTool()
@@ -138,6 +143,68 @@ QList<QFrame*> AudioTool::createGroupFrame(QString folder, QFrame *frame)
     settings.endArray();
 
     return groupFrames;
+}
+
+// Generate the category list
+void AudioTool::generateCategoryList(QStringList categories)
+{
+    ui->listWidget_categories->clear();
+
+    for (QString cat : categories)
+    {
+        if (!cat.contains("."))
+        {
+            ui->listWidget_categories->addItem(cleanText(cat));
+            ui->listWidget_categories->item(ui->listWidget_categories->count()-1)->setToolTip(cat);
+        }
+    }
+}
+
+// Generate the szenario list
+void AudioTool::generateScenarioList(QString category)
+{
+    ui->listWidget_scenarios->clear();
+
+    for (QString scenario : getFolders(settingsManager->getSetting(musicPath)+"/"+category))
+    {
+        if (!scenario.contains("."))
+        {
+            ui->listWidget_scenarios->addItem(cleanText(scenario));
+            ui->listWidget_scenarios->item(ui->listWidget_scenarios->count()-1)->setToolTip(scenario);
+        }
+    }
+}
+
+// Generate the buttons for all the elements of a scenario
+void AudioTool::generateElementButtons(QString scenario)
+{
+    QString category = ui->listWidget_categories->currentItem()->toolTip();
+
+    qDebug() << "Removing old Elements...";
+//    QLayoutItem *item;
+//    while ((item = ui->frame_elements->layout()->takeAt(0)) != 0)
+//    {
+//        ui->frame_elements->layout()->removeItem(item);
+//        delete item;
+//    }
+    qDeleteAll(ui->frame_elements->children());
+
+    FlowLayout *layout = new FlowLayout;
+    ui->frame_elements->setLayout(layout);
+
+    qDebug() << "Adding new Elements...";
+    qDebug() << settingsManager->getSetting(musicPath)+"/"+category+"/"+scenario;
+    for (QString element : getFolders(settingsManager->getSetting(musicPath)+"/"+category+"/"+scenario))
+    {
+        if (!element.contains("."))
+        {
+            qDebug() << element;
+
+            QPushButton *button = new QPushButton(element);
+
+            ui->frame_elements->layout()->addWidget(button);
+        }
+    }
 }
 
 // Generate all the buttons and tabs in the "Small Buttons" page
@@ -369,4 +436,20 @@ void AudioTool::on_comboBox_music_currentIndexChanged(int index)
     {
         musicPlaylist->setCurrentIndex(index);
     }
+}
+
+// When a category is selected in list view
+void AudioTool::on_listWidget_categories_currentRowChanged(int currentRow)
+{
+    if (currentRow > -1)
+    {
+        generateScenarioList(ui->listWidget_categories->currentItem()->toolTip());
+    }
+}
+
+// When a scenario is selected
+void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
+{
+    if (currentRow > -1)
+        generateElementButtons(ui->listWidget_scenarios->currentItem()->toolTip());
 }
