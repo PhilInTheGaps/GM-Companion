@@ -48,7 +48,9 @@ SOURCES += main.cpp\
     dicetool.cpp \
     dbmanager.cpp \
     tools/testtool.cpp \
-    tools/audiotool.cpp
+    tools/audiotool.cpp \
+    editors/audioeditor.cpp \
+    managers/dbmanager.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -68,7 +70,9 @@ HEADERS  += mainwindow.h \
     dicetool.h \
     dbmanager.h \
     tools/testtool.h \
-    tools/audiotool.h
+    tools/audiotool.h \
+    editors/audioeditor.h \
+    managers/dbmanager.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
@@ -81,7 +85,8 @@ FORMS    += mainwindow.ui \
     dicetool.ui \
     preloader.ui \
     tools/testtool.ui \
-    tools/audiotool.ui
+    tools/audiotool.ui \
+    editors/audioeditor.ui
 
 DISTFILES += \
 
