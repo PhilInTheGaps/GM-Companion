@@ -50,6 +50,10 @@ private slots:
 
     void updateMetaData();
 
+    void on_listWidget_categories_currentRowChanged(int currentRow);
+
+    void on_listWidget_scenarios_currentRowChanged(int currentRow);
+
 private:
     Ui::AudioTool *ui;
 
@@ -62,6 +66,12 @@ private:
     QList<QFrame *> createGroupFrame(QString folder, QFrame *frame);
 
     void generateSmallButtons(QStringList categories);
+
+    void generateCategoryList(QStringList categories);
+
+    void generateScenarioList(QString category);
+
+    void generateElementButtons(QString scenario);
 
     SettingsManager *settingsManager;
 
