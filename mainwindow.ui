@@ -55,7 +55,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>9</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -2200,7 +2200,7 @@ p, li { white-space: pre-wrap; }
      <property name="title">
       <string>Add Tools</string>
      </property>
-     <addaction name="actionAdd_Music_Tool"/>
+     <addaction name="actionAdd_Audio_Tool"/>
      <addaction name="actionToggle_Sound_Tool"/>
      <addaction name="actionToggle_Radio_Tool"/>
      <addaction name="actionToggle_Maps_Tool"/>
@@ -2429,7 +2429,7 @@ p, li { white-space: pre-wrap; }
     <string>Unit Converter</string>
    </property>
   </action>
-  <action name="actionAdd_Music_Tool">
+  <action name="actionAdd_Audio_Tool">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -2437,7 +2437,7 @@ p, li { white-space: pre-wrap; }
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Music</string>
+    <string>Audio</string>
    </property>
   </action>
  </widget>

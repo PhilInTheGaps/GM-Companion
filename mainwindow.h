@@ -167,7 +167,7 @@ private slots:
     void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
     void on_addTestToolButton_clicked();
 
-    void on_actionAdd_Music_Tool_triggered();
+    void on_actionAdd_Audio_Tool_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -180,8 +180,8 @@ private:
 
     // Music
     QTabWidget *tabWidgetMusic;
-    QSignalMapper *signalMapperMusic;
     QHBoxLayout *tabMusicLayout;
+    QSignalMapper *signalMapperMusic;
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
     QTabWidget* musicTabWidget;

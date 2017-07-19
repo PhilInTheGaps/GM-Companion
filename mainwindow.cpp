@@ -6,7 +6,7 @@
 #include "sifrp.h"
 
 #include "tools/testtool.h"
-#include "tools/musictool.h"
+#include "tools/audiotool.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -50,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     signalMapperNames = new QSignalMapper(this);
 
     // Adding Tools
-    MusicTool *musicTool = new MusicTool;
-    ui->tabWidget->addTab(musicTool, "Music Tool");
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->addTab(audioTool, "Audio Tool");
 
     // Generates the dice page
     diceManager = new DiceManager;
@@ -78,8 +78,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int)));
 
     // Generate Music Buttons
-    generateMusicButtons();
-    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
+//    generateMusicButtons();
+//    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
     // Initialize player and playlist for sound
     soundPlayer = new QMediaPlayer(this);
@@ -384,8 +384,8 @@ void MainWindow::on_addTestToolButton_clicked()
     ui->tabWidget->addTab(testTool, "Test Tool");
 }
 
-void MainWindow::on_actionAdd_Music_Tool_triggered()
+void MainWindow::on_actionAdd_Audio_Tool_triggered()
 {
-    MusicTool *musicTool = new MusicTool;
-    ui->tabWidget->addTab(musicTool, "Music Tool");
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
