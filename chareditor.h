@@ -5,7 +5,7 @@
 #include <QTableWidget>
 #include <QListWidget>
 #include <QSettings>
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 
 namespace Ui {
 class CharEditor;
