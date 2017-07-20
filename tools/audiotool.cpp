@@ -2,6 +2,7 @@
 #include "ui_audiotool.h"
 #include "functions.h"
 #include "flowlayout.h"
+#include "editors/audioeditor.h"
 
 #include <QDebug>
 #include <QScrollArea>
@@ -452,4 +453,11 @@ void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
 {
     if (currentRow > -1)
         generateElementButtons(ui->listWidget_scenarios->currentItem()->toolTip());
+}
+
+// Open Audio Editor
+void AudioTool::on_pushButton_openEditor_clicked()
+{
+    AudioEditor *audioEditor = new AudioEditor;
+    audioEditor->showMaximized();
 }

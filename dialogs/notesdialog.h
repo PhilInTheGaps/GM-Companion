@@ -4,7 +4,7 @@
 #include <QDialog>
 
 #include <mainwindow.h>
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 
 namespace Ui {
     class NotesDialog;
