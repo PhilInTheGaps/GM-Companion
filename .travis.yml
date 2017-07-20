@@ -4,7 +4,6 @@ dist: trusty
 
 os:
   - linux
-  - osx
 
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
