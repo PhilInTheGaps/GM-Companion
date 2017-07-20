@@ -26,8 +26,6 @@ SOURCES += main.cpp\
     flowlayout.cpp \
     characters.cpp \
     functions.cpp \
-    settingsmanager.cpp \
-    dicemanager.cpp \
     music.cpp \
     sound.cpp \
     names.cpp \
@@ -36,57 +34,57 @@ SOURCES += main.cpp\
     chareditor.cpp \
     characterpage.cpp \
     deletecharacterdialog.cpp \
-    filemanager.cpp \
     network.cpp \
     windows.cpp \
-    optionsdialog.cpp \
     notes.cpp \
-    notesdialog.cpp \
     sifrp.cpp \
     converter.cpp \
     whatisnewwindow.cpp \
-    dicetool.cpp \
-    dbmanager.cpp \
     tools/testtool.cpp \
     tools/audiotool.cpp \
     editors/audioeditor.cpp \
-    managers/dbmanager.cpp
+    managers/dbmanager.cpp \
+    dialogs/notesdialog.cpp \
+    dialogs/optionsdialog.cpp \
+    managers/dicemanager.cpp \
+    managers/filemanager.cpp \
+    managers/settingsmanager.cpp \
+    tools/dicetool.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
     characters.h \
     functions.h \
-    settingsmanager.h \
-    dicemanager.h \
     chareditor.h \
     characterpage.h \
     version.h \
     deletecharacterdialog.h \
-    filemanager.h \
-    optionsdialog.h \
-    notesdialog.h \
     sifrp.h \
     whatisnewwindow.h \
-    dicetool.h \
-    dbmanager.h \
     tools/testtool.h \
     tools/audiotool.h \
     editors/audioeditor.h \
-    managers/dbmanager.h
+    managers/dbmanager.h \
+    dialogs/notesdialog.h \
+    dialogs/optionsdialog.h \
+    managers/dicemanager.h \
+    managers/filemanager.h \
+    managers/settingsmanager.h \
+    tools/dicetool.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
     characterpage.ui \
     deletecharacterdialog.ui \
-    optionsdialog.ui \
-    notesdialog.ui \
     sifrp.ui \
     whatisnewwindow.ui \
-    dicetool.ui \
     preloader.ui \
     tools/testtool.ui \
     tools/audiotool.ui \
-    editors/audioeditor.ui
+    editors/audioeditor.ui \
+    dialogs/notesdialog.ui \
+    dialogs/optionsdialog.ui \
+    tools/dicetool.ui
 
 DISTFILES += \
 

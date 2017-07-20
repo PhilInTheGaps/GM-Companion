@@ -6,7 +6,7 @@
 #include <QCheckBox>
 
 #include "mainwindow.h"
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 
 namespace Ui {
     class OptionsDialog;
@@ -63,6 +63,8 @@ private slots:
     void on_addonManagerButton_clicked();
 
     void on_setNotesPath_clicked();
+
+    void on_setAudioPath_clicked();
 
 private:
     Ui::OptionsDialog *ui;
