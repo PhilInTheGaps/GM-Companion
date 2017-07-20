@@ -10,7 +10,13 @@ before_install:
   - sudo apt-get -qq update
 
 install:
-  - sudo apt-get --yes install qt58base qt58multimedia qt58tools qt58declarative qt58xmlpatterns qt58x11extras qt58webengine qt58script qt58-meta-full qt58imageformats qt58translations
+  - sudo apt-get --yes install qt58base qt58multimedia qt58tools qt58declarative qt58xmlpatterns qt58x11extras qt58webengine
+  - sudo apt-get --yes install qt58script qt58-meta-full qt58imageformats qt58translations qt58qbs qt58scxml
+
+before_script:
+  - QTDIR="/opt/qt58"
+  - PATH="$QTDIR/bin:$PATH"
+  - source /opt/qt58/bin/qt58-env.sh
 
 script:
   - qmake -project
