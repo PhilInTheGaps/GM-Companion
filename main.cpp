@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 #include "whatisnewwindow.h"
 
 #include <QApplication>

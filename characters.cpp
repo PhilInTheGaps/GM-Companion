@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 #include "flowlayout.h"
 #include "characterpage.h"
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 #include "chareditor.h"
 #include "deletecharacterdialog.h"
 

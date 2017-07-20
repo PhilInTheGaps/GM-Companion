@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "functions.h"
-#include "notesdialog.h"
+#include "dialogs/notesdialog.h"
 
 #include <QDebug>
 #include <QDir>
