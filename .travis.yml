@@ -10,7 +10,7 @@ before_install:
   - sudo apt-get -qq update
 
 install:
-  - sudo apt-get --yes install qt58base qt58multimedia qt58tools qt58declarative qt58xmlpatterns qt58x11extras qt58webengine qt58script qt58meta qt58imageformats qt58translations
+  - sudo apt-get --yes install qt58base qt58multimedia qt58tools qt58declarative qt58xmlpatterns qt58x11extras qt58webengine qt58script qt58-meta qt58imageformats qt58translations
 
 script:
   - qmake -project
