@@ -21,6 +21,6 @@ before_script:
   - source /opt/qt58/bin/qt58-env.sh
 
 script:
-  #- qmake -project
-  #- qmake GM-Companion.pro
+  - qmake -project
+  - qmake GM-Companion.pro
   - make
