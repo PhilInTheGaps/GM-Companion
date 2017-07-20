@@ -19,7 +19,8 @@ enum Setting{
     openWhatIsNewWindow,
     language,
     version,
-    notesPath
+    notesPath,
+    audioPath
 };
 
 class SettingsManager

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "characters.h"
-#include "filemanager.h"
-#include "optionsdialog.h"
+#include "managers/filemanager.h"
+#include "dialogs/optionsdialog.h"
 #include "sifrp.h"
 
 #include "tools/testtool.h"
@@ -388,4 +388,9 @@ void MainWindow::on_actionAdd_Audio_Tool_triggered()
 {
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->addTab(audioTool, "Audio Tool");
+}
+
+void MainWindow::on_actionSet_Audio_Projects_Folder_triggered()
+{
+    settingsManager->setSetting(audioPath, true);
 }

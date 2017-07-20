@@ -9,7 +9,7 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 
 namespace Ui {
 class AudioTool;
@@ -53,6 +53,8 @@ private slots:
     void on_listWidget_categories_currentRowChanged(int currentRow);
 
     void on_listWidget_scenarios_currentRowChanged(int currentRow);
+
+    void on_pushButton_openEditor_clicked();
 
 private:
     Ui::AudioTool *ui;

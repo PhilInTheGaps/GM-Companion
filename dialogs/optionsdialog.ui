@@ -21,7 +21,7 @@
    <item alignment="Qt::AlignTop">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabUpdates">
       <attribute name="title">
@@ -333,6 +333,27 @@
        <string>Paths</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Audio Projects</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_13">
+         <item>
+          <widget class="QLineEdit" name="audioPath"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="setAudioPath">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">

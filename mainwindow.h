@@ -19,8 +19,8 @@
 #include <QString>
 #include <QFileSystemWatcher>
 
-#include "settingsmanager.h"
-#include "dicemanager.h"
+#include "managers/settingsmanager.h"
+#include "managers/dicemanager.h"
 #include "functions.h"
 
 // Includes QtWinExtras if system is Windows
@@ -168,6 +168,8 @@ private slots:
     void on_addTestToolButton_clicked();
 
     void on_actionAdd_Audio_Tool_triggered();
+
+    void on_actionSet_Audio_Projects_Folder_triggered();
 
 private:
     Ui::MainWindow *ui;

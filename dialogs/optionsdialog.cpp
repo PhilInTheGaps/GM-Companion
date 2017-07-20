@@ -203,6 +203,11 @@ void OptionsDialog::on_setNotesPath_clicked()
     updatePaths();
 }
 
+void OptionsDialog::on_setAudioPath_clicked()
+{
+    settings->setSetting(audioPath);
+}
+
 void OptionsDialog::updatePaths(){
     ui->musicPath->setText(settings->getSetting(Setting::musicPath));
     ui->soundPath->setText(settings->getSetting(Setting::soundPath));

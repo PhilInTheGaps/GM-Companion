@@ -139,7 +139,7 @@
      <property name="movable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tab_music">
       <attribute name="title">
        <string>Music</string>
       </attribute>
@@ -152,7 +152,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeWidget" name="treeWidget_2">
+        <widget class="QTreeWidget" name="treeWidget_music">
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContents</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectItems</enum>
+         </property>
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
@@ -165,7 +174,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tab_sound">
       <attribute name="title">
        <string>Sound</string>
       </attribute>
@@ -178,7 +187,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeWidget" name="treeWidget_3">
+        <widget class="QTreeWidget" name="treeWidget_sound">
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>

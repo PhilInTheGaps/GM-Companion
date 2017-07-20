@@ -10,6 +10,7 @@ SettingsManager::SettingsManager()
 {
 
 }
+
 // Returns a specific setting
 QString SettingsManager::getSetting(Setting setting){
     QString settingString;
@@ -45,6 +46,11 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::notesPath:
         settings.beginGroup("Paths");
         settingString = settings.value("notesPath", QDir::homePath()+"/.gm-companion/notes").toString();
+        settings.endGroup();
+        break;
+    case Setting::audioPath:
+        settings.beginGroup("Paths");
+        settingString = settings.value("audio", QDir::homePath()+"/.gm-companion/audio").toString();
         settings.endGroup();
         break;
     case Setting::checkForUpdatesOnStart:
@@ -126,6 +132,14 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("notesPath", path);
+            settings.endGroup();
+        }
+        break;
+    case Setting::audioPath:
+        path = setFolderLocation("Set Audio Projects Folder");
+        if (path.length()>1){
+            settings.beginGroup("Paths");
+            settings.setValue("audioPath", path);
             settings.endGroup();
         }
         break;

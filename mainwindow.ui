@@ -2189,6 +2189,7 @@ p, li { white-space: pre-wrap; }
      <property name="title">
       <string>Set Paths</string>
      </property>
+     <addaction name="actionSet_Audio_Projects_Folder"/>
      <addaction name="actionSet_Music_Folder"/>
      <addaction name="actionSet_Sound_Folder"/>
      <addaction name="actionSet_Maps_Folder"/>
@@ -2438,6 +2439,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Audio</string>
+   </property>
+  </action>
+  <action name="actionSet_Audio_Projects_Folder">
+   <property name="text">
+    <string>Audio Projects</string>
    </property>
   </action>
  </widget>
