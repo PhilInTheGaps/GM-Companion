@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "settingsmanager.h"
+#include "managers/settingsmanager.h"
 
 namespace Ui {
 class WhatIsNewWindow;
