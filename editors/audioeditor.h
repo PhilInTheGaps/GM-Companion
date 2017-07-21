@@ -20,16 +20,24 @@ public:
     ~AudioEditor();
 
 private slots:
-    void on_pushButton_newCategory_clicked();
-
-    void on_pushButton_newScenario_clicked();
-
     void on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
+    void on_pushButton_newProject_clicked();
+
+    void on_pushButton_save_clicked();
+
+    void on_pushButton_newCategory_clicked();
 
 private:
     Ui::AudioEditor *ui;
 
     SettingsManager *settingsManager;
+
+    bool isProjectOpen;
+
+    QString projectName;
+
+    void save();
 
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
 
