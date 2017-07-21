@@ -5,12 +5,15 @@
 #include <QDir>
 #include <QStyle>
 #include <QDebug>
+#include <QSettings>
 
 AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEditor)
 {
     ui->setupUi(this);
 
     settingsManager = new SettingsManager;
+
+    isProjectOpen = false;
 
     loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
 }
@@ -84,19 +87,60 @@ void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString 
     }
 }
 
-
-void AudioEditor::on_pushButton_newCategory_clicked()
-{
-//    dbManager->addTable("Test");
-}
-
-void AudioEditor::on_pushButton_newScenario_clicked()
-{
-//    dbManager->getTables();
-}
-
+// When an item in the music explorer is double clicked
 void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     if (item->type() == 1)
         qDebug() << "File was double clicked!";
+}
+
+// Create a new project
+void AudioEditor::on_pushButton_newProject_clicked()
+{
+    projectName = ui->lineEdit_project->text();
+
+    ui->lineEdit_project->clear();
+
+    save();
+}
+
+// Save project
+void AudioEditor::save()
+{
+    if (projectName != NULL)
+    {
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+        settings.setValue("ProjectName", projectName);
+    }
+}
+
+// Save Project
+void AudioEditor::on_pushButton_save_clicked()
+{
+    save();
+}
+
+// Add a category
+void AudioEditor::on_pushButton_newCategory_clicked()
+{
+    if (ui->lineEdit_category->text() != NULL && projectName != NULL)
+    {
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+        int size = settings.beginReadArray("Categories");
+        settings.endArray();
+
+        settings.beginWriteArray("Categories");
+
+
+
+        settings.setArrayIndex(size);
+
+        settings.setValue("name", ui->lineEdit_category->text());
+
+        settings.endArray();
+    }
+
+    ui->lineEdit_category->clear();
 }
