@@ -81,15 +81,15 @@ void AudioTool::playMusic(QString folder)
 //        musicTable->setColumnWidth(0, 230);
 //    }
 
-    // If random mode is active, start with a random song
-    if (ui->pushButton_shuffle->isChecked()){
-        musicPlaylist->next();
-    }
-
     // Set playlist, volume and play
     musicPlayer->setPlaylist(musicPlaylist);
     musicPlayer->setVolume(ui->horizontalSlider_music->value());
     musicPlayer->play();
+
+    // If random mode is active, start with a random song
+    if (ui->pushButton_shuffle->isChecked()){
+        musicPlaylist->next();
+    }
 }
 
 // Display the metadata of the currently playing song
