@@ -28,6 +28,10 @@ private slots:
 
     void on_pushButton_newCategory_clicked();
 
+    void on_pushButton_openProject_clicked();
+
+    void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
 private:
     Ui::AudioEditor *ui;
 
@@ -36,8 +40,17 @@ private:
     bool isProjectOpen;
 
     QString projectName;
+    QString currentCategory;
+    QString currentScenario;
+    QString currentElement;
 
     void save();
+
+    void getProjects();
+
+    void loadProject();
+
+    void loadCategories();
 
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
 

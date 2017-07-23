@@ -15,12 +15,26 @@ AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEdi
 
     isProjectOpen = false;
 
-    loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
+    getProjects();
 }
 
 AudioEditor::~AudioEditor()
 {
     delete ui;
+}
+
+// Reads all project files in the project directory and adds them to the combo box
+void AudioEditor::getProjects()
+{
+    ui->comboBox_projects->clear();
+
+    for (QString project : getFiles(settingsManager->getSetting(audioPath)))
+    {
+        if (project.contains(".ini"))
+        {
+            ui->comboBox_projects->addItem(cleanText(project));
+        }
+    }
 }
 
 // Adds a child item for every subfolder in the directory
@@ -63,6 +77,8 @@ void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFold
 // Load a folder structure to a tree view
 void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder)
 {
+    qDebug() << "Loading music files...";
+
     // Making sure it is empty
     treeWidget->clear();
 
@@ -102,6 +118,10 @@ void AudioEditor::on_pushButton_newProject_clicked()
     ui->lineEdit_project->clear();
 
     save();
+
+    getProjects();
+
+    loadProject();
 }
 
 // Save project
@@ -143,4 +163,81 @@ void AudioEditor::on_pushButton_newCategory_clicked()
     }
 
     ui->lineEdit_category->clear();
+}
+
+// Load the project to the editor
+void AudioEditor::loadProject()
+{
+    qDebug() << "Loading project" << projectName << "...";
+
+    isProjectOpen = true;
+
+    // Generating tree view
+    loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
+
+    // Loading Categories
+    loadCategories();
+
+
+}
+
+// Loads all categories and their sub-elements
+void AudioEditor::loadCategories()
+{
+    qDebug() << "Loading Categories...";
+
+    // Only execute if a project is loaded
+    if (isProjectOpen)
+    {
+        // Making sure the tree widget is empty
+        ui->treeWidget_categories->clear();
+
+        // Setting up QSettings
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+        int catCount = settings.beginReadArray("Categories");
+
+        // Loading categories
+        for (int i = 0; i<catCount; i++)
+        {
+            settings.setArrayIndex(i);
+
+            QString category = settings.value("name").toString();
+
+            QTreeWidgetItem *catItem = new QTreeWidgetItem(0);
+            catItem->setText(0, category);
+            catItem->setToolTip(0, category);
+            catItem->setIcon(0, style()->standardIcon(QStyle::SP_FileDialogStart));
+
+            ui->treeWidget_categories->addTopLevelItem(catItem);
+
+        }
+
+    }
+}
+
+// Open project selected in combo box
+void AudioEditor::on_pushButton_openProject_clicked()
+{
+    // Setting project name
+    projectName = ui->comboBox_projects->currentText();
+
+    // Loading project
+    loadProject();
+}
+
+// When an item in the project content tree is double clicked
+void AudioEditor::on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    int itemType = item->type();
+
+    switch (itemType) {
+    case 0:
+
+        currentCategory = item->text(column);
+
+        break;
+    default:
+        break;
+    }
 }
