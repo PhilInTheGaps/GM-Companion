@@ -78,8 +78,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int)));
 
     // Generate Music Buttons
-//    generateMusicButtons();
-//    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
+    generateMusicButtons();
+    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
     // Initialize player and playlist for sound
     soundPlayer = new QMediaPlayer(this);
