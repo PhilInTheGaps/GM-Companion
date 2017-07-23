@@ -62,10 +62,12 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     }
 
     // Show Music Folders and Groups in ComboBox
+    checkSettings.beginGroup("Paths");
     for (QString folder : getFolders(checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString())){
         if (!folder.contains("."))
             ui->groupsMusicFolderComboBox->addItem(folder);
     }
+    checkSettings.endGroup();
 
     // Display current language
     QString lang = settings->getSetting(Setting::language);
@@ -276,7 +278,9 @@ void OptionsDialog::on_groupsMusicFolderComboBox_currentTextChanged(const QStrin
     ui->groupsComboBox->clear();
 
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    checkSettings.beginGroup("Paths");
     QString iniPath =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+"/"+arg1+"/groups.ini";
+    checkSettings.endGroup();
 
     if (QFile(iniPath).exists()){
         QSettings groupSettings(iniPath, QSettings::IniFormat);
@@ -300,8 +304,10 @@ void OptionsDialog::on_groupsComboBox_currentTextChanged(const QString &arg1)
 
     if (arg1.length() > 0){
         QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+        checkSettings.beginGroup("Paths");
         QString iniPath =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+
                                                "/"+ui->groupsMusicFolderComboBox->currentText()+"/groups.ini";
+        checkSettings.endGroup();
 
         if (QFile(iniPath).exists()){
             QSettings groupSettings(iniPath, QSettings::IniFormat);
@@ -335,8 +341,10 @@ void OptionsDialog::on_addGroupButton_clicked()
     ui->groupsComboBox->addItem(group);
 
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    checkSettings.beginGroup("Paths");
     QString iniPath =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+
                                            "/"+ui->groupsMusicFolderComboBox->currentText()+"/groups.ini";
+    checkSettings.endGroup();
 
     QSettings groupSettings(iniPath, QSettings::IniFormat);
 
@@ -359,8 +367,10 @@ void OptionsDialog::on_groupsSaveFolders_clicked()
     QString group = ui->groupsComboBox->currentText();
 
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    checkSettings.beginGroup("Paths");
     QString iniPath =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+
                                            "/"+ui->groupsMusicFolderComboBox->currentText()+"/groups.ini";
+    checkSettings.endGroup();
 
     QSettings groupSettings(iniPath, QSettings::IniFormat);
 
@@ -384,8 +394,10 @@ void OptionsDialog::on_removeGroupButton_clicked()
     QString group = ui->groupsComboBox->currentText();
 
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    checkSettings.beginGroup("Paths");
     QString iniPath =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+
                                            "/"+ui->groupsMusicFolderComboBox->currentText()+"/groups.ini";
+    checkSettings.endGroup();
 
     QSettings groupSettings(iniPath, QSettings::IniFormat);
 
@@ -422,8 +434,10 @@ void OptionsDialog::on_removeGroupButton_clicked()
 void OptionsDialog::on_groupsSelectFoldersButton_clicked()
 {
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    checkSettings.beginGroup("Paths");
     QString directory =  checkSettings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString()+
                                            "/"+ui->groupsMusicFolderComboBox->currentText();
+    checkSettings.endGroup();
 
     QFileDialog *fileDialog = new QFileDialog;
     fileDialog->setFileMode(QFileDialog::DirectoryOnly);
