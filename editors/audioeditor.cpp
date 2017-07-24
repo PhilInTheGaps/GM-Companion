@@ -152,14 +152,19 @@ void AudioEditor::on_pushButton_newCategory_clicked()
         settings.endArray();
 
         settings.beginWriteArray("Categories");
-
-
-
         settings.setArrayIndex(size);
 
         settings.setValue("name", ui->lineEdit_category->text());
 
         settings.endArray();
+
+        // Add to Tree View
+        QTreeWidgetItem *catItem = new QTreeWidgetItem(0);
+        catItem->setText(0, ui->lineEdit_category->text());
+        catItem->setToolTip(0, ui->lineEdit_category->text());
+        catItem->setIcon(0, style()->standardIcon(QStyle::SP_FileDialogStart));
+
+        ui->treeWidget_categories->addTopLevelItem(catItem);
     }
 
     ui->lineEdit_category->clear();
@@ -209,11 +214,41 @@ void AudioEditor::loadCategories()
             catItem->setToolTip(0, category);
             catItem->setIcon(0, style()->standardIcon(QStyle::SP_FileDialogStart));
 
-            ui->treeWidget_categories->addTopLevelItem(catItem);
+            // load scenarios
+            loadScenarios(catItem);
 
+            // add to tree
+            ui->treeWidget_categories->addTopLevelItem(catItem);
         }
 
+        settings.endArray();
     }
+}
+
+// Add Scenarios of category
+void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
+{
+    // Setting up QSettings
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+    // Loading Scenarios
+    int scenCount = settings.beginReadArray(catItem->text(0) + "_Scenarios");
+
+    for (int i = 0; i<scenCount; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString scenario = settings.value("name").toString();
+
+        QTreeWidgetItem *scenItem = new QTreeWidgetItem(0);
+        scenItem->setText(0, scenario);
+        scenItem->setToolTip(0, scenario);
+        scenItem->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
+
+        catItem->addChild(scenItem);
+    }
+
+    settings.endArray();
 }
 
 // Open project selected in combo box
@@ -239,5 +274,97 @@ void AudioEditor::on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *it
         break;
     default:
         break;
+    }
+}
+
+// Delete Category, Scenario or Element
+void AudioEditor::on_pushButton_deleteSelected_clicked()
+{
+    // Only execute if a project is loaded
+    if (isProjectOpen)
+    {
+        int type = ui->treeWidget_categories->currentItem()->type();
+
+        QString typeString;
+
+        switch (type) {
+        case 0:
+            typeString = "Categories";
+            break;
+        case 1:
+            typeString = "Scenarios";
+            break;
+        case 2:
+            typeString = "Elements";
+            break;
+        default:
+            break;
+        }
+
+        // Setting up QSettings
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+        int catCount = settings.beginReadArray(typeString);
+
+        // Loading categories
+        QStringList categories;
+
+        for (int i = 0; i<catCount; i++)
+        {
+            settings.setArrayIndex(i);
+
+            QString category = settings.value("name").toString();
+
+            qDebug() << category;
+
+            if (category != ui->treeWidget_categories->currentItem()->text(0))
+            {
+                categories.push_back(category);
+            }
+        }
+        settings.endArray();
+
+        // Add only not deleted stuff
+        settings.beginWriteArray(typeString);
+
+        for (int i = 0; i < categories.size(); i++)
+        {
+            settings.setArrayIndex(i);
+
+            settings.setValue("name", categories.at(i));
+        }
+        settings.endArray();
+
+        // Re-loading categories
+        loadCategories();
+    }
+}
+
+// Add a new scenario
+void AudioEditor::on_pushButton_newScenario_clicked()
+{
+    if (isProjectOpen && ui->lineEdit_scenario->text() != NULL)
+    {
+        QTreeWidgetItem *item = ui->treeWidget_categories->currentItem();
+
+        while (item->type() != 0)
+        {
+            item = ui->treeWidget_categories->itemAbove(item);
+        }
+
+        QString category = item->text(0);
+
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+
+        int size = settings.beginReadArray(category + "_Scenarios");
+        settings.endArray();
+
+        settings.beginWriteArray(category + "_Scenarios");
+        settings.setArrayIndex(size);
+
+        settings.setValue("name", ui->lineEdit_scenario->text());
+        settings.endArray();
+
+        loadCategories();
     }
 }
