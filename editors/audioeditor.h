@@ -32,6 +32,10 @@ private slots:
 
     void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
+    void on_pushButton_deleteSelected_clicked();
+
+    void on_pushButton_newScenario_clicked();
+
 private:
     Ui::AudioEditor *ui;
 
@@ -51,6 +55,8 @@ private:
     void loadProject();
 
     void loadCategories();
+
+    void loadScenarios(QTreeWidgetItem *catItem);
 
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
 
