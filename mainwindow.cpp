@@ -166,6 +166,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
+    splash->close();
+
     // Some functions behave differently when the program is just starting
     programStart = false;
 }

@@ -56,12 +56,22 @@ private slots:
 
     void on_pushButton_openEditor_clicked();
 
+    void on_checkBox_setProjectAsDefault_toggled(bool checked);
+
+    void on_pushButton_loadProject_clicked();
+
+    void on_comboBox_projects_currentTextChanged(const QString &arg1);
+
 private:
     Ui::AudioTool *ui;
 
     QSignalMapper *signalMapperMusic;
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
+
+    void getProjects();
+
+    void loadProject();
 
     QStringList getCategories();
 
