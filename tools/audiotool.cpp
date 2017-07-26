@@ -23,11 +23,13 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     signalMapperMusic = new QSignalMapper;
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
-    QStringList categories = getCategories();
+//    QStringList categories = getCategories();
 
-    generateSmallButtons(categories);
+//    generateSmallButtons(categories);
 
-    generateCategoryList(categories);
+//    generateCategoryList(categories);
+
+    getProjects();
 
     FlowLayout *elementLayout = new FlowLayout;
     ui->frame_elements->setLayout(elementLayout);
@@ -36,6 +38,22 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 AudioTool::~AudioTool()
 {
     delete ui;
+}
+
+// Get all available projects
+void AudioTool::getProjects()
+{
+    ui->comboBox_projects->clear();
+
+    QString projectsFolder = settingsManager->getSetting(audioPath);
+
+    for (QString project : getFiles(projectsFolder))
+    {
+        if (project.contains(".ini") && !project.contains("desktop.ini"))
+        {
+            ui->comboBox_projects->addItem(project);
+        }
+    }
 }
 
 // Play Music
@@ -460,4 +478,57 @@ void AudioTool::on_pushButton_openEditor_clicked()
 {
     AudioEditor *audioEditor = new AudioEditor;
     audioEditor->showMaximized();
+}
+
+// Load a project
+void AudioTool::loadProject()
+{
+    getCategories();
+}
+
+// Check or uncheck set project as default
+void AudioTool::on_checkBox_setProjectAsDefault_toggled(bool checked)
+{
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    settings.beginGroup("AudioTool");
+
+    if (checked)
+    {
+        settings.setValue("defaultProject", ui->comboBox_projects->currentText());
+    }
+
+    else
+    {
+        if (ui->comboBox_projects->currentText() == settings.value("defaultProject", "").toString())
+        {
+            settings.setValue("defaultProject", "");
+        }
+    }
+
+    settings.endGroup();
+}
+
+// When load project is clicked
+void AudioTool::on_pushButton_loadProject_clicked()
+{
+    loadProject();
+}
+
+// When the project combobox changes
+void AudioTool::on_comboBox_projects_currentTextChanged(const QString &arg1)
+{
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    settings.beginGroup("AudioTool");
+
+    if (arg1 == settings.value("defaultProject", "").toString())
+    {
+        ui->checkBox_setProjectAsDefault->setChecked(true);
+    }
+
+    else
+    {
+        ui->checkBox_setProjectAsDefault->setChecked(false);
+    }
+
+    settings.endGroup();
 }

@@ -36,12 +36,20 @@ private slots:
 
     void on_pushButton_newScenario_clicked();
 
+    void on_pushButton_newMusicList_clicked();
+
+    void on_pushButton_newSoundList_clicked();
+
+    void on_pushButton_newRadio_clicked();
+
 private:
     Ui::AudioEditor *ui;
 
     SettingsManager *settingsManager;
 
-    bool isProjectOpen;
+    bool isProjectOpen = false;
+
+    bool filesAreLoaded = false;
 
     QString projectName;
     QString currentCategory;
@@ -53,10 +61,11 @@ private:
     void getProjects();
 
     void loadProject();
-
     void loadCategories();
-
     void loadScenarios(QTreeWidgetItem *catItem);
+    void loadMusicLists(QTreeWidgetItem *scenItem, QString category);
+    void loadSoundLists(QTreeWidgetItem *scenItem, QString category);
+    void loadRadios(QTreeWidgetItem *scenItem, QString category);
 
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
 
