@@ -120,7 +120,7 @@
         <bool>true</bool>
        </property>
        <property name="headerHidden">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <attribute name="headerVisible">
         <bool>false</bool>
@@ -155,6 +155,32 @@
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_pleaseCreateOrLoadAProject">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Please create or load a project!</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QGroupBox" name="groupBox_2">
        <property name="sizePolicy">

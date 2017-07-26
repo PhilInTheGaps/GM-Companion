@@ -90,16 +90,19 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_musicSound">
+         <widget class="QComboBox" name="comboBox_projects"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_loadProject">
           <property name="text">
-           <string>Music / Sound</string>
+           <string>Load Project</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_radio">
+         <widget class="QCheckBox" name="checkBox_setProjectAsDefault">
           <property name="text">
-           <string>Radio</string>
+           <string>Set as Default</string>
           </property>
          </widget>
         </item>
