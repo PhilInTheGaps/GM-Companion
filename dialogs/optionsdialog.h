@@ -23,50 +23,28 @@ private slots:
 
     void onClose();
     void on_checkForUpdatesOnProgramStart_toggled(bool checked);
-
-    void on_setMusicPath_clicked();
-
-    void on_setSoundPath_clicked();
-
-    void on_setResourcesPath_clicked();
-
-    void on_setMapsPath_clicked();
-
-    void on_setCharactersPath_clicked();
-
     void on_closeButton_clicked();
 
+    // Paths
+    void on_setMusicPath_clicked();
+    void on_setSoundPath_clicked();
+    void on_setResourcesPath_clicked();
+    void on_setMapsPath_clicked();
+    void on_setCharactersPath_clicked();
+    void on_setNotesPath_clicked();
+    void on_setAudioPath_clicked();
+    void on_setRadioPath_clicked();
+
+    // Addons
     void on_selectAll_clicked();
-
     void on_deselectAll_clicked();
-
-    void on_styleComboBox_currentTextChanged(const QString &arg1);
-
-    void on_buttonStyleComboBox_currentIndexChanged(int index);
-
-    void on_musicTrackListCheckBox_toggled(bool checked);
-
-    void on_groupsMusicFolderComboBox_currentTextChanged(const QString &arg1);
-
-    void on_groupsComboBox_currentTextChanged(const QString &arg1);
-
-    void on_addGroupButton_clicked();
-
-    void on_groupsSaveFolders_clicked();
-
-    void on_removeGroupButton_clicked();
-
-    void on_groupsSelectFoldersButton_clicked();
-
-    void on_languageComboBox_currentIndexChanged(int index);
-
     void on_addonManagerButton_clicked();
 
-    void on_setNotesPath_clicked();
+    // Stylesheet
+    void on_styleComboBox_currentTextChanged(const QString &arg1);
 
-    void on_setAudioPath_clicked();
-
-    void on_setRadioPath_clicked();
+    // Language
+    void on_languageComboBox_currentIndexChanged(int index);
 
 private:
     Ui::OptionsDialog *ui;
@@ -84,7 +62,6 @@ private:
     void writeAddonSettings();
 
     QList<QCheckBox*> officialAddons;
-
     QList<QCheckBox*> inofficialAddons;
 };
 
