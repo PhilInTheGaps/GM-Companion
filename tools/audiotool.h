@@ -30,7 +30,7 @@ private slots:
 
     void on_radioButton_Small_clicked();
 
-    void playMusic(QString folder);
+    void playMusic(QString musicList);
 
     void on_pushButton_play_clicked();
 
