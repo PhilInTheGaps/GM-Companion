@@ -396,3 +396,8 @@ void MainWindow::on_actionSet_Audio_Projects_Folder_triggered()
 {
     settingsManager->setSetting(audioPath, true);
 }
+
+void MainWindow::on_actionSet_Radio_Playlists_Folder_triggered()
+{
+    settingsManager->setSetting(radioPath, true);
+}
