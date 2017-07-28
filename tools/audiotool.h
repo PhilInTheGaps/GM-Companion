@@ -30,7 +30,7 @@ private slots:
     void on_radioButton_Small_clicked();
 
     // Music
-    void playMusic(QString musicList);
+    void playMusic(QString arg);
     void on_comboBox_music_currentIndexChanged(int index);
     void updateMetaData();
     void on_listWidget_songs_currentRowChanged(int currentRow);
@@ -41,10 +41,10 @@ private slots:
     void on_pushButton_next_clicked();
 
     // Sound
-    void playSound(QString soundList);
+    void playSound(QString arg);
 
     // Radio
-    void playRadio(QString radio);
+    void playRadio(QString arg);
 
     // Change volume
     void on_horizontalSlider_music_valueChanged(int value);
@@ -81,16 +81,13 @@ private:
     QSignalMapper *signalMapperSound;
     QList<QMediaPlayer*> soundPlayerList;
 
-    QList<QFrame *> createGroupFrame(QString folder, QFrame *frame);
-
-    void generateSmallButtons(QStringList categories);
-    void generateCategoryList(QStringList categories);
+    // List View
     void generateScenarioList(QString category);
+    void generateListViewElementButtons(QString scenario);
 
-    void generateElementButtons(QString scenario);
-
-
-
+    // Button View
+    void generateScenarioFrames(QString category, QFrame *sFrame, QFrame *lFrame);
+    void generateElementButtons(QString category, QString scenario, QFrame *sFrame, QFrame *lFrame);
 };
 
 #endif // AUDIOTOOL_H

@@ -24,35 +24,24 @@ private slots:
     void on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
     void on_pushButton_newProject_clicked();
-
-    void on_pushButton_save_clicked();
-
+    void on_pushButton_openProject_clicked();
     void on_pushButton_newCategory_clicked();
 
-    void on_pushButton_openProject_clicked();
-
     void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
     void on_pushButton_deleteSelected_clicked();
 
     void on_pushButton_newScenario_clicked();
-
     void on_pushButton_newMusicList_clicked();
-
     void on_pushButton_newSoundList_clicked();
-
     void on_pushButton_newRadio_clicked();
-
-    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
     void on_pushButton_saveElement_clicked();
 
     void on_listWidget_musicList_itemDoubleClicked(QListWidgetItem *item);
-
     void on_listWidget_soundList_itemDoubleClicked(QListWidgetItem *item);
-
     void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
-
     void on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:

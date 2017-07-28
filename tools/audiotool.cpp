@@ -11,6 +11,8 @@
 
 AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
 {
+    qDebug() << "Loading AudioTool ...";
+
     ui->setupUi(this);
 
     settingsManager = sManager;
@@ -38,10 +40,6 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     // Display all available projects in the combo box
     getProjects();
 
-    // Set a layout for the element frame
-    FlowLayout *elementLayout = new FlowLayout;
-    ui->frame_elements->setLayout(elementLayout);
-
     // Load default project
     QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     settings.beginGroup("AudioTool");
@@ -49,6 +47,7 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     {
         if (ui->comboBox_projects->itemText(i) == settings.value("defaultProject").toString())
         {
+            qDebug() << "Loading default project: " + ui->comboBox_projects->itemText(i) + " ...";
             ui->comboBox_projects->setCurrentIndex(i);
             loadProject(ui->comboBox_projects->itemText(i));
         }
@@ -60,6 +59,24 @@ AudioTool::~AudioTool()
     delete ui;
 }
 
+// Get all available projects
+void AudioTool::getProjects()
+{
+    qDebug() << "Getting available projects ...";
+
+    ui->comboBox_projects->clear();
+
+    QString projectsFolder = settingsManager->getSetting(audioPath);
+
+    for (QString project : getFiles(projectsFolder))
+    {
+        if (project.contains(".ini") && !project.contains("desktop.ini"))
+        {
+            ui->comboBox_projects->addItem(cleanText(project));
+        }
+    }
+}
+
 // Load a project
 void AudioTool::loadProject(QString project)
 {
@@ -67,6 +84,13 @@ void AudioTool::loadProject(QString project)
 
     ui->listWidget_categories->clear();
 
+    for (int i = 0; i<ui->tabWidget_Small->count(); i++)
+    {
+        ui->tabWidget_Small->removeTab(i);
+        ui->tabWidget_Large->removeTab(i);
+    }
+
+    project = cleanText(project)+".ini";
     currentProject = project;
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+project, QSettings::IniFormat);
@@ -81,39 +105,311 @@ void AudioTool::loadProject(QString project)
         QString categoryName = settings.value("name").toString();
         QString categoryDescription = settings.value("description").toString();
 
+        // List View
         QListWidgetItem *categoryItem = new QListWidgetItem(categoryName);
         categoryItem->setToolTip(categoryDescription);
 
         ui->listWidget_categories->addItem(categoryItem);
+
+        // Small Buttons
+        QFrame *sFrame = new QFrame;
+        QVBoxLayout *sFrameLayout = new QVBoxLayout;
+        sFrameLayout->setAlignment(Qt::AlignTop);
+        sFrame->setLayout(sFrameLayout);
+
+        ui->tabWidget_Small->addTab(sFrame, categoryName);
+
+        // Large Buttons
+        QFrame *lFrame = new QFrame;
+        QVBoxLayout *lFrameLayout = new QVBoxLayout;
+        lFrameLayout->setAlignment(Qt::AlignTop);
+        lFrame->setLayout(lFrameLayout);
+
+        ui->tabWidget_Large->addTab(lFrame, categoryName);
+
+        // Both Button Views
+        generateScenarioFrames(categoryName, sFrame, lFrame);
     }
     settings.endArray();
 }
 
-// Get all available projects
-void AudioTool::getProjects()
+// Generate the scenario list
+void AudioTool::generateScenarioList(QString category)
 {
-    ui->comboBox_projects->clear();
+    ui->listWidget_scenarios->clear();
 
-    QString projectsFolder = settingsManager->getSetting(audioPath);
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
 
-    for (QString project : getFiles(projectsFolder))
+    // Load scenarios
+    int scenarios = settings.beginReadArray(category+"_Scenarios");
+
+    for (int i = 0; i<scenarios; i++)
     {
-        if (project.contains(".ini") && !project.contains("desktop.ini"))
-        {
-            ui->comboBox_projects->addItem(project);
-        }
+        settings.setArrayIndex(i);
+
+        QString scenarioName = settings.value("name").toString();
+        QString scenarioDescription = settings.value("description").toString();
+
+        QListWidgetItem *scenarioItem = new QListWidgetItem(scenarioName);
+        scenarioItem->setToolTip(scenarioDescription);
+
+        ui->listWidget_scenarios->addItem(scenarioItem);
     }
+    settings.endArray();
+}
+
+// Generate the buttons for all the elements of a scenario
+void AudioTool::generateListViewElementButtons(QString scenario)
+{
+    QString category = ui->listWidget_categories->currentItem()->text();
+
+    qDebug() << "Removing old Elements...";
+    qDeleteAll(ui->frame_elements->children());
+
+    QVBoxLayout *vlayout = new QVBoxLayout;
+    ui->frame_elements->setLayout(vlayout);
+
+    FlowLayout *musicLayout = new FlowLayout;
+    vlayout->addLayout(musicLayout);
+
+    FlowLayout *soundLayout = new FlowLayout;
+    vlayout->addLayout(soundLayout);
+
+    FlowLayout *radioLayout = new FlowLayout;
+    vlayout->addLayout(radioLayout);
+
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+
+    // Music Lists
+    qDebug() << "Adding music lists ...";
+    int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
+
+    for (int i = 0; i<musicLists; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+
+        connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
+        signalMapperMusic->setMapping(button, name+";"+category+";"+scenario);
+
+        musicLayout->addWidget(button);
+    }
+    settings.endArray();
+
+    // Sound Lists
+    qDebug() << "Adding sound lists ...";
+    int soundLists = settings.beginReadArray(category+"_"+scenario+"_SoundLists");
+
+    for (int i = 0; i<soundLists; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        button->setCheckable(true);
+
+        connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
+        signalMapperSound->setMapping(button, name+";"+category+";"+scenario);
+
+        soundLayout->addWidget(button);
+    }
+    settings.endArray();
+
+    // Radios
+    qDebug() << "Adding radios ...";
+    int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
+
+    for (int i = 0; i<radios; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+
+        connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
+        signalMapperRadio->setMapping(button, name+";"+category+";"+scenario);
+
+        radioLayout->addWidget(button);
+    }
+    settings.endArray();
+}
+
+// Generate Scenarios for Button View
+void AudioTool::generateScenarioFrames(QString category, QFrame *sFrame, QFrame *lFrame)
+{
+    qDebug() << "Generating scenario frames for category: " + category + " ...";
+
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+
+    // Load scenarios
+    int scenarios = settings.beginReadArray(category+"_Scenarios");
+
+    for (int i = 0; i<scenarios; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString scenarioName = settings.value("name").toString();
+        QString scenarioDescription = settings.value("description").toString();
+
+        // Small Buttons
+        sFrame->layout()->addWidget(new QLabel(scenarioName));
+
+        QFrame *sSubFrame = new QFrame;
+        FlowLayout *sSubFrameLayout = new FlowLayout;
+        sSubFrame->setLayout(sSubFrameLayout);
+        sSubFrame->setToolTip(scenarioDescription);
+
+        sFrame->layout()->addWidget(sSubFrame);
+
+        // Large Buttons
+        lFrame->layout()->addWidget(new QLabel(scenarioName));
+
+        QFrame *lSubFrame = new QFrame;
+        FlowLayout *lSubFrameLayout = new FlowLayout;
+        lSubFrame->setLayout(lSubFrameLayout);
+        lSubFrame->setToolTip(scenarioDescription);
+
+        lFrame->layout()->addWidget(lSubFrame);
+
+        // Both
+        generateElementButtons(category, scenarioName, sSubFrame, lSubFrame);
+    }
+    settings.endArray();
+}
+
+// Generate Elements for Button View
+void AudioTool::generateElementButtons(QString category, QString scenario, QFrame *sFrame, QFrame *lFrame)
+{
+    qDebug() << "Generating element buttons for scenario: " + scenario + " in category: " + category + " ...";
+
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+
+    // Music Lists
+    qDebug() << "   Generating music lists ...";
+    int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
+
+    for (int i = 0; i<musicLists; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QToolButton* b = new QToolButton;
+        b->setText(name);
+        b->setToolTip(description);
+        b->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+
+        connect(b, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
+        signalMapperMusic->setMapping(b, name+";"+category+";"+scenario);
+
+        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        b->setIconSize(QSize(64,64));
+        b->setMinimumWidth(150);
+        b->setMinimumHeight(90);
+        b->setStyleSheet("background-color: #222222;");
+
+//        if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"".png").exists()){
+//            QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png");
+//            QIcon icon(pixmap);
+//            b->setIcon(icon);
+//        }
+//        else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg").exists()){
+//            QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg");
+//            QIcon icon(pixmap);
+//            b->setIcon(icon);
+//        }
+
+        sFrame->layout()->addWidget(b);
+    }
+    settings.endArray();
+
+    // Sound Lists
+    qDebug() << "   Generating sound lists ...";
+    int soundLists = settings.beginReadArray(category+"_"+scenario+"_SoundLists");
+
+    for (int i = 0; i<soundLists; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QToolButton* b = new QToolButton;
+        b->setText(name);
+        b->setToolTip(description);
+        b->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+
+        connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
+        signalMapperSound->setMapping(b, name+";"+category+";"+scenario);
+
+        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        b->setIconSize(QSize(64,64));
+        b->setMinimumWidth(150);
+        b->setMinimumHeight(90);
+        b->setStyleSheet("background-color: #222222;");
+        b->setCheckable(true);
+
+        sFrame->layout()->addWidget(b);
+    }
+    settings.endArray();
+
+    // Radios
+    qDebug() << "   Generating radios ...";
+    int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
+
+    for (int i = 0; i<radios; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QToolButton* b = new QToolButton;
+        b->setText(name);
+        b->setToolTip(description);
+        b->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+
+        connect(b, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
+        signalMapperRadio->setMapping(b, name+";"+category+";"+scenario);
+
+        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        b->setIconSize(QSize(64,64));
+        b->setMinimumWidth(150);
+        b->setMinimumHeight(90);
+        b->setStyleSheet("background-color: #222222;");
+
+        sFrame->layout()->addWidget(b);
+    }
+    settings.endArray();
 }
 
 // Play Music
-void AudioTool::playMusic(QString musicList)
+void AudioTool::playMusic(QString arg)
 {
+    QStringList args = arg.split(";");
+
+    QString musicList = args.at(0);
+    QString category = args.at(1);
+    QString scenario = args.at(2);
+
     qDebug() << "Playing music list: " + musicList + " ...";
 
     radioPlayer->stop();
-
-    QString category = ui->listWidget_categories->currentItem()->text();
-    QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
     ui->label_element->setText(musicList);
 
@@ -176,9 +472,23 @@ void AudioTool::playMusic(QString musicList)
     }
 }
 
-// Play Sounds
-void AudioTool::playSound(QString soundList)
+// Display the metadata of the currently playing song
+void AudioTool::updateMetaData()
 {
+    ui->comboBox_music->setCurrentIndex(musicPlaylist->currentIndex());
+
+    // TODO
+}
+
+// Play Sounds
+void AudioTool::playSound(QString arg)
+{
+    QStringList args = arg.split(";");
+
+    QString soundList = args.at(0);
+    QString category = args.at(1);
+    QString scenario = args.at(2);
+
     // Check if sound player already exists in list
     bool checked = false;
 
@@ -201,9 +511,6 @@ void AudioTool::playSound(QString soundList)
     if (!checked)
     {
         qDebug() << "Playing sound list: " + soundList + " ...";
-
-        QString category = ui->listWidget_categories->currentItem()->text();
-        QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
         QMediaPlayer *player = new QMediaPlayer;
         QMediaPlaylist *playlist = new QMediaPlaylist;
@@ -273,8 +580,14 @@ void AudioTool::playSound(QString soundList)
 }
 
 // Play Radio
-void AudioTool::playRadio(QString radio)
+void AudioTool::playRadio(QString arg)
 {
+    QStringList args = arg.split(";");
+
+    QString radio = args.at(0);
+    QString category = args.at(1);
+    QString scenario = args.at(2);
+
     qDebug() << "Playing radio: " + radio + " ...";
 
     musicPlayer->stop();
@@ -283,9 +596,6 @@ void AudioTool::playRadio(QString radio)
     ui->comboBox_music->clear();
 
     ui->label_element->setText(radio);
-
-    QString category = ui->listWidget_categories->currentItem()->text();
-    QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
     int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
@@ -323,311 +633,6 @@ void AudioTool::playRadio(QString radio)
 
     radioPlayer->setVolume(ui->horizontalSlider_music->value());
     radioPlayer->play();
-}
-
-// Display the metadata of the currently playing song
-void AudioTool::updateMetaData()
-{
-    ui->comboBox_music->setCurrentIndex(musicPlaylist->currentIndex());
-}
-
-// Getting the groups in the category and creating the frame for it
-QList<QFrame*> AudioTool::createGroupFrame(QString folder, QFrame *frame)
-{
-    QList<QFrame*> groupFrames;
-
-    QSettings settings(settingsManager->getSetting(Setting::musicPath)+"/"+folder+"/groups.ini", QSettings::IniFormat);
-    int groupsSize = settings.beginReadArray("Groups");
-
-    for (int i = 0; i<groupsSize; i++){
-        settings.setArrayIndex(i);
-
-        // Getting the group name
-        QString group = settings.value("group").toString();
-
-        // Actually creating the frame and it's layout
-        QFrame* f = new QFrame;
-        f->setStyleSheet("background: none;");
-        f->setToolTip(group);
-
-        FlowLayout* fLayout = new FlowLayout;
-        f->setLayout(fLayout);
-
-        // Creating a group title label
-        QLabel* l = new QLabel(group);
-        l->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-        l->setStyleSheet("background: none;");
-
-        // Adding the label and the frame to the "main frame" ;)
-        frame->layout()->addWidget(l);
-        frame->layout()->addWidget(f);
-
-        // Adding the frame to the frame list
-        groupFrames.push_back(f);
-    }
-
-    settings.endArray();
-
-    return groupFrames;
-}
-
-// Generate the category list
-void AudioTool::generateCategoryList(QStringList categories)
-{
-    ui->listWidget_categories->clear();
-
-    for (QString cat : categories)
-    {
-        if (!cat.contains("."))
-        {
-            ui->listWidget_categories->addItem(cleanText(cat));
-            ui->listWidget_categories->item(ui->listWidget_categories->count()-1)->setToolTip(cat);
-        }
-    }
-}
-
-// Generate the scenario list
-void AudioTool::generateScenarioList(QString category)
-{
-    ui->listWidget_scenarios->clear();
-
-    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
-
-    // Load scenarios
-    int scenarios = settings.beginReadArray(category+"_Scenarios");
-
-    for (int i = 0; i<scenarios; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QString scenarioName = settings.value("name").toString();
-        QString scenarioDescription = settings.value("description").toString();
-
-        QListWidgetItem *scenarioItem = new QListWidgetItem(scenarioName);
-        scenarioItem->setToolTip(scenarioDescription);
-
-        ui->listWidget_scenarios->addItem(scenarioItem);
-    }
-    settings.endArray();
-}
-
-// Generate the buttons for all the elements of a scenario
-void AudioTool::generateElementButtons(QString scenario)
-{
-    QString category = ui->listWidget_categories->currentItem()->text();
-
-    qDebug() << "Removing old Elements...";
-    qDeleteAll(ui->frame_elements->children());
-
-    QVBoxLayout *vlayout = new QVBoxLayout;
-    ui->frame_elements->setLayout(vlayout);
-
-    FlowLayout *musicLayout = new FlowLayout;
-    vlayout->addLayout(musicLayout);
-
-    FlowLayout *soundLayout = new FlowLayout;
-    vlayout->addLayout(soundLayout);
-
-    FlowLayout *radioLayout = new FlowLayout;
-    vlayout->addLayout(radioLayout);
-
-    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
-
-    // Music Lists
-    qDebug() << "Adding music lists ...";
-    int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
-
-    for (int i = 0; i<musicLists; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QString name = settings.value("name").toString();
-        QString description = settings.value("description").toString();
-
-        QPushButton *button = new QPushButton(name);
-        button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
-
-        connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
-        signalMapperMusic->setMapping(button, name);
-
-        musicLayout->addWidget(button);
-    }
-    settings.endArray();
-
-    // Sound Lists
-    qDebug() << "Adding sound lists ...";
-    int soundLists = settings.beginReadArray(category+"_"+scenario+"_SoundLists");
-
-    for (int i = 0; i<soundLists; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QString name = settings.value("name").toString();
-        QString description = settings.value("description").toString();
-
-        QPushButton *button = new QPushButton(name);
-        button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
-        button->setCheckable(true);
-
-        connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
-        signalMapperSound->setMapping(button, name);
-
-        soundLayout->addWidget(button);
-    }
-    settings.endArray();
-
-    // Radios
-    qDebug() << "Adding radios ...";
-    int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
-
-    for (int i = 0; i<radios; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QString name = settings.value("name").toString();
-        QString description = settings.value("description").toString();
-
-        QPushButton *button = new QPushButton(name);
-        button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
-
-        connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
-        signalMapperRadio->setMapping(button, name);
-
-        radioLayout->addWidget(button);
-    }
-    settings.endArray();
-}
-
-// Generate all the buttons and tabs in the "Small Buttons" page
-void AudioTool::generateSmallButtons(QStringList categories)
-{
-    qDebug() << tr("Generating Small Music Buttons...");
-
-    for (QString folder : categories){
-        if (!folder.contains(".")){
-
-            // Creating the scroll area and setting a frame as it's widget
-            // The scroll area is the widget that becomes a category tab, the frame contains all the group-frames
-            QScrollArea *scrollArea = new QScrollArea;
-            QFrame *frame = new QFrame;
-            QVBoxLayout* frameLayout = new QVBoxLayout;
-
-            frame->setLayout(frameLayout);
-            frameLayout->setAlignment(Qt::AlignTop);
-
-            ui->tabWidget_Small->addTab(scrollArea, cleanText(folder));
-            scrollArea->setWidget(frame);
-            scrollArea->setWidgetResizable(true);
-
-            // Checking if a background image for that category exists and adding it to the frame via a stylesheet
-            if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".png);"
-                                     "background-position: center top;}");
-            }
-            else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg").exists()){
-                frame->setStyleSheet("QFrame{background-image: url("+settingsManager->getSetting(Setting::resourcesPath)+"/Backgrounds/"+folder+".jpg);"
-                                     "background-position: center top;}");
-            }
-
-            // Creating all the group frames
-            QList<QFrame*> groupFrames = createGroupFrame(folder, frame);
-
-            // Generating musicButtons
-            QString path = settingsManager->getSetting(Setting::musicPath)+"/"+folder;
-            QStringList musicFolders = getFolders(path);
-
-            // Label and frame for buttons without a specified group
-            QLabel* allLabel = new QLabel("General");
-            allLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-            allLabel->setStyleSheet("background: none;");
-            frame->layout()->addWidget(allLabel);
-
-            QFrame* allFrame = new QFrame;
-            allFrame->setStyleSheet("background: none;");
-            allFrame->setToolTip("General");
-
-            FlowLayout *flowLayoutMusic = new FlowLayout;
-            allFrame->setLayout(flowLayoutMusic);
-            frame->layout()->addWidget(allFrame);
-
-            // Creating the buttons
-            for (QString s : musicFolders){
-                if (!s.contains(".")){
-                    QToolButton* b = new QToolButton;
-
-                    // Connect button with music signal mapper
-                    connect(b, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
-                    signalMapperMusic->setMapping(b, settingsManager->getSetting(Setting::musicPath)+"/"+folder+"/"+s);
-
-                    // Setting basic button properties
-                    b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-                    b->setIconSize(QSize(64,64));
-                    b->setMinimumWidth(150);
-                    b->setMinimumHeight(90);
-                    b->setStyleSheet("background-color: #222222;");
-
-                    // Setting the button font
-                    QFont font;
-                    font.setPixelSize(15);
-                    b->setFont(font);
-
-                    // Setting the button text and if it is too long, splitting it in to multiple lines
-                    QString title = cleanText(s);
-
-                    if (title.length()>20){
-                        int i = title.indexOf(" ", 14);
-                        title.remove(i, 1);
-                        title.insert(i, "\n");
-                    }
-
-                    b->setText(title);
-                    b->setToolTip(cleanText(s));
-
-                    // Setting the button icon
-                    if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png").exists()){
-                        QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png");
-                        QIcon icon(pixmap);
-                        b->setIcon(icon);
-                    }
-                    else if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg").exists()){
-                        QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".jpg");
-                        QIcon icon(pixmap);
-                        b->setIcon(icon);
-                    }
-
-                    // Checking if the button belongs in a group
-                    QSettings settings(settingsManager->getSetting(Setting::musicPath)+"/"+folder+"/groups.ini", QSettings::IniFormat);
-
-                    bool inGroup = false;
-                    for (int gIndex = 0; gIndex<groupFrames.size(); gIndex++){
-                        int size = settings.beginReadArray(groupFrames.at(gIndex)->toolTip());
-
-                        for (int j = 0; j<size; j++){
-                            settings.setArrayIndex(j);
-                            QString value = settings.value("folder").toString();
-
-                            if (s == value){
-                                inGroup = true;
-
-                                QFrame* gFrame = groupFrames.at(gIndex);
-                                gFrame->layout()->addWidget(b);
-
-                                break;
-                            }
-                        }
-
-                        settings.endArray();
-                    }
-
-                    if (!inGroup)
-                        flowLayoutMusic->addWidget(b);
-                }
-            }
-        }
-    }
 }
 
 // Switching to list view
@@ -739,7 +744,7 @@ void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
 {
     if (currentRow > -1)
     {
-        generateElementButtons(ui->listWidget_scenarios->currentItem()->text());
+        generateListViewElementButtons(ui->listWidget_scenarios->currentItem()->text());
 
         ui->textEdit_scenarioDescription->setText(ui->listWidget_scenarios->currentItem()->toolTip());
         ui->label_scenario->setText(ui->listWidget_scenarios->currentItem()->text());
@@ -801,10 +806,12 @@ void AudioTool::on_comboBox_projects_currentTextChanged(const QString &arg1)
     settings.endGroup();
 }
 
+// When a song is selected in the song list view, play it
 void AudioTool::on_listWidget_songs_currentRowChanged(int currentRow)
 {
     if (currentRow >= 0)
     {
+        // Changing the combo box index causes the music player to change to the song
         ui->comboBox_music->setCurrentIndex(currentRow);
     }
 }
