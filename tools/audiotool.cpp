@@ -309,19 +309,20 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QString name = settings.value("name").toString();
         QString description = settings.value("description").toString();
 
-        QToolButton* b = new QToolButton;
-        b->setText(name);
-        b->setToolTip(description);
-        b->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        // Small Buttons
+        QToolButton *sb = new QToolButton;
+        sb->setText(name);
+        sb->setToolTip(description);
+        sb->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
 
-        connect(b, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
-        signalMapperMusic->setMapping(b, name+";"+category+";"+scenario);
+        connect(sb, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
+        signalMapperMusic->setMapping(sb, name+";"+category+";"+scenario);
 
-        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        b->setIconSize(QSize(64,64));
-        b->setMinimumWidth(150);
-        b->setMinimumHeight(90);
-        b->setStyleSheet("background-color: #222222;");
+        sb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        sb->setIconSize(QSize(64,64));
+        sb->setMinimumWidth(150);
+        sb->setMinimumHeight(90);
+        sb->setStyleSheet("background-color: #222222;");
 
 //        if (QFile(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"".png").exists()){
 //            QPixmap pixmap(settingsManager->getSetting(Setting::resourcesPath)+"/Icons/Music/"+folder+"/"+s+".png");
@@ -334,7 +335,24 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
 //            b->setIcon(icon);
 //        }
 
-        sFrame->layout()->addWidget(b);
+        sFrame->layout()->addWidget(sb);
+
+        // Large Buttons
+        QToolButton *lb = new QToolButton;
+        lb->setText(name);
+        lb->setToolTip(description);
+        lb->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+
+        connect(lb, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
+        signalMapperMusic->setMapping(lb, name+";"+category+";"+scenario);
+
+        lb->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        lb->setIconSize(QSize(128,128));
+        lb->setMinimumWidth(150);
+        lb->setMinimumHeight(150);
+        lb->setStyleSheet("background-color: #222222;");
+
+        lFrame->layout()->addWidget(lb);
     }
     settings.endArray();
 
@@ -349,22 +367,41 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QString name = settings.value("name").toString();
         QString description = settings.value("description").toString();
 
-        QToolButton* b = new QToolButton;
-        b->setText(name);
-        b->setToolTip(description);
-        b->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        // Small Buttons
+        QToolButton* sb = new QToolButton;
+        sb->setText(name);
+        sb->setToolTip(description);
+        sb->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
 
-        connect(b, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
-        signalMapperSound->setMapping(b, name+";"+category+";"+scenario);
+        connect(sb, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
+        signalMapperSound->setMapping(sb, name+";"+category+";"+scenario);
 
-        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        b->setIconSize(QSize(64,64));
-        b->setMinimumWidth(150);
-        b->setMinimumHeight(90);
-        b->setStyleSheet("background-color: #222222;");
-        b->setCheckable(true);
+        sb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        sb->setIconSize(QSize(64,64));
+        sb->setMinimumWidth(150);
+        sb->setMinimumHeight(90);
+        sb->setStyleSheet("background-color: #222222;");
+        sb->setCheckable(true);
 
-        sFrame->layout()->addWidget(b);
+        sFrame->layout()->addWidget(sb);
+
+        // Large Buttons
+        QToolButton* lb = new QToolButton;
+        lb->setText(name);
+        lb->setToolTip(description);
+        lb->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+
+        connect(lb, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
+        signalMapperSound->setMapping(lb, name+";"+category+";"+scenario);
+
+        lb->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        lb->setIconSize(QSize(128,128));
+        lb->setMinimumWidth(150);
+        lb->setMinimumHeight(150);
+        lb->setStyleSheet("background-color: #222222;");
+        lb->setCheckable(true);
+
+        lFrame->layout()->addWidget(lb);
     }
     settings.endArray();
 
@@ -379,21 +416,40 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QString name = settings.value("name").toString();
         QString description = settings.value("description").toString();
 
-        QToolButton* b = new QToolButton;
-        b->setText(name);
-        b->setToolTip(description);
-        b->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        // Small Buttons
+        QToolButton* sb = new QToolButton;
+        sb->setText(name);
+        sb->setToolTip(description);
+        sb->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
 
-        connect(b, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
-        signalMapperRadio->setMapping(b, name+";"+category+";"+scenario);
+        connect(sb, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
+        signalMapperRadio->setMapping(sb, name+";"+category+";"+scenario);
 
-        b->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        b->setIconSize(QSize(64,64));
-        b->setMinimumWidth(150);
-        b->setMinimumHeight(90);
-        b->setStyleSheet("background-color: #222222;");
+        sb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        sb->setIconSize(QSize(64,64));
+        sb->setMinimumWidth(150);
+        sb->setMinimumHeight(90);
+        sb->setStyleSheet("background-color: #222222;");
 
-        sFrame->layout()->addWidget(b);
+        sFrame->layout()->addWidget(sb);
+
+        // Large Buttons
+        QToolButton* lb = new QToolButton;
+        lb->setText(name);
+        lb->setToolTip(description);
+        lb->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+
+        connect(lb, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
+        signalMapperRadio->setMapping(lb, name+";"+category+";"+scenario);
+
+        lb->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        lb->setIconSize(QSize(128,128));
+        lb->setMinimumWidth(150);
+        lb->setMinimumHeight(150);
+        lb->setStyleSheet("background-color: #222222;");
+
+        lFrame->layout()->addWidget(lb);
+
     }
     settings.endArray();
 }
@@ -684,11 +740,13 @@ void AudioTool::on_radioButton_Small_clicked()
 void AudioTool::on_pushButton_play_clicked()
 {
     musicPlayer->play();
+    radioPlayer->play();
 }
 
 // Pause
 void AudioTool::on_pushButton_pause_clicked()
 {
+    radioPlayer->pause();
     musicPlayer->pause();
 }
 
