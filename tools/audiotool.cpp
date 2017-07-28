@@ -33,11 +33,54 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     FlowLayout *elementLayout = new FlowLayout;
     ui->frame_elements->setLayout(elementLayout);
+
+    // Load default project
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    settings.beginGroup("AudioTool");
+    for (int i = 0; i<ui->comboBox_projects->count(); i++)
+    {
+        if (ui->comboBox_projects->itemText(i) == settings.value("defaultProject").toString())
+        {
+            ui->comboBox_projects->setCurrentIndex(i);
+            loadProject(ui->comboBox_projects->itemText(i));
+        }
+    }
 }
 
 AudioTool::~AudioTool()
 {
     delete ui;
+}
+
+// Load a project
+void AudioTool::loadProject(QString project)
+{
+    qDebug() << "Loading project: " + project + " ...";
+
+    ui->listWidget_categories->clear();
+
+    currentProject = project;
+
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+project, QSettings::IniFormat);
+
+    // Load categories
+    int categories = settings.beginReadArray("Categories");
+
+    for (int i = 0; i<categories; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString categoryName = settings.value("name").toString();
+        QString categoryDescription = settings.value("description").toString();
+
+        QListWidgetItem *categoryItem = new QListWidgetItem(categoryName);
+        categoryItem->setToolTip(categoryDescription);
+
+        ui->listWidget_categories->addItem(categoryItem);
+    }
+    settings.endArray();
+
+    //getCategories();
 }
 
 // Get all available projects
@@ -184,46 +227,78 @@ void AudioTool::generateScenarioList(QString category)
 {
     ui->listWidget_scenarios->clear();
 
-    for (QString scenario : getFolders(settingsManager->getSetting(musicPath)+"/"+category))
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+
+    // Load scenarios
+    int scenarios = settings.beginReadArray(category+"_Scenarios");
+
+    for (int i = 0; i<scenarios; i++)
     {
-        if (!scenario.contains("."))
-        {
-            ui->listWidget_scenarios->addItem(cleanText(scenario));
-            ui->listWidget_scenarios->item(ui->listWidget_scenarios->count()-1)->setToolTip(scenario);
-        }
+        settings.setArrayIndex(i);
+
+        QString scenarioName = settings.value("name").toString();
+        QString scenarioDescription = settings.value("description").toString();
+
+        QListWidgetItem *scenarioItem = new QListWidgetItem(scenarioName);
+        scenarioItem->setToolTip(scenarioDescription);
+
+        ui->listWidget_scenarios->addItem(scenarioItem);
     }
+    settings.endArray();
 }
 
 // Generate the buttons for all the elements of a scenario
 void AudioTool::generateElementButtons(QString scenario)
 {
-    QString category = ui->listWidget_categories->currentItem()->toolTip();
+    QString category = ui->listWidget_categories->currentItem()->text();
 
     qDebug() << "Removing old Elements...";
-//    QLayoutItem *item;
-//    while ((item = ui->frame_elements->layout()->takeAt(0)) != 0)
-//    {
-//        ui->frame_elements->layout()->removeItem(item);
-//        delete item;
-//    }
     qDeleteAll(ui->frame_elements->children());
 
     FlowLayout *layout = new FlowLayout;
     ui->frame_elements->setLayout(layout);
 
-    qDebug() << "Adding new Elements...";
-    qDebug() << settingsManager->getSetting(musicPath)+"/"+category+"/"+scenario;
-    for (QString element : getFolders(settingsManager->getSetting(musicPath)+"/"+category+"/"+scenario))
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+
+    // Music Lists
+    qDebug() << "Adding music lists ...";
+    int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
+
+    for (int i = 0; i<musicLists; i++)
     {
-        if (!element.contains("."))
-        {
-            qDebug() << element;
+        settings.setArrayIndex(i);
 
-            QPushButton *button = new QPushButton(element);
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
 
-            ui->frame_elements->layout()->addWidget(button);
-        }
+//        QStringList songsPaths;
+
+//        int songs = settings.beginReadArray("songs");
+//        for (int j = 0; j<songs; i++)
+//        {
+//            settings.setArrayIndex(j);
+//            QString path = settings.value("path").toString();
+//            songsPaths.push_back(path);
+//        }
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+
+        layout->addWidget(button);
     }
+    settings.endArray();
+
+//    for (QString element : getFolders(settingsManager->getSetting(musicPath)+"/"+category+"/"+scenario))
+//    {
+//        if (!element.contains("."))
+//        {
+//            qDebug() << element;
+
+//            QPushButton *button = new QPushButton(element);
+
+//            ui->frame_elements->layout()->addWidget(button);
+//        }
+//    }
 }
 
 // Generate all the buttons and tabs in the "Small Buttons" page
@@ -462,7 +537,9 @@ void AudioTool::on_listWidget_categories_currentRowChanged(int currentRow)
 {
     if (currentRow > -1)
     {
-        generateScenarioList(ui->listWidget_categories->currentItem()->toolTip());
+        generateScenarioList(ui->listWidget_categories->currentItem()->text());
+
+        ui->textEdit_categoryDescription->setText(ui->listWidget_categories->currentItem()->toolTip());
     }
 }
 
@@ -470,7 +547,12 @@ void AudioTool::on_listWidget_categories_currentRowChanged(int currentRow)
 void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
 {
     if (currentRow > -1)
-        generateElementButtons(ui->listWidget_scenarios->currentItem()->toolTip());
+    {
+        generateElementButtons(ui->listWidget_scenarios->currentItem()->text());
+
+        ui->textEdit_scenarioDescription->setText(ui->listWidget_scenarios->currentItem()->toolTip());
+    }
+
 }
 
 // Open Audio Editor
@@ -478,12 +560,6 @@ void AudioTool::on_pushButton_openEditor_clicked()
 {
     AudioEditor *audioEditor = new AudioEditor;
     audioEditor->showMaximized();
-}
-
-// Load a project
-void AudioTool::loadProject()
-{
-    getCategories();
 }
 
 // Check or uncheck set project as default
@@ -511,7 +587,7 @@ void AudioTool::on_checkBox_setProjectAsDefault_toggled(bool checked)
 // When load project is clicked
 void AudioTool::on_pushButton_loadProject_clicked()
 {
-    loadProject();
+    loadProject(ui->comboBox_projects->currentText());
 }
 
 // When the project combobox changes
