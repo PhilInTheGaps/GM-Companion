@@ -74,6 +74,7 @@ void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFold
 
         QString path = baseFolder+"/"+file;
         path = path.replace(settingsManager->getSetting(musicPath), "");
+        path = path.replace(settingsManager->getSetting(soundPath), "");
         item->setWhatsThis(0, path);
 
         baseItem->addChild(item);
@@ -510,7 +511,7 @@ void AudioEditor::on_pushButton_newMusicList_clicked()
 // Create a new Sound List
 void AudioEditor::on_pushButton_newSoundList_clicked()
 {
-    if (isProjectOpen && ui->treeWidget_categories->currentItem()->type() == 1 && ui->lineEdit_soundList->text() != NULL)
+    if (isProjectOpen && !currentScenario.isNull() && !ui->lineEdit_soundList->text().isNull())
     {
         QString scenario = ui->treeWidget_categories->currentItem()->text(0);
 
@@ -544,7 +545,7 @@ void AudioEditor::on_pushButton_newSoundList_clicked()
 // Create a new Radio
 void AudioEditor::on_pushButton_newRadio_clicked()
 {
-    if (isProjectOpen && ui->treeWidget_categories->currentItem()->type() == 1 && ui->lineEdit_radio->text() != NULL)
+    if (isProjectOpen && !currentScenario.isNull() && !ui->lineEdit_radio->text().isNull())
     {
         QString scenario = ui->treeWidget_categories->currentItem()->text(0);
 
@@ -719,7 +720,9 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
 
                     ui->lineEdit_soundListDescription->setText(description);
 
-                    ui->checkBox_soundListRandom->setChecked(settings.value("random", false).toBool());
+                    ui->radioButton_soundListRandom->setChecked(settings.value("random", true).toBool());
+                    ui->radioButton_soundListLoop->setChecked(settings.value("loop", false).toBool());
+                    ui->radioButton_soundListSequential->setChecked(settings.value("sequential", false).toBool());
 
                     // Sounds
                     ui->listWidget_soundList->clear();
@@ -896,7 +899,9 @@ void AudioEditor::on_pushButton_saveElement_clicked()
             if (settings.value("name").toString() == name)
             {
                 settings.setValue("description", description);
-                settings.setValue("random", ui->checkBox_soundListRandom->isChecked());
+                settings.setValue("random", ui->radioButton_soundListRandom->isChecked());
+                settings.setValue("loop", ui->radioButton_soundListLoop->isChecked());
+                settings.setValue("sequential", ui->radioButton_soundListSequential->isChecked());
 
                 // Save sounds
                 settings.beginWriteArray("sounds");
