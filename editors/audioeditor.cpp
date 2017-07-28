@@ -152,12 +152,6 @@ void AudioEditor::save()
     }
 }
 
-// Save Project
-void AudioEditor::on_pushButton_save_clicked()
-{
-    save();
-}
-
 // Add a category
 void AudioEditor::on_pushButton_newCategory_clicked()
 {
