@@ -293,20 +293,7 @@
               </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Expanding</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
+              <widget class="QListWidget" name="listWidget_songs"/>
              </item>
             </layout>
            </item>
@@ -341,7 +328,7 @@
               <item row="0" column="1">
                <widget class="QLabel" name="label_category">
                 <property name="text">
-                 <string>Science Fiction</string>
+                 <string>NONE</string>
                 </property>
                </widget>
               </item>
@@ -355,21 +342,21 @@
               <item row="1" column="1">
                <widget class="QLabel" name="label_scenario">
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string>NONE</string>
                 </property>
                </widget>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="label_7">
                 <property name="text">
-                 <string>Element:</string>
+                 <string>Music Element:</string>
                 </property>
                </widget>
               </item>
               <item row="2" column="1">
                <widget class="QLabel" name="label_element">
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string>NONE</string>
                 </property>
                </widget>
               </item>
@@ -511,38 +498,6 @@
          <width>32</width>
          <height>32</height>
         </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_shuffle">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Shuffle</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/resources/mediaIcons/shuffleOn.png</normaloff>:/resources/mediaIcons/shuffleOn.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
        </property>
       </widget>
      </item>

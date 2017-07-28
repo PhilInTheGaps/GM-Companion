@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QScrollArea>
 #include <QToolButton>
+#include <QVBoxLayout>
 
 AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
 {
@@ -14,6 +15,7 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     settingsManager = sManager;
 
+    // Music
     musicPlayer = new QMediaPlayer;
     connect(musicPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(updateMetaData()));
 
@@ -23,9 +25,9 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     signalMapperMusic = new QSignalMapper;
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
-//    QStringList categories = getCategories();
-//    generateSmallButtons(categories);
-//    generateCategoryList(categories);
+    // Sound
+    signalMapperSound = new QSignalMapper;
+    connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
 
     // Display all available projects in the combo box
     getProjects();
@@ -79,8 +81,6 @@ void AudioTool::loadProject(QString project)
         ui->listWidget_categories->addItem(categoryItem);
     }
     settings.endArray();
-
-    //getCategories();
 }
 
 // Get all available projects
@@ -105,9 +105,12 @@ void AudioTool::playMusic(QString musicList)
     QString category = ui->listWidget_categories->currentItem()->text();
     QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
+    ui->label_element->setText(musicList);
+
     // Clear Playlist
     musicPlaylist->clear();
     ui->comboBox_music->clear();
+    ui->listWidget_songs->clear();
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
     int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
@@ -131,13 +134,16 @@ void AudioTool::playMusic(QString musicList)
                 QString name = settings.value("name").toString();
                 QString path = settings.value("path").toString();
 
-                ui->comboBox_music->addItem(cleanText(name));
+                if (QFile(path).exists())
+                {
+                    ui->comboBox_music->addItem(cleanText(name));
 
-                qDebug() << name;
-                qDebug() << path;
-                qDebug() << settingsManager->getSetting(musicPath)+path;
+                    QListWidgetItem *listItem = new QListWidgetItem(name);
+                    listItem->setToolTip(path);
+                    ui->listWidget_songs->addItem(listItem);
 
-                musicPlaylist->addMedia(QUrl::fromLocalFile(settingsManager->getSetting(musicPath)+path));
+                    musicPlaylist->addMedia(QUrl::fromLocalFile(settingsManager->getSetting(musicPath)+path));
+                }
             }
 
             settings.endArray();
@@ -145,32 +151,6 @@ void AudioTool::playMusic(QString musicList)
     }
 
     settings.endArray();
-
-//    // Add music files to playlist and ListView
-//    QStringList files = getFiles(folder);
-//    int row = 0;
-//    for (QString file : files){
-//        if (file.contains(".mp3") || file.contains(".wav") || file.contains(".ogg") || file.toLower().contains(".FLAC")){
-////            QTableWidgetItem *i = new QTableWidgetItem;
-////            i->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
-////            i->setText(cleanText(file).replace(folderName, ""));
-////            musicTable->setItem(row, 0, i);
-
-//            ui->comboBox_music->addItem(cleanText(file).replace(folderName, ""));
-
-//            musicPlaylist->addMedia(QUrl::fromLocalFile(folder+"/"+file));
-//            row++;
-//        }
-//    }
-
-//    // Adjust ListView Column Size
-//    musicTable->setRowCount(files.size());
-//    if (files.size() > 9){
-//        musicTable->setColumnWidth(0, 220);
-//    }
-//    else{
-//        musicTable->setColumnWidth(0, 230);
-//    }
 
     // Set playlist, volume and play
     musicPlayer->setPlaylist(musicPlaylist);
@@ -184,18 +164,102 @@ void AudioTool::playMusic(QString musicList)
     }
 }
 
+// Play Sounds
+void AudioTool::playSound(QString soundList)
+{
+    // Check if sound player already exists in list
+    bool checked = false;
+
+    for (QMediaPlayer *sPlayer : soundPlayerList)
+    {
+        if (sPlayer->objectName() == soundList)
+        {
+            checked = true;
+
+            sPlayer->stop();
+
+            soundPlayerList.removeOne(sPlayer);
+
+            delete sPlayer;
+        }
+    }
+
+    if (!checked)
+    {
+        QString category = ui->listWidget_categories->currentItem()->text();
+        QString scenario = ui->listWidget_scenarios->currentItem()->text();
+
+        QMediaPlayer *player = new QMediaPlayer;
+        QMediaPlaylist *playlist = new QMediaPlaylist;
+
+        player->setPlaylist(playlist);
+        soundPlayerList.push_back(player);
+
+        player->setObjectName(soundList);
+
+        bool random;
+        bool loop;
+        bool sequential;
+
+        // Read properties
+        QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+        int lists = settings.beginReadArray(category+"_"+scenario+"_SoundLists");
+
+        for (int i = 0; i<lists; i++)
+        {
+            settings.setArrayIndex(i);
+
+            if (settings.value("name").toString() == soundList)
+            {
+                random = settings.value("random", true).toBool();
+                loop = settings.value("loop", false).toBool();
+                sequential = settings.value("sequential", false).toBool();
+
+                int sounds = settings.beginReadArray("sounds");
+
+                for (int j = 0; j<sounds; j++)
+                {
+                    settings.setArrayIndex(j);
+
+                    QString path = settingsManager->getSetting(soundPath) + settings.value("path").toString();
+
+                    if (QFile(path).exists())
+                    {
+                        playlist->addMedia(QUrl::fromLocalFile(path));
+                    }
+
+                }
+
+                settings.endArray();
+            }
+        }
+
+        settings.endArray();
+
+        // Set playback mode
+        if (random) {
+            playlist->setPlaybackMode(QMediaPlaylist::Random);
+            playlist->next();
+        }
+
+        else if (loop) {
+            playlist->setPlaybackMode(QMediaPlaylist::Loop);
+        }
+
+        else if (sequential) {
+            playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+        }
+
+        player->setVolume(ui->horizontalSlider_sound->value());
+        player->play();
+    }
+
+}
+
 // Display the metadata of the currently playing song
 void AudioTool::updateMetaData()
 {
     ui->comboBox_music->setCurrentIndex(musicPlaylist->currentIndex());
-}
-
-// Get a list of all music categories
-QStringList AudioTool::getCategories()
-{
-    QStringList musicCategories = getFolders(settingsManager->getSetting(Setting::musicPath));
-
-    return musicCategories;
 }
 
 // Getting the groups in the category and creating the frame for it
@@ -286,8 +350,17 @@ void AudioTool::generateElementButtons(QString scenario)
     qDebug() << "Removing old Elements...";
     qDeleteAll(ui->frame_elements->children());
 
-    FlowLayout *layout = new FlowLayout;
-    ui->frame_elements->setLayout(layout);
+    QVBoxLayout *vlayout = new QVBoxLayout;
+    ui->frame_elements->setLayout(vlayout);
+
+    FlowLayout *musicLayout = new FlowLayout;
+    vlayout->addLayout(musicLayout);
+
+    FlowLayout *soundLayout = new FlowLayout;
+    vlayout->addLayout(soundLayout);
+
+    FlowLayout *radioLayout = new FlowLayout;
+    vlayout->addLayout(radioLayout);
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
 
@@ -304,11 +377,57 @@ void AudioTool::generateElementButtons(QString scenario)
 
         QPushButton *button = new QPushButton(name);
         button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
 
         connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
         signalMapperMusic->setMapping(button, name);
 
-        layout->addWidget(button);
+        musicLayout->addWidget(button);
+    }
+    settings.endArray();
+
+    // Sound Lists
+    qDebug() << "Adding sound lists ...";
+    int soundLists = settings.beginReadArray(category+"_"+scenario+"_SoundLists");
+
+    for (int i = 0; i<soundLists; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        button->setCheckable(true);
+
+        connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
+        signalMapperSound->setMapping(button, name);
+
+        soundLayout->addWidget(button);
+    }
+    settings.endArray();
+
+    // Radios
+    qDebug() << "Adding radios ...";
+    int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
+
+    for (int i = 0; i<radios; i++)
+    {
+        settings.setArrayIndex(i);
+
+        QString name = settings.value("name").toString();
+        QString description = settings.value("description").toString();
+
+        QPushButton *button = new QPushButton(name);
+        button->setToolTip(description);
+        button->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+
+//        connect(button, SIGNAL(clicked()), signalMapperSounds, SLOT(map()));
+//        signalMapperMusic->setMapping(button, name);
+
+        radioLayout->addWidget(button);
     }
     settings.endArray();
 }
@@ -511,20 +630,6 @@ void AudioTool::on_pushButton_next_clicked()
     musicPlaylist->next();
 }
 
-// Shuffle
-void AudioTool::on_pushButton_shuffle_clicked()
-{
-    if (ui->pushButton_shuffle->isChecked())
-    {
-        musicPlaylist->setPlaybackMode(QMediaPlaylist::Random);
-    }
-
-    else
-    {
-        musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
-    }
-}
-
 // Adjust music volume
 void AudioTool::on_horizontalSlider_music_valueChanged(int value)
 {
@@ -533,7 +638,10 @@ void AudioTool::on_horizontalSlider_music_valueChanged(int value)
 
 void AudioTool::on_horizontalSlider_sound_valueChanged(int value)
 {
-    // TODO
+    for (QMediaPlayer *player : soundPlayerList)
+    {
+        player->setVolume(value);
+    }
 }
 
 void AudioTool::on_comboBox_music_currentIndexChanged(int index)
@@ -552,6 +660,7 @@ void AudioTool::on_listWidget_categories_currentRowChanged(int currentRow)
         generateScenarioList(ui->listWidget_categories->currentItem()->text());
 
         ui->textEdit_categoryDescription->setText(ui->listWidget_categories->currentItem()->toolTip());
+        ui->label_category->setText(ui->listWidget_categories->currentItem()->text());
     }
 }
 
@@ -563,6 +672,7 @@ void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
         generateElementButtons(ui->listWidget_scenarios->currentItem()->text());
 
         ui->textEdit_scenarioDescription->setText(ui->listWidget_scenarios->currentItem()->toolTip());
+        ui->label_scenario->setText(ui->listWidget_scenarios->currentItem()->text());
     }
 
 }
@@ -619,4 +729,12 @@ void AudioTool::on_comboBox_projects_currentTextChanged(const QString &arg1)
     }
 
     settings.endGroup();
+}
+
+void AudioTool::on_listWidget_songs_currentRowChanged(int currentRow)
+{
+    if (currentRow >= 0)
+    {
+        ui->comboBox_music->setCurrentIndex(currentRow);
+    }
 }

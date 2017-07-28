@@ -338,7 +338,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidget_editElement">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_empty">
            <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -574,9 +574,35 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_soundListRandom">
+                 <widget class="QRadioButton" name="radioButton_soundListRandom">
+                  <property name="toolTip">
+                   <string>Play sounds in a random order. Does not end.</string>
+                  </property>
                   <property name="text">
                    <string>Random Order</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioButton_soundListLoop">
+                  <property name="toolTip">
+                   <string>Play sounds in sequential order and start at the beginning when last sound is played.</string>
+                  </property>
+                  <property name="text">
+                   <string>Loop List</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="radioButton_soundListSequential">
+                  <property name="toolTip">
+                   <string>Play sounds in a sequential order. Ends when last sound was played.</string>
+                  </property>
+                  <property name="text">
+                   <string>Sequential Order</string>
                   </property>
                  </widget>
                 </item>
