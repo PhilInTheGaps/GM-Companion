@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTreeWidget>
+#include <QListWidget>
 
 #include "managers/dbmanager.h"
 #include "managers/settingsmanager.h"
@@ -41,6 +42,16 @@ private slots:
     void on_pushButton_newSoundList_clicked();
 
     void on_pushButton_newRadio_clicked();
+
+    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    void on_pushButton_saveElement_clicked();
+
+    void on_listWidget_musicList_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_listWidget_soundList_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:
     Ui::AudioEditor *ui;
