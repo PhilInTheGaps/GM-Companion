@@ -69,9 +69,11 @@ private:
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
 
+    QString currentProject;
+
     void getProjects();
 
-    void loadProject();
+    void loadProject(QString project);
 
     QStringList getCategories();
 
