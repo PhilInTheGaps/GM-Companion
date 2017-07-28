@@ -50,7 +50,12 @@ QString SettingsManager::getSetting(Setting setting){
         break;
     case Setting::audioPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("audio", QDir::homePath()+"/.gm-companion/audio").toString();
+        settingString = settings.value("audioPath", QDir::homePath()+"/.gm-companion/audio").toString();
+        settings.endGroup();
+        break;
+    case Setting::radioPath:
+        settings.beginGroup("Paths");
+        settingString = settings.value("radioPath", QDir::homePath()+"/.gm-companion/radio").toString();
         settings.endGroup();
         break;
     case Setting::checkForUpdatesOnStart:
@@ -140,6 +145,14 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("audioPath", path);
+            settings.endGroup();
+        }
+        break;
+    case Setting::radioPath:
+        path = setFolderLocation("Set Radio Playlists Folder");
+        if (path.length()>1){
+            settings.beginGroup("Paths");
+            settings.setValue("radioPath", path);
             settings.endGroup();
         }
         break;

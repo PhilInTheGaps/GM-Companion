@@ -53,6 +53,8 @@ private slots:
 
     void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
+    void on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
 private:
     Ui::AudioEditor *ui;
 

@@ -43,6 +43,9 @@ private slots:
     // Sound
     void playSound(QString soundList);
 
+    // Radio
+    void playRadio(QString radio);
+
     // Change volume
     void on_horizontalSlider_music_valueChanged(int value);
     void on_horizontalSlider_sound_valueChanged(int value);
@@ -69,6 +72,10 @@ private:
     QSignalMapper *signalMapperMusic;
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
+
+    // Radio
+    QSignalMapper *signalMapperRadio;
+    QMediaPlayer *radioPlayer;
 
     // Sound
     QSignalMapper *signalMapperSound;

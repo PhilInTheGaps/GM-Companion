@@ -25,6 +25,12 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     signalMapperMusic = new QSignalMapper;
     connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
 
+    // Radio
+    radioPlayer = new QMediaPlayer;
+
+    signalMapperRadio = new QSignalMapper;
+    connect(signalMapperRadio, SIGNAL(mapped(QString)), this, SLOT(playRadio(QString)));
+
     // Sound
     signalMapperSound = new QSignalMapper;
     connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
@@ -102,6 +108,10 @@ void AudioTool::getProjects()
 // Play Music
 void AudioTool::playMusic(QString musicList)
 {
+    qDebug() << "Playing music list: " + musicList + " ...";
+
+    radioPlayer->stop();
+
     QString category = ui->listWidget_categories->currentItem()->text();
     QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
@@ -134,6 +144,8 @@ void AudioTool::playMusic(QString musicList)
                 QString name = settings.value("name").toString();
                 QString path = settings.value("path").toString();
 
+                path = settingsManager->getSetting(musicPath)+path;
+
                 if (QFile(path).exists())
                 {
                     ui->comboBox_music->addItem(cleanText(name));
@@ -142,7 +154,7 @@ void AudioTool::playMusic(QString musicList)
                     listItem->setToolTip(path);
                     ui->listWidget_songs->addItem(listItem);
 
-                    musicPlaylist->addMedia(QUrl::fromLocalFile(settingsManager->getSetting(musicPath)+path));
+                    musicPlaylist->addMedia(QUrl::fromLocalFile(path));
                 }
             }
 
@@ -174,6 +186,8 @@ void AudioTool::playSound(QString soundList)
     {
         if (sPlayer->objectName() == soundList)
         {
+            qDebug() << "Stopping sound list: " + soundList + " ...";
+
             checked = true;
 
             sPlayer->stop();
@@ -186,6 +200,8 @@ void AudioTool::playSound(QString soundList)
 
     if (!checked)
     {
+        qDebug() << "Playing sound list: " + soundList + " ...";
+
         QString category = ui->listWidget_categories->currentItem()->text();
         QString scenario = ui->listWidget_scenarios->currentItem()->text();
 
@@ -254,6 +270,59 @@ void AudioTool::playSound(QString soundList)
         player->play();
     }
 
+}
+
+// Play Radio
+void AudioTool::playRadio(QString radio)
+{
+    qDebug() << "Playing radio: " + radio + " ...";
+
+    musicPlayer->stop();
+
+    ui->listWidget_songs->clear();
+    ui->comboBox_music->clear();
+
+    ui->label_element->setText(radio);
+
+    QString category = ui->listWidget_categories->currentItem()->text();
+    QString scenario = ui->listWidget_scenarios->currentItem()->text();
+
+    QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
+    int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
+
+    QString url;
+
+    for (int i = 0; i<radios; i++)
+    {
+        settings.setArrayIndex(i);
+
+        if (settings.value("name").toString() == radio)
+        {
+            url = settings.value("url").toString();
+        }
+    }
+
+    qDebug() << "URL: " +url;
+
+    settings.endArray();
+
+    if (url.contains(".m3u"))
+    {
+        QMediaPlaylist *radioPlaylist = new QMediaPlaylist;
+        radioPlayer->setPlaylist(radioPlaylist);
+
+        if (QFile(settingsManager->getSetting(radioPath)+url).exists())
+            radioPlaylist->load(QUrl::fromLocalFile(settingsManager->getSetting(radioPath)+url));
+        else
+            radioPlaylist->load(QUrl(url));
+    }
+    else
+    {
+        radioPlayer->setMedia(QUrl(url));
+    }
+
+    radioPlayer->setVolume(ui->horizontalSlider_music->value());
+    radioPlayer->play();
 }
 
 // Display the metadata of the currently playing song
@@ -424,8 +493,8 @@ void AudioTool::generateElementButtons(QString scenario)
         button->setToolTip(description);
         button->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
 
-//        connect(button, SIGNAL(clicked()), signalMapperSounds, SLOT(map()));
-//        signalMapperMusic->setMapping(button, name);
+        connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
+        signalMapperRadio->setMapping(button, name);
 
         radioLayout->addWidget(button);
     }
@@ -634,6 +703,7 @@ void AudioTool::on_pushButton_next_clicked()
 void AudioTool::on_horizontalSlider_music_valueChanged(int value)
 {
     musicPlayer->setVolume(value);
+    radioPlayer->setVolume(value);
 }
 
 void AudioTool::on_horizontalSlider_sound_valueChanged(int value)
