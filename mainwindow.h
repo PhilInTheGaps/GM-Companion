@@ -171,6 +171,8 @@ private slots:
 
     void on_actionSet_Audio_Projects_Folder_triggered();
 
+    void on_actionSet_Radio_Playlists_Folder_triggered();
+
 private:
     Ui::MainWindow *ui;
 

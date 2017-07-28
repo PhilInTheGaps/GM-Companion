@@ -20,7 +20,8 @@ enum Setting{
     language,
     version,
     notesPath,
-    audioPath
+    audioPath,
+    radioPath
 };
 
 class SettingsManager

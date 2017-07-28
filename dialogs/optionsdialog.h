@@ -66,6 +66,8 @@ private slots:
 
     void on_setAudioPath_clicked();
 
+    void on_setRadioPath_clicked();
+
 private:
     Ui::OptionsDialog *ui;
 

@@ -2192,6 +2192,7 @@ p, li { white-space: pre-wrap; }
      <addaction name="actionSet_Audio_Projects_Folder"/>
      <addaction name="actionSet_Music_Folder"/>
      <addaction name="actionSet_Sound_Folder"/>
+     <addaction name="actionSet_Radio_Playlists_Folder"/>
      <addaction name="actionSet_Maps_Folder"/>
      <addaction name="actionSet_Resources_Folder"/>
      <addaction name="actionSet_Characters_Folder"/>
@@ -2444,6 +2445,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionSet_Audio_Projects_Folder">
    <property name="text">
     <string>Audio Projects</string>
+   </property>
+  </action>
+  <action name="actionSet_Radio_Playlists_Folder">
+   <property name="text">
+    <string>Radio Playlists</string>
    </property>
   </action>
  </widget>

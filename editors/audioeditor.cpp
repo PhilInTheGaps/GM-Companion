@@ -75,6 +75,7 @@ void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFold
         QString path = baseFolder+"/"+file;
         path = path.replace(settingsManager->getSetting(musicPath), "");
         path = path.replace(settingsManager->getSetting(soundPath), "");
+        path = path.replace(settingsManager->getSetting(radioPath), "");
         item->setWhatsThis(0, path);
 
         baseItem->addChild(item);
@@ -107,6 +108,22 @@ void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString 
             // Add files
             addFilesToTreeItem(item, baseFolder+"/"+folder);
         }
+    }
+
+    for (QString file : getFiles(baseFolder))
+    {
+        QTreeWidgetItem *item = new QTreeWidgetItem(1);
+        item->setText(0, file);
+        item->setToolTip(0, file);
+        item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
+
+        QString path = baseFolder+"/"+file;
+        path = path.replace(settingsManager->getSetting(musicPath), "");
+        path = path.replace(settingsManager->getSetting(soundPath), "");
+        path = path.replace(settingsManager->getSetting(radioPath), "");
+        item->setWhatsThis(0, path);
+
+        treeWidget->addTopLevelItem(item);
     }
 }
 
@@ -187,6 +204,7 @@ void AudioEditor::loadProject()
     {
         loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
         loadFolderContentsToTreeView(ui->treeWidget_sound, settingsManager->getSetting(soundPath));
+        loadFolderContentsToTreeView(ui->treeWidget_radio, settingsManager->getSetting(radioPath));
         filesAreLoaded = true;
     }
 
@@ -690,6 +708,8 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 }
             }
             settings.endArray();
+
+            ui->tabWidget->setCurrentIndex(0);
             break;
 
         // Sound List
@@ -743,6 +763,8 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 }
             }
             settings.endArray();
+
+            ui->tabWidget->setCurrentIndex(1);
             break;
 
         // Radios
@@ -777,6 +799,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 }
             }
 
+            ui->tabWidget->setCurrentIndex(2);
             break;
 
         default:
@@ -967,10 +990,10 @@ void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, i
 {
     if (item->type() == 1)
     {
-        qDebug() << "Adding song: " + item->text(0);
+        qDebug() << "Adding song: " + item->text(column);
 
-        QListWidgetItem *listItem = new QListWidgetItem(item->text(0));
-        listItem->setWhatsThis(item->whatsThis(0));
+        QListWidgetItem *listItem = new QListWidgetItem(item->text(column));
+        listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_musicList->addItem(listItem);
     }
@@ -981,11 +1004,17 @@ void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, i
 {
     if (item->type() == 1)
     {
-        qDebug() << "Adding sound: " + item->text(0);
+        qDebug() << "Adding sound: " + item->text(column);
 
-        QListWidgetItem *listItem = new QListWidgetItem(item->text(0));
-        listItem->setWhatsThis(item->whatsThis(0));
+        QListWidgetItem *listItem = new QListWidgetItem(item->text(column));
+        listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_soundList->addItem(listItem);
     }
+}
+
+// Set a radio playlist
+void AudioEditor::on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    ui->lineEdit_radioURL->setText(item->whatsThis(column));
 }

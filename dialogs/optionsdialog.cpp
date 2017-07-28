@@ -210,13 +210,21 @@ void OptionsDialog::on_setAudioPath_clicked()
     settings->setSetting(audioPath);
 }
 
+void OptionsDialog::on_setRadioPath_clicked()
+{
+    settings->setSetting(radioPath);
+}
+
+
 void OptionsDialog::updatePaths(){
-    ui->musicPath->setText(settings->getSetting(Setting::musicPath));
-    ui->soundPath->setText(settings->getSetting(Setting::soundPath));
-    ui->mapsPath->setText(settings->getSetting(Setting::mapsPath));
-    ui->resourcesPath->setText(settings->getSetting(Setting::resourcesPath));
-    ui->charactersPath->setText(settings->getSetting(Setting::charactersPath));
-    ui->notesPath->setText(settings->getSetting(Setting::notesPath));
+    ui->musicPath->setText(settings->getSetting(musicPath));
+    ui->soundPath->setText(settings->getSetting(soundPath));
+    ui->mapsPath->setText(settings->getSetting(mapsPath));
+    ui->resourcesPath->setText(settings->getSetting(resourcesPath));
+    ui->charactersPath->setText(settings->getSetting(charactersPath));
+    ui->notesPath->setText(settings->getSetting(notesPath));
+    ui->audioPath->setText(settings->getSetting(audioPath));
+    ui->radioPath->setText(settings->getSetting(radioPath));
 }
 
 
