@@ -520,6 +520,8 @@ void AudioTool::playMusic(QString arg)
 
             int songCount = settings.beginReadArray("songs");
 
+            qDebug() << "This element contains the following songs:";
+
             for (int j = 0; j<songCount; j++)
             {
                 settings.setArrayIndex(j);
@@ -528,6 +530,9 @@ void AudioTool::playMusic(QString arg)
                 QString path = settings.value("path").toString();
 
                 path = settingsManager->getSetting(musicPath)+path;
+
+                qDebug() << "   " + name;
+                qDebug() << "   " + path;
 
                 if (QFile(path).exists())
                 {

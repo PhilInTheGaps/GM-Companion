@@ -325,7 +325,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidget_editElement">
           <property name="currentIndex">
-           <number>5</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_empty">
            <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -742,6 +742,13 @@
            </column>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_addAllFilesFromMusicFolder">
+           <property name="text">
+            <string>Add all files from folder</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="tab_sound">
@@ -766,6 +773,13 @@
              <string notr="true">1</string>
             </property>
            </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_addAllFilesFromSoundFolder">
+           <property name="text">
+            <string>Add all files from folder</string>
+           </property>
           </widget>
          </item>
         </layout>
