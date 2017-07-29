@@ -26,21 +26,14 @@ SOURCES += main.cpp\
     flowlayout.cpp \
     characters.cpp \
     functions.cpp \
-    music.cpp \
-    sound.cpp \
     names.cpp \
-    radio.cpp \
     maps.cpp \
     chareditor.cpp \
     characterpage.cpp \
-    deletecharacterdialog.cpp \
     network.cpp \
-    windows.cpp \
     notes.cpp \
     sifrp.cpp \
     converter.cpp \
-    whatisnewwindow.cpp \
-    tools/testtool.cpp \
     tools/audiotool.cpp \
     editors/audioeditor.cpp \
     managers/dbmanager.cpp \
@@ -49,7 +42,9 @@ SOURCES += main.cpp\
     managers/dicemanager.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
-    tools/dicetool.cpp
+    tools/dicetool.cpp \
+    dialogs/deletecharacterdialog.cpp \
+    dialogs/whatisnewwindow.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -58,10 +53,7 @@ HEADERS  += mainwindow.h \
     chareditor.h \
     characterpage.h \
     version.h \
-    deletecharacterdialog.h \
     sifrp.h \
-    whatisnewwindow.h \
-    tools/testtool.h \
     tools/audiotool.h \
     editors/audioeditor.h \
     managers/dbmanager.h \
@@ -70,21 +62,21 @@ HEADERS  += mainwindow.h \
     managers/dicemanager.h \
     managers/filemanager.h \
     managers/settingsmanager.h \
-    tools/dicetool.h
+    tools/dicetool.h \
+    dialogs/deletecharacterdialog.h \
+    dialogs/whatisnewwindow.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
     characterpage.ui \
-    deletecharacterdialog.ui \
     sifrp.ui \
-    whatisnewwindow.ui \
-    preloader.ui \
-    tools/testtool.ui \
     tools/audiotool.ui \
     editors/audioeditor.ui \
     dialogs/notesdialog.ui \
     dialogs/optionsdialog.ui \
-    tools/dicetool.ui
+    tools/dicetool.ui \
+    dialogs/deletecharacterdialog.ui \
+    dialogs/whatisnewwindow.ui
 
 DISTFILES += \
 
