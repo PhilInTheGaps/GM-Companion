@@ -49,6 +49,7 @@ void AudioEditor::addSubFoldersToTreeItem(QTreeWidgetItem *baseItem, QString bas
             QTreeWidgetItem *item = new QTreeWidgetItem(0);
             item->setText(0, folder);
             item->setToolTip(0, folder);
+            item->setWhatsThis(0, baseFolder+"/"+folder);
             item->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
 
             baseItem->addChild(item);
@@ -993,6 +994,30 @@ void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, i
     }
 }
 
+// Add all music files from the selected folder
+void AudioEditor::on_pushButton_addAllFilesFromMusicFolder_clicked()
+{
+    QTreeWidgetItem *item = ui->treeWidget_music->currentItem();
+
+    if (item->type() == 0)
+    {
+        qDebug() << "Adding all music files from folder: " + item->text(0);
+
+        QString path = item->whatsThis(0);
+
+        for (QString file : getFiles(path))
+        {
+            QString relativePath = path.replace(settingsManager->getSetting(musicPath), "");
+            relativePath += "/"+file;
+
+            QListWidgetItem *listItem = new QListWidgetItem(file);
+            listItem->setWhatsThis(relativePath);
+
+            ui->listWidget_musicList->addItem(listItem);
+        }
+    }
+}
+
 // Add a sound to the sound list
 void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
@@ -1004,6 +1029,29 @@ void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, i
         listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_soundList->addItem(listItem);
+    }
+}
+
+void AudioEditor::on_pushButton_addAllFilesFromSoundFolder_clicked()
+{
+    QTreeWidgetItem *item = ui->treeWidget_sound->currentItem();
+
+    if (item->type() == 0)
+    {
+        qDebug() << "Adding all sound files from folder: " + item->text(0);
+
+        QString path = item->whatsThis(0);
+
+        for (QString file : getFiles(path))
+        {
+            QString relativePath = path.replace(settingsManager->getSetting(soundPath), "");
+            relativePath += "/"+file;
+
+            QListWidgetItem *listItem = new QListWidgetItem(file);
+            listItem->setWhatsThis(relativePath);
+
+            ui->listWidget_soundList->addItem(listItem);
+        }
     }
 }
 
