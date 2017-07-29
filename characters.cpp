@@ -5,7 +5,7 @@
 #include "characterpage.h"
 #include "managers/settingsmanager.h"
 #include "chareditor.h"
-#include "deletecharacterdialog.h"
+#include "dialogs/deletecharacterdialog.h"
 
 #include <QDir>
 #include <QListWidget>

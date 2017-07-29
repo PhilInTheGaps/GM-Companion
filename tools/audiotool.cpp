@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QtWinExtras>
 
 AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
 {
@@ -52,6 +53,36 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
             loadProject(ui->comboBox_projects->itemText(i));
         }
     }
+
+    #ifdef _WIN32
+    // Creates thumbnail toolbar
+    qDebug() << "Adding thumbnail toolbar ...";
+
+    QWinThumbnailToolBar* thumbnailToolBar = new QWinThumbnailToolBar(this);
+    thumbnailToolBar->setWindow(parent->windowHandle());
+
+    QWinThumbnailToolButton *playToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    playToolButton->setEnabled(true);
+    playToolButton->setToolTip(tr("Music: Play"));
+    playToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    connect(playToolButton, SIGNAL(clicked()), this, SLOT(on_pushButton_play_clicked()));
+
+    QWinThumbnailToolButton *pauseToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    pauseToolButton->setEnabled(true);
+    pauseToolButton->setToolTip(tr("Music: Pause"));
+    pauseToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    connect(pauseToolButton, SIGNAL(clicked()), this, SLOT(on_pushButton_pause_clicked()));
+
+    QWinThumbnailToolButton *nextToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
+    nextToolButton->setEnabled(true);
+    nextToolButton->setToolTip(tr("Music: Next"));
+    nextToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    connect(nextToolButton, SIGNAL(clicked()), this, SLOT(on_pushButton_next_clicked()));
+
+    thumbnailToolBar->addButton(playToolButton);
+    thumbnailToolBar->addButton(pauseToolButton);
+    thumbnailToolBar->addButton(nextToolButton);
+    #endif
 }
 
 AudioTool::~AudioTool()

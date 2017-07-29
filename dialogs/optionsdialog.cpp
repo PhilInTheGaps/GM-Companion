@@ -62,9 +62,6 @@ OptionsDialog::~OptionsDialog()
 
 // Executed when windows closes
 void OptionsDialog::onClose(){
-    if (pathsChanged)
-        w->regenerateButtons();
-
     writeAddonSettings();
 }
 
@@ -110,30 +107,6 @@ void OptionsDialog::writeAddonSettings(){
     w->getNotes();
 }
 
-// Generates Music and Sound Buttons
-void MainWindow::regenerateButtons(){
-    qDebug() << tr("Paths changed, generating buttons...");
-
-    QLayoutItem *child;
-    while ((child = ui->tabSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
-
-    while ((child = ui->tabMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
-}
 
 void OptionsDialog::on_checkForUpdatesOnProgramStart_toggled(bool checked)
 {
