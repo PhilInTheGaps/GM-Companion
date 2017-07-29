@@ -45,43 +45,19 @@ public:
     ~MainWindow();
     void addToPlaylist(QUrl url, bool music); // Add audio file to playlist. Bool true if music, false if sound
 
+    // Version
     void setVersion(QString); // Set Version Number (String)
     QString getVersion(); // Get Version Number (String), e.g. 1.3.1.0
     int getVersionNumber(); // Get Version Number (int), e.g. 1310
     void updateSettingsVersion(); // Sets version in settings to current version
 
-    void regenerateButtons();
-
+    // Notes
     void getNotes();
 
-    #ifdef Q_OS_WIN
-    void createThumbnailToolbar();
-    #endif
+    // Tools
+    void addTools();
 
 private slots:
-    // Music
-    void playMusic(QString);
-    void updateMetaData();
-    void updateProgressBar();
-    void on_musicPauseButton_clicked();
-    void on_musicPlayButton_clicked();
-    void on_musicReplayButton_clicked();
-    void on_musicNextButton_clicked();
-    void on_musicRandomButton_clicked();
-    void on_tableDoubleClicked(int);
-    void on_musicVolumeSlider_valueChanged(int value);
-    void on_musicProgressSlider_sliderReleased();
-    void on_musicTitleComboBox_currentIndexChanged(int index);
-
-    // Sound
-    void playSound(QString);
-    void on_soundPlayButton_clicked();
-    void on_soundPauseButton_clicked();
-    void on_soundReplayButton_clicked();
-    void on_soundNextButton_clicked();
-    void on_soundRandomButton_clicked();
-    void on_soundVolumeSlider_valueChanged(int value);
-
     // Maps
     void setMap(QString mapPath);
     void on_mapsZoomInButton_clicked();
@@ -98,6 +74,8 @@ private slots:
     void on_actionSet_Characters_Folder_triggered(); // Characters
     void on_actionCheck_for_Updates_triggered(); // Check Updates
     void on_actionSet_Notes_Folder_triggered(); // Notes
+    void on_actionSet_Audio_Projects_Folder_triggered();
+    void on_actionSet_Radio_Playlists_Folder_triggered();
 
     // Name Generator
     void on_generateNames(QString);
@@ -130,12 +108,6 @@ private slots:
     void on_versionNetworkAccessManagerFinished(QNetworkReply*); // Get Newest Version Number
     void on_blogNetworkAccessManagerFinished(QNetworkReply*); // Get Blog Entries
 
-    // Radío
-    void on_radioMetaDataChanged();
-    void displayRadios();
-    void on_addRadioButton_clicked();
-    void on_radioPlayButton_clicked();
-
     // Converter
     void on_addUnitButton_clicked();
     void on_converterTypeComboBox_currentIndexChanged(int index);
@@ -157,21 +129,14 @@ private slots:
 
     // Tools
     void closeTab(int index);
-    void on_actionToggle_Sound_Tool_toggled(bool arg1);
-    void on_actionToggle_Radio_Tool_toggled(bool arg1);
     void on_actionToggle_Maps_Tool_toggled(bool arg1);
     void on_actionToggle_Dice_Tool_toggled(bool arg1);
     void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
     void on_actionToggle_Characters_Tool_toggled(bool arg1);
     void on_actionToggle_Notes_Tool_toggled(bool arg1);
     void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
-    void on_addTestToolButton_clicked();
 
-    void on_actionAdd_Audio_Tool_triggered();
-
-    void on_actionSet_Audio_Projects_Folder_triggered();
-
-    void on_actionSet_Radio_Playlists_Folder_triggered();
+    void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
 
 private:
     Ui::MainWindow *ui;
@@ -181,24 +146,6 @@ private:
 
     int versionNumber;
     QString versionString;
-
-    // Music
-    QTabWidget *tabWidgetMusic;
-    QHBoxLayout *tabMusicLayout;
-    QSignalMapper *signalMapperMusic;
-    QMediaPlayer *musicPlayer;
-    QMediaPlaylist *musicPlaylist;
-    QTabWidget* musicTabWidget;
-    QTableWidget *musicTable;
-    void generateMusicButtons();
-    bool initialMusicPlay;
-
-    // Sound
-    QTabWidget *tabWidgetSound;
-    QSignalMapper *signalMapperSound;
-    QMediaPlayer *soundPlayer;
-    QMediaPlaylist *soundPlaylist;
-    void generateSoundButtons();
 
     // Maps
     QSignalMapper *signalMapperMaps;
@@ -233,12 +180,6 @@ private:
     QNetworkAccessManager *versionNetworkManager;
     QNetworkAccessManager *blogNetworkManager;
 
-    //Radio
-    QMediaPlayer *radioPlayer;
-    bool radioActive;
-    int radioID;
-    QStringList radioURLs;
-
     // Characters
     void updateCharacters();
     QTimer* updateCharactersTimer;
@@ -256,13 +197,6 @@ private:
     void convertVolume(int index1, int index2, double units);
     void convertWeight(int index1, int index2, double units);
     void convertMoney(int index1, int index2, double units);
-
-    // ThumbnailToolbar (Windows Only)
-    #ifdef Q_OS_WIN
-    QWinThumbnailToolButton* playToolButton;
-    QWinThumbnailToolButton* pauseToolButton;
-    QWinThumbnailToolButton* nextToolButton;
-    #endif
 };
 
 #endif // MAINWINDOW_H
