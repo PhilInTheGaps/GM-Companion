@@ -44,6 +44,10 @@ private slots:
     void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
+    void on_pushButton_addAllFilesFromMusicFolder_clicked();
+
+    void on_pushButton_addAllFilesFromSoundFolder_clicked();
+
 private:
     Ui::AudioEditor *ui;
 
