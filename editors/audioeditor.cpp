@@ -68,18 +68,21 @@ void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFold
 {
     for (QString file : getFiles(baseFolder))
     {
-        QTreeWidgetItem *item = new QTreeWidgetItem(1);
-        item->setText(0, file);
-        item->setToolTip(0, file);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
+        if (file.contains(".mp3") || file.contains(".wav") || file.contains(".ogg") || file.contains(".flac") || file.contains(".m3u"))
+        {
+            QTreeWidgetItem *item = new QTreeWidgetItem(1);
+            item->setText(0, file);
+            item->setToolTip(0, file);
+            item->setIcon(0, style()->standardIcon(QStyle::SP_FileIcon));
 
-        QString path = baseFolder+"/"+file;
-        path = path.replace(settingsManager->getSetting(musicPath), "");
-        path = path.replace(settingsManager->getSetting(soundPath), "");
-        path = path.replace(settingsManager->getSetting(radioPath), "");
-        item->setWhatsThis(0, path);
+            QString path = baseFolder+"/"+file;
+            path = path.replace(settingsManager->getSetting(musicPath), "");
+            path = path.replace(settingsManager->getSetting(soundPath), "");
+            path = path.replace(settingsManager->getSetting(radioPath), "");
+            item->setWhatsThis(0, path);
 
-        baseItem->addChild(item);
+            baseItem->addChild(item);
+        }
     }
 }
 
@@ -471,12 +474,12 @@ void AudioEditor::on_pushButton_newScenario_clicked()
     {
         QTreeWidgetItem *item = ui->treeWidget_categories->currentItem();
 
-        while (item->type() != 0)
-        {
-            item = ui->treeWidget_categories->itemAbove(item);
-        }
+//        while (item->type() != 0)
+//        {
+//            item = ui->treeWidget_categories->itemAbove(item);
+//        }
 
-        QString category = item->text(0);
+        QString category = currentCategory; //item->text(0);
 
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
 
@@ -1007,13 +1010,16 @@ void AudioEditor::on_pushButton_addAllFilesFromMusicFolder_clicked()
 
         for (QString file : getFiles(path))
         {
-            QString relativePath = path.replace(settingsManager->getSetting(musicPath), "");
-            relativePath += "/"+file;
+            if (file.contains(".mp3") || file.contains(".wav") || file.contains(".ogg") || file.contains(".flac"))
+            {
+                QString relativePath = path.replace(settingsManager->getSetting(musicPath), "");
+                relativePath += "/"+file;
 
-            QListWidgetItem *listItem = new QListWidgetItem(file);
-            listItem->setWhatsThis(relativePath);
+                QListWidgetItem *listItem = new QListWidgetItem(file);
+                listItem->setWhatsThis(relativePath);
 
-            ui->listWidget_musicList->addItem(listItem);
+                ui->listWidget_musicList->addItem(listItem);
+            }
         }
     }
 }
@@ -1044,13 +1050,16 @@ void AudioEditor::on_pushButton_addAllFilesFromSoundFolder_clicked()
 
         for (QString file : getFiles(path))
         {
-            QString relativePath = path.replace(settingsManager->getSetting(soundPath), "");
-            relativePath += "/"+file;
+            if (file.contains(".mp3") || file.contains(".wav") || file.contains(".ogg") || file.contains(".flac"))
+            {
+                QString relativePath = path.replace(settingsManager->getSetting(soundPath), "");
+                relativePath += "/"+file;
 
-            QListWidgetItem *listItem = new QListWidgetItem(file);
-            listItem->setWhatsThis(relativePath);
+                QListWidgetItem *listItem = new QListWidgetItem(file);
+                listItem->setWhatsThis(relativePath);
 
-            ui->listWidget_soundList->addItem(listItem);
+                ui->listWidget_soundList->addItem(listItem);
+            }
         }
     }
 }
