@@ -58,6 +58,8 @@ private slots:
     void on_pushButton_loadProject_clicked();
     void on_comboBox_projects_currentTextChanged(const QString &arg1);
 
+    void on_pushButton_updateProjects_clicked();
+
 private:
     Ui::AudioTool *ui;
 

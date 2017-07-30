@@ -914,3 +914,9 @@ void AudioTool::on_listWidget_songs_currentRowChanged(int currentRow)
         ui->comboBox_music->setCurrentIndex(currentRow);
     }
 }
+
+// Update Projects List
+void AudioTool::on_pushButton_updateProjects_clicked()
+{
+    getProjects();
+}
