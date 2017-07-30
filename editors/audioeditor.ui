@@ -325,7 +325,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidget_editElement">
           <property name="currentIndex">
-           <number>0</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="page_empty">
            <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -487,6 +487,9 @@
                  <widget class="QCheckBox" name="checkBox_musicRandom">
                   <property name="text">
                    <string>Random Order</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -743,11 +746,28 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_addAllFilesFromMusicFolder">
-           <property name="text">
-            <string>Add all files from folder</string>
-           </property>
-          </widget>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton_addAllFilesFromMusicFolder">
+             <property name="toolTip">
+              <string>Add all songs from the folder to the current music list</string>
+             </property>
+             <property name="text">
+              <string>Add all files from folder</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButton_convertFolderToMusicList">
+             <property name="toolTip">
+              <string>Creates a new music list with all songs from the folder</string>
+             </property>
+             <property name="text">
+              <string>Convert folder to list</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
