@@ -48,6 +48,8 @@ private slots:
 
     void on_pushButton_addAllFilesFromSoundFolder_clicked();
 
+    void on_pushButton_convertFolderToMusicList_clicked();
+
 private:
     Ui::AudioEditor *ui;
 

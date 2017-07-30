@@ -286,6 +286,8 @@ void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
         loadSoundLists(scenItem, catItem->text(0));
         loadRadios(scenItem, catItem->text(0));
 
+        // Expand Item
+        scenItem->setExpanded(true);
     }
 
     settings.endArray();
@@ -472,14 +474,7 @@ void AudioEditor::on_pushButton_newScenario_clicked()
 {
     if (isProjectOpen && ui->lineEdit_scenario->text() != NULL)
     {
-        QTreeWidgetItem *item = ui->treeWidget_categories->currentItem();
-
-//        while (item->type() != 0)
-//        {
-//            item = ui->treeWidget_categories->itemAbove(item);
-//        }
-
-        QString category = currentCategory; //item->text(0);
+        QString category = currentCategory;
 
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
 
@@ -685,7 +680,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                     description = settings.value("description", "").toString();
 
                     ui->lineEdit_musicListDescription->setText(description);
-                    ui->checkBox_musicRandom->setChecked(settings.value("random", false).toBool());
+                    ui->checkBox_musicRandom->setChecked(settings.value("random", true).toBool());
 
                     // Songs
                     ui->listWidget_musicList->clear();
@@ -1068,4 +1063,74 @@ void AudioEditor::on_pushButton_addAllFilesFromSoundFolder_clicked()
 void AudioEditor::on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     ui->lineEdit_radioURL->setText(item->whatsThis(column));
+}
+
+// Create a new music list with all the songs from the selected folder
+void AudioEditor::on_pushButton_convertFolderToMusicList_clicked()
+{
+    QTreeWidgetItem *item = ui->treeWidget_music->currentItem();
+
+    if (item->type() == 0)
+    {
+        QString folderName = item->text(0);
+        QString path = item->whatsThis(0);
+
+        qDebug() << "Creating music list from folder: " + folderName;
+
+        // Set the name of the music list
+        ui->lineEdit_musicList->setText(folderName);
+
+        // Create new list
+        on_pushButton_newMusicList_clicked();
+
+        // Select the new music list
+        for( int i = 0; i < ui->treeWidget_categories->topLevelItemCount(); i++)
+        {
+            // Get the correct category item
+            QTreeWidgetItem *catItem = ui->treeWidget_categories->topLevelItem(i);
+
+            if (catItem->text(0) == currentCategory)
+             {
+                for (int j = 0; j<catItem->childCount(); j++)
+                {
+                    // Get the scenario item
+                    QTreeWidgetItem *scenItem = catItem->child(j);
+
+                    if (scenItem->text(0) == currentScenario)
+                    {
+                        for (int m = 0; m<scenItem->childCount(); m++)
+                        {
+                            // Get the music list item
+                            QTreeWidgetItem *listItem = scenItem->child(m);
+
+                            if (listItem->text(0) == folderName)
+                            {
+                                // Expand the scenario item
+                                scenItem->setExpanded(true);
+
+                                // Set list Item as curren item
+                                ui->treeWidget_categories->setCurrentItem(listItem);
+                            }
+                        }
+                    }
+               }
+           }
+        }
+
+        for (QString file : getFiles(path))
+        {
+            if (file.contains(".mp3") || file.contains(".wav") || file.contains(".ogg") || file.contains(".flac"))
+            {
+                QString relativePath = path.replace(settingsManager->getSetting(musicPath), "");
+                relativePath += "/"+file;
+
+                QListWidgetItem *listItem = new QListWidgetItem(file);
+                listItem->setWhatsThis(relativePath);
+
+                ui->listWidget_musicList->addItem(listItem);
+            }
+        }
+
+        on_pushButton_saveElement_clicked();
+    }
 }
