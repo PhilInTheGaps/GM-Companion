@@ -8,7 +8,11 @@
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
+
+// Only Windows relevant
+#ifdef _WIN32
 #include <QtWinExtras>
+#endif
 
 AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
 {
@@ -54,6 +58,7 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
         }
     }
 
+    // Only Windows relevant
     #ifdef _WIN32
     // Creates thumbnail toolbar
     qDebug() << "Adding thumbnail toolbar ...";
