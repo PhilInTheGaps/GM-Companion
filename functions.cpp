@@ -47,7 +47,7 @@ QString rot13(QString s){
     qDebug() << "Encrypting...";
 
     QString lowCaps = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
-    QString upperCaps = "ABCDEFGHIJKLMNOPQRSTUVPXYZABCDEFGHIJKLMNOPQRSTUVPXYZ";
+    QString upperCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     QString encrypted = "";
 
