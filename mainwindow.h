@@ -20,8 +20,8 @@
 #include <QFileSystemWatcher>
 
 #include "managers/settingsmanager.h"
-#include "managers/dicemanager.h"
 #include "functions.h"
+#include "flowlayout.h"
 
 // Includes QtWinExtras if system is Windows
 #ifdef Q_OS_WIN
@@ -130,13 +130,13 @@ private slots:
     // Tools
     void closeTab(int index);
     void on_actionToggle_Maps_Tool_toggled(bool arg1);
-    void on_actionToggle_Dice_Tool_toggled(bool arg1);
     void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
     void on_actionToggle_Characters_Tool_toggled(bool arg1);
     void on_actionToggle_Notes_Tool_toggled(bool arg1);
     void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
 
     void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
+    void on_actionToggle_Dice_Tool_triggered(); // Add DiceTool
 
 private:
     Ui::MainWindow *ui;
@@ -159,9 +159,6 @@ private:
     void writeSettings(QString content, QString indicator, QString newSetting);
     void setFolderLocations(QString indicator);
     QString readSettings();
-
-    // Dice
-    DiceManager* diceManager;
 
     // Name Generator
     QSignalMapper *signalMapperNames;
