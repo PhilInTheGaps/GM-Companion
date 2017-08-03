@@ -39,7 +39,6 @@ SOURCES += main.cpp\
     managers/dbmanager.cpp \
     dialogs/notesdialog.cpp \
     dialogs/optionsdialog.cpp \
-    managers/dicemanager.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
     tools/dicetool.cpp \
@@ -59,7 +58,6 @@ HEADERS  += mainwindow.h \
     managers/dbmanager.h \
     dialogs/notesdialog.h \
     dialogs/optionsdialog.h \
-    managers/dicemanager.h \
     managers/filemanager.h \
     managers/settingsmanager.h \
     tools/dicetool.h \
