@@ -6,6 +6,7 @@
 #include "sifrp.h"
 
 #include "tools/audiotool.h"
+#include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
 
 #include <QStringList>
@@ -39,7 +40,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
     // Initialize Signal Mappers
-    signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
 
     // Notes
@@ -71,10 +71,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
-
-    // Initialize Maps Viewer
-    generateMaps();
-    connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
     //Initialize Character View
     QStringList characterList = getCharacterList();
@@ -122,6 +118,10 @@ void MainWindow::addTools()
     // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->insertTab(1, audioTool, "Audio Tool");
+
+    // MapTool
+    MapViewerTool *mapViewerTool = new MapViewerTool;
+    ui->tabWidget->insertTab(2, mapViewerTool, "Map Tool");
 
     // DiceTool
     DiceTool *diceTool = new DiceTool;
@@ -182,12 +182,6 @@ void MainWindow::on_actionSet_Sound_Folder_triggered(){
 // Set Maps Path
 void MainWindow::on_actionSet_Maps_Folder_triggered(){
     settingsManager->setSetting(Setting::mapsPath, true);
-    QLayoutItem *child;
-    while ((child = ui->mapsVBox->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    generateMaps();
 }
 
 // Set Characters Path
@@ -232,11 +226,11 @@ void MainWindow::closeTab(int index){
     ui->tabWidget->removeTab(index);
 }
 
-void MainWindow::on_actionToggle_Maps_Tool_toggled(bool arg1)
+void MainWindow::on_actionToggle_Maps_Tool_triggered()
 {
-    if (arg1){
-        qDebug() << "Adding maps tool...";
-    }
+    qDebug() << "Adding Map Viewer Tool...";
+    MapViewerTool *mapViewerTool = new MapViewerTool;
+    ui->tabWidget->addTab(mapViewerTool, "Map Tool");
 }
 
 void MainWindow::on_actionToggle_Dice_Tool_triggered()

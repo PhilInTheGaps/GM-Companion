@@ -27,7 +27,6 @@ SOURCES += main.cpp\
     characters.cpp \
     functions.cpp \
     names.cpp \
-    maps.cpp \
     chareditor.cpp \
     characterpage.cpp \
     network.cpp \
@@ -43,7 +42,8 @@ SOURCES += main.cpp\
     managers/settingsmanager.cpp \
     tools/dicetool.cpp \
     dialogs/deletecharacterdialog.cpp \
-    dialogs/whatisnewwindow.cpp
+    dialogs/whatisnewwindow.cpp \
+    tools/mapviewertool.cpp
 
 HEADERS  += mainwindow.h \
     flowlayout.h \
@@ -62,7 +62,8 @@ HEADERS  += mainwindow.h \
     managers/settingsmanager.h \
     tools/dicetool.h \
     dialogs/deletecharacterdialog.h \
-    dialogs/whatisnewwindow.h
+    dialogs/whatisnewwindow.h \
+    tools/mapviewertool.h
 
 FORMS    += mainwindow.ui \
     chareditor.ui \
@@ -74,7 +75,8 @@ FORMS    += mainwindow.ui \
     dialogs/optionsdialog.ui \
     tools/dicetool.ui \
     dialogs/deletecharacterdialog.ui \
-    dialogs/whatisnewwindow.ui
+    dialogs/whatisnewwindow.ui \
+    tools/mapviewertool.ui
 
 DISTFILES += \
 
