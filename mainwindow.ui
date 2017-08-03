@@ -55,7 +55,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -368,12 +368,6 @@ p, li { white-space: pre-wrap; }
          <layout class="QVBoxLayout" name="mapsVBox"/>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tabDice">
-       <attribute name="title">
-        <string>Dice Tool</string>
-       </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_8"/>
       </widget>
       <widget class="QWidget" name="tabNames">
        <attribute name="title">
