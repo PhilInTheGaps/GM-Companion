@@ -58,13 +58,6 @@ public:
     void addTools();
 
 private slots:
-    // Maps
-    void setMap(QString mapPath);
-    void on_mapsZoomInButton_clicked();
-    void on_mapsZoomOutButton_clicked();
-    void on_mapsFitToViewButton_clicked();
-    void on_mapsResetSizeButton_clicked();
-
     // Options
     void on_actionOptions_triggered(); // OptionsDialog
     void on_actionSet_Music_Folder_triggered(); // Music
@@ -129,13 +122,13 @@ private slots:
 
     // Tools
     void closeTab(int index);
-    void on_actionToggle_Maps_Tool_toggled(bool arg1);
     void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
     void on_actionToggle_Characters_Tool_toggled(bool arg1);
     void on_actionToggle_Notes_Tool_toggled(bool arg1);
     void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
 
     void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
+    void on_actionToggle_Maps_Tool_triggered(); // Add MapViewerTool
     void on_actionToggle_Dice_Tool_triggered(); // Add DiceTool
 
 private:
@@ -146,13 +139,6 @@ private:
 
     int versionNumber;
     QString versionString;
-
-    // Maps
-    QSignalMapper *signalMapperMaps;
-    QScrollArea *mapsScrollArea;
-    QLabel *mapsImageLabel;
-    double mapsZoomFactor = 1.0;
-    void generateMaps();
 
     // Settings
     SettingsManager* settingsManager;
