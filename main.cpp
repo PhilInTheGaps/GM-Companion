@@ -7,10 +7,16 @@
 #include <QDir>
 #include <QTranslator>
 #include <QDebug>
+#include <QSplashScreen>
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    // Show splash screen
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap(":/resources/splash.jpg"));
+    splash->show();
 
     // Translator
     qDebug() << "Initializing translations ...";
@@ -84,6 +90,8 @@ int main(int argc, char *argv[])
 
         w.updateSettingsVersion();
     }
+
+    splash->close();
 
     return app.exec();
 }
