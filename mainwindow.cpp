@@ -6,6 +6,7 @@
 #include "sifrp.h"
 
 #include "tools/audiotool.h"
+#include "tools/dicetool.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -18,11 +19,6 @@
 #include <QPlainTextEdit>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    // Show splash screen
-    QSplashScreen *splash = new QSplashScreen;
-    splash->setPixmap(QPixmap(":/resources/splash.jpg"));
-    splash->show();
-
     qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
@@ -45,10 +41,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Initialize Signal Mappers
     signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
-
-    // Generates the dice page
-    diceManager = new DiceManager;
-    ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
 
     // Notes
     getNotes();
@@ -115,8 +107,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
-    splash->close();
-
     // Some functions behave differently when the program is just starting
     programStart = false;
 }
@@ -129,9 +119,13 @@ MainWindow::~MainWindow()
 // Add Tools
 void MainWindow::addTools()
 {
-    // Adding Tools
+    // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->insertTab(1, audioTool, "Audio Tool");
+
+    // DiceTool
+    DiceTool *diceTool = new DiceTool;
+    ui->tabWidget->insertTab(3, diceTool, "Dice Tool");
 }
 
 // Open Wiki Page in Web Browser
@@ -245,14 +239,11 @@ void MainWindow::on_actionToggle_Maps_Tool_toggled(bool arg1)
     }
 }
 
-void MainWindow::on_actionToggle_Dice_Tool_toggled(bool arg1)
+void MainWindow::on_actionToggle_Dice_Tool_triggered()
 {
-    if (arg1){
-        qDebug() << "Adding dice tool...";
-
-        diceManager = new DiceManager;
-        ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
-    }
+    qDebug() << "Adding AudioTool ...";
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
 
 void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
