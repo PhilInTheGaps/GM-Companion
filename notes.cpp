@@ -131,7 +131,7 @@ void MainWindow::deleteNotes(){
     if (ui->notesTree->currentItem() != NULL){
         if (ui->notesTree->currentItem()->type() == 1){
             QString folder = ui->notesTree->currentItem()->parent()->text(0);
-            QFile file(settingsManager->getSetting(Setting::notesPath)+"/+"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt");
+            QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt");
             qDebug() << tr("Removing Note: ")+settingsManager->getSetting(Setting::notesPath)+"/"+folder+"/"+ui->notesTree->currentItem()->text(0)+".txt";
             file.remove();
             getNotes();
