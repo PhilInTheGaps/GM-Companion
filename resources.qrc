@@ -6,9 +6,6 @@
         <file>resources/icon256.png</file>
         <file>resources/icon256.ico</file>
         <file>resources/splash.jpg</file>
-        <file>resources/radio/logo-radio-rivendell.png</file>
-        <file>resources/radio/radioRivendell01.png</file>
-        <file>resources/radio/logo-mmorp-radio-de.png</file>
         <file>resources/mediaIcons/play.png</file>
         <file>resources/mediaIcons/pause.png</file>
         <file>resources/mediaIcons/playBackwards.png</file>
