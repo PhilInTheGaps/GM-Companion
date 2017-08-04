@@ -588,7 +588,7 @@ void AudioEditor::on_pushButton_newRadio_clicked()
 }
 
 // When another element is selected
-void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current)
 {
     if (ui->treeWidget_categories->currentColumn() >= 0)
     {
