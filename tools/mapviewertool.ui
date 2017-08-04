@@ -118,6 +118,19 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QGraphicsView" name="graphicsView">
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustToContents</enum>
+       </property>
+       <property name="dragMode">
+        <enum>QGraphicsView::ScrollHandDrag</enum>
+       </property>
+       <property name="resizeAnchor">
+        <enum>QGraphicsView::AnchorUnderMouse</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
