@@ -3,7 +3,7 @@
 
 #include <QStackedWidget>
 #include <QStringList>
-#include "characters.h"
+#include "tools/characters.h"
 #include <QList>
 #include <QTableWidget>
 

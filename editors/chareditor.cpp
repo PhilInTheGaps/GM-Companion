@@ -1,6 +1,6 @@
 #include "chareditor.h"
 #include "ui_chareditor.h"
-#include "characters.h"
+#include "tools/characters.h"
 #include <QSettings>
 #include <QFileDialog>
 #include <QDebug>
