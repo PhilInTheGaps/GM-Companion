@@ -23,52 +23,49 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
            mainwindow.cpp \
-    flowlayout.cpp \
-    characters.cpp \
     functions.cpp \
-    names.cpp \
-    chareditor.cpp \
-    characterpage.cpp \
     network.cpp \
-    notes.cpp \
-    sifrp.cpp \
-    converter.cpp \
     tools/audiotool.cpp \
+    tools/dicetool.cpp \
+    tools/mapviewertool.cpp \
+    tools/characters.cpp \
+    tools/converter.cpp \
+    tools/names.cpp \
+    tools/notes.cpp \
     editors/audioeditor.cpp \
+    editors/chareditor.cpp \
     managers/dbmanager.cpp \
-    dialogs/notesdialog.cpp \
-    dialogs/optionsdialog.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
-    tools/dicetool.cpp \
+    dialogs/notesdialog.cpp \
+    dialogs/optionsdialog.cpp \
     dialogs/deletecharacterdialog.cpp \
     dialogs/whatisnewwindow.cpp \
-    tools/mapviewertool.cpp
+    addontools/sifrp.cpp \
+    ui/characterpage.cpp \
+    ui/flowlayout.cpp
 
 HEADERS  += mainwindow.h \
-    flowlayout.h \
-    characters.h \
     functions.h \
-    chareditor.h \
-    characterpage.h \
     version.h \
-    sifrp.h \
     tools/audiotool.h \
+    tools/mapviewertool.h \
+    tools/dicetool.h \
+    tools/characters.h \
     editors/audioeditor.h \
+    editors/chareditor.h \
     managers/dbmanager.h \
-    dialogs/notesdialog.h \
-    dialogs/optionsdialog.h \
     managers/filemanager.h \
     managers/settingsmanager.h \
-    tools/dicetool.h \
+    dialogs/notesdialog.h \
+    dialogs/optionsdialog.h \
     dialogs/deletecharacterdialog.h \
     dialogs/whatisnewwindow.h \
-    tools/mapviewertool.h
+    addontools/sifrp.h \
+    ui/characterpage.h \
+    ui/flowlayout.h
 
 FORMS    += mainwindow.ui \
-    chareditor.ui \
-    characterpage.ui \
-    sifrp.ui \
     tools/audiotool.ui \
     editors/audioeditor.ui \
     dialogs/notesdialog.ui \
@@ -76,7 +73,10 @@ FORMS    += mainwindow.ui \
     tools/dicetool.ui \
     dialogs/deletecharacterdialog.ui \
     dialogs/whatisnewwindow.ui \
-    tools/mapviewertool.ui
+    tools/mapviewertool.ui \
+    addontools/sifrp.ui \
+    editors/chareditor.ui \
+    ui/characterpage.ui
 
 DISTFILES += \
 

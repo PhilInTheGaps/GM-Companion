@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "characters.h"
+#include "tools/characters.h"
 #include "managers/filemanager.h"
 #include "dialogs/optionsdialog.h"
-#include "sifrp.h"
+#include "addontools/sifrp.h"
 
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"

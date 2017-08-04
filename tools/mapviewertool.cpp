@@ -1,6 +1,6 @@
 #include "mapviewertool.h"
 #include "ui_mapviewertool.h"
-#include "flowlayout.h"
+#include "ui/flowlayout.h"
 #include "managers/settingsmanager.h"
 #include "functions.h"
 
@@ -72,12 +72,6 @@ void MapViewerTool::on_pushButton_zoomIn_clicked()
 void MapViewerTool::on_pushButton_zoomOut_clicked()
 {
     ui->graphicsView->scale(0.75, 0.75);
-}
-
-// Set label size to fit into the view
-void MapViewerTool::on_pushButton_fitToView_clicked()
-{
-
 }
 
 // Reset label size back to normal

@@ -21,7 +21,7 @@
 
 #include "managers/settingsmanager.h"
 #include "functions.h"
-#include "flowlayout.h"
+#include "ui/flowlayout.h"
 
 // Includes QtWinExtras if system is Windows
 #ifdef Q_OS_WIN
