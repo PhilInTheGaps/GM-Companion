@@ -8,6 +8,7 @@
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
+#include "tools/characterviewertool.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -126,6 +127,10 @@ void MainWindow::addTools()
     // DiceTool
     DiceTool *diceTool = new DiceTool;
     ui->tabWidget->insertTab(3, diceTool, "Dice Tool");
+
+    // Character Viewer
+    CharacterViewerTool *characterViewer = new CharacterViewerTool;
+    ui->tabWidget->insertTab(4, characterViewer, "Characters");
 }
 
 // Open Wiki Page in Web Browser
@@ -247,11 +252,11 @@ void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
     }
 }
 
-void MainWindow::on_actionToggle_Characters_Tool_toggled(bool arg1)
+void MainWindow::on_actionToggle_Characters_Tool_triggered()
 {
-    if (arg1){
-        qDebug() << "Adding characters tool...";
-    }
+    qDebug() << "Adding characters tool...";
+    CharacterViewerTool *characterViewer = new CharacterViewerTool;
+    ui->tabWidget->addTab(characterViewer, "Characters");
 }
 
 void MainWindow::on_actionToggle_Notes_Tool_toggled(bool arg1)
