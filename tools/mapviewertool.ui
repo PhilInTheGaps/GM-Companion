@@ -54,18 +54,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_fitToView">
-        <property name="font">
-         <font>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Fit to View</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="pushButton_resetSize">
         <property name="font">
          <font>

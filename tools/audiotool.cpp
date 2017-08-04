@@ -1,7 +1,7 @@
 #include "audiotool.h"
 #include "ui_audiotool.h"
 #include "functions.h"
-#include "flowlayout.h"
+#include "ui/flowlayout.h"
 #include "editors/audioeditor.h"
 
 #include <QDebug>

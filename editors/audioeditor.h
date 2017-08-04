@@ -5,7 +5,6 @@
 #include <QTreeWidget>
 #include <QListWidget>
 
-#include "managers/dbmanager.h"
 #include "managers/settingsmanager.h"
 
 namespace Ui {
@@ -28,7 +27,7 @@ private slots:
     void on_pushButton_newCategory_clicked();
 
     void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
-    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current);
 
     void on_pushButton_deleteSelected_clicked();
 
