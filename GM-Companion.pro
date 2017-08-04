@@ -34,7 +34,6 @@ SOURCES += main.cpp\
     tools/notes.cpp \
     editors/audioeditor.cpp \
     editors/chareditor.cpp \
-    managers/dbmanager.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
     dialogs/notesdialog.cpp \
@@ -54,7 +53,6 @@ HEADERS  += mainwindow.h \
     tools/characters.h \
     editors/audioeditor.h \
     editors/chareditor.h \
-    managers/dbmanager.h \
     managers/filemanager.h \
     managers/settingsmanager.h \
     dialogs/notesdialog.h \
