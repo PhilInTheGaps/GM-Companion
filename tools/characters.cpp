@@ -1,10 +1,10 @@
 #include "characters.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "flowlayout.h"
-#include "characterpage.h"
+#include "ui/flowlayout.h"
+#include "ui/characterpage.h"
 #include "managers/settingsmanager.h"
-#include "chareditor.h"
+#include "editors/chareditor.h"
 #include "dialogs/deletecharacterdialog.h"
 
 #include <QDir>
