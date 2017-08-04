@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     dialogs/whatisnewwindow.cpp \
     addontools/sifrp.cpp \
     ui/characterpage.cpp \
-    ui/flowlayout.cpp
+    ui/flowlayout.cpp \
+    tools/characterviewertool.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -61,7 +62,8 @@ HEADERS  += mainwindow.h \
     dialogs/whatisnewwindow.h \
     addontools/sifrp.h \
     ui/characterpage.h \
-    ui/flowlayout.h
+    ui/flowlayout.h \
+    tools/characterviewertool.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -74,7 +76,8 @@ FORMS    += mainwindow.ui \
     tools/mapviewertool.ui \
     addontools/sifrp.ui \
     editors/chareditor.ui \
-    ui/characterpage.ui
+    ui/characterpage.ui \
+    tools/characterviewertool.ui
 
 DISTFILES += \
 
