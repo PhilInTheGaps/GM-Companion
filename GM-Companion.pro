@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     addontools/sifrp.cpp \
     ui/characterpage.cpp \
     ui/flowlayout.cpp \
-    tools/characterviewertool.cpp
+    tools/characterviewertool.cpp \
+    editors/charactersheeteditor.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -63,7 +64,8 @@ HEADERS  += mainwindow.h \
     addontools/sifrp.h \
     ui/characterpage.h \
     ui/flowlayout.h \
-    tools/characterviewertool.h
+    tools/characterviewertool.h \
+    editors/charactersheeteditor.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -77,7 +79,8 @@ FORMS    += mainwindow.ui \
     addontools/sifrp.ui \
     editors/chareditor.ui \
     ui/characterpage.ui \
-    tools/characterviewertool.ui
+    tools/characterviewertool.ui \
+    editors/charactersheeteditor.ui
 
 DISTFILES += \
 
