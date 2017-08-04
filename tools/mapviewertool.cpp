@@ -6,6 +6,7 @@
 
 #include <QDebug>
 #include <QScrollArea>
+#include <QGraphicsScene>
 
 MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapViewerTool)
 {
@@ -16,17 +17,6 @@ MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapV
     // Initialize Signal Mapper
     signalMapperMaps = new QSignalMapper(this);
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
-
-    // Create ScrollArea
-    QScrollArea *mapsScrollArea = new QScrollArea;
-    ui->verticalLayout->addWidget(mapsScrollArea);
-
-    // Create MapLabel
-    mapLabel = new QLabel;
-    mapLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    mapLabel->setScaledContents(true);
-
-    mapsScrollArea->setWidget(mapLabel);
 
     getMaps();
 }
@@ -64,72 +54,34 @@ void MapViewerTool::getMaps()
 }
 
 // Display a map
-void MapViewerTool::setMap(QString mapPath){
-    mapsZoomFactor = 1.0;
+void MapViewerTool::setMap(QString mapPath)
+{
+    QGraphicsScene *scene = new QGraphicsScene;
+    ui->graphicsView->setScene(scene);
 
-    mapLabel->setPixmap(QPixmap(mapPath));
-    mapLabel->adjustSize();
+    scene->addPixmap(QPixmap(mapPath));
 }
 
 // Zoom In
 void MapViewerTool::on_pushButton_zoomIn_clicked()
 {
-    if (mapLabel->pixmap() != 0){
-        // Multiply current zoom factor with 1.5
-        double factor = 1.5 * mapsZoomFactor;
-
-        // Resize label
-        mapLabel->resize(factor * mapLabel->pixmap()->size());
-
-        // Set new zoom factor
-        mapsZoomFactor = factor;
-    }
+    ui->graphicsView->scale(1.5, 1.5);
 }
 
 // Zoom Out
 void MapViewerTool::on_pushButton_zoomOut_clicked()
 {
-    if (mapLabel->pixmap() != 0){
-        // Multiply current zoom factor with 0.75
-        double factor = 0.75 * mapsZoomFactor;
-
-        // Resize label
-        mapLabel->resize(factor * mapLabel->pixmap()->size());
-
-        // Set new zoom factor
-        mapsZoomFactor = factor;
-    }
+    ui->graphicsView->scale(0.75, 0.75);
 }
 
 // Set label size to fit into the view
 void MapViewerTool::on_pushButton_fitToView_clicked()
 {
-    if (mapLabel->pixmap() != 0){
-        double width = mapLabel->width();
-        double height = mapLabel->height();
-        double ratio = width/height;
-        double factor = 1;
 
-        if (ratio >=1){
-            factor = ui->frame_mapButtons->geometry().width() / width;
-            mapLabel->resize(factor * mapLabel->size());
-        }
-        else{
-            factor = ui->frame_controls->geometry().height() / height;
-            mapLabel->resize(factor * mapLabel->size());
-        }
-
-
-        mapsZoomFactor = mapsZoomFactor*factor;
-    }
 }
 
 // Reset label size back to normal
 void MapViewerTool::on_pushButton_resetSize_clicked()
 {
-    if (mapLabel->pixmap() != 0){
-        mapLabel->resize(mapLabel->pixmap()->size());
-
-        mapsZoomFactor = 1.0;
-    }
+    ui->graphicsView->resetTransform();
 }

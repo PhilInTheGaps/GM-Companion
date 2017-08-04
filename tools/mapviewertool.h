@@ -22,8 +22,6 @@ private slots:
 
     void on_pushButton_zoomOut_clicked();
 
-    void on_pushButton_fitToView_clicked();
-
     void on_pushButton_resetSize_clicked();
 
     void setMap(QString mapPath);
@@ -31,11 +29,7 @@ private slots:
 private:
     Ui::MapViewerTool *ui;
 
-    QLabel *mapLabel;
-
     QSignalMapper *signalMapperMaps;
-
-    double mapsZoomFactor = 1.0;
 
     void getMaps();
 };
