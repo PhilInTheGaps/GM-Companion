@@ -246,27 +246,51 @@ QStringList SettingsManager::getOfficialAddons(){
     return officialAddons;
 }
 
-// Returns all unactive characters
-QStringList SettingsManager::getUnactiveCharacters()
+// Returns all inactive characters
+QStringList SettingsManager::getInactiveCharacters()
 {
+    qDebug() << "Getting inactive characters ...";
+
     QStringList characters;
 
     QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
 
     settings.beginGroup("Characters");
 
-    int size = settings.beginReadArray("UnactiveCharacters");
+    int size = settings.beginReadArray("InactiveCharacters");
 
     for (int i = 0; i < size; i++)
     {
+        settings.setArrayIndex(i);
+
         characters.push_back(settings.value("filename").toString());
     }
 
     settings.endArray();
-
     settings.endGroup();
 
     return characters;
+}
+
+void SettingsManager::setInactiveCharacters(QStringList characters)
+{
+   qDebug() << "Writing inactive characters ...";
+
+   QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+
+   settings.beginGroup("Characters");
+
+   settings.beginWriteArray("InactiveCharacters");
+
+    for (int i = 0; i < characters.size(); i++)
+    {
+        settings.setArrayIndex(i);
+
+        settings.setValue("filename", characters.at(i));
+    }
+
+    settings.endArray();
+    settings.endGroup();
 }
 
 // Updates the settings if something changed from a previous version
