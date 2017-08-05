@@ -2,9 +2,7 @@
 
 A tool for the gamemaster of a tabletop RPG session.
 
-[![Build Status](https://travis-ci.org/PhilInTheGaps/GM-Companion.svg?branch=master)](https://travis-ci.org/PhilInTheGaps/GM-Companion)
-[![Build status](https://ci.appveyor.com/api/projects/status/cwx0qblksi0rfbv3?svg=true)](https://ci.appveyor.com/project/PhilInTheGaps/gm-companion)
-
+[![Build Status](https://travis-ci.org/PhilInTheGaps/GM-Companion.svg?branch=master_beta_3_2)](https://travis-ci.org/PhilInTheGaps/GM-Companion)
 
 [Official Website](https://philinthegaps.github.io/GM-Companion/)  
 [Launchpad Repository](https://launchpad.net/~rophil/+archive/ubuntu/gm-companion)  
