@@ -165,6 +165,9 @@ void CharacterViewerTool::on_listWidget_characters_currentItemChanged(QListWidge
             ui->tableWidget_abilities->setItem(i, 2, i3);
         }
         settings.endArray();
+
+        // Notes
+        ui->textEdit_notes->setHtml(settings.value("notes"));
     }
     else
     {
@@ -176,6 +179,8 @@ void CharacterViewerTool::on_listWidget_characters_currentItemChanged(QListWidge
 
         ui->tableWidget_attributes->setRowCount(0);
         ui->tableWidget_attributes->setColumnCount(0);
+
+        ui->textEdit_notes->clear();
     }
 }
 
@@ -263,6 +268,9 @@ void CharacterViewerTool::on_pushButton_save_clicked()
             settings.setValue("notes", notes);
         }
         settings.endArray();
+
+        // Notes
+        settings.setValue("notes", ui->textEdit_notes->document()->toHtml());
     }
 }
 
