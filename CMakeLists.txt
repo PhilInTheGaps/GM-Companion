@@ -82,7 +82,7 @@ set ( RESOURCES
 )
 
 # Next lines needed for building all Qt projects
-find_package( Qt4 REQUIRED )
+find_package( Qt5 REQUIRED )
 include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 include_directories( ${CMAKE_BINARY_DIR} )
