@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QSettings>
+#include <QDebug>
 
 void MainWindow::initializeUnits(){
     // Getting Default Values
