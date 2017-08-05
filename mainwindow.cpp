@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include <QPlainTextEdit>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     qDebug() << tr("Starting GM-Companion...");
