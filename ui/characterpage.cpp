@@ -3,6 +3,8 @@
 
 #include "QTableWidgetItem"
 
+#include <QDebug>
+
 CharacterPage::CharacterPage(QWidget *parent) :
     QStackedWidget(parent),
     ui(new Ui::CharacterPage)

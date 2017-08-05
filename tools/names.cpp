@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "functions.h"
 
+#include <QDebug>
+
 void MainWindow::generateNamesTab(){
     // Normal Names
     QStringList folderList = getFolders(QDir::homePath()+"/.gm-companion/names");

@@ -2,6 +2,7 @@
 #include "ui_whatisnewwindow.h"
 
 #include <QProcess>
+#include <QDebug>
 
 WhatIsNewWindow::WhatIsNewWindow(QWidget *parent) : QDialog(parent), ui(new Ui::WhatIsNewWindow)
 {
