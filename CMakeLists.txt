@@ -1,58 +1,26 @@
-cmake_minimum_required(VERSION 2.8.11)
-set(CMAKE_CXX_STANDARD 14)
-
+cmake_minimum_required(2.8.8)
 project(GM-Companion)
 
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
+# Tell CMake to run moc when necessary:
 set(CMAKE_AUTOMOC ON)
+# As moc files are generated in the binary dir, tell CMake
+# to always look for includes there:
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# Find the Qt libraries
-find_package(Qt5Widgets)
-foreach(plugin ${Qt5Widgets_PLUGINS})
-  get_target_property(_loc ${plugin} LOCATION)
-  message("Plugin ${plugin} is at location ${_loc}")
-endforeach()
+# Widgets finds its own dependencies.
+find_package(Qt5 REQUIRED
+    Core
+    Gui
+    Widgets
+    Multimedia
+    MultimediaWidgets
+    Sql
+    Network
+)
 
-find_package(Qt5Core)
-foreach(plugin ${Qt5Core_PLUGINS})
-  get_target_property(_loc ${plugin} LOCATION)
-  message("Plugin ${plugin} is at location ${_loc}")
-endforeach()
+add_executable(gm-companion main.cpp mainwindow.cpp)
 
-find_package(Qt5Network)
-foreach(plugin ${Qt5Network_PLUGINS})
-  get_target_property(_loc ${plugin} LOCATION)
-  message("Plugin ${plugin} is at location ${_loc}")
-endforeach()
-
-find_package(Qt5Sql)
-foreach(plugin ${Qt5Sql_PLUGINS})
-  get_target_property(_loc ${plugin} LOCATION)
-  message("Plugin ${plugin} is at location ${_loc}")
-endforeach()
-
-find_package(Qt5Gui)
-foreach(plugin ${Qt5Gui_PLUGINS})
-  get_target_property(_loc ${plugin} LOCATION)
-  message("Plugin ${plugin} is at location ${_loc}")
-endforeach()
-
-find_package(Qt5Multimedia)
-find_package(Qt5MultimediaWidgets)
-
-# Includes
-include_directories(${Qt5Widgets_INCLUDES})
-include_directories(${Qt5Multimedia_INCLUDES})
-include_directories(${Qt5MultimediaWidgets_INCLUDES})
+qt5_use_modules(gm-companion widgets multimedia multimediawidgets sql network)
 
 # Tell CMake to create the gm-companion executable
 add_executable(gm-companion main.cpp)
-
-# Use the modules from Qt 5.
-target_link_libraries(gm-companion Qt5::Widgets)
-target_link_libraries(gm-companion Qt5::Core)
-target_link_libraries(gm-companion Qt5::Network)
-target_link_libraries(gm-companion Qt5::Sql)
-target_link_libraries(gm-companion Qt5::Gui)
