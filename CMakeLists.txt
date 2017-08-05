@@ -21,4 +21,12 @@ find_package(Qt5 REQUIRED
 # Tell CMake to create the gm-companion executable
 add_executable(gm-companion main.cpp mainwindow.cpp)
 
+qt5_use_package(gm-companion Core)
+qt5_use_package(gm-companion Widgets)
+qt5_use_package(gm-companion Gui)
+qt5_use_package(gm-companion Multimedia)
+qt5_use_package(gm-companion MultimediaWidgets)
+qt5_use_package(gm-companion Sql)
+qt5_use_package(gm-companion Network)
+
 qt5_use_modules(gm-companion core gui widgets multimedia multimediawidgets sql network)
