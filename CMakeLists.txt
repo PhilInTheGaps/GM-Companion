@@ -6,6 +6,7 @@ find_package(Qt5Multimedia)
 find_package(Qt5MultimediaWidgets)
 find_package(Qt5Network)
 find_package(Qt5Sql)
+find_package(Qt5WinExtras)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
