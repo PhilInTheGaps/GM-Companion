@@ -246,6 +246,29 @@ QStringList SettingsManager::getOfficialAddons(){
     return officialAddons;
 }
 
+// Returns all unactive characters
+QStringList SettingsManager::getUnactiveCharacters()
+{
+    QStringList characters;
+
+    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+
+    settings.beginGroup("Characters");
+
+    int size = settings.beginReadArray("UnactiveCharacters");
+
+    for (int i = 0; i < size; i++)
+    {
+        characters.push_back(settings.value("filename").toString());
+    }
+
+    settings.endArray();
+
+    settings.endGroup();
+
+    return characters;
+}
+
 // Updates the settings if something changed from a previous version
 void SettingsManager::updateSettings(){
     QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
