@@ -60,19 +60,19 @@ set ( MOC_HEADERS
 )
 
 set ( UIS
- mainwindow.ui \
- tools/audiotool.ui \
- editors/audioeditor.ui \
- dialogs/notesdialog.ui \
- dialogs/optionsdialog.ui \
- tools/dicetool.ui \
- dialogs/deletecharacterdialog.ui \
- dialogs/whatisnewwindow.ui \
- tools/mapviewertool.ui \
- addontools/sifrp.ui \
- editors/chareditor.ui \
- ui/characterpage.ui \
- tools/characterviewertool.ui \
+ mainwindow.ui
+ tools/audiotool.ui
+ editors/audioeditor.ui
+ dialogs/notesdialog.ui
+ dialogs/optionsdialog.ui
+ tools/dicetool.ui
+ dialogs/deletecharacterdialog.ui
+ dialogs/whatisnewwindow.ui
+ tools/mapviewertool.ui
+ addontools/sifrp.ui
+ editors/chareditor.ui
+ ui/characterpage.ui
+ tools/characterviewertool.ui
  editors/charactersheeteditor.ui
 )
 
