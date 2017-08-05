@@ -12,7 +12,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_library(mainwindow mainwindow.cpp)
-target_link_libraries (mainwindow Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Network Qt5::Sql)
+target_link_libraries (mainwindow Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Network Qt5::Sql Qt5::WinExtras)
 
 add_executable(gm-companion main.cpp)
 target_link_libraries (gm-companion mainwindow)
