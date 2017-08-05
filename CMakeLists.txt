@@ -18,7 +18,7 @@ find_package(Qt5 REQUIRED
     Network
 )
 
-qt5_use_modules(gm-companion widgets multimedia multimediawidgets sql network)
-
 # Tell CMake to create the gm-companion executable
 add_executable(gm-companion main.cpp)
+
+qt5_use_modules(gm-companion widgets multimedia multimediawidgets sql network)
