@@ -1,4 +1,4 @@
-cmake_minimum_required(2.8.8)
+cmake_minimum_required(VERSION 2.8.11)
 project(GM-Companion)
 
 # Tell CMake to run moc when necessary:
