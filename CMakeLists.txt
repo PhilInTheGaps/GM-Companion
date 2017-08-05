@@ -39,8 +39,14 @@ foreach(plugin ${Qt5Gui_PLUGINS})
   message("Plugin ${plugin} is at location ${_loc}")
 endforeach()
 
+find_package(Qt5Multimedia)
+
+# Includes
+include_directories(${Qt5Widgets_INCLUDES})
+include_directories(${Qt5Multimedia_INCLUDES})
+
 # Tell CMake to create the gm-companion executable
-add_executable(gm-companion WIN32 main.cpp)
+add_executable(gm-companion main.cpp)
 
 # Use the modules from Qt 5.
 target_link_libraries(gm-companion Qt5::Widgets)
