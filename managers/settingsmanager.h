@@ -37,7 +37,8 @@ public:
 
     QStringList getOfficialAddons();
 
-    QStringList getUnactiveCharacters();
+    QStringList getInactiveCharacters();
+    void setInactiveCharacters(QStringList characters);
 
     void updateSettings();
 
