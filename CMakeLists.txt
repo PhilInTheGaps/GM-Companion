@@ -40,12 +40,12 @@ foreach(plugin ${Qt5Gui_PLUGINS})
 endforeach()
 
 find_package(Qt5Multimedia)
-find_package(QtMultimediaWidgets)
+find_package(Qt5MultimediaWidgets)
 
 # Includes
 include_directories(${Qt5Widgets_INCLUDES})
 include_directories(${Qt5Multimedia_INCLUDES})
-include_directories(${QtMultimediaWidgets_INCLUDES})
+include_directories(${Qt5MultimediaWidgets_INCLUDES})
 
 # Tell CMake to create the gm-companion executable
 add_executable(gm-companion main.cpp)
