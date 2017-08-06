@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDateTime>
+#include <QSettings>
 
 void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString & msg)
 {
@@ -43,7 +44,16 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-//    qInstallMessageHandler(myMessageHandler);
+    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    if (checkSettings.value("debug", 0).toInt() == 1)
+    {
+        qDebug.noquote() << "Debug mode activated ...";
+    }
+    else
+    {
+        qDebug.noquote() << "Debug mode is not active ...";
+        qInstallMessageHandler(myMessageHandler);
+    }
 
     // Show splash screen
     QSplashScreen *splash = new QSplashScreen;
@@ -52,15 +62,15 @@ int main(int argc, char *argv[])
 
     // Translator
     qDebug() << "Initializing translations ...";
-    SettingsManager* settings = new SettingsManager;
+    SettingsManager* settingsManager = new SettingsManager;
     QTranslator* translator = new QTranslator();
 
     #ifdef _WIN32
-    if (translator->load("gm-companion_"+settings->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
         app.installTranslator(translator);
     }
     #else
-    if (translator->load("gm-companion_"+settings->getSetting(language), "/usr/share/gm-companion/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(language), "/usr/share/gm-companion/translations")) {
         app.installTranslator(translator);
     }
     #endif
@@ -70,7 +80,7 @@ int main(int argc, char *argv[])
 
     // Set StyleSheet
     qDebug() << "Loading stylesheet ...";
-    QString style = settings->getSetting(uiMode);
+    QString style = settingsManager->getSetting(uiMode);
 
     QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
     if (file.exists()){
@@ -101,7 +111,6 @@ int main(int argc, char *argv[])
     w.addTools();
 
     // Open WhatIsNewWindow
-    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
     int settingsVersion = checkSettings.value("version", 0).toInt();
     if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion)
@@ -118,7 +127,7 @@ int main(int argc, char *argv[])
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
 
-        settings->updateSettings();
+        settingsManager->updateSettings();
 
         w.updateSettingsVersion();
     }
