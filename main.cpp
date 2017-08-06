@@ -47,11 +47,11 @@ int main(int argc, char *argv[])
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     if (checkSettings.value("debug", 0).toInt() == 1)
     {
-        qDebug.noquote() << "Debug mode activated ...";
+        qDebug().noquote() << "Debug mode activated ...";
     }
     else
     {
-        qDebug.noquote() << "Debug mode is not active ...";
+        qDebug().noquote() << "Debug mode is not active ...";
         qInstallMessageHandler(myMessageHandler);
     }
 
