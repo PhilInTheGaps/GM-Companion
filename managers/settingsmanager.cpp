@@ -62,7 +62,7 @@ QString SettingsManager::getSetting(Setting setting){
         settingString = settings.value("checkForUpdatesOnStart", 1).toInt();
         break;
     case Setting::uiMode:
-        settingString = settings.value("uiMode", "DarkStyle").toString();
+        settingString = settings.value("uiMode", "Dark").toString();
         break;
     case Setting::buttonStyle:
         settingString = settings.value("buttonStyle", "small").toString();
