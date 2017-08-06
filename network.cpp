@@ -4,6 +4,8 @@
 #include <QScrollBar>
 #include <QXmlStreamReader>
 
+#include <QDebug>
+
 // Check for Updates
 void MainWindow::on_actionCheck_for_Updates_triggered(){
     qDebug() << tr("Checking for updates...");

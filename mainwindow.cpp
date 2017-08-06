@@ -1,9 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "characters.h"
-#include "filemanager.h"
-#include "optionsdialog.h"
-#include "sifrp.h"
+#include "tools/characters.h"
+#include "managers/filemanager.h"
+#include "dialogs/optionsdialog.h"
+#include "addontools/sifrp.h"
+
+#include "tools/audiotool.h"
+#include "tools/mapviewertool.h"
+#include "tools/dicetool.h"
+#include "tools/characterviewertool.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -12,12 +17,15 @@
 #include <QSettings>
 #include <QScrollBar>
 #include <QApplication>
+#include <QSplashScreen>
+#include <QPlainTextEdit>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
-    setVersion("0.3.1.1");
+    setVersion("0.3.2.0");
 
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
@@ -30,56 +38,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     int checkUpdates = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
 
+    // Set tool tabs closeable
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
     // Initialize Signal Mappers
-    signalMapperMusic = new QSignalMapper(this);
-    signalMapperSound = new QSignalMapper(this);
-    signalMapperMaps = new QSignalMapper(this);
     signalMapperNames = new QSignalMapper(this);
-
-    // Generates the dice page
-    diceManager = new DiceManager;
-    ui->tabDice->layout()->addWidget(diceManager->generateDiceFrame());
-
-    // Initialize player and playlist for music
-    musicPlayer = new QMediaPlayer(this);
-    musicPlayer->setVolume(ui->musicVolumeSlider->value());
-
-    musicPlaylist = new QMediaPlaylist();
-    musicPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
-    musicPlayer->setPlaylist(musicPlaylist);
-
-    connect(musicPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(updateProgressBar()));
-    connect(musicPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(updateMetaData()));
-
-    // Creates TableWidget to display song titles
-    initialMusicPlay = true;
-    musicTable = new QTableWidget;
-    musicTable->setMaximumWidth(250);
-    musicTable->setColumnWidth(0, 250);
-    musicTable->setColumnCount(1);
-    musicTable->setHorizontalHeaderLabels(QString("Title").split(";"));
-    connect(musicTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_tableDoubleClicked(int)));
-
-    // Generate Music Buttons
-    generateMusicButtons();
-    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
-
-    // Initialize player and playlist for sound
-    soundPlayer = new QMediaPlayer(this);
-    soundPlayer->setVolume(ui->soundVolumeSlider->value());
-
-    soundPlaylist = new QMediaPlaylist();
-    soundPlaylist->setPlaybackMode(QMediaPlaylist::PlaybackMode::Random);
-    soundPlayer->setPlaylist(soundPlaylist);
-
-    // Generate Sound Buttons
-    generateSoundButtons();
-    connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
 
     // Notes
     getNotes();
     notesWatcher = new QFileSystemWatcher;
-    notesWatcher->addPath(QDir::homePath()+"/.gm-companion/notes");
+    notesWatcher->addPath(settingsManager->getSetting(Setting::notesPath));
     connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
 
     // Addons
@@ -88,14 +56,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         SIFRP* sifrp = new SIFRP(this);
         ui->tabWidget->addTab(sifrp, "SIFRP");
     }
-
-    // Initialize Radio
-    qDebug() << tr("Initializing Radio...");
-    radioPlayer = new QMediaPlayer(this);
-    radioPlayer->setVolume(ui->musicVolumeSlider->value());
-
-    displayRadios();
-    connect(radioPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(on_radioMetaDataChanged()));
 
     // Initialize Name Generator
     generateNamesTab();
@@ -113,10 +73,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
-
-    // Initialize Maps Viewer
-    generateMaps();
-    connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
     //Initialize Character View
     QStringList characterList = getCharacterList();
@@ -158,14 +114,24 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// Add audio file to correct playlist
-void MainWindow::addToPlaylist(QUrl url, bool music){
-    if (music){
-        musicPlaylist->addMedia(url);
-    }
-    else{
-        soundPlaylist->addMedia(url);
-    }
+// Add Tools
+void MainWindow::addTools()
+{
+    // AudioTool
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->insertTab(1, audioTool, "Audio Tool");
+
+    // MapTool
+    MapViewerTool *mapViewerTool = new MapViewerTool;
+    ui->tabWidget->insertTab(2, mapViewerTool, "Map Tool");
+
+    // DiceTool
+    DiceTool *diceTool = new DiceTool;
+    ui->tabWidget->insertTab(3, diceTool, "Dice Tool");
+
+    // Character Viewer
+    CharacterViewerTool *characterViewer = new CharacterViewerTool;
+    ui->tabWidget->insertTab(4, characterViewer, "Characters");
 }
 
 // Open Wiki Page in Web Browser
@@ -212,41 +178,16 @@ void MainWindow::actionI_want_to_use_an_older_Version_triggered(){
 // Set Music Path
 void MainWindow::on_actionSet_Music_Folder_triggered(){
     settingsManager->setSetting(Setting::musicPath, true);
-    QLayoutItem *child;
-    while ((child = ui->tabMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
 }
 
 // Set Sound Path
 void MainWindow::on_actionSet_Sound_Folder_triggered(){
     settingsManager->setSetting(Setting::soundPath, true);
-    QLayoutItem *child;
-    while ((child = ui->tabSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
 }
 
 // Set Maps Path
 void MainWindow::on_actionSet_Maps_Folder_triggered(){
     settingsManager->setSetting(Setting::mapsPath, true);
-    QLayoutItem *child;
-    while ((child = ui->mapsVBox->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    generateMaps();
 }
 
 // Set Characters Path
@@ -258,30 +199,85 @@ void MainWindow::on_actionSet_Characters_Folder_triggered(){
 // Set resources path
 void MainWindow::on_actionSet_Resources_Folder_triggered(){
     settingsManager->setSetting(Setting::resourcesPath, true);
+}
 
-    QLayoutItem *child;
-    while ((child = ui->tabSound->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    soundPlayer->stop();
-    soundPlaylist->clear();
-    tabWidgetSound = NULL;
-    generateSoundButtons();
+// Set Notes Path
+void MainWindow::on_actionSet_Notes_Folder_triggered()
+{
+    settingsManager->setSetting(Setting::notesPath, true);
 
-    while ((child = ui->tabMusic->layout()->takeAt(0)) != 0) {
-        delete child->widget();
-        delete child;
-    }
-    musicPlayer->stop();
-    musicPlaylist->clear();
-    tabWidgetMusic = NULL;
-    initialMusicPlay = true;
-    generateMusicButtons();
+    getNotes();
+}
+
+// Set Audio Projects Path
+void MainWindow::on_actionSet_Audio_Projects_Folder_triggered()
+{
+    settingsManager->setSetting(audioPath, true);
+}
+
+// Set Radio Playlists Path
+void MainWindow::on_actionSet_Radio_Playlists_Folder_triggered()
+{
+    settingsManager->setSetting(radioPath, true);
 }
 
 // Open Options Dialog
 void MainWindow::on_actionOptions_triggered(){
     OptionsDialog* options = new OptionsDialog(this);
     options->show();
+}
+
+// Remove a tab from the tab widget
+void MainWindow::closeTab(int index){
+    ui->tabWidget->removeTab(index);
+}
+
+void MainWindow::on_actionToggle_Maps_Tool_triggered()
+{
+    qDebug() << "Adding Map Viewer Tool...";
+    MapViewerTool *mapViewerTool = new MapViewerTool;
+    ui->tabWidget->addTab(mapViewerTool, "Map Tool");
+}
+
+void MainWindow::on_actionToggle_Dice_Tool_triggered()
+{
+    qDebug() << "Adding AudioTool ...";
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->addTab(audioTool, "Audio Tool");
+}
+
+void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding name generator tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Characters_Tool_triggered()
+{
+    qDebug() << "Adding characters tool...";
+    CharacterViewerTool *characterViewer = new CharacterViewerTool;
+    ui->tabWidget->addTab(characterViewer, "Characters");
+}
+
+void MainWindow::on_actionToggle_Notes_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding notes tool...";
+    }
+}
+
+void MainWindow::on_actionToggle_Unit_Converter_Tool_toggled(bool arg1)
+{
+    if (arg1){
+        qDebug() << "Adding unit converter tool...";
+    }
+}
+
+// Add Audio Tool
+void MainWindow::on_actionAdd_Audio_Tool_triggered()
+{
+    qDebug() << "Adding AudioTool ...";
+    AudioTool *audioTool = new AudioTool(settingsManager, this);
+    ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
