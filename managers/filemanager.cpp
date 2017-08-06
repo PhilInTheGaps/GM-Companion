@@ -67,13 +67,13 @@ void FileManager::copyFiles(){
     QDir lDir(QDir::homePath()+"/.gm-companion");
 
     // List of all directories to be created
-    QStringList dirList = {"addons", "characters", "maps", "music", "notes", "resources", "sounds", "styles", "notes"};
+    QStringList dirList = {"addons", "audio", "characters", "maps", "music", "names", "notes", "radio", "resources", "sounds", "styles", "logs"};
 
     // List of files to be copied
-    QStringList fileList = {"radios.ini", "units.ini"};
+    QStringList fileList = {"units.ini"};
 
     // List of all files to be deleted
-//    filesToBeDeleted = {""};
+    filesToBeDeleted.append({"styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss"});
 
     // List of all folders to be deleted
     foldersToBeDeleted.append({"names/DSA5", "names/SIFRP"});
@@ -158,6 +158,8 @@ void FileManager::copyFiles(){
             QFile f (QDir::homePath()+"/.gm-companion/"+file);
 
             if (f.exists()){
+                qDebug().noquote() << "Removing " + QDir::homePath()+"/.gm-companion/"+file << "...";
+
                 f.remove();
             }
         }
@@ -167,7 +169,7 @@ void FileManager::copyFiles(){
     if (!foldersToBeDeleted.isEmpty()){
         for (QString folder : foldersToBeDeleted){
             if (QDir(QDir::homePath()+"/.gm-companion/"+folder).exists()){
-                qDebug() << "Removing " + QDir::homePath()+"/.gm-companion/"+folder;
+                qDebug().noquote() << "Removing " + QDir::homePath()+"/.gm-companion/"+folder;
 
                 removeDir(QDir::homePath()+"/.gm-companion/"+folder);
             }
