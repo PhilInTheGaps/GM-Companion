@@ -496,24 +496,24 @@ void AudioEditor::on_pushButton_newMusicList_clicked()
 {
     if (isProjectOpen && !currentScenario.isNull() && !ui->lineEdit_musicList->text().isNull())
     {
-        qDebug() << "Adding new music list ...";
+        qDebug().noquote() << "Adding new music list ...";
 
         QString arrayName = currentCategory + "_" + currentScenario + "_MusicLists";
-        qDebug() << "Adding music list to: " + arrayName;
+        qDebug().noquote() << "Adding music list to: " + arrayName;
 
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
 
         int size = settings.beginReadArray(arrayName);
         settings.endArray();
-        qDebug() << "Music list position: " + size;
+        qDebug().noquote() << "Music list position:" << size;
 
-        qDebug() << "Writing array ...";
+        qDebug().noquote() << "Writing array ...";
         settings.beginWriteArray(arrayName);
         settings.setArrayIndex(size);
 
         settings.setValue("name", ui->lineEdit_musicList->text());
         settings.endArray();
-        qDebug() << "Added music list: " + ui->lineEdit_musicList->text();
+        qDebug().noquote() << "Added music list: " + ui->lineEdit_musicList->text();
 
         loadCategories();
     }
