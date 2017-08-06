@@ -1,35 +1,86 @@
 #include "mainwindow.h"
-#include "settingsmanager.h"
-#include "whatisnewwindow.h"
+#include "managers/settingsmanager.h"
+#include "dialogs/whatisnewwindow.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDir>
 #include <QTranslator>
 #include <QDebug>
+#include <QSplashScreen>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+#include <QSettings>
+
+void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString & msg)
+{
+    QDate date;
+    QTime time;
+
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = time.currentTime().toString() + ": " + QString("Debug: %1").arg(msg);
+        break;
+    case QtWarningMsg:
+        txt = time.currentTime().toString() + ": " + QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = time.currentTime().toString() + ": " + QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = time.currentTime().toString() + ": " + QString("Fatal: %1").arg(msg);
+    break;
+    }
+
+    QFile outFile(QDir::homePath()+"/.gm-companion/logs/"+date.currentDate().toString());
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    if (checkSettings.value("debug", 0).toInt() == 1)
+    {
+        qDebug().noquote() << "Debug mode activated ...";
+    }
+    else
+    {
+        qDebug().noquote() << "Debug mode is not active ...";
+        qInstallMessageHandler(myMessageHandler);
+    }
+
+    // Show splash screen
+    QSplashScreen *splash = new QSplashScreen;
+    splash->setPixmap(QPixmap(":/resources/splash.jpg"));
+    splash->show();
+
     // Translator
-    SettingsManager* settings = new SettingsManager;
+    qDebug() << "Initializing translations ...";
+    SettingsManager* settingsManager = new SettingsManager;
     QTranslator* translator = new QTranslator();
 
     #ifdef _WIN32
-    if (translator->load("gm-companion_"+settings->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
         app.installTranslator(translator);
     }
     #else
-    if (translator->load("gm-companion_"+settings->getSetting(Setting::language), "/usr/share/gm-companion/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(language), "/usr/share/gm-companion/translations")) {
         app.installTranslator(translator);
     }
     #endif
 
+    // Start mainwindow
     MainWindow w;
 
     // Set StyleSheet
-    QString style = settings->getSetting(Setting::uiMode);
+    qDebug() << "Loading stylesheet ...";
+    QString style = settingsManager->getSetting(uiMode);
 
     QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
     if (file.exists()){
@@ -37,7 +88,7 @@ int main(int argc, char *argv[])
         QString styleSheet = QLatin1String(file.readAll());
         app.setStyleSheet(styleSheet);
     }else{
-        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/DarkStyle.qss");
+        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/Dark.qss");
         if (defaultStyle.exists()){
             defaultStyle.open(QFile::ReadOnly);
             QString styleSheet = QLatin1String(defaultStyle.readAll());
@@ -51,28 +102,37 @@ int main(int argc, char *argv[])
     #endif
 
     // Open Window Maximized
+    qDebug() << "Opening UI ...";
     w.showMaximized();
+    w.focusWidget();
 
-    // Create Thumbnail Toolbar if system is windows
-    #ifdef _WIN32
-    w.createThumbnailToolbar();
-    #endif
+    // Add Tools to mainwindow
+    qDebug() << "Loading tools ...";
+    w.addTools();
 
     // Open WhatIsNewWindow
-    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
     int settingsVersion = checkSettings.value("version", 0).toInt();
-    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion){
-        if (w.getVersionNumber() > settingsVersion){
+    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion)
+    {
+        if (w.getVersionNumber() > settingsVersion)
+        {
             qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
-        }else if (openNewFeatures == 1){
+        }
+        else if (openNewFeatures == 1)
+        {
             qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
         }
 
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
+
+        settingsManager->updateSettings();
+
         w.updateSettingsVersion();
     }
+
+    splash->close();
 
     return app.exec();
 }
