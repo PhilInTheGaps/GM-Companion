@@ -31,20 +31,25 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     }
 
     // Display correct style
-    for (QString style : getFiles(QDir::homePath()+"/.gm-companion/styles")){
-        bool exists = false;
-        for (int i = 0; i<ui->styleComboBox->count(); i++){
-            if (!exists && ui->styleComboBox->itemText(0) == cleanText(style)){
-                exists = true;
-            }
-        }
-        if (!exists){
-            ui->styleComboBox->addItem(cleanText(style));
-        }
+    QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
+    qDebug().noquote() << "Found the following stylesheets:";
 
-        QString currentStyle = checkSettings.value("uiMode", "DarkStyle").toString();
-        ui->styleComboBox->setCurrentText(currentStyle);
+    for (int i = 0; i < styles.size(); i++)
+    {
+        if (ui->styleComboBox->findText(cleanText(styles.at(i))) == -1)
+        {
+            qDebug().noquote() <<  "    " << styles.at(i) << "(Custom)";
+
+            ui->styleComboBox->addItem(cleanText(styles.at(i)));
+        } else
+        {
+            qDebug().noquote() <<  "    " << styles.at(i);
+        }
     }
+    int index = ui->styleComboBox->findText(settings->getSetting(uiMode));
+    ui->styleComboBox->setCurrentIndex(index);
+    qDebug().noquote() << "Default style:" << settings->getSetting(uiMode);
+    qDebug().noquote() << "Default style index:" << index;
 
     // Display current language
     QString lang = settings->getSetting(Setting::language);
