@@ -21,6 +21,16 @@ CharacterViewerTool::CharacterViewerTool(QWidget *parent) : QWidget(parent), ui(
         if (sheetTemplate.contains(".ini"))
             ui->comboBox_template->addItem(sheetTemplate.replace(".ini", ""));
     }
+
+    // Get addon templates
+    QString addonsPath = QDir::homePath() + "/.gm-companion/addons";
+    for (QString addon : getFolders(addonsPath))
+    {
+        if (settingsManager->getIsAddonEnabled(addon) && QFile(addonsPath+"/"+addon+"/CharacterSheet.ini").exists())
+        {
+            ui->comboBox_template->addItem(addon);
+        }
+    }
 }
 
 CharacterViewerTool::~CharacterViewerTool()
@@ -83,6 +93,9 @@ void CharacterViewerTool::on_listWidget_characters_currentItemChanged(QListWidge
         // Bio & Info
         QString info = settings.value("info").toString();
         ui->textEdit_bioInfo->setHtml(info);
+
+        QString info2 = settings.value("info2").toString();
+        ui->textEdit_bioInfo2->setHtml(info2);
 
         // Inventory
         int inventoryCount = settings.beginReadArray("inventory");
@@ -167,7 +180,7 @@ void CharacterViewerTool::on_listWidget_characters_currentItemChanged(QListWidge
         settings.endArray();
 
         // Notes
-        ui->textEdit_notes->setHtml(settings.value("notes"));
+        ui->textEdit_notes->setHtml(settings.value("notes").toString());
     }
     else
     {
@@ -197,12 +210,76 @@ void CharacterViewerTool::on_pushButton_newCharacter_clicked()
         settings.setValue("name", characterName);
         settings.setValue("player", playerName);
 
-//        if (ui->comboBox_template->currentIndex() != 0)
-//        {
-//            QSettings temp(settingsManager->getSetting(Setting::charactersPath)+"/templates/"+ui->comboBox_template->currentText()+".ini", QSettings::IniFormat);
+        if (ui->comboBox_template->currentIndex() != 0)
+        {
+            QString templateName = ui->comboBox_template->currentText();
+            QString templatePath;
 
-//            settings.setValue("content", temp.value("content").toString());
-//        }
+            // Check if template belongs to an addon
+            if (settingsManager->getIsAddonEnabled(templateName))
+                templatePath = QDir::homePath() + "/.gm-companion/addons/" + templateName + "/CharacterSheet.ini";
+            else
+                templatePath = settingsManager->getSetting(Setting::charactersPath)+"/templates/" + templateName + ".ini";
+
+            QSettings temp(templatePath, QSettings::IniFormat);
+
+            // Copy values
+            settings.setValue("info", temp.value("info").toString());
+            settings.setValue("info2", temp.value("info2").toString());
+            settings.setValue("notes", temp.value("notes").toString());
+
+            int inventorySize = temp.beginReadArray("inventory");
+            settings.beginWriteArray("inventory");
+            for (int i = 0; i < inventorySize; i++)
+            {
+                temp.setArrayIndex(i);
+                settings.setArrayIndex(i);
+
+                QString item = temp.value("item").toString();
+                QString where = temp.value("where").toString();
+                QString weight = temp.value("weight").toString();
+
+                settings.setValue("item", item);
+                settings.setValue("where", where);
+                settings.setValue("weight", weight);
+            }
+            settings.endArray();
+            temp.endArray();
+
+            int attributeCount = temp.beginReadArray("attributes");
+            settings.beginWriteArray("attributes");
+            for (int i = 0; i < attributeCount; i++)
+            {
+                temp.setArrayIndex(i);
+                settings.setArrayIndex(i);
+
+                QString name = temp.value("name").toString();
+                QString value = temp.value("value").toString();
+
+                settings.setValue("name", name);
+                settings.setValue("value", value);
+            }
+            settings.endArray();
+            temp.endArray();
+
+            int abilityCount = temp.beginReadArray("abilities");
+            settings.beginWriteArray("abilities");
+            for (int i = 0; i < abilityCount; i++)
+            {
+                temp.setArrayIndex(i);
+                settings.setArrayIndex(i);
+
+                QString name = temp.value("name").toString();
+                QString rank = temp.value("rank").toString();
+                QString notes = temp.value("notes").toString();
+
+                settings.setValue("name", name);
+                settings.setValue("rank", rank);
+                settings.setValue("notes", notes);
+            }
+            settings.endArray();
+            temp.endArray();
+        }
     }
     getCharacters();
 }
@@ -219,6 +296,9 @@ void CharacterViewerTool::on_pushButton_save_clicked()
         // Bio & Info
         QString info = ui->textEdit_bioInfo->document()->toHtml();
         settings.setValue("info", info);
+
+        QString info2 = ui->textEdit_bioInfo2->document()->toHtml();
+        settings.setValue("info2", info2);
 
         // Inventory
         int inventoryCount = ui->tableWidget_inventory->rowCount();
@@ -385,14 +465,6 @@ void CharacterViewerTool::on_pushButton_makeAllActive_clicked()
 {
     qDebug() << "Making all characters active ...";
 
-    for (int i = 0; i < ui->listWidget_inactiveChars->count(); i++)
-    {
-        QString character = ui->listWidget_inactiveChars->item(i)->text();
-
-        QListWidgetItem *item = new QListWidgetItem(character);
-        ui->listWidget_activeChars->addItem(item);
-    }
-
     ui->listWidget_inactiveChars->clear();
 
     QStringList characters;
@@ -410,10 +482,7 @@ void CharacterViewerTool::on_pushButton_makeAllInactive_clicked()
 
     for (int i = 0; i < ui->listWidget_activeChars->count(); i++)
     {
-        QString character = ui->listWidget_activeChars->item(i)->text();
-
-        QListWidgetItem *item = new QListWidgetItem(character);
-        ui->listWidget_inactiveChars->addItem(item);
+        QString character = ui->listWidget_activeChars->item(i)->whatsThis();
 
         characters.push_back(character);
     }

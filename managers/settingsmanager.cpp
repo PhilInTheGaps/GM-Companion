@@ -230,7 +230,7 @@ bool SettingsManager::getIsAddonEnabled(QString addon){
     QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     addonSettings.beginGroup("Addons");
 
-    if (addonSettings.value(addon).toInt() == 1){
+    if (addonSettings.value(addon, 0).toInt() == 1){
         enabled = true;
     }else{
         enabled = false;
