@@ -8,10 +8,42 @@
 #include <QTranslator>
 #include <QDebug>
 #include <QSplashScreen>
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+
+void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString & msg)
+{
+    QDate date;
+    QTime time;
+
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = time.currentTime().toString() + ": " + QString("Debug: %1").arg(msg);
+        break;
+    case QtWarningMsg:
+        txt = time.currentTime().toString() + ": " + QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = time.currentTime().toString() + ": " + QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = time.currentTime().toString() + ": " + QString("Fatal: %1").arg(msg);
+    break;
+    }
+
+    QFile outFile(QDir::homePath()+"/.gm-companion/logs/"+date.currentDate().toString());
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+//    qInstallMessageHandler(myMessageHandler);
 
     // Show splash screen
     QSplashScreen *splash = new QSplashScreen;
@@ -46,7 +78,7 @@ int main(int argc, char *argv[])
         QString styleSheet = QLatin1String(file.readAll());
         app.setStyleSheet(styleSheet);
     }else{
-        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/DarkStyle.qss");
+        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/Dark.qss");
         if (defaultStyle.exists()){
             defaultStyle.open(QFile::ReadOnly);
             QString styleSheet = QLatin1String(defaultStyle.readAll());
