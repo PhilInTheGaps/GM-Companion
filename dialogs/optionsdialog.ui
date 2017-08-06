@@ -110,7 +110,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="styleComboBox"/>
+          <widget class="QComboBox" name="styleComboBox">
+           <item>
+            <property name="text">
+             <string>Dark</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>White</string>
+            </property>
+           </item>
+          </widget>
          </item>
         </layout>
        </item>
