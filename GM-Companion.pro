@@ -7,7 +7,8 @@
 QT       += core gui \
             multimedia \
             multimediawidgets \
-            network
+            network \
+            sql
 
 win32:QT += winextras
 
@@ -18,65 +19,76 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+CONFIG += c++11
+
 SOURCES += main.cpp\
-           mainwindow.cpp \
-    flowlayout.cpp \
-    characters.cpp \
+    mainwindow.cpp \
     functions.cpp \
-    settingsmanager.cpp \
-    dicemanager.cpp \
-    music.cpp \
-    sound.cpp \
-    names.cpp \
-    radio.cpp \
-    maps.cpp \
-    chareditor.cpp \
-    characterpage.cpp \
-    deletecharacterdialog.cpp \
-    filemanager.cpp \
     network.cpp \
-    windows.cpp \
-    optionsdialog.cpp \
-    notes.cpp \
-    notesdialog.cpp \
-    sifrp.cpp \
-    converter.cpp \
-    whatisnewwindow.cpp \
-    dicetool.cpp
+    tools/audiotool.cpp \
+    tools/dicetool.cpp \
+    tools/mapviewertool.cpp \
+    tools/characters.cpp \
+    tools/converter.cpp \
+    tools/names.cpp \
+    tools/notes.cpp \
+    editors/audioeditor.cpp \
+    editors/chareditor.cpp \
+    managers/filemanager.cpp \
+    managers/settingsmanager.cpp \
+    dialogs/notesdialog.cpp \
+    dialogs/optionsdialog.cpp \
+    dialogs/deletecharacterdialog.cpp \
+    dialogs/whatisnewwindow.cpp \
+    addontools/sifrp.cpp \
+    ui/characterpage.cpp \
+    ui/flowlayout.cpp \
+    tools/characterviewertool.cpp \
+    editors/charactersheeteditor.cpp
 
 HEADERS  += mainwindow.h \
-    flowlayout.h \
-    characters.h \
     functions.h \
-    settingsmanager.h \
-    dicemanager.h \
-    chareditor.h \
-    characterpage.h \
     version.h \
-    deletecharacterdialog.h \
-    filemanager.h \
-    optionsdialog.h \
-    notesdialog.h \
-    sifrp.h \
-    whatisnewwindow.h \
-    dicetool.h
+    tools/audiotool.h \
+    tools/mapviewertool.h \
+    tools/dicetool.h \
+    tools/characters.h \
+    editors/audioeditor.h \
+    editors/chareditor.h \
+    managers/filemanager.h \
+    managers/settingsmanager.h \
+    dialogs/notesdialog.h \
+    dialogs/optionsdialog.h \
+    dialogs/deletecharacterdialog.h \
+    dialogs/whatisnewwindow.h \
+    addontools/sifrp.h \
+    ui/characterpage.h \
+    ui/flowlayout.h \
+    tools/characterviewertool.h \
+    editors/charactersheeteditor.h
 
 FORMS    += mainwindow.ui \
-    chareditor.ui \
-    characterpage.ui \
-    deletecharacterdialog.ui \
-    optionsdialog.ui \
-    notesdialog.ui \
-    sifrp.ui \
-    whatisnewwindow.ui \
-    dicetool.ui
+    tools/audiotool.ui \
+    editors/audioeditor.ui \
+    dialogs/notesdialog.ui \
+    dialogs/optionsdialog.ui \
+    tools/dicetool.ui \
+    dialogs/deletecharacterdialog.ui \
+    dialogs/whatisnewwindow.ui \
+    tools/mapviewertool.ui \
+    addontools/sifrp.ui \
+    editors/chareditor.ui \
+    ui/characterpage.ui \
+    tools/characterviewertool.ui \
+    editors/charactersheeteditor.ui
 
 DISTFILES += \
 
 RC_FILE = GM-Companion.rc
 
-RESOURCES += \
-    resources.qrc
+RESOURCES += resources.qrc \
+    styles/qdarkstyle/style.qrc
+
 
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
@@ -87,6 +99,8 @@ win32 {
 
 !win32 {
     message("Not building on Windows...")
+    QMAKE_CXXFLAGS += -std=c++11
+
     target.path = /usr/bin
     INSTALLS += target
 

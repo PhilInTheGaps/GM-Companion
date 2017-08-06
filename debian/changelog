@@ -1,3 +1,9 @@
+gm-companion (0.3.2.0-1ubuntu1) zesty; urgency=medium
+
+  * Update to Beta 3.2
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Fri, 14 Jul 2017 21:10:00 +0200
+
 gm-companion (0.3.1.1-1ubuntu2) zesty; urgency=medium
 
   * Fixed File Copying Bug
