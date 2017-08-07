@@ -25,5 +25,5 @@ void GeneratorManager::loadGenerators()
 
     // Name Generator
     NameGenerator *nameGenerator = new NameGenerator;
-    ui->tabWidget_generators->addTab(nameGenerator, "Name Generator");R
+    ui->tabWidget_generators->addTab(nameGenerator, "Name Generator");
 }
