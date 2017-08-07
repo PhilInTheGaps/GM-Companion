@@ -8,6 +8,7 @@
 #include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
 #include "tools/characterviewertool.h"
+#include "managers/generatormanager.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -114,6 +115,10 @@ void MainWindow::addTools()
     // Character Viewer
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
     ui->tabWidget->insertTab(4, characterViewer, "Characters");
+
+    // Generator Manager
+    GeneratorManager *generatorManager = new GeneratorManager;
+    ui->tabWidget->insertTab(5, generatorManager, "Generators");
 }
 
 // Open Wiki Page in Web Browser
@@ -213,6 +218,7 @@ void MainWindow::closeTab(int index){
     ui->tabWidget->removeTab(index);
 }
 
+// Add Maps Tool
 void MainWindow::on_actionToggle_Maps_Tool_triggered()
 {
     qDebug() << "Adding Map Viewer Tool...";
@@ -220,6 +226,7 @@ void MainWindow::on_actionToggle_Maps_Tool_triggered()
     ui->tabWidget->addTab(mapViewerTool, "Map Tool");
 }
 
+// Add Dice Tool
 void MainWindow::on_actionToggle_Dice_Tool_triggered()
 {
     qDebug() << "Adding AudioTool ...";
@@ -227,13 +234,7 @@ void MainWindow::on_actionToggle_Dice_Tool_triggered()
     ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
 
-void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding name generator tool...";
-    }
-}
-
+// Add Character Tool
 void MainWindow::on_actionToggle_Characters_Tool_triggered()
 {
     qDebug() << "Adding characters tool...";
@@ -241,19 +242,6 @@ void MainWindow::on_actionToggle_Characters_Tool_triggered()
     ui->tabWidget->addTab(characterViewer, "Characters");
 }
 
-void MainWindow::on_actionToggle_Notes_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding notes tool...";
-    }
-}
-
-void MainWindow::on_actionToggle_Unit_Converter_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding unit converter tool...";
-    }
-}
 
 // Add Audio Tool
 void MainWindow::on_actionAdd_Audio_Tool_triggered()
