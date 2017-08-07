@@ -976,7 +976,6 @@ void SIFRP::on_step4BuyUnitsButton_clicked()
 {
     int cost = 0;
     int discipline = 0;
-    int experience = 0;
     int power = resources[5];
     int investedPower = ui->step4InvestedPower->text().toInt();
     QString training;
@@ -987,25 +986,21 @@ void SIFRP::on_step4BuyUnitsButton_clicked()
         training = "Green";
         cost = 1;
         discipline = 9;
-        experience = 20;
         break;
     case 1:
         training = "Trained";
         cost = 3;
         discipline = 6;
-        experience = 60;
         break;
     case 2:
         training = "Veteran";
         cost = 5;
         discipline = 3;
-        experience = 100;
         break;
     case 3:
         training = "Elite";
         cost = 7;
         discipline = 0;
-        experience = 140;
         break;
     default:
         break;
@@ -1077,56 +1072,47 @@ void SIFRP::on_step4InvestInBannerHouse_clicked()
 
 void SIFRP::on_step4WealthHoldingComboBox_currentIndexChanged(int index)
 {
-    int cost = 0;
     QString description;
     QString time;
     QString requirement;
 
     switch (index) {
     case 0: // Artisan
-        cost = 10;
         description = "Your house aquires the service of a master artisan.";
         requirement = "Hall or larger defensive structure";
         time = "2D6 Months";
         break;
     case 1: // Godswood
-        cost = 5;
         description = "Your home has a godswood, a place sacred to the old gods.";
         requirement = "Realm: The North";
         time = "24+2D6 Months";
         break;
     case 2: // Guilds
-        cost = 15;
         description = "A Guild controls manufacturing and pricing of commodities.";
         requirement = "Small town or larger community";
         time = "2D6 Months";
         break;
     case 3: // Maester
-        cost = 10;
         description = "All houses can benefit from the wisdom and learning of a maester.";
         requirement = "Influence 20+";
         time = "1D6 Months";
         break;
     case 4: // Marketplace
-        cost = 10;
         description = "A Marketplace facilitates trade and draws merchants from abroad.";
         requirement = "Small town or larger community";
         time = "1D6 Months";
         break;
     case 5: // Mine
-        cost = 10;
         description = "You open mines on your lands to generate additional income.";
         requirement = "Mountains or hills";
         time = "24+2D6 Months";
         break;
     case 6: // Port
-        cost = 10;
         description = "A port enables merchant ships to come to your lands.";
         requirement = "Coastline";
         time = "3D6 Months";
         break;
     case 7: // Sept
-        cost = 15;
         description = "You erect a sept of the Faith to show your family's piety.";
         requirement = "Hall or larger defensive structure or small town or larger community";
         time = "12+2D6 Months";
