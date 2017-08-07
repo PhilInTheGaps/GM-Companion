@@ -115,9 +115,6 @@ private slots:
 
     // Tools
     void closeTab(int index);
-    void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
-    void on_actionToggle_Notes_Tool_toggled(bool arg1);
-    void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
 
     void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
     void on_actionToggle_Maps_Tool_triggered(); // Add MapViewerTool
