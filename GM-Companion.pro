@@ -40,7 +40,9 @@ SOURCES += main.cpp\
     dialogs/whatisnewwindow.cpp \
     addontools/sifrp.cpp \
     ui/flowlayout.cpp \
-    tools/characterviewertool.cpp
+    tools/characterviewertool.cpp \
+    managers/generatormanager.cpp \
+    generators/namegenerator.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -58,6 +60,8 @@ HEADERS  += mainwindow.h \
     addontools/sifrp.h \
     ui/flowlayout.h \
     tools/characterviewertool.h \
+    managers/generatormanager.h \
+    generators/namegenerator.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -70,6 +74,8 @@ FORMS    += mainwindow.ui \
     tools/mapviewertool.ui \
     addontools/sifrp.ui \
     tools/characterviewertool.ui \
+    managers/generatormanager.ui \
+    generators/namegenerator.ui
 
 DISTFILES +=
 
