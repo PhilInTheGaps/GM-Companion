@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tools/characters.h"
 #include "managers/filemanager.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
@@ -73,23 +72,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
-
-    //Initialize Character View
-    QStringList characterList = getCharacterList();
-    if (!characterList.empty()){
-        for (QString character : characterList){
-            QWidget* widget = getCharacterPage(character);
-            ui->charactersStackedWidget->addWidget(widget);
-
-            QListWidgetItem *listItem = new QListWidgetItem;
-            listItem->setText(widget->toolTip());
-            listItem->setToolTip(cleanText(character));
-            ui->charactersListWidget->addItem(listItem);
-        }
-        on_characterListClicked(0);
-    }
-
-    connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 
     // Initialize Converter
     initializeUnits();
@@ -193,7 +175,6 @@ void MainWindow::on_actionSet_Maps_Folder_triggered(){
 // Set Characters Path
 void MainWindow::on_actionSet_Characters_Folder_triggered(){
     settingsManager->setSetting(Setting::charactersPath, true);
-    updateCharacters();
 }
 
 // Set resources path
