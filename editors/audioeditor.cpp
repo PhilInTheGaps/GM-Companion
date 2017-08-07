@@ -825,9 +825,6 @@ void AudioEditor::on_pushButton_saveElement_clicked()
         description = ui->textEdit_categoryDescription->toPlainText();
 
         arraySize = settings.beginReadArray("Categories");
-        settings.endArray();
-
-        arraySize = settings.beginReadArray("Categories");
         for (int i = 0; i<arraySize; i++)
         {
             settings.setArrayIndex(i);
@@ -848,9 +845,6 @@ void AudioEditor::on_pushButton_saveElement_clicked()
         description = ui->textEdit_scenarioDescription->toPlainText();
 
         arraySize = settings.beginReadArray(currentCategory + "_Scenarios");
-        settings.endArray();
-
-        arraySize = settings.beginReadArray(currentCategory + "_Scenarios");
         for (int i = 0; i<arraySize; i++)
         {
             settings.setArrayIndex(i);
@@ -869,9 +863,6 @@ void AudioEditor::on_pushButton_saveElement_clicked()
         qDebug() << "Saving music list ...";
 
         description = ui->lineEdit_musicListDescription->text();
-
-        arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_MusicLists");
-        settings.endArray();
 
         arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_MusicLists");
         for (int i = 0; i<arraySize; i++)
@@ -905,9 +896,6 @@ void AudioEditor::on_pushButton_saveElement_clicked()
         description = ui->lineEdit_soundListDescription->text();
 
         arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_SoundLists");
-        settings.endArray();
-
-        arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_SoundLists");
         for (int i = 0; i<arraySize; i++)
         {
             settings.setArrayIndex(i);
@@ -939,9 +927,6 @@ void AudioEditor::on_pushButton_saveElement_clicked()
         qDebug() << "Saving radio ...";
 
         description = ui->textEdit_radioDescription->toPlainText();
-
-        arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_Radios");
-        settings.endArray();
 
         arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_Radios");
         for (int i = 0; i<arraySize; i++)
