@@ -513,7 +513,7 @@ void AudioTool::playMusic(QString arg)
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
     int musicLists = settings.beginReadArray(category+"_"+scenario+"_MusicLists");
 
-    bool random;
+    bool random = false;
 
     for (int i = 0; i<musicLists; i++)
     {
@@ -617,9 +617,9 @@ void AudioTool::playSound(QString arg)
 
         player->setObjectName(soundList);
 
-        bool random;
-        bool loop;
-        bool sequential;
+        bool random = true;
+        bool loop = false;
+        bool sequential = false;
 
         // Read properties
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
