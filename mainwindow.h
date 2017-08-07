@@ -73,13 +73,6 @@ private slots:
     // Name Generator
     void on_generateNames(QString);
 
-    // Characters
-    void on_characterListClicked(int);
-    void on_createCharacterButton_clicked();
-    void on_updateCharactersButton_clicked();
-    void on_editCharacter_clicked();
-    void on_deleteCharacterButton_clicked();
-
     // Notes
     void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
     void on_notesTextEdit_textChanged();
@@ -162,11 +155,6 @@ private:
     // Network
     QNetworkAccessManager *versionNetworkManager;
     QNetworkAccessManager *blogNetworkManager;
-
-    // Characters
-    void updateCharacters();
-    QTimer* updateCharactersTimer;
-    bool listenForCharacterUpdaters = true;
 
     // Converter
     QList<Unit> lengthUnits;
