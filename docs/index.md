@@ -1,7 +1,7 @@
 ---
+title: Home
+permalink: "/"
 layout: archive
-permalink: /
-title: "Home"
 ---
 
 ![](/GM-Companion/images/site.png)
