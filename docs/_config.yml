@@ -1,0 +1,71 @@
+# Site wide configuration
+
+title: GM-Companion
+description: "GM-Companion is a tool for the gamemaster of a rpg session."
+logo: /images/icon128.png
+teaser: siteLabel.png
+locale: en
+url: https://philinthegaps.github.io/GM-Companion
+baseurl: /GM-Companion
+feed:
+  path: /feed.xml
+#=======
+
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+# Permalinks
+permalink:        pretty
+
+# Jekyll configuration
+gems:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  
+sass:
+  sass_dir: _sass
+  style: compressed
+permalink: /:categories/:title/
+kramdown:
+  toc_levels: 1..2
+highlighter: rouge
+
+# Site owner
+owner:
+  name: Phil Hoffmann
+  email: phil.hoffmann@inbox.com
+  twitter:
+  google:
+    ad-client:
+    ad-slot:
+  bio:
+  avatar: /images/icon128.png
+  disqus-shortname:
+
+include:
+  - .htaccess
+exclude:
+  - "*.less"
+  - "*.sublime-project"
+  - "*.sublime-workspace"
+  - .asset-cache
+  - .bundle
+  - .jekyll-assets-cache
+  - .sass-cache
+  - CHANGELOG
+  - Capfile
+  - Gruntfile.js
+  - LICENSE
+  - README
+  - Rakefile
+  - config
+  - gulpfile.js
+  - lib
+  - log
+  - node_modules
+  - package.json
+  - spec
+  - tmp
