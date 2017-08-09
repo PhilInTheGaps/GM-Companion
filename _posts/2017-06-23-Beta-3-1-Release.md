@@ -1,12 +1,14 @@
 ---
-layout: media
 title: Released version 0.3.1
-modified:
-categories: info
-excerpt:
-tags: []
+date: 2017-06-23 00:00:00 Z
+categories:
+- docs
+- info
+layout: media
+modified: 
+excerpt: 
 image:
-  feature:
+  feature: 
   teaser: siteLabel.png
   thumb: icon128.png
 ---
