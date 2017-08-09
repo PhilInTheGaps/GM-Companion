@@ -7,6 +7,8 @@
 
 // Start
 SIFRP::SIFRP(MainWindow *parent) : QWidget(parent), ui(new Ui::SIFRP){
+    qDebug().noquote() << "Loading SIFRP tool ...";
+
     ui->setupUi(this);
 
     w = parent;
@@ -42,21 +44,30 @@ SIFRP::~SIFRP(){
 
 // Roll D6 dice
 int SIFRP::rollDice(int amount){
+    qDebug().noquote() << "Rolling" << amount << "D6 ...";
+
     int result = 0;
     for (int i = 0; i<amount; i++){
         int temp = rand() % 6;
         temp += 1;
         result += temp;
     }
+
+    qDebug().noquote() << "Result:" << result;
+
     return result;
 }
 
 // Returns a string from a .ini file
 QString SIFRP::getString(QString s){
+    qDebug().noquote() << "Reading" << s << "from generator.ini";
+
     QSettings settings(QDir::homePath()+"/.gm-companion/addons/SIFRP/house/generator.ini", QSettings::IniFormat);
     QString setting;
 
     setting = settings.value(s, " ").toString();
+
+    qDebug().noquote() << "Result:" << setting;
 
     return setting;
 }
