@@ -1,12 +1,14 @@
 ---
-layout: media
 title: Ubuntu ppa is now available!
-modified:
-categories: info
-excerpt:
-tags: []
+date: 2017-05-24 00:00:00 Z
+categories:
+- docs
+- info
+layout: media
+modified: 
+excerpt: 
 image:
-  feature:
+  feature: 
   teaser: siteLabel.png
   thumb: icon128.png
 ---
