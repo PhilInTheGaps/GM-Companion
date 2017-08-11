@@ -22,7 +22,6 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
 
     setVersion("0.3.2.0");
@@ -51,8 +50,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
 
     // Addons
-    qDebug() << tr("Getting Addons...");
+    qDebug().noquote() << tr("Getting Addons...");
     if (settingsManager->getIsAddonEnabled("SIFRP")){
+        qDebug().noquote() << tr("SIFRP addon is enabled, loading tools ...");
         SIFRP* sifrp = new SIFRP(this);
         ui->tabWidget->addTab(sifrp, "SIFRP");
     }
@@ -61,11 +61,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     generateNamesTab();
 
     // Check if openSSL is installed
-    qDebug() << tr("Checking SSL installation...");
+    qDebug().noquote() << tr("Checking SSL installation...");
     if (!QSslSocket::supportsSsl()){
-        qDebug() << tr("Please install openSSL");
+        qDebug().noquote() << tr("Please install openSSL");
     }else{
-        qDebug() << tr("SSL is installed.");
+        qDebug().noquote() << tr("SSL is installed.");
     }
 
     // Initialize Version and Blog Network Managers
@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Get Blog Feed
     qDebug() << tr("Getting blog feed...");
-    blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
+    blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
     // Some functions behave differently when the program is just starting
@@ -135,7 +135,7 @@ void MainWindow::setVersion(QString versionAsString){
     QString temp = versionAsString.replace(".", "");
     versionNumber = temp.toInt();
 
-    qDebug() << tr("Version: ")+versionString;
+    qDebug().noquote() << tr("Version: ")+versionString;
 
 }
 
@@ -211,12 +211,14 @@ void MainWindow::on_actionSet_Radio_Playlists_Folder_triggered()
 
 // Open Options Dialog
 void MainWindow::on_actionOptions_triggered(){
+    qDebug() << "Opening options window ...";
     OptionsDialog* options = new OptionsDialog(this);
     options->show();
 }
 
 // Remove a tab from the tab widget
 void MainWindow::closeTab(int index){
+    qDebug().noquote() << "Closing tab:" << ui->tabWidget->tabText(index) << "...";
     ui->tabWidget->removeTab(index);
 }
 
