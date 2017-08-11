@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>660</height>
+    <width>1234</width>
+    <height>747</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -293,8 +293,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>333</width>
-                  <height>271</height>
+                  <width>135</width>
+                  <height>636</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -312,8 +312,26 @@
                </widget>
               </widget>
              </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_12">
              <item>
-              <widget class="QListWidget" name="listWidget_songs"/>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Music List:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QListWidget" name="listWidget_songs">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
