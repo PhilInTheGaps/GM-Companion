@@ -4,7 +4,7 @@ A tool for the gamemaster of a tabletop RPG session.
 
 [![Build Status](https://travis-ci.org/PhilInTheGaps/GM-Companion.svg?branch=master)](https://travis-ci.org/PhilInTheGaps/GM-Companion)
 
-[Official Website](https://philinthegaps.github.io/GM-Companion/)  
+[Official Website](https://gm-companion.github.io/)  
 [Launchpad Repository](https://launchpad.net/~rophil/+archive/ubuntu/gm-companion)  
 [GM-Companion at itch.io](https://philinthegaps.itch.io/gm-companion)  
 
