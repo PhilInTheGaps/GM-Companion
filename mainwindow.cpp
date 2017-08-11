@@ -100,6 +100,8 @@ MainWindow::~MainWindow()
 // Add Tools
 void MainWindow::addTools()
 {
+    qDebug() << "Loading tools ...";
+
     // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->insertTab(1, audioTool, "Audio Tool");

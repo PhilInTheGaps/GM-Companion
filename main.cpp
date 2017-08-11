@@ -55,18 +55,21 @@ int main(int argc, char *argv[])
         qInstallMessageHandler(myMessageHandler);
     }
 
+    qDebug().noquote() << "Starting GM-Companion ...";
+
     // Show splash screen
+    qDebug().noquote() << "Showing splash screen ...";
     QSplashScreen *splash = new QSplashScreen;
     splash->setPixmap(QPixmap(":/resources/splash.jpg"));
     splash->show();
 
     // Translator
-    qDebug() << "Initializing translations ...";
+    qDebug().noquote() << "Initializing translations ...";
     SettingsManager* settingsManager = new SettingsManager;
     QTranslator* translator = new QTranslator();
 
     #ifdef _WIN32
-    if (translator->load("gm-companion_"+settingsManager->getSetting(Setting::language), QApplication::applicationDirPath()+"/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(language), QApplication::applicationDirPath()+"/translations")) {
         app.installTranslator(translator);
     }
     #else
@@ -79,8 +82,8 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     // Set StyleSheet
-    qDebug() << "Loading stylesheet ...";
     QString style = settingsManager->getSetting(uiMode);
+    qDebug().noquote() << "Loading stylesheet:" << style << "...";
 
     QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
     if (file.exists()){
@@ -102,12 +105,11 @@ int main(int argc, char *argv[])
     #endif
 
     // Open Window Maximized
-    qDebug() << "Opening UI ...";
+    qDebug().noquote() << "Opening UI ...";
     w.showMaximized();
     w.focusWidget();
 
     // Add Tools to mainwindow
-    qDebug() << "Loading tools ...";
     w.addTools();
 
     // Open WhatIsNewWindow
@@ -117,11 +119,11 @@ int main(int argc, char *argv[])
     {
         if (w.getVersionNumber() > settingsVersion)
         {
-            qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
+            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
         }
         else if (openNewFeatures == 1)
         {
-            qDebug() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
+            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
         }
 
         WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
@@ -132,6 +134,7 @@ int main(int argc, char *argv[])
         w.updateSettingsVersion();
     }
 
+    qDebug().noquote() << "Closing splash screen ...";
     splash->close();
 
     return app.exec();
