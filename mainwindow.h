@@ -91,7 +91,6 @@ private slots:
     void actionI_want_to_use_an_older_Version_triggered(); // Older Version
 
     // Network
-    void on_versionNetworkAccessManagerFinished(QNetworkReply*); // Get Newest Version Number
     void on_blogNetworkAccessManagerFinished(QNetworkReply*); // Get Blog Entries
 
     // Converter
@@ -154,7 +153,6 @@ private:
     QFileSystemWatcher* notesWatcher;
 
     // Network
-    QNetworkAccessManager *versionNetworkManager;
     QNetworkAccessManager *blogNetworkManager;
 
     // Converter

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "managers/settingsmanager.h"
 #include "dialogs/whatisnewwindow.h"
+#include "managers/updatemanager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -80,6 +81,11 @@ int main(int argc, char *argv[])
 
     // Start mainwindow
     MainWindow w;
+    w.setVersion("0.3.2.0");
+
+    // Update Manager
+    UpdateManager *updateManager = new UpdateManager(320);
+    updateManager->checkForUpdates();
 
     // Set StyleSheet
     QString style = settingsManager->getSetting(uiMode);
