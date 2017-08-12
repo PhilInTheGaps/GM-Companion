@@ -121,6 +121,10 @@ private slots:
     void on_actionToggle_Dice_Tool_triggered(); // Add DiceTool
     void on_actionToggle_Characters_Tool_triggered();   // Add Character Viewer Tool
 
+    void on_radioButton_allEntries_toggled(bool checked);
+
+    void on_radioButton_releaseOnly_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
 
