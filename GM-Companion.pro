@@ -29,7 +29,6 @@ SOURCES += main.cpp\
     tools/dicetool.cpp \
     tools/mapviewertool.cpp \
     tools/converter.cpp \
-    tools/names.cpp \
     tools/notes.cpp \
     editors/audioeditor.cpp \
     managers/filemanager.cpp \
