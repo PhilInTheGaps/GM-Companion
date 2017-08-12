@@ -54,9 +54,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->tabWidget->addTab(sifrp, "SIFRP");
     }
 
-    // Initialize Name Generator
-    generateNamesTab();
-
     // Initialize Blog Network Manager
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
