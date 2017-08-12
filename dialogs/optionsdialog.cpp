@@ -21,15 +21,6 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     updatePaths();
     getAddons();
 
-    // Check or uncheck "Check for updates on program start"
-    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
-    int checkOnStart = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
-    if (checkOnStart == 1){
-        ui->checkForUpdatesOnProgramStart->setChecked(true);
-    } else{
-        ui->checkForUpdatesOnProgramStart->setChecked(false);
-    }
-
     // Display correct style
     QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
     qDebug().noquote() << "Found the following stylesheets:";
@@ -110,12 +101,6 @@ void OptionsDialog::writeAddonSettings(){
         settings->setAddonEnabled(b->text(), b->isChecked());
     }
     w->getNotes();
-}
-
-
-void OptionsDialog::on_checkForUpdatesOnProgramStart_toggled(bool checked)
-{
-    settings->setSetting(Setting::checkForUpdatesOnStart, checked);
 }
 
 void OptionsDialog::on_setMusicPath_clicked()
