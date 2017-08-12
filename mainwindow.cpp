@@ -37,9 +37,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set tool tabs closeable
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
-    // Initialize Signal Mappers
-    signalMapperNames = new QSignalMapper(this);
-
     // Notes
     getNotes();
     notesWatcher = new QFileSystemWatcher;

@@ -70,9 +70,6 @@ private slots:
     void on_actionSet_Audio_Projects_Folder_triggered();
     void on_actionSet_Radio_Playlists_Folder_triggered();
 
-    // Name Generator
-    void on_generateNames(QString);
-
     // Notes
     void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
     void on_notesTextEdit_textChanged();
@@ -138,10 +135,6 @@ private:
     void writeSettings(QString content, QString indicator, QString newSetting);
     void setFolderLocations(QString indicator);
     QString readSettings();
-
-    // Name Generator
-    QSignalMapper *signalMapperNames;
-    void generateNamesTab();
 
     // Notes
     void readNotes(QString file);
