@@ -3,6 +3,7 @@
 #include "managers/filemanager.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
+#include "managers/updatemanager.h"
 
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"
@@ -24,8 +25,6 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
-    setVersion("0.3.2.0");
-
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
     fileManager->copyFiles();
@@ -34,8 +33,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << tr("Initializing settings...");
     settingsManager = new SettingsManager;
 
-    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
-    int checkUpdates = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
 
     // Set tool tabs closeable
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
@@ -60,28 +57,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Initialize Name Generator
     generateNamesTab();
 
-    // Check if openSSL is installed
-    qDebug().noquote() << tr("Checking SSL installation...");
-    if (!QSslSocket::supportsSsl()){
-        qDebug().noquote() << tr("Please install openSSL");
-    }else{
-        qDebug().noquote() << tr("SSL is installed.");
-    }
-
-    // Initialize Version and Blog Network Managers
-    versionNetworkManager = new QNetworkAccessManager;
-    connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
+    // Initialize Blog Network Manager
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
 
     // Initialize Converter
     initializeUnits();
-
-    // Checks for updates on program start
-    if (checkUpdates == 1){
-        onStartUpdateCheck = true;
-        on_actionCheck_for_Updates_triggered();
-    }
 
     // Get Blog Feed
     qDebug() << tr("Getting blog feed...");
@@ -136,17 +117,22 @@ void MainWindow::setVersion(QString versionAsString){
     versionNumber = temp.toInt();
 
     qDebug().noquote() << tr("Version: ")+versionString;
-
 }
 
-// Returns version as String with dots
-QString MainWindow::getVersion(){
+int MainWindow::getVersionNumber()
+{
+    return versionNumber;
+}
+
+QString MainWindow::getVersion()
+{
     return versionString;
 }
 
-// Returns version as int
-int MainWindow::getVersionNumber(){
-    return versionNumber;
+// Check for Updates
+void MainWindow::on_actionCheck_for_Updates_triggered(){
+    UpdateManager *updateManger = new UpdateManager(versionNumber);
+    updateManger->checkForUpdates();
 }
 
 // Update the settings version

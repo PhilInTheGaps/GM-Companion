@@ -42,7 +42,9 @@ SOURCES += main.cpp\
     ui/flowlayout.cpp \
     tools/characterviewertool.cpp \
     managers/generatormanager.cpp \
-    generators/namegenerator.cpp
+    generators/namegenerator.cpp \
+    managers/updatemanager.cpp \
+    dialogs/updatedialog.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -61,7 +63,9 @@ HEADERS  += mainwindow.h \
     ui/flowlayout.h \
     tools/characterviewertool.h \
     managers/generatormanager.h \
-    generators/namegenerator.h
+    generators/namegenerator.h \
+    managers/updatemanager.h \
+    dialogs/updatedialog.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -75,7 +79,8 @@ FORMS    += mainwindow.ui \
     addontools/sifrp.ui \
     tools/characterviewertool.ui \
     managers/generatormanager.ui \
-    generators/namegenerator.ui
+    generators/namegenerator.ui \
+    dialogs/updatedialog.ui
 
 DISTFILES +=
 
