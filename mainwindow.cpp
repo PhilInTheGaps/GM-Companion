@@ -254,3 +254,22 @@ void MainWindow::on_actionAdd_Audio_Tool_triggered()
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
+
+// Change blog settings
+void MainWindow::on_radioButton_allEntries_toggled(bool checked)
+{
+    if (checked)
+    {
+        qDebug() << tr("Getting blog feed ...");
+        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
+    }
+}
+
+void MainWindow::on_radioButton_releaseOnly_toggled(bool checked)
+{
+    if (checked)
+    {
+        qDebug() << tr("Getting blog feed ...");
+        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/releases.xml")));
+    }
+}
