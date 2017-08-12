@@ -11,7 +11,6 @@ enum Setting{
     soundPath,
     mapsPath,
     resourcesPath,
-    checkForUpdatesOnStart,
     uiMode,
     charactersPath,
     buttonStyle,
@@ -53,7 +52,8 @@ private:
 
     QStringList officialAddons = {
         "DSA5",
-        "SIFRP"
+        "SIFRP",
+        "HowToBeAHero"
     };
 };
 
