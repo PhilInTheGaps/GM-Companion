@@ -60,6 +60,9 @@ void DiceTool::rollDice(int sides){
         results.push_back(temp);
     }
 
+    if (ui->spinBox_bonusDice->value() > ui->spinBox_amount->value())
+        ui->spinBox_bonusDice->setValue(ui->spinBox_amount->value());
+
     // Remove bonus dice
     for (int i = 0; i<ui->spinBox_bonusDice->value(); i++)
     {
