@@ -29,27 +29,6 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="label_8">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Updates</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkForUpdatesOnProgramStart">
-         <property name="text">
-          <string>Check for updates on program start</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLabel" name="label_17">
          <property name="font">
           <font>

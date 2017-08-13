@@ -28,12 +28,8 @@ SOURCES += main.cpp\
     tools/audiotool.cpp \
     tools/dicetool.cpp \
     tools/mapviewertool.cpp \
-    tools/characters.cpp \
     tools/converter.cpp \
-    tools/names.cpp \
-    tools/notes.cpp \
     editors/audioeditor.cpp \
-    editors/chareditor.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
     dialogs/notesdialog.cpp \
@@ -41,10 +37,13 @@ SOURCES += main.cpp\
     dialogs/deletecharacterdialog.cpp \
     dialogs/whatisnewwindow.cpp \
     addontools/sifrp.cpp \
-    ui/characterpage.cpp \
     ui/flowlayout.cpp \
     tools/characterviewertool.cpp \
-    editors/charactersheeteditor.cpp
+    managers/generatormanager.cpp \
+    generators/namegenerator.cpp \
+    managers/updatemanager.cpp \
+    dialogs/updatedialog.cpp \
+    tools/notestool.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -52,9 +51,7 @@ HEADERS  += mainwindow.h \
     tools/audiotool.h \
     tools/mapviewertool.h \
     tools/dicetool.h \
-    tools/characters.h \
     editors/audioeditor.h \
-    editors/chareditor.h \
     managers/filemanager.h \
     managers/settingsmanager.h \
     dialogs/notesdialog.h \
@@ -62,10 +59,13 @@ HEADERS  += mainwindow.h \
     dialogs/deletecharacterdialog.h \
     dialogs/whatisnewwindow.h \
     addontools/sifrp.h \
-    ui/characterpage.h \
     ui/flowlayout.h \
     tools/characterviewertool.h \
-    editors/charactersheeteditor.h
+    managers/generatormanager.h \
+    generators/namegenerator.h \
+    managers/updatemanager.h \
+    dialogs/updatedialog.h \
+    tools/notestool.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -77,12 +77,13 @@ FORMS    += mainwindow.ui \
     dialogs/whatisnewwindow.ui \
     tools/mapviewertool.ui \
     addontools/sifrp.ui \
-    editors/chareditor.ui \
-    ui/characterpage.ui \
     tools/characterviewertool.ui \
-    editors/charactersheeteditor.ui
+    managers/generatormanager.ui \
+    generators/namegenerator.ui \
+    dialogs/updatedialog.ui \
+    tools/notestool.ui
 
-DISTFILES += \
+DISTFILES +=
 
 RC_FILE = GM-Companion.rc
 

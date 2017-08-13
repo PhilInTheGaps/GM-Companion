@@ -58,9 +58,6 @@ QString SettingsManager::getSetting(Setting setting){
         settingString = settings.value("radioPath", QDir::homePath()+"/.gm-companion/radio").toString();
         settings.endGroup();
         break;
-    case Setting::checkForUpdatesOnStart:
-        settingString = settings.value("checkForUpdatesOnStart", 1).toInt();
-        break;
     case Setting::uiMode:
         settingString = settings.value("uiMode", "Dark").toString();
         break;
@@ -154,13 +151,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
             settings.beginGroup("Paths");
             settings.setValue("radioPath", path);
             settings.endGroup();
-        }
-        break;
-    case Setting::checkForUpdatesOnStart:
-        if (checked){
-            settings.setValue("checkForUpdatesOnStart", 1);
-        }else{
-            settings.setValue("checkForUpdatesOnStart", 0);
         }
         break;
     case Setting::uiMode:
