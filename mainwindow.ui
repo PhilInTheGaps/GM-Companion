@@ -464,6 +464,8 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionReport_a_Bug"/>
     <addaction name="separator"/>
     <addaction name="actionI_want_to_use_an_older_Version"/>
+    <addaction name="actionView_on_GitHub"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuOptions"/>
    <addaction name="menuHelp"/>
@@ -698,6 +700,16 @@ p, li { white-space: pre-wrap; }
   <action name="actionUnit_Converter">
    <property name="text">
     <string>Unit Converter</string>
+   </property>
+  </action>
+  <action name="actionView_on_GitHub">
+   <property name="text">
+    <string>View on GitHub</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

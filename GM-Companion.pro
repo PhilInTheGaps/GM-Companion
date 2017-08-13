@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     managers/updatemanager.cpp \
     dialogs/updatedialog.cpp \
     tools/notestool.cpp \
-    tools/convertertool.cpp
+    tools/convertertool.cpp \
+    dialogs/aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -66,7 +67,8 @@ HEADERS  += mainwindow.h \
     managers/updatemanager.h \
     dialogs/updatedialog.h \
     tools/notestool.h \
-    tools/convertertool.h
+    tools/convertertool.h \
+    dialogs/aboutdialog.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -83,7 +85,8 @@ FORMS    += mainwindow.ui \
     generators/namegenerator.ui \
     dialogs/updatedialog.ui \
     tools/notestool.ui \
-    tools/convertertool.ui
+    tools/convertertool.ui \
+    dialogs/aboutdialog.ui
 
 DISTFILES +=
 
