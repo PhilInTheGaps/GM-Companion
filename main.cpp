@@ -26,13 +26,13 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString 
         break;
     case QtWarningMsg:
         txt = time.currentTime().toString() + ": " + QString("Warning: %1").arg(msg);
-    break;
+        break;
     case QtCriticalMsg:
         txt = time.currentTime().toString() + ": " + QString("Critical: %1").arg(msg);
-    break;
+        break;
     case QtFatalMsg:
         txt = time.currentTime().toString() + ": " + QString("Fatal: %1").arg(msg);
-    break;
+        break;
     }
 
     QFile outFile(QDir::homePath()+"/.gm-companion/logs/"+date.currentDate().toString());
