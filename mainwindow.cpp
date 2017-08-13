@@ -1,15 +1,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "managers/filemanager.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
-#include "managers/updatemanager.h"
 
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
 #include "tools/characterviewertool.h"
+#include "tools/notestool.h"
+
+#include "managers/filemanager.h"
 #include "managers/generatormanager.h"
+#include "managers/updatemanager.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -30,22 +32,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     fileManager->copyFiles();
 
     // Initialize SettingsManager
-    qDebug() << tr("Initializing settings...");
+    qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
-
 
     // Set tool tabs closeable
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
-    // Notes
-    getNotes();
-    notesWatcher = new QFileSystemWatcher;
-    notesWatcher->addPath(settingsManager->getSetting(Setting::notesPath));
-    connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
-
     // Addons
-    qDebug().noquote() << tr("Getting Addons...");
-    if (settingsManager->getIsAddonEnabled("SIFRP")){
+    qDebug().noquote() << "Getting Addons...";
+    if (settingsManager->getIsAddonEnabled("SIFRP"))
+    {
         qDebug().noquote() << tr("SIFRP addon is enabled, loading tools ...");
         SIFRP* sifrp = new SIFRP(this);
         ui->tabWidget->addTab(sifrp, "SIFRP");
@@ -96,6 +92,10 @@ void MainWindow::addTools()
     // Generator Manager
     GeneratorManager *generatorManager = new GeneratorManager;
     ui->tabWidget->insertTab(5, generatorManager, "Generators");
+
+    // NotesTool
+    NotesTool *notesTool = new NotesTool;
+    ui->tabWidget->insertTab(6, notesTool, "Notes");
 }
 
 // Open Wiki Page in Web Browser
@@ -173,8 +173,6 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
 void MainWindow::on_actionSet_Notes_Folder_triggered()
 {
     settingsManager->setSetting(Setting::notesPath, true);
-
-    getNotes();
 }
 
 // Set Audio Projects Path
@@ -226,13 +224,20 @@ void MainWindow::on_actionToggle_Characters_Tool_triggered()
     ui->tabWidget->addTab(characterViewer, "Characters");
 }
 
-
 // Add Audio Tool
 void MainWindow::on_actionAdd_Audio_Tool_triggered()
 {
     qDebug() << "Adding AudioTool ...";
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->addTab(audioTool, "Audio Tool");
+}
+
+// Add Notes Tool
+void MainWindow::on_actionNotes_triggered()
+{
+    qDebug() << "Adding NotesTool ...";
+    NotesTool *notesTool = new NotesTool;
+    ui->tabWidget->addTab(notesTool, "Notes");
 }
 
 // Change blog settings

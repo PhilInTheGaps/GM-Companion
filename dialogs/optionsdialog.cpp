@@ -100,7 +100,6 @@ void OptionsDialog::writeAddonSettings(){
     for (QCheckBox* b : inofficialAddons){
         settings->setAddonEnabled(b->text(), b->isChecked());
     }
-    w->getNotes();
 }
 
 void OptionsDialog::on_setMusicPath_clicked()
