@@ -91,6 +91,10 @@ private slots:
 
     void on_pushButton_documentation_clicked();
 
+    void on_actionView_on_GitHub_triggered();
+
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
 
