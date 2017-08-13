@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QMediaMetaData>
 
 // Only Windows relevant
 #ifdef _WIN32
@@ -498,7 +499,7 @@ void AudioTool::playMusic(QString arg)
 
     radioPlayer->stop();
 
-    ui->label_element->setText(musicList);
+    ui->label_element->setText("Element: " + musicList);
 
     // Clear Playlist
     musicPlaylist->clear();
@@ -569,7 +570,16 @@ void AudioTool::updateMetaData()
 {
     ui->comboBox_music->setCurrentIndex(musicPlaylist->currentIndex());
 
-    // TODO
+    if (musicPlayer->isMetaDataAvailable())
+    {
+        QString title = musicPlayer->metaData(QMediaMetaData::Title).toString();
+        QString artist = musicPlayer->metaData(QMediaMetaData::Author).toString();
+        QString album = musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
+
+        ui->label_title->setText("Title: " + title);
+        ui->label_artist->setText("Artist: " + artist);
+        ui->label_album->setText("Album: " + album);
+    }
 }
 
 // Play Sounds
@@ -687,7 +697,7 @@ void AudioTool::playRadio(QString arg)
     ui->listWidget_songs->clear();
     ui->comboBox_music->clear();
 
-    ui->label_element->setText(radio);
+    ui->label_element->setText("Element: " + radio);
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
     int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
@@ -802,7 +812,7 @@ void AudioTool::on_listWidget_categories_currentRowChanged(int currentRow)
         generateScenarioList(ui->listWidget_categories->currentItem()->text());
 
         ui->textEdit_categoryDescription->setText(ui->listWidget_categories->currentItem()->toolTip());
-        ui->label_category->setText(ui->listWidget_categories->currentItem()->text());
+        ui->label_category->setText("Category: " + ui->listWidget_categories->currentItem()->text());
     }
 }
 
@@ -814,7 +824,7 @@ void AudioTool::on_listWidget_scenarios_currentRowChanged(int currentRow)
         generateListViewElementButtons(ui->listWidget_scenarios->currentItem()->text());
 
         ui->textEdit_scenarioDescription->setText(ui->listWidget_scenarios->currentItem()->toolTip());
-        ui->label_scenario->setText(ui->listWidget_scenarios->currentItem()->text());
+        ui->label_scenario->setText("Scenario: " + ui->listWidget_scenarios->currentItem()->text());
     }
 
 }
