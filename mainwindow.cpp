@@ -103,6 +103,12 @@ void MainWindow::on_actionOpen_Wiki_triggered(){
     QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
 }
 
+// Open Wiki
+void MainWindow::on_pushButton_documentation_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
+}
+
 // Set Program version
 void MainWindow::setVersion(QString versionAsString){
     versionString = versionAsString;
