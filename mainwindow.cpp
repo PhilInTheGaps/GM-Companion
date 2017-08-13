@@ -8,6 +8,7 @@
 #include "tools/dicetool.h"
 #include "tools/characterviewertool.h"
 #include "tools/notestool.h"
+#include "tools/convertertool.h"
 
 #include "managers/filemanager.h"
 #include "managers/generatormanager.h"
@@ -51,9 +52,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
 
-    // Initialize Converter
-    initializeUnits();
-
     // Get Blog Feed
     qDebug() << tr("Getting blog feed...");
     blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
@@ -96,6 +94,10 @@ void MainWindow::addTools()
     // NotesTool
     NotesTool *notesTool = new NotesTool;
     ui->tabWidget->insertTab(6, notesTool, "Notes");
+
+    // ConverterTool
+    ConverterTool *converterTool = new ConverterTool;
+    ui->tabWidget->insertTab(7, converterTool, "Unit Converter");
 }
 
 // Open Wiki Page in Web Browser
@@ -244,6 +246,14 @@ void MainWindow::on_actionNotes_triggered()
     qDebug() << "Adding NotesTool ...";
     NotesTool *notesTool = new NotesTool;
     ui->tabWidget->addTab(notesTool, "Notes");
+}
+
+// Add Converter Tool
+void MainWindow::on_actionUnit_Converter_triggered()
+{
+    qDebug() << "Adding ConverterTool ...";
+    ConverterTool *converterTool = new ConverterTool;
+    ui->tabWidget->addTab(converterTool, "Unit Converter");
 }
 
 // Change blog settings
