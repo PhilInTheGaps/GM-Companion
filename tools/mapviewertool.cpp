@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QScrollArea>
 #include <QGraphicsScene>
+#include <QSpacerItem>
 
 MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapViewerTool)
 {
@@ -30,15 +31,16 @@ MapViewerTool::~MapViewerTool()
 void MapViewerTool::getMaps()
 {
     // Clear all old buttons
-    qDeleteAll(ui->frame_mapButtons->children());
+    qDeleteAll(ui->scrollAreaWidgetContents->children());
 
     // Set map button layout
-    FlowLayout *mapButtonLayout = new FlowLayout;
-    ui->frame_mapButtons->setLayout(mapButtonLayout);
+    QVBoxLayout *mapButtonLayout = new QVBoxLayout;
+    ui->scrollAreaWidgetContents->setLayout(mapButtonLayout);
 
     SettingsManager *settingsManager = new SettingsManager;
     QStringList mapsList = getFiles(settingsManager->getSetting(Setting::mapsPath));
 
+    // Create a button for every map
     for (QString mapName : mapsList){
         if (mapName.contains(".png") || mapName.contains(".jpg")){
             QString mapPath = settingsManager->getSetting(Setting::mapsPath)+"/"+mapName;
@@ -51,6 +53,9 @@ void MapViewerTool::getMaps()
             signalMapperMaps->setMapping(imageButton, mapPath);
         }
     }
+
+    // Add a verical spacer
+    mapButtonLayout->addItem(new QSpacerItem(0,10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
 // Display a map
@@ -65,13 +70,13 @@ void MapViewerTool::setMap(QString mapPath)
 // Zoom In
 void MapViewerTool::on_pushButton_zoomIn_clicked()
 {
-    ui->graphicsView->scale(1.5, 1.5);
+    ui->graphicsView->scale(2, 2);
 }
 
 // Zoom Out
 void MapViewerTool::on_pushButton_zoomOut_clicked()
 {
-    ui->graphicsView->scale(0.75, 0.75);
+    ui->graphicsView->scale(0.5, 0.5);
 }
 
 // Reset label size back to normal

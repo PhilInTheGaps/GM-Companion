@@ -80,7 +80,7 @@ void NotesTool::getNotes()
     {
         if (!addon.contains("."))
         {
-            if (settingsManager->getIsAddonEnabled(addon))
+            if (settingsManager->getIsAddonEnabled(addon) && QDir(addonsFolder+"/"+addon+"/notes").exists())
             {
                 QTreeWidgetItem* ti = new QTreeWidgetItem(2);
                 ti->setText(0, addon);
