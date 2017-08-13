@@ -51,9 +51,6 @@ public:
     int getVersionNumber(); // Get Version Number (int), e.g. 1310
     void updateSettingsVersion(); // Sets version in settings to current version
 
-    // Notes
-    void getNotes();
-
     // Tools
     void addTools();
 
@@ -69,18 +66,6 @@ private slots:
     void on_actionSet_Notes_Folder_triggered(); // Notes
     void on_actionSet_Audio_Projects_Folder_triggered();
     void on_actionSet_Radio_Playlists_Folder_triggered();
-
-    // Notes
-    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
-    void on_notesTextEdit_textChanged();
-    void on_addNoteButton_clicked();
-    void on_addCategoryButton_clicked();
-    void on_deleteNoteButton_clicked();
-    void on_deleteCategoryButton_clicked();
-    void notesWatcher_directoryChanged();
-    void on_notesEncryptButton_clicked();
-    void on_notesFontBox_currentTextChanged(const QString &arg1);
-    void on_notesFontSizeSpinBox_valueChanged(int arg1);
 
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
@@ -121,6 +106,8 @@ private slots:
 
     void on_radioButton_releaseOnly_toggled(bool checked);
 
+    void on_actionNotes_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -135,15 +122,6 @@ private:
     void writeSettings(QString content, QString indicator, QString newSetting);
     void setFolderLocations(QString indicator);
     QString readSettings();
-
-    // Notes
-    void readNotes(QString file);
-    void addNotes();
-    void addCategory();
-    void deleteNotes();
-    void deleteCategory();
-    void updateText();
-    QFileSystemWatcher* notesWatcher;
 
     // Network
     QNetworkAccessManager *blogNetworkManager;
