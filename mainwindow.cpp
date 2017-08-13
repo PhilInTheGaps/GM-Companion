@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
+#include "dialogs/aboutdialog.h"
 
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"
@@ -273,4 +274,15 @@ void MainWindow::on_radioButton_releaseOnly_toggled(bool checked)
         qDebug() << tr("Getting blog feed ...");
         blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/releases.xml")));
     }
+}
+
+void MainWindow::on_actionView_on_GitHub_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion"));
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutDialog *about = new AboutDialog(versionString);
+    about->show();
 }
