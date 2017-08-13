@@ -75,38 +75,19 @@ private slots:
     // Network
     void on_blogNetworkAccessManagerFinished(QNetworkReply*); // Get Blog Entries
 
-    // Converter
-    void on_addUnitButton_clicked();
-    void on_converterTypeComboBox_currentIndexChanged(int index);
-    void on_length1ComboBox_currentIndexChanged(int index);
-    void on_length2ComboBox_currentIndexChanged(int index);
-    void on_area1ComboBox_currentIndexChanged(int index);
-    void on_area2ComboBox_currentIndexChanged(int index);
-    void on_length1SpinBox_valueChanged(double value);
-    void on_area1SpinBox_valueChanged(double value);
-    void on_volume1ComboBox_currentIndexChanged(int index);
-    void on_volume2ComboBox_currentIndexChanged(int index);
-    void on_volume1SpinBox_valueChanged(double arg1);
-    void on_weight1ComboBox_currentIndexChanged(int index);
-    void on_weight2ComboBox_currentIndexChanged(int index);
-    void on_weight1SpinBox_valueChanged(double arg1);
-    void on_money1ComboBox_currentIndexChanged(int index);
-    void on_money2ComboBox_currentIndexChanged(int index);
-    void on_money1SpinBox_valueChanged(double arg1);
-
     // Tools
     void closeTab(int index);
 
-    void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
-    void on_actionToggle_Maps_Tool_triggered(); // Add MapViewerTool
-    void on_actionToggle_Dice_Tool_triggered(); // Add DiceTool
+    void on_actionAdd_Audio_Tool_triggered();           // Add AudioTool
+    void on_actionToggle_Maps_Tool_triggered();         // Add MapViewerTool
+    void on_actionToggle_Dice_Tool_triggered();         // Add DiceTool
     void on_actionToggle_Characters_Tool_triggered();   // Add Character Viewer Tool
+    void on_actionNotes_triggered();                    // Notes Tool
+    void on_actionUnit_Converter_triggered();           // Unit Converter
 
+    // Blog
     void on_radioButton_allEntries_toggled(bool checked);
-
     void on_radioButton_releaseOnly_toggled(bool checked);
-
-    void on_actionNotes_triggered();
 
     void on_pushButton_documentation_clicked();
 
@@ -127,19 +108,6 @@ private:
 
     // Network
     QNetworkAccessManager *blogNetworkManager;
-
-    // Converter
-    QList<Unit> lengthUnits;
-    QList<Unit> areaUnits;
-    QList<Unit> volumeUnits;
-    QList<Unit> weightUnits;
-    QList<Unit> moneyUnits;
-    void initializeUnits();
-    void convertLength(int index1, int index2, double units);
-    void convertArea(int index1, int index2, double units);
-    void convertVolume(int index1, int index2, double units);
-    void convertWeight(int index1, int index2, double units);
-    void convertMoney(int index1, int index2, double units);
 };
 
 #endif // MAINWINDOW_H
