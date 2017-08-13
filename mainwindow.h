@@ -108,6 +108,8 @@ private slots:
 
     void on_actionNotes_triggered();
 
+    void on_pushButton_documentation_clicked();
+
 private:
     Ui::MainWindow *ui;
 
