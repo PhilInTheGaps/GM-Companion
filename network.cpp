@@ -16,38 +16,36 @@ void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
     QXmlStreamReader reader(replyString);
 
     qDebug() << "Starting blog feed reader ...";
-    if (reader.readNextStartElement()) {
-
-        qDebug().noquote() << reader.name();
-
-        if (reader.name() == "rss"){
-            qDebug() << "Reading element: rss ...";
-            while(reader.readNextStartElement()){
-
-                qDebug().noquote() << "   rss item:" << reader.name();
-
-                while (reader.readNextStartElement()){
-
-                    qDebug().noquote() << "      item:" << reader.name();
-
-                    if(reader.name() == "item"){
-                        qDebug() << "Reading element: item ...";
-
+    if (reader.readNextStartElement())
+    {
+        if (reader.name() == "rss")
+        {
+            while(reader.readNextStartElement())
+            {
+                while (reader.readNextStartElement())
+                {
+                    if(reader.name() == "item")
+                    {
                         QString title;
                         QString pubDate;
                         QString description;
 
-                        while(reader.readNextStartElement()){
-                            if (reader.name() == "title"){
+                        while(reader.readNextStartElement())
+                        {
+                            if (reader.name() == "title")
+                            {
                                 title = "<h1>"+reader.readElementText()+"</h1>";
                             }
-                            else if (reader.name() == "pubDate"){
+                            else if (reader.name() == "pubDate")
+                            {
                                 pubDate = reader.readElementText();
                             }
-                            else if (reader.name() == "description"){
+                            else if (reader.name() == "description")
+                            {
                                 description = reader.readElementText();
                             }
-                            else{
+                            else
+                            {
                                 reader.skipCurrentElement();
                             }
                         }
@@ -67,5 +65,4 @@ void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
     }
 
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
-
 }
