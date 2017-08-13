@@ -1,28 +1,57 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "namegenerator.h"
+#include "ui_namegenerator.h"
 #include "functions.h"
+#include "managers/settingsmanager.h"
 
 #include <QDebug>
+#include <QScrollArea>
+#include <QDir>
+#include <QPushButton>
 
-void MainWindow::generateNamesTab(){
+NameGenerator::NameGenerator(QWidget *parent) : QWidget(parent), ui(new Ui::NameGenerator)
+{
+    qDebug().noquote() << "Loading NameGenerator ...";
+
+    ui->setupUi(this);
+
+    signalMapper = new QSignalMapper;
+    settingsManager = new SettingsManager;
+
+    ui->textEdit_names->setFontPointSize(ui->spinBox_pointSize->value());
+
+    generateNamesTab();
+}
+
+NameGenerator::~NameGenerator()
+{
+    delete ui;
+}
+
+void NameGenerator::generateNamesTab()
+{
     // Normal Names
     QStringList folderList = getFolders(QDir::homePath()+"/.gm-companion/names");
-    for (QString folder : folderList){
-        if (!folder.contains(".")){
+    for (QString folder : folderList)
+    {
+        if (!folder.contains("."))
+        {
+            // ScrollArea for the name buttons
             QScrollArea *scrollArea = new QScrollArea;
             scrollArea->setWidgetResizable(true);
             QFrame *frame = new QFrame;
             scrollArea->setWidget(frame);
             QVBoxLayout *frameLayout = new QVBoxLayout;
             frame->setLayout(frameLayout);
-            ui->nameTabWidget->addTab(scrollArea, folder);
+            ui->tabWidget_categories->addTab(scrollArea, folder);
 
             folder = QDir::homePath()+"/.gm-companion/names/"+folder;
 
             QStringList subfolderList = getFolders(folder);
 
-            for (QString subfolder : subfolderList){
-                if (!subfolder.contains(".")){
+            for (QString subfolder : subfolderList)
+            {
+                if (!subfolder.contains("."))
+                {
                     QFrame *subFrame = new QFrame;
                     frameLayout->addWidget(subFrame);
 
@@ -38,7 +67,9 @@ void MainWindow::generateNamesTab(){
                     buttonFrame->setMaximumWidth(200);
                     hbox->addWidget(buttonFrame);
 
-                    if (QFile(folder+"/"+subfolder+"/male.txt").exists()){
+                    // Male names
+                    if (QFile(folder+"/"+subfolder+"/male.txt").exists())
+                    {
                         QPushButton *maleButton = new QPushButton;
                         maleButton->setMaximumWidth(200);
                         maleButton->setText(tr("Male"));
@@ -46,11 +77,13 @@ void MainWindow::generateNamesTab(){
 
                         QString maleFile = folder+"/"+subfolder+"/male.txt";
 
-                        connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                        signalMapperNames->setMapping(maleButton, maleFile);
+                        connect(maleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                        signalMapper->setMapping(maleButton, maleFile);
                     }
 
-                    if (QFile(folder+"/"+subfolder+"/female.txt").exists()){
+                    // Female names
+                    if (QFile(folder+"/"+subfolder+"/female.txt").exists())
+                    {
                         QPushButton *femaleButton = new QPushButton;
                         femaleButton->setMaximumWidth(200);
                         femaleButton->setText(tr("Female"));
@@ -58,8 +91,8 @@ void MainWindow::generateNamesTab(){
 
                         QString femaleFile = folder+"/"+subfolder+"/female.txt";
 
-                        connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                        signalMapperNames->setMapping(femaleButton, femaleFile);
+                        connect(femaleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                        signalMapper->setMapping(femaleButton, femaleFile);
                     }
                 }
             }
@@ -70,22 +103,26 @@ void MainWindow::generateNamesTab(){
 
     // Addon Names
     folderList = getFolders(QDir::homePath()+"/.gm-companion/addons");
-    for (QString folder : folderList){
-        if (!folder.contains(".") && QDir(QDir::homePath()+"/.gm-companion/addons/"+folder+"/names").exists() && settingsManager->getIsAddonEnabled(folder)){
+    for (QString folder : folderList)
+    {
+        if (!folder.contains(".") && QDir(QDir::homePath()+"/.gm-companion/addons/"+folder+"/names").exists() && settingsManager->getIsAddonEnabled(folder))
+        {
             QScrollArea *scrollArea = new QScrollArea;
             scrollArea->setWidgetResizable(true);
             QFrame *frame = new QFrame;
             scrollArea->setWidget(frame);
             QVBoxLayout *frameLayout = new QVBoxLayout;
             frame->setLayout(frameLayout);
-            ui->nameTabWidget->addTab(scrollArea, folder);
+            ui->tabWidget_categories->addTab(scrollArea, folder);
 
             folder = QDir::homePath()+"/.gm-companion/addons/"+folder+"/names";
 
             QStringList subfolderList = getFolders(folder);
 
-            for (QString subfolder : subfolderList){
-                if (!subfolder.contains(".")){
+            for (QString subfolder : subfolderList)
+            {
+                if (!subfolder.contains("."))
+                {
                     QFrame *subFrame = new QFrame;
                     frameLayout->addWidget(subFrame);
 
@@ -101,7 +138,8 @@ void MainWindow::generateNamesTab(){
                     buttonFrame->setMaximumWidth(200);
                     hbox->addWidget(buttonFrame);
 
-                    if (QFile(folder+"/"+subfolder+"/male.txt").exists()){
+                    if (QFile(folder+"/"+subfolder+"/male.txt").exists())
+                    {
                         QPushButton *maleButton = new QPushButton;
                         maleButton->setMaximumWidth(200);
                         maleButton->setText(tr("Male"));
@@ -109,11 +147,12 @@ void MainWindow::generateNamesTab(){
 
                         QString maleFile = folder+"/"+subfolder+"/male.txt";
 
-                        connect(maleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                        signalMapperNames->setMapping(maleButton, maleFile);
+                        connect(maleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                        signalMapper->setMapping(maleButton, maleFile);
                     }
 
-                    if (QFile(folder+"/"+subfolder+"/female.txt").exists()){
+                    if (QFile(folder+"/"+subfolder+"/female.txt").exists())
+                    {
                         QPushButton *femaleButton = new QPushButton;
                         femaleButton->setMaximumWidth(200);
                         femaleButton->setText(tr("Female"));
@@ -121,8 +160,8 @@ void MainWindow::generateNamesTab(){
 
                         QString femaleFile = folder+"/"+subfolder+"/female.txt";
 
-                        connect(femaleButton, SIGNAL(clicked()), signalMapperNames, SLOT(map()));
-                        signalMapperNames->setMapping(femaleButton, femaleFile);
+                        connect(femaleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                        signalMapper->setMapping(femaleButton, femaleFile);
                     }
                 }
             }
@@ -131,11 +170,12 @@ void MainWindow::generateNamesTab(){
         }
     }
 
-    connect(signalMapperNames, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
 }
 
-void MainWindow::on_generateNames(QString file){
-    ui->nameTextEdit->clear();
+void NameGenerator::on_generateNames(QString file)
+{
+    ui->textEdit_names->clear();
     int index = file.lastIndexOf("/");
     QString path = file.left(index);
 
@@ -149,7 +189,8 @@ void MainWindow::on_generateNames(QString file){
 
     QStringList surnames;
 
-    if (QFile(surnamesPath).exists()){
+    if (QFile(surnamesPath).exists())
+    {
         QFile surnamesFile(surnamesPath);
         surnamesFile.open(QIODevice::ReadOnly);
         QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
@@ -157,7 +198,8 @@ void MainWindow::on_generateNames(QString file){
         surnamesFile.close();
     }
 
-    for (int i = 0; i<ui->namesAmountSpinBox->value(); i++){
+    for (int i = 0; i<ui->spinBox_amount->value(); i++)
+    {
         QString name = names.at(rand() % names.size());
 
         QString displayName = name;
@@ -167,6 +209,11 @@ void MainWindow::on_generateNames(QString file){
             displayName.append(" "+surname);
         }
 
-        ui->nameTextEdit->append(displayName);
+        ui->textEdit_names->append(displayName);
     }
+}
+
+void NameGenerator::on_spinBox_pointSize_valueChanged(int arg1)
+{
+    ui->textEdit_names->setFontPointSize(arg1);
 }

@@ -22,7 +22,6 @@ public:
 private slots:
 
     void onClose();
-    void on_checkForUpdatesOnProgramStart_toggled(bool checked);
     void on_closeButton_clicked();
 
     // Paths

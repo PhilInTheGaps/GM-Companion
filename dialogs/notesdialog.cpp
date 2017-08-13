@@ -1,12 +1,13 @@
 #include "notesdialog.h"
 #include "ui_notesdialog.h"
+#include "tools/notestool.h"
 
 #include <QFile>
 #include <QDir>
 #include <QIODevice>
 #include <QDebug>
 
-NotesDialog::NotesDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::NotesDialog){
+NotesDialog::NotesDialog(NotesTool *parent) : QDialog(parent), ui(new Ui::NotesDialog){
     ui->setupUi(this);
 
     w = parent;
