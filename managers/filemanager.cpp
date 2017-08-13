@@ -93,7 +93,6 @@ void FileManager::copyFiles(){
         }
     }
 
-    bool copied = false;
     qDebug() << QCoreApplication::translate("FileManager" ,"Copying files to ") << QDir::homePath()+"/.gm-companion ...";
 
     // Actually copy files to the directories
@@ -142,8 +141,8 @@ void FileManager::copyFiles(){
 
                     for (QString file : getFiles(QApplication::applicationDirPath()+"/names/"+folder+"/"+subfolder)){
                         QFile f(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
-                        if (!f.exists()){
-                            copied = true;
+                        if (!f.exists())
+                        {
                             QFile::copy(origPath+"/names/"+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
                         }
                     }

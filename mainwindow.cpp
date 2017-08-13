@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "tools/characters.h"
-#include "managers/filemanager.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
 
@@ -9,6 +7,11 @@
 #include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
 #include "tools/characterviewertool.h"
+#include "tools/notestool.h"
+
+#include "managers/filemanager.h"
+#include "managers/generatormanager.h"
+#include "managers/updatemanager.h"
 
 #include <QStringList>
 #include <cstdlib>
@@ -22,87 +25,38 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
-    qDebug() << tr("Starting GM-Companion...");
     ui->setupUi(this);
-
-    setVersion("0.3.2.0");
 
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
     fileManager->copyFiles();
 
     // Initialize SettingsManager
-    qDebug() << tr("Initializing settings...");
+    qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
-
-    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
-    int checkUpdates = checkSettings.value("checkForUpdatesOnStart", 1).toInt();
 
     // Set tool tabs closeable
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
-    // Initialize Signal Mappers
-    signalMapperNames = new QSignalMapper(this);
-
-    // Notes
-    getNotes();
-    notesWatcher = new QFileSystemWatcher;
-    notesWatcher->addPath(settingsManager->getSetting(Setting::notesPath));
-    connect(notesWatcher, SIGNAL(directoryChanged(QString)), SLOT(notesWatcher_directoryChanged()));
-
     // Addons
-    qDebug() << tr("Getting Addons...");
-    if (settingsManager->getIsAddonEnabled("SIFRP")){
+    qDebug().noquote() << "Getting Addons...";
+    if (settingsManager->getIsAddonEnabled("SIFRP"))
+    {
+        qDebug().noquote() << tr("SIFRP addon is enabled, loading tools ...");
         SIFRP* sifrp = new SIFRP(this);
         ui->tabWidget->addTab(sifrp, "SIFRP");
     }
 
-    // Initialize Name Generator
-    generateNamesTab();
-
-    // Check if openSSL is installed
-    qDebug() << tr("Checking SSL installation...");
-    if (!QSslSocket::supportsSsl()){
-        qDebug() << tr("Please install openSSL");
-    }else{
-        qDebug() << tr("SSL is installed.");
-    }
-
-    // Initialize Version and Blog Network Managers
-    versionNetworkManager = new QNetworkAccessManager;
-    connect(versionNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_versionNetworkAccessManagerFinished(QNetworkReply*)));
+    // Initialize Blog Network Manager
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
-
-    //Initialize Character View
-    QStringList characterList = getCharacterList();
-    if (!characterList.empty()){
-        for (QString character : characterList){
-            QWidget* widget = getCharacterPage(character);
-            ui->charactersStackedWidget->addWidget(widget);
-
-            QListWidgetItem *listItem = new QListWidgetItem;
-            listItem->setText(widget->toolTip());
-            listItem->setToolTip(cleanText(character));
-            ui->charactersListWidget->addItem(listItem);
-        }
-        on_characterListClicked(0);
-    }
-
-    connect(ui->charactersListWidget, SIGNAL(currentRowChanged(int)), SLOT(on_characterListClicked(int)));
 
     // Initialize Converter
     initializeUnits();
 
-    // Checks for updates on program start
-    if (checkUpdates == 1){
-        onStartUpdateCheck = true;
-        on_actionCheck_for_Updates_triggered();
-    }
-
     // Get Blog Feed
     qDebug() << tr("Getting blog feed...");
-    blogNetworkManager->get(QNetworkRequest(QUrl("https://philinthegaps.github.io/GM-Companion/feed.xml")));
+    blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
     // Some functions behave differently when the program is just starting
@@ -117,6 +71,8 @@ MainWindow::~MainWindow()
 // Add Tools
 void MainWindow::addTools()
 {
+    qDebug() << "Loading tools ...";
+
     // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->insertTab(1, audioTool, "Audio Tool");
@@ -132,6 +88,14 @@ void MainWindow::addTools()
     // Character Viewer
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
     ui->tabWidget->insertTab(4, characterViewer, "Characters");
+
+    // Generator Manager
+    GeneratorManager *generatorManager = new GeneratorManager;
+    ui->tabWidget->insertTab(5, generatorManager, "Generators");
+
+    // NotesTool
+    NotesTool *notesTool = new NotesTool;
+    ui->tabWidget->insertTab(6, notesTool, "Notes");
 }
 
 // Open Wiki Page in Web Browser
@@ -146,18 +110,23 @@ void MainWindow::setVersion(QString versionAsString){
     QString temp = versionAsString.replace(".", "");
     versionNumber = temp.toInt();
 
-    qDebug() << tr("Version: ")+versionString;
-
+    qDebug().noquote() << tr("Version: ")+versionString;
 }
 
-// Returns version as String with dots
-QString MainWindow::getVersion(){
+int MainWindow::getVersionNumber()
+{
+    return versionNumber;
+}
+
+QString MainWindow::getVersion()
+{
     return versionString;
 }
 
-// Returns version as int
-int MainWindow::getVersionNumber(){
-    return versionNumber;
+// Check for Updates
+void MainWindow::on_actionCheck_for_Updates_triggered(){
+    UpdateManager *updateManger = new UpdateManager(versionNumber);
+    updateManger->checkForUpdates();
 }
 
 // Update the settings version
@@ -193,7 +162,6 @@ void MainWindow::on_actionSet_Maps_Folder_triggered(){
 // Set Characters Path
 void MainWindow::on_actionSet_Characters_Folder_triggered(){
     settingsManager->setSetting(Setting::charactersPath, true);
-    updateCharacters();
 }
 
 // Set resources path
@@ -205,8 +173,6 @@ void MainWindow::on_actionSet_Resources_Folder_triggered(){
 void MainWindow::on_actionSet_Notes_Folder_triggered()
 {
     settingsManager->setSetting(Setting::notesPath, true);
-
-    getNotes();
 }
 
 // Set Audio Projects Path
@@ -223,15 +189,18 @@ void MainWindow::on_actionSet_Radio_Playlists_Folder_triggered()
 
 // Open Options Dialog
 void MainWindow::on_actionOptions_triggered(){
+    qDebug() << "Opening options window ...";
     OptionsDialog* options = new OptionsDialog(this);
     options->show();
 }
 
 // Remove a tab from the tab widget
 void MainWindow::closeTab(int index){
+    qDebug().noquote() << "Closing tab:" << ui->tabWidget->tabText(index) << "...";
     ui->tabWidget->removeTab(index);
 }
 
+// Add Maps Tool
 void MainWindow::on_actionToggle_Maps_Tool_triggered()
 {
     qDebug() << "Adding Map Viewer Tool...";
@@ -239,6 +208,7 @@ void MainWindow::on_actionToggle_Maps_Tool_triggered()
     ui->tabWidget->addTab(mapViewerTool, "Map Tool");
 }
 
+// Add Dice Tool
 void MainWindow::on_actionToggle_Dice_Tool_triggered()
 {
     qDebug() << "Adding AudioTool ...";
@@ -246,32 +216,12 @@ void MainWindow::on_actionToggle_Dice_Tool_triggered()
     ui->tabWidget->addTab(audioTool, "Audio Tool");
 }
 
-void MainWindow::on_actionToggle_Name_Generator_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding name generator tool...";
-    }
-}
-
+// Add Character Tool
 void MainWindow::on_actionToggle_Characters_Tool_triggered()
 {
     qDebug() << "Adding characters tool...";
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
     ui->tabWidget->addTab(characterViewer, "Characters");
-}
-
-void MainWindow::on_actionToggle_Notes_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding notes tool...";
-    }
-}
-
-void MainWindow::on_actionToggle_Unit_Converter_Tool_toggled(bool arg1)
-{
-    if (arg1){
-        qDebug() << "Adding unit converter tool...";
-    }
 }
 
 // Add Audio Tool
@@ -280,4 +230,31 @@ void MainWindow::on_actionAdd_Audio_Tool_triggered()
     qDebug() << "Adding AudioTool ...";
     AudioTool *audioTool = new AudioTool(settingsManager, this);
     ui->tabWidget->addTab(audioTool, "Audio Tool");
+}
+
+// Add Notes Tool
+void MainWindow::on_actionNotes_triggered()
+{
+    qDebug() << "Adding NotesTool ...";
+    NotesTool *notesTool = new NotesTool;
+    ui->tabWidget->addTab(notesTool, "Notes");
+}
+
+// Change blog settings
+void MainWindow::on_radioButton_allEntries_toggled(bool checked)
+{
+    if (checked)
+    {
+        qDebug() << tr("Getting blog feed ...");
+        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
+    }
+}
+
+void MainWindow::on_radioButton_releaseOnly_toggled(bool checked)
+{
+    if (checked)
+    {
+        qDebug() << tr("Getting blog feed ...");
+        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/releases.xml")));
+    }
 }

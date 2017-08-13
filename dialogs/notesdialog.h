@@ -5,6 +5,7 @@
 
 #include <mainwindow.h>
 #include "managers/settingsmanager.h"
+#include "tools/notestool.h"
 
 namespace Ui {
     class NotesDialog;
@@ -15,7 +16,7 @@ class NotesDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit NotesDialog(MainWindow *parent = 0);
+    explicit NotesDialog(NotesTool *parent = 0);
     ~NotesDialog();
 
     void setFolder(QString f);
@@ -36,7 +37,7 @@ private slots:
 private:
     Ui::NotesDialog *ui;
 
-    MainWindow *w;
+    NotesTool *w;
 
     SettingsManager *settingsManager;
 

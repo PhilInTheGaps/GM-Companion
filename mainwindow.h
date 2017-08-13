@@ -51,9 +51,6 @@ public:
     int getVersionNumber(); // Get Version Number (int), e.g. 1310
     void updateSettingsVersion(); // Sets version in settings to current version
 
-    // Notes
-    void getNotes();
-
     // Tools
     void addTools();
 
@@ -70,35 +67,12 @@ private slots:
     void on_actionSet_Audio_Projects_Folder_triggered();
     void on_actionSet_Radio_Playlists_Folder_triggered();
 
-    // Name Generator
-    void on_generateNames(QString);
-
-    // Characters
-    void on_characterListClicked(int);
-    void on_createCharacterButton_clicked();
-    void on_updateCharactersButton_clicked();
-    void on_editCharacter_clicked();
-    void on_deleteCharacterButton_clicked();
-
-    // Notes
-    void on_notesTree_itemClicked(QTreeWidgetItem *item, int column);
-    void on_notesTextEdit_textChanged();
-    void on_addNoteButton_clicked();
-    void on_addCategoryButton_clicked();
-    void on_deleteNoteButton_clicked();
-    void on_deleteCategoryButton_clicked();
-    void notesWatcher_directoryChanged();
-    void on_notesEncryptButton_clicked();
-    void on_notesFontBox_currentTextChanged(const QString &arg1);
-    void on_notesFontSizeSpinBox_valueChanged(int arg1);
-
     // Help
     void on_actionOpen_Wiki_triggered(); // Open Wiki
     void on_actionReport_a_Bug_triggered(); // Report Bug
     void actionI_want_to_use_an_older_Version_triggered(); // Older Version
 
     // Network
-    void on_versionNetworkAccessManagerFinished(QNetworkReply*); // Get Newest Version Number
     void on_blogNetworkAccessManagerFinished(QNetworkReply*); // Get Blog Entries
 
     // Converter
@@ -122,14 +96,17 @@ private slots:
 
     // Tools
     void closeTab(int index);
-    void on_actionToggle_Name_Generator_Tool_toggled(bool arg1);
-    void on_actionToggle_Notes_Tool_toggled(bool arg1);
-    void on_actionToggle_Unit_Converter_Tool_toggled(bool arg1);
 
     void on_actionAdd_Audio_Tool_triggered();   // Add AudioTool
     void on_actionToggle_Maps_Tool_triggered(); // Add MapViewerTool
     void on_actionToggle_Dice_Tool_triggered(); // Add DiceTool
     void on_actionToggle_Characters_Tool_triggered();   // Add Character Viewer Tool
+
+    void on_radioButton_allEntries_toggled(bool checked);
+
+    void on_radioButton_releaseOnly_toggled(bool checked);
+
+    void on_actionNotes_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -146,27 +123,8 @@ private:
     void setFolderLocations(QString indicator);
     QString readSettings();
 
-    // Name Generator
-    QSignalMapper *signalMapperNames;
-    void generateNamesTab();
-
-    // Notes
-    void readNotes(QString file);
-    void addNotes();
-    void addCategory();
-    void deleteNotes();
-    void deleteCategory();
-    void updateText();
-    QFileSystemWatcher* notesWatcher;
-
     // Network
-    QNetworkAccessManager *versionNetworkManager;
     QNetworkAccessManager *blogNetworkManager;
-
-    // Characters
-    void updateCharacters();
-    QTimer* updateCharactersTimer;
-    bool listenForCharacterUpdaters = true;
 
     // Converter
     QList<Unit> lengthUnits;
