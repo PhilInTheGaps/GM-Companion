@@ -1337,9 +1337,7 @@ void SIFRP::on_saveHouseButton_clicked()
 
     }
     file.close();
-    qDebug() << tr("Done.");
-
-    w->getNotes();
+    qDebug() << "Done.";
 }
 
 // Reset everything

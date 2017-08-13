@@ -29,7 +29,6 @@ SOURCES += main.cpp\
     tools/dicetool.cpp \
     tools/mapviewertool.cpp \
     tools/converter.cpp \
-    tools/notes.cpp \
     editors/audioeditor.cpp \
     managers/filemanager.cpp \
     managers/settingsmanager.cpp \
@@ -43,7 +42,8 @@ SOURCES += main.cpp\
     managers/generatormanager.cpp \
     generators/namegenerator.cpp \
     managers/updatemanager.cpp \
-    dialogs/updatedialog.cpp
+    dialogs/updatedialog.cpp \
+    tools/notestool.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -64,7 +64,8 @@ HEADERS  += mainwindow.h \
     managers/generatormanager.h \
     generators/namegenerator.h \
     managers/updatemanager.h \
-    dialogs/updatedialog.h
+    dialogs/updatedialog.h \
+    tools/notestool.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -79,7 +80,8 @@ FORMS    += mainwindow.ui \
     tools/characterviewertool.ui \
     managers/generatormanager.ui \
     generators/namegenerator.ui \
-    dialogs/updatedialog.ui
+    dialogs/updatedialog.ui \
+    tools/notestool.ui
 
 DISTFILES +=
 
