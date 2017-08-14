@@ -203,7 +203,7 @@ void ConverterTool::on_doubleSpinBox_length1_valueChanged(double arg1)
 // Area Units
 void ConverterTool::on_comboBox_area1_currentIndexChanged(int index)
 {
-    convertUnits(index, ui->comboBox_area1->currentIndex(), areaUnits, ui->doubleSpinBox_area1->value(), ui->doubleSpinBox_area2);
+    convertUnits(index, ui->comboBox_area2->currentIndex(), areaUnits, ui->doubleSpinBox_area1->value(), ui->doubleSpinBox_area2);
 }
 
 void ConverterTool::on_comboBox_area2_currentIndexChanged(int index)
@@ -219,7 +219,7 @@ void ConverterTool::on_doubleSpinBox_area1_valueChanged(double arg1)
 // Volume Units
 void ConverterTool::on_comboBox_volume1_currentIndexChanged(int index)
 {
-    convertUnits(index, ui->comboBox_volume1->currentIndex(), volumeUnits, ui->doubleSpinBox_volume1->value(), ui->doubleSpinBox_volume2);
+    convertUnits(index, ui->comboBox_volume2->currentIndex(), volumeUnits, ui->doubleSpinBox_volume1->value(), ui->doubleSpinBox_volume2);
 }
 
 void ConverterTool::on_comboBox_volume2_currentIndexChanged(int index)
@@ -235,7 +235,7 @@ void ConverterTool::on_doubleSpinBox_volume1_valueChanged(double arg1)
 // Weight Units
 void ConverterTool::on_comboBox_weight1_currentIndexChanged(int index)
 {
-    convertUnits(index, ui->comboBox_weight1->currentIndex(), weightUnits, ui->doubleSpinBox_weight1->value(), ui->doubleSpinBox_weight2);
+    convertUnits(index, ui->comboBox_weight2->currentIndex(), weightUnits, ui->doubleSpinBox_weight1->value(), ui->doubleSpinBox_weight2);
 }
 
 void ConverterTool::on_comboBox_weight2_currentIndexChanged(int index)
@@ -251,7 +251,7 @@ void ConverterTool::on_doubleSpinBox_weight1_valueChanged(double arg1)
 // Money Units
 void ConverterTool::on_comboBox_money1_currentIndexChanged(int index)
 {
-    convertUnits(index, ui->comboBox_money1->currentIndex(), moneyUnits, ui->doubleSpinBox_money1->value(), ui->doubleSpinBox_money2);
+    convertUnits(index, ui->comboBox_money2->currentIndex(), moneyUnits, ui->doubleSpinBox_money1->value(), ui->doubleSpinBox_money2);
 }
 
 void ConverterTool::on_comboBox_money2_currentIndexChanged(int index)
