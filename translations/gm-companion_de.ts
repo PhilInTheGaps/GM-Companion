@@ -2282,12 +2282,12 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="85"/>
         <source>Official Addons</source>
-        <translation type="unfinished"></translation>
+        <translation>Offizielle Addons</translation>
     </message>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="89"/>
         <source>Inofficial Addons</source>
-        <translation type="unfinished"></translation>
+        <translation>Inoffizielle Addons</translation>
     </message>
 </context>
 <context>
@@ -2312,42 +2312,42 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="93"/>
         <source>Set Music Folder</source>
-        <translation type="unfinished">Musik Pfad festlegen</translation>
+        <translation>Musik Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="101"/>
         <source>Set Sound Folder</source>
-        <translation type="unfinished">Sound Pfad festlegen</translation>
+        <translation>Sound Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="109"/>
         <source>Set Maps Folder</source>
-        <translation type="unfinished">Karten Pfad festlegen</translation>
+        <translation>Karten Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="117"/>
         <source>Set Resources Folder</source>
-        <translation type="unfinished">Resourcen Pfad festlegen</translation>
+        <translation>Resourcen Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="125"/>
         <source>Set Characters Folder</source>
-        <translation type="unfinished">Charakter Pfad festlegen</translation>
+        <translation>Charakter Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="133"/>
         <source>Set Notes Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Notizen Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="141"/>
         <source>Set Audio Projects Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Projekt Pfad festlegen</translation>
     </message>
     <message>
         <location filename="../managers/settingsmanager.cpp" line="149"/>
         <source>Set Radio Playlists Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio Playlist Pfad festlegen</translation>
     </message>
 </context>
 <context>
