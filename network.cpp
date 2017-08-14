@@ -61,7 +61,7 @@ void MainWindow::on_blogNetworkAccessManagerFinished(QNetworkReply * reply){
             }
         }
         else
-            reader.raiseError(QObject::tr("Incorrect file"));
+            reader.raiseError("Incorrect XML file!");
     }
 
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
