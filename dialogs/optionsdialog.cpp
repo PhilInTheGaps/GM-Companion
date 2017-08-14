@@ -82,11 +82,11 @@ void OptionsDialog::getAddons(){
         }
     }
 
-    ui->addonsFrame->layout()->addWidget(new QLabel("Official Addons"));
+    ui->addonsFrame->layout()->addWidget(new QLabel(tr("Official Addons")));
     for (QCheckBox* b : officialAddons){
         ui->addonsFrame->layout()->addWidget(b);
     }
-    ui->addonsFrame->layout()->addWidget(new QLabel("Inofficial Addons"));
+    ui->addonsFrame->layout()->addWidget(new QLabel(tr("Inofficial Addons")));
     for (QCheckBox* b : inofficialAddons){
         ui->addonsFrame->layout()->addWidget(b);
     }
