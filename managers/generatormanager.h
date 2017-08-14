@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "managers/settingsmanager.h"
+
 namespace Ui {
 class GeneratorManager;
 }
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::GeneratorManager *ui;
+
+    SettingsManager *settingsManager;
 
     void loadGenerators();
 };
