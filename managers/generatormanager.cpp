@@ -2,6 +2,7 @@
 #include "ui_generatormanager.h"
 
 #include "generators/namegenerator.h"
+#include "addontools/sifrp.h"
 
 #include <QDebug>
 
@@ -10,6 +11,8 @@ GeneratorManager::GeneratorManager(QWidget *parent) : QWidget(parent), ui(new Ui
     qDebug().noquote() << "Loading GeneratorManager ...";
 
     ui->setupUi(this);
+
+    settingsManager = new SettingsManager;
 
     loadGenerators();
 }
@@ -26,4 +29,13 @@ void GeneratorManager::loadGenerators()
     // Name Generator
     NameGenerator *nameGenerator = new NameGenerator;
     ui->tabWidget_generators->addTab(nameGenerator, "Name Generator");
+
+    // Addons
+    qDebug().noquote() << "Loading addon generators ...";
+    if (settingsManager->getIsAddonEnabled("SIFRP"))
+    {
+        qDebug().noquote() << "SIFRP addon is enabled, loading generators ...";
+        SIFRP* sifrp = new SIFRP(this);
+        ui->tabWidget_generators->addTab(sifrp, "SIFRP");
+    }
 }
