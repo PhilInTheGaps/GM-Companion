@@ -18,5 +18,8 @@
         <file>resources/mediaIcons/stop.png</file>
         <file>resources/NewFeatures/groups.png</file>
         <file>resources/NewFeatures/buttonStyle.png</file>
+        <file>resources/mediaIcons/music.png</file>
+        <file>resources/mediaIcons/radio.png</file>
+        <file>resources/mediaIcons/sound.png</file>
     </qresource>
 </RCC>

@@ -237,7 +237,7 @@ void AudioTool::generateListViewElementButtons(QString scenario)
 
         QPushButton *button = new QPushButton(name);
         button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        button->setIcon(QIcon(":/resources/mediaIcons/music.png"));
 
         connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
         signalMapperMusic->setMapping(button, name+";"+category+";"+scenario);
@@ -259,7 +259,7 @@ void AudioTool::generateListViewElementButtons(QString scenario)
 
         QPushButton *button = new QPushButton(name);
         button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        button->setIcon(QIcon(":/resources/mediaIcons/sound.png"));
         button->setCheckable(true);
 
         connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
@@ -282,7 +282,7 @@ void AudioTool::generateListViewElementButtons(QString scenario)
 
         QPushButton *button = new QPushButton(name);
         button->setToolTip(description);
-        button->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        button->setIcon(QIcon(":/resources/mediaIcons/radio.png"));
 
         connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
         signalMapperRadio->setMapping(button, name+";"+category+";"+scenario);
@@ -357,7 +357,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton *sb = new QToolButton;
         sb->setText(name);
         sb->setToolTip(description);
-        sb->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        sb->setIcon(QIcon(":/resources/mediaIcons/music.png"));
 
         connect(sb, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
         signalMapperMusic->setMapping(sb, name+";"+category+";"+scenario);
@@ -374,7 +374,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton *lb = new QToolButton;
         lb->setText(name);
         lb->setToolTip(description);
-        lb->setIcon(style()->standardIcon(QStyle::SP_MediaVolume));
+        lb->setIcon(QIcon(":/resources/mediaIcons/music.png"));
 
         connect(lb, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
         signalMapperMusic->setMapping(lb, name+";"+category+";"+scenario);
@@ -404,7 +404,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton* sb = new QToolButton;
         sb->setText(name);
         sb->setToolTip(description);
-        sb->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        sb->setIcon(QIcon(":/resources/mediaIcons/sound.png"));
 
         connect(sb, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
         signalMapperSound->setMapping(sb, name+";"+category+";"+scenario);
@@ -422,7 +422,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton* lb = new QToolButton;
         lb->setText(name);
         lb->setToolTip(description);
-        lb->setIcon(style()->standardIcon(QStyle::SP_DriveCDIcon));
+        lb->setIcon(QIcon(":/resources/mediaIcons/sound.png"));
 
         connect(lb, SIGNAL(clicked()), signalMapperSound, SLOT(map()));
         signalMapperSound->setMapping(lb, name+";"+category+";"+scenario);
@@ -453,7 +453,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton* sb = new QToolButton;
         sb->setText(name);
         sb->setToolTip(description);
-        sb->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        sb->setIcon(QIcon(":/resources/mediaIcons/radio.png"));
 
         connect(sb, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
         signalMapperRadio->setMapping(sb, name+";"+category+";"+scenario);
@@ -470,7 +470,7 @@ void AudioTool::generateElementButtons(QString category, QString scenario, QFram
         QToolButton* lb = new QToolButton;
         lb->setText(name);
         lb->setToolTip(description);
-        lb->setIcon(style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        lb->setIcon(QIcon(":/resources/mediaIcons/radio.png"));
 
         connect(lb, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
         signalMapperRadio->setMapping(lb, name+";"+category+";"+scenario);
