@@ -39,9 +39,9 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     QString replyString = reply->readAll();
     QXmlStreamReader reader(replyString);
 
-    int newestVersion = 0;
-    QString newestVersionTitle;
-    QString newestVersionString;
+    int newestVersion = 0;          // 320
+    QString newestVersionTitle;     // Beta 3.2
+    QString newestVersionString;    // 0.3.2.0
 
     qDebug() << "Found the following versions:";
     if (reader.readNextStartElement())

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTreeWidget>
 #include <QListWidget>
+#include <QMediaPlayer>
 
 #include "managers/settingsmanager.h"
 
@@ -49,10 +50,24 @@ private slots:
 
     void on_pushButton_convertFolderToMusicList_clicked();
 
+    void on_pushButton_playPause_toggled(bool checked);
+
+    void on_treeWidget_music_currentItemChanged(QTreeWidgetItem *current);
+
+    void on_treeWidget_sound_currentItemChanged(QTreeWidgetItem *current);
+
+    void on_verticalSlider_volume_valueChanged(int value);
+
+    void on_horizontalSlider_progress_sliderMoved(int position);
+    void previewPlayer_positionChanged(qint64 position);
+
 private:
     Ui::AudioEditor *ui;
 
     SettingsManager *settingsManager;
+
+    QMediaPlayer *previewPlayer;
+    void playPreview(QString path);
 
     bool isProjectOpen = false;
 
