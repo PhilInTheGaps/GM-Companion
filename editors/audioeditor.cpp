@@ -977,6 +977,8 @@ void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, i
         listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_musicList->addItem(listItem);
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1004,6 +1006,8 @@ void AudioEditor::on_pushButton_addAllFilesFromMusicFolder_clicked()
                 ui->listWidget_musicList->addItem(listItem);
             }
         }
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1018,6 +1022,8 @@ void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, i
         listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_soundList->addItem(listItem);
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1044,6 +1050,8 @@ void AudioEditor::on_pushButton_addAllFilesFromSoundFolder_clicked()
                 ui->listWidget_soundList->addItem(listItem);
             }
         }
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
