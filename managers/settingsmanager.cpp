@@ -90,7 +90,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
 
     switch (setting) {
     case Setting::musicPath:
-        path = setFolderLocation("Set Music Folder");
+        path = setFolderLocation(QObject::tr("Set Music Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("musicPath", path);
@@ -98,7 +98,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::soundPath:
-        path = setFolderLocation("Set Sound Folder");
+        path = setFolderLocation(QObject::tr("Set Sound Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("soundPath", path);
@@ -106,7 +106,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::mapsPath:
-        path = setFolderLocation("Set Maps Folder");
+        path = setFolderLocation(QObject::tr("Set Maps Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("mapsPath", path);
@@ -114,7 +114,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::resourcesPath:
-        path = setFolderLocation("Set Resources Folder");
+        path = setFolderLocation(QObject::tr("Set Resources Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("resourcesPath", path);
@@ -122,7 +122,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::charactersPath:
-        path = setFolderLocation("Set Characters Folder");
+        path = setFolderLocation(QObject::tr("Set Characters Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("charactersPath", path);
@@ -130,7 +130,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::notesPath:
-        path = setFolderLocation("Set Notes Folder");
+        path = setFolderLocation(QObject::tr("Set Notes Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("notesPath", path);
@@ -138,7 +138,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::audioPath:
-        path = setFolderLocation("Set Audio Projects Folder");
+        path = setFolderLocation(QObject::tr("Set Audio Projects Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("audioPath", path);
@@ -146,7 +146,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::radioPath:
-        path = setFolderLocation("Set Radio Playlists Folder");
+        path = setFolderLocation(QObject::tr("Set Radio Playlists Folder"));
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("radioPath", path);
@@ -220,7 +220,7 @@ bool SettingsManager::getIsAddonEnabled(QString addon){
     QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     addonSettings.beginGroup("Addons");
 
-    if (addonSettings.value(addon, 0).toInt() == 1){
+    if (addonSettings.value(addon, 1).toInt() == 1){
         enabled = true;
     }else{
         enabled = false;

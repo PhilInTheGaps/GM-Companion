@@ -13,6 +13,9 @@ AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEdi
 
     ui->progressBar_loading->setHidden(true);
 
+    previewPlayer = new QMediaPlayer;
+    connect(previewPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(previewPlayer_positionChanged(qint64)));
+
     settingsManager = new SettingsManager;
 
     isProjectOpen = false;
@@ -974,6 +977,8 @@ void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, i
         listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_musicList->addItem(listItem);
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1001,6 +1006,8 @@ void AudioEditor::on_pushButton_addAllFilesFromMusicFolder_clicked()
                 ui->listWidget_musicList->addItem(listItem);
             }
         }
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1015,6 +1022,8 @@ void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, i
         listItem->setWhatsThis(item->whatsThis(column));
 
         ui->listWidget_soundList->addItem(listItem);
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1041,6 +1050,8 @@ void AudioEditor::on_pushButton_addAllFilesFromSoundFolder_clicked()
                 ui->listWidget_soundList->addItem(listItem);
             }
         }
+
+        on_pushButton_saveElement_clicked();
     }
 }
 
@@ -1118,4 +1129,70 @@ void AudioEditor::on_pushButton_convertFolderToMusicList_clicked()
 
         on_pushButton_saveElement_clicked();
     }
+}
+
+// Start preview
+void AudioEditor::playPreview(QString path)
+{
+    qDebug().noquote() << "Previewing file:" << path;
+
+    if (ui->checkBox_autoplay->isChecked() && QFile(path).exists())
+    {
+        ui->pushButton_playPause->setEnabled(true);
+        ui->pushButton_playPause->setChecked(false);
+        on_pushButton_playPause_toggled(false);
+
+        previewPlayer->setMedia(QUrl::fromLocalFile(path));
+        previewPlayer->setVolume(ui->verticalSlider_volume->value());
+        previewPlayer->play();
+    }
+}
+
+void AudioEditor::on_pushButton_playPause_toggled(bool checked)
+{
+    if (checked)
+    {
+        ui->pushButton_playPause->setIcon(QIcon(":/resources/mediaIcons/play.png"));
+        ui->pushButton_playPause->setText("Play");
+        previewPlayer->pause();
+
+    }
+    else
+    {
+        ui->pushButton_playPause->setIcon(QIcon(":/resources/mediaIcons/pause.png"));
+        ui->pushButton_playPause->setText("Pause");
+        previewPlayer->play();
+    }
+}
+
+void AudioEditor::on_treeWidget_music_currentItemChanged(QTreeWidgetItem *current)
+{
+    if (current->type() == 1)
+    {
+        playPreview(settingsManager->getSetting(musicPath) + current->whatsThis(0));
+    }
+}
+
+void AudioEditor::on_treeWidget_sound_currentItemChanged(QTreeWidgetItem *current)
+{
+    if (current->type() == 1)
+    {
+        playPreview(settingsManager->getSetting(soundPath) + current->whatsThis(0));
+    }
+}
+
+void AudioEditor::on_verticalSlider_volume_valueChanged(int value)
+{
+    previewPlayer->setVolume(value);
+}
+
+void AudioEditor::on_horizontalSlider_progress_sliderMoved(int position)
+{
+    previewPlayer->setPosition(position);
+}
+
+void AudioEditor::previewPlayer_positionChanged(qint64 position)
+{
+    ui->horizontalSlider_progress->setMaximum(previewPlayer->duration());
+    ui->horizontalSlider_progress->setValue(position);
 }

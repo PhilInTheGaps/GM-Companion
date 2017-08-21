@@ -2,12 +2,14 @@
 #include "ui_mainwindow.h"
 #include "dialogs/optionsdialog.h"
 #include "addontools/sifrp.h"
+#include "dialogs/aboutdialog.h"
 
 #include "tools/audiotool.h"
 #include "tools/mapviewertool.h"
 #include "tools/dicetool.h"
 #include "tools/characterviewertool.h"
 #include "tools/notestool.h"
+#include "tools/convertertool.h"
 
 #include "managers/filemanager.h"
 #include "managers/generatormanager.h"
@@ -38,24 +40,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Set tool tabs closeable
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 
-    // Addons
-    qDebug().noquote() << "Getting Addons...";
-    if (settingsManager->getIsAddonEnabled("SIFRP"))
-    {
-        qDebug().noquote() << tr("SIFRP addon is enabled, loading tools ...");
-        SIFRP* sifrp = new SIFRP(this);
-        ui->tabWidget->addTab(sifrp, "SIFRP");
-    }
-
     // Initialize Blog Network Manager
     blogNetworkManager = new QNetworkAccessManager;
     connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
 
-    // Initialize Converter
-    initializeUnits();
-
     // Get Blog Feed
-    qDebug() << tr("Getting blog feed...");
+    qDebug() << "Getting blog feed...";
     blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
     ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
@@ -75,27 +65,31 @@ void MainWindow::addTools()
 
     // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->insertTab(1, audioTool, "Audio Tool");
+    ui->tabWidget->insertTab(1, audioTool, tr("Audio Tool"));
 
     // MapTool
     MapViewerTool *mapViewerTool = new MapViewerTool;
-    ui->tabWidget->insertTab(2, mapViewerTool, "Map Tool");
+    ui->tabWidget->insertTab(2, mapViewerTool, tr("Map Tool"));
 
     // DiceTool
     DiceTool *diceTool = new DiceTool;
-    ui->tabWidget->insertTab(3, diceTool, "Dice Tool");
+    ui->tabWidget->insertTab(3, diceTool, tr("Dice Tool"));
 
     // Character Viewer
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
-    ui->tabWidget->insertTab(4, characterViewer, "Characters");
+    ui->tabWidget->insertTab(4, characterViewer, tr("Characters"));
 
     // Generator Manager
     GeneratorManager *generatorManager = new GeneratorManager;
-    ui->tabWidget->insertTab(5, generatorManager, "Generators");
+    ui->tabWidget->insertTab(5, generatorManager, tr("Generators"));
 
     // NotesTool
     NotesTool *notesTool = new NotesTool;
-    ui->tabWidget->insertTab(6, notesTool, "Notes");
+    ui->tabWidget->insertTab(6, notesTool, tr("Notes"));
+
+    // ConverterTool
+    ConverterTool *converterTool = new ConverterTool;
+    ui->tabWidget->insertTab(7, converterTool, tr("Unit Converter"));
 }
 
 // Open Wiki Page in Web Browser
@@ -116,7 +110,7 @@ void MainWindow::setVersion(QString versionAsString){
     QString temp = versionAsString.replace(".", "");
     versionNumber = temp.toInt();
 
-    qDebug().noquote() << tr("Version: ")+versionString;
+    qDebug().noquote() << "Version: " + versionString;
 }
 
 int MainWindow::getVersionNumber()
@@ -211,7 +205,7 @@ void MainWindow::on_actionToggle_Maps_Tool_triggered()
 {
     qDebug() << "Adding Map Viewer Tool...";
     MapViewerTool *mapViewerTool = new MapViewerTool;
-    ui->tabWidget->addTab(mapViewerTool, "Map Tool");
+    ui->tabWidget->addTab(mapViewerTool, tr("Map Tool"));
 }
 
 // Add Dice Tool
@@ -219,7 +213,7 @@ void MainWindow::on_actionToggle_Dice_Tool_triggered()
 {
     qDebug() << "Adding AudioTool ...";
     AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->addTab(audioTool, "Audio Tool");
+    ui->tabWidget->addTab(audioTool, tr("Audio Tool"));
 }
 
 // Add Character Tool
@@ -227,7 +221,7 @@ void MainWindow::on_actionToggle_Characters_Tool_triggered()
 {
     qDebug() << "Adding characters tool...";
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
-    ui->tabWidget->addTab(characterViewer, "Characters");
+    ui->tabWidget->addTab(characterViewer, tr("Characters"));
 }
 
 // Add Audio Tool
@@ -235,7 +229,7 @@ void MainWindow::on_actionAdd_Audio_Tool_triggered()
 {
     qDebug() << "Adding AudioTool ...";
     AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->addTab(audioTool, "Audio Tool");
+    ui->tabWidget->addTab(audioTool, tr("Audio Tool"));
 }
 
 // Add Notes Tool
@@ -243,7 +237,15 @@ void MainWindow::on_actionNotes_triggered()
 {
     qDebug() << "Adding NotesTool ...";
     NotesTool *notesTool = new NotesTool;
-    ui->tabWidget->addTab(notesTool, "Notes");
+    ui->tabWidget->addTab(notesTool, tr("Notes"));
+}
+
+// Add Converter Tool
+void MainWindow::on_actionUnit_Converter_triggered()
+{
+    qDebug() << "Adding ConverterTool ...";
+    ConverterTool *converterTool = new ConverterTool;
+    ui->tabWidget->addTab(converterTool, tr("Unit Converter"));
 }
 
 // Change blog settings
@@ -251,7 +253,7 @@ void MainWindow::on_radioButton_allEntries_toggled(bool checked)
 {
     if (checked)
     {
-        qDebug() << tr("Getting blog feed ...");
+        qDebug() << "Getting blog feed ...";
         blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
     }
 }
@@ -260,7 +262,18 @@ void MainWindow::on_radioButton_releaseOnly_toggled(bool checked)
 {
     if (checked)
     {
-        qDebug() << tr("Getting blog feed ...");
+        qDebug() << "Getting blog feed ...";
         blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/releases.xml")));
     }
+}
+
+void MainWindow::on_actionView_on_GitHub_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion"));
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    AboutDialog *about = new AboutDialog(versionString);
+    about->show();
 }
