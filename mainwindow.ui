@@ -246,7 +246,7 @@ p, li { white-space: pre-wrap; }
                  </font>
                 </property>
                 <property name="text">
-                 <string>Version: Beta 3.2 (0.3.2.0) DEV-BUILD</string>
+                 <string>Version: Beta 3.2 (0.3.2.0)</string>
                 </property>
                </widget>
               </item>
