@@ -301,6 +301,26 @@
         <source>Double click a file to add it to an element!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../editors/audioeditor.ui" line="856"/>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editors/audioeditor.ui" line="882"/>
+        <source>Preview Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editors/audioeditor.ui" line="897"/>
+        <source>Play file when selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editors/audioeditor.ui" line="910"/>
+        <source>Preview Progress</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioTool</name>
@@ -345,102 +365,112 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="160"/>
+        <location filename="../tools/audiotool.ui" line="133"/>
+        <source>Open the audio tool wiki page</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/audiotool.ui" line="136"/>
+        <source>Documentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/audiotool.ui" line="170"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="245"/>
+        <location filename="../tools/audiotool.ui" line="255"/>
         <source>Scenarios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="294"/>
+        <location filename="../tools/audiotool.ui" line="304"/>
         <source>Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="334"/>
+        <location filename="../tools/audiotool.ui" line="344"/>
         <source>Music List:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="374"/>
+        <location filename="../tools/audiotool.ui" line="384"/>
         <source>Category: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="381"/>
+        <location filename="../tools/audiotool.ui" line="391"/>
         <source>Scenario: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="388"/>
+        <location filename="../tools/audiotool.ui" line="398"/>
         <source>Element: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="402"/>
+        <location filename="../tools/audiotool.ui" line="412"/>
         <source>Metadata:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="409"/>
+        <location filename="../tools/audiotool.ui" line="419"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="419"/>
+        <location filename="../tools/audiotool.ui" line="429"/>
         <source>Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="429"/>
+        <location filename="../tools/audiotool.ui" line="439"/>
         <source>Album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="485"/>
+        <location filename="../tools/audiotool.ui" line="495"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="517"/>
+        <location filename="../tools/audiotool.ui" line="527"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="543"/>
+        <location filename="../tools/audiotool.ui" line="553"/>
         <source>Replay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="569"/>
+        <location filename="../tools/audiotool.ui" line="579"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="593"/>
+        <location filename="../tools/audiotool.ui" line="603"/>
         <source>Music Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="600"/>
+        <location filename="../tools/audiotool.ui" line="610"/>
         <source>Sound Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.cpp" line="72"/>
+        <location filename="../tools/audiotool.cpp" line="73"/>
         <source>Music: Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.cpp" line="78"/>
+        <location filename="../tools/audiotool.cpp" line="79"/>
         <source>Music: Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.cpp" line="84"/>
+        <location filename="../tools/audiotool.cpp" line="85"/>
         <source>Music: Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -846,28 +876,8 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileManager</name>
     <message>
-        <location filename="../managers/filemanager.cpp" line="83"/>
-        <source>does not exist. Creating...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../managers/filemanager.cpp" line="91"/>
-        <source> does not exist. Creating...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../managers/filemanager.cpp" line="96"/>
-        <source>Copying files to </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../managers/filemanager.cpp" line="105"/>
         <source>This OS is not supported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../managers/filemanager.cpp" line="178"/>
-        <source>Done.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -890,6 +900,11 @@ p, li { white-space: pre-wrap; }
         <location filename="../mainwindow.ui" line="114"/>
         <source>Welcome!</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="249"/>
+        <source>Version: Beta 3.2 (0.3.2.0)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
@@ -928,8 +943,8 @@ p, li { white-space: pre-wrap; }
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="589"/>
         <location filename="../mainwindow.ui" line="650"/>
-        <location filename="../mainwindow.cpp" line="89"/>
-        <location filename="../mainwindow.cpp" line="233"/>
+        <location filename="../mainwindow.cpp" line="80"/>
+        <location filename="../mainwindow.cpp" line="224"/>
         <source>Characters</source>
         <translation></translation>
     </message>
@@ -937,8 +952,8 @@ p, li { white-space: pre-wrap; }
         <location filename="../mainwindow.ui" line="599"/>
         <location filename="../mainwindow.ui" line="658"/>
         <location filename="../mainwindow.ui" line="697"/>
-        <location filename="../mainwindow.cpp" line="97"/>
-        <location filename="../mainwindow.cpp" line="249"/>
+        <location filename="../mainwindow.cpp" line="88"/>
+        <location filename="../mainwindow.cpp" line="240"/>
         <source>Notes</source>
         <translation></translation>
     </message>
@@ -950,8 +965,8 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../mainwindow.ui" line="666"/>
         <location filename="../mainwindow.ui" line="702"/>
-        <location filename="../mainwindow.cpp" line="101"/>
-        <location filename="../mainwindow.cpp" line="257"/>
+        <location filename="../mainwindow.cpp" line="92"/>
+        <location filename="../mainwindow.cpp" line="248"/>
         <source>Unit Converter</source>
         <translation></translation>
     </message>
@@ -963,11 +978,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../mainwindow.ui" line="224"/>
         <source>GM-Companion Blog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="249"/>
-        <source>Version: Beta 3.2 (0.3.2.0) DEV-BUILD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1093,7 +1103,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../mainwindow.ui" line="692"/>
-        <location filename="../mainwindow.cpp" line="93"/>
+        <location filename="../mainwindow.cpp" line="84"/>
         <source>Generators</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1112,20 +1122,20 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Close</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="77"/>
-        <location filename="../mainwindow.cpp" line="225"/>
-        <location filename="../mainwindow.cpp" line="241"/>
+        <location filename="../mainwindow.cpp" line="68"/>
+        <location filename="../mainwindow.cpp" line="216"/>
+        <location filename="../mainwindow.cpp" line="232"/>
         <source>Audio Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="81"/>
-        <location filename="../mainwindow.cpp" line="217"/>
+        <location filename="../mainwindow.cpp" line="72"/>
+        <location filename="../mainwindow.cpp" line="208"/>
         <source>Map Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="85"/>
+        <location filename="../mainwindow.cpp" line="76"/>
         <source>Dice Tool</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1423,19 +1433,6 @@ Please select a user defined category!</source>
     <message>
         <location filename="../dialogs/optionsdialog.cpp" line="89"/>
         <source>Inofficial Addons</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Program Start</name>
-    <message>
-        <location filename="../main.cpp" line="128"/>
-        <source>Opening New Features Window because of an Update...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../main.cpp" line="132"/>
-        <source>Opening New Features Window because of the settings preferences...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2639,107 +2636,26 @@ p, li { white-space: pre-wrap; }
         <translation>New Features!</translation>
     </message>
     <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="37"/>
         <source>What is new in version 3.1?</source>
-        <translation>What is new in version 3.1?</translation>
+        <translation type="vanished">What is new in version 3.1?</translation>
     </message>
     <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="63"/>
-        <source>GM-Companion is now also available in german!</source>
-        <translation></translation>
+        <location filename="../dialogs/whatisnewwindow.ui" line="37"/>
+        <source>What is new in version 3.2?</source>
+        <translation type="unfinished">What is new in version 3.1? {3.2??}</translation>
     </message>
     <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="72"/>
-        <source>Select your prefered language:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="85"/>
-        <source>English</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="90"/>
-        <source>German</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="100"/>
-        <source>A new music / sound button style is now available!</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="124"/>
-        <source>Select your prefered button style:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="137"/>
-        <source>Small</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="142"/>
-        <source>Large</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="161"/>
-        <source>Music folders can now be grouped as in the screenshot below:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="189"/>
-        <source>Groups can be managed in the new options window!</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="200"/>
-        <source>Addons for different RPG systems are now supported.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="209"/>
-        <source>Install addons via the Addon Manager:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="216"/>
-        <source>Open Addon Manager</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="225"/>
-        <source>Addons can be enabled / disabled in the options menu. By default they are enabled after their installation.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="232"/>
-        <source>Currently the only two addons available are for &quot;DSA5 (The Dark Eye)&quot; and &quot;SIFRP (A Song of Ice and Fire Roleplaying)&quot;. The features that addons offer are currently very limited as addons are still under heavy development.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="242"/>
-        <source>For more information regarding addons please visit the wiki.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="284"/>
-        <source>For some of the changes to take effect, the program needs to be restarted!</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="298"/>
+        <location filename="../dialogs/whatisnewwindow.ui" line="81"/>
         <source>Don&apos;t show this window again</source>
         <translation>Don&apos;t show this window again</translation>
     </message>
     <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="324"/>
+        <location filename="../dialogs/whatisnewwindow.ui" line="107"/>
         <source>Next</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/whatisnewwindow.ui" line="337"/>
+        <location filename="../dialogs/whatisnewwindow.ui" line="120"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
