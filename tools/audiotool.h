@@ -60,6 +60,8 @@ private slots:
 
     void on_pushButton_updateProjects_clicked();
 
+    void on_pushButton_documentation_clicked();
+
 private:
     Ui::AudioTool *ui;
 

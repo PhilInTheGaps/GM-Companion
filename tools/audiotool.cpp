@@ -898,3 +898,9 @@ void AudioTool::on_pushButton_updateProjects_clicked()
 {
     getProjects();
 }
+
+// Open audio tool wiki page
+void AudioTool::on_pushButton_documentation_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki/Audio-Tool"));
+}
