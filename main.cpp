@@ -118,27 +118,29 @@ int main(int argc, char *argv[])
     // Add Tools to mainwindow
     w.addTools();
 
-    // Open WhatIsNewWindow
-    int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
-    int settingsVersion = checkSettings.value("version", 0).toInt();
-    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion)
-    {
-        if (w.getVersionNumber() > settingsVersion)
-        {
-            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
-        }
-        else if (openNewFeatures == 1)
-        {
-            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
-        }
+    // I currently disabled the new features window because I don't know what to put in there this patch...
 
-        WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
-        whatIsNewWindow->show();
+//    // Open WhatIsNewWindow
+//    int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
+//    int settingsVersion = checkSettings.value("version", 0).toInt();
+//    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion)
+//    {
+//        if (w.getVersionNumber() > settingsVersion)
+//        {
+//            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
+//        }
+//        else if (openNewFeatures == 1)
+//        {
+//            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
+//        }
 
-        settingsManager->updateSettings();
+//        WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
+//        whatIsNewWindow->show();
 
-        w.updateSettingsVersion();
-    }
+//        settingsManager->updateSettings();
+
+//        w.updateSettingsVersion();
+//    }
 
     qDebug().noquote() << "Closing splash screen ...";
     splash->close();
