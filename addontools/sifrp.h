@@ -1,9 +1,6 @@
 #ifndef SIFRP_H
 #define SIFRP_H
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-
 #include <QWidget>
 #include <QSettings>
 #include <QStringList>
@@ -17,52 +14,37 @@ class SIFRP : public QWidget{
     Q_OBJECT
 
 public:
-    explicit SIFRP(MainWindow *parent = 0);
+    explicit SIFRP(QWidget *parent = 0);
     ~SIFRP();
 
 private slots:
     void on_realmComboBox_currentIndexChanged(int index);
-
     void on_randomRealm_clicked();
 
     void on_nextButton_clicked();
 
     void on_step2SetPlayersButton_clicked();
-
     void on_step2AddButton_clicked();
 
     void on_foundingComboBox_currentIndexChanged(int index);
-
     void on_foundingRandomButton_clicked();
-
-    void on_eventComboBox_currentIndexChanged(int index);
-
-    void on_eventRandomButton_clicked();
-
     void on_foundingApplyButton_clicked();
 
+    void on_eventRandomButton_clicked();
+    void on_eventComboBox_currentIndexChanged(int index);
     void on_eventApplyButton_clicked();
-
-    void on_step4InvestInDefenseButton_clicked();
 
     void on_step1SetRealmButton_clicked();
 
+    void on_step4InvestInDefenseButton_clicked();
     void on_step4InvestInHeirButton_clicked();
-
     void on_step4SetTerrainButton_clicked();
-
     void on_step4AddFeatureButton_clicked();
-
     void on_step4CreateDomainButton_clicked();
-
     void on_step4UnitsComboBox_currentIndexChanged(int index);
-
     void on_step4BuyUnitsButton_clicked();
-
     void on_step4InvestInBannerHouse_clicked();
-
     void on_step4WealthHoldingComboBox_currentIndexChanged(int index);
-
     void on_step4InvestInWealthHoldingButton_clicked();
 
     void on_saveHouseButton_clicked();
@@ -71,8 +53,6 @@ private slots:
 
 private:
     Ui::SIFRP *ui;
-
-    MainWindow* w;
 
     QString getString(QString s);
 

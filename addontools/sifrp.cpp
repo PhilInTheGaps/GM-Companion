@@ -6,12 +6,10 @@
 #include <QTableWidgetItem>
 
 // Start
-SIFRP::SIFRP(MainWindow *parent) : QWidget(parent), ui(new Ui::SIFRP){
+SIFRP::SIFRP(QWidget *parent) : QWidget(parent), ui(new Ui::SIFRP){
     qDebug().noquote() << "Loading SIFRP tool ...";
 
     ui->setupUi(this);
-
-    w = parent;
 
     on_realmComboBox_currentIndexChanged(0);
     ui->eventComboBox->setEnabled(false);
@@ -1225,7 +1223,7 @@ void SIFRP::on_step4InvestInWealthHoldingButton_clicked()
 // Save House
 void SIFRP::on_saveHouseButton_clicked()
 {
-    qDebug() << tr("Saving SIFRP House...");
+    qDebug() << "Saving SIFRP House...";
 
     // Get House Name and generate Filename from that
     QString filename = ui->houseNameLine->text()+".txt";
@@ -1234,7 +1232,7 @@ void SIFRP::on_saveHouseButton_clicked()
     // Check if the directory "SIFRP-Houses" exists and create it if not
     QDir dir(QDir::homePath()+"/.gm-companion/notes/SIFRP-Houses");
     if (!dir.exists()){
-        qDebug() << tr("SIFRP House directory does not exist. Creating...");
+        qDebug() << "SIFRP House directory does not exist. Creating...";
         dir.mkpath(".");
     }
 

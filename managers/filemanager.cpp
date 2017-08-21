@@ -50,7 +50,7 @@ void FileManager::copyContents(QString path, QString destination){
             copy = false;
         } else {
             QFile(destination).remove();
-            qDebug() << path + " is newer, replacing...";
+            qDebug().noquote() << path + " is newer, replacing...";
         }
 
     } else {
@@ -80,7 +80,7 @@ void FileManager::copyFiles(){
 
     // Check if local .gm-companion directory exists and create it if not
     if (!lDir.exists()){
-        qDebug() << QDir::homePath()+"/.gm-companion"+QCoreApplication::translate("FileManager","does not exist. Creating...");
+        qDebug().noquote() << QDir::homePath()+"/.gm-companion does not exist. Creating...";
         lDir.mkpath(".");
     }
 
@@ -88,12 +88,12 @@ void FileManager::copyFiles(){
     for (QString path : dirList){
         QDir dir(QDir::homePath()+"/.gm-companion/"+path);
         if (!dir.exists()){
-            qDebug() << QDir::homePath()+"/.gm-companion/"+path+QCoreApplication::translate("FileManager", " does not exist. Creating...");
+            qDebug().noquote() << QDir::homePath()+"/.gm-companion/ does not exist. Creating...";
             dir.mkpath(".");
         }
     }
 
-    qDebug() << QCoreApplication::translate("FileManager" ,"Copying files to ") << QDir::homePath()+"/.gm-companion ...";
+    qDebug().noquote() << "Copying files to " << QDir::homePath()+"/.gm-companion ...";
 
     // Actually copy files to the directories
     #ifdef __linux__
@@ -175,6 +175,6 @@ void FileManager::copyFiles(){
         }
     }
 
-    qDebug() << QCoreApplication::translate("FileManager","Done.");
+    qDebug() << "Done.";
 
 }

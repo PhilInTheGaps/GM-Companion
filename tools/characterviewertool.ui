@@ -71,7 +71,7 @@
             </sizepolicy>
            </property>
            <property name="toolTip">
-            <string>Double click to make unactive</string>
+            <string>Double click to make inactive</string>
            </property>
           </widget>
          </item>
