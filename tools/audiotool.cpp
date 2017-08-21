@@ -9,6 +9,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QMediaMetaData>
+#include <QDesktopServices>
 
 // Only Windows relevant
 #ifdef _WIN32
