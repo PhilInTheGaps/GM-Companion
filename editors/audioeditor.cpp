@@ -315,7 +315,7 @@ void AudioEditor::loadMusicLists(QTreeWidgetItem *scenItem, QString category)
         QTreeWidgetItem *item = new QTreeWidgetItem(2);
         item->setText(0, list);
         item->setToolTip(0, list);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MediaVolume));
+        item->setIcon(0, QIcon(":/resources/mediaIcons/music.png"));
 
         scenItem->addChild(item);
     }
@@ -342,7 +342,7 @@ void AudioEditor::loadSoundLists(QTreeWidgetItem *scenItem, QString category)
         QTreeWidgetItem *item = new QTreeWidgetItem(3);
         item->setText(0, list);
         item->setToolTip(0, list);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_DriveCDIcon));
+        item->setIcon(0, QIcon(":/resources/mediaIcons/sound.png"));
 
         scenItem->addChild(item);
     }
@@ -369,7 +369,7 @@ void AudioEditor::loadRadios(QTreeWidgetItem *scenItem, QString category)
         QTreeWidgetItem *item = new QTreeWidgetItem(4);
         item->setText(0, list);
         item->setToolTip(0, list);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_MessageBoxInformation));
+        item->setIcon(0, QIcon(":/resources/mediaIcons/radio.png"));
 
         scenItem->addChild(item);
     }
