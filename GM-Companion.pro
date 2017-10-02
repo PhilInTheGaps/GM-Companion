@@ -24,7 +24,6 @@ CONFIG += c++11
 SOURCES += main.cpp\
     mainwindow.cpp \
     functions.cpp \
-    network.cpp \
     tools/audiotool.cpp \
     tools/dicetool.cpp \
     tools/mapviewertool.cpp \
