@@ -81,10 +81,10 @@ int main(int argc, char *argv[])
 
     // Start mainwindow
     MainWindow w;
-    w.setVersion("0.3.2.0");
+    w.setVersion("0.3.3.0");
 
     // Update Manager
-    UpdateManager *updateManager = new UpdateManager(320);
+    UpdateManager *updateManager = new UpdateManager(330);
     updateManager->checkForUpdates();
 
     // Set StyleSheet
