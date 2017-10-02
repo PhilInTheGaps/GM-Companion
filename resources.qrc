@@ -21,5 +21,12 @@
         <file>resources/mediaIcons/music.png</file>
         <file>resources/mediaIcons/radio.png</file>
         <file>resources/mediaIcons/sound.png</file>
+        <file>resources/mediaIcons/die.png</file>
+        <file>resources/mediaIcons/map.png</file>
+        <file>resources/mediaIcons/characters.png</file>
+        <file>resources/mediaIcons/generator.png</file>
+        <file>resources/mediaIcons/notes.png</file>
+        <file>resources/mediaIcons/converter.png</file>
+        <file>resources/mediaIcons/settings.png</file>
     </qresource>
 </RCC>
