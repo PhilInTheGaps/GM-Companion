@@ -2,12 +2,15 @@
 #include "ui_optionsdialog.h"
 #include "ui_mainwindow.h"
 #include "functions.h"
+#include "dialogs/aboutdialog.h"
+#include "managers/updatemanager.h"
 
 #include <QDebug>
 #include <QSettings>
 #include <QLabel>
 #include <QFileDialog>
 #include <QProcess>
+#include <QDesktopServices>
 
 OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::OptionsDialog){
     ui->setupUi(this);
@@ -224,4 +227,37 @@ void OptionsDialog::on_addonManagerButton_clicked()
         QProcess::startDetached("java", {"-jar", QApplication::applicationDirPath()+"/AddonManager.jar"});
         //qDebug() << QCoreApplication::translate("AddonManager", "This OS is not supported. Cannot launch Addon Manager.");
     #endif
+}
+
+// Help-Buttons
+void OptionsDialog::on_pushButton_openWiki_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
+}
+
+void OptionsDialog::on_pushButton_reportABug_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/issues/new"));
+}
+
+void OptionsDialog::on_pushButton_downloadOlderVersions_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/releases"));
+}
+
+void OptionsDialog::on_pushButton_viewOnGitHub_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion"));
+}
+
+void OptionsDialog::on_pushButton_about_clicked()
+{
+    AboutDialog *about = new AboutDialog(w->getVersion());
+    about->show();
+}
+
+void OptionsDialog::on_pushButton_checkForUpdates_clicked()
+{
+    UpdateManager *updateManger = new UpdateManager(w->getVersionNumber());
+    updateManger->checkForUpdates();
 }
