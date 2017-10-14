@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>129</height>
+    <width>279</width>
+    <height>321</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,17 +52,15 @@
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QPlainTextEdit" name="plainTextEdit">
+     <property name="plainText">
+      <string>Changelog:
+
+- Removed Start page
+- Added sidebar navigation, removed tab system
+- Added changelog to about dialog</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
