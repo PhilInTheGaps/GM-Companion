@@ -11,8 +11,6 @@ AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEdi
 {
     ui->setupUi(this);
 
-    ui->progressBar_loading->setHidden(true);
-
     previewPlayer = new QMediaPlayer;
     connect(previewPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(previewPlayer_positionChanged(qint64)));
 
@@ -193,12 +191,7 @@ void AudioEditor::loadProject()
 {
     qDebug() << "Loading project" << projectName << "...";
 
-    // Show loading bar
-    ui->progressBar_loading->setHidden(false);
-
     isProjectOpen = true;
-
-    ui->label_pleaseCreateOrLoadAProject->hide();
 
     // Generating music files tree view
     if (!filesAreLoaded)
@@ -211,9 +204,6 @@ void AudioEditor::loadProject()
 
     // Loading Categories
     loadCategories();
-
-    // Hide loading bar
-    ui->progressBar_loading->setHidden(true);
 }
 
 // Loads all categories and their sub-elements
@@ -817,7 +807,13 @@ void AudioEditor::on_pushButton_saveElement_clicked()
     int arraySize;
     QString description;
 
-    QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
+    QString projectPath = settingsManager->getSetting(audioPath)+"/"+projectName+".ini";
+    qDebug().noquote() << projectPath;
+    qDebug().noquote() << "Current Category:" << currentCategory;
+    qDebug().noquote() << "Current Scenario:" << currentScenario;
+    qDebug().noquote() << "Current Element:" << currentElement;
+
+    QSettings settings(projectPath, QSettings::IniFormat);
 
     switch (type) {
 
@@ -884,6 +880,9 @@ void AudioEditor::on_pushButton_saveElement_clicked()
                     settings.setArrayIndex(i);
                     settings.setValue("name", ui->listWidget_musicList->item(i)->text());
                     settings.setValue("path", ui->listWidget_musicList->item(i)->whatsThis());
+
+                    qDebug().noquote() << " Name:" << ui->listWidget_musicList->item(i)->text();
+                    qDebug().noquote() << " Path:" << ui->listWidget_musicList->item(i)->whatsThis();
                 }
                 settings.endArray();
             }
