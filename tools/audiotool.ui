@@ -57,7 +57,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton_Small">
+         <widget class="QRadioButton" name="radioButton_Buttons">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -65,20 +65,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Small Buttons</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioButton_Large">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Large Buttons</string>
+           <string>Buttons</string>
           </property>
          </widget>
         </item>
@@ -315,7 +302,7 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>388</width>
+                  <width>491</width>
                   <height>636</height>
                  </rect>
                 </property>
@@ -339,6 +326,102 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_12">
              <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Info</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_metaData">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>250</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_13">
+                <item>
+                 <widget class="QLabel" name="label_category">
+                  <property name="text">
+                   <string>Category: None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_scenario">
+                  <property name="text">
+                   <string>Scenario: None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_element">
+                  <property name="text">
+                   <string>Element: None</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="Line" name="line_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Metadata:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_title">
+                  <property name="text">
+                   <string>Title</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_artist">
+                  <property name="text">
+                   <string>Artist</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_album">
+                  <property name="text">
+                   <string>Album</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
                 <string>Music List:</string>
@@ -357,123 +440,14 @@
              </item>
             </layout>
            </item>
-           <item>
-            <widget class="QFrame" name="frame_metaData">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>250</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_13">
-              <item>
-               <widget class="QLabel" name="label_category">
-                <property name="text">
-                 <string>Category: None</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_scenario">
-                <property name="text">
-                 <string>Scenario: None</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_element">
-                <property name="text">
-                 <string>Element: None</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="Line" name="line_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>Metadata:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_title">
-                <property name="text">
-                 <string>Title</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_artist">
-                <property name="text">
-                 <string>Artist</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_album">
-                <property name="text">
-                 <string>Album</string>
-                </property>
-                <property name="wordWrap">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
           </layout>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_Large">
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QTabWidget" name="tabWidget_Large"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="page_Small">
+       <widget class="QWidget" name="page_Buttons">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QTabWidget" name="tabWidget_Small"/>
+          <widget class="QTabWidget" name="tabWidget_Buttons"/>
          </item>
         </layout>
        </widget>
