@@ -19,7 +19,7 @@ public:
     ~NameGenerator();
 
 private slots:
-    void on_generateNames(QString file);
+    void on_generateNames(QString path);
 
     void on_spinBox_pointSize_valueChanged(int arg1);
 
