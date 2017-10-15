@@ -28,20 +28,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="textEdit_names"/>
+    <widget class="QTextEdit" name="textEdit_male"/>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_settings">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QTextEdit" name="textEdit_female"/>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="title">
-      <string>Settings</string>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
@@ -90,7 +90,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>634</height>
          </size>
         </property>
        </spacer>
