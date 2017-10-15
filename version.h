@@ -16,6 +16,6 @@
 #define VER_ORIGINALFILENAME_STR    "GM-Companion.exe"
 #define VER_PRODUCTNAME_STR         "GM-Companion"
 
-#define VER_COMPANYDOMAIN_STR       "https://philinthegaps.github.io/GM-Companion/"
+#define VER_COMPANYDOMAIN_STR       "https://gm-companion.github.io/"
 
 #endif // VERSION_H
