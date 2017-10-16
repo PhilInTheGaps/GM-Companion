@@ -28,5 +28,6 @@
         <file>resources/mediaIcons/notes.png</file>
         <file>resources/mediaIcons/converter.png</file>
         <file>resources/mediaIcons/settings.png</file>
+        <file>resources/mediaIcons/combatTracker.png</file>
     </qresource>
 </RCC>
