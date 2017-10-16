@@ -65,6 +65,10 @@ private slots:
     void on_pushButton_unitConverter_clicked();
     void on_pushButton_settings_clicked();
 
+    void on_pushButton_addons_clicked();
+
+    void on_pushButton_combatTracker_clicked();
+
 private:
     Ui::MainWindow *ui;
 
