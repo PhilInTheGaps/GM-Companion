@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     dialogs/updatedialog.cpp \
     tools/notestool.cpp \
     tools/convertertool.cpp \
-    dialogs/aboutdialog.cpp
+    dialogs/aboutdialog.cpp \
+    tools/combattracker.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -67,7 +68,8 @@ HEADERS  += mainwindow.h \
     dialogs/updatedialog.h \
     tools/notestool.h \
     tools/convertertool.h \
-    dialogs/aboutdialog.h
+    dialogs/aboutdialog.h \
+    tools/combattracker.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -85,7 +87,8 @@ FORMS    += mainwindow.ui \
     dialogs/updatedialog.ui \
     tools/notestool.ui \
     tools/convertertool.ui \
-    dialogs/aboutdialog.ui
+    dialogs/aboutdialog.ui \
+    tools/combattracker.ui
 
 DISTFILES +=
 

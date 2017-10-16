@@ -10,6 +10,7 @@
 #include "tools/characterviewertool.h"
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
+#include "tools/combattracker.h"
 
 #include "managers/filemanager.h"
 #include "managers/generatormanager.h"
@@ -79,6 +80,12 @@ void MainWindow::addTools()
     ConverterTool *converterTool = new ConverterTool;
     ui->stackedWidget->addWidget(converterTool);
 
+    // Combat Tracker
+    CombatTracker *combatTracker = new CombatTracker;
+    ui->stackedWidget->addWidget(combatTracker);
+
+    // Addons Tool
+    // TODO
 
 
     // Options Dialog
@@ -152,6 +159,18 @@ void MainWindow::on_pushButton_notes_clicked()
 void MainWindow::on_pushButton_unitConverter_clicked()
 {
     ui->stackedWidget->setCurrentIndex(6);
+}
+
+// Combat Tracker
+void MainWindow::on_pushButton_combatTracker_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(7);
+}
+
+// Addons
+void MainWindow::on_pushButton_addons_clicked()
+{
+//    ui->stackedWidget->setCurrentIndex(8);
 }
 
 // Settings
