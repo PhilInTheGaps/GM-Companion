@@ -1,6 +1,8 @@
 #include "combattracker.h"
 #include "ui_combattracker.h"
 
+#include "tools/dicetool.h"
+
 #include <QDebug>
 
 CombatTracker::CombatTracker(QWidget *parent) : QDialog(parent), ui(new Ui::CombatTracker)
@@ -9,6 +11,9 @@ CombatTracker::CombatTracker(QWidget *parent) : QDialog(parent), ui(new Ui::Comb
 
     combatRound = 0;
     currentIndex = 0;
+
+    DiceTool *diceTool = new DiceTool;
+    this->layout()->addWidget(diceTool);
 }
 
 CombatTracker::~CombatTracker()
