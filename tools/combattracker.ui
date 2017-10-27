@@ -168,11 +168,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="0" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -181,11 +191,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="1" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -194,11 +214,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="2" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -207,11 +237,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="3" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -220,11 +260,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="4" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -233,11 +283,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="5" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -246,11 +306,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="6" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -259,11 +329,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="7" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -272,11 +352,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="8" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -285,11 +375,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="9" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -298,11 +398,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="10" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -311,11 +421,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="11" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -324,11 +444,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="12" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -337,11 +467,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="13" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
@@ -350,11 +490,21 @@
         <property name="text">
          <string/>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="textAlignment">
-         <set>AlignTrailing|AlignVCenter</set>
+         <set>AlignTrailing|AlignBottom</set>
         </property>
        </item>
        <item row="14" column="2">
+        <property name="text">
+         <string/>
+        </property>
         <property name="textAlignment">
          <set>AlignCenter</set>
         </property>
