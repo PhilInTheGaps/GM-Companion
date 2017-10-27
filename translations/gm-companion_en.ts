@@ -31,6 +31,15 @@
         <source>Copyright © 2017 Phil Hoffmann</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../dialogs/aboutdialog.ui" line="57"/>
+        <source>Changelog:
+
+- Removed Start page
+- Added sidebar navigation, removed tab system
+- Added changelog to about dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioEditor</name>
@@ -70,254 +79,244 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="167"/>
-        <source>Please create or load a project!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editors/audioeditor.ui" line="180"/>
+        <location filename="../editors/audioeditor.ui" line="154"/>
         <source>Add Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="200"/>
+        <location filename="../editors/audioeditor.ui" line="174"/>
         <source>New Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="213"/>
+        <location filename="../editors/audioeditor.ui" line="187"/>
         <source>New Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="220"/>
+        <location filename="../editors/audioeditor.ui" line="194"/>
         <source>Category Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="227"/>
+        <location filename="../editors/audioeditor.ui" line="201"/>
         <source>Scenario Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="244"/>
+        <location filename="../editors/audioeditor.ui" line="218"/>
         <source>New Music List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="257"/>
+        <location filename="../editors/audioeditor.ui" line="231"/>
         <source>New Sound List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="270"/>
+        <location filename="../editors/audioeditor.ui" line="244"/>
         <source>New Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="277"/>
+        <location filename="../editors/audioeditor.ui" line="251"/>
         <source>Music List Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="284"/>
+        <location filename="../editors/audioeditor.ui" line="258"/>
         <source>Sound List Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="291"/>
+        <location filename="../editors/audioeditor.ui" line="265"/>
         <source>Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="315"/>
-        <source>Loading...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editors/audioeditor.ui" line="322"/>
+        <location filename="../editors/audioeditor.ui" line="277"/>
         <source>Edit Element</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="335"/>
+        <location filename="../editors/audioeditor.ui" line="290"/>
         <source>No element selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="359"/>
+        <location filename="../editors/audioeditor.ui" line="314"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="373"/>
-        <location filename="../editors/audioeditor.ui" line="401"/>
-        <location filename="../editors/audioeditor.ui" line="441"/>
-        <location filename="../editors/audioeditor.ui" line="541"/>
-        <location filename="../editors/audioeditor.ui" line="661"/>
+        <location filename="../editors/audioeditor.ui" line="328"/>
+        <location filename="../editors/audioeditor.ui" line="356"/>
+        <location filename="../editors/audioeditor.ui" line="396"/>
+        <location filename="../editors/audioeditor.ui" line="496"/>
+        <location filename="../editors/audioeditor.ui" line="616"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="387"/>
+        <location filename="../editors/audioeditor.ui" line="342"/>
         <source>Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="421"/>
+        <location filename="../editors/audioeditor.ui" line="376"/>
         <source>Music List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="462"/>
+        <location filename="../editors/audioeditor.ui" line="417"/>
         <source>Songs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="482"/>
-        <location filename="../editors/audioeditor.ui" line="569"/>
+        <location filename="../editors/audioeditor.ui" line="437"/>
+        <location filename="../editors/audioeditor.ui" line="524"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="489"/>
-        <location filename="../editors/audioeditor.ui" line="579"/>
+        <location filename="../editors/audioeditor.ui" line="444"/>
+        <location filename="../editors/audioeditor.ui" line="534"/>
         <source>Random Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="516"/>
+        <location filename="../editors/audioeditor.ui" line="471"/>
         <source>Double click a song to remove it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="527"/>
+        <location filename="../editors/audioeditor.ui" line="482"/>
         <source>Sound List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="555"/>
+        <location filename="../editors/audioeditor.ui" line="510"/>
         <source>Sounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="576"/>
+        <location filename="../editors/audioeditor.ui" line="531"/>
         <source>Play sounds in a random order. Does not end.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="589"/>
+        <location filename="../editors/audioeditor.ui" line="544"/>
         <source>Play sounds in sequential order and start at the beginning when last sound is played.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="592"/>
+        <location filename="../editors/audioeditor.ui" line="547"/>
         <source>Loop List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="599"/>
+        <location filename="../editors/audioeditor.ui" line="554"/>
         <source>Play sounds in a sequential order. Ends when last sound was played.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="602"/>
+        <location filename="../editors/audioeditor.ui" line="557"/>
         <source>Sequential Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="626"/>
+        <location filename="../editors/audioeditor.ui" line="581"/>
         <source>Double click a sound to remove it!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="637"/>
+        <location filename="../editors/audioeditor.ui" line="592"/>
         <source>Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="651"/>
+        <location filename="../editors/audioeditor.ui" line="606"/>
         <source>URL or .m3u playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="681"/>
+        <location filename="../editors/audioeditor.ui" line="636"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="717"/>
+        <location filename="../editors/audioeditor.ui" line="672"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="723"/>
+        <location filename="../editors/audioeditor.ui" line="678"/>
         <source>Music Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="753"/>
+        <location filename="../editors/audioeditor.ui" line="708"/>
         <source>Add all songs from the folder to the current music list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../editors/audioeditor.ui" line="711"/>
         <location filename="../editors/audioeditor.ui" line="756"/>
-        <location filename="../editors/audioeditor.ui" line="801"/>
         <source>Add all files from folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="763"/>
+        <location filename="../editors/audioeditor.ui" line="718"/>
         <source>Creates a new music list with all songs from the folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="766"/>
+        <location filename="../editors/audioeditor.ui" line="721"/>
         <source>Convert folder to list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="776"/>
+        <location filename="../editors/audioeditor.ui" line="731"/>
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="782"/>
+        <location filename="../editors/audioeditor.ui" line="737"/>
         <source>Sound Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="809"/>
+        <location filename="../editors/audioeditor.ui" line="764"/>
         <source>Radios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="815"/>
+        <location filename="../editors/audioeditor.ui" line="770"/>
         <source>Radio Playlists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="838"/>
+        <location filename="../editors/audioeditor.ui" line="793"/>
         <source>Double click a file to add it to an element!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="856"/>
+        <location filename="../editors/audioeditor.ui" line="811"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="882"/>
+        <location filename="../editors/audioeditor.ui" line="837"/>
         <source>Preview Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="897"/>
+        <location filename="../editors/audioeditor.ui" line="852"/>
         <source>Play file when selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editors/audioeditor.ui" line="910"/>
+        <location filename="../editors/audioeditor.ui" line="865"/>
         <source>Preview Progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -330,132 +329,132 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="49"/>
+        <location filename="../tools/audiotool.ui" line="61"/>
         <source>List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="68"/>
-        <source>Small Buttons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/audiotool.ui" line="81"/>
-        <source>Large Buttons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/audiotool.ui" line="98"/>
+        <location filename="../tools/audiotool.ui" line="97"/>
         <source>Load Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="105"/>
+        <location filename="../tools/audiotool.ui" line="104"/>
         <source>Set as Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="112"/>
+        <location filename="../tools/audiotool.ui" line="111"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="126"/>
+        <location filename="../tools/audiotool.ui" line="125"/>
         <source>Open Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="133"/>
+        <location filename="../tools/audiotool.ui" line="132"/>
         <source>Open the audio tool wiki page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="136"/>
+        <location filename="../tools/audiotool.ui" line="135"/>
         <source>Documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="170"/>
+        <location filename="../tools/audiotool.ui" line="169"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="255"/>
+        <location filename="../tools/audiotool.ui" line="254"/>
         <source>Scenarios</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="304"/>
+        <location filename="../tools/audiotool.ui" line="303"/>
         <source>Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="344"/>
+        <location filename="../tools/audiotool.ui" line="439"/>
         <source>Music List:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="384"/>
+        <location filename="../tools/audiotool.ui" line="371"/>
         <source>Category: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="391"/>
+        <location filename="../tools/audiotool.ui" line="80"/>
+        <source>Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/audiotool.ui" line="343"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/audiotool.ui" line="378"/>
         <source>Scenario: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="398"/>
+        <location filename="../tools/audiotool.ui" line="385"/>
         <source>Element: None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="412"/>
+        <location filename="../tools/audiotool.ui" line="399"/>
         <source>Metadata:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="419"/>
+        <location filename="../tools/audiotool.ui" line="406"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="429"/>
+        <location filename="../tools/audiotool.ui" line="416"/>
         <source>Artist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="439"/>
+        <location filename="../tools/audiotool.ui" line="426"/>
         <source>Album</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="495"/>
+        <location filename="../tools/audiotool.ui" line="481"/>
         <source>Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="527"/>
+        <location filename="../tools/audiotool.ui" line="1784"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="553"/>
+        <location filename="../tools/audiotool.ui" line="3081"/>
         <source>Replay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="579"/>
+        <location filename="../tools/audiotool.ui" line="4378"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="603"/>
+        <location filename="../tools/audiotool.ui" line="5673"/>
         <source>Music Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/audiotool.ui" line="610"/>
+        <location filename="../tools/audiotool.ui" line="5680"/>
         <source>Sound Volume</source>
         <translation type="unfinished"></translation>
     </message>
@@ -546,72 +545,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="38"/>
+        <location filename="../tools/characterviewertool.ui" line="50"/>
         <source>Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="55"/>
+        <location filename="../tools/characterviewertool.ui" line="67"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="61"/>
+        <location filename="../tools/characterviewertool.ui" line="73"/>
         <source>Active Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="74"/>
+        <location filename="../tools/characterviewertool.ui" line="86"/>
         <source>Double click to make inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="81"/>
+        <location filename="../tools/characterviewertool.ui" line="93"/>
         <source>Inactive Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="98"/>
+        <location filename="../tools/characterviewertool.ui" line="110"/>
         <source>Make all active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="105"/>
+        <location filename="../tools/characterviewertool.ui" line="117"/>
         <source>Make all inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="122"/>
+        <location filename="../tools/characterviewertool.ui" line="134"/>
         <source>New Character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="130"/>
+        <location filename="../tools/characterviewertool.ui" line="142"/>
         <source>No Template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="144"/>
+        <location filename="../tools/characterviewertool.ui" line="156"/>
         <source>Character Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="157"/>
+        <location filename="../tools/characterviewertool.ui" line="169"/>
         <source>Player Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="183"/>
+        <location filename="../tools/characterviewertool.ui" line="195"/>
         <source>Character Sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="198"/>
+        <location filename="../tools/characterviewertool.ui" line="210"/>
         <source>Bio &amp; Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="219"/>
+        <location filename="../tools/characterviewertool.ui" line="231"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;title&gt;Character Sheet&lt;/title&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -620,87 +619,210 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="251"/>
+        <location filename="../tools/characterviewertool.ui" line="263"/>
         <source>Inventory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="274"/>
+        <location filename="../tools/characterviewertool.ui" line="286"/>
         <source>Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="279"/>
+        <location filename="../tools/characterviewertool.ui" line="291"/>
         <source>Where carried?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="284"/>
+        <location filename="../tools/characterviewertool.ui" line="296"/>
         <source>Weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="294"/>
-        <location filename="../tools/characterviewertool.ui" line="464"/>
+        <location filename="../tools/characterviewertool.ui" line="306"/>
+        <location filename="../tools/characterviewertool.ui" line="476"/>
         <source>Add Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="301"/>
-        <location filename="../tools/characterviewertool.ui" line="471"/>
+        <location filename="../tools/characterviewertool.ui" line="313"/>
+        <location filename="../tools/characterviewertool.ui" line="483"/>
         <source>Remove Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="340"/>
+        <location filename="../tools/characterviewertool.ui" line="352"/>
         <source>Attributes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="375"/>
+        <location filename="../tools/characterviewertool.ui" line="387"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="380"/>
+        <location filename="../tools/characterviewertool.ui" line="392"/>
         <source>New Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="390"/>
+        <location filename="../tools/characterviewertool.ui" line="402"/>
         <source>Add Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="397"/>
+        <location filename="../tools/characterviewertool.ui" line="409"/>
         <source>Remove Column</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="415"/>
+        <location filename="../tools/characterviewertool.ui" line="427"/>
         <source>Abilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="438"/>
+        <location filename="../tools/characterviewertool.ui" line="450"/>
         <source>Ability</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="443"/>
+        <location filename="../tools/characterviewertool.ui" line="455"/>
         <source>Rank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="448"/>
-        <location filename="../tools/characterviewertool.ui" line="484"/>
+        <location filename="../tools/characterviewertool.ui" line="460"/>
+        <location filename="../tools/characterviewertool.ui" line="496"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/characterviewertool.ui" line="503"/>
+        <location filename="../tools/characterviewertool.ui" line="515"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
+    </message>
+</context>
+<context>
+    <name>CombatTracker</name>
+    <message>
+        <location filename="../tools/combattracker.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="74"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="79"/>
+        <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="84"/>
+        <source>3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="89"/>
+        <source>4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="94"/>
+        <source>5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="99"/>
+        <source>6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="104"/>
+        <source>7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="109"/>
+        <source>8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="114"/>
+        <source>9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="119"/>
+        <source>10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="124"/>
+        <source>11</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="129"/>
+        <source>12</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="134"/>
+        <source>13</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="139"/>
+        <source>14</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="144"/>
+        <source>15</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="149"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="154"/>
+        <source>Combatant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="159"/>
+        <source>Initiative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="164"/>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="541"/>
+        <source>Combat Round:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="591"/>
+        <source>Next Combatant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="610"/>
+        <source>Clear Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/combattracker.ui" line="622"/>
+        <source>Reset Rounds</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -711,52 +833,52 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="40"/>
+        <location filename="../tools/convertertool.ui" line="52"/>
         <source>Add Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="53"/>
-        <location filename="../tools/convertertool.ui" line="593"/>
+        <location filename="../tools/convertertool.ui" line="65"/>
+        <location filename="../tools/convertertool.ui" line="605"/>
         <source>Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="58"/>
-        <location filename="../tools/convertertool.ui" line="319"/>
+        <location filename="../tools/convertertool.ui" line="70"/>
+        <location filename="../tools/convertertool.ui" line="331"/>
         <source>Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="63"/>
-        <location filename="../tools/convertertool.ui" line="415"/>
+        <location filename="../tools/convertertool.ui" line="75"/>
+        <location filename="../tools/convertertool.ui" line="427"/>
         <source>Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="68"/>
-        <location filename="../tools/convertertool.ui" line="397"/>
+        <location filename="../tools/convertertool.ui" line="80"/>
+        <location filename="../tools/convertertool.ui" line="409"/>
         <source>Weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="73"/>
-        <location filename="../tools/convertertool.ui" line="379"/>
+        <location filename="../tools/convertertool.ui" line="85"/>
+        <location filename="../tools/convertertool.ui" line="391"/>
         <source>Money</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="88"/>
+        <location filename="../tools/convertertool.ui" line="100"/>
         <source>Unit Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="109"/>
+        <location filename="../tools/convertertool.ui" line="121"/>
         <source>REF_UNIT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/convertertool.ui" line="138"/>
+        <location filename="../tools/convertertool.ui" line="150"/>
         <source>Add Unit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -807,68 +929,67 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>DiceTool</name>
     <message>
-        <location filename="../tools/dicetool.ui" line="14"/>
+        <location filename="../tools/dicetool.ui" line="19"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="62"/>
+        <location filename="../tools/dicetool.ui" line="67"/>
         <source>x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="90"/>
+        <location filename="../tools/dicetool.ui" line="120"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="136"/>
+        <location filename="../tools/dicetool.ui" line="166"/>
         <source>Bonus dice are added to the normal amount of dice, but the worst results (amount = amount of bonus dice) are again subtracted from the result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="139"/>
+        <location filename="../tools/dicetool.ui" line="169"/>
         <source>Bonus Dice: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="187"/>
-        <source>Result:</source>
+        <location filename="../tools/dicetool.ui" line="217"/>
+        <source>Roll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="219"/>
+        <location filename="../tools/dicetool.ui" line="252"/>
         <source>Custom Dice: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="253"/>
+        <location filename="../tools/dicetool.ui" line="286"/>
         <source>Add Die</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="266"/>
+        <location filename="../tools/dicetool.ui" line="299"/>
         <source>Reset Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="331"/>
+        <location filename="../tools/dicetool.ui" line="364"/>
         <source>dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="336"/>
+        <location filename="../tools/dicetool.ui" line="369"/>
         <source>roll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/dicetool.ui" line="341"/>
+        <location filename="../tools/dicetool.ui" line="374"/>
         <source>result</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tools/dicetool.cpp" line="42"/>
-        <location filename="../tools/dicetool.cpp" line="118"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -892,228 +1013,196 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.ui" line="80"/>
-        <source>Start</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="114"/>
-        <source>Welcome!</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="249"/>
-        <source>Version: Beta 3.2 (0.3.2.0)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="284"/>
-        <source>loading...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="500"/>
+        <location filename="../mainwindow.ui" line="1867"/>
         <source>Music</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="618"/>
+        <location filename="../mainwindow.ui" line="1985"/>
         <source>Radio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="505"/>
-        <location filename="../mainwindow.ui" line="610"/>
+        <location filename="../mainwindow.ui" line="1872"/>
+        <location filename="../mainwindow.ui" line="1977"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="510"/>
-        <location filename="../mainwindow.ui" line="626"/>
+        <location filename="../mainwindow.ui" line="27"/>
+        <source>GM-Companion | Beta 3.3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1408"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1522"/>
+        <location filename="../mainwindow.ui" line="1877"/>
+        <location filename="../mainwindow.ui" line="1993"/>
         <source>Maps</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="579"/>
-        <location filename="../mainwindow.ui" line="642"/>
+        <location filename="../mainwindow.ui" line="1541"/>
+        <source>Combat Tracker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1567"/>
+        <source>Combat /</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1946"/>
+        <location filename="../mainwindow.ui" line="2009"/>
         <source>Name Generator</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="584"/>
-        <location filename="../mainwindow.ui" line="589"/>
-        <location filename="../mainwindow.ui" line="650"/>
-        <location filename="../mainwindow.cpp" line="80"/>
-        <location filename="../mainwindow.cpp" line="224"/>
+        <location filename="../mainwindow.ui" line="1608"/>
+        <location filename="../mainwindow.ui" line="1634"/>
+        <location filename="../mainwindow.ui" line="1951"/>
+        <location filename="../mainwindow.ui" line="1956"/>
+        <location filename="../mainwindow.ui" line="2017"/>
         <source>Characters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="599"/>
-        <location filename="../mainwindow.ui" line="658"/>
-        <location filename="../mainwindow.ui" line="697"/>
-        <location filename="../mainwindow.cpp" line="88"/>
-        <location filename="../mainwindow.cpp" line="240"/>
+        <location filename="../mainwindow.ui" line="1698"/>
+        <location filename="../mainwindow.ui" line="1724"/>
+        <location filename="../mainwindow.ui" line="1966"/>
+        <location filename="../mainwindow.ui" line="2025"/>
+        <location filename="../mainwindow.ui" line="2064"/>
         <source>Notes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="515"/>
+        <location filename="../mainwindow.ui" line="1882"/>
         <source>Resources</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="666"/>
-        <location filename="../mainwindow.ui" line="702"/>
-        <location filename="../mainwindow.cpp" line="92"/>
-        <location filename="../mainwindow.cpp" line="248"/>
+        <location filename="../mainwindow.ui" line="1743"/>
+        <location filename="../mainwindow.ui" line="2033"/>
+        <location filename="../mainwindow.ui" line="2069"/>
         <source>Unit Converter</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="26"/>
-        <source>GM-Companion | Beta 3.2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="224"/>
-        <source>GM-Companion Blog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="312"/>
-        <source>Blog Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="319"/>
-        <source>All Entries</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="329"/>
-        <source>Only Release Entries</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="343"/>
-        <source>Documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="421"/>
+        <location filename="../mainwindow.ui" line="1814"/>
         <source>Options</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="425"/>
-        <source>Set Paths</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="438"/>
-        <source>Add Tools</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="461"/>
-        <source>Help</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="475"/>
-        <location filename="../mainwindow.ui" line="634"/>
+        <location filename="../mainwindow.ui" line="1589"/>
+        <location filename="../mainwindow.ui" line="1842"/>
+        <location filename="../mainwindow.ui" line="2001"/>
         <source>Dice</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="486"/>
+        <location filename="../mainwindow.ui" line="1769"/>
+        <source>Converter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1788"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1853"/>
         <source>Database</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
+        <location filename="../mainwindow.ui" line="1887"/>
         <source>Music Player</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="525"/>
+        <location filename="../mainwindow.ui" line="1892"/>
         <source>Sound Player</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="530"/>
+        <location filename="../mainwindow.ui" line="1897"/>
         <source>Map Viewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="535"/>
+        <location filename="../mainwindow.ui" line="1902"/>
         <source>Set Database Path</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="543"/>
+        <location filename="../mainwindow.ui" line="1910"/>
         <source>Open Wiki</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="548"/>
+        <location filename="../mainwindow.ui" line="1915"/>
         <source>Check for Updates</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="553"/>
+        <location filename="../mainwindow.ui" line="1920"/>
         <source>Report a Bug</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="558"/>
+        <location filename="../mainwindow.ui" line="1925"/>
         <source>I want to use an older version!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="563"/>
+        <location filename="../mainwindow.ui" line="1930"/>
         <source>Webradio</source>
         <translation>Internet Radio</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="571"/>
+        <location filename="../mainwindow.ui" line="1938"/>
         <source>Check for Updates on Program Start</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="594"/>
+        <location filename="../mainwindow.ui" line="1961"/>
         <source>Options...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="677"/>
+        <location filename="../mainwindow.ui" line="1477"/>
+        <location filename="../mainwindow.ui" line="2044"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="682"/>
+        <location filename="../mainwindow.ui" line="2049"/>
         <source>Audio Projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="687"/>
+        <location filename="../mainwindow.ui" line="2054"/>
         <source>Radio Playlists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="692"/>
-        <location filename="../mainwindow.cpp" line="84"/>
+        <location filename="../mainwindow.ui" line="1653"/>
+        <location filename="../mainwindow.ui" line="1679"/>
+        <location filename="../mainwindow.ui" line="2059"/>
         <source>Generators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="707"/>
+        <location filename="../mainwindow.ui" line="2074"/>
         <source>View on GitHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="712"/>
+        <location filename="../mainwindow.ui" line="2079"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1122,21 +1211,13 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Close</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="68"/>
-        <location filename="../mainwindow.cpp" line="216"/>
-        <location filename="../mainwindow.cpp" line="232"/>
+        <location filename="../mainwindow.ui" line="1439"/>
         <source>Audio Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="72"/>
-        <location filename="../mainwindow.cpp" line="208"/>
+        <location filename="../mainwindow.ui" line="1496"/>
         <source>Map Tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="76"/>
-        <source>Dice Tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1148,17 +1229,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/mapviewertool.ui" line="42"/>
+        <location filename="../tools/mapviewertool.ui" line="54"/>
         <source>Zoom In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/mapviewertool.ui" line="54"/>
+        <location filename="../tools/mapviewertool.ui" line="66"/>
         <source>Zoom Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/mapviewertool.ui" line="66"/>
+        <location filename="../tools/mapviewertool.ui" line="78"/>
         <source>Reset Size</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1171,11 +1252,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../generators/namegenerator.ui" line="42"/>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../generators/namegenerator.ui" line="48"/>
         <source>Amount of generated names</source>
         <translation type="unfinished"></translation>
@@ -1183,18 +1259,6 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../generators/namegenerator.ui" line="71"/>
         <source>Font size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../generators/namegenerator.cpp" line="75"/>
-        <location filename="../generators/namegenerator.cpp" line="145"/>
-        <source>Male</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../generators/namegenerator.cpp" line="89"/>
-        <location filename="../generators/namegenerator.cpp" line="158"/>
-        <source>Female</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1231,47 +1295,47 @@ Please select a user defined category!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="29"/>
+        <location filename="../tools/notestool.ui" line="41"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="39"/>
+        <location filename="../tools/notestool.ui" line="51"/>
         <source>Add Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="46"/>
+        <location filename="../tools/notestool.ui" line="58"/>
         <source>Delete Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="53"/>
+        <location filename="../tools/notestool.ui" line="65"/>
         <source>Add Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="60"/>
+        <location filename="../tools/notestool.ui" line="72"/>
         <source>Delete Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="67"/>
+        <location filename="../tools/notestool.ui" line="79"/>
         <source>Update Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="74"/>
+        <location filename="../tools/notestool.ui" line="86"/>
         <source>Encrypt rot13</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="95"/>
+        <location filename="../tools/notestool.ui" line="107"/>
         <source>Font: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/notestool.ui" line="111"/>
+        <location filename="../tools/notestool.ui" line="123"/>
         <source>Font Size: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1284,154 +1348,189 @@ Please select a user defined category!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="28"/>
+        <location filename="../dialogs/optionsdialog.ui" line="34"/>
         <source>General</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="39"/>
+        <location filename="../dialogs/optionsdialog.ui" line="47"/>
         <source>Language</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="48"/>
+        <location filename="../dialogs/optionsdialog.ui" line="56"/>
         <source>Select Language:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="56"/>
+        <location filename="../dialogs/optionsdialog.ui" line="64"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="61"/>
+        <location filename="../dialogs/optionsdialog.ui" line="69"/>
         <source>Deutsch</source>
         <translation>Deutsch (German)</translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="78"/>
+        <location filename="../dialogs/optionsdialog.ui" line="86"/>
         <source>User Interface</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="87"/>
+        <location filename="../dialogs/optionsdialog.ui" line="95"/>
         <source>Select Style:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="116"/>
+        <location filename="../dialogs/optionsdialog.ui" line="124"/>
         <source>Changing the style requires restarting the program</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="176"/>
+        <location filename="../dialogs/optionsdialog.ui" line="205"/>
         <source>Music</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="95"/>
+        <location filename="../dialogs/optionsdialog.ui" line="103"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="100"/>
+        <location filename="../dialogs/optionsdialog.ui" line="108"/>
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="149"/>
+        <location filename="../dialogs/optionsdialog.ui" line="150"/>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="157"/>
+        <source>Check for Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="178"/>
         <source>Paths</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="155"/>
+        <location filename="../dialogs/optionsdialog.ui" line="184"/>
         <source>Audio Projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="167"/>
-        <location filename="../dialogs/optionsdialog.ui" line="244"/>
-        <location filename="../dialogs/optionsdialog.ui" line="353"/>
+        <location filename="../dialogs/optionsdialog.ui" line="196"/>
+        <location filename="../dialogs/optionsdialog.ui" line="273"/>
+        <location filename="../dialogs/optionsdialog.ui" line="382"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="204"/>
+        <location filename="../dialogs/optionsdialog.ui" line="233"/>
         <source>Sound</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="232"/>
+        <location filename="../dialogs/optionsdialog.ui" line="261"/>
         <source>Internet Radio Playlists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="253"/>
+        <location filename="../dialogs/optionsdialog.ui" line="282"/>
         <source>Resources</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="281"/>
+        <location filename="../dialogs/optionsdialog.ui" line="310"/>
         <source>Maps</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="309"/>
+        <location filename="../dialogs/optionsdialog.ui" line="338"/>
         <source>Characters</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="337"/>
+        <location filename="../dialogs/optionsdialog.ui" line="366"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="376"/>
+        <location filename="../dialogs/optionsdialog.ui" line="405"/>
         <source>Addons</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="382"/>
+        <location filename="../dialogs/optionsdialog.ui" line="411"/>
         <source>Use the checkbox to enable / disable the addon. Addons are enabled by default.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="389"/>
+        <location filename="../dialogs/optionsdialog.ui" line="418"/>
         <source>The following addons have been found:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="415"/>
+        <location filename="../dialogs/optionsdialog.ui" line="450"/>
         <source>Select All</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="422"/>
+        <location filename="../dialogs/optionsdialog.ui" line="457"/>
         <source>Deselect All</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="446"/>
+        <location filename="../dialogs/optionsdialog.ui" line="481"/>
         <source>To download and install addons use the Addon Manager (Requires Java)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="453"/>
+        <location filename="../dialogs/optionsdialog.ui" line="494"/>
         <source>Open Addon Manager</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.ui" line="481"/>
-        <source>Close</source>
-        <translation></translation>
+        <location filename="../dialogs/optionsdialog.ui" line="513"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="85"/>
+        <location filename="../dialogs/optionsdialog.ui" line="531"/>
+        <source>Open Wiki</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="550"/>
+        <source>Report a Bug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="557"/>
+        <source>Download older Versions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="564"/>
+        <source>View GM-Companion on GitHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.ui" line="571"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/optionsdialog.cpp" line="88"/>
         <source>Official Addons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/optionsdialog.cpp" line="89"/>
+        <location filename="../dialogs/optionsdialog.cpp" line="92"/>
         <source>Inofficial Addons</source>
         <translation type="unfinished"></translation>
     </message>
