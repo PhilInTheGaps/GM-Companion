@@ -102,31 +102,13 @@ void DiceTool::rollDice(int sides){
 }
 
 // Generating the die buttons
-void DiceTool::generateDice(){
-    // Clear dice button frame
-    qDeleteAll(ui->frame_diceButtons->children());
-
-    // Add a flowlayout to the dice button frame
-    FlowLayout *diceFrameLayout = new FlowLayout;
-    ui->frame_diceButtons->setLayout(diceFrameLayout);
-
-    signalMapperDice = new QSignalMapper;
-
-    for (int sides : sidesList){
-        // Create button
-        QPushButton *button = new QPushButton;
-        button->setText(tr("D")+QString::number(sides));
-        button->setStyleSheet("min-width: 50; min-height: 50; max-width: 200; max-height: 200;");
-
-        // Add button to dice frame
-        ui->frame_diceButtons->layout()->addWidget(button);
-
-        // Connect button with the signalmapper
-        connect(button, SIGNAL(clicked()), signalMapperDice, SLOT(map()), Qt::UniqueConnection);
-        signalMapperDice->setMapping(button, sides);
+void DiceTool::generateDice()
+{
+    for (int sides : sidesList)
+    {
+        ui->comboBox_dice->addItem(QString::number(sides));
     }
 
-    connect(signalMapperDice, SIGNAL(mapped(int)), this, SLOT(rollDice(int)));
 }
 
 // Add a custom die
@@ -143,4 +125,9 @@ void DiceTool::on_pushButton_resetDice_clicked()
     sidesList = {2, 3, 4, 6, 12, 20};
 
     generateDice();
+}
+
+void DiceTool::on_pushButton_roll_clicked()
+{
+    rollDice(ui->comboBox_dice->currentText().toInt());
 }
