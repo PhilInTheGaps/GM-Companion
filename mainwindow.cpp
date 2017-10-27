@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
 
+
     // Some functions behave differently when the program is just starting
     programStart = false;
 }
@@ -60,9 +61,9 @@ void MainWindow::addTools()
     MapViewerTool *mapViewerTool = new MapViewerTool;
     ui->stackedWidget->addWidget(mapViewerTool);
 
-    // DiceTool
-    DiceTool *diceTool = new DiceTool;
-    ui->stackedWidget->addWidget(diceTool);
+    // Combat Tracker
+    CombatTracker *combatTracker = new CombatTracker;
+    ui->stackedWidget->addWidget(combatTracker);
 
     // Character Viewer
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
@@ -80,17 +81,13 @@ void MainWindow::addTools()
     ConverterTool *converterTool = new ConverterTool;
     ui->stackedWidget->addWidget(converterTool);
 
-    // Combat Tracker
-    CombatTracker *combatTracker = new CombatTracker;
-    ui->stackedWidget->addWidget(combatTracker);
-
     // Addons Tool
     // TODO
-
 
     // Options Dialog
     OptionsDialog *optionsDialog = new OptionsDialog(this);
     ui->stackedWidget->addWidget(optionsDialog);
+
 }
 
 // Set Program version
@@ -131,8 +128,8 @@ void MainWindow::on_pushButton_mapTool_clicked()
     ui->stackedWidget->setCurrentIndex(1);
 }
 
-// Dice Tool
-void MainWindow::on_pushButton_diceTool_clicked()
+// Combat Tracker
+void MainWindow::on_pushButton_combatTracker_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
 }
@@ -161,17 +158,11 @@ void MainWindow::on_pushButton_unitConverter_clicked()
     ui->stackedWidget->setCurrentIndex(6);
 }
 
-// Combat Tracker
-void MainWindow::on_pushButton_combatTracker_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(7);
-}
-
-// Addons
-void MainWindow::on_pushButton_addons_clicked()
-{
-//    ui->stackedWidget->setCurrentIndex(8);
-}
+//// Addons
+//void MainWindow::on_pushButton_addons_clicked()
+//{
+////    ui->stackedWidget->setCurrentIndex(8);
+//}
 
 // Settings
 void MainWindow::on_pushButton_settings_clicked()
