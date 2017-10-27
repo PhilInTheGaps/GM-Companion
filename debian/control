@@ -23,8 +23,14 @@ Description: A tool for the gamemaster of a tabletop rpg session.
  .
  - Dice rolling
  .
+ - Combat Tracker
+ .
  - Name Generator
  .
  - Character Overview
  .
  - Map viewer
+ .
+ - Unit conversion
+ .
+ - Notes
