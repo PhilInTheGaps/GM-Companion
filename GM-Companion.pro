@@ -100,12 +100,7 @@ RESOURCES += resources.qrc \
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
 
-win32 {
-    message("Building on Windows...")
-}
-
 !win32 {
-    message("Not building on Windows...")
     QMAKE_CXXFLAGS += -std=c++11
 
     target.path = /usr/bin
