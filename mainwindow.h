@@ -58,15 +58,12 @@ private slots:
     // Tools
     void on_pushButton_audioTool_clicked();
     void on_pushButton_mapTool_clicked();
-    void on_pushButton_diceTool_clicked();
     void on_pushButton_characters_clicked();
     void on_pushButton_generators_clicked();
     void on_pushButton_notes_clicked();
     void on_pushButton_unitConverter_clicked();
     void on_pushButton_settings_clicked();
-
-    void on_pushButton_addons_clicked();
-
+//    void on_pushButton_addons_clicked();  // TODO
     void on_pushButton_combatTracker_clicked();
 
 private:
