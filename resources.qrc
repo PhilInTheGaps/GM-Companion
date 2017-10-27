@@ -29,5 +29,6 @@
         <file>resources/mediaIcons/converter.png</file>
         <file>resources/mediaIcons/settings.png</file>
         <file>resources/mediaIcons/combatTracker.png</file>
+        <file>resources/mediaIcons/combatTracker_dice.png</file>
     </qresource>
 </RCC>
