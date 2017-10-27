@@ -49,6 +49,7 @@ void CombatTracker::nextCharacter()
     }
 
     ui->tableWidget->item(nextIndex, 0)->setText("-->");
+    ui->tableWidget->selectRow(nextIndex);
 
     currentIndex = nextIndex;
 
