@@ -58,7 +58,9 @@
 
 - Removed Start page
 - Added sidebar navigation, removed tab system
-- Added changelog to about dialog</string>
+- Added changelog to about dialog
+- Cleaned up UI
+- Added Combat Tracker and combined it with the dice tool</string>
      </property>
     </widget>
    </item>
