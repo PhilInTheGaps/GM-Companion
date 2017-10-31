@@ -50,6 +50,18 @@
          <string>Characters</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QListWidget" name="listWidget_characters">
            <property name="sizePolicy">
@@ -67,6 +79,18 @@
          <string>Settings</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
@@ -195,6 +219,18 @@
          <string>Character Sheet</string>
         </attribute>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QFrame" name="frame_2">
            <property name="frameShape">
@@ -204,6 +240,18 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
@@ -340,6 +388,18 @@ p, li { white-space: pre-wrap; }
             <number>1</number>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_6">
               <property name="sizePolicy">
@@ -496,6 +556,18 @@ p, li { white-space: pre-wrap; }
          <string>Notes</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
           <widget class="QTextEdit" name="textEdit_notes">
            <property name="autoFormatting">
