@@ -209,6 +209,8 @@ void AudioTool::generateListViewElementButtons(QString scenario)
     FlowLayout *radioLayout = new FlowLayout;
     vlayout->addLayout(radioLayout);
 
+    vlayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
 
     int minimumButtonWidth = 200;
@@ -650,10 +652,12 @@ void AudioTool::playRadio(QString arg)
 
     settings.endArray();
 
-    if (url.contains(".m3u"))
+    if (url.contains(".m3u") || url.contains(".pls"))
     {
         QMediaPlaylist *radioPlaylist = new QMediaPlaylist;
         radioPlayer->setPlaylist(radioPlaylist);
+
+        qDebug().noquote() << "Radio is a playlist, located here:" << settingsManager->getSetting(radioPath)+url;
 
         if (QFile(settingsManager->getSetting(radioPath)+url).exists())
             radioPlaylist->load(QUrl::fromLocalFile(settingsManager->getSetting(radioPath)+url));
