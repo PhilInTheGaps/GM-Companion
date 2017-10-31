@@ -12,6 +12,8 @@ DiceTool::DiceTool(QWidget *parent) : QWidget(parent), ui(new Ui::DiceTool)
     ui->setupUi(this);
 
     generateDice();
+
+    ui->comboBox_dice->setCurrentIndex(5);
 }
 
 DiceTool::~DiceTool()
