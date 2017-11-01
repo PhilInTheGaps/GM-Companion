@@ -1,4 +1,10 @@
-gm-companion (0.3.2.3-1ubuntu1) zesty; urgency=medium
+gm-companion (0.3.3.0-1ubuntu1) zesty; urgency=medium
+
+  * Fixed version number
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Wed, 01 Nov 2017 19:30:00 +0200
+
+gm-companion (0.3.3.0-1ubuntu1) zesty; urgency=medium
 
   * Update to Beta 3.3
 
