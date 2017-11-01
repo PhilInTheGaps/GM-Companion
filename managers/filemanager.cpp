@@ -125,7 +125,8 @@ void FileManager::copyFiles(){
     }
 
     // Copy names
-    for (QString folder : getFolders(+"/names")){
+    qDebug() << "Copying names for generator...";
+    for (QString folder : getFolders(origPath+"/names")){
         if (!folder.contains(".")){
             QDir dir(origPath+"/names/"+folder);
             if (!dir.exists()){
@@ -139,11 +140,14 @@ void FileManager::copyFiles(){
                         dir2.mkpath(".");
                     }
 
-                    for (QString file : getFiles(QApplication::applicationDirPath()+"/names/"+folder+"/"+subfolder)){
+                    for (QString file : getFiles(origPath+"/names/"+folder+"/"+subfolder)){
                         QFile f(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
                         if (!f.exists())
                         {
                             QFile::copy(origPath+"/names/"+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
+
+                            qDebug().noquote() << "Name file origin:" << origPath+"/names/"+folder+"/"+subfolder+"/"+file;
+                            qDebug().noquote() << "Name file location:" << QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file;
                         }
                     }
                 }
