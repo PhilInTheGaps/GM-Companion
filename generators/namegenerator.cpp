@@ -17,7 +17,8 @@ NameGenerator::NameGenerator(QWidget *parent) : QWidget(parent), ui(new Ui::Name
     signalMapper = new QSignalMapper;
     settingsManager = new SettingsManager;
 
-    ui->textEdit_names->setFontPointSize(ui->spinBox_pointSize->value());
+    ui->textEdit_male->setFontPointSize(ui->spinBox_pointSize->value());
+    ui->textEdit_female->setFontPointSize(ui->spinBox_pointSize->value());
 
     generateNamesTab();
 }
@@ -55,45 +56,16 @@ void NameGenerator::generateNamesTab()
                     QFrame *subFrame = new QFrame;
                     frameLayout->addWidget(subFrame);
 
-                    QHBoxLayout *hbox = new QHBoxLayout;
-                    subFrame->setLayout(hbox);
+                    QPushButton *button = new QPushButton;
+                    button->setMinimumWidth(200);
+                    button->setText(subfolder);
+                    frameLayout->addWidget(button);
 
-                    QLabel *subfolderLabel = new QLabel(subfolder);
-                    hbox->addWidget(subfolderLabel);
+                    QString path = folder+"/"+subfolder;
 
-                    QFrame *buttonFrame = new QFrame;
-                    QHBoxLayout *buttonLayout = new QHBoxLayout;
-                    buttonFrame->setLayout(buttonLayout);
-                    buttonFrame->setMaximumWidth(200);
-                    hbox->addWidget(buttonFrame);
+                    connect(button, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                    signalMapper->setMapping(button, path);
 
-                    // Male names
-                    if (QFile(folder+"/"+subfolder+"/male.txt").exists())
-                    {
-                        QPushButton *maleButton = new QPushButton;
-                        maleButton->setMaximumWidth(200);
-                        maleButton->setText(tr("Male"));
-                        buttonLayout->addWidget(maleButton);
-
-                        QString maleFile = folder+"/"+subfolder+"/male.txt";
-
-                        connect(maleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                        signalMapper->setMapping(maleButton, maleFile);
-                    }
-
-                    // Female names
-                    if (QFile(folder+"/"+subfolder+"/female.txt").exists())
-                    {
-                        QPushButton *femaleButton = new QPushButton;
-                        femaleButton->setMaximumWidth(200);
-                        femaleButton->setText(tr("Female"));
-                        buttonLayout->addWidget(femaleButton);
-
-                        QString femaleFile = folder+"/"+subfolder+"/female.txt";
-
-                        connect(femaleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                        signalMapper->setMapping(femaleButton, femaleFile);
-                    }
                 }
             }
             QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -126,43 +98,16 @@ void NameGenerator::generateNamesTab()
                     QFrame *subFrame = new QFrame;
                     frameLayout->addWidget(subFrame);
 
-                    QHBoxLayout *hbox = new QHBoxLayout;
-                    subFrame->setLayout(hbox);
+                    QPushButton *button = new QPushButton;
+                    button->setMinimumWidth(200);
+                    button->setText(subfolder);
+                    frameLayout->addWidget(button);
 
-                    QLabel *subfolderLabel = new QLabel(subfolder);
-                    hbox->addWidget(subfolderLabel);
+                    QString path = folder+"/"+subfolder;
 
-                    QFrame *buttonFrame = new QFrame;
-                    QHBoxLayout *buttonLayout = new QHBoxLayout;
-                    buttonFrame->setLayout(buttonLayout);
-                    buttonFrame->setMaximumWidth(200);
-                    hbox->addWidget(buttonFrame);
+                    connect(button, SIGNAL(clicked()), signalMapper, SLOT(map()));
+                    signalMapper->setMapping(button, path);
 
-                    if (QFile(folder+"/"+subfolder+"/male.txt").exists())
-                    {
-                        QPushButton *maleButton = new QPushButton;
-                        maleButton->setMaximumWidth(200);
-                        maleButton->setText(tr("Male"));
-                        buttonLayout->addWidget(maleButton);
-
-                        QString maleFile = folder+"/"+subfolder+"/male.txt";
-
-                        connect(maleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                        signalMapper->setMapping(maleButton, maleFile);
-                    }
-
-                    if (QFile(folder+"/"+subfolder+"/female.txt").exists())
-                    {
-                        QPushButton *femaleButton = new QPushButton;
-                        femaleButton->setMaximumWidth(200);
-                        femaleButton->setText(tr("Female"));
-                        buttonLayout->addWidget(femaleButton);
-
-                        QString femaleFile = folder+"/"+subfolder+"/female.txt";
-
-                        connect(femaleButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                        signalMapper->setMapping(femaleButton, femaleFile);
-                    }
                 }
             }
             QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -173,22 +118,42 @@ void NameGenerator::generateNamesTab()
     connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
 }
 
-void NameGenerator::on_generateNames(QString file)
+void NameGenerator::on_generateNames(QString path)
 {
-    ui->textEdit_names->clear();
-    int index = file.lastIndexOf("/");
-    QString path = file.left(index);
+    ui->textEdit_male->clear();
+    ui->textEdit_male->append("Male Names:");
 
+    ui->textEdit_female->clear();
+    ui->textEdit_female->append("Female Names:");
+
+    QString malePath = path+"/male.txt";
+    QString femalePath = path+"/female.txt";
     QString surnamesPath = path+"/surname.txt";
 
-    QFile nameFile(file);
-    nameFile.open(QIODevice::ReadOnly);
-    QString namesAsString = QString::fromUtf8(nameFile.readAll());
-    QStringList names = namesAsString.split(",");
-    nameFile.close();
+    // Male Names
+    QStringList maleNames;
+    if (QFile(malePath).exists())
+    {
+        QFile maleFile(malePath);
+        maleFile.open(QIODevice::ReadOnly);
+        QString maleNamesAsString = QString::fromUtf8(maleFile.readAll());
+        maleNames = maleNamesAsString.split(",");
+        maleFile.close();
+    }
 
+    // Female Names
+    QStringList femaleNames;
+    if (QFile(femalePath).exists())
+    {
+        QFile femaleFile(femalePath);
+        femaleFile.open(QIODevice::ReadOnly);
+        QString femaleNamesAsString = QString::fromUtf8(femaleFile.readAll());
+        femaleNames = femaleNamesAsString.split(",");
+        femaleFile.close();
+    }
+
+    // Surnames
     QStringList surnames;
-
     if (QFile(surnamesPath).exists())
     {
         QFile surnamesFile(surnamesPath);
@@ -200,20 +165,34 @@ void NameGenerator::on_generateNames(QString file)
 
     for (int i = 0; i<ui->spinBox_amount->value(); i++)
     {
-        QString name = names.at(rand() % names.size());
-
-        QString displayName = name;
+        QString maleName;
+        QString femaleName;
+        QString surname;
 
         if (QFile(surnamesPath).exists()){
-            QString surname = surnames.at(rand() % surnames.size());
-            displayName.append(" "+surname);
+            surname = surnames.at(rand() % surnames.size());
         }
 
-        ui->textEdit_names->append(displayName);
+        if (QFile(malePath).exists())
+        {
+            maleName = maleNames.at(rand() % maleNames.size());
+            maleName.append(" "+surname);
+
+            ui->textEdit_male->append(maleName);
+        }
+
+        if (QFile(femalePath).exists())
+        {
+            femaleName = femaleNames.at(rand() % femaleNames.size());
+            femaleName.append(" "+surname);
+
+            ui->textEdit_female->append(femaleName);
+        }
     }
 }
 
 void NameGenerator::on_spinBox_pointSize_valueChanged(int arg1)
 {
-    ui->textEdit_names->setFontPointSize(arg1);
+    ui->textEdit_male->setFontPointSize(arg1);
+    ui->textEdit_female->setFontPointSize(arg1);
 }
