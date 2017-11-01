@@ -10,6 +10,7 @@
 #include <QMediaPlaylist>
 
 #include "managers/settingsmanager.h"
+#include "managers/googledrive.h"
 
 namespace Ui {
 class AudioTool;
@@ -61,6 +62,8 @@ private slots:
     void on_pushButton_documentation_clicked();
 
 
+    void on_checkBox_googleDrive_toggled(bool checked);
+
 private:
     Ui::AudioTool *ui;
 
@@ -91,6 +94,10 @@ private:
     // Button View
     void generateScenarioFrames(QString category, QFrame *bFrame);
     void generateElementButtons(QString category, QString scenario, QFrame *bFrame);
+
+    // Google Drive
+    bool useGoogleDrive;
+    GoogleDrive *drive;
 };
 
 #endif // AUDIOTOOL_H

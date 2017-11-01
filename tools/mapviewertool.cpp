@@ -19,6 +19,10 @@ MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapV
     signalMapperMaps = new QSignalMapper(this);
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
+    // Google Drive
+    useGoogleDrive = false;
+    drive = new GoogleDrive;
+
     getMaps();
 }
 
@@ -30,6 +34,19 @@ MapViewerTool::~MapViewerTool()
 // Create buttons for all the maps
 void MapViewerTool::getMaps()
 {
+    QString path;
+    SettingsManager *settingsManager = new SettingsManager;
+
+    if (useGoogleDrive)
+    {
+        drive->downloadAll("0B2lW8fcqYF5IZUUtNTktTHRjTzQ", "maps");
+        path = QDir::homePath()+"/.gm-companion/tools/cloud/download/maps";
+    }
+    else
+    {
+        path = settingsManager->getSetting(Setting::mapsPath);
+    }
+
     // Clear all old buttons
     qDeleteAll(ui->scrollAreaWidgetContents->children());
 
@@ -37,13 +54,12 @@ void MapViewerTool::getMaps()
     QVBoxLayout *mapButtonLayout = new QVBoxLayout;
     ui->scrollAreaWidgetContents->setLayout(mapButtonLayout);
 
-    SettingsManager *settingsManager = new SettingsManager;
-    QStringList mapsList = getFiles(settingsManager->getSetting(Setting::mapsPath));
+    QStringList mapsList = getFiles(path);
 
     // Create a button for every map
     for (QString mapName : mapsList){
         if (mapName.contains(".png") || mapName.contains(".jpg")){
-            QString mapPath = settingsManager->getSetting(Setting::mapsPath)+"/"+mapName;
+            QString mapPath = path + "/" + mapName;
 
             QPushButton *imageButton = new QPushButton;
             imageButton->setText(cleanText(mapName));
@@ -83,4 +99,12 @@ void MapViewerTool::on_pushButton_zoomOut_clicked()
 void MapViewerTool::on_pushButton_resetSize_clicked()
 {
     ui->graphicsView->resetTransform();
+}
+
+void MapViewerTool::on_checkBox_googleDrive_toggled(bool checked)
+{
+    useGoogleDrive = checked;
+
+    if (checked)
+        getMaps();
 }

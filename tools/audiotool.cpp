@@ -44,6 +44,10 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     signalMapperSound = new QSignalMapper;
     connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
 
+    // Google Drive
+    useGoogleDrive = false;
+    drive = new GoogleDrive;
+
     // Display all available projects in the combo box
     getProjects();
 
@@ -833,4 +837,13 @@ void AudioTool::on_pushButton_updateProjects_clicked()
 void AudioTool::on_pushButton_documentation_clicked()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki/Audio-Tool"));
+}
+
+
+void AudioTool::on_checkBox_googleDrive_toggled(bool checked)
+{
+    useGoogleDrive = checked;
+
+    if (checked)
+        drive->authenticate();
 }

@@ -5,6 +5,8 @@
 #include <QSignalMapper>
 #include <QLabel>
 
+#include "managers/googledrive.h"
+
 namespace Ui {
 class MapViewerTool;
 }
@@ -26,12 +28,18 @@ private slots:
 
     void setMap(QString mapPath);
 
+    void on_checkBox_googleDrive_toggled(bool checked);
+
 private:
     Ui::MapViewerTool *ui;
 
     QSignalMapper *signalMapperMaps;
 
     void getMaps();
+
+    GoogleDrive *drive;
+
+    bool useGoogleDrive;
 };
 
 #endif // MAPVIEWERTOOL_H
