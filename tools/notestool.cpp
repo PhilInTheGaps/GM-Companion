@@ -19,6 +19,8 @@ NotesTool::NotesTool(QWidget *parent) : QWidget(parent), ui(new Ui::NotesTool)
     settingsManager = new SettingsManager;
 
     getNotes();
+
+    ui->textEdit_notes->setFontPointSize(ui->spinBox_fontSize->value());
 }
 
 NotesTool::~NotesTool()

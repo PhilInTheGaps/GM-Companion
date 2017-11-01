@@ -1,11 +1,11 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VER_FILEVERSION             0,3,2,0
-#define VER_FILEVERSION_STR         "0.3.2.0"
+#define VER_FILEVERSION             0,3,3,0
+#define VER_FILEVERSION_STR         "0.3.3.0"
 
-#define VER_PRODUCTVERSION          0,3,2,0
-#define VER_PRODUCTVERSION_STR      "0.3.2.0"
+#define VER_PRODUCTVERSION          0,3,3,0
+#define VER_PRODUCTVERSION_STR      "0.3.3.0"
 
 #define VER_COMPANYNAME_STR         "Phil Hoffmann"
 #define VER_FILEDESCRIPTION_STR     "GM-Companion"
@@ -16,6 +16,6 @@
 #define VER_ORIGINALFILENAME_STR    "GM-Companion.exe"
 #define VER_PRODUCTNAME_STR         "GM-Companion"
 
-#define VER_COMPANYDOMAIN_STR       "https://philinthegaps.github.io/GM-Companion/"
+#define VER_COMPANYDOMAIN_STR       "https://gm-companion.github.io/"
 
 #endif // VERSION_H

@@ -26,8 +26,7 @@ public:
 private slots:
     // Changing view
     void on_radioButton_List_clicked();
-    void on_radioButton_Large_clicked();
-    void on_radioButton_Small_clicked();
+    void on_radioButton_Buttons_clicked();
 
     // Music
     void playMusic(QString arg);
@@ -59,8 +58,8 @@ private slots:
     void on_comboBox_projects_currentTextChanged(const QString &arg1);
 
     void on_pushButton_updateProjects_clicked();
-
     void on_pushButton_documentation_clicked();
+
 
 private:
     Ui::AudioTool *ui;
@@ -90,8 +89,8 @@ private:
     void generateListViewElementButtons(QString scenario);
 
     // Button View
-    void generateScenarioFrames(QString category, QFrame *sFrame, QFrame *lFrame);
-    void generateElementButtons(QString category, QString scenario, QFrame *sFrame, QFrame *lFrame);
+    void generateScenarioFrames(QString category, QFrame *bFrame);
+    void generateElementButtons(QString category, QString scenario, QFrame *bFrame);
 };
 
 #endif // AUDIOTOOL_H

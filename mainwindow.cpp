@@ -10,6 +10,7 @@
 #include "tools/characterviewertool.h"
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
+#include "tools/combattracker.h"
 
 #include "managers/filemanager.h"
 #include "managers/generatormanager.h"
@@ -37,17 +38,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
 
-    // Set tool tabs closeable
-    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
-
-    // Initialize Blog Network Manager
-    blogNetworkManager = new QNetworkAccessManager;
-    connect(blogNetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_blogNetworkAccessManagerFinished(QNetworkReply*)));
-
-    // Get Blog Feed
-    qDebug() << "Getting blog feed...";
-    blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
-    ui->blogTextEdit->verticalScrollBar()->setValue(0);
 
     // Some functions behave differently when the program is just starting
     programStart = false;
@@ -65,42 +55,39 @@ void MainWindow::addTools()
 
     // AudioTool
     AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->insertTab(1, audioTool, tr("Audio Tool"));
+    ui->stackedWidget->addWidget(audioTool);
 
     // MapTool
     MapViewerTool *mapViewerTool = new MapViewerTool;
-    ui->tabWidget->insertTab(2, mapViewerTool, tr("Map Tool"));
+    ui->stackedWidget->addWidget(mapViewerTool);
 
-    // DiceTool
-    DiceTool *diceTool = new DiceTool;
-    ui->tabWidget->insertTab(3, diceTool, tr("Dice Tool"));
+    // Combat Tracker
+    CombatTracker *combatTracker = new CombatTracker;
+    ui->stackedWidget->addWidget(combatTracker);
 
     // Character Viewer
     CharacterViewerTool *characterViewer = new CharacterViewerTool;
-    ui->tabWidget->insertTab(4, characterViewer, tr("Characters"));
+    ui->stackedWidget->addWidget(characterViewer);
 
     // Generator Manager
     GeneratorManager *generatorManager = new GeneratorManager;
-    ui->tabWidget->insertTab(5, generatorManager, tr("Generators"));
+    ui->stackedWidget->addWidget(generatorManager);
 
     // NotesTool
     NotesTool *notesTool = new NotesTool;
-    ui->tabWidget->insertTab(6, notesTool, tr("Notes"));
+    ui->stackedWidget->addWidget(notesTool);
 
     // ConverterTool
     ConverterTool *converterTool = new ConverterTool;
-    ui->tabWidget->insertTab(7, converterTool, tr("Unit Converter"));
-}
+    ui->stackedWidget->addWidget(converterTool);
 
-// Open Wiki Page in Web Browser
-void MainWindow::on_actionOpen_Wiki_triggered(){
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
-}
+    // Addons Tool
+    // TODO
 
-// Open Wiki
-void MainWindow::on_pushButton_documentation_clicked()
-{
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
+    // Options Dialog
+    OptionsDialog *optionsDialog = new OptionsDialog(this);
+    ui->stackedWidget->addWidget(optionsDialog);
+
 }
 
 // Set Program version
@@ -123,157 +110,62 @@ QString MainWindow::getVersion()
     return versionString;
 }
 
-// Check for Updates
-void MainWindow::on_actionCheck_for_Updates_triggered(){
-    UpdateManager *updateManger = new UpdateManager(versionNumber);
-    updateManger->checkForUpdates();
-}
-
 // Update the settings version
 void MainWindow::updateSettingsVersion(){
     settingsManager->setSetting(Setting::version, true, QString::number(versionNumber));
 }
 
-// Opens Issues GitHub Page
-void MainWindow::on_actionReport_a_Bug_triggered(){
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/issues/new"));
-}
-
-// Opens Releases GitHub Page
-void MainWindow::actionI_want_to_use_an_older_Version_triggered(){
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/releases"));
-}
-
-// Set Music Path
-void MainWindow::on_actionSet_Music_Folder_triggered(){
-    settingsManager->setSetting(Setting::musicPath, true);
-}
-
-// Set Sound Path
-void MainWindow::on_actionSet_Sound_Folder_triggered(){
-    settingsManager->setSetting(Setting::soundPath, true);
-}
-
-// Set Maps Path
-void MainWindow::on_actionSet_Maps_Folder_triggered(){
-    settingsManager->setSetting(Setting::mapsPath, true);
-}
-
-// Set Characters Path
-void MainWindow::on_actionSet_Characters_Folder_triggered(){
-    settingsManager->setSetting(Setting::charactersPath, true);
-}
-
-// Set resources path
-void MainWindow::on_actionSet_Resources_Folder_triggered(){
-    settingsManager->setSetting(Setting::resourcesPath, true);
-}
-
-// Set Notes Path
-void MainWindow::on_actionSet_Notes_Folder_triggered()
+/// Tool Navigation
+// Audio Tool
+void MainWindow::on_pushButton_audioTool_clicked()
 {
-    settingsManager->setSetting(Setting::notesPath, true);
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
-// Set Audio Projects Path
-void MainWindow::on_actionSet_Audio_Projects_Folder_triggered()
+// Map Viewer Tool
+void MainWindow::on_pushButton_mapTool_clicked()
 {
-    settingsManager->setSetting(audioPath, true);
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
-// Set Radio Playlists Path
-void MainWindow::on_actionSet_Radio_Playlists_Folder_triggered()
+// Combat Tracker
+void MainWindow::on_pushButton_combatTracker_clicked()
 {
-    settingsManager->setSetting(radioPath, true);
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
-// Open Options Dialog
-void MainWindow::on_actionOptions_triggered(){
-    qDebug() << "Opening options window ...";
-    OptionsDialog* options = new OptionsDialog(this);
-    options->show();
-}
-
-// Remove a tab from the tab widget
-void MainWindow::closeTab(int index){
-    qDebug().noquote() << "Closing tab:" << ui->tabWidget->tabText(index) << "...";
-    ui->tabWidget->removeTab(index);
-}
-
-// Add Maps Tool
-void MainWindow::on_actionToggle_Maps_Tool_triggered()
+// Characters
+void MainWindow::on_pushButton_characters_clicked()
 {
-    qDebug() << "Adding Map Viewer Tool...";
-    MapViewerTool *mapViewerTool = new MapViewerTool;
-    ui->tabWidget->addTab(mapViewerTool, tr("Map Tool"));
+    ui->stackedWidget->setCurrentIndex(3);
 }
 
-// Add Dice Tool
-void MainWindow::on_actionToggle_Dice_Tool_triggered()
+// Generators
+void MainWindow::on_pushButton_generators_clicked()
 {
-    qDebug() << "Adding AudioTool ...";
-    AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->addTab(audioTool, tr("Audio Tool"));
+    ui->stackedWidget->setCurrentIndex(4);
 }
 
-// Add Character Tool
-void MainWindow::on_actionToggle_Characters_Tool_triggered()
+// Notes
+void MainWindow::on_pushButton_notes_clicked()
 {
-    qDebug() << "Adding characters tool...";
-    CharacterViewerTool *characterViewer = new CharacterViewerTool;
-    ui->tabWidget->addTab(characterViewer, tr("Characters"));
+    ui->stackedWidget->setCurrentIndex(5);
 }
 
-// Add Audio Tool
-void MainWindow::on_actionAdd_Audio_Tool_triggered()
+// Unit Converter
+void MainWindow::on_pushButton_unitConverter_clicked()
 {
-    qDebug() << "Adding AudioTool ...";
-    AudioTool *audioTool = new AudioTool(settingsManager, this);
-    ui->tabWidget->addTab(audioTool, tr("Audio Tool"));
+    ui->stackedWidget->setCurrentIndex(6);
 }
 
-// Add Notes Tool
-void MainWindow::on_actionNotes_triggered()
-{
-    qDebug() << "Adding NotesTool ...";
-    NotesTool *notesTool = new NotesTool;
-    ui->tabWidget->addTab(notesTool, tr("Notes"));
-}
+//// Addons
+//void MainWindow::on_pushButton_addons_clicked()
+//{
+////    ui->stackedWidget->setCurrentIndex(8);
+//}
 
-// Add Converter Tool
-void MainWindow::on_actionUnit_Converter_triggered()
+// Settings
+void MainWindow::on_pushButton_settings_clicked()
 {
-    qDebug() << "Adding ConverterTool ...";
-    ConverterTool *converterTool = new ConverterTool;
-    ui->tabWidget->addTab(converterTool, tr("Unit Converter"));
-}
-
-// Change blog settings
-void MainWindow::on_radioButton_allEntries_toggled(bool checked)
-{
-    if (checked)
-    {
-        qDebug() << "Getting blog feed ...";
-        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/feed.xml")));
-    }
-}
-
-void MainWindow::on_radioButton_releaseOnly_toggled(bool checked)
-{
-    if (checked)
-    {
-        qDebug() << "Getting blog feed ...";
-        blogNetworkManager->get(QNetworkRequest(QUrl("https://gm-companion.github.io/releases.xml")));
-    }
-}
-
-void MainWindow::on_actionView_on_GitHub_triggered()
-{
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion"));
-}
-
-void MainWindow::on_actionAbout_triggered()
-{
-    AboutDialog *about = new AboutDialog(versionString);
-    about->show();
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->count()-1);
 }

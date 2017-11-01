@@ -24,7 +24,6 @@ CONFIG += c++11
 SOURCES += main.cpp\
     mainwindow.cpp \
     functions.cpp \
-    network.cpp \
     tools/audiotool.cpp \
     tools/dicetool.cpp \
     tools/mapviewertool.cpp \
@@ -44,7 +43,8 @@ SOURCES += main.cpp\
     dialogs/updatedialog.cpp \
     tools/notestool.cpp \
     tools/convertertool.cpp \
-    dialogs/aboutdialog.cpp
+    dialogs/aboutdialog.cpp \
+    tools/combattracker.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -68,7 +68,8 @@ HEADERS  += mainwindow.h \
     dialogs/updatedialog.h \
     tools/notestool.h \
     tools/convertertool.h \
-    dialogs/aboutdialog.h
+    dialogs/aboutdialog.h \
+    tools/combattracker.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \
@@ -86,7 +87,8 @@ FORMS    += mainwindow.ui \
     dialogs/updatedialog.ui \
     tools/notestool.ui \
     tools/convertertool.ui \
-    dialogs/aboutdialog.ui
+    dialogs/aboutdialog.ui \
+    tools/combattracker.ui
 
 DISTFILES +=
 
@@ -98,12 +100,7 @@ RESOURCES += resources.qrc \
 TRANSLATIONS+=  translations/gm-companion_en.ts
 TRANSLATIONS+=  translations/gm-companion_de.ts
 
-win32 {
-    message("Building on Windows...")
-}
-
 !win32 {
-    message("Not building on Windows...")
     QMAKE_CXXFLAGS += -std=c++11
 
     target.path = /usr/bin

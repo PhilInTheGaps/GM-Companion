@@ -489,7 +489,10 @@ void CharacterViewerTool::on_pushButton_makeAllInactive_clicked()
 
     ui->listWidget_activeChars->clear();
 
-    settingsManager->setInactiveCharacters(characters);
+    QStringList inactiveChars = settingsManager->getInactiveCharacters();
+    inactiveChars.append(characters);
+
+    settingsManager->setInactiveCharacters(inactiveChars);
 
     getCharacters();
 }

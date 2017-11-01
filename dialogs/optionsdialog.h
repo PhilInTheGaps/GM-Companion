@@ -45,6 +45,18 @@ private slots:
     // Language
     void on_languageComboBox_currentIndexChanged(int index);
 
+    void on_pushButton_openWiki_clicked();
+
+    void on_pushButton_reportABug_clicked();
+
+    void on_pushButton_downloadOlderVersions_clicked();
+
+    void on_pushButton_viewOnGitHub_clicked();
+
+    void on_pushButton_about_clicked();
+
+    void on_pushButton_checkForUpdates_clicked();
+
 private:
     Ui::OptionsDialog *ui;
 
