@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     tools/notestool.cpp \
     tools/convertertool.cpp \
     dialogs/aboutdialog.cpp \
-    tools/combattracker.cpp
+    tools/combattracker.cpp \
+    managers/googledrive.cpp
 
 HEADERS  += mainwindow.h \
     functions.h \
@@ -69,7 +70,8 @@ HEADERS  += mainwindow.h \
     tools/notestool.h \
     tools/convertertool.h \
     dialogs/aboutdialog.h \
-    tools/combattracker.h
+    tools/combattracker.h \
+    managers/googledrive.h
 
 FORMS    += mainwindow.ui \
     tools/audiotool.ui \

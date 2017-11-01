@@ -137,6 +137,30 @@
          </widget>
         </item>
         <item>
+         <widget class="Line" name="line_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Google Drive</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_googleDrive">
+          <property name="toolTip">
+           <string>If the music and sound files are uploaded to Google Drive, this feature saves disk space by only downloading the files when they are needed</string>
+          </property>
+          <property name="text">
+           <string>Use Drive</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="Line" name="line_4">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -413,8 +437,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>702</width>
-                  <height>615</height>
+                  <width>705</width>
+                  <height>619</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_11">

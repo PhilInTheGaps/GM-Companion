@@ -20,7 +20,8 @@ enum Setting{
     version,
     notesPath,
     audioPath,
-    radioPath
+    radioPath,
+    drive_music
 };
 
 class SettingsManager
