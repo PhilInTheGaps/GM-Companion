@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>720</height>
+    <height>727</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -104,7 +104,7 @@
   </widget>
   <widget class="QDockWidget" name="dockWidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+    <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -112,12 +112,12 @@
    <property name="minimumSize">
     <size>
      <width>82</width>
-     <height>668</height>
+     <height>687</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>82</width>
+     <width>95</width>
      <height>524287</height>
     </size>
    </property>
