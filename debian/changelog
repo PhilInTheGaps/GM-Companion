@@ -1,3 +1,9 @@
+gm-companion (1.0.0-1ubuntu1) zesty; urgency=medium
+
+  * Updated to version 1.0
+
+ -- Phil Hoffmann <phil.hoffmann@inbox.com>  Wed, 01 Nov 2017 20:00:00 +0200
+ 
 gm-companion (0.3.3.0-1ubuntu1) zesty; urgency=medium
 
   * Fixed version number
