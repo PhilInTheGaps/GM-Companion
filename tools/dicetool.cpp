@@ -117,7 +117,7 @@ void DiceTool::generateDice()
 void DiceTool::on_pushButton_addDie_clicked()
 {
     sidesList.push_back(ui->spinBox_customDie->value());
-
+    ui->comboBox_dice->clear();
     generateDice();
 }
 
@@ -125,7 +125,7 @@ void DiceTool::on_pushButton_addDie_clicked()
 void DiceTool::on_pushButton_resetDice_clicked()
 {
     sidesList = {2, 3, 4, 6, 12, 20};
-
+    ui->comboBox_dice->clear();
     generateDice();
 }
 
