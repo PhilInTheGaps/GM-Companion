@@ -229,35 +229,39 @@ void NotesTool::on_treeWidget_notes_itemClicked(QTreeWidgetItem *item, int colum
 void NotesTool::on_textEdit_notes_textChanged()
 {
     int column = ui->treeWidget_notes->currentColumn();
-    QString filename = ui->treeWidget_notes->currentItem()->text(column)+".txt";
-    QString parent = ui->treeWidget_notes->currentItem()->parent()->text(column);
 
-    if (ui->treeWidget_notes->currentItem()->type() == 1)
-    {
-        QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+parent+"/"+filename);
+    if (column > -1) {
 
-        if (file.exists())
+        QString filename = ui->treeWidget_notes->currentItem()->text(column)+".txt";
+        QString parent = ui->treeWidget_notes->currentItem()->parent()->text(column);
+
+        if (ui->treeWidget_notes->currentItem()->type() == 1)
         {
-            file.open(QFile::WriteOnly);
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            QString output = ui->textEdit_notes->document()->toPlainText().toUtf8();
-            stream << output;
-            file.close();
+            QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+parent+"/"+filename);
+
+            if (file.exists())
+            {
+                file.open(QFile::WriteOnly);
+                QTextStream stream(&file);
+                stream.setCodec("UTF-8");
+                QString output = ui->textEdit_notes->document()->toPlainText().toUtf8();
+                stream << output;
+                file.close();
+            }
         }
-    }
-    else if (ui->treeWidget_notes->currentItem()->type() == 3)
-    {
-        QFile file(QDir::homePath()+"/.gm-companion/addons/"+parent+"/notes/"+filename);
-
-        if (file.exists())
+        else if (ui->treeWidget_notes->currentItem()->type() == 3)
         {
-            file.open(QFile::WriteOnly);
-            QTextStream stream(&file);
-            stream.setCodec("UTF-8");
-            QString output = ui->textEdit_notes->document()->toPlainText().toUtf8();
-            stream << output;
-            file.close();
+            QFile file(QDir::homePath()+"/.gm-companion/addons/"+parent+"/notes/"+filename);
+
+            if (file.exists())
+            {
+                file.open(QFile::WriteOnly);
+                QTextStream stream(&file);
+                stream.setCodec("UTF-8");
+                QString output = ui->textEdit_notes->document()->toPlainText().toUtf8();
+                stream << output;
+                file.close();
+            }
         }
     }
 }
