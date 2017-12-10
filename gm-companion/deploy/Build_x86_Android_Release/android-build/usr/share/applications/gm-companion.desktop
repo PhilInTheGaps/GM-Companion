@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=0.3.1.1
+Name=GM-Companion
+GenericName=GM-Companion
+Comment=A gamemaster tool.
+Icon=/usr/share/gm-companion/icon256.png
+Exec=gm-companion
+Terminal=false
+Type=Application
+Categories=Qt;Utility;
