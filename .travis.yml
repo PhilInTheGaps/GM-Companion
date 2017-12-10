@@ -7,7 +7,7 @@ addons:
     project:
       name: "PhilInTheGaps/GM-Companion"
       description: "A gamemaster tool."
-    notification_email: phil.hoffmann@inbox.com
+    notification_email: phil.hoffmann@zoho.eu
     build_command_prepend: qmake
     build_command: make
     branch_pattern: coverity_scan
@@ -25,6 +25,7 @@ matrix:
         - sudo apt-get -y install qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev
         - source /opt/qt59/bin/qt59-env.sh
       script:
+	    - cd gm-companion
         - qmake
         - make
     - os: osx
@@ -33,6 +34,7 @@ matrix:
         - brew install qt5
         - brew link qt5 --force
       script:
+	    - cd gm-companion
         - qmake
         - make
 
