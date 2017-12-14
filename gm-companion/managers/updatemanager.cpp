@@ -1,5 +1,5 @@
 #include "updatemanager.h"
-#include "dialogs/updatedialog.h"
+#include "gm-companion/dialogs/updatedialog.h"
 
 #include <QXmlStreamReader>
 #include <QDebug>

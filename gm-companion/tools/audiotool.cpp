@@ -1,8 +1,8 @@
 #include "audiotool.h"
 #include "ui_audiotool.h"
-#include "functions.h"
-#include "ui/flowlayout.h"
-#include "editors/audioeditor.h"
+#include "gm-companion/functions.h"
+#include "gm-companion/ui/flowlayout.h"
+#include "gm-companion/editors/audioeditor.h"
 
 #include <QDebug>
 #include <QScrollArea>

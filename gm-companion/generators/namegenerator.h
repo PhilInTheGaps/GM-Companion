@@ -1,7 +1,7 @@
 #ifndef NAMEGENERATOR_H
 #define NAMEGENERATOR_H
 
-#include "managers/settingsmanager.h"
+#include "gm-companion/managers/settingsmanager.h"
 
 #include <QWidget>
 #include <QSignalMapper>

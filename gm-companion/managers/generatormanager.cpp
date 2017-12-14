@@ -1,8 +1,8 @@
 #include "generatormanager.h"
 #include "ui_generatormanager.h"
 
-#include "generators/namegenerator.h"
-#include "addontools/sifrp.h"
+#include "gm-companion/generators/namegenerator.h"
+#include "gm-companion/addontools/sifrp.h"
 
 #include <QDebug>
 

@@ -1,9 +1,9 @@
 #include "optionsdialog.h"
 #include "ui_optionsdialog.h"
 #include "ui_mainwindow.h"
-#include "functions.h"
-#include "dialogs/aboutdialog.h"
-#include "managers/updatemanager.h"
+#include "gm-companion/functions.h"
+#include "gm-companion/dialogs/aboutdialog.h"
+#include "gm-companion/managers/updatemanager.h"
 
 #include <QDebug>
 #include <QSettings>

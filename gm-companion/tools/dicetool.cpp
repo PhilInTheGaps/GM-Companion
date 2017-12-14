@@ -1,6 +1,6 @@
 #include "dicetool.h"
 #include "ui_dicetool.h"
-#include "ui/flowlayout.h"
+#include "gm-companion/ui/flowlayout.h"
 
 #include <QTableWidgetItem>
 #include <QDebug>

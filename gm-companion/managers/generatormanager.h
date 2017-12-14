@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "managers/settingsmanager.h"
+#include "gm-companion/managers/settingsmanager.h"
 
 namespace Ui {
 class GeneratorManager;

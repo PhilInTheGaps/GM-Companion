@@ -1,6 +1,6 @@
 #include "characterviewertool.h"
 #include "ui_characterviewertool.h"
-#include "functions.h"
+#include "gm-companion/functions.h"
 
 #include <QDebug>
 #include <QTableWidgetItem>

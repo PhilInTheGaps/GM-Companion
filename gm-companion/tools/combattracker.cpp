@@ -1,7 +1,7 @@
 #include "combattracker.h"
 #include "ui_combattracker.h"
 
-#include "tools/dicetool.h"
+#include "gm-companion/tools/dicetool.h"
 
 #include <QDebug>
 

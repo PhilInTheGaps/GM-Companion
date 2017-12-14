@@ -1,8 +1,8 @@
 #include "mapviewertool.h"
 #include "ui_mapviewertool.h"
-#include "ui/flowlayout.h"
-#include "managers/settingsmanager.h"
-#include "functions.h"
+#include "gm-companion/ui/flowlayout.h"
+#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/functions.h"
 
 #include <QDebug>
 #include <QScrollArea>

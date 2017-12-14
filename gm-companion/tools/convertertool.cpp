@@ -1,6 +1,6 @@
 #include "convertertool.h"
 #include "ui_convertertool.h"
-#include "functions.h"
+#include "gm-companion/functions.h"
 
 #include <QDebug>
 #include <QDir>

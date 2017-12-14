@@ -1,7 +1,7 @@
 #include "notestool.h"
 #include "ui_notestool.h"
-#include "functions.h"
-#include "dialogs/notesdialog.h"
+#include "gm-companion/functions.h"
+#include "gm-companion/dialogs/notesdialog.h"
 
 #include <QDebug>
 #include <QDir>

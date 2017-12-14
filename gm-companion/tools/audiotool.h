@@ -9,8 +9,8 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 
-#include "managers/settingsmanager.h"
-#include "managers/googledrive.h"
+#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/managers/googledrive.h"
 
 namespace Ui {
 class AudioTool;
