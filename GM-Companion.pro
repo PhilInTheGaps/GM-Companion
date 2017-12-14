@@ -14,7 +14,7 @@ win32:QT += winextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = gm-companion
+TARGET = out/gm-companion
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
