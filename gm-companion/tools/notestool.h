@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTreeWidgetItem>
 
-#include "managers/settingsmanager.h"
+#include "gm-companion/managers/settingsmanager.h"
 
 namespace Ui {
 class NotesTool;

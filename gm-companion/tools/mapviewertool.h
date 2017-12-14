@@ -5,7 +5,7 @@
 #include <QSignalMapper>
 #include <QLabel>
 
-#include "managers/googledrive.h"
+#include "gm-companion/managers/googledrive.h"
 
 namespace Ui {
 class MapViewerTool;

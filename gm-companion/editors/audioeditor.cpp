@@ -1,6 +1,6 @@
 #include "audioeditor.h"
 #include "ui_audioeditor.h"
-#include "functions.h"
+#include "gm-companion/functions.h"
 
 #include <QDir>
 #include <QStyle>

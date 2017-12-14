@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
-#include <functions.h>
+#include <gm-companion/functions.h>
 #include <QFileInfo>
 #include <QDateTime>
 
