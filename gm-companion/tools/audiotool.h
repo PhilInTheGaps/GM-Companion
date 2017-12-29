@@ -10,7 +10,6 @@
 #include <QMediaPlaylist>
 
 #include "gm-companion/managers/settingsmanager.h"
-#include "gm-companion/managers/googledrive.h"
 
 namespace Ui {
 class AudioTool;
@@ -97,7 +96,6 @@ private:
 
     // Google Drive
     bool useGoogleDrive;
-    GoogleDrive *drive;
 };
 
 #endif // AUDIOTOOL_H

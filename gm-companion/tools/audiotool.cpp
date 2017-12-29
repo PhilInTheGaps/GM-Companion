@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QMediaMetaData>
 #include <QDesktopServices>
+#include <QDir>
 
 // Only Windows relevant
 #ifdef _WIN32
@@ -46,7 +47,6 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     // Google Drive
     useGoogleDrive = false;
-    drive = new GoogleDrive;
 
     // Display all available projects in the combo box
     getProjects();
@@ -514,6 +514,9 @@ void AudioTool::updateMetaData()
         QString artist = musicPlayer->metaData(QMediaMetaData::Author).toString();
         QString album = musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
 
+        QImage img = musicPlayer->metaData(QMediaMetaData::ThumbnailImage).value<QImage>();
+        ui->comboBox_music->setItemIcon(ui->comboBox_music->currentIndex(), QIcon(QPixmap::fromImage(img)));
+
         ui->label_title->setText("Title: " + title);
         ui->label_artist->setText("Artist: " + artist);
         ui->label_album->setText("Album: " + album);
@@ -843,7 +846,4 @@ void AudioTool::on_pushButton_documentation_clicked()
 void AudioTool::on_checkBox_googleDrive_toggled(bool checked)
 {
     useGoogleDrive = checked;
-
-    if (checked)
-        drive->authenticate();
 }
