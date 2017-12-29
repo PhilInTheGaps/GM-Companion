@@ -14,6 +14,7 @@
 #include <QDateTime>
 #include <QSettings>
 
+// Responsible for writing the console output into a log if debug option in settings is disabled (default)
 void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString & msg)
 {
     QDate date;
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+    // Check if debug mode is enabled (disabled by default)
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     if (checkSettings.value("debug", 0).toInt() == 1)
     {
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
         QString styleSheet = QLatin1String(file.readAll());
         app.setStyleSheet(styleSheet);
     }else{
-        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/Dark.qss");
+        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/White.qss");
         if (defaultStyle.exists()){
             defaultStyle.open(QFile::ReadOnly);
             QString styleSheet = QLatin1String(defaultStyle.readAll());
