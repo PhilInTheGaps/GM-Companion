@@ -5,8 +5,6 @@
 #include <QSignalMapper>
 #include <QLabel>
 
-#include "gm-companion/managers/googledrive.h"
-
 namespace Ui {
 class MapViewerTool;
 }
@@ -36,8 +34,6 @@ private:
     QSignalMapper *signalMapperMaps;
 
     void getMaps();
-
-    GoogleDrive *drive;
 
     bool useGoogleDrive;
 };

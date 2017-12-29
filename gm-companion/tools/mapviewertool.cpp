@@ -19,10 +19,6 @@ MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapV
     signalMapperMaps = new QSignalMapper(this);
     connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
 
-    // Google Drive
-    useGoogleDrive = false;
-    drive = new GoogleDrive;
-
     getMaps();
 }
 
@@ -34,18 +30,9 @@ MapViewerTool::~MapViewerTool()
 // Create buttons for all the maps
 void MapViewerTool::getMaps()
 {
-    QString path;
     SettingsManager *settingsManager = new SettingsManager;
 
-    if (useGoogleDrive)
-    {
-        drive->downloadAll("0B2lW8fcqYF5IZUUtNTktTHRjTzQ", "maps");
-        path = QDir::homePath()+"/.gm-companion/tools/cloud/download/maps";
-    }
-    else
-    {
-        path = settingsManager->getSetting(Setting::mapsPath);
-    }
+    QString path = settingsManager->getSetting(Setting::mapsPath);
 
     // Clear all old buttons
     qDeleteAll(ui->scrollAreaWidgetContents->children());
