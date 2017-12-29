@@ -3,6 +3,7 @@
 #include <QTextStream>
 #include <QFileDialog>
 #include <QCoreApplication>
+#include <QApplication>
 #include <QDir>
 #include <QDebug>
 
@@ -154,8 +155,27 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         }
         break;
     case Setting::uiMode:
+    {
         settings.setValue("uiMode", value);
+
+        qDebug().noquote() << "Loading stylesheet:" << value << "...";
+        QApplication* application = static_cast<QApplication *>(QApplication::instance());
+
+        QFile file(QDir::homePath()+"/.gm-companion/styles/"+value+".qss");
+        if (file.exists()){
+            file.open(QFile::ReadOnly);
+            QString styleSheet = QLatin1String(file.readAll());
+            application->setStyleSheet(styleSheet);
+        }else{
+            QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/White.qss");
+            if (defaultStyle.exists()){
+                defaultStyle.open(QFile::ReadOnly);
+                QString styleSheet = QLatin1String(defaultStyle.readAll());
+                application->setStyleSheet(styleSheet);
+            }
+        }
         break;
+    }
     case Setting::buttonStyle:
         settings.setValue("buttonStyle", value);
         break;

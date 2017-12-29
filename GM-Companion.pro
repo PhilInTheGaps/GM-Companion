@@ -45,7 +45,6 @@ SOURCES += gm-companion/main.cpp\
     gm-companion/tools/convertertool.cpp \
     gm-companion/dialogs/aboutdialog.cpp \
     gm-companion/tools/combattracker.cpp \
-    gm-companion/managers/googledrive.cpp
 
 HEADERS  += gm-companion/mainwindow.h \
     gm-companion/functions.h \
@@ -71,7 +70,6 @@ HEADERS  += gm-companion/mainwindow.h \
     gm-companion/tools/convertertool.h \
     gm-companion/dialogs/aboutdialog.h \
     gm-companion/tools/combattracker.h \
-    gm-companion/managers/googledrive.h
 
 FORMS    += gm-companion/mainwindow.ui \
     gm-companion/tools/audiotool.ui \
