@@ -30,5 +30,8 @@
         <file>resources/mediaIcons/settings.png</file>
         <file>resources/mediaIcons/combatTracker.png</file>
         <file>resources/mediaIcons/combatTracker_dice.png</file>
+        <file>resources/mediaIcons/musicImage.png</file>
+        <file>resources/mediaIcons/radioImage.png</file>
+        <file>resources/mediaIcons/soundImage.png</file>
     </qresource>
 </RCC>

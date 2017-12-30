@@ -24,13 +24,9 @@ public:
     ~AudioTool();
 
 private slots:
-    // Changing view
-    void on_radioButton_List_clicked();
-    void on_radioButton_Buttons_clicked();
 
     // Music
     void playMusic(QString arg);
-    void on_comboBox_music_currentIndexChanged(int index);
     void updateMetaData();
     void on_listWidget_songs_currentRowChanged(int currentRow);
 
@@ -49,7 +45,6 @@ private slots:
     void on_horizontalSlider_music_valueChanged(int value);
     void on_horizontalSlider_sound_valueChanged(int value);
 
-    void on_listWidget_categories_currentRowChanged(int currentRow);
     void on_listWidget_scenarios_currentRowChanged(int currentRow);
 
     void on_pushButton_openEditor_clicked();
@@ -60,8 +55,8 @@ private slots:
     void on_pushButton_updateProjects_clicked();
     void on_pushButton_documentation_clicked();
 
-
-    void on_checkBox_googleDrive_toggled(bool checked);
+    // Categories
+    void changeCategory(QString category);
 
 private:
     Ui::AudioTool *ui;
@@ -87,15 +82,12 @@ private:
     QList<QMediaPlayer*> soundPlayerList;
 
     // List View
-    void generateScenarioList(QString category);
-    void generateListViewElementButtons(QString scenario);
+    void generateScenarioList(QString category); // Scenarios
+    void generateElementButtons(QString scenario); // Elements
 
-    // Button View
-    void generateScenarioFrames(QString category, QFrame *bFrame);
-    void generateElementButtons(QString category, QString scenario, QFrame *bFrame);
-
-    // Google Drive
-    bool useGoogleDrive;
+    // Categories
+    QSignalMapper *signalMapperCategories;
+    QString currentCategory;
 };
 
 #endif // AUDIOTOOL_H
