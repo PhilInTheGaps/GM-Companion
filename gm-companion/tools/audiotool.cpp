@@ -12,6 +12,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QApplication>
+#include <QScreen>
 
 // Only Windows relevant
 #ifdef _WIN32
@@ -158,7 +159,6 @@ void AudioTool::loadProject(QString project)
 
         QFont f;
         f.setPointSize(12);
-//        f.setCapitalization(QFont::AllUppercase);
         f.setFamily("Helvetica");
 
         categoryButton->setFont(f);
@@ -254,7 +254,6 @@ void AudioTool::generateElementButtons(QString scenario)
 
             QFont f;
             f.setPointSize(10);
-    //        f.setCapitalization(QFont::AllUppercase);
             f.setFamily("Helvetica");
             bLabel->setFont(f);
 
@@ -286,7 +285,6 @@ void AudioTool::generateElementButtons(QString scenario)
                 soundLayout->addWidget(bWidget);
                 break;
             case 2: // Radio
-                qDebug() << "Adding a Radio!";
                 button->setIcon(QIcon(":/resources/mediaIcons/radioImage.png"));
 
                 connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
