@@ -26,16 +26,12 @@ private slots:
 
     void setMap(QString mapPath);
 
-    void on_checkBox_googleDrive_toggled(bool checked);
-
 private:
     Ui::MapViewerTool *ui;
 
     QSignalMapper *signalMapperMaps;
 
     void getMaps();
-
-    bool useGoogleDrive;
 };
 
 #endif // MAPVIEWERTOOL_H

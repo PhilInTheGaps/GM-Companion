@@ -87,11 +87,3 @@ void MapViewerTool::on_pushButton_resetSize_clicked()
 {
     ui->graphicsView->resetTransform();
 }
-
-void MapViewerTool::on_checkBox_googleDrive_toggled(bool checked)
-{
-    useGoogleDrive = checked;
-
-    if (checked)
-        getMaps();
-}
