@@ -79,27 +79,6 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Google Drive</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_googleDrive">
-          <property name="text">
-           <string>Use Drive</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </item>
@@ -120,7 +99,7 @@
           <x>0</x>
           <y>0</y>
           <width>98</width>
-          <height>542</height>
+          <height>595</height>
          </rect>
         </property>
        </widget>
