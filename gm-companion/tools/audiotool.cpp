@@ -128,11 +128,9 @@ void AudioTool::loadProject(QString project)
     qDebug().noquote() << "Loading project: " + project + " ...";
 
     // Clean old category stuff
-    QLayoutItem *child;
-    while ((child = ui->categoryBar->layout()->takeAt(0)) != 0)
-    {
-        delete child;
-    }
+    qDeleteAll(ui->categoryBar->children());
+    qDeleteAll(ui->scrollAreaWidgetContents->children());
+    ui->listWidget_scenarios->clear();
 
     project = cleanText(project)+".ini";
     currentProject = project;
@@ -268,7 +266,7 @@ void AudioTool::generateElementButtons(QString scenario)
 
             switch (i){
             case 0: // Music
-                button->setIcon(QIcon(":/resources/mediaIcons/musicImage.png"));
+                button->setIcon(QIcon(":/resources/mediaIcons/music_image.png"));
 
                 connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
                 signalMapperMusic->setMapping(button, name+";"+category+";"+scenario);
@@ -276,7 +274,7 @@ void AudioTool::generateElementButtons(QString scenario)
                 musicLayout->addWidget(bWidget);
                 break;
             case 1: // Sound
-                button->setIcon(QIcon(":/resources/mediaIcons/soundImage.png"));
+                button->setIcon(QIcon(":/resources/mediaIcons/sound_image.png"));
                 button->setCheckable(true);
 
                 connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
@@ -285,7 +283,7 @@ void AudioTool::generateElementButtons(QString scenario)
                 soundLayout->addWidget(bWidget);
                 break;
             case 2: // Radio
-                button->setIcon(QIcon(":/resources/mediaIcons/radioImage.png"));
+                button->setIcon(QIcon(":/resources/mediaIcons/radio_image.png"));
 
                 connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
                 signalMapperRadio->setMapping(button, name+";"+category+";"+scenario);
@@ -341,6 +339,7 @@ void AudioTool::playMusic(QString arg)
     bool randomPlayback = true;
     bool loop = false;
     bool sequential = false;
+    bool hasSongs = true;
 
     for (int i = 0; i<musicLists; i++)
     {
@@ -349,55 +348,66 @@ void AudioTool::playMusic(QString arg)
         {
             // Get Playback Mode of Music List
             randomPlayback = settings.value("randomPlayback", true).toBool();
-            randomPlaylist = settings.value("randomPlaylist", false).toBool();;
-            loop = settings.value("loop", false).toBool();;
-            sequential = settings.value("sequential", false).toBool();;
+            randomPlaylist = settings.value("randomPlaylist", false).toBool();
+            loop = settings.value("loop", false).toBool();
+            sequential = settings.value("sequential", false).toBool();
 
             // Add Songs to Playlist
             int songCount = settings.beginReadArray("songs");
-            qDebug().noquote() << "This element contains the following songs:";
+            qDebug().noquote() << "This element contains the following songs:" << songCount;
 
-            for (int j = 0; j<songCount; j++)
+            if (songCount > 0)
             {
-                settings.setArrayIndex(j);
-
-                QString name = settings.value("name").toString();
-                QString path = settings.value("path").toString();
-
-                path = settingsManager->getSetting(musicPath)+path;
-                qDebug().noquote() << "   " + name + "\n   " + path;
-
-                if (QFile(path).exists())
+                for (int j = 0; j<songCount; j++)
                 {
-                    QListWidgetItem *listItem = new QListWidgetItem(name);
-                    listItem->setToolTip(path);
-                    ui->listWidget_songs->addItem(listItem);
+                    settings.setArrayIndex(j);
 
-                    musicPlaylist->addMedia(QUrl::fromLocalFile(path));
+                    QString name = settings.value("name").toString();
+                    QString path = settings.value("path").toString();
 
-                    if (randomPlaylist)
-                        musicPlaylist->shuffle();
+                    path = settingsManager->getSetting(musicPath)+path;
+                    qDebug().noquote() << "   " + name + "\n   " + path;
+
+                    if (QFile(path).exists())
+                    {
+                        QListWidgetItem *listItem = new QListWidgetItem(name);
+                        listItem->setToolTip(path);
+                        ui->listWidget_songs->addItem(listItem);
+
+                        musicPlaylist->addMedia(QUrl::fromLocalFile(path));
+
+                        if (randomPlaylist)
+                            musicPlaylist->shuffle();
+                    }
                 }
             }
+            else
+                hasSongs = false;
+
             settings.endArray();
         }
     }
     settings.endArray();
 
-    // Set playlist, volume and play
-    musicPlayer->setPlaylist(musicPlaylist);
-    musicPlayer->setVolume(ui->horizontalSlider_music->value());
+    if (hasSongs)
+    {
+        // Set playlist, volume and play
+        musicPlayer->setPlaylist(musicPlaylist);
+        musicPlayer->setVolume(ui->horizontalSlider_music->value());
 
-    // If random mode is active, start with a random song
-    if (randomPlayback) {
-        musicPlaylist->setPlaybackMode(QMediaPlaylist::Random);
-        musicPlaylist->next();
-    } else if (loop || randomPlaylist) {
-        musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
-    } else if (sequential) {
-        musicPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
+        // If random mode is active, start with a random song
+        if (randomPlayback) {
+            musicPlaylist->setPlaybackMode(QMediaPlaylist::Random);
+            musicPlaylist->next();
+        } else if (loop || randomPlaylist) {
+            musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
+        } else if (sequential) {
+            musicPlaylist->setPlaybackMode(QMediaPlaylist::Sequential);
+        }
+        musicPlayer->play();
     }
-    musicPlayer->play();
+    else
+        qDebug() << "Error: Music list does have any songs in it!";
 }
 
 // Play Sounds

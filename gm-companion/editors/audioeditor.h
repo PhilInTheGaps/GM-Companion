@@ -45,19 +45,17 @@ private slots:
     void on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
     void on_pushButton_addAllFilesFromMusicFolder_clicked();
-
     void on_pushButton_addAllFilesFromSoundFolder_clicked();
-
     void on_pushButton_convertFolderToMusicList_clicked();
 
     void on_pushButton_playPause_toggled(bool checked);
 
     void on_treeWidget_music_currentItemChanged(QTreeWidgetItem *current);
-
     void on_treeWidget_sound_currentItemChanged(QTreeWidgetItem *current);
+    void on_treeWidget_music_itemExpanded(QTreeWidgetItem *item);
+    void on_treeWidget_sound_itemExpanded(QTreeWidgetItem *item);
 
     void on_verticalSlider_volume_valueChanged(int value);
-
     void on_horizontalSlider_progress_sliderMoved(int position);
     void previewPlayer_positionChanged(qint64 position);
 
@@ -85,15 +83,14 @@ private:
     void loadProject();
     void loadCategories();
     void loadScenarios(QTreeWidgetItem *catItem);
-    void loadMusicLists(QTreeWidgetItem *scenItem, QString category);
-    void loadSoundLists(QTreeWidgetItem *scenItem, QString category);
-    void loadRadios(QTreeWidgetItem *scenItem, QString category);
+    void loadElements(QTreeWidgetItem *scenItem, QString category, int type);
 
+    void addNewElement(int type);
+
+    // File Browser
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
-
-    void addSubFoldersToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder);
-
-    void addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder);
+    void addSubFoldersToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel = false, QTreeWidget *tree = NULL);
+    void addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel = false, QTreeWidget *tree = NULL);
 };
 
 #endif // AUDIOEDITOR_H
