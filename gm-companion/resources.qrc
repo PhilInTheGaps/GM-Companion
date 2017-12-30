@@ -33,5 +33,8 @@
         <file>resources/mediaIcons/musicImage.png</file>
         <file>resources/mediaIcons/radioImage.png</file>
         <file>resources/mediaIcons/soundImage.png</file>
+        <file>resources/mediaIcons/music_image.png</file>
+        <file>resources/mediaIcons/radio_image.png</file>
+        <file>resources/mediaIcons/sound_image.png</file>
     </qresource>
 </RCC>
