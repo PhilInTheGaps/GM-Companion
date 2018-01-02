@@ -76,6 +76,7 @@ private:
     // Radio
     QSignalMapper *signalMapperRadio;
     QMediaPlayer *radioPlayer;
+    bool radioActive;
 
     // Sound
     QSignalMapper *signalMapperSound;
