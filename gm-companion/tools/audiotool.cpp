@@ -39,9 +39,9 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     // Radio
     radioPlayer = new QMediaPlayer;
-
     signalMapperRadio = new QSignalMapper;
     connect(signalMapperRadio, SIGNAL(mapped(QString)), this, SLOT(playRadio(QString)));
+    radioActive = false;
 
     // Sound
     signalMapperSound = new QSignalMapper;
@@ -326,6 +326,7 @@ void AudioTool::playMusic(QString arg)
     qDebug().noquote() << "Playing music list: " + musicList + " ...";
 
     radioPlayer->stop();
+    radioActive = false;
 
     // Clear Playlist
     musicPlaylist->clear();
@@ -514,6 +515,7 @@ void AudioTool::playRadio(QString arg)
     // Stop music and clear song list
     musicPlayer->stop();
     ui->listWidget_songs->clear();
+    radioActive = true;
 
     QSettings settings(settingsManager->getSetting(audioPath)+"/"+currentProject, QSettings::IniFormat);
     int radios = settings.beginReadArray(category+"_"+scenario+"_Radios");
@@ -553,15 +555,19 @@ void AudioTool::playRadio(QString arg)
 // Play
 void AudioTool::on_pushButton_play_clicked()
 {
-    musicPlayer->play();
-    radioPlayer->play();
+    if (radioActive)
+        radioPlayer->play();
+    else
+        musicPlayer->play();
 }
 
 // Pause
 void AudioTool::on_pushButton_pause_clicked()
 {
-    radioPlayer->pause();
-    musicPlayer->pause();
+    if (radioActive)
+        radioPlayer->pause();
+    else
+        musicPlayer->pause();
 }
 
 // Replay
@@ -594,6 +600,7 @@ void AudioTool::on_horizontalSlider_sound_valueChanged(int value)
 void AudioTool::changeCategory(QString category)
 {
     currentCategory = category;
+    qDeleteAll(ui->scrollAreaWidgetContents->children());
     generateScenarioList(category);
 }
 
