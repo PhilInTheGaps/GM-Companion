@@ -8,6 +8,7 @@
 #include <QSignalMapper>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QKeyEvent>
 
 #include "gm-companion/managers/settingsmanager.h"
 
@@ -62,6 +63,8 @@ private:
     Ui::AudioTool *ui;
 
     SettingsManager *settingsManager;
+
+    void keyPressEvent(QKeyEvent *event);
 
     // Project
     QString currentProject;

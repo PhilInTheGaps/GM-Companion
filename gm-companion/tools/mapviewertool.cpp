@@ -73,13 +73,13 @@ void MapViewerTool::setMap(QString mapPath)
 // Zoom In
 void MapViewerTool::on_pushButton_zoomIn_clicked()
 {
-    ui->graphicsView->scale(2, 2);
+    ui->graphicsView->scale(1.5, 1.5);
 }
 
 // Zoom Out
 void MapViewerTool::on_pushButton_zoomOut_clicked()
 {
-    ui->graphicsView->scale(0.5, 0.5);
+    ui->graphicsView->scale(0.75, 0.75);
 }
 
 // Reset label size back to normal
