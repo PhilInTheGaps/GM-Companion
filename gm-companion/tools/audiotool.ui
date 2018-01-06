@@ -175,6 +175,18 @@
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
+         <property name="leftMargin">
+          <number>4</number>
+         </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
+         <property name="rightMargin">
+          <number>4</number>
+         </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
          <item>
           <widget class="QFrame" name="frame_elements">
            <property name="frameShape">

@@ -552,6 +552,33 @@ void AudioTool::playRadio(QString arg)
     radioPlayer->setVolume(ui->horizontalSlider_music->value());
     radioPlayer->play();
 }
+
+void AudioTool::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+    case Qt::Key_MediaPlay:
+    {
+        if (musicPlayer->state() == QMediaPlayer::PlayingState || radioPlayer->state() == QMediaPlayer::PlayingState)
+            on_pushButton_pause_clicked();
+        else if (musicPlayer->state() == QMediaPlayer::PausedState || radioPlayer->state() == QMediaPlayer::PausedState)
+            on_pushButton_play_clicked();
+        break;
+    }
+    case Qt::Key_MediaNext:
+    {
+        on_pushButton_next_clicked();
+        break;
+    }
+    case Qt::Key_MediaPrevious:
+    {
+        on_pushButton_replay_clicked();
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 // Play
 void AudioTool::on_pushButton_play_clicked()
 {
