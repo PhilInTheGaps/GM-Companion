@@ -4,6 +4,7 @@
 #include "gm-companion/tools/dicetool.h"
 
 #include <QDebug>
+#include <QTableWidgetItem>
 
 CombatTracker::CombatTracker(QWidget *parent) : QDialog(parent), ui(new Ui::CombatTracker)
 {
@@ -26,8 +27,18 @@ void CombatTracker::nextCharacter()
     qDebug().noquote() << "CombatTracker: Switching to next character ...";
 
     int nextIndex = 0;
-    ui->tableWidget->item(currentIndex, 0)->setText("");
 
+    // Create a new tablewidget item in case it does not already exist due to "Clear Table"
+    if (ui->tableWidget->item(currentIndex, 0) == NULL)
+    {
+        QTableWidgetItem *item = new QTableWidgetItem;
+        item->setText("");
+        ui->tableWidget->setItem(currentIndex, 0, item);
+    }
+    else
+        ui->tableWidget->item(currentIndex, 0)->setText("");
+
+    // If it is the first round, find character with highest INI
     if (combatRound == 0)
     {
         combatRound++;
@@ -36,6 +47,7 @@ void CombatTracker::nextCharacter()
     }
     else
     {
+        // Check if current character has the lowest INI, if not, switch to next one
         if (getIsLowestInitiative(currentIndex))
         {
             combatRound++;
@@ -48,6 +60,14 @@ void CombatTracker::nextCharacter()
         }
     }
 
+    // Create a new tablewidget item in case it does not already exist due to "Clear Table"
+    if (ui->tableWidget->item(nextIndex, 0) == NULL)
+    {
+        QTableWidgetItem *item = new QTableWidgetItem;
+        item->setText("");
+        ui->tableWidget->setItem(nextIndex, 0, item);
+    }
+
     ui->tableWidget->item(nextIndex, 0)->setText("-->");
     ui->tableWidget->selectRow(nextIndex);
 
@@ -58,8 +78,13 @@ void CombatTracker::nextCharacter()
 
 int CombatTracker::getInitiative(int index)
 {
-    int ini = ui->tableWidget->item(index, 2)->text().toInt();
-    return ini;
+    if (ui->tableWidget->item(index, 2) != NULL)
+    {
+        int ini = ui->tableWidget->item(index, 2)->text().toInt();
+        return ini;
+    }
+    else
+        return 0;
 }
 
 bool CombatTracker::getIsLowestInitiative(int index)
@@ -72,12 +97,15 @@ bool CombatTracker::getIsLowestInitiative(int index)
 
     for (int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-        if (temp < ini && temp > 0)
+        if (ui->tableWidget->item(i, 2) != NULL)
         {
-            isLowest = false;
-            break;
+            int temp = ui->tableWidget->item(i, 2)->text().toInt();
+
+            if ((temp < ini && temp > 0) || (i > index && ini == temp))
+            {
+                isLowest = false;
+                break;
+            }
         }
     }
 
@@ -94,14 +122,22 @@ int CombatTracker::getNextHighestInitiativeIndex(int index)
     int nextIni = 0;
     int nextIniIndex = 0;
 
+    bool foundSameIni = false;
+
     for (int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-        if (temp < ini && temp > nextIni)
+        if (ui->tableWidget->item(i, 2) != NULL)
         {
-            nextIni = temp;
-            nextIniIndex = i;
+            int temp = ui->tableWidget->item(i, 2)->text().toInt();
+
+            if ((temp < ini && temp > nextIni) || (i > index && temp == ini && !foundSameIni))
+            {
+                nextIni = temp;
+                nextIniIndex = i;
+
+                if (i > index && temp == ini && !foundSameIni)
+                    foundSameIni = true;
+            }
         }
     }
 
@@ -120,12 +156,15 @@ int CombatTracker::getHighestInitiativeIndex()
 
     for (int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-        if (temp > nextIni)
+        if (ui->tableWidget->item(i, 2) != NULL)
         {
-            nextIni = temp;
-            nextIniIndex = i;
+            int temp = ui->tableWidget->item(i, 2)->text().toInt();
+
+            if (temp > nextIni)
+            {
+                nextIni = temp;
+                nextIniIndex = i;
+            }
         }
     }
 
@@ -139,7 +178,10 @@ void CombatTracker::resetRounds()
 {
     qDebug().noquote() << "CombatTracker: Resetting rounds ...";
 
-    ui->tableWidget->item(currentIndex, 0)->setText("");
+    if (ui->tableWidget->item(currentIndex, 0) != NULL)
+    {
+        ui->tableWidget->item(currentIndex, 0)->setText("");
+    }
 
     combatRound = 0;
     currentIndex = 0;
