@@ -27,7 +27,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -436,6 +436,13 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton_saveAddons">
+           <property name="text">
+            <string>Save Addon Settings</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="selectAll">
            <property name="text">

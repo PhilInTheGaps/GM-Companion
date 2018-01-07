@@ -261,3 +261,8 @@ void OptionsDialog::on_pushButton_checkForUpdates_clicked()
     UpdateManager *updateManger = new UpdateManager(w->getVersionNumber());
     updateManger->checkForUpdates();
 }
+
+void OptionsDialog::on_pushButton_saveAddons_clicked()
+{
+    writeAddonSettings();
+}
