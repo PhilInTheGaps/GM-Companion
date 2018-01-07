@@ -9,7 +9,7 @@
 
 SettingsManager::SettingsManager()
 {
-
+    qDebug() << "Loading Settings Manager ...";
 }
 
 // Returns a specific setting
@@ -57,6 +57,11 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::radioPath:
         settings.beginGroup("Paths");
         settingString = settings.value("radioPath", QDir::homePath()+"/.gm-companion/radio").toString();
+        settings.endGroup();
+        break;
+    case Setting::shopPath:
+        settings.beginGroup("Paths");
+        settingString = settings.value("shopPath", QDir::homePath()+"/.gm-companion/shop").toString();
         settings.endGroup();
         break;
     case Setting::uiMode:
@@ -119,6 +124,14 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
         if (path.length()>1){
             settings.beginGroup("Paths");
             settings.setValue("resourcesPath", path);
+            settings.endGroup();
+        }
+        break;
+    case Setting::shopPath:
+        path = setFolderLocation(QObject::tr("Set Shop Folder"));
+        if (path.length()>1){
+            settings.beginGroup("Paths");
+            settings.setValue("shopPath", path);
             settings.endGroup();
         }
         break;
@@ -311,7 +324,7 @@ void SettingsManager::updateSettings(){
         qDebug() << "Updating settings file...";
 
         QStringList paths = {
-            "musicPath", "charactersPath", "resourcesPath", "soundPath", "mapsPath", "notesPath"
+            "musicPath", "charactersPath", "resourcesPath", "soundPath", "mapsPath", "notesPath", "shopPath"
         };
 
         for (QString path : paths){

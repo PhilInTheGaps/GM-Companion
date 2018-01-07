@@ -45,6 +45,9 @@ SOURCES += gm-companion/main.cpp\
     gm-companion/tools/convertertool.cpp \
     gm-companion/dialogs/aboutdialog.cpp \
     gm-companion/tools/combattracker.cpp \
+    gm-companion/tools/shoptool.cpp \
+    gm-companion/editors/shopeditor.cpp \
+    gm-companion/editors/itemeditor.cpp
 
 HEADERS  += gm-companion/mainwindow.h \
     gm-companion/functions.h \
@@ -70,6 +73,9 @@ HEADERS  += gm-companion/mainwindow.h \
     gm-companion/tools/convertertool.h \
     gm-companion/dialogs/aboutdialog.h \
     gm-companion/tools/combattracker.h \
+    gm-companion/tools/shoptool.h \
+    gm-companion/editors/shopeditor.h \
+    gm-companion/editors/itemeditor.h
 
 FORMS    += gm-companion/mainwindow.ui \
     gm-companion/tools/audiotool.ui \
@@ -88,7 +94,10 @@ FORMS    += gm-companion/mainwindow.ui \
     gm-companion/tools/notestool.ui \
     gm-companion/tools/convertertool.ui \
     gm-companion/dialogs/aboutdialog.ui \
-    gm-companion/tools/combattracker.ui
+    gm-companion/tools/combattracker.ui \
+    gm-companion/tools/shoptool.ui \
+    gm-companion/editors/shopeditor.ui \
+    gm-companion/editors/itemeditor.ui
 
 DISTFILES +=
 

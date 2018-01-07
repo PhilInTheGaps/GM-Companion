@@ -65,6 +65,7 @@ private slots:
     void on_pushButton_settings_clicked();
 //    void on_pushButton_addons_clicked();  // TODO
     void on_pushButton_combatTracker_clicked();
+    void on_pushButton_shopTool_clicked();
 
 private:
     Ui::MainWindow *ui;

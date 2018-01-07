@@ -67,7 +67,7 @@ void FileManager::copyFiles(){
     QDir lDir(QDir::homePath()+"/.gm-companion");
 
     // List of all directories to be created
-    QStringList dirList = {"addons", "audio", "characters", "maps", "music", "names", "notes", "radio", "resources", "sounds", "styles", "logs"};
+    QStringList dirList = {"addons", "audio", "characters", "maps", "music", "names", "shop", "notes", "radio", "resources", "sounds", "styles", "logs"};
 
     // List of files to be copied
     QStringList fileList = {"units.ini"};
