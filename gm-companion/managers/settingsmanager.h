@@ -10,6 +10,7 @@ enum Setting{
     musicPath,
     soundPath,
     mapsPath,
+    shopPath,
     resourcesPath,
     uiMode,
     charactersPath,

@@ -11,6 +11,7 @@
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
 #include "tools/combattracker.h"
+#include "tools/shoptool.h"
 
 #include "managers/filemanager.h"
 #include "managers/generatormanager.h"
@@ -80,6 +81,10 @@ void MainWindow::addTools()
     // ConverterTool
     ConverterTool *converterTool = new ConverterTool;
     ui->stackedWidget->addWidget(converterTool);
+
+    // Shop Tool
+    ShopTool *shopTool = new ShopTool;
+    ui->stackedWidget->addWidget(shopTool);
 
     // Addons Tool
     // TODO
@@ -156,6 +161,12 @@ void MainWindow::on_pushButton_notes_clicked()
 void MainWindow::on_pushButton_unitConverter_clicked()
 {
     ui->stackedWidget->setCurrentIndex(6);
+}
+
+// Item Shop
+void MainWindow::on_pushButton_shopTool_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(7);
 }
 
 //// Addons
