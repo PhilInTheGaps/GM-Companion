@@ -57,6 +57,8 @@ private slots:
 
     void on_pushButton_checkForUpdates_clicked();
 
+    void on_pushButton_saveAddons_clicked();
+
 private:
     Ui::OptionsDialog *ui;
 
