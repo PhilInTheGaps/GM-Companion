@@ -162,6 +162,9 @@ void AudioTool::loadProject(QString project)
         categoryButton->setFont(f);
         ui->categoryBar->layout()->addWidget(categoryButton);
 
+        categoryButton->setStyleSheet("QPushButton{color: #eff0f1; background-color: #31363b; border-width: 1px; border-color: #76797C; "
+                                      "border-style: solid; padding: 5px; border-radius: 2px; outline: none;}");
+
         connect(categoryButton, SIGNAL(clicked()), signalMapperCategories, SLOT(map()));
         signalMapperCategories->setMapping(categoryButton, categoryName);
     }
@@ -359,6 +362,8 @@ void AudioTool::playMusic(QString arg)
 
             if (songCount > 0)
             {
+                QList<Song> songs;
+
                 for (int j = 0; j<songCount; j++)
                 {
                     settings.setArrayIndex(j);
@@ -371,15 +376,23 @@ void AudioTool::playMusic(QString arg)
 
                     if (QFile(path).exists())
                     {
-                        QListWidgetItem *listItem = new QListWidgetItem(name);
-                        listItem->setToolTip(path);
-                        ui->listWidget_songs->addItem(listItem);
-
-                        musicPlaylist->addMedia(QUrl::fromLocalFile(path));
-
-                        if (randomPlaylist)
-                            musicPlaylist->shuffle();
+                        Song song;
+                        song.title = name;
+                        song.path = path;
+                        songs.push_back(song);
                     }
+                }
+
+                if (randomPlaylist)
+                    std::random_shuffle(songs.begin(), songs.end());
+
+                for (Song s : songs)
+                {
+                    QListWidgetItem *listItem = new QListWidgetItem(s.title);
+                    listItem->setToolTip(s.path);
+                    ui->listWidget_songs->addItem(listItem);
+
+                    musicPlaylist->addMedia(QUrl::fromLocalFile(s.path));
                 }
             }
             else
