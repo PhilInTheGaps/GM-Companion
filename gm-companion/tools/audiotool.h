@@ -9,8 +9,14 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QKeyEvent>
+#include <QList>
 
 #include "gm-companion/managers/settingsmanager.h"
+
+struct Song {
+    QString title;
+    QString path;
+};
 
 namespace Ui {
 class AudioTool;

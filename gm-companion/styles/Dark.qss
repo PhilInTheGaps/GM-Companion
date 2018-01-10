@@ -524,15 +524,14 @@ QSizeGrip {
 QMainWindow::separator
 {
     background-color: #31363b;
-    color: white;
+    color: transparent;
     padding-left: 4px;
     spacing: 2px;
-    border: 1px dashed #76797C;
+    border: 1px #76797C;
 }
 
 QMainWindow::separator:hover
 {
-
     background-color: #787876;
     color: white;
     padding-left: 4px;
@@ -901,7 +900,6 @@ QTabBar QToolButton::right-arrow:disabled {
  QTabBar QToolButton::left-arrow:disabled {
      image: url(:/qss_icons/rc/left_arrow_disabled.png);
  }
-
 
 QDockWidget {
     background: #31363b;
