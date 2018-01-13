@@ -27,7 +27,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -176,7 +176,11 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_13">
              <item>
-              <widget class="QLineEdit" name="audioPath"/>
+              <widget class="QLineEdit" name="audioPath">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="setAudioPath">
@@ -253,40 +257,16 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_14">
              <item>
-              <widget class="QLineEdit" name="radioPath"/>
+              <widget class="QLineEdit" name="radioPath">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="setRadioPath">
                <property name="text">
                 <string>...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Resources</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
-             <item>
-              <widget class="QLineEdit" name="resourcesPath">
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-               <property name="clearButtonEnabled">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="setResourcesPath">
-               <property name="text">
-                <string notr="true">...</string>
                </property>
               </widget>
              </item>
@@ -368,6 +348,43 @@
               <widget class="QToolButton" name="setNotesPath">
                <property name="text">
                 <string>...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Resources</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLineEdit" name="resourcesPath">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="setResourcesPath">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string notr="true">...</string>
                </property>
               </widget>
              </item>
