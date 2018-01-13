@@ -29,7 +29,7 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     // Music
     musicPlayer = new QMediaPlayer;
-    connect(musicPlayer, SIGNAL(metaDataAvailableChanged(bool)), this, SLOT(updateMetaData()));
+    connect(musicPlayer, SIGNAL(metaDataChanged()), this, SLOT(updateMetaData())); //metaDataAvailableChanged
 
     musicPlaylist = new QMediaPlaylist;
     musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
@@ -307,13 +307,27 @@ void AudioTool::updateMetaData()
     if (musicPlayer->isMetaDataAvailable())
     {
         // Set Album Cover
+        // Sometimes ThumbnailImage works, sometimes it does not. I have no idea why.
+        // So the current solution is simply testing if any of the possible meta data values work
         QImage img = musicPlayer->metaData(QMediaMetaData::ThumbnailImage).value<QImage>();
+        if (img.isNull())
+            img = musicPlayer->metaData(QMediaMetaData::PosterImage).value<QImage>();
+        if (img.isNull())
+            img = musicPlayer->metaData(QMediaMetaData::CoverArtImage).value<QImage>();
         ui->label_albumCover->setPixmap(QPixmap::fromImage(img).scaledToWidth(ui->label_albumCover->width()));
 
         // Set other MetaData stuff
         ui->label_title->setText("Title: " + musicPlayer->metaData(QMediaMetaData::Title).toString());
-        ui->label_artist->setText("Artist: " + musicPlayer->metaData(QMediaMetaData::Author).toString());
         ui->label_album->setText("Album: " + musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString());
+
+        // Same thing as with the album cover, sometimes it works, sometimes not.
+        QString artist = musicPlayer->metaData(QMediaMetaData::Author).toString();
+        if (artist.isNull())
+            artist = musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
+        if (artist.isNull())
+            artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
+
+        ui->label_artist->setText("Artist: " + artist);
     }
 }
 

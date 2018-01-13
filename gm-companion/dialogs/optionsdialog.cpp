@@ -150,11 +150,15 @@ void OptionsDialog::on_setNotesPath_clicked()
 void OptionsDialog::on_setAudioPath_clicked()
 {
     settings->setSetting(audioPath);
+    pathsChanged = true;
+    updatePaths();
 }
 
 void OptionsDialog::on_setRadioPath_clicked()
 {
     settings->setSetting(radioPath);
+    pathsChanged = true;
+    updatePaths();
 }
 
 
