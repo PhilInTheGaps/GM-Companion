@@ -22,26 +22,44 @@
 #include <QDesktopServices>
 #include <QNetworkAccessManager>
 #include <QSettings>
-#include <QScrollBar>
 #include <QApplication>
 #include <QSplashScreen>
 #include <QPlainTextEdit>
 #include <QDebug>
+#include <QPushButton>
+#include <QSizePolicy>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
     ui->setupUi(this);
 
     // Copy files to a writable directory if they do not exist
     FileManager* fileManager = new FileManager;
-    fileManager->copyFiles();
+    fileManager->run();
 
     // Initialize SettingsManager
     qDebug() << "Initializing settings...";
     settingsManager = new SettingsManager;
 
+    // Hide menu labels and resize buttons
+    if (settingsManager->getSetting(Setting::showToolNames).toInt() == 0)
+    {
+        ui->label_audio->hide();
+        ui->label_maps->hide();
+        ui->label_combat->hide();
+        ui->label_dice->hide();
+        ui->label_shop->hide();
+        ui->label_characters->hide();
+        ui->label_generators->hide();
+        ui->label_notes->hide();
+        ui->label_converter->hide();
+        ui->label_options->hide();
+    }
 
     // Some functions behave differently when the program is just starting
     programStart = false;
+
+    qDebug().noquote() << "Closing splash screen ...";
+    splash->close();
 }
 
 MainWindow::~MainWindow()

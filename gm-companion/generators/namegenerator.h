@@ -4,7 +4,7 @@
 #include "gm-companion/managers/settingsmanager.h"
 
 #include <QWidget>
-#include <QSignalMapper>
+#include <QVBoxLayout>
 
 namespace Ui {
 class NameGenerator;
@@ -19,16 +19,15 @@ public:
     ~NameGenerator();
 
 private slots:
-    void on_generateNames(QString path);
-
     void on_spinBox_pointSize_valueChanged(int arg1);
 
 private:
     Ui::NameGenerator *ui;
 
     void generateNamesTab();
-
-    QSignalMapper *signalMapper;
+    void generateNameButtons(QString path, QString folder, bool resource = false);
+    void addButton(QString path, QString subFolder, QVBoxLayout *layout);
+    void generateNames(QString path);
 
     SettingsManager *settingsManager;
 };

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>264</width>
-    <height>132</height>
+    <height>137</height>
    </rect>
   </property>
   <property name="font">
@@ -17,6 +17,10 @@
   </property>
   <property name="windowTitle">
    <string>Update Available!</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/gm-companion/icon256.png</normaloff>:/icons/gm-companion/icon256.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -80,6 +84,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

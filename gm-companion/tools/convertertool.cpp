@@ -25,47 +25,51 @@ ConverterTool::~ConverterTool()
 
 void ConverterTool::getAllUnits()
 {
-    qDebug() << "Loading default units ...";
+    qDebug() << "Loading units ...";
 
-    // Normal Units
-    lengthUnits = getUnits("LengthUnits", 0, ui->comboBox_length1, ui->comboBox_length2);
-    areaUnits = getUnits("AreaUnits", 0, ui->comboBox_area1, ui->comboBox_area2);
-    volumeUnits = getUnits("VolumeUnits", 0, ui->comboBox_volume1, ui->comboBox_volume2);
-    weightUnits = getUnits("WeightUnits", 0, ui->comboBox_weight1, ui->comboBox_weight2);
-    moneyUnits = getUnits("MoneyUnits", 0, ui->comboBox_money1, ui->comboBox_money2);
-
-    qDebug() << "Loading addon units ...";
-
-    // Addon Units
-    for (QString addon : getFolders(QDir::homePath()+"/.gm-companion/addons")){
-        lengthUnits.append(getUnits("LengthUnits", 1, ui->comboBox_length1, ui->comboBox_length2, addon));
-        areaUnits.append(getUnits("AreaUnits", 1, ui->comboBox_area1, ui->comboBox_area2, addon));
-        volumeUnits.append(getUnits("VolumeUnits", 1, ui->comboBox_volume1, ui->comboBox_volume2, addon));
-        weightUnits.append(getUnits("WeightUnits", 1, ui->comboBox_weight1, ui->comboBox_weight2, addon));
-        moneyUnits.append(getUnits("MoneyUnits", 1, ui->comboBox_money1, ui->comboBox_money2, addon));
+    for (int i = 0; i < 2; i++)
+    {
+        if (i == 1) // Addon Units
+        {
+            for (QString addon : getFolders(QDir::homePath()+"/.gm-companion/addons"))
+                addUnitGroup(i, addon);
+        }
+        else
+        {
+            addUnitGroup(i, "");
+        }
     }
+}
+
+void ConverterTool::addUnitGroup(int index, QString str)
+{
+    lengthUnits = getUnits("LengthUnits", index, ui->comboBox_length1, ui->comboBox_length2, str);
+    areaUnits = getUnits("AreaUnits", index, ui->comboBox_area1, ui->comboBox_area2, str);
+    volumeUnits = getUnits("VolumeUnits", index, ui->comboBox_volume1, ui->comboBox_volume2, str);
+    weightUnits = getUnits("WeightUnits", index, ui->comboBox_weight1, ui->comboBox_weight2, str);
+    moneyUnits = getUnits("MoneyUnits", index, ui->comboBox_money1, ui->comboBox_money2, str);
 }
 
 QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon)
 {
-    qDebug().noquote() << "     Loading" << arrayName << "...";
-
     QList<Unit> list;
     QString path;
     bool unitsExist = false;
 
     // Check if units are normal units or addon units
-    if (type == 0)  // Normal
-    {
-        path = QDir::homePath()+"/.gm-companion/units.ini";
-        unitsExist = true;
-    }
-    else    // Addon
-    {
+    switch (type) {
+    case 1: // Addon
         path = QDir::homePath()+"/.gm-companion/addons/"+addon+"/units.ini";
-
         if (QFile(path).exists() && settingsManager->getIsAddonEnabled(addon))
             unitsExist = true;
+        break;
+    case 2: // Custom
+        path = QDir::homePath()+"/.gm-companion/units/custom.ini";
+        break;
+    default: // Default
+        path = ":/units/default.ini";
+        unitsExist = true;
+        break;
     }
 
     if (unitsExist)
@@ -157,7 +161,7 @@ void ConverterTool::addUnit(QString arrayName, Unit unit, QList<Unit> list, QCom
 {
     list.push_back(unit);
 
-    QSettings settings(QDir::homePath()+"/.gm-companion/units.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath()+"/.gm-companion/custom.ini", QSettings::IniFormat);
     int size = settings.beginReadArray(arrayName);
     settings.endArray();
 

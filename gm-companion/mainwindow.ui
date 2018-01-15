@@ -27,8 +27,8 @@
    <string>GM-Companion</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icons/ico/resources/icon256.ico</normaloff>:/icons/ico/resources/icon256.ico</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/icons/gm-companion/icon256.png</normaloff>:/icons/gm-companion/icon256.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -62,6 +62,9 @@
     <string notr="true"/>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -75,50 +78,15 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QFrame" name="frame">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <property name="lineWidth">
-       <number>1</number>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QDockWidget" name="dockWidget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Maximum" vsizetype="Minimum">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>82</width>
-     <height>334</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>95</width>
-     <height>524287</height>
-    </size>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">/*
+      <property name="styleSheet">
+       <string notr="true">/*
  * The MIT License (MIT)
  *
  * Copyright (c) &lt;2013-2014&gt; &lt;Colin Duquesnoy&gt;
@@ -174,301 +142,15 @@ QWidget:item:selected
     background-color: #18465d;
 }
 
-QCheckBox
-{
-    spacing: 5px;
-    outline: none;
-    color: #eff0f1;
-    margin-bottom: 2px;
-}
-
-QCheckBox:disabled
-{
-    color: #76797C;
-}
-
-QCheckBox::indicator,
-QGroupBox::indicator
-{
-    width: 18px;
-    height: 18px;
-}
-QGroupBox::indicator
-{
-    margin-left: 2px;
-}
-
-QCheckBox::indicator:unchecked
-{
-    image: url(:/qss_icons/rc/checkbox_unchecked.png);
-}
-
-QCheckBox::indicator:unchecked:hover,
-QCheckBox::indicator:unchecked:focus,
-QCheckBox::indicator:unchecked:pressed,
-QGroupBox::indicator:unchecked:hover,
-QGroupBox::indicator:unchecked:focus,
-QGroupBox::indicator:unchecked:pressed
-{
-  border: none;
-    image: url(:/qss_icons/rc/checkbox_unchecked_focus.png);
-}
-
-QCheckBox::indicator:checked
-{
-    image: url(:/qss_icons/rc/checkbox_checked.png);
-}
-
-QCheckBox::indicator:checked:hover,
-QCheckBox::indicator:checked:focus,
-QCheckBox::indicator:checked:pressed,
-QGroupBox::indicator:checked:hover,
-QGroupBox::indicator:checked:focus,
-QGroupBox::indicator:checked:pressed
-{
-  border: none;
-    image: url(:/qss_icons/rc/checkbox_checked_focus.png);
-}
-
-
-QCheckBox::indicator:indeterminate
-{
-    image: url(:/qss_icons/rc/checkbox_indeterminate.png);
-}
-
-QCheckBox::indicator:indeterminate:focus,
-QCheckBox::indicator:indeterminate:hover,
-QCheckBox::indicator:indeterminate:pressed
-{
-    image: url(:/qss_icons/rc/checkbox_indeterminate_focus.png);
-}
-
-QCheckBox::indicator:checked:disabled,
-QGroupBox::indicator:checked:disabled
-{
-    image: url(:/qss_icons/rc/checkbox_checked_disabled.png);
-}
-
-QCheckBox::indicator:unchecked:disabled,
-QGroupBox::indicator:unchecked:disabled
-{
-    image: url(:/qss_icons/rc/checkbox_unchecked_disabled.png);
-}
-
-QRadioButton
-{
-    spacing: 5px;
-    outline: none;
-    color: #eff0f1;
-    margin-bottom: 2px;
-}
-
-QRadioButton:disabled
-{
-    color: #76797C;
-}
-QRadioButton::indicator
-{
-    width: 21px;
-    height: 21px;
-}
-
-QRadioButton::indicator:unchecked
-{
-    image: url(:/qss_icons/rc/radio_unchecked.png);
-}
-
-
-QRadioButton::indicator:unchecked:hover,
-QRadioButton::indicator:unchecked:focus,
-QRadioButton::indicator:unchecked:pressed
-{
-    border: none;
-    outline: none;
-    image: url(:/qss_icons/rc/radio_unchecked_focus.png);
-}
-
-QRadioButton::indicator:checked
-{
-    border: none;
-    outline: none;
-    image: url(:/qss_icons/rc/radio_checked.png);
-}
-
-QRadioButton::indicator:checked:hover,
-QRadioButton::indicator:checked:focus,
-QRadioButton::indicator:checked:pressed
-{
-    border: none;
-    outline: none;
-    image: url(:/qss_icons/rc/radio_checked_focus.png);
-}
-
-QRadioButton::indicator:checked:disabled
-{
-    outline: none;
-    image: url(:/qss_icons/rc/radio_checked_disabled.png);
-}
-
-QRadioButton::indicator:unchecked:disabled
-{
-    image: url(:/qss_icons/rc/radio_unchecked_disabled.png);
-}
-
-
-QMenuBar
-{
-    background-color: #31363b;
-    color: #eff0f1;
-}
-
-QMenuBar::item
-{
-    background: transparent;
-}
-
-QMenuBar::item:selected
-{
-    background: transparent;
-    border: 1px solid #76797C;
-}
-
-QMenuBar::item:pressed
-{
-    border: 1px solid #76797C;
-    background-color: #3daee9;
-    color: #eff0f1;
-    margin-bottom:-1px;
-    padding-bottom:1px;
-}
-
-QMenu
-{
-    border: 1px solid #76797C;
-    color: #eff0f1;
-    margin: 2px;
-}
-
-QMenu::icon
-{
-    margin: 5px;
-}
-
-QMenu::item
-{
-    padding: 5px 30px 5px 30px;
-    border: 1px solid transparent; /* reserve space for selection border */
-}
-
-QMenu::item:selected
-{
-    color: #eff0f1;
-}
-
-QMenu::separator {
-    height: 2px;
-    background: lightblue;
-    margin-left: 10px;
-    margin-right: 5px;
-}
-
-QMenu::indicator {
-    width: 18px;
-    height: 18px;
-}
-
-/* non-exclusive indicator = check box style indicator
-   (see QActionGroup::setExclusive) */
-QMenu::indicator:non-exclusive:unchecked {
-    image: url(:/qss_icons/rc/checkbox_unchecked.png);
-}
-
-QMenu::indicator:non-exclusive:unchecked:selected {
-    image: url(:/qss_icons/rc/checkbox_unchecked_disabled.png);
-}
-
-QMenu::indicator:non-exclusive:checked {
-    image: url(:/qss_icons/rc/checkbox_checked.png);
-}
-
-QMenu::indicator:non-exclusive:checked:selected {
-    image: url(:/qss_icons/rc/checkbox_checked_disabled.png);
-}
-
-/* exclusive indicator = radio button style indicator (see QActionGroup::setExclusive) */
-QMenu::indicator:exclusive:unchecked {
-    image: url(:/qss_icons/rc/radio_unchecked.png);
-}
-
-QMenu::indicator:exclusive:unchecked:selected {
-    image: url(:/qss_icons/rc/radio_unchecked_disabled.png);
-}
-
-QMenu::indicator:exclusive:checked {
-    image: url(:/qss_icons/rc/radio_checked.png);
-}
-
-QMenu::indicator:exclusive:checked:selected {
-    image: url(:/qss_icons/rc/radio_checked_disabled.png);
-}
-
-QMenu::right-arrow {
-    margin: 5px;
-    image: url(:/qss_icons/rc/right_arrow.png)
-}
-
-
 QWidget:disabled
 {
     color: #454545;
     background-color: #31363b;
 }
 
-QAbstractItemView
-{
-    alternate-background-color: #31363b;
-    color: #eff0f1;
-    border: 1px solid 3A3939;
-    border-radius: 2px;
-}
-
 QWidget:focus, QMenuBar:focus
 {
     border: 1px solid #3daee9;
-}
-
-QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
-{
-    border: none;
-}
-
-QLineEdit
-{
-    background-color: #232629;
-    padding: 5px;
-    border-style: solid;
-    border: 1px solid #76797C;
-    border-radius: 2px;
-    color: #eff0f1;
-}
-
-QAbstractItemView QLineEdit
-{
-    padding: 0;
-}
-
-QGroupBox {
-    border:1px solid #76797C;
-    border-radius: 2px;
-    margin-top: 20px;
-}
-
-QGroupBox::title {
-    subcontrol-origin: margin;
-    subcontrol-position: top center;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 10px;
 }
 
 QAbstractScrollArea
@@ -478,86 +160,20 @@ QAbstractScrollArea
     background-color: transparent;
 }
 
-QScrollBar:horizontal
-{
-    height: 15px;
-    margin: 3px 15px 3px 15px;
-    border: 1px transparent #2A2929;
-    border-radius: 4px;
-    background-color: #2A2929;
-}
-
-QScrollBar::handle:horizontal
-{
-    background-color: #605F5F;
-    min-width: 5px;
-    border-radius: 4px;
-}
-
-QScrollBar::add-line:horizontal
-{
-    margin: 0px 3px 0px 3px;
-    border-image: url(:/qss_icons/rc/right_arrow_disabled.png);
-    width: 10px;
-    height: 10px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::sub-line:horizontal
-{
-    margin: 0px 3px 0px 3px;
-    border-image: url(:/qss_icons/rc/left_arrow_disabled.png);
-    height: 10px;
-    width: 10px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::add-line:horizontal:hover,QScrollBar::add-line:horizontal:on
-{
-    border-image: url(:/qss_icons/rc/right_arrow.png);
-    height: 10px;
-    width: 10px;
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-}
-
-
-QScrollBar::sub-line:horizontal:hover, QScrollBar::sub-line:horizontal:on
-{
-    border-image: url(:/qss_icons/rc/left_arrow.png);
-    height: 10px;
-    width: 10px;
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-}
-
-QScrollBar::up-arrow:horizontal, QScrollBar::down-arrow:horizontal
-{
-    background: none;
-}
-
-
-QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
-{
-    background: none;
-}
-
 QScrollBar:vertical
 {
     background-color: #2A2929;
-    width: 15px;
-    margin: 15px 3px 15px 3px;
-    border: 1px transparent #2A2929;
-    border-radius: 4px;
+    width: 0px;
+    margin: 0px 0px 0px 0px;
+    border: 0px transparent #2A2929;
+    border-radius: 0px;
 }
 
 QScrollBar::handle:vertical
 {
     background-color: #605F5F;
-    min-height: 5px;
-    border-radius: 4px;
+    min-height: 0px;
+    border-radius: 0px;
 }
 
 QScrollBar::sub-line:vertical
@@ -565,7 +181,7 @@ QScrollBar::sub-line:vertical
     margin: 3px 0px 3px 0px;
     border-image: url(:/qss_icons/rc/up_arrow_disabled.png);
     height: 10px;
-    width: 10px;
+    width: 0px;
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
@@ -575,7 +191,7 @@ QScrollBar::add-line:vertical
     margin: 3px 0px 3px 0px;
     border-image: url(:/qss_icons/rc/down_arrow_disabled.png);
     height: 10px;
-    width: 10px;
+    width: 0px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
@@ -585,7 +201,7 @@ QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on
 
     border-image: url(:/qss_icons/rc/up_arrow.png);
     height: 10px;
-    width: 10px;
+    width: 0px;
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
@@ -595,7 +211,7 @@ QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on
 {
     border-image: url(:/qss_icons/rc/down_arrow.png);
     height: 10px;
-    width: 10px;
+    width: 0px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
@@ -605,33 +221,9 @@ QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical
     background: none;
 }
 
-
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical
 {
     background: none;
-}
-
-QTextEdit
-{
-    background-color: #232629;
-    color: #eff0f1;
-    border: 1px solid #76797C;
-}
-
-QPlainTextEdit
-{
-    background-color: #232629;;
-    color: #eff0f1;
-    border-radius: 2px;
-    border: 1px solid #76797C;
-}
-
-QHeaderView::section
-{
-    background-color: #76797C;
-    color: #eff0f1;
-    padding: 5px;
-    border: 1px solid #76797C;
 }
 
 QSizeGrip {
@@ -639,37 +231,6 @@ QSizeGrip {
     width: 12px;
     height: 12px;
 }
-
-
-QMainWindow::separator
-{
-    background-color: #31363b;
-    color: transparent;
-    padding-left: 4px;
-    spacing: 2px;
-    border: 1px #76797C;
-}
-
-QMainWindow::separator:hover
-{
-    background-color: #787876;
-    color: white;
-    padding-left: 4px;
-    border: 1px solid #76797C;
-    spacing: 2px;
-}
-
-
-QMenu::separator
-{
-    height: 1px;
-    background-color: #76797C;
-    color: white;
-    padding-left: 4px;
-    margin-left: 10px;
-    margin-right: 5px;
-}
-
 
 QFrame
 {
@@ -683,43 +244,22 @@ QFrame[frameShape=&quot;0&quot;]
     border: 1px transparent #76797C;
 }
 
-QStackedWidget
-{
-    border: 1px transparent black;
-}
-
-QToolBar {
-    border: 1px transparent #393838;
-    background: 1px solid #31363b;
-    font-weight: bold;
-}
-
-QToolBar::handle:horizontal {
-    image: url(:/qss_icons/rc/Hmovetoolbar.png);
-}
-QToolBar::handle:vertical {
-    image: url(:/qss_icons/rc/Vmovetoolbar.png);
-}
-QToolBar::separator:horizontal {
-    image: url(:/qss_icons/rc/Hsepartoolbar.png);
-}
-QToolBar::separator:vertical {
-    image: url(:/qss_icons/rc/Vsepartoolbar.png);
-}
-QToolButton#qt_toolbar_ext_button {
-    background: #58595a
-}
-
 QPushButton
 {
     color: #eff0f1;
     background-color: #31363b;
-    border-width: 1px;
+    border-width: 0px;
     border-color: #76797C;
     border-style: solid;
     padding: 5px;
     border-radius: 2px;
     outline: none;
+}
+
+QPushButton:hover
+{
+	border-width: 1px;
+	background-color: rgb(0, 85, 127);
 }
 
 QPushButton:disabled
@@ -748,1166 +288,613 @@ QPushButton:pressed
     padding-bottom: -17px;
 }
 
-QComboBox
-{
-    selection-background-color: #3daee9;
-    border-style: solid;
-    border: 1px solid #76797C;
-    border-radius: 2px;
-    padding: 5px;
-    min-width: 75px;
-}
-
-QPushButton:checked{
-    background-color: #76797C;
-    border-color: #6A6969;
-}
-
-QComboBox:hover,QPushButton:hover,QAbstractSpinBox:hover,QLineEdit:hover,QTextEdit:hover,QPlainTextEdit:hover,QAbstractView:hover,QTreeView:hover
-{
-    border: 1px solid #3daee9;
-    color: #eff0f1;
-}
-
-QComboBox:on
-{
-    padding-top: 3px;
-    padding-left: 4px;
-    selection-background-color: #4a4a4a;
-}
-
-QComboBox QAbstractItemView
-{
-    background-color: #232629;
-    border-radius: 2px;
-    border: 1px solid #76797C;
-    selection-background-color: #18465d;
-}
-
-QComboBox::drop-down
-{
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-
-    border-left-width: 0px;
-    border-left-color: darkgray;
-    border-left-style: solid;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
-
-QComboBox::down-arrow
-{
-    image: url(:/qss_icons/rc/down_arrow_disabled.png);
-}
-
-QComboBox::down-arrow:on, QComboBox::down-arrow:hover,
-QComboBox::down-arrow:focus
-{
-    image: url(:/qss_icons/rc/down_arrow.png);
-}
-
-QAbstractSpinBox {
-    padding: 5px;
-    border: 1px solid #76797C;
-    background-color: #232629;
-    color: #eff0f1;
-    border-radius: 2px;
-    min-width: 75px;
-}
-
-QAbstractSpinBox:up-button
-{
-    background-color: transparent;
-    subcontrol-origin: border;
-    subcontrol-position: center right;
-}
-
-QAbstractSpinBox:down-button
-{
-    background-color: transparent;
-    subcontrol-origin: border;
-    subcontrol-position: center left;
-}
-
-QAbstractSpinBox::up-arrow,QAbstractSpinBox::up-arrow:disabled,QAbstractSpinBox::up-arrow:off {
-    image: url(:/qss_icons/rc/up_arrow_disabled.png);
-    width: 10px;
-    height: 10px;
-}
-QAbstractSpinBox::up-arrow:hover
-{
-    image: url(:/qss_icons/rc/up_arrow.png);
-}
-
-
-QAbstractSpinBox::down-arrow,QAbstractSpinBox::down-arrow:disabled,QAbstractSpinBox::down-arrow:off
-{
-    image: url(:/qss_icons/rc/down_arrow_disabled.png);
-    width: 10px;
-    height: 10px;
-}
-QAbstractSpinBox::down-arrow:hover
-{
-    image: url(:/qss_icons/rc/down_arrow.png);
-}
-
-
 QLabel
 {
     border: 0px solid black;
 }
 
-QTabWidget{
-    border: 0px transparent black;
-}
-
-QTabWidget::pane {
-    border: 1px solid #76797C;
-    padding: 5px;
-    margin: 0px;
-}
-
-QTabWidget::tab-bar {
-    left: 5px; /* move to the right by 5px */
-}
-
-QTabBar
-{
-    qproperty-drawBase: 0;
-    border-radius: 3px;
-}
-
-QTabBar:focus
-{
-    border: 0px transparent black;
-}
-
-QTabBar::close-button  {
-    image: url(:/qss_icons/rc/close.png);
-    background: transparent;
-}
-
-QTabBar::close-button:hover
-{
-    image: url(:/qss_icons/rc/close-hover.png);
-    background: transparent;
-}
-
-QTabBar::close-button:pressed {
-    image: url(:/qss_icons/rc/close-pressed.png);
-    background: transparent;
-}
-
-/* TOP TABS */
-QTabBar::tab:top {
-    color: #eff0f1;
-    border: 1px solid #76797C;
-    border-bottom: 1px transparent black;
-    background-color: #31363b;
-    padding: 5px;
-    min-width: 50px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-}
-
-QTabBar::tab:top:!selected
-{
-    color: #eff0f1;
-    background-color: #54575B;
-    border: 1px solid #76797C;
-    border-bottom: 1px transparent black;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;    
-}
-
-QTabBar::tab:top:!selected:hover {
-    background-color: #3daee9;
-}
-
-/* BOTTOM TABS */
-QTabBar::tab:bottom {
-    color: #eff0f1;
-    border: 1px solid #76797C;
-    border-top: 1px transparent black;
-    background-color: #31363b;
-    padding: 5px;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    min-width: 50px;
-}
-
-QTabBar::tab:bottom:!selected
-{
-    color: #eff0f1;
-    background-color: #54575B;
-    border: 1px solid #76797C;
-    border-top: 1px transparent black;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-}
-
-QTabBar::tab:bottom:!selected:hover {
-    background-color: #3daee9;
-}
-
-/* LEFT TABS */
-QTabBar::tab:left {
-    color: #eff0f1;
-    border: 1px solid #76797C;
-    border-left: 1px transparent black;
-    background-color: #31363b;
-    padding: 5px;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    min-height: 50px;
-}
-
-QTabBar::tab:left:!selected
-{
-    color: #eff0f1;
-    background-color: #54575B;
-    border: 1px solid #76797C;
-    border-left: 1px transparent black;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-}
-
-QTabBar::tab:left:!selected:hover {
-    background-color: #3daee9;
-}
-
-
-/* RIGHT TABS */
-QTabBar::tab:right {
-    color: #eff0f1;
-    border: 1px solid #76797C;
-    border-right: 1px transparent black;
-    background-color: #31363b;
-    padding: 5px;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-    min-height: 50px;
-}
-
-QTabBar::tab:right:!selected
-{
-    color: #eff0f1;
-    background-color: #54575B;
-    border: 1px solid #76797C;
-    border-right: 1px transparent black;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-}
-
-QTabBar::tab:right:!selected:hover {
-    background-color: #3daee9;
-}
-
-QTabBar QToolButton::right-arrow:enabled {
-     image: url(:/qss_icons/rc/right_arrow.png);
- }
-
- QTabBar QToolButton::left-arrow:enabled {
-     image: url(:/qss_icons/rc/left_arrow.png);
- }
-
-QTabBar QToolButton::right-arrow:disabled {
-     image: url(:/qss_icons/rc/right_arrow_disabled.png);
- }
-
- QTabBar QToolButton::left-arrow:disabled {
-     image: url(:/qss_icons/rc/left_arrow_disabled.png);
- }
-
-QDockWidget {
+QDockWidget
+ {
     background: #31363b;
     border: 1px solid #403F3F;
     titlebar-close-icon: url(:/qss_icons/rc/close.png);
     titlebar-normal-icon: url(:/qss_icons/rc/undock.png);
 }
 
-QDockWidget::close-button, QDockWidget::float-button {
+QDockWidget::close-button, QDockWidget::float-button 
+{
     border: 1px solid transparent;
     border-radius: 2px;
     background: transparent;
 }
 
-QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+QDockWidget::close-button:hover, QDockWidget::float-button:hover 
+{
     background: rgba(255, 255, 255, 10);
 }
 
-QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
+QDockWidget::close-button:pressed, QDockWidget::float-button:pressed 
+{
     padding: 1px -1px -1px 1px;
     background: rgba(255, 255, 255, 10);
 }
 
-QTreeView, QListView
+QPushButton::menu-indicator 
 {
-    border: 1px solid #76797C;
-    background-color: #232629;
-}
-
-QTreeView:branch:selected, QTreeView:branch:hover
-{
-    background: url(:/qss_icons/rc/transparent.png);
-}
-
-QTreeView::branch:has-siblings:!adjoins-item {
-    border-image: url(:/qss_icons/rc/transparent.png);
-}
-
-QTreeView::branch:has-siblings:adjoins-item {
-    border-image: url(:/qss_icons/rc/transparent.png);
-}
-
-QTreeView::branch:!has-children:!has-siblings:adjoins-item {
-    border-image: url(:/qss_icons/rc/transparent.png);
-}
-
-QTreeView::branch:has-children:!has-siblings:closed,
-QTreeView::branch:closed:has-children:has-siblings {
-    image: url(:/qss_icons/rc/branch_closed.png);
-}
-
-QTreeView::branch:open:has-children:!has-siblings,
-QTreeView::branch:open:has-children:has-siblings  {
-    image: url(:/qss_icons/rc/branch_open.png);
-}
-
-QTreeView::branch:has-children:!has-siblings:closed:hover,
-QTreeView::branch:closed:has-children:has-siblings:hover {
-    image: url(:/qss_icons/rc/branch_closed-on.png);
-    }
-
-QTreeView::branch:open:has-children:!has-siblings:hover,
-QTreeView::branch:open:has-children:has-siblings:hover  {
-    image: url(:/qss_icons/rc/branch_open-on.png);
-    }
-
-QListView::item:!selected:hover, QTreeView::item:!selected:hover  {
-    background: #18465d;
-    outline: 0;
-    color: #eff0f1
-}
-
-QListView::item:selected:hover, QTreeView::item:selected:hover  {
-    background: #287399;
-    color: #eff0f1;
-}
-
-QSlider::groove:horizontal {
-    border: 1px solid #565a5e;
-    height: 4px;
-    background: #565a5e;
-    margin: 0px;
-    border-radius: 2px;
-}
-
-QSlider::handle:horizontal {
-    background: #232629;
-    border: 1px solid #565a5e;
-    width: 16px;
-    height: 16px;
-    margin: -8px 0;
-    border-radius: 9px;
-}
-
-QSlider::groove:vertical {
-    border: 1px solid #565a5e;
-    width: 4px;
-    background: #565a5e;
-    margin: 0px;
-    border-radius: 3px;
-}
-
-QSlider::handle:vertical {
-    background: #232629;
-    border: 1px solid #565a5e;
-    width: 16px;
-    height: 16px;
-    margin: 0 -8px;
-    border-radius: 9px;
-}
-
-QToolButton {
-    background-color: transparent;
-    border: 1px transparent #76797C;
-    border-radius: 2px;
-    margin: 3px;
-    padding: 5px;
-}
-
-QToolButton[popupMode=&quot;1&quot;] { /* only for MenuButtonPopup */
- padding-right: 20px; /* make way for the popup button */
- border: 1px #76797C;
- border-radius: 5px;
-}
-
-QToolButton[popupMode=&quot;2&quot;] { /* only for InstantPopup */
- padding-right: 10px; /* make way for the popup button */
- border: 1px #76797C;
-}
-
-
-QToolButton:hover, QToolButton::menu-button:hover {
-    background-color: transparent;
-    border: 1px solid #3daee9;
-    padding: 5px;
-}
-
-QToolButton:checked, QToolButton:pressed,
-        QToolButton::menu-button:pressed {
-    background-color: #3daee9;
-    border: 1px solid #3daee9;
-    padding: 5px;
-}
-
-/* the subcontrol below is used only in the InstantPopup or DelayedPopup mode */
-QToolButton::menu-indicator {
-    image: url(:/qss_icons/rc/down_arrow.png);
-    top: -7px; left: -2px; /* shift it a bit */
-}
-
-/* the subcontrols below are used only in the MenuButtonPopup mode */
-QToolButton::menu-button {
-    border: 1px transparent #76797C;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    /* 16px width + 4px for border = 20px allocated above */
-    width: 16px;
-    outline: none;
-}
-
-QToolButton::menu-arrow {
-    image: url(:/qss_icons/rc/down_arrow.png);
-}
-
-QToolButton::menu-arrow:open {
-    border: 1px solid #76797C;
-}
-
-QPushButton::menu-indicator  {
     subcontrol-origin: padding;
     subcontrol-position: bottom right;
     left: 8px;
 }
-
-QTableView
-{
-    border: 1px solid #76797C;
-    gridline-color: #31363b;
-    background-color: #232629;
-}
-
-
-QTableView, QHeaderView
-{
-    border-radius: 0px;
-}
-
-QTableView::item:pressed, QListView::item:pressed, QTreeView::item:pressed  {
-    background: #18465d;
-    color: #eff0f1;
-}
-
-QTableView::item:selected:active, QTreeView::item:selected:active, QListView::item:selected:active  {
-    background: #287399;
-    color: #eff0f1;
-}
-
-
-QHeaderView
-{
-    background-color: #31363b;
-    border: 1px transparent;
-    border-radius: 0px;
-    margin: 0px;
-    padding: 0px;
-
-}
-
-QHeaderView::section  {
-    background-color: #31363b;
-    color: #eff0f1;
-    padding: 5px;
-    border: 1px solid #76797C;
-    border-radius: 0px;
-    text-align: center;
-}
-
-QHeaderView::section::vertical::first, QHeaderView::section::vertical::only-one
-{
-    border-top: 1px solid #76797C;
-}
-
-QHeaderView::section::vertical
-{
-    border-top: transparent;
-}
-
-QHeaderView::section::horizontal::first, QHeaderView::section::horizontal::only-one
-{
-    border-left: 1px solid #76797C;
-}
-
-QHeaderView::section::horizontal
-{
-    border-left: transparent;
-}
-
-
-QHeaderView::section:checked
- {
-    color: white;
-    background-color: #334e5e;
- }
-
- /* style the sort indicator */
-QHeaderView::down-arrow {
-    image: url(:/qss_icons/rc/down_arrow.png);
-}
-
-QHeaderView::up-arrow {
-    image: url(:/qss_icons/rc/up_arrow.png);
-}
-
-
-QTableCornerButton::section {
-    background-color: #31363b;
-    border: 1px transparent #76797C;
-    border-radius: 0px;
-}
-
-QToolBox  {
-    padding: 5px;
-    border: 1px transparent black;
-}
-
-QToolBox::tab {
-    color: #eff0f1;
-    background-color: #31363b;
-    border: 1px solid #76797C;
-    border-bottom: 1px transparent #31363b;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-QToolBox::tab:selected { /* italicize selected tabs */
-    font: italic;
-    background-color: #31363b;
-    border-color: #3daee9;
- }
-
-QStatusBar::item {
-    border: 0px transparent dark;
- }
-
-
-QFrame[height=&quot;3&quot;], QFrame[width=&quot;3&quot;] {
-    background-color: #76797C;
-}
-
-
-QSplitter::handle {
-    border: 1px dashed #76797C;
-}
-
-QSplitter::handle:hover {
-    background-color: #787876;
-    border: 1px solid #76797C;
-}
-
-QSplitter::handle:horizontal {
-    width: 1px;
-}
-
-QSplitter::handle:vertical {
-    height: 1px;
-}
-
-QProgressBar {
-    border: 1px solid #76797C;
-    border-radius: 5px;
-    text-align: center;
-}
-
-QProgressBar::chunk {
-    background-color: #05B8CC;
-}
-
-QDateEdit
-{
-    selection-background-color: #3daee9;
-    border-style: solid;
-    border: 1px solid #3375A3;
-    border-radius: 2px;
-    padding: 1px;
-    min-width: 75px;
-}
-
-QDateEdit:on
-{
-    padding-top: 3px;
-    padding-left: 4px;
-    selection-background-color: #4a4a4a;
-}
-
-QDateEdit QAbstractItemView
-{
-    background-color: #232629;
-    border-radius: 2px;
-    border: 1px solid #3375A3;
-    selection-background-color: #3daee9;
-}
-
-QDateEdit::drop-down
-{
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-    border-left-width: 0px;
-    border-left-color: darkgray;
-    border-left-style: solid;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-}
-
-QDateEdit::down-arrow
-{
-    image: url(:/qss_icons/rc/down_arrow_disabled.png);
-}
-
-QDateEdit::down-arrow:on, QDateEdit::down-arrow:hover,
-QDateEdit::down-arrow:focus
-{
-    image: url(:/qss_icons/rc/down_arrow.png);
-}
 </string>
-   </property>
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="features">
-    <set>QDockWidget::DockWidgetMovable</set>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string>Tools</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>1</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>2</number>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+       <property name="leftMargin">
+        <number>0</number>
        </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
+       <property name="topMargin">
+        <number>0</number>
        </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
+       <property name="rightMargin">
+        <number>0</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       <property name="bottomMargin">
+        <number>0</number>
        </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>82</width>
-          <height>724</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetNoConstraint</enum>
+       <item>
+        <widget class="QPushButton" name="pushButton_audioTool">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="leftMargin">
-          <number>1</number>
+         <property name="mouseTracking">
+          <bool>false</bool>
          </property>
-         <property name="topMargin">
-          <number>1</number>
+         <property name="toolTip">
+          <string>Audio Tool</string>
          </property>
-         <property name="rightMargin">
-          <number>1</number>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
          </property>
-         <property name="bottomMargin">
-          <number>1</number>
+         <property name="text">
+          <string/>
          </property>
-         <item>
-          <widget class="QPushButton" name="pushButton_audioTool">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Audio Tool</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/radio.png</normaloff>:/resources/mediaIcons/radio.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-           <property name="autoRepeatDelay">
-            <number>300</number>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>false</bool>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Audio</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_mapTool">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Map Tool</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/map.png</normaloff>:/resources/mediaIcons/map.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Maps</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_combatTracker">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Combat Tracker and Dice Tool</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/combatTracker_dice.png</normaloff>:/resources/mediaIcons/combatTracker_dice.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_8">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Combat /</string>
-           </property>
-           <property name="scaledContents">
-            <bool>false</bool>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Dice</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_shopTool">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Item Shop</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_9">
-           <property name="text">
-            <string>Item Shop</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_characters">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Characters</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/characters.png</normaloff>:/resources/mediaIcons/characters.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Characters</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_generators">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Generators</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/generator.png</normaloff>:/resources/mediaIcons/generator.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Generators</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_notes">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Notes</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/notes.png</normaloff>:/resources/mediaIcons/notes.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_6">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Notes</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_unitConverter">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Unit Converter</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/converter.png</normaloff>:/resources/mediaIcons/converter.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_7">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Converter</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_settings">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>Settings</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="resources.qrc">
-             <normaloff>:/resources/mediaIcons/settings.png</normaloff>:/resources/mediaIcons/settings.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>37</width>
-             <height>37</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_10">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Options</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+         <property name="autoRepeatDelay">
+          <number>300</number>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_audio">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Audio</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_mapTool">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Map Tool</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/map.png</normaloff>:/icons/media/map.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_maps">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Maps</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_combatTracker">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Combat Tracker and Dice Tool</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/combatTracker_dice.png</normaloff>:/icons/media/combatTracker_dice.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_combat">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Combat /</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_dice">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Dice</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_shopTool">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Item Shop</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/stop.png</normaloff>:/icons/media/stop.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_shop">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Item Shop</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_characters">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Characters</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/characters.png</normaloff>:/icons/media/characters.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_characters">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Characters</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_generators">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Generators</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/generator.png</normaloff>:/icons/media/generator.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_generators">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Generators</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_notes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Notes</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/notes.png</normaloff>:/icons/media/notes.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_notes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Notes</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_unitConverter">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Unit Converter</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/converter.png</normaloff>:/icons/media/converter.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_converter">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Converter</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_settings">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Settings</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/media/settings.png</normaloff>:/icons/media/settings.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>37</width>
+           <height>37</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_options">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Options</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <action name="actionDice">
    <property name="text">

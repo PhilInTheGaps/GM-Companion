@@ -269,7 +269,7 @@ void AudioTool::generateElementButtons(QString scenario)
 
             switch (i){
             case 0: // Music
-                button->setIcon(QIcon(":/resources/mediaIcons/music_image.png"));
+                button->setIcon(QIcon(":/icons/media/music_image.png"));
 
                 connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
                 signalMapperMusic->setMapping(button, name+";"+category+";"+scenario);
@@ -277,7 +277,7 @@ void AudioTool::generateElementButtons(QString scenario)
                 musicLayout->addWidget(bWidget);
                 break;
             case 1: // Sound
-                button->setIcon(QIcon(":/resources/mediaIcons/sound_image.png"));
+                button->setIcon(QIcon(":/icons/media/sound_image.png"));
                 button->setCheckable(true);
 
                 connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
@@ -286,7 +286,7 @@ void AudioTool::generateElementButtons(QString scenario)
                 soundLayout->addWidget(bWidget);
                 break;
             case 2: // Radio
-                button->setIcon(QIcon(":/resources/mediaIcons/radio_image.png"));
+                button->setIcon(QIcon(":/icons/media/radio_image.png"));
 
                 connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
                 signalMapperRadio->setMapping(button, name+";"+category+";"+scenario);

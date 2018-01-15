@@ -11,9 +11,25 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Generators</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/media/generator.png</normaloff>:/icons/media/generator.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget_generators">
      <property name="currentIndex">
@@ -26,6 +42,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

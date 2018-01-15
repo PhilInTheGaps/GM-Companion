@@ -59,6 +59,8 @@ private slots:
 
     void on_pushButton_saveAddons_clicked();
 
+    void on_checkBox_showToolNames_toggled(bool checked);
+
 private:
     Ui::OptionsDialog *ui;
 

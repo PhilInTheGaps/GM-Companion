@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Combat Tracker</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/media/combatTracker.png</normaloff>:/icons/media/combatTracker.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -641,6 +645,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
