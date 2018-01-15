@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QProcess>
 #include <QDesktopServices>
+#include <QComboBox>
 
 OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::OptionsDialog){
     ui->setupUi(this);
@@ -24,26 +25,20 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     updatePaths();
     getAddons();
 
-    // Display correct style
+    // Add all custom StyleSheets to the combo box
     QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
     qDebug().noquote() << "Found the following stylesheets:";
 
     for (int i = 0; i < styles.size(); i++)
     {
-        if (ui->styleComboBox->findText(cleanText(styles.at(i))) == -1)
-        {
-            qDebug().noquote() <<  "    " << styles.at(i) << "(Custom)";
-
-            ui->styleComboBox->addItem(cleanText(styles.at(i)));
-        } else
-        {
             qDebug().noquote() <<  "    " << styles.at(i);
-        }
+            ui->styleComboBox->addItem(cleanText(styles.at(i)));
     }
+
+    // Set combobox to default style
     int index = ui->styleComboBox->findText(settings->getSetting(uiMode));
     ui->styleComboBox->setCurrentIndex(index);
     qDebug().noquote() << "Default style:" << settings->getSetting(uiMode);
-    qDebug().noquote() << "Default style index:" << index;
 
     // Display current language
     QString lang = settings->getSetting(Setting::language);
@@ -52,6 +47,11 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     }else if (lang == "de"){
         ui->languageComboBox->setCurrentText("Deutsch");
     }
+
+    if (settings->getSetting(Setting::showToolNames).toInt() == 1)
+        ui->checkBox_showToolNames->setChecked(true);
+    else
+        ui->checkBox_showToolNames->setChecked(false);
 }
 
 OptionsDialog::~OptionsDialog()
@@ -269,4 +269,9 @@ void OptionsDialog::on_pushButton_checkForUpdates_clicked()
 void OptionsDialog::on_pushButton_saveAddons_clicked()
 {
     writeAddonSettings();
+}
+
+void OptionsDialog::on_checkBox_showToolNames_toggled(bool checked)
+{
+    settings->setSetting(Setting::showToolNames, checked);
 }

@@ -6,71 +6,18 @@
 #include <QFileInfo>
 #include <QDateTime>
 
-FileManager::FileManager(){
-
-}
-
-// Removes Directories and Files
-bool removeDir(const QString & dirName)
+FileManager::FileManager()
 {
-    bool result = true;
-    QDir dir(dirName);
 
-    if (dir.exists()) {
-        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
-            if (info.isDir()) {
-                result = removeDir(info.absoluteFilePath());
-            }
-            else {
-                result = QFile::remove(info.absoluteFilePath());
-            }
-
-            if (!result) {
-                return result;
-            }
-        }
-        result = QDir().rmdir(dirName);
-    }
-    return result;
 }
 
-// Copies a file if it is newer than the existing one
-void FileManager::copyContents(QString path, QString destination){
-
-    bool copy = true;
-
-    if (QFile(destination).exists()){
-        QFileInfo oldInfo (path);
-        QDateTime oldTime (oldInfo.lastModified());
-
-        QFileInfo newInfo (destination);
-        QDateTime newTime (newInfo.lastModified());
-
-        if (newTime.operator >=(oldTime)){
-            copy = false;
-        } else {
-            QFile(destination).remove();
-            qDebug().noquote() << path + " is newer, replacing...";
-        }
-
-    } else {
-        qDebug() << "copying " + path;
-    }
-
-    if (copy){
-        QFile::copy(path, destination);
-    }
-}
-
-void FileManager::copyFiles(){
+void FileManager::run()
+{
     // Local home directory
     QDir lDir(QDir::homePath()+"/.gm-companion");
 
     // List of all directories to be created
-    QStringList dirList = {"addons", "audio", "characters", "maps", "music", "names", "shop", "notes", "radio", "resources", "sounds", "styles", "logs"};
-
-    // List of files to be copied
-    QStringList fileList = {"units.ini"};
+    QStringList dirList = {"addons", "audio", "characters", "maps", "music", "names", "shop", "notes", "radio", "resources", "units", "sounds", "styles", "logs"};
 
     // List of all files to be deleted
     filesToBeDeleted.append({"styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss"});
@@ -90,68 +37,6 @@ void FileManager::copyFiles(){
         if (!dir.exists()){
             qDebug().noquote() << QDir::homePath()+"/.gm-companion/ does not exist. Creating...";
             dir.mkpath(".");
-        }
-    }
-
-    qDebug().noquote() << "Copying files to " << QDir::homePath()+"/.gm-companion ...";
-
-    // Actually copy files to the directories
-    #ifdef __linux__
-    origPath = "/usr/share/gm-companion";
-    #elif _WIN32
-    origPath = QApplication::applicationDirPath();
-    #else
-    origPath = QApplication::applicationDirPath();
-    qDebug() << QCoreApplication::translate("FileManager","This OS is not supported.");
-    #endif
-
-    // Copy folder contents
-    for (QString folder : dirList){
-        QString topPathString = origPath + "/" + folder;
-        QDir topPath(topPathString);
-
-        if (topPath.exists()){
-            for (QString file : getFiles(topPathString)){
-                copyContents(topPathString+"/"+file, QDir::homePath()+"/.gm-companion/"+folder+"/"+file);
-            }
-        }
-    }
-
-    // Copy files
-    for (QString file : fileList){
-        if (QFile(origPath+"/"+file).exists()){
-            copyContents(origPath+"/"+file, QDir::homePath()+"/.gm-companion/"+file);
-        }
-    }
-
-    // Copy names
-    qDebug() << "Copying names for generator...";
-    for (QString folder : getFolders(origPath+"/names")){
-        if (!folder.contains(".")){
-            QDir dir(origPath+"/names/"+folder);
-            if (!dir.exists()){
-                dir.mkpath(".");
-            }
-
-            for (QString subfolder : getFolders(origPath+"/names/"+folder)){
-                if (!subfolder.contains(".")){
-                    QDir dir2(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder);
-                    if(!dir2.exists()){
-                        dir2.mkpath(".");
-                    }
-
-                    for (QString file : getFiles(origPath+"/names/"+folder+"/"+subfolder)){
-                        QFile f(QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
-                        if (!f.exists())
-                        {
-                            QFile::copy(origPath+"/names/"+folder+"/"+subfolder+"/"+file, QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file);
-
-                            qDebug().noquote() << "Name file origin:" << origPath+"/names/"+folder+"/"+subfolder+"/"+file;
-                            qDebug().noquote() << "Name file location:" << QDir::homePath()+"/.gm-companion/names/"+folder+"/"+subfolder+"/"+file;
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -180,5 +65,26 @@ void FileManager::copyFiles(){
     }
 
     qDebug() << "Done.";
+}
 
+// Removes Directories and Files
+bool FileManager::removeDir(const QString & dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists())
+    {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
+        {
+            if (info.isDir())
+                result = removeDir(info.absoluteFilePath());
+            else
+                result = QFile::remove(info.absoluteFilePath());
+            if (!result)
+                return result;
+        }
+        result = QDir().rmdir(dirName);
+    }
+    return result;
 }

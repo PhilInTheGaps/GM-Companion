@@ -104,10 +104,10 @@ DISTFILES +=
 RC_FILE = gm-companion/GM-Companion.rc
 
 RESOURCES += gm-companion/resources.qrc \
-    gm-companion/styles/qdarkstyle/style.qrc
+    gm-companion/resources/styles/qdarkstyle/style.qrc
 
-TRANSLATIONS+=  gm-companion/translations/gm-companion_en.ts
-TRANSLATIONS+=  gm-companion/translations/gm-companion_de.ts
+TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts
+TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
 
 !win32 {
     QMAKE_CXXFLAGS += -std=c++11

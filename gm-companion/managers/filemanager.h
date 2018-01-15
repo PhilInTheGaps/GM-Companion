@@ -8,10 +8,7 @@ class FileManager
 {
 public:
     FileManager();
-
-    void copyFiles();
-
-    void copyContents(QString path, QString destination);
+    void run();
 
 private:
 
@@ -19,6 +16,7 @@ private:
     QStringList filesToBeDeleted;
     QStringList foldersToBeDeleted;
 
+    bool removeDir(const QString & dirName);
 };
 
 #endif // FILEMANAGER_H

@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Audio Editor</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>2</number>
@@ -1000,7 +1004,7 @@
           <string>Play</string>
          </property>
          <property name="icon">
-          <iconset resource="../resources.qrc">
+          <iconset>
            <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
          </property>
          <property name="checkable">

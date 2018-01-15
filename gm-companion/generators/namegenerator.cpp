@@ -14,7 +14,6 @@ NameGenerator::NameGenerator(QWidget *parent) : QWidget(parent), ui(new Ui::Name
 
     ui->setupUi(this);
 
-    signalMapper = new QSignalMapper;
     settingsManager = new SettingsManager;
 
     ui->textEdit_male->setFontPointSize(ui->spinBox_pointSize->value());
@@ -30,101 +29,79 @@ NameGenerator::~NameGenerator()
 
 void NameGenerator::generateNamesTab()
 {
-    // Normal Names
-    QStringList folderList = getFolders(QDir::homePath()+"/.gm-companion/names");
-    for (QString folder : folderList)
+    // Names in resources
+    generateNameButtons(":/names/Generic", "Generic", true);
+
+    // Custom names in names folder
+    for (QString folder : getFolders(QDir::homePath()+"/.gm-companion/names"))
     {
         if (!folder.contains("."))
-        {
-            // ScrollArea for the name buttons
-            QScrollArea *scrollArea = new QScrollArea;
-            scrollArea->setWidgetResizable(true);
-            QFrame *frame = new QFrame;
-            scrollArea->setWidget(frame);
-            QVBoxLayout *frameLayout = new QVBoxLayout;
-            frame->setLayout(frameLayout);
-            ui->tabWidget_categories->addTab(scrollArea, folder);
-
-            folder = QDir::homePath()+"/.gm-companion/names/"+folder;
-
-            QStringList subfolderList = getFolders(folder);
-
-            for (QString subfolder : subfolderList)
-            {
-                if (!subfolder.contains("."))
-                {
-                    QFrame *subFrame = new QFrame;
-                    frameLayout->addWidget(subFrame);
-
-                    QPushButton *button = new QPushButton;
-                    button->setMinimumWidth(200);
-                    button->setText(subfolder);
-                    frameLayout->addWidget(button);
-
-                    QString path = folder+"/"+subfolder;
-
-                    connect(button, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                    signalMapper->setMapping(button, path);
-
-                }
-            }
-            QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-            frameLayout->addSpacerItem(spacer);
-        }
+            generateNameButtons(QDir::homePath()+"/.gm-companion/names/"+folder, folder);
     }
 
-    // Addon Names
-    folderList = getFolders(QDir::homePath()+"/.gm-companion/addons");
-    for (QString folder : folderList)
+    // Addon names
+    for (QString folder : getFolders(QDir::homePath()+"/.gm-companion/addons"))
     {
         if (!folder.contains(".") && QDir(QDir::homePath()+"/.gm-companion/addons/"+folder+"/names").exists() && settingsManager->getIsAddonEnabled(folder))
+            generateNameButtons(QDir::homePath()+"/.gm-companion/addons/"+folder+"/names", folder);
+    }
+}
+
+void NameGenerator::generateNameButtons(QString path, QString folder, bool resource)
+{
+    QScrollArea *scrollArea = new QScrollArea;
+    QFrame *frame = new QFrame;
+
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(frame);
+
+    QVBoxLayout *frameLayout = new QVBoxLayout;
+    frame->setLayout(frameLayout);
+    ui->tabWidget_categories->addTab(scrollArea, folder);
+
+    if (resource)
+    {
+        QStringList types;
+        for (QString r : QDir(path).entryList())
         {
-            QScrollArea *scrollArea = new QScrollArea;
-            scrollArea->setWidgetResizable(true);
-            QFrame *frame = new QFrame;
-            scrollArea->setWidget(frame);
-            QVBoxLayout *frameLayout = new QVBoxLayout;
-            frame->setLayout(frameLayout);
-            ui->tabWidget_categories->addTab(scrollArea, folder);
-
-            folder = QDir::homePath()+"/.gm-companion/addons/"+folder+"/names";
-
-            QStringList subfolderList = getFolders(folder);
-
-            for (QString subfolder : subfolderList)
+            QString type = r.left(r.indexOf("/"));
+            if (!types.contains(type))
             {
-                if (!subfolder.contains("."))
-                {
-                    QFrame *subFrame = new QFrame;
-                    frameLayout->addWidget(subFrame);
-
-                    QPushButton *button = new QPushButton;
-                    button->setMinimumWidth(200);
-                    button->setText(subfolder);
-                    frameLayout->addWidget(button);
-
-                    QString path = folder+"/"+subfolder;
-
-                    connect(button, SIGNAL(clicked()), signalMapper, SLOT(map()));
-                    signalMapper->setMapping(button, path);
-
-                }
+                types.append(type);
+                addButton(path+"/"+type, type, frameLayout);
             }
-            QSpacerItem *spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-            frameLayout->addSpacerItem(spacer);
+        }
+    }
+    else
+    {
+        for (QString subfolder : getFolders(path))
+        {
+            if (!subfolder.contains("."))
+                addButton(path+"/"+subfolder, subfolder, frameLayout);
         }
     }
 
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(on_generateNames(QString)));
+    QSpacerItem *spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    frameLayout->addSpacerItem(spacer);
 }
 
-void NameGenerator::on_generateNames(QString path)
+void NameGenerator::addButton(QString path, QString subFolder, QVBoxLayout *layout)
+{
+    QFrame *subFrame = new QFrame;
+    layout->addWidget(subFrame);
+
+    QPushButton *button = new QPushButton;
+    button->setMinimumWidth(200);
+    button->setText(subFolder);
+    layout->addWidget(button);
+
+    connect(button, &QPushButton::clicked, this, [=]() { generateNames(path); });
+}
+
+void NameGenerator::generateNames(QString path)
 {
     ui->textEdit_male->clear();
-    ui->textEdit_male->append("Male Names:");
-
     ui->textEdit_female->clear();
-    ui->textEdit_female->append("Female Names:");
 
     QString malePath = path+"/male.txt";
     QString femalePath = path+"/female.txt";

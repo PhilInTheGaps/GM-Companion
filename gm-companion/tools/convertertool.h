@@ -61,6 +61,7 @@ private:
     SettingsManager *settingsManager;
 
     void getAllUnits();
+    void addUnitGroup(int index, QString str);
 
     void convertUnits(int index1, int index2, QList<Unit> list, double units, QDoubleSpinBox *box);
 

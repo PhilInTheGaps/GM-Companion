@@ -82,6 +82,9 @@ QString SettingsManager::getSetting(Setting setting){
     case Setting::version:
         settingString = QString::number(settings.value("version", 0).toInt());
         break;
+    case Setting::showToolNames:
+        settingString = QString::number(settings.value("showToolNames", 0).toInt());
+        break;
     default:
         settingString = "";
         break;
@@ -170,41 +173,23 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
     case Setting::uiMode:
     {
         settings.setValue("uiMode", value);
-
-        qDebug().noquote() << "Loading stylesheet:" << value << "...";
-        QApplication* application = static_cast<QApplication *>(QApplication::instance());
-
-        QFile file(QDir::homePath()+"/.gm-companion/styles/"+value+".qss");
-        if (file.exists()){
-            file.open(QFile::ReadOnly);
-            QString styleSheet = QLatin1String(file.readAll());
-            application->setStyleSheet(styleSheet);
-        }else{
-            QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/White.qss");
-            if (defaultStyle.exists()){
-                defaultStyle.open(QFile::ReadOnly);
-                QString styleSheet = QLatin1String(defaultStyle.readAll());
-                application->setStyleSheet(styleSheet);
-            }
-        }
+        setStyleSheet(value);
         break;
     }
     case Setting::buttonStyle:
         settings.setValue("buttonStyle", value);
         break;
     case Setting::enableMusicTrackList:
-        if (checked){
+        if (checked)
             settings.setValue("enableMusicTrackList", 1);
-        }else{
+        else
             settings.setValue("enableMusicTrackList", 0);
-        }
         break;
     case Setting::openWhatIsNewWindow:
-        if (checked){
+        if (checked)
             settings.setValue("openWhatIsNewWindow", 1);
-        }else{
+        else
             settings.setValue("openWhatIsNewWindow", 0);
-        }
         break;
     case Setting::language:
         settings.setValue("language", value);
@@ -212,19 +197,57 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value){
     case Setting::version:
         settings.setValue("version", value);
         break;
+    case Setting::showToolNames:
+        if (checked)
+            settings.setValue("showToolNames", 1);
+        else
+            settings.setValue("showToolNames", 0);
+        break;
     default:
         break;
     }
 }
 
+void SettingsManager::setStyleSheet(QString style)
+{
+    qDebug().noquote() << "Loading stylesheet:" << style << "...";
+    QApplication* application = static_cast<QApplication *>(QApplication::instance());
+
+    QString styleSheet;
+
+    // Check if style is a custom style
+    QStringList nonCustomStyles = {"Dark", "White"};
+    if (nonCustomStyles.contains(style))
+    {
+        QFile file(":/styles/"+style+".qss");
+        file.open(QFile::ReadOnly);
+        styleSheet = QLatin1String(file.readAll());
+        file.close();
+    }
+    else
+    {
+        QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
+        if (file.exists())
+        {
+            file.open(QFile::ReadOnly);
+            styleSheet = QLatin1String(file.readAll());
+            file.close();
+        }
+    }
+    application->setStyleSheet(styleSheet);
+}
+
 // Opens a Directory Chooser to set the new folder location
-QString SettingsManager::setFolderLocation(QString windowTitle){
+QString SettingsManager::setFolderLocation(QString windowTitle)
+{
     QString path;
     QFileDialog *fileDialog = new QFileDialog;
     fileDialog->setFileMode(QFileDialog::DirectoryOnly);
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setWindowTitle(windowTitle);
-    if (fileDialog->exec() == QDialog::Accepted){
+
+    if (fileDialog->exec() == QDialog::Accepted)
+    {
         QStringList paths = fileDialog->selectedFiles();
         path = paths.at(0);
     }
@@ -233,7 +256,8 @@ QString SettingsManager::setFolderLocation(QString windowTitle){
 }
 
 // Set addon disabled or enabled
-void SettingsManager::setAddonEnabled(QString addon, bool enabled){
+void SettingsManager::setAddonEnabled(QString addon, bool enabled)
+{
     QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
     addonSettings.beginGroup("Addons");
 
@@ -247,7 +271,8 @@ void SettingsManager::setAddonEnabled(QString addon, bool enabled){
 }
 
 // Returns if addon is enabled
-bool SettingsManager::getIsAddonEnabled(QString addon){
+bool SettingsManager::getIsAddonEnabled(QString addon)
+{
     bool enabled;
 
     QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
@@ -265,7 +290,8 @@ bool SettingsManager::getIsAddonEnabled(QString addon){
 }
 
 // Returns Official Addons
-QStringList SettingsManager::getOfficialAddons(){
+QStringList SettingsManager::getOfficialAddons()
+{
     return officialAddons;
 }
 
@@ -317,7 +343,8 @@ void SettingsManager::setInactiveCharacters(QStringList characters)
 }
 
 // Updates the settings if something changed from a previous version
-void SettingsManager::updateSettings(){
+void SettingsManager::updateSettings()
+{
     QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
 
     if (settings.value("version").toInt() < 320){

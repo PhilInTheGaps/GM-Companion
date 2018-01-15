@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>About</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/icons/gm-companion/icon256.png</normaloff>:/icons/gm-companion/icon256.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
@@ -44,7 +48,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Copyright © 2017 Phil Hoffmann</string>
+      <string>Copyright © 2018 Phil Hoffmann</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -53,6 +57,12 @@
    </item>
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit">
+     <property name="documentTitle">
+      <string>Changelog</string>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
      <property name="plainText">
       <string>Changelog:
 
@@ -76,7 +86,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

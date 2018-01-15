@@ -17,7 +17,7 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QString>
-#include <QFileSystemWatcher>
+#include <QSplashScreen>
 
 #include "managers/settingsmanager.h"
 #include "functions.h"
@@ -41,7 +41,7 @@ class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QSplashScreen *splash, QWidget *parent = 0);
     ~MainWindow();
     void addToPlaylist(QUrl url, bool music); // Add audio file to playlist. Bool true if music, false if sound
 

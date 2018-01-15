@@ -34,6 +34,9 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString 
     case QtFatalMsg:
         txt = time.currentTime().toString() + ": " + QString("Fatal: %1").arg(msg);
         break;
+    default:
+        txt = time.currentTime().toString() + ": " + msg;
+        break;
     }
 
     QFile outFile(QDir::homePath()+"/.gm-companion/logs/"+date.currentDate().toString());
@@ -63,7 +66,7 @@ int main(int argc, char *argv[])
     // Show splash screen
     qDebug().noquote() << "Showing splash screen ...";
     QSplashScreen *splash = new QSplashScreen;
-    splash->setPixmap(QPixmap(":/resources/splash.jpg"));
+    splash->setPixmap(QPixmap(":/splash.jpg"));
     splash->show();
 
     // Translator
@@ -71,18 +74,13 @@ int main(int argc, char *argv[])
     SettingsManager* settingsManager = new SettingsManager;
     QTranslator* translator = new QTranslator();
 
-    #ifdef _WIN32
-    if (translator->load("gm-companion_"+settingsManager->getSetting(language), QApplication::applicationDirPath()+"/translations")) {
+    if (translator->load("gm-companion_"+settingsManager->getSetting(language), ":/translations"))
         app.installTranslator(translator);
-    }
-    #else
-    if (translator->load("gm-companion_"+settingsManager->getSetting(language), "/usr/share/gm-companion/translations")) {
-        app.installTranslator(translator);
-    }
-    #endif
+    else
+        qDebug() << "Could not load translation ...";
 
     // Start mainwindow
-    MainWindow w;
+    MainWindow w(splash);
     w.setVersion("1.0.0.0");
 
     // Update Manager
@@ -90,22 +88,7 @@ int main(int argc, char *argv[])
     updateManager->checkForUpdates();
 
     // Set StyleSheet
-    QString style = settingsManager->getSetting(uiMode);
-    qDebug().noquote() << "Loading stylesheet:" << style << "...";
-
-    QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
-    if (file.exists()){
-        file.open(QFile::ReadOnly);
-        QString styleSheet = QLatin1String(file.readAll());
-        app.setStyleSheet(styleSheet);
-    }else{
-        QFile defaultStyle(QDir::homePath()+"/.gm-companion/styles/White.qss");
-        if (defaultStyle.exists()){
-            defaultStyle.open(QFile::ReadOnly);
-            QString styleSheet = QLatin1String(defaultStyle.readAll());
-            app.setStyleSheet(styleSheet);
-        }
-    }
+    settingsManager->setStyleSheet(settingsManager->getSetting(uiMode));
 
     // Sets the window size to maximized, w.showMaximized() is glitchy under windows
     #ifdef _WIN32
@@ -144,8 +127,8 @@ int main(int argc, char *argv[])
 //        w.updateSettingsVersion();
 //    }
 
-    qDebug().noquote() << "Closing splash screen ...";
-    splash->close();
+//    qDebug().noquote() << "Closing splash screen ...";
+//    splash->close();
 
     return app.exec();
 }

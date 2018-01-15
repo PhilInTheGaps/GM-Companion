@@ -22,7 +22,8 @@ enum Setting{
     notesPath,
     audioPath,
     radioPath,
-    drive_music
+    drive_music,
+    showToolNames
 };
 
 class SettingsManager
@@ -41,6 +42,7 @@ public:
     QStringList getInactiveCharacters();
     void setInactiveCharacters(QStringList characters);
 
+    void setStyleSheet(QString style);
     void updateSettings();
 
 private:
@@ -49,13 +51,15 @@ private:
 
     QString setFolderLocation(QString windowTitle);
 
+
     // Addon Settings
     QSettings addonSettings;
 
     QStringList officialAddons = {
         "DSA5",
         "SIFRP",
-        "HowToBeAHero"
+        "HowToBeAHero",
+        "90MinutesOfMayhem",
     };
 };
 
