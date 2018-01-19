@@ -19,7 +19,4 @@ The source code for both the GM-Companion and the Addon Manager can be found at 
 https://github.com/PhilInTheGaps/GM-Companion  
 https://github.com/PhilInTheGaps/GMC-AddonManager
 
-If you have any questions or want to contribute to the project feel free to contact me at
-phil.hoffmann@inbox.com
-
 Have fun!
