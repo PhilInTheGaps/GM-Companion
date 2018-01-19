@@ -34,22 +34,9 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
     musicPlaylist = new QMediaPlaylist;
     musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
 
-    signalMapperMusic = new QSignalMapper;
-    connect(signalMapperMusic, SIGNAL(mapped(QString)), this, SLOT(playMusic(QString)));
-
     // Radio
     radioPlayer = new QMediaPlayer;
-    signalMapperRadio = new QSignalMapper;
-    connect(signalMapperRadio, SIGNAL(mapped(QString)), this, SLOT(playRadio(QString)));
     radioActive = false;
-
-    // Sound
-    signalMapperSound = new QSignalMapper;
-    connect(signalMapperSound, SIGNAL(mapped(QString)), this, SLOT(playSound(QString)));
-
-    // Categories
-    signalMapperCategories = new QSignalMapper;
-    connect(signalMapperCategories, SIGNAL(mapped(QString)), this, SLOT(changeCategory(QString)));
 
     // Display all available projects in the combo box
     getProjects();
@@ -165,8 +152,7 @@ void AudioTool::loadProject(QString project)
         categoryButton->setStyleSheet("QPushButton{color: #eff0f1; background-color: #31363b; border-width: 1px; border-color: #76797C; "
                                       "border-style: solid; padding: 5px; border-radius: 2px; outline: none;}");
 
-        connect(categoryButton, SIGNAL(clicked()), signalMapperCategories, SLOT(map()));
-        signalMapperCategories->setMapping(categoryButton, categoryName);
+        connect(categoryButton, &QPushButton::clicked, this, [=]() { changeCategory(categoryName); });
     }
     settings.endArray();
 }
@@ -238,7 +224,6 @@ void AudioTool::generateElementButtons(QString scenario)
             settings.setArrayIndex(j);
 
             QString name = settings.value("name").toString();
-//            QString description = settings.value("description").toString();
 
             // Create Button
             QWidget* bWidget = new QWidget;
@@ -270,27 +255,18 @@ void AudioTool::generateElementButtons(QString scenario)
             switch (i){
             case 0: // Music
                 button->setIcon(QIcon(":/icons/media/music_image.png"));
-
-                connect(button, SIGNAL(clicked()), signalMapperMusic, SLOT(map()));
-                signalMapperMusic->setMapping(button, name+";"+category+";"+scenario);
-
+                connect(button, &QPushButton::clicked, this, [=]() { playMusic(name+";"+category+";"+scenario); });
                 musicLayout->addWidget(bWidget);
                 break;
             case 1: // Sound
                 button->setIcon(QIcon(":/icons/media/sound_image.png"));
                 button->setCheckable(true);
-
-                connect(button, SIGNAL(clicked(bool)), signalMapperSound, SLOT(map()));
-                signalMapperSound->setMapping(button, name+";"+category+";"+scenario);
-
+                connect(button, &QPushButton::clicked, this, [=]() { playSound(name+";"+category+";"+scenario); });
                 soundLayout->addWidget(bWidget);
                 break;
             case 2: // Radio
                 button->setIcon(QIcon(":/icons/media/radio_image.png"));
-
-                connect(button, SIGNAL(clicked()), signalMapperRadio, SLOT(map()));
-                signalMapperRadio->setMapping(button, name+";"+category+";"+scenario);
-
+                connect(button, &QPushButton::clicked, this, [=]() { playRadio(name+";"+category+";"+scenario); });
                 radioLayout->addWidget(bWidget);
                 break;
             default:

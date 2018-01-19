@@ -45,12 +45,35 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext &, const QString 
     ts << txt << endl;
 }
 
-int main(int argc, char *argv[])
+// Show "What is new?" window
+void showWhatIsNew(SettingsManager *settingsManager, MainWindow *w)
 {
-    QApplication app(argc, argv);
-
-    // Check if debug mode is enabled (disabled by default)
     QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+
+    int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();    // Should window be opened by default?
+    int settingsVersion = checkSettings.value("version", 0).toInt();                // Program version the last time it was used
+
+    if (openNewFeatures == 1 || w->getVersionNumber() > settingsVersion)
+    {
+        // Print the reason why the window is being opened
+        if (w->getVersionNumber() > settingsVersion)
+            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
+        else if (openNewFeatures == 1)
+            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
+
+        WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
+        whatIsNewWindow->show();
+
+        settingsManager->updateSettings();  // Update the settings file in case it needs to be modified because of an update
+        w->updateSettingsVersion();          // Update the version of the settings file
+    }
+}
+
+// Check if debug mode is enabled (disabled by default)
+void enableDebug()
+{
+    QSettings checkSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+
     if (checkSettings.value("debug", 0).toInt() == 1)
     {
         qDebug().noquote() << "Debug mode activated ...";
@@ -58,8 +81,16 @@ int main(int argc, char *argv[])
     else
     {
         qDebug().noquote() << "Debug mode is not active ...";
-        qInstallMessageHandler(myMessageHandler);
+        qInstallMessageHandler(myMessageHandler);   // Debug messages are written in a log file instead of the console
     }
+}
+
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+
+    // Enable or disable debug mode
+    enableDebug();
 
     qDebug().noquote() << "Starting GM-Companion ...";
 
@@ -69,7 +100,7 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/splash.jpg"));
     splash->show();
 
-    // Translator
+    // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";
     SettingsManager* settingsManager = new SettingsManager;
     QTranslator* translator = new QTranslator();
@@ -80,10 +111,13 @@ int main(int argc, char *argv[])
         qDebug() << "Could not load translation ...";
 
     // Start mainwindow
-    MainWindow w(splash);
-    w.setVersion("1.0.0.0");
+    MainWindow *w = new MainWindow(splash);
+    w->setVersion("1.0.0.0");
 
-    // Update Manager
+    // Add Tools to mainwindow
+    w->addTools();
+
+    // Update Manager checks if a new version of the gm-companion is available
     UpdateManager *updateManager = new UpdateManager(1000);
     updateManager->checkForUpdates();
 
@@ -97,38 +131,11 @@ int main(int argc, char *argv[])
 
     // Open Window Maximized
     qDebug().noquote() << "Opening UI ...";
-    w.showMaximized();
-    w.focusWidget();
+    w->showMaximized();
+    w->focusWidget();
 
-    // Add Tools to mainwindow
-    w.addTools();
-
-    // I currently disabled the new features window because I don't know what to put in there this patch...
-
-//    // Open WhatIsNewWindow
-//    int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
-//    int settingsVersion = checkSettings.value("version", 0).toInt();
-//    if (openNewFeatures == 1 || w.getVersionNumber() > settingsVersion)
-//    {
-//        if (w.getVersionNumber() > settingsVersion)
-//        {
-//            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of an Update...");
-//        }
-//        else if (openNewFeatures == 1)
-//        {
-//            qDebug().noquote() << QCoreApplication::translate("Program Start", "Opening New Features Window because of the settings preferences...");
-//        }
-
-//        WhatIsNewWindow* whatIsNewWindow = new WhatIsNewWindow;
-//        whatIsNewWindow->show();
-
-//        settingsManager->updateSettings();
-
-//        w.updateSettingsVersion();
-//    }
-
-//    qDebug().noquote() << "Closing splash screen ...";
-//    splash->close();
+    // Open WhatIsNewWindow
+//    showWhatIsNew(settingsManager, w); // TODO
 
     return app.exec();
 }

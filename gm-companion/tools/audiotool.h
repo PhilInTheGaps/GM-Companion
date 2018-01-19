@@ -33,7 +33,6 @@ public:
 private slots:
 
     // Music
-    void playMusic(QString arg);
     void updateMetaData();
     void on_listWidget_songs_currentRowChanged(int currentRow);
 
@@ -41,12 +40,6 @@ private slots:
     void on_pushButton_pause_clicked();
     void on_pushButton_replay_clicked();
     void on_pushButton_next_clicked();
-
-    // Sound
-    void playSound(QString arg);
-
-    // Radio
-    void playRadio(QString arg);
 
     // Change volume
     void on_horizontalSlider_music_valueChanged(int value);
@@ -62,9 +55,6 @@ private slots:
     void on_pushButton_updateProjects_clicked();
     void on_pushButton_documentation_clicked();
 
-    // Categories
-    void changeCategory(QString category);
-
 private:
     Ui::AudioTool *ui;
 
@@ -78,17 +68,17 @@ private:
     void loadProject(QString project);
 
     // Music
-    QSignalMapper *signalMapperMusic;
+    void playMusic(QString arg);
     QMediaPlayer *musicPlayer;
     QMediaPlaylist *musicPlaylist;
 
     // Radio
-    QSignalMapper *signalMapperRadio;
+    void playRadio(QString arg);
     QMediaPlayer *radioPlayer;
     bool radioActive;
 
     // Sound
-    QSignalMapper *signalMapperSound;
+    void playSound(QString arg);
     QList<QMediaPlayer*> soundPlayerList;
 
     // List View
@@ -96,6 +86,7 @@ private:
     void generateElementButtons(QString scenario); // Elements
 
     // Categories
+    void changeCategory(QString category);
     QSignalMapper *signalMapperCategories;
     QString currentCategory;
 };

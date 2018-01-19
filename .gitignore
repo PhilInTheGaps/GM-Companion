@@ -48,3 +48,4 @@ target_wrapper.*
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+PKGBUILD
