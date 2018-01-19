@@ -39,7 +39,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -179,6 +179,9 @@
         <widget class="QTabWidget" name="tabWidget_2">
          <property name="currentIndex">
           <number>0</number>
+         </property>
+         <property name="tabBarAutoHide">
+          <bool>true</bool>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -365,6 +368,31 @@
              </item>
              <item>
               <widget class="QToolButton" name="setNotesPath">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Shop Projects / Items Database</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QLineEdit" name="shopPath">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="setShopPath">
                <property name="text">
                 <string>...</string>
                </property>

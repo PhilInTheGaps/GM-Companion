@@ -20,33 +20,11 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
 
     settings = new SettingsManager;
 
-    connect(this, SIGNAL(finished(int)), SLOT(onClose()));
-
     updatePaths();
+
     getAddons();
-
-    // Add all custom StyleSheets to the combo box
-    QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
-    qDebug().noquote() << "Found the following stylesheets:";
-
-    for (int i = 0; i < styles.size(); i++)
-    {
-            qDebug().noquote() <<  "    " << styles.at(i);
-            ui->styleComboBox->addItem(cleanText(styles.at(i)));
-    }
-
-    // Set combobox to default style
-    int index = ui->styleComboBox->findText(settings->getSetting(uiMode));
-    ui->styleComboBox->setCurrentIndex(index);
-    qDebug().noquote() << "Default style:" << settings->getSetting(uiMode);
-
-    // Display current language
-    QString lang = settings->getSetting(Setting::language);
-    if (lang == "en"){
-        ui->languageComboBox->setCurrentText("English");
-    }else if (lang == "de"){
-        ui->languageComboBox->setCurrentText("Deutsch");
-    }
+    getStyleSheets();
+    getLanguage();
 
     if (settings->getSetting(Setting::showToolNames).toInt() == 1)
         ui->checkBox_showToolNames->setChecked(true);
@@ -59,9 +37,32 @@ OptionsDialog::~OptionsDialog()
     delete ui;
 }
 
-// Executed when windows closes
-void OptionsDialog::onClose(){
-    writeAddonSettings();
+// Display current language
+void OptionsDialog::getLanguage()
+{
+    QString lang = settings->getSetting(Setting::language);
+    if (lang == "en")
+        ui->languageComboBox->setCurrentText("English");
+    else if (lang == "de")
+        ui->languageComboBox->setCurrentText("Deutsch");
+}
+
+// Add all custom StyleSheets to the combo box
+void OptionsDialog::getStyleSheets()
+{
+    QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
+    qDebug().noquote() << "Found the following stylesheets:";
+
+    for (int i = 0; i < styles.size(); i++)
+    {
+        qDebug().noquote() <<  "    " << styles.at(i);
+        ui->styleComboBox->addItem(cleanText(styles.at(i)));
+    }
+
+    // Set combobox to default style
+    int index = ui->styleComboBox->findText(settings->getSetting(uiMode));
+    ui->styleComboBox->setCurrentIndex(index);
+    qDebug().noquote() << "Default style:" << settings->getSetting(uiMode);
 }
 
 // Gets every installed addon
@@ -96,73 +97,69 @@ void OptionsDialog::getAddons(){
 }
 
 // Save Addon Settings
-void OptionsDialog::writeAddonSettings(){
-    for (QCheckBox* b : officialAddons){
+void OptionsDialog::writeAddonSettings()
+{
+    for (QCheckBox* b : officialAddons)
         settings->setAddonEnabled(b->text(), b->isChecked());
-    }
-    for (QCheckBox* b : inofficialAddons){
+
+    for (QCheckBox* b : inofficialAddons)
         settings->setAddonEnabled(b->text(), b->isChecked());
-    }
 }
 
 void OptionsDialog::on_setMusicPath_clicked()
 {
-    settings->setSetting(Setting::musicPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(musicPath);
 }
 
 void OptionsDialog::on_setSoundPath_clicked()
 {
-    settings->setSetting(Setting::soundPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(soundPath);
 }
 
 void OptionsDialog::on_setResourcesPath_clicked()
 {
-    settings->setSetting(Setting::resourcesPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(resourcesPath);
 }
 
 void OptionsDialog::on_setMapsPath_clicked()
 {
-    settings->setSetting(Setting::mapsPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(mapsPath);
 }
 
 void OptionsDialog::on_setCharactersPath_clicked()
 {
-    settings->setSetting(Setting::charactersPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(charactersPath);
 }
 
 void OptionsDialog::on_setNotesPath_clicked()
 {
-    settings->setSetting(Setting::notesPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(notesPath);
 }
 
 void OptionsDialog::on_setAudioPath_clicked()
 {
-    settings->setSetting(audioPath);
-    pathsChanged = true;
-    updatePaths();
+    setPath(audioPath);
 }
 
 void OptionsDialog::on_setRadioPath_clicked()
 {
-    settings->setSetting(radioPath);
+    setPath(radioPath);
+}
+
+void OptionsDialog::on_setShopPath_clicked()
+{
+    setPath(shopPath);
+}
+
+void OptionsDialog::setPath(Setting setting)
+{
+    settings->setSetting(setting);
     pathsChanged = true;
     updatePaths();
 }
 
-
-void OptionsDialog::updatePaths(){
+void OptionsDialog::updatePaths()
+{
     ui->musicPath->setText(settings->getSetting(musicPath));
     ui->soundPath->setText(settings->getSetting(soundPath));
     ui->mapsPath->setText(settings->getSetting(mapsPath));
@@ -171,12 +168,7 @@ void OptionsDialog::updatePaths(){
     ui->notesPath->setText(settings->getSetting(notesPath));
     ui->audioPath->setText(settings->getSetting(audioPath));
     ui->radioPath->setText(settings->getSetting(radioPath));
-}
-
-
-void OptionsDialog::on_closeButton_clicked()
-{
-    this->close();
+    ui->shopPath->setText(settings->getSetting(shopPath));
 }
 
 void OptionsDialog::on_selectAll_clicked()

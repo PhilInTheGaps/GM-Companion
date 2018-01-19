@@ -15,10 +15,6 @@ MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapV
 
     ui->setupUi(this);
 
-    // Initialize Signal Mapper
-    signalMapperMaps = new QSignalMapper(this);
-    connect(signalMapperMaps, SIGNAL(mapped(QString)), this, SLOT(setMap(QString)));
-
     getMaps();
 }
 
@@ -52,8 +48,7 @@ void MapViewerTool::getMaps()
             imageButton->setText(cleanText(mapName));
             mapButtonLayout->addWidget(imageButton);
 
-            connect(imageButton, SIGNAL(clicked()), signalMapperMaps, SLOT(map()));
-            signalMapperMaps->setMapping(imageButton, mapPath);
+            connect(imageButton, &QPushButton::clicked, this, [=]() { setMap(mapPath); });
         }
     }
 

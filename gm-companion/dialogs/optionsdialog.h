@@ -20,10 +20,6 @@ public:
     ~OptionsDialog();
 
 private slots:
-
-    void onClose();
-    void on_closeButton_clicked();
-
     // Paths
     void on_setMusicPath_clicked();
     void on_setSoundPath_clicked();
@@ -33,11 +29,13 @@ private slots:
     void on_setNotesPath_clicked();
     void on_setAudioPath_clicked();
     void on_setRadioPath_clicked();
+    void on_setShopPath_clicked();
 
     // Addons
     void on_selectAll_clicked();
     void on_deselectAll_clicked();
     void on_addonManagerButton_clicked();
+    void on_pushButton_saveAddons_clicked();
 
     // Stylesheet
     void on_styleComboBox_currentTextChanged(const QString &arg1);
@@ -45,19 +43,13 @@ private slots:
     // Language
     void on_languageComboBox_currentIndexChanged(int index);
 
+    // Sidebar
     void on_pushButton_openWiki_clicked();
-
     void on_pushButton_reportABug_clicked();
-
     void on_pushButton_downloadOlderVersions_clicked();
-
     void on_pushButton_viewOnGitHub_clicked();
-
     void on_pushButton_about_clicked();
-
     void on_pushButton_checkForUpdates_clicked();
-
-    void on_pushButton_saveAddons_clicked();
 
     void on_checkBox_showToolNames_toggled(bool checked);
 
@@ -69,10 +61,12 @@ private:
     SettingsManager* settings;
 
     bool pathsChanged = false;
-
     void updatePaths();
+    void setPath(Setting setting);
 
     void getAddons();
+    void getStyleSheets();
+    void getLanguage();
 
     void writeAddonSettings();
 

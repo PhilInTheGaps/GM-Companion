@@ -19,19 +19,14 @@ public:
 
 private slots:
     void on_pushButton_zoomIn_clicked();
-
     void on_pushButton_zoomOut_clicked();
-
     void on_pushButton_resetSize_clicked();
-
-    void setMap(QString mapPath);
 
 private:
     Ui::MapViewerTool *ui;
 
-    QSignalMapper *signalMapperMaps;
-
     void getMaps();
+    void setMap(QString mapPath);
 };
 
 #endif // MAPVIEWERTOOL_H
