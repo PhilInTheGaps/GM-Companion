@@ -128,3 +128,5 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += desktop
     INSTALLS += resources
 }
+
+unix:!macx: LIBS += -ltag

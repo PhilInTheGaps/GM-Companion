@@ -13,10 +13,21 @@
 #include <QDir>
 #include <QApplication>
 #include <QScreen>
+#include <QLabel>
 
 // Only Windows relevant
 #ifdef _WIN32
 #include <QtWinExtras>
+#endif
+
+// Linux only
+#ifdef __linux__
+#include "taglib/tag.h"
+#include "taglib/taglib.h"
+#include "taglib/fileref.h"
+#include "taglib/mpegfile.h"
+#include "taglib/id3v2tag.h"
+#include "taglib/attachedpictureframe.h"
 #endif
 
 AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
@@ -280,8 +291,39 @@ void AudioTool::generateElementButtons(QString scenario)
 // Display the metadata of the currently playing song
 void AudioTool::updateMetaData()
 {
-    if (musicPlayer->isMetaDataAvailable())
+    if (musicPlayer->isMetaDataAvailable() && musicPlayer->bufferStatus() == 100)
     {
+        // Reading tags using TagLib, as it is way more reliable than QMetaData
+        #ifdef __linux__
+        QString path = musicPlaylist->currentMedia().resources().first().url().path();
+
+        // Album, Artist and Title
+        TagLib::FileRef f(path.toLatin1());
+        ui->label_album->setText(QString("Album: ") + f.tag()->album().toCString());
+        ui->label_artist->setText(QString("Artist: ") + f.tag()->artist().toCString());
+        ui->label_title->setText(QString("Title: ") + f.tag()->title().toCString());
+
+        // Get file path and convert it to wchar_t for taglib
+        wchar_t array[path.length()];
+        path.toWCharArray(array);
+
+        TagLib::MPEG::File file(path.toLatin1());
+        TagLib::ID3v2::Tag *m_tag = file.ID3v2Tag(true);
+        TagLib::ID3v2::FrameList frameList = m_tag->frameList("APIC");
+
+        // Get cover image if one is available
+        if(!frameList.isEmpty())
+        {
+            TagLib::ID3v2::AttachedPictureFrame *coverImg = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(frameList.front());
+
+            QImage coverQImg;
+            coverQImg.loadFromData((const uchar *) coverImg->picture().data(), coverImg->picture().size());
+
+            ui->label_albumCover->setPixmap(QPixmap::fromImage(coverQImg).scaledToWidth(ui->label_albumCover->width()));
+        } else
+            ui->label_albumCover->clear();
+
+        #else // I can't get TagLib to work on Windows though, so this mess below has to do
         // Set Album Cover
         // Sometimes ThumbnailImage works, sometimes it does not. I have no idea why.
         // So the current solution is simply testing if any of the possible meta data values work
@@ -304,6 +346,7 @@ void AudioTool::updateMetaData()
             artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
 
         ui->label_artist->setText("Artist: " + artist);
+        #endif
     }
 }
 
@@ -362,13 +405,28 @@ void AudioTool::playMusic(QString arg)
                     QString path = settings.value("path").toString();
 
                     path = settingsManager->getSetting(musicPath)+path;
-                    qDebug().noquote() << "   " + name + "\n   " + path;
+//                    qDebug().noquote() << "   " + name + "\n   " + path;
 
                     if (QFile(path).exists())
                     {
                         Song song;
                         song.title = name;
                         song.path = path;
+
+                        #ifdef __linux__
+                        TagLib::FileRef f(path.toLatin1());
+                        QString title = f.tag()->title().toCString();
+                        QString album = f.tag()->album().toCString();
+
+                        if (!title.isEmpty())
+                        {
+                            if (!album.isEmpty())
+                                song.title = title + " ("+album+")";
+                            else
+                                song.title = title;
+                        }
+                        #endif
+
                         songs.push_back(song);
                     }
                 }

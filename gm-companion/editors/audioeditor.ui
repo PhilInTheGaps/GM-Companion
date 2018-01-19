@@ -114,16 +114,40 @@
      <item>
       <widget class="QTreeWidget" name="treeWidget_categories">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAsNeeded</enum>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QAbstractScrollArea::AdjustIgnored</enum>
+       </property>
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
+       <property name="showDropIndicator" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="dragEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::NoDragDrop</enum>
+       </property>
+       <property name="defaultDropAction">
+        <enum>Qt::MoveAction</enum>
+       </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="verticalScrollMode">
+        <enum>QAbstractItemView::ScrollPerItem</enum>
        </property>
        <property name="rootIsDecorated">
         <bool>true</bool>
@@ -140,7 +164,19 @@
        <attribute name="headerVisible">
         <bool>false</bool>
        </attribute>
+       <attribute name="headerCascadingSectionResizes">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="headerDefaultSectionSize">
+        <number>500</number>
+       </attribute>
+       <attribute name="headerMinimumSectionSize">
+        <number>250</number>
+       </attribute>
        <attribute name="headerShowSortIndicator" stdset="0">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="headerStretchLastSection">
         <bool>false</bool>
        </attribute>
        <column>
@@ -804,7 +840,7 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -816,15 +852,19 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="tabsClosable">
         <bool>false</bool>
        </property>
        <property name="movable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <widget class="QWidget" name="tab_music">
+        <attribute name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/media/music.png</normaloff>:/icons/media/music.png</iconset>
+        </attribute>
         <attribute name="title">
          <string>Music</string>
         </attribute>
@@ -850,8 +890,14 @@
          </item>
          <item>
           <widget class="QTreeWidget" name="treeWidget_music">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="sizeAdjustPolicy">
-            <enum>QAbstractScrollArea::AdjustToContents</enum>
+            <enum>QAbstractScrollArea::AdjustIgnored</enum>
            </property>
            <property name="editTriggers">
             <set>QAbstractItemView::NoEditTriggers</set>
@@ -860,6 +906,15 @@
             <enum>QAbstractItemView::SelectItems</enum>
            </property>
            <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="headerDefaultSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerMinimumSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerStretchLastSection">
             <bool>false</bool>
            </attribute>
            <column>
@@ -896,6 +951,10 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_sound">
+        <attribute name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/media/sound.png</normaloff>:/icons/media/sound.png</iconset>
+        </attribute>
         <attribute name="title">
          <string>Sound</string>
         </attribute>
@@ -921,7 +980,22 @@
          </item>
          <item>
           <widget class="QTreeWidget" name="treeWidget_sound">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="headerDefaultSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerMinimumSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerStretchLastSection">
             <bool>false</bool>
            </attribute>
            <column>
@@ -941,6 +1015,10 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_radios">
+        <attribute name="icon">
+         <iconset resource="../resources.qrc">
+          <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
+        </attribute>
         <attribute name="title">
          <string>Radios</string>
         </attribute>
@@ -966,7 +1044,22 @@
          </item>
          <item>
           <widget class="QTreeWidget" name="treeWidget_radio">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="headerDefaultSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerMinimumSectionSize">
+            <number>200</number>
+           </attribute>
+           <attribute name="headerStretchLastSection">
             <bool>false</bool>
            </attribute>
            <column>
