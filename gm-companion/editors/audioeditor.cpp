@@ -6,6 +6,8 @@
 #include <QStyle>
 #include <QDebug>
 #include <QSettings>
+#include <QStringList>
+#include <QHeaderView>
 
 AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEditor)
 {
@@ -33,7 +35,7 @@ void AudioEditor::getProjects()
 
     for (QString project : getFiles(settingsManager->getSetting(audioPath)))
     {
-        if (project.contains(".ini"))
+        if (project.contains(".ini") && project != "desktop.ini")
             ui->comboBox_projects->addItem(cleanText(project));
     }
 }
@@ -58,9 +60,15 @@ void AudioEditor::loadProject()
     // Generating music files tree view
     if (!filesAreLoaded)
     {
+        ui->treeWidget_music->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
         loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
+
+        ui->treeWidget_sound->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
         loadFolderContentsToTreeView(ui->treeWidget_sound, settingsManager->getSetting(soundPath));
+
+        ui->treeWidget_radio->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
         loadFolderContentsToTreeView(ui->treeWidget_radio, settingsManager->getSetting(radioPath));
+
         filesAreLoaded = true;
     }
 
@@ -221,18 +229,17 @@ void AudioEditor::loadCategories()
         // Making sure the tree widget is empty
         qDebug() << "Clearing tree view";
         ui->treeWidget_categories->clear();
+        ui->treeWidget_categories->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
         // Setting up QSettings
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
         int catCount = settings.beginReadArray("Categories");
 
-        // Loading categories
+        // Get all categories and sort them alphabetically
         for (int i = 0; i<catCount; i++)
         {
             settings.setArrayIndex(i);
-
             QString category = settings.value("name").toString();
-
             qDebug() << "Loading category: " + category +" ...";
 
             QTreeWidgetItem *catItem = new QTreeWidgetItem(0);
