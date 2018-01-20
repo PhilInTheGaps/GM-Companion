@@ -28,7 +28,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/icons/gm-companion/icon256.png</normaloff>:/icons/gm-companion/icon256.png</iconset>
+    <normaloff>:/icons/gm-companion/icon256_new.png</normaloff>:/icons/gm-companion/icon256_new.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
@@ -371,12 +371,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
+           <normaloff>:/icons/menu/audio.png</normaloff>:/icons/menu/audio.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
          <property name="autoRepeatDelay">
@@ -436,12 +436,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/map.png</normaloff>:/icons/media/map.png</iconset>
+           <normaloff>:/icons/menu/maps.png</normaloff>:/icons/menu/maps.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -489,12 +489,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/combatTracker_dice.png</normaloff>:/icons/media/combatTracker_dice.png</iconset>
+           <normaloff>:/icons/menu/combat.png</normaloff>:/icons/menu/combat.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -569,12 +569,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/stop.png</normaloff>:/icons/media/stop.png</iconset>
+           <normaloff>:/icons/menu/item-shop.png</normaloff>:/icons/menu/item-shop.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -613,12 +613,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/characters.png</normaloff>:/icons/media/characters.png</iconset>
+           <normaloff>:/icons/menu/characters.png</normaloff>:/icons/menu/characters.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -666,12 +666,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/generator.png</normaloff>:/icons/media/generator.png</iconset>
+           <normaloff>:/icons/menu/generators.png</normaloff>:/icons/menu/generators.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -719,12 +719,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/notes.png</normaloff>:/icons/media/notes.png</iconset>
+           <normaloff>:/icons/menu/notes.png</normaloff>:/icons/menu/notes.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -772,12 +772,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/converter.png</normaloff>:/icons/media/converter.png</iconset>
+           <normaloff>:/icons/menu/converter.png</normaloff>:/icons/menu/converter.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>
@@ -825,12 +825,12 @@ QPushButton::menu-indicator
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
-           <normaloff>:/icons/media/settings.png</normaloff>:/icons/media/settings.png</iconset>
+           <normaloff>:/icons/menu/settings.png</normaloff>:/icons/menu/settings.png</iconset>
          </property>
          <property name="iconSize">
           <size>
-           <width>37</width>
-           <height>37</height>
+           <width>45</width>
+           <height>45</height>
           </size>
          </property>
         </widget>

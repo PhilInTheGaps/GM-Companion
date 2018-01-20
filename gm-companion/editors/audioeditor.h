@@ -93,7 +93,9 @@ private:
 
     void addNewElement(int type);
 
+    // Icon File Browser
     QString setIconPath(QString windowTitle);
+    QString lastPath;
 
     // File Browser
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
