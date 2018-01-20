@@ -403,7 +403,7 @@
            <item>
             <widget class="QLabel" name="label_3">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
               <string>Resources</string>
@@ -415,7 +415,7 @@
              <item>
               <widget class="QLineEdit" name="resourcesPath">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="readOnly">
                 <bool>true</bool>
@@ -428,7 +428,7 @@
              <item>
               <widget class="QToolButton" name="setResourcesPath">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="text">
                 <string notr="true">...</string>
