@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QLabel>
+#include <QPushButton>
 
 // Only Windows relevant
 #ifdef _WIN32
@@ -245,7 +246,7 @@ void AudioTool::generateElementButtons(QString scenario)
             bWidget->setMaximumWidth(buttonWidth+10);
             bWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
 
-            bLabel->setToolTip(name);
+
             bLabel->setAlignment(Qt::AlignHCenter);
             bLabel->setWordWrap(true);
 
@@ -254,7 +255,6 @@ void AudioTool::generateElementButtons(QString scenario)
             f.setFamily("Helvetica");
             bLabel->setFont(f);
 
-            button->setToolTip(name);
             button->setMinimumSize(buttonWidth, buttonHeight);
             button->setMaximumSize(buttonWidth, buttonHeight);
             button->setIconSize(QSize(buttonWidth-10, buttonHeight-10));
@@ -263,19 +263,24 @@ void AudioTool::generateElementButtons(QString scenario)
             bLayout->addWidget(button);
             bLayout->addWidget(bLabel);
 
+            QString type;
+
             switch (i){
             case 0: // Music
+                type = "Music: ";
                 button->setIcon(QIcon(":/icons/media/music_image.png"));
                 connect(button, &QPushButton::clicked, this, [=]() { playMusic(name+";"+category+";"+scenario); });
                 musicLayout->addWidget(bWidget);
                 break;
             case 1: // Sound
+                type = "Sound: ";
                 button->setIcon(QIcon(":/icons/media/sound_image.png"));
                 button->setCheckable(true);
                 connect(button, &QPushButton::clicked, this, [=]() { playSound(name+";"+category+";"+scenario); });
                 soundLayout->addWidget(bWidget);
                 break;
             case 2: // Radio
+                type = "Radio: ";
                 button->setIcon(QIcon(":/icons/media/radio_image.png"));
                 connect(button, &QPushButton::clicked, this, [=]() { playRadio(name+";"+category+";"+scenario); });
                 radioLayout->addWidget(bWidget);
@@ -283,6 +288,13 @@ void AudioTool::generateElementButtons(QString scenario)
             default:
                 break;
             }
+
+            bLabel->setToolTip(type+name);
+            button->setToolTip(type+name);
+
+            QString iconPath = settings.value("icon", "").toString();
+            if (!iconPath.isEmpty())
+                button->setIcon(QIcon(QPixmap(settingsManager->getSetting(resourcesPath)+"/"+iconPath).scaledToWidth(buttonWidth)));
         }
         settings.endArray();
     }

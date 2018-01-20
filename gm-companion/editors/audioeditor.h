@@ -59,6 +59,12 @@ private slots:
     void on_horizontalSlider_progress_sliderMoved(int position);
     void previewPlayer_positionChanged(qint64 position);
 
+    void on_toolButton_musicIcon_clicked();
+
+    void on_toolButton_soundIcon_clicked();
+
+    void on_toolButton_radioIcon_clicked();
+
 private:
     Ui::AudioEditor *ui;
 
@@ -86,6 +92,8 @@ private:
     void loadElements(QTreeWidgetItem *scenItem, QString category, int type);
 
     void addNewElement(int type);
+
+    QString setIconPath(QString windowTitle);
 
     // File Browser
     void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);

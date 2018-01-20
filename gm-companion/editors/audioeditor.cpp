@@ -8,6 +8,8 @@
 #include <QSettings>
 #include <QStringList>
 #include <QHeaderView>
+#include <QFileDialog>
+#include <QLineEdit>
 
 AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEditor)
 {
@@ -537,6 +539,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
         int arraySize;
 
         QString description;
+        QString iconPath;
 
         QTreeWidgetItem *item = current;
 
@@ -612,8 +615,16 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 if (settings.value("name").toString() == current->text(0))
                 {
                     description = settings.value("description", "").toString();
-
                     ui->lineEdit_musicListDescription->setText(description);
+
+                    // Icon
+                    iconPath = settings.value("icon", "").toString();
+                    ui->lineEdit_musicIcon->setText(iconPath);
+                    if (!iconPath.isNull())
+                    {
+                        QString resPath = settingsManager->getSetting(resourcesPath);
+                        ui->label_musicIcon->setPixmap(QPixmap(resPath+"/"+iconPath).scaledToWidth(ui->label_musicIcon->width()));
+                    }
 
                     // Get Playback Mode of Music List
                     ui->radioButton_musicListRandomOrder->setChecked(settings.value("randomPlayback", false).toBool());
@@ -669,8 +680,16 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 if (settings.value("name").toString() == current->text(0))
                 {
                     description = settings.value("description", "").toString();
-
                     ui->lineEdit_soundListDescription->setText(description);
+
+                    // Icon
+                    iconPath = settings.value("icon", "").toString();
+                    ui->lineEdit_soundIcon->setText(iconPath);
+                    if (!iconPath.isNull())
+                    {
+                        QString resPath = settingsManager->getSetting(resourcesPath);
+                        ui->label_soundIcon->setPixmap(QPixmap(resPath+"/"+iconPath).scaledToWidth(ui->label_soundIcon->width()));
+                    }
 
                     ui->radioButton_soundListRandom->setChecked(settings.value("random", true).toBool());
                     ui->radioButton_soundListLoop->setChecked(settings.value("loop", false).toBool());
@@ -724,8 +743,16 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
                 if (settings.value("name").toString() == current->text(0))
                 {
                     description = settings.value("description", "").toString();
+                    ui->textEdit_radioDescription->setText(description);
 
-                    ui->lineEdit_soundListDescription->setText(description);
+                    // Icon
+                    iconPath = settings.value("icon", "").toString();
+                    ui->lineEdit_radioIcon->setText(iconPath);
+                    if (!iconPath.isNull())
+                    {
+                        QString resPath = settingsManager->getSetting(resourcesPath);
+                        ui->label_radioIcon->setPixmap(QPixmap(resPath+"/"+iconPath).scaledToWidth(ui->label_radioIcon->width()));
+                    }
 
                     ui->lineEdit_radioURL->setText(settings.value("URL").toString());
                 }
@@ -817,6 +844,7 @@ void AudioEditor::on_pushButton_saveElement_clicked()
             if (settings.value("name").toString() == name)
             {
                 settings.setValue("description", description);
+                settings.setValue("icon", ui->lineEdit_musicIcon->text());
 
                 // Save Playback Mode of Music List
                 settings.setValue("randomPlayback", ui->radioButton_musicListRandomOrder->isChecked());
@@ -856,6 +884,8 @@ void AudioEditor::on_pushButton_saveElement_clicked()
             if (settings.value("name").toString() == name)
             {
                 settings.setValue("description", description);
+                settings.setValue("icon", ui->lineEdit_soundIcon->text());
+
                 settings.setValue("random", ui->radioButton_soundListRandom->isChecked());
                 settings.setValue("loop", ui->radioButton_soundListLoop->isChecked());
                 settings.setValue("sequential", ui->radioButton_soundListSequential->isChecked());
@@ -889,6 +919,7 @@ void AudioEditor::on_pushButton_saveElement_clicked()
             if (settings.value("name").toString() == name)
             {
                 settings.setValue("description", description);
+                settings.setValue("icon", ui->lineEdit_radioIcon->text());
                 settings.setValue("URL", ui->lineEdit_radioURL->text());
             }
         }
@@ -1145,4 +1176,52 @@ void AudioEditor::previewPlayer_positionChanged(qint64 position)
 {
     ui->horizontalSlider_progress->setMaximum(previewPlayer->duration());
     ui->horizontalSlider_progress->setValue(position);
+}
+
+// Opens a File Chooser to set a file path
+QString AudioEditor::setIconPath(QString windowTitle)
+{
+    QString path;
+    QFileDialog *fileDialog = new QFileDialog;
+    fileDialog->setDirectory(settingsManager->getSetting(Setting::resourcesPath));
+    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog->setWindowTitle(windowTitle);
+
+    if (fileDialog->exec() == QDialog::Accepted)
+    {
+        QStringList paths = fileDialog->selectedFiles();
+        path = paths.at(0);
+    }
+
+    return path;
+}
+
+// Choose Music Icon
+void AudioEditor::on_toolButton_musicIcon_clicked()
+{
+    QString resPath = settingsManager->getSetting(resourcesPath);
+    QString path = setIconPath("Set Music Icon").replace(resPath, "");
+    ui->lineEdit_musicIcon->setText(path);
+    ui->lineEdit_musicIcon->setToolTip(path);
+    ui->label_musicIcon->setPixmap(QPixmap(resPath+"/"+path).scaledToWidth(ui->label_musicIcon->width()));
+}
+
+// Choose Sound Icon
+void AudioEditor::on_toolButton_soundIcon_clicked()
+{
+    QString resPath = settingsManager->getSetting(resourcesPath);
+    QString path = setIconPath("Set Sound Icon").replace(resPath, "");
+    ui->lineEdit_soundIcon->setText(path);
+    ui->lineEdit_soundIcon->setToolTip(path);
+    ui->label_soundIcon->setPixmap(QPixmap(resPath+"/"+path).scaledToWidth(ui->label_soundIcon->width()));
+}
+
+// Choose Radio Icon
+void AudioEditor::on_toolButton_radioIcon_clicked()
+{
+    QString resPath = settingsManager->getSetting(resourcesPath);
+    QString path = setIconPath("Set Radio Icon").replace(resPath, "");
+    ui->lineEdit_radioIcon->setText(path);
+    ui->lineEdit_radioIcon->setToolTip(path);
+    ui->label_radioIcon->setPixmap(QPixmap(resPath+"/"+path).scaledToWidth(ui->label_radioIcon->width()));
 }
