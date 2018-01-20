@@ -1183,7 +1183,11 @@ QString AudioEditor::setIconPath(QString windowTitle)
 {
     QString path;
     QFileDialog *fileDialog = new QFileDialog;
-    fileDialog->setDirectory(settingsManager->getSetting(Setting::resourcesPath));
+
+    if (QDir(lastPath).exists() && !lastPath.isNull())
+        fileDialog->setDirectory(lastPath);
+    else
+        fileDialog->setDirectory(settingsManager->getSetting(Setting::resourcesPath));
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setWindowTitle(windowTitle);
 
@@ -1193,6 +1197,7 @@ QString AudioEditor::setIconPath(QString windowTitle)
         path = paths.at(0);
     }
 
+    lastPath = fileDialog->directory().absolutePath();
     return path;
 }
 

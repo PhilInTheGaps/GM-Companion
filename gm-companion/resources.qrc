@@ -18,6 +18,7 @@
         <file alias="icon128.png">resources/icons/gm-companion/icon128.png</file>
         <file alias="icon256.ico">resources/icons/gm-companion/icon256.ico</file>
         <file alias="icon256.png">resources/icons/gm-companion/icon256.png</file>
+        <file alias="icon256_new.png">resources/icons/gm-companion/icon256_new.png</file>
     </qresource>
     <qresource prefix="/icons/media">
         <file alias="characters.png">resources/icons/media/characters.png</file>
@@ -61,5 +62,16 @@
     </qresource>
     <qresource prefix="/units">
         <file alias="default.ini">resources/units.ini</file>
+    </qresource>
+    <qresource prefix="/icons/menu">
+        <file alias="item-shop.png">resources/icons/menu/item-shop.png</file>
+        <file alias="audio.png">resources/icons/menu/audio.png</file>
+        <file alias="settings.png">resources/icons/menu/settings.png</file>
+        <file alias="maps.png">resources/icons/menu/maps.png</file>
+        <file alias="characters.png">resources/icons/menu/characters.png</file>
+        <file alias="combat.png">resources/icons/menu/combat.png</file>
+        <file alias="converter.png">resources/icons/menu/converter.png</file>
+        <file alias="generators.png">resources/icons/menu/generators.png</file>
+        <file alias="notes.png">resources/icons/menu/notes.png</file>
     </qresource>
 </RCC>

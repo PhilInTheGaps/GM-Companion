@@ -292,9 +292,10 @@ void AudioTool::generateElementButtons(QString scenario)
             bLabel->setToolTip(type+name);
             button->setToolTip(type+name);
 
+            // Set Custom Icon
             QString iconPath = settings.value("icon", "").toString();
-            if (!iconPath.isEmpty())
-                button->setIcon(QIcon(QPixmap(settingsManager->getSetting(resourcesPath)+"/"+iconPath).scaledToWidth(buttonWidth)));
+            if (!iconPath.isEmpty() && !QPixmap(settingsManager->getSetting(resourcesPath)+"/"+iconPath).isNull())
+                button->setIcon(QIcon(QPixmap(settingsManager->getSetting(resourcesPath)+"/"+iconPath).scaledToWidth(buttonWidth, Qt::SmoothTransformation)));
         }
         settings.endArray();
     }
@@ -310,16 +311,16 @@ void AudioTool::updateMetaData()
         QString path = musicPlaylist->currentMedia().resources().first().url().path();
 
         // Album, Artist and Title
-        TagLib::FileRef f(path.toLatin1());
-        ui->label_album->setText(QString("Album: ") + f.tag()->album().toCString());
-        ui->label_artist->setText(QString("Artist: ") + f.tag()->artist().toCString());
-        ui->label_title->setText(QString("Title: ") + f.tag()->title().toCString());
+        TagLib::FileRef f(path.toUtf8());
+        ui->label_album->setText(QString("Album: ") + f.tag()->album().toCString(true));
+        ui->label_artist->setText(QString("Artist: ") + f.tag()->artist().toCString(true));
+        ui->label_title->setText(QString("Title: ") + f.tag()->title().toCString(true));
 
         // Get file path and convert it to wchar_t for taglib
         wchar_t array[path.length()];
         path.toWCharArray(array);
 
-        TagLib::MPEG::File file(path.toLatin1());
+        TagLib::MPEG::File file(path.toUtf8());
         TagLib::ID3v2::Tag *m_tag = file.ID3v2Tag(true);
         TagLib::ID3v2::FrameList frameList = m_tag->frameList("APIC");
 
@@ -417,7 +418,7 @@ void AudioTool::playMusic(QString arg)
                     QString path = settings.value("path").toString();
 
                     path = settingsManager->getSetting(musicPath)+path;
-//                    qDebug().noquote() << "   " + name + "\n   " + path;
+                    qDebug().noquote() << "   " + name + "\n   " + path;
 
                     if (QFile(path).exists())
                     {
@@ -426,9 +427,9 @@ void AudioTool::playMusic(QString arg)
                         song.path = path;
 
                         #ifdef __linux__
-                        TagLib::FileRef f(path.toLatin1());
-                        QString title = f.tag()->title().toCString();
-                        QString album = f.tag()->album().toCString();
+                        TagLib::FileRef f(path.toUtf8());
+                        QString title = f.tag()->title().toCString(true);
+                        QString album = f.tag()->album().toCString(true);
 
                         if (!title.isEmpty())
                         {
