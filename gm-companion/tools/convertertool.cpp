@@ -43,11 +43,11 @@ void ConverterTool::getAllUnits()
 
 void ConverterTool::addUnitGroup(int index, QString str)
 {
-    lengthUnits = getUnits("LengthUnits", index, ui->comboBox_length1, ui->comboBox_length2, str);
-    areaUnits = getUnits("AreaUnits", index, ui->comboBox_area1, ui->comboBox_area2, str);
-    volumeUnits = getUnits("VolumeUnits", index, ui->comboBox_volume1, ui->comboBox_volume2, str);
-    weightUnits = getUnits("WeightUnits", index, ui->comboBox_weight1, ui->comboBox_weight2, str);
-    moneyUnits = getUnits("MoneyUnits", index, ui->comboBox_money1, ui->comboBox_money2, str);
+    lengthUnits.append(getUnits("LengthUnits", index, ui->comboBox_length1, ui->comboBox_length2, str));
+    areaUnits.append(getUnits("AreaUnits", index, ui->comboBox_area1, ui->comboBox_area2, str));
+    volumeUnits.append(getUnits("VolumeUnits", index, ui->comboBox_volume1, ui->comboBox_volume2, str));
+    weightUnits.append(getUnits("WeightUnits", index, ui->comboBox_weight1, ui->comboBox_weight2, str));
+    moneyUnits.append(getUnits("MoneyUnits", index, ui->comboBox_money1, ui->comboBox_money2, str));
 }
 
 QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon)
@@ -74,15 +74,25 @@ QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, 
 
     if (unitsExist)
     {
+        qDebug() << path;
+
         QSettings settings(path, QSettings::IniFormat);
         int size = settings.beginReadArray(arrayName);
 
-        for (int i = 0; i<size; i++){
+        qDebug() << "Size" << size;
+
+        for (int i = 0; i<size; i++)
+        {
             settings.setArrayIndex(i);
+
+            qDebug() << "Index:" << i;
 
             Unit unit;
             unit.name = settings.value("name", "unknown").toString();
             unit.refUnits = settings.value("refUnits", 1).toDouble();
+
+            qDebug() << "Name" << unit.name;
+            qDebug() << "RefUnits" << unit.refUnits;
 
             list.push_back(unit);
 
@@ -192,6 +202,7 @@ void ConverterTool::convertUnits(int index1, int index2, QList<Unit> list, doubl
 void ConverterTool::on_comboBox_length1_currentIndexChanged(int index)
 {
     convertUnits(index, ui->comboBox_length2->currentIndex(), lengthUnits, ui->doubleSpinBox_length1->value(), ui->doubleSpinBox_length2);
+    qDebug() << lengthUnits.length();
 }
 
 void ConverterTool::on_comboBox_length2_currentIndexChanged(int index)
