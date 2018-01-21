@@ -123,7 +123,7 @@ QWidget
 {
     color: #eff0f1;
     background-color: #31363b;
-    selection-background-color:#3daee9;
+    selection-background-color:#66635B;
     selection-color: #eff0f1;
     background-clip: border;
     border-image: none;
@@ -150,7 +150,7 @@ QWidget:disabled
 
 QWidget:focus, QMenuBar:focus
 {
-    border: 1px solid #3daee9;
+    border: 1px solid #66635B;
 }
 
 QAbstractScrollArea
@@ -259,7 +259,7 @@ QPushButton
 QPushButton:hover
 {
 	border-width: 1px;
-	background-color: rgb(0, 85, 127);
+	background-color: 9D9B96;
 }
 
 QPushButton:disabled
@@ -277,13 +277,13 @@ QPushButton:disabled
 }
 
 QPushButton:focus {
-    background-color: #3daee9;
+    background-color: #66635B;
     color: white;
 }
 
 QPushButton:pressed
 {
-    background-color: #3daee9;
+    background-color: #66635B;
     padding-top: -15px;
     padding-bottom: -17px;
 }

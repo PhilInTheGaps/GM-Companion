@@ -332,7 +332,7 @@ void AudioTool::updateMetaData()
             QImage coverQImg;
             coverQImg.loadFromData((const uchar *) coverImg->picture().data(), coverImg->picture().size());
 
-            ui->label_albumCover->setPixmap(QPixmap::fromImage(coverQImg).scaledToWidth(ui->label_albumCover->width()));
+            ui->label_albumCover->setPixmap(QPixmap::fromImage(coverQImg).scaledToWidth(ui->label_albumCover->width(), Qt::SmoothTransformation));
         } else
             ui->label_albumCover->clear();
 
@@ -345,7 +345,7 @@ void AudioTool::updateMetaData()
             img = musicPlayer->metaData(QMediaMetaData::PosterImage).value<QImage>();
         if (img.isNull())
             img = musicPlayer->metaData(QMediaMetaData::CoverArtImage).value<QImage>();
-        ui->label_albumCover->setPixmap(QPixmap::fromImage(img).scaledToWidth(ui->label_albumCover->width()));
+        ui->label_albumCover->setPixmap(QPixmap::fromImage(img).scaledToWidth(ui->label_albumCover->width(), Qt::SmoothTransformation));
 
         // Set other MetaData stuff
         ui->label_title->setText("Title: " + musicPlayer->metaData(QMediaMetaData::Title).toString());
