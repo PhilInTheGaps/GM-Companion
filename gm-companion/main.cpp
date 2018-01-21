@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
 
     // Sets the window size to maximized, w.showMaximized() is glitchy under windows
     #ifdef _WIN32
-    w.resize(QApplication::primaryScreen()->availableGeometry().width(), QApplication::primaryScreen()->availableGeometry().height());
+    w->resize(QApplication::primaryScreen()->availableGeometry().width(), QApplication::primaryScreen()->availableGeometry().height());
     #endif
 
     // Open Window Maximized
