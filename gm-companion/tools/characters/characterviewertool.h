@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QListWidgetItem>
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 namespace Ui {
 class CharacterViewerTool;

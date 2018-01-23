@@ -6,7 +6,7 @@
 #include <QTreeWidgetItem>
 #include <QTableWidget>
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 #include "gm-companion/functions.h"
 
 namespace Ui {

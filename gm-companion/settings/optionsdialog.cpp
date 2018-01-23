@@ -2,7 +2,7 @@
 #include "ui_optionsdialog.h"
 #include "ui_mainwindow.h"
 #include "gm-companion/functions.h"
-#include "gm-companion/dialogs/aboutdialog.h"
+#include "gm-companion/ui/aboutdialog.h"
 #include "gm-companion/managers/updatemanager.h"
 
 #include <QDebug>

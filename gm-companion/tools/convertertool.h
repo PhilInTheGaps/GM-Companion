@@ -6,7 +6,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 namespace Ui {
 class ConverterTool;

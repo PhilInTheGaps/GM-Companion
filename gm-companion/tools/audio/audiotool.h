@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QList>
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 struct Song {
     QString title;

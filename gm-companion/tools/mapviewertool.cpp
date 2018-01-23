@@ -1,7 +1,7 @@
 #include "mapviewertool.h"
 #include "ui_mapviewertool.h"
 #include "gm-companion/ui/flowlayout.h"
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 #include "gm-companion/functions.h"
 
 #include <QDebug>

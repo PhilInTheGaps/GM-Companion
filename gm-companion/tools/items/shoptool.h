@@ -5,7 +5,7 @@
 #include <QStringList>
 #include <QTreeWidgetItem>
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 namespace Ui {
 class ShopTool;

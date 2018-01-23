@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "managers/settingsmanager.h"
-#include "dialogs/whatisnewwindow.h"
+#include "ui/mainwindow.h"
+#include "settings/settingsmanager.h"
+#include "ui/whatisnewwindow.h"
 #include "managers/updatemanager.h"
 
 #include <QApplication>

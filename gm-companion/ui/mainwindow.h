@@ -19,9 +19,9 @@
 #include <QString>
 #include <QSplashScreen>
 
-#include "managers/settingsmanager.h"
-#include "functions.h"
-#include "ui/flowlayout.h"
+#include "gm-companion/settings/settingsmanager.h"
+#include "gm-companion/functions.h"
+#include "gm-companion/ui/flowlayout.h"
 
 // Includes QtWinExtras if system is Windows
 #ifdef Q_OS_WIN
