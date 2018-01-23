@@ -1,7 +1,7 @@
 #ifndef NAMEGENERATOR_H
 #define NAMEGENERATOR_H
 
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 #include <QWidget>
 #include <QVBoxLayout>

@@ -8,7 +8,7 @@
 
 FileManager::FileManager()
 {
-
+    // The FileManager is responsible for creating .gm-companion directories and deleting old obsolete files
 }
 
 void FileManager::run()
@@ -23,10 +23,11 @@ void FileManager::run()
     filesToBeDeleted.append({"styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss"});
 
     // List of all folders to be deleted
-    foldersToBeDeleted.append({"names/DSA5", "names/SIFRP"});
+    foldersToBeDeleted.append({"names/DSA5", "names/SIFRP", "names/Generic"});
 
     // Check if local .gm-companion directory exists and create it if not
-    if (!lDir.exists()){
+    if (!lDir.exists())
+    {
         qDebug().noquote() << QDir::homePath()+"/.gm-companion does not exist. Creating...";
         lDir.mkpath(".");
     }
@@ -35,30 +36,33 @@ void FileManager::run()
     for (QString path : dirList){
         QDir dir(QDir::homePath()+"/.gm-companion/"+path);
         if (!dir.exists()){
-            qDebug().noquote() << QDir::homePath()+"/.gm-companion/ does not exist. Creating...";
+            qDebug().noquote() << QDir::homePath()+"/.gm-companion/" + path + " does not exist. Creating...";
             dir.mkpath(".");
         }
     }
 
     // Delete obsolete Files
-    if (!filesToBeDeleted.isEmpty()){
-        for (QString file : filesToBeDeleted){
+    if (!filesToBeDeleted.isEmpty())
+    {
+        for (QString file : filesToBeDeleted)
+        {
             QFile f (QDir::homePath()+"/.gm-companion/"+file);
-
-            if (f.exists()){
+            if (f.exists())
+            {
                 qDebug().noquote() << "Removing " + QDir::homePath()+"/.gm-companion/"+file << "...";
-
                 f.remove();
             }
         }
     }
 
     // Delete obsolete Folders
-    if (!foldersToBeDeleted.isEmpty()){
-        for (QString folder : foldersToBeDeleted){
-            if (QDir(QDir::homePath()+"/.gm-companion/"+folder).exists()){
+    if (!foldersToBeDeleted.isEmpty())
+    {
+        for (QString folder : foldersToBeDeleted)
+        {
+            if (QDir(QDir::homePath()+"/.gm-companion/"+folder).exists())
+            {
                 qDebug().noquote() << "Removing " + QDir::homePath()+"/.gm-companion/"+folder;
-
                 removeDir(QDir::homePath()+"/.gm-companion/"+folder);
             }
         }

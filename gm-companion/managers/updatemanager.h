@@ -10,7 +10,6 @@ class UpdateManager : public QObject
 
 public:
     UpdateManager(int version);
-
     void checkForUpdates();
 
 private slots:
@@ -20,7 +19,6 @@ private:
     QNetworkAccessManager *networkManager;
 
     QString feedURL;
-
     int currentVersion;
 };
 

@@ -1,6 +1,6 @@
 #include "shoptool.h"
 #include "ui_shoptool.h"
-#include "gm-companion/editors/shopeditor.h"
+#include "gm-companion/tools/items/shopeditor.h"
 #include "gm-companion/functions.h"
 
 #include <QDebug>

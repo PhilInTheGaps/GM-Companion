@@ -2,7 +2,7 @@
 #include "ui_audiotool.h"
 #include "gm-companion/functions.h"
 #include "gm-companion/ui/flowlayout.h"
-#include "gm-companion/editors/audioeditor.h"
+#include "gm-companion/tools/audio/audioeditor.h"
 
 #include <QDebug>
 #include <QScrollArea>

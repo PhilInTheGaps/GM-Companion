@@ -1,7 +1,7 @@
 #include "namegenerator.h"
 #include "ui_namegenerator.h"
 #include "gm-companion/functions.h"
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 #include <QDebug>
 #include <QScrollArea>

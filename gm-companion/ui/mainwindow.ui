@@ -27,7 +27,7 @@
    <string>GM-Companion</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../resources/resources.qrc">
     <normaloff>:/icons/gm-companion/icon256_new.png</normaloff>:/icons/gm-companion/icon256_new.png</iconset>
   </property>
   <property name="windowOpacity">
@@ -370,7 +370,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/audio.png</normaloff>:/icons/menu/audio.png</iconset>
          </property>
          <property name="iconSize">
@@ -435,7 +435,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/maps.png</normaloff>:/icons/menu/maps.png</iconset>
          </property>
          <property name="iconSize">
@@ -488,7 +488,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/combat.png</normaloff>:/icons/menu/combat.png</iconset>
          </property>
          <property name="iconSize">
@@ -568,7 +568,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/item-shop.png</normaloff>:/icons/menu/item-shop.png</iconset>
          </property>
          <property name="iconSize">
@@ -612,7 +612,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/characters.png</normaloff>:/icons/menu/characters.png</iconset>
          </property>
          <property name="iconSize">
@@ -665,7 +665,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/generators.png</normaloff>:/icons/menu/generators.png</iconset>
          </property>
          <property name="iconSize">
@@ -718,7 +718,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/notes.png</normaloff>:/icons/menu/notes.png</iconset>
          </property>
          <property name="iconSize">
@@ -771,7 +771,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/converter.png</normaloff>:/icons/menu/converter.png</iconset>
          </property>
          <property name="iconSize">
@@ -824,7 +824,7 @@ QPushButton::menu-indicator
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="resources.qrc">
+          <iconset resource="../resources/resources.qrc">
            <normaloff>:/icons/menu/settings.png</normaloff>:/icons/menu/settings.png</iconset>
          </property>
          <property name="iconSize">
@@ -1141,7 +1141,7 @@ QPushButton::menu-indicator
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

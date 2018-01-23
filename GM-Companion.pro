@@ -21,89 +21,120 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-SOURCES += gm-companion/main.cpp\
-    gm-companion/mainwindow.cpp \
+SOURCES += gm-companion/main.cpp \
+    # UI
+    gm-companion/ui/mainwindow.cpp \
+    gm-companion/ui/whatisnewwindow.cpp \
+    gm-companion/ui/flowlayout.cpp \
+    gm-companion/ui/updatedialog.cpp \
+    gm-companion/ui/aboutdialog.cpp \
+    # Other
     gm-companion/functions.cpp \
-    gm-companion/tools/audiotool.cpp \
+    # Tools
     gm-companion/tools/dicetool.cpp \
     gm-companion/tools/mapviewertool.cpp \
-    gm-companion/editors/audioeditor.cpp \
-    gm-companion/managers/filemanager.cpp \
-    gm-companion/managers/settingsmanager.cpp \
-    gm-companion/dialogs/notesdialog.cpp \
-    gm-companion/dialogs/optionsdialog.cpp \
-    gm-companion/dialogs/deletecharacterdialog.cpp \
-    gm-companion/dialogs/whatisnewwindow.cpp \
-    gm-companion/addontools/sifrp.cpp \
-    gm-companion/ui/flowlayout.cpp \
-    gm-companion/tools/characterviewertool.cpp \
-    gm-companion/managers/generatormanager.cpp \
-    gm-companion/generators/namegenerator.cpp \
-    gm-companion/managers/updatemanager.cpp \
-    gm-companion/dialogs/updatedialog.cpp \
-    gm-companion/tools/notestool.cpp \
     gm-companion/tools/convertertool.cpp \
-    gm-companion/dialogs/aboutdialog.cpp \
     gm-companion/tools/combattracker.cpp \
-    gm-companion/tools/shoptool.cpp \
-    gm-companion/editors/shopeditor.cpp \
-    gm-companion/editors/itemeditor.cpp
+    # Tools AUDIO
+    gm-companion/tools/audio/audiotool.cpp \
+    gm-companion/tools/audio/audioeditor.cpp \
+    # Tools ADDONS
+    gm-companion/tools/addons/sifrp.cpp \
+    # Tools CHARACTERS
+    gm-companion/tools/characters/deletecharacterdialog.cpp \
+    gm-companion/tools/characters/characterviewertool.cpp \
+    # Tools NOTES
+    gm-companion/tools/notes/notesdialog.cpp \
+    gm-companion/tools/notes/notestool.cpp \
+    # Tools GENERATORS
+    gm-companion/tools/generators/generatormanager.cpp \
+    gm-companion/tools/generators/namegenerator.cpp \
+    # Tools ITEMS
+    gm-companion/tools/items/shoptool.cpp \
+    gm-companion/tools/items/shopeditor.cpp \
+    gm-companion/tools/items/itemeditor.cpp \
+    # Managers
+    gm-companion/managers/filemanager.cpp \
+    gm-companion/managers/updatemanager.cpp \
+    # Settings
+    gm-companion/settings/settingsmanager.cpp \
+    gm-companion/settings/optionsdialog.cpp
 
-HEADERS  += gm-companion/mainwindow.h \
+HEADERS  += gm-companion/ui/mainwindow.h \
+    # UI
+    gm-companion/ui/whatisnewwindow.h \
+    gm-companion/ui/flowlayout.h \
+    gm-companion/ui/updatedialog.h \
+    gm-companion/ui/aboutdialog.h \
+    # Other
     gm-companion/functions.h \
     gm-companion/version.h \
-    gm-companion/tools/audiotool.h \
+    # Tools
     gm-companion/tools/mapviewertool.h \
     gm-companion/tools/dicetool.h \
-    gm-companion/editors/audioeditor.h \
-    gm-companion/managers/filemanager.h \
-    gm-companion/managers/settingsmanager.h \
-    gm-companion/dialogs/notesdialog.h \
-    gm-companion/dialogs/optionsdialog.h \
-    gm-companion/dialogs/deletecharacterdialog.h \
-    gm-companion/dialogs/whatisnewwindow.h \
-    gm-companion/addontools/sifrp.h \
-    gm-companion/ui/flowlayout.h \
-    gm-companion/tools/characterviewertool.h \
-    gm-companion/managers/generatormanager.h \
-    gm-companion/generators/namegenerator.h \
-    gm-companion/managers/updatemanager.h \
-    gm-companion/dialogs/updatedialog.h \
-    gm-companion/tools/notestool.h \
     gm-companion/tools/convertertool.h \
-    gm-companion/dialogs/aboutdialog.h \
     gm-companion/tools/combattracker.h \
-    gm-companion/tools/shoptool.h \
-    gm-companion/editors/shopeditor.h \
-    gm-companion/editors/itemeditor.h
+    # Tools AUDIO
+    gm-companion/tools/audio/audiotool.h \
+    gm-companion/tools/audio/audioeditor.h \
+    # Tools NOTES
+    gm-companion/tools/notes/notesdialog.h \
+    gm-companion/tools/notes/notestool.h \
+    # Tools CHARACTERS
+    gm-companion/tools/characters/deletecharacterdialog.h \
+    gm-companion/tools/characters/characterviewertool.h \
+    # Tools ADDONS
+    gm-companion/tools/addons/sifrp.h \
+    # Tools GENERATORS
+    gm-companion/tools/generators/generatormanager.h \
+    gm-companion/tools/generators/namegenerator.h \
+    # Tools ITEMS
+    gm-companion/tools/items/shoptool.h \
+    gm-companion/tools/items/shopeditor.h \
+    gm-companion/tools/items/itemeditor.h \
+    # Managers
+    gm-companion/managers/filemanager.h \
+    gm-companion/managers/updatemanager.h \
+    # Settings
+    gm-companion/settings/settingsmanager.h \
+    gm-companion/settings/optionsdialog.h
 
-FORMS    += gm-companion/mainwindow.ui \
-    gm-companion/tools/audiotool.ui \
-    gm-companion/editors/audioeditor.ui \
-    gm-companion/dialogs/notesdialog.ui \
-    gm-companion/dialogs/optionsdialog.ui \
+FORMS    += gm-companion/ui/mainwindow.ui \
+    # UI
+    gm-companion/ui/whatisnewwindow.ui \
+    gm-companion/ui/updatedialog.ui \
+    gm-companion/ui/aboutdialog.ui \
+    # Tools
     gm-companion/tools/dicetool.ui \
-    gm-companion/dialogs/deletecharacterdialog.ui \
-    gm-companion/dialogs/whatisnewwindow.ui \
     gm-companion/tools/mapviewertool.ui \
-    gm-companion/addontools/sifrp.ui \
-    gm-companion/tools/characterviewertool.ui \
-    gm-companion/managers/generatormanager.ui \
-    gm-companion/generators/namegenerator.ui \
-    gm-companion/dialogs/updatedialog.ui \
-    gm-companion/tools/notestool.ui \
     gm-companion/tools/convertertool.ui \
-    gm-companion/dialogs/aboutdialog.ui \
     gm-companion/tools/combattracker.ui \
-    gm-companion/tools/shoptool.ui \
-    gm-companion/editors/shopeditor.ui \
-    gm-companion/editors/itemeditor.ui
+    # Tools AUDIO
+    gm-companion/tools/audio/audiotool.ui \
+    gm-companion/tools/audio/audioeditor.ui \
+    # Tools ITEMS
+    gm-companion/tools/items/shoptool.ui \
+    gm-companion/tools/items/shopeditor.ui \
+    gm-companion/tools/items/itemeditor.ui \
+    # Tools NOTES
+    gm-companion/tools/notes/notesdialog.ui \
+    gm-companion/tools/notes/notestool.ui \
+    # Tools CHARACTERS
+    gm-companion/tools/characters/deletecharacterdialog.ui \
+    gm-companion/tools/characters/characterviewertool.ui \
+    # Tools ADDONS
+    gm-companion/tools/addons/sifrp.ui \
+    # Tools GENERATORS
+    gm-companion/tools/generators/generatormanager.ui \
+    gm-companion/tools/generators/namegenerator.ui \
+    # Settings
+    gm-companion/settings/optionsdialog.ui
 
 DISTFILES +=
 
 RC_FILE = gm-companion/GM-Companion.rc
 
-RESOURCES += gm-companion/resources.qrc \
+RESOURCES += gm-companion/resources/resources.qrc \
     gm-companion/resources/styles/qdarkstyle/style.qrc
 
 TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts

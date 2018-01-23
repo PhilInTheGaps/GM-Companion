@@ -1,0 +1,77 @@
+<RCC>
+    <qresource prefix="/">
+        <file>splash.jpg</file>
+    </qresource>
+    <qresource prefix="/names/Generic">
+        <file alias="Elves/female.txt">names/Generic/Elves/female.txt</file>
+        <file alias="Elves/male.txt">names/Generic/Elves/male.txt</file>
+        <file alias="Humans/female.txt">names/Generic/Humans/female.txt</file>
+        <file alias="Humans/male.txt">names/Generic/Humans/male.txt</file>
+        <file alias="Humans/surname.txt">names/Generic/Humans/surname.txt</file>
+        <file alias="Orcs/female.txt">names/Generic/Orcs/female.txt</file>
+        <file alias="Orcs/male.txt">names/Generic/Orcs/male.txt</file>
+    </qresource>
+    <qresource prefix="/icons/gm-companion">
+        <file alias="icon14.png">icons/gm-companion/icon14.png</file>
+        <file alias="icon32.png">icons/gm-companion/icon32.png</file>
+        <file alias="icon64.png">icons/gm-companion/icon64.png</file>
+        <file alias="icon128.png">icons/gm-companion/icon128.png</file>
+        <file alias="icon256_new.png">icons/gm-companion/icon256_new.png</file>
+        <file alias="icon256.ico">icons/gm-companion/icon256.ico</file>
+        <file alias="icon256.png">icons/gm-companion/icon256.png</file>
+    </qresource>
+    <qresource prefix="/icons/media">
+        <file alias="characters.png">icons/media/characters.png</file>
+        <file alias="combatTracker_dice.png">icons/media/combatTracker_dice.png</file>
+        <file alias="combatTracker.png">icons/media/combatTracker.png</file>
+        <file alias="converter.png">icons/media/converter.png</file>
+        <file alias="die.png">icons/media/die.png</file>
+        <file alias="generator.png">icons/media/generator.png</file>
+        <file alias="map.png">icons/media/map.png</file>
+        <file alias="music_image.png">icons/media/music_image.png</file>
+        <file alias="music_large.png">icons/media/music_large.png</file>
+        <file alias="music.png">icons/media/music.png</file>
+        <file alias="notes.png">icons/media/notes.png</file>
+        <file alias="pause.png">icons/media/pause.png</file>
+        <file alias="play.png">icons/media/play.png</file>
+        <file alias="playBackwards.png">icons/media/playBackwards.png</file>
+        <file alias="radio_image.png">icons/media/radio_image.png</file>
+        <file alias="radio_large.png">icons/media/radio_large.png</file>
+        <file alias="radio.png">icons/media/radio.png</file>
+        <file alias="seekBack.png">icons/media/seekBack.png</file>
+        <file alias="seekForward.png">icons/media/seekForward.png</file>
+        <file alias="settings.png">icons/media/settings.png</file>
+        <file alias="shuffleOff.png">icons/media/shuffleOff.png</file>
+        <file alias="shuffleOn.png">icons/media/shuffleOn.png</file>
+        <file alias="skipBack.png">icons/media/skipBack.png</file>
+        <file alias="skipForward.png">icons/media/skipForward.png</file>
+        <file alias="sound_image.png">icons/media/sound_image.png</file>
+        <file alias="sound_large.png">icons/media/sound_large.png</file>
+        <file alias="sound.png">icons/media/sound.png</file>
+        <file alias="stop.png">icons/media/stop.png</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file alias="White.qss">styles/White.qss</file>
+        <file alias="Dark.qss">styles/Dark.qss</file>
+    </qresource>
+    <qresource prefix="/translations">
+        <file alias="gm-companion_de.qm">translations/gm-companion_de.qm</file>
+        <file alias="gm-companion_de.ts">translations/gm-companion_de.ts</file>
+        <file alias="gm-companion_en.qm">translations/gm-companion_en.qm</file>
+        <file alias="gm-companion_en.ts">translations/gm-companion_en.ts</file>
+    </qresource>
+    <qresource prefix="/units">
+        <file alias="default.ini">units.ini</file>
+    </qresource>
+    <qresource prefix="/icons/menu">
+        <file alias="audio.png">icons/menu/audio.png</file>
+        <file alias="characters.png">icons/menu/characters.png</file>
+        <file alias="combat.png">icons/menu/combat.png</file>
+        <file alias="converter.png">icons/menu/converter.png</file>
+        <file alias="generators.png">icons/menu/generators.png</file>
+        <file alias="item-shop.png">icons/menu/item-shop.png</file>
+        <file alias="maps.png">icons/menu/maps.png</file>
+        <file alias="notes.png">icons/menu/notes.png</file>
+        <file alias="settings.png">icons/menu/settings.png</file>
+    </qresource>
+</RCC>

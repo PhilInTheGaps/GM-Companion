@@ -3,14 +3,13 @@
 
 #include <QStringList>
 
-QStringList getFolders(QString path);
+QStringList getFolders(QString path); // Returns all folders in a path
+QStringList getFiles(QString folder); // Returns all files in a path
 
-QStringList getFiles(QString folder);
+QString cleanText(QString text); // Removes unwanted elements of a string such as underscores or filenames
 
-QString cleanText(QString text);
+QStringList shuffleStringList(QStringList list); // Shuffles a QStringList
 
-QStringList shuffleStringList(QStringList list);
-
-QString rot13(QString s);
+QString rot13(QString s); // Encrypts a string using the rot13 method, also decrypts encrypted strings
 
 #endif // FUNCTIONS_H

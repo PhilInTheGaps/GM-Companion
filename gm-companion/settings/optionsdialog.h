@@ -5,8 +5,8 @@
 #include <QList>
 #include <QCheckBox>
 
-#include "gm-companion/mainwindow.h"
-#include "gm-companion/managers/settingsmanager.h"
+#include "gm-companion/ui/mainwindow.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 namespace Ui {
     class OptionsDialog;

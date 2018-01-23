@@ -3,9 +3,9 @@
 
 #include <QDialog>
 
-#include "gm-companion/mainwindow.h"
-#include "gm-companion/managers/settingsmanager.h"
-#include "gm-companion/tools/notestool.h"
+#include "gm-companion/ui/mainwindow.h"
+#include "gm-companion/settings/settingsmanager.h"
+#include "gm-companion/tools/notes/notestool.h"
 
 namespace Ui {
     class NotesDialog;
