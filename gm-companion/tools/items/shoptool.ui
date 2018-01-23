@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Shop Tool</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resources.qrc">
+    <normaloff>:/icons/menu/item-shop.png</normaloff>:/icons/menu/item-shop.png</iconset>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>2</number>
@@ -352,6 +356,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

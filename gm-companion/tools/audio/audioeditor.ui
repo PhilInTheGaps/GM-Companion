@@ -14,7 +14,7 @@
    <string>Audio Editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -33,23 +33,14 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QFrame" name="frame_2">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>256</width>
-         <height>16777215</height>
-        </size>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
-       <property name="title">
-        <string>Project</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <property name="leftMargin">
          <number>2</number>
         </property>
@@ -63,8 +54,8 @@
          <number>2</number>
         </property>
         <item>
-         <layout class="QFormLayout" name="formLayout_3">
-          <item row="1" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_21">
+          <item>
            <widget class="QPushButton" name="pushButton_newProject">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -77,20 +68,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_project">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="placeholderText">
-             <string>Project Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
+          <item>
            <widget class="QPushButton" name="pushButton_openProject">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -103,8 +81,32 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="comboBox_projects"/>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_22">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_project">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="placeholderText">
+             <string>Project Name</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_projects">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -207,23 +209,20 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QFrame" name="frame_3">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="title">
-        <string>Add Elements</string>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <layout class="QHBoxLayout" name="horizontalLayout_11">
         <property name="leftMargin">
          <number>2</number>
         </property>
@@ -237,118 +236,86 @@
          <number>2</number>
         </property>
         <item>
-         <layout class="QFormLayout" name="formLayout">
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_newCategory">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>New Category</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="pushButton_newScenario">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>New Scenario</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_category">
-            <property name="placeholderText">
-             <string>Category Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_scenario">
-            <property name="placeholderText">
-             <string>Scenario Name</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QPushButton" name="pushButton_newElement">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>New</string>
+          </property>
+         </widget>
         </item>
         <item>
-         <layout class="QFormLayout" name="formLayout_2">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushButton_newMusicList">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>New Music List</string>
-            </property>
-           </widget>
+         <widget class="QComboBox" name="comboBox_elementType">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Category</string>
+           </property>
           </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_newSoundList">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>New Sound List</string>
-            </property>
-           </widget>
+          <item>
+           <property name="text">
+            <string>Scenario</string>
+           </property>
           </item>
-          <item row="2" column="0">
-           <widget class="QPushButton" name="pushButton_newRadio">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>New Radio</string>
-            </property>
-           </widget>
+          <item>
+           <property name="text">
+            <string>Music List</string>
+           </property>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_musicList">
-            <property name="placeholderText">
-             <string>Music List Name</string>
-            </property>
-           </widget>
+          <item>
+           <property name="text">
+            <string>Sound List</string>
+           </property>
           </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_soundList">
-            <property name="placeholderText">
-             <string>Sound List Name</string>
-            </property>
-           </widget>
+          <item>
+           <property name="text">
+            <string>Radio</string>
+           </property>
           </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_radio">
-            <property name="placeholderText">
-             <string>Radio Name</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_elementName">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>Element Name</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title">
         <string>Edit Element</string>
        </property>
@@ -368,7 +335,7 @@
         <item>
          <widget class="QStackedWidget" name="stackedWidget_editElement">
           <property name="currentIndex">
-           <number>5</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page_empty">
            <layout class="QVBoxLayout" name="verticalLayout_12">
@@ -395,6 +362,9 @@
              <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Ignored</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1023,7 +993,7 @@
        </property>
        <widget class="QWidget" name="tab_music">
         <attribute name="icon">
-         <iconset resource="../resources.qrc">
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/icons/media/music.png</normaloff>:/icons/media/music.png</iconset>
         </attribute>
         <attribute name="title">
@@ -1113,7 +1083,7 @@
        </widget>
        <widget class="QWidget" name="tab_sound">
         <attribute name="icon">
-         <iconset resource="../resources.qrc">
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/icons/media/sound.png</normaloff>:/icons/media/sound.png</iconset>
         </attribute>
         <attribute name="title">
@@ -1177,7 +1147,7 @@
        </widget>
        <widget class="QWidget" name="tab_radios">
         <attribute name="icon">
-         <iconset resource="../resources.qrc">
+         <iconset resource="../../resources/resources.qrc">
           <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
         </attribute>
         <attribute name="title">
@@ -1258,8 +1228,8 @@
           <string>Play</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>:/resources/mediaIcons/play.png</normaloff>:/resources/mediaIcons/play.png</iconset>
+          <iconset resource="../../resources/resources.qrc">
+           <normaloff>:/icons/media/play.png</normaloff>:/icons/media/play.png</iconset>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -1325,7 +1295,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -41,8 +41,7 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(paren
 
     // Music
     musicPlayer = new QMediaPlayer;
-    connect(musicPlayer, SIGNAL(metaDataChanged()), this, SLOT(updateMetaData())); //metaDataAvailableChanged
-
+    connect(musicPlayer, SIGNAL(metaDataChanged()), this, SLOT(updateMetaData()));
     musicPlaylist = new QMediaPlaylist;
     musicPlaylist->setPlaybackMode(QMediaPlaylist::Loop);
 
@@ -159,11 +158,13 @@ void AudioTool::loadProject(QString project)
         f.setFamily("Helvetica");
 
         categoryButton->setFont(f);
-        ui->categoryBar->layout()->addWidget(categoryButton);
 
         categoryButton->setStyleSheet("QPushButton{color: #eff0f1; background-color: #31363b; border-width: 1px; border-color: #76797C; "
                                       "border-style: solid; padding: 5px; border-radius: 2px; outline: none;}");
 
+        categoryButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+
+        ui->categoryBar->layout()->addWidget(categoryButton);
         connect(categoryButton, &QPushButton::clicked, this, [=]() { changeCategory(categoryName); });
     }
     settings.endArray();
@@ -426,6 +427,7 @@ void AudioTool::playMusic(QString arg)
                         song.title = name;
                         song.path = path;
 
+                        // Read meta data with TagLib
                         #ifdef __linux__
                         TagLib::FileRef f(path.toUtf8());
                         QString title = f.tag()->title().toCString(true);

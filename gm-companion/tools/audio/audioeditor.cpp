@@ -192,9 +192,9 @@ void AudioEditor::save()
 }
 
 // Add a category
-void AudioEditor::on_pushButton_newCategory_clicked()
+void AudioEditor::addNewCategory()
 {
-    if (ui->lineEdit_category->text() != NULL && projectName != NULL)
+    if (ui->lineEdit_elementName->text() != NULL && projectName != NULL)
     {
         QSettings settings(settingsManager->getSetting(audioPath)+"/"+projectName+".ini", QSettings::IniFormat);
 
@@ -204,20 +204,20 @@ void AudioEditor::on_pushButton_newCategory_clicked()
         settings.beginWriteArray("Categories");
         settings.setArrayIndex(size);
 
-        settings.setValue("name", ui->lineEdit_category->text());
+        settings.setValue("name", ui->lineEdit_elementName->text());
 
         settings.endArray();
 
         // Add to Tree View
         QTreeWidgetItem *catItem = new QTreeWidgetItem(0);
-        catItem->setText(0, ui->lineEdit_category->text());
-        catItem->setToolTip(0, ui->lineEdit_category->text());
+        catItem->setText(0, ui->lineEdit_elementName->text());
+        catItem->setToolTip(0, ui->lineEdit_elementName->text());
         catItem->setIcon(0, style()->standardIcon(QStyle::SP_FileDialogStart));
 
         ui->treeWidget_categories->addTopLevelItem(catItem);
     }
 
-    ui->lineEdit_category->clear();
+    ui->lineEdit_elementName->clear();
 }
 
 // Loads all categories and their sub-elements
@@ -312,15 +312,15 @@ void AudioEditor::loadElements(QTreeWidgetItem *scenItem, QString category, int 
     switch (type) {
     case 2: // Music
         suffix = "_MusicLists";
-        icon = QIcon(":/resources/mediaIcons/music.png");
+        icon = QIcon(":/icons/media/music.png");
         break;
     case 3: // Sound
         suffix = "_SoundLists";
-        icon = QIcon(":/resources/mediaIcons/sound.png");
+        icon = QIcon(":/icons/media/sound.png");
         break;
     case 4: // Radio
         suffix = "_Radios";
-        icon = QIcon(":/resources/mediaIcons/radio.png");
+        icon = QIcon(":/icons/media/radio.png");
         break;
     default:
         break;
@@ -434,13 +434,16 @@ void AudioEditor::on_pushButton_deleteSelected_clicked()
 
         // Re-loading categories
         loadCategories();
+
+        // Switch back to "No Element selected"
+        ui->stackedWidget_editElement->setCurrentIndex(0);
     }
 }
 
 // Add a new scenario
-void AudioEditor::on_pushButton_newScenario_clicked()
+void AudioEditor::addNewScenario()
 {
-    QString scenario = ui->lineEdit_scenario->text();
+    QString scenario = ui->lineEdit_elementName->text();
 
     if (isProjectOpen && scenario != NULL && currentCategory != NULL)
     {
@@ -468,18 +471,18 @@ void AudioEditor::addNewElement(int type)
 
     switch (type) {
     case 0:
-        element = ui->lineEdit_musicList->text();
-        ui->lineEdit_musicList->clear();
+        element = ui->lineEdit_elementName->text();
+        ui->lineEdit_elementName->clear();
         arrayName = currentCategory + "_" + currentScenario + "_MusicLists";
         break;
     case 1:
-        element = ui->lineEdit_soundList->text();
-        ui->lineEdit_soundList->clear();
+        element = ui->lineEdit_elementName->text();
+        ui->lineEdit_elementName->clear();
         arrayName = currentCategory + "_" + currentScenario + "_SoundLists";
         break;
     case 2:
-        element = ui->lineEdit_radio->text();
-        ui->lineEdit_radio->clear();
+        element = ui->lineEdit_elementName->text();
+        ui->lineEdit_elementName->clear();
         arrayName = currentCategory + "_" + currentScenario + "_Radios";
         break;
     default:
@@ -503,24 +506,6 @@ void AudioEditor::addNewElement(int type)
 
         loadCategories();
     }
-}
-
-// Create a new music list
-void AudioEditor::on_pushButton_newMusicList_clicked()
-{
-    addNewElement(0);
-}
-
-// Create a new Sound List
-void AudioEditor::on_pushButton_newSoundList_clicked()
-{
-    addNewElement(1);
-}
-
-// Create a new Radio
-void AudioEditor::on_pushButton_newRadio_clicked()
-{
-    addNewElement(2);
 }
 
 // When another element is selected
@@ -644,6 +629,12 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *c
 
                         QListWidgetItem *item = new QListWidgetItem(songName);
                         item->setWhatsThis(songPath);
+
+                        if (!QFile(settingsManager->getSetting(musicPath)+"/"+songPath).exists())
+                        {
+                            item->setBackgroundColor(Qt::red);
+                            qDebug() << songPath;
+                        }
 
                         ui->listWidget_musicList->addItem(item);
                     }
@@ -1055,10 +1046,10 @@ void AudioEditor::on_pushButton_convertFolderToMusicList_clicked()
         qDebug() << "Creating music list from folder: " + folderName;
 
         // Set the name of the music list
-        ui->lineEdit_musicList->setText(folderName);
+        ui->lineEdit_elementName->setText(folderName);
 
         // Create new list
-        on_pushButton_newMusicList_clicked();
+        addNewElement(0);
 
         // Select the new music list
         for( int i = 0; i < ui->treeWidget_categories->topLevelItemCount(); i++)
@@ -1133,14 +1124,14 @@ void AudioEditor::on_pushButton_playPause_toggled(bool checked)
 {
     if (checked)
     {
-        ui->pushButton_playPause->setIcon(QIcon(":/resources/mediaIcons/play.png"));
+        ui->pushButton_playPause->setIcon(QIcon(":/icons/media/play.png"));
         ui->pushButton_playPause->setText("Play");
         previewPlayer->pause();
 
     }
     else
     {
-        ui->pushButton_playPause->setIcon(QIcon(":/resources/mediaIcons/pause.png"));
+        ui->pushButton_playPause->setIcon(QIcon(":/icons/media/pause.png"));
         ui->pushButton_playPause->setText("Pause");
         previewPlayer->play();
     }
@@ -1229,4 +1220,28 @@ void AudioEditor::on_toolButton_radioIcon_clicked()
     ui->lineEdit_radioIcon->setText(path);
     ui->lineEdit_radioIcon->setToolTip(path);
     ui->label_radioIcon->setPixmap(QPixmap(resPath+"/"+path).scaledToWidth(ui->label_radioIcon->width()));
+}
+
+// Add new Element
+void AudioEditor::on_pushButton_newElement_clicked()
+{
+    switch (ui->comboBox_elementType->currentIndex()) {
+    case 0: // Category
+        addNewCategory();
+        break;
+    case 1: // Scenario
+
+        break;
+    case 2: // Music
+        addNewElement(0);
+        break;
+    case 3: // Sounds
+        addNewElement(1);
+        break;
+    case 4: // Radio
+        addNewElement(2);
+        break;
+    default:
+        break;
+    }
 }

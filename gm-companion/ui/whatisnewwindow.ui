@@ -26,7 +26,7 @@
    <string>New Features!</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../resources/resources.qrc">
     <normaloff>:/icons/gm-companion/icon256.png</normaloff>:/icons/gm-companion/icon256.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -130,7 +130,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>
