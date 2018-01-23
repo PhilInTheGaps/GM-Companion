@@ -20,9 +20,9 @@ matrix:
         - QMAKESPEC=linux-clang
         - MAKEFLAGS=-j2
       before_install:
-        - sudo add-apt-repository --yes ppa:beineri/opt-qt591-trusty
+        - sudo add-apt-repository --yes ppa:beineri/opt-qt593-trusty
         - sudo apt-get update -qq
-        - sudo apt-get -y install qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev
+        - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev
         - source /opt/qt59/bin/qt59-env.sh
       script:
         - qmake
