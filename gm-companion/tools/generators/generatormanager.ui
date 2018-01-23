@@ -14,7 +14,7 @@
    <string>Generators</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/icons/media/generator.png</normaloff>:/icons/media/generator.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -43,7 +43,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

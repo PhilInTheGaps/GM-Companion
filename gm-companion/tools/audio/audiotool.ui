@@ -14,7 +14,7 @@
    <string>Audio Tool</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
   </property>
   <property name="styleSheet">
@@ -1578,7 +1578,7 @@ QDateEdit::down-arrow:focus
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources.qrc">
+             <iconset resource="../../resources/resources.qrc">
               <normaloff>:/icons/media/play.png</normaloff>:/icons/media/play.png</iconset>
             </property>
             <property name="iconSize">
@@ -2880,7 +2880,7 @@ QDateEdit::down-arrow:focus
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources.qrc">
+             <iconset resource="../../resources/resources.qrc">
               <normaloff>:/icons/media/pause.png</normaloff>:/icons/media/pause.png</iconset>
             </property>
             <property name="iconSize">
@@ -4176,8 +4176,8 @@ QDateEdit::down-arrow:focus
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources.qrc">
-              <normaloff>:/icons/media/skip_back.png</normaloff>:/icons/media/skip_back.png</iconset>
+             <iconset resource="../../resources/resources.qrc">
+              <normaloff>:/icons/media/skipBack.png</normaloff>:/icons/media/skipBack.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5472,8 +5472,8 @@ QDateEdit::down-arrow:focus
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="../resources.qrc">
-              <normaloff>:/icons/media/seek_forward.png</normaloff>:/icons/media/seek_forward.png</iconset>
+             <iconset resource="../../resources/resources.qrc">
+              <normaloff>:/icons/media/seekForward.png</normaloff>:/icons/media/seekForward.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -5620,7 +5620,7 @@ QDateEdit::down-arrow:focus
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

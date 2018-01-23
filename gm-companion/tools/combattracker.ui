@@ -14,7 +14,7 @@
    <string>Combat Tracker</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../resources/resources.qrc">
     <normaloff>:/icons/media/combatTracker.png</normaloff>:/icons/media/combatTracker.png</iconset>
   </property>
   <property name="autoFillBackground">
@@ -646,7 +646,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

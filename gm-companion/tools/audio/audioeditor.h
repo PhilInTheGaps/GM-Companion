@@ -25,17 +25,11 @@ private slots:
 
     void on_pushButton_newProject_clicked();
     void on_pushButton_openProject_clicked();
-    void on_pushButton_newCategory_clicked();
 
     void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current);
 
     void on_pushButton_deleteSelected_clicked();
-
-    void on_pushButton_newScenario_clicked();
-    void on_pushButton_newMusicList_clicked();
-    void on_pushButton_newSoundList_clicked();
-    void on_pushButton_newRadio_clicked();
 
     void on_pushButton_saveElement_clicked();
 
@@ -60,10 +54,10 @@ private slots:
     void previewPlayer_positionChanged(qint64 position);
 
     void on_toolButton_musicIcon_clicked();
-
     void on_toolButton_soundIcon_clicked();
-
     void on_toolButton_radioIcon_clicked();
+
+    void on_pushButton_newElement_clicked();
 
 private:
     Ui::AudioEditor *ui;
@@ -92,6 +86,8 @@ private:
     void loadElements(QTreeWidgetItem *scenItem, QString category, int type);
 
     void addNewElement(int type);
+    void addNewCategory();
+    void addNewScenario();
 
     // Icon File Browser
     QString setIconPath(QString windowTitle);
