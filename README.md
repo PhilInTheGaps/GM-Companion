@@ -49,7 +49,7 @@ I do not recommend using it, but if for some reason you absolutely want to use i
 
 
 ```
-sudo add-apt-repository ppa:rophil/gm-companion-dayly  
+sudo add-apt-repository ppa:rophil/gm-companion-daily  
 sudo apt-get update  
 sudo apt-get install gm-companion  
 ```
