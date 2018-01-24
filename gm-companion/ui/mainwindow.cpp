@@ -29,11 +29,13 @@
 #include <QPushButton>
 #include <QSizePolicy>
 
-MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(
+        parent), ui(new Ui::MainWindow)
+{
     ui->setupUi(this);
 
     // Copy files to a writable directory if they do not exist
-    FileManager* fileManager = new FileManager;
+    FileManager *fileManager = new FileManager;
     fileManager->run();
 
     // Initialize SettingsManager
@@ -110,11 +112,11 @@ void MainWindow::addTools()
     // Options Dialog
     OptionsDialog *optionsDialog = new OptionsDialog(this);
     ui->stackedWidget->addWidget(optionsDialog);
-
 }
 
 // Set Program version
-void MainWindow::setVersion(QString versionAsString){
+void MainWindow::setVersion(QString versionAsString)
+{
     versionString = versionAsString;
     versionNumber = 0;
     QString temp = versionAsString.replace(".", "");
@@ -134,8 +136,10 @@ QString MainWindow::getVersion()
 }
 
 // Update the settings version
-void MainWindow::updateSettingsVersion(){
-    settingsManager->setSetting(Setting::version, true, QString::number(versionNumber));
+void MainWindow::updateSettingsVersion()
+{
+    settingsManager->setSetting(Setting::version, true,
+                                QString::number(versionNumber));
 }
 
 /// Tool Navigation
@@ -188,13 +192,13 @@ void MainWindow::on_pushButton_shopTool_clicked()
 }
 
 //// Addons
-//void MainWindow::on_pushButton_addons_clicked()
-//{
+// void MainWindow::on_pushButton_addons_clicked()
+// {
 ////    ui->stackedWidget->setCurrentIndex(8);
-//}
+// }
 
 // Settings
 void MainWindow::on_pushButton_settings_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->count()-1);
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->count() - 1);
 }

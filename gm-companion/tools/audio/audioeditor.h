@@ -59,6 +59,18 @@ private slots:
 
     void on_pushButton_newElement_clicked();
 
+    void on_pushButton_detectMissingMusic_clicked();
+
+    void on_pushButton_detectMissingSounds_clicked();
+
+    void on_pushButton_addToMusicList_clicked();
+
+    void on_pushButton_addToSoundList_clicked();
+
+    void on_pushButton_removeSoundFile_clicked();
+
+    void on_pushButton_removeFileMusic_clicked();
+
 private:
     Ui::AudioEditor *ui;
 
@@ -68,7 +80,6 @@ private:
     void playPreview(QString path);
 
     bool isProjectOpen = false;
-
     bool filesAreLoaded = false;
 
     QString projectName;
@@ -79,18 +90,24 @@ private:
     void save();
 
     void getProjects();
-
     void loadProject();
     void loadCategories();
     void loadScenarios(QTreeWidgetItem *catItem);
     void loadElements(QTreeWidgetItem *scenItem, QString category, int type);
 
+    void addFileToList(QTreeWidgetItem *item, int column, int type);
+    void addAllFilesFromFolder(QTreeWidgetItem *item, int type);
+
     void addNewElement(int type);
     void addNewCategory();
     void addNewScenario();
 
+    void markMissingFiles(QList<int> indices, QListWidget *widget);
+    QList<int> getMissingFiles(int type);
+
     // Icon File Browser
     QString setIconPath(QString windowTitle);
+    void chooseIcon(int type);
     QString lastPath;
 
     // File Browser

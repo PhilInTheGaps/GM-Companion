@@ -319,6 +319,9 @@
        <property name="title">
         <string>Edit Element</string>
        </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <property name="leftMargin">
          <number>4</number>
@@ -353,8 +356,17 @@
             </property>
             <item>
              <widget class="QLabel" name="label_11">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string>No element selected</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -588,6 +600,30 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QLabel" name="label_20">
+                  <property name="text">
+                   <string>Files</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_removeFileMusic">
+                  <property name="toolTip">
+                   <string>Remove the currently selected file from the list. (Can also be done by double clicking)</string>
+                  </property>
+                  <property name="text">
+                   <string>Remove Selected File</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_detectMissingMusic">
+                  <property name="text">
+                   <string>Detect Missing Files</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QLabel" name="label_23">
                   <property name="text">
                    <string>Music List Icon</string>
@@ -750,6 +786,30 @@
                   </property>
                   <property name="text">
                    <string>Sequential Order</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_26">
+                  <property name="text">
+                   <string>Files</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_removeSoundFile">
+                  <property name="toolTip">
+                   <string>Remove the currently selected file from the list. (Can also be done by double clicking)</string>
+                  </property>
+                  <property name="text">
+                   <string>Remove Selected File</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_detectMissingSounds">
+                  <property name="text">
+                   <string>Detect Missing Files</string>
                   </property>
                  </widget>
                 </item>
@@ -1056,28 +1116,34 @@
           </widget>
          </item>
          <item>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton_addAllFilesFromMusicFolder">
-             <property name="toolTip">
-              <string>Add all songs from the folder to the current music list</string>
-             </property>
-             <property name="text">
-              <string>Add all files from folder</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="pushButton_convertFolderToMusicList">
-             <property name="toolTip">
-              <string>Creates a new music list with all songs from the folder</string>
-             </property>
-             <property name="text">
-              <string>Convert folder to list</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QPushButton" name="pushButton_addToMusicList">
+           <property name="toolTip">
+            <string>Add the currently selected music file to the music list. (This can also be done by double clicking)</string>
+           </property>
+           <property name="text">
+            <string>Add Selected File To List</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_addAllFilesFromMusicFolder">
+           <property name="toolTip">
+            <string>Add all songs from the folder to the current music list</string>
+           </property>
+           <property name="text">
+            <string>Add all files from folder</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_convertFolderToMusicList">
+           <property name="toolTip">
+            <string>Creates a new music list with all songs from the folder</string>
+           </property>
+           <property name="text">
+            <string>Convert folder to list</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -1134,6 +1200,19 @@
              <string notr="true">1</string>
             </property>
            </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_addToSoundList">
+           <property name="toolTip">
+            <string>Add the currently selected sound file to the sound list. (This can also be done by double clicking)</string>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
+           <property name="text">
+            <string>Add Selected File To List</string>
+           </property>
           </widget>
          </item>
          <item>
@@ -1202,13 +1281,6 @@
          </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_20">
-       <property name="text">
-        <string>Double click a file to add it to an element!</string>
-       </property>
       </widget>
      </item>
      <item>
