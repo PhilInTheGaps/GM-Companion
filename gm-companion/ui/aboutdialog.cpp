@@ -3,7 +3,8 @@
 
 #include <QDebug>
 
-AboutDialog::AboutDialog(QString version, QWidget *parent) : QDialog(parent), ui(new Ui::AboutDialog)
+AboutDialog::AboutDialog(QString version, QWidget *parent) : QDialog(parent), ui(
+        new Ui::AboutDialog)
 {
     qDebug() << "Opening AboutDialog ...";
 
