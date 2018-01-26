@@ -4,6 +4,7 @@
 #include "gm-companion/functions.h"
 #include "gm-companion/ui/aboutdialog.h"
 #include "gm-companion/managers/updatemanager.h"
+#include "gm-companion/tools/addons/addonmanager.h"
 
 #include <QDebug>
 #include <QSettings>
@@ -13,7 +14,9 @@
 #include <QDesktopServices>
 #include <QComboBox>
 
-OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::OptionsDialog){
+OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(
+        new Ui::OptionsDialog)
+{
     ui->setupUi(this);
 
     w = parent;
@@ -26,10 +29,9 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::O
     getStyleSheets();
     getLanguage();
 
-    if (settings->getSetting(Setting::showToolNames).toInt() == 1)
-        ui->checkBox_showToolNames->setChecked(true);
-    else
-        ui->checkBox_showToolNames->setChecked(false);
+    if (settings->getSetting(Setting::showToolNames).toInt() ==
+        1) ui->checkBox_showToolNames->setChecked(true);
+    else ui->checkBox_showToolNames->setChecked(false);
 }
 
 OptionsDialog::~OptionsDialog()
@@ -41,16 +43,16 @@ OptionsDialog::~OptionsDialog()
 void OptionsDialog::getLanguage()
 {
     QString lang = settings->getSetting(Setting::language);
-    if (lang == "en")
-        ui->languageComboBox->setCurrentText("English");
-    else if (lang == "de")
-        ui->languageComboBox->setCurrentText("Deutsch");
+
+    if (lang == "en") ui->languageComboBox->setCurrentText("English");
+    else if (lang == "de") ui->languageComboBox->setCurrentText("Deutsch");
 }
 
 // Add all custom StyleSheets to the combo box
 void OptionsDialog::getStyleSheets()
 {
-    QStringList styles = getFiles(QDir::homePath()+"/.gm-companion/styles");
+    QStringList styles = getFiles(QDir::homePath() + "/.gm-companion/styles");
+
     qDebug().noquote() << "Found the following stylesheets:";
 
     for (int i = 0; i < styles.size(); i++)
@@ -66,32 +68,36 @@ void OptionsDialog::getStyleSheets()
 }
 
 // Gets every installed addon
-void OptionsDialog::getAddons(){
+void OptionsDialog::getAddons()
+{
     ui->addonsFrame->layout()->setAlignment(Qt::AlignTop);
 
     QStringList officialAddonNames = settings->getOfficialAddons();
 
-    for (QString folder : getFolders(QDir::homePath()+"/.gm-companion/addons")){
-        if (!folder.contains(".")){
-            QCheckBox* b = new QCheckBox;
+    for (QString folder :
+         getFolders(QDir::homePath() + "/.gm-companion/addons")) {
+        if (!folder.contains(".")) {
+            QCheckBox *b = new QCheckBox;
             b->setText(folder);
 
             b->setChecked(settings->getIsAddonEnabled(folder));
 
-            if (officialAddonNames.contains(folder)){
+            if (officialAddonNames.contains(folder)) {
                 officialAddons.push_back(b);
-            }else{
+            } else {
                 inofficialAddons.push_back(b);
             }
         }
     }
 
     ui->addonsFrame->layout()->addWidget(new QLabel(tr("Official Addons")));
-    for (QCheckBox* b : officialAddons){
+
+    for (QCheckBox *b : officialAddons) {
         ui->addonsFrame->layout()->addWidget(b);
     }
     ui->addonsFrame->layout()->addWidget(new QLabel(tr("Inofficial Addons")));
-    for (QCheckBox* b : inofficialAddons){
+
+    for (QCheckBox *b : inofficialAddons) {
         ui->addonsFrame->layout()->addWidget(b);
     }
 }
@@ -99,11 +105,11 @@ void OptionsDialog::getAddons(){
 // Save Addon Settings
 void OptionsDialog::writeAddonSettings()
 {
-    for (QCheckBox* b : officialAddons)
-        settings->setAddonEnabled(b->text(), b->isChecked());
+    for (QCheckBox *b : officialAddons) settings->setAddonEnabled(
+            b->text(), b->isChecked());
 
-    for (QCheckBox* b : inofficialAddons)
-        settings->setAddonEnabled(b->text(), b->isChecked());
+    for (QCheckBox *b : inofficialAddons) settings->setAddonEnabled(
+            b->text(), b->isChecked());
 }
 
 void OptionsDialog::on_setMusicPath_clicked()
@@ -173,26 +179,29 @@ void OptionsDialog::updatePaths()
 
 void OptionsDialog::on_selectAll_clicked()
 {
-    for (QCheckBox* b : officialAddons){
+    for (QCheckBox *b : officialAddons) {
         b->setChecked(true);
     }
-    for (QCheckBox* b : inofficialAddons){
+
+    for (QCheckBox *b : inofficialAddons) {
         b->setChecked(true);
     }
 }
 
 void OptionsDialog::on_deselectAll_clicked()
 {
-    for (QCheckBox* b : officialAddons){
+    for (QCheckBox *b : officialAddons) {
         b->setChecked(false);
     }
-    for (QCheckBox* b : inofficialAddons){
+
+    for (QCheckBox *b : inofficialAddons) {
         b->setChecked(false);
     }
 }
 
 // Set new Style Sheet when another one is selected
-void OptionsDialog::on_styleComboBox_currentTextChanged(const QString &arg1){
+void OptionsDialog::on_styleComboBox_currentTextChanged(const QString& arg1)
+{
     settings->setSetting(Setting::uiMode, true, arg1);
 }
 
@@ -203,9 +212,11 @@ void OptionsDialog::on_languageComboBox_currentIndexChanged(int index)
     case 0:
         settings->setSetting(Setting::language, true, "en");
         break;
+
     case 1:
         settings->setSetting(Setting::language, true, "de");
         break;
+
     default:
         settings->setSetting(Setting::language, true, "en");
         break;
@@ -215,46 +226,47 @@ void OptionsDialog::on_languageComboBox_currentIndexChanged(int index)
 // Open Addon Manager
 void OptionsDialog::on_addonManagerButton_clicked()
 {
-    #ifdef __linux__
-        QProcess::startDetached("java", {"-jar", "/usr/share/gm-companion/AddonManager.jar"});
-    #elif _WIN32
-        QProcess::startDetached("java", {"-jar", QApplication::applicationDirPath()+"/AddonManager.jar"});
-    #else
-        QProcess::startDetached("java", {"-jar", QApplication::applicationDirPath()+"/AddonManager.jar"});
-        //qDebug() << QCoreApplication::translate("AddonManager", "This OS is not supported. Cannot launch Addon Manager.");
-    #endif
+    AddonManager *manager = new AddonManager;
+
+    manager->show();
 }
 
 // Help-Buttons
 void OptionsDialog::on_pushButton_openWiki_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki"));
+    QDesktopServices::openUrl(QUrl(
+                                  "https://github.com/PhilInTheGaps/GM-Companion/wiki"));
 }
 
 void OptionsDialog::on_pushButton_reportABug_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/issues/new"));
+    QDesktopServices::openUrl(QUrl(
+                                  "https://github.com/PhilInTheGaps/GM-Companion/issues/new"));
 }
 
 void OptionsDialog::on_pushButton_downloadOlderVersions_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/releases"));
+    QDesktopServices::openUrl(QUrl(
+                                  "https://github.com/PhilInTheGaps/GM-Companion/releases"));
 }
 
 void OptionsDialog::on_pushButton_viewOnGitHub_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion"));
+    QDesktopServices::openUrl(QUrl(
+                                  "https://github.com/PhilInTheGaps/GM-Companion"));
 }
 
 void OptionsDialog::on_pushButton_about_clicked()
 {
     AboutDialog *about = new AboutDialog(w->getVersion());
+
     about->show();
 }
 
 void OptionsDialog::on_pushButton_checkForUpdates_clicked()
 {
     UpdateManager *updateManger = new UpdateManager(w->getVersionNumber());
+
     updateManger->checkForUpdates();
 }
 
