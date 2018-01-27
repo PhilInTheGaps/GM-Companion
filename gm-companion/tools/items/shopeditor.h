@@ -39,6 +39,8 @@ private slots:
 
     void on_pushButton_clearItems_clicked();
 
+    void on_pushButton_deleteSelected_clicked();
+
 private:
     Ui::ShopEditor *ui;
 

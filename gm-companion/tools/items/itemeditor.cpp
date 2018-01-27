@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QStringList>
+#include <QHBoxLayout>
 
 ItemEditor::ItemEditor(QWidget *parent) : QWidget(parent), ui(new Ui::ItemEditor)
 {
@@ -22,8 +23,9 @@ ItemEditor::~ItemEditor()
 
 void ItemEditor::loadItems()
 {
-    QString projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
+    QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
+    QSettings settings(projectFolder + "/CustomItems.items",
+                       QSettings::IniFormat);
 
     ui->tableWidget_itemList->clearContents();
     ui->tableWidget_itemList->setRowCount(0);
@@ -34,12 +36,12 @@ void ItemEditor::loadItems()
     {
         settings.setArrayIndex(i);
 
-        QString name = settings.value("name", "").toString();
-        QString price = settings.value("price", "/").toString();
-        QString category = settings.value("category", "").toString();
+        QString name        = settings.value("name", "").toString();
+        QString price       = settings.value("price", "/").toString();
+        QString category    = settings.value("category", "").toString();
         QString description = settings.value("description", "").toString();
 
-        addItemToList(i, {name, price, category, description});
+        addItemToList(i, { name, price, category, description });
     }
 }
 
@@ -52,23 +54,26 @@ void ItemEditor::addItemToList(int index, QStringList info)
         QTableWidgetItem *item = new QTableWidgetItem;
         item->setText(info.at(j));
 
-        ui->tableWidget_itemList->setItem(index, j+1, item);
+        ui->tableWidget_itemList->setItem(index, j + 1, item);
     }
 
     // Add remove button
-    QWidget* widget = new QWidget;
-    QPushButton* button = new QPushButton;
+    QWidget *widget     = new QWidget;
+    QPushButton *button = new QPushButton;
     button->setText("Remove");
-    button->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-    QHBoxLayout* bLayout = new QHBoxLayout(widget);
+    QHBoxLayout *bLayout = new QHBoxLayout(widget);
     bLayout->addWidget(button);
     bLayout->setAlignment(Qt::AlignCenter);
     bLayout->setContentsMargins(0, 0, 0, 0);
     widget->setLayout(bLayout);
     ui->tableWidget_itemList->setCellWidget(index, 0, widget);
 
-    connect(button, &QPushButton::clicked, this, [=]() { removeItem(index); });
+    connect(button, &QPushButton::clicked, this, [ = ]() {
+        removeItem(index);
+    });
 }
 
 // Add new item
@@ -76,13 +81,13 @@ void ItemEditor::on_pushButton_addItem_clicked()
 {
     if (!ui->lineEdit_itemName->text().isNull())
     {
-        QString name = ui->lineEdit_itemName->text();
-        QString price = ui->lineEdit_itemPrice->text();
-        QString category = ui->comboBox_category->currentText();
+        QString name        = ui->lineEdit_itemName->text();
+        QString price       = ui->lineEdit_itemPrice->text();
+        QString category    = ui->comboBox_category->currentText();
         QString description = ui->lineEdit_itemDescription->text();
 
         int index = ui->tableWidget_itemList->rowCount();
-        addItemToList(index, {name, price, category, description});
+        addItemToList(index, { name, price, category, description });
     }
 }
 
@@ -94,8 +99,9 @@ void ItemEditor::on_pushButton_addCategory_clicked()
         QString category = ui->lineEdit_categoryName->text();
         ui->lineEdit_categoryName->clear();
 
-        QString projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
+        QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
+        QSettings settings(projectFolder + "/CustomItems.items",
+                           QSettings::IniFormat);
 
         int count = settings.beginReadArray("categories");
         settings.endArray();
@@ -117,8 +123,9 @@ void ItemEditor::getCategories()
     ui->comboBox_category->clear();
     QStringList categories;
 
-    QString projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
+    QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
+    QSettings settings(projectFolder + "/CustomItems.items",
+                       QSettings::IniFormat);
 
     int count = settings.beginReadArray("categories");
 
@@ -143,8 +150,9 @@ void ItemEditor::removeItem(int index)
 // Save all items in table to file
 void ItemEditor::on_pushButton_save_clicked()
 {
-    QString projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
+    QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
+    QSettings settings(projectFolder + "/CustomItems.items",
+                       QSettings::IniFormat);
 
     int count = ui->tableWidget_itemList->rowCount();
 
@@ -152,19 +160,22 @@ void ItemEditor::on_pushButton_save_clicked()
 
     for (int i = 0; i < count; i++)
     {
-        QStringList info = {"", "/", "", ""};
+        QStringList info = { "", "/", "", "" };
 
         for (int j = 0; j < 4; j++)
         {
-            if (ui->tableWidget_itemList->item(i, j+1) != NULL)
-                info.replace(j, ui->tableWidget_itemList->item(i, j+1)->text());
+            if (ui->tableWidget_itemList->item(i, j + 1) != NULL) info.replace(j, ui->tableWidget_itemList->item(
+                                                                                   i,
+                                                                                   j
+                                                                                   +
+                                                                                   1)->text());
         }
 
         settings.setArrayIndex(i);
 
-        settings.setValue("name", info.at(0));
-        settings.setValue("price", info.at(1));
-        settings.setValue("category", info.at(2));
+        settings.setValue("name",        info.at(0));
+        settings.setValue("price",       info.at(1));
+        settings.setValue("category",    info.at(2));
         settings.setValue("description", info.at(3));
     }
 
