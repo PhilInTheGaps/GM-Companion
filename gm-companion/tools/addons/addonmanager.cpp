@@ -41,68 +41,74 @@ void AddonManager::setUpTable()
     ui->progressBar->hide();
     ui->tableWidget->show();
     ui->textBrowser->show();
-    ui->textBrowser->append(downloadedData);
 
     qDebug() << "Loading addons ...";
 
     QList<QByteArray> list = downloadedData.split(';');
     ui->tableWidget->setRowCount(list.size());
 
-    for (int i = 0; i < list.size(); i++)
+    if (!list.isEmpty())
     {
-        QByteArray s            = list.at(i);
-        QList<QByteArray> local = s.split(':');
-
-        // Add Status Button
-        QString addonName = local.at(0);
-        addonName = addonName.replace("\n", "");
-        QString addonVersion = local.at(1);
-        QString status       = getStatus(addonName, addonVersion);
-
-        qDebug().noquote() << "   Loading addon:" << addonName;
-
-        for (int j = 0; j < local.size(); j++)
+        for (int i = 0; i < list.size(); i++)
         {
-            QTableWidgetItem *item = new QTableWidgetItem;
-            item->setText(local.at(j));
+            QByteArray s            = list.at(i);
+            QList<QByteArray> local = s.split(':');
 
-            if (j == 2)
+            if (local.size() >= 3)
             {
-                ui->tableWidget->setItem(i, 3, item);
-            }
-            else
-            {
-                ui->tableWidget->setItem(i, j, item);
+                // Add Status Button
+                QString addonName = local.at(0);
+                addonName = addonName.replace("\n", "");
+                QString addonVersion = local.at(1);
+                QString status       = getStatus(addonName, addonVersion);
+
+                qDebug().noquote() << "   Loading addon:" << addonName;
+
+                for (int j = 0; j < local.size(); j++)
+                {
+                    QTableWidgetItem *item = new QTableWidgetItem;
+                    item->setText(local.at(j));
+
+                    if (j == 2)
+                    {
+                        ui->tableWidget->setItem(i, 3, item);
+                    }
+                    else
+                    {
+                        ui->tableWidget->setItem(i, j, item);
+                    }
+                }
+
+
+                qDebug() << "Adding download button ...";
+                QWidget *widget     = new QWidget;
+                QPushButton *button = new QPushButton;
+                button->setText(status);
+                button->setSizePolicy(QSizePolicy::Expanding,
+                                      QSizePolicy::Expanding);
+                widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+                if (status == "Installed")
+                {
+                    button->setEnabled(false);
+                }
+
+                QHBoxLayout *bLayout = new QHBoxLayout(widget);
+                bLayout->addWidget(button);
+                bLayout->setAlignment(Qt::AlignCenter);
+                bLayout->setContentsMargins(0, 0, 0, 0);
+                widget->setLayout(bLayout);
+                ui->tableWidget->setCellWidget(i, 2, widget);
+
+                QUrl url =
+                    "https://github.com/PhilInTheGaps/GM-Companion/raw/master/docs/addons/"
+                    + addonName + "_" + addonVersion + ".zip";
+
+                connect(button, &QPushButton::clicked, this, [ = ]() {
+                    downloadAddon(url);
+                });
             }
         }
-
-
-        qDebug() << "Adding download button ...";
-        QWidget *widget     = new QWidget;
-        QPushButton *button = new QPushButton;
-        button->setText(status);
-        button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-        if (status == "Installed")
-        {
-            button->setEnabled(false);
-        }
-
-        QHBoxLayout *bLayout = new QHBoxLayout(widget);
-        bLayout->addWidget(button);
-        bLayout->setAlignment(Qt::AlignCenter);
-        bLayout->setContentsMargins(0, 0, 0, 0);
-        widget->setLayout(bLayout);
-        ui->tableWidget->setCellWidget(i, 2, widget);
-
-        QUrl url =
-            "https://github.com/PhilInTheGaps/GM-Companion/raw/master/docs/addons/"
-            + addonName + "_" + addonVersion + ".zip";
-
-        connect(button, &QPushButton::clicked, this, [ = ]() {
-            downloadAddon(url);
-        });
     }
 }
 
