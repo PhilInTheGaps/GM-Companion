@@ -170,7 +170,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>15</pointsize>
+          <pointsize>13</pointsize>
          </font>
         </property>
         <property name="animated">
@@ -187,6 +187,13 @@
           <string notr="true">1</string>
          </property>
         </column>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_deleteSelected">
+        <property name="text">
+         <string>Delete Selected Shop / Category</string>
+        </property>
        </widget>
       </item>
      </layout>
