@@ -41,8 +41,9 @@ SOURCES += gm-companion/main.cpp \
     # Tools ADDONS
     gm-companion/tools/addons/sifrp.cpp \
     # Tools CHARACTERS
-    gm-companion/tools/characters/deletecharacterdialog.cpp \
-    gm-companion/tools/characters/characterviewertool.cpp \
+    gm-companion/tools/characters/sheets/defaultsheet.cpp \
+    gm-companion/tools/characters/sheets/sheetfunctions.cpp \
+    gm-companion/tools/characters/sheets/dsa5sheet.cpp \
     # Tools NOTES
     gm-companion/tools/notes/notesdialog.cpp \
     gm-companion/tools/notes/notestool.cpp \
@@ -59,7 +60,8 @@ SOURCES += gm-companion/main.cpp \
     # Settings
     gm-companion/settings/settingsmanager.cpp \
     gm-companion/settings/optionsdialog.cpp \
-    gm-companion/tools/addons/addonmanager.cpp
+    gm-companion/tools/addons/addonmanager.cpp \
+    gm-companion/tools/characters/charactertool.cpp
 
 HEADERS  += gm-companion/ui/mainwindow.h \
     # UI
@@ -82,8 +84,10 @@ HEADERS  += gm-companion/ui/mainwindow.h \
     gm-companion/tools/notes/notesdialog.h \
     gm-companion/tools/notes/notestool.h \
     # Tools CHARACTERS
-    gm-companion/tools/characters/deletecharacterdialog.h \
-    gm-companion/tools/characters/characterviewertool.h \
+    gm-companion/tools/characters/charactertool.h \
+    gm-companion/tools/characters/sheets/defaultsheet.h \
+    gm-companion/tools/characters/sheets/sheetfunctions.h \
+    gm-companion/tools/characters/sheets/dsa5sheet.h \
     # Tools ADDONS
     gm-companion/tools/addons/sifrp.h \
     # Tools GENERATORS
@@ -122,8 +126,9 @@ FORMS    += gm-companion/ui/mainwindow.ui \
     gm-companion/tools/notes/notesdialog.ui \
     gm-companion/tools/notes/notestool.ui \
     # Tools CHARACTERS
-    gm-companion/tools/characters/deletecharacterdialog.ui \
-    gm-companion/tools/characters/characterviewertool.ui \
+    gm-companion/tools/characters/charactertool.ui \
+    gm-companion/tools/characters/sheets/defaultsheet.ui \
+    gm-companion/tools/characters/sheets/dsa5sheet.ui \
     # Tools ADDONS
     gm-companion/tools/addons/sifrp.ui \
     # Tools GENERATORS

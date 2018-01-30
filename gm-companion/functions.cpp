@@ -2,6 +2,8 @@
 
 #include <QDir>
 #include <QDebug>
+#include <QTime>
+#include <QCoreApplication>
 
 // Gets all folders in directory
 QStringList getFolders(QString path)
@@ -87,4 +89,12 @@ QString rot13(QString s)
 
     qDebug() << "Done.";
     return encrypted;
+}
+
+void delay(int seconds)
+{
+    QTime dieTime = QTime::currentTime().addSecs(seconds);
+
+    while (QTime::currentTime() < dieTime) QCoreApplication::processEvents(
+            QEventLoop::AllEvents, 100);
 }
