@@ -1,0 +1,60 @@
+#ifndef CHARACTERTOOL_H
+#define CHARACTERTOOL_H
+
+#include <QWidget>
+#include <QStringList>
+#include <QListWidgetItem>
+
+#include "gm-companion/settings/settingsmanager.h"
+#include "sheets/defaultsheet.h"
+#include "sheets/dsa5sheet.h"
+
+namespace Ui {
+class CharacterTool;
+}
+
+class CharacterTool : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit CharacterTool(QWidget *parent = 0);
+    ~CharacterTool();
+
+private slots:
+    void on_pushButton_makeInactive_clicked();
+    void on_pushButton_makeAllInactive_clicked();
+
+    void on_pushButton_makeActive_clicked();
+    void on_pushButton_makeAllActive_clicked();
+
+    void on_pushButton_createNewCharacter_clicked();
+
+    void on_listWidget_activeCharacters_currentItemChanged(QListWidgetItem *item);
+
+    void on_pushButton_save_clicked();
+
+    void on_pushButton_delete_clicked();
+
+private:
+    Ui::CharacterTool *ui;
+
+    SettingsManager *settingsManager;
+
+    DefaultSheet *defaultSheet;
+    DSA5Sheet *dsa5Sheet;
+
+    QStringList inactiveCharacters;
+    QString currentCharacter;
+
+    void setTemplates();
+    void loadCharacterSheets();
+    void updateCharacterList();
+
+    void createNewCharacter();
+
+    void makeCharacterInactive(int index);
+    void makeCharacterActive(int index);
+};
+
+#endif // CHARACTERTOOL_H

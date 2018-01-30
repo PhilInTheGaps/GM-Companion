@@ -12,4 +12,6 @@ QStringList shuffleStringList(QStringList list); // Shuffles a QStringList
 
 QString rot13(QString s); // Encrypts a string using the rot13 method, also decrypts encrypted strings
 
+void delay(int seconds);
+
 #endif // FUNCTIONS_H

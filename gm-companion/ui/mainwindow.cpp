@@ -7,7 +7,7 @@
 #include "gm-companion/tools/audio/audiotool.h"
 #include "gm-companion/tools/mapviewertool.h"
 #include "gm-companion/tools/dicetool.h"
-#include "gm-companion/tools/characters/characterviewertool.h"
+#include "gm-companion/tools/characters/charactertool.h"
 #include "gm-companion/tools/notes/notestool.h"
 #include "gm-companion/tools/convertertool.h"
 #include "gm-companion/tools/combattracker.h"
@@ -87,8 +87,8 @@ void MainWindow::addTools()
     ui->stackedWidget->addWidget(combatTracker);
 
     // Character Viewer
-    CharacterViewerTool *characterViewer = new CharacterViewerTool;
-    ui->stackedWidget->addWidget(characterViewer);
+    CharacterTool *characterTool = new CharacterTool;
+    ui->stackedWidget->addWidget(characterTool);
 
     // Generator Manager
     GeneratorManager *generatorManager = new GeneratorManager;
