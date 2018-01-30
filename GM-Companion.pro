@@ -61,7 +61,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/settings/settingsmanager.cpp \
     gm-companion/settings/optionsdialog.cpp \
     gm-companion/tools/addons/addonmanager.cpp \
-    gm-companion/tools/characters/charactertool.cpp
+    gm-companion/tools/characters/charactertool.cpp \
+    gm-companion/tools/characters/sheets/entaria2sheet.cpp
 
 HEADERS  += gm-companion/ui/mainwindow.h \
     # UI
@@ -103,7 +104,8 @@ HEADERS  += gm-companion/ui/mainwindow.h \
     # Settings
     gm-companion/settings/settingsmanager.h \
     gm-companion/settings/optionsdialog.h \
-    gm-companion/tools/addons/addonmanager.h
+    gm-companion/tools/addons/addonmanager.h \
+    gm-companion/tools/characters/sheets/entaria2sheet.h
 
 FORMS    += gm-companion/ui/mainwindow.ui \
     # UI
@@ -136,7 +138,8 @@ FORMS    += gm-companion/ui/mainwindow.ui \
     gm-companion/tools/generators/namegenerator.ui \
     # Settings
     gm-companion/settings/optionsdialog.ui \
-    gm-companion/tools/addons/addonmanager.ui
+    gm-companion/tools/addons/addonmanager.ui \
+    gm-companion/tools/characters/sheets/entaria2sheet.ui
 
 DISTFILES +=
 

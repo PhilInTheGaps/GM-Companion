@@ -1,0 +1,1747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Entaria2Sheet</class>
+ <widget class="QWidget" name="Entaria2Sheet">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1285</width>
+    <height>767</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Entaria v2 Sheet</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>3</number>
+     </property>
+     <widget class="QWidget" name="tab_eigenschaften">
+      <attribute name="title">
+       <string>Eigenschaften</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QFormLayout" name="formLayout_2">
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Geschlecht</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Beruf</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_name"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_geschlecht"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="lineEdit_beruf"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Spieler</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Geburtsort</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_spieler"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_geburtsort"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>Spezies</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>Geburtsdatum</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="lineEdit_spezies"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="lineEdit_geburtsdatum"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QTableWidget" name="tableWidget_eigenschaften_links">
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>78</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <row>
+            <property name="text">
+             <string>Kostitution</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Stärke</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Geschick</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Reflex</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Intelligenz</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Charisma</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Initiative</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Ausweichen</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Mag-Rettungsw.</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Bewegung / Sek.</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>Start</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Mod.</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Aktuell</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_eigenschaften_mitte">
+           <property name="columnCount">
+            <number>1</number>
+           </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <row>
+            <property name="text">
+             <string>Lebenspunkte</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Alter</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Gewicht</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Größe</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Gestalt</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Tragkraft</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Hebekraft</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Sichtbereich</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Nahrung</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Essen / Zeit</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Schlafen / Zeit</string>
+            </property>
+           </row>
+           <column/>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_eigenschaften_rechts">
+           <property name="columnCount">
+            <number>1</number>
+           </property>
+           <attribute name="horizontalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <row>
+            <property name="text">
+             <string>Kriechen</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Gehen</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Laufen</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Soz. Stufe</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Essenz</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Joker</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Kopfgeld</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Gesamt-EP</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Ausbau-EP</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Guthab-EP</string>
+            </property>
+           </row>
+           <column/>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QTableWidget" name="tableWidget_vorteile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>135</height>
+              </size>
+             </property>
+             <property name="rowCount">
+              <number>4</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Vorteile</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget_nachteile">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>135</height>
+              </size>
+             </property>
+             <property name="rowCount">
+              <number>4</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Nachteile</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QTableWidget" name="tableWidget_besondere_faehigkeiten">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>135</height>
+              </size>
+             </property>
+             <property name="rowCount">
+              <number>4</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Besondere Fähigkeiten</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget_krankheiten">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>135</height>
+              </size>
+             </property>
+             <property name="rowCount">
+              <number>4</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>(Geistes-) Krankheiten</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_spezifische_daten">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="rowCount">
+            <number>9</number>
+           </property>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Spezienspezifische Daten</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_kampf">
+      <attribute name="title">
+       <string>Kampfwerte</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Nahkampfwert</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_nahkampfwert"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Fernkampfwert</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_fernkampfwert"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget_fernkampf">
+         <property name="rowCount">
+          <number>5</number>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
+         <row/>
+         <row/>
+         <row/>
+         <row/>
+         <row/>
+         <column>
+          <property name="text">
+           <string>Fernkampwaffe</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Typ / Art</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Feuerart</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Reichweite</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>SW</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>BEM</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Tarnstufe</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Ladekapazität</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Munition</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QTableWidget" name="tableWidget_nahkampf">
+             <property name="rowCount">
+              <number>5</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Nahkampfwaffe</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>mind. Stärke</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Typ / Art</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>SW</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Tarnstufe</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget_granaten">
+             <property name="rowCount">
+              <number>5</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Granaten, Minen</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>WB</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>SW</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Anz.</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Effekt</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_ruestung">
+           <property name="rowCount">
+            <number>10</number>
+           </property>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Rüstungsname</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>PAZ</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>BEW</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>INI</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_fertigkeiten">
+      <attribute name="title">
+       <string>Fertigkeiten</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QTableWidget" name="tableWidget_fertigkeiten_links">
+           <property name="rowCount">
+            <number>30</number>
+           </property>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>95</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Fertigkeit</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Attr.</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Stufe</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>EW</string>
+            </property>
+           </column>
+           <item row="0" column="0">
+            <property name="text">
+             <string>Grundwissen</string>
+            </property>
+           </item>
+           <item row="1" column="0">
+            <property name="text">
+             <string>Nahkampf</string>
+            </property>
+           </item>
+           <item row="1" column="1">
+            <property name="text">
+             <string>Ges</string>
+            </property>
+           </item>
+           <item row="1" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="1" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="2" column="0">
+            <property name="text">
+             <string>Fernkampf</string>
+            </property>
+           </item>
+           <item row="2" column="1">
+            <property name="text">
+             <string>Ges</string>
+            </property>
+           </item>
+           <item row="2" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="2" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="3" column="0">
+            <property name="text">
+             <string>Abschätzen</string>
+            </property>
+           </item>
+           <item row="3" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="3" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="3" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="4" column="0">
+            <property name="text">
+             <string>Allgemeinwissen</string>
+            </property>
+           </item>
+           <item row="4" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="4" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="4" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="5" column="0">
+            <property name="text">
+             <string>Arbeitssuche</string>
+            </property>
+           </item>
+           <item row="5" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="5" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="5" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="6" column="0">
+            <property name="text">
+             <string>Balancieren</string>
+            </property>
+           </item>
+           <item row="6" column="1">
+            <property name="text">
+             <string>Ges</string>
+            </property>
+           </item>
+           <item row="6" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="6" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="7" column="0">
+            <property name="text">
+             <string>Durchsuchen</string>
+            </property>
+           </item>
+           <item row="7" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="7" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="7" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="8" column="0">
+            <property name="text">
+             <string>Entdecken</string>
+            </property>
+           </item>
+           <item row="8" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="8" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="8" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="9" column="0">
+            <property name="text">
+             <string>Erinnern</string>
+            </property>
+           </item>
+           <item row="9" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="9" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="9" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="10" column="0">
+            <property name="text">
+             <string>Fangen</string>
+            </property>
+           </item>
+           <item row="10" column="1">
+            <property name="text">
+             <string>Ges</string>
+            </property>
+           </item>
+           <item row="10" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="10" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="11" column="0">
+            <property name="text">
+             <string>Klettern</string>
+            </property>
+           </item>
+           <item row="11" column="1">
+            <property name="text">
+             <string>Ges</string>
+            </property>
+           </item>
+           <item row="11" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="11" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="12" column="0">
+            <property name="text">
+             <string>Lauschen</string>
+            </property>
+           </item>
+           <item row="12" column="1">
+            <property name="text">
+             <string>Int</string>
+            </property>
+           </item>
+           <item row="12" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="12" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="13" column="0">
+            <property name="text">
+             <string>Schwimmern</string>
+            </property>
+           </item>
+           <item row="13" column="1">
+            <property name="text">
+             <string>Kon</string>
+            </property>
+           </item>
+           <item row="13" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="13" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="14" column="0">
+            <property name="text">
+             <string>Springen</string>
+            </property>
+           </item>
+           <item row="14" column="1">
+            <property name="text">
+             <string>Stä</string>
+            </property>
+           </item>
+           <item row="14" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="14" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="15" column="0">
+            <property name="text">
+             <string>Verführen</string>
+            </property>
+           </item>
+           <item row="15" column="1">
+            <property name="text">
+             <string>Cha</string>
+            </property>
+           </item>
+           <item row="15" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="15" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="16" column="0">
+            <property name="text">
+             <string>Verhandeln</string>
+            </property>
+           </item>
+           <item row="16" column="1">
+            <property name="text">
+             <string>Cha</string>
+            </property>
+           </item>
+           <item row="16" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="16" column="3">
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item row="17" column="0">
+            <property name="text">
+             <string>Sprache Basic</string>
+            </property>
+           </item>
+           <item row="17" column="1">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </item>
+           <item row="17" column="2">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </item>
+           <item row="17" column="3">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_fertigkeiten_mitte">
+           <property name="rowCount">
+            <number>30</number>
+           </property>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>95</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Fertigkeit</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Attr.</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Stufe</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>EW</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_fertigkeiten_rechts">
+           <property name="rowCount">
+            <number>30</number>
+           </property>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>95</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Fertigkeit</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Attr.</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Stufe</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>EW</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_ausruestung">
+      <attribute name="title">
+       <string>Ausrüstung</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QTableWidget" name="tableWidget_ausruestung_links">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>210</number>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>Kopf</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Arme, Hände, Extremitäten</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Schultern</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Torso</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Kleidung, Aussehen</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Gewicht</string>
+              </property>
+             </column>
+             <item row="0" column="0">
+              <property name="text">
+               <string>Kopf</string>
+              </property>
+             </item>
+             <item row="3" column="0">
+              <property name="text">
+               <string>Arme, Hände, Extremitäten</string>
+              </property>
+             </item>
+             <item row="5" column="0">
+              <property name="text">
+               <string/>
+              </property>
+             </item>
+             <item row="6" column="0">
+              <property name="text">
+               <string>Schultern</string>
+              </property>
+             </item>
+             <item row="9" column="0">
+              <property name="text">
+               <string>Torso</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QTableWidget" name="tableWidget_ausruestung_rechts">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>210</number>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>Hüfte</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Beine</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Füße</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Kleidung, Aussehen</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Gewicht</string>
+              </property>
+             </column>
+             <item row="0" column="0">
+              <property name="text">
+               <string>Hüfte</string>
+              </property>
+             </item>
+             <item row="3" column="0">
+              <property name="text">
+               <string>Beine</string>
+              </property>
+             </item>
+             <item row="6" column="0">
+              <property name="text">
+               <string>Füße</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <layout class="QFormLayout" name="formLayout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Credits</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="lineEdit_credits"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Sonstiges</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEdit_sonstiges"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Gürtel- / Hosentaschen</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget_hosentaschen">
+             <property name="rowCount">
+              <number>8</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Gegenstand</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Gewicht</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Proviant / Tränke / Verbrauchsgut</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tableWidget_proviant">
+             <property name="rowCount">
+              <number>8</number>
+             </property>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <row/>
+             <column>
+              <property name="text">
+               <string>Gegenstand</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Anz. / Anwend.</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Gewicht</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Rucksack / Tasche / Beutel / Koffer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QTableWidget" name="tableWidget_rucksack_links">
+           <property name="rowCount">
+            <number>10</number>
+           </property>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>379</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Gegenstand</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Gewicht</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget_rucksack_rechts">
+           <property name="rowCount">
+            <number>10</number>
+           </property>
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>379</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="verticalHeaderVisible">
+            <bool>false</bool>
+           </attribute>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <row/>
+           <column>
+            <property name="text">
+             <string>Gegenstand</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Gewicht</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
