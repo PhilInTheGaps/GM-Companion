@@ -8,6 +8,7 @@
 #include "gm-companion/settings/settingsmanager.h"
 #include "sheets/defaultsheet.h"
 #include "sheets/dsa5sheet.h"
+#include "sheets/entaria2sheet.h"
 
 namespace Ui {
 class CharacterTool;
@@ -33,7 +34,6 @@ private slots:
     void on_listWidget_activeCharacters_currentItemChanged(QListWidgetItem *item);
 
     void on_pushButton_save_clicked();
-
     void on_pushButton_delete_clicked();
 
 private:
@@ -43,6 +43,7 @@ private:
 
     DefaultSheet *defaultSheet;
     DSA5Sheet *dsa5Sheet;
+    Entaria2Sheet *entaria2Sheet;
 
     QStringList inactiveCharacters;
     QString currentCharacter;

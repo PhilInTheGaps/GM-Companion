@@ -12,9 +12,7 @@
 
 #include "gm-companion/functions.h"
 
-CharacterTool::CharacterTool(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::CharacterTool)
+CharacterTool::CharacterTool(QWidget *parent) : QWidget(parent), ui(new Ui::CharacterTool)
 {
     ui->setupUi(this);
 
@@ -36,14 +34,11 @@ CharacterTool::~CharacterTool()
 // Add all enabled templates to the template combo box
 void CharacterTool::setTemplates()
 {
-    QStringList templates = { "DSA5" };
+    QStringList templates = { "DSA5", "Entaria_v2" };
 
     for (QString temp : templates)
     {
-        if (settingsManager->getIsAddonEnabled(temp))
-        {
-            ui->comboBox_template->addItem(temp);
-        }
+        ui->comboBox_template->addItem(temp);
     }
 }
 
@@ -55,6 +50,9 @@ void CharacterTool::loadCharacterSheets()
 
     dsa5Sheet = new DSA5Sheet;
     ui->stackedWidget->addWidget(dsa5Sheet);
+
+    entaria2Sheet = new Entaria2Sheet;
+    ui->stackedWidget->addWidget(entaria2Sheet);
 }
 
 // Get all characters and add them to their correct list
@@ -101,7 +99,7 @@ void CharacterTool::createNewCharacter()
     QString playerName    = ui->lineEdit_playerName->text();
     QString sheetTemplate = ui->comboBox_template->currentText();
 
-    if (!characterName.isNull())
+    if (!characterName.isNull() && !characterName.isEmpty())
     {
         QString charPath  = settingsManager->getSetting(Setting::charactersPath);
         QString character = characterName;
@@ -234,6 +232,11 @@ void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(
             index = 2;
             dsa5Sheet->load(filePath);
         }
+        else if (sheetTemplate == "Entaria_v2")
+        {
+            index = 3;
+            entaria2Sheet->load(filePath);
+        }
 
         ui->stackedWidget->setCurrentIndex(index);
     }
@@ -255,6 +258,10 @@ void CharacterTool::on_pushButton_save_clicked()
 
         case 2: // DSA5 Sheet
             dsa5Sheet->save(filePath);
+            break;
+
+        case 3: // Entaria v2 Sheet
+            entaria2Sheet->save(filePath);
             break;
 
         default: // No character selected
