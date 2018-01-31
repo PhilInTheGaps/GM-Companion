@@ -9,6 +9,8 @@
 #include <QStackedWidget>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QCheckBox>
+#include <QGraphicsView>
 
 #include "gm-companion/functions.h"
 
@@ -204,9 +206,26 @@ void CharacterTool::on_pushButton_createNewCharacter_clicked()
     createNewCharacter();
 }
 
+// Load character images
+void CharacterTool::loadCharacterImages(QString path, QStringList files)
+{
+    ui->listWidget_pages->clear();
+
+    for (QString file : files)
+    {
+        QString filePath = path + "/" + file;
+
+        QListWidgetItem *item = new QListWidgetItem;
+        item->setWhatsThis(filePath);
+        item->setText(file);
+        ui->listWidget_pages->addItem(item);
+    }
+
+    ui->stackedWidget_image_text->setCurrentIndex(1);
+}
+
 // Change currently displayed character
-void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(
-    QListWidgetItem *item)
+void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(QListWidgetItem *item)
 {
     if (item != NULL)
     {
@@ -216,29 +235,49 @@ void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(
 
         currentCharacter = character;
 
-        QSettings settings(charPath + "/" + characterFile + ".character", QSettings::IniFormat);
-        QString   sheetTemplate = settings.value("sheet_template", "NONE").toString();
-        QString   filePath      = charPath + "/" + characterFile + ".character";
+        QDir dir(charPath + "/" + character);
+        QStringList files;
+        bool useImage = ui->checkBox_useImages->isChecked();
 
-        int index = 0;
-
-        if (sheetTemplate == "Default Sheet")
+        if (useImage && dir.exists())
         {
-            index = 1;
-            defaultSheet->load(filePath);
+            files = dir.entryList({ "*.jpg", "*.jpeg", "*.png" });
         }
-        else if (sheetTemplate == "DSA5")
+        else
         {
-            index = 2;
-            dsa5Sheet->load(filePath);
-        }
-        else if (sheetTemplate == "Entaria_v2")
-        {
-            index = 3;
-            entaria2Sheet->load(filePath);
+            ui->stackedWidget_image_text->setCurrentIndex(0);
         }
 
-        ui->stackedWidget->setCurrentIndex(index);
+        if (files.size() > 0)
+        {
+            loadCharacterImages(charPath + "/" + character, files);
+        }
+        else
+        {
+            QSettings settings(charPath + "/" + characterFile + ".character", QSettings::IniFormat);
+            QString   sheetTemplate = settings.value("sheet_template", "NONE").toString();
+            QString   filePath      = charPath + "/" + characterFile + ".character";
+
+            int index = 0;
+
+            if (sheetTemplate == "Default Sheet")
+            {
+                index = 1;
+                defaultSheet->load(filePath);
+            }
+            else if (sheetTemplate == "DSA5")
+            {
+                index = 2;
+                dsa5Sheet->load(filePath);
+            }
+            else if (sheetTemplate == "Entaria_v2")
+            {
+                index = 3;
+                entaria2Sheet->load(filePath);
+            }
+
+            ui->stackedWidget->setCurrentIndex(index);
+        }
     }
 }
 
@@ -285,6 +324,38 @@ void CharacterTool::on_pushButton_delete_clicked()
         f.remove();
 
         updateCharacterList();
-        ui->listWidget_activeCharacters->setCurrentRow(0);
     }
+}
+
+void CharacterTool::on_listWidget_pages_currentItemChanged(QListWidgetItem *item)
+{
+    if (item != NULL)
+    {
+        QString filePath = item->whatsThis();
+
+
+        QPixmap pixmap(filePath);
+        QGraphicsScene *scene = new QGraphicsScene;
+        ui->graphicsView->setScene(scene);
+
+        scene->addPixmap(pixmap);
+
+        ui->graphicsView->fitInView(0, 0, pixmap.width(), pixmap.height(), Qt::KeepAspectRatio);
+    }
+}
+
+// QGraphicsView zoom in
+void CharacterTool::on_pushButton_zoomIn_clicked()
+{
+    ui->graphicsView->scale(2, 2);
+}
+
+void CharacterTool::on_pushButton_zoomOut_clicked()
+{
+    ui->graphicsView->scale(0.5, 0.5);
+}
+
+void CharacterTool::on_pushButton_reset_clicked()
+{
+    ui->graphicsView->resetTransform();
 }

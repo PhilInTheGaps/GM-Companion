@@ -55,13 +55,34 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_name"/>
+            <widget class="QLineEdit" name="lineEdit_name">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_geschlecht"/>
+            <widget class="QLineEdit" name="lineEdit_geschlecht">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLineEdit" name="lineEdit_beruf"/>
+            <widget class="QLineEdit" name="lineEdit_beruf">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_8">
@@ -89,10 +110,24 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_spieler"/>
+            <widget class="QLineEdit" name="lineEdit_spieler">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_geburtsort"/>
+            <widget class="QLineEdit" name="lineEdit_geburtsort">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -113,10 +148,24 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="lineEdit_spezies"/>
+            <widget class="QLineEdit" name="lineEdit_spezies">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLineEdit" name="lineEdit_geburtsdatum"/>
+            <widget class="QLineEdit" name="lineEdit_geburtsdatum">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -126,6 +175,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QTableWidget" name="tableWidget_eigenschaften_links">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <attribute name="horizontalHeaderDefaultSectionSize">
             <number>78</number>
            </attribute>
@@ -201,6 +256,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_eigenschaften_mitte">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="columnCount">
             <number>1</number>
            </property>
@@ -270,6 +331,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_eigenschaften_rechts">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="columnCount">
             <number>1</number>
            </property>
@@ -346,6 +413,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -379,6 +452,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
              </property>
              <property name="maximumSize">
               <size>
@@ -418,6 +497,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -451,6 +536,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
              </property>
              <property name="maximumSize">
               <size>
@@ -487,6 +578,12 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
            </property>
            <property name="rowCount">
             <number>9</number>
@@ -532,7 +629,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_nahkampfwert"/>
+          <widget class="QLineEdit" name="lineEdit_nahkampfwert">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">
@@ -542,7 +646,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_fernkampfwert"/>
+          <widget class="QLineEdit" name="lineEdit_fernkampfwert">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer">
@@ -561,6 +672,12 @@
        </item>
        <item>
         <widget class="QTableWidget" name="tableWidget_fernkampf">
+         <property name="minimumSize">
+          <size>
+           <width>10</width>
+           <height>10</height>
+          </size>
+         </property>
          <property name="rowCount">
           <number>5</number>
          </property>
@@ -628,6 +745,12 @@
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <widget class="QTableWidget" name="tableWidget_nahkampf">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="rowCount">
               <number>5</number>
              </property>
@@ -671,6 +794,12 @@
            </item>
            <item>
             <widget class="QTableWidget" name="tableWidget_granaten">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="rowCount">
               <number>5</number>
              </property>
@@ -716,6 +845,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_ruestung">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>10</number>
            </property>
@@ -767,6 +902,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <widget class="QTableWidget" name="tableWidget_fertigkeiten_links">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>30</number>
            </property>
@@ -1178,6 +1319,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_fertigkeiten_mitte">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>30</number>
            </property>
@@ -1244,6 +1391,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_fertigkeiten_rechts">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>30</number>
            </property>
@@ -1328,6 +1481,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
              </property>
              <property name="maximumSize">
               <size>
@@ -1453,6 +1612,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -1550,7 +1715,14 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLineEdit" name="lineEdit_credits"/>
+              <widget class="QLineEdit" name="lineEdit_credits">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>10</height>
+                </size>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_7">
@@ -1560,7 +1732,14 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QLineEdit" name="lineEdit_sonstiges"/>
+              <widget class="QLineEdit" name="lineEdit_sonstiges">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>10</height>
+                </size>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -1577,6 +1756,12 @@
            </item>
            <item>
             <widget class="QTableWidget" name="tableWidget_hosentaschen">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="rowCount">
               <number>8</number>
              </property>
@@ -1615,6 +1800,12 @@
            </item>
            <item>
             <widget class="QTableWidget" name="tableWidget_proviant">
+             <property name="minimumSize">
+              <size>
+               <width>10</width>
+               <height>10</height>
+              </size>
+             </property>
              <property name="rowCount">
               <number>8</number>
              </property>
@@ -1664,6 +1855,12 @@
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
           <widget class="QTableWidget" name="tableWidget_rucksack_links">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>10</number>
            </property>
@@ -1700,6 +1897,12 @@
          </item>
          <item>
           <widget class="QTableWidget" name="tableWidget_rucksack_rechts">
+           <property name="minimumSize">
+            <size>
+             <width>10</width>
+             <height>10</height>
+            </size>
+           </property>
            <property name="rowCount">
             <number>10</number>
            </property>

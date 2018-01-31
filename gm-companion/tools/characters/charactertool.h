@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QStringList>
 #include <QListWidgetItem>
+#include <QDir>
 
 #include "gm-companion/settings/settingsmanager.h"
 #include "sheets/defaultsheet.h"
@@ -36,6 +37,14 @@ private slots:
     void on_pushButton_save_clicked();
     void on_pushButton_delete_clicked();
 
+    void on_listWidget_pages_currentItemChanged(QListWidgetItem *item);
+
+    void on_pushButton_zoomIn_clicked();
+
+    void on_pushButton_zoomOut_clicked();
+
+    void on_pushButton_reset_clicked();
+
 private:
     Ui::CharacterTool *ui;
 
@@ -51,6 +60,8 @@ private:
     void setTemplates();
     void loadCharacterSheets();
     void updateCharacterList();
+
+    void loadCharacterImages(QString path, QStringList files);
 
     void createNewCharacter();
 
