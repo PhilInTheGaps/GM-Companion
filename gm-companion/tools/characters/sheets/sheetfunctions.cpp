@@ -24,6 +24,7 @@ void loadTableWidget_horizontal(QTableWidget *table, QString value, QStringList 
 {
     int size = settings->beginReadArray(value);
 
+    // Fill in all the values from the array
     for (int i = 0; i < size; i++)
     {
         settings->setArrayIndex(i);
@@ -37,8 +38,23 @@ void loadTableWidget_horizontal(QTableWidget *table, QString value, QStringList 
         }
     }
 
+    // Empty every other row
+    if (table->columnCount() > size)
+    {
+        for (int i = size; i < table->columnCount(); i++)
+        {
+            for (int j = 0; j < headers.size(); j++)
+            {
+                QTableWidgetItem *item = new QTableWidgetItem("");
+                item->setToolTip("");
+                table->setItem(j, i, item);
+            }
+        }
+    }
+
     settings->endArray();
 
+    // Resize Headers
     table->resizeRowsToContents();
 }
 
@@ -51,6 +67,7 @@ void loadTableWidget_vertical(QTableWidget *table, QString value, QStringList he
 {
     int size = settings->beginReadArray(value);
 
+    // Fill in all the values from the array
     for (int i = 0; i < size; i++)
     {
         settings->setArrayIndex(i);
@@ -64,10 +81,28 @@ void loadTableWidget_vertical(QTableWidget *table, QString value, QStringList he
         }
     }
 
+    // Empty every other row
+    if (table->rowCount() > size)
+    {
+        for (int i = size; i < table->rowCount(); i++)
+        {
+            for (int j = 0; j < headers.size(); j++)
+            {
+                QTableWidgetItem *item = new QTableWidgetItem("");
+                item->setToolTip("");
+                table->setItem(i, j, item);
+            }
+        }
+    }
+
     settings->endArray();
 
-    table->resizeColumnsToContents();
+    // Resize Headers
     table->resizeRowsToContents();
+
+    // I have no idea why, but if there is only one column the header glitches
+    // really badly
+    if (headers.size() > 1) table->resizeColumnsToContents();
 }
 
 // Save line edit value

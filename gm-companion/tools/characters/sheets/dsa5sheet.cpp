@@ -2,6 +2,8 @@
 #include "ui_dsa5sheet.h"
 #include "sheetfunctions.h"
 
+#include <QHeaderView>
+
 DSA5Sheet::DSA5Sheet(QWidget *parent) : QWidget(parent), ui(new Ui::DSA5Sheet)
 {
     ui->setupUi(this);
@@ -208,14 +210,12 @@ void DSA5Sheet::load(QString filePath)
     loadLineEdit(ui->lineEdit_leiteigenschaft_magisch, "magische_leiteigenschaft", settings);
     loadLineEdit(ui->lineEdit_merkmal,                 "merkmal",                  settings);
     loadLineEdit(ui->lineEdit_tradition_magisch,       "magische_tradition",       settings);
-    loadTableWidget_vertical(ui->tableWidget_magische_sonderfertigkeiten, "magische_sonderfertigkeiten", { "sonderfertigkeit" },
-                                                                                                    settings);
-    loadTableWidget_vertical(ui->tableWidget_zaubertricks,                "zaubertricks",                { "zaubertrick" },
-                                                                                                    settings);
+    loadTableWidget_vertical(ui->tableWidget_magische_sonderfertigkeiten, "magische_sonderfertigkeiten", { "sonderfertigkeit" }, settings);
+    loadTableWidget_vertical(ui->tableWidget_zaubertricks,                "zaubertricks",                { "zaubertrick" },      settings);
 
     // Liturgien & Zeremonien
-    loadTableWidget_vertical(ui->tableWidget_liturgien, "liturgien", { "liturgie", "probe", "fw", "kosten", "liturgiedauer", "reichweite", "wirkungsdauer",
-                                                                       "aspekt", "sf", "wirkung" }, settings);
+    loadTableWidget_vertical(ui->tableWidget_liturgien,                   "liturgien",                   { "liturgie", "probe", "fw", "kosten", "liturgiedauer", "reichweite", "wirkungsdauer",
+                                                                                                           "aspekt", "sf", "wirkung" }, settings);
     loadLineEdit(ui->lineEdit_leiteigenschaft_klerikal, "klerikale_leiteigenschaft", settings);
     loadLineEdit(ui->lineEdit_aspekt,                   "aspekt",                    settings);
     loadLineEdit(ui->lineEdit_tradition_klerikal,       "klerikale_tradition",       settings);
