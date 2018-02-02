@@ -146,15 +146,32 @@ void AudioTool::loadProject(QString project)
     QHBoxLayout *categoryLayout = new QHBoxLayout;
     ui->categoryBar->setLayout(categoryLayout);
 
-    // Load categories
-    int categories = settings.beginReadArray("Categories");
+    // Load category order
+    QStringList categoryList;
+    int categories = settings.beginReadArray("Categories_Order");
+
+    for (int i = 0; i < categories; i++)
+    {
+        settings.setArrayIndex(i);
+        categoryList.append(settings.value("name").toString());
+    }
+
+    settings.endArray();
+
+    // Load category data and create buttons
+    categories = settings.beginReadArray("Categories");
+
+    QString categoryName;
+    QString categoryDescription;
+
+    QList<QPushButton *> categoryButtons;
 
     for (int i = 0; i < categories; i++)
     {
         settings.setArrayIndex(i);
 
-        QString categoryName        = settings.value("name").toString();
-        QString categoryDescription = settings.value("description").toString();
+        categoryName        = settings.value("name").toString();
+        categoryDescription = settings.value("description").toString();
 
         // Category Buttons
         QPushButton *categoryButton = new QPushButton(categoryName);
@@ -166,16 +183,26 @@ void AudioTool::loadProject(QString project)
         f.setFamily("Helvetica");
 
         categoryButton->setFont(f);
-
         categoryButton->setStyleSheet("QPushButton{color: #eff0f1; background-color: #31363b; border-width: 1px; border-color: #76797C; "
                                       "border-style: solid; padding: 5px; border-radius: 2px; outline: none;}");
 
         categoryButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 
-        ui->categoryBar->layout()->addWidget(categoryButton);
         connect(categoryButton, &QPushButton::clicked, this, [ = ]() { changeCategory(categoryName); });
+
+        // Add button to list and insert it at the correct index
+        int index = categoryList.indexOf(categoryName);
+
+        if (index > i) index = i;
+        categoryButtons.insert(index, categoryButton);
     }
     settings.endArray();
+
+    // Add buttons to layout
+    for (QPushButton *b : categoryButtons)
+    {
+        ui->categoryBar->layout()->addWidget(b);
+    }
 }
 
 // Generate the scenario list
@@ -215,17 +242,10 @@ void AudioTool::generateElementButtons(QString scenario)
     QVBoxLayout *vlayout = new QVBoxLayout;
     ui->scrollAreaWidgetContents->setLayout(vlayout);
 
-    FlowLayout *musicLayout = new FlowLayout;
-    vlayout->addLayout(musicLayout);
-
-    FlowLayout *soundLayout = new FlowLayout;
-    vlayout->addLayout(soundLayout);
-
-    FlowLayout *radioLayout = new FlowLayout;
-    vlayout->addLayout(radioLayout);
+    FlowLayout *elementLayout = new FlowLayout;
+    vlayout->addLayout(elementLayout);
 
     vlayout->addItem(new QSpacerItem(10, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
-
 
     QSettings settings(settingsManager->getSetting(audioPath) + "/" + currentProject, QSettings::IniFormat);
 
@@ -234,6 +254,20 @@ void AudioTool::generateElementButtons(QString scenario)
     int buttonWidth  = screenWidth / 10;
     int buttonHeight = screenWidth / 10;
 
+    // Get element order
+    QStringList elements;
+    int count = settings.beginReadArray(category + "_" + scenario + "_Order");
+
+    for (int i = 0; i < count; i++)
+    {
+        settings.setArrayIndex(i);
+        elements.append(settings.value("name").toString());
+    }
+
+    settings.endArray();
+
+    // Get all elements
+    QList<QWidget *> bWidgets;
     QStringList listNames = { "MusicLists", "SoundLists", "Radios" };
     qDebug().noquote() << "Adding Elements ...";
 
@@ -255,7 +289,6 @@ void AudioTool::generateElementButtons(QString scenario)
 
             bWidget->setMaximumWidth(buttonWidth + 10);
             bWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-
 
             bLabel->setAlignment(Qt::AlignHCenter);
             bLabel->setWordWrap(true);
@@ -282,7 +315,6 @@ void AudioTool::generateElementButtons(QString scenario)
                 connect(button, &QPushButton::clicked, this, [ = ]() {
                     playMusic(name + ";" + category + ";" + scenario);
                 });
-                musicLayout->addWidget(bWidget);
                 break;
 
             case 1: // Sound
@@ -292,7 +324,6 @@ void AudioTool::generateElementButtons(QString scenario)
                 connect(button, &QPushButton::clicked, this, [ = ]() {
                     playSound(name + ";" + category + ";" + scenario);
                 });
-                soundLayout->addWidget(bWidget);
                 break;
 
             case 2: // Radio
@@ -301,7 +332,6 @@ void AudioTool::generateElementButtons(QString scenario)
                 connect(button, &QPushButton::clicked, this, [ = ]() {
                     playRadio(name + ";" + category + ";" + scenario);
                 });
-                radioLayout->addWidget(bWidget);
                 break;
 
             default:
@@ -318,8 +348,18 @@ void AudioTool::generateElementButtons(QString scenario)
             {
                 button->setIcon(QIcon(QPixmap(settingsManager->getSetting(resourcesPath) + "/" + iconPath).scaledToWidth(buttonWidth, Qt::SmoothTransformation)));
             }
+
+            int index = elements.indexOf(name);
+
+            if (index > j) index = j;
+            bWidgets.insert(index, bWidget);
         }
         settings.endArray();
+    }
+
+    for (QWidget *w : bWidgets)
+    {
+        elementLayout->addWidget(w);
     }
 }
 

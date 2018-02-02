@@ -31,8 +31,6 @@ private slots:
 
     void on_pushButton_deleteSelected_clicked();
 
-    void on_pushButton_saveElement_clicked();
-
     void on_listWidget_musicList_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_soundList_itemDoubleClicked(QListWidgetItem *item);
     void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
@@ -60,16 +58,18 @@ private slots:
     void on_pushButton_newElement_clicked();
 
     void on_pushButton_detectMissingMusic_clicked();
-
     void on_pushButton_detectMissingSounds_clicked();
 
     void on_pushButton_addToMusicList_clicked();
-
     void on_pushButton_addToSoundList_clicked();
 
     void on_pushButton_removeSoundFile_clicked();
-
     void on_pushButton_removeFileMusic_clicked();
+
+    void on_pushButton_up_clicked();
+    void on_pushButton_down_clicked();
+
+    void on_pushButton_save_clicked();
 
 private:
     Ui::AudioEditor *ui;
@@ -88,12 +88,18 @@ private:
     QString currentElement;
 
     void save();
+    void saveCategoryOrder();
+    void saveElement();
+    void saveElementOrder();
 
     void getProjects();
     void loadProject();
     void loadCategories();
     void loadScenarios(QTreeWidgetItem *catItem);
-    void loadElements(QTreeWidgetItem *scenItem, QString category, int type);
+    void loadElement(QTreeWidgetItem *scenItem, QString category, QString element, int type);
+    void loadElements(QTreeWidgetItem *scenItem, QString category);
+
+    void moveElement(QTreeWidgetItem *item, int steps);
 
     void addFileToList(QTreeWidgetItem *item, int column, int type);
     void addAllFilesFromFolder(QTreeWidgetItem *item, int type);
