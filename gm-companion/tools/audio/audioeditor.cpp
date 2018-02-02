@@ -11,15 +11,14 @@
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QLabel>
+#include <QPushButton>
 
-AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(
-        new Ui::AudioEditor)
+AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEditor)
 {
     ui->setupUi(this);
 
     previewPlayer = new QMediaPlayer;
-    connect(previewPlayer, SIGNAL(positionChanged(qint64)), this,
-            SLOT(previewPlayer_positionChanged(qint64)));
+    connect(previewPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(previewPlayer_positionChanged(qint64)));
 
     settingsManager = new SettingsManager;
 
@@ -42,8 +41,7 @@ void AudioEditor::getProjects()
     for (QString project : getFiles(settingsManager->getSetting(audioPath)))
     {
         if (project.contains(".ini") &&
-            (project !=
-             "desktop.ini")) ui->comboBox_projects->addItem(cleanText(project));
+            (project != "desktop.ini")) ui->comboBox_projects->addItem(cleanText(project));
     }
 }
 
@@ -67,20 +65,14 @@ void AudioEditor::loadProject()
     // Generating music files tree view
     if (!filesAreLoaded)
     {
-        ui->treeWidget_music->header()->setSectionResizeMode(
-            QHeaderView::ResizeToContents);
-        loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(
-                                         musicPath));
+        ui->treeWidget_music->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        loadFolderContentsToTreeView(ui->treeWidget_music, settingsManager->getSetting(musicPath));
 
-        ui->treeWidget_sound->header()->setSectionResizeMode(
-            QHeaderView::ResizeToContents);
-        loadFolderContentsToTreeView(ui->treeWidget_sound, settingsManager->getSetting(
-                                         soundPath));
+        ui->treeWidget_sound->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        loadFolderContentsToTreeView(ui->treeWidget_sound, settingsManager->getSetting(soundPath));
 
-        ui->treeWidget_radio->header()->setSectionResizeMode(
-            QHeaderView::ResizeToContents);
-        loadFolderContentsToTreeView(ui->treeWidget_radio, settingsManager->getSetting(
-                                         radioPath));
+        ui->treeWidget_radio->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+        loadFolderContentsToTreeView(ui->treeWidget_radio, settingsManager->getSetting(radioPath));
 
         filesAreLoaded = true;
     }
@@ -90,8 +82,7 @@ void AudioEditor::loadProject()
 }
 
 // Load a folder structure to a tree view
-void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget,
-                                               QString      baseFolder)
+void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder)
 {
     qDebug() << "Loading files...";
 
@@ -106,9 +97,7 @@ void AudioEditor::loadFolderContentsToTreeView(QTreeWidget *treeWidget,
 }
 
 // Adds a child item for every subfolder in the directory
-void AudioEditor::addSubFoldersToTreeItem(QTreeWidgetItem *baseItem,
-                                          QString baseFolder, bool topLevel,
-                                          QTreeWidget *tree)
+void AudioEditor::addSubFoldersToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel, QTreeWidget *tree)
 {
     for (QString folder : getFolders(baseFolder))
     {
@@ -128,9 +117,7 @@ void AudioEditor::addSubFoldersToTreeItem(QTreeWidgetItem *baseItem,
 }
 
 // Adds a child item for every file inside the folder
-void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem,
-                                     QString baseFolder, bool topLevel,
-                                     QTreeWidget *tree)
+void AudioEditor::addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel, QTreeWidget *tree)
 {
     QStringList fileFormats = { ".mp3", ".wav", ".ogg", ".flac", ".m3u", ".pls" };
 
@@ -198,9 +185,7 @@ void AudioEditor::save()
 {
     if (!projectName.isNull())
     {
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
         settings.setValue("ProjectName", projectName);
     }
 }
@@ -210,9 +195,7 @@ void AudioEditor::addNewCategory()
 {
     if ((ui->lineEdit_elementName->text() != NULL) && (projectName != NULL))
     {
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
         int size = settings.beginReadArray("Categories");
         settings.endArray();
@@ -247,17 +230,26 @@ void AudioEditor::loadCategories()
         // Making sure the tree widget is empty
         qDebug() << "Clearing tree view";
         ui->treeWidget_categories->clear();
-        ui->treeWidget_categories->header()->setSectionResizeMode(
-            QHeaderView::ResizeToContents);
+        ui->treeWidget_categories->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
         // Setting up QSettings
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
-        int catCount = settings.beginReadArray("Categories");
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
-        // Get all categories and sort them alphabetically
-        for (int i = 0; i < catCount; i++)
+        QStringList categories;
+        int count = settings.beginReadArray("Categories_Order");
+
+        for (int i = 0; i < count; i++)
+        {
+            settings.setArrayIndex(i);
+            categories.append(settings.value("name").toString());
+        }
+
+        settings.endArray();
+
+        count = settings.beginReadArray("Categories");
+
+        // Get all categories
+        for (int i = 0; i < count; i++)
         {
             settings.setArrayIndex(i);
             QString category = settings.value("name").toString();
@@ -266,12 +258,15 @@ void AudioEditor::loadCategories()
             QTreeWidgetItem *catItem = new QTreeWidgetItem(0);
             catItem->setText(0, category);
             catItem->setToolTip(0, category);
-            catItem->setIcon(0,
-                             style()->standardIcon(QStyle::SP_FileDialogStart));
+            catItem->setIcon(0, style()->standardIcon(QStyle::SP_FileDialogStart));
             catItem->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 
             // add to tree
-            ui->treeWidget_categories->addTopLevelItem(catItem);
+            int index = categories.indexOf(category);
+
+            if (index > i) index = i;
+
+            ui->treeWidget_categories->insertTopLevelItem(index, catItem);
 
             // load scenarios
             loadScenarios(catItem);
@@ -287,17 +282,15 @@ void AudioEditor::loadCategories()
 void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
 {
     // Setting up QSettings
-    QSettings settings(settingsManager->getSetting(
-                           audioPath) + "/" + projectName + ".ini",
-                       QSettings::IniFormat);
-    int scenCount = settings.beginReadArray(catItem->text(0) + "_Scenarios");
+    QSettings *settings = new QSettings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
+    int scenCount       = settings->beginReadArray(catItem->text(0) + "_Scenarios");
 
     // Loading Scenarios
     for (int i = 0; i < scenCount; i++)
     {
-        settings.setArrayIndex(i);
+        settings->setArrayIndex(i);
 
-        QString scenario = settings.value("name").toString();
+        QString scenario = settings->value("name").toString();
         qDebug() << "   Loading scenario: " + scenario + " ...";
 
         QTreeWidgetItem *scenItem = new QTreeWidgetItem(1);
@@ -308,28 +301,20 @@ void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
 
         catItem->addChild(scenItem);
 
-        qDebug() << "Current Category:" << currentCategory << "Local:" <<
-            catItem->text(0);
-        qDebug() << "Current Scenario:" << currentScenario << "Local:" <<
-            scenario;
-
         // Expand Item if it is the current Scenario
-        if ((catItem->text(0) == currentCategory) &&
-            (scenario == currentScenario)) scenItem->setExpanded(true);
+        if ((catItem->text(0) == currentCategory) && (scenario == currentScenario)) scenItem->setExpanded(true);
 
         // Add music lists, sound lists and radios
-        loadElements(scenItem, catItem->text(0), 2); // Music
-        loadElements(scenItem, catItem->text(0), 3); // Sound
-        loadElements(scenItem, catItem->text(0), 4); // Radio
+        loadElements(scenItem, catItem->text(0));
     }
 
-    settings.endArray();
+    settings->endArray();
 }
 
-// Add all Elements to Scenario
-void AudioEditor::loadElements(QTreeWidgetItem *scenItem, QString category,
-                               int type)
+void AudioEditor::loadElement(QTreeWidgetItem *scenItem, QString category, QString element, int type)
 {
+    QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
+
     QString suffix;
     QIcon   icon;
 
@@ -353,34 +338,57 @@ void AudioEditor::loadElements(QTreeWidgetItem *scenItem, QString category,
         break;
     }
 
-    // Setting up QSettings
-    QSettings settings(settingsManager->getSetting(
-                           audioPath) + "/" + projectName + ".ini",
-                       QSettings::IniFormat);
-    int count = settings.beginReadArray(category + "_" + scenItem->text(
-                                            0) + suffix);
+    int count = settings.beginReadArray(category + "_" + scenItem->text(0) + suffix);
+
+    QString list;
 
     // Loading Elements
     for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
+        list = settings.value("name").toString();
 
-        QString list = settings.value("name").toString();
+        if (list == element)
+        {
+            QTreeWidgetItem *item = new QTreeWidgetItem(type);
+            item->setText(0, list);
+            item->setToolTip(0, list);
+            item->setIcon(0, icon);
 
-        QTreeWidgetItem *item = new QTreeWidgetItem(type);
-        item->setText(0, list);
-        item->setToolTip(0, list);
-        item->setIcon(0, icon);
+            scenItem->addChild(item);
 
-        scenItem->addChild(item);
-
-        if ((scenItem->text(0) == currentScenario) &&
-            (scenItem->parent()->text(0) == currentCategory) &&
-            (list == currentElement)) ui->treeWidget_categories->setCurrentItem(
-                item);
+            if ((scenItem->text(0) == currentScenario) &&
+                (scenItem->parent()->text(0) == currentCategory) &&
+                (list == currentElement)) ui->treeWidget_categories->setCurrentItem(item);
+        }
     }
 
     settings.endArray();
+}
+
+// Add all Elements to Scenario
+void AudioEditor::loadElements(QTreeWidgetItem *scenItem, QString category)
+{
+    QSettings *settings = new QSettings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
+
+    int count = settings->beginReadArray(category + "_" + scenItem->text(0) + "_Order");
+
+    QString name;
+    QString type;
+
+    for (int i = 0; i < count; i++)
+    {
+        settings->setArrayIndex(i);
+
+        name = settings->value("name").toString();
+        type = settings->value("type").toString();
+
+        if (type == "MusicLists") loadElement(scenItem, category, name, 2);
+        else if (type == "SoundLists") loadElement(scenItem, category, name, 3);
+        else if (type == "Radios") loadElement(scenItem, category, name, 4);
+    }
+
+    settings->endArray();
 }
 
 // When an item in the project content tree is double clicked
@@ -469,7 +477,6 @@ void AudioEditor::on_pushButton_deleteSelected_clicked()
         for (int i = 0; i < elements.size(); i++)
         {
             settings.setArrayIndex(i);
-
             settings.setValue("name", elements.at(i));
         }
         settings.endArray();
@@ -489,9 +496,7 @@ void AudioEditor::addNewScenario()
 
     if (isProjectOpen && (scenario != NULL) && (currentCategory != NULL))
     {
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
         int size = settings.beginReadArray(currentCategory + "_Scenarios");
         settings.endArray();
@@ -540,9 +545,7 @@ void AudioEditor::addNewElement(int type)
     if (isProjectOpen && !currentCategory.isNull() && !currentScenario.isNull() &&
         !element.isNull())
     {
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
         int size = settings.beginReadArray(arrayName);
         settings.endArray();
@@ -571,9 +574,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
         ui->stackedWidget_editElement->setCurrentIndex(type + 1);
 
         // Load stuff
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
         int arraySize;
 
         QString description;
@@ -646,8 +647,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
 
             currentElement = current->text(0);
 
-            arraySize = settings.beginReadArray(
-                currentCategory + "_" + currentScenario + "_MusicLists");
+            arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_MusicLists");
 
             for (int i = 0; i < arraySize; i++)
             {
@@ -666,25 +666,14 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
                     {
                         QString resPath = settingsManager->getSetting(
                             resourcesPath);
-                        ui->label_musicIcon->setPixmap(QPixmap(resPath + "/" +
-                                                               iconPath).scaledToWidth(
-                                                           ui->label_musicIcon->
-                                                           width()));
+                        ui->label_musicIcon->setPixmap(QPixmap(resPath + "/" + iconPath).scaledToWidth(ui->label_musicIcon->width()));
                     }
 
                     // Get Playback Mode of Music List
-                    ui->radioButton_musicListRandomOrder->setChecked(settings.value(
-                                                                         "randomPlayback",
-                                                                         false).toBool());
-                    ui->radioButton_musicListShuffleList->setChecked(settings.value(
-                                                                         "randomPlaylist",
-                                                                         true).toBool());
-                    ui->radioButton_musicListLoopList->setChecked(settings.value(
-                                                                      "loop",
-                                                                      false).toBool());
-                    ui->radioButton_musicListSequential->setChecked(settings.value(
-                                                                        "sequential",
-                                                                        false).toBool());
+                    ui->radioButton_musicListRandomOrder->setChecked(settings.value("randomPlayback", false).toBool());
+                    ui->radioButton_musicListShuffleList->setChecked(settings.value("randomPlaylist", true).toBool());
+                    ui->radioButton_musicListLoopList->setChecked(settings.value("loop", false).toBool());
+                    ui->radioButton_musicListSequential->setChecked(settings.value("sequential", false).toBool());
 
                     // Songs
                     ui->listWidget_musicList->clear();
@@ -694,10 +683,8 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
                     for (int i = 0; i < songs; i++)
                     {
                         settings.setArrayIndex(i);
-                        QString songName =
-                            settings.value("name", "UNKNOWN NAME").toString();
-                        QString songPath =
-                            settings.value("path", "UNKNOWN PATH").toString();
+                        QString songName = settings.value("name", "UNKNOWN NAME").toString();
+                        QString songPath = settings.value("path", "UNKNOWN PATH").toString();
 
                         QListWidgetItem *item = new QListWidgetItem(songName);
                         item->setWhatsThis(songPath);
@@ -729,8 +716,7 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
 
             currentElement = current->text(0);
 
-            arraySize = settings.beginReadArray(
-                currentCategory + "_" + currentScenario + "_SoundLists");
+            arraySize = settings.beginReadArray(currentCategory + "_" + currentScenario + "_SoundLists");
 
             for (int i = 0; i < arraySize; i++)
             {
@@ -749,21 +735,12 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
                     {
                         QString resPath = settingsManager->getSetting(
                             resourcesPath);
-                        ui->label_soundIcon->setPixmap(QPixmap(resPath + "/" +
-                                                               iconPath).scaledToWidth(
-                                                           ui->label_soundIcon->
-                                                           width()));
+                        ui->label_soundIcon->setPixmap(QPixmap(resPath + "/" + iconPath).scaledToWidth(ui->label_soundIcon->width()));
                     }
 
-                    ui->radioButton_soundListRandom->setChecked(settings.value(
-                                                                    "random",
-                                                                    true).toBool());
-                    ui->radioButton_soundListLoop->setChecked(settings.value(
-                                                                  "loop",
-                                                                  false).toBool());
-                    ui->radioButton_soundListSequential->setChecked(settings.value(
-                                                                        "sequential",
-                                                                        false).toBool());
+                    ui->radioButton_soundListRandom->setChecked(settings.value("random", true).toBool());
+                    ui->radioButton_soundListLoop->setChecked(settings.value("loop", false).toBool());
+                    ui->radioButton_soundListSequential->setChecked(settings.value("sequential", false).toBool());
 
                     // Sounds
                     ui->listWidget_soundList->clear();
@@ -773,10 +750,8 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
                     for (int i = 0; i < sounds; i++)
                     {
                         settings.setArrayIndex(i);
-                        QString soundName =
-                            settings.value("name", "UNKNOWN NAME").toString();
-                        QString soundPath =
-                            settings.value("path", "UNKNOWN PATH").toString();
+                        QString soundName = settings.value("name", "UNKNOWN NAME").toString();
+                        QString soundPath = settings.value("path", "UNKNOWN PATH").toString();
 
                         QListWidgetItem *item = new QListWidgetItem(soundName);
                         item->setWhatsThis(soundPath);
@@ -828,14 +803,10 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
                     {
                         QString resPath = settingsManager->getSetting(
                             resourcesPath);
-                        ui->label_radioIcon->setPixmap(QPixmap(resPath + "/" +
-                                                               iconPath).scaledToWidth(
-                                                           ui->label_radioIcon->
-                                                           width()));
+                        ui->label_radioIcon->setPixmap(QPixmap(resPath + "/" + iconPath).scaledToWidth(ui->label_radioIcon->width()));
                     }
 
-                    ui->lineEdit_radioURL->setText(settings.value(
-                                                       "URL").toString());
+                    ui->lineEdit_radioURL->setText(settings.value("URL").toString());
                 }
             }
 
@@ -851,137 +822,210 @@ void AudioEditor::on_treeWidget_categories_currentItemChanged(
     }
 }
 
-// Save the element
-void AudioEditor::on_pushButton_saveElement_clicked()
+// Save category order
+void AudioEditor::saveCategoryOrder()
 {
-    QTreeWidgetItem *item = ui->treeWidget_categories->currentItem();
-    QString name          = item->text(0);
-    QString projectPath   = settingsManager->getSetting(audioPath) + "/" +
-                            projectName + ".ini";
+    QString   projectPath = settingsManager->getSetting(audioPath) + "/" + projectName + ".ini";
     QSettings settings(projectPath, QSettings::IniFormat);
+    QTreeWidget *tree = ui->treeWidget_categories;
 
-    QString description;
-    QString debugMessage;
-    QString arrayName;
-    QString contentName;
-    QLineEdit   *iconLine;
-    QListWidget *listWidget;
+    int count = tree->topLevelItemCount();
 
-    switch (item->type()) {
-    case 0: // Category
-        debugMessage = "Saving category ...";
-        description  = ui->textEdit_categoryDescription->toPlainText();
-        arrayName    = "Categories";
-        break;
+    settings.beginWriteArray("Categories_Order");
 
-    case 1: // Scenario
-        debugMessage = "Saving scenario ...";
-        description  = ui->textEdit_scenarioDescription->toPlainText();
-        arrayName    = currentCategory + "_Scenarios";
-        break;
-
-    case 2: // Music List
-        debugMessage = "Saving music list ...";
-        description  = description = ui->lineEdit_musicListDescription->text();
-        arrayName    = currentCategory + "_" + currentScenario + "_MusicLists";
-        iconLine     = ui->lineEdit_musicIcon;
-        listWidget   = ui->listWidget_musicList;
-        contentName  = "songs";
-        break;
-
-    case 3: // Sound List
-        debugMessage = "Saving sound list ...";
-        description  = description = ui->lineEdit_soundListDescription->text();
-        arrayName    = currentCategory + "_" + currentScenario + "_SoundLists";
-        iconLine     = ui->lineEdit_soundIcon;
-        listWidget   = ui->listWidget_soundList;
-        contentName  = "sounds";
-        break;
-
-    case 4: // Radio
-        debugMessage = "Saving radio ...";
-        description  = description = ui->textEdit_radioDescription->toPlainText();
-        arrayName    = currentCategory + "_" + currentScenario + "_Radios";
-        iconLine     = ui->lineEdit_radioIcon;
-        break;
-
-    default:
-        break;
-    }
-
-    qDebug() << debugMessage;
-    int arraySize = settings.beginReadArray(arrayName);
-
-    for (int i = 0; i < arraySize; i++)
+    for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
 
-        if (settings.value("name").toString() == name)
-        {
-            settings.setValue("description", description);
-
-            // Lists
-            if (item->type() >= 2)
-            {
-                settings.setValue("icon", iconLine->text());
-
-                // Music specific
-                if (item->type() == 2)
-                {
-                    // Save Playback Mode of Music List
-                    settings.setValue("randomPlayback",
-                                      ui->radioButton_musicListRandomOrder->isChecked());
-                    settings.setValue("randomPlaylist",
-                                      ui->radioButton_musicListShuffleList->isChecked());
-                    settings.setValue("loop",
-                                      ui->radioButton_musicListLoopList->isChecked());
-                    settings.setValue("sequential",
-                                      ui->radioButton_musicListSequential->isChecked());
-                }
-
-                // Sound specific
-                if (item->type() == 3)
-                {
-                    settings.setValue("random",
-                                      ui->radioButton_soundListRandom->isChecked());
-                    settings.setValue("loop",
-                                      ui->radioButton_soundListLoop->isChecked());
-                    settings.setValue("sequential",
-                                      ui->radioButton_soundListSequential->isChecked());
-                }
-
-                // Radio specific
-                if (item->type() == 4)
-                {
-                    settings.setValue("URL", ui->lineEdit_radioURL->text());
-                }
-
-                // Save songs or sounds
-                if ((item->type() == 2) || (item->type() == 3))
-                {
-                    settings.beginWriteArray(contentName);
-                    QString contentName, contentPath;
-
-                    for (int i = 0; i < listWidget->count(); i++)
-                    {
-                        settings.setArrayIndex(i);
-
-                        contentName = listWidget->item(i)->text();
-                        contentPath = listWidget->item(i)->whatsThis();
-
-                        settings.setValue("name", contentName);
-                        settings.setValue("path", contentPath);
-
-                        qDebug().noquote() << " Name:" << contentName;
-                        qDebug().noquote() << " Path:" << contentPath;
-                    }
-                    settings.endArray();
-                }
-            }
-        }
+        settings.setValue("name", tree->topLevelItem(i)->text(0));
     }
 
     settings.endArray();
+}
+
+// Save order of elements
+void AudioEditor::saveElementOrder()
+{
+    QTreeWidget *tree = ui->treeWidget_categories;
+    int topLevelCount = tree->topLevelItemCount();
+
+    if (topLevelCount > 0)
+    {
+        QString   projectPath = settingsManager->getSetting(audioPath) + "/" + projectName + ".ini";
+        QSettings settings(projectPath, QSettings::IniFormat);
+
+        for (int i = 0; i < topLevelCount; i++)
+        {
+            QTreeWidgetItem *topLevelItem = tree->topLevelItem(i);
+            int scenarioCount             = topLevelItem->childCount();
+
+            for (int j = 0; j < scenarioCount; j++)
+            {
+                QTreeWidgetItem *scenarioItem = topLevelItem->child(j);
+                int elementCount              = scenarioItem->childCount();
+
+                settings.beginWriteArray(topLevelItem->text(0) + "_" + scenarioItem->text(0) + "_Order");
+
+                for (int k = 0; k < elementCount; k++)
+                {
+                    QTreeWidgetItem *elementItem = scenarioItem->child(k);
+                    settings.setArrayIndex(k);
+
+                    settings.setValue("name", elementItem->text(0));
+
+                    switch (elementItem->type()) {
+                    case 2: // Music List
+                        settings.setValue("type", "MusicLists");
+                        break;
+
+                    case 3: // Sound List
+                        settings.setValue("type", "SoundLists");
+                        break;
+
+                    case 4: // Radio
+                        settings.setValue("type", "Radios");
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+                settings.endArray();
+            }
+        }
+    }
+}
+
+// Save the element
+void AudioEditor::saveElement()
+{
+    QTreeWidgetItem *item = ui->treeWidget_categories->currentItem();
+
+    if (item != NULL)
+    {
+        QString   name        = item->text(0);
+        QString   projectPath = settingsManager->getSetting(audioPath) + "/" + projectName + ".ini";
+        QSettings settings(projectPath, QSettings::IniFormat);
+
+        QString description;
+        QString debugMessage;
+        QString arrayName;
+        QString contentName;
+        QLineEdit   *iconLine;
+        QListWidget *listWidget;
+
+        switch (item->type()) {
+        case 0: // Category
+            debugMessage = "Saving category ...";
+            description  = ui->textEdit_categoryDescription->toPlainText();
+            arrayName    = "Categories";
+            break;
+
+        case 1: // Scenario
+            debugMessage = "Saving scenario ...";
+            description  = ui->textEdit_scenarioDescription->toPlainText();
+            arrayName    = currentCategory + "_Scenarios";
+            break;
+
+        case 2: // Music List
+            debugMessage = "Saving music list ...";
+            description  = description = ui->lineEdit_musicListDescription->text();
+            arrayName    = currentCategory + "_" + currentScenario + "_MusicLists";
+            iconLine     = ui->lineEdit_musicIcon;
+            listWidget   = ui->listWidget_musicList;
+            contentName  = "songs";
+            break;
+
+        case 3: // Sound List
+            debugMessage = "Saving sound list ...";
+            description  = description = ui->lineEdit_soundListDescription->text();
+            arrayName    = currentCategory + "_" + currentScenario + "_SoundLists";
+            iconLine     = ui->lineEdit_soundIcon;
+            listWidget   = ui->listWidget_soundList;
+            contentName  = "sounds";
+            break;
+
+        case 4: // Radio
+            debugMessage = "Saving radio ...";
+            description  = description = ui->textEdit_radioDescription->toPlainText();
+            arrayName    = currentCategory + "_" + currentScenario + "_Radios";
+            iconLine     = ui->lineEdit_radioIcon;
+            break;
+
+        default:
+            break;
+        }
+
+        qDebug() << debugMessage;
+        int arraySize = settings.beginReadArray(arrayName);
+
+        for (int i = 0; i < arraySize; i++)
+        {
+            settings.setArrayIndex(i);
+
+            if (settings.value("name").toString() == name)
+            {
+                settings.setValue("description", description);
+
+                // Lists
+                if (item->type() >= 2)
+                {
+                    settings.setValue("icon", iconLine->text());
+
+                    // Music specific
+                    if (item->type() == 2)
+                    {
+                        // Save Playback Mode of Music List
+                        settings.setValue("randomPlayback", ui->radioButton_musicListRandomOrder->isChecked());
+                        settings.setValue("randomPlaylist", ui->radioButton_musicListShuffleList->isChecked());
+                        settings.setValue("loop",           ui->radioButton_musicListLoopList->isChecked());
+                        settings.setValue("sequential",     ui->radioButton_musicListSequential->isChecked());
+                    }
+
+                    // Sound specific
+                    if (item->type() == 3)
+                    {
+                        settings.setValue("random",     ui->radioButton_soundListRandom->isChecked());
+                        settings.setValue("loop",       ui->radioButton_soundListLoop->isChecked());
+                        settings.setValue("sequential", ui->radioButton_soundListSequential->isChecked());
+                    }
+
+                    // Radio specific
+                    if (item->type() == 4)
+                    {
+                        settings.setValue("URL", ui->lineEdit_radioURL->text());
+                    }
+
+                    // Save songs or sounds
+                    if ((item->type() == 2) || (item->type() == 3))
+                    {
+                        settings.beginWriteArray(contentName);
+                        QString contentName, contentPath;
+
+                        for (int i = 0; i < listWidget->count(); i++)
+                        {
+                            settings.setArrayIndex(i);
+
+                            contentName = listWidget->item(i)->text();
+                            contentPath = listWidget->item(i)->whatsThis();
+
+                            settings.setValue("name", contentName);
+                            settings.setValue("path", contentPath);
+
+                            qDebug().noquote() << " Name:" << contentName;
+                            qDebug().noquote() << " Path:" << contentPath;
+                        }
+                        settings.endArray();
+                    }
+                }
+            }
+        }
+
+        settings.endArray();
+
+        saveElementOrder();
+    }
 }
 
 // Remove a song from the music list
@@ -1024,28 +1068,25 @@ void AudioEditor::addFileToList(QTreeWidgetItem *item, int column, int type)
 
             listWidget->addItem(listItem);
 
-            on_pushButton_saveElement_clicked();
+            saveElement();
         }
     }
 }
 
 // When an item in the music explorer is double clicked
-void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item,
-                                                        int              column)
+void AudioEditor::on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     addFileToList(item, column, 0);
 }
 
 // Add a sound to the sound list
-void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item,
-                                                        int              column)
+void AudioEditor::on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     addFileToList(item, column, 1);
 }
 
 // Set a radio playlist
-void AudioEditor::on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item,
-                                                        int              column)
+void AudioEditor::on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     ui->lineEdit_radioURL->setText(item->whatsThis(column));
 }
@@ -1095,7 +1136,7 @@ void AudioEditor::addAllFilesFromFolder(QTreeWidgetItem *item, int type)
                 }
             }
 
-            on_pushButton_saveElement_clicked();
+            saveElement();
         }
     }
 }
@@ -1168,8 +1209,7 @@ void AudioEditor::on_pushButton_convertFolderToMusicList_clicked()
             if (file.contains(".mp3") || file.contains(".wav") ||
                 file.contains(".ogg") || file.contains(".flac"))
             {
-                QString relativePath =
-                    path.replace(settingsManager->getSetting(musicPath), "");
+                QString relativePath = path.replace(settingsManager->getSetting(musicPath), "");
                 relativePath += "/" + file;
 
                 QListWidgetItem *listItem = new QListWidgetItem(file);
@@ -1179,7 +1219,7 @@ void AudioEditor::on_pushButton_convertFolderToMusicList_clicked()
             }
         }
 
-        on_pushButton_saveElement_clicked();
+        saveElement();
     }
 }
 
@@ -1237,8 +1277,7 @@ QList<int>AudioEditor::getMissingFiles(int type)
 
     for (int i = 0; i < widget->count(); i++)
     {
-        if (!QFile(settingsManager->getSetting(s) + "/" +
-                   widget->item(i)->whatsThis()).exists())
+        if (!QFile(settingsManager->getSetting(s) + "/" + widget->item(i)->whatsThis()).exists())
         {
             list.append(i);
         }
@@ -1259,8 +1298,7 @@ QString AudioEditor::setIconPath(QString windowTitle)
     }
     else
     {
-        fileDialog->setDirectory(settingsManager->getSetting(Setting::
-                                                             resourcesPath));
+        fileDialog->setDirectory(settingsManager->getSetting(Setting::resourcesPath));
     }
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setWindowTitle(windowTitle);
@@ -1446,4 +1484,55 @@ void AudioEditor::on_pushButton_removeSoundFile_clicked()
 {
     if (ui->listWidget_soundList->currentItem() !=
         NULL) delete ui->listWidget_soundList->currentItem();
+}
+
+// Move selected item
+void AudioEditor::moveElement(QTreeWidgetItem *item, int steps)
+{
+    if (item != NULL)
+    {
+        if (item->type() > 0) // Scenarios or Lists
+        {
+            QTreeWidgetItem *parentItem = item->parent();
+            int index                   = parentItem->indexOfChild(item);
+
+            if ((index + steps > -1) && (index + steps < parentItem->childCount()))
+            {
+                QTreeWidgetItem *child = parentItem->takeChild(index);
+                parentItem->insertChild(index + steps, child);
+
+                ui->treeWidget_categories->setCurrentItem(item);
+            }
+        }
+        else if (item->type() == 0) // Top Level Item = Category
+        {
+            int index = ui->treeWidget_categories->indexOfTopLevelItem(item);
+
+            if ((index + steps > -1) && (index + steps < ui->treeWidget_categories->topLevelItemCount()))
+            {
+                QTreeWidgetItem *temp = ui->treeWidget_categories->takeTopLevelItem(index);
+                ui->treeWidget_categories->insertTopLevelItem(index + steps, temp);
+
+                ui->treeWidget_categories->setCurrentItem(item);
+            }
+        }
+    }
+}
+
+// Move selected item up
+void AudioEditor::on_pushButton_up_clicked()
+{
+    moveElement(ui->treeWidget_categories->currentItem(), -1);
+}
+
+// Move selected item down
+void AudioEditor::on_pushButton_down_clicked()
+{
+    moveElement(ui->treeWidget_categories->currentItem(), 1);
+}
+
+void AudioEditor::on_pushButton_save_clicked()
+{
+    saveCategoryOrder();
+    saveElement();
 }
