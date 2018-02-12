@@ -70,6 +70,17 @@ private slots:
     void on_pushButton_down_clicked();
 
     void on_pushButton_save_clicked();
+    void on_pushButton_openProjectFolder_clicked();
+
+    void on_pushButton_saveCategory_clicked();
+
+    void on_pushButton_saveScenario_clicked();
+
+    void on_pushButton_saveMusicList_clicked();
+
+    void on_pushButton_saveSoundList_clicked();
+
+    void on_pushButton_saveRadio_clicked();
 
 private:
     Ui::AudioEditor *ui;
@@ -89,6 +100,7 @@ private:
 
     void save();
     void saveCategoryOrder();
+    void saveScenarioOrder(QTreeWidgetItem *categoryItem);
     void saveElement();
     void saveElementOrder();
 

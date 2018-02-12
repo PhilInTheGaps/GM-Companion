@@ -12,6 +12,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QPushButton>
+#include <QDesktopServices>
 
 AudioEditor::AudioEditor(QWidget *parent) : QWidget(parent), ui(new Ui::AudioEditor)
 {
@@ -264,7 +265,7 @@ void AudioEditor::loadCategories()
             // add to tree
             int index = categories.indexOf(category);
 
-            if (index > i) index = i;
+            if ((index > i) || (index < 0)) index = i;
 
             ui->treeWidget_categories->insertTopLevelItem(index, catItem);
 
@@ -283,7 +284,19 @@ void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
 {
     // Setting up QSettings
     QSettings *settings = new QSettings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
-    int scenCount       = settings->beginReadArray(catItem->text(0) + "_Scenarios");
+
+    QStringList scenarios;
+    int scenCount = settings->beginReadArray(catItem->text(0) + "_Scenarios_Order");
+
+    for (int i = 0; i < scenCount; i++)
+    {
+        settings->setArrayIndex(i);
+        scenarios.append(settings->value("name").toString());
+    }
+
+    settings->endArray();
+
+    scenCount = settings->beginReadArray(catItem->text(0) + "_Scenarios");
 
     // Loading Scenarios
     for (int i = 0; i < scenCount; i++)
@@ -299,7 +312,12 @@ void AudioEditor::loadScenarios(QTreeWidgetItem *catItem)
         scenItem->setIcon(0, style()->standardIcon(QStyle::SP_DirIcon));
         scenItem->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
 
-        catItem->addChild(scenItem);
+        // add to tree
+        int index = scenarios.indexOf(scenario);
+
+        if ((index > i) || (index < 0)) index = i;
+
+        catItem->insertChild(index, scenItem);
 
         // Expand Item if it is the current Scenario
         if ((catItem->text(0) == currentCategory) && (scenario == currentScenario)) scenItem->setExpanded(true);
@@ -516,25 +534,28 @@ void AudioEditor::addNewScenario()
 // Add a new Element (Music List, Sound List or Radio)
 void AudioEditor::addNewElement(int type)
 {
-    QString element, arrayName;
+    QString element, arrayName, typeString;
 
     switch (type) {
     case 0:
         element = ui->lineEdit_elementName->text();
         ui->lineEdit_elementName->clear();
-        arrayName = currentCategory + "_" + currentScenario + "_MusicLists";
+        arrayName  = currentCategory + "_" + currentScenario + "_MusicLists";
+        typeString = "MusicLists";
         break;
 
     case 1:
         element = ui->lineEdit_elementName->text();
         ui->lineEdit_elementName->clear();
-        arrayName = currentCategory + "_" + currentScenario + "_SoundLists";
+        arrayName  = currentCategory + "_" + currentScenario + "_SoundLists";
+        typeString = "SoundLists";
         break;
 
     case 2:
         element = ui->lineEdit_elementName->text();
         ui->lineEdit_elementName->clear();
-        arrayName = currentCategory + "_" + currentScenario + "_Radios";
+        arrayName  = currentCategory + "_" + currentScenario + "_Radios";
+        typeString = "Radios";
         break;
 
     default:
@@ -542,11 +563,11 @@ void AudioEditor::addNewElement(int type)
     }
 
 
-    if (isProjectOpen && !currentCategory.isNull() && !currentScenario.isNull() &&
-        !element.isNull())
+    if (isProjectOpen && !currentCategory.isNull() && !currentScenario.isNull() && !element.isNull())
     {
         QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
+        // Save Element in Scenario
         int size = settings.beginReadArray(arrayName);
         settings.endArray();
 
@@ -556,6 +577,17 @@ void AudioEditor::addNewElement(int type)
         settings.setValue("name", element);
         currentElement = element;
         settings.endArray();
+
+        // Save Element Order
+        size = settings.beginReadArray(currentCategory + "_" + currentScenario + "_Order");
+        settings.endArray();
+
+        settings.beginWriteArray(currentCategory + "_" + currentScenario + "_Order");
+        settings.setArrayIndex(size);
+        settings.setValue("name", element);
+        settings.setValue("type", typeString);
+        settings.endArray();
+
 
         loadCategories();
     }
@@ -836,8 +868,26 @@ void AudioEditor::saveCategoryOrder()
     for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
-
         settings.setValue("name", tree->topLevelItem(i)->text(0));
+        saveScenarioOrder(tree->topLevelItem(i));
+    }
+
+    settings.endArray();
+}
+
+void AudioEditor::saveScenarioOrder(QTreeWidgetItem *categoryItem)
+{
+    QString   projectPath = settingsManager->getSetting(audioPath) + "/" + projectName + ".ini";
+    QSettings settings(projectPath, QSettings::IniFormat);
+
+    int count = categoryItem->childCount();
+
+    settings.beginWriteArray(categoryItem->text(0) + "_Scenarios_Order");
+
+    for (int i = 0; i < count; i++)
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("name", categoryItem->child(i)->text(0));
     }
 
     settings.endArray();
@@ -1534,5 +1584,35 @@ void AudioEditor::on_pushButton_down_clicked()
 void AudioEditor::on_pushButton_save_clicked()
 {
     saveCategoryOrder();
+    saveElement();
+}
+
+void AudioEditor::on_pushButton_openProjectFolder_clicked()
+{
+    QDesktopServices::openUrl(settingsManager->getSetting(Setting::audioPath));
+}
+
+void AudioEditor::on_pushButton_saveCategory_clicked()
+{
+    saveElement();
+}
+
+void AudioEditor::on_pushButton_saveScenario_clicked()
+{
+    saveElement();
+}
+
+void AudioEditor::on_pushButton_saveMusicList_clicked()
+{
+    saveElement();
+}
+
+void AudioEditor::on_pushButton_saveSoundList_clicked()
+{
+    saveElement();
+}
+
+void AudioEditor::on_pushButton_saveRadio_clicked()
+{
     saveElement();
 }
