@@ -31,8 +31,7 @@
 # include "taglib/attachedpictureframe.h"
 #endif // ifdef __linux__
 
-AudioTool::AudioTool(SettingsManager *sManager, QWidget         *parent) : QWidget(parent), ui(
-        new Ui::AudioTool)
+AudioTool::AudioTool(SettingsManager *sManager, QWidget *parent) : QWidget(parent), ui(new Ui::AudioTool)
 {
     qDebug().noquote() << "Loading AudioTool ...";
 
@@ -59,11 +58,9 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget         *parent) : QWidg
 
     for (int i = 0; i < ui->comboBox_projects->count(); i++)
     {
-        if (ui->comboBox_projects->itemText(i) ==
-            settings.value("defaultProject").toString())
+        if (ui->comboBox_projects->itemText(i) == settings.value("defaultProject").toString())
         {
-            qDebug().noquote() << "Loading default project: " +
-                ui->comboBox_projects->itemText(i) + " ...";
+            qDebug().noquote() << "Loading default project: " + ui->comboBox_projects->itemText(i) + " ...";
             ui->comboBox_projects->setCurrentIndex(i);
             loadProject(ui->comboBox_projects->itemText(i));
         }
@@ -78,22 +75,19 @@ AudioTool::AudioTool(SettingsManager *sManager, QWidget         *parent) : QWidg
     QWinThumbnailToolBar *thumbnailToolBar = new QWinThumbnailToolBar(this);
     thumbnailToolBar->setWindow(parent->windowHandle());
 
-    QWinThumbnailToolButton *playToolButton = new QWinThumbnailToolButton(
-        thumbnailToolBar);
+    QWinThumbnailToolButton *playToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
     playToolButton->setEnabled(true);
     playToolButton->setToolTip(tr("Music: Play"));
     playToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     connect(playToolButton, SIGNAL(clicked()), this, SLOT(on_pushButton_play_clicked()));
 
-    QWinThumbnailToolButton *pauseToolButton = new QWinThumbnailToolButton(
-        thumbnailToolBar);
+    QWinThumbnailToolButton *pauseToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
     pauseToolButton->setEnabled(true);
     pauseToolButton->setToolTip(tr("Music: Pause"));
     pauseToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
     connect(pauseToolButton, SIGNAL(clicked()), this, SLOT(on_pushButton_pause_clicked()));
 
-    QWinThumbnailToolButton *nextToolButton = new QWinThumbnailToolButton(
-        thumbnailToolBar);
+    QWinThumbnailToolButton *nextToolButton = new QWinThumbnailToolButton(thumbnailToolBar);
     nextToolButton->setEnabled(true);
     nextToolButton->setToolTip(tr("Music: Next"));
     nextToolButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
@@ -193,7 +187,7 @@ void AudioTool::loadProject(QString project)
         // Add button to list and insert it at the correct index
         int index = categoryList.indexOf(categoryName);
 
-        if (index > i) index = i;
+        if ((index > i) || (index < 0)) index = i;
         categoryButtons.insert(index, categoryButton);
     }
     settings.endArray();
@@ -212,10 +206,22 @@ void AudioTool::generateScenarioList(QString category)
 
     QSettings settings(settingsManager->getSetting(audioPath) + "/" + currentProject, QSettings::IniFormat);
 
-    // Load scenarios
-    int scenarios = settings.beginReadArray(category + "_Scenarios");
+    // Load Order
+    int count = settings.beginReadArray(category + "_Scenarios_Order");
+    QStringList scenarios;
 
-    for (int i = 0; i < scenarios; i++)
+    for (int i = 0; i < count; i++)
+    {
+        settings.setArrayIndex(i);
+        scenarios.append(settings.value("name").toString());
+    }
+
+    settings.endArray();
+
+    // Load scenarios
+    count = settings.beginReadArray(category + "_Scenarios");
+
+    for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
 
@@ -225,7 +231,12 @@ void AudioTool::generateScenarioList(QString category)
         QListWidgetItem *scenarioItem = new QListWidgetItem(scenarioName);
         scenarioItem->setToolTip(scenarioDescription);
 
-        ui->listWidget_scenarios->addItem(scenarioItem);
+        // Add to List
+        int index = scenarios.indexOf(scenarioName);
+
+        if ((index > i) || (index < 0)) index = i;
+
+        ui->listWidget_scenarios->insertItem(index, scenarioItem);
     }
     settings.endArray();
 }
@@ -599,11 +610,8 @@ void AudioTool::playSound(QString arg)
         bool sequential = false;
 
         // Read properties
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + currentProject,
-                           QSettings::IniFormat);
-        int lists = settings.beginReadArray(
-            category + "_" + scenario + "_SoundLists");
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + currentProject, QSettings::IniFormat);
+        int lists = settings.beginReadArray(category + "_" + scenario + "_SoundLists");
 
         for (int i = 0; i < lists; i++)
         {
@@ -620,11 +628,9 @@ void AudioTool::playSound(QString arg)
                 for (int j = 0; j < sounds; j++)
                 {
                     settings.setArrayIndex(j);
-                    QString path = settingsManager->getSetting(soundPath) +
-                                   settings.value("path").toString();
+                    QString path = settingsManager->getSetting(soundPath) + settings.value("path").toString();
 
-                    if (QFile(path).exists()) playlist->addMedia(QUrl::fromLocalFile(
-                                                                     path));
+                    if (QFile(path).exists()) playlist->addMedia(QUrl::fromLocalFile(path));
                 }
 
                 settings.endArray();
@@ -666,9 +672,7 @@ void AudioTool::playRadio(QString arg)
     ui->listWidget_songs->clear();
     radioActive = true;
 
-    QSettings settings(settingsManager->getSetting(
-                           audioPath) + "/" + currentProject,
-                       QSettings::IniFormat);
+    QSettings settings(settingsManager->getSetting(audioPath) + "/" + currentProject, QSettings::IniFormat);
     int radios = settings.beginReadArray(category + "_" + scenario + "_Radios");
 
     // Get Radio URL
@@ -678,8 +682,7 @@ void AudioTool::playRadio(QString arg)
     {
         settings.setArrayIndex(i);
 
-        if (settings.value("name").toString() ==
-            radio) url = settings.value("url").toString();
+        if (settings.value("name").toString() == radio) url = settings.value("url").toString();
     }
     qDebug().noquote() << "URL: " + url;
     settings.endArray();

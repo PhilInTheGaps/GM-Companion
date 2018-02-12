@@ -18,7 +18,7 @@
     <normaloff>:/icons/media/radio.png</normaloff>:/icons/media/radio.png</iconset>
   </property>
   <property name="styleSheet">
-   <string>0</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
