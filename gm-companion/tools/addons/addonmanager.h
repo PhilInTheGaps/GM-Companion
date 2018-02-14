@@ -25,6 +25,7 @@ private slots:
     void fileDownloaded(QNetworkReply* reply);
 
     void on_pushButton_documentation_clicked();
+    void on_pushButton_folder_clicked();
 
 private:
     Ui::AddonManager *ui;
