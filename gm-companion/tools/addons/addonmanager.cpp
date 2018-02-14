@@ -9,13 +9,11 @@
 #include <QPushButton>
 #include <QDesktopServices>
 
-AddonManager::AddonManager(QWidget *parent) : QWidget(parent), ui(
-        new Ui::AddonManager)
+AddonManager::AddonManager(QWidget *parent) : QWidget(parent), ui(new Ui::AddonManager)
 {
     ui->setupUi(this);
 
-    connect(&networkManager, SIGNAL(finished(QNetworkReply *)), this,
-            SLOT(fileDownloaded(QNetworkReply *)));
+    connect(&networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(fileDownloaded(QNetworkReply *)));
 
     // Hide stuff on start
     ui->tableWidget->hide();
@@ -23,10 +21,7 @@ AddonManager::AddonManager(QWidget *parent) : QWidget(parent), ui(
 
     settingsManager = new SettingsManager;
 
-    downloadFile(QUrl(
-                     "https://github.com/PhilInTheGaps/GM-Companion/raw/master/gm-companion/Addons/versions.txt"));
-
-    //  localTest();
+    downloadFile(QUrl("https://github.com/PhilInTheGaps/GM-Companion/raw/master/gm-companion/Addons/versions.txt"));
 }
 
 AddonManager::~AddonManager()
@@ -84,8 +79,7 @@ void AddonManager::setUpTable()
                 QWidget *widget     = new QWidget;
                 QPushButton *button = new QPushButton;
                 button->setText(status);
-                button->setSizePolicy(QSizePolicy::Expanding,
-                                      QSizePolicy::Expanding);
+                button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
                 widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
                 if (status == "Installed")
@@ -138,14 +132,12 @@ QString AddonManager::getStatus(QString addon, QString version)
     {
         status = "Installed";
 
-        QFile f(
-            QDir::homePath() + "/.gm-companion/addons/" + addon + "/version.txt");
+        QFile f(QDir::homePath() + "/.gm-companion/addons/" + addon + "/version.txt");
         f.open(QIODevice::ReadOnly);
         QString localVersion = f.readAll();
         f.close();
 
-        if (version.replace(".",
-                            "").toInt() > localVersion.replace(".", "").toInt())
+        if (version.replace(".", "").toInt() > localVersion.replace(".", "").toInt())
         {
             status = "Update";
         }
@@ -182,8 +174,14 @@ void AddonManager::fileDownloaded(QNetworkReply *reply)
     reply->deleteLater();
 }
 
+// Open wiki in browser
 void AddonManager::on_pushButton_documentation_clicked()
 {
-    QDesktopServices::openUrl(QUrl(
-                                  "https://github.com/PhilInTheGaps/GM-Companion/wiki/Addons"));
+    QDesktopServices::openUrl(QUrl("https://github.com/PhilInTheGaps/GM-Companion/wiki/Addons"));
+}
+
+// Open the addon folder
+void AddonManager::on_pushButton_folder_clicked()
+{
+    QDesktopServices::openUrl(QDir::homePath() + "/.gm-companion/addons");
 }

@@ -101,19 +101,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -135,9 +122,22 @@ p, li { white-space: pre-wrap; }
        <number>0</number>
       </property>
       <item>
+       <widget class="QPushButton" name="pushButton_folder">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Open Addon Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton_documentation">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
