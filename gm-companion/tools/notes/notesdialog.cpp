@@ -7,7 +7,8 @@
 #include <QIODevice>
 #include <QDebug>
 
-NotesDialog::NotesDialog(NotesTool *parent) : QDialog(parent), ui(new Ui::NotesDialog){
+NotesDialog::NotesDialog(NotesTool *parent) : QDialog(parent), ui(new Ui::NotesDialog)
+{
     ui->setupUi(this);
 
     w = parent;
@@ -15,23 +16,29 @@ NotesDialog::NotesDialog(NotesTool *parent) : QDialog(parent), ui(new Ui::NotesD
     settingsManager = new SettingsManager;
 }
 
-NotesDialog::~NotesDialog(){
+NotesDialog::~NotesDialog()
+{
     delete ui;
 }
 
-void NotesDialog::setPage(int i){
+void NotesDialog::setPage(int i)
+{
     ui->stackedWidget->setCurrentIndex(i);
 }
 
-void NotesDialog::setFolder(QString f){
+void NotesDialog::setFolder(QString f)
+{
     folder = f;
 }
 
-void NotesDialog::on_createNoteDialog_accepted(){
-    filename = ui->noteNameLine->text()+".txt";
+void NotesDialog::on_createNoteDialog_accepted()
+{
+    filename = ui->noteNameLine->text() + ".txt";
 
-    QFile file(settingsManager->getSetting(Setting::notesPath)+"/"+folder+"/"+filename);
-    if (!file.exists()){
+    QFile file(settingsManager->getSetting(Setting::notesPath) + "/" + folder + "/" + filename);
+
+    if (!file.exists())
+    {
         file.open(QIODevice::WriteOnly);
         file.close();
     }
@@ -40,19 +47,24 @@ void NotesDialog::on_createNoteDialog_accepted(){
     w->getNotes();
 }
 
-void NotesDialog::on_createNoteDialog_rejected(){
+void NotesDialog::on_createNoteDialog_rejected()
+{
     this->close();
 }
 
-void NotesDialog::on_errorNoteDialog_rejected(){
+void NotesDialog::on_errorNoteDialog_rejected()
+{
     this->close();
 }
 
-void NotesDialog::on_addCategoryDialog_accepted(){
+void NotesDialog::on_addCategoryDialog_accepted()
+{
     folder = ui->categoryLine->text();
 
-    QDir dir(settingsManager->getSetting(Setting::notesPath)+"/"+folder);
-    if (!dir.exists()){
+    QDir dir(settingsManager->getSetting(Setting::notesPath) + "/" + folder);
+
+    if (!dir.exists())
+    {
         dir.mkpath(".");
     }
 
@@ -60,6 +72,7 @@ void NotesDialog::on_addCategoryDialog_accepted(){
     w->getNotes();
 }
 
-void NotesDialog::on_addCategoryDialog_rejected(){
+void NotesDialog::on_addCategoryDialog_rejected()
+{
     this->close();
 }
