@@ -45,16 +45,7 @@ MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(
     // Hide menu labels and resize buttons
     if (settingsManager->getSetting(Setting::showToolNames).toInt() == 0)
     {
-        ui->label_audio->hide();
-        ui->label_maps->hide();
-        ui->label_combat->hide();
-        ui->label_dice->hide();
-        ui->label_shop->hide();
-        ui->label_characters->hide();
-        ui->label_generators->hide();
-        ui->label_notes->hide();
-        ui->label_converter->hide();
-        ui->label_options->hide();
+        hideToolNames(true);
     }
 
     // Some functions behave differently when the program is just starting
@@ -138,8 +129,21 @@ QString MainWindow::getVersion()
 // Update the settings version
 void MainWindow::updateSettingsVersion()
 {
-    settingsManager->setSetting(Setting::version, true,
-                                QString::number(versionNumber));
+    settingsManager->setSetting(Setting::version, true, QString::number(versionNumber));
+}
+
+void MainWindow::hideToolNames(bool hide)
+{
+    ui->label_audio->setHidden(hide);
+    ui->label_maps->setHidden(hide);
+    ui->label_combat->setHidden(hide);
+    ui->label_dice->setHidden(hide);
+    ui->label_shop->setHidden(hide);
+    ui->label_characters->setHidden(hide);
+    ui->label_generators->setHidden(hide);
+    ui->label_notes->setHidden(hide);
+    ui->label_converter->setHidden(hide);
+    ui->label_options->setHidden(hide);
 }
 
 /// Tool Navigation
