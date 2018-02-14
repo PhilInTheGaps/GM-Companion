@@ -11,8 +11,7 @@ WhatIsNewWindow::WhatIsNewWindow(QWidget *parent) : QDialog(parent), ui(
 
     settingsManager = new SettingsManager;
 
-    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini",
-                       QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
     int openNewWindow = settings.value("openWhatIsNewWindow", 1).toInt();
 
     if (openNewWindow == 0) ui->dontshowAgainCheckBox->setChecked(true);
@@ -76,25 +75,7 @@ void WhatIsNewWindow::on_buttonStyleComboBox_currentIndexChanged(int index)
         break;
 
     default:
-        settingsManager->setSetting(Setting::buttonStyle,
-                                    true,
-                                    "small");
+        settingsManager->setSetting(Setting::buttonStyle, true, "small");
         break;
     }
-}
-
-void WhatIsNewWindow::on_pushButton_clicked()
-{
-    #ifdef __linux__
-    QProcess::startDetached("java", { "-jar",
-                                      "/usr/share/gm-companion/AddonManager.jar" });
-    #elif _WIN32
-    QProcess::startDetached("java",
-                            { "-jar",
-                              QApplication::applicationDirPath() +
-                              "/AddonManager.jar" });
-    #else // ifdef __linux__
-    qDebug() << QCoreApplication::translate("",
-                                            "This OS is not supported. Cannot launch Addon Manager.");
-    #endif // ifdef __linux__
 }

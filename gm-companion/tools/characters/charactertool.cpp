@@ -113,8 +113,7 @@ void CharacterTool::createNewCharacter()
 
         while (QFile(filePath).exists())
         {
-            filePath = charPath + "/" + character + "_" +
-                       QString::number(counter) + ".character";
+            filePath = charPath + "/" + character + "_" + QString::number(counter) + ".character";
             counter++;
         }
 

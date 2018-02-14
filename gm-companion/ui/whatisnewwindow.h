@@ -28,8 +28,6 @@ private slots:
 
     void on_buttonStyleComboBox_currentIndexChanged(int index);
 
-    void on_pushButton_clicked();
-
 private:
     Ui::WhatIsNewWindow *ui;
 

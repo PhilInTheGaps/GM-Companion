@@ -40,26 +40,29 @@ void MapViewerTool::getMaps()
     QStringList mapsList = getFiles(path);
 
     // Create a button for every map
-    for (QString mapName : mapsList){
-        if (mapName.contains(".png") || mapName.contains(".jpg")){
+    for (QString mapName : mapsList)
+    {
+        if (mapName.contains(".png") || mapName.contains(".jpg"))
+        {
             QString mapPath = path + "/" + mapName;
 
             QPushButton *imageButton = new QPushButton;
             imageButton->setText(cleanText(mapName));
             mapButtonLayout->addWidget(imageButton);
 
-            connect(imageButton, &QPushButton::clicked, this, [=]() { setMap(mapPath); });
+            connect(imageButton, &QPushButton::clicked, this, [ = ]() { setMap(mapPath); });
         }
     }
 
     // Add a verical spacer
-    mapButtonLayout->addItem(new QSpacerItem(0,10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    mapButtonLayout->addItem(new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
 // Display a map
 void MapViewerTool::setMap(QString mapPath)
 {
     QGraphicsScene *scene = new QGraphicsScene;
+
     ui->graphicsView->setScene(scene);
 
     scene->addPixmap(QPixmap(mapPath));

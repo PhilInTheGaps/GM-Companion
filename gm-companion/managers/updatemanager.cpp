@@ -8,20 +8,17 @@ UpdateManager::UpdateManager(int version)
 {
     qDebug().noquote() << "Initializing update manager ...";
 
-    feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom"; // GitHub
-                                                                             // Release
-                                                                             // feed
+    // GitHub Release feed
+    feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
     currentVersion = version;
     networkManager = new QNetworkAccessManager;
-    connect(networkManager, SIGNAL(finished(QNetworkReply *)), this,
-            SLOT(on_networkManager_finished(QNetworkReply *)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(on_networkManager_finished(QNetworkReply *)));
 
     // Check if openSSL is installed, required for network access to work
     qDebug().noquote() << "Checking SSL installation...";
 
-    if (!QSslSocket::supportsSsl()) qDebug().noquote() <<
-        "Please install openSSL";
+    if (!QSslSocket::supportsSsl()) qDebug().noquote() << "Please install openSSL";
     else qDebug().noquote() << "SSL is installed.";
 }
 
@@ -31,9 +28,8 @@ void UpdateManager::checkForUpdates()
     qDebug().noquote() << "Current version:" << currentVersion;
     qDebug().noquote() << "Releases feed URL:" << feedURL;
 
-    networkManager->get(QNetworkRequest(QUrl(feedURL))); // Get the release feed
-                                                         // to check for a new
-                                                         // version
+    // Get the release feed to check for a new version
+    networkManager->get(QNetworkRequest(QUrl(feedURL)));
 }
 
 // Evaluate the release feed
@@ -70,33 +66,20 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
                     {
                         if (reader.name() == "id") id = reader.readElementText();
 
-                        else if (reader.name() ==
-                                 "title") title = reader.readElementText();
+                        else if (reader.name() == "title") title = reader.readElementText();
 
-                        else if (reader.name() ==
-                                 "content") content = reader.readElementText();
+                        else if (reader.name() == "content") content = reader.readElementText();
 
                         else reader.skipCurrentElement();
                     }
 
                     // Version is converted from git tag, so we have to remove a
                     // bunch of junk
-                    versionString = id.replace(
-                        "tag:github.com,2008:Repository/78660365/", "");
-                    int versionNumber = versionString.replace(".", "").toInt(); //
-                                                                                // Remove
-                                                                                // all
-                                                                                // the
-                                                                                // dots
-                                                                                // to
-                                                                                // make
-                                                                                // it
-                                                                                // a
-                                                                                // number
-                                                                                // and
-                                                                                // easier
-                                                                                // to
-                                                                                // compare
+                    versionString = id.replace("tag:github.com,2008:Repository/78660365/", "");
+
+                    // Remove all the dots to make it a
+                    // number and easier to compare
+                    int versionNumber = versionString.replace(".", "").toInt();
 
                     if (versionNumber > newestVersion)
                     {
@@ -105,12 +88,10 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
 
                         // Forgot why I did not simply use versionString, but
                         // must have had a reason
-                        newestVersionString = id.replace(
-                            "tag:github.com,2008:Repository/78660365/", "");
+                        newestVersionString = id.replace("tag:github.com,2008:Repository/78660365/", "");
                     }
 
-                    qDebug().noquote() << " -" << title << "(" << versionString <<
-                    ")";
+                    qDebug().noquote() << " -" << title << "(" << versionString << ")";
                 } else reader.skipCurrentElement();
             }
         }
@@ -122,10 +103,10 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     {
         // If newer version is available, open a dialog to tell the user
         qDebug().noquote() << "Found a newer version:" << newestVersionTitle;
-        UpdateDialog *dialog = new UpdateDialog(newestVersionTitle,
-                                                newestVersionString);
+        UpdateDialog *dialog = new UpdateDialog(newestVersionTitle, newestVersionString);
         dialog->show();
-    } else
+    }
+    else
     {
         qDebug().noquote() << "Your version is the newest one.";
     }

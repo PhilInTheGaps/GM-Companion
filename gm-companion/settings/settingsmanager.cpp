@@ -9,82 +9,98 @@
 
 SettingsManager::SettingsManager()
 {
-    qDebug() << "Loading Settings Manager ...";
 }
 
 // Returns a specific setting
-QString SettingsManager::getSetting(Setting setting){
+QString SettingsManager::getSetting(Setting setting)
+{
     QString settingString;
 
-    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("musicPath", QDir::homePath()+"/.gm-companion/music").toString();
+        settingString = settings.value("musicPath", QDir::homePath() + "/.gm-companion/music").toString();
         settings.endGroup();
         break;
+
     case Setting::soundPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("soundPath", QDir::homePath()+"/.gm-companion/sounds").toString();
+        settingString = settings.value("soundPath", QDir::homePath() + "/.gm-companion/sounds").toString();
         settings.endGroup();
         break;
+
     case Setting::mapsPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("mapsPath", QDir::homePath()+"/.gm-companion/maps").toString();
+        settingString = settings.value("mapsPath", QDir::homePath() + "/.gm-companion/maps").toString();
         settings.endGroup();
         break;
+
     case Setting::resourcesPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("resourcesPath", QDir::homePath()+"/.gm-companion/resources").toString();
+        settingString = settings.value("resourcesPath", QDir::homePath() + "/.gm-companion/resources").toString();
         settings.endGroup();
         break;
+
     case Setting::charactersPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("charactersPath", QDir::homePath()+"/.gm-companion/characters").toString();
+        settingString = settings.value("charactersPath", QDir::homePath() + "/.gm-companion/characters").toString();
         settings.endGroup();
         break;
+
     case Setting::notesPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("notesPath", QDir::homePath()+"/.gm-companion/notes").toString();
+        settingString = settings.value("notesPath", QDir::homePath() + "/.gm-companion/notes").toString();
         settings.endGroup();
         break;
+
     case Setting::audioPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("audioPath", QDir::homePath()+"/.gm-companion/audio").toString();
+        settingString = settings.value("audioPath", QDir::homePath() + "/.gm-companion/audio").toString();
         settings.endGroup();
         break;
+
     case Setting::radioPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("radioPath", QDir::homePath()+"/.gm-companion/radio").toString();
+        settingString = settings.value("radioPath", QDir::homePath() + "/.gm-companion/radio").toString();
         settings.endGroup();
         break;
+
     case Setting::shopPath:
         settings.beginGroup("Paths");
-        settingString = settings.value("shopPath", QDir::homePath()+"/.gm-companion/shop").toString();
+        settingString = settings.value("shopPath", QDir::homePath() + "/.gm-companion/shop").toString();
         settings.endGroup();
         break;
+
     case Setting::uiMode:
         settingString = settings.value("uiMode", "Dark").toString();
         break;
+
     case Setting::buttonStyle:
         settingString = settings.value("buttonStyle", "small").toString();
         break;
+
     case Setting::enableMusicTrackList:
         settingString = settings.value("enableMusicTrackList", 0).toInt();
         break;
+
     case Setting::openWhatIsNewWindow:
         settingString = settings.value("openWhatIsNewWindow", 1).toInt();
         break;
+
     case Setting::language:
         settingString = settings.value("language", "en").toString();
         break;
+
     case Setting::version:
         settingString = QString::number(settings.value("version", 0).toInt());
         break;
+
     case Setting::showToolNames:
         settingString = QString::number(settings.value("showToolNames", 0).toInt());
         break;
+
     default:
         settingString = "";
         break;
@@ -93,140 +109,166 @@ QString SettingsManager::getSetting(Setting setting){
 }
 
 // Sets a specific setting
-void SettingsManager::setSetting(Setting setting, int checked, QString value){
-    QString path;
-    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+void SettingsManager::setSetting(Setting setting, int checked, QString value)
+{
+    QString   path;
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
         path = setFolderLocation(QObject::tr("Set Music Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("musicPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::soundPath:
         path = setFolderLocation(QObject::tr("Set Sound Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("soundPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::mapsPath:
         path = setFolderLocation(QObject::tr("Set Maps Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("mapsPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::resourcesPath:
         path = setFolderLocation(QObject::tr("Set Resources Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("resourcesPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::shopPath:
         path = setFolderLocation(QObject::tr("Set Shop Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("shopPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::charactersPath:
         path = setFolderLocation(QObject::tr("Set Characters Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("charactersPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::notesPath:
         path = setFolderLocation(QObject::tr("Set Notes Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("notesPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::audioPath:
         path = setFolderLocation(QObject::tr("Set Audio Projects Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("audioPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::radioPath:
         path = setFolderLocation(QObject::tr("Set Radio Playlists Folder"));
-        if (path.length()>1){
+
+        if (path.length() > 1) {
             settings.beginGroup("Paths");
             settings.setValue("radioPath", path);
             settings.endGroup();
         }
         break;
+
     case Setting::uiMode:
     {
         settings.setValue("uiMode", value);
         setStyleSheet(value);
         break;
     }
+
     case Setting::buttonStyle:
         settings.setValue("buttonStyle", value);
         break;
+
     case Setting::enableMusicTrackList:
-        if (checked)
-            settings.setValue("enableMusicTrackList", 1);
-        else
-            settings.setValue("enableMusicTrackList", 0);
+
+        if (checked) settings.setValue("enableMusicTrackList", 1);
+        else settings.setValue("enableMusicTrackList", 0);
         break;
+
     case Setting::openWhatIsNewWindow:
-        if (checked)
-            settings.setValue("openWhatIsNewWindow", 1);
-        else
-            settings.setValue("openWhatIsNewWindow", 0);
+
+        if (checked) settings.setValue("openWhatIsNewWindow", 1);
+        else settings.setValue("openWhatIsNewWindow", 0);
         break;
+
     case Setting::language:
         settings.setValue("language", value);
         break;
+
     case Setting::version:
         settings.setValue("version", value);
         break;
+
     case Setting::showToolNames:
-        if (checked)
-            settings.setValue("showToolNames", 1);
-        else
-            settings.setValue("showToolNames", 0);
+
+        if (checked) settings.setValue("showToolNames", 1);
+        else settings.setValue("showToolNames", 0);
         break;
+
     default:
         break;
     }
 }
 
+// Load a StyleSheet and apply it to the application
 void SettingsManager::setStyleSheet(QString style)
 {
     qDebug().noquote() << "Loading stylesheet:" << style << "...";
-    QApplication* application = static_cast<QApplication *>(QApplication::instance());
+    QApplication *application = static_cast<QApplication *>(QApplication::instance());
 
     QString styleSheet;
 
     // Check if style is a custom style
-    QStringList nonCustomStyles = {"Dark", "White"};
+    QStringList nonCustomStyles = { "Dark", "White" };
+
     if (nonCustomStyles.contains(style))
     {
-        QFile file(":/styles/"+style+".qss");
+        QFile file(":/styles/" + style + ".qss");
         file.open(QFile::ReadOnly);
         styleSheet = QLatin1String(file.readAll());
         file.close();
     }
     else
     {
-        QFile file(QDir::homePath()+"/.gm-companion/styles/"+style+".qss");
+        QFile file(QDir::homePath() + "/.gm-companion/styles/" + style + ".qss");
+
         if (file.exists())
         {
             file.open(QFile::ReadOnly);
@@ -242,6 +284,7 @@ QString SettingsManager::setFolderLocation(QString windowTitle)
 {
     QString path;
     QFileDialog *fileDialog = new QFileDialog;
+
     fileDialog->setFileMode(QFileDialog::DirectoryOnly);
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setWindowTitle(windowTitle);
@@ -258,12 +301,13 @@ QString SettingsManager::setFolderLocation(QString windowTitle)
 // Set addon disabled or enabled
 void SettingsManager::setAddonEnabled(QString addon, bool enabled)
 {
-    QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings addonSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+
     addonSettings.beginGroup("Addons");
 
-    if (enabled){
+    if (enabled) {
         addonSettings.setValue(addon, 1);
-    }else{
+    } else {
         addonSettings.setValue(addon, 0);
     }
 
@@ -275,12 +319,13 @@ bool SettingsManager::getIsAddonEnabled(QString addon)
 {
     bool enabled;
 
-    QSettings addonSettings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings addonSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+
     addonSettings.beginGroup("Addons");
 
-    if (addonSettings.value(addon, 1).toInt() == 1){
+    if (addonSettings.value(addon, 1).toInt() == 1) {
         enabled = true;
-    }else{
+    } else {
         enabled = false;
     }
 
@@ -302,7 +347,7 @@ QStringList SettingsManager::getInactiveCharacters()
 
     QStringList characters;
 
-    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     settings.beginGroup("Characters");
 
@@ -323,13 +368,13 @@ QStringList SettingsManager::getInactiveCharacters()
 
 void SettingsManager::setInactiveCharacters(QStringList characters)
 {
-   qDebug() << "Writing inactive characters ...";
+    qDebug() << "Writing inactive characters ...";
 
-   QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
-   settings.beginGroup("Characters");
+    settings.beginGroup("Characters");
 
-   settings.beginWriteArray("InactiveCharacters");
+    settings.beginWriteArray("InactiveCharacters");
 
     for (int i = 0; i < characters.size(); i++)
     {
@@ -345,17 +390,18 @@ void SettingsManager::setInactiveCharacters(QStringList characters)
 // Updates the settings if something changed from a previous version
 void SettingsManager::updateSettings()
 {
-    QSettings settings(QDir::homePath()+"/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
-    if (settings.value("version").toInt() < 320){
+    if (settings.value("version").toInt() < 320) // Last major settings change
+    {                                            // was in Beta 3.2
         qDebug() << "Updating settings file...";
 
         QStringList paths = {
             "musicPath", "charactersPath", "resourcesPath", "soundPath", "mapsPath", "notesPath", "shopPath"
         };
 
-        for (QString path : paths){
-            if (settings.value(path).isValid()){
+        for (QString path : paths) {
+            if (settings.value(path).isValid()) {
                 QString temp;
                 temp = settings.value(path).toString();
                 settings.remove(path);
