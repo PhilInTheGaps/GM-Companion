@@ -48,11 +48,9 @@ void ShopEditor::loadProject(QString project)
     currentProject = project;
 
     QString projectFolder = settingsManager->getSetting(Setting::shopPath);
-    qDebug() << "Creating new shop project: " + projectFolder + "/" + project +
-        ".shop";
+    qDebug() << "Creating new shop project: " + projectFolder + "/" + project + ".shop";
 
-    QSettings settings(projectFolder + "/" + project + ".shop",
-                       QSettings::IniFormat);
+    QSettings settings(projectFolder + "/" + project + ".shop", QSettings::IniFormat);
 
     settings.setValue("project_name", project);
 
@@ -82,8 +80,7 @@ void ShopEditor::getCategories()
     if (!currentProject.isNull())
     {
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         QStringList categories;
         int count = settings.beginReadArray("categories");
@@ -116,8 +113,7 @@ void ShopEditor::on_pushButton_newShop_clicked()
             currentCategory;
 
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         // Write shop data to project file
         int index = settings.beginReadArray(currentCategory + "_shops");
@@ -141,8 +137,7 @@ void ShopEditor::on_pushButton_newCategory_clicked()
         ui->lineEdit_newCategory->clear();
 
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         int index = settings.beginReadArray("categories");
         settings.endArray();
@@ -165,8 +160,7 @@ void ShopEditor::loadShops()
     ui->treeWidget_shops->clear();
 
     QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                       QSettings::IniFormat);
+    QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
     // Get all categories
     QStringList categories;
@@ -175,8 +169,7 @@ void ShopEditor::loadShops()
     for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
-        categories.push_back(settings.value("name",
-                                            "UNKNOWN CATEGORY").toString());
+        categories.push_back(settings.value("name", tr("UNKNOWN CATEGORY")).toString());
     }
     settings.endArray();
 
@@ -238,12 +231,9 @@ void ShopEditor::loadShop()
             // Find shop in list
             if (settings.value("name", "").toString() == currentShop)
             {
-                ui->label_shopName->setText(settings.value("name",
-                                                           "UNKNOWN SHOP").toString());
-                ui->lineEdit_shopOwner->setText(settings.value("owner",
-                                                               "").toString());
-                ui->lineEdit_shopDescription->setText(settings.value("description",
-                                                                     "").toString());
+                ui->label_shopName->setText(settings.value("name", tr("UNKNOWN SHOP")).toString());
+                ui->lineEdit_shopOwner->setText(settings.value("owner", "").toString());
+                ui->lineEdit_shopDescription->setText(settings.value("description", "").toString());
 
                 // Add items
                 int items = settings.beginReadArray("items");
@@ -253,15 +243,10 @@ void ShopEditor::loadShop()
                     settings.setArrayIndex(j);
                     ui->tableWidget_shopItems->insertRow(j);
 
-                    QString name =
-                        settings.value("name", "UNKNOWN ITEM").toString();
-                    QString price =
-                        settings.value("price", "UNKNOWN PRICE").toString();
-                    QString description =
-                        settings.value("description", "").toString();
-                    QString category = settings.value("category",
-                                                      "UNKNOWN CATEGORY").
-                                       toString();
+                    QString name        = settings.value("name", tr("UNKNOWN ITEM")).toString();
+                    QString price       = settings.value("price", tr("UNKNOWN PRICE")).toString();
+                    QString description = settings.value("description", "").toString();
+                    QString category    = settings.value("category", tr("UNKNOWN CATEGORY")).toString();
 
                     QStringList info = { name, price, description, category };
 
@@ -275,11 +260,9 @@ void ShopEditor::loadShop()
                     // Add "Remove" button
                     QWidget *widget     = new QWidget;
                     QPushButton *button = new QPushButton;
-                    button->setText("Remove");
-                    button->setSizePolicy(QSizePolicy::Expanding,
-                                          QSizePolicy::Expanding);
-                    widget->setSizePolicy(QSizePolicy::Minimum,
-                                          QSizePolicy::Minimum);
+                    button->setText(tr("Remove"));
+                    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
                     connect(button, &QPushButton::clicked, this, [ = ]() {
                         removeItemFromShop(j);
@@ -302,8 +285,7 @@ void ShopEditor::loadShop()
 void ShopEditor::loadItems()
 {
     QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/CustomItems.items",
-                       QSettings::IniFormat);
+    QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
 
     // Remove addon tabs
     for (int i = ui->tabWidget_itemLists->count() - 1; i > 0; i--)
@@ -368,8 +350,7 @@ void ShopEditor::loadItems()
             {
                 QTableWidget *table = new QTableWidget;
                 table->setColumnCount(5);
-                table->setHorizontalHeaderLabels({ "", "Item", "Price",
-                                                   "Category", "Description" });
+                table->setHorizontalHeaderLabels({ "", tr("Item"), tr("Price"), tr("Category"), tr("Description") });
                 table->horizontalHeader()->setStretchLastSection(true);
                 table->setSortingEnabled(true);
                 table->verticalHeader()->hide();
@@ -377,8 +358,7 @@ void ShopEditor::loadItems()
                 ui->tabWidget_itemLists->addTab(table, addon);
 
                 QString   folder = addonsFolder + "/" + addon + "/shop";
-                QSettings addonSettings(folder + "/AddonItems.items",
-                                        QSettings::IniFormat);
+                QSettings addonSettings(folder + "/AddonItems.items", QSettings::IniFormat);
 
                 int itemCount = addonSettings.beginReadArray("items");
 
@@ -390,10 +370,8 @@ void ShopEditor::loadItems()
 
                     info.replace(0, addonSettings.value("name", "").toString());
                     info.replace(1, addonSettings.value("price", "").toString());
-                    info.replace(2,
-                                 addonSettings.value("category", "").toString());
-                    info.replace(3, addonSettings.value("description",
-                                                        "").toString());
+                    info.replace(2, addonSettings.value("category", "").toString());
+                    info.replace(3, addonSettings.value("description", "").toString());
 
                     table->insertRow(i);
 
@@ -407,11 +385,9 @@ void ShopEditor::loadItems()
                     // Add "add" button
                     QWidget *widget     = new QWidget;
                     QPushButton *button = new QPushButton;
-                    button->setText("Add");
-                    button->setSizePolicy(QSizePolicy::Expanding,
-                                          QSizePolicy::Expanding);
-                    widget->setSizePolicy(QSizePolicy::Minimum,
-                                          QSizePolicy::Minimum);
+                    button->setText(tr("Add"));
+                    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+                    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
                     connect(button, &QPushButton::clicked, this, [ = ]() {
                         addItemToShop(i, table);
@@ -451,7 +427,7 @@ void ShopEditor::addItemToShop(int index, QTableWidget *table)
         // Add "Remove" button
         QWidget *widget     = new QWidget;
         QPushButton *button = new QPushButton;
-        button->setText("Remove");
+        button->setText(tr("Remove"));
         button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
@@ -511,8 +487,7 @@ void ShopEditor::on_pushButton_saveShop_clicked()
     if (!currentProject.isNull())
     {
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         int shops = settings.beginReadArray(currentCategory + "_shops");
         settings.endArray();
@@ -527,9 +502,8 @@ void ShopEditor::on_pushButton_saveShop_clicked()
             if (settings.value("name", "").toString() == currentShop)
             {
                 // Shop Info
-                settings.setValue("owner", ui->lineEdit_shopOwner->text());
-                settings.setValue("description",
-                                  ui->lineEdit_shopDescription->text());
+                settings.setValue("owner",       ui->lineEdit_shopOwner->text());
+                settings.setValue("description", ui->lineEdit_shopDescription->text());
 
                 // Items
                 int items = ui->tableWidget_shopItems->rowCount();
@@ -539,18 +513,10 @@ void ShopEditor::on_pushButton_saveShop_clicked()
                 for (int j = 0; j < items; j++)
                 {
                     settings.setArrayIndex(j);
-                    settings.setValue("name",        ui->tableWidget_shopItems->item(
-                                          j,
-                                          1)->text());
-                    settings.setValue("price",       ui->tableWidget_shopItems->item(
-                                          j,
-                                          2)->text());
-                    settings.setValue("category",    ui->tableWidget_shopItems->item(
-                                          j,
-                                          3)->text());
-                    settings.setValue("description", ui->tableWidget_shopItems->item(
-                                          j,
-                                          4)->text());
+                    settings.setValue("name",        ui->tableWidget_shopItems->item(j, 1)->text());
+                    settings.setValue("price",       ui->tableWidget_shopItems->item(j, 2)->text());
+                    settings.setValue("category",    ui->tableWidget_shopItems->item(j, 3)->text());
+                    settings.setValue("description", ui->tableWidget_shopItems->item(j, 4)->text());
                 }
                 settings.endArray();
             }
@@ -588,8 +554,7 @@ void ShopEditor::on_pushButton_deleteSelected_clicked()
     {
         QTreeWidgetItem *item   = ui->treeWidget_shops->currentItem();
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         if (item->type() == 0) // Category
         {

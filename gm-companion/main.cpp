@@ -16,8 +16,7 @@
 
 // Responsible for writing the console output into a log if debug option in
 // settings is disabled (default)
-void myMessageHandler(QtMsgType type, const QMessageLogContext&,
-                      const QString& msg)
+void myMessageHandler(QtMsgType type, const QMessageLogContext&, const QString& msg)
 {
     QDate date;
     QTime time;
@@ -26,23 +25,19 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext&,
 
     switch (type) {
     case QtDebugMsg:
-        txt = time.currentTime().toString() + ": " +
-              QString("Debug: %1").arg(msg);
+        txt = time.currentTime().toString() + ": " + QString("Debug: %1").arg(msg);
         break;
 
     case QtWarningMsg:
-        txt = time.currentTime().toString() + ": " + QString("Warning: %1").arg(
-            msg);
+        txt = time.currentTime().toString() + ": " + QString("Warning: %1").arg(msg);
         break;
 
     case QtCriticalMsg:
-        txt = time.currentTime().toString() + ": " + QString("Critical: %1").arg(
-            msg);
+        txt = time.currentTime().toString() + ": " + QString("Critical: %1").arg(msg);
         break;
 
     case QtFatalMsg:
-        txt = time.currentTime().toString() + ": " +
-              QString("Fatal: %1").arg(msg);
+        txt = time.currentTime().toString() + ": " + QString("Fatal: %1").arg(msg);
         break;
 
     default:
@@ -50,9 +45,7 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext&,
         break;
     }
 
-    QFile outFile(
-        QDir::homePath() + "/.gm-companion/logs/" +
-        date.currentDate().toString());
+    QFile outFile(QDir::homePath() + "/.gm-companion/logs/" + date.currentDate().toString());
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream ts(&outFile);
     ts << txt << endl;
@@ -61,8 +54,7 @@ void myMessageHandler(QtMsgType type, const QMessageLogContext&,
 // Show "What is new?" window
 void showWhatIsNew(SettingsManager *settingsManager, MainWindow *w)
 {
-    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",
-                            QSettings::IniFormat);
+    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     // Should window be opened by default?
     int openNewFeatures = checkSettings.value("openWhatIsNewWindow", 1).toInt();
@@ -73,14 +65,8 @@ void showWhatIsNew(SettingsManager *settingsManager, MainWindow *w)
     if ((openNewFeatures == 1) || (w->getVersionNumber() > settingsVersion))
     {
         // Print the reason why the window is being opened
-        if (w->getVersionNumber() >
-            settingsVersion) qDebug().noquote() << QCoreApplication::translate(
-                "Program Start",
-                "Opening New Features Window because of an Update...");
-        else if (openNewFeatures ==
-                 1) qDebug().noquote() << QCoreApplication::translate(
-                "Program Start",
-                "Opening New Features Window because of the settings preferences...");
+        if (w->getVersionNumber() > settingsVersion) qDebug().noquote() << "Opening New Features Window because of an Update...";
+        else if (openNewFeatures == 1) qDebug().noquote() << "Opening New Features Window because of the settings preferences...";
 
         WhatIsNewWindow *whatIsNewWindow = new WhatIsNewWindow;
         whatIsNewWindow->show();
@@ -97,8 +83,7 @@ void showWhatIsNew(SettingsManager *settingsManager, MainWindow *w)
 // Check if debug mode is enabled (disabled by default)
 void enableDebug()
 {
-    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",
-                            QSettings::IniFormat);
+    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     if (checkSettings.value("debug", 0).toInt() == 1)
     {
@@ -133,8 +118,7 @@ int main(int argc, char *argv[])
     SettingsManager *settingsManager = new SettingsManager;
     QTranslator     *translator      = new QTranslator();
 
-    if (translator->load("gm-companion_" + settingsManager->getSetting(language),
-                         ":/translations")) app.installTranslator(translator);
+    if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
 
     // Start mainwindow
@@ -154,8 +138,7 @@ int main(int argc, char *argv[])
     // Sets the window size to maximized, w.showMaximized() is glitchy under
     // windows
     #ifdef _WIN32
-    w->resize(QApplication::primaryScreen()->availableGeometry().width(),
-              QApplication::primaryScreen()->availableGeometry().height());
+    w->resize(QApplication::primaryScreen()->availableGeometry().width(), QApplication::primaryScreen()->availableGeometry().height());
     #endif // ifdef _WIN32
 
     // Open Window Maximized

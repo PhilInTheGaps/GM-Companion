@@ -391,9 +391,9 @@ void AudioTool::updateMetaData()
 
             // Album, Artist and Title
             TagLib::FileRef f(path.toUtf8());
-            ui->label_album->setText(QString("Album: ") + f.tag()->album().toCString(true));
-            ui->label_artist->setText(QString("Artist: ") + f.tag()->artist().toCString(true));
-            ui->label_title->setText(QString("Title: ") + f.tag()->title().toCString(true));
+            ui->label_album->setText(QString(tr("Album: ")) + f.tag()->album().toCString(true));
+            ui->label_artist->setText(QString(tr("Artist: ")) + f.tag()->artist().toCString(true));
+            ui->label_title->setText(QString(tr("Title: ")) + f.tag()->title().toCString(true));
 
             // Get file path and convert it to wchar_t for taglib
             wchar_t array[path.length()];
@@ -414,7 +414,7 @@ void AudioTool::updateMetaData()
             else
             {
                 ui->label_albumCover->clear();
-                ui->label_albumCover->setText("No Album Cover Available");
+                ui->label_albumCover->setText(tr("No Album Cover Available"));
             }
         }
         #else // I can't get TagLib to work on Windows though, so this mess
@@ -432,8 +432,8 @@ void AudioTool::updateMetaData()
         ui->label_albumCover->setPixmap(QPixmap::fromImage(img).scaledToWidth(ui->label_albumCover->width(), Qt::SmoothTransformation));
 
         // Set other MetaData stuff
-        ui->label_title->setText("Title: " + musicPlayer->metaData(QMediaMetaData::Title).toString());
-        ui->label_album->setText("Album: " + musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString());
+        ui->label_title->setText(tr("Title: ") + musicPlayer->metaData(QMediaMetaData::Title).toString());
+        ui->label_album->setText(tr("Album: ") + musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString());
 
         // Same thing as with the album cover, sometimes it works, sometimes
         // not.
@@ -443,7 +443,7 @@ void AudioTool::updateMetaData()
 
         if (artist.isNull()) artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
 
-        ui->label_artist->setText("Artist: " + artist);
+        ui->label_artist->setText(tr("Artist: ") + artist);
         #endif // ifdef __linux__
     }
 }
@@ -490,8 +490,7 @@ void AudioTool::playMusic(QString arg)
 
             // Add Songs to Playlist
             int songCount = settings.beginReadArray("songs");
-            qDebug().noquote() << "This element contains the following songs:" <<
-                songCount;
+            qDebug().noquote() << "This element contains the following songs:" << songCount;
 
             if (songCount > 0)
             {

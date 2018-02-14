@@ -60,7 +60,7 @@ void ItemEditor::addItemToList(int index, QStringList info)
     // Add remove button
     QWidget *widget     = new QWidget;
     QPushButton *button = new QPushButton;
-    button->setText("Remove");
+    button->setText(tr("Remove"));
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
@@ -100,8 +100,7 @@ void ItemEditor::on_pushButton_addCategory_clicked()
         ui->lineEdit_categoryName->clear();
 
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/CustomItems.items",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
 
         int count = settings.beginReadArray("categories");
         settings.endArray();
@@ -124,8 +123,7 @@ void ItemEditor::getCategories()
     QStringList categories;
 
     QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/CustomItems.items",
-                       QSettings::IniFormat);
+    QSettings settings(projectFolder + "/CustomItems.items", QSettings::IniFormat);
 
     int count = settings.beginReadArray("categories");
 
@@ -165,8 +163,7 @@ void ItemEditor::on_pushButton_save_clicked()
         for (int j = 0; j < 4; j++)
         {
             if (ui->tableWidget_itemList->item(i, j + 1) != NULL) info.replace(j, ui->tableWidget_itemList->item(
-                                                                                   i,
-                                                                                   j
+                                                                                   i, j
                                                                                    +
                                                                                    1)->text());
         }

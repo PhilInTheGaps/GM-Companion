@@ -41,8 +41,7 @@ void AudioEditor::getProjects()
 
     for (QString project : getFiles(settingsManager->getSetting(audioPath)))
     {
-        if (project.contains(".ini") &&
-            (project != "desktop.ini")) ui->comboBox_projects->addItem(cleanText(project));
+        if (project.contains(".ini") && (project != "desktop.ini")) ui->comboBox_projects->addItem(cleanText(project));
     }
 }
 
@@ -465,9 +464,7 @@ void AudioEditor::on_pushButton_deleteSelected_clicked()
         }
 
         // Setting up QSettings
-        QSettings settings(settingsManager->getSetting(
-                               audioPath) + "/" + projectName + ".ini",
-                           QSettings::IniFormat);
+        QSettings settings(settingsManager->getSetting(audioPath) + "/" + projectName + ".ini", QSettings::IniFormat);
 
         int arraySize = settings.beginReadArray(arrayName);
 
@@ -1421,8 +1418,7 @@ void AudioEditor::on_treeWidget_music_currentItemChanged(QTreeWidgetItem *curren
 {
     if (current->type() == 1)
     {
-        playPreview(settingsManager->getSetting(musicPath) +
-                    current->whatsThis(0));
+        playPreview(settingsManager->getSetting(musicPath) + current->whatsThis(0));
     }
 }
 
@@ -1430,8 +1426,7 @@ void AudioEditor::on_treeWidget_sound_currentItemChanged(QTreeWidgetItem *curren
 {
     if (current->type() == 1)
     {
-        playPreview(settingsManager->getSetting(soundPath) +
-                    current->whatsThis(0));
+        playPreview(settingsManager->getSetting(soundPath) + current->whatsThis(0));
     }
 }
 
@@ -1525,15 +1520,13 @@ void AudioEditor::on_pushButton_addToSoundList_clicked()
 // Remove music file from list
 void AudioEditor::on_pushButton_removeFileMusic_clicked()
 {
-    if (ui->listWidget_musicList->currentItem() !=
-        NULL) delete ui->listWidget_musicList->currentItem();
+    if (ui->listWidget_musicList->currentItem() != NULL) delete ui->listWidget_musicList->currentItem();
 }
 
 // Remove sound file from list
 void AudioEditor::on_pushButton_removeSoundFile_clicked()
 {
-    if (ui->listWidget_soundList->currentItem() !=
-        NULL) delete ui->listWidget_soundList->currentItem();
+    if (ui->listWidget_soundList->currentItem() != NULL) delete ui->listWidget_soundList->currentItem();
 }
 
 // Move selected item

@@ -16,8 +16,7 @@ ShopTool::ShopTool(QWidget *parent) : QDialog(parent), ui(new Ui::ShopTool)
     getProjects();
 
     // Load default project
-    QSettings settings(
-        QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
     settings.beginGroup("ShopTool");
 
     for (int i = 0; i < ui->comboBox_loadProject->count(); i++)
@@ -25,8 +24,7 @@ ShopTool::ShopTool(QWidget *parent) : QDialog(parent), ui(new Ui::ShopTool)
         if (ui->comboBox_loadProject->itemText(i) ==
             settings.value("defaultProject").toString())
         {
-            qDebug().noquote() << "Loading default project: " +
-                ui->comboBox_loadProject->itemText(i) + " ...";
+            qDebug().noquote() << "Loading default project: " + ui->comboBox_loadProject->itemText(i) + " ...";
             ui->comboBox_loadProject->setCurrentIndex(i);
             loadProject(ui->comboBox_loadProject->itemText(i));
         }
@@ -68,8 +66,7 @@ void ShopTool::loadShops()
     ui->treeWidget_shopList->clear();
 
     QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-    QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                       QSettings::IniFormat);
+    QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
     // Get all categories
     QStringList categories;
@@ -78,8 +75,7 @@ void ShopTool::loadShops()
     for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
-        categories.push_back(settings.value("name",
-                                            "UNKNOWN CATEGORY").toString());
+        categories.push_back(settings.value("name", tr("UNKNOWN CATEGORY")).toString());
     }
     settings.endArray();
 
@@ -123,8 +119,7 @@ void ShopTool::loadShop()
     if (!currentShop.isNull() && !currentCategory.isNull())
     {
         QString   projectFolder = settingsManager->getSetting(Setting::shopPath);
-        QSettings settings(projectFolder + "/" + currentProject + ".shop",
-                           QSettings::IniFormat);
+        QSettings settings(projectFolder + "/" + currentProject + ".shop", QSettings::IniFormat);
 
         // Clear old info
         ui->label_shopTitle->clear();
@@ -144,12 +139,9 @@ void ShopTool::loadShop()
             // Find shop in list
             if (settings.value("name", "").toString() == currentShop)
             {
-                ui->label_shopTitle->setText(settings.value("name",
-                                                            "UNKNOWN SHOP").toString());
-                ui->label_shopOwner->setText(settings.value("owner",
-                                                            "").toString());
-                ui->label_shopDescription->setText(settings.value("description",
-                                                                  "").toString());
+                ui->label_shopTitle->setText(settings.value("name", tr("UNKNOWN SHOP")).toString());
+                ui->label_shopOwner->setText(settings.value("owner", "").toString());
+                ui->label_shopDescription->setText(settings.value("description", "").toString());
 
                 // Add items
                 int items = settings.beginReadArray("items");
@@ -161,8 +153,7 @@ void ShopTool::loadShop()
                 {
                     settings.setArrayIndex(j);
 
-                    QString category = settings.value("category",
-                                                      "Unknown Category").toString();
+                    QString category = settings.value("category", tr("Unknown Category")).toString();
 
                     if (!categories.contains(category))
                     {
@@ -194,18 +185,13 @@ void ShopTool::loadShop()
                         settings.setArrayIndex(j);
 
                         // If item belongs to category
-                        if (category ==
-                            settings.value("category",
-                                           "Unknown Category").toString())
+                        if (category == settings.value("category", tr("Unknown Category")).toString())
                         {
                             ui->tableWidget_items->insertRow(rowIndex);
 
-                            QString name =
-                                settings.value("name", "Unknown Item").toString();
-                            QString price =
-                                settings.value("price", "").toString();
-                            QString description =
-                                settings.value("description", "").toString();
+                            QString name        = settings.value("name", tr("Unknown Item")).toString();
+                            QString price       = settings.value("price", "").toString();
+                            QString description = settings.value("description", "").toString();
 
                             QStringList info =
                             { name, price, description, category };
@@ -219,8 +205,7 @@ void ShopTool::loadShop()
                                 // Make Price align right
                                 if (k == 1)
                                 {
-                                    item->setTextAlignment(
-                                        Qt::AlignRight | Qt::AlignVCenter);
+                                    item->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
                                     item->setText(info.at(k) + "  ");
                                 }
 
@@ -270,15 +255,10 @@ void ShopTool::on_comboBox_loadProject_currentTextChanged(const QString& arg1)
 {
     if (!arg1.isNull())
     {
-        QSettings settings(
-            QDir::homePath() + "/.gm-companion/settings.ini",
-            QSettings::IniFormat);
+        QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
         settings.beginGroup("ShopTool");
 
-        if (arg1 ==
-            settings.value("defaultProject",
-                           "").toString()) ui->checkBox_setDefault->setChecked(
-                true);
+        if (arg1 == settings.value("defaultProject", "").toString()) ui->checkBox_setDefault->setChecked(true);
         else ui->checkBox_setDefault->setChecked(false);
 
         settings.endGroup();
@@ -288,17 +268,17 @@ void ShopTool::on_comboBox_loadProject_currentTextChanged(const QString& arg1)
 // When "set as default" combo box is toggled
 void ShopTool::on_checkBox_setDefault_toggled(bool checked)
 {
-    QSettings settings(
-        QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     settings.beginGroup("ShopTool");
 
-    if (checked) settings.setValue("defaultProject",
-                                   ui->comboBox_loadProject->currentText());
+    if (checked)
+    {
+        settings.setValue("defaultProject", ui->comboBox_loadProject->currentText());
+    }
     else
     {
-        if (ui->comboBox_loadProject->currentText() ==
-            settings.value("defaultProject", "").toString())
+        if (ui->comboBox_loadProject->currentText() == settings.value("defaultProject", "").toString())
         {
             settings.setValue("defaultProject", "");
         }
