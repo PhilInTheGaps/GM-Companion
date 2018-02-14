@@ -14,8 +14,7 @@
 #include <QDesktopServices>
 #include <QComboBox>
 
-OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(
-        new Ui::OptionsDialog)
+OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(new Ui::OptionsDialog)
 {
     ui->setupUi(this);
 
@@ -29,8 +28,7 @@ OptionsDialog::OptionsDialog(MainWindow *parent) : QDialog(parent), ui(
     getStyleSheets();
     getLanguage();
 
-    if (settings->getSetting(Setting::showToolNames).toInt() ==
-        1) ui->checkBox_showToolNames->setChecked(true);
+    if (settings->getSetting(Setting::showToolNames).toInt() == 1) ui->checkBox_showToolNames->setChecked(true);
     else ui->checkBox_showToolNames->setChecked(false);
 }
 
@@ -74,17 +72,21 @@ void OptionsDialog::getAddons()
 
     QStringList officialAddonNames = settings->getOfficialAddons();
 
-    for (QString folder :
-         getFolders(QDir::homePath() + "/.gm-companion/addons")) {
-        if (!folder.contains(".")) {
+    for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/addons"))
+    {
+        if (!folder.contains("."))
+        {
             QCheckBox *b = new QCheckBox;
             b->setText(folder);
 
             b->setChecked(settings->getIsAddonEnabled(folder));
 
-            if (officialAddonNames.contains(folder)) {
+            if (officialAddonNames.contains(folder))
+            {
                 officialAddons.push_back(b);
-            } else {
+            }
+            else
+            {
                 inofficialAddons.push_back(b);
             }
         }
@@ -92,12 +94,14 @@ void OptionsDialog::getAddons()
 
     ui->addonsFrame->layout()->addWidget(new QLabel(tr("Official Addons")));
 
-    for (QCheckBox *b : officialAddons) {
+    for (QCheckBox *b : officialAddons)
+    {
         ui->addonsFrame->layout()->addWidget(b);
     }
     ui->addonsFrame->layout()->addWidget(new QLabel(tr("Inofficial Addons")));
 
-    for (QCheckBox *b : inofficialAddons) {
+    for (QCheckBox *b : inofficialAddons)
+    {
         ui->addonsFrame->layout()->addWidget(b);
     }
 }
@@ -105,11 +109,15 @@ void OptionsDialog::getAddons()
 // Save Addon Settings
 void OptionsDialog::writeAddonSettings()
 {
-    for (QCheckBox *b : officialAddons) settings->setAddonEnabled(
-            b->text(), b->isChecked());
+    for (QCheckBox *b : officialAddons)
+    {
+        settings->setAddonEnabled(b->text(), b->isChecked());
+    }
 
-    for (QCheckBox *b : inofficialAddons) settings->setAddonEnabled(
-            b->text(), b->isChecked());
+    for (QCheckBox *b : inofficialAddons)
+    {
+        settings->setAddonEnabled(b->text(), b->isChecked());
+    }
 }
 
 void OptionsDialog::on_setMusicPath_clicked()
@@ -278,4 +286,5 @@ void OptionsDialog::on_pushButton_saveAddons_clicked()
 void OptionsDialog::on_checkBox_showToolNames_toggled(bool checked)
 {
     settings->setSetting(Setting::showToolNames, checked);
+    w->hideToolNames(!checked);
 }

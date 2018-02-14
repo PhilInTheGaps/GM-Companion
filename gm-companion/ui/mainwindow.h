@@ -54,6 +54,9 @@ public:
     // Tools
     void addTools();
 
+    // UI
+    void hideToolNames(bool hide);
+
 private slots:
     // Tools
     void on_pushButton_audioTool_clicked();
