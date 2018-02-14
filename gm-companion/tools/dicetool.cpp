@@ -22,26 +22,26 @@ DiceTool::~DiceTool()
 }
 
 // Rolling dice
-void DiceTool::rollDice(int sides){
-
-    int amount = ui->spinBox_amount->value();
+void DiceTool::rollDice(int sides)
+{
+    int amount   = ui->spinBox_amount->value();
     int modifier = ui->spinBox_modifier->value();
-    int result = 0;
+    int result   = 0;
 
     ui->tableWidget_results->insertRow(0);
 
     QList<int> results;
 
-    for (int i = 0; i<amount; i++){
-        QTableWidgetItem *i1 = new QTableWidgetItem;   // dice
-        QTableWidgetItem *i2 = new QTableWidgetItem;   // roll
-        QTableWidgetItem *i3 = new QTableWidgetItem;   // result
+    for (int i = 0; i < amount; i++) {
+        QTableWidgetItem *i1 = new QTableWidgetItem; // dice
+        QTableWidgetItem *i2 = new QTableWidgetItem; // roll
+        QTableWidgetItem *i3 = new QTableWidgetItem; // result
 
         // Generate random integer
-        int temp = rand() % sides+1;
+        int temp = rand() % sides + 1;
 
         // Set dice table item
-        i1->setText(QString::number(i+1)+tr("D")+QString::number(sides));
+        i1->setText(QString::number(i + 1) + tr("D") + QString::number(sides));
 
         // Set the roll table item
         i2->setText(QString::number(temp));
@@ -62,22 +62,21 @@ void DiceTool::rollDice(int sides){
         results.push_back(temp);
     }
 
-    if (ui->spinBox_bonusDice->value() > ui->spinBox_amount->value())
-        ui->spinBox_bonusDice->setValue(ui->spinBox_amount->value());
+    if (ui->spinBox_bonusDice->value() > ui->spinBox_amount->value()) ui->spinBox_bonusDice->setValue(ui->spinBox_amount->value());
 
     // Remove bonus dice
-    for (int i = 0; i<ui->spinBox_bonusDice->value(); i++)
+    for (int i = 0; i < ui->spinBox_bonusDice->value(); i++)
     {
-        QTableWidgetItem *i1 = new QTableWidgetItem;   // dice
-        QTableWidgetItem *i2 = new QTableWidgetItem;   // roll
-        QTableWidgetItem *i3 = new QTableWidgetItem;   // result
+        QTableWidgetItem *i1 = new QTableWidgetItem; // dice
+        QTableWidgetItem *i2 = new QTableWidgetItem; // roll
+        QTableWidgetItem *i3 = new QTableWidgetItem; // result
 
         // Get smallest result
         int min = *std::min_element(results.begin(), results.end());
         result -= min;
 
         // Set dice table item
-        i1->setText("Bonus #"+QString::number(i+1));
+        i1->setText(tr("Bonus #") + QString::number(i + 1));
 
         // Set the roll table item
         i2->setText("-" + QString::number(min));
@@ -110,7 +109,6 @@ void DiceTool::generateDice()
     {
         ui->comboBox_dice->addItem(QString::number(sides));
     }
-
 }
 
 // Add a custom die
@@ -124,7 +122,7 @@ void DiceTool::on_pushButton_addDie_clicked()
 // Reset dice
 void DiceTool::on_pushButton_resetDice_clicked()
 {
-    sidesList = {2, 3, 4, 6, 12, 20};
+    sidesList = { 2, 3, 4, 6, 12, 20 };
     ui->comboBox_dice->clear();
     generateDice();
 }
