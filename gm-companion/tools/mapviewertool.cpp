@@ -8,12 +8,15 @@
 #include <QScrollArea>
 #include <QGraphicsScene>
 #include <QSpacerItem>
+#include <QPushButton>
 
 MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapViewerTool)
 {
     qDebug() << "Loading Map Viewer Tool ...";
 
     ui->setupUi(this);
+
+    listVisible = true;
 
     getMaps();
 }
@@ -48,6 +51,9 @@ void MapViewerTool::getMaps()
 
             QPushButton *imageButton = new QPushButton;
             imageButton->setText(cleanText(mapName));
+            imageButton->setToolTip(cleanText(mapName));
+            imageButton->setMaximumWidth(175);
+
             mapButtonLayout->addWidget(imageButton);
 
             connect(imageButton, &QPushButton::clicked, this, [ = ]() { setMap(mapPath); });
@@ -84,4 +90,21 @@ void MapViewerTool::on_pushButton_zoomOut_clicked()
 void MapViewerTool::on_pushButton_resetSize_clicked()
 {
     ui->graphicsView->resetTransform();
+}
+
+// Show or Hide maps list
+void MapViewerTool::on_pushButton_toggleMaps_clicked()
+{
+    if (listVisible)
+    {
+        listVisible = false;
+        ui->scrollArea_mapButtons->setHidden(true);
+        ui->pushButton_toggleMaps->setText("Show List");
+    }
+    else
+    {
+        listVisible = true;
+        ui->scrollArea_mapButtons->setHidden(false);
+        ui->pushButton_toggleMaps->setText("Hide List");
+    }
 }

@@ -138,6 +138,7 @@ void AudioTool::loadProject(QString project)
     QSettings settings(settingsManager->getSetting(audioPath) + "/" + project, QSettings::IniFormat);
 
     QHBoxLayout *categoryLayout = new QHBoxLayout;
+    categoryLayout->setContentsMargins(2, 2, 2, 2);
     ui->categoryBar->setLayout(categoryLayout);
 
     // Load category order
@@ -282,6 +283,8 @@ void AudioTool::generateElementButtons(QString scenario)
     QStringList listNames = { "MusicLists", "SoundLists", "Radios" };
     qDebug().noquote() << "Adding Elements ...";
 
+    QImage image;
+
     for (int i = 0; i < listNames.size(); i++)
     {
         int size = settings.beginReadArray(category + "_" + scenario + "_" + listNames.at(i));
@@ -354,10 +357,11 @@ void AudioTool::generateElementButtons(QString scenario)
 
             // Set Custom Icon
             QString iconPath = settings.value("icon", "").toString();
+            image = QImage(settingsManager->getSetting(resourcesPath) + "/" + iconPath);
 
-            if (!iconPath.isEmpty() && !QPixmap(settingsManager->getSetting(resourcesPath) + "/" + iconPath).isNull())
+            if (!iconPath.isEmpty() && !image.isNull())
             {
-                button->setIcon(QIcon(QPixmap(settingsManager->getSetting(resourcesPath) + "/" + iconPath).scaledToWidth(buttonWidth, Qt::SmoothTransformation)));
+                button->setIcon(QIcon(QPixmap::fromImage(image).scaledToWidth(buttonWidth, Qt::SmoothTransformation)));
             }
 
             int index = elements.indexOf(name);
