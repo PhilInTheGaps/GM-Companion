@@ -22,11 +22,14 @@ private slots:
     void on_pushButton_zoomOut_clicked();
     void on_pushButton_resetSize_clicked();
 
+    void on_pushButton_toggleMaps_clicked();
+
 private:
     Ui::MapViewerTool *ui;
 
     void getMaps();
     void setMap(QString mapPath);
+    bool listVisible;
 };
 
 #endif // MAPVIEWERTOOL_H
