@@ -6,9 +6,11 @@
 
 #include <QDebug>
 #include <QScrollArea>
+#include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QSpacerItem>
 #include <QPushButton>
+#include <QScrollBar>
 
 MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapViewerTool)
 {
@@ -17,6 +19,8 @@ MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapV
     ui->setupUi(this);
 
     listVisible = true;
+
+    zoom = 1;
 
     getMaps();
 }
@@ -39,6 +43,7 @@ void MapViewerTool::getMaps()
     // Set map button layout
     QVBoxLayout *mapButtonLayout = new QVBoxLayout;
     ui->scrollAreaWidgetContents->setLayout(mapButtonLayout);
+    ui->scrollArea_mapButtons->setWidgetResizable(true);
 
     QStringList mapsList = getFiles(path);
 
@@ -49,19 +54,33 @@ void MapViewerTool::getMaps()
         {
             QString mapPath = path + "/" + mapName;
 
-            QPushButton *imageButton = new QPushButton;
-            imageButton->setText(cleanText(mapName));
-            imageButton->setToolTip(cleanText(mapName));
-            imageButton->setMaximumWidth(175);
+            QVBoxLayout *l = new QVBoxLayout;
 
-            mapButtonLayout->addWidget(imageButton);
+            QPushButton *imageButton = new QPushButton;
+            imageButton->setMaximumWidth(150);
+            imageButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
+            QPixmap p = QPixmap(mapPath).scaled(145, 145, Qt::KeepAspectRatio, Qt::FastTransformation);
+
+            imageButton->setIcon(QIcon(p));
+            imageButton->setIconSize(QSize(145, 145));
+            l->addWidget(imageButton);
+
+            QLabel *label = new QLabel;
+            label->setText(cleanText(mapName));
+            label->setText(cleanText(mapName));
+            label->setWordWrap(true);
+            l->addWidget(label);
+            label->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
             connect(imageButton, &QPushButton::clicked, this, [ = ]() { setMap(mapPath); });
+
+            mapButtonLayout->addLayout(l);
         }
     }
 
     // Add a verical spacer
     mapButtonLayout->addItem(new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->scrollArea_mapButtons->setMinimumWidth(170 + ui->scrollArea_mapButtons->verticalScrollBar()->sizeHint().width());
 }
 
 // Display a map
@@ -77,13 +96,23 @@ void MapViewerTool::setMap(QString mapPath)
 // Zoom In
 void MapViewerTool::on_pushButton_zoomIn_clicked()
 {
-    ui->graphicsView->scale(1.5, 1.5);
+    float z = (zoom + 0.1) / (zoom);
+
+    zoom += 0.1;
+
+    ui->graphicsView->scale(z, z);
 }
 
 // Zoom Out
 void MapViewerTool::on_pushButton_zoomOut_clicked()
 {
-    ui->graphicsView->scale(0.75, 0.75);
+    float z = (zoom - 0.1) / (zoom);
+
+    if (zoom - 0.1 > 0)
+    {
+        zoom -= 0.1;
+        ui->graphicsView->scale(z, z);
+    }
 }
 
 // Reset label size back to normal
