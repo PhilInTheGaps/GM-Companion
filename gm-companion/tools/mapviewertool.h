@@ -27,6 +27,8 @@ private slots:
 private:
     Ui::MapViewerTool *ui;
 
+    float zoom;
+
     void getMaps();
     void setMap(QString mapPath);
     bool listVisible;
