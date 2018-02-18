@@ -94,9 +94,7 @@ void AddonManager::setUpTable()
                 widget->setLayout(bLayout);
                 ui->tableWidget->setCellWidget(i, 2, widget);
 
-                QUrl url =
-                    "https://github.com/PhilInTheGaps/GM-Companion/raw/master/docs/addons/"
-                    + addonName + "_" + addonVersion + ".zip";
+                QUrl url = "https://github.com/PhilInTheGaps/GM-Companion/raw/master/gm-companion/Addons/" + addonName + "_" + addonVersion + ".zip";
 
                 connect(button, &QPushButton::clicked, this, [ = ]() {
                     downloadAddon(url);
