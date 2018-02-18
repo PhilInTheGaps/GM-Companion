@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QSignalMapper>
 #include <QLabel>
+#include <QStringList>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 namespace Ui {
 class MapViewerTool;
@@ -30,6 +33,9 @@ private:
     float zoom;
 
     void getMaps();
+    void createMapButtons(QStringList fileList, QString path, QVBoxLayout *mapButtonLayout, QScrollArea *area);
+    void loadAddonMaps();
+
     void setMap(QString mapPath);
     bool listVisible;
 };

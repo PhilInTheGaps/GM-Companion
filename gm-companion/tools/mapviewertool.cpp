@@ -11,6 +11,7 @@
 #include <QSpacerItem>
 #include <QPushButton>
 #include <QScrollBar>
+#include <QTabWidget>
 
 MapViewerTool::MapViewerTool(QWidget *parent) : QWidget(parent), ui(new Ui::MapViewerTool)
 {
@@ -45,10 +46,17 @@ void MapViewerTool::getMaps()
     ui->scrollAreaWidgetContents->setLayout(mapButtonLayout);
     ui->scrollArea_mapButtons->setWidgetResizable(true);
 
-    QStringList mapsList = getFiles(path);
+    // Add Buttons
+    createMapButtons(getFiles(path), path, mapButtonLayout, ui->scrollArea_mapButtons);
 
+    // Addon Buttons
+    loadAddonMaps();
+}
+
+void MapViewerTool::createMapButtons(QStringList fileList, QString path, QVBoxLayout *mapButtonLayout, QScrollArea *area)
+{
     // Create a button for every map
-    for (QString mapName : mapsList)
+    for (QString mapName : fileList)
     {
         if (mapName.contains(".png") || mapName.contains(".jpg"))
         {
@@ -57,30 +65,67 @@ void MapViewerTool::getMaps()
             QVBoxLayout *l = new QVBoxLayout;
 
             QPushButton *imageButton = new QPushButton;
-            imageButton->setMaximumWidth(150);
+            imageButton->setMaximumWidth(130);
             imageButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
-            QPixmap p = QPixmap(mapPath).scaled(145, 145, Qt::KeepAspectRatio, Qt::FastTransformation);
+            imageButton->setToolTip(cleanText(mapName));
+            QPixmap p = QPixmap(mapPath).scaled(125, 125, Qt::KeepAspectRatio, Qt::FastTransformation);
 
             imageButton->setIcon(QIcon(p));
-            imageButton->setIconSize(QSize(145, 145));
+            imageButton->setIconSize(QSize(125, 125));
             l->addWidget(imageButton);
 
             QLabel *label = new QLabel;
             label->setText(cleanText(mapName));
-            label->setText(cleanText(mapName));
+            label->setToolTip(cleanText(mapName));
             label->setWordWrap(true);
             l->addWidget(label);
             label->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
             connect(imageButton, &QPushButton::clicked, this, [ = ]() { setMap(mapPath); });
-
             mapButtonLayout->addLayout(l);
         }
     }
 
     // Add a verical spacer
     mapButtonLayout->addItem(new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    ui->scrollArea_mapButtons->setMinimumWidth(170 + ui->scrollArea_mapButtons->verticalScrollBar()->sizeHint().width());
+    area->setMinimumWidth(130 + ui->scrollArea_mapButtons->verticalScrollBar()->sizeHint().width());
+}
+
+void MapViewerTool::loadAddonMaps()
+{
+    qDebug() << "Loading addon maps ...";
+    QString addonPath  = QDir::homePath() + "/.gm-companion/addons";
+    QStringList addons = getFolders(addonPath);
+
+    QString path;
+    bool    addedMaps = false;
+
+    for (QString addon : addons)
+    {
+        path = addonPath + "/" + addon + "/maps";
+        qDebug() << "Loading addon maps:" << path;
+
+        if (QDir(path).exists() && !addon.contains("."))
+        {
+            QScrollArea *area   = new QScrollArea;
+            QWidget     *widget = new QWidget;
+            QVBoxLayout *layout = new QVBoxLayout;
+            widget->setLayout(layout);
+            area->setWidget(widget);
+            area->setWidgetResizable(true);
+            area->setFrameShape(QFrame::NoFrame);
+
+            createMapButtons(getFiles(path), path, layout, area);
+
+            ui->tabWidget->addTab(area, addon);
+            addedMaps = true;
+        }
+    }
+
+    if (addedMaps)
+    {
+        ui->tabWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    }
 }
 
 // Display a map
@@ -119,6 +164,7 @@ void MapViewerTool::on_pushButton_zoomOut_clicked()
 void MapViewerTool::on_pushButton_resetSize_clicked()
 {
     ui->graphicsView->resetTransform();
+    zoom = 1;
 }
 
 // Show or Hide maps list
@@ -127,13 +173,13 @@ void MapViewerTool::on_pushButton_toggleMaps_clicked()
     if (listVisible)
     {
         listVisible = false;
-        ui->scrollArea_mapButtons->setHidden(true);
+        ui->tabWidget->setHidden(true);
         ui->pushButton_toggleMaps->setText("Show List");
     }
     else
     {
         listVisible = true;
-        ui->scrollArea_mapButtons->setHidden(false);
+        ui->tabWidget->setHidden(false);
         ui->pushButton_toggleMaps->setText("Hide List");
     }
 }
