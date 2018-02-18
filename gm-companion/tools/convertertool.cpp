@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QLabel>
 
 ConverterTool::ConverterTool(QWidget *parent) : QWidget(parent), ui(new Ui::ConverterTool)
 {
@@ -16,6 +17,12 @@ ConverterTool::ConverterTool(QWidget *parent) : QWidget(parent), ui(new Ui::Conv
     on_comboBox_unitType_currentIndexChanged(0);
 
     getAllUnits();
+
+    ui->label_arrow1->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
+    ui->label_arrow2->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
+    ui->label_arrow3->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
+    ui->label_arrow4->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
+    ui->label_arrow5->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
 }
 
 ConverterTool::~ConverterTool()
@@ -31,8 +38,7 @@ void ConverterTool::getAllUnits()
     {
         if (i == 1) // Addon Units
         {
-            for (QString addon : getFolders(QDir::homePath()+"/.gm-companion/addons"))
-                addUnitGroup(i, addon);
+            for (QString addon : getFolders(QDir::homePath() + "/.gm-companion/addons")) addUnitGroup(i, addon);
         }
         else
         {
@@ -50,24 +56,26 @@ void ConverterTool::addUnitGroup(int index, QString str)
     moneyUnits.append(getUnits("MoneyUnits", index, ui->comboBox_money1, ui->comboBox_money2, str));
 }
 
-QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon)
+QList<ConverterTool::Unit>ConverterTool::getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon)
 {
     QList<Unit> list;
-    QString path;
+    QString     path;
     bool unitsExist = false;
 
     // Check if units are normal units or addon units
     switch (type) {
     case 1: // Addon
-        path = QDir::homePath()+"/.gm-companion/addons/"+addon+"/units.ini";
-        if (QFile(path).exists() && settingsManager->getIsAddonEnabled(addon))
-            unitsExist = true;
+        path = QDir::homePath() + "/.gm-companion/addons/" + addon + "/units.ini";
+
+        if (QFile(path).exists() && settingsManager->getIsAddonEnabled(addon)) unitsExist = true;
         break;
+
     case 2: // Custom
-        path = QDir::homePath()+"/.gm-companion/units/custom.ini";
+        path = QDir::homePath() + "/.gm-companion/units/custom.ini";
         break;
+
     default: // Default
-        path = ":/units/default.ini";
+        path       = ":/units/default.ini";
         unitsExist = true;
         break;
     }
@@ -77,18 +85,19 @@ QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, 
         qDebug() << path;
 
         QSettings settings(path, QSettings::IniFormat);
+        settings.setIniCodec("UTF-8");
         int size = settings.beginReadArray(arrayName);
 
         qDebug() << "Size" << size;
 
-        for (int i = 0; i<size; i++)
+        for (int i = 0; i < size; i++)
         {
             settings.setArrayIndex(i);
 
             qDebug() << "Index:" << i;
 
             Unit unit;
-            unit.name = settings.value("name", "unknown").toString();
+            unit.name     = settings.value("name", "unknown").toString();
             unit.refUnits = settings.value("refUnits", 1).toDouble();
 
             qDebug() << "Name" << unit.name;
@@ -98,7 +107,6 @@ QList<ConverterTool::Unit> ConverterTool::getUnits(QString arrayName, int type, 
 
             box1->addItem(unit.name);
             box2->addItem(unit.name);
-
         }
         settings.endArray();
     }
@@ -116,18 +124,23 @@ void ConverterTool::on_comboBox_unitType_currentIndexChanged(int index)
     case 0: // Length
         refUnit = tr("Meters");
         break;
+
     case 1: // Area
         refUnit = tr("Square Meters");
         break;
+
     case 2: // Volume
         refUnit = tr("Cubic Meters");
         break;
+
     case 3: // Weight
         refUnit = tr("Kilograms");
         break;
+
     case 4: // Money
         refUnit = tr("Dollars");
         break;
+
     default:
         refUnit = "REF_UNIT";
         break;
@@ -142,42 +155,48 @@ void ConverterTool::on_pushButton_addUnit_clicked()
     if (!ui->lineEdit_unitName->text().isEmpty())
     {
         Unit unit;
-        unit.name = ui->lineEdit_unitName->text();
+        unit.name     = ui->lineEdit_unitName->text();
         unit.refUnits = ui->doubleSpinBox_refUnits->value();
 
         switch (ui->comboBox_unitType->currentIndex()) {
         case 0: // Length
             addUnit("LengthUnits", unit, lengthUnits, ui->comboBox_length1, ui->comboBox_length2);
             break;
+
         case 1: // Area
             addUnit("LengthUnits", unit, areaUnits, ui->comboBox_area1, ui->comboBox_area2);
             break;
+
         case 2: // Volume
             addUnit("LengthUnits", unit, volumeUnits, ui->comboBox_volume1, ui->comboBox_volume2);
             break;
+
         case 3: // Weight
             addUnit("LengthUnits", unit, weightUnits, ui->comboBox_weight1, ui->comboBox_weight2);
             break;
+
         case 4: // Money
             addUnit("LengthUnits", unit, moneyUnits, ui->comboBox_money1, ui->comboBox_money2);
             break;
+
         default:
             break;
         }
     }
 }
 
-void ConverterTool::addUnit(QString arrayName, Unit unit, QList<Unit> list, QComboBox *box1, QComboBox *box2)
+void ConverterTool::addUnit(QString arrayName, Unit unit, QList<Unit>list, QComboBox *box1, QComboBox *box2)
 {
     list.push_back(unit);
 
-    QSettings settings(QDir::homePath()+"/.gm-companion/custom.ini", QSettings::IniFormat);
+    QSettings settings(QDir::homePath() + "/.gm-companion/custom.ini", QSettings::IniFormat);
+    settings.setIniCodec("UTF-8");
     int size = settings.beginReadArray(arrayName);
     settings.endArray();
 
     settings.beginWriteArray(arrayName);
     settings.setArrayIndex(size);
-    settings.setValue("name", unit.name);
+    settings.setValue("name",     unit.name);
     settings.setValue("refUnits", unit.refUnits);
     settings.endArray();
 
@@ -186,14 +205,14 @@ void ConverterTool::addUnit(QString arrayName, Unit unit, QList<Unit> list, QCom
 }
 
 // Convert Units
-void ConverterTool::convertUnits(int index1, int index2, QList<Unit> list, double units, QDoubleSpinBox *box)
+void ConverterTool::convertUnits(int index1, int index2, QList<Unit>list, double units, QDoubleSpinBox *box)
 {
     if (!list.isEmpty())
     {
         double refUnits1 = list.at(index1).refUnits;
         double refUnits2 = list.at(index2).refUnits;
 
-        double value = refUnits1*units/refUnits2;
+        double value = refUnits1 * units / refUnits2;
         box->setValue(value);
     }
 }
