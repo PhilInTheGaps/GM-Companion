@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     else qDebug() << "Could not load translation ...";
 
     // Start mainwindow
-    MainWindow *w = new MainWindow(splash);
+    MainWindow *w = new MainWindow();
     w->setVersion("1.0.0.0");
 
     // Add Tools to mainwindow
@@ -148,6 +148,11 @@ int main(int argc, char *argv[])
 
     // Open WhatIsNewWindow
     //    showWhatIsNew(settingsManager, w); // TODO
+
+
+    qDebug().noquote() << "Closing splash screen ...";
+    splash->close();
+    delete splash;
 
     return app.exec();
 }

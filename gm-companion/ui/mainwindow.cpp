@@ -29,8 +29,7 @@
 #include <QPushButton>
 #include <QSizePolicy>
 
-MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(
-        parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -50,9 +49,6 @@ MainWindow::MainWindow(QSplashScreen *splash, QWidget *parent) : QMainWindow(
 
     // Some functions behave differently when the program is just starting
     programStart = false;
-
-    qDebug().noquote() << "Closing splash screen ...";
-    splash->close();
 }
 
 MainWindow::~MainWindow()
