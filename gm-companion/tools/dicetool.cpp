@@ -2,6 +2,7 @@
 #include "ui_dicetool.h"
 #include "gm-companion/ui/flowlayout.h"
 #include "gm-companion/functions.h"
+#include "gm-companion/settings/settingsmanager.h"
 
 #include <QTableWidgetItem>
 #include <QDebug>
@@ -118,15 +119,18 @@ void DiceTool::generateDice()
     }
 }
 
+// Add dice for Addons
 void DiceTool::addAddonDice()
 {
     QString addonFolder = QDir::homePath() + "/.gm-companion/addons";
+
+    SettingsManager *settingsmanager = new SettingsManager;
 
     for (QString addon : getFolders(addonFolder))
     {
         QString iniPath = addonFolder + "/" + addon + "/dice.ini";
 
-        if (QFile(iniPath).exists())
+        if (QFile(iniPath).exists() && settingsmanager->getIsAddonEnabled(addon))
         {
             QSettings settings(iniPath, QSettings::IniFormat);
             int count = settings.beginReadArray("dice");

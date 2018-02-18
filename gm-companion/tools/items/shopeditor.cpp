@@ -248,7 +248,7 @@ void ShopEditor::loadShop()
                     QString description = settings.value("description", "").toString();
                     QString category    = settings.value("category", tr("UNKNOWN CATEGORY")).toString();
 
-                    QStringList info = { name, price, description, category };
+                    QStringList info = { name, price, category, description };
 
                     for (int k = 0; k < 4; k++)
                     {
@@ -279,6 +279,7 @@ void ShopEditor::loadShop()
             }
         }
         settings.endArray();
+        ui->tableWidget_shopItems->resizeColumnToContents(1);
     }
 }
 

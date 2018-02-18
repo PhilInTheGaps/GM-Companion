@@ -97,6 +97,8 @@ void MapViewerTool::loadAddonMaps()
     QString addonPath  = QDir::homePath() + "/.gm-companion/addons";
     QStringList addons = getFolders(addonPath);
 
+    SettingsManager *settingsmanager = new SettingsManager;
+
     QString path;
     bool    addedMaps = false;
 
@@ -105,7 +107,7 @@ void MapViewerTool::loadAddonMaps()
         path = addonPath + "/" + addon + "/maps";
         qDebug() << "Loading addon maps:" << path;
 
-        if (QDir(path).exists() && !addon.contains("."))
+        if (settingsmanager->getIsAddonEnabled(addon) && QDir(path).exists() && !addon.contains("."))
         {
             QScrollArea *area   = new QScrollArea;
             QWidget     *widget = new QWidget;

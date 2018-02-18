@@ -227,6 +227,8 @@ void ShopTool::loadShop()
             }
         }
         settings.endArray();
+
+        ui->tableWidget_items->resizeColumnToContents(1);
     }
 }
 
