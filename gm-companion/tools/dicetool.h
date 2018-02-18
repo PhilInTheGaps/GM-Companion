@@ -34,6 +34,7 @@ private:
     void rollDice(int sides);
 
     void generateDice();
+    void addAddonDice();
 };
 
 #endif // DICETOOL_H

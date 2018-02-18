@@ -1,9 +1,14 @@
 #include "dicetool.h"
 #include "ui_dicetool.h"
 #include "gm-companion/ui/flowlayout.h"
+#include "gm-companion/functions.h"
 
 #include <QTableWidgetItem>
 #include <QDebug>
+#include <QDir>
+#include <QSettings>
+#include <QComboBox>
+#include <QGroupBox>
 
 DiceTool::DiceTool(QWidget *parent) : QWidget(parent), ui(new Ui::DiceTool)
 {
@@ -13,7 +18,7 @@ DiceTool::DiceTool(QWidget *parent) : QWidget(parent), ui(new Ui::DiceTool)
 
     generateDice();
 
-    ui->comboBox_dice->setCurrentIndex(5);
+    ui->comboBox_dice->setCurrentText(QString::number(20));
 }
 
 DiceTool::~DiceTool()
@@ -105,9 +110,49 @@ void DiceTool::rollDice(int sides)
 // Generating the die buttons
 void DiceTool::generateDice()
 {
+    addAddonDice();
+
     for (int sides : sidesList)
     {
         ui->comboBox_dice->addItem(QString::number(sides));
+    }
+}
+
+void DiceTool::addAddonDice()
+{
+    QString addonFolder = QDir::homePath() + "/.gm-companion/addons";
+
+    for (QString addon : getFolders(addonFolder))
+    {
+        QString iniPath = addonFolder + "/" + addon + "/dice.ini";
+
+        if (QFile(iniPath).exists())
+        {
+            QSettings settings(iniPath, QSettings::IniFormat);
+            int count = settings.beginReadArray("dice");
+
+            for (int i = 0; i < count; i++)
+            {
+                settings.setArrayIndex(i);
+                int sides = settings.value("sides").toInt();
+
+                if (!sidesList.contains(sides))
+                {
+                    int index = 0;
+
+                    for (int j = 0; j < sidesList.size(); j++)
+                    {
+                        if (sidesList.at(j) < sides)
+                        {
+                            index = j + 1;
+                        }
+                    }
+                    sidesList.insert(index, sides);
+                }
+            }
+
+            settings.endArray();
+        }
     }
 }
 
