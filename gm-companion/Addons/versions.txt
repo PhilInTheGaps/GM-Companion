@@ -1,5 +1,6 @@
-DSA5:0.0.3:Das Schwarze Auge 5;
-SIFRP:0.0.4:A Song of Ice and Fire RPG;
-HowToBeAHero:0.0.1:How To Be A Hero;
-90MinutesOfMayhem:0.0.1:90 Minutes of Mayhem
+DSA5:1.0.0:Das Schwarze Auge 5 - Fanprojekt;
+SIFRP:0.1.0:A Song of Ice and Fire RPG - Fanproject;
+HowToBeAHero:0.0.2:How To Be A Hero - Fanproject;
+90MinutesOfMayhem:0.0.1:90 Minutes of Mayhem - Fanproject;
+Entaria:0.0.1:Entaria - Dein Weltraumabenteuer - Fanprojekt
 
