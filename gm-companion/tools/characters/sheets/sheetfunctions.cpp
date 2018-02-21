@@ -170,3 +170,15 @@ void saveTableWidget_vertical(QTableWidget *table, QString value, QStringList he
 
     settings->endArray();
 }
+
+void saveCheckBox(QCheckBox *checkbox, QString value, QSettings *settings)
+{
+    settings->setValue(value, checkbox->isChecked());
+}
+
+void loadCheckBox(QCheckBox *checkbox, QString value, QSettings *settings)
+{
+    bool checked = settings->value(value, false).toBool();
+
+    checkbox->setChecked(checked);
+}

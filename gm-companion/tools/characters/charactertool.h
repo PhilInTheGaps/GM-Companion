@@ -10,6 +10,7 @@
 #include "sheets/defaultsheet.h"
 #include "sheets/dsa5sheet.h"
 #include "sheets/entaria2sheet.h"
+#include "sheets/dnd5esheet.h"
 
 namespace Ui {
 class CharacterTool;
@@ -38,11 +39,8 @@ private slots:
     void on_pushButton_delete_clicked();
 
     void on_listWidget_pages_currentItemChanged(QListWidgetItem *item);
-
     void on_pushButton_zoomIn_clicked();
-
     void on_pushButton_zoomOut_clicked();
-
     void on_pushButton_reset_clicked();
 
 private:
@@ -51,6 +49,7 @@ private:
     SettingsManager *settingsManager;
 
     DefaultSheet *defaultSheet;
+    DnD5eSheet *dnd5eSheet;
     DSA5Sheet *dsa5Sheet;
     Entaria2Sheet *entaria2Sheet;
 
