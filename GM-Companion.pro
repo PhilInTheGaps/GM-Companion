@@ -62,7 +62,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/settings/optionsdialog.cpp \
     gm-companion/tools/addons/addonmanager.cpp \
     gm-companion/tools/characters/charactertool.cpp \
-    gm-companion/tools/characters/sheets/entaria2sheet.cpp
+    gm-companion/tools/characters/sheets/entaria2sheet.cpp \
+    gm-companion/tools/characters/sheets/dnd5esheet.cpp
 
 HEADERS  += gm-companion/ui/mainwindow.h \
     # UI
@@ -105,7 +106,8 @@ HEADERS  += gm-companion/ui/mainwindow.h \
     gm-companion/settings/settingsmanager.h \
     gm-companion/settings/optionsdialog.h \
     gm-companion/tools/addons/addonmanager.h \
-    gm-companion/tools/characters/sheets/entaria2sheet.h
+    gm-companion/tools/characters/sheets/entaria2sheet.h \
+    gm-companion/tools/characters/sheets/dnd5esheet.h
 
 FORMS    += gm-companion/ui/mainwindow.ui \
     # UI
@@ -139,7 +141,8 @@ FORMS    += gm-companion/ui/mainwindow.ui \
     # Settings
     gm-companion/settings/optionsdialog.ui \
     gm-companion/tools/addons/addonmanager.ui \
-    gm-companion/tools/characters/sheets/entaria2sheet.ui
+    gm-companion/tools/characters/sheets/entaria2sheet.ui \
+    gm-companion/tools/characters/sheets/dnd5esheet.ui
 
 DISTFILES +=
 

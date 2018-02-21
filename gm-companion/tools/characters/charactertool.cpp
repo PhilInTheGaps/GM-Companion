@@ -24,7 +24,6 @@ CharacterTool::CharacterTool(QWidget *parent) : QWidget(parent), ui(new Ui::Char
     setTemplates();
 
     loadCharacterSheets();
-
     updateCharacterList();
 }
 
@@ -36,7 +35,7 @@ CharacterTool::~CharacterTool()
 // Add all enabled templates to the template combo box
 void CharacterTool::setTemplates()
 {
-    QStringList templates = { "DSA5", "Entaria_v2" };
+    QStringList templates = { "D&D_5e", "DSA5", "Entaria_v2" };
 
     for (QString temp : templates)
     {
@@ -55,6 +54,9 @@ void CharacterTool::loadCharacterSheets()
 
     entaria2Sheet = new Entaria2Sheet;
     ui->stackedWidget->addWidget(entaria2Sheet);
+
+    dnd5eSheet = new DnD5eSheet;
+    ui->stackedWidget->addWidget(dnd5eSheet);
 }
 
 // Get all characters and add them to their correct list
@@ -274,6 +276,11 @@ void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(QListWidge
                 index = 3;
                 entaria2Sheet->load(filePath);
             }
+            else if (sheetTemplate == "D&D_5e")
+            {
+                index = 4;
+                dnd5eSheet->load(filePath);
+            }
 
             ui->stackedWidget->setCurrentIndex(index);
         }
@@ -300,6 +307,10 @@ void CharacterTool::on_pushButton_save_clicked()
 
         case 3: // Entaria v2 Sheet
             entaria2Sheet->save(filePath);
+            break;
+
+        case 4: // D&D 5e Sheet
+            dnd5eSheet->save(filePath);
             break;
 
         default: // No character selected
