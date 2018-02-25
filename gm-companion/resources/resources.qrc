@@ -33,7 +33,6 @@
         <file alias="music.png">icons/media/music.png</file>
         <file alias="notes.png">icons/media/notes.png</file>
         <file alias="pause.png">icons/media/pause.png</file>
-        <file alias="play.png">icons/media/play.png</file>
         <file alias="playBackwards.png">icons/media/playBackwards.png</file>
         <file alias="radio_image.png">icons/media/radio_image.png</file>
         <file alias="radio_large.png">icons/media/radio_large.png</file>
@@ -49,6 +48,8 @@
         <file alias="sound_large.png">icons/media/sound_large.png</file>
         <file alias="sound.png">icons/media/sound.png</file>
         <file alias="stop.png">icons/media/stop.png</file>
+        <file alias="play.png">icons/media/play.png</file>
+        <file alias="playlist.png">icons/media/playlist.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file alias="White.qss">styles/White.qss</file>
@@ -73,5 +74,8 @@
         <file alias="maps.png">icons/menu/maps.png</file>
         <file alias="notes.png">icons/menu/notes.png</file>
         <file alias="settings.png">icons/menu/settings.png</file>
+        <file alias="three_bars_bright.png">icons/menu/three_bars_bright.png</file>
+        <file alias="three_bars_dark.png">icons/menu/three_bars_dark.png</file>
+        <file alias="dice.png">icons/menu/dice.png</file>
     </qresource>
 </RCC>
