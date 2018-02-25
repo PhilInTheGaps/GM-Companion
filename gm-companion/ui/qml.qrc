@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>tools/Audio.qml</file>
+        <file>tools/Characters.qml</file>
+        <file>tools/CombatTracker.qml</file>
+        <file>tools/Converter.qml</file>
+        <file>tools/Dice.qml</file>
+        <file>tools/Generators.qml</file>
+        <file>tools/ItemShop.qml</file>
+        <file>tools/Maps.qml</file>
+        <file>tools/Notes.qml</file>
+        <file>tools/Settings.qml</file>
+        <file>tools/audio/AudioButton.qml</file>
+        <file>tools/audio/CategoryButton.qml</file>
+        <file>tools/audio/ScenarioButton.qml</file>
+    </qresource>
+</RCC>
