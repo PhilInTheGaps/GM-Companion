@@ -14,5 +14,9 @@
         <file>tools/audio/AudioButton.qml</file>
         <file>tools/audio/CategoryButton.qml</file>
         <file>tools/audio/ScenarioButton.qml</file>
+        <file>tools/audio/SoundButton.qml</file>
+        <file>tools/audio/PlaylistModel.qml</file>
+        <file>tools/audio/PlaylistModelItem.qml</file>
+        <file>tools/audio/Editor.qml</file>
     </qresource>
 </RCC>

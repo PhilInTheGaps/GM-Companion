@@ -1,7 +1,7 @@
 #ifndef AUDIOTOOL_H
 #define AUDIOTOOL_H
 
-#include <QWidget>
+//#include <QWidget>
 #include <QStringList>
 #include <QFrame>
 #include <QSettings>
@@ -18,77 +18,122 @@ struct Song {
     QString path;
 };
 
-namespace Ui {
-class AudioTool;
-}
-
-class AudioTool : public QWidget
+class AudioTool : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList projectList READ projectList NOTIFY projectListChanged)
+    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
+    Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenariosChanged)
+    Q_PROPERTY(QStringList elements READ elements NOTIFY elementsChanged)
+    Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
+    Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
+    Q_PROPERTY(int currentSongIndex READ currentSongIndex NOTIFY currentSongChanged)
+
+    Q_PROPERTY(QString currentProject READ currentProject WRITE setCurrentProject NOTIFY currentProjectChanged)
+    Q_PROPERTY(QString currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
+    Q_PROPERTY(QString currentScenario READ currentScenario WRITE setCurrentScenario NOTIFY currentScenarioChanged)
+    Q_PROPERTY(QString currentElement READ currentElement WRITE setCurrentElement NOTIFY currentElementChanged)
+
 
 public:
-    explicit AudioTool(SettingsManager *sManager, QWidget *parent = 0);
+    explicit AudioTool(QObject *parent = 0);
     ~AudioTool();
 
-private slots:
-
-    // Music
-    void updateMetaData();
-    void on_listWidget_songs_currentRowChanged(int currentRow);
-
-    void on_pushButton_play_clicked();
-    void on_pushButton_pause_clicked();
-    void on_pushButton_replay_clicked();
-    void on_pushButton_next_clicked();
-
-    // Change volume
-    void on_horizontalSlider_music_valueChanged(int value);
-    void on_horizontalSlider_sound_valueChanged(int value);
-
-    void on_listWidget_scenarios_currentRowChanged(int currentRow);
-
-    void on_pushButton_openEditor_clicked();
-    void on_checkBox_setProjectAsDefault_toggled(bool checked);
-    void on_pushButton_loadProject_clicked();
-    void on_comboBox_projects_currentTextChanged(const QString &arg1);
-
-    void on_pushButton_updateProjects_clicked();
-    void on_pushButton_documentation_clicked();
-
-private:
-    Ui::AudioTool *ui;
-
-    SettingsManager *settingsManager;
-
-    void keyPressEvent(QKeyEvent *event);
-
     // Project
-    QString currentProject;
-    void getProjects();
-    void loadProject(QString project);
-
-    // Music
-    void playMusic(QString arg);
-    QMediaPlayer *musicPlayer;
-    QMediaPlaylist *musicPlaylist;
-
-    // Radio
-    void playRadio(QString arg);
-    QMediaPlayer *radioPlayer;
-    bool radioActive;
-
-    // Sound
-    void playSound(QString arg);
-    QList<QMediaPlayer*> soundPlayerList;
-
-    // List View
-    void generateScenarioList(QString category); // Scenarios
-    void generateElementButtons(QString scenario); // Elements
+    QStringList projectList();
+    QString currentProject();
+    void setCurrentProject(QString project);
 
     // Categories
-    void changeCategory(QString category);
-    QSignalMapper *signalMapperCategories;
-    QString currentCategory;
+    QStringList categories();
+    QString currentCategory();
+    Q_INVOKABLE void setCurrentCategory(QString category);
+
+    // Scenarios
+    QStringList scenarios();
+    QString currentScenario();
+    Q_INVOKABLE void setCurrentScenario(QString scenario);
+
+    // Elements
+    Q_INVOKABLE void findElements();
+    QStringList elements();
+    QString currentElement();
+    Q_INVOKABLE QString elementIcon(QString element);
+    Q_INVOKABLE void setCurrentElement(QString element);
+    Q_INVOKABLE int elementType(int index);
+
+    // Music
+    Q_INVOKABLE void playMusic(QString element);
+    Q_INVOKABLE void musicNext();
+    Q_INVOKABLE void musicAgain();
+    Q_INVOKABLE void musicPausePlay();
+    QStringList songs();
+    int currentSongIndex();
+    bool isPlaying();
+
+    // Sound
+    Q_INVOKABLE void playSound(QString element);
+    Q_INVOKABLE bool isSoundPlayling(QString element);
+    Q_INVOKABLE void removeSound(QString element);
+
+    // Radio
+    Q_INVOKABLE void playRadio(QString element);
+
+    // Volume
+    Q_INVOKABLE void setMusicVolume(float volume);
+    Q_INVOKABLE void setSoundVolume(float volume);
+
+signals:
+    void projectListChanged();
+    void currentProjectChanged();
+
+    void categoriesChanged();
+    void currentCategoryChanged();
+
+    void scenariosChanged();
+    void currentScenarioChanged();
+
+    void elementsChanged();
+    void currentElementChanged();
+
+    void isPlayingChanged();
+    void currentSongChanged();
+    void songsChanged();
+
+private slots:
+    void onCurrentSongChanged();
+
+private:
+    SettingsManager *sManager;
+
+    // Music
+    int musicVolume;
+    QMediaPlayer *musicPlayer;
+    QMediaPlaylist *musicPlaylist;
+    QStringList l_songs;
+    bool musicNotRadio;
+
+    // Project
+    QStringList projects;
+    QString l_currentProject;
+
+    QStringList l_categories;
+    QString l_currentCategory;
+
+    QStringList l_scenarios;
+    QString l_currentScenario;
+
+    QStringList l_elements;
+    QStringList l_elementIcons;
+    QList<int> l_elementTypes;
+    QString l_currentElement;
+
+    bool l_isPlaying;
+
+    int soundVolume;
+    QList<QMediaPlayer*> soundPlayerList;
+
+    QMediaPlaylist *radioPlaylist;
 };
 
 #endif // AUDIOTOOL_H
