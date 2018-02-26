@@ -4,35 +4,50 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
 
+import gm.companion.maptool 1.0
+import "maps"
+
 Page {
     id: maps_page
+
+    MapTool {
+        id: map_tool
+
+        Component.onCompleted: {
+            loadMapList()
+        }
+
+        function loadMap(path) {
+            maps_image.source = "file:///" + path
+        }
+
+        function loadMapList() {
+            findMaps()
+
+            var mapCategories = categories
+
+            for (var i = 0; i < mapCategories.length; i++) {
+                var list = maps(mapCategories[i])
+
+                var component = Qt.createComponent("./maps/MapListTab.qml")
+                var tab = component.createObject(maps_tab_view, {
+                                                     list: maps(mapCategories[i]),
+                                                     paths: mapPaths(
+                                                                mapCategories[i]),
+                                                     category: mapCategories[i]
+                                                 })
+
+                tab.clicked.connect(loadMap)
+            }
+        }
+    }
+
     Row {
         anchors.fill: parent
         TabView {
             id: maps_tab_view
             height: parent.height
             width: 200
-            Tab {
-                title: "Test"
-
-                ListView {
-                    id: list1
-                    Text {
-                        text: "BLA"
-                    }
-                }
-            }
-
-            Tab {
-                title: "Test 2"
-
-                ListView {
-                    id: list2
-                    Text {
-                        text: "Test ASD"
-                    }
-                }
-            }
         }
 
         ScrollView {
@@ -46,9 +61,6 @@ Page {
                 id: maps_image
                 height: maps_page.height
                 width: maps_page.width - maps_tab_view.width
-
-
-                //                source: "file:/home/phil/drives/Google-Drive-Linux/GM-Boys/Regelwerk und Co./Das Schwarze Auge (5)/Karten/Aventurien.jpg"
                 fillMode: Image.PreserveAspectFit
             }
         }
@@ -102,10 +114,25 @@ Page {
             text: "R"
             width: parent.width
             height: width
+
+            onClicked: {
+                maps_image.height = maps_page.height
+                maps_image.width = maps_page.width - maps_tab_view.width
+            }
         }
 
         Button {
-            text: "L"
+            //            text: "L"
+            Image {
+                source: "/icons/menu/three_bars_dark.png"
+                width: parent.width - 20
+                height: width
+                sourceSize.width: width
+                sourceSize.height: height
+                x: 10
+                y: 10
+            }
+
             width: parent.width
             height: width
 
