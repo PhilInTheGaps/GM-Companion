@@ -30,7 +30,6 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/functions.cpp \
 #    # Tools
 #    gm-companion/tools/dicetool.cpp \
-#    gm-companion/tools/mapviewertool.cpp \
 #    gm-companion/tools/convertertool.cpp \
 #    gm-companion/tools/combattracker.cpp \
     # Tools AUDIO
@@ -62,7 +61,8 @@ SOURCES += gm-companion/main.cpp \
 #    gm-companion/tools/characters/charactertool.cpp \
 #    gm-companion/tools/characters/sheets/entaria2sheet.cpp \
 #    gm-companion/tools/characters/sheets/dnd5esheet.cpp
-    gm-companion/platformdetails.cpp
+    gm-companion/platformdetails.cpp \
+    gm-companion/tools/maptool.cpp
 
 HEADERS  += gm-companion/functions.h \
 #    gm-companion/ui/mainwindow.h \
@@ -74,7 +74,7 @@ HEADERS  += gm-companion/functions.h \
 #    # Other
     gm-companion/version.h \
 #    # Tools
-#    gm-companion/tools/mapviewertool.h \
+    gm-companion/tools/maptool.h \
 #    gm-companion/tools/dicetool.h \
 #    gm-companion/tools/convertertool.h \
 #    gm-companion/tools/combattracker.h \

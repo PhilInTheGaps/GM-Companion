@@ -18,5 +18,7 @@
         <file>tools/audio/PlaylistModel.qml</file>
         <file>tools/audio/PlaylistModelItem.qml</file>
         <file>tools/audio/Editor.qml</file>
+        <file>tools/maps/MapListItem.qml</file>
+        <file>tools/maps/MapListTab.qml</file>
     </qresource>
 </RCC>
