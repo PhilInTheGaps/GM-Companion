@@ -374,6 +374,12 @@ void AudioTool::playMusic(QString element)
     }
 }
 
+void AudioTool::setMusicIndex(int index)
+{
+    musicPlaylist->setCurrentIndex(index);
+    emit currentSongChanged();
+}
+
 void AudioTool::musicNext()
 {
     musicPlaylist->next();

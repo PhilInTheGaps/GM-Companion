@@ -160,6 +160,8 @@ Page {
 
                 onCurrentSongIndexChanged: {
                     playlist_view.currentIndex = audio_tool.currentSongIndex
+                    playlist_view.positionViewAtIndex(
+                                playlist_view.currentIndex, ListView.Contain)
                 }
             }
 
@@ -178,8 +180,8 @@ Page {
 
                     Image {
                         source: "/icons/menu/three_bars_dark.png"
-                        height: parent.height * 0.8
-                        width: parent.width * 0.8
+                        height: parent.height * 0.6
+                        width: parent.width * 0.6
 
                         sourceSize.width: width
                         sourceSize.height: height
@@ -247,8 +249,8 @@ Page {
 
                     Image {
                         source: "/icons/media/playlist.png"
-                        height: parent.height * 0.8
-                        width: parent.width * 0.8
+                        height: parent.height * 0.6
+                        width: parent.width * 0.6
 
                         sourceSize.width: width
                         sourceSize.height: height
@@ -272,8 +274,8 @@ Page {
 
                         Image {
                             source: "/icons/media/seekBack.png"
-                            height: parent.height * 0.8
-                            width: parent.width * 0.8
+                            height: parent.height * 0.6
+                            width: parent.width * 0.6
 
                             sourceSize.width: width
                             sourceSize.height: height
@@ -292,8 +294,8 @@ Page {
                         Image {
                             id: audio_play_pause_icon
                             source: "/icons/media/play.png"
-                            height: parent.height * 0.8
-                            width: parent.width * 0.8
+                            height: parent.height * 0.6
+                            width: parent.width * 0.6
 
                             sourceSize.width: width
                             sourceSize.height: height
@@ -311,8 +313,8 @@ Page {
 
                         Image {
                             source: "/icons/media/seekForward.png"
-                            height: parent.height * 0.8
-                            width: parent.width * 0.8
+                            height: parent.height * 0.6
+                            width: parent.width * 0.6
 
                             sourceSize.width: width
                             sourceSize.height: height
@@ -472,6 +474,11 @@ Page {
                                 clip: true
                                 elide: Text.ElideRight
                                 text: name
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: audio_tool.setMusicIndex(index)
+                                }
                             }
                         }
                     }

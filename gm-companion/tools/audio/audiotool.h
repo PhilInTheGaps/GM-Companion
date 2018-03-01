@@ -67,6 +67,7 @@ public:
     Q_INVOKABLE void musicNext();
     Q_INVOKABLE void musicAgain();
     Q_INVOKABLE void musicPausePlay();
+    Q_INVOKABLE void setMusicIndex(int index);
     QStringList songs();
     int currentSongIndex();
     bool isPlaying();
