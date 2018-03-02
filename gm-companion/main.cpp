@@ -8,7 +8,8 @@
 // #include <QDir>
 // #include <QTranslator>
 // #include <QDebug>
-// #include <QSplashScreen>
+ #include <QSplashScreen>
+
 // #include <QFile>
 // #include <QTextStream>
 // #include <QDateTime>
@@ -20,6 +21,7 @@
 
 #include "gm-companion/tools/audio/audiotool.h"
 #include "gm-companion/tools/maptool.h"
+#include "gm-companion/tools/dicetool.h"
 #include "gm-companion/platformdetails.h"
 
 /*
@@ -135,6 +137,7 @@ int main(int argc, char *argv[])
     QUrl source(QStringLiteral("qrc:/main.qml"));
     qmlRegisterType<AudioTool>(      "gm.companion.audiotool", 1, 0, "AudioTool");
     qmlRegisterType<MapTool>(        "gm.companion.maptool",   1, 0, "MapTool");
+    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",  1, 0, "DiceTool");
     qmlRegisterType<PlatformDetails>("gm.companion.platforms", 1, 0, "PlatformDetails");
 
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
@@ -147,8 +150,6 @@ int main(int argc, char *argv[])
     return app.exec();
 
     /*
-        QApplication app(argc, argv);
-
         // Enable or disable debug mode
         enableDebug();
 
@@ -170,42 +171,9 @@ int main(int argc, char *argv[])
        app.installTranslator(translator);
         else qDebug() << "Could not load translation ...";
 
-        // Start mainwindow
-        MainWindow *w = new MainWindow();
-        w->setVersion("1.0.0.0");
-
-        // Add Tools to mainwindow
-        w->addTools();
-
         // Update Manager checks if a new version of the gm-companion is
        available
         UpdateManager *updateManager = new UpdateManager(1000);
         updateManager->checkForUpdates();
-
-        // Set StyleSheet
-        settingsManager->setStyleSheet(settingsManager->getSetting(uiMode));
-
-        // Sets the window size to maximized, w.showMaximized() is glitchy
-       under
-        // windows
-     #ifdef _WIN32
-        w->resize(QApplication::primaryScreen()->availableGeometry().width(),
-       QApplication::primaryScreen()->availableGeometry().height());
-     #endif // ifdef _WIN32
-
-        // Open Window Maximized
-        qDebug().noquote() << "Opening UI ...";
-        w->showMaximized();
-        w->focusWidget();
-
-        // Open WhatIsNewWindow
-        //    showWhatIsNew(settingsManager, w); // TODO
-
-
-        qDebug().noquote() << "Closing splash screen ...";
-        splash->close();
-        delete splash;
-
-        return app.exec();
      */
 }
