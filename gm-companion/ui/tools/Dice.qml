@@ -18,12 +18,12 @@ Page {
     Row {
         anchors.fill: parent
         spacing: 10
+        leftPadding: 5
 
         Column {
             id: dice_column
             height: parent.height - parent.padding
             spacing: 10
-            padding: 5
 
             Text {
                 text: qsTr("Default Dice")
@@ -72,6 +72,7 @@ Page {
                         width: parent.width
                         height: 40
                         value: 1
+                        minimumValue: 1
                         onValueChanged: dice_tool.setAmount(value)
                     }
                 }
@@ -147,7 +148,7 @@ Page {
 
         ScrollView {
             height: parent.height - parent.padding
-            width: parent.width - dice_column.width - parent.spacing - parent.padding
+            width: parent.width - dice_column.width - parent.spacing - parent.leftPadding
 
             flickableItem.interactive: true
             clip: true
