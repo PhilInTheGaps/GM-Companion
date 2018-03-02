@@ -104,6 +104,8 @@ Page {
                         width: parent.width
                         height: 40
                         value: 0
+                        minimumValue: -99
+                        maximumValue: 99
                         onValueChanged: dice_tool.setModifier(value)
                     }
                 }
