@@ -6,8 +6,6 @@
 
 QT       += core gui multimedia multimediawidgets network quick qml
 
-QML_IMPORT_PATH =
-
 win32:QT += winextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -21,9 +19,7 @@ CONFIG += c++11
 
 SOURCES += gm-companion/main.cpp \
     # UI
-#    gm-companion/ui/mainwindow.cpp \
 #    gm-companion/ui/whatisnewwindow.cpp \
-#    gm-companion/ui/flowlayout.cpp \
 #    gm-companion/ui/updatedialog.cpp \
 #    gm-companion/ui/aboutdialog.cpp \
 #    # Other
@@ -62,13 +58,12 @@ SOURCES += gm-companion/main.cpp \
 #    gm-companion/tools/characters/sheets/entaria2sheet.cpp \
 #    gm-companion/tools/characters/sheets/dnd5esheet.cpp
     gm-companion/platformdetails.cpp \
-    gm-companion/tools/maptool.cpp
+    gm-companion/tools/maptool.cpp \
+    gm-companion/tools/dicetool.cpp
 
 HEADERS  += gm-companion/functions.h \
-#    gm-companion/ui/mainwindow.h \
 #    # UI
 #    gm-companion/ui/whatisnewwindow.h \
-#    gm-companion/ui/flowlayout.h \
 #    gm-companion/ui/updatedialog.h \
 #    gm-companion/ui/aboutdialog.h \
 #    # Other
@@ -107,44 +102,12 @@ HEADERS  += gm-companion/functions.h \
 #    gm-companion/tools/addons/addonmanager.h \
 #    gm-companion/tools/characters/sheets/entaria2sheet.h \
 #    gm-companion/tools/characters/sheets/dnd5esheet.h
-    gm-companion/platformdetails.h
-
-#FORMS    += gm-companion/ui/mainwindow.ui \
-#    # UI
-#    gm-companion/ui/whatisnewwindow.ui \
-#    gm-companion/ui/updatedialog.ui \
-#    gm-companion/ui/aboutdialog.ui \
-#    # Tools
-#    gm-companion/tools/dicetool.ui \
-#    gm-companion/tools/mapviewertool.ui \
-#    gm-companion/tools/convertertool.ui \
-#    gm-companion/tools/combattracker.ui \
-#    # Tools AUDIO
-#    gm-companion/tools/audio/audiotool.ui \
-#    gm-companion/tools/audio/audioeditor.ui \
-#    # Tools ITEMS
-#    gm-companion/tools/items/shoptool.ui \
-#    gm-companion/tools/items/shopeditor.ui \
-#    gm-companion/tools/items/itemeditor.ui \
-#    # Tools NOTES
-#    gm-companion/tools/notes/notesdialog.ui \
-#    gm-companion/tools/notes/notestool.ui \
-#    # Tools CHARACTERS
-#    gm-companion/tools/characters/charactertool.ui \
-#    gm-companion/tools/characters/sheets/defaultsheet.ui \
-#    gm-companion/tools/characters/sheets/dsa5sheet.ui \
-#    # Tools ADDONS
-#    gm-companion/tools/addons/sifrp.ui \
-#    # Tools GENERATORS
-#    gm-companion/tools/generators/generatormanager.ui \
-#    gm-companion/tools/generators/namegenerator.ui \
-#    # Settings
-#    gm-companion/settings/optionsdialog.ui \
-#    gm-companion/tools/addons/addonmanager.ui \
-#    gm-companion/tools/characters/sheets/entaria2sheet.ui \
-#    gm-companion/tools/characters/sheets/dnd5esheet.ui
+    gm-companion/platformdetails.h \
+    gm-companion/tools/dicetool.h
 
 DISTFILES +=
+
+QML_IMPORT_PATH =
 
 RC_FILE = gm-companion/GM-Companion.rc
 
