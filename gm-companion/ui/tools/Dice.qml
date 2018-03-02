@@ -15,19 +15,15 @@ Page {
         onCalculationStringChanged: calculation_text_edit.text = calculationString
     }
 
-    Row {
+    Flow {
         anchors.fill: parent
         spacing: 10
         leftPadding: 5
 
         Column {
             id: dice_column
-            height: parent.height - parent.padding
+            //            height: parent.height - parent.padding
             spacing: 10
-
-            Text {
-                text: qsTr("Default Dice")
-            }
 
             Row {
                 spacing: 5
@@ -149,10 +145,15 @@ Page {
         }
 
         ScrollView {
-            height: parent.height - parent.padding
-            width: parent.width - dice_column.width - parent.spacing - parent.leftPadding
+            height: parent.width > dice_column.width
+                    + width ? availableHeight : availableHeight
+                              - dice_column.height - parent.spacing
 
+            width: parent.width > 2
+                   * dice_column.width ? parent.width - dice_column.width - parent.spacing
+                                         - parent.leftPadding : parent.width - parent.leftPadding
             flickableItem.interactive: true
+            flickableItem.flickableDirection: Flickable.VerticalFlick
             clip: true
 
             TextEdit {
