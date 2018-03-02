@@ -59,7 +59,8 @@ SOURCES += gm-companion/main.cpp \
 #    gm-companion/tools/characters/sheets/dnd5esheet.cpp
     gm-companion/platformdetails.cpp \
     gm-companion/tools/maptool.cpp \
-    gm-companion/tools/dicetool.cpp
+    gm-companion/tools/dicetool.cpp \
+    gm-companion/tools/combattracker.cpp
 
 HEADERS  += gm-companion/functions.h \
 #    # UI
@@ -103,7 +104,8 @@ HEADERS  += gm-companion/functions.h \
 #    gm-companion/tools/characters/sheets/entaria2sheet.h \
 #    gm-companion/tools/characters/sheets/dnd5esheet.h
     gm-companion/platformdetails.h \
-    gm-companion/tools/dicetool.h
+    gm-companion/tools/dicetool.h \
+    gm-companion/tools/combattracker.h
 
 DISTFILES +=
 

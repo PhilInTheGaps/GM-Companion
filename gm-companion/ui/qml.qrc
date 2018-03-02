@@ -20,5 +20,6 @@
         <file>tools/audio/Editor.qml</file>
         <file>tools/maps/MapListItem.qml</file>
         <file>tools/maps/MapListTab.qml</file>
+        <file>tools/combat_tracker/CombatTrackerItem.qml</file>
     </qresource>
 </RCC>

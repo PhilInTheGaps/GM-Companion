@@ -1,42 +1,29 @@
 #ifndef COMBATTRACKER_H
 #define COMBATTRACKER_H
 
-#include <QDialog>
+#include <QObject>
+#include <QList>
 
-namespace Ui {
-class CombatTracker;
-}
+struct Combatant
+{
+    QString name;
+    int ini;
+    int health;
+    QString status;
+};
 
-class CombatTracker : public QDialog
+class CombatTracker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit CombatTracker(QWidget *parent = 0);
-    ~CombatTracker();
+    explicit CombatTracker(QObject *parent = nullptr);
 
-private slots:
-    void on_pushButton_next_clicked();
-
-    void on_pushButton_clear_clicked();
-
-    void on_pushButton_reset_clicked();
+signals:
 
 private:
-    Ui::CombatTracker *ui;
+    QList<Combatant> l_combatants;
 
-    int combatRound;
-    int currentIndex;
-
-    void nextCharacter();
-    void clearTable();
-    void resetRounds();
-
-    int getInitiative(int index);
-    int getNextHighestInitiativeIndex(int index);
-    int getHighestInitiativeIndex();
-
-    bool getIsLowestInitiative(int index);
 };
 
 #endif // COMBATTRACKER_H
