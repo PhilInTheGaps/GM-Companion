@@ -63,7 +63,7 @@ Window {
             if (platform.isAndroid) {
                 parent.width / 4
             } else {
-                180
+                200
             }
         }
 
