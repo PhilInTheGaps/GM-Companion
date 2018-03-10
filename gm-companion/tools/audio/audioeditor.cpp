@@ -1,5 +1,5 @@
 #include "audioeditor.h"
-#include "ui_audioeditor.h"
+//#include "ui_audioeditor.h"
 #include "gm-companion/functions.h"
 
 #include <QDir>

@@ -22,6 +22,7 @@
 #include "gm-companion/tools/audio/audiotool.h"
 #include "gm-companion/tools/maptool.h"
 #include "gm-companion/tools/dicetool.h"
+#include "gm-companion/tools/combattracker.h"
 #include "gm-companion/platformdetails.h"
 
 /*
@@ -138,6 +139,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<AudioTool>(      "gm.companion.audiotool", 1, 0, "AudioTool");
     qmlRegisterType<MapTool>(        "gm.companion.maptool",   1, 0, "MapTool");
     qmlRegisterType<DiceTool>(       "gm.companion.dicetool",  1, 0, "DiceTool");
+    qmlRegisterType<CombatTracker>(       "gm.companion.combattracker",  1, 0, "CombatTrackerTool");
     qmlRegisterType<PlatformDetails>("gm.companion.platforms", 1, 0, "PlatformDetails");
 
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
