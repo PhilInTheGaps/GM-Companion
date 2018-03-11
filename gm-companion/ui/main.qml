@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 import "./tools"
+import "./menu"
 import gm.companion.platforms 1.0
 
 Window {
@@ -96,37 +97,12 @@ Window {
                 color: "#262f31"
             }
 
-            Button {
-                text: "Audio"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/audio.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Audio")
+                icon_source: "../icons/menu/audio.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Audio"
+                    tool_label.text = qsTr("Current Tool: Audio")
                     swipe.setCurrentIndex(0)
 
                     if (inPortrait) {
@@ -135,37 +111,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Maps"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/maps.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Maps")
+                icon_source: "../icons/menu/maps.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Maps"
+                    tool_label.text = qsTr("Current Tool: Maps")
                     swipe.setCurrentIndex(1)
 
                     if (inPortrait) {
@@ -174,37 +125,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Dice"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/dice.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Dice")
+                icon_source: "../icons/menu/dice.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Dice"
+                    tool_label.text = qsTr("Current Tool: Dice")
                     swipe.setCurrentIndex(2)
 
                     if (inPortrait) {
@@ -213,37 +139,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Combat Tracker"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/combat.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Combat Tracker")
+                icon_source: "../icons/menu/combat.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Combat"
+                    tool_label.text = qsTr("Current Tool: Combat Tracker")
                     swipe.setCurrentIndex(3)
 
                     if (inPortrait) {
@@ -252,37 +153,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Item Shop"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/item-shop.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Item Shop")
+                icon_source: "../icons/menu/item-shop.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Item Shop"
+                    tool_label.text = qsTr("Current Tool: Item Shop")
                     swipe.setCurrentIndex(4)
 
                     if (inPortrait) {
@@ -291,37 +167,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Characters"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/characters.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Characters")
+                icon_source: "../icons/menu/characters.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Characters"
+                    tool_label.text = qsTr("Current Tool: Characters")
                     swipe.setCurrentIndex(5)
 
                     if (inPortrait) {
@@ -330,37 +181,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Generators"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/generators.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Generators")
+                icon_source: "../icons/menu/generators.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Generators"
+                    tool_label.text = qsTr("Current Tool: Generators")
                     swipe.setCurrentIndex(6)
 
                     if (inPortrait) {
@@ -369,37 +195,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Notes"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/notes.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Notes")
+                icon_source: "../icons/menu/notes.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Notes"
+                    tool_label.text = qsTr("Current Tool: Notes")
                     swipe.setCurrentIndex(7)
 
                     if (inPortrait) {
@@ -408,37 +209,12 @@ Window {
                 }
             }
 
-            Button {
-                text: "Converter"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/converter.png"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Converter")
+                icon_source: "../icons/menu/converter.png"
 
                 onClicked: {
-                    tool_label.text = "Current Tool: Unit Converter"
+                    tool_label.text = qsTr("Current Tool: Unit Converter")
                     swipe.setCurrentIndex(8)
 
                     if (inPortrait) {
@@ -453,37 +229,12 @@ Window {
                 color: "#262f31"
             }
 
-            Button {
-                text: "Settings"
-                width: parent.width
-                height: platform.isAndroid ? parent.height / 15 : 45
-
-                contentItem: Text {
-                    text: parent.text
-                    font: parent.font
-                    opacity: enabled ? 1.0 : 0.3
-                    color: parent.down ? "black" : "white"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    x: 5
-                    anchors.verticalCenter: parent.verticalCenter
-                    sourceSize.height: parent.height - 10
-                    height: sourceSize.height
-                    source: "icons/menu/settings.png"
-                }
-
-                background: Rectangle {
-                    implicitHeight: 40
-                    color: parent.down ? "white" : "transparent"
-                }
+            SideMenuButton {
+                tool_name: qsTr("Settings")
+                icon_source: "../icons/menu/settings.png"
 
                 onClicked: {
-                    tool_label.text = "Settings"
+                    tool_label.text = qsTr("Settings")
                     swipe.setCurrentIndex(9)
 
                     if (inPortrait) {
