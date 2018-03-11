@@ -18,8 +18,8 @@ Page {
     Flow {
         anchors.fill: parent
         spacing: 10
-        leftPadding: 5
 
+        //        leftPadding: 5
         Column {
             id: dice_column
             //            height: parent.height - parent.padding
