@@ -21,5 +21,7 @@
         <file>tools/maps/MapListItem.qml</file>
         <file>tools/maps/MapListTab.qml</file>
         <file>menu/SideMenuButton.qml</file>
+        <file>tools/notes/ChapterButton.qml</file>
+        <file>tools/notes/PageButton.qml</file>
     </qresource>
 </RCC>

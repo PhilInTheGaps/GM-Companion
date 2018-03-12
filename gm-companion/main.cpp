@@ -19,11 +19,12 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 
-#include "gm-companion/tools/audio/audiotool.h"
-#include "gm-companion/tools/maptool.h"
-#include "gm-companion/tools/dicetool.h"
-#include "gm-companion/tools/combattracker.h"
-#include "gm-companion/platformdetails.h"
+#include "tools/audio/audiotool.h"
+#include "tools/maptool.h"
+#include "tools/dicetool.h"
+#include "tools/combattracker.h"
+#include "tools/notestool.h"
+#include "platformdetails.h"
 
 /*
    // Responsible for writing the console output into a log if debug option in
@@ -136,11 +137,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QUrl source(QStringLiteral("qrc:/main.qml"));
-    qmlRegisterType<AudioTool>(      "gm.companion.audiotool", 1, 0, "AudioTool");
-    qmlRegisterType<MapTool>(        "gm.companion.maptool",   1, 0, "MapTool");
-    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",  1, 0, "DiceTool");
-    qmlRegisterType<CombatTracker>(       "gm.companion.combattracker",  1, 0, "CombatTrackerTool");
-    qmlRegisterType<PlatformDetails>("gm.companion.platforms", 1, 0, "PlatformDetails");
+    qmlRegisterType<AudioTool>(      "gm.companion.audiotool",     1, 0, "AudioTool");
+    qmlRegisterType<MapTool>(        "gm.companion.maptool",       1, 0, "MapTool");
+    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",      1, 0, "DiceTool");
+    qmlRegisterType<CombatTracker>(  "gm.companion.combattracker", 1, 0, "CombatTrackerTool");
+    qmlRegisterType<NotesTool>(      "gm.companion.notestool",     1, 0, "NotesTool");
+    qmlRegisterType<PlatformDetails>("gm.companion.platforms",     1, 0, "PlatformDetails");
 
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 

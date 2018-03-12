@@ -60,7 +60,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/platformdetails.cpp \
     gm-companion/tools/maptool.cpp \
     gm-companion/tools/dicetool.cpp \
-    gm-companion/tools/combattracker.cpp
+    gm-companion/tools/combattracker.cpp \
+    gm-companion/tools/notestool.cpp
 
 HEADERS  += gm-companion/functions.h \
 #    # UI
@@ -105,7 +106,8 @@ HEADERS  += gm-companion/functions.h \
 #    gm-companion/tools/characters/sheets/dnd5esheet.h
     gm-companion/platformdetails.h \
     gm-companion/tools/dicetool.h \
-    gm-companion/tools/combattracker.h
+    gm-companion/tools/combattracker.h \
+    gm-companion/tools/notestool.h
 
 DISTFILES +=
 
