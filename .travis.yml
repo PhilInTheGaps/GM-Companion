@@ -15,18 +15,17 @@ addons:
 matrix:
   include:
     - os: linux
-      compiler: clang
-      env:
-        - QMAKESPEC=linux-clang
-        - MAKEFLAGS=-j2
+      compiler: gcc
+      
       before_install:
         - sudo add-apt-repository --yes ppa:beineri/opt-qt593-trusty
         - sudo apt-get update -qq
-        - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev
+        - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev qt59declarative
         - source /opt/qt59/bin/qt59-env.sh
       script:
         - qmake
         - make
+        
     - os: osx
       before_install:
         - brew update
