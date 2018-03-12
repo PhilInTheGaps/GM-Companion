@@ -30,22 +30,17 @@ Button {
             source: icon_source
         }
 
-        Rectangle {
-            height: parent.height - parent.topPadding * 2
-            width: parent.width - button_icon.width - parent.spacing - parent.leftPadding * 2
-            color: "transparent"
+        Text {
+            text: tool_name
+            //            font: button.font
+            font.pixelSize: 17
 
-            Text {
-                text: tool_name
-                font: button.font
-                opacity: enabled ? 1.0 : 0.3
-                color: button.down ? "black" : "white"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                elide: Text.ElideRight
-            }
+            opacity: enabled ? 1.0 : 0.3
+            color: button.down ? "black" : "white"
+
+            verticalAlignment: Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+            elide: Text.ElideRight
         }
     }
 }
