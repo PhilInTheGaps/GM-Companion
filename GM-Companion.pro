@@ -8,7 +8,7 @@ QT       += core gui multimedia multimediawidgets network quick qml
 
 win32:QT += winextras
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = out/gm-companion
 TEMPLATE = app
@@ -49,10 +49,9 @@ SOURCES += gm-companion/main.cpp \
 #    gm-companion/tools/items/itemeditor.cpp \
 #    # Managers
 #    gm-companion/managers/filemanager.cpp \
-#    gm-companion/managers/updatemanager.cpp \
-#    # Settings
+    gm-companion/managers/updatemanager.cpp \
+    # Settings
     gm-companion/settings/settingsmanager.cpp \
-#    gm-companion/settings/optionsdialog.cpp \
 #    gm-companion/tools/addons/addonmanager.cpp \
 #    gm-companion/tools/characters/charactertool.cpp \
 #    gm-companion/tools/characters/sheets/entaria2sheet.cpp \
@@ -61,12 +60,22 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/tools/maptool.cpp \
     gm-companion/tools/dicetool.cpp \
     gm-companion/tools/combattracker.cpp \
-    gm-companion/tools/notestool.cpp
+    gm-companion/tools/notestool.cpp \
+    gm-companion/settings/settingstool.cpp
+
+lupdate_only{
+SOURCES += *.qml \
+    menu/*.qml \
+    tools/*.qml \
+    tools/audio/*.qml \
+    tools/maps/*.qml \
+    tools/notes/*.qml \
+    tools/settings/*.qml \
+}
 
 HEADERS  += gm-companion/functions.h \
 #    # UI
 #    gm-companion/ui/whatisnewwindow.h \
-#    gm-companion/ui/updatedialog.h \
 #    gm-companion/ui/aboutdialog.h \
 #    # Other
     gm-companion/version.h \
@@ -97,8 +106,8 @@ HEADERS  += gm-companion/functions.h \
 #    gm-companion/tools/items/itemeditor.h \
 #    # Managers
 #    gm-companion/managers/filemanager.h \
-#    gm-companion/managers/updatemanager.h \
-#    # Settings
+    gm-companion/managers/updatemanager.h \
+    # Settings
     gm-companion/settings/settingsmanager.h \
 #    gm-companion/settings/optionsdialog.h \
 #    gm-companion/tools/addons/addonmanager.h \
@@ -107,7 +116,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/platformdetails.h \
     gm-companion/tools/dicetool.h \
     gm-companion/tools/combattracker.h \
-    gm-companion/tools/notestool.h
+    gm-companion/tools/notestool.h \
+    gm-companion/settings/settingstool.h
 
 DISTFILES +=
 

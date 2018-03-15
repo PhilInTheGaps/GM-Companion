@@ -83,6 +83,7 @@ Window {
             Text {
                 text: "Tools"
                 color: "white"
+                font.pointSize: 12
 
                 width: parent.width
                 height: 40
@@ -277,6 +278,7 @@ Window {
 
         Dice {
             id: dice
+            padding: 5
         }
 
         CombatTracker {

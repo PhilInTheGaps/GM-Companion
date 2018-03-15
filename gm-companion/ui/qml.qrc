@@ -23,5 +23,6 @@
         <file>menu/SideMenuButton.qml</file>
         <file>tools/notes/ChapterButton.qml</file>
         <file>tools/notes/PageButton.qml</file>
+        <file>tools/settings/PathItem.qml</file>
     </qresource>
 </RCC>

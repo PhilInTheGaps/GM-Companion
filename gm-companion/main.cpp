@@ -1,19 +1,17 @@
-// #include "settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 // #include "ui/whatisnewwindow.h"
 // #include "managers/updatemanager.h"
 
-// #include <QApplication>
-// #include <QDesktopWidget>
-// #include <QDir>
-// #include <QTranslator>
-// #include <QDebug>
- #include <QSplashScreen>
+#include <QTranslator>
+
+#include <QDebug>
 
 // #include <QFile>
 // #include <QTextStream>
 // #include <QDateTime>
-// #include <QSettings>
+#include <QSettings>
+#include <QDir>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -24,6 +22,8 @@
 #include "tools/dicetool.h"
 #include "tools/combattracker.h"
 #include "tools/notestool.h"
+#include "settings/settingstool.h"
+#include "managers/updatemanager.h"
 #include "platformdetails.h"
 
 /*
@@ -108,12 +108,11 @@
    }
  */
 
-/*
-   // Check if debug mode is enabled (disabled by default)
-   void enableDebug()
-   {
-    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",
-   QSettings::IniFormat);
+
+// Check if debug mode is enabled (disabled by default)
+void enableDebug()
+{
+    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",  QSettings::IniFormat);
 
     if (checkSettings.value("debug", 0).toInt() == 1)
     {
@@ -124,10 +123,10 @@
         qDebug().noquote() << "Debug mode is not active ...";
 
         // Debug messages are written in a log file instead of the console
-        qInstallMessageHandler(myMessageHandler);
+        //        qInstallMessageHandler(myMessageHandler);
     }
-   }
- */
+}
+
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)
@@ -136,14 +135,32 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    // Enable or disable debug mode
+    enableDebug();
+
+    qDebug().noquote() << "Starting GM-Companion ...";
+
+    // Set the language and install a translator
+    qDebug().noquote() << "Initializing translations ...";
+    SettingsManager *settingsManager = new SettingsManager;
+    QTranslator     *translator      = new QTranslator();
+
+    if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
+    else qDebug() << "Could not load translation ...";
+
+    // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
     qmlRegisterType<AudioTool>(      "gm.companion.audiotool",     1, 0, "AudioTool");
     qmlRegisterType<MapTool>(        "gm.companion.maptool",       1, 0, "MapTool");
     qmlRegisterType<DiceTool>(       "gm.companion.dicetool",      1, 0, "DiceTool");
     qmlRegisterType<CombatTracker>(  "gm.companion.combattracker", 1, 0, "CombatTrackerTool");
     qmlRegisterType<NotesTool>(      "gm.companion.notestool",     1, 0, "NotesTool");
+    qmlRegisterType<SettingsTool>(   "gm.companion.settingstool",  1, 0, "SettingsTool");
+
+    qmlRegisterType<UpdateManager>(  "gm.companion.updatemanager", 1, 0, "UpdateManager");
     qmlRegisterType<PlatformDetails>("gm.companion.platforms",     1, 0, "PlatformDetails");
 
+    // Set Icon
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 
     QQmlApplicationEngine engine;
@@ -154,27 +171,6 @@ int main(int argc, char *argv[])
     return app.exec();
 
     /*
-        // Enable or disable debug mode
-        enableDebug();
-
-        qDebug().noquote() << "Starting GM-Companion ...";
-
-        // Show splash screen
-        qDebug().noquote() << "Showing splash screen ...";
-        QSplashScreen *splash = new QSplashScreen;
-        splash->setPixmap(QPixmap(":/splash.jpg"));
-        splash->show();
-
-        // Set the language and install a translator
-        qDebug().noquote() << "Initializing translations ...";
-        SettingsManager *settingsManager = new SettingsManager;
-        QTranslator     *translator      = new QTranslator();
-
-        if (translator->load("gm-companion_" +
-       settingsManager->getSetting(language), ":/translations"))
-       app.installTranslator(translator);
-        else qDebug() << "Could not load translation ...";
-
         // Update Manager checks if a new version of the gm-companion is
        available
         UpdateManager *updateManager = new UpdateManager(1000);

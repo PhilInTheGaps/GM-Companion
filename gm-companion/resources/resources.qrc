@@ -56,9 +56,9 @@
         <file alias="Dark.qss">styles/Dark.qss</file>
     </qresource>
     <qresource prefix="/translations">
-        <file alias="gm-companion_de.qm">translations/gm-companion_de.qm</file>
+        <file alias="gm-companion_Deutsch">translations/gm-companion_de.qm</file>
         <file alias="gm-companion_de.ts">translations/gm-companion_de.ts</file>
-        <file alias="gm-companion_en.qm">translations/gm-companion_en.qm</file>
+        <file alias="gm-companion_English">translations/gm-companion_en.qm</file>
         <file alias="gm-companion_en.ts">translations/gm-companion_en.ts</file>
     </qresource>
     <qresource prefix="/units">
