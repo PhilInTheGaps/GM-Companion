@@ -6,6 +6,7 @@ import QtQuick.Controls 1.4
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
+import gm.companion.settingstool 1.0
 import "./audio"
 
 Page {

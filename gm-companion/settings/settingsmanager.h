@@ -42,14 +42,11 @@ public:
     QStringList getInactiveCharacters();
     void setInactiveCharacters(QStringList characters);
 
-    void setStyleSheet(QString style);
     void updateSettings();
 
 private:
     // Normal Settings
     QSettings settings;
-
-    QString setFolderLocation(QString windowTitle);
 
 
     // Addon Settings

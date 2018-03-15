@@ -1,9 +1,7 @@
 #include "settingsmanager.h"
 
 #include <QTextStream>
-#include <QFileDialog>
 #include <QCoreApplication>
-#include <QApplication>
 #include <QDir>
 #include <QDebug>
 
@@ -111,96 +109,86 @@ QString SettingsManager::getSetting(Setting setting)
 // Sets a specific setting
 void SettingsManager::setSetting(Setting setting, int checked, QString value)
 {
-    QString   path;
     QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
-        path = setFolderLocation(QObject::tr("Set Music Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("musicPath", path);
+            settings.setValue("musicPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::soundPath:
-        path = setFolderLocation(QObject::tr("Set Sound Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("soundPath", path);
+            settings.setValue("soundPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::mapsPath:
-        path = setFolderLocation(QObject::tr("Set Maps Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("mapsPath", path);
+            settings.setValue("mapsPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::resourcesPath:
-        path = setFolderLocation(QObject::tr("Set Resources Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("resourcesPath", path);
+            settings.setValue("resourcesPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::shopPath:
-        path = setFolderLocation(QObject::tr("Set Shop Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("shopPath", path);
+            settings.setValue("shopPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::charactersPath:
-        path = setFolderLocation(QObject::tr("Set Characters Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("charactersPath", path);
+            settings.setValue("charactersPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::notesPath:
-        path = setFolderLocation(QObject::tr("Set Notes Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("notesPath", path);
+            settings.setValue("notesPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::audioPath:
-        path = setFolderLocation(QObject::tr("Set Audio Projects Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("audioPath", path);
+            settings.setValue("audioPath", value);
             settings.endGroup();
         }
         break;
 
     case Setting::radioPath:
-        path = setFolderLocation(QObject::tr("Set Radio Playlists Folder"));
 
-        if (path.length() > 1) {
+        if (value.length() > 1) {
             settings.beginGroup("Paths");
-            settings.setValue("radioPath", path);
+            settings.setValue("radioPath", value);
             settings.endGroup();
         }
         break;
@@ -208,7 +196,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
     case Setting::uiMode:
     {
         settings.setValue("uiMode", value);
-        setStyleSheet(value);
         break;
     }
 
@@ -245,57 +232,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
     default:
         break;
     }
-}
-
-// Load a StyleSheet and apply it to the application
-void SettingsManager::setStyleSheet(QString style)
-{
-    qDebug().noquote() << "Loading stylesheet:" << style << "...";
-    QApplication *application = static_cast<QApplication *>(QApplication::instance());
-
-    QString styleSheet;
-
-    // Check if style is a custom style
-    QStringList nonCustomStyles = { "Dark", "White" };
-
-    if (nonCustomStyles.contains(style))
-    {
-        QFile file(":/styles/" + style + ".qss");
-        file.open(QFile::ReadOnly);
-        styleSheet = QLatin1String(file.readAll());
-        file.close();
-    }
-    else
-    {
-        QFile file(QDir::homePath() + "/.gm-companion/styles/" + style + ".qss");
-
-        if (file.exists())
-        {
-            file.open(QFile::ReadOnly);
-            styleSheet = QLatin1String(file.readAll());
-            file.close();
-        }
-    }
-    application->setStyleSheet(styleSheet);
-}
-
-// Opens a Directory Chooser to set the new folder location
-QString SettingsManager::setFolderLocation(QString windowTitle)
-{
-    QString path;
-    QFileDialog *fileDialog = new QFileDialog;
-
-    fileDialog->setFileMode(QFileDialog::DirectoryOnly);
-    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog->setWindowTitle(windowTitle);
-
-    if (fileDialog->exec() == QDialog::Accepted)
-    {
-        QStringList paths = fileDialog->selectedFiles();
-        path = paths.at(0);
-    }
-
-    return path;
 }
 
 // Set addon disabled or enabled
