@@ -3,33 +3,37 @@
 
 #include "gm-companion/settings/settingsmanager.h"
 
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QObject>
+#include <QStringList>
 
-namespace Ui {
-class NameGenerator;
-}
-
-class NameGenerator : public QWidget
+class NameGenerator : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
 
 public:
-    explicit NameGenerator(QWidget *parent = 0);
-    ~NameGenerator();
+    explicit NameGenerator(QObject *parent = nullptr);
 
-private slots:
-    void on_spinBox_pointSize_valueChanged(int arg1);
+    QStringList categories();
+    Q_INVOKABLE QString categoryPath(QString category);
+
+    Q_INVOKABLE QStringList categoryNames(QString category);
+
+    Q_INVOKABLE QStringList maleNames(QString category, QString folder, int count);
+    Q_INVOKABLE QStringList femaleNames(QString category, QString folder, int count);
+
+signals:
+    void categoriesChanged();
 
 private:
-    Ui::NameGenerator *ui;
+    SettingsManager *sManager;
 
-    void generateNamesTab();
-    void generateNameButtons(QString path, QString folder, bool resource = false);
-    void addButton(QString path, QString subFolder, QVBoxLayout *layout);
-    void generateNames(QString path);
+    void updateCategories();
 
-    SettingsManager *settingsManager;
+    QStringList l_categories;
+    QStringList l_categoryPaths;
+
+    QStringList generateNames(QString category, QString folder, QString type, int count);
 };
 
 #endif // NAMEGENERATOR_H

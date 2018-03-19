@@ -23,6 +23,8 @@
 #include "tools/combattracker.h"
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
+#include "tools/generators/namegenerator.h"
+
 #include "settings/settingstool.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
@@ -151,16 +153,17 @@ int main(int argc, char *argv[])
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
-    qmlRegisterType<AudioTool>(      "gm.companion.audiotool",     1, 0, "AudioTool");
-    qmlRegisterType<MapTool>(        "gm.companion.maptool",       1, 0, "MapTool");
-    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",      1, 0, "DiceTool");
-    qmlRegisterType<CombatTracker>(  "gm.companion.combattracker", 1, 0, "CombatTrackerTool");
-    qmlRegisterType<NotesTool>(      "gm.companion.notestool",     1, 0, "NotesTool");
-    qmlRegisterType<ConverterTool>(  "gm.companion.convertertool", 1, 0, "ConverterTool");
-    qmlRegisterType<SettingsTool>(   "gm.companion.settingstool",  1, 0, "SettingsTool");
+    qmlRegisterType<AudioTool>(      "gm.companion.audiotool",         1, 0, "AudioTool");
+    qmlRegisterType<MapTool>(        "gm.companion.maptool",           1, 0, "MapTool");
+    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",          1, 0, "DiceTool");
+    qmlRegisterType<CombatTracker>(  "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
+    qmlRegisterType<NotesTool>(      "gm.companion.notestool",         1, 0, "NotesTool");
+    qmlRegisterType<ConverterTool>(  "gm.companion.convertertool",     1, 0, "ConverterTool");
+    qmlRegisterType<SettingsTool>(   "gm.companion.settingstool",      1, 0, "SettingsTool");
+    qmlRegisterType<NameGenerator>(  "gm.companion.namegeneratortool", 1, 0, "NameGeneratorTool");
 
-    qmlRegisterType<UpdateManager>(  "gm.companion.updatemanager", 1, 0, "UpdateManager");
-    qmlRegisterType<PlatformDetails>("gm.companion.platforms",     1, 0, "PlatformDetails");
+    qmlRegisterType<UpdateManager>(  "gm.companion.updatemanager",     1, 0, "UpdateManager");
+    qmlRegisterType<PlatformDetails>("gm.companion.platforms",         1, 0, "PlatformDetails");
 
     // Set Icon
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
