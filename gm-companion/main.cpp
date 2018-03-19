@@ -22,6 +22,7 @@
 #include "tools/dicetool.h"
 #include "tools/combattracker.h"
 #include "tools/notestool.h"
+#include "tools/convertertool.h"
 #include "settings/settingstool.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
@@ -155,6 +156,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DiceTool>(       "gm.companion.dicetool",      1, 0, "DiceTool");
     qmlRegisterType<CombatTracker>(  "gm.companion.combattracker", 1, 0, "CombatTrackerTool");
     qmlRegisterType<NotesTool>(      "gm.companion.notestool",     1, 0, "NotesTool");
+    qmlRegisterType<ConverterTool>(  "gm.companion.convertertool", 1, 0, "ConverterTool");
     qmlRegisterType<SettingsTool>(   "gm.companion.settingstool",  1, 0, "SettingsTool");
 
     qmlRegisterType<UpdateManager>(  "gm.companion.updatemanager", 1, 0, "UpdateManager");

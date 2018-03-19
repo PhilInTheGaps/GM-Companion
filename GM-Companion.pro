@@ -61,7 +61,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/tools/dicetool.cpp \
     gm-companion/tools/combattracker.cpp \
     gm-companion/tools/notestool.cpp \
-    gm-companion/settings/settingstool.cpp
+    gm-companion/settings/settingstool.cpp \
+    gm-companion/tools/convertertool.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -117,7 +118,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/tools/dicetool.h \
     gm-companion/tools/combattracker.h \
     gm-companion/tools/notestool.h \
-    gm-companion/settings/settingstool.h
+    gm-companion/settings/settingstool.h \
+    gm-companion/tools/convertertool.h
 
 DISTFILES +=
 
