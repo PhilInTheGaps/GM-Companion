@@ -24,5 +24,8 @@
         <file>tools/notes/ChapterButton.qml</file>
         <file>tools/notes/PageButton.qml</file>
         <file>tools/settings/PathItem.qml</file>
+        <file>tools/generators/NameGenerator.qml</file>
+        <file>tools/generators/NameGeneratorButton.qml</file>
+        <file>tools/generators/NameGeneratorCategoryButton.qml</file>
     </qresource>
 </RCC>
