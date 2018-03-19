@@ -1,78 +1,70 @@
 #ifndef CONVERTERTOOL_H
 #define CONVERTERTOOL_H
 
-#include <QWidget>
-#include <QSettings>
-#include <QComboBox>
-#include <QSpinBox>
+#include <QObject>
+#include <QStringList>
+#include <QList>
 
-#include "gm-companion/settings/settingsmanager.h"
-
-namespace Ui {
-class ConverterTool;
-}
-
-class ConverterTool : public QWidget
+class ConverterTool : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList lengthUnits READ lengthUnits NOTIFY lengthUnitsChanged)
+    Q_PROPERTY(QStringList areaUnits READ areaUnits NOTIFY areaUnitsChanged)
+    Q_PROPERTY(QStringList volumeUnits READ volumeUnits NOTIFY volumeUnitsChanged)
+    Q_PROPERTY(QStringList weightUnits READ weightUnits NOTIFY weightUnitsChanged)
+    Q_PROPERTY(QStringList moneyUnits READ moneyUnits NOTIFY moneyUnitsChanged)
 
 public:
-    explicit ConverterTool(QWidget *parent = 0);
-    ~ConverterTool();
+    explicit ConverterTool(QObject *parent = nullptr);
 
-    struct Unit{
-        QString name;
-        double refUnits;
-    };
+    QStringList lengthUnits();
+    QStringList areaUnits();
+    QStringList volumeUnits();
+    QStringList weightUnits();
+    QStringList moneyUnits();
 
-private slots:
-    // Add Units
-    void on_comboBox_unitType_currentIndexChanged(int index);
-    void on_pushButton_addUnit_clicked();
+    Q_INVOKABLE QString convertLength(QString unit1, QString unit2, QString value);
+    Q_INVOKABLE QString convertArea(QString unit1, QString unit2, QString value);
+    Q_INVOKABLE QString convertVolume(QString unit1, QString unit2, QString value);
+    Q_INVOKABLE QString convertWeight(QString unit1, QString unit2, QString value);
+    Q_INVOKABLE QString convertMoney(QString unit1, QString unit2, QString value);
 
-    // Length
-    void on_comboBox_length1_currentIndexChanged(int index);
-    void on_comboBox_length2_currentIndexChanged(int index);
-    void on_doubleSpinBox_length1_valueChanged(double arg1);
+    Q_INVOKABLE void updateUnits();
+    Q_INVOKABLE void addUnit(QString name, QString refUnits, QString type);
+    Q_INVOKABLE QString refUnitName(QString unit);
 
-    // Area
-    void on_comboBox_area1_currentIndexChanged(int index);
-    void on_comboBox_area2_currentIndexChanged(int index);
-    void on_doubleSpinBox_area1_valueChanged(double arg1);
-
-    // Volume
-    void on_comboBox_volume1_currentIndexChanged(int index);
-    void on_comboBox_volume2_currentIndexChanged(int index);
-    void on_doubleSpinBox_volume1_valueChanged(double arg1);
-
-    // Weight
-    void on_comboBox_weight1_currentIndexChanged(int index);
-    void on_comboBox_weight2_currentIndexChanged(int index);
-    void on_doubleSpinBox_weight1_valueChanged(double arg1);
-
-    // Money
-    void on_comboBox_money1_currentIndexChanged(int index);
-    void on_comboBox_money2_currentIndexChanged(int index);
-    void on_doubleSpinBox_money1_valueChanged(double arg1);
+signals:
+    void lengthUnitsChanged();
+    void areaUnitsChanged();
+    void volumeUnitsChanged();
+    void weightUnitsChanged();
+    void moneyUnitsChanged();
 
 private:
-    Ui::ConverterTool *ui;
+    QStringList unitPaths;
+    QStringList unitTypes = {"LengthUnits", "AreaUnits", "VolumeUnits", "WeightUnits", "MoneyUnits"};
 
-    SettingsManager *settingsManager;
+    double textToNumber(QString text);
 
-    void getAllUnits();
-    void addUnitGroup(int index, QString str);
+    QStringList l_lengthUnits;
+    double lengthUnitValue(QString unit);
+    QList<double> l_lengthUnitsValues;
 
-    void convertUnits(int index1, int index2, QList<Unit> list, double units, QDoubleSpinBox *box);
+    QStringList l_areaUnits;
+    double areaUnitValue(QString unit);
+    QList<double> l_areaUnitsValues;
 
-    QList<Unit> getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon = "");
-    void addUnit(QString arrayName, Unit unit, QList<Unit> list, QComboBox *box1, QComboBox *box2);
+    QStringList l_volumeUnits;
+    double volumeUnitValue(QString unit);
+    QList<double> l_volumeUnitsValues;
 
-    QList<Unit> lengthUnits;
-    QList<Unit> areaUnits;
-    QList<Unit> volumeUnits;
-    QList<Unit> weightUnits;
-    QList<Unit> moneyUnits;
+    QStringList l_weightUnits;
+    double weightUnitValue(QString unit);
+    QList<double> l_weightUnitsValues;
+
+    QStringList l_moneyUnits;
+    double moneyUnitValue(QString unit);
+    QList<double> l_moneyUnitsValues;
 };
 
 #endif // CONVERTERTOOL_H

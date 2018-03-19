@@ -1,299 +1,299 @@
 #include "convertertool.h"
-#include "ui_convertertool.h"
-#include "gm-companion/functions.h"
-
-#include <QDebug>
+#include <QSettings>
 #include <QDir>
-#include <QLabel>
+#include <QDebug>
 
-ConverterTool::ConverterTool(QWidget *parent) : QWidget(parent), ui(new Ui::ConverterTool)
+ConverterTool::ConverterTool(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading ConverterTool ...";
-
-    ui->setupUi(this);
-
-    settingsManager = new SettingsManager;
-
-    on_comboBox_unitType_currentIndexChanged(0);
-
-    getAllUnits();
-
-    ui->label_arrow1->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
-    ui->label_arrow2->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
-    ui->label_arrow3->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
-    ui->label_arrow4->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
-    ui->label_arrow5->setPixmap(style()->standardIcon(QStyle::SP_ArrowRight).pixmap(16, 16));
+    unitPaths.append({ ":/units/default.ini", QDir::homePath() + "/.gm-companion/units/custom.ini" });
+    updateUnits();
 }
 
-ConverterTool::~ConverterTool()
+void ConverterTool::updateUnits()
 {
-    delete ui;
-}
+    qDebug() << "Updating Units ...";
 
-void ConverterTool::getAllUnits()
-{
-    qDebug() << "Loading units ...";
+    l_lengthUnits.clear();
+    l_lengthUnitsValues.clear();
 
-    for (int i = 0; i < 2; i++)
+    l_areaUnits.clear();
+    l_areaUnitsValues.clear();
+
+    l_volumeUnits.clear();
+    l_volumeUnitsValues.clear();
+
+    l_weightUnits.clear();
+    l_weightUnitsValues.clear();
+
+    l_moneyUnits.clear();
+    l_moneyUnitsValues.clear();
+
+    for (QString path : unitPaths)
     {
-        if (i == 1) // Addon Units
+        QSettings settings(path, QSettings::IniFormat);
+
+        for (QString type : unitTypes)
         {
-            for (QString addon : getFolders(QDir::homePath() + "/.gm-companion/addons")) addUnitGroup(i, addon);
+            int count = settings.beginReadArray(type);
+
+            for (int i = 0; i < count; i++)
+            {
+                settings.setArrayIndex(i);
+
+                if (type == "LengthUnits")
+                {
+                    l_lengthUnits.append(settings.value("name", "UNKNOWN UNIT").toString());
+                    l_lengthUnitsValues.append(settings.value("refUnits", 0).toDouble());
+                }
+                else if (type == "AreaUnits")
+                {
+                    l_areaUnits.append(settings.value("name", "UNKNOWN UNIT").toString());
+                    l_areaUnitsValues.append(settings.value("refUnits", 0).toDouble());
+                }
+                else if (type == "VolumeUnits")
+                {
+                    l_volumeUnits.append(settings.value("name", "UNKNOWN UNIT").toString());
+                    l_volumeUnitsValues.append(settings.value("refUnits", 0).toDouble());
+                }
+                else if (type == "WeightUnits")
+                {
+                    l_weightUnits.append(settings.value("name", "UNKNOWN UNIT").toString());
+                    l_weightUnitsValues.append(settings.value("refUnits", 0).toDouble());
+                }
+                else if (type == "MoneyUnits")
+                {
+                    l_moneyUnits.append(settings.value("name", "UNKNOWN UNIT").toString());
+                    l_moneyUnitsValues.append(settings.value("refUnits", 0).toDouble());
+                }
+                else
+                {
+                    qDebug() << "Converter Tool: Unknown Unit Type" << type;
+                }
+            }
+
+            settings.endArray();
+        }
+    }
+
+    emit lengthUnitsChanged();
+    emit areaUnitsChanged();
+    emit volumeUnitsChanged();
+    emit weightUnitsChanged();
+    emit moneyUnitsChanged();
+}
+
+double ConverterTool::textToNumber(QString text)
+{
+    QString temp   = text.replace(",", ".");
+    double  number = temp.toDouble();
+
+    return number;
+}
+
+void ConverterTool::addUnit(QString name, QString refUnits, QString type)
+{
+    if (!name.isNull() && !refUnits.isNull() && !type.isNull())
+    {
+        QSettings settings(QDir::homePath() + "/.gm-companion/units/custom.ini", QSettings::IniFormat);
+
+        QString arrayName;
+
+        if (type == "Length")
+        {
+            arrayName = "LengthUnits";
+        }
+        else if (type == "Area")
+        {
+            arrayName = "AreaUnits";
+        }
+        else if (type == "Volume")
+        {
+            arrayName = "VolumeUnits";
+        }
+        else if (type == "Weight")
+        {
+            arrayName = "WeightUnits";
+        }
+        else if (type == "Money")
+        {
+            arrayName = "MoneyUnits";
         }
         else
         {
-            addUnitGroup(i, "");
+            qDebug() << "Converter Tool: Unknown Unit Type" << type;
         }
-    }
-}
 
-void ConverterTool::addUnitGroup(int index, QString str)
-{
-    lengthUnits.append(getUnits("LengthUnits", index, ui->comboBox_length1, ui->comboBox_length2, str));
-    areaUnits.append(getUnits("AreaUnits", index, ui->comboBox_area1, ui->comboBox_area2, str));
-    volumeUnits.append(getUnits("VolumeUnits", index, ui->comboBox_volume1, ui->comboBox_volume2, str));
-    weightUnits.append(getUnits("WeightUnits", index, ui->comboBox_weight1, ui->comboBox_weight2, str));
-    moneyUnits.append(getUnits("MoneyUnits", index, ui->comboBox_money1, ui->comboBox_money2, str));
-}
-
-QList<ConverterTool::Unit>ConverterTool::getUnits(QString arrayName, int type, QComboBox *box1, QComboBox *box2, QString addon)
-{
-    QList<Unit> list;
-    QString     path;
-    bool unitsExist = false;
-
-    // Check if units are normal units or addon units
-    switch (type) {
-    case 1: // Addon
-        path = QDir::homePath() + "/.gm-companion/addons/" + addon + "/units.ini";
-
-        if (QFile(path).exists() && settingsManager->getIsAddonEnabled(addon)) unitsExist = true;
-        break;
-
-    case 2: // Custom
-        path = QDir::homePath() + "/.gm-companion/units/custom.ini";
-        break;
-
-    default: // Default
-        path       = ":/units/default.ini";
-        unitsExist = true;
-        break;
-    }
-
-    if (unitsExist)
-    {
-        qDebug() << path;
-
-        QSettings settings(path, QSettings::IniFormat);
-        settings.setIniCodec("UTF-8");
-        int size = settings.beginReadArray(arrayName);
-
-        qDebug() << "Size" << size;
-
-        for (int i = 0; i < size; i++)
+        if (!arrayName.isNull())
         {
-            settings.setArrayIndex(i);
+            int index = settings.beginReadArray(arrayName);
+            settings.endArray();
 
-            qDebug() << "Index:" << i;
+            settings.beginWriteArray(arrayName);
+            settings.setArrayIndex(index);
 
-            Unit unit;
-            unit.name     = settings.value("name", "unknown").toString();
-            unit.refUnits = settings.value("refUnits", 1).toDouble();
+            settings.setValue("name",     name);
+            settings.setValue("refUnits", textToNumber(refUnits));
 
-            qDebug() << "Name" << unit.name;
-            qDebug() << "RefUnits" << unit.refUnits;
+            settings.endArray();
 
-            list.push_back(unit);
-
-            box1->addItem(unit.name);
-            box2->addItem(unit.name);
+            updateUnits();
         }
-        settings.endArray();
     }
-
-    return list;
 }
 
-// When unit type combo box is used
-void ConverterTool::on_comboBox_unitType_currentIndexChanged(int index)
+QString ConverterTool::refUnitName(QString unit)
 {
-    // Display correct reference unit name
     QString refUnit;
 
-    switch (index) {
-    case 0: // Length
-        refUnit = tr("Meters");
-        break;
-
-    case 1: // Area
-        refUnit = tr("Square Meters");
-        break;
-
-    case 2: // Volume
-        refUnit = tr("Cubic Meters");
-        break;
-
-    case 3: // Weight
-        refUnit = tr("Kilograms");
-        break;
-
-    case 4: // Money
-        refUnit = tr("Dollars");
-        break;
-
-    default:
-        refUnit = "REF_UNIT";
-        break;
-    }
-
-    ui->label_refUnit->setText(refUnit);
-}
-
-// Add a unit
-void ConverterTool::on_pushButton_addUnit_clicked()
-{
-    if (!ui->lineEdit_unitName->text().isEmpty())
+    if (unit == "Length")
     {
-        Unit unit;
-        unit.name     = ui->lineEdit_unitName->text();
-        unit.refUnits = ui->doubleSpinBox_refUnits->value();
-
-        switch (ui->comboBox_unitType->currentIndex()) {
-        case 0: // Length
-            addUnit("LengthUnits", unit, lengthUnits, ui->comboBox_length1, ui->comboBox_length2);
-            break;
-
-        case 1: // Area
-            addUnit("LengthUnits", unit, areaUnits, ui->comboBox_area1, ui->comboBox_area2);
-            break;
-
-        case 2: // Volume
-            addUnit("LengthUnits", unit, volumeUnits, ui->comboBox_volume1, ui->comboBox_volume2);
-            break;
-
-        case 3: // Weight
-            addUnit("LengthUnits", unit, weightUnits, ui->comboBox_weight1, ui->comboBox_weight2);
-            break;
-
-        case 4: // Money
-            addUnit("LengthUnits", unit, moneyUnits, ui->comboBox_money1, ui->comboBox_money2);
-            break;
-
-        default:
-            break;
-        }
+        refUnit = "Meters";
     }
-}
-
-void ConverterTool::addUnit(QString arrayName, Unit unit, QList<Unit>list, QComboBox *box1, QComboBox *box2)
-{
-    list.push_back(unit);
-
-    QSettings settings(QDir::homePath() + "/.gm-companion/custom.ini", QSettings::IniFormat);
-    settings.setIniCodec("UTF-8");
-    int size = settings.beginReadArray(arrayName);
-    settings.endArray();
-
-    settings.beginWriteArray(arrayName);
-    settings.setArrayIndex(size);
-    settings.setValue("name",     unit.name);
-    settings.setValue("refUnits", unit.refUnits);
-    settings.endArray();
-
-    box1->addItem(unit.name);
-    box2->addItem(unit.name);
-}
-
-// Convert Units
-void ConverterTool::convertUnits(int index1, int index2, QList<Unit>list, double units, QDoubleSpinBox *box)
-{
-    if (!list.isEmpty())
+    else if (unit == "Area")
     {
-        double refUnits1 = list.at(index1).refUnits;
-        double refUnits2 = list.at(index2).refUnits;
+        refUnit = "Square Meters";
+    }
+    else if (unit == "Volume")
+    {
+        refUnit = "Cubic Meters";
+    }
+    else if (unit == "Weight")
+    {
+        refUnit = "Kilograms";
+    }
+    else if (unit == "Money")
+    {
+        refUnit = "Dollars";
+    }
+    else
+    {
+        qDebug() << "Converter Tool: Unknown Unit Type" << unit;
+    }
 
-        double value = refUnits1 * units / refUnits2;
-        box->setValue(value);
+    return refUnit;
+}
+
+QString ConverterTool::convertLength(QString unit1, QString unit2, QString value)
+{
+    qDebug() << "Converting Length ...";
+    return QString::number(lengthUnitValue(unit1) / lengthUnitValue(unit2) * textToNumber(value), 'd', 6);
+}
+
+QString ConverterTool::convertArea(QString unit1, QString unit2, QString value)
+{
+    qDebug() << "Converting Area ...";
+    return QString::number(areaUnitValue(unit1) / areaUnitValue(unit2) * textToNumber(value), 'd', 6);
+}
+
+QString ConverterTool::convertVolume(QString unit1, QString unit2, QString value)
+{
+    qDebug() << "Converting Volume ...";
+    return QString::number(volumeUnitValue(unit1) / volumeUnitValue(unit2) * textToNumber(value), 'd', 6);
+}
+
+QString ConverterTool::convertWeight(QString unit1, QString unit2, QString value)
+{
+    qDebug() << "Converting Weight ...";
+    return QString::number(weightUnitValue(unit1) / weightUnitValue(unit2) * textToNumber(value), 'd', 6);
+}
+
+QString ConverterTool::convertMoney(QString unit1, QString unit2, QString value)
+{
+    qDebug() << "Converting Money ...";
+    return QString::number(moneyUnitValue(unit1) / moneyUnitValue(unit2) * textToNumber(value), 'd', 6);
+}
+
+QStringList ConverterTool::lengthUnits()
+{
+    return l_lengthUnits;
+}
+
+QStringList ConverterTool::areaUnits()
+{
+    return l_areaUnits;
+}
+
+QStringList ConverterTool::volumeUnits()
+{
+    return l_volumeUnits;
+}
+
+QStringList ConverterTool::weightUnits()
+{
+    return l_weightUnits;
+}
+
+QStringList ConverterTool::moneyUnits()
+{
+    return l_moneyUnits;
+}
+
+double ConverterTool::lengthUnitValue(QString unit)
+{
+    int i = l_lengthUnits.indexOf(unit);
+
+    if (i > -1)
+    {
+        return l_lengthUnitsValues.at(i);
+    }
+    else
+    {
+        return 0;
     }
 }
 
-// Length Units
-void ConverterTool::on_comboBox_length1_currentIndexChanged(int index)
+double ConverterTool::areaUnitValue(QString unit)
 {
-    convertUnits(index, ui->comboBox_length2->currentIndex(), lengthUnits, ui->doubleSpinBox_length1->value(), ui->doubleSpinBox_length2);
-    qDebug() << lengthUnits.length();
+    int i = l_areaUnits.indexOf(unit);
+
+    if (i > -1)
+    {
+        return l_areaUnitsValues.at(i);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-void ConverterTool::on_comboBox_length2_currentIndexChanged(int index)
+double ConverterTool::volumeUnitValue(QString unit)
 {
-    convertUnits(ui->comboBox_length1->currentIndex(), index, lengthUnits, ui->doubleSpinBox_length1->value(), ui->doubleSpinBox_length2);
+    int i = l_volumeUnits.indexOf(unit);
+
+    if (i > -1)
+    {
+        return l_volumeUnitsValues.at(i);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-void ConverterTool::on_doubleSpinBox_length1_valueChanged(double arg1)
+double ConverterTool::weightUnitValue(QString unit)
 {
-    convertUnits(ui->comboBox_length1->currentIndex(), ui->comboBox_length2->currentIndex(), lengthUnits, arg1, ui->doubleSpinBox_length2);
+    int i = l_weightUnits.indexOf(unit);
+
+    if (i > -1)
+    {
+        return l_weightUnitsValues.at(i);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-// Area Units
-void ConverterTool::on_comboBox_area1_currentIndexChanged(int index)
+double ConverterTool::moneyUnitValue(QString unit)
 {
-    convertUnits(index, ui->comboBox_area2->currentIndex(), areaUnits, ui->doubleSpinBox_area1->value(), ui->doubleSpinBox_area2);
-}
+    int i = l_moneyUnits.indexOf(unit);
 
-void ConverterTool::on_comboBox_area2_currentIndexChanged(int index)
-{
-    convertUnits(ui->comboBox_area1->currentIndex(), index, areaUnits, ui->doubleSpinBox_area1->value(), ui->doubleSpinBox_area2);
-}
-
-void ConverterTool::on_doubleSpinBox_area1_valueChanged(double arg1)
-{
-    convertUnits(ui->comboBox_area1->currentIndex(), ui->comboBox_area2->currentIndex(), areaUnits, arg1, ui->doubleSpinBox_area2);
-}
-
-// Volume Units
-void ConverterTool::on_comboBox_volume1_currentIndexChanged(int index)
-{
-    convertUnits(index, ui->comboBox_volume2->currentIndex(), volumeUnits, ui->doubleSpinBox_volume1->value(), ui->doubleSpinBox_volume2);
-}
-
-void ConverterTool::on_comboBox_volume2_currentIndexChanged(int index)
-{
-    convertUnits(ui->comboBox_volume1->currentIndex(), index, volumeUnits, ui->doubleSpinBox_volume1->value(), ui->doubleSpinBox_volume2);
-}
-
-void ConverterTool::on_doubleSpinBox_volume1_valueChanged(double arg1)
-{
-    convertUnits(ui->comboBox_volume1->currentIndex(), ui->comboBox_volume2->currentIndex(), volumeUnits, arg1, ui->doubleSpinBox_volume2);
-}
-
-// Weight Units
-void ConverterTool::on_comboBox_weight1_currentIndexChanged(int index)
-{
-    convertUnits(index, ui->comboBox_weight2->currentIndex(), weightUnits, ui->doubleSpinBox_weight1->value(), ui->doubleSpinBox_weight2);
-}
-
-void ConverterTool::on_comboBox_weight2_currentIndexChanged(int index)
-{
-    convertUnits(ui->comboBox_weight1->currentIndex(), index, weightUnits, ui->doubleSpinBox_weight1->value(), ui->doubleSpinBox_weight2);
-}
-
-void ConverterTool::on_doubleSpinBox_weight1_valueChanged(double arg1)
-{
-    convertUnits(ui->comboBox_weight1->currentIndex(), ui->comboBox_weight2->currentIndex(), weightUnits, arg1, ui->doubleSpinBox_weight2);
-}
-
-// Money Units
-void ConverterTool::on_comboBox_money1_currentIndexChanged(int index)
-{
-    convertUnits(index, ui->comboBox_money2->currentIndex(), moneyUnits, ui->doubleSpinBox_money1->value(), ui->doubleSpinBox_money2);
-}
-
-void ConverterTool::on_comboBox_money2_currentIndexChanged(int index)
-{
-    convertUnits(ui->comboBox_money1->currentIndex(), index, moneyUnits, ui->doubleSpinBox_money1->value(), ui->doubleSpinBox_money2);
-}
-
-void ConverterTool::on_doubleSpinBox_money1_valueChanged(double arg1)
-{
-    convertUnits(ui->comboBox_money1->currentIndex(), ui->comboBox_money2->currentIndex(), moneyUnits, arg1, ui->doubleSpinBox_money2);
+    if (i > -1)
+    {
+        return l_moneyUnitsValues.at(i);
+    }
+    else
+    {
+        return 0;
+    }
 }
