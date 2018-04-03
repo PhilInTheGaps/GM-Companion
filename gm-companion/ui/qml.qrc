@@ -27,5 +27,9 @@
         <file>tools/generators/NameGenerator.qml</file>
         <file>tools/generators/NameGeneratorButton.qml</file>
         <file>tools/generators/NameGeneratorCategoryButton.qml</file>
+        <file>tools/characters/DefaultSheet.qml</file>
+        <file>tools/characters/sheet_elements/PropertyRow.qml</file>
+        <file>tools/characters/sheet_elements/EditableTable.qml</file>
+        <file>tools/characters/CharacterButton.qml</file>
     </qresource>
 </RCC>

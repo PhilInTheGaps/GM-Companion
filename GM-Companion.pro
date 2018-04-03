@@ -24,7 +24,7 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/functions.cpp \
     # Tools
     gm-companion/tools/audio/audiotool.cpp \
-    gm-companion/tools/audio/audioeditor.cpp \
+#    gm-companion/tools/audio/audioeditor.cpp \
     gm-companion/tools/maptool.cpp \
     gm-companion/tools/dicetool.cpp \
     gm-companion/tools/combattracker.cpp \
@@ -51,7 +51,11 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/settings/settingstool.cpp \
     gm-companion/settings/settingsmanager.cpp \
 #    gm-companion/tools/addons/addonmanager.cpp \
-    gm-companion/platformdetails.cpp
+    gm-companion/platformdetails.cpp \
+    gm-companion/tools/characters/charactersheet.cpp \
+    gm-companion/tools/characters/defaultsheet.cpp \
+    gm-companion/tools/characters/charactertool.cpp \
+    gm-companion/tools/characters/charactersaveload.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -73,7 +77,7 @@ HEADERS  += gm-companion/functions.h \
     # Tools
     gm-companion/tools/maptool.h \
     gm-companion/tools/audio/audiotool.h \
-    gm-companion/tools/audio/audioeditor.h \
+#    gm-companion/tools/audio/audioeditor.h \
     gm-companion/tools/dicetool.h \
     gm-companion/tools/combattracker.h \
     gm-companion/tools/notestool.h \
@@ -100,7 +104,11 @@ HEADERS  += gm-companion/functions.h \
 #    gm-companion/tools/addons/addonmanager.h \
 #    gm-companion/tools/characters/sheets/entaria2sheet.h \
 #    gm-companion/tools/characters/sheets/dnd5esheet.h
-    gm-companion/platformdetails.h
+    gm-companion/platformdetails.h \
+    gm-companion/tools/characters/charactersheet.h \
+    gm-companion/tools/characters/defaultsheet.h \
+    gm-companion/tools/characters/charactertool.h \
+    gm-companion/tools/characters/charactersaveload.h
 
 
 DISTFILES +=
