@@ -97,6 +97,30 @@ Page {
                             sheet_tool.character_name, "info", 1)
                 info_table.fillList()
 
+                attributes_table.col1_list = save_load.loadTable(
+                            sheet_tool.character_name, "attributes", 0)
+                attributes_table.col2_list = save_load.loadTable(
+                            sheet_tool.character_name, "attributes", 1)
+                attributes_table.fillList()
+
+                abilities1_table.col1_list = save_load.loadTable(
+                            sheet_tool.character_name, "abilities1", 0)
+                abilities1_table.col2_list = save_load.loadTable(
+                            sheet_tool.character_name, "abilities1", 1)
+                abilities1_table.fillList()
+
+                abilities2_table.col1_list = save_load.loadTable(
+                            sheet_tool.character_name, "abilities2", 0)
+                abilities2_table.col2_list = save_load.loadTable(
+                            sheet_tool.character_name, "abilities2", 1)
+                abilities2_table.fillList()
+
+                inventory_table.col1_list = save_load.loadTable(
+                            sheet_tool.character_name, "inventory", 0)
+                inventory_table.col2_list = save_load.loadTable(
+                            sheet_tool.character_name, "inventory", 1)
+                inventory_table.fillList()
+
                 bio_text_area.text = save_load.loadText(
                             sheet_page.character_name, "info", "bio")
             }
