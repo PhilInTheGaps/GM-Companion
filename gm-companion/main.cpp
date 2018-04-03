@@ -25,6 +25,10 @@
 #include "tools/convertertool.h"
 #include "tools/generators/namegenerator.h"
 
+#include "tools/characters/charactertool.h"
+#include "tools/characters/charactersaveload.h"
+#include "tools/characters/defaultsheet.h"
+
 #include "settings/settingstool.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
@@ -130,6 +134,25 @@ void enableDebug()
     }
 }
 
+void loadQmlClasses()
+{
+    qmlRegisterType<AudioTool>(        "gm.companion.audiotool",         1, 0, "AudioTool");
+    qmlRegisterType<MapTool>(          "gm.companion.maptool",           1, 0, "MapTool");
+    qmlRegisterType<DiceTool>(         "gm.companion.dicetool",          1, 0, "DiceTool");
+    qmlRegisterType<CombatTracker>(    "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
+    qmlRegisterType<NotesTool>(        "gm.companion.notestool",         1, 0, "NotesTool");
+    qmlRegisterType<ConverterTool>(    "gm.companion.convertertool",     1, 0, "ConverterTool");
+    qmlRegisterType<SettingsTool>(     "gm.companion.settingstool",      1, 0, "SettingsTool");
+    qmlRegisterType<NameGenerator>(    "gm.companion.namegeneratortool", 1, 0, "NameGeneratorTool");
+
+    qmlRegisterType<CharacterTool>(    "gm.companion.charactertool",     1, 0, "CharacterTool");
+    qmlRegisterType<CharacterSaveLoad>("gm.companion.charactersaveload", 1, 0, "CharacterSaveLoad");
+    qmlRegisterType<DefaultSheet>(     "gm.companion.defaultsheet",      1, 0, "DefaultSheetTool");
+
+    qmlRegisterType<UpdateManager>(    "gm.companion.updatemanager",     1, 0, "UpdateManager");
+    qmlRegisterType<PlatformDetails>(  "gm.companion.platforms",         1, 0, "PlatformDetails");
+}
+
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WIN)
@@ -153,17 +176,7 @@ int main(int argc, char *argv[])
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
-    qmlRegisterType<AudioTool>(      "gm.companion.audiotool",         1, 0, "AudioTool");
-    qmlRegisterType<MapTool>(        "gm.companion.maptool",           1, 0, "MapTool");
-    qmlRegisterType<DiceTool>(       "gm.companion.dicetool",          1, 0, "DiceTool");
-    qmlRegisterType<CombatTracker>(  "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
-    qmlRegisterType<NotesTool>(      "gm.companion.notestool",         1, 0, "NotesTool");
-    qmlRegisterType<ConverterTool>(  "gm.companion.convertertool",     1, 0, "ConverterTool");
-    qmlRegisterType<SettingsTool>(   "gm.companion.settingstool",      1, 0, "SettingsTool");
-    qmlRegisterType<NameGenerator>(  "gm.companion.namegeneratortool", 1, 0, "NameGeneratorTool");
-
-    qmlRegisterType<UpdateManager>(  "gm.companion.updatemanager",     1, 0, "UpdateManager");
-    qmlRegisterType<PlatformDetails>("gm.companion.platforms",         1, 0, "PlatformDetails");
+    loadQmlClasses();
 
     // Set Icon
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));

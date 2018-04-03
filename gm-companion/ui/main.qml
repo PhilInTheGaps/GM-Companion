@@ -265,6 +265,7 @@ Window {
         anchors.right: parent.right
         y: toolbar.height
 
+        clip: true
         interactive: false
         currentIndex: 0
 

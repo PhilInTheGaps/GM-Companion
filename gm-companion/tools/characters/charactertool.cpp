@@ -1,371 +1,135 @@
 #include "charactertool.h"
-#include "ui_charactertool.h"
 
-#include <QComboBox>
 #include <QDebug>
 #include <QSettings>
-#include <QListWidget>
-#include <QTableWidget>
-#include <QStackedWidget>
-#include <QLineEdit>
-#include <QTextEdit>
-#include <QCheckBox>
-#include <QGraphicsView>
+#include <QFile>
 
-#include "gm-companion/functions.h"
-
-CharacterTool::CharacterTool(QWidget *parent) : QWidget(parent), ui(new Ui::CharacterTool)
+CharacterTool::CharacterTool(QObject *parent) : QObject(parent)
 {
-    ui->setupUi(this);
+    qDebug() << "Loading Character Tool ...";
 
-    settingsManager    = new SettingsManager;
-    inactiveCharacters = settingsManager->getInactiveCharacters();
-
-    setTemplates();
-
-    loadCharacterSheets();
-    updateCharacterList();
+    sManager = new SettingsManager;
 }
 
-CharacterTool::~CharacterTool()
+void CharacterTool::addCharacter(QString template_name, QString character_name, QString player_name)
 {
-    delete ui;
-}
-
-// Add all enabled templates to the template combo box
-void CharacterTool::setTemplates()
-{
-    QStringList templates = { "D&D_5e", "DSA5", "Entaria_v2" };
-
-    for (QString temp : templates)
+    if (!template_name.isNull() && !character_name.isNull() && !player_name.isNull())
     {
-        ui->comboBox_template->addItem(temp);
+        qDebug() << "Creating new Character file for" << character_name << "by" << player_name << "...";
+
+        QString char_path = sManager->getSetting(Setting::charactersPath);
+        QString file_name = character_name.replace(" ", "_") + ".character";
+
+        int file_counter = 1;
+
+        while (QFile(char_path + "/" + file_name).exists())
+        {
+            file_counter++;
+            file_name = character_name.replace(" ", "_") + "_(" + QString::number(file_counter) + ").character";
+        }
+
+        QSettings settings(char_path + "/" + file_name, QSettings::IniFormat);
+
+        settings.setValue("sheet_template", template_name);
+        settings.setValue("player_name",    player_name);
+        settings.setValue("character_name", character_name);
+
+        settings.sync();
+
+        emit charactersUpdated();
     }
 }
 
-// Add all character sheets to the stacked widget
-void CharacterTool::loadCharacterSheets()
+QString CharacterTool::getSheetTemplate(QString character_name)
 {
-    defaultSheet = new DefaultSheet;
-    ui->stackedWidget->addWidget(defaultSheet);
+    QString char_path = sManager->getSetting(Setting::charactersPath);
+    QString file_name = character_name.replace(" ", "_") + ".character";
 
-    dsa5Sheet = new DSA5Sheet;
-    ui->stackedWidget->addWidget(dsa5Sheet);
+    QSettings settings(char_path + "/" + file_name, QSettings::IniFormat);
 
-    entaria2Sheet = new Entaria2Sheet;
-    ui->stackedWidget->addWidget(entaria2Sheet);
-
-    dnd5eSheet = new DnD5eSheet;
-    ui->stackedWidget->addWidget(dnd5eSheet);
+    return settings.value("sheet_template", "Default").toString();
 }
 
-// Get all characters and add them to their correct list
-void CharacterTool::updateCharacterList()
+int CharacterTool::getSheetIndex(QString template_name)
 {
-    QString charPath = settingsManager->getSetting(
-        Setting::charactersPath);
-
-    ui->listWidget_activeCharacters->clear();
-    ui->listWidget_inactiveCharacters->clear();
-
-    for (QString character : getFiles(charPath))
+    if (template_name == "Default")
     {
-        if (character.endsWith(".character"))
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+QStringList CharacterTool::getActiveCharacterList()
+{
+    QStringList list;
+    QStringList inactive = sManager->getInactiveCharacters();
+
+    QString path = sManager->getSetting(Setting::charactersPath);
+
+    for (QString f : getFiles(path))
+    {
+        if (f.contains(".character"))
         {
-            QString fileName = character.replace(".character", "");
+            QString character = f.replace(".character", "");
 
-            QListWidgetItem *item = new QListWidgetItem;
-            item->setText(cleanText(fileName));
-            item->setWhatsThis(character);
-
-            // Decide if a character is active or inactive
-            if (inactiveCharacters.contains(fileName))
+            if (!inactive.contains(character))
             {
-                ui->listWidget_inactiveCharacters->addItem(item);
-            }
-            else
-            {
-                ui->listWidget_activeCharacters->addItem(item);
+                character = character.replace("_", " ");
 
-                if (fileName == currentCharacter)
-                {
-                    ui->listWidget_activeCharacters->setCurrentItem(item);
-                }
+                list.append(character);
             }
         }
     }
+
+    return list;
 }
 
-// Create a new Character
-void CharacterTool::createNewCharacter()
+QStringList CharacterTool::getInactiveCharacterList()
 {
-    QString characterName = ui->lineEdit_characterName->text();
-    QString playerName    = ui->lineEdit_playerName->text();
-    QString sheetTemplate = ui->comboBox_template->currentText();
+    QStringList list;
+    QStringList inactive = sManager->getInactiveCharacters();
 
-    if (!characterName.isNull() && !characterName.isEmpty())
+    QString path = sManager->getSetting(Setting::charactersPath);
+
+    for (QString f : getFiles(path))
     {
-        QString charPath  = settingsManager->getSetting(Setting::charactersPath);
-        QString character = characterName;
-        character        = character.replace(" ", "_");
-        currentCharacter = character;
-        QString filePath = charPath + "/" + character + ".character";
-
-        int counter = 2;
-
-        while (QFile(filePath).exists())
+        if (f.contains(".character"))
         {
-            filePath = charPath + "/" + character + "_" + QString::number(counter) + ".character";
-            counter++;
-        }
+            QString character = f.replace(".character", "");
 
-        QSettings settings(filePath, QSettings::IniFormat);
-        settings.setValue("character_name", characterName);
-        settings.setValue("player_name",    playerName);
-        settings.setValue("sheet_template", sheetTemplate);
-
-        ui->lineEdit_characterName->clear();
-        ui->lineEdit_playerName->clear();
-
-        delay(1);
-
-        updateCharacterList();
-    }
-}
-
-// Make a character active
-void CharacterTool::makeCharacterActive(int index)
-{
-    QListWidgetItem *item = ui->listWidget_inactiveCharacters->item(index);
-
-    QString fileName = item->whatsThis().replace(".character", "");
-
-    inactiveCharacters.removeOne(fileName);
-}
-
-// Make a character inactive
-void CharacterTool::makeCharacterInactive(int index)
-{
-    QListWidgetItem *item = ui->listWidget_activeCharacters->item(index);
-
-    QString fileName = item->whatsThis().replace(".character", "");
-
-    inactiveCharacters.append(fileName);
-}
-
-// Make selected character inactive
-void CharacterTool::on_pushButton_makeInactive_clicked()
-{
-    int index = ui->listWidget_activeCharacters->currentRow();
-
-    if (index > -1)
-    {
-        makeCharacterInactive(index);
-        settingsManager->setInactiveCharacters(inactiveCharacters);
-        updateCharacterList();
-    }
-}
-
-// Make all characters inactive
-void CharacterTool::on_pushButton_makeAllInactive_clicked()
-{
-    for (int i = 0; i < ui->listWidget_activeCharacters->count(); i++)
-    {
-        makeCharacterInactive(i);
-    }
-    settingsManager->setInactiveCharacters(inactiveCharacters);
-    updateCharacterList();
-}
-
-// Make selected character active
-void CharacterTool::on_pushButton_makeActive_clicked()
-{
-    int index = ui->listWidget_inactiveCharacters->currentRow();
-
-    if (index > -1)
-    {
-        makeCharacterActive(index);
-        settingsManager->setInactiveCharacters(inactiveCharacters);
-        updateCharacterList();
-    }
-}
-
-// Make all characters active
-void CharacterTool::on_pushButton_makeAllActive_clicked()
-{
-    for (int i = 0; i < ui->listWidget_inactiveCharacters->count(); i++)
-    {
-        makeCharacterActive(i);
-    }
-    settingsManager->setInactiveCharacters(inactiveCharacters);
-    updateCharacterList();
-}
-
-// Create new character
-void CharacterTool::on_pushButton_createNewCharacter_clicked()
-{
-    createNewCharacter();
-}
-
-// Load character images
-void CharacterTool::loadCharacterImages(QString path, QStringList files)
-{
-    ui->listWidget_pages->clear();
-
-    for (QString file : files)
-    {
-        QString filePath = path + "/" + file;
-
-        QListWidgetItem *item = new QListWidgetItem;
-        item->setWhatsThis(filePath);
-        item->setText(file);
-        ui->listWidget_pages->addItem(item);
-    }
-
-    ui->stackedWidget_image_text->setCurrentIndex(1);
-}
-
-// Change currently displayed character
-void CharacterTool::on_listWidget_activeCharacters_currentItemChanged(QListWidgetItem *item)
-{
-    if (item != NULL)
-    {
-        QString charPath      = settingsManager->getSetting(Setting::charactersPath);
-        QString characterFile = item->whatsThis();
-        QString character     = characterFile.replace(".character", "");
-
-        currentCharacter = character;
-
-        QDir dir(charPath + "/" + character);
-        QStringList files;
-        bool useImage = ui->checkBox_useImages->isChecked();
-
-        if (useImage && dir.exists())
-        {
-            files = dir.entryList({ "*.jpg", "*.jpeg", "*.png" });
-        }
-        else
-        {
-            ui->stackedWidget_image_text->setCurrentIndex(0);
-        }
-
-        if (files.size() > 0)
-        {
-            loadCharacterImages(charPath + "/" + character, files);
-        }
-        else
-        {
-            QSettings settings(charPath + "/" + characterFile + ".character", QSettings::IniFormat);
-            QString   sheetTemplate = settings.value("sheet_template", "NONE").toString();
-            QString   filePath      = charPath + "/" + characterFile + ".character";
-
-            int index = 0;
-
-            if (sheetTemplate == "Default Sheet")
+            if (inactive.contains(character))
             {
-                index = 1;
-                defaultSheet->load(filePath);
-            }
-            else if (sheetTemplate == "DSA5")
-            {
-                index = 2;
-                dsa5Sheet->load(filePath);
-            }
-            else if (sheetTemplate == "Entaria_v2")
-            {
-                index = 3;
-                entaria2Sheet->load(filePath);
-            }
-            else if (sheetTemplate == "D&D_5e")
-            {
-                index = 4;
-                dnd5eSheet->load(filePath);
-            }
+                character = character.replace("_", " ");
 
-            ui->stackedWidget->setCurrentIndex(index);
+                list.append(character);
+            }
         }
     }
+
+    return list;
 }
 
-// Save character
-void CharacterTool::on_pushButton_save_clicked()
+void CharacterTool::setCharacterActive(QString character_name)
 {
-    if (ui->listWidget_activeCharacters->currentItem() != NULL)
-    {
-        QString charPath      = settingsManager->getSetting(Setting::charactersPath);
-        QString characterFile = ui->listWidget_activeCharacters->currentItem()->whatsThis();
-        QString filePath      = charPath + "/" + characterFile + ".character";
+    QStringList inactive = sManager->getInactiveCharacters();
 
-        switch (ui->stackedWidget->currentIndex()) {
-        case 1: // Default Sheet
-            defaultSheet->save(filePath);
-            break;
+    inactive.removeOne(character_name.replace(" ", "_"));
 
-        case 2: // DSA5 Sheet
-            dsa5Sheet->save(filePath);
-            break;
+    sManager->setInactiveCharacters(inactive);
 
-        case 3: // Entaria v2 Sheet
-            entaria2Sheet->save(filePath);
-            break;
-
-        case 4: // D&D 5e Sheet
-            dnd5eSheet->save(filePath);
-            break;
-
-        default: // No character selected
-            break;
-        }
-    }
+    emit charactersUpdated();
 }
 
-// Delete Character
-void CharacterTool::on_pushButton_delete_clicked()
+void CharacterTool::setCharacterInactive(QString character_name)
 {
-    if (ui->listWidget_activeCharacters->currentItem() != NULL)
-    {
-        QString charPath      = settingsManager->getSetting(Setting::charactersPath);
-        QString characterFile = ui->listWidget_activeCharacters->currentItem()->whatsThis();
-        QString filePath      = charPath + "/" + characterFile + ".character";
+    QStringList inactive = sManager->getInactiveCharacters();
 
-        qDebug().noquote() << "Deleting character:" << filePath;
+    inactive.append(character_name.replace(" ", "_"));
 
-        QFile f(filePath);
-        f.remove();
+    sManager->setInactiveCharacters(inactive);
 
-        updateCharacterList();
-    }
-}
-
-void CharacterTool::on_listWidget_pages_currentItemChanged(QListWidgetItem *item)
-{
-    if (item != NULL)
-    {
-        QString filePath = item->whatsThis();
-
-
-        QPixmap pixmap(filePath);
-        QGraphicsScene *scene = new QGraphicsScene;
-        ui->graphicsView->setScene(scene);
-
-        scene->addPixmap(pixmap);
-
-        ui->graphicsView->fitInView(0, 0, pixmap.width(), pixmap.height(), Qt::KeepAspectRatio);
-    }
-}
-
-// QGraphicsView zoom in
-void CharacterTool::on_pushButton_zoomIn_clicked()
-{
-    ui->graphicsView->scale(2, 2);
-}
-
-void CharacterTool::on_pushButton_zoomOut_clicked()
-{
-    ui->graphicsView->scale(0.5, 0.5);
-}
-
-void CharacterTool::on_pushButton_reset_clicked()
-{
-    ui->graphicsView->resetTransform();
+    emit charactersUpdated();
 }
