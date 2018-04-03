@@ -37,3 +37,7 @@ matrix:
 
 before_script:
   - qmake -version
+
+
+notifications:
+    slack: gm-companion:hYQtgVm2LokcpUT6SbnELwSN
