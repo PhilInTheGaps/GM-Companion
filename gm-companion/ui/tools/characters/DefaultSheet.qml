@@ -71,23 +71,35 @@ Page {
             height: parent.height - page_control_flow.height - parent.spacing
 
             function save() {
-                info_table.character_name = sheet_page.character_name
-                info_table.save()
+                var table_names = new Array(0)
+                var table_values = new Array(0)
+                var text_groups = new Array(0)
+                var text_names = new Array(0)
+                var texts = new Array(0)
 
-                attributes_table.character_name = sheet_page.character_name
-                attributes_table.save()
+                // Persönliche Daten
+                table_names.push(info_table.save()[0])
+                table_values.push(info_table.save()[1])
 
-                abilities1_table.character_name = sheet_page.character_name
-                abilities1_table.save()
+                table_names.push(attributes_table.save()[0])
+                table_values.push(attributes_table.save()[1])
 
-                abilities2_table.character_name = sheet_page.character_name
-                abilities2_table.save()
+                table_names.push(abilities1_table.save()[0])
+                table_values.push(abilities1_table.save()[1])
 
-                inventory_table.character_name = sheet_page.character_name
-                inventory_table.save()
+                table_names.push(abilities2_table.save()[0])
+                table_values.push(abilities2_table.save()[1])
 
-                save_load.saveText(sheet_page.character_name, "info", "bio",
-                                   bio_text_area.text)
+                table_names.push(inventory_table.save()[0])
+                table_values.push(inventory_table.save()[1])
+
+                text_groups.push("info")
+                text_names.push("bio")
+                texts.push(bio_text_area.text)
+
+                save_load.saveCharacter(sheet_page.character_name, table_names,
+                                        table_values, text_groups,
+                                        text_names, texts)
             }
 
             function load() {

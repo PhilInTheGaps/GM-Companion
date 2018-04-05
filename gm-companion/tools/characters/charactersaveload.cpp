@@ -4,8 +4,6 @@
 
 CharacterSaveLoad::CharacterSaveLoad(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading Character SaveLoad ...";
-
     sManager = new SettingsManager;
 }
 
@@ -17,6 +15,46 @@ void CharacterSaveLoad::initializeSaving()
 void CharacterSaveLoad::initializeLoading()
 {
     emit loading();
+}
+
+// Save Character
+void CharacterSaveLoad::saveCharacter(QString character_name, QStringList table_names, QList<QVariant>table_values, QStringList text_groups, QStringList text_names, QStringList texts)
+{
+    QString path = sManager->getSetting(Setting::charactersPath) + "/" + character_name.replace(" ", "_") + ".character";
+
+    QSettings settings(path, QSettings::IniFormat);
+
+    qDebug() << "Saving Character" << character_name;
+
+    qDebug() << "Saving Tables ...";
+
+    // Save Tables
+    for (int i = 0; i < table_names.size(); i++)
+    {
+        settings.beginGroup(table_names.at(i));
+
+        for (int j = 0; j < table_values.at(i).toList().size(); j++)
+        {
+            settings.setValue(QString::number(j), table_values.at(i).toList().at(j).toList());
+        }
+
+        settings.endGroup();
+    }
+
+    qDebug() << "Saving Texts ...";
+
+    // Save Texts
+    for (int i = 0; i < text_groups.size(); i++)
+    {
+        if (text_groups.at(i) != "")
+        {
+            settings.beginGroup(text_groups.at(i));
+
+            settings.setValue(text_names.at(i), texts.at(i));
+
+            settings.endGroup();
+        }
+    }
 }
 
 // Save the content of an EditableTable

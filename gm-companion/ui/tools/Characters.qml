@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
+import QtQuick.Dialogs 1.3
 
 import gm.companion.charactertool 1.0
 import "./characters"
@@ -76,6 +77,31 @@ Page {
         onCharactersUpdated: loadActiveCharacterList()
     }
 
+    Dialog {
+        id: delete_character_dialog
+        visible: false
+
+        title: "Delete Character?"
+        standardButtons: StandardButton.No | StandardButton.Yes
+
+        property string character_name: "Unknown Character"
+        property string player_name: "Unknown Player"
+
+        Text {
+            text: qsTr("Are you sure you want to delete the character?")
+            width: parent.width
+            wrapMode: Text.WordWrap
+            clip: true
+        }
+
+        onYes: {
+            character_tool.deleteCharacter(swipe_view.getCharacterName())
+
+            swipe_view.setCurrentIndex(0)
+            swipe_view.setCharacterName("Unknown Character")
+        }
+    }
+
     Row {
         anchors.fill: parent
         spacing: 5
@@ -102,7 +128,7 @@ Page {
             ComboBox {
                 id: sheet_type_combobox
                 width: parent.width
-                model: [qsTr("Default")]
+                model: ["Default", "DSA5"]
             }
 
             Button {
@@ -115,6 +141,14 @@ Page {
                                 sheet_type_combobox.currentText,
                                 character_name_field.text,
                                 player_name_field.text)
+
+                    swipe_view.currentIndex = character_tool.getSheetIndex(
+                                character_tool.getSheetTemplate(
+                                    sheet_type_combobox.currentText))
+
+                    swipe_view.setCharacterName(sheet_type_combobox.currentText)
+
+                    swipe_view.save()
                 }
             }
 
@@ -186,6 +220,10 @@ Page {
 
                 Button {
                     text: qsTr("Delete Character")
+
+                    onClicked: {
+                        delete_character_dialog.open()
+                    }
                 }
             }
 
@@ -195,24 +233,56 @@ Page {
                 height: parent.height - parent.spacing - save_delete_row.height
                 clip: true
 
-                interactive: true
+                interactive: false
                 currentIndex: 0
 
                 function setCharacterName(character_name) {
-                    if (currentIndex == 1) {
+                    switch (currentIndex) {
+                    case 1:
                         default_sheet.character_name = character_name
+                        break
+                    case 2:
+                        dsa5_sheet.character_name = character_name
+                        break
+                    default:
+                        break
+                    }
+                }
+
+                function getCharacterName() {
+                    switch (currentIndex) {
+                    case 1:
+                        return default_sheet.character_name
+                    case 2:
+                        return dsa5_sheet.character_name
+                    default:
+                        return "Unknown Character"
                     }
                 }
 
                 function save() {
-                    if (currentIndex == 1) {
+                    switch (currentIndex) {
+                    case 1:
                         default_sheet.save()
+                        break
+                    case 2:
+                        dsa5_sheet.save()
+                        break
+                    default:
+                        break
                     }
                 }
 
                 function load() {
-                    if (currentIndex == 1) {
+                    switch (currentIndex) {
+                    case 1:
                         default_sheet.load()
+                        break
+                    case 2:
+                        dsa5_sheet.load()
+                        break
+                    default:
+                        break
                     }
                 }
 
@@ -229,6 +299,10 @@ Page {
 
                 DefaultSheet {
                     id: default_sheet
+                }
+
+                DSA5Sheet {
+                    id: dsa5_sheet
                 }
             }
         }
