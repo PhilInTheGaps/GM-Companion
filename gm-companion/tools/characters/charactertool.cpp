@@ -11,6 +11,7 @@ CharacterTool::CharacterTool(QObject *parent) : QObject(parent)
     sManager = new SettingsManager;
 }
 
+// Create new Character File
 void CharacterTool::addCharacter(QString template_name, QString character_name, QString player_name)
 {
     if (!template_name.isNull() && !character_name.isNull() && !player_name.isNull())
@@ -40,6 +41,19 @@ void CharacterTool::addCharacter(QString template_name, QString character_name, 
     }
 }
 
+// Delete a Character
+void CharacterTool::deleteCharacter(QString character_name)
+{
+    QFile f(sManager->getSetting(Setting::charactersPath) + "/" + character_name.replace(" ", "_") + ".character");
+
+    if (f.exists())
+    {
+        f.remove();
+    }
+
+    emit charactersUpdated();
+}
+
 QString CharacterTool::getSheetTemplate(QString character_name)
 {
     QString char_path = sManager->getSetting(Setting::charactersPath);
@@ -55,6 +69,10 @@ int CharacterTool::getSheetIndex(QString template_name)
     if (template_name == "Default")
     {
         return 1;
+    }
+    else if (template_name == "DSA5")
+    {
+        return 2;
     }
     else
     {
