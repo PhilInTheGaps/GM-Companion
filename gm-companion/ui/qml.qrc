@@ -31,5 +31,8 @@
         <file>tools/characters/sheet_elements/PropertyRow.qml</file>
         <file>tools/characters/sheet_elements/EditableTable.qml</file>
         <file>tools/characters/CharacterButton.qml</file>
+        <file>tools/characters/DSA5Sheet.qml</file>
+        <file>tools/shop/ShopEditor.qml</file>
+        <file>tools/shop/ItemEditor.qml</file>
     </qresource>
 </RCC>

@@ -2,28 +2,33 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 
 import "./generators"
 
 Page {
     id: generators_page
 
-    TabView {
-        id: generators_tab_view
+    Column {
         anchors.fill: parent
 
-        Tab {
-            title: qsTr("Name Generator")
+        TabBar {
+            id: tab_bar
+            width: parent.width
 
-            NameGenerator {
-                id: name_generator
-                anchors.fill: parent
+            TabButton {
+                text: qsTr("Name Generator")
             }
         }
 
-        Tab {
-            title: "SIFRP - House"
+        SwipeView {
+            id: swipe_view
+            width: parent.width
+            height: parent.height - tab_bar.height
+            currentIndex: tab_bar.currentIndex
+
+            NameGenerator {
+                id: name_generator
+            }
         }
     }
 }

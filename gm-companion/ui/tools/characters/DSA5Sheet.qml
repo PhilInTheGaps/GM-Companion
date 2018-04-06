@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 import gm.companion.dsa5sheet 1.0
@@ -40,44 +39,31 @@ Page {
         anchors.fill: parent
         spacing: 5
 
-        Flow {
-            id: page_control_flow
-            spacing: 5
+        TabBar {
+            id: swipe_tab_bar
             width: parent.width
 
-            Button {
+            TabButton {
                 text: qsTr("Persönliche Daten")
-                onClicked: swipe_view.setCurrentIndex(0)
             }
 
-            Button {
+            TabButton {
                 text: qsTr("Spielwerte")
-                onClicked: swipe_view.setCurrentIndex(1)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Kampf")
-                onClicked: swipe_view.setCurrentIndex(2)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Besitz")
-                onClicked: swipe_view.setCurrentIndex(3)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Zauber / Rituale")
-                onClicked: swipe_view.setCurrentIndex(4)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Liturgien / Zeremonien")
-                onClicked: swipe_view.setCurrentIndex(5)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Tier")
-                onClicked: swipe_view.setCurrentIndex(6)
             }
         }
 
@@ -85,8 +71,9 @@ Page {
             id: swipe_view
             clip: true
             width: parent.width
-            height: parent.height - page_control_flow.height - parent.spacing
+            height: parent.height - swipe_tab_bar.height - parent.spacing
 
+            currentIndex: swipe_tab_bar.currentIndex
             function save() {
                 var table_names = new Array(0)
                 var table_values = new Array(0)

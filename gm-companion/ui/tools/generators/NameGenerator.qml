@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 
 import gm.companion.namegeneratortool 1.0
@@ -90,6 +89,8 @@ Item {
                 id: names_count_spinbox
                 width: parent.width
                 value: 15
+                from: 1
+                editable: true
             }
 
             Text {
@@ -101,7 +102,8 @@ Item {
                 id: names_font_size_spinbox
                 width: parent.width
                 value: 20
-                minimumValue: 1
+                from: 1
+                editable: true
 
                 onValueChanged: setPointSize()
                 Component.onCompleted: setPointSize()

@@ -55,7 +55,9 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/tools/characters/charactersheet.cpp \
     gm-companion/tools/characters/defaultsheet.cpp \
     gm-companion/tools/characters/charactertool.cpp \
-    gm-companion/tools/characters/charactersaveload.cpp
+    gm-companion/tools/characters/charactersaveload.cpp \
+    gm-companion/tools/characters/dsa5sheet.cpp \
+    gm-companion/ui/colorscheme.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -108,7 +110,9 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/tools/characters/charactersheet.h \
     gm-companion/tools/characters/defaultsheet.h \
     gm-companion/tools/characters/charactertool.h \
-    gm-companion/tools/characters/charactersaveload.h
+    gm-companion/tools/characters/charactersaveload.h \
+    gm-companion/tools/characters/dsa5sheet.h \
+    gm-companion/ui/colorscheme.h
 
 
 DISTFILES +=

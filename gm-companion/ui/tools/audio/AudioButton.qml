@@ -31,10 +31,10 @@ Rectangle {
         Image {
             id: large_icon
             source: icon_path === default_icon ? icon_path : "file:///" + icon_path
-
             x: 5
             y: 5
 
+            asynchronous: true
             width: parent.width - 10
             height: width
 

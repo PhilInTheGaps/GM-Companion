@@ -1,16 +1,16 @@
-import QtQuick 2.9
+﻿import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
+import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.combattracker 1.0
 
 Page {
-    id: combat_tracker_tool
+    id: combat_tracker
 
     CombatTrackerTool {
-        id: combat_tracker
+        id: combat_tracker_tool
 
         onCombatantNameChanged: combatant_name.text = combatantName
 
@@ -39,22 +39,22 @@ Page {
     ScrollView {
         id: combat_tracker_scroll_view
         anchors.fill: parent
-        flickableItem.interactive: true
         clip: true
-        flickableItem.flickableDirection: Flickable.VerticalFlick
 
-        // Top Control Buttons
         Flow {
-            width: combat_tracker_tool.width
+            width: combat_tracker.width
 
             padding: 5
             spacing: 5
 
             Column {
-                width: combat_tracker_tool.width
-                       > combat_tracker_tool.height ? parent.width / 2 : parent.width
+                width: parent.width > combat_dice.width * 2
+                       && combat_dice.visible ? parent.width - combat_dice.width
+                                                - parent.spacing - parent.padding
+                                                * 2 : parent.width - parent.spacing * 2
                 spacing: 5
 
+                // Top Control Buttons
                 Flow {
                     id: combat_tracker_controls
                     width: parent.width - combat_dice_button.width
@@ -63,10 +63,12 @@ Page {
                     Frame {
                         id: current_round_frame
                         padding: 5
+                        height: combat_tracker.height / 20
 
                         Text {
                             id: current_round_text
                             text: qsTr("Round: 1")
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
 
@@ -75,14 +77,14 @@ Page {
                         text: qsTr("Next Combatant")
                         height: current_round_frame.height
 
-                        onClicked: combat_tracker.nextCombatant()
+                        onClicked: combat_tracker_tool.nextCombatant()
                     }
 
                     Button {
                         text: qsTr("Reset Rounds")
                         height: current_round_frame.height
 
-                        onClicked: combat_tracker.resetRounds()
+                        onClicked: combat_tracker_tool.resetRounds()
                     }
 
                     Button {
@@ -90,11 +92,11 @@ Page {
                         height: current_round_frame.height
 
                         onClicked: {
-                            combat_tracker.clearCombatants()
+                            combat_tracker_tool.clearCombatants()
                             combat_tracker_list_model.clear()
 
                             combatant_name.text = qsTr("No Combatant")
-                            combatant_ini.text = 0
+                            combatant_ini.value = 0
                             combatant_health.value = 0
                             combatant_max_health.value = 0
                             combatant_status.text = ""
@@ -113,9 +115,6 @@ Page {
 
                             width: parent.width
                             height: parent.height
-
-                            sourceSize.height: height
-                            sourceSize.width: width
                         }
 
                         onClicked: {
@@ -132,103 +131,110 @@ Page {
                 // Current Combatant Information
                 Frame {
                     width: parent.width
-                    height: 100
 
                     ScrollView {
                         anchors.fill: parent
-                        flickableItem.interactive: true
-                        flickableItem.clip: true
+                        clip: true
 
-                        Grid {
-                            columns: 5
-                            rows: 2
+                        Column {
                             spacing: 5
 
                             Text {
                                 text: qsTr("Name")
                             }
 
-                            Text {
-                                text: qsTr("INI")
-                            }
-
-                            Text {
-                                text: qsTr("Health")
-                            }
-
-                            Text {
-                                text: qsTr("Max H.")
-                            }
-
-                            Text {
-                                text: qsTr("Status")
-                            }
-
                             Frame {
                                 padding: 5
+                                height: combatant_ini.height
 
                                 Text {
                                     id: combatant_name
                                     text: qsTr("No Combatant")
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                             }
 
-                            SpinBox {
-                                id: combatant_ini
-                                width: 50
+                            Grid {
+                                columns: 4
+                                rows: 2
+                                spacing: 5
 
-                                onValueChanged: {
-                                    if (combat_tracker.currentIndex > -1) {
-                                        combat_tracker.setCombatantIni(value)
-                                        combat_tracker_list_model.setProperty(
-                                                    combat_tracker.currentIndex,
-                                                    "ini", value.toString())
+                                Text {
+                                    text: qsTr("INI")
+                                }
+
+                                Text {
+                                    text: qsTr("Health")
+                                }
+
+                                Text {
+                                    text: qsTr("Max H.")
+                                }
+
+                                Text {
+                                    text: qsTr("Status")
+                                }
+
+                                SpinBox {
+                                    id: combatant_ini
+                                    editable: true
+
+                                    onValueChanged: {
+                                        if (combat_tracker_tool.currentIndex > -1) {
+                                            combat_tracker_tool.setCombatantIni(
+                                                        value)
+                                            combat_tracker_list_model.setProperty(
+                                                        combat_tracker_tool.currentIndex,
+                                                        "ini", value.toString())
+                                        }
                                     }
                                 }
-                            }
 
-                            SpinBox {
-                                id: combatant_health
-                                width: 50
-
-                                onValueChanged: {
-                                    if (combat_tracker.currentIndex > -1) {
-                                        combat_tracker.setCombatantHealth(value)
-                                        combat_tracker_list_model.setProperty(
-                                                    combat_tracker.currentIndex,
-                                                    "health", value + " / "
-                                                    + combat_tracker.combatantMaxHealth)
+                                SpinBox {
+                                    id: combatant_health
+                                    editable: true
+                                    onValueChanged: {
+                                        if (combat_tracker_tool.currentIndex > -1) {
+                                            combat_tracker_tool.setCombatantHealth(
+                                                        value)
+                                            combat_tracker_list_model.setProperty(
+                                                        combat_tracker_tool.currentIndex,
+                                                        "health", value + " / "
+                                                        + combat_tracker_tool.combatantMaxHealth)
+                                        }
                                     }
                                 }
-                            }
 
-                            SpinBox {
-                                id: combatant_max_health
-                                width: 50
-
-                                onValueChanged: {
-                                    if (combat_tracker.currentIndex > -1) {
-                                        combat_tracker.setCombatantMaxHealth(
-                                                    value)
-                                        combat_tracker_list_model.setProperty(
-                                                    combat_tracker.currentIndex,
-                                                    "health",
-                                                    combat_tracker.combatantHealth + " / " + value)
+                                SpinBox {
+                                    id: combatant_max_health
+                                    editable: true
+                                    onValueChanged: {
+                                        if (combat_tracker_tool.currentIndex > -1) {
+                                            combat_tracker_tool.setCombatantMaxHealth(
+                                                        value)
+                                            combat_tracker_list_model.setProperty(
+                                                        combat_tracker_tool.currentIndex,
+                                                        "health",
+                                                        combat_tracker_tool.combatantHealth
+                                                        + " / " + value)
+                                        }
                                     }
                                 }
-                            }
 
-                            TextField {
-                                id: combatant_status
-                                width: 100
+                                TextField {
+                                    id: combatant_status
+                                    width: 100
+                                    selectByMouse: true
 
-                                onTextChanged: {
-                                    if (combat_tracker.currentIndex > -1) {
-                                        combat_tracker.setCombatantStatus(text)
+                                    onTextChanged: {
+                                        if (combat_tracker_tool.currentIndex > -1) {
+                                            combat_tracker_tool.setCombatantStatus(
+                                                        text)
 
-                                        combat_tracker_list_model.setProperty(
-                                                    combat_tracker.currentIndex,
-                                                    "status", text)
+                                            combat_tracker_list_model.setProperty(
+                                                        combat_tracker_tool.currentIndex,
+                                                        "status", text)
+                                        }
                                     }
                                 }
                             }
@@ -239,12 +245,10 @@ Page {
                 // Add Combatant stuff
                 Frame {
                     width: parent.width
-                    height: 125
 
                     ScrollView {
                         anchors.fill: parent
-                        flickableItem.interactive: true
-                        flickableItem.clip: true
+                        clip: true
 
                         Grid {
                             columns: 3
@@ -274,12 +278,14 @@ Page {
                                 id: add_ini_spinbox
                                 width: 100
                                 height: combatant_add_button.height
+                                editable: true
                             }
 
                             SpinBox {
                                 id: add_health_spinbox
                                 width: 100
                                 height: combatant_add_button.height
+                                editable: true
                             }
 
                             Button {
@@ -287,7 +293,7 @@ Page {
                                 text: qsTr("Add")
 
                                 onClicked: {
-                                    combat_tracker.addCombatant(
+                                    combat_tracker_tool.addCombatant(
                                                 add_name_field.text,
                                                 add_ini_spinbox.value,
                                                 add_health_spinbox.value)
@@ -302,7 +308,7 @@ Page {
                 }
 
                 // Combatants Table
-                TableView {
+                Controls1_4.TableView {
                     id: combat_tracker_list
                     width: parent.width
                     height: parent.height / 3
@@ -310,25 +316,25 @@ Page {
                     clip: true
                     alternatingRowColors: false
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         role: "name"
                         title: qsTr("Name")
                         width: 200
                     }
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         role: "ini"
                         title: qsTr("INI")
                         width: 50
                     }
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         role: "health"
                         title: qsTr("Health")
                         width: 100
                     }
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         role: "status"
                         title: qsTr("Status")
                         width: 170
@@ -349,7 +355,7 @@ Page {
                                 && index <= combat_tracker_list.rowCount - 1) {
                             combat_tracker_list_model.remove(index)
 
-                            combat_tracker.removeCombatant(index)
+                            combat_tracker_tool.removeCombatant(index)
                         }
                     }
                 }
