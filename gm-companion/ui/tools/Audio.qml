@@ -1,20 +1,33 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import "./audio"
 
+import gm.companion.colorscheme 1.0
+
 Page {
+    ColorScheme {
+        id: color_scheme
+    }
+
     SwipeView {
         id: audio_swipe
         anchors.fill: parent
 
+        background: Rectangle {
+            color: color_scheme.backgroundColor
+        }
+
         Page {
+            background: Rectangle {
+                color: color_scheme.backgroundColor
+            }
+
             AudioTool {
                 id: audio_tool
 
@@ -169,23 +182,26 @@ Page {
             ToolBar {
                 id: audio_control_bar
                 width: parent.width
-                height: 50
+                height: parent.height / 18
                 anchors.bottom: parent.bottom
                 visible: true
 
+                background: Rectangle {
+                    color: color_scheme.menuColor
+                }
+
                 Button {
                     anchors.left: parent.left
-                    height: parent.height
-                    width: parent.height
+                    height: parent.height - 10
+                    width: height
+                    y: 5
+
                     id: audio_project_structure_button
 
                     Image {
                         source: "/icons/menu/three_bars_dark.png"
                         height: parent.height * 0.6
                         width: parent.width * 0.6
-
-                        sourceSize.width: width
-                        sourceSize.height: height
 
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -196,25 +212,45 @@ Page {
 
                 Column {
                     width: parent.width / 5
+                    height: audio_control_bar.height
                     anchors.verticalCenter: parent.verticalCenter
                     x: audio_project_structure_button.width + 10
 
+                    padding: 5
+                    spacing: 5
+
                     Row {
                         width: parent.width
+                        height: (parent.height - parent.spacing
+                                 - parent.topPadding - parent.bottomPadding) / 2
                         spacing: 5
 
                         Image {
                             id: music_icon
                             source: "/icons/media/music.png"
-                            height: audio_control_bar.height / 2.5
+                            height: parent.height
                             width: height
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         Slider {
                             width: parent.width - music_icon.width - parent.spacing
+                            height: parent.height
+                            from: 0
                             value: 1.5
-                            maximumValue: 2
+                            to: 2
+
+                            handle: Rectangle {
+                                x: parent.leftPadding + parent.visualPosition
+                                   * (parent.availableWidth - width)
+                                y: parent.topPadding + parent.availableHeight / 2 - height / 2
+
+                                implicitWidth: parent.height
+                                implicitHeight: parent.height
+                                radius: 13
+                                color: parent.pressed ? "#f0f0f0" : "#f6f6f6"
+                                border.color: "#bdbebf"
+                            }
 
                             onValueChanged: audio_tool.setMusicVolume(value)
                         }
@@ -222,20 +258,36 @@ Page {
 
                     Row {
                         width: parent.width
+                        height: (parent.height - parent.spacing
+                                 - parent.topPadding - parent.bottomPadding) / 2
                         spacing: 5
 
                         Image {
                             id: sound_icon
                             source: "/icons/media/sound.png"
-                            height: audio_control_bar.height / 2.5
+                            height: parent.height
                             width: height
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
                         Slider {
                             width: parent.width - sound_icon.width - parent.spacing
+                            height: parent.height
+                            from: 0
                             value: 0.5
-                            maximumValue: 2
+                            to: 2
+
+                            handle: Rectangle {
+                                x: parent.leftPadding + parent.visualPosition
+                                   * (parent.availableWidth - width)
+                                y: parent.topPadding + parent.availableHeight / 2 - height / 2
+
+                                implicitWidth: parent.height
+                                implicitHeight: parent.height
+                                radius: 13
+                                color: parent.pressed ? "#f0f0f0" : "#f6f6f6"
+                                border.color: "#bdbebf"
+                            }
 
                             onValueChanged: audio_tool.setSoundVolume(value)
                         }
@@ -245,16 +297,14 @@ Page {
                 Button {
                     anchors.right: parent.right
 
-                    height: parent.height
-                    width: parent.height
+                    height: parent.height - 10
+                    width: height
+                    y: 5
 
                     Image {
                         source: "/icons/media/playlist.png"
                         height: parent.height * 0.6
                         width: parent.width * 0.6
-
-                        sourceSize.width: width
-                        sourceSize.height: height
 
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -267,7 +317,8 @@ Page {
                 Row {
                     spacing: 5
                     anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.height
+                    height: parent.height - 10
+                    y: 5
 
                     Button {
                         height: parent.height
@@ -277,9 +328,6 @@ Page {
                             source: "/icons/media/seekBack.png"
                             height: parent.height * 0.6
                             width: parent.width * 0.6
-
-                            sourceSize.width: width
-                            sourceSize.height: height
 
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
@@ -298,9 +346,6 @@ Page {
                             height: parent.height * 0.6
                             width: parent.width * 0.6
 
-                            sourceSize.width: width
-                            sourceSize.height: height
-
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -316,9 +361,6 @@ Page {
                             source: "/icons/media/seekForward.png"
                             height: parent.height * 0.6
                             width: parent.width * 0.6
-
-                            sourceSize.width: width
-                            sourceSize.height: height
 
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
@@ -368,7 +410,6 @@ Page {
                         id: audio_project_scroll_view
                         width: parent.width - parent.padding
                         height: audio_project_menu.height - y
-                        flickableItem.interactive: true
 
                         Column {
                             id: audio_project_structure
@@ -414,16 +455,17 @@ Page {
                     ScrollView {
                         id: audio_scroll_view
                         height: parent.height - scenario_flow.height
+                                - parent.topPadding * 2 - parent.spacing
                         width: parent.width
 
-                        flickableItem.interactive: true
+                        clip: true
 
                         Flow {
                             id: audio_scroll_flow
                             padding: 5
                             spacing: 5
 
-                            width: audio_scroll_view.viewport.width
+                            width: audio_scroll_view.width
                         }
                     }
                 }

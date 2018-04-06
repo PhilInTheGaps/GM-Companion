@@ -4,10 +4,9 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
 
-Tab {
+Column {
     id: tab
-    title: category
-    anchors.fill: parent
+    //    anchors.fill: parent
     property var list
     property var paths
     property var category
@@ -18,8 +17,10 @@ Tab {
         flickableItem.interactive: true
         flickableItem.flickableDirection: "VerticalFlick"
 
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
 
+        //        anchors.fill: parent
         Column {
             id: column
             spacing: 5

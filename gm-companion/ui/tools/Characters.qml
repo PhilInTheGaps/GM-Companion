@@ -2,8 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
-import QtQuick.Dialogs 1.3
 
 import gm.companion.charactertool 1.0
 import "./characters"
@@ -77,31 +75,6 @@ Page {
         onCharactersUpdated: loadActiveCharacterList()
     }
 
-    Dialog {
-        id: delete_character_dialog
-        visible: false
-
-        title: "Delete Character?"
-        standardButtons: StandardButton.No | StandardButton.Yes
-
-        property string character_name: "Unknown Character"
-        property string player_name: "Unknown Player"
-
-        Text {
-            text: qsTr("Are you sure you want to delete the character?")
-            width: parent.width
-            wrapMode: Text.WordWrap
-            clip: true
-        }
-
-        onYes: {
-            character_tool.deleteCharacter(swipe_view.getCharacterName())
-
-            swipe_view.setCurrentIndex(0)
-            swipe_view.setCharacterName("Unknown Character")
-        }
-    }
-
     Row {
         anchors.fill: parent
         spacing: 5
@@ -117,12 +90,14 @@ Page {
                 id: character_name_field
                 width: parent.width
                 placeholderText: qsTr("Character Name")
+                selectByMouse: true
             }
 
             TextField {
                 id: player_name_field
                 width: parent.width
                 placeholderText: qsTr("Player Name")
+                selectByMouse: true
             }
 
             ComboBox {
@@ -184,14 +159,11 @@ Page {
                     id: character_scrollview
                     width: parent.width
                     height: parent.height - active_inactive_row.height - parent.spacing
-                    flickableItem.interactive: true
                     clip: true
-
-                    horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
                     Column {
                         id: active_column
-                        width: character_scrollview.viewport.width
+                        width: character_scrollview.width
                         spacing: 5
 
                         Component.onCompleted: {
@@ -218,11 +190,16 @@ Page {
                     onClicked: swipe_view.save()
                 }
 
-                Button {
+                DelayButton {
                     text: qsTr("Delete Character")
+                    delay: 1200
 
-                    onClicked: {
-                        delete_character_dialog.open()
+                    onActivated: {
+                        character_tool.deleteCharacter(
+                                    swipe_view.getCharacterName())
+
+                        swipe_view.setCurrentIndex(0)
+                        swipe_view.setCharacterName("Unknown Character")
                     }
                 }
             }

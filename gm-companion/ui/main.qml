@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import "./tools"
 import "./menu"
 import gm.companion.platforms 1.0
+import gm.companion.colorscheme 1.0
 
 Window {
     id: window
@@ -20,14 +21,22 @@ Window {
         id: platform
     }
 
+    ColorScheme {
+        id: color_scheme
+    }
+
     //! [orientation]
     ToolBar {
         id: toolbar
         width: {
             (inPortrait) ? parent.width : parent.width - drawer.width
         }
-        height: 40
+        height: window.height / 24
         anchors.right: parent.right
+
+        background: Rectangle {
+            color: color_scheme.toolbarColor
+        }
 
         Row {
             id: toolbar_row_left
@@ -46,16 +55,13 @@ Window {
         Label {
             id: tool_label
             text: "Current Tool: Audio"
+            color: color_scheme.toolbarTextColor
+
             height: parent.height
             verticalAlignment: "AlignVCenter"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: toolbar_row_left.verticalCenter
         }
-    }
-
-    Rectangle {
-        id: drawer_bg
-        color: "#1b2224"
     }
 
     Drawer {
@@ -69,7 +75,9 @@ Window {
         }
 
         height: parent.height
-        background: drawer_bg
+        background: Rectangle {
+            color: color_scheme.menuColor
+        }
 
         modal: inPortrait
         interactive: inPortrait || platform.isAndroid
@@ -80,22 +88,28 @@ Window {
             anchors.fill: parent
             spacing: 5
 
-            Text {
-                text: "Tools"
-                color: "white"
-                font.pointSize: 12
-
+            Rectangle {
                 width: parent.width
-                height: 40
+                height: toolbar.height - parent.spacing
 
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
+                Text {
+                    text: "Tools"
+                    color: color_scheme.toolbarTextColor
+                    font.pointSize: 12
+
+                    anchors.fill: parent
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                color: color_scheme.toolbarColor
             }
 
             Rectangle {
                 width: parent.width
                 height: 2
-                color: "#262f31"
+                color: color_scheme.dividerColor
             }
 
             SideMenuButton {
@@ -227,7 +241,7 @@ Window {
             Rectangle {
                 width: parent.width
                 height: 2
-                color: "#262f31"
+                color: color_scheme.dividerColor
             }
 
             SideMenuButton {
@@ -265,6 +279,10 @@ Window {
         anchors.right: parent.right
         y: toolbar.height
 
+        background: Rectangle {
+            color: color_scheme.backgroundColor
+        }
+
         clip: true
         interactive: false
         currentIndex: 0
@@ -289,7 +307,6 @@ Window {
         ItemShop {
             id: item_shop
         }
-
         Characters {
             id: characters
         }

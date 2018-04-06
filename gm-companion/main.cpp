@@ -1,15 +1,7 @@
 #include "settings/settingsmanager.h"
 
-// #include "ui/whatisnewwindow.h"
-// #include "managers/updatemanager.h"
-
 #include <QTranslator>
-
 #include <QDebug>
-
-// #include <QFile>
-// #include <QTextStream>
-// #include <QDateTime>
 #include <QSettings>
 #include <QDir>
 
@@ -28,111 +20,12 @@
 #include "tools/characters/charactertool.h"
 #include "tools/characters/charactersaveload.h"
 #include "tools/characters/defaultsheet.h"
+#include "tools/characters/dsa5sheet.h"
 
 #include "settings/settingstool.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
-
-/*
-   // Responsible for writing the console output into a log if debug option in
-   // settings is disabled (default)
-   void myMessageHandler(QtMsgType type, const QMessageLogContext&, const
-   QString& msg)
-   {
-
-
-    QDate date;
-    QTime time;
-
-    QString txt;
-
-    switch (type) {
-    case QtDebugMsg:
-        txt = time.currentTime().toString() + ": " + QString("Debug:
-   %1").arg(msg);
-        break;
-
-    case QtWarningMsg:
-        txt = time.currentTime().toString() + ": " + QString("Warning:
-   %1").arg(msg);
-        break;
-
-    case QtCriticalMsg:
-        txt = time.currentTime().toString() + ": " + QString("Critical:
-   %1").arg(msg);
-        break;
-
-    case QtFatalMsg:
-        txt = time.currentTime().toString() + ": " + QString("Fatal:
-   %1").arg(msg);
-        break;
-
-    default:
-        txt = time.currentTime().toString() + ": " + msg;
-        break;
-    }
-
-    QFile outFile(QDir::homePath() + "/.gm-companion/logs/" +
-   date.currentDate().toString());
-    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
-    QTextStream ts(&outFile);
-    ts << txt << endl;
-   }
- */
-
-/*
-   // Show "What is new?" window
-   void showWhatIsNew(SettingsManager *settingsManager, MainWindow *w)
-   {
-    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",
-   QSettings::IniFormat);
-
-    // Should window be opened by default?
-    int openNewFeatures = checkSettings.value("openWhatIsNewWindow",
-   1).toInt();
-
-    // Program version the last time it was used
-    int settingsVersion = checkSettings.value("version", 0).toInt();
-
-    if ((openNewFeatures == 1) || (w->getVersionNumber() > settingsVersion))
-    {
-        // Print the reason why the window is being opened
-        if (w->getVersionNumber() > settingsVersion) qDebug().noquote() <<
-   "Opening New Features Window because of an Update...";
-        else if (openNewFeatures == 1) qDebug().noquote() << "Opening New
-   Features Window because of the settings preferences...";
-
-        WhatIsNewWindow *whatIsNewWindow = new WhatIsNewWindow;
-        whatIsNewWindow->show();
-
-        // Update the settings file in case it needs to be modified because of
-        // an update
-        settingsManager->updateSettings();
-
-        // Update the version of the settings file
-        w->updateSettingsVersion();
-    }
-   }
- */
-
-
-// Check if debug mode is enabled (disabled by default)
-void enableDebug()
-{
-    QSettings checkSettings(QDir::homePath() + "/.gm-companion/settings.ini",  QSettings::IniFormat);
-
-    if (checkSettings.value("debug", 0).toInt() == 1)
-    {
-        qDebug().noquote() << "Debug mode activated ...";
-    }
-    else
-    {
-        qDebug().noquote() << "Debug mode is not active ...";
-
-        // Debug messages are written in a log file instead of the console
-        //        qInstallMessageHandler(myMessageHandler);
-    }
-}
+#include "ui/colorscheme.h"
 
 void loadQmlClasses()
 {
@@ -148,9 +41,11 @@ void loadQmlClasses()
     qmlRegisterType<CharacterTool>(    "gm.companion.charactertool",     1, 0, "CharacterTool");
     qmlRegisterType<CharacterSaveLoad>("gm.companion.charactersaveload", 1, 0, "CharacterSaveLoad");
     qmlRegisterType<DefaultSheet>(     "gm.companion.defaultsheet",      1, 0, "DefaultSheetTool");
+    qmlRegisterType<DSA5Sheet>(        "gm.companion.dsa5sheet",         1, 0, "DSA5SheetTool");
 
     qmlRegisterType<UpdateManager>(    "gm.companion.updatemanager",     1, 0, "UpdateManager");
     qmlRegisterType<PlatformDetails>(  "gm.companion.platforms",         1, 0, "PlatformDetails");
+    qmlRegisterType<ColorScheme>(      "gm.companion.colorscheme",       1, 0, "ColorScheme");
 }
 
 int main(int argc, char *argv[])
@@ -160,9 +55,6 @@ int main(int argc, char *argv[])
 #endif // if defined(Q_OS_WIN)
 
     QGuiApplication app(argc, argv);
-
-    // Enable or disable debug mode
-    enableDebug();
 
     qDebug().noquote() << "Starting GM-Companion ...";
 

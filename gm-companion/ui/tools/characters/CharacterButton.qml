@@ -3,6 +3,8 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
+import gm.companion.colorscheme 1.0
+
 Rectangle {
     property var character_name
     property bool active: true
@@ -13,20 +15,24 @@ Rectangle {
     width: parent.width
     height: 30
 
+    ColorScheme {
+        id: color_scheme
+    }
+
     Row {
         anchors.fill: parent
         padding: 5
 
         Text {
             text: character_name
-            color: mouse_area.pressed ? "black" : "white"
+            color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
 
             width: toggle_active_button.x - parent.padding - 5
             elide: Text.ElideRight
         }
     }
 
-    color: mouse_area.pressed ? "white" : "#262f31"
+    color: mouse_area.pressed ? "white" : color_scheme.primaryButtonColor
 
     MouseArea {
         anchors.fill: parent

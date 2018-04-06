@@ -40,27 +40,19 @@ Page {
         anchors.fill: parent
         spacing: 5
 
-        Flow {
-            id: page_control_flow
-            spacing: 5
+        TabBar {
+            id: swipe_tab_bar
             width: parent.width
 
-            Button {
-                text: qsTr("Info")
-
-                onClicked: swipe_view.setCurrentIndex(0)
+            TabButton {
+                text: qsTr("Info Daten")
             }
 
-            Button {
+            TabButton {
                 text: qsTr("Abilities")
-
-                onClicked: swipe_view.setCurrentIndex(1)
             }
-
-            Button {
+            TabButton {
                 text: qsTr("Inventory")
-
-                onClicked: swipe_view.setCurrentIndex(2)
             }
         }
 
@@ -68,7 +60,8 @@ Page {
             id: swipe_view
             clip: true
             width: parent.width
-            height: parent.height - page_control_flow.height - parent.spacing
+            height: parent.height - swipe_tab_bar.height - parent.spacing
+            currentIndex: swipe_tab_bar.currentIndex
 
             function save() {
                 var table_names = new Array(0)

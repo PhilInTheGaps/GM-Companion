@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
+import gm.companion.colorscheme 1.0
+
 Rectangle {
     property var name
     property var category
@@ -11,17 +13,21 @@ Rectangle {
     width: text.width > 100 ? text.width + 10 : 100
     height: 30
 
+    ColorScheme {
+        id: colors
+    }
+
     Text {
         id: text
         text: name
-        color: mouse_area.pressed ? "white" : "black"
+        color: mouse_area.pressed ? "white" : colors.buttonTextColor
         x: 5
         y: 5
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
     }
 
-    color: mouse_area.pressed ? "#262f31" : "lightgrey"
+    color: mouse_area.pressed ? "#262f31" : colors.primaryButtonColor
 
     MouseArea {
         anchors.fill: parent

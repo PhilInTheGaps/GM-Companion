@@ -19,6 +19,8 @@ Column {
             sourceSize.width: width
             sourceSize.height: height
             source: "file:///" + path
+
+            asynchronous: true
         }
 
         MouseArea {

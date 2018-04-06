@@ -2,10 +2,11 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 
 import gm.companion.maptool 1.0
 import "maps"
+
+import gm.companion.colorscheme 1.0
 
 Page {
     id: maps_page
@@ -30,7 +31,7 @@ Page {
                 var list = maps(mapCategories[i])
 
                 var component = Qt.createComponent("./maps/MapListTab.qml")
-                var tab = component.createObject(maps_tab_view, {
+                var tab = component.createObject(maps_swipe_view, {
                                                      list: maps(mapCategories[i]),
                                                      paths: mapPaths(
                                                                 mapCategories[i]),
@@ -38,106 +39,154 @@ Page {
                                                  })
 
                 tab.clicked.connect(loadMap)
+
+                tab_button_repeater.model++
             }
         }
     }
 
-    Row {
-        anchors.fill: parent
-        TabView {
-            id: maps_tab_view
-            height: parent.height
-            width: 200
-        }
-
-        ScrollView {
-            id: maps_image_scroll_view
-            width: maps_tab_view.visible ? maps_page.width - maps_tab_view.width : maps_page.width
-            height: maps_page.height
-
-            flickableItem.interactive: true
-
-            Image {
-                id: maps_image
-                height: maps_page.height
-                width: maps_page.width - maps_tab_view.width
-                fillMode: Image.PreserveAspectFit
-            }
-        }
+    ColorScheme {
+        id: color_scheme
     }
 
     Column {
-        width: 40
-        padding: 5
-        spacing: 5
+        anchors.fill: parent
 
-        x: maps_tab_view.visible ? maps_tab_view.width + 10 : 10
-        y: 10
-
-        Button {
-            text: "+"
+        Row {
             width: parent.width
-            height: width
+            height: parent.height - maps_control_bar.height
 
-            onClicked: {
-                maps_image.height *= 2
-                maps_image.width *= 2
+            Column {
+                id: maps_tab_column
+                height: parent.height
+                width: 200
 
-                maps_image_scroll_view.flickableItem.contentY
-                        = maps_image_scroll_view.flickableItem.contentHeight / 2
-                        - maps_image_scroll_view.height / 2
-                maps_image_scroll_view.flickableItem.contentX
-                        = maps_image_scroll_view.flickableItem.contentWidth / 2
-                        - maps_image_scroll_view.width / 2
+                TabBar {
+                    id: maps_tab_bar
+                    width: parent.width
+
+                    Repeater {
+                        id: tab_button_repeater
+
+                        model: 0
+
+                        TabButton {
+                            text: map_tool.categories[index]
+                        }
+                    }
+                }
+
+                SwipeView {
+                    id: maps_swipe_view
+                    width: parent.width
+                    height: parent.height - parent.spacing - maps_tab_bar.height
+
+                    currentIndex: maps_tab_bar.currentIndex
+                    clip: true
+                }
+            }
+
+            Flickable {
+                id: maps_image_flickable
+                width: maps_tab_column.visible ? maps_page.width
+                                                 - maps_tab_column.width : maps_page.width
+                height: maps_page.height
+                clip: true
+                interactive: true
+
+                contentWidth: maps_image.width
+                contentHeight: maps_image.height
+
+                Image {
+                    id: maps_image
+                    height: maps_page.height
+                    width: maps_page.width - maps_tab_column.width
+                    fillMode: Image.PreserveAspectFit
+                }
             }
         }
 
-        Button {
-            text: "-"
+        Rectangle {
+            id: maps_control_bar
+            height: parent.height / 18
             width: parent.width
-            height: width
+            color: color_scheme.menuColor
 
-            onClicked: {
-                maps_image.height *= 0.5
-                maps_image.width *= 0.5
+            Button {
+                Image {
+                    source: "/icons/menu/three_bars_dark.png"
+                    width: parent.height - 20
+                    height: width
+                    x: 10
+                    y: 10
+                }
 
-                maps_image_scroll_view.flickableItem.contentY
-                        = maps_image_scroll_view.flickableItem.contentHeight / 2
-                        - maps_image_scroll_view.height / 2
-                maps_image_scroll_view.flickableItem.contentX
-                        = maps_image_scroll_view.flickableItem.contentWidth / 2
-                        - maps_image_scroll_view.width / 2
-            }
-        }
-
-        Button {
-            text: "R"
-            width: parent.width
-            height: width
-
-            onClicked: {
-                maps_image.height = maps_page.height
-                maps_image.width = maps_page.width - maps_tab_view.width
-            }
-        }
-
-        Button {
-            //            text: "L"
-            Image {
-                source: "/icons/menu/three_bars_dark.png"
-                width: parent.width - 20
+                width: parent.height - 10
                 height: width
-                sourceSize.width: width
-                sourceSize.height: height
-                x: 10
-                y: 10
+                x: 5
+                y: 5
+
+                onClicked: maps_tab_column.visible ? maps_tab_column.visible
+                                                     = false : maps_tab_column.visible = true
             }
 
-            width: parent.width
-            height: width
+            Row {
+                id: controls
+                height: parent.height
+                padding: 5
+                spacing: 5
 
-            onClicked: maps_tab_view.visible ? maps_tab_view.visible
-                                               = false : maps_tab_view.visible = true
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Button {
+                    text: "+"
+                    width: parent.height - parent.padding * 2
+                    height: width
+
+                    font.pointSize: height / 2
+
+                    onClicked: {
+                        maps_image.height *= 2
+                        maps_image.width *= 2
+
+                        maps_image_flickable.contentY = maps_image_flickable.contentHeight
+                                / 2 - maps_image_flickable.height / 2
+                        maps_image_flickable.contentX = maps_image_flickable.contentWidth
+                                / 2 - maps_image_flickable.width / 2
+                    }
+                }
+
+                Button {
+                    text: "-"
+                    width: parent.height - parent.padding * 2
+                    height: width
+
+                    font.pointSize: height / 2
+
+                    onClicked: {
+                        maps_image.height *= 0.5
+                        maps_image.width *= 0.5
+
+                        maps_image_flickable.contentY = maps_image_flickable.contentHeight
+                                / 2 - maps_image_flickable.height / 2
+                        maps_image_flickable.contentX = maps_image_flickable.contentWidth
+                                / 2 - maps_image_flickable.width / 2
+                    }
+                }
+
+                Button {
+                    text: "R"
+                    width: parent.height - parent.padding * 2
+                    height: width
+
+                    font.pointSize: height / 2
+
+                    onClicked: {
+                        maps_image.height = maps_page.height
+                        maps_image.width = maps_page.width - maps_tab_column.width
+                    }
+                }
+            }
         }
     }
 }
