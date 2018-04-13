@@ -35,9 +35,9 @@ Window {
         anchors.right: parent.right
 
         background: Rectangle {
+            id: toolbar_bg
             color: color_scheme.toolbarColor
         }
-
         Row {
             id: toolbar_row_left
             height: parent.height
@@ -55,8 +55,8 @@ Window {
         Label {
             id: tool_label
             text: "Current Tool: Audio"
-            color: color_scheme.toolbarTextColor
 
+            color: color_scheme.toolbarTextColor
             height: parent.height
             verticalAlignment: "AlignVCenter"
             anchors.horizontalCenter: parent.horizontalCenter
@@ -110,6 +110,10 @@ Window {
                 width: parent.width
                 height: 2
                 color: color_scheme.dividerColor
+            }
+
+            TabBar {
+
             }
 
             SideMenuButton {
@@ -285,7 +289,7 @@ Window {
 
         clip: true
         interactive: false
-        currentIndex: 0
+        currentIndex: 4
 
         Audio {
             id: audio
@@ -307,8 +311,10 @@ Window {
         ItemShop {
             id: item_shop
         }
-        Characters {
-            id: characters
+
+        Loader {
+            source: "tools/Characters.qml"
+            asynchronous: true
         }
 
         Generators {

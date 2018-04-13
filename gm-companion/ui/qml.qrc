@@ -34,5 +34,7 @@
         <file>tools/characters/DSA5Sheet.qml</file>
         <file>tools/shop/ShopEditor.qml</file>
         <file>tools/shop/ItemEditor.qml</file>
+        <file>tools/shop/CategoryButton.qml</file>
+        <file>tools/shop/ShopButton.qml</file>
     </qresource>
 </RCC>
