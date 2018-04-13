@@ -3,6 +3,8 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
+import gm.companion.colorscheme 1.0
+
 Rectangle {
     property var page
     property var parent_width
@@ -12,6 +14,10 @@ Rectangle {
     width: parent_width
     height: 30
 
+    ColorScheme {
+        id: colors
+    }
+
     Row {
         id: text_row
         anchors.fill: parent
@@ -19,14 +25,14 @@ Rectangle {
 
         Text {
             text: page
-            color: mouse_area.pressed ? "black" : "black"
+            color: mouse_area.pressed ? "black" : colors.buttonTextColor
             width: parent.width - parent.padding * 2
             clip: true
             elide: Text.ElideRight
         }
     }
 
-    color: mouse_area.pressed ? "white" : "lightgrey"
+    color: mouse_area.pressed ? "white" : colors.primaryButtonColor
 
     MouseArea {
         anchors.fill: parent
