@@ -11,30 +11,30 @@ Page {
     ConverterTool {
         id: converter_tool
 
-        onLengthUnitsChanged: {
-            length_units_1.model = lengthUnits
-            length_units_2.model = lengthUnits
-        }
+                onLengthUnitsChanged: {
+                    length_units_1.model = lengthUnits
+                    length_units_2.model = lengthUnits
+                }
 
-        onAreaUnitsChanged: {
-            area_units_1.model = areaUnits
-            area_units_2.model = areaUnits
-        }
+                onAreaUnitsChanged: {
+                    area_units_1.model = areaUnits
+                    area_units_2.model = areaUnits
+                }
 
-        onVolumeUnitsChanged: {
-            volume_units_1.model = volumeUnits
-            volume_units_2.model = volumeUnits
-        }
+                onVolumeUnitsChanged: {
+                    volume_units_1.model = volumeUnits
+                    volume_units_2.model = volumeUnits
+                }
 
-        onWeightUnitsChanged: {
-            weight_units_1.model = weightUnits
-            weight_units_2.model = weightUnits
-        }
+                onWeightUnitsChanged: {
+                    weight_units_1.model = weightUnits
+                    weight_units_2.model = weightUnits
+                }
 
-        onMoneyUnitsChanged: {
-            money_units_1.model = moneyUnits
-            money_units_2.model = moneyUnits
-        }
+                onMoneyUnitsChanged: {
+                    money_units_1.model = moneyUnits
+                    money_units_2.model = moneyUnits
+                }
     }
 
     ScrollView {
