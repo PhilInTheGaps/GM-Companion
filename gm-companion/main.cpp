@@ -12,6 +12,8 @@
 #include "tools/audio/audiotool.h"
 #include "tools/maptool.h"
 #include "tools/dicetool.h"
+#include "tools/shop/shoptool.h"
+#include "tools/shop/itemeditor.h"
 #include "tools/combattracker.h"
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
@@ -26,12 +28,15 @@
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
 #include "ui/colorscheme.h"
+#include "tools/project_converter/projectconverter.h"
 
 void loadQmlClasses()
 {
     qmlRegisterType<AudioTool>(        "gm.companion.audiotool",         1, 0, "AudioTool");
     qmlRegisterType<MapTool>(          "gm.companion.maptool",           1, 0, "MapTool");
     qmlRegisterType<DiceTool>(         "gm.companion.dicetool",          1, 0, "DiceTool");
+    qmlRegisterType<ShopTool>(         "gm.companion.shoptool",          1, 0, "ShopTool");
+    qmlRegisterType<ItemEditor>(       "gm.companion.itemeditor",        1, 0, "ItemEditorTool");
     qmlRegisterType<CombatTracker>(    "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
     qmlRegisterType<NotesTool>(        "gm.companion.notestool",         1, 0, "NotesTool");
     qmlRegisterType<ConverterTool>(    "gm.companion.convertertool",     1, 0, "ConverterTool");
@@ -46,6 +51,7 @@ void loadQmlClasses()
     qmlRegisterType<UpdateManager>(    "gm.companion.updatemanager",     1, 0, "UpdateManager");
     qmlRegisterType<PlatformDetails>(  "gm.companion.platforms",         1, 0, "PlatformDetails");
     qmlRegisterType<ColorScheme>(      "gm.companion.colorscheme",       1, 0, "ColorScheme");
+    qmlRegisterType<ProjectConverter>( "gm.companion.projectconverter",  1, 0, "ProjectConverter");
 }
 
 int main(int argc, char *argv[])
@@ -68,12 +74,14 @@ int main(int argc, char *argv[])
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
+
     loadQmlClasses();
 
     // Set Icon
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 
     QQmlApplicationEngine engine;
+
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;

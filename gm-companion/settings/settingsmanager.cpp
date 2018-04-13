@@ -72,7 +72,7 @@ QString SettingsManager::getSetting(Setting setting)
         break;
 
     case Setting::uiMode:
-        settingString = settings.value("uiMode", "Dark").toString();
+        settingString = settings.value("uiMode", "Bright").toString();
         break;
 
     case Setting::buttonStyle:

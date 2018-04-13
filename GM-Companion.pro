@@ -57,7 +57,11 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/tools/characters/charactertool.cpp \
     gm-companion/tools/characters/charactersaveload.cpp \
     gm-companion/tools/characters/dsa5sheet.cpp \
-    gm-companion/ui/colorscheme.cpp
+    gm-companion/ui/colorscheme.cpp \
+    gm-companion/tools/project_converter/projectconverter.cpp \
+    gm-companion/tools/project_converter/shopconverter.cpp \
+    gm-companion/tools/shop/shoptool.cpp \
+    gm-companion/tools/shop/itemeditor.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -112,7 +116,11 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/tools/characters/charactertool.h \
     gm-companion/tools/characters/charactersaveload.h \
     gm-companion/tools/characters/dsa5sheet.h \
-    gm-companion/ui/colorscheme.h
+    gm-companion/ui/colorscheme.h \
+    gm-companion/tools/project_converter/projectconverter.h \
+    gm-companion/tools/project_converter/shopconverter.h \
+    gm-companion/tools/shop/shoptool.h \
+    gm-companion/tools/shop/itemeditor.h
 
 
 DISTFILES +=

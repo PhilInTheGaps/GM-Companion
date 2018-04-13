@@ -2,18 +2,97 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
+import QtQuick.Controls 1.4 as Controls1_4
 
 import "./shop"
+import gm.companion.projectconverter 1.0
+import gm.companion.shoptool 1.0
 
 Page {
     id: item_shop
+
+    ProjectConverter {
+        id: project_converter
+
+        Component.onCompleted: convert()
+    }
+
+    ShopTool {
+        id: shop_tool
+
+        onProjectsChanged: project_combo_box.model = projects
+
+        function updateCategory(cat) {
+            console.log("Changing category to " + cat)
+
+            category = cat
+        }
+
+        function updateCategories() {
+            loadCategories(project_combo_box.currentText)
+            category_column.children = []
+            shop_flow.children = []
+
+            var component = Qt.createComponent("./shop/CategoryButton.qml")
+
+            for (var i = 0; i < categories.length; i++) {
+                var button = component.createObject(category_column, {
+                                                        x: 0,
+                                                        y: 0,
+                                                        category: categories[i],
+                                                        parent_width: category_column.width
+                                                    })
+
+                button.clicked.connect(updateCategory)
+            }
+        }
+
+        onCategoryChanged: {
+            console.log("Category Changed")
+
+            loadShops(project_combo_box.currentText)
+            shop_flow.children = []
+
+            var component = Qt.createComponent("./shop/ShopButton.qml")
+
+            for (var i = 0; i < shops.length; i++) {
+                var button = component.createObject(shop_flow, {
+                                                        x: 0,
+                                                        y: 0,
+                                                        shop: shops[i]
+                                                    })
+
+                button.clicked.connect(loadShop)
+            }
+        }
+
+        function loadShop(shop) {
+            load(project_combo_box.currentText, shop)
+        }
+
+        onShopNameChanged: shop_title_text.text = shopName
+        onShopOwnerChanged: shop_owner_text.text = shopOwner
+        onShopDescriptionChanged: shop_description_text.text = shopDescription
+
+        onItemsChanged: {
+            table_model.clear()
+
+            for (var i = 0; i < item_names.length; i++) {
+                table_model.append({
+                                       item: item_names[i],
+                                       price: item_prices[i],
+                                       description: item_descriptions[i]
+                                   })
+            }
+        }
+    }
 
     SwipeView {
         id: shop_swipe_view
         anchors.fill: parent
         padding: 5
         spacing: 5
+        interactive: false
 
         Row {
             spacing: 5
@@ -29,19 +108,13 @@ Page {
                     text: qsTr("Projects")
                 }
 
-                Row {
-                    id: load_project_row
+                ComboBox {
+                    id: project_combo_box
                     width: parent.width
-                    spacing: 5
 
-                    ComboBox {
-                        id: project_combo_box
-                    }
+                    model: shop_tool.projects
 
-                    Button {
-                        id: load_project_button
-                        text: qsTr("Load")
-                    }
+                    onCurrentTextChanged: shop_tool.updateCategories()
                 }
 
                 Button {
@@ -56,7 +129,12 @@ Page {
                     id: type_scroll_view
                     width: parent.width
                     height: parent.height - parent.spacing * 3 - projects_text.height
-                            - load_project_row.height - open_editor_button.height
+                            - project_combo_box.height - open_editor_button.height
+
+                    Column {
+                        id: category_column
+                        width: control_column.width
+                    }
                 }
             }
 
@@ -69,6 +147,8 @@ Page {
                 Flow {
                     id: shop_flow
                     width: parent.width
+
+                    spacing: 5
                 }
 
                 Row {
@@ -97,32 +177,38 @@ Page {
                     }
                 }
 
-                TableView {
+                ListModel {
+                    id: table_model
+                }
+
+                Controls1_4.TableView {
                     id: shop_table
 
                     width: parent.width
                     height: parent.height - parent.spacing * 2 - shop_flow.height - title_row.height
 
-                    TableViewColumn {
+                    model: table_model
+
+                    Controls1_4.TableViewColumn {
                         id: item_column
                         title: qsTr("Item")
                         role: "item"
                         movable: false
                     }
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         id: price_column
                         title: qsTr("Price")
                         role: "price"
                         movable: false
                     }
 
-                    TableViewColumn {
+                    Controls1_4.TableViewColumn {
                         id: description_column
                         title: qsTr("Description")
                         role: "description"
                         movable: false
-                        width: parent.width - item_column.width - price_column.width
+                        width: shop_table.width - item_column.width - price_column.width - 5
                     }
                 }
             }
@@ -132,10 +218,13 @@ Page {
             id: shop_editor
 
             onBackToViewer: shop_swipe_view.setCurrentIndex(0)
+            onSwitchToItemEditor: shop_swipe_view.setCurrentIndex(2)
         }
 
         ItemEditor {
             id: item_editor
+
+            onBackToShopEditor: shop_swipe_view.setCurrentIndex(1)
         }
     }
 }
