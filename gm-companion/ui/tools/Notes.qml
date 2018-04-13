@@ -45,10 +45,11 @@ Page {
 
         onCurrentChapterChanged: {
             updatePages()
-            text_edit.text = ""
 
             if (pages.length > 0) {
                 setCurrentPage(pages[0])
+            } else {
+                text_edit.text = ""
             }
         }
 
