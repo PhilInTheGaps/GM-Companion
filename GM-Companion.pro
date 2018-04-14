@@ -61,7 +61,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/tools/project_converter/projectconverter.cpp \
     gm-companion/tools/project_converter/shopconverter.cpp \
     gm-companion/tools/shop/shoptool.cpp \
-    gm-companion/tools/shop/itemeditor.cpp
+    gm-companion/tools/shop/itemeditor.cpp \
+    gm-companion/tools/shop/shopeditor.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -120,7 +121,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/tools/project_converter/projectconverter.h \
     gm-companion/tools/project_converter/shopconverter.h \
     gm-companion/tools/shop/shoptool.h \
-    gm-companion/tools/shop/itemeditor.h
+    gm-companion/tools/shop/itemeditor.h \
+    gm-companion/tools/shop/shopeditor.h
 
 
 DISTFILES +=

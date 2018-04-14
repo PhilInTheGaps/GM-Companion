@@ -5,17 +5,10 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4 as Controls1_4
 
 import "./shop"
-import gm.companion.projectconverter 1.0
 import gm.companion.shoptool 1.0
 
 Page {
     id: item_shop
-
-    ProjectConverter {
-        id: project_converter
-
-        Component.onCompleted: convert()
-    }
 
     ShopTool {
         id: shop_tool
@@ -134,6 +127,7 @@ Page {
                     Column {
                         id: category_column
                         width: control_column.width
+                        spacing: 5
                     }
                 }
             }
