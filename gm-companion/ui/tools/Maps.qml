@@ -115,10 +115,10 @@ Page {
             Button {
                 Image {
                     source: "/icons/menu/three_bars_dark.png"
-                    width: parent.height - 20
+                    width: parent.height / 1.5
                     height: width
-                    x: 10
-                    y: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 width: parent.height - 10
@@ -139,13 +139,21 @@ Page {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Button {
-                    text: "+"
+                    Image {
+                        source: "/icons/menu/plus_sign_dark.png"
+                        width: parent.height / 1.5
+                        height: width
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
                     width: parent.height - parent.padding * 2
                     height: width
 
                     font.pointSize: height / 2
 
                     onClicked: {
+
                         maps_image.height *= 2
                         maps_image.width *= 2
 
@@ -157,13 +165,19 @@ Page {
                 }
 
                 Button {
-                    text: "-"
+                    Image {
+                        source: "/icons/menu/vertical_bar_dark.png"
+                        width: parent.height / 1.5
+                        height: width
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
                     width: parent.height - parent.padding * 2
                     height: width
 
-                    font.pointSize: height / 2
-
                     onClicked: {
+
                         maps_image.height *= 0.5
                         maps_image.width *= 0.5
 
@@ -175,13 +189,22 @@ Page {
                 }
 
                 Button {
-                    text: "R"
+                    Image {
+                        source: "/icons/menu/ring_arrow_dark.png"
+                        width: parent.height / 1.5
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        mirror: true
+                    }
+
                     width: parent.height - parent.padding * 2
                     height: width
 
-                    font.pointSize: height / 2
-
                     onClicked: {
+
                         maps_image.height = maps_page.height
                         maps_image.width = maps_page.width - maps_tab_column.width
                     }

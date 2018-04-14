@@ -6,6 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import gm.companion.colorscheme 1.0
 
 Rectangle {
+    id: character_button
     property var character_name
     property bool active: true
 
@@ -49,7 +50,25 @@ Rectangle {
         x: parent.width - width - 5
         anchors.verticalCenter: parent.verticalCenter
 
-        text: parent.active ? "x" : "<"
+        ToolTip.text: parent.active ? "Make Inactive" : "Make Active"
+        ToolTip.visible: hovered
+        hoverEnabled: true
+
+        background: Rectangle {
+            color: "transparent"
+        }
+
+        Image {
+            source: character_button.active ? "/icons/menu/x_sign_bright.png" : "/icons/media/playBackwards_bright.png"
+            width: parent.height * 0.9
+            height: width
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            sourceSize.width: width
+            sourceSize.height: height
+        }
 
         onClicked: parent.toggle_active_clicked(parent.character_name,
                                                 parent.active)

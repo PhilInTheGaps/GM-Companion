@@ -200,8 +200,8 @@ Page {
 
                     Image {
                         source: "/icons/menu/three_bars_dark.png"
-                        height: parent.height * 0.6
-                        width: parent.width * 0.6
+                        width: parent.height / 1.5
+                        height: width
 
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -227,7 +227,7 @@ Page {
 
                         Image {
                             id: music_icon
-                            source: "/icons/media/music.png"
+                            source: "/icons/media/music_bright.png"
                             height: parent.height
                             width: height
                             anchors.verticalCenter: parent.verticalCenter
@@ -264,7 +264,7 @@ Page {
 
                         Image {
                             id: sound_icon
-                            source: "/icons/media/sound.png"
+                            source: "/icons/media/sound_bright.png"
                             height: parent.height
                             width: height
                             anchors.verticalCenter: parent.verticalCenter
@@ -303,8 +303,8 @@ Page {
 
                     Image {
                         source: "/icons/media/playlist.png"
-                        height: parent.height * 0.6
-                        width: parent.width * 0.6
+                        width: parent.height / 1.5
+                        height: width
 
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -326,8 +326,8 @@ Page {
 
                         Image {
                             source: "/icons/media/seekBack.png"
-                            height: parent.height * 0.6
-                            width: parent.width * 0.6
+                            width: parent.height / 1.5
+                            height: width
 
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
@@ -343,8 +343,8 @@ Page {
                         Image {
                             id: audio_play_pause_icon
                             source: "/icons/media/play.png"
-                            height: parent.height * 0.6
-                            width: parent.width * 0.6
+                            width: parent.height / 1.5
+                            height: width
 
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
@@ -359,8 +359,8 @@ Page {
 
                         Image {
                             source: "/icons/media/seekForward.png"
-                            height: parent.height * 0.6
-                            width: parent.width * 0.6
+                            width: parent.height / 1.5
+                            height: width
 
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
