@@ -27,28 +27,89 @@ Page {
                 spacing: 5
 
                 Button {
-                    text: qsTr("D4")
+
+                    Image {
+                        source: "/icons/dice/d4.png"
+                        width: parent.height * 0.9
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                    }
+
+                    ToolTip.text: qsTr("D4")
+                    ToolTip.visible: hovered
+                    hoverEnabled: true
+
                     width: (value_row.width - 3 * parent.spacing) / 4
                     height: width
                     onClicked: dice_type_spin_box.value = 4
                 }
 
                 Button {
-                    text: qsTr("D6")
+                    Image {
+                        source: "/icons/dice/d6.png"
+                        width: parent.height * 0.9
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                    }
+
+                    ToolTip.text: qsTr("D6")
+                    ToolTip.visible: hovered
+                    hoverEnabled: true
+
                     width: (value_row.width - 3 * parent.spacing) / 4
                     height: width
                     onClicked: dice_type_spin_box.value = 6
                 }
 
                 Button {
-                    text: qsTr("D12")
+                    Image {
+                        source: "/icons/dice/d12.png"
+                        width: parent.height * 0.9
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                    }
+
+                    ToolTip.text: qsTr("D12")
+                    ToolTip.visible: hovered
+                    hoverEnabled: true
+
                     width: (value_row.width - 3 * parent.spacing) / 4
                     height: width
                     onClicked: dice_type_spin_box.value = 12
                 }
 
                 Button {
-                    text: qsTr("D20")
+                    Image {
+                        source: "/icons/dice/d20.png"
+                        width: parent.height * 0.9
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                    }
+
+                    ToolTip.text: qsTr("D20")
+                    ToolTip.visible: hovered
+                    hoverEnabled: true
+
                     width: (value_row.width - 3 * parent.spacing) / 4
                     height: width
                     onClicked: dice_type_spin_box.value = 20
@@ -109,15 +170,6 @@ Page {
                         editable: true
                     }
                 }
-
-                //                Column {
-                //                    Text {
-                //                        text: qsTr("Bonus Dice")
-                //                        ToolTip {
-                //                            text: qsTr("Bonus Dice are ")
-                //                        }
-                //                    }
-                //                }
             }
 
             Row {
@@ -125,8 +177,23 @@ Page {
                 spacing: 5
 
                 Button {
-                    text: qsTr("Roll")
+                    Image {
+                        source: "/icons/dice/dice_roll.png"
+                        width: parent.height * 0.9
+                        height: width
+
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        sourceSize.height: height
+                        sourceSize.width: width
+                    }
+
                     height: roll_result.height
+
+                    ToolTip.text: qsTr("Roll")
+                    ToolTip.visible: hovered
+                    hoverEnabled: true
 
                     onClicked: {
                         roll_result.text = dice_tool.roll

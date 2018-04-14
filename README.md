@@ -12,6 +12,9 @@ A tool for the gamemaster of a tabletop RPG session.
 
 [Documentation](https://github.com/PhilInTheGaps/GM-Companion/wiki)
 
+## Credits
+
+Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the CC BY 3.0 (http://creativecommons.org/licenses/by/3.0/)
 
 # Installation
 
@@ -21,12 +24,12 @@ For Windows there are 64-bit and 32-bit installers available:
 
 [Beta 3.3 (Win x64 Installer)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win64_setup.exe)  
 [Beta 3.3 (Win x86 Installer)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win32_setup.exe)  
-	
+
 If you don't want an installer and instead want a zipped version that runs without an installer:
 
 [Beta 3.3 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win64.zip)  
 [Beta 3.3 (Win x86)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win32.zip)  
-	
+
 Older versions are available at the [GitHub Release Page](https://github.com/PhilInTheGaps/GM-Companion/releases)  
 
 

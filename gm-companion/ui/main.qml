@@ -113,7 +113,6 @@ Window {
             }
 
             TabBar {
-
             }
 
             SideMenuButton {
@@ -289,7 +288,7 @@ Window {
 
         clip: true
         interactive: false
-        currentIndex: 4
+        currentIndex: 0
 
         Audio {
             id: audio
