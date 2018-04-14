@@ -43,8 +43,6 @@ void ShopTool::loadCategories(QString project)
     QSettings settings(path, QSettings::IniFormat);
 
     l_categories = settings.value("categories", {}).toStringList();
-
-    qDebug() << l_categories;
 }
 
 // Load Shop list
@@ -56,7 +54,7 @@ void ShopTool::loadShops(QString project)
 
     QSettings settings(path, QSettings::IniFormat);
 
-    QStringList shop_list;
+    QStringList shops;
 
     int count = settings.beginReadArray(l_category + "_shops");
 
@@ -64,14 +62,12 @@ void ShopTool::loadShops(QString project)
     {
         settings.setArrayIndex(i);
 
-        shop_list.append(settings.value("name", tr("UNKNOWN SHOP")).toString());
+        shops.append(settings.value("shop").toStringList().at(0));
     }
 
     settings.endArray();
 
-    l_shops = shop_list;
-
-    qDebug() << l_shops;
+    l_shops = shops;
 }
 
 // Load a shop
@@ -87,31 +83,36 @@ void ShopTool::load(QString project, QString shop)
     l_item_prices.clear();
     l_item_descriptions.clear();
 
-    int count = settings.beginReadArray(l_category + "_shops");
+    // Get Shop Information
+    l_shopName = shop;
+    QStringList shopValues;
+
+    int shopCount = settings.beginReadArray(l_category + "_shops");
+
+    for (int i = 0; i < shopCount; i++)
+    {
+        settings.setArrayIndex(i);
+
+        if (settings.value("shop").toStringList().at(0) == shop) shopValues = settings.value("shop").toStringList();
+    }
+
+    settings.endArray();
+
+    l_shopOwner       = shopValues.at(1);
+    l_shopDescription = shopValues.at(2);
+
+    // Get Items
+    int count = settings.beginReadArray(l_category + "_" + shop + "_items");
 
     for (int i = 0; i < count; i++)
     {
         settings.setArrayIndex(i);
 
-        if (settings.value("name", tr("UNKNOWN SHOP")).toString() == shop)
-        {
-            l_shopName        = shop;
-            l_shopOwner       = settings.value("owner", tr("UNKNOWN OWNER")).toString();
-            l_shopDescription = settings.value("description", tr("No description available")).toString();
+        QStringList item = settings.value("item").toStringList();
 
-            int item_count = settings.beginReadArray("items");
-
-            for (int j = 0; j < item_count; j++)
-            {
-                settings.setArrayIndex(j);
-
-                l_item_names.append(settings.value("name", tr("UNKNOWN ITEM")).toString());
-                l_item_prices.append(settings.value("price", "/").toString());
-                l_item_descriptions.append(settings.value("description", "").toString());
-            }
-
-            settings.endArray();
-        }
+        l_item_names.append(item.at(0));
+        l_item_prices.append(item.at(1));
+        l_item_descriptions.append(item.at(3));
     }
 
     settings.endArray();

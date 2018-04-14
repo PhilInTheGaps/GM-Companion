@@ -13,6 +13,7 @@
 #include "tools/maptool.h"
 #include "tools/dicetool.h"
 #include "tools/shop/shoptool.h"
+#include "tools/shop/shopeditor.h"
 #include "tools/shop/itemeditor.h"
 #include "tools/combattracker.h"
 #include "tools/notestool.h"
@@ -36,6 +37,7 @@ void loadQmlClasses()
     qmlRegisterType<MapTool>(          "gm.companion.maptool",           1, 0, "MapTool");
     qmlRegisterType<DiceTool>(         "gm.companion.dicetool",          1, 0, "DiceTool");
     qmlRegisterType<ShopTool>(         "gm.companion.shoptool",          1, 0, "ShopTool");
+    qmlRegisterType<ShopEditor>(       "gm.companion.shopeditor",        1, 0, "ShopEditorTool");
     qmlRegisterType<ItemEditor>(       "gm.companion.itemeditor",        1, 0, "ItemEditorTool");
     qmlRegisterType<CombatTracker>(    "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
     qmlRegisterType<NotesTool>(        "gm.companion.notestool",         1, 0, "NotesTool");
@@ -51,7 +53,6 @@ void loadQmlClasses()
     qmlRegisterType<UpdateManager>(    "gm.companion.updatemanager",     1, 0, "UpdateManager");
     qmlRegisterType<PlatformDetails>(  "gm.companion.platforms",         1, 0, "PlatformDetails");
     qmlRegisterType<ColorScheme>(      "gm.companion.colorscheme",       1, 0, "ColorScheme");
-    qmlRegisterType<ProjectConverter>( "gm.companion.projectconverter",  1, 0, "ProjectConverter");
 }
 
 int main(int argc, char *argv[])
@@ -71,6 +72,10 @@ int main(int argc, char *argv[])
 
     if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
+
+    // Convert Projects to newest version
+    ProjectConverter projConverter;
+    projConverter.convert();
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
