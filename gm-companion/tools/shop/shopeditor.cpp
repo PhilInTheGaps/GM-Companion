@@ -295,7 +295,7 @@ void ShopEditor::loadItemListTabs()
     l_itemListTabNames.clear();
     l_itemListTabNames.append("Custom");
     l_itemListTabPaths.clear();
-    l_itemListTabPaths.append({ sManager->getSetting(Setting::shopPath) + "/CustomItems.items" });
+    l_itemListTabPaths.append(sManager->getSetting(Setting::shopPath) + "/CustomItems.items");
 
     QString addonPath = QDir::homePath() + "/.gm-companion/addons";
 
