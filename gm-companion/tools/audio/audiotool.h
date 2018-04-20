@@ -37,7 +37,6 @@ class AudioTool : public QObject
 
 public:
     explicit AudioTool(QObject *parent = 0);
-    ~AudioTool();
 
     // Project
     QStringList projectList();

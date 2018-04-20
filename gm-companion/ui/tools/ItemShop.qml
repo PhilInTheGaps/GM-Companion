@@ -6,9 +6,14 @@ import QtQuick.Controls 1.4 as Controls1_4
 
 import "./shop"
 import gm.companion.shoptool 1.0
+import gm.companion.colorscheme 1.0
 
 Page {
     id: item_shop
+
+    ColorScheme {
+        id: color_scheme
+    }
 
     ShopTool {
         id: shop_tool
@@ -24,7 +29,7 @@ Page {
         function updateCategories() {
             loadCategories(project_combo_box.currentText)
             category_column.children = []
-            shop_flow.children = []
+            shop_list_column.children = []
 
             var component = Qt.createComponent("./shop/CategoryButton.qml")
 
@@ -44,12 +49,12 @@ Page {
             console.log("Category Changed")
 
             loadShops(project_combo_box.currentText)
-            shop_flow.children = []
+            shop_list_column.children = []
 
             var component = Qt.createComponent("./shop/ShopButton.qml")
 
             for (var i = 0; i < shops.length; i++) {
-                var button = component.createObject(shop_flow, {
+                var button = component.createObject(shop_list_column, {
                                                         x: 0,
                                                         y: 0,
                                                         shop: shops[i]
@@ -92,7 +97,7 @@ Page {
 
             Column {
                 id: control_column
-                width: 150
+                width: parent.width / 8
                 height: parent.height - parent.topPadding - parent.bottomPadding
                 spacing: 5
 
@@ -124,6 +129,8 @@ Page {
                     height: parent.height - parent.spacing * 3 - projects_text.height
                             - project_combo_box.height - open_editor_button.height
 
+                    clip: true
+
                     Column {
                         id: category_column
                         width: control_column.width
@@ -133,17 +140,10 @@ Page {
             }
 
             Column {
-                width: parent.width - parent.spacing - parent.leftPadding
-                       - parent.rightPadding - control_column.width
+                width: parent.width - parent.spacing * 2 - parent.leftPadding
+                       - parent.rightPadding - control_column.width - shop_sidebar.width
                 height: parent.height - parent.topPadding - parent.bottomPadding
                 spacing: 5
-
-                Flow {
-                    id: shop_flow
-                    width: parent.width
-
-                    spacing: 5
-                }
 
                 Row {
                     id: title_row
@@ -179,7 +179,7 @@ Page {
                     id: shop_table
 
                     width: parent.width
-                    height: parent.height - parent.spacing * 2 - shop_flow.height - title_row.height
+                    height: parent.height - parent.spacing - title_row.height
 
                     model: table_model
 
@@ -203,6 +203,26 @@ Page {
                         role: "description"
                         movable: false
                         width: shop_table.width - item_column.width - price_column.width - 5
+                    }
+                }
+            }
+
+            Column {
+                id: shop_sidebar
+                width: parent.width / 8
+                height: parent.height
+
+                ScrollView {
+                    width: parent.width
+                    height: parent.height
+                    clip: true
+
+                    Column {
+                        id: shop_list_column
+                        width: shop_sidebar.width
+                        height: shop_sidebar.height
+
+                        spacing: 5
                     }
                 }
             }

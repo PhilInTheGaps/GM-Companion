@@ -76,7 +76,7 @@ Item {
 
         Column {
             id: left_column
-            width: 150
+            width: parent.width / 8
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
@@ -126,9 +126,11 @@ Item {
                         - names_font_size_text.height - names_font_size_spinbox.height
                         - names_categories_text.height - parent.spacing * 5
 
+                clip: true
+
                 Column {
                     id: names_categories_column
-                    width: parent.width
+                    width: parent.parent.width
                     spacing: 5
                 }
             }
@@ -168,6 +170,7 @@ Item {
                         height: parent.height - male_names_text.height - parent.spacing
 
                         readOnly: true
+                        selectByMouse: true
                     }
                 }
 
@@ -188,6 +191,7 @@ Item {
                         height: parent.height - female_names_text.height - parent.spacing
 
                         readOnly: true
+                        selectByMouse: true
                     }
                 }
             }

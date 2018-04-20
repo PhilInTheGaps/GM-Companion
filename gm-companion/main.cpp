@@ -10,6 +10,8 @@
 #include <QIcon>
 
 #include "tools/audio/audiotool.h"
+#include "tools/audio/audioeditor.h"
+#include "tools/audio/audioeditorfilebrowser.h"
 #include "tools/maptool.h"
 #include "tools/dicetool.h"
 #include "tools/shop/shoptool.h"
@@ -33,26 +35,29 @@
 
 void loadQmlClasses()
 {
-    qmlRegisterType<AudioTool>(        "gm.companion.audiotool",         1, 0, "AudioTool");
-    qmlRegisterType<MapTool>(          "gm.companion.maptool",           1, 0, "MapTool");
-    qmlRegisterType<DiceTool>(         "gm.companion.dicetool",          1, 0, "DiceTool");
-    qmlRegisterType<ShopTool>(         "gm.companion.shoptool",          1, 0, "ShopTool");
-    qmlRegisterType<ShopEditor>(       "gm.companion.shopeditor",        1, 0, "ShopEditorTool");
-    qmlRegisterType<ItemEditor>(       "gm.companion.itemeditor",        1, 0, "ItemEditorTool");
-    qmlRegisterType<CombatTracker>(    "gm.companion.combattracker",     1, 0, "CombatTrackerTool");
-    qmlRegisterType<NotesTool>(        "gm.companion.notestool",         1, 0, "NotesTool");
-    qmlRegisterType<ConverterTool>(    "gm.companion.convertertool",     1, 0, "ConverterTool");
-    qmlRegisterType<SettingsTool>(     "gm.companion.settingstool",      1, 0, "SettingsTool");
-    qmlRegisterType<NameGenerator>(    "gm.companion.namegeneratortool", 1, 0, "NameGeneratorTool");
+    qmlRegisterType<AudioTool>(             "gm.companion.audiotool",              1, 0, "AudioTool");
+    qmlRegisterType<AudioEditor>(           "gm.companion.audioeditor",            1, 0, "AudioEditor");
+    qmlRegisterType<AudioEditorFileBrowser>("gm.companion.audioeditorfilebrowser", 1, 0, "AudioEditorFileBrowserTool");
 
-    qmlRegisterType<CharacterTool>(    "gm.companion.charactertool",     1, 0, "CharacterTool");
-    qmlRegisterType<CharacterSaveLoad>("gm.companion.charactersaveload", 1, 0, "CharacterSaveLoad");
-    qmlRegisterType<DefaultSheet>(     "gm.companion.defaultsheet",      1, 0, "DefaultSheetTool");
-    qmlRegisterType<DSA5Sheet>(        "gm.companion.dsa5sheet",         1, 0, "DSA5SheetTool");
+    qmlRegisterType<MapTool>(               "gm.companion.maptool",                1, 0, "MapTool");
+    qmlRegisterType<DiceTool>(              "gm.companion.dicetool",               1, 0, "DiceTool");
+    qmlRegisterType<ShopTool>(              "gm.companion.shoptool",               1, 0, "ShopTool");
+    qmlRegisterType<ShopEditor>(            "gm.companion.shopeditor",             1, 0, "ShopEditorTool");
+    qmlRegisterType<ItemEditor>(            "gm.companion.itemeditor",             1, 0, "ItemEditorTool");
+    qmlRegisterType<CombatTracker>(         "gm.companion.combattracker",          1, 0, "CombatTrackerTool");
+    qmlRegisterType<NotesTool>(             "gm.companion.notestool",              1, 0, "NotesTool");
+    qmlRegisterType<ConverterTool>(         "gm.companion.convertertool",          1, 0, "ConverterTool");
+    qmlRegisterType<SettingsTool>(          "gm.companion.settingstool",           1, 0, "SettingsTool");
+    qmlRegisterType<NameGenerator>(         "gm.companion.namegeneratortool",      1, 0, "NameGeneratorTool");
 
-    qmlRegisterType<UpdateManager>(    "gm.companion.updatemanager",     1, 0, "UpdateManager");
-    qmlRegisterType<PlatformDetails>(  "gm.companion.platforms",         1, 0, "PlatformDetails");
-    qmlRegisterType<ColorScheme>(      "gm.companion.colorscheme",       1, 0, "ColorScheme");
+    qmlRegisterType<CharacterTool>(         "gm.companion.charactertool",          1, 0, "CharacterTool");
+    qmlRegisterType<CharacterSaveLoad>(     "gm.companion.charactersaveload",      1, 0, "CharacterSaveLoad");
+    qmlRegisterType<DefaultSheet>(          "gm.companion.defaultsheet",           1, 0, "DefaultSheetTool");
+    qmlRegisterType<DSA5Sheet>(             "gm.companion.dsa5sheet",              1, 0, "DSA5SheetTool");
+
+    qmlRegisterType<UpdateManager>(         "gm.companion.updatemanager",          1, 0, "UpdateManager");
+    qmlRegisterType<PlatformDetails>(       "gm.companion.platforms",              1, 0, "PlatformDetails");
+    qmlRegisterType<ColorScheme>(           "gm.companion.colorscheme",            1, 0, "ColorScheme");
 }
 
 int main(int argc, char *argv[])

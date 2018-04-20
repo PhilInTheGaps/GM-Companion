@@ -45,7 +45,7 @@ Page {
             width: parent.width
 
             TabButton {
-                text: qsTr("Info Daten")
+                text: qsTr("General Data")
             }
 
             TabButton {

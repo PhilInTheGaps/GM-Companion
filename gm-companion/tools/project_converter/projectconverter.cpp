@@ -1,5 +1,6 @@
 #include "projectconverter.h"
 #include "shopconverter.h"
+#include "audioconverter.h"
 
 #include <QDebug>
 
@@ -13,4 +14,7 @@ void ProjectConverter::convert()
     ShopConverter *shop_converter = new ShopConverter;
 
     shop_converter->convert();
+
+    AudioConverter *audio_converter = new AudioConverter;
+    audio_converter->convert();
 }

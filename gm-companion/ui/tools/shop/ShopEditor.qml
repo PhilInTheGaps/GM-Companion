@@ -23,7 +23,7 @@ Page {
         function updateShopFlow() {
             updateShopList()
 
-            shop_flow.children = []
+            shop_column.children = []
 
             var component = Qt.createComponent("./ShopButton.qml")
 
@@ -33,7 +33,7 @@ Page {
 
                 console.log(getShopList()[i])
 
-                var button = component.createObject(shop_flow, {
+                var button = component.createObject(shop_column, {
                                                         x: 0,
                                                         y: 0,
                                                         shop: getShopList()[i]
@@ -89,381 +89,470 @@ Page {
         }
     }
 
-    Row {
+    Column {
         width: parent.width
         height: parent.height
         spacing: 5
 
-        Column {
-            id: shop_properties_column
-            width: parent.width / 8
-            height: parent.height
+        Dialog {
+            id: new_project_dialog
+            title: qsTr("Create New Project")
+
+            contentItem: Column {
+                TextField {
+                    id: project_textfield
+                    width: parent.width
+                    placeholderText: qsTr("Project Name")
+                    selectByMouse: true
+                }
+            }
+
+            standardButtons: Dialog.Ok | Dialog.Cancel
+
+            onAccepted: {
+                editor_tool.createProject(project_textfield.text)
+
+                project_combo_box.model = shop_tool.projects
+            }
+        }
+
+        Dialog {
+            id: new_category_dialog
+            title: qsTr("Create New Category")
+
+            contentItem: Column {
+
+                TextField {
+                    id: category_textfield
+                    width: parent.width
+                    placeholderText: qsTr("Category Name")
+                    selectByMouse: true
+                }
+            }
+
+            standardButtons: Dialog.Ok | Dialog.Cancel
+
+            onAccepted: {
+                editor_tool.createCategory(category_textfield.text)
+
+                category_combo_box.model = editor_tool.getCategories()
+
+                category_combo_box.currentIndex = editor_tool.getCategories(
+                            ).length - 1
+            }
+        }
+
+        Dialog {
+            id: new_shop_dialog
+            title: qsTr("Create New Shop")
+
+            contentItem: Column {
+
+                TextField {
+                    id: shop_name_textfield
+                    width: parent.width
+                    placeholderText: qsTr("Shop Name")
+                    selectByMouse: true
+                }
+            }
+
+            standardButtons: Dialog.Ok | Dialog.Cancel
+
+            onAccepted: {
+                editor_tool.createShop(shop_name_textfield.text)
+
+                editor_tool.updateShopFlow()
+            }
+        }
+
+        Row {
+            id: tool_bar
+            width: parent.height
             spacing: 5
 
             Button {
-                text: qsTr("Back")
-                width: parent.width
+
+                ToolTip.text: qsTr("Back")
+                ToolTip.visible: hovered
+                hoverEnabled: true
+
+                Image {
+                    source: "/icons/media/playBackwards.png"
+                    width: parent.height * 0.9
+                    height: width
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    sourceSize.width: width
+                    sourceSize.height: height
+                }
+
+                width: height
                 onClicked: backToViewer()
             }
 
-            Text {
-                text: qsTr("Projects")
-            }
-
-            ComboBox {
-                id: project_combo_box
-                width: parent.width
-                model: shop_tool.projects
-
-                onCurrentTextChanged: {
-                    if (currentText != "") {
-                        editor_tool.setCurrentProject(currentText)
-
-                        category_combo_box.model = editor_tool.getCategories()
-                    }
-                }
-            }
-
-            Text {
-                text: qsTr("Category")
-            }
-
-            ComboBox {
-                id: category_combo_box
-                width: parent.width
-                Component.onCompleted: {
-                    model = editor_tool.getCategories()
-                }
-
-                onCurrentTextChanged: {
-                    if (currentText != "") {
-                        editor_tool.setCurrentCategory(currentText)
-
-                        editor_tool.updateShopFlow()
-                    }
-                }
-            }
-
-            TextField {
-                id: project_textfield
-                width: parent.width
-                placeholderText: qsTr("Project Name")
-                selectByMouse: true
-            }
-
             Button {
-                width: parent.width
                 text: qsTr("Create New Project")
 
                 onClicked: {
-                    editor_tool.createProject(project_textfield.text)
-
-                    project_combo_box.model = shop_tool.projects
+                    new_project_dialog.open()
                 }
             }
 
-            Text {
-                text: qsTr("New Category")
-            }
-
-            TextField {
-                id: category_textfield
-                width: parent.width
-                placeholderText: qsTr("Category Name")
-                selectByMouse: true
-            }
-
             Button {
-                width: parent.width
                 text: qsTr("Create New Category")
 
                 onClicked: {
-                    editor_tool.createCategory(category_textfield.text)
-
-                    category_combo_box.model = editor_tool.getCategories()
-
-                    category_combo_box.currentIndex = editor_tool.getCategories(
-                                ).length - 1
+                    new_category_dialog.open()
                 }
-            }
-
-            Text {
-                text: qsTr("New Shop")
-            }
-
-            TextField {
-                id: shop_name_textfield
-                width: parent.width
-                placeholderText: qsTr("Shop Name")
-                selectByMouse: true
             }
 
             Button {
-                width: parent.width
                 text: qsTr("Create New Shop")
 
                 onClicked: {
-                    editor_tool.createShop(shop_name_textfield.text)
-
-                    editor_tool.updateShopFlow()
-                }
-            }
-
-            DelayButton {
-                width: parent.width
-                text: qsTr("Delete Shop")
-                delay: 1200
-
-                onActivated: {
-                    editor_tool.deleteShop()
-
-                    editor_tool.updateShopFlow()
+                    new_shop_dialog.open()
                 }
             }
         }
 
-        Column {
-            width: parent.width - parent.spacing - shop_properties_column.width
-            height: parent.height
+        Row {
+            width: parent.width
+            height: parent.height - parent.spacing - tool_bar.height
             spacing: 5
 
-            Flow {
-                id: shop_flow
-                width: parent.width
+            Column {
+                id: shop_properties_column
+                width: parent.width / 8
+                height: parent.height
                 spacing: 5
+
+                Text {
+                    id: project_text
+                    text: qsTr("Project")
+                }
+
+                ComboBox {
+                    id: project_combo_box
+                    width: parent.width
+                    model: shop_tool.projects
+
+                    onCurrentTextChanged: {
+                        if (currentText != "") {
+                            editor_tool.setCurrentProject(currentText)
+
+                            category_combo_box.model = editor_tool.getCategories()
+                        }
+                    }
+                }
+
+                Text {
+                    id: category_text
+                    text: qsTr("Category")
+                }
+
+                ComboBox {
+                    id: category_combo_box
+                    width: parent.width
+                    Component.onCompleted: {
+                        model = editor_tool.getCategories()
+                    }
+
+                    onCurrentTextChanged: {
+                        if (currentText != "") {
+                            editor_tool.setCurrentCategory(currentText)
+
+                            editor_tool.updateShopFlow()
+                        }
+                    }
+                }
+
+                Text {
+                    id: shops_text
+                    text: qsTr("Shops")
+                }
+
+                ScrollView {
+                    width: parent.width
+                    height: parent.height - parent.spacing * 5 - category_combo_box.height
+                            - category_text.height - shops_text.height
+                            - project_combo_box.height - project_text.height
+
+                    clip: true
+
+                    Column {
+                        id: shop_column
+                        width: parent.parent.width
+                        spacing: 5
+                    }
+                }
             }
 
-            Row {
-                width: parent.width
-                height: parent.height - parent.spacing - shop_flow.height
+            Column {
+                width: parent.width - parent.spacing - shop_properties_column.width
+                height: parent.height
                 spacing: 5
 
-                Column {
-                    width: (parent.width - parent.spacing) / 2
+                Row {
+                    width: parent.width
                     height: parent.height
                     spacing: 5
 
-                    Row {
-                        id: shop_properties_row
-                        width: parent.width
+                    Column {
+                        width: (parent.width - parent.spacing) / 2
+                        height: parent.height
                         spacing: 5
 
                         Text {
                             id: shop_name_text
                             text: qsTr("No Shop Selected")
-                            anchors.verticalCenter: parent.verticalCenter
                             font.pointSize: 20
 
-                            width: parent.width - parent.spacing - shop_owner_textfield.width
+                            width: parent.width
                             clip: true
                             elide: Text.ElideRight
                         }
 
-                        TextField {
-                            id: shop_owner_textfield
-                            width: parent.width / 4
-                            placeholderText: qsTr("Shop Owner")
-                            selectByMouse: true
+                        Row {
+                            id: shop_properties_row
+                            width: parent.width
+                            spacing: 5
 
-                            onTextEdited: editor_tool.setShopOwner(text)
-                        }
-                    }
+                            TextField {
+                                id: shop_owner_textfield
+                                width: parent.width / 4
+                                placeholderText: qsTr("Shop Owner")
+                                selectByMouse: true
 
-                    TextField {
-                        id: shop_description_textfield
-                        width: parent.width
-                        placeholderText: qsTr("Shop Description")
-                        selectByMouse: true
+                                onTextEdited: editor_tool.setShopOwner(text)
+                            }
 
-                        onTextEdited: editor_tool.setShopDescription(text)
-                    }
+                            TextField {
+                                id: shop_description_textfield
+                                width: parent.width - parent.spacing - shop_owner_textfield.width
+                                placeholderText: qsTr("Shop Description")
+                                selectByMouse: true
 
-                    Controls1_4.TableView {
-                        id: shop_items_table
-                        width: parent.width
-                        height: parent.height - parent.spacing * 3 - shop_properties_row.height
-                                - shop_description_textfield.height - shop_action_row.height
-
-                        model: ListModel {
-                            id: table_model
+                                onTextEdited: editor_tool.setShopDescription(
+                                                  text)
+                            }
                         }
 
-                        Controls1_4.TableViewColumn {
-                            id: item_column
-                            title: qsTr("Item")
-                            role: "name"
-                            movable: false
-                            width: shop_items_table.width / 6
-                        }
+                        Row {
+                            id: shop_action_row
+                            width: parent.width
+                            spacing: 5
 
-                        Controls1_4.TableViewColumn {
-                            id: price_column
-                            title: qsTr("Price")
-                            role: "price"
-                            movable: false
-                            width: shop_items_table.width / 6
-                        }
+                            Button {
+                                width: (parent.width - parent.spacing * 3) / 4
+                                text: qsTr("Save Shop")
 
-                        Controls1_4.TableViewColumn {
-                            id: category_column
-                            title: qsTr("Category")
-                            role: "category"
-                            movable: false
-                            width: shop_items_table.width / 6
-                        }
+                                onClicked: editor_tool.saveShop()
+                            }
 
-                        Controls1_4.TableViewColumn {
-                            id: description_column
-                            title: qsTr("Description")
-                            role: "description"
-                            movable: false
-                            width: shop_items_table.width - item_column.width
-                                   - price_column.width - category_column.width - 2
-                        }
-                    }
+                            DelayButton {
+                                width: (parent.width - parent.spacing * 3) / 4
+                                text: qsTr("Delete Shop")
+                                delay: 1200
 
-                    Row {
-                        id: shop_action_row
-                        width: parent.width
-                        spacing: 5
+                                onActivated: {
+                                    editor_tool.deleteShop()
 
-                        Button {
-                            text: qsTr("Save Shop")
+                                    editor_tool.updateShopFlow()
+                                }
+                            }
 
-                            onClicked: editor_tool.saveShop()
-                        }
+                            Button {
+                                width: (parent.width - parent.spacing * 3) / 4
+                                text: qsTr("Remove Selected Item")
 
-                        Button {
-                            text: qsTr("Remove Selected Item")
+                                ToolTip.text: qsTr("Remove Selected Item")
+                                ToolTip.visible: hovered
+                                hoverEnabled: true
 
-                            onClicked: {
-                                var tableIndex = shop_items_table.currentRow
+                                onClicked: {
+                                    var tableIndex = shop_items_table.currentRow
 
-                                if (tableIndex > -1) {
-                                    editor_tool.removeItem(tableIndex)
+                                    if (tableIndex > -1) {
+                                        editor_tool.removeItem(tableIndex)
 
-                                    editor_tool.fillItemTable()
+                                        editor_tool.fillItemTable()
 
-                                    // Make sure next index is a legitimate index
-                                    if (tableIndex >= shop_items_table.rowCount - 1) {
-                                        tableIndex = shop_items_table.rowCount - 2
+                                        // Make sure next index is a legitimate index
+                                        if (tableIndex >= shop_items_table.rowCount - 1) {
+                                            tableIndex = shop_items_table.rowCount - 2
+                                        }
+
+                                        shop_items_table.currentRow = tableIndex
                                     }
+                                }
+                            }
 
-                                    shop_items_table.currentRow = tableIndex
+                            DelayButton {
+                                width: (parent.width - parent.spacing * 3) / 4
+                                text: qsTr("Remove All Items")
+                                delay: 1200
+
+                                ToolTip.text: qsTr("Remove All Items")
+                                ToolTip.visible: hovered
+                                hoverEnabled: true
+
+                                onActivated: {
+                                    editor_tool.removeAllItems()
+                                    editor_tool.fillItemTable()
                                 }
                             }
                         }
 
-                        DelayButton {
-                            text: qsTr("Remove All Items")
-                            delay: 1200
+                        Controls1_4.TableView {
+                            id: shop_items_table
+                            width: parent.width
+                            height: parent.height - parent.spacing * 3 - shop_properties_row.height
+                                    - shop_name_text.height - shop_action_row.height
 
-                            onActivated: {
-                                editor_tool.removeAllItems()
-                                editor_tool.fillItemTable()
+                            model: ListModel {
+                                id: table_model
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: item_column
+                                title: qsTr("Item")
+                                role: "name"
+                                movable: false
+                                width: shop_items_table.width / 6
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: price_column
+                                title: qsTr("Price")
+                                role: "price"
+                                movable: false
+                                width: shop_items_table.width / 6
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: category_column
+                                title: qsTr("Category")
+                                role: "category"
+                                movable: false
+                                width: shop_items_table.width / 6
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: description_column
+                                title: qsTr("Description")
+                                role: "description"
+                                movable: false
+                                width: shop_items_table.width - item_column.width
+                                       - price_column.width - category_column.width - 2
                             }
                         }
                     }
-                }
 
-                Column {
-                    width: (parent.width - parent.spacing) / 2
-                    height: parent.height
-                    spacing: 5
-
-                    Row {
-                        id: item_header_row
-                        width: parent.width
+                    Column {
+                        width: (parent.width - parent.spacing) / 2
+                        height: parent.height
                         spacing: 5
 
-                        Button {
-                            text: qsTr("Add Selected Item")
+                        TabBar {
+                            id: item_tab_bar
+                            width: parent.width
 
-                            onClicked: editor_tool.addListItem()
-                        }
+                            spacing: 5
 
-                        Button {
-                            id: item_editor_button
+                            onCurrentIndexChanged: {
+                                console.log(currentIndex)
 
-                            text: qsTr("Open Item Editor")
+                                editor_tool.setItemListTabIndex(currentIndex)
+                                editor_tool.loadItemList()
+                                editor_tool.fillItemListTable()
+                            }
 
-                            onClicked: switchToItemEditor()
-                        }
-                    }
+                            Repeater {
+                                id: item_tab_bar_repeater
+                                model: 0
 
-                    TabBar {
-                        id: item_tab_bar
-                        width: parent.width
-
-                        onCurrentIndexChanged: {
-                            console.log(currentIndex)
-
-                            editor_tool.setItemListTabIndex(currentIndex)
-                            editor_tool.loadItemList()
-                            editor_tool.fillItemListTable()
-                        }
-
-                        Repeater {
-                            id: item_tab_bar_repeater
-                            model: 0
-
-                            TabButton {
-                                text: editor_tool.getItemListTabNames()[index]
+                                TabButton {
+                                    text: editor_tool.getItemListTabNames(
+                                              )[index]
+                                }
                             }
                         }
-                    }
 
-                    Controls1_4.TableView {
-                        id: item_list_table
-                        width: parent.width
-                        height: parent.height - parent.spacing * 2
-                                - item_tab_bar.height - item_header_row.height
+                        Row {
+                            id: item_header_row
+                            width: parent.width
+                            spacing: 5
 
-                        model: ListModel {
-                            id: item_list_model
+                            Button {
+                                width: (parent.width - parent.spacing) / 2
+                                text: qsTr("Add Selected Item")
+
+                                onClicked: editor_tool.addListItem()
+                            }
+
+                            Button {
+                                id: item_editor_button
+                                width: (parent.width - parent.spacing) / 2
+                                text: qsTr("Open Item Editor")
+
+                                onClicked: switchToItemEditor()
+                            }
                         }
 
-                        Component.onCompleted: {
-                            editor_tool.loadItemListTabs()
-                            item_tab_bar_repeater.model = editor_tool.getItemListTabNames()
+                        Controls1_4.TableView {
+                            id: item_list_table
+                            width: parent.width
+                            height: parent.height - parent.spacing * 2
+                                    - item_tab_bar.height - item_header_row.height
 
-                            editor_tool.loadItemList()
-                            editor_tool.fillItemListTable()
-                        }
+                            model: ListModel {
+                                id: item_list_model
+                            }
 
-                        onDoubleClicked: editor_tool.addListItem()
+                            Component.onCompleted: {
+                                editor_tool.loadItemListTabs()
+                                item_tab_bar_repeater.model = editor_tool.getItemListTabNames()
 
-                        Controls1_4.TableViewColumn {
-                            id: list_item_column
-                            title: qsTr("Item")
-                            role: "name"
-                            movable: false
-                            width: item_list_table.width / 6
-                        }
+                                editor_tool.loadItemList()
+                                editor_tool.fillItemListTable()
+                            }
 
-                        Controls1_4.TableViewColumn {
-                            id: list_price_column
-                            title: qsTr("Price")
-                            role: "price"
-                            movable: false
-                            width: item_list_table.width / 6
-                        }
+                            onDoubleClicked: editor_tool.addListItem()
 
-                        Controls1_4.TableViewColumn {
-                            id: list_category_column
-                            title: qsTr("Category")
-                            role: "category"
-                            movable: false
-                            width: item_list_table.width / 6
-                        }
+                            Controls1_4.TableViewColumn {
+                                id: list_item_column
+                                title: qsTr("Item")
+                                role: "name"
+                                movable: false
+                                width: item_list_table.width / 6
+                            }
 
-                        Controls1_4.TableViewColumn {
-                            id: list_description_column
-                            title: qsTr("Description")
-                            role: "description"
-                            movable: false
-                            width: item_list_table.width - list_item_column.width
-                                   - list_price_column.width - list_category_column.width - 2
+                            Controls1_4.TableViewColumn {
+                                id: list_price_column
+                                title: qsTr("Price")
+                                role: "price"
+                                movable: false
+                                width: item_list_table.width / 6
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: list_category_column
+                                title: qsTr("Category")
+                                role: "category"
+                                movable: false
+                                width: item_list_table.width / 6
+                            }
+
+                            Controls1_4.TableViewColumn {
+                                id: list_description_column
+                                title: qsTr("Description")
+                                role: "description"
+                                movable: false
+                                width: item_list_table.width - list_item_column.width
+                                       - list_price_column.width - list_category_column.width - 2
+                            }
                         }
                     }
                 }

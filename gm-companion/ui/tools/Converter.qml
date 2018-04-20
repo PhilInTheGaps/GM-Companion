@@ -11,30 +11,30 @@ Page {
     ConverterTool {
         id: converter_tool
 
-                onLengthUnitsChanged: {
-                    length_units_1.model = lengthUnits
-                    length_units_2.model = lengthUnits
-                }
+        onLengthUnitsChanged: {
+            length_units_1.model = lengthUnits
+            length_units_2.model = lengthUnits
+        }
 
-                onAreaUnitsChanged: {
-                    area_units_1.model = areaUnits
-                    area_units_2.model = areaUnits
-                }
+        onAreaUnitsChanged: {
+            area_units_1.model = areaUnits
+            area_units_2.model = areaUnits
+        }
 
-                onVolumeUnitsChanged: {
-                    volume_units_1.model = volumeUnits
-                    volume_units_2.model = volumeUnits
-                }
+        onVolumeUnitsChanged: {
+            volume_units_1.model = volumeUnits
+            volume_units_2.model = volumeUnits
+        }
 
-                onWeightUnitsChanged: {
-                    weight_units_1.model = weightUnits
-                    weight_units_2.model = weightUnits
-                }
+        onWeightUnitsChanged: {
+            weight_units_1.model = weightUnits
+            weight_units_2.model = weightUnits
+        }
 
-                onMoneyUnitsChanged: {
-                    money_units_1.model = moneyUnits
-                    money_units_2.model = moneyUnits
-                }
+        onMoneyUnitsChanged: {
+            money_units_1.model = moneyUnits
+            money_units_2.model = moneyUnits
+        }
     }
 
     ScrollView {
@@ -42,20 +42,80 @@ Page {
         height: parent.height
         clip: true
 
-        Flow {
+        Column {
             width: parent.width
             spacing: 10
             padding: 5
 
+            Dialog {
+                id: add_unit_dialog
+
+                title: qsTr("Add Units")
+
+                contentItem: Column {
+                    spacing: 5
+
+                    ComboBox {
+                        id: unit_type
+                        model: ["Length", "Area", "Volume", "Weight", "Money"]
+
+                        onCurrentTextChanged: refUnit_text.text = converter_tool.refUnitName(
+                                                  currentText)
+                    }
+
+                    Row {
+                        spacing: 5
+
+                        Grid {
+                            spacing: 5
+                            columns: 2
+
+                            Text {
+                                text: qsTr("Unit Name:")
+                            }
+
+                            Text {
+                                id: refUnit_text
+                                text: "Meters"
+                            }
+
+                            TextField {
+                                id: unit_name
+                            }
+
+                            TextField {
+                                id: unit_value
+                            }
+                        }
+                    }
+
+                    Button {
+                        text: qsTr("Add Unit")
+
+                        onClicked: converter_tool.addUnit(unit_name.text,
+                                                          unit_value.text,
+                                                          unit_type.currentText)
+                    }
+                }
+
+                standardButtons: Dialog.Close
+            }
+
             Column {
                 spacing: 5
+
+                Button {
+                    text: qsTr("Add Custom Units")
+
+                    onClicked: add_unit_dialog.open()
+                }
 
                 Text {
                     text: qsTr("Length")
                 }
 
                 Row {
-                    id: length_row
+                    id: length_row_1
                     width: parent.width
                     spacing: 5
 
@@ -72,7 +132,7 @@ Page {
 
                     ComboBox {
                         id: length_units_1
-                        width: 100
+                        width: 200
                         model: converter_tool.lengthUnits
 
                         onCurrentTextChanged: {
@@ -82,11 +142,12 @@ Page {
                                         length_units_text_1.text)
                         }
                     }
+                }
 
-                    Text {
-                        text: "->"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                Row {
+                    id: length_row_2
+                    width: parent.width
+                    spacing: 5
 
                     TextField {
                         id: length_output
@@ -96,7 +157,7 @@ Page {
 
                     ComboBox {
                         id: length_units_2
-                        width: 100
+                        width: 200
                         model: converter_tool.lengthUnits
 
                         onCurrentTextChanged: {
@@ -112,7 +173,7 @@ Page {
                 }
 
                 Row {
-                    id: area_row
+                    id: area_row_1
                     width: parent.width
                     spacing: 5
 
@@ -129,7 +190,7 @@ Page {
 
                     ComboBox {
                         id: area_units_1
-                        width: 100
+                        width: 200
 
                         model: converter_tool.areaUnits
                         onCurrentTextChanged: {
@@ -138,11 +199,12 @@ Page {
                                         area_units_text_1.text)
                         }
                     }
+                }
 
-                    Text {
-                        text: "->"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                Row {
+                    id: area_row_2
+                    width: parent.width
+                    spacing: 5
 
                     TextField {
                         id: area_output
@@ -152,7 +214,7 @@ Page {
 
                     ComboBox {
                         id: area_units_2
-                        width: 100
+                        width: 200
 
                         model: converter_tool.areaUnits
                         onCurrentTextChanged: {
@@ -168,6 +230,7 @@ Page {
                 }
 
                 Row {
+                    id: volume_row_1
                     width: parent.width
                     spacing: 5
 
@@ -184,7 +247,7 @@ Page {
 
                     ComboBox {
                         id: volume_units_1
-                        width: 100
+                        width: 200
                         model: converter_tool.volumeUnits
 
                         onCurrentTextChanged: {
@@ -194,11 +257,12 @@ Page {
                                         volume_units_text_1.text)
                         }
                     }
+                }
 
-                    Text {
-                        text: "->"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                Row {
+                    id: volume_row_2
+                    width: parent.width
+                    spacing: 5
 
                     TextField {
                         id: volume_output
@@ -208,7 +272,7 @@ Page {
 
                     ComboBox {
                         id: volume_units_2
-                        width: 100
+                        width: 200
                         model: converter_tool.volumeUnits
 
                         onCurrentTextChanged: {
@@ -224,6 +288,7 @@ Page {
                 }
 
                 Row {
+                    id: weight_row_1
                     width: parent.width
                     spacing: 5
 
@@ -239,7 +304,7 @@ Page {
 
                     ComboBox {
                         id: weight_units_1
-                        width: 100
+                        width: 200
                         model: converter_tool.weightUnits
 
                         onCurrentTextChanged: {
@@ -249,11 +314,12 @@ Page {
                                         weight_units_text_1.text)
                         }
                     }
+                }
 
-                    Text {
-                        text: "->"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                Row {
+                    id: weight_row_2
+                    width: parent.width
+                    spacing: 5
 
                     TextField {
                         id: weight_output
@@ -263,7 +329,7 @@ Page {
 
                     ComboBox {
                         id: weight_units_2
-                        width: 100
+                        width: 200
                         model: converter_tool.weightUnits
 
                         onCurrentTextChanged: {
@@ -279,6 +345,7 @@ Page {
                 }
 
                 Row {
+                    id: money_row_1
                     width: parent.width
                     spacing: 5
 
@@ -295,7 +362,7 @@ Page {
 
                     ComboBox {
                         id: money_units_1
-                        width: 100
+                        width: 200
                         model: converter_tool.moneyUnits
 
                         onCurrentTextChanged: {
@@ -304,11 +371,12 @@ Page {
                                         money_units_text_1.text)
                         }
                     }
+                }
 
-                    Text {
-                        text: "->"
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+                Row {
+                    id: money_row_2
+                    width: parent.width
+                    spacing: 5
 
                     TextField {
                         id: money_output
@@ -318,7 +386,7 @@ Page {
 
                     ComboBox {
                         id: money_units_2
-                        width: 100
+                        width: 200
                         model: converter_tool.moneyUnits
 
                         onCurrentTextChanged: {
@@ -327,57 +395,6 @@ Page {
                                         money_units_text_1.text)
                         }
                     }
-                }
-            }
-
-            Column {
-                //                width: 300
-                spacing: 5
-
-                Text {
-                    text: qsTr("Add Units")
-                }
-
-                ComboBox {
-                    id: unit_type
-                    model: ["Length", "Area", "Volume", "Weight", "Money"]
-
-                    onCurrentTextChanged: refUnit_text.text = converter_tool.refUnitName(
-                                              currentText)
-                }
-
-                Row {
-                    spacing: 5
-
-                    Grid {
-                        spacing: 5
-                        columns: 2
-
-                        Text {
-                            text: qsTr("Unit Name:")
-                        }
-
-                        Text {
-                            id: refUnit_text
-                            text: "Meters"
-                        }
-
-                        TextField {
-                            id: unit_name
-                        }
-
-                        TextField {
-                            id: unit_value
-                        }
-                    }
-                }
-
-                Button {
-                    text: qsTr("Add Unit")
-
-                    onClicked: converter_tool.addUnit(unit_name.text,
-                                                      unit_value.text,
-                                                      unit_type.currentText)
                 }
             }
         }

@@ -11,7 +11,7 @@ Rectangle {
 
     signal clicked(string page_name)
 
-    width: parent_width
+    width: parent.width
     height: 30
 
     ColorScheme {
