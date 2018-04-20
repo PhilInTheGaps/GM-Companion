@@ -17,7 +17,7 @@ Rectangle {
         source: element_icon
         width: parent.height * 0.8
         height: width
-        x: 5
+        x: (parent.height - height) / 2
         anchors.verticalCenter: parent.verticalCenter
 
         sourceSize.width: width
@@ -42,6 +42,16 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         id: mouse_area
+
+        ToolTip {
+            id: tool_tip
+            text: qsTr("Stop Sound: ") + element
+        }
+
+        hoverEnabled: true
+
+        onEntered: tool_tip.visible = true
+        onExited: tool_tip.visible = false
 
         onClicked: parent.clicked(parent.element)
     }

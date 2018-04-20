@@ -70,6 +70,9 @@ public:
     QStringList songs();
     int currentSongIndex();
     bool isPlaying();
+    Q_INVOKABLE QString getSongName();
+    Q_INVOKABLE QString getArtist();
+    Q_INVOKABLE QString getAlbum();
 
     // Sound
     Q_INVOKABLE void playSound(QString element);
@@ -99,9 +102,11 @@ signals:
     void isPlayingChanged();
     void currentSongChanged();
     void songsChanged();
+    void metaDataChanged();
 
 private slots:
     void onCurrentSongChanged();
+    void onMetaDataChanged();
 
 private:
     SettingsManager *sManager;
@@ -112,6 +117,10 @@ private:
     QMediaPlaylist *musicPlaylist;
     QStringList l_songs;
     bool musicNotRadio;
+
+    QString l_songName;
+    QString l_artist;
+    QString l_album;
 
     // Project
     QStringList projects;
