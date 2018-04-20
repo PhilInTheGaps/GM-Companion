@@ -142,4 +142,4 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += resources
 }
 
-#unix:!macx: LIBS += -ltag
+unix:!macx: LIBS += -ltag

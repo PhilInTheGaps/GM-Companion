@@ -178,6 +178,12 @@ Page {
                     playlist_view.positionViewAtIndex(
                                 playlist_view.currentIndex, ListView.Contain)
                 }
+
+                onMetaDataChanged: {
+                    song_name_text.text = getSongName()
+                    artist_text.text = getArtist()
+                    album_text.text = getAlbum()
+                }
             }
 
             ToolBar {
@@ -379,7 +385,7 @@ Page {
                 Column {
                     id: audio_project_menu
                     height: parent.height - audio_control_bar.height
-                    width: platform.isAndroid ? parent.width / 5 : 150
+                    width: platform.isAndroid ? parent.width / 2 : 150
 
                     spacing: 5
                     padding: 5
@@ -498,11 +504,47 @@ Page {
                             width: parent.width
                         }
 
+                        Frame {
+                            id: music_metadata_column
+                            width: parent.width
+                            spacing: 5
+                            padding: 5
+
+                            Column {
+                                width: parent.width
+
+                                Text {
+                                    id: song_name_text
+                                    width: parent.width - parent.padding * 2
+                                    text: ""
+                                    clip: true
+                                    elide: Text.ElideRight
+                                }
+
+                                Text {
+                                    id: artist_text
+                                    width: parent.width - parent.padding * 2
+                                    text: ""
+                                    clip: true
+                                    elide: Text.ElideRight
+                                }
+
+                                Text {
+                                    id: album_text
+                                    width: parent.width - parent.padding * 2
+                                    text: ""
+                                    clip: true
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
+
                         ListView {
                             id: playlist_view
                             width: parent.width
                             height: parent.height - sound_info_column.height
                                     - music_element_name.height - parent.spacing
+                                    * 3 - music_metadata_column.height
                             clip: true
 
                             highlight: Rectangle {

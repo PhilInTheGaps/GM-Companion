@@ -3,16 +3,17 @@
 
 #include <QDebug>
 #include <QSettings>
+#include <QMediaMetaData>
 
-//// Linux only
-// #ifdef __linux__
-// # include "taglib/tag.h"
-// # include "taglib/taglib.h"
-// # include "taglib/fileref.h"
-// # include "taglib/mpegfile.h"
-// # include "taglib/id3v2tag.h"
-// # include "taglib/attachedpictureframe.h"
-// #endif // ifdef __linux__
+// Linux only
+ #ifdef __linux__
+ # include "taglib/tag.h"
+ # include "taglib/taglib.h"
+ # include "taglib/fileref.h"
+ # include "taglib/mpegfile.h"
+ # include "taglib/id3v2tag.h"
+ # include "taglib/attachedpictureframe.h"
+ #endif // ifdef __linux__
 
 AudioTool::AudioTool(QObject *parent) : QObject(parent)
 {
@@ -20,7 +21,8 @@ AudioTool::AudioTool(QObject *parent) : QObject(parent)
 
     sManager = new SettingsManager;
 
-    musicPlayer   = new QMediaPlayer;
+    musicPlayer = new QMediaPlayer;
+    connect(musicPlayer,   SIGNAL(metaDataChanged()),        SLOT(onMetaDataChanged()));
     musicPlaylist = new QMediaPlaylist;
     connect(musicPlaylist, SIGNAL(currentIndexChanged(int)), SLOT(onCurrentSongChanged()));
     musicVolume = 75;
@@ -500,4 +502,60 @@ void AudioTool::playRadio(QString element)
             emit isPlayingChanged();
         }
     }
+}
+
+void AudioTool::onMetaDataChanged()
+{
+    l_songName.clear();
+    l_artist.clear();
+    l_album.clear();
+
+    if (musicPlayer->isMetaDataAvailable())
+    {
+        // Reading tags using TagLib, as it is way more reliable than
+
+        #ifdef __linux__
+
+        if (musicPlayer->bufferStatus() == 100)
+        {
+            QString path = musicPlaylist->currentMedia().resources().first().url().path();
+
+            // Album, Artist and Title
+            TagLib::FileRef f(path.toUtf8());
+            l_album    = f.tag()->album().toCString(true);
+            l_artist   = f.tag()->artist().toCString(true);
+            l_songName =  f.tag()->title().toCString(true);
+        }
+        #else // ifdef __linux__
+
+        // I can't get TagLib to work on Windows though, so this mess below has
+        // to do
+
+        l_songName = musicPlayer->metaData(QMediaMetaData::Title).toString();
+        l_album    = musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
+        l_artist   = musicPlayer->metaData(QMediaMetaData::Author).toString();
+
+        if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
+
+        if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
+
+        #endif // ifdef __linux__
+    }
+
+    emit metaDataChanged();
+}
+
+QString AudioTool::getSongName()
+{
+    return l_songName;
+}
+
+QString AudioTool::getArtist()
+{
+    return l_artist;
+}
+
+QString AudioTool::getAlbum()
+{
+    return l_album;
 }
