@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
+import gm.companion.colorscheme 1.0
 
 Column {
     property var name
@@ -8,6 +9,10 @@ Column {
     signal clicked(string path)
 
     width: parent.width
+
+    ColorScheme {
+        id: color_scheme
+    }
 
     Item {
         width: parent.width
@@ -32,6 +37,7 @@ Column {
     }
     Text {
         text: name
+        color: color_scheme.textColor
 
         width: parent.width - 10
         wrapMode: Text.WordWrap

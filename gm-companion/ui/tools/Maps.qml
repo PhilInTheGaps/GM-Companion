@@ -49,6 +49,10 @@ Page {
         id: color_scheme
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     Column {
         anchors.fill: parent
 

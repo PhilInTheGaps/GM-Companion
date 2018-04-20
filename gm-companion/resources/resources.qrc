@@ -54,10 +54,7 @@
         <file alias="music_bright.png">icons/media/music_bright.png</file>
         <file alias="playBackwards_bright.png">icons/media/playBackwards_bright.png</file>
     </qresource>
-    <qresource prefix="/styles">
-        <file alias="White.qss">styles/White.qss</file>
-        <file alias="Dark.qss">styles/Dark.qss</file>
-    </qresource>
+    <qresource prefix="/styles"/>
     <qresource prefix="/translations">
         <file alias="gm-companion_Deutsch">translations/gm-companion_de.qm</file>
         <file alias="gm-companion_de.ts">translations/gm-companion_de.ts</file>

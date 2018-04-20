@@ -3,6 +3,8 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
+import gm.companion.colorscheme 1.0
+
 Rectangle {
     property var element_name
     property var icon_path
@@ -19,8 +21,14 @@ Rectangle {
 
     signal clicked(string element_name)
 
+    ColorScheme {
+        id: color_scheme
+    }
+
     width: 150
     height: 180
+
+    color: color_scheme.backgroundColor
 
     Rectangle {
         id: rect
@@ -64,7 +72,7 @@ Rectangle {
         x: 5
         width: parent.width - 10
         text: element_name
-        color: "#262f31"
+        color: color_scheme.textColor
         anchors.horizontalCenter: parent.horizontalCenter
         wrapMode: Text.WordWrap
     }

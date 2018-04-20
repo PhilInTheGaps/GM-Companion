@@ -4,6 +4,8 @@ import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4 as Controls1_4
 
+import gm.companion.colorscheme 1.0
+
 Page {
     id: audio_list_page
 
@@ -49,6 +51,10 @@ Page {
         icon_image.source = "file://" + resourcesPath + path
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     Column {
         width: parent.width
         height: parent.height
@@ -57,11 +63,13 @@ Page {
         Text {
             id: list_name_text
             text: qsTr("Audio List")
+            color: color_scheme.textColor
         }
 
         Text {
             id: selected_file_text
             text: qsTr("Selected File:")
+            color: color_scheme.textColor
         }
 
         Row {
@@ -201,6 +209,7 @@ Page {
 
                 Text {
                     text: qsTr("Playback Mode")
+                    color: color_scheme.textColor
                 }
 
                 RadioButton {
@@ -208,6 +217,10 @@ Page {
                     checked: true
                     text: qsTr("Shuffle List")
                     width: parent.width
+
+                    background: Rectangle {
+                        color: "#e0e0e0"
+                    }
 
                     ToolTip.text: qsTr("Playlist is shuffled before playing. Loops.")
                     ToolTip.visible: hovered
@@ -225,6 +238,10 @@ Page {
                     text: qsTr("Random Mode")
                     width: parent.width
 
+                    background: Rectangle {
+                        color: "#e0e0e0"
+                    }
+
                     ToolTip.text: qsTr("Files are played randomly, does not stop.")
                     ToolTip.visible: hovered
                     hoverEnabled: true
@@ -241,6 +258,10 @@ Page {
                     text: qsTr("Loop List")
                     width: parent.width
 
+                    background: Rectangle {
+                        color: "#e0e0e0"
+                    }
+
                     ToolTip.text: qsTr("Playlist loops in sequential order.")
                     ToolTip.visible: hovered
                     hoverEnabled: true
@@ -256,6 +277,10 @@ Page {
                     checked: false
                     text: qsTr("Sequential Order")
                     width: parent.width
+
+                    background: Rectangle {
+                        color: "#e0e0e0"
+                    }
 
                     ToolTip.text: qsTr("Playlist is played in set order. Does not loop.")
                     ToolTip.visible: hovered
@@ -277,6 +302,7 @@ Page {
                 Text {
                     text: qsTr("List Icon")
                     width: parent.width
+                    color: color_scheme.textColor
                 }
 
                 Row {

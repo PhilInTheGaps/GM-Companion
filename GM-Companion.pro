@@ -116,7 +116,6 @@ QML_IMPORT_PATH =
 RC_FILE = gm-companion/GM-Companion.rc
 
 RESOURCES += gm-companion/resources/resources.qrc \
-    gm-companion/resources/styles/qdarkstyle/style.qrc \
     gm-companion/ui/qml.qrc
 
 TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts

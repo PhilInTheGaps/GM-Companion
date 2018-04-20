@@ -13,6 +13,10 @@ Page {
 
     Component.onCompleted: editor_tool.updateCategories()
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     ItemEditorTool {
         id: editor_tool
 
@@ -68,6 +72,7 @@ Page {
 
             Text {
                 text: qsTr("Add New Items")
+                color: color_scheme.textColor
             }
 
             Row {
@@ -114,6 +119,7 @@ Page {
 
             Text {
                 text: qsTr("Add New Categories")
+                color: color_scheme.textColor
             }
 
             Row {
@@ -145,6 +151,7 @@ Page {
                 wrapMode: "WordWrap"
                 clip: true
 
+                color: color_scheme.textColor
                 text: qsTr("Tutorial:\n
 Categories
 - To add a new item category enter a category name

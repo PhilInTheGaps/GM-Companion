@@ -21,6 +21,10 @@ Page {
         save_load.initializeLoading()
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     DSA5SheetTool {
         id: sheet_tool
 
@@ -738,6 +742,7 @@ Page {
                 Text {
                     id: tier_allgemein_text
                     text: "Allgemeine Daten"
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -777,6 +782,7 @@ Page {
                 Text {
                     id: tier_kampf_text
                     text: "Kampf"
+                    color: color_scheme.textColor
                 }
 
                 Row {

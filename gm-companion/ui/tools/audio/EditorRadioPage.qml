@@ -30,6 +30,10 @@ Page {
         icon_image.source = "file://" + resourcesPath + path
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     Column {
         anchors.fill: parent
         spacing: 5
@@ -37,6 +41,7 @@ Page {
         Text {
             id: name_text
             text: qsTr("Radio")
+            color: color_scheme.textColor
         }
 
         Button {
@@ -52,6 +57,10 @@ Page {
             ToolTip.text: qsTr("In local mode, a local playlist is read instead of a web URL.")
             ToolTip.visible: hovered
             hoverEnabled: true
+
+            background: Rectangle {
+                color: "#e0e0e0"
+            }
 
             onCheckedChanged: {
                 changeLocal(checked)
@@ -69,6 +78,7 @@ Page {
         Text {
             id: url_text
             text: qsTr("URL")
+            color: color_scheme.textColor
         }
 
         TextField {
@@ -82,6 +92,7 @@ Page {
 
         Text {
             text: qsTr("Radio Icon")
+            color: color_scheme.textColor
         }
 
         TextField {

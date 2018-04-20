@@ -392,6 +392,7 @@ Page {
 
                     Text {
                         text: qsTr("Project")
+                        color: color_scheme.textColor
                     }
 
                     ComboBox {
@@ -411,6 +412,7 @@ Page {
 
                     Text {
                         text: qsTr("Project Structure")
+                        color: color_scheme.textColor
                     }
 
                     ScrollView {
@@ -494,6 +496,7 @@ Page {
 
                             Text {
                                 text: qsTr("Sounds")
+                                color: color_scheme.textColor
                             }
                         }
 
@@ -502,6 +505,7 @@ Page {
                             text: qsTr("No Music Selected")
                             wrapMode: Text.WordWrap
                             width: parent.width
+                            color: color_scheme.textColor
                         }
 
                         Frame {
@@ -519,6 +523,7 @@ Page {
                                     text: ""
                                     clip: true
                                     elide: Text.ElideRight
+                                    color: color_scheme.textColor
                                 }
 
                                 Text {
@@ -527,6 +532,7 @@ Page {
                                     text: ""
                                     clip: true
                                     elide: Text.ElideRight
+                                    color: color_scheme.textColor
                                 }
 
                                 Text {
@@ -535,6 +541,7 @@ Page {
                                     text: ""
                                     clip: true
                                     elide: Text.ElideRight
+                                    color: color_scheme.textColor
                                 }
                             }
                         }
@@ -560,6 +567,7 @@ Page {
                                 clip: true
                                 elide: Text.ElideRight
                                 text: name
+                                color: color_scheme.textColor
 
                                 MouseArea {
                                     anchors.fill: parent
