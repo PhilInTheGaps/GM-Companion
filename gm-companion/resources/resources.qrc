@@ -85,6 +85,8 @@
         <file alias="ring_arrow_dark.png">icons/menu/ring_arrow_dark.png</file>
         <file alias="x_sign_dark.png">icons/menu/x_sign_dark.png</file>
         <file alias="x_sign_bright.png">icons/menu/x_sign_bright.png</file>
+        <file alias="arrow_down_dark.png">icons/menu/arrow_down_dark.png</file>
+        <file alias="arrow_up_dark.png">icons/menu/arrow_up_dark.png</file>
     </qresource>
     <qresource prefix="/icons/dice">
         <file alias="d4.png">icons/dice/d4.png</file>
