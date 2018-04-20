@@ -9,7 +9,7 @@ Rectangle {
     signal clicked(string element)
 
     objectName: element
-    width: parent.width
+    width: parent ? parent.width : 0
     height: 30
 
     Image {

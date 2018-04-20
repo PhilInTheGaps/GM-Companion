@@ -121,7 +121,7 @@ Page {
                     ComboBox {
                         property bool loaded: false
                         width: parent.width / 2
-                        model: [qsTr("Dark"), qsTr("Bright")]
+                        model: ["Dark", "Bright"]
 
                         onCurrentTextChanged: {
                             if (loaded) {

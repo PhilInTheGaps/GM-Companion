@@ -18,6 +18,7 @@ Page {
     SwipeView {
         id: audio_swipe
         anchors.fill: parent
+        interactive: false
 
         background: Rectangle {
             color: color_scheme.backgroundColor
@@ -531,6 +532,8 @@ Page {
 
         Editor {
             id: audio_editor
+
+            onBackToTool: audio_swipe.currentIndex = 0
         }
     }
 }

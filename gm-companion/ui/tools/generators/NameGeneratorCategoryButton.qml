@@ -10,7 +10,7 @@ Rectangle {
     property var max_width
     signal clicked(string category)
 
-    width: max_width
+    width: parent.width
     height: 30
 
     ColorScheme {

@@ -82,32 +82,20 @@ Page {
         Column {
             id: left_column
             height: parent.height - parent.topPadding * 2
-            width: 150
+            width: parent.width / 8
             spacing: 5
 
-            Frame {
-                id: font_size_frame
+            Text {
+                id: font_size_text
+                text: qsTr("Font Size:")
+            }
+
+            SpinBox {
+                id: font_size_spin_box
+                value: 12
                 width: parent.width
-                padding: 5
 
-                Row {
-                    width: parent.width
-                    spacing: 5
-
-                    Text {
-                        id: font_size_text
-                        text: qsTr("Font Size:")
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    SpinBox {
-                        id: font_size_spin_box
-                        value: 12
-                        width: parent.width - parent.spacing - font_size_text.width
-
-                        onValueChanged: text_edit.font.pointSize = value
-                    }
-                }
+                onValueChanged: text_edit.font.pointSize = value
             }
 
             TextField {
@@ -124,6 +112,15 @@ Page {
                 onClicked: notes_tool.addChapter(add_chapter_text_field.text)
             }
 
+            DelayButton {
+                id: delete_chapter_button
+                width: parent.width
+
+                text: qsTr("Delete Chapter")
+                delay: 1200
+                onActivated: notes_tool.deleteChapter(notes_tool.currentChapter)
+            }
+
             Frame {
                 id: chapters_text_frame
                 width: parent.width
@@ -134,23 +131,21 @@ Page {
                 }
             }
 
-            Column {
-                id: chapter_column
+            ScrollView {
                 width: parent.width
-                height: parent.height - font_size_frame.height - chapters_text_frame.height
+                height: parent.height - font_size_text.height
+                        - font_size_spin_box.height - chapters_text_frame.height
                         - delete_chapter_button.height - add_chapter_text_field.height
-                        - add_chapter_button.height - parent.spacing * 5
+                        - add_chapter_button.height - parent.spacing * 6
 
-                spacing: 5
-            }
+                clip: true
 
-            DelayButton {
-                id: delete_chapter_button
-                width: parent.width
+                Column {
+                    id: chapter_column
+                    width: parent.parent.width
 
-                text: qsTr("Delete Chapter")
-                delay: 1200
-                onActivated: notes_tool.deleteChapter(notes_tool.currentChapter)
+                    spacing: 5
+                }
             }
         }
 
@@ -179,7 +174,7 @@ Page {
 
         Column {
             id: right_column
-            width: 150
+            width: parent.width / 8
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
@@ -195,6 +190,16 @@ Page {
                 width: parent.width
 
                 onClicked: notes_tool.addPage(add_page_text_field.text)
+            }
+
+            DelayButton {
+                id: delete_page_button
+                width: parent.width
+
+                text: qsTr("Delete Page")
+
+                delay: 1200
+                onActivated: notes_tool.deletePage(notes_tool.currentPage)
             }
 
             Button {
@@ -225,19 +230,9 @@ Page {
 
                 Column {
                     id: page_column
-                    width: right_column.width - right_column.padding * 2
+                    width: right_column.width
                     spacing: 5
                 }
-            }
-
-            DelayButton {
-                id: delete_page_button
-                width: parent.width
-
-                text: qsTr("Delete Page")
-
-                delay: 1200
-                onActivated: notes_tool.deletePage(notes_tool.currentPage)
             }
         }
     }

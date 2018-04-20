@@ -45,8 +45,24 @@ Page {
             spacing: 5
 
             Button {
-                text: qsTr("Back")
 
+                ToolTip.text: qsTr("Back")
+                ToolTip.visible: hovered
+                hoverEnabled: true
+
+                Image {
+                    source: "/icons/media/playBackwards.png"
+                    width: parent.height * 0.9
+                    height: width
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    sourceSize.width: width
+                    sourceSize.height: height
+                }
+
+                width: height
                 onClicked: backToShopEditor()
             }
 
@@ -126,6 +142,8 @@ Page {
                 width: parent.width
                 padding: 0
                 readOnly: true
+                wrapMode: "WordWrap"
+                clip: true
 
                 text: qsTr("Tutorial:\n
 Categories
@@ -150,8 +168,11 @@ Items
             height: parent.height
             spacing: 5
 
-            ListModel {
-                id: table_model
+            Button {
+                id: delete_item_button
+                text: qsTr("Delete Selected Item")
+
+                onClicked: editor_tool.deleteItem(item_table_view.currentRow)
             }
 
             Controls1_4.TableView {
@@ -159,7 +180,9 @@ Items
                 width: parent.width
                 height: parent.height - parent.spacing - delete_item_button.height
 
-                model: table_model
+                model: ListModel {
+                    id: table_model
+                }
 
                 Component.onCompleted: editor_tool.updateItems()
 
@@ -195,13 +218,6 @@ Items
                     width: item_table_view.width - item_column.width
                            - price_column.width - category_column.width - 2
                 }
-            }
-
-            Button {
-                id: delete_item_button
-                text: qsTr("Delete Selected")
-
-                onClicked: editor_tool.deleteItem(item_table_view.currentRow)
             }
         }
     }

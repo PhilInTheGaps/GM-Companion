@@ -11,7 +11,7 @@ Rectangle {
 
     signal clicked(string chapter_name)
 
-    width: parent_width
+    width: parent.width
     height: 30
 
     ColorScheme {
@@ -25,6 +25,9 @@ Rectangle {
         Text {
             text: chapter
             color: mouse_area.pressed ? "black" : colors.buttonTextColor
+            width: parent.width - parent.padding * 2
+            clip: true
+            elide: Text.ElideRight
         }
     }
 

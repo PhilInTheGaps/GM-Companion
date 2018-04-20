@@ -10,7 +10,8 @@ Rectangle {
 
     signal clicked(string shop)
 
-    width: text.width + text_row.padding * 2
+    //    width: text.width + text_row.padding * 2
+    width: parent.width
     height: 30
 
     ColorScheme {
