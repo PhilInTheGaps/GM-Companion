@@ -15,6 +15,10 @@ Page {
         id: color_scheme
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     ShopTool {
         id: shop_tool
 
@@ -104,6 +108,7 @@ Page {
                 Text {
                     id: projects_text
                     text: qsTr("Projects")
+                    color: color_scheme.textColor
                 }
 
                 ComboBox {
@@ -154,6 +159,7 @@ Page {
                         id: shop_title_text
                         text: qsTr("No Shop Selected")
                         font.pointSize: 20
+                        color: color_scheme.textColor
                     }
 
                     Column {
@@ -162,11 +168,13 @@ Page {
                         Text {
                             id: shop_owner_text
                             text: qsTr("Owner: No Owner Available")
+                            color: color_scheme.textColor
                         }
 
                         Text {
                             id: shop_description_text
                             text: qsTr("Description: No Description Available")
+                            color: color_scheme.textColor
                         }
                     }
                 }

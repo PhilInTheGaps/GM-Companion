@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.audioeditor 1.0
+import gm.companion.colorscheme 1.0
 
 Page {
     id: audio_editor
@@ -112,6 +113,10 @@ Page {
                 button.moveDown.connect(moveElementDown)
             }
         }
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
     }
 
     Dialog {
@@ -278,6 +283,7 @@ Page {
             Text {
                 id: project_text
                 text: qsTr("Project")
+                color: color_scheme.textColor
             }
 
             ComboBox {
@@ -295,6 +301,7 @@ Page {
                 id: category_text
                 text: qsTr("Category")
                 width: parent.width - parent.padding * 2
+                color: color_scheme.textColor
             }
 
             ComboBox {
@@ -309,6 +316,7 @@ Page {
             Text {
                 id: scenario_text
                 text: qsTr("Scenario")
+                color: color_scheme.textColor
             }
 
             ComboBox {
@@ -324,6 +332,7 @@ Page {
             Text {
                 id: elements_text
                 text: qsTr("Elements")
+                color: color_scheme.textColor
             }
 
             ScrollView {
@@ -362,6 +371,7 @@ Page {
                     Text {
                         text: qsTr("No Element Selected")
                         anchors.horizontalCenter: parent.horizontalCenter
+                        color: color_scheme.textColor
                     }
                 }
 

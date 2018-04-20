@@ -22,6 +22,10 @@ Page {
         save_load.initializeLoading()
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     DefaultSheetTool {
         id: sheet_tool
 
@@ -154,6 +158,7 @@ Page {
                     Text {
                         id: bio_text
                         text: qsTr("Character Biography")
+                        color: color_scheme.textColor
                     }
 
                     TextArea {

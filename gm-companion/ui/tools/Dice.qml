@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.dicetool 1.0
+import gm.companion.colorscheme 1.0
 
 Page {
     id: dice_page
@@ -12,6 +13,14 @@ Page {
         id: dice_tool
 
         onCalculationStringChanged: calculation_text_edit.text = calculationString
+    }
+
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
     }
 
     Flow {
@@ -126,6 +135,7 @@ Page {
                     Text {
                         id: dice_count_text
                         text: qsTr("Dice Count")
+                        color: color_scheme.textColor
                     }
 
                     SpinBox {
@@ -142,6 +152,7 @@ Page {
                     id: sides_column
                     Text {
                         text: qsTr("Dice Sides")
+                        color: color_scheme.textColor
                     }
 
                     SpinBox {
@@ -158,6 +169,7 @@ Page {
                 Column {
                     Text {
                         text: qsTr("Modifier")
+                        color: color_scheme.textColor
                     }
 
                     SpinBox {
@@ -204,12 +216,14 @@ Page {
                     text: qsTr("Result:")
                     font.pixelSize: 35
                     anchors.verticalCenter: parent.verticalCenter
+                    color: color_scheme.textColor
                 }
 
                 Text {
                     id: roll_result
                     font.pixelSize: 35
                     text: "-"
+                    color: color_scheme.textColor
                 }
             }
         }
@@ -226,6 +240,7 @@ Page {
             TextEdit {
                 id: calculation_text_edit
                 readOnly: true
+                color: color_scheme.textColor
             }
         }
     }

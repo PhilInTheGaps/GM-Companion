@@ -89,6 +89,10 @@ Page {
         }
     }
 
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     Column {
         width: parent.width
         height: parent.height
@@ -231,6 +235,7 @@ Page {
                 Text {
                     id: project_text
                     text: qsTr("Project")
+                    color: color_scheme.textColor
                 }
 
                 ComboBox {
@@ -250,6 +255,7 @@ Page {
                 Text {
                     id: category_text
                     text: qsTr("Category")
+                    color: color_scheme.textColor
                 }
 
                 ComboBox {
@@ -271,6 +277,7 @@ Page {
                 Text {
                     id: shops_text
                     text: qsTr("Shops")
+                    color: color_scheme.textColor
                 }
 
                 ScrollView {
@@ -308,6 +315,7 @@ Page {
                             id: shop_name_text
                             text: qsTr("No Shop Selected")
                             font.pointSize: 20
+                            color: color_scheme.textColor
 
                             width: parent.width
                             clip: true

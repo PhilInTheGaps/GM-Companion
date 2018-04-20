@@ -23,6 +23,7 @@ Column {
 
     Text {
         text: path_type
+        color: color_scheme.textColor
     }
 
     Row {

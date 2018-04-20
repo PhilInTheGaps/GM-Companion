@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.combattracker 1.0
+import gm.companion.colorscheme 1.0
 
 Page {
     id: combat_tracker
@@ -34,6 +35,14 @@ Page {
                                                  status: qsTr("Alive")
                                              })
         }
+    }
+
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
     }
 
     ScrollView {
@@ -69,6 +78,7 @@ Page {
                             id: current_round_text
                             text: qsTr("Round: 1")
                             anchors.verticalCenter: parent.verticalCenter
+                            color: color_scheme.textColor
                         }
                     }
 
@@ -126,6 +136,7 @@ Page {
 
                 Text {
                     text: qsTr("Current Combatant")
+                    color: color_scheme.textColor
                 }
 
                 // Current Combatant Information
@@ -141,6 +152,7 @@ Page {
 
                             Text {
                                 text: qsTr("Name")
+                                color: color_scheme.textColor
                             }
 
                             Frame {
@@ -151,6 +163,7 @@ Page {
                                     id: combatant_name
                                     text: qsTr("No Combatant")
                                     anchors.verticalCenter: parent.verticalCenter
+                                    color: color_scheme.textColor
                                 }
                             }
 
@@ -161,18 +174,22 @@ Page {
 
                                 Text {
                                     text: qsTr("INI")
+                                    color: color_scheme.textColor
                                 }
 
                                 Text {
                                     text: qsTr("Health")
+                                    color: color_scheme.textColor
                                 }
 
                                 Text {
                                     text: qsTr("Max H.")
+                                    color: color_scheme.textColor
                                 }
 
                                 Text {
                                     text: qsTr("Status")
+                                    color: color_scheme.textColor
                                 }
 
                                 SpinBox {
@@ -257,14 +274,17 @@ Page {
                             spacing: 5
                             Text {
                                 text: qsTr("Name")
+                                color: color_scheme.textColor
                             }
 
                             Text {
                                 text: qsTr("INI")
+                                color: color_scheme.textColor
                             }
 
                             Text {
                                 text: qsTr("Health")
+                                color: color_scheme.textColor
                             }
 
                             TextField {
@@ -305,6 +325,7 @@ Page {
 
                 Text {
                     text: qsTr("Combatants")
+                    color: color_scheme.textColor
                 }
 
                 // Combatants Table

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.audioeditorfilebrowser 1.0
+import gm.companion.colorscheme 1.0
 
 Column {
     id: file_browser
@@ -85,6 +86,7 @@ Column {
     Text {
         id: type_text
         text: qsTr("Audio Type")
+        color: color_scheme.textColor
     }
 
     ScrollView {
@@ -100,6 +102,7 @@ Column {
 
             Text {
                 text: qsTr("Folders:")
+                color: color_scheme.textColor
             }
 
             Button {
@@ -133,6 +136,7 @@ Column {
 
             Text {
                 text: qsTr("Files:")
+                color: color_scheme.textColor
             }
 
             Button {

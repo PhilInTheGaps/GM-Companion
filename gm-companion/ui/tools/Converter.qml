@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.convertertool 1.0
+import gm.companion.colorscheme 1.0
 
 Page {
     id: converter
@@ -35,6 +36,14 @@ Page {
             money_units_1.model = moneyUnits
             money_units_2.model = moneyUnits
         }
+    }
+
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
     }
 
     ScrollView {
@@ -72,11 +81,13 @@ Page {
 
                             Text {
                                 text: qsTr("Unit Name:")
+                                color: color_scheme.textColor
                             }
 
                             Text {
                                 id: refUnit_text
                                 text: "Meters"
+                                color: color_scheme.textColor
                             }
 
                             TextField {
@@ -112,6 +123,7 @@ Page {
 
                 Text {
                     text: qsTr("Length")
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -170,6 +182,7 @@ Page {
 
                 Text {
                     text: qsTr("Area")
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -227,6 +240,7 @@ Page {
 
                 Text {
                     text: qsTr("Volume")
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -285,6 +299,7 @@ Page {
 
                 Text {
                     text: qsTr("Weight")
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -342,6 +357,7 @@ Page {
 
                 Text {
                     text: qsTr("Money")
+                    color: color_scheme.textColor
                 }
 
                 Row {

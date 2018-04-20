@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.charactertool 1.0
+import gm.companion.colorscheme 1.0
 import "./characters"
 
 Page {
@@ -73,6 +74,14 @@ Page {
         }
 
         onCharactersUpdated: loadActiveCharacterList()
+    }
+
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
     }
 
     Row {
@@ -210,6 +219,10 @@ Page {
                 height: parent.height - parent.spacing - save_delete_row.height
                 clip: true
 
+                background: Rectangle {
+                    color: color_scheme.backgroundColor
+                }
+
                 interactive: false
                 currentIndex: 0
 
@@ -265,9 +278,11 @@ Page {
 
                 Rectangle {
                     id: no_character_selected
+                    color: color_scheme.backgroundColor
 
                     Text {
                         text: qsTr("No Character Selected")
+                        color: color_scheme.textColor
 
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter

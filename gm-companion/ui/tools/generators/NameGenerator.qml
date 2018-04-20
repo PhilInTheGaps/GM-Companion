@@ -83,6 +83,7 @@ Item {
             Text {
                 id: names_count_text
                 text: qsTr("Generated Names")
+                color: color_scheme.textColor
             }
 
             SpinBox {
@@ -96,6 +97,7 @@ Item {
             Text {
                 id: names_font_size_text
                 text: qsTr("Font Size")
+                color: color_scheme.textColor
             }
 
             SpinBox {
@@ -117,6 +119,7 @@ Item {
             Text {
                 id: names_categories_text
                 text: qsTr("Name Categories")
+                color: color_scheme.textColor
             }
 
             ScrollView {
@@ -162,6 +165,7 @@ Item {
                     Text {
                         id: male_names_text
                         text: qsTr("Male Names")
+                        color: color_scheme.textColor
                     }
 
                     TextArea {
@@ -169,6 +173,7 @@ Item {
                         width: parent.width
                         height: parent.height - male_names_text.height - parent.spacing
 
+                        color: color_scheme.textColor
                         readOnly: true
                         selectByMouse: true
                     }
@@ -183,12 +188,14 @@ Item {
                     Text {
                         id: female_names_text
                         text: qsTr("Female Names")
+                        color: color_scheme.textColor
                     }
 
                     TextArea {
                         id: female_names_text_area
                         width: parent.width
                         height: parent.height - female_names_text.height - parent.spacing
+                        color: color_scheme.textColor
 
                         readOnly: true
                         selectByMouse: true

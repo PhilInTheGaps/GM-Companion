@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.notestool 1.0
+import gm.companion.colorscheme 1.0
 import "./notes"
 
 Page {
@@ -74,6 +75,14 @@ Page {
         }
     }
 
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     Row {
         anchors.fill: parent
         spacing: 5
@@ -88,6 +97,7 @@ Page {
             Text {
                 id: font_size_text
                 text: qsTr("Font Size:")
+                color: color_scheme.textColor
             }
 
             SpinBox {
@@ -128,6 +138,7 @@ Page {
 
                 Text {
                     text: qsTr("Chapters")
+                    color: color_scheme.textColor
                 }
             }
 
@@ -166,6 +177,7 @@ Page {
 
                     selectByMouse: true
                     wrapMode: TextEdit.WordWrap
+                    color: color_scheme.textColor
 
                     onTextChanged: notes_tool.saveCurrentPageContent(text)
                 }
@@ -217,6 +229,7 @@ Page {
 
                 Text {
                     text: qsTr("Pages")
+                    color: color_scheme.textColor
                 }
             }
 

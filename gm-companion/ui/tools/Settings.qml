@@ -7,6 +7,7 @@ import Qt.labs.platform 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import gm.companion.updatemanager 1.0
+import gm.companion.colorscheme 1.0
 import "./settings"
 
 Page {
@@ -41,6 +42,14 @@ Page {
         id: platform_details
     }
 
+    ColorScheme {
+        id: color_scheme
+    }
+
+    background: Rectangle {
+        color: color_scheme.backgroundColor
+    }
+
     ScrollView {
         id: settings_scroll_view
         width: parent.width
@@ -64,11 +73,13 @@ Page {
 
                 Text {
                     text: qsTr("Changing settings requires a program restart!")
+                    color: color_scheme.textColor
                 }
 
                 Text {
                     text: qsTr("Language")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -78,6 +89,7 @@ Page {
                         text: qsTr("Select Language")
                         width: parent.width / 2
                         anchors.verticalCenter: parent.verticalCenter
+                        color: color_scheme.textColor
                     }
 
                     ComboBox {
@@ -107,6 +119,7 @@ Page {
                 Text {
                     text: qsTr("User Interface")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -116,6 +129,7 @@ Page {
                         text: qsTr("Select Style")
                         width: parent.width / 2
                         anchors.verticalCenter: parent.verticalCenter
+                        color: color_scheme.textColor
                     }
 
                     ComboBox {
@@ -146,6 +160,7 @@ Page {
                     text: qsTr("Updates")
                     font.bold: true
                     visible: platform_details.isAndroid ? false : true
+                    color: color_scheme.textColor
                 }
 
                 Row {
@@ -199,6 +214,7 @@ Page {
                 Text {
                     text: qsTr("Paths")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 PathItem {
@@ -264,10 +280,12 @@ Page {
                 Text {
                     text: qsTr("Addons")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 Text {
                     text: "// TODO"
+                    color: color_scheme.textColor
                 }
             }
 
@@ -282,6 +300,7 @@ Page {
                 Text {
                     text: qsTr("Help")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 Button {

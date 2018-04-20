@@ -13,9 +13,9 @@ QString ColorScheme::textColor()
 {
     if (style == "Dark")
     {
-        return "white";
+        return "#f6f7f8";
     }
-    else if (style == "Bright")
+    else
     {
         return "black";
     }
@@ -25,9 +25,9 @@ QString ColorScheme::backgroundColor()
 {
     if (style == "Dark")
     {
-        return "black";
+        return "#2e2e2e";
     }
-    else if (style == "Bright")
+    else
     {
         return "white";
     }
@@ -37,9 +37,9 @@ QString ColorScheme::toolbarColor()
 {
     if (style == "Dark")
     {
-        return "#bdc3c7";
+        return "#2f3740";
     }
-    else if (style == "Bright")
+    else
     {
         return "#2f3740";
     }
@@ -51,7 +51,7 @@ QString ColorScheme::toolbarTextColor()
     {
         return "white";
     }
-    else if (style == "Bright")
+    else
     {
         return "white";
     }
@@ -61,9 +61,9 @@ QString ColorScheme::menuColor()
 {
     if (style == "Dark")
     {
-        return "#1b2224";
+        return "#343a43";
     }
-    else if (style == "Bright")
+    else
     {
         return "#343a43";
     }
@@ -73,9 +73,9 @@ QString ColorScheme::dividerColor()
 {
     if (style == "Dark")
     {
-        return "#262f31";
+        return "#bec2c5";
     }
-    else if (style == "Bright")
+    else
     {
         return "#bec2c5";
     }
@@ -85,9 +85,9 @@ QString ColorScheme::primaryButtonColor()
 {
     if (style == "Dark")
     {
-        return "#262f31";
+        return "#3f4957";
     }
-    else if (style == "Bright")
+    else
     {
         return "#3f4957";
     }
@@ -97,9 +97,9 @@ QString ColorScheme::secondaryButtonColor()
 {
     if (style == "Dark")
     {
-        return "#262f31";
+        return "#404752";
     }
-    else if (style == "Bright")
+    else
     {
         return "#404752";
     }
@@ -111,7 +111,7 @@ QString ColorScheme::buttonTextColor()
     {
         return "white";
     }
-    else if (style == "Bright")
+    else
     {
         return "white";
     }
