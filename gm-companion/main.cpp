@@ -28,6 +28,7 @@
 #include "tools/characters/dsa5sheet.h"
 
 #include "settings/settingstool.h"
+#include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
 #include "ui/colorscheme.h"
@@ -47,8 +48,10 @@ void loadQmlClasses()
     qmlRegisterType<CombatTracker>(         "gm.companion.combattracker",          1, 0, "CombatTrackerTool");
     qmlRegisterType<NotesTool>(             "gm.companion.notestool",              1, 0, "NotesTool");
     qmlRegisterType<ConverterTool>(         "gm.companion.convertertool",          1, 0, "ConverterTool");
-    qmlRegisterType<SettingsTool>(          "gm.companion.settingstool",           1, 0, "SettingsTool");
     qmlRegisterType<NameGenerator>(         "gm.companion.namegeneratortool",      1, 0, "NameGeneratorTool");
+
+    qmlRegisterType<SettingsTool>(          "gm.companion.settingstool",           1, 0, "SettingsTool");
+    qmlRegisterType<AddonManager>(          "gm.companion.addonmanager",           1, 0, "AddonManager");
 
     qmlRegisterType<CharacterTool>(         "gm.companion.charactertool",          1, 0, "CharacterTool");
     qmlRegisterType<CharacterSaveLoad>(     "gm.companion.charactersaveload",      1, 0, "CharacterSaveLoad");
@@ -91,7 +94,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 
     QQmlApplicationEngine engine;
-
+    QPM_INIT(engine);
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;
