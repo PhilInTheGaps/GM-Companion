@@ -10,8 +10,8 @@ import gm.companion.platforms 1.0
 
 Column {
     id: column
-    property var path_type
-    property var setting
+    property string path_type
+    property string setting
 
     SettingsTool {
         id: settings
