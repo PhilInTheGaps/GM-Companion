@@ -7,6 +7,7 @@
 QT       += core gui multimedia multimediawidgets network quick qml
 
 win32:QT += winextras
+include(vendor/vendor.pri)
 
 TARGET = out/gm-companion
 TEMPLATE = app
@@ -52,7 +53,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/settings/settingstool.cpp \
     gm-companion/settings/settingsmanager.cpp \
 #    gm-companion/tools/addons/addonmanager.cpp \
-    gm-companion/platformdetails.cpp
+    gm-companion/platformdetails.cpp \
+    gm-companion/managers/addonmanager.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -106,7 +108,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/settings/settingstool.h \
     gm-companion/settings/settingsmanager.h \
 #    gm-companion/tools/addons/addonmanager.h \
-    gm-companion/platformdetails.h
+    gm-companion/platformdetails.h \
+    gm-companion/managers/addonmanager.h
 
 
 DISTFILES +=

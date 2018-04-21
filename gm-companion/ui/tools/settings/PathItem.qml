@@ -2,9 +2,9 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
-import Qt.labs.platform 1.0
+import QtQuick.Dialogs 1.3
 
+//import Qt.labs.platform 1.0
 import gm.companion.settingstool 1.0
 import gm.companion.platforms 1.0
 
@@ -34,6 +34,7 @@ Column {
             id: path_text_field
             width: button.visible ? parent.width - button.width - parent.spacing : parent.width
             text: settings.getPath(setting)
+            selectByMouse: true
 
             onTextChanged: {
                 settings.setPath(setting, text)
@@ -44,19 +45,21 @@ Column {
             id: button
             text: "..."
 
-            visible: platform_details.isWindows
-                     || platform_details.isMacOS ? true : false
-
             onClicked: {
-                folder_dialog.open()
+                file_dialog.open()
             }
         }
     }
 
-    FolderDialog {
-        id: folder_dialog
+    FileDialog {
+        id: file_dialog
+        title: "Set " + path_type + " Folder"
+
         folder: "file://" + path_text_field.text
 
-        onAccepted: path_text_field.text = currentFolder
+        selectFolder: true
+
+        onAccepted: path_text_field.text = fileUrl.toString().replace(
+                        "file://", "")
     }
 }

@@ -8,6 +8,8 @@ import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import gm.companion.updatemanager 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.addonmanager 1.0
+import com.blackgrain.qml.quickdownload 1.0
 import "./settings"
 
 Page {
@@ -22,6 +24,11 @@ Page {
         Component.onCompleted: {
             setCurrentVersion(1000)
             checkForUpdates()
+
+            if (getCurrentVersion() > newestVersionInt())
+                addon_manager.setIsTestVersion(true)
+
+            addon_manager.updateAddonList()
         }
 
         onUpdateAvailable: {
@@ -38,6 +45,44 @@ Page {
         }
     }
 
+    AddonManager {
+        id: addon_manager
+
+        onAddonListChanged: {
+            addon_busy_indicator.visible = false
+            addon_column.children = []
+
+            var component = Qt.createComponent("./settings/AddonItem.qml")
+
+            for (var i = 0; i < getAddonNames().length; i++) {
+                var installed = false
+                var outdated = false
+
+                if (getAddonStatusList()[i] !== 0) {
+                    installed = true
+
+                    if (getAddonStatusList()[i] === 1) {
+                        outdated = true
+                    }
+                }
+
+                var addonItem = component.createObject(addon_column, {
+                                                           x: 0,
+                                                           y: 0,
+                                                           addon: getAddonNames(
+                                                                      )[i],
+                                                           version: getAddonVersions(
+                                                                        )[i],
+                                                           description: getAddonDescriptions(
+                                                                            )[i],
+                                                           installed: installed,
+                                                           outdated: outdated,
+                                                           destination: getDestinationFolder()
+                                                       })
+            }
+        }
+    }
+
     PlatformDetails {
         id: platform_details
     }
@@ -50,31 +95,45 @@ Page {
         color: color_scheme.backgroundColor
     }
 
-    ScrollView {
-        id: settings_scroll_view
-        width: parent.width
-        height: parent.height
-        clip: true
+    Column {
+        anchors.fill: parent
+        bottomPadding: 5
 
-        Flow {
-            id: settings_flow
-            width: settings_scroll_view.width
+        TabBar {
+            id: tab_bar
+            width: parent.width - parent.padding * 2
+
+            TabButton {
+                text: qsTr("General")
+            }
+
+            TabButton {
+                text: qsTr("Paths")
+            }
+
+            TabButton {
+                text: qsTr("Addons")
+            }
+
+            TabButton {
+                text: qsTr("Info")
+            }
+        }
+
+        SwipeView {
+            id: swipe_view
+            width: parent.width - parent.padding * 2
+            height: parent.height - parent.spacing * 2 - parent.bottomPadding
+                    - tab_bar.height - restart_info_text.height
+            currentIndex: tab_bar.currentIndex
             padding: 5
             spacing: 5
+            interactive: false
 
             Column {
-                id: settings_column
-                width: settings_page.width
-                       > settings_page.height ? settings_flow.width / 2 - parent.spacing
-                                                - parent.padding : settings_flow.width
-                                                - parent.padding * 2
+                id: general_column
 
                 spacing: 5
-
-                Text {
-                    text: qsTr("Changing settings requires a program restart!")
-                    color: color_scheme.textColor
-                }
 
                 Text {
                     text: qsTr("Language")
@@ -87,14 +146,14 @@ Page {
 
                     Text {
                         text: qsTr("Select Language")
-                        width: parent.width / 2
+                        width: language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
 
                     ComboBox {
+                        id: language_box
                         property bool loaded: false
-                        width: parent.width / 2
                         model: ["English", "Deutsch"]
 
                         onCurrentTextChanged: {
@@ -127,14 +186,14 @@ Page {
 
                     Text {
                         text: qsTr("Select Style")
-                        width: parent.width / 2
+                        width: style_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
 
                     ComboBox {
+                        id: style_box
                         property bool loaded: false
-                        width: parent.width / 2
                         model: ["Dark", "Bright"]
 
                         onCurrentTextChanged: {
@@ -204,18 +263,10 @@ Page {
                                     "https://github.com/PhilInTheGaps/GM-Companion/releases")
                     }
                 }
+            }
 
-                Rectangle {
-                    height: 10
-                    width: height
-                    color: "transparent"
-                }
-
-                Text {
-                    text: qsTr("Paths")
-                    font.bold: true
-                    color: color_scheme.textColor
-                }
+            Column {
+                spacing: 5
 
                 PathItem {
                     path_type: qsTr("Audio Projects")
@@ -260,7 +311,7 @@ Page {
                 }
 
                 PathItem {
-                    path_type: qsTr("Shop Projects / Item Database")
+                    path_type: qsTr("Shop Projects / Item Library")
                     setting: "shop"
                     width: parent.width
                 }
@@ -276,32 +327,37 @@ Page {
                     width: height
                     color: "transparent"
                 }
+            }
 
-                Text {
-                    text: qsTr("Addons")
-                    font.bold: true
-                    color: color_scheme.textColor
+            Column {
+                spacing: 5
+
+                TextArea {
+                    width: parent.width
+                    padding: 0
+                    readOnly: true
+
+                    text: qsTr("Addons can be installed by clicking \"Download\". A download starts automatically and when it is finished, the downloaded archive is opened. \nTo finish the installation extract the content (A folder with the name of the addon) to the directory it was downloaded into. (your/home/folder/.gm-companion/addons) \nAfter installing addons the program must be restarted for them to work!")
+                    clip: true
+                    wrapMode: "WordWrap"
                 }
 
-                Text {
-                    text: "// TODO"
-                    color: color_scheme.textColor
+                BusyIndicator {
+                    id: addon_busy_indicator
+                    visible: true
+                    width: check_for_updates_button.height
+                    height: width
+                }
+
+                Column {
+                    id: addon_column
+                    width: parent.width
                 }
             }
 
             Column {
                 id: help_column
-                width: settings_page.width
-                       > settings_page.height ? settings_flow.width / 2 - parent.spacing
-                                                - parent.padding : settings_flow.width
-                                                - parent.padding * 2
                 spacing: 5
-
-                Text {
-                    text: qsTr("Help")
-                    font.bold: true
-                    color: color_scheme.textColor
-                }
 
                 Button {
                     text: qsTr("Open Wiki")
@@ -345,6 +401,12 @@ Page {
                     }
                 }
             }
+        }
+
+        Text {
+            id: restart_info_text
+            text: qsTr("Changing settings requires a program restart!")
+            color: "red"
         }
     }
 }

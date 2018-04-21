@@ -14,6 +14,8 @@ public:
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE void setCurrentVersion(int version);
     QString newestVersion();
+    Q_INVOKABLE int newestVersionInt();
+    Q_INVOKABLE int getCurrentVersion();
 
 private slots:
     void on_networkManager_finished(QNetworkReply*reply);
@@ -23,7 +25,7 @@ private:
 
     QString feedURL;
     QString l_newestVersion;
-    int currentVersion;
+    int l_currentVersion;
 
 signals:
     void updateAvailable();

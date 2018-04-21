@@ -14,7 +14,8 @@ A tool for the gamemaster of a tabletop RPG session.
 
 ## Credits
 
-Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the CC BY 3.0 (http://creativecommons.org/licenses/by/3.0/)
+Uses [QuickDownload](https://github.com/Larpon/QuickDownload) by [Larpon](https://github.com/Larpon) under the [MIT license](https://github.com/Larpon/QuickDownload/blob/master/LICENSE)  
+Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 # Installation
 
@@ -57,28 +58,24 @@ sudo apt-get update
 sudo apt-get install gm-companion  
 ```
 
-### Other Distros
+## Building From Source
 
-Currently your only option is to compile the code yourself.  
-
+You can also build the program from source. This should work for Windows, Linux and Mac.  
+Even though the travis.ci build for MacOS compiles without errors, I don't know if that version works 100% as I don't own a Mac to test this on.
 
 GM-Companion requires Qt5 to build.  
 
 So the build steps would look something like this:  
 1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion)  
-2. Install Qt5  
-3. Go to the GM-Companion folder
-4. Run qmake
-5. Run make
-
-## MacOS
-
-As the GM-Companion is Qt5 based, it should run on MacOS.  
-Though I don't use a mac and can't confirm it.  
-You could try the same steps I wrote above for other Linux distros and compile everything yourself.
-
-Maybe it works, good luck!
-
+2. Install [Qt5](https://www.qt.io/)  
+3. Install [qpm](https://www.qpm.io/)
+4. Through qpm install QuickDownload
+	```
+	qpm install com.blackgrain.qml.quickdownload
+	```
+6. Switch to the GM-Companion folder
+7. Run qmake
+8. Run make
 
 
 Have fun!

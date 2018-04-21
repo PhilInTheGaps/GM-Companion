@@ -22,13 +22,13 @@ UpdateManager::UpdateManager()
 
 void UpdateManager::setCurrentVersion(int version)
 {
-    currentVersion = version;
+    l_currentVersion = version;
 }
 
 void UpdateManager::checkForUpdates()
 {
     qDebug().noquote() << "Checking for updates ...";
-    qDebug().noquote() << "Current version:" << currentVersion;
+    qDebug().noquote() << "Current version:" << l_currentVersion;
     qDebug().noquote() << "Releases feed URL:" << feedURL;
 
     // Get the release feed to check for a new version
@@ -38,6 +38,16 @@ void UpdateManager::checkForUpdates()
 QString UpdateManager::newestVersion()
 {
     return l_newestVersion;
+}
+
+int UpdateManager::newestVersionInt()
+{
+    return l_newestVersion.replace(".", "").toInt();
+}
+
+int UpdateManager::getCurrentVersion()
+{
+    return l_currentVersion;
 }
 
 // Evaluate the release feed
@@ -107,7 +117,7 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     }
 
     // Decide if a newer version is available than the one installed
-    if (newestVersion > currentVersion)
+    if (newestVersion > l_currentVersion)
     {
         qDebug().noquote() << "Found a newer version:" << newestVersionTitle;
         l_newestVersion = newestVersionTitle;
