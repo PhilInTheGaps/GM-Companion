@@ -1,6 +1,8 @@
 #ifndef CONVERTERTOOL_H
 #define CONVERTERTOOL_H
 
+#include "gm-companion/settings/settingsmanager.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QList>
@@ -43,6 +45,9 @@ signals:
 private:
     QStringList unitPaths;
     QStringList unitTypes = {"LengthUnits", "AreaUnits", "VolumeUnits", "WeightUnits", "MoneyUnits"};
+
+    SettingsManager sManager;
+    void addAddonUnits();
 
     double textToNumber(QString text);
 
