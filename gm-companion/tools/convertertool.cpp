@@ -1,4 +1,5 @@
 #include "convertertool.h"
+#include "gm-companion/functions.h"
 #include <QSettings>
 #include <QDir>
 #include <QDebug>
@@ -6,9 +7,29 @@
 ConverterTool::ConverterTool(QObject *parent) : QObject(parent)
 {
     unitPaths.append({ ":/units/default.ini", QDir::homePath() + "/.gm-companion/units/custom.ini" });
+    addAddonUnits();
     updateUnits();
 }
 
+// Find installed addons and if they have a units.ini file, add it to the unit
+// paths
+void ConverterTool::addAddonUnits()
+{
+    QString basePath = QDir::homePath() + "/.gm-companion/addons";
+
+    for (QString addon : getFolders(basePath))
+    {
+        if (sManager.getIsAddonEnabled(addon))
+        {
+            if (QFile(basePath + "/" + addon + "/units.ini").exists())
+            {
+                unitPaths.append(basePath + "/" + addon + "/units.ini");
+            }
+        }
+    }
+}
+
+// Read all the units from the .ini files
 void ConverterTool::updateUnits()
 {
     qDebug() << "Updating Units ...";
@@ -31,6 +52,7 @@ void ConverterTool::updateUnits()
     for (QString path : unitPaths)
     {
         QSettings settings(path, QSettings::IniFormat);
+        settings.setIniCodec("UTF-8");
 
         for (QString type : unitTypes)
         {
@@ -82,6 +104,7 @@ void ConverterTool::updateUnits()
     emit moneyUnitsChanged();
 }
 
+// Convert a string to a number, necessary, because the ui uses textfields
 double ConverterTool::textToNumber(QString text)
 {
     QString temp   = text.replace(",", ".");
@@ -90,11 +113,13 @@ double ConverterTool::textToNumber(QString text)
     return number;
 }
 
+// Add custom unit
 void ConverterTool::addUnit(QString name, QString refUnits, QString type)
 {
     if (!name.isNull() && !refUnits.isNull() && !type.isNull())
     {
         QSettings settings(QDir::homePath() + "/.gm-companion/units/custom.ini", QSettings::IniFormat);
+        settings.setIniCodec("UTF-8");
 
         QString arrayName;
 
@@ -141,6 +166,8 @@ void ConverterTool::addUnit(QString name, QString refUnits, QString type)
     }
 }
 
+// Return the name of the reference unit that belongs to the unit type.
+// Example: returns "Meters" for "Length"
 QString ConverterTool::refUnitName(QString unit)
 {
     QString refUnit;
@@ -232,68 +259,43 @@ double ConverterTool::lengthUnitValue(QString unit)
 {
     int i = l_lengthUnits.indexOf(unit);
 
-    if (i > -1)
-    {
-        return l_lengthUnitsValues.at(i);
-    }
-    else
-    {
-        return 0;
-    }
+    if (i > -1) return l_lengthUnitsValues.at(i);
+
+    else return 0;
 }
 
 double ConverterTool::areaUnitValue(QString unit)
 {
     int i = l_areaUnits.indexOf(unit);
 
-    if (i > -1)
-    {
-        return l_areaUnitsValues.at(i);
-    }
-    else
-    {
-        return 0;
-    }
+    if (i > -1) return l_areaUnitsValues.at(i);
+
+    else return 0;
 }
 
 double ConverterTool::volumeUnitValue(QString unit)
 {
     int i = l_volumeUnits.indexOf(unit);
 
-    if (i > -1)
-    {
-        return l_volumeUnitsValues.at(i);
-    }
-    else
-    {
-        return 0;
-    }
+    if (i > -1) return l_volumeUnitsValues.at(i);
+
+    else return 0;
 }
 
 double ConverterTool::weightUnitValue(QString unit)
 {
     int i = l_weightUnits.indexOf(unit);
 
-    if (i > -1)
-    {
-        return l_weightUnitsValues.at(i);
-    }
-    else
-    {
-        return 0;
-    }
+    if (i > -1) return l_weightUnitsValues.at(i);
+
+    else return 0;
 }
 
 double ConverterTool::moneyUnitValue(QString unit)
 {
     int i = l_moneyUnits.indexOf(unit);
 
-    if (i > -1)
-    {
-        return l_moneyUnitsValues.at(i);
-    }
-    else
-    {
-        return 0;
-    }
+    if (i > -1) return l_moneyUnitsValues.at(i);
+
+    else return 0;
 }
