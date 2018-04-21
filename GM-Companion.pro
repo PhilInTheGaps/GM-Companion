@@ -52,9 +52,9 @@ SOURCES += gm-companion/main.cpp \
     # Settings
     gm-companion/settings/settingstool.cpp \
     gm-companion/settings/settingsmanager.cpp \
-#    gm-companion/tools/addons/addonmanager.cpp \
     gm-companion/platformdetails.cpp \
-    gm-companion/managers/addonmanager.cpp
+    gm-companion/managers/addonmanager.cpp \
+    gm-companion/managers/filemanager.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -107,9 +107,9 @@ HEADERS  += gm-companion/functions.h \
     # Settings
     gm-companion/settings/settingstool.h \
     gm-companion/settings/settingsmanager.h \
-#    gm-companion/tools/addons/addonmanager.h \
     gm-companion/platformdetails.h \
-    gm-companion/managers/addonmanager.h
+    gm-companion/managers/addonmanager.h \
+    gm-companion/managers/filemanager.h
 
 
 DISTFILES +=

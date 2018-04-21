@@ -30,6 +30,7 @@
 #include "settings/settingstool.h"
 #include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
+#include "managers/filemanager.h"
 #include "platformdetails.h"
 #include "ui/colorscheme.h"
 #include "tools/project_converter/projectconverter.h"
@@ -80,6 +81,10 @@ int main(int argc, char *argv[])
 
     if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
+
+    // Create program files and remove old ones that are no longer required
+    FileManager fileManager;
+    fileManager.run();
 
     // Convert Projects to newest version
     ProjectConverter projConverter;
