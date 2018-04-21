@@ -19,7 +19,7 @@ CONFIG += c++11
 SOURCES += gm-companion/main.cpp \
     # UI
     gm-companion/ui/colorscheme.cpp \
-#    # Other
+    # Other
     gm-companion/functions.cpp \
     # Tools
     gm-companion/tools/maptool.cpp \
@@ -144,4 +144,4 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += resources
 }
 
-unix:!macx: LIBS += -ltag
+unix:!macx:!android: LIBS += -ltag

@@ -6,13 +6,15 @@
 #include <QMediaMetaData>
 
 // Linux only
- #ifdef __linux__
- # include "taglib/tag.h"
- # include "taglib/taglib.h"
- # include "taglib/fileref.h"
- # include "taglib/mpegfile.h"
- # include "taglib/id3v2tag.h"
- # include "taglib/attachedpictureframe.h"
+ #ifdef Q_OS_LINUX
+# ifndef Q_OS_ANDROID
+ #  include "taglib/tag.h"
+ #  include "taglib/taglib.h"
+ #  include "taglib/fileref.h"
+ #  include "taglib/mpegfile.h"
+ #  include "taglib/id3v2tag.h"
+ #  include "taglib/attachedpictureframe.h"
+# endif // ifndef Q_OS_ANDROID
  #endif // ifdef __linux__
 
 AudioTool::AudioTool(QObject *parent) : QObject(parent)
@@ -514,7 +516,8 @@ void AudioTool::onMetaDataChanged()
     {
         // Reading tags using TagLib, as it is way more reliable than
 
-        #ifdef __linux__
+        #ifdef Q_OS_LINUX
+        # ifndef Q_OS_ANDROID
 
         if (musicPlayer->bufferStatus() == 100)
         {
@@ -526,6 +529,7 @@ void AudioTool::onMetaDataChanged()
             l_artist   = f.tag()->artist().toCString(true);
             l_songName =  f.tag()->title().toCString(true);
         }
+        # endif // ifndef Q_OS_ANDROID
         #else // ifdef __linux__
 
         // I can't get TagLib to work on Windows though, so this mess below has

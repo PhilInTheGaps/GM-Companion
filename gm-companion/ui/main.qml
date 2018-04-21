@@ -297,7 +297,6 @@ Window {
         Maps {
             id: maps
         }
-
         Dice {
             id: dice
             padding: 5

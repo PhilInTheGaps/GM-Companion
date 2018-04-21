@@ -59,7 +59,12 @@ Column {
 
         selectFolder: true
 
-        onAccepted: path_text_field.text = fileUrl.toString().replace(
-                        "file://", "")
+        onAccepted: {
+            if (platform_details.isWindows)
+                path_text_field.text = fileUrl.toString().replace("file:///",
+                                                                  "")
+            else
+                path_text_field.text = fileUrl.toString().replace("file://", "")
+        }
     }
 }
