@@ -99,17 +99,10 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 
     QQmlApplicationEngine engine;
-    QPM_INIT(engine);
+    engine.addImportPath(QStringLiteral("qrc:/"));
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;
 
     return app.exec();
-
-    /*
-        // Update Manager checks if a new version of the gm-companion is
-       available
-        UpdateManager *updateManager = new UpdateManager(1000);
-        updateManager->checkForUpdates();
-     */
 }

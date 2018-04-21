@@ -4,8 +4,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 Button {
-    property var tool_name
-    property var icon_source
+    property string tool_name
+    property string icon_source
 
     id: button
     width: parent.width
