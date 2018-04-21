@@ -68,16 +68,21 @@ void AddonManager::fileDownloaded(QNetworkReply *reply)
     {
         replyString = replyString.replace("\n", "");
 
+        qDebug() << replyString;
+
         QStringList addons = replyString.split(";");
 
         for (QString addon : addons)
         {
             QStringList info = addon.split(":");
 
-            l_addonNames.append(info.at(0));
-            l_addonVersions.append(info.at(1));
-            l_addonDescriptions.append(info.at(2));
-            l_addonStatusList.append(addonStatus(info.at(0), info.at(1)));
+            if (info.size() > 2)
+            {
+                l_addonNames.append(info.at(0));
+                l_addonVersions.append(info.at(1));
+                l_addonDescriptions.append(info.at(2));
+                l_addonStatusList.append(addonStatus(info.at(0), info.at(1)));
+            }
         }
     }
     else

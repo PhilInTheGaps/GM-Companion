@@ -47,7 +47,9 @@ void AudioConverter::convert()
     {
         if (file.endsWith(".ini"))
         {
-            QFile(basePath + "/" + file).rename(basePath + "/" + file.replace(".ini", ".audio"));
+            QFile   f(basePath + "/" + file);
+            QString newName = file.replace(".ini", ".audio");
+            f.rename(basePath + "/" + newName);
         }
 
         if (file.endsWith(".audio"))
