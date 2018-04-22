@@ -1,10 +1,14 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: gm-companion
-Source: https://github.com/PhilInTheGaps/GM-Companion/archive/0.3.2.0.tar.gz
+Source: https://github.com/PhilInTheGaps/GM-Companion/archive/1.0.0.0.tar.gz
 
 Files: *
-Copyright: 2017 Phil Hoffmann <phil.hoffmann@inbox.com>
+Copyright: 2017-2018 Phil Hoffmann <phil.hoffmann@zoho.eu>
 License: GPLv3
+
+Files: lib/QuickDownload/*
+Copyright: 2015-2017 Lars Pontoppidan
+License: MIT
 
 Files: lib/*
 Copyright: 2017 The Qt Company

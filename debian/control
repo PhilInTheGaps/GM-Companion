@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Phil Hoffmann <phil.hoffmann@inbox.com>
 Build-Depends: g++, debhelper (>= 9), cdbs, libtag1-dev, qtbase5-dev, qt5-default, qttools5-dev, qttools5-dev-tools, qtmultimedia5-dev, libqt5opengl5-dev, qtscript5-dev, libqt5webkit5-dev, libqt5x11extras5-dev, libqt5xmlpatterns5-dev, qtdeclarative5-dev
 Standards-Version: 3.9.8
-Homepage: https://philinthegaps.github.io/GM-Companion/
+Homepage: https://gm-companion.github.io
 #Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion.git
 #Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gm-companion.git
 
