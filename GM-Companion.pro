@@ -7,7 +7,7 @@
 QT       += core gui multimedia multimediawidgets network quick qml
 
 win32:QT += winextras
-include(vendor/vendor.pri)
+include(lib/QuickDownload/quickdownload.pri)
 
 TARGET = out/gm-companion
 TEMPLATE = app

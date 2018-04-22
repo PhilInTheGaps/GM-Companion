@@ -22,9 +22,6 @@ matrix:
         - sudo apt-get update -qq
         - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev qt59declarative
         - source /opt/qt59/bin/qt59-env.sh
-        - sudo apt-get install golang-go
-        - go get qpm.io/qpm
-        - qpm install com.blackgrain.qml.quickdownload
       script:
         - qmake
         - make
@@ -34,8 +31,6 @@ matrix:
         - brew update
         - brew install qt5
         - brew link qt5 --force
-        - brew install qpm
-        - qpm install com.blackgrain.qml.quickdownload
       script:
         - qmake
         - make

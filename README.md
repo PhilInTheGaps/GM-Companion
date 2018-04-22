@@ -67,15 +67,10 @@ GM-Companion requires Qt5 to build.
 
 So the build steps would look something like this:  
 1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion)  
-2. Install [Qt5](https://www.qt.io/)  
-3. Install [qpm](https://www.qpm.io/)
-4. Through qpm install QuickDownload
-	```
-	qpm install com.blackgrain.qml.quickdownload
-	```
-6. Switch to the GM-Companion folder
-7. Run qmake
-8. Run make
+2. Install [Qt5](https://www.qt.io/) 
+3. Switch to the GM-Companion folder
+4. Run qmake
+5. Run make
 
 
 Have fun!
