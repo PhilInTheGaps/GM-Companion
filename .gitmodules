@@ -1,0 +1,3 @@
+[submodule "lib/QuickDownload"]
+	path = lib/QuickDownload
+	url = https://github.com/Larpon/QuickDownload/
