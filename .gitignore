@@ -2,6 +2,9 @@
 /gm-companion/deploy/
 /deploy/
 
+/vendor/
+qpm.json
+
 # C++ objects and libs
 
 *.slo
