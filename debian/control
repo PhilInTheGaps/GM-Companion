@@ -7,6 +7,7 @@ Standards-Version: 3.9.8
 Homepage: https://gm-companion.github.io
 #Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion.git
 #Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gm-companion.git
+
 Package: gm-companion
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5, libqt5qml5, libqt5quick5, qml-module-qtquick-layouts, qml-module-qtquick-window2, qml-module-qtquick2, qml-module-qtquick-controls, qml-module-qtquick-controls-styles-breeze
