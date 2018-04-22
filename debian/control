@@ -10,7 +10,7 @@ Homepage: https://gm-companion.github.io
 
 Package: gm-companion
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5, libqt5qml5, libqt5quick5, qml-module-qtquick-layouts, qml-module-qtquick-window2, qml-module-qtquick2, qml-module-ubuntu-performancemetrics
 Description: A tool for the gamemaster of a tabletop rpg session.
  The "GM-Companion" is a tool for the gamemaster of a tabletop rpg session.
  .
