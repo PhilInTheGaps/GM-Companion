@@ -4,7 +4,9 @@ import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
 
 import com.blackgrain.qml.quickdownload 1.0
+
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Row {
     property string addon: "Placeholder Addon"
@@ -20,6 +22,10 @@ Row {
 
     ColorScheme {
         id: color_scheme
+    }
+
+    PlatformDetails {
+        id: platform
     }
 
     Column {
@@ -74,8 +80,12 @@ Row {
             width: parent.width
 
             onClicked: {
-                download.destination = "file://" + destination + "/" + addon
-                        + "_" + version + ".zip"
+                if (platform.isWindows)
+                    download.destination = destination + "/" + addon + "_" + version + ".zip"
+                else
+                    download.destination = "file://" + destination + "/" + addon
+                            + "_" + version + ".zip"
+
                 download.running = true
             }
         }
@@ -104,8 +114,6 @@ Row {
 
         url: "https://raw.githubusercontent.com/PhilInTheGaps/GM-Companion/master_release_1_0/gm-companion/Addons/"
              + addon + "_" + version + ".zip"
-
-        running: false
 
         followRedirects: true
         onRedirected: console.log('Redirected', url, '->', redirectUrl)
