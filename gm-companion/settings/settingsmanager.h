@@ -14,16 +14,13 @@ enum Setting{
     resourcesPath,
     uiMode,
     charactersPath,
-    buttonStyle,
-    enableMusicTrackList,
     openWhatIsNewWindow,
     language,
     version,
     notesPath,
     audioPath,
     radioPath,
-    drive_music,
-    showToolNames
+    drive_music
 };
 
 class SettingsManager
@@ -47,7 +44,7 @@ public:
 private:
     // Normal Settings
     QSettings settings;
-
+    QStringList settingsList;
 
     // Addon Settings
     QSettings addonSettings;

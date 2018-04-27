@@ -7,14 +7,13 @@
 
 SettingsManager::SettingsManager()
 {
+    settings.setPath(QSettings::IniFormat, QSettings::UserScope, QDir::homePath() + "/.gm-companion/settings.ini");
 }
 
 // Returns a specific setting
 QString SettingsManager::getSetting(Setting setting)
 {
     QString settingString;
-
-    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 
     switch (setting) {
     case Setting::musicPath:
@@ -75,14 +74,6 @@ QString SettingsManager::getSetting(Setting setting)
         settingString = settings.value("uiMode", "Bright").toString();
         break;
 
-    case Setting::buttonStyle:
-        settingString = settings.value("buttonStyle", "small").toString();
-        break;
-
-    case Setting::enableMusicTrackList:
-        settingString = settings.value("enableMusicTrackList", 0).toInt();
-        break;
-
     case Setting::openWhatIsNewWindow:
         settingString = settings.value("openWhatIsNewWindow", 1).toInt();
         break;
@@ -95,10 +86,6 @@ QString SettingsManager::getSetting(Setting setting)
         settingString = QString::number(settings.value("version", 0).toInt());
         break;
 
-    case Setting::showToolNames:
-        settingString = QString::number(settings.value("showToolNames", 0).toInt());
-        break;
-
     default:
         settingString = "";
         break;
@@ -109,8 +96,6 @@ QString SettingsManager::getSetting(Setting setting)
 // Sets a specific setting
 void SettingsManager::setSetting(Setting setting, int checked, QString value)
 {
-    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
-
     switch (setting) {
     case Setting::musicPath:
 
@@ -199,16 +184,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
         break;
     }
 
-    case Setting::buttonStyle:
-        settings.setValue("buttonStyle", value);
-        break;
-
-    case Setting::enableMusicTrackList:
-
-        if (checked) settings.setValue("enableMusicTrackList", 1);
-        else settings.setValue("enableMusicTrackList", 0);
-        break;
-
     case Setting::openWhatIsNewWindow:
 
         if (checked) settings.setValue("openWhatIsNewWindow", 1);
@@ -223,12 +198,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
         settings.setValue("version", value);
         break;
 
-    case Setting::showToolNames:
-
-        if (checked) settings.setValue("showToolNames", 1);
-        else settings.setValue("showToolNames", 0);
-        break;
-
     default:
         break;
     }
@@ -237,8 +206,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
 // Set addon disabled or enabled
 void SettingsManager::setAddonEnabled(QString addon, bool enabled)
 {
-    QSettings addonSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
-
     addonSettings.beginGroup("Addons");
 
     if (enabled) {

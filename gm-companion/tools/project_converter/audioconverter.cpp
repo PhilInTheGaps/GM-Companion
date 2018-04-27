@@ -337,6 +337,25 @@ void AudioConverter::convert()
                     }
                 }
             }
+            else if (file_version == 1)
+            {
+                file_version = 2;
+                settings.setValue("version", 2);
+
+                QStringList toRemove = {"_MusicList", "_MusicLists", "_Order", "_SoundLists", "_SoundList", "_Radios"};
+
+                for (QString group : settings.childGroups())
+                {
+                    for (QString ending : toRemove)
+                    {
+                        if (group.endsWith(ending))
+                        {
+                            qDebug() << group;
+                            settings.remove(group);
+                        }
+                    }
+                }
+            }
             else
             {
                 qDebug() << "   Project has already been converted.";
