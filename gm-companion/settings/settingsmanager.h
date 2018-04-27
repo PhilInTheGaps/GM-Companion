@@ -43,7 +43,7 @@ public:
 
 private:
     // Normal Settings
-    QSettings settings;
+    QSettings *settings;
     QStringList settingsList;
 
     // Addon Settings
