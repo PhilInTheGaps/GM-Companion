@@ -335,13 +335,21 @@ Page {
                 color: color_scheme.textColor
             }
 
+            Button {
+                text: qsTr("Sort Alphabetically")
+                onClicked: editor_tool.sortElements()
+                width: parent.width - parent.padding * 2
+                id: sort_button
+            }
+
             ScrollView {
                 id: elements_scroll_view
                 width: parent.width - parent.padding * 2
-                height: parent.height - parent.spacing * 7 - parent.topPadding
+                height: parent.height - parent.spacing * 8 - parent.topPadding
                         * 2 - project_text.height - project_combo_box.height
-                        - category_text.height - category_combo_box.height - scenario_text.height
-                        - scenario_combo_box.height - elements_text.height
+                        - category_text.height - category_combo_box.height
+                        - scenario_text.height - scenario_combo_box.height
+                        - elements_text.height - sort_button.height
                 clip: true
 
                 Column {

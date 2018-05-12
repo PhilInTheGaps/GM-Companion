@@ -188,6 +188,33 @@ void AudioEditor::updateElementList()
     }
 }
 
+void AudioEditor::sortElements()
+{
+    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != ""))
+    {
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QSettings settings(path, QSettings::IniFormat);
+
+        settings.beginGroup(l_currentCategory);
+
+        l_musicLists = settings.value(l_currentScenario + "_music").toStringList();
+        l_soundLists = settings.value(l_currentScenario + "_sounds").toStringList();
+        l_radios     = settings.value(l_currentScenario + "_radios").toStringList();
+
+        l_musicLists.sort();
+        l_soundLists.sort();
+        l_radios.sort();
+
+        settings.setValue(l_currentScenario + "_music",  l_musicLists);
+        settings.setValue(l_currentScenario + "_sounds", l_soundLists);
+        settings.setValue(l_currentScenario + "_radios",     l_radios);
+
+        settings.endGroup();
+
+        emit elementListChanged();
+    }
+}
+
 // Move element in list
 void AudioEditor::moveElement(QString element, int type, int positions)
 {

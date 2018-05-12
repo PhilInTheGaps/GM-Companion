@@ -117,6 +117,8 @@ private:
     QMediaPlaylist *musicPlaylist;
     QStringList l_songs;
     bool musicNotRadio;
+    void getMetaData();
+    void getMetaDataTagLib();
 
     QString l_songName;
     QString l_artist;
