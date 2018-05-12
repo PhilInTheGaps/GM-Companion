@@ -28,6 +28,7 @@ public:
 
     Q_INVOKABLE void updateElementList();
     Q_INVOKABLE void moveElement(QString element, int type, int positions);
+    Q_INVOKABLE void sortElements();
 
     Q_INVOKABLE void createList(QString listName, int type);
     Q_INVOKABLE QStringList getMusicLists();

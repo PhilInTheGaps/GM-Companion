@@ -226,6 +226,8 @@ void AudioTool::setCurrentElement(QString element)
 
 void AudioTool::playMusic(QString element)
 {
+    qDebug() << "Playling music:" << element;
+
     if ((l_currentProject != NULL) && (l_currentCategory != NULL) && (l_currentScenario != NULL) && (element != NULL))
     {
         musicPlaylist->clear();
@@ -251,7 +253,19 @@ void AudioTool::playMusic(QString element)
             Song song;
             song.path  = basePath + settings.value("song").toStringList().at(1);
             song.title = settings.value("song").toStringList().at(0);
-            songList.append(song);
+
+            if (QFile(song.path).exists())
+            {
+                Song song;
+                song.path  = basePath + settings.value("song").toStringList().at(1);
+                song.title = settings.value("song").toStringList().at(0);
+                songList.append(song);
+            }
+            else
+            {
+                qDebug() << song.title << "Does not exist!";
+                qDebug() << "Path:" << song.path;
+            }
         }
 
         settings.endArray();
@@ -292,15 +306,21 @@ void AudioTool::playMusic(QString element)
             l_songs.append(songList.at(i).title);
         }
 
+        qDebug() << songs();
         emit songsChanged();
         musicNotRadio = true;
-        musicPlayer->play();
 
-        if (!l_isPlaying)
+        if (songList.size() > 0)
         {
-            l_isPlaying = true;
-            emit isPlayingChanged();
+            musicPlayer->play();
+
+            if (!l_isPlaying)
+            {
+                l_isPlaying = true;
+            }
         }
+
+        emit isPlayingChanged();
     }
 }
 
@@ -506,6 +526,39 @@ void AudioTool::playRadio(QString element)
     }
 }
 
+void AudioTool::getMetaData()
+{
+    // I can't get TagLib to work on Windows though, so this mess below has
+    // to do
+
+    l_songName = musicPlayer->metaData(QMediaMetaData::Title).toString();
+    l_album    = musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
+    l_artist   = musicPlayer->metaData(QMediaMetaData::Author).toString();
+
+    if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
+
+    if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
+}
+
+void AudioTool::getMetaDataTagLib()
+{
+    #ifdef Q_OS_LINUX
+    # ifndef Q_OS_ANDROID
+
+    if (musicPlayer->bufferStatus() == 100)
+    {
+        QString path = musicPlaylist->currentMedia().resources().first().url().path();
+
+        // Album, Artist and Title
+        TagLib::FileRef f(path.toUtf8());
+        l_album    = f.tag()->album().toCString(true);
+        l_artist   = f.tag()->artist().toCString(true);
+        l_songName =  f.tag()->title().toCString(true);
+    }
+    # endif // ifndef Q_OS_ANDROID
+    #endif // ifdef Q_OS_LINUX
+}
+
 void AudioTool::onMetaDataChanged()
 {
     l_songName.clear();
@@ -518,32 +571,13 @@ void AudioTool::onMetaDataChanged()
 
         #ifdef Q_OS_LINUX
         # ifndef Q_OS_ANDROID
-
-        if (musicPlayer->bufferStatus() == 100)
-        {
-            QString path = musicPlaylist->currentMedia().resources().first().url().path();
-
-            // Album, Artist and Title
-            TagLib::FileRef f(path.toUtf8());
-            l_album    = f.tag()->album().toCString(true);
-            l_artist   = f.tag()->artist().toCString(true);
-            l_songName =  f.tag()->title().toCString(true);
-        }
+        getMetaDataTagLib();
+        # else // ifndef Q_OS_ANDROID
+        getMetaData();
         # endif // ifndef Q_OS_ANDROID
-        #else // ifdef __linux__
-
-        // I can't get TagLib to work on Windows though, so this mess below has
-        // to do
-
-        l_songName = musicPlayer->metaData(QMediaMetaData::Title).toString();
-        l_album    = musicPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
-        l_artist   = musicPlayer->metaData(QMediaMetaData::Author).toString();
-
-        if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
-
-        if (l_artist.isNull()) l_artist = musicPlayer->metaData(QMediaMetaData::Composer).toString();
-
-        #endif // ifdef __linux__
+        #else  // ifdef __linux__
+        getMetaData();
+        #endif  // ifdef __linux__
     }
 
     emit metaDataChanged();
