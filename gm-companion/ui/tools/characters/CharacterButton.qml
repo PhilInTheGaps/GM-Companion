@@ -13,8 +13,8 @@ Rectangle {
     signal clicked(string character_name)
     signal toggle_active_clicked(string character_name, bool active)
 
-    width: parent.width
-    height: 30
+    width: parent ? parent.width : 0
+    height: platform.isAndroid ? width / 6 : 40
 
     ColorScheme {
         id: color_scheme
@@ -29,6 +29,8 @@ Rectangle {
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
 
             width: toggle_active_button.x - parent.padding - 5
+            anchors.verticalCenter: parent.verticalCenter
+            clip: true
             elide: Text.ElideRight
         }
     }

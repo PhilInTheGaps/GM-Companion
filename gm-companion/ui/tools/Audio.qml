@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
+import QtMultimedia 5.9
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
@@ -124,6 +125,10 @@ Page {
                 }
 
                 onCurrentScenarioChanged: {
+                    audio_tool.findElements()
+                }
+
+                onElementsChanged: {
                     audio_busy_indicator.visible = true
 
                     audio_scroll_flow.children = []
@@ -186,10 +191,11 @@ Page {
                 }
             }
 
+            // Bar at the bottom
             ToolBar {
                 id: audio_control_bar
                 width: parent.width
-                height: parent.height / 18
+                height: platform.isAndroid ? parent.height / 12 : parent.height / 18
                 anchors.bottom: parent.bottom
                 visible: true
 
@@ -327,12 +333,12 @@ Page {
                     height: parent.height - 10
                     y: 5
 
-                    Button {
+                    RoundButton {
                         height: parent.height
                         width: parent.height
 
                         Image {
-                            source: "/icons/media/seekBack.png"
+                            source: "/icons/media/seekBack_weight_centered.png"
                             width: parent.height / 1.5
                             height: width
 
@@ -343,13 +349,13 @@ Page {
                         onClicked: audio_tool.musicAgain()
                     }
 
-                    Button {
+                    RoundButton {
                         height: parent.height
                         width: parent.height
 
                         Image {
                             id: audio_play_pause_icon
-                            source: "/icons/media/play.png"
+                            source: "/icons/media/play_weight_centered.png"
                             width: parent.height / 1.5
                             height: width
 
@@ -360,12 +366,12 @@ Page {
                         onClicked: audio_tool.musicPausePlay()
                     }
 
-                    Button {
+                    RoundButton {
                         height: parent.height
                         width: parent.height
 
                         Image {
-                            source: "/icons/media/seekForward.png"
+                            source: "/icons/media/seekForward_weight_centered.png"
                             width: parent.height / 1.5
                             height: width
 
@@ -385,9 +391,9 @@ Page {
                 Column {
                     id: audio_project_menu
                     height: parent.height - audio_control_bar.height
-                    width: platform.isAndroid ? parent.width / 2 : 150
+                    width: platform.isAndroid ? parent.width / 5 : 150
 
-                    spacing: 5
+                    spacing: platform.isAndroid ? 10 : 5
                     padding: 5
 
                     Text {
@@ -398,16 +404,23 @@ Page {
                     ComboBox {
                         id: audio_project_combo_box
                         width: parent.width - parent.padding
+                        height: editor_button.height
                         model: audio_tool.projectList
 
                         onCurrentTextChanged: audio_tool.currentProject = currentText
                     }
 
                     Button {
+                        id: editor_button
                         text: qsTr("Editor")
                         width: parent.width - parent.padding
 
                         onClicked: audio_swipe.currentIndex = 1
+
+                        Component.onCompleted: {
+                            if (platform.isAndroid)
+                                height = width / 5
+                        }
                     }
 
                     Text {
@@ -419,9 +432,12 @@ Page {
                         id: audio_project_scroll_view
                         width: parent.width - parent.padding
                         height: audio_project_menu.height - y
+                        clip: true
+                        contentWidth: -1
 
                         Column {
                             id: audio_project_structure
+                            width: audio_project_menu.width - audio_project_menu.padding
                             spacing: 5
                         }
                     }
@@ -468,6 +484,7 @@ Page {
                         width: parent.width
 
                         clip: true
+                        contentWidth: -1
 
                         Flow {
                             id: audio_scroll_flow
@@ -482,7 +499,7 @@ Page {
                 Frame {
                     id: audio_info_frame
                     height: parent.height - audio_control_bar.height
-                    width: 200
+                    width: platform.isAndroid ? parent.width / 5 : 200
                     visible: false
 
                     Column {

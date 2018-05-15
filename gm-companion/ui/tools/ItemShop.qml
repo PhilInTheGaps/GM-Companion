@@ -101,7 +101,7 @@ Page {
 
             Column {
                 id: control_column
-                width: parent.width / 8
+                width: platform.isAndroid ? parent.width / 5 : 200
                 height: parent.height - parent.topPadding - parent.bottomPadding
                 spacing: 5
 
@@ -114,6 +114,7 @@ Page {
                 ComboBox {
                     id: project_combo_box
                     width: parent.width
+                    height: platform.isAndroid ? width / 6 : 40
 
                     model: shop_tool.projects
 
@@ -122,6 +123,7 @@ Page {
 
                 Button {
                     id: open_editor_button
+                    height: platform.isAndroid ? width / 6 : 40
                     width: parent.width
                     text: qsTr("Open Editor")
 
@@ -217,7 +219,7 @@ Page {
 
             Column {
                 id: shop_sidebar
-                width: parent.width / 8
+                width: platform.isAndroid ? parent.width / 5 : 200
                 height: parent.height
 
                 ScrollView {

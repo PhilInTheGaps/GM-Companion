@@ -1,7 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
+
+import gm.companion.platforms 1.0
 
 Button {
     property string tool_name
@@ -9,11 +11,15 @@ Button {
 
     id: button
     width: parent.width
-    height: platform.isAndroid ? parent.height / 15 : 45
+    height: platform.isAndroid ? drawer.height / 15 : 45
 
     background: Rectangle {
         implicitHeight: 40
         color: parent.down ? "white" : "transparent"
+    }
+
+    PlatformDetails {
+        id: platform
     }
 
     Row {
@@ -32,15 +38,17 @@ Button {
 
         Text {
             text: tool_name
-            //            font: button.font
-            font.pixelSize: 17
+            font.pixelSize: platform.isAndroid ? parent.height / 2 : 17
+
+            width: parent.width - parent.spacing - parent.padding * 2 - button_icon.width
+            clip: true
+            elide: Text.ElideRight
 
             opacity: enabled ? 1.0 : 0.3
             color: button.down ? "black" : "white"
 
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
-            elide: Text.ElideRight
         }
     }
 }

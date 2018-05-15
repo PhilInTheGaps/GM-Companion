@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Rectangle {
     property var scenario
@@ -11,10 +12,14 @@ Rectangle {
     signal clicked(string scenario)
 
     width: text.width > 100 ? text.width + 10 : 100
-    height: 30
+    height: platform.isAndroid ? (parent ? parent.parent.height / 15 : 0) : 40
 
     ColorScheme {
         id: color_scheme
+    }
+
+    PlatformDetails {
+        id: platform
     }
 
     Text {

@@ -1,7 +1,6 @@
 ﻿import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.combattracker 1.0
@@ -292,6 +291,7 @@ Page {
                                 width: 100
                                 height: combatant_add_button.height
                                 placeholderText: qsTr("Name")
+                                selectByMouse: true
                             }
 
                             SpinBox {
@@ -384,6 +384,8 @@ Page {
 
             Dice {
                 id: combat_dice
+                width: parent.width / 2.2
+                height: parent.height - parent.padding * 2
                 visible: false
             }
         }

@@ -112,7 +112,25 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/managers/filemanager.h
 
 
-DISTFILES +=
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
 
 QML_IMPORT_PATH =
 
@@ -144,4 +162,10 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += resources
 }
 
+unix: {
+    message("It\'s a UNIX system!")
+}
+
 unix:!macx:!android: LIBS += -ltag
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
