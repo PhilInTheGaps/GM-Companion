@@ -10,8 +10,8 @@ Rectangle {
     property var max_width
     signal clicked(string category)
 
-    width: parent.width
-    height: 30
+    width: parent ? parent.width : 0
+    height: platform.isAndroid ? width / 6 : 40
 
     ColorScheme {
         id: colors
@@ -24,6 +24,10 @@ Rectangle {
         Text {
             text: category
             color: mouse_area.pressed ? "black" : colors.buttonTextColor
+            width: parent.width - parent.padding * 2
+            anchors.verticalCenter: parent.verticalCenter
+            clip: true
+            elide: Text.ElideRight
         }
     }
 

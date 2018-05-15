@@ -7,9 +7,14 @@ import gm.companion.maptool 1.0
 import "maps"
 
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Page {
     id: maps_page
+
+    PlatformDetails {
+        id: platform
+    }
 
     MapTool {
         id: map_tool
@@ -63,7 +68,7 @@ Page {
             Column {
                 id: maps_tab_column
                 height: parent.height
-                width: 200
+                width: parent.width / 4
 
                 TabBar {
                     id: maps_tab_bar
@@ -112,7 +117,7 @@ Page {
 
         Rectangle {
             id: maps_control_bar
-            height: parent.height / 18
+            height: platform.isAndroid ? parent.height / 12 : parent.height / 18
             width: parent.width
             color: color_scheme.menuColor
 

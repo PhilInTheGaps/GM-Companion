@@ -4,6 +4,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Rectangle {
     property var element_name
@@ -25,8 +26,12 @@ Rectangle {
         id: color_scheme
     }
 
-    width: 150
-    height: 180
+    PlatformDetails {
+        id: platform
+    }
+
+    width: platform.isAndroid ? (parent ? parent.parent.width / 8 : 0) : 150
+    height: platform.isAndroid ? width + text.height : 180
 
     color: color_scheme.backgroundColor
 
@@ -68,6 +73,7 @@ Rectangle {
     }
 
     Text {
+        id: text
         y: rect.height
         x: 5
         width: parent.width - 10
@@ -75,6 +81,7 @@ Rectangle {
         color: color_scheme.textColor
         anchors.horizontalCenter: parent.horizontalCenter
         wrapMode: Text.WordWrap
+        clip: true
     }
 
     MouseArea {

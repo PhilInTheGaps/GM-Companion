@@ -53,6 +53,9 @@
         <file alias="sound_bright.png">icons/media/sound_bright.png</file>
         <file alias="music_bright.png">icons/media/music_bright.png</file>
         <file alias="playBackwards_bright.png">icons/media/playBackwards_bright.png</file>
+        <file alias="play_weight_centered.png">icons/media/play_weight_centered.png</file>
+        <file alias="seekBack_weight_centered.png">icons/media/seekBack_weight_centered.png</file>
+        <file alias="seekForward_weight_centered.png">icons/media/seekForward_weight_centered.png</file>
     </qresource>
     <qresource prefix="/styles"/>
     <qresource prefix="/translations">
@@ -84,6 +87,7 @@
         <file alias="x_sign_bright.png">icons/menu/x_sign_bright.png</file>
         <file alias="arrow_down_dark.png">icons/menu/arrow_down_dark.png</file>
         <file alias="arrow_up_dark.png">icons/menu/arrow_up_dark.png</file>
+        <file alias="three_bars_white.png">icons/menu/three_bars_white.png</file>
     </qresource>
     <qresource prefix="/icons/dice">
         <file alias="d4.png">icons/dice/d4.png</file>

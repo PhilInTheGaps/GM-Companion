@@ -11,7 +11,7 @@ Rectangle {
     signal clicked(string category, string scenario)
 
     width: text.width > 100 ? text.width + 10 : 100
-    height: 30
+    height: platform.isAndroid ? width / 6 : 40
 
     ColorScheme {
         id: colors
@@ -25,6 +25,10 @@ Rectangle {
         y: 5
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+
+        width: parent.width - parent.padding * 2
+        clip: true
+        elide: Text.ElideRight
     }
 
     color: mouse_area.pressed ? "#262f31" : colors.primaryButtonColor

@@ -10,9 +10,8 @@ Rectangle {
 
     signal clicked(string shop)
 
-    //    width: text.width + text_row.padding * 2
-    width: parent.width
-    height: 30
+    width: parent ? parent.width : 0
+    height: platform.isAndroid ? width / 6 : 40
 
     ColorScheme {
         id: colors
@@ -27,6 +26,10 @@ Rectangle {
             id: text
             text: shop
             color: mouse_area.pressed ? "black" : colors.buttonTextColor
+            width: parent.width - parent.padding * 2
+            anchors.verticalCenter: parent.verticalCenter
+            clip: true
+            elide: Text.ElideRight
         }
     }
 

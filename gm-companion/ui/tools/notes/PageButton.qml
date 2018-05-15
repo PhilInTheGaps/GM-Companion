@@ -11,8 +11,8 @@ Rectangle {
 
     signal clicked(string page_name)
 
-    width: parent.width
-    height: 30
+    width: parent ? parent.width : 0
+    height: platform.isAndroid ? width / 6 : 40
 
     ColorScheme {
         id: colors
@@ -29,6 +29,7 @@ Rectangle {
             width: parent.width - parent.padding * 2
             clip: true
             elide: Text.ElideRight
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 

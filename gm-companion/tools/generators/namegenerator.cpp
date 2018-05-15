@@ -26,6 +26,8 @@ void NameGenerator::updateCategories()
     // Custom Names
     for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/names"))
     {
+        qDebug() << folder;
+
         if (!folder.contains("."))
         {
             l_categories.append(folder);
