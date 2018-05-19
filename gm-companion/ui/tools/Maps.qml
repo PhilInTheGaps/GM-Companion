@@ -20,16 +20,14 @@ Page {
         id: map_tool
 
         Component.onCompleted: {
-            loadMapList()
+            findMaps()
         }
 
         function loadMap(path) {
             maps_image.source = "file:///" + path
         }
 
-        function loadMapList() {
-            findMaps()
-
+        onCategoriesChanged: {
             var mapCategories = categories
 
             for (var i = 0; i < mapCategories.length; i++) {
@@ -47,6 +45,8 @@ Page {
 
                 tab_button_repeater.model++
             }
+
+            maps_tab_bar.setCurrentIndex(0)
         }
     }
 
@@ -68,11 +68,17 @@ Page {
             Column {
                 id: maps_tab_column
                 height: parent.height
-                width: parent.width / 4
+                width: platform.isAndroid ? parent.width / 4 : 200
 
                 TabBar {
                     id: maps_tab_bar
                     width: parent.width
+
+                    currentIndex: maps_swipe_view.currentIndex
+
+                    onCurrentIndexChanged: {
+                        maps_swipe_view.currentIndex = currentIndex
+                    }
 
                     Repeater {
                         id: tab_button_repeater
@@ -105,6 +111,40 @@ Page {
 
                 contentWidth: maps_image.width
                 contentHeight: maps_image.height
+
+                PinchArea {
+                    width: Math.max(maps_image_flickable.contentWidth,
+                                    maps_image_flickable.width)
+                    height: Math.max(maps_image_flickable.contentHeight,
+                                     maps_image_flickable.height)
+
+                    property real initialWidth
+                    property real initialHeight
+
+                    onPinchStarted: {
+                        initialWidth = maps_image_flickable.contentWidth
+                        initialHeight = maps_image_flickable.contentHeight
+                    }
+
+                    onPinchUpdated: {
+                        // adjust content pos due to drag
+                        maps_image_flickable.contentX += pinch.previousCenter.x - pinch.center.x
+                        maps_image_flickable.contentY += pinch.previousCenter.y - pinch.center.y
+
+                        // resize content
+                        maps_image_flickable.resizeContent(
+                                    initialWidth * pinch.scale,
+                                    initialHeight * pinch.scale, pinch.center)
+
+                        maps_image.width = maps_image_flickable.contentWidth
+                        maps_image.height = maps_image_flickable.contentHeight
+                    }
+
+                    onPinchFinished: {
+                        // Move its content within bounds.
+                        maps_image_flickable.returnToBounds()
+                    }
+                }
 
                 Image {
                     id: maps_image

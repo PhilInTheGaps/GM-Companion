@@ -8,10 +8,15 @@ Column {
     property var path
     signal clicked(string path)
 
-    width: parent.width
+    width: parent.width - parent.padding * 2
 
     ColorScheme {
         id: color_scheme
+    }
+
+    BusyIndicator {
+        visible: image.status !== Image.Ready
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Item {
@@ -24,7 +29,6 @@ Column {
             sourceSize.width: width
             sourceSize.height: height
             source: "file:///" + path
-
             asynchronous: true
         }
 

@@ -5,13 +5,20 @@ import QtQuick.Controls.Styles 1.4
 
 import gm.companion.charactertool 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 import "./characters"
 
 Page {
     id: characters
 
+    PlatformDetails {
+        id: platform
+    }
+
     CharacterTool {
         id: character_tool
+
+        Component.onCompleted: updateCharacterList()
 
         // Load character data
         function loadCharacter(character_name) {
@@ -84,20 +91,21 @@ Page {
         color: color_scheme.backgroundColor
     }
 
-    Row {
-        anchors.fill: parent
-        spacing: 5
-        padding: 5
+    Dialog {
+        id: new_character_dialog
+        title: qsTr("New Character")
+        width: parent.width / 1.5
+        height: parent.height / 1.5
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
 
-        Column {
-            id: left_column
-            height: parent.height
-            width: 150
+        contentItem: Column {
             spacing: 5
 
             TextField {
                 id: character_name_field
                 width: parent.width
+                height: platform.isAndroid ? font.pixelSize * 1.5 : 40
                 placeholderText: qsTr("Character Name")
                 selectByMouse: true
             }
@@ -105,79 +113,96 @@ Page {
             TextField {
                 id: player_name_field
                 width: parent.width
+                height: platform.isAndroid ? font.pixelSize * 1.5 : 40
                 placeholderText: qsTr("Player Name")
                 selectByMouse: true
+            }
+
+            Text {
+                text: qsTr("Sheet Type")
             }
 
             ComboBox {
                 id: sheet_type_combobox
                 width: parent.width
+                height: platform.isAndroid ? font.pixelSize * 1.5 : 40
                 model: ["Default", "DSA5"]
             }
+        }
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            character_tool.addCharacter(sheet_type_combobox.currentText,
+                                        character_name_field.text,
+                                        player_name_field.text)
+
+            swipe_view.currentIndex = character_tool.getSheetIndex(
+                        character_tool.getSheetTemplate(
+                            sheet_type_combobox.currentText))
+
+            swipe_view.setCharacterName(sheet_type_combobox.currentText)
+
+            swipe_view.save()
+        }
+    }
+
+    Row {
+        anchors.fill: parent
+        spacing: 5
+        padding: 5
+
+        Column {
+            id: left_column
+            height: parent.height - parent.padding * 2
+            width: platform.isAndroid ? parent.width / 5 : 150
+            spacing: 5
 
             Button {
                 id: new_character_button
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 text: qsTr("Create new Character")
 
                 onClicked: {
-                    character_tool.addCharacter(
-                                sheet_type_combobox.currentText,
-                                character_name_field.text,
-                                player_name_field.text)
-
-                    swipe_view.currentIndex = character_tool.getSheetIndex(
-                                character_tool.getSheetTemplate(
-                                    sheet_type_combobox.currentText))
-
-                    swipe_view.setCharacterName(sheet_type_combobox.currentText)
-
-                    swipe_view.save()
+                    new_character_dialog.open()
                 }
             }
 
-            Column {
+            Row {
+                id: active_inactive_row
                 width: parent.width
-                height: parent.height - character_name_field.height
-                        - player_name_field.height - sheet_type_combobox.height
-                        - new_character_button.height - parent.spacing * 7
-
                 spacing: 5
 
-                Row {
-                    id: active_inactive_row
-                    width: parent.width
-                    spacing: 5
-
-                    Button {
-                        text: qsTr("Active")
-                        width: (parent.width - parent.spacing) / 2
-
-                        onClicked: character_tool.loadActiveCharacterList()
-                    }
-
-                    Button {
-                        text: qsTr("Inactive")
-                        width: (parent.width - parent.spacing) / 2
-
-                        onClicked: character_tool.loadInactiveCharacterList()
-                    }
+                Button {
+                    text: qsTr("Active")
+                    width: (parent.width - parent.spacing) / 2
+                    height: platform.isAndroid ? width / 3 : 40
+                    onClicked: character_tool.loadActiveCharacterList()
                 }
 
-                ScrollView {
-                    id: character_scrollview
-                    width: parent.width
-                    height: parent.height - active_inactive_row.height - parent.spacing
-                    clip: true
+                Button {
+                    text: qsTr("Inactive")
+                    width: (parent.width - parent.spacing) / 2
+                    height: platform.isAndroid ? width / 3 : 40
+                    onClicked: character_tool.loadInactiveCharacterList()
+                }
+            }
 
-                    Column {
-                        id: active_column
-                        width: character_scrollview.width
-                        spacing: 5
+            ScrollView {
+                id: character_scrollview
+                width: parent.width
+                height: parent.height - active_inactive_row.height
+                        - active_inactive_row.height - parent.spacing * 2
+                clip: true
 
-                        Component.onCompleted: {
-                            character_tool.loadActiveCharacterList()
-                        }
+                Column {
+                    id: active_column
+                    width: character_scrollview.width
+                    spacing: 5
+
+                    Component.onCompleted: {
+                        character_tool.loadActiveCharacterList()
                     }
                 }
             }
@@ -195,14 +220,14 @@ Page {
 
                 Button {
                     text: qsTr("Save Character")
-
+                    height: new_character_button.height
                     onClicked: swipe_view.save()
                 }
 
                 DelayButton {
                     text: qsTr("Delete Character")
                     delay: 1200
-
+                    height: new_character_button.height
                     onActivated: {
                         character_tool.deleteCharacter(
                                     swipe_view.getCharacterName())

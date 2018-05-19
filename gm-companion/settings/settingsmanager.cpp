@@ -207,29 +207,17 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
 void SettingsManager::setAddonEnabled(QString addon, bool enabled)
 {
     settings->beginGroup("Addons");
-
-    if (enabled) {
-        settings->setValue(addon, 1);
-    } else {
-        settings->setValue(addon, 0);
-    }
-
+    settings->setValue(addon, enabled);
     settings->endGroup();
 }
 
 // Returns if addon is enabled
 bool SettingsManager::getIsAddonEnabled(QString addon)
 {
-    bool enabled;
-
     settings->beginGroup("Addons");
+    bool enabled = true;
 
-    if (settings->value(addon, 1).toInt() == 1) {
-        enabled = true;
-    } else {
-        enabled = false;
-    }
-
+    if (settings->value(addon, true).toBool() == false) enabled = false;
     settings->endGroup();
 
     return enabled;
@@ -288,7 +276,7 @@ void SettingsManager::setInactiveCharacters(QStringList characters)
 void SettingsManager::updateSettings()
 {
     if (settings->value("version").toInt() < 320) // Last major settings change
-    {                                            // was in Beta 3.2
+    {                                             // was in Beta 3.2
         qDebug() << "Updating settings file...";
 
         QStringList paths = {

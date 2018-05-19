@@ -91,7 +91,7 @@ Page {
         Column {
             id: left_column
             height: parent.height - parent.topPadding * 2
-            width: parent.width / 8
+            width: platform.isAndroid ? parent.width / 5 : parent.width / 8
             spacing: 5
 
             Text {
@@ -104,6 +104,7 @@ Page {
                 id: font_size_spin_box
                 value: 12
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
 
                 onValueChanged: text_edit.font.pointSize = value
             }
@@ -111,6 +112,7 @@ Page {
             TextField {
                 id: add_chapter_text_field
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 placeholderText: qsTr("Chapter")
             }
 
@@ -118,6 +120,7 @@ Page {
                 id: add_chapter_button
                 text: qsTr("Add Chapter")
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
 
                 onClicked: notes_tool.addChapter(add_chapter_text_field.text)
             }
@@ -125,6 +128,7 @@ Page {
             DelayButton {
                 id: delete_chapter_button
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
 
                 text: qsTr("Delete Chapter")
                 delay: 1200
@@ -134,11 +138,13 @@ Page {
             Frame {
                 id: chapters_text_frame
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 padding: 5
 
                 Text {
                     text: qsTr("Chapters")
                     color: color_scheme.textColor
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
 
@@ -186,13 +192,14 @@ Page {
 
         Column {
             id: right_column
-            width: parent.width / 8
+            width: platform.isAndroid ? parent.width / 5 : parent.width / 8
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
             TextField {
                 id: add_page_text_field
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 placeholderText: qsTr("Page")
             }
 
@@ -200,6 +207,7 @@ Page {
                 id: add_page_button
                 text: qsTr("Add Page")
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
 
                 onClicked: notes_tool.addPage(add_page_text_field.text)
             }
@@ -207,7 +215,7 @@ Page {
             DelayButton {
                 id: delete_page_button
                 width: parent.width
-
+                height: platform.isAndroid ? width / 6 : 40
                 text: qsTr("Delete Page")
 
                 delay: 1200
@@ -217,6 +225,7 @@ Page {
             Button {
                 id: encrypt_button
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 text: qsTr("Encrypt Page")
 
                 onClicked: text_edit.text = notes_tool.encrypt(text_edit.text)
@@ -225,11 +234,13 @@ Page {
             Frame {
                 id: pages_text_frame
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 padding: 5
 
                 Text {
                     text: qsTr("Pages")
                     color: color_scheme.textColor
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
 

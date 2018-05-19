@@ -14,6 +14,8 @@ class CharacterTool : public QObject
 public:
     explicit CharacterTool(QObject *parent = nullptr);
 
+    Q_INVOKABLE void updateCharacterList();
+
     Q_INVOKABLE void addCharacter(QString template_name, QString character_name, QString player_name);
     Q_INVOKABLE void deleteCharacter(QString character_name);
     Q_INVOKABLE int getSheetIndex(QString template_name);
@@ -31,6 +33,13 @@ signals:
 
 private:
     SettingsManager *sManager;
+
+    QStringList l_activeCharacters;
+    QStringList l_inactiveCharacters;
 };
+
+inline QStringList CharacterTool::getActiveCharacterList() { return l_activeCharacters; }
+inline QStringList CharacterTool::getInactiveCharacterList() { return l_inactiveCharacters; }
+
 
 #endif // CHARACTERTOOL_H

@@ -200,6 +200,8 @@ void AudioTool::findElements()
                 settings.endGroup();
             }
         }
+
+        emit elementsChanged();
     }
 }
 
@@ -556,7 +558,7 @@ void AudioTool::getMetaDataTagLib()
         l_songName =  f.tag()->title().toCString(true);
     }
     # endif // ifndef Q_OS_ANDROID
-    #endif // ifdef Q_OS_LINUX
+    #endif  // ifdef Q_OS_LINUX
 }
 
 void AudioTool::onMetaDataChanged()

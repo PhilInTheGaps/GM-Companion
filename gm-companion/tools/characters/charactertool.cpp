@@ -80,54 +80,34 @@ int CharacterTool::getSheetIndex(QString template_name)
     }
 }
 
-QStringList CharacterTool::getActiveCharacterList()
+void CharacterTool::updateCharacterList()
 {
-    QStringList list;
+    l_activeCharacters.clear();
+    l_inactiveCharacters.clear();
+
     QStringList inactive = sManager->getInactiveCharacters();
+    QString     path     = sManager->getSetting(Setting::charactersPath);
 
-    QString path = sManager->getSetting(Setting::charactersPath);
-
+    // Active Characters
     for (QString f : getFiles(path))
     {
         if (f.contains(".character"))
         {
             QString character = f.replace(".character", "");
-
-            if (!inactive.contains(character))
-            {
-                character = character.replace("_", " ");
-
-                list.append(character);
-            }
-        }
-    }
-
-    return list;
-}
-
-QStringList CharacterTool::getInactiveCharacterList()
-{
-    QStringList list;
-    QStringList inactive = sManager->getInactiveCharacters();
-
-    QString path = sManager->getSetting(Setting::charactersPath);
-
-    for (QString f : getFiles(path))
-    {
-        if (f.contains(".character"))
-        {
-            QString character = f.replace(".character", "");
+            character = character.replace("_", " ");
 
             if (inactive.contains(character))
             {
-                character = character.replace("_", " ");
-
-                list.append(character);
+                l_inactiveCharacters.append(character);
+            }
+            else
+            {
+                l_activeCharacters.append(character);
             }
         }
     }
 
-    return list;
+    emit charactersUpdated();
 }
 
 void CharacterTool::setCharacterActive(QString character_name)
