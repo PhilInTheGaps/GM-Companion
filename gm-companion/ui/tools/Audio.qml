@@ -125,17 +125,15 @@ Page {
                 }
 
                 onCurrentScenarioChanged: {
+                    audio_busy_indicator.visible = true
                     audio_tool.findElements()
                 }
 
                 onElementsChanged: {
-                    audio_busy_indicator.visible = true
 
                     audio_scroll_flow.children = []
                     var component = Qt.createComponent(
                                 "./audio/AudioButton.qml")
-
-                    audio_tool.findElements()
 
                     var elements = audio_tool.elements
 
@@ -492,6 +490,10 @@ Page {
                             spacing: 5
 
                             width: audio_scroll_view.width
+
+                            Button {
+                                text: "Test"
+                            }
                         }
                     }
                 }

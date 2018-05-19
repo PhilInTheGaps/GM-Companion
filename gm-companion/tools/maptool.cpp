@@ -12,6 +12,7 @@ MapTool::MapTool(QObject *parent) : QObject(parent)
 
 MapTool::~MapTool()
 {
+    delete sManager;
 }
 
 void MapTool::findMaps()
@@ -63,6 +64,8 @@ void MapTool::findMaps()
             }
         }
     }
+
+    emit categoriesChanged();
 }
 
 QStringList MapTool::maps(QString category)

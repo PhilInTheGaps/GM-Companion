@@ -2,11 +2,9 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 
 Column {
     id: tab
-    //    anchors.fill: parent
     property var list
     property var paths
     property var category
@@ -14,18 +12,16 @@ Column {
 
     ScrollView {
         id: scroll_view
-        flickableItem.interactive: true
-        flickableItem.flickableDirection: "VerticalFlick"
 
         width: parent.width
         height: parent.height
 
-        //        anchors.fill: parent
         Column {
             id: column
             spacing: 5
             padding: 5
-            width: 175
+
+            width: tab.width
         }
 
         Component.onCompleted: {

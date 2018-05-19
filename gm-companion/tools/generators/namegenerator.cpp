@@ -8,8 +8,6 @@
 NameGenerator::NameGenerator(QObject *parent) : QObject(parent)
 {
     qDebug() << "Loading Name Generator ...";
-
-    updateCategories();
 }
 
 void NameGenerator::updateCategories()
@@ -26,8 +24,6 @@ void NameGenerator::updateCategories()
     // Custom Names
     for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/names"))
     {
-        qDebug() << folder;
-
         if (!folder.contains("."))
         {
             l_categories.append(folder);
@@ -36,7 +32,16 @@ void NameGenerator::updateCategories()
     }
 
     // Addon Names
-    // TODO
+    QString addonBasePath = QDir::homePath() + "/.gm-companion/addons";
+
+    for (QString addon : getFolders(addonBasePath))
+    {
+        if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(addonBasePath + "/" + addon + "/names").size() > 0))
+        {
+            l_categories.append(addon);
+            l_categoryPaths.append(addonBasePath + "/" + addon + "/names");
+        }
+    }
 
     emit categoriesChanged();
 }

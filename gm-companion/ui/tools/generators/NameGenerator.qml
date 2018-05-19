@@ -10,7 +10,7 @@ Item {
     NameGeneratorTool {
         id: name_generator_tool
 
-        Component.onCompleted: loadCategories()
+        Component.onCompleted: updateCategories()
 
         onCategoriesChanged: {
             loadCategories()
@@ -76,7 +76,7 @@ Item {
 
         Column {
             id: left_column
-            width: parent.width / 8
+            width: platform.isAndroid ? parent.width / 5 : 150
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
@@ -89,6 +89,7 @@ Item {
             SpinBox {
                 id: names_count_spinbox
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 value: 15
                 from: 1
                 editable: true
@@ -103,6 +104,7 @@ Item {
             SpinBox {
                 id: names_font_size_spinbox
                 width: parent.width
+                height: platform.isAndroid ? width / 6 : 40
                 value: 20
                 from: 1
                 editable: true

@@ -14,6 +14,8 @@ class NameGenerator : public QObject
 public:
     explicit NameGenerator(QObject *parent = nullptr);
 
+    Q_INVOKABLE void updateCategories();
+
     QStringList categories();
     Q_INVOKABLE QString categoryPath(QString category);
 
@@ -26,9 +28,7 @@ signals:
     void categoriesChanged();
 
 private:
-    SettingsManager *sManager;
-
-    void updateCategories();
+    SettingsManager sManager;
 
     QStringList l_categories;
     QStringList l_categoryPaths;

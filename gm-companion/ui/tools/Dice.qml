@@ -58,7 +58,7 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
-                width: dice_page.width / 6
+                width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 4
             }
@@ -80,7 +80,7 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
-                width: dice_page.width / 6
+                width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 6
             }
@@ -102,7 +102,7 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
-                width: dice_page.width / 6
+                width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 12
             }
@@ -124,7 +124,7 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
-                width: dice_page.width / 6
+                width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 20
             }
@@ -247,11 +247,10 @@ Page {
 
         ScrollView {
             anchors.horizontalCenter: parent.horizontalCenter
+            width: value_row.width
 
             height: parent.height - dice_button_row.height - value_row.height
                     - result_row.height - parent.spacing * 3
-            width: parent.width
-
             clip: true
 
             TextEdit {

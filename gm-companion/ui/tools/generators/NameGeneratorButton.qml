@@ -11,7 +11,7 @@ Rectangle {
     signal clicked(string category, string scenario)
 
     width: text.width > 100 ? text.width + 10 : 100
-    height: platform.isAndroid ? width / 6 : 40
+    height: platform.isAndroid ? text.font.pixelSize * 1.5 : 40
 
     ColorScheme {
         id: colors
