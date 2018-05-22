@@ -146,7 +146,8 @@ Page {
 
                     Text {
                         text: qsTr("Select Language")
-                        width: language_box.width
+                        width: platform_details.isAndroid ? settings_page.width
+                                                            / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -155,6 +156,7 @@ Page {
                         id: language_box
                         property bool loaded: false
                         model: ["English", "Deutsch"]
+                        width: settings_page.width / 6
 
                         onCurrentTextChanged: {
                             if (loaded) {
@@ -186,7 +188,8 @@ Page {
 
                     Text {
                         text: qsTr("Select Style")
-                        width: style_box.width
+                        width: platform_details.isAndroid ? settings_page.width
+                                                            / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -195,6 +198,7 @@ Page {
                         id: style_box
                         property bool loaded: false
                         model: ["Dark", "Bright"]
+                        width: settings_page.width / 6
 
                         onCurrentTextChanged: {
                             if (loaded) {
@@ -333,6 +337,7 @@ Page {
                 spacing: 5
 
                 TextArea {
+                    id: addon_text_area
                     width: parent.width
                     padding: 0
                     readOnly: true
@@ -349,9 +354,16 @@ Page {
                     height: width
                 }
 
-                Column {
-                    id: addon_column
+                ScrollView {
                     width: parent.width
+                    height: parent.height - addon_busy_indicator.height
+                            - addon_text_area.height - parent.spacing * 2
+                    clip: true
+
+                    Column {
+                        id: addon_column
+                        width: parent.parent.width
+                    }
                 }
             }
 
@@ -361,7 +373,8 @@ Page {
 
                 Button {
                     text: qsTr("Open Wiki")
-                    width: parent.width > 400 ? 400 : parent.width
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     onClicked: Qt.openUrlExternally(
                                    "https://github.com/PhilInTheGaps/GM-Companion/wiki")
@@ -369,7 +382,8 @@ Page {
 
                 Button {
                     text: qsTr("Report a Bug")
-                    width: parent.width > 400 ? 400 : parent.width
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     onClicked: Qt.openUrlExternally(
                                    "https://github.com/PhilInTheGaps/GM-Companion/issues")
@@ -377,7 +391,8 @@ Page {
 
                 Button {
                     text: qsTr("Download older Versions")
-                    width: parent.width > 400 ? 400 : parent.width
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     onClicked: Qt.openUrlExternally(
                                    "https://github.com/PhilInTheGaps/GM-Companion/releases")
@@ -385,7 +400,8 @@ Page {
 
                 Button {
                     text: qsTr("View GM-Companion on GitHub")
-                    width: parent.width > 400 ? 400 : parent.width
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     onClicked: Qt.openUrlExternally(
                                    "https://github.com/PhilInTheGaps/GM-Companion")
@@ -393,7 +409,8 @@ Page {
 
                 Button {
                     text: qsTr("About")
-                    width: parent.width > 400 ? 400 : parent.width
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     onClicked: {
                         Qt.openUrlExternally(

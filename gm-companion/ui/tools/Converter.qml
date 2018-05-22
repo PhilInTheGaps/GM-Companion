@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 
 import gm.companion.convertertool 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Page {
     id: converter
@@ -38,6 +39,10 @@ Page {
         }
     }
 
+    PlatformDetails {
+        id: platform
+    }
+
     ColorScheme {
         id: color_scheme
     }
@@ -50,6 +55,8 @@ Page {
         width: parent.width
         height: parent.height
         clip: true
+        ScrollBar.horizontal.interactive: false
+        ScrollBar.vertical.interactive: true
 
         Column {
             width: parent.width
@@ -113,10 +120,12 @@ Page {
             }
 
             Column {
+                id: column
                 spacing: 5
 
                 Button {
                     text: qsTr("Add Custom Units")
+                    height: platform.isAndroid ? width / 3 : 40
 
                     onClicked: add_unit_dialog.open()
                 }
@@ -134,6 +143,7 @@ Page {
                     TextField {
                         id: length_units_text_1
                         selectByMouse: true
+                        height: platform.isAndroid ? width / 3 : 40
 
                         onTextChanged: {
                             length_output.text = converter_tool.convertLength(
@@ -144,7 +154,8 @@ Page {
 
                     ComboBox {
                         id: length_units_1
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.lengthUnits
 
                         onCurrentTextChanged: {
@@ -163,13 +174,15 @@ Page {
 
                     TextField {
                         id: length_output
+                        height: platform.isAndroid ? width / 3 : 40
                         readOnly: true
                         selectByMouse: true
                     }
 
                     ComboBox {
                         id: length_units_2
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.lengthUnits
 
                         onCurrentTextChanged: {
@@ -192,6 +205,7 @@ Page {
 
                     TextField {
                         id: area_units_text_1
+                        height: platform.isAndroid ? width / 3 : 40
                         selectByMouse: true
 
                         onTextChanged: {
@@ -203,7 +217,8 @@ Page {
 
                     ComboBox {
                         id: area_units_1
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
 
                         model: converter_tool.areaUnits
                         onCurrentTextChanged: {
@@ -221,13 +236,15 @@ Page {
 
                     TextField {
                         id: area_output
+                        height: platform.isAndroid ? width / 3 : 40
                         readOnly: true
                         selectByMouse: true
                     }
 
                     ComboBox {
                         id: area_units_2
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
 
                         model: converter_tool.areaUnits
                         onCurrentTextChanged: {
@@ -251,6 +268,7 @@ Page {
                     TextField {
                         id: volume_units_text_1
                         selectByMouse: true
+                        height: platform.isAndroid ? width / 3 : 40
 
                         onTextChanged: {
                             volume_output.text = converter_tool.convertVolume(
@@ -261,7 +279,8 @@ Page {
 
                     ComboBox {
                         id: volume_units_1
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.volumeUnits
 
                         onCurrentTextChanged: {
@@ -281,12 +300,14 @@ Page {
                     TextField {
                         id: volume_output
                         readOnly: true
+                        height: platform.isAndroid ? width / 3 : 40
                         selectByMouse: true
                     }
 
                     ComboBox {
                         id: volume_units_2
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.volumeUnits
 
                         onCurrentTextChanged: {
@@ -310,6 +331,7 @@ Page {
                     TextField {
                         id: weight_units_text_1
                         selectByMouse: true
+                        height: platform.isAndroid ? width / 3 : 40
                         onTextChanged: {
                             weight_output.text = converter_tool.convertWeight(
                                         weight_units_1.currentText,
@@ -319,7 +341,8 @@ Page {
 
                     ComboBox {
                         id: weight_units_1
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.weightUnits
 
                         onCurrentTextChanged: {
@@ -339,12 +362,14 @@ Page {
                     TextField {
                         id: weight_output
                         readOnly: true
+                        height: platform.isAndroid ? width / 3 : 40
                         selectByMouse: true
                     }
 
                     ComboBox {
                         id: weight_units_2
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.weightUnits
 
                         onCurrentTextChanged: {
@@ -368,6 +393,7 @@ Page {
                     TextField {
                         id: money_units_text_1
                         selectByMouse: true
+                        height: platform.isAndroid ? width / 3 : 40
 
                         onTextChanged: {
                             money_output.text = converter_tool.convertMoney(
@@ -378,7 +404,8 @@ Page {
 
                     ComboBox {
                         id: money_units_1
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.moneyUnits
 
                         onCurrentTextChanged: {
@@ -397,12 +424,14 @@ Page {
                     TextField {
                         id: money_output
                         readOnly: true
+                        height: platform.isAndroid ? width / 3 : 40
                         selectByMouse: true
                     }
 
                     ComboBox {
                         id: money_units_2
-                        width: 200
+                        width: platform.isAndroid ? converter.width / 4 : 200
+                        height: platform.isAndroid ? width / 6 : 40
                         model: converter_tool.moneyUnits
 
                         onCurrentTextChanged: {
