@@ -194,20 +194,21 @@ Page {
                 Row {
                     spacing: 5
                     padding: 5
-                    anchors.fill: parent
+                    anchors.centerIn: parent
 
                     Image {
                         id: dice_image
                         source: "../icons/menu/dice.png"
 
                         width: height
-                        height: parent.height - parent.padding * 2
+                        height: combat_dice_button.height - parent.padding * 2
                     }
 
                     Text {
                         text: qsTr("Toggle Dice")
                         clip: true
-                        width: parent.width - dice_image.width - parent.spacing - parent.padding * 2
+                        width: combat_dice_button.width - dice_image.width
+                               - parent.spacing - parent.padding * 2
                         elide: Text.ElideRight
                         anchors.verticalCenter: parent.verticalCenter
                     }

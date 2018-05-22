@@ -16,6 +16,10 @@ Page {
         id: color_scheme
     }
 
+    PlatformDetails {
+        id: platform
+    }
+
     SwipeView {
         id: audio_swipe
         anchors.fill: parent
@@ -412,6 +416,7 @@ Page {
                         id: editor_button
                         text: qsTr("Editor")
                         width: parent.width - parent.padding
+                        visible: !platform.isAndroid
 
                         onClicked: audio_swipe.currentIndex = 1
 
@@ -490,10 +495,6 @@ Page {
                             spacing: 5
 
                             width: audio_scroll_view.width
-
-                            Button {
-                                text: "Test"
-                            }
                         }
                     }
                 }

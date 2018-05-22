@@ -73,6 +73,7 @@ Page {
                 TabBar {
                     id: maps_tab_bar
                     width: parent.width
+                    height: platform.isAndroid ? width / 6 : 40
 
                     currentIndex: maps_swipe_view.currentIndex
 
@@ -87,6 +88,7 @@ Page {
 
                         TabButton {
                             text: map_tool.categories[index]
+                            height: maps_tab_bar.height
                         }
                     }
                 }
@@ -105,7 +107,7 @@ Page {
                 id: maps_image_flickable
                 width: maps_tab_column.visible ? maps_page.width
                                                  - maps_tab_column.width : maps_page.width
-                height: maps_page.height
+                height: maps_page.height - maps_control_bar.height
                 clip: true
                 interactive: true
 

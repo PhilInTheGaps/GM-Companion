@@ -7,12 +7,17 @@ import QtQuick.Controls 1.4 as Controls1_4
 import "./shop"
 import gm.companion.shoptool 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.platforms 1.0
 
 Page {
     id: item_shop
 
     ColorScheme {
         id: color_scheme
+    }
+
+    PlatformDetails {
+        id: platform
     }
 
     background: Rectangle {
@@ -126,6 +131,7 @@ Page {
                     height: platform.isAndroid ? width / 6 : 40
                     width: parent.width
                     text: qsTr("Open Editor")
+                    visible: !platform.isAndroid
 
                     onClicked: shop_swipe_view.setCurrentIndex(1)
                 }
