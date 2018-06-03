@@ -24,6 +24,7 @@ Page {
         id: audio_swipe
         anchors.fill: parent
         interactive: false
+        clip: true
 
         background: Rectangle {
             color: color_scheme.backgroundColor
