@@ -14,29 +14,6 @@ Page {
 
     CombatTrackerTool {
         id: combat_tracker_tool
-
-        onCombatantNameChanged: combatant_name.text = combatantName
-
-        onCombatantIniChanged: combatant_ini.value = combatantIni
-
-        onCombatantHealthChanged: {
-            combatant_health.value = combatantHealth
-            combatant_max_health.value = combatantMaxHealth
-        }
-
-        onCombatantStatusChanged: combatant_status.text = combatantStatus
-
-        onCurrentRoundChanged: current_round_text.text = qsTr(
-                                   "Round: ") + currentRound
-
-        onLatestAddedCombatantChanged: {
-            combat_tracker_list_model.append({
-                                                 name: latestAddedCombatant[0],
-                                                 ini: latestAddedCombatant[1],
-                                                 health: latestAddedCombatant[2],
-                                                 status: qsTr("Alive")
-                                             })
-        }
     }
 
     ColorScheme {
@@ -87,7 +64,6 @@ Page {
                 TextField {
                     id: add_name_field
                     width: dialog_column.width / 4
-                    height: current_round_frame.height
                     placeholderText: qsTr("Name")
                     selectByMouse: true
                 }
@@ -95,14 +71,12 @@ Page {
                 SpinBox {
                     id: add_ini_spinbox
                     width: dialog_column.width / 4
-                    height: current_round_frame.height
                     editable: true
                 }
 
                 SpinBox {
                     id: add_health_spinbox
                     width: dialog_column.width / 4
-                    height: current_round_frame.height
                     editable: true
                 }
             }
@@ -117,326 +91,225 @@ Page {
         }
     }
 
-    Row {
-        id: row
-        anchors.fill: parent
-        spacing: 5
-        padding: 5
+    Rectangle {
+        id: top_bar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
 
-        Column {
-            id: left_column
-            height: parent.height - parent.padding * 2
-            width: platform.isAndroid ? parent.width / 5 : 150
+        height: parent.height / 12
+        color: color_scheme.menuColor
+
+        Row {
+            anchors.fill: parent
+            padding: 5
             spacing: 5
 
-            Frame {
-                id: current_round_frame
-                padding: 5
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                Text {
-                    id: current_round_text
-                    text: qsTr("Round: 1")
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: color_scheme.textColor
-                }
+            Button {
+                text: qsTr("Next")
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             Button {
-                id: next_combatant_button
-                text: qsTr("Next Combatant")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                onClicked: combat_tracker_tool.nextCombatant()
+                text: qsTr("Add")
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             Button {
-                id: add_combatant_button
-                text: qsTr("Add Combatant")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                onClicked: add_combatant_dialog.open()
-            }
-
-            Button {
-                text: qsTr("Reset Rounds")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                onClicked: combat_tracker_tool.resetRounds()
-            }
-
-            Button {
-                text: qsTr("Clear Table")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                onClicked: {
-                    combat_tracker_tool.clearCombatants()
-                    combat_tracker_list_model.clear()
-
-                    combatant_name.text = qsTr("No Combatant")
-                    combatant_ini.value = 0
-                    combatant_health.value = 0
-                    combatant_max_health.value = 0
-                    combatant_status.text = ""
-                }
-            }
-
-            Button {
-                id: combat_dice_button
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                Row {
-                    spacing: 5
-                    padding: 5
-                    anchors.centerIn: parent
-
-                    Image {
-                        id: dice_image
-                        source: "../icons/menu/dice.png"
-
-                        width: height
-                        height: combat_dice_button.height - parent.padding * 2
-                    }
-
-                    Text {
-                        text: qsTr("Toggle Dice")
-                        clip: true
-                        width: combat_dice_button.width - dice_image.width
-                               - parent.spacing - parent.padding * 2
-                        elide: Text.ElideRight
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-
-                onClicked: {
-                    combat_dice.visible = !combat_dice.visible
-                }
+                text: qsTr("Dice")
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
-        ScrollView {
-            id: combat_tracker_scroll_view
-            height: parent.height - parent.padding * 2
-            width: parent.width - parent.padding * 2 - parent.spacing - left_column.width
-            padding: 0
-            clip: true
+    }
 
-            Flow {
-                width: row.width - row.padding * 2 - row.spacing - left_column.width
+    Rectangle {
+        id: list_header
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: top_bar.bottom
+
+        height: parent.height / 15
+
+        Row {
+            anchors.fill: parent
+            spacing: 5
+            padding: 5
+
+            Text {
+                text: qsTr("Name")
+                anchors.verticalCenter: parent.verticalCenter
+                width: list_view.width / 5
+            }
+
+            Text {
+                text: qsTr("Initiative")
+                anchors.verticalCenter: parent.verticalCenter
+                width: list_view.width / 6
+            }
+
+            Text {
+                text: qsTr("Health")
+                anchors.verticalCenter: parent.verticalCenter
+                width: list_view.width / 6
+            }
+
+            Text {
+                text: qsTr("Status")
+                anchors.verticalCenter: parent.verticalCenter
+                width: list_view.width / 6
+            }
+
+            Text {
+                text: qsTr("Notes")
+                anchors.verticalCenter: parent.verticalCenter
+                width: list_view.width / 6
+            }
+        }
+    }
+
+    ListView {
+        id: list_view
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: list_header.bottom
+        anchors.bottom: bottom_bar.top
+
+        clip: true
+        spacing: 5
+
+        model: ListModel {
+            id: tracker_model
+
+            ListElement {
+                name: "Frank Lightspeed"
+                ini: 12
+                health: 25
+                status: "Alive"
+                notes: "Is super cool"
+            }
+
+            ListElement {
+                name: "Berythag Appelfass"
+                ini: 10
+            }
+
+            ListElement {
+                name: "Test"
+                ini: 12
+            }
+
+            ListElement {
+                name: "Test"
+                ini: 12
+            }
+        }
+
+        delegate: Rectangle {
+            height: delegate_row.height
+            width: list_view.width
+
+            Row {
+                id: delegate_row
+                padding: 5
                 spacing: 5
 
-                Column {
-                    id: main_column
-                    width: inPortrait || combat_dice.visible
-                           == false ? parent.width - parent.padding
-                                      * 2 : (parent.width - parent.padding * 2 - parent.spacing) / 2
-
-                    spacing: 5
-
-                    // Current Combatant Information
-                    Frame {
-                        width: parent.width
-
-                        background: Rectangle {
-                            color: color_scheme.primaryButtonColor
-                        }
-
-                        ScrollView {
-                            anchors.fill: parent
-                            clip: true
-
-                            Column {
-                                spacing: 5
-
-                                Text {
-                                    text: qsTr("Current Combatant")
-                                    color: "white"
-                                }
-
-                                Frame {
-                                    padding: 5
-                                    height: next_combatant_button.height
-                                    width: parent.width
-
-                                    Text {
-                                        id: combatant_name
-                                        text: qsTr("No Combatant")
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        color: "white"
-                                    }
-                                }
-
-                                Grid {
-                                    columns: 4
-                                    rows: 2
-                                    spacing: 5
-
-                                    Text {
-                                        text: qsTr("INI")
-                                        color: "white"
-                                    }
-
-                                    Text {
-                                        text: qsTr("Health")
-                                        color: "white"
-                                    }
-
-                                    Text {
-                                        text: qsTr("Max H.")
-                                        color: "white"
-                                    }
-
-                                    Text {
-                                        text: qsTr("Status")
-                                        color: "white"
-                                    }
-
-                                    SpinBox {
-                                        id: combatant_ini
-                                        editable: true
-                                        height: next_combatant_button.height
-
-                                        onValueChanged: {
-                                            if (combat_tracker_tool.currentIndex > -1) {
-                                                combat_tracker_tool.setCombatantIni(
-                                                            value)
-                                                combat_tracker_list_model.setProperty(
-                                                            combat_tracker_tool.currentIndex,
-                                                            "ini",
-                                                            value.toString())
-                                            }
-                                        }
-                                    }
-
-                                    SpinBox {
-                                        id: combatant_health
-                                        editable: true
-                                        height: next_combatant_button.height
-                                        onValueChanged: {
-                                            if (combat_tracker_tool.currentIndex > -1) {
-                                                combat_tracker_tool.setCombatantHealth(
-                                                            value)
-                                                combat_tracker_list_model.setProperty(
-                                                            combat_tracker_tool.currentIndex,
-                                                            "health",
-                                                            value + " / " + combat_tracker_tool.combatantMaxHealth)
-                                            }
-                                        }
-                                    }
-
-                                    SpinBox {
-                                        id: combatant_max_health
-                                        editable: true
-                                        height: next_combatant_button.height
-                                        onValueChanged: {
-                                            if (combat_tracker_tool.currentIndex > -1) {
-                                                combat_tracker_tool.setCombatantMaxHealth(
-                                                            value)
-                                                combat_tracker_list_model.setProperty(
-                                                            combat_tracker_tool.currentIndex,
-                                                            "health",
-                                                            combat_tracker_tool.combatantHealth
-                                                            + " / " + value)
-                                            }
-                                        }
-                                    }
-
-                                    TextField {
-                                        id: combatant_status
-                                        width: 100
-                                        height: next_combatant_button.height
-                                        selectByMouse: true
-
-                                        onTextChanged: {
-                                            if (combat_tracker_tool.currentIndex > -1) {
-                                                combat_tracker_tool.setCombatantStatus(
-                                                            text)
-
-                                                combat_tracker_list_model.setProperty(
-                                                            combat_tracker_tool.currentIndex,
-                                                            "status", text)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Text {
-                        text: qsTr("Combatants")
-                        color: color_scheme.textColor
-                    }
-
-                    // Combatants Table
-                    Controls1_4.TableView {
-                        id: combat_tracker_list
-                        width: parent.width
-                        height: parent.height / 2
-
-                        clip: true
-                        alternatingRowColors: false
-
-                        Controls1_4.TableViewColumn {
-                            role: "name"
-                            title: qsTr("Name")
-                            width: 200
-                        }
-
-                        Controls1_4.TableViewColumn {
-                            role: "ini"
-                            title: qsTr("INI")
-                            width: 50
-                        }
-
-                        Controls1_4.TableViewColumn {
-                            role: "health"
-                            title: qsTr("Health")
-                            width: 100
-                        }
-
-                        Controls1_4.TableViewColumn {
-                            role: "status"
-                            title: qsTr("Status")
-                            width: 170
-                        }
-
-                        model: ListModel {
-                            id: combat_tracker_list_model
-                        }
-                    }
-
-                    Button {
-                        text: qsTr("Delete Selected Combatant")
-                        height: next_combatant_button.height
-                        onClicked: {
-
-                            var index = combat_tracker_list.currentRow
-
-                            if (index > -1
-                                    && index <= combat_tracker_list.rowCount - 1) {
-                                combat_tracker_list_model.remove(index)
-
-                                combat_tracker_tool.removeCombatant(index)
-                            }
-                        }
-                    }
+                Text {
+                    text: name
+                    width: list_view.width / 5
+                    clip: true
+                    elide: Text.ElideRight
+                    anchors.verticalCenter: parent.verticalCenter
                 }
 
-                Dice {
-                    id: combat_dice
-                    width: inPortrait ? parent.width - parent.padding
-                                        * 2 : (parent.width - parent.padding * 2
-                                               - parent.spacing) / 2
-                    height: inPortrait ? main_column.height : parent.height - parent.padding * 2
-                    visible: false
+                SpinBox {
+                    value: ini
+                    width: list_view.width / 6
+                    editable: true
+                }
+
+                SpinBox {
+                    value: health
+                    width: list_view.width / 6
+                    editable: true
+                }
+
+                TextField {
+                    text: status
+                    width: list_view.width / 6
+                    selectByMouse: true
+                }
+
+                TextField {
+                    text: notes
+                    width: list_view.width / 6
+                    selectByMouse: true
+                }
+
+                Image {
+                    id: delegate_remove_image
+                    source: "/icons/menu/x_sign_dark.png"
+                    height: parent.height - parent.padding * 2
+                    width: height
                 }
             }
         }
     }
+
+    Rectangle {
+        id: bottom_bar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        height: parent.height / 12
+        color: color_scheme.menuColor
+
+        Row {
+            anchors.fill: parent
+            padding: 5
+            spacing: 5
+
+            Rectangle {
+                height: reset_button.height
+                width: 200
+                color: "white"
+                anchors.verticalCenter: parent.verticalCenter
+
+                Row {
+                    spacing: 5
+                    padding: 5
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Text {
+                        text: qsTr("Round:")
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: combat_tracker_tool.currentRound
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+            }
+
+            Button {
+                id: reset_button
+                text: qsTr("Reset")
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Button {
+                text: qsTr("Clear")
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+    }
+
+    //    Dice {
+    //        id: combat_dice
+    //        width: inPortrait ? parent.width - parent.padding
+    //                            * 2 : (parent.width - parent.padding * 2 - parent.spacing) / 2
+    //        height: inPortrait ? main_column.height : parent.height - parent.padding * 2
+    //        visible: false
+    //    }
 }
