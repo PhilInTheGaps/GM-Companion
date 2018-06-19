@@ -9,63 +9,53 @@ struct Combatant
     QString name;
     int ini;
     int health;
-    int max_health;
     QString status;
+    QString notes;
 };
 
 class CombatTracker : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString combatantName READ combatantName NOTIFY combatantNameChanged)
-    Q_PROPERTY(int combatantIni READ combatantIni NOTIFY combatantIniChanged)
-    Q_PROPERTY(int combatantHealth READ combatantHealth NOTIFY combatantHealthChanged)
-    Q_PROPERTY(int combatantMaxHealth READ combatantMaxHealth)
-    Q_PROPERTY(QString combatantStatus READ combatantStatus NOTIFY combatantStatusChanged)
-    Q_PROPERTY(QStringList latestAddedCombatant READ latestAddedCombatant NOTIFY latestAddedCombatantChanged)
     Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
-    Q_PROPERTY(int currentIndex READ currentIndex)
+    Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
 public:
     explicit CombatTracker(QObject *parent = nullptr);
 
-    QString combatantName();
-    int combatantIni();
-    int combatantHealth();
-    int combatantMaxHealth();
-    QString combatantStatus();
+    int currentRound() { return l_currentRound; }
+    int currentIndex() { return l_currentIndex; }
 
-    QStringList latestAddedCombatant();
-    int currentRound();
-    int currentIndex();
-
-    Q_INVOKABLE void nextCombatant();
-    Q_INVOKABLE void addCombatant(QString name, int ini, int health);
-    Q_INVOKABLE void clearCombatants();
+    Q_INVOKABLE void next();
+    Q_INVOKABLE void add(QString name, int ini, int health);
+    Q_INVOKABLE void clear();
     Q_INVOKABLE void resetRounds();
-    Q_INVOKABLE void removeCombatant(int index);
+    Q_INVOKABLE void remove(int index);
 
-    Q_INVOKABLE void setCombatantIni(int ini);
-    Q_INVOKABLE void setCombatantHealth(int health);
-    Q_INVOKABLE void setCombatantMaxHealth(int health);
-    Q_INVOKABLE void setCombatantStatus(QString status);
+    Q_INVOKABLE int getListSize() { return l_combatants.size(); }
+
+    Q_INVOKABLE void setIni(int index, int ini);
+    Q_INVOKABLE void setHealth(int index, int health);
+    Q_INVOKABLE void setStatus(int index, QString status);
+    Q_INVOKABLE void setNotes(int index, QString notes);
+
+    Q_INVOKABLE QString getName(int index) { return l_combatants.at(index).name; }
+    Q_INVOKABLE int getIni(int index) { return l_combatants.at(index).ini; }
+    Q_INVOKABLE int getHealth(int index) { return l_combatants.at(index).health; }
+    Q_INVOKABLE QString getStatus(int index) { return l_combatants.at(index).status; }
+    Q_INVOKABLE QString getNotes(int index) { return l_combatants.at(index).notes; }
 
 signals:
-    void combatantNameChanged();
-    void combatantIniChanged();
-    void combatantHealthChanged();
-    void combatantStatusChanged();
     void currentRoundChanged();
-    void latestAddedCombatantChanged();
+    void currentIndexChanged();
+    void combatantsChanged();
 
 private:
     QList<Combatant> l_combatants;
 
-    QStringList l_latestAddedCombatant;
-
     int getNextIndex();
     int getStartIndex();
 
-    int l_currentCombatantIndex = -1;
+    int l_currentIndex = 0;
     int l_currentRound = 1;
 
 };
