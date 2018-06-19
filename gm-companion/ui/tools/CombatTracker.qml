@@ -13,7 +13,21 @@ Page {
     readonly property bool inPortrait: width < height
 
     CombatTrackerTool {
-        id: combat_tracker_tool
+        id: tool
+
+        onCombatantsChanged: {
+            tracker_model.clear()
+
+            for (var i = 0; i < getListSize(); i++) {
+                tracker_model.append({
+                                         name: getName(i),
+                                         ini: getIni(i),
+                                         health: getHealth(i),
+                                         status: getStatus(i),
+                                         notes: getNotes(i)
+                                     })
+            }
+        }
     }
 
     ColorScheme {
@@ -35,6 +49,7 @@ Page {
         height: parent.height / 1.5
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
+        modal: true
 
         contentItem: Column {
             id: dialog_column
@@ -85,9 +100,8 @@ Page {
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         onAccepted: {
-            combat_tracker_tool.addCombatant(add_name_field.text,
-                                             add_ini_spinbox.value,
-                                             add_health_spinbox.value)
+            tool.add(add_name_field.text, add_ini_spinbox.value,
+                     add_health_spinbox.value)
         }
     }
 
@@ -103,21 +117,27 @@ Page {
         Row {
             anchors.fill: parent
             padding: 5
+            leftPadding: 0
             spacing: 5
 
             Button {
                 text: qsTr("Next")
                 anchors.verticalCenter: parent.verticalCenter
+                onClicked: tool.next()
             }
 
             Button {
                 text: qsTr("Add")
                 anchors.verticalCenter: parent.verticalCenter
+                onClicked: add_combatant_dialog.open()
             }
 
             Button {
                 text: qsTr("Dice")
                 anchors.verticalCenter: parent.verticalCenter
+                onClicked: {
+                    combat_dice.visible ? combat_dice.visible = false : combat_dice.visible = true
+                }
             }
         }
     }
@@ -132,8 +152,8 @@ Page {
 
         Row {
             anchors.fill: parent
-            spacing: 5
-            padding: 5
+            spacing: 10
+            padding: 10
 
             Text {
                 text: qsTr("Name")
@@ -167,91 +187,95 @@ Page {
         }
     }
 
-    ListView {
-        id: list_view
+    Flow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: list_header.bottom
         anchors.bottom: bottom_bar.top
 
-        clip: true
-        spacing: 5
+        ListView {
+            id: list_view
 
-        model: ListModel {
-            id: tracker_model
+            width: combat_dice.visible
+                   && !inPortrait ? parent.width * 0.6 : parent.width
+            height: combat_dice.visible
+                    && inPortrait ? parent.height / 2 : parent.height
 
-            ListElement {
-                name: "Frank Lightspeed"
-                ini: 12
-                health: 25
-                status: "Alive"
-                notes: "Is super cool"
+            clip: true
+            spacing: 10
+
+            model: ListModel {
+                id: tracker_model
             }
 
-            ListElement {
-                name: "Berythag Appelfass"
-                ini: 10
-            }
+            delegate: Rectangle {
+                height: delegate_row.height
+                width: list_view.width
+                color: index == tool.currentIndex ? color_scheme.primaryButtonColor : "transparent"
 
-            ListElement {
-                name: "Test"
-                ini: 12
-            }
+                Row {
+                    id: delegate_row
+                    padding: 10
+                    spacing: 10
 
-            ListElement {
-                name: "Test"
-                ini: 12
+                    Text {
+                        text: name
+                        color: index == tool.currentIndex ? "white" : color_scheme.textColor
+                        width: list_view.width / 5
+                        clip: true
+                        elide: Text.ElideRight
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    SpinBox {
+                        value: ini
+                        width: list_view.width / 6
+                        editable: true
+                        onValueChanged: tool.setIni(index, value)
+                    }
+
+                    SpinBox {
+                        value: health
+                        width: list_view.width / 6
+                        editable: true
+                        onValueChanged: tool.setHealth(index, value)
+                    }
+
+                    TextField {
+                        text: status
+                        width: list_view.width / 6
+                        selectByMouse: true
+                        onTextEdited: tool.setStatus(index, text)
+                    }
+
+                    TextField {
+                        text: notes
+                        width: list_view.width / 6
+                        selectByMouse: true
+                        onTextEdited: tool.setNotes(index, text)
+                    }
+
+                    Image {
+                        id: delegate_remove_image
+                        source: "/icons/menu/x_sign_dark.png"
+                        height: (parent.height - parent.padding * 2) * 0.8
+                        width: height
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: tool.remove(index)
+                        }
+                    }
+                }
             }
         }
 
-        delegate: Rectangle {
-            height: delegate_row.height
-            width: list_view.width
-
-            Row {
-                id: delegate_row
-                padding: 5
-                spacing: 5
-
-                Text {
-                    text: name
-                    width: list_view.width / 5
-                    clip: true
-                    elide: Text.ElideRight
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                SpinBox {
-                    value: ini
-                    width: list_view.width / 6
-                    editable: true
-                }
-
-                SpinBox {
-                    value: health
-                    width: list_view.width / 6
-                    editable: true
-                }
-
-                TextField {
-                    text: status
-                    width: list_view.width / 6
-                    selectByMouse: true
-                }
-
-                TextField {
-                    text: notes
-                    width: list_view.width / 6
-                    selectByMouse: true
-                }
-
-                Image {
-                    id: delegate_remove_image
-                    source: "/icons/menu/x_sign_dark.png"
-                    height: parent.height - parent.padding * 2
-                    width: height
-                }
-            }
+        Dice {
+            id: combat_dice
+            width: inPortrait ? parent.width : parent.width - list_view.width
+            height: inPortrait ? parent.height - list_view.height : parent.height
+            visible: false
         }
     }
 
@@ -267,6 +291,7 @@ Page {
         Row {
             anchors.fill: parent
             padding: 5
+            leftPadding: 0
             spacing: 5
 
             Rectangle {
@@ -286,7 +311,7 @@ Page {
                     }
 
                     Text {
-                        text: combat_tracker_tool.currentRound
+                        text: tool.currentRound
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
@@ -296,20 +321,14 @@ Page {
                 id: reset_button
                 text: qsTr("Reset")
                 anchors.verticalCenter: parent.verticalCenter
+                onClicked: tool.resetRounds()
             }
 
             Button {
                 text: qsTr("Clear")
                 anchors.verticalCenter: parent.verticalCenter
+                onClicked: tool.clear()
             }
         }
     }
-
-    //    Dice {
-    //        id: combat_dice
-    //        width: inPortrait ? parent.width - parent.padding
-    //                            * 2 : (parent.width - parent.padding * 2 - parent.spacing) / 2
-    //        height: inPortrait ? main_column.height : parent.height - parent.padding * 2
-    //        visible: false
-    //    }
 }
