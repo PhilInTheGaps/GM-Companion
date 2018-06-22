@@ -38,11 +38,7 @@ SOURCES += gm-companion/main.cpp \
     # Tools ADDONS
 #    gm-companion/tools/addons/sifrp.cpp \
     # Tools CHARACTERS
-    gm-companion/tools/characters/charactersheet.cpp \
-    gm-companion/tools/characters/defaultsheet.cpp \
     gm-companion/tools/characters/charactertool.cpp \
-    gm-companion/tools/characters/charactersaveload.cpp \
-    gm-companion/tools/characters/dsa5sheet.cpp \
     # Tools ITEMS
     gm-companion/tools/shop/itemeditor.cpp \
     gm-companion/tools/shop/shopeditor.cpp \
@@ -88,11 +84,7 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/tools/audio/audioeditor.h \
     gm-companion/tools/audio/audioeditorfilebrowser.h \
     # Tools CHARACTERS
-    gm-companion/tools/characters/charactersheet.h \
-    gm-companion/tools/characters/defaultsheet.h \
     gm-companion/tools/characters/charactertool.h \
-    gm-companion/tools/characters/charactersaveload.h \
-    gm-companion/tools/characters/dsa5sheet.h \
     # Tools ADDONS
 #    gm-companion/tools/addons/sifrp.h \
     # Tools GENERATORS
