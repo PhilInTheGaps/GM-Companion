@@ -23,9 +23,6 @@
 #include "tools/generators/namegenerator.h"
 
 #include "tools/characters/charactertool.h"
-#include "tools/characters/charactersaveload.h"
-#include "tools/characters/defaultsheet.h"
-#include "tools/characters/dsa5sheet.h"
 
 #include "settings/settingstool.h"
 #include "managers/addonmanager.h"
@@ -55,9 +52,6 @@ void loadQmlClasses()
     qmlRegisterType<AddonManager>(          "gm.companion.addonmanager",           1, 0, "AddonManager");
 
     qmlRegisterType<CharacterTool>(         "gm.companion.charactertool",          1, 0, "CharacterTool");
-    qmlRegisterType<CharacterSaveLoad>(     "gm.companion.charactersaveload",      1, 0, "CharacterSaveLoad");
-    qmlRegisterType<DefaultSheet>(          "gm.companion.defaultsheet",           1, 0, "DefaultSheetTool");
-    qmlRegisterType<DSA5Sheet>(             "gm.companion.dsa5sheet",              1, 0, "DSA5SheetTool");
 
     qmlRegisterType<UpdateManager>(         "gm.companion.updatemanager",          1, 0, "UpdateManager");
     qmlRegisterType<PlatformDetails>(       "gm.companion.platforms",              1, 0, "PlatformDetails");

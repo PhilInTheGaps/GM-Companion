@@ -1,108 +1,36 @@
 #include "charactertool.h"
+#include "gm-companion/functions.h"
 
 #include <QDebug>
-#include <QSettings>
 #include <QFile>
 
 CharacterTool::CharacterTool(QObject *parent) : QObject(parent)
 {
     qDebug() << "Loading Character Tool ...";
-
-    sManager = new SettingsManager;
-}
-
-// Create new Character File
-void CharacterTool::addCharacter(QString template_name, QString character_name, QString player_name)
-{
-    if (!template_name.isNull() && !character_name.isNull() && !player_name.isNull())
-    {
-        qDebug() << "Creating new Character file for" << character_name << "by" << player_name << "...";
-
-        QString char_path = sManager->getSetting(Setting::charactersPath);
-        QString file_name = character_name.replace(" ", "_") + ".character";
-
-        int file_counter = 1;
-
-        while (QFile(char_path + "/" + file_name).exists())
-        {
-            file_counter++;
-            file_name = character_name.replace(" ", "_") + "_(" + QString::number(file_counter) + ").character";
-        }
-
-        QSettings settings(char_path + "/" + file_name, QSettings::IniFormat);
-
-        settings.setValue("sheet_template", template_name);
-        settings.setValue("player_name",    player_name);
-        settings.setValue("character_name", character_name);
-
-        settings.sync();
-
-        emit charactersUpdated();
-    }
-}
-
-// Delete a Character
-void CharacterTool::deleteCharacter(QString character_name)
-{
-    QFile f(sManager->getSetting(Setting::charactersPath) + "/" + character_name.replace(" ", "_") + ".character");
-
-    if (f.exists())
-    {
-        f.remove();
-    }
-
-    emit charactersUpdated();
-}
-
-QString CharacterTool::getSheetTemplate(QString character_name)
-{
-    QString char_path = sManager->getSetting(Setting::charactersPath);
-    QString file_name = character_name.replace(" ", "_") + ".character";
-
-    QSettings settings(char_path + "/" + file_name, QSettings::IniFormat);
-
-    return settings.value("sheet_template", "Default").toString();
-}
-
-int CharacterTool::getSheetIndex(QString template_name)
-{
-    if (template_name == "Default")
-    {
-        return 1;
-    }
-    else if (template_name == "DSA5")
-    {
-        return 2;
-    }
-    else
-    {
-        return 0;
-    }
+    m_settings = new QSettings(m_sManager.getSetting(Setting::charactersPath) + "/settings.ini", QSettings::IniFormat);
 }
 
 void CharacterTool::updateCharacterList()
 {
-    l_activeCharacters.clear();
-    l_inactiveCharacters.clear();
+    qDebug() << "Updating Character List ...";
 
-    QStringList inactive = sManager->getInactiveCharacters();
-    QString     path     = sManager->getSetting(Setting::charactersPath);
+    m_activeCharacters.clear();
+    m_inactiveCharacters.clear();
 
-    // Active Characters
-    for (QString f : getFiles(path))
+    QString basePath         = m_sManager.getSetting(Setting::charactersPath);
+    QStringList allInactives = m_settings->value("inactive").toStringList();
+
+    for (QString s : getFolders(basePath))
     {
-        if (f.contains(".character"))
+        if ((s != ".") && (s != ".."))
         {
-            QString character = f.replace(".character", "");
-            character = character.replace("_", " ");
-
-            if (inactive.contains(character))
+            if (allInactives.contains(s))
             {
-                l_inactiveCharacters.append(character);
+                m_inactiveCharacters.append(s);
             }
             else
             {
-                l_activeCharacters.append(character);
+                m_activeCharacters.append(s);
             }
         }
     }
@@ -110,24 +38,61 @@ void CharacterTool::updateCharacterList()
     emit charactersUpdated();
 }
 
+QStringList CharacterTool::getImages(QString character_name)
+{
+    QStringList list;
+
+    QString path = m_sManager.getSetting(Setting::charactersPath) + "/" + character_name;
+
+    for (QString s : getFiles(path))
+    {
+        if (s.endsWith(".jpg") || s.endsWith(".jpeg") || s.endsWith(".png"))
+        {
+            list.append(path + "/" + s);
+        }
+    }
+
+    return list;
+}
+
 void CharacterTool::setCharacterActive(QString character_name)
 {
-    QStringList inactive = sManager->getInactiveCharacters();
+    QStringList allInactives = m_settings->value("inactive").toStringList();
 
-    inactive.removeOne(character_name.replace(" ", "_"));
+    allInactives.removeAll(character_name);
+    m_inactiveCharacters.removeAll(character_name);
+    m_activeCharacters.append(character_name);
 
-    sManager->setInactiveCharacters(inactive);
+    m_settings->setValue("inactive", allInactives);
 
     emit charactersUpdated();
 }
 
 void CharacterTool::setCharacterInactive(QString character_name)
 {
-    QStringList inactive = sManager->getInactiveCharacters();
+    QStringList allInactives = m_settings->value("inactive").toStringList();
 
-    inactive.append(character_name.replace(" ", "_"));
+    allInactives.append(character_name);
+    m_inactiveCharacters.append(character_name);
+    m_activeCharacters.removeAll(character_name);
 
-    sManager->setInactiveCharacters(inactive);
+    m_settings->setValue("inactive", allInactives);
 
     emit charactersUpdated();
+}
+
+void CharacterTool::loadButtonTexts(QString character_name)
+{
+    QStringList list;
+    QString     path = m_sManager.getSetting(Setting::charactersPath) + "/" + character_name;
+
+    for (QString s : getFiles(path))
+    {
+        if (s.endsWith(".jpg") || s.endsWith(".jpeg") || s.endsWith(".png"))
+        {
+            list.append(s.left(s.indexOf(".")));
+        }
+    }
+
+    m_buttonTexts = list;
 }

@@ -2,11 +2,10 @@
 #define CHARACTERTOOL_H
 
 #include "gm-companion/settings/settingsmanager.h"
-#include "gm-companion/functions.h"
 
 #include <QObject>
-#include <QList>
 #include <QStringList>
+#include <QSettings>
 
 class CharacterTool : public QObject
 {
@@ -16,30 +15,34 @@ public:
 
     Q_INVOKABLE void updateCharacterList();
 
-    Q_INVOKABLE void addCharacter(QString template_name, QString character_name, QString player_name);
-    Q_INVOKABLE void deleteCharacter(QString character_name);
-    Q_INVOKABLE int getSheetIndex(QString template_name);
-    Q_INVOKABLE QStringList getActiveCharacterList();
-    Q_INVOKABLE QStringList getInactiveCharacterList();
+    Q_INVOKABLE QStringList getActiveCharacterList() const { return m_activeCharacters; }
+    Q_INVOKABLE QStringList getInactiveCharacterList() const { return m_inactiveCharacters; }
+
+    Q_INVOKABLE QStringList getImages(QString character_name);
 
     Q_INVOKABLE void setCharacterActive(QString character_name);
     Q_INVOKABLE void setCharacterInactive(QString character_name);
 
-    Q_INVOKABLE QString getSheetTemplate(QString character_name);
+    Q_INVOKABLE void setActive(bool active) { m_active = active; }
+    Q_INVOKABLE bool getActive() const { return m_active; }
 
+    Q_INVOKABLE QString getButtonText(int index) const { return m_buttonTexts.at(index); }
+    Q_INVOKABLE void loadButtonTexts(QString character_name);
 
 signals:
     void charactersUpdated();
 
 private:
-    SettingsManager *sManager;
+    SettingsManager m_sManager;
+    QSettings *m_settings;
 
-    QStringList l_activeCharacters;
-    QStringList l_inactiveCharacters;
+    QStringList m_activeCharacters;
+    QStringList m_inactiveCharacters;
+    QStringList m_buttonTexts;
+
+    bool m_active = true;
 };
-
-inline QStringList CharacterTool::getActiveCharacterList() { return l_activeCharacters; }
-inline QStringList CharacterTool::getInactiveCharacterList() { return l_inactiveCharacters; }
 
 
 #endif // CHARACTERTOOL_H
+
