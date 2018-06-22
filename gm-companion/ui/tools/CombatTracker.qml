@@ -111,11 +111,14 @@ Page {
         anchors.right: parent.right
         anchors.top: parent.top
 
-        height: parent.height / 12
+        height: top_row.height
         color: color_scheme.menuColor
 
         Row {
-            anchors.fill: parent
+            id: top_row
+            anchors.left: parent.left
+            anchors.right: parent.right
+
             padding: 5
             leftPadding: 0
             spacing: 5
@@ -285,11 +288,14 @@ Page {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        height: parent.height / 12
+        height: bottom_row.height
         color: color_scheme.menuColor
 
         Row {
-            anchors.fill: parent
+            id: bottom_row
+            anchors.left: parent.left
+            anchors.right: parent.right
+
             padding: 5
             leftPadding: 0
             spacing: 5
