@@ -22,6 +22,8 @@ public:
     int uiStyleIndex();
     Q_INVOKABLE void setUiStyle(QString style);
 
+    Q_INVOKABLE void setAddonEnabled(QString addon, bool enabled);
+
 signals:
     void audioPathChanged();
     void musicPathChanged();

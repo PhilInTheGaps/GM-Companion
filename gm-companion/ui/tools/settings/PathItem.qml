@@ -4,7 +4,6 @@ import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.3
 
-//import Qt.labs.platform 1.0
 import gm.companion.settingstool 1.0
 import gm.companion.platforms 1.0
 

@@ -2,6 +2,7 @@
 #include "gm-companion/functions.h"
 
 #include <QDebug>
+#include <QSettings>
 
 MapTool::MapTool(QObject *parent) : QObject(parent)
 {
@@ -39,26 +40,28 @@ void MapTool::findMaps()
     l_categories.append("Custom");
 
     // Addon maps
-    QString addonBasePath = QDir::homePath() + "/.gm-companion/addons";
-
-    for (QString addon : getFolders(addonBasePath))
+    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
     {
-        if (sManager->getIsAddonEnabled(addon) && !addon.contains("."))
+        for (QString addon : getFolders(path))
         {
-            if (QDir(addonBasePath + "/" + addon + "/maps").exists())
+            if (sManager->getIsAddonEnabled(addon) && !addon.contains("."))
             {
-                l_categories.append(addon);
-
-                for (QString m : getFiles(addonBasePath + "/" + addon + "/maps"))
+                if (QDir(path + "/" + addon + "/maps").exists())
                 {
-                    if (m.endsWith(".jpg") || m.endsWith(".jpeg") || m.endsWith(".png"))
-                    {
-                        Map map;
-                        map.name     = m;
-                        map.path     = addonBasePath + "/" + addon + "/maps/" + m;
-                        map.category = addon;
+                    QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
+                    l_categories.append(settings.value("name", addon).toString());
 
-                        l_maps.append(map);
+                    for (QString m : getFiles(path + "/" + addon + "/maps"))
+                    {
+                        if (m.endsWith(".jpg") || m.endsWith(".jpeg") || m.endsWith(".png"))
+                        {
+                            Map map;
+                            map.name     = m;
+                            map.path     = path + "/" + addon + "/maps/" + m;
+                            map.category = addon;
+
+                            l_maps.append(map);
+                        }
                     }
                 }
             }
