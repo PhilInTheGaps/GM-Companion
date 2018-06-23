@@ -208,7 +208,8 @@ Page {
                     height: width
 
                     onClicked: {
-                        character_image.width = mid_column.width
+                        character_image.width = character_flickable.width
+                        character_image.height = character_flickable.height
                     }
                 }
             }
