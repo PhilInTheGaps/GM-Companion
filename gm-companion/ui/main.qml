@@ -14,7 +14,6 @@ Window {
     height: 720
     title: qsTr("GM-Companion")
 
-    //! [orientation]
     readonly property bool inPortrait: window.width < window.height
 
     PlatformDetails {
@@ -34,13 +33,7 @@ Window {
             color: "#222222"
         }
 
-        visible: {
-            audio.status !== Loader.Ready && maps.status !== Loader.Ready && dice.status
-                    !== Loader.Ready && combat.status !== Loader.Ready && shop.status
-                    !== Loader.Ready && characters.status !== Loader.Ready && generators.status
-                    !== Loader.Ready && notes.status !== Loader.Ready && converter.status
-                    !== Loader.Ready && settings.status !== Loader.Ready
-        }
+        visible: audio.status !== Loader.Ready
 
         Column {
             anchors.centerIn: parent
@@ -182,7 +175,10 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Audio")
-                            swipe.setCurrentIndex(0)
+
+                            if (stack.currentItem !== audio) {
+                                stack.pop(null)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -196,7 +192,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Maps")
-                            swipe.setCurrentIndex(1)
+
+                            if (stack.currentItem !== maps) {
+                                stack.pop(null)
+                                maps.active = true
+                                stack.push(maps)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -210,7 +211,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Dice")
-                            swipe.setCurrentIndex(2)
+
+                            if (stack.currentItem !== dice) {
+                                stack.pop(null)
+                                dice.active = true
+                                stack.push(dice)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -225,7 +231,12 @@ Window {
                         onClicked: {
                             tool_label.text = qsTr(
                                         "Current Tool: Combat Tracker")
-                            swipe.setCurrentIndex(3)
+
+                            if (stack.currentItem !== combat) {
+                                stack.pop(null)
+                                combat.active = true
+                                stack.push(combat)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -239,7 +250,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Item Shop")
-                            swipe.setCurrentIndex(4)
+
+                            if (stack.currentItem !== shop) {
+                                stack.pop(null)
+                                shop.active = true
+                                stack.push(shop)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -253,7 +269,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Characters")
-                            swipe.setCurrentIndex(5)
+
+                            if (stack.currentItem !== characters) {
+                                stack.pop(null)
+                                characters.active = true
+                                stack.push(characters)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -267,7 +288,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Generators")
-                            swipe.setCurrentIndex(6)
+
+                            if (stack.currentItem !== generators) {
+                                stack.pop(null)
+                                generators.active = true
+                                stack.push(generators)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -281,7 +307,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Current Tool: Notes")
-                            swipe.setCurrentIndex(7)
+
+                            if (stack.currentItem !== notes) {
+                                stack.pop(null)
+                                notes.active = true
+                                stack.push(notes)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -296,7 +327,12 @@ Window {
                         onClicked: {
                             tool_label.text = qsTr(
                                         "Current Tool: Unit Converter")
-                            swipe.setCurrentIndex(8)
+
+                            if (stack.currentItem !== converter) {
+                                stack.pop(null)
+                                converter.active = true
+                                stack.push(converter)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -316,7 +352,12 @@ Window {
 
                         onClicked: {
                             tool_label.text = qsTr("Settings")
-                            swipe.setCurrentIndex(9)
+
+                            if (stack.currentItem !== settings) {
+                                stack.pop(null)
+                                settings.active = true
+                                stack.push(settings)
+                            }
 
                             if (inPortrait || platform.isAndroid) {
                                 drawer.close()
@@ -327,10 +368,9 @@ Window {
             }
         }
 
-        SwipeView {
-            id: swipe
+        StackView {
+            id: stack
             width: {
-
                 if (inPortrait || platform.isAndroid) {
                     parent.width
                 } else {
@@ -346,69 +386,76 @@ Window {
                 color: color_scheme.backgroundColor
             }
 
-            clip: true
-            interactive: false
-            currentIndex: 0
+            initialItem: audio
+        }
 
-            Loader {
-                id: audio
-                source: "tools/Audio.qml"
-                asynchronous: true
-            }
+        Loader {
+            id: audio
+            source: "tools/Audio.qml"
+            asynchronous: true
+        }
 
-            Loader {
-                id: maps
-                source: "tools/Maps.qml"
-                asynchronous: true
-            }
+        Loader {
+            id: maps
+            source: "tools/Maps.qml"
+            asynchronous: true
+            active: false
+        }
 
-            Loader {
-                source: "tools/Dice.qml"
-                asynchronous: true
-                id: dice
-            }
+        Loader {
+            source: "tools/Dice.qml"
+            asynchronous: true
+            id: dice
+            active: false
+        }
 
-            Loader {
-                source: "tools/CombatTracker.qml"
-                asynchronous: true
-                id: combat
-            }
+        Loader {
+            source: "tools/CombatTracker.qml"
+            asynchronous: true
+            id: combat
+            active: false
+        }
 
-            Loader {
-                source: "tools/ItemShop.qml"
-                asynchronous: true
-                id: shop
-            }
+        Loader {
+            source: "tools/ItemShop.qml"
+            asynchronous: true
+            id: shop
+            active: false
+        }
 
-            Loader {
-                source: "tools/Characters.qml"
-                asynchronous: true
-                id: characters
-            }
+        Loader {
+            source: "tools/Characters.qml"
+            asynchronous: true
+            id: characters
+            active: false
+        }
 
-            Loader {
-                source: "tools/Generators.qml"
-                asynchronous: true
-                id: generators
-            }
+        Loader {
+            source: "tools/Generators.qml"
+            asynchronous: true
+            id: generators
+            active: false
+        }
 
-            Loader {
-                source: "tools/Notes.qml"
-                asynchronous: true
-                id: notes
-            }
+        Loader {
+            source: "tools/Notes.qml"
+            asynchronous: true
+            id: notes
+            active: false
+        }
 
-            Loader {
-                source: "tools/Converter.qml"
-                asynchronous: true
-                id: converter
-            }
+        Loader {
+            source: "tools/Converter.qml"
+            asynchronous: true
+            id: converter
+            active: false
+        }
 
-            Loader {
-                source: "tools/Settings.qml"
-                asynchronous: true
-                id: settings
-            }
+        Loader {
+            source: "tools/Settings.qml"
+            asynchronous: true
+            id: settings
+            active: false
         }
     }
 }
