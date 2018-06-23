@@ -2,10 +2,7 @@
 #define ADDONMANAGER_H
 
 #include "gm-companion/settings/settingsmanager.h"
-
 #include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 
 class AddonManager : public QObject
 {
@@ -14,12 +11,10 @@ public:
     explicit AddonManager(QObject *parent = nullptr);
 
     Q_INVOKABLE void updateAddonList();
-    Q_INVOKABLE QStringList getAddonNames();
-    Q_INVOKABLE QStringList getAddonVersions();
-    Q_INVOKABLE QStringList getAddonDescriptions();
-    Q_INVOKABLE QList<int> getAddonStatusList();
-    Q_INVOKABLE QString getDestinationFolder();
-    Q_INVOKABLE void setIsTestVersion(bool isTest);
+    Q_INVOKABLE QStringList getAddonNames() const { return m_addonNames; }
+    Q_INVOKABLE QStringList getAddonDescriptions() const { return m_addonDescriptions; }
+    Q_INVOKABLE QStringList getAddonPathNames() const { return m_addonPathNames; }
+    Q_INVOKABLE QList<bool> getAddonEnabledList() const { return m_addonEnabledList; }
 
 signals:
     void addonListChanged();
@@ -27,17 +22,10 @@ signals:
 private:
     SettingsManager sManager;
 
-    QString l_urlString;
-    QNetworkAccessManager networkManager;
-    int addonStatus(QString addon, QString version);
-
-    QStringList l_addonNames;
-    QStringList l_addonVersions;
-    QStringList l_addonDescriptions;
-    QList<int> l_addonStatusList;
-
-private slots:
-    void fileDownloaded(QNetworkReply *reply);
+    QStringList m_addonNames;
+    QStringList m_addonPathNames;
+    QStringList m_addonDescriptions;
+    QList<bool> m_addonEnabledList;
 };
 
 #endif // ADDONMANAGER_H

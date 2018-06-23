@@ -297,18 +297,20 @@ void ShopEditor::loadItemListTabs()
     l_itemListTabPaths.clear();
     l_itemListTabPaths.append(sManager->getSetting(Setting::shopPath) + "/CustomItems.items");
 
-    QString addonPath = QDir::homePath() + "/.gm-companion/addons";
-
-    for (QString addon : getFolders(addonPath))
+    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
     {
-        if (sManager->getIsAddonEnabled(addon))
+        for (QString addon : getFolders(path))
         {
-            QString addonItemPath = addonPath + "/" + addon + "/shop/AddonItems.items";
-
-            if (QFile(addonItemPath).exists())
+            if (sManager->getIsAddonEnabled(addon))
             {
-                l_itemListTabNames.append(addon);
-                l_itemListTabPaths.append(addonItemPath);
+                QString addonItemPath = path + "/" + addon + "/shop/AddonItems.items";
+
+                if (QFile(addonItemPath).exists())
+                {
+                    QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
+                    l_itemListTabNames.append(settings.value("name", addon).toString());
+                    l_itemListTabPaths.append(addonItemPath);
+                }
             }
         }
     }

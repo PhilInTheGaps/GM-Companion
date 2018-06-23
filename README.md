@@ -13,8 +13,7 @@ A tool for the gamemaster of a tabletop RPG session.
 [Documentation](https://github.com/PhilInTheGaps/GM-Companion/wiki)
 
 ## Credits
-
-Uses [QuickDownload](https://github.com/Larpon/QuickDownload) by [Larpon](https://github.com/Larpon) under the [MIT license](https://github.com/Larpon/QuickDownload/blob/master/LICENSE)  
+ 
 Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 # Installation
@@ -69,16 +68,11 @@ GM-Companion requires Qt5 to build.
 
 So the build steps would look something like this:  
 1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion)  
-2. Get the submodules  
-	```
-	git submodule init  
-	git submodule update  
-	```  
-3. Install [Qt5](https://www.qt.io/) (GM-Companion requires at least version 5.10)  
-4. If you are on Linux install TagLib  
-5. Switch to the GM-Companion folder  
-6. Run qmake  
-7. Run make  
+2. Install [Qt5](https://www.qt.io/) (GM-Companion requires at least version 5.10)  
+3. If you are on Linux install TagLib  
+4. Switch to the GM-Companion folder  
+5. Run qmake  
+6. Run make  
 
 
 Have fun!

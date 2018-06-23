@@ -7,7 +7,6 @@
 QT       += core gui multimedia multimediawidgets network quick qml
 
 win32:QT += winextras
-include(lib/QuickDownload/quickdownload.pri)
 
 TARGET = out/gm-companion
 TEMPLATE = app
@@ -58,7 +57,6 @@ SOURCES += *.qml \
     tools/*.qml \
     tools/audio/*.qml \
     tools/characters/*.qml \
-    tools/characters/sheet_elements/*.qml \
     tools/generators/*.qml \
     tools/maps/*.qml \
     tools/notes/*.qml \

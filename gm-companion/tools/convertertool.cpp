@@ -15,15 +15,16 @@ ConverterTool::ConverterTool(QObject *parent) : QObject(parent)
 // paths
 void ConverterTool::addAddonUnits()
 {
-    QString basePath = QDir::homePath() + "/.gm-companion/addons";
-
-    for (QString addon : getFolders(basePath))
+    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
     {
-        if (sManager.getIsAddonEnabled(addon))
+        for (QString addon : getFolders(path))
         {
-            if (QFile(basePath + "/" + addon + "/units.ini").exists())
+            if (sManager.getIsAddonEnabled(addon))
             {
-                unitPaths.append(basePath + "/" + addon + "/units.ini");
+                if (QFile(path + "/" + addon + "/units.ini").exists())
+                {
+                    unitPaths.append(path + "/" + addon + "/units.ini");
+                }
             }
         }
     }

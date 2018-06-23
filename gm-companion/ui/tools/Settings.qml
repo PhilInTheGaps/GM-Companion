@@ -9,7 +9,6 @@ import gm.companion.settingstool 1.0
 import gm.companion.updatemanager 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.addonmanager 1.0
-import com.blackgrain.qml.quickdownload 1.0
 import "./settings"
 
 Page {
@@ -22,13 +21,10 @@ Page {
     UpdateManager {
         id: update_manager
         Component.onCompleted: {
+            addon_manager.updateAddonList()
+
             setCurrentVersion(1000)
             checkForUpdates()
-
-            if (getCurrentVersion() > newestVersionInt())
-                addon_manager.setIsTestVersion(true)
-
-            addon_manager.updateAddonList()
         }
 
         onUpdateAvailable: {
@@ -49,35 +45,20 @@ Page {
         id: addon_manager
 
         onAddonListChanged: {
-            addon_busy_indicator.visible = false
             addon_column.children = []
 
             var component = Qt.createComponent("./settings/AddonItem.qml")
 
             for (var i = 0; i < getAddonNames().length; i++) {
-                var installed = false
-                var outdated = false
-
-                if (getAddonStatusList()[i] !== 0) {
-                    installed = true
-
-                    if (getAddonStatusList()[i] === 1) {
-                        outdated = true
-                    }
-                }
 
                 var addonItem = component.createObject(addon_column, {
-                                                           x: 0,
-                                                           y: 0,
                                                            addon: getAddonNames(
                                                                       )[i],
-                                                           version: getAddonVersions(
-                                                                        )[i],
                                                            description: getAddonDescriptions(
                                                                             )[i],
-                                                           installed: installed,
-                                                           outdated: outdated,
-                                                           destination: getDestinationFolder()
+                                                           folder: getAddonPathNames(
+                                                                       )[i],
+                                                           addon_enabled: getAddonEnabledList()[i]
                                                        })
             }
         }
@@ -112,7 +93,7 @@ Page {
             }
 
             TabButton {
-                text: qsTr("Addons")
+                text: qsTr("RPG Addons")
             }
 
             TabButton {
@@ -342,27 +323,21 @@ Page {
                     padding: 0
                     readOnly: true
 
-                    text: qsTr("Addons can be installed by clicking \"Download\". A download starts automatically and when it is finished, the downloaded archive is opened. \nTo finish the installation extract the content (A folder with the name of the addon) to the directory it was downloaded into. (your/home/folder/.gm-companion/addons) \nAfter installing addons the program must be restarted for them to work!")
+                    text: qsTr("The following addons are available:")
                     clip: true
                     wrapMode: "WordWrap"
                 }
 
-                BusyIndicator {
-                    id: addon_busy_indicator
-                    visible: true
-                    width: check_for_updates_button.height
-                    height: width
-                }
-
                 ScrollView {
                     width: parent.width
-                    height: parent.height - addon_busy_indicator.height
-                            - addon_text_area.height - parent.spacing * 2
+                    height: parent.height - addon_text_area.height - parent.spacing * 2
                     clip: true
 
                     Column {
                         id: addon_column
                         width: parent.parent.width
+                        spacing: 10
+                        topPadding: 10
                     }
                 }
             }
@@ -424,6 +399,7 @@ Page {
             id: restart_info_text
             text: qsTr("Changing settings requires a program restart!")
             color: "red"
+            padding: 5
         }
     }
 }

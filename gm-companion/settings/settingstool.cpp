@@ -27,6 +27,11 @@ void SettingsTool::setUiStyle(QString style)
     emit uiStyleChanged();
 }
 
+void SettingsTool::setAddonEnabled(QString addon, bool enabled)
+{
+    sManager->setAddonEnabled(addon, enabled);
+}
+
 QString SettingsTool::getPath(QString type)
 {
     if (type == "audio")

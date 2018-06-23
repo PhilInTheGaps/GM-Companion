@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <QSettings>
 
 NameGenerator::NameGenerator(QObject *parent) : QObject(parent)
 {
@@ -32,14 +33,16 @@ void NameGenerator::updateCategories()
     }
 
     // Addon Names
-    QString addonBasePath = QDir::homePath() + "/.gm-companion/addons";
-
-    for (QString addon : getFolders(addonBasePath))
+    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
     {
-        if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(addonBasePath + "/" + addon + "/names").size() > 0))
+        for (QString addon : getFolders(path))
         {
-            l_categories.append(addon);
-            l_categoryPaths.append(addonBasePath + "/" + addon + "/names");
+            if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
+            {
+                QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
+                l_categories.append(settings.value("name", addon).toString());
+                l_categoryPaths.append(path + "/" + addon + "/names");
+            }
         }
     }
 
