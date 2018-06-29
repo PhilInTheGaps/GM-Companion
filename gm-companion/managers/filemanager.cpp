@@ -21,7 +21,7 @@ void FileManager::run()
     QStringList dirList = { "addons", "audio", "characters", "maps", "music", "names", "shop", "notes", "radio", "resources", "units", "sounds", "styles", "logs" };
 
     // List of all files to be deleted
-    filesToBeDeleted.append({ "styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss", "styles/Dark.qss", "styles/Whites.qss" });
+    filesToBeDeleted.append({ "styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss", "styles/Dark.qss", "styles/White.qss" });
 
     // List of all folders to be deleted
     foldersToBeDeleted.append({ "names/DSA5", "names/SIFRP", "names/Generic" });

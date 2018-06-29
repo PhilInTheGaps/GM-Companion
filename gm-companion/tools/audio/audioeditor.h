@@ -1,137 +1,98 @@
 #ifndef AUDIOEDITOR_H
 #define AUDIOEDITOR_H
 
-#include <QWidget>
-#include <QTreeWidget>
-#include <QListWidget>
-#include <QMediaPlayer>
-
+#include <QObject>
+#include <QStringList>
 #include "gm-companion/settings/settingsmanager.h"
 
-namespace Ui {
-class AudioEditor;
-}
-
-class AudioEditor : public QWidget
+class AudioEditor : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit AudioEditor(QWidget *parent = 0);
-    ~AudioEditor();
+    explicit AudioEditor(QObject *parent = nullptr);
 
-private slots:
-    void on_treeWidget_music_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    Q_INVOKABLE void updateProjectList();
+    Q_INVOKABLE QStringList getProjectList();
+    Q_INVOKABLE void setCurrentProject(QString project);
+    Q_INVOKABLE void createProject(QString project);
 
-    void on_pushButton_newProject_clicked();
-    void on_pushButton_openProject_clicked();
+    Q_INVOKABLE void updateCategoryList();
+    Q_INVOKABLE QStringList getCategoryList();
+    Q_INVOKABLE void setCurrentCategory(QString category);
+    Q_INVOKABLE void createCategory(QString category);
 
-    void on_treeWidget_categories_itemDoubleClicked(QTreeWidgetItem *item, int column);
-    void on_treeWidget_categories_currentItemChanged(QTreeWidgetItem *current);
+    Q_INVOKABLE void updateScenarioList();
+    Q_INVOKABLE QStringList getScenarioList();
+    Q_INVOKABLE void setCurrentScenario(QString scenario);
+    Q_INVOKABLE void createScenario(QString scenario);
 
-    void on_pushButton_deleteSelected_clicked();
+    Q_INVOKABLE void updateElementList();
+    Q_INVOKABLE void moveElement(QString element, int type, int positions);
+    Q_INVOKABLE void sortElements();
 
-    void on_listWidget_musicList_itemDoubleClicked(QListWidgetItem *item);
-    void on_listWidget_soundList_itemDoubleClicked(QListWidgetItem *item);
-    void on_treeWidget_sound_itemDoubleClicked(QTreeWidgetItem *item, int column);
-    void on_treeWidget_radio_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    Q_INVOKABLE void createList(QString listName, int type);
+    Q_INVOKABLE QStringList getMusicLists();
+    Q_INVOKABLE QStringList getSoundLists();
+    Q_INVOKABLE QStringList getRadios();
 
-    void on_pushButton_addAllFilesFromMusicFolder_clicked();
-    void on_pushButton_addAllFilesFromSoundFolder_clicked();
-    void on_pushButton_convertFolderToMusicList_clicked();
+    Q_INVOKABLE void saveProject();
+    Q_INVOKABLE QString getResourcesPath();
 
-    void on_pushButton_playPause_toggled(bool checked);
+    Q_INVOKABLE void setCurrentList(QString list, int type);
+    Q_INVOKABLE QStringList getCurrentFileNames();
+    Q_INVOKABLE QStringList getCurrentFilePaths();
+    Q_INVOKABLE QString getCurrentListIcon();
+    Q_INVOKABLE int getCurrentListMode();
+    Q_INVOKABLE void addFile(QString name, QString path);
+    Q_INVOKABLE void addFiles(QStringList names, QStringList paths);
+    Q_INVOKABLE void removeFile(int index);
+    Q_INVOKABLE void saveList(int type);
+    Q_INVOKABLE void deleteList(QString list, int type);
+    Q_INVOKABLE void moveFile(int index, int positions);
+    Q_INVOKABLE void setCurrentListMode(int mode);
+    Q_INVOKABLE void setCurrentListIcon(QString icon);
+    Q_INVOKABLE void removeMissingFiles(int type);
 
-    void on_treeWidget_music_currentItemChanged(QTreeWidgetItem *current);
-    void on_treeWidget_sound_currentItemChanged(QTreeWidgetItem *current);
-    void on_treeWidget_music_itemExpanded(QTreeWidgetItem *item);
-    void on_treeWidget_sound_itemExpanded(QTreeWidgetItem *item);
+    Q_INVOKABLE bool getLocal();
+    Q_INVOKABLE QString getURL();
+    Q_INVOKABLE void setURL(QString url);
+    Q_INVOKABLE void setLocal(bool local);
 
-    void on_verticalSlider_volume_valueChanged(int value);
-    void on_horizontalSlider_progress_sliderMoved(int position);
-    void previewPlayer_positionChanged(qint64 position);
+signals:
+    void projectListChanged();
+    void categoryListChanged();
+    void scenarioListChanged();
+    void elementListChanged();
 
-    void on_toolButton_musicIcon_clicked();
-    void on_toolButton_soundIcon_clicked();
-    void on_toolButton_radioIcon_clicked();
-
-    void on_pushButton_newElement_clicked();
-
-    void on_pushButton_detectMissingMusic_clicked();
-    void on_pushButton_detectMissingSounds_clicked();
-
-    void on_pushButton_addToMusicList_clicked();
-    void on_pushButton_addToSoundList_clicked();
-
-    void on_pushButton_removeSoundFile_clicked();
-    void on_pushButton_removeFileMusic_clicked();
-
-    void on_pushButton_up_clicked();
-    void on_pushButton_down_clicked();
-
-    void on_pushButton_save_clicked();
-    void on_pushButton_openProjectFolder_clicked();
-
-    void on_pushButton_saveCategory_clicked();
-
-    void on_pushButton_saveScenario_clicked();
-
-    void on_pushButton_saveMusicList_clicked();
-
-    void on_pushButton_saveSoundList_clicked();
-
-    void on_pushButton_saveRadio_clicked();
+    void listChanged();
+    void urlChanged();
 
 private:
-    Ui::AudioEditor *ui;
+    SettingsManager *sManager;
 
-    SettingsManager *settingsManager;
+    QStringList l_projectList;
+    QString l_currentProject;
 
-    QMediaPlayer *previewPlayer;
-    void playPreview(QString path);
+    QStringList l_categoryList;
+    QString l_currentCategory;
 
-    bool isProjectOpen = false;
-    bool filesAreLoaded = false;
+    QStringList l_scenarioList;
+    QString l_currentScenario;
 
-    QString projectName;
-    QString currentCategory;
-    QString currentScenario;
-    QString currentElement;
+    QStringList l_musicLists;
+    QStringList l_soundLists;
+    QStringList l_radios;
 
-    void save();
-    void saveCategoryOrder();
-    void saveScenarioOrder(QTreeWidgetItem *categoryItem);
-    void saveElement();
-    void saveElementOrder();
+    QString l_currentElement;
 
-    void getProjects();
-    void loadProject();
-    void loadCategories();
-    void loadScenarios(QTreeWidgetItem *catItem);
-    void loadElement(QTreeWidgetItem *scenItem, QString category, QString element, int type);
-    void loadElements(QTreeWidgetItem *scenItem, QString category);
+    QString l_currentList;
+    QStringList l_currentFileNames;
+    QStringList l_currentFilePaths;
+    int l_currentListMode;
+    QString l_currentListIcon;
 
-    void moveElement(QTreeWidgetItem *item, int steps);
-
-    void addFileToList(QTreeWidgetItem *item, int column, int type);
-    void addAllFilesFromFolder(QTreeWidgetItem *item, int type);
-
-    void addNewElement(int type);
-    void addNewCategory();
-    void addNewScenario();
-
-    void markMissingFiles(QList<int> indices, QListWidget *widget);
-    QList<int> getMissingFiles(int type);
-
-    // Icon File Browser
-    QString setIconPath(QString windowTitle);
-    void chooseIcon(int type);
-    QString lastPath;
-
-    // File Browser
-    void loadFolderContentsToTreeView(QTreeWidget *treeWidget, QString baseFolder);
-    void addSubFoldersToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel = false, QTreeWidget *tree = NULL);
-    void addFilesToTreeItem(QTreeWidgetItem *baseItem, QString baseFolder, bool topLevel = false, QTreeWidget *tree = NULL);
+    bool l_local;
+    QString l_url;
 };
 
 #endif // AUDIOEDITOR_H

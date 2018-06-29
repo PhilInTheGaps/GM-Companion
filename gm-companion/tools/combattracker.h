@@ -1,42 +1,63 @@
 #ifndef COMBATTRACKER_H
 #define COMBATTRACKER_H
 
-#include <QDialog>
+#include <QObject>
+#include <QList>
 
-namespace Ui {
-class CombatTracker;
-}
+struct Combatant
+{
+    QString name;
+    int ini;
+    int health;
+    QString status;
+    QString notes;
+};
 
-class CombatTracker : public QDialog
+class CombatTracker : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
+    Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
 public:
-    explicit CombatTracker(QWidget *parent = 0);
-    ~CombatTracker();
+    explicit CombatTracker(QObject *parent = nullptr);
 
-private slots:
-    void on_pushButton_next_clicked();
+    int currentRound() { return l_currentRound; }
+    int currentIndex() { return l_currentIndex; }
 
-    void on_pushButton_clear_clicked();
+    Q_INVOKABLE void next();
+    Q_INVOKABLE void add(QString name, int ini, int health);
+    Q_INVOKABLE void clear();
+    Q_INVOKABLE void resetRounds();
+    Q_INVOKABLE void remove(int index);
 
-    void on_pushButton_reset_clicked();
+    Q_INVOKABLE int getListSize() { return l_combatants.size(); }
+
+    Q_INVOKABLE void setIni(int index, int ini);
+    Q_INVOKABLE void setHealth(int index, int health);
+    Q_INVOKABLE void setStatus(int index, QString status);
+    Q_INVOKABLE void setNotes(int index, QString notes);
+
+    Q_INVOKABLE QString getName(int index) { return l_combatants.at(index).name; }
+    Q_INVOKABLE int getIni(int index) { return l_combatants.at(index).ini; }
+    Q_INVOKABLE int getHealth(int index) { return l_combatants.at(index).health; }
+    Q_INVOKABLE QString getStatus(int index) { return l_combatants.at(index).status; }
+    Q_INVOKABLE QString getNotes(int index) { return l_combatants.at(index).notes; }
+
+signals:
+    void currentRoundChanged();
+    void currentIndexChanged();
+    void combatantsChanged();
 
 private:
-    Ui::CombatTracker *ui;
+    QList<Combatant> l_combatants;
 
-    int combatRound;
-    int currentIndex;
+    int getNextIndex();
+    int getStartIndex();
 
-    void nextCharacter();
-    void clearTable();
-    void resetRounds();
+    int l_currentIndex = 0;
+    int l_currentRound = 1;
 
-    int getInitiative(int index);
-    int getNextHighestInitiativeIndex(int index);
-    int getHighestInitiativeIndex();
-
-    bool getIsLowestInitiative(int index);
 };
 
 #endif // COMBATTRACKER_H

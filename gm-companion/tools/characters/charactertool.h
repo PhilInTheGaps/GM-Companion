@@ -1,71 +1,48 @@
 #ifndef CHARACTERTOOL_H
 #define CHARACTERTOOL_H
 
-#include <QWidget>
-#include <QStringList>
-#include <QListWidgetItem>
-#include <QDir>
-
 #include "gm-companion/settings/settingsmanager.h"
-#include "sheets/defaultsheet.h"
-#include "sheets/dsa5sheet.h"
-#include "sheets/entaria2sheet.h"
-#include "sheets/dnd5esheet.h"
 
-namespace Ui {
-class CharacterTool;
-}
+#include <QObject>
+#include <QStringList>
+#include <QSettings>
 
-class CharacterTool : public QWidget
+class CharacterTool : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit CharacterTool(QWidget *parent = 0);
-    ~CharacterTool();
+    explicit CharacterTool(QObject *parent = nullptr);
 
-private slots:
-    void on_pushButton_makeInactive_clicked();
-    void on_pushButton_makeAllInactive_clicked();
+    Q_INVOKABLE void updateCharacterList();
 
-    void on_pushButton_makeActive_clicked();
-    void on_pushButton_makeAllActive_clicked();
+    Q_INVOKABLE QStringList getActiveCharacterList() const { return m_activeCharacters; }
+    Q_INVOKABLE QStringList getInactiveCharacterList() const { return m_inactiveCharacters; }
 
-    void on_pushButton_createNewCharacter_clicked();
+    Q_INVOKABLE QStringList getImages(QString character_name);
 
-    void on_listWidget_activeCharacters_currentItemChanged(QListWidgetItem *item);
+    Q_INVOKABLE void setCharacterActive(QString character_name);
+    Q_INVOKABLE void setCharacterInactive(QString character_name);
 
-    void on_pushButton_save_clicked();
-    void on_pushButton_delete_clicked();
+    Q_INVOKABLE void setActive(bool active) { m_active = active; }
+    Q_INVOKABLE bool getActive() const { return m_active; }
 
-    void on_listWidget_pages_currentItemChanged(QListWidgetItem *item);
-    void on_pushButton_zoomIn_clicked();
-    void on_pushButton_zoomOut_clicked();
-    void on_pushButton_reset_clicked();
+    Q_INVOKABLE QString getButtonText(int index) const { return m_buttonTexts.at(index); }
+    Q_INVOKABLE void loadButtonTexts(QString character_name);
+
+signals:
+    void charactersUpdated();
 
 private:
-    Ui::CharacterTool *ui;
+    SettingsManager m_sManager;
+    QSettings *m_settings;
 
-    SettingsManager *settingsManager;
+    QStringList m_activeCharacters;
+    QStringList m_inactiveCharacters;
+    QStringList m_buttonTexts;
 
-    DefaultSheet *defaultSheet;
-    DnD5eSheet *dnd5eSheet;
-    DSA5Sheet *dsa5Sheet;
-    Entaria2Sheet *entaria2Sheet;
-
-    QStringList inactiveCharacters;
-    QString currentCharacter;
-
-    void setTemplates();
-    void loadCharacterSheets();
-    void updateCharacterList();
-
-    void loadCharacterImages(QString path, QStringList files);
-
-    void createNewCharacter();
-
-    void makeCharacterInactive(int index);
-    void makeCharacterActive(int index);
+    bool m_active = true;
 };
 
+
 #endif // CHARACTERTOOL_H
+

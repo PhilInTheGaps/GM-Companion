@@ -33,7 +33,6 @@
         <file alias="music.png">icons/media/music.png</file>
         <file alias="notes.png">icons/media/notes.png</file>
         <file alias="pause.png">icons/media/pause.png</file>
-        <file alias="play.png">icons/media/play.png</file>
         <file alias="playBackwards.png">icons/media/playBackwards.png</file>
         <file alias="radio_image.png">icons/media/radio_image.png</file>
         <file alias="radio_large.png">icons/media/radio_large.png</file>
@@ -49,15 +48,20 @@
         <file alias="sound_large.png">icons/media/sound_large.png</file>
         <file alias="sound.png">icons/media/sound.png</file>
         <file alias="stop.png">icons/media/stop.png</file>
+        <file alias="play.png">icons/media/play.png</file>
+        <file alias="playlist.png">icons/media/playlist.png</file>
+        <file alias="sound_bright.png">icons/media/sound_bright.png</file>
+        <file alias="music_bright.png">icons/media/music_bright.png</file>
+        <file alias="playBackwards_bright.png">icons/media/playBackwards_bright.png</file>
+        <file alias="play_weight_centered.png">icons/media/play_weight_centered.png</file>
+        <file alias="seekBack_weight_centered.png">icons/media/seekBack_weight_centered.png</file>
+        <file alias="seekForward_weight_centered.png">icons/media/seekForward_weight_centered.png</file>
     </qresource>
-    <qresource prefix="/styles">
-        <file alias="White.qss">styles/White.qss</file>
-        <file alias="Dark.qss">styles/Dark.qss</file>
-    </qresource>
+    <qresource prefix="/styles"/>
     <qresource prefix="/translations">
-        <file alias="gm-companion_de.qm">translations/gm-companion_de.qm</file>
+        <file alias="gm-companion_Deutsch">translations/gm-companion_de.qm</file>
         <file alias="gm-companion_de.ts">translations/gm-companion_de.ts</file>
-        <file alias="gm-companion_en.qm">translations/gm-companion_en.qm</file>
+        <file alias="gm-companion_English">translations/gm-companion_en.qm</file>
         <file alias="gm-companion_en.ts">translations/gm-companion_en.ts</file>
     </qresource>
     <qresource prefix="/units">
@@ -73,5 +77,74 @@
         <file alias="maps.png">icons/menu/maps.png</file>
         <file alias="notes.png">icons/menu/notes.png</file>
         <file alias="settings.png">icons/menu/settings.png</file>
+        <file alias="three_bars_bright.png">icons/menu/three_bars_bright.png</file>
+        <file alias="three_bars_dark.png">icons/menu/three_bars_dark.png</file>
+        <file alias="dice.png">icons/menu/dice.png</file>
+        <file alias="plus_sign_dark.png">icons/menu/plus_sign_dark.png</file>
+        <file alias="vertical_bar_dark.png">icons/menu/vertical_bar_dark.png</file>
+        <file alias="ring_arrow_dark.png">icons/menu/ring_arrow_dark.png</file>
+        <file alias="x_sign_dark.png">icons/menu/x_sign_dark.png</file>
+        <file alias="x_sign_bright.png">icons/menu/x_sign_bright.png</file>
+        <file alias="arrow_down_dark.png">icons/menu/arrow_down_dark.png</file>
+        <file alias="arrow_up_dark.png">icons/menu/arrow_up_dark.png</file>
+        <file alias="three_bars_white.png">icons/menu/three_bars_white.png</file>
+    </qresource>
+    <qresource prefix="/icons/dice">
+        <file alias="d4.png">icons/dice/d4.png</file>
+        <file alias="d12.png">icons/dice/d12.png</file>
+        <file alias="d20.png">icons/dice/dice-twenty-faces-twenty.png</file>
+        <file alias="d6.png">icons/dice/perspective-dice-six.png</file>
+        <file alias="dice_roll.png">icons/dice/rolling-dice-cup.png</file>
+    </qresource>
+    <qresource prefix="/addons/dsa5">
+        <file alias="addon.ini">addons/dsa5/addon.ini</file>
+        <file alias="units.ini">addons/dsa5/units.ini</file>
+        <file alias="shop/AddonItems.items">addons/dsa5/shop/AddonItems.items</file>
+        <file alias="names/Albernisch/female.txt">addons/dsa5/names/Albernisch/female.txt</file>
+        <file alias="names/Albernisch/male.txt">addons/dsa5/names/Albernisch/male.txt</file>
+        <file alias="names/Albernisch/surname.txt">addons/dsa5/names/Albernisch/surname.txt</file>
+        <file alias="names/Amazonen/female.txt">addons/dsa5/names/Amazonen/female.txt</file>
+        <file alias="names/Bornland/female.txt">addons/dsa5/names/Bornland/female.txt</file>
+        <file alias="names/Bornland/male.txt">addons/dsa5/names/Bornland/male.txt</file>
+        <file alias="names/Bornland/surname.txt">addons/dsa5/names/Bornland/surname.txt</file>
+        <file alias="names/Darpatisch/female.txt">addons/dsa5/names/Darpatisch/female.txt</file>
+        <file alias="names/Darpatisch/male.txt">addons/dsa5/names/Darpatisch/male.txt</file>
+        <file alias="names/Elfen/female.txt">addons/dsa5/names/Elfen/female.txt</file>
+        <file alias="names/Elfen/male.txt">addons/dsa5/names/Elfen/male.txt</file>
+        <file alias="names/Garethi/female.txt">addons/dsa5/names/Garethi/female.txt</file>
+        <file alias="names/Garethi/male.txt">addons/dsa5/names/Garethi/male.txt</file>
+        <file alias="names/Garethi/surname.txt">addons/dsa5/names/Garethi/surname.txt</file>
+        <file alias="names/Horasisch/female.txt">addons/dsa5/names/Horasisch/female.txt</file>
+        <file alias="names/Horasisch/male.txt">addons/dsa5/names/Horasisch/male.txt</file>
+        <file alias="names/Horasisch/surname.txt">addons/dsa5/names/Horasisch/surname.txt</file>
+        <file alias="names/Moha/female.txt">addons/dsa5/names/Moha/female.txt</file>
+        <file alias="names/Moha/male.txt">addons/dsa5/names/Moha/male.txt</file>
+        <file alias="names/Nivesen/female.txt">addons/dsa5/names/Nivesen/female.txt</file>
+        <file alias="names/Nivesen/male.txt">addons/dsa5/names/Nivesen/male.txt</file>
+        <file alias="names/Norbaden/female.txt">addons/dsa5/names/Norbaden/female.txt</file>
+        <file alias="names/Norbaden/male.txt">addons/dsa5/names/Norbaden/male.txt</file>
+        <file alias="names/Norbaden/surname.txt">addons/dsa5/names/Norbaden/surname.txt</file>
+        <file alias="names/Novadi/female.txt">addons/dsa5/names/Novadi/female.txt</file>
+        <file alias="names/Novadi/male.txt">addons/dsa5/names/Novadi/male.txt</file>
+        <file alias="names/Rogolan/female.txt">addons/dsa5/names/Rogolan/female.txt</file>
+        <file alias="names/Rogolan/male.txt">addons/dsa5/names/Rogolan/male.txt</file>
+        <file alias="names/Rogolan/surname.txt">addons/dsa5/names/Rogolan/surname.txt</file>
+        <file alias="names/Thorwal/female.txt">addons/dsa5/names/Thorwal/female.txt</file>
+        <file alias="names/Thorwal/male.txt">addons/dsa5/names/Thorwal/male.txt</file>
+        <file alias="names/Weiden/female.txt">addons/dsa5/names/Weiden/female.txt</file>
+        <file alias="names/Weiden/male.txt">addons/dsa5/names/Weiden/male.txt</file>
+        <file alias="names/Zwerge/female.txt">addons/dsa5/names/Zwerge/female.txt</file>
+        <file alias="names/Zwerge/male.txt">addons/dsa5/names/Zwerge/male.txt</file>
+    </qresource>
+    <qresource prefix="/addons/sifrp">
+        <file alias="addon.ini">addons/sifrp/addon.ini</file>
+        <file alias="units.ini">addons/sifrp/units.ini</file>
+        <file alias="names/Dothraki/female.txt">addons/sifrp/names/Dothraki/female.txt</file>
+        <file alias="names/Dothraki/male.txt">addons/sifrp/names/Dothraki/male.txt</file>
+        <file alias="names/Unsullied/male.txt">addons/sifrp/names/Unsullied/male.txt</file>
+        <file alias="names/Unsullied/surname.txt">addons/sifrp/names/Unsullied/surname.txt</file>
+        <file alias="names/Westeros/female.txt">addons/sifrp/names/Westeros/female.txt</file>
+        <file alias="names/Westeros/male.txt">addons/sifrp/names/Westeros/male.txt</file>
+        <file alias="names/Westeros/surname.txt">addons/sifrp/names/Westeros/surname.txt</file>
     </qresource>
 </RCC>

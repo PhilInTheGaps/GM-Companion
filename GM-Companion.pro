@@ -4,15 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui \
-            multimedia \
-            multimediawidgets \
-            network \
-            sql
+QT       += core gui multimedia multimediawidgets network quick qml
 
 win32:QT += winextras
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = out/gm-companion
 TEMPLATE = app
@@ -23,133 +17,117 @@ CONFIG += c++11
 
 SOURCES += gm-companion/main.cpp \
     # UI
-    gm-companion/ui/mainwindow.cpp \
-    gm-companion/ui/whatisnewwindow.cpp \
-    gm-companion/ui/flowlayout.cpp \
-    gm-companion/ui/updatedialog.cpp \
-    gm-companion/ui/aboutdialog.cpp \
+    gm-companion/ui/colorscheme.cpp \
     # Other
     gm-companion/functions.cpp \
     # Tools
+    gm-companion/tools/maptool.cpp \
     gm-companion/tools/dicetool.cpp \
-    gm-companion/tools/mapviewertool.cpp \
-    gm-companion/tools/convertertool.cpp \
     gm-companion/tools/combattracker.cpp \
+    gm-companion/tools/notestool.cpp \
+    gm-companion/tools/convertertool.cpp \
+    gm-companion/tools/generators/namegenerator.cpp \
+    gm-companion/tools/project_converter/projectconverter.cpp \
+    gm-companion/tools/project_converter/shopconverter.cpp \
     # Tools AUDIO
     gm-companion/tools/audio/audiotool.cpp \
+    gm-companion/tools/project_converter/audioconverter.cpp \
     gm-companion/tools/audio/audioeditor.cpp \
+    gm-companion/tools/audio/audioeditorfilebrowser.cpp \
     # Tools ADDONS
-    gm-companion/tools/addons/sifrp.cpp \
+#    gm-companion/tools/addons/sifrp.cpp \
     # Tools CHARACTERS
-    gm-companion/tools/characters/sheets/defaultsheet.cpp \
-    gm-companion/tools/characters/sheets/sheetfunctions.cpp \
-    gm-companion/tools/characters/sheets/dsa5sheet.cpp \
-    # Tools NOTES
-    gm-companion/tools/notes/notesdialog.cpp \
-    gm-companion/tools/notes/notestool.cpp \
-    # Tools GENERATORS
-    gm-companion/tools/generators/generatormanager.cpp \
-    gm-companion/tools/generators/namegenerator.cpp \
+    gm-companion/tools/characters/charactertool.cpp \
     # Tools ITEMS
-    gm-companion/tools/items/shoptool.cpp \
-    gm-companion/tools/items/shopeditor.cpp \
-    gm-companion/tools/items/itemeditor.cpp \
+    gm-companion/tools/shop/itemeditor.cpp \
+    gm-companion/tools/shop/shopeditor.cpp \
+    gm-companion/tools/shop/shoptool.cpp \
     # Managers
-    gm-companion/managers/filemanager.cpp \
     gm-companion/managers/updatemanager.cpp \
     # Settings
+    gm-companion/settings/settingstool.cpp \
     gm-companion/settings/settingsmanager.cpp \
-    gm-companion/settings/optionsdialog.cpp \
-    gm-companion/tools/addons/addonmanager.cpp \
-    gm-companion/tools/characters/charactertool.cpp \
-    gm-companion/tools/characters/sheets/entaria2sheet.cpp \
-    gm-companion/tools/characters/sheets/dnd5esheet.cpp
+    gm-companion/platformdetails.cpp \
+    gm-companion/managers/addonmanager.cpp \
+    gm-companion/managers/filemanager.cpp
 
-HEADERS  += gm-companion/ui/mainwindow.h \
+lupdate_only{
+SOURCES += *.qml \
+    menu/*.qml \
+    tools/*.qml \
+    tools/audio/*.qml \
+    tools/characters/*.qml \
+    tools/generators/*.qml \
+    tools/maps/*.qml \
+    tools/notes/*.qml \
+    tools/settings/*.qml \
+    tools/shop/*.qml \
+}
+
+HEADERS  += gm-companion/functions.h \
     # UI
-    gm-companion/ui/whatisnewwindow.h \
-    gm-companion/ui/flowlayout.h \
-    gm-companion/ui/updatedialog.h \
-    gm-companion/ui/aboutdialog.h \
+    gm-companion/ui/colorscheme.h \
     # Other
-    gm-companion/functions.h \
     gm-companion/version.h \
     # Tools
-    gm-companion/tools/mapviewertool.h \
-    gm-companion/tools/dicetool.h \
-    gm-companion/tools/convertertool.h \
-    gm-companion/tools/combattracker.h \
-    # Tools AUDIO
+    gm-companion/tools/maptool.h \
     gm-companion/tools/audio/audiotool.h \
+    gm-companion/tools/dicetool.h \
+    gm-companion/tools/combattracker.h \
+    gm-companion/tools/notestool.h \
+    gm-companion/tools/convertertool.h \
+    gm-companion/tools/project_converter/projectconverter.h \
+    # Tools AUDIO
+    gm-companion/tools/project_converter/audioconverter.h \
     gm-companion/tools/audio/audioeditor.h \
-    # Tools NOTES
-    gm-companion/tools/notes/notesdialog.h \
-    gm-companion/tools/notes/notestool.h \
+    gm-companion/tools/audio/audioeditorfilebrowser.h \
     # Tools CHARACTERS
     gm-companion/tools/characters/charactertool.h \
-    gm-companion/tools/characters/sheets/defaultsheet.h \
-    gm-companion/tools/characters/sheets/sheetfunctions.h \
-    gm-companion/tools/characters/sheets/dsa5sheet.h \
     # Tools ADDONS
-    gm-companion/tools/addons/sifrp.h \
+#    gm-companion/tools/addons/sifrp.h \
     # Tools GENERATORS
-    gm-companion/tools/generators/generatormanager.h \
-    gm-companion/tools/generators/namegenerator.h \
+     gm-companion/tools/generators/namegenerator.h \
     # Tools ITEMS
-    gm-companion/tools/items/shoptool.h \
-    gm-companion/tools/items/shopeditor.h \
-    gm-companion/tools/items/itemeditor.h \
+    gm-companion/tools/project_converter/shopconverter.h \
+    gm-companion/tools/shop/shoptool.h \
+    gm-companion/tools/shop/itemeditor.h \
+    gm-companion/tools/shop/shopeditor.h \
     # Managers
-    gm-companion/managers/filemanager.h \
     gm-companion/managers/updatemanager.h \
     # Settings
+    gm-companion/settings/settingstool.h \
     gm-companion/settings/settingsmanager.h \
-    gm-companion/settings/optionsdialog.h \
-    gm-companion/tools/addons/addonmanager.h \
-    gm-companion/tools/characters/sheets/entaria2sheet.h \
-    gm-companion/tools/characters/sheets/dnd5esheet.h
+    gm-companion/platformdetails.h \
+    gm-companion/managers/addonmanager.h \
+    gm-companion/managers/filemanager.h
 
-FORMS    += gm-companion/ui/mainwindow.ui \
-    # UI
-    gm-companion/ui/whatisnewwindow.ui \
-    gm-companion/ui/updatedialog.ui \
-    gm-companion/ui/aboutdialog.ui \
-    # Tools
-    gm-companion/tools/dicetool.ui \
-    gm-companion/tools/mapviewertool.ui \
-    gm-companion/tools/convertertool.ui \
-    gm-companion/tools/combattracker.ui \
-    # Tools AUDIO
-    gm-companion/tools/audio/audiotool.ui \
-    gm-companion/tools/audio/audioeditor.ui \
-    # Tools ITEMS
-    gm-companion/tools/items/shoptool.ui \
-    gm-companion/tools/items/shopeditor.ui \
-    gm-companion/tools/items/itemeditor.ui \
-    # Tools NOTES
-    gm-companion/tools/notes/notesdialog.ui \
-    gm-companion/tools/notes/notestool.ui \
-    # Tools CHARACTERS
-    gm-companion/tools/characters/charactertool.ui \
-    gm-companion/tools/characters/sheets/defaultsheet.ui \
-    gm-companion/tools/characters/sheets/dsa5sheet.ui \
-    # Tools ADDONS
-    gm-companion/tools/addons/sifrp.ui \
-    # Tools GENERATORS
-    gm-companion/tools/generators/generatormanager.ui \
-    gm-companion/tools/generators/namegenerator.ui \
-    # Settings
-    gm-companion/settings/optionsdialog.ui \
-    gm-companion/tools/addons/addonmanager.ui \
-    gm-companion/tools/characters/sheets/entaria2sheet.ui \
-    gm-companion/tools/characters/sheets/dnd5esheet.ui
 
-DISTFILES +=
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
+
+QML_IMPORT_PATH =
 
 RC_FILE = gm-companion/GM-Companion.rc
 
 RESOURCES += gm-companion/resources/resources.qrc \
-    gm-companion/resources/styles/qdarkstyle/style.qrc
+    gm-companion/ui/qml.qrc
 
 TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts
 TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
@@ -174,4 +152,10 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += resources
 }
 
-unix:!macx: LIBS += -ltag
+unix: {
+    message("It\'s a UNIX system!")
+}
+
+unix:!macx:!android: LIBS += -ltag
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

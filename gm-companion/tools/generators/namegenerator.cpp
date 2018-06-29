@@ -1,137 +1,125 @@
 #include "namegenerator.h"
-#include "ui_namegenerator.h"
 #include "gm-companion/functions.h"
-#include "gm-companion/settings/settingsmanager.h"
 
 #include <QDebug>
-#include <QScrollArea>
 #include <QDir>
-#include <QPushButton>
-#include <QTextEdit>
+#include <QFile>
+#include <QSettings>
 
-NameGenerator::NameGenerator(QWidget *parent) : QWidget(parent), ui(new Ui::NameGenerator)
+NameGenerator::NameGenerator(QObject *parent) : QObject(parent)
 {
-    qDebug().noquote() << "Loading NameGenerator ...";
-
-    ui->setupUi(this);
-
-    settingsManager = new SettingsManager;
-
-    ui->textEdit_male->setFontPointSize(ui->spinBox_pointSize->value());
-    ui->textEdit_female->setFontPointSize(ui->spinBox_pointSize->value());
-
-    generateNamesTab();
+    qDebug() << "Loading Name Generator ...";
 }
 
-NameGenerator::~NameGenerator()
+void NameGenerator::updateCategories()
 {
-    delete ui;
-}
+    qDebug() << "Updating Name Categories ...";
 
-// Create Tabs for every type of names
-void NameGenerator::generateNamesTab()
-{
-    // Names in resources
-    generateNameButtons(":/names/Generic", "Generic", true);
+    l_categories.clear();
+    l_categoryPaths.clear();
 
-    // Custom names in names folder
+    // Generic Default Names
+    l_categories.append("Generic");
+    l_categoryPaths.append(":/names/Generic");
+
+    // Custom Names
     for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/names"))
     {
-        if (!folder.contains(".")) generateNameButtons(QDir::homePath() + "/.gm-companion/names/" + folder, folder);
-    }
-
-    // Addon names
-    for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/addons"))
-    {
-        if (!folder.contains(".") && QDir(QDir::homePath() + "/.gm-companion/addons/" + folder + "/names").exists() && settingsManager->getIsAddonEnabled(folder))
+        if (!folder.contains("."))
         {
-            generateNameButtons(QDir::homePath() + "/.gm-companion/addons/" + folder + "/names", folder);
+            l_categories.append(folder);
+            l_categoryPaths.append(QDir::homePath() + "/.gm-companion/names/" + folder);
         }
     }
-}
 
-void NameGenerator::generateNameButtons(QString path, QString folder, bool resource)
-{
-    QScrollArea *scrollArea = new QScrollArea;
-
-    scrollArea->setWidget(new QWidget);
-    scrollArea->widget()->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    scrollArea->setWidgetResizable(true);
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setAlignment(Qt::AlignCenter | Qt::AlignTop);
-
-    if (resource)
+    // Addon Names
+    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
     {
-        QStringList types;
-
-        for (QString r : QDir(path).entryList())
+        for (QString addon : getFolders(path))
         {
-            QString type = r.left(r.indexOf("/"));
-
-            if (!types.contains(type))
+            if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
             {
-                types.append(type);
-                addButton(path + "/" + type, type, layout);
+                QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
+                l_categories.append(settings.value("name", addon).toString());
+                l_categoryPaths.append(path + "/" + addon + "/names");
             }
         }
     }
+
+    emit categoriesChanged();
+}
+
+QStringList NameGenerator::categories()
+{
+    return l_categories;
+}
+
+QString NameGenerator::categoryPath(QString category)
+{
+    int index = l_categories.indexOf(category);
+
+    if (index > -1)
+    {
+        return l_categoryPaths.at(index);
+    }
     else
     {
-        for (QString subfolder : getFolders(path))
+        qDebug() << "Unknown Category" << category;
+        return "";
+    }
+}
+
+QStringList NameGenerator::categoryNames(QString category)
+{
+    int index = l_categories.indexOf(category);
+
+    QStringList names;
+
+    if (index > -1)
+    {
+        QString path = l_categoryPaths.at(index);
+
+        for (QString folder : getFolders(path))
         {
-            if (!subfolder.contains(".")) addButton(path + "/" + subfolder, subfolder, layout);
+            if (!folder.contains("."))
+            {
+                names.append(folder);
+            }
         }
     }
 
-    scrollArea->widget()->setLayout(layout);
-    scrollArea->widget()->adjustSize();
-    ui->tabWidget_categories->addTab(scrollArea, folder);
-    ui->tabWidget_categories->adjustSize();
+    return names;
 }
 
-void NameGenerator::addButton(QString path, QString subFolder, QVBoxLayout *layout)
+QStringList NameGenerator::maleNames(QString category, QString folder, int count)
 {
-    QPushButton *button = new QPushButton;
-
-    button->setText(subFolder);
-    button->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    layout->addWidget(button);
-
-    connect(button, &QPushButton::clicked, this, [ = ]() { generateNames(path); });
+    return generateNames(category, folder, "male", count);
 }
 
-void NameGenerator::generateNames(QString path)
+QStringList NameGenerator::femaleNames(QString category, QString folder, int count)
 {
-    ui->textEdit_male->clear();
-    ui->textEdit_female->clear();
+    return generateNames(category, folder, "female", count);
+}
 
-    QString malePath     = path + "/male.txt";
-    QString femalePath   = path + "/female.txt";
+QStringList NameGenerator::generateNames(QString category, QString folder, QString type, int count)
+{
+    QStringList names;
+
+    QString path = categoryPath(category) + "/" + folder;
+
+    QString namesPath    = path + "/" + type + ".txt";
     QString surnamesPath = path + "/surname.txt";
 
-    // Male Names
-    QStringList maleNames;
+    // Forenames
+    QStringList forenames;
 
-    if (QFile(malePath).exists())
+    if (QFile(namesPath).exists())
     {
-        QFile maleFile(malePath);
-        maleFile.open(QIODevice::ReadOnly);
-        QString maleNamesAsString = QString::fromUtf8(maleFile.readAll());
-        maleNames = maleNamesAsString.split(",");
-        maleFile.close();
-    }
-
-    // Female Names
-    QStringList femaleNames;
-
-    if (QFile(femalePath).exists())
-    {
-        QFile femaleFile(femalePath);
-        femaleFile.open(QIODevice::ReadOnly);
-        QString femaleNamesAsString = QString::fromUtf8(femaleFile.readAll());
-        femaleNames = femaleNamesAsString.split(",");
-        femaleFile.close();
+        QFile file(namesPath);
+        file.open(QIODevice::ReadOnly);
+        QString namesAsString = QString::fromUtf8(file.readAll());
+        forenames = namesAsString.split(",");
+        file.close();
     }
 
     // Surnames
@@ -146,39 +134,25 @@ void NameGenerator::generateNames(QString path)
         surnamesFile.close();
     }
 
-    for (int i = 0; i < ui->spinBox_amount->value(); i++)
+    for (int i = 0; i < count; i++)
     {
-        QString maleName;
-        QString femaleName;
-        QString surname;
+        QString name = "";
 
-        if (QFile(surnamesPath).exists()) {
-            surname = surnames.at(rand() % surnames.size());
-        }
-
-        if (QFile(malePath).exists())
+        if (QFile(namesPath).exists())
         {
-            maleName = maleNames.at(rand() % maleNames.size());
-            maleName.append(" " + surname);
+            name = forenames.at(rand() % forenames.size());
 
-            ui->textEdit_male->append(maleName);
+            if (QFile(surnamesPath).exists())
+            {
+                QString surname = surnames.at(rand() % surnames.size());
+                name.append(" " + surname);
+            }
         }
 
-        if (QFile(femalePath).exists())
-        {
-            femaleName = femaleNames.at(rand() % femaleNames.size());
-            femaleName.append(" " + surname);
+        name.replace("\n", "");
 
-            ui->textEdit_female->append(femaleName);
-        }
+        names.append(name);
     }
-}
 
-void NameGenerator::on_spinBox_pointSize_valueChanged(int arg1)
-{
-    ui->textEdit_male->setFontPointSize(arg1);
-    ui->textEdit_female->setFontPointSize(arg1);
-
-    ui->textEdit_male->setText(ui->textEdit_male->toPlainText());
-    ui->textEdit_female->setText(ui->textEdit_female->toPlainText());
+    return names;
 }

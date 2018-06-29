@@ -1,17 +1,15 @@
 #include "updatemanager.h"
-#include "gm-companion/ui/updatedialog.h"
 
 #include <QXmlStreamReader>
 #include <QDebug>
 
-UpdateManager::UpdateManager(int version)
+UpdateManager::UpdateManager()
 {
     qDebug().noquote() << "Initializing update manager ...";
 
     // GitHub Release feed
     feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
-    currentVersion = version;
     networkManager = new QNetworkAccessManager;
     connect(networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(on_networkManager_finished(QNetworkReply *)));
 
@@ -22,14 +20,34 @@ UpdateManager::UpdateManager(int version)
     else qDebug().noquote() << "SSL is installed.";
 }
 
+void UpdateManager::setCurrentVersion(int version)
+{
+    l_currentVersion = version;
+}
+
 void UpdateManager::checkForUpdates()
 {
     qDebug().noquote() << "Checking for updates ...";
-    qDebug().noquote() << "Current version:" << currentVersion;
+    qDebug().noquote() << "Current version:" << l_currentVersion;
     qDebug().noquote() << "Releases feed URL:" << feedURL;
 
     // Get the release feed to check for a new version
     networkManager->get(QNetworkRequest(QUrl(feedURL)));
+}
+
+QString UpdateManager::newestVersion()
+{
+    return l_newestVersion;
+}
+
+int UpdateManager::newestVersionInt()
+{
+    return l_newestVersion.replace(".", "").toInt();
+}
+
+int UpdateManager::getCurrentVersion()
+{
+    return l_currentVersion;
 }
 
 // Evaluate the release feed
@@ -99,15 +117,15 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     }
 
     // Decide if a newer version is available than the one installed
-    if (newestVersion > currentVersion)
+    if (newestVersion > l_currentVersion)
     {
-        // If newer version is available, open a dialog to tell the user
         qDebug().noquote() << "Found a newer version:" << newestVersionTitle;
-        UpdateDialog *dialog = new UpdateDialog(newestVersionTitle, newestVersionString);
-        dialog->show();
+        l_newestVersion = newestVersionTitle;
+        emit updateAvailable();
     }
     else
     {
         qDebug().noquote() << "Your version is the newest one.";
+        emit noUpdateAvailable();
     }
 }

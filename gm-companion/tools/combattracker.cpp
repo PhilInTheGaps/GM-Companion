@@ -1,210 +1,154 @@
 #include "combattracker.h"
-#include "ui_combattracker.h"
-
-#include "gm-companion/tools/dicetool.h"
 
 #include <QDebug>
-#include <QTableWidgetItem>
 
-CombatTracker::CombatTracker(QWidget *parent) : QDialog(parent), ui(new Ui::CombatTracker)
+CombatTracker::CombatTracker(QObject *parent) : QObject(parent)
 {
-    ui->setupUi(this);
-
-    combatRound = 0;
-    currentIndex = 0;
-
-    DiceTool *diceTool = new DiceTool;
-    this->layout()->addWidget(diceTool);
-}
-
-CombatTracker::~CombatTracker()
-{
-    delete ui;
-}
-
-void CombatTracker::nextCharacter()
-{
-    qDebug().noquote() << "CombatTracker: Switching to next character ...";
-
-    int nextIndex = 0;
-
-    // Create a new tablewidget item in case it does not already exist due to "Clear Table"
-    if (ui->tableWidget->item(currentIndex, 0) == NULL)
-    {
-        QTableWidgetItem *item = new QTableWidgetItem;
-        item->setText("");
-        ui->tableWidget->setItem(currentIndex, 0, item);
-    }
-    else
-        ui->tableWidget->item(currentIndex, 0)->setText("");
-
-    // If it is the first round, find character with highest INI
-    if (combatRound == 0)
-    {
-        combatRound++;
-        ui->spinBox_round->setValue(combatRound);
-        nextIndex = getHighestInitiativeIndex();
-    }
-    else
-    {
-        // Check if current character has the lowest INI, if not, switch to next one
-        if (getIsLowestInitiative(currentIndex))
-        {
-            combatRound++;
-            ui->spinBox_round->setValue(combatRound);
-            nextIndex = getHighestInitiativeIndex();
-        }
-        else
-        {
-            nextIndex = getNextHighestInitiativeIndex(currentIndex);
-        }
-    }
-
-    // Create a new tablewidget item in case it does not already exist due to "Clear Table"
-    if (ui->tableWidget->item(nextIndex, 0) == NULL)
-    {
-        QTableWidgetItem *item = new QTableWidgetItem;
-        item->setText("");
-        ui->tableWidget->setItem(nextIndex, 0, item);
-    }
-
-    ui->tableWidget->item(nextIndex, 0)->setText("-->");
-    ui->tableWidget->selectRow(nextIndex);
-
-    currentIndex = nextIndex;
-
-    qDebug().noquote() << "CombatTracker: New index =" << currentIndex;
-}
-
-int CombatTracker::getInitiative(int index)
-{
-    if (ui->tableWidget->item(index, 2) != NULL)
-    {
-        int ini = ui->tableWidget->item(index, 2)->text().toInt();
-        return ini;
-    }
-    else
-        return 0;
-}
-
-bool CombatTracker::getIsLowestInitiative(int index)
-{
-    qDebug().noquote() << "CombatTracker: Checking if" << index <<"is the lowest initiative ...";
-
-    int ini = getInitiative(index);
-
-    bool isLowest = true;
-
-    for (int i = 0; i < ui->tableWidget->rowCount(); i++)
-    {
-        if (ui->tableWidget->item(i, 2) != NULL)
-        {
-            int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-            if ((temp < ini && temp > 0) || (i > index && ini == temp))
-            {
-                isLowest = false;
-                break;
-            }
-        }
-    }
-
-    qDebug().noquote() << isLowest;
-    return isLowest;
-}
-
-int CombatTracker::getNextHighestInitiativeIndex(int index)
-{
-    qDebug().noquote() << "CombatTracker: Getting the next highest initiative ...";
-
-    int ini = getInitiative(index);
-
-    int nextIni = 0;
-    int nextIniIndex = 0;
-
-    bool foundSameIni = false;
-
-    for (int i = 0; i < ui->tableWidget->rowCount(); i++)
-    {
-        if (ui->tableWidget->item(i, 2) != NULL)
-        {
-            int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-            if ((temp < ini && temp > nextIni) || (i > index && temp == ini && !foundSameIni))
-            {
-                nextIni = temp;
-                nextIniIndex = i;
-
-                if (i > index && temp == ini && !foundSameIni)
-                    foundSameIni = true;
-            }
-        }
-    }
-
-    qDebug().noquote() << "Initiative:" << nextIni;
-    qDebug().noquote() << "Index:" << nextIniIndex;
-
-    return nextIniIndex;
-}
-
-int CombatTracker::getHighestInitiativeIndex()
-{
-    qDebug().noquote() << "CombatTracker: Getting the highest initiative ...";
-
-    int nextIni = 0;
-    int nextIniIndex = 0;
-
-    for (int i = 0; i < ui->tableWidget->rowCount(); i++)
-    {
-        if (ui->tableWidget->item(i, 2) != NULL)
-        {
-            int temp = ui->tableWidget->item(i, 2)->text().toInt();
-
-            if (temp > nextIni)
-            {
-                nextIni = temp;
-                nextIniIndex = i;
-            }
-        }
-    }
-
-    qDebug().noquote() << "Initiative:" << nextIni;
-    qDebug().noquote() << "Index:" << nextIniIndex;
-
-    return nextIniIndex;
+    qDebug() << "Loading Combat Tracker ...";
 }
 
 void CombatTracker::resetRounds()
 {
-    qDebug().noquote() << "CombatTracker: Resetting rounds ...";
+    l_currentRound = 1;
+    l_currentIndex = getStartIndex();
 
-    if (ui->tableWidget->item(currentIndex, 0) != NULL)
+    emit currentRoundChanged();
+}
+
+void CombatTracker::clear()
+{
+    l_combatants.clear();
+    l_currentIndex = 0;
+    l_currentRound = 1;
+
+    emit combatantsChanged();
+    emit currentRoundChanged();
+}
+
+// Switch to next combatant
+void CombatTracker::next()
+{
+    int next = getNextIndex();
+
+    if ((l_currentIndex < l_combatants.size()) && (next > -1))
     {
-        ui->tableWidget->item(currentIndex, 0)->setText("");
+        l_currentIndex = next;
+        emit currentIndexChanged();
+    }
+    else
+    {
+        l_currentIndex = getStartIndex();
+        l_currentRound++;
+        emit currentRoundChanged();
+        emit currentIndexChanged();
+    }
+}
+
+// Returns the index of the next combatant
+int CombatTracker::getNextIndex()
+{
+    int  oldIni         = (l_combatants.size() > 0) ? l_combatants.at(l_currentIndex).ini : -1;
+    int  newIni         = -1;
+    int  index          = -1;
+    bool foundDoubleIni = false;
+
+    for (int i = 0; i < l_combatants.size(); i++)
+    {
+        int tempIni = l_combatants.at(i).ini;
+
+        if ((tempIni < oldIni) && (tempIni > newIni))
+        {
+            newIni = tempIni;
+            index  = i;
+        }
+        else if ((tempIni == oldIni) && (l_currentIndex < i) && !foundDoubleIni)
+        {
+            foundDoubleIni = true;
+            index          = i;
+            newIni         = tempIni;
+        }
     }
 
-    combatRound = 0;
-    currentIndex = 0;
-    ui->spinBox_round->setValue(0);
-    nextCharacter();
+    return index;
 }
 
-void CombatTracker::clearTable()
+// Returns index of highest initiative
+int CombatTracker::getStartIndex()
 {
-    ui->tableWidget->clearContents();
+    int index = 0;
+
+    for (int i = 0; i < l_combatants.size(); i++)
+    {
+        if (l_combatants.at(i).ini > l_combatants.at(index).ini)
+        {
+            index = i;
+        }
+    }
+
+    return index;
 }
 
-void CombatTracker::on_pushButton_next_clicked()
+// Add a combatant to the list
+void CombatTracker::add(QString name, int ini, int health)
 {
-    nextCharacter();
+    if ((name != NULL) && (ini > 0))
+    {
+        Combatant c;
+
+        c.name   = name;
+        c.ini    = ini;
+        c.health = health;
+        c.status = tr("Alive");
+        c.notes  = "";
+
+        l_combatants.append(c);
+        emit combatantsChanged();
+    }
 }
 
-void CombatTracker::on_pushButton_clear_clicked()
+// Remove Combatant from list
+void CombatTracker::remove(int index)
 {
-    clearTable();
+    if ((index > -1) && (l_combatants.size() > index))
+    {
+        l_combatants.removeAt(index);
+    }
+
+    emit combatantsChanged();
 }
 
-void CombatTracker::on_pushButton_reset_clicked()
+void CombatTracker::setIni(int index, int ini)
 {
-    resetRounds();
+    Combatant c = l_combatants.at(index);
+
+    c.ini = ini;
+
+    l_combatants.replace(index, c);
+}
+
+void CombatTracker::setHealth(int index, int health)
+{
+    Combatant c = l_combatants.at(index);
+
+    c.health = health;
+
+    l_combatants.replace(index, c);
+}
+
+void CombatTracker::setStatus(int index, QString status)
+{
+    Combatant c = l_combatants.at(index);
+
+    c.status = status;
+
+    l_combatants.replace(index, c);
+}
+
+void CombatTracker::setNotes(int index, QString notes)
+{
+    Combatant c = l_combatants.at(index);
+
+    c.notes = notes;
+
+    l_combatants.replace(index, c);
 }
