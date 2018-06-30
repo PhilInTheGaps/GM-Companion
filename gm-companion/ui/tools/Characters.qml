@@ -81,7 +81,7 @@ Page {
     }
 
     function loadImage(source) {
-        character_image.source = "file://" + source
+        character_image.source = "file:///" + source
     }
 
     function toggleInactive(character, active) {
