@@ -605,6 +605,9 @@ Page {
             id: audio_editor
 
             onBackToTool: audio_swipe.currentIndex = 0
+            onProjectAdded: {
+                audio_project_combo_box.model = audio_tool.projectList
+            }
         }
     }
 }

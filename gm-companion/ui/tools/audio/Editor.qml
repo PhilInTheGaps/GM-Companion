@@ -11,6 +11,7 @@ Page {
     id: audio_editor
 
     signal backToTool
+    signal projectAdded
 
     AudioEditor {
         id: editor_tool
@@ -136,6 +137,7 @@ Page {
         onAccepted: {
             editor_tool.createProject(project_textfield.text)
             project_textfield.clear()
+            projectAdded()
         }
     }
 
