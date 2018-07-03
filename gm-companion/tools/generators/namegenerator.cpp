@@ -117,7 +117,7 @@ QStringList NameGenerator::generateNames(QString category, QString folder, QStri
     {
         QFile file(namesPath);
         file.open(QIODevice::ReadOnly);
-        QString namesAsString = QString::fromUtf8(file.readAll());
+        QString namesAsString = QString::fromLatin1(file.readAll());
         forenames = namesAsString.split(",");
         file.close();
     }
@@ -129,7 +129,7 @@ QStringList NameGenerator::generateNames(QString category, QString folder, QStri
     {
         QFile surnamesFile(surnamesPath);
         surnamesFile.open(QIODevice::ReadOnly);
-        QString surnamesAsString = QString::fromUtf8(surnamesFile.readAll());
+        QString surnamesAsString = QString::fromLatin1(surnamesFile.readAll());
         surnames = surnamesAsString.split(",");
         surnamesFile.close();
     }
