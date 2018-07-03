@@ -136,6 +136,12 @@ Page {
             }
 
             Button {
+                text: qsTr("Sort by INI")
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: tool.sortByIni()
+            }
+
+            Button {
                 text: qsTr("Dice")
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {

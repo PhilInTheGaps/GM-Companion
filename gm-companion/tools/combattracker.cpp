@@ -117,6 +117,34 @@ void CombatTracker::remove(int index)
     emit combatantsChanged();
 }
 
+void CombatTracker::sortByIni()
+{
+    QList<Combatant> sorted;
+
+    while (!l_combatants.isEmpty())
+    {
+        int ini   = -1;
+        int index = 0;
+
+        for (int i = 0; i < l_combatants.size(); i++)
+        {
+            Combatant c = l_combatants.at(i);
+
+            if (c.ini > ini)
+            {
+                index = i;
+                ini   = c.ini;
+            }
+        }
+
+        sorted.append(l_combatants.at(index));
+        l_combatants.removeAt(index);
+    }
+
+    l_combatants = sorted;
+    emit combatantsChanged();
+}
+
 void CombatTracker::setIni(int index, int ini)
 {
     Combatant c = l_combatants.at(index);
