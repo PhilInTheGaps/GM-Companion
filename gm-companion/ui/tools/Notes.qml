@@ -106,7 +106,7 @@ Page {
                 width: parent.width
                 height: platform.isAndroid ? width / 6 : 40
 
-                onValueChanged: text_edit.font.pointSize = value
+                //                onValueChanged: text_edit.font.pointSize = value
             }
 
             TextField {
@@ -184,6 +184,7 @@ Page {
                     selectByMouse: true
                     wrapMode: TextEdit.WordWrap
                     color: color_scheme.textColor
+                    font.pointSize: font_size_spin_box.value
 
                     onTextChanged: notes_tool.saveCurrentPageContent(text)
                 }
