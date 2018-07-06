@@ -26,7 +26,7 @@ public:
     int currentIndex() const { return l_currentIndex; }
 
     Q_INVOKABLE void next();
-    Q_INVOKABLE void add(QString name, int ini, int health);
+    Q_INVOKABLE void add(QString name, int ini, int health, bool sort = false);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void resetRounds();
     Q_INVOKABLE void remove(int index);

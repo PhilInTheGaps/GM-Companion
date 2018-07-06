@@ -89,7 +89,7 @@ int CombatTracker::getStartIndex()
 }
 
 // Add a combatant to the list
-void CombatTracker::add(QString name, int ini, int health)
+void CombatTracker::add(QString name, int ini, int health, bool sort)
 {
     if ((name != NULL) && (ini > 0))
     {
@@ -102,8 +102,11 @@ void CombatTracker::add(QString name, int ini, int health)
         c.notes  = "";
 
         l_combatants.append(c);
-        emit combatantsChanged();
+
+        if (!sort) emit combatantsChanged();
     }
+
+    if (sort) sortByIni();
 }
 
 // Remove Combatant from list

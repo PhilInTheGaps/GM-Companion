@@ -39,5 +39,8 @@
         <file>tools/audio/EditorRadioPage.qml</file>
         <file>tools/settings/AddonItem.qml</file>
         <file>tools/characters/PageButton.qml</file>
+        <file>tools/DiceAlt.qml</file>
+        <file>tools/combat_tracker/CombatantDialog.qml</file>
+        <file>tools/combat_tracker/AddCombatantRow.qml</file>
     </qresource>
 </RCC>

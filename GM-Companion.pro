@@ -57,6 +57,7 @@ SOURCES += *.qml \
     tools/*.qml \
     tools/audio/*.qml \
     tools/characters/*.qml \
+    tools/combat_tracker/*.qml \
     tools/generators/*.qml \
     tools/maps/*.qml \
     tools/notes/*.qml \
@@ -150,10 +151,6 @@ TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
     INSTALLS += data
     INSTALLS += desktop
     INSTALLS += resources
-}
-
-unix: {
-    message("It\'s a UNIX system!")
 }
 
 unix:!macx:!android: LIBS += -ltag

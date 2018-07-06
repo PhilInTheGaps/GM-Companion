@@ -10,6 +10,8 @@ import gm.companion.platforms 1.0
 Page {
     id: dice_page
 
+    property bool combat_tracker_mode: false
+
     DiceTool {
         id: dice_tool
 
@@ -35,6 +37,8 @@ Page {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
+        padding: combat_tracker_mode ? 0 : height * 0.15
+
         Row {
             id: dice_button_row
             spacing: 5
@@ -47,9 +51,7 @@ Page {
                     width: parent.height * 0.9
                     height: width
 
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
+                    anchors.centerIn: parent
                     sourceSize.height: height
                     sourceSize.width: width
                 }
@@ -69,9 +71,7 @@ Page {
                     width: parent.height * 0.9
                     height: width
 
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
+                    anchors.centerIn: parent
                     sourceSize.height: height
                     sourceSize.width: width
                 }
@@ -91,9 +91,7 @@ Page {
                     width: parent.height * 0.9
                     height: width
 
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
+                    anchors.centerIn: parent
                     sourceSize.height: height
                     sourceSize.width: width
                 }
@@ -113,9 +111,7 @@ Page {
                     width: parent.height * 0.9
                     height: width
 
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
+                    anchors.centerIn: parent
                     sourceSize.height: height
                     sourceSize.width: width
                 }
@@ -250,7 +246,7 @@ Page {
             width: value_row.width
 
             height: parent.height - dice_button_row.height - value_row.height
-                    - result_row.height - parent.spacing * 3
+                    - result_row.height - parent.spacing * 3 - parent.padding * 2
             clip: true
 
             TextEdit {
