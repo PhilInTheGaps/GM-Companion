@@ -64,7 +64,8 @@ Window {
                 platform.isAndroid ? parent.width : inPortrait ? parent.width : drawer.opened ? parent.width - drawer.width : parent.width
             }
 
-            height: platform.isAndroid ? window.height / 15 : (inPortrait ? window.height / 24 : 0)
+            height: color_scheme.toolbarHeight
+
             visible: platform.isAndroid || inPortrait ? true : false
             anchors.right: parent.right
 
@@ -132,26 +133,24 @@ Window {
             visible: !inPortrait || !platform.isAndroid
 
             ScrollView {
-                width: parent.width
-                height: parent.height
+                anchors.fill: parent
                 clip: true
                 contentWidth: -1
 
                 Column {
                     width: drawer.width
-                    spacing: 5
 
                     Rectangle {
-                        width: parent.width
-                        height: toolbar.visible ? toolbar.height
-                                                  - parent.spacing : window.height / 24
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: color_scheme.toolbarHeight
 
                         Text {
                             text: "Tools"
                             color: color_scheme.toolbarTextColor
-                            font.pointSize: 12
+                            font.pointSize: 14
 
-                            anchors.fill: parent
+                            anchors.centerIn: parent
 
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
@@ -160,207 +159,214 @@ Window {
                         color: color_scheme.toolbarColor
                     }
 
-                    Rectangle {
-                        width: parent.width
-                        height: 2
-                        color: color_scheme.dividerColor
-                    }
+                    Column {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        spacing: 5
 
-                    TabBar {
-                    }
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: 2
+                            color: color_scheme.dividerColor
+                        }
 
-                    SideMenuButton {
-                        tool_name: qsTr("Audio")
-                        icon_source: "../icons/menu/audio.png"
+                        SideMenuButton {
+                            tool_name: qsTr("Audio")
+                            icon_source: "../icons/menu/audio.png"
 
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Audio")
+                            onClicked: {
+                                tool_label.text = qsTr("Current Tool: Audio")
 
-                            if (stack.currentItem !== audio) {
-                                stack.pop(null)
-                            }
+                                if (stack.currentItem !== audio) {
+                                    stack.pop(null)
+                                }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
-                    }
 
-                    SideMenuButton {
-                        tool_name: qsTr("Maps")
-                        icon_source: "../icons/menu/maps.png"
+                        SideMenuButton {
+                            tool_name: qsTr("Maps")
+                            icon_source: "../icons/menu/maps.png"
 
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Maps")
+                            onClicked: {
+                                tool_label.text = qsTr("Current Tool: Maps")
 
-                            if (stack.currentItem !== maps) {
-                                stack.pop(null)
-                                maps.active = true
-                                stack.push(maps)
-                            }
+                                if (stack.currentItem !== maps) {
+                                    stack.pop(null)
+                                    maps.active = true
+                                    stack.push(maps)
+                                }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
-                            }
-                        }
-                    }
-
-                    SideMenuButton {
-                        tool_name: qsTr("Dice")
-                        icon_source: "../icons/menu/dice.png"
-
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Dice")
-
-                            if (stack.currentItem !== dice) {
-                                stack.pop(null)
-                                dice.active = true
-                                stack.push(dice)
-                            }
-
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
-                    }
 
-                    SideMenuButton {
-                        tool_name: qsTr("Combat Tracker")
-                        icon_source: "../icons/menu/combat.png"
+                        SideMenuButton {
+                            tool_name: qsTr("Dice")
+                            icon_source: "../icons/menu/dice.png"
 
-                        onClicked: {
-                            tool_label.text = qsTr(
-                                        "Current Tool: Combat Tracker")
+                            onClicked: {
+                                tool_label.text = qsTr("Current Tool: Dice")
 
-                            if (stack.currentItem !== combat) {
-                                stack.pop(null)
-                                combat.active = true
-                                stack.push(combat)
-                            }
+                                if (stack.currentItem !== dice) {
+                                    stack.pop(null)
+                                    dice.active = true
+                                    stack.push(dice)
+                                }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
-                            }
-                        }
-                    }
-
-                    SideMenuButton {
-                        tool_name: qsTr("Item Shop")
-                        icon_source: "../icons/menu/item-shop.png"
-
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Item Shop")
-
-                            if (stack.currentItem !== shop) {
-                                stack.pop(null)
-                                shop.active = true
-                                stack.push(shop)
-                            }
-
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
-                    }
 
-                    SideMenuButton {
-                        tool_name: qsTr("Characters")
-                        icon_source: "../icons/menu/characters.png"
+                        SideMenuButton {
+                            tool_name: qsTr("Combat Tracker")
+                            icon_source: "../icons/menu/combat.png"
 
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Characters")
+                            onClicked: {
+                                tool_label.text = qsTr(
+                                            "Current Tool: Combat Tracker")
 
-                            if (stack.currentItem !== characters) {
-                                stack.pop(null)
-                                characters.active = true
-                                stack.push(characters)
-                            }
+                                if (stack.currentItem !== combat) {
+                                    stack.pop(null)
+                                    combat.active = true
+                                    stack.push(combat)
+                                }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
-                            }
-                        }
-                    }
-
-                    SideMenuButton {
-                        tool_name: qsTr("Generators")
-                        icon_source: "../icons/menu/generators.png"
-
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Generators")
-
-                            if (stack.currentItem !== generators) {
-                                stack.pop(null)
-                                generators.active = true
-                                stack.push(generators)
-                            }
-
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
-                    }
 
-                    SideMenuButton {
-                        tool_name: qsTr("Notes")
-                        icon_source: "../icons/menu/notes.png"
+                        SideMenuButton {
+                            tool_name: qsTr("Item Shop")
+                            icon_source: "../icons/menu/item-shop.png"
 
-                        onClicked: {
-                            tool_label.text = qsTr("Current Tool: Notes")
+                            onClicked: {
+                                tool_label.text = qsTr(
+                                            "Current Tool: Item Shop")
 
-                            if (stack.currentItem !== notes) {
-                                stack.pop(null)
-                                notes.active = true
-                                stack.push(notes)
-                            }
+                                if (stack.currentItem !== shop) {
+                                    stack.pop(null)
+                                    shop.active = true
+                                    stack.push(shop)
+                                }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
-                            }
-                        }
-                    }
-
-                    SideMenuButton {
-                        tool_name: qsTr("Converter")
-                        icon_source: "../icons/menu/converter.png"
-
-                        onClicked: {
-                            tool_label.text = qsTr(
-                                        "Current Tool: Unit Converter")
-
-                            if (stack.currentItem !== converter) {
-                                stack.pop(null)
-                                converter.active = true
-                                stack.push(converter)
-                            }
-
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
-                    }
 
-                    Rectangle {
-                        width: parent.width
-                        height: 2
-                        color: color_scheme.dividerColor
-                    }
+                        SideMenuButton {
+                            tool_name: qsTr("Characters")
+                            icon_source: "../icons/menu/characters.png"
 
-                    SideMenuButton {
-                        tool_name: qsTr("Settings")
-                        icon_source: "../icons/menu/settings.png"
+                            onClicked: {
+                                tool_label.text = qsTr(
+                                            "Current Tool: Characters")
 
-                        onClicked: {
-                            tool_label.text = qsTr("Settings")
+                                if (stack.currentItem !== characters) {
+                                    stack.pop(null)
+                                    characters.active = true
+                                    stack.push(characters)
+                                }
 
-                            if (stack.currentItem !== settings) {
-                                stack.pop(null)
-                                settings.active = true
-                                stack.push(settings)
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
+                        }
 
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
+                        SideMenuButton {
+                            tool_name: qsTr("Generators")
+                            icon_source: "../icons/menu/generators.png"
+
+                            onClicked: {
+                                tool_label.text = qsTr(
+                                            "Current Tool: Generators")
+
+                                if (stack.currentItem !== generators) {
+                                    stack.pop(null)
+                                    generators.active = true
+                                    stack.push(generators)
+                                }
+
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
+                            }
+                        }
+
+                        SideMenuButton {
+                            tool_name: qsTr("Notes")
+                            icon_source: "../icons/menu/notes.png"
+
+                            onClicked: {
+                                tool_label.text = qsTr("Current Tool: Notes")
+
+                                if (stack.currentItem !== notes) {
+                                    stack.pop(null)
+                                    notes.active = true
+                                    stack.push(notes)
+                                }
+
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
+                            }
+                        }
+
+                        SideMenuButton {
+                            tool_name: qsTr("Converter")
+                            icon_source: "../icons/menu/converter.png"
+
+                            onClicked: {
+                                tool_label.text = qsTr(
+                                            "Current Tool: Unit Converter")
+
+                                if (stack.currentItem !== converter) {
+                                    stack.pop(null)
+                                    converter.active = true
+                                    stack.push(converter)
+                                }
+
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: parent.width
+                            height: 2
+                            color: color_scheme.dividerColor
+                        }
+
+                        SideMenuButton {
+                            tool_name: qsTr("Settings")
+                            icon_source: "../icons/menu/settings.png"
+
+                            onClicked: {
+                                tool_label.text = qsTr("Settings")
+
+                                if (stack.currentItem !== settings) {
+                                    stack.pop(null)
+                                    settings.active = true
+                                    stack.push(settings)
+                                }
+
+                                if (inPortrait || platform.isAndroid) {
+                                    drawer.close()
+                                }
                             }
                         }
                     }
@@ -378,9 +384,9 @@ Window {
                 }
             }
 
-            height: parent.height - toolbar.height
+            anchors.top: toolbar.visible ? toolbar.bottom : parent.top
+            anchors.bottom: parent.bottom
             anchors.right: parent.right
-            y: toolbar.height
 
             background: Rectangle {
                 color: color_scheme.backgroundColor

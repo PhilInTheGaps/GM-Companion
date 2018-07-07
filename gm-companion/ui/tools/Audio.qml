@@ -198,7 +198,7 @@ Page {
             ToolBar {
                 id: audio_control_bar
                 width: parent.width
-                height: platform.isAndroid ? parent.height / 12 : parent.height / 18
+                height: platform.isAndroid ? parent.height / 12 : color_scheme.toolbarHeight
                 anchors.bottom: parent.bottom
                 visible: true
 

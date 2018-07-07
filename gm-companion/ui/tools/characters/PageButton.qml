@@ -10,7 +10,7 @@ Rectangle {
     signal clicked(string source)
 
     width: row.width
-    height: platform.isAndroid ? width / 6 : 40
+    height: platform.isAndroid ? width / 6 : parent ? parent.height - parent.padding * 2 : 0
 
     Row {
         id: row

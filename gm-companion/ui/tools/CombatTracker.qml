@@ -63,13 +63,12 @@ Page {
 
     Rectangle {
         id: top_bar
-        height: top_row.height
+        height: color_scheme.toolbarHeight
         color: color_scheme.menuColor
 
         Row {
             id: top_row
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.fill: parent
 
             padding: 5
             leftPadding: 0
@@ -77,28 +76,30 @@ Page {
 
             Button {
                 text: qsTr("Next")
+                height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: tool.next()
             }
 
             Button {
                 text: qsTr("Add")
+                height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: add_combatant_dialog.open()
             }
 
             Button {
                 text: qsTr("Sort by INI")
+                height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: tool.sortByIni()
             }
 
             Button {
                 text: qsTr("Dice")
+                height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: {
-                    dice_enabled ? dice_enabled = false : dice_enabled = true
-                }
+                onClicked: dice_enabled ? dice_enabled = false : dice_enabled = true
             }
         }
     }
@@ -111,6 +112,8 @@ Page {
 
         height: top_bar.height
 
+        color: color_scheme.listHeaderBackgroundColor
+
         Row {
             anchors.fill: parent
             spacing: 10
@@ -122,6 +125,7 @@ Page {
                 width: list_view.width / 5
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
 
             Text {
@@ -130,6 +134,7 @@ Page {
                 width: list_view.width / 6
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
 
             Text {
@@ -138,6 +143,7 @@ Page {
                 width: list_view.width / 6
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
 
             Text {
@@ -146,6 +152,7 @@ Page {
                 width: list_view.width / 6
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
 
             Text {
@@ -154,6 +161,7 @@ Page {
                 width: list_view.width / 6
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
         }
     }
@@ -198,6 +206,7 @@ Page {
                         clip: true
                         elide: Text.ElideRight
                         anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
                     }
 
                     SpinBox {
@@ -230,7 +239,7 @@ Page {
 
                     Image {
                         id: delegate_remove_image
-                        source: index == tool.currentIndex ? "/icons/menu/x_sign_bright.png" : "/icons/menu/x_sign_dark.png"
+                        source: index == tool.currentIndex ? "/icons/menu/x_sign_bright.png" : "/icons/menu/x_sign_" + color_scheme.combatTrackerXType + ".png"
                         height: (parent.height - parent.padding * 2) * 0.8
                         width: height
                         anchors.verticalCenter: parent.verticalCenter
@@ -263,12 +272,12 @@ Page {
             id: bottom_column
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             Loader {
                 id: combat_dice_alt
                 source: "DiceAlt.qml"
 
-                height: bottom_rect.height
                 anchors.left: parent.left
                 anchors.right: parent.right
 
@@ -278,20 +287,20 @@ Page {
 
             Rectangle {
                 id: bottom_rect
-                height: bottom_row.height
+                height: color_scheme.toolbarHeight
                 anchors.left: parent.left
                 anchors.right: parent.right
                 color: color_scheme.menuColor
 
                 Row {
                     id: bottom_row
-
+                    height: parent.height
                     padding: 5
                     leftPadding: 0
                     spacing: 5
 
                     Rectangle {
-                        height: reset_button.height
+                        height: parent.height - parent.padding * 2
                         width: 200
                         color: "white"
                         anchors.verticalCenter: parent.verticalCenter
@@ -317,12 +326,14 @@ Page {
                         id: reset_button
                         text: qsTr("Reset")
                         anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height - parent.padding * 2
                         onClicked: tool.resetRounds()
                     }
 
                     Button {
                         text: qsTr("Clear")
                         anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height - parent.padding * 2
                         onClicked: tool.clear()
                     }
                 }

@@ -57,7 +57,6 @@
         <file alias="seekBack_weight_centered.png">icons/media/seekBack_weight_centered.png</file>
         <file alias="seekForward_weight_centered.png">icons/media/seekForward_weight_centered.png</file>
     </qresource>
-    <qresource prefix="/styles"/>
     <qresource prefix="/translations">
         <file alias="gm-companion_Deutsch">translations/gm-companion_de.qm</file>
         <file alias="gm-companion_de.ts">translations/gm-companion_de.ts</file>
@@ -146,5 +145,8 @@
         <file alias="names/Westeros/female.txt">addons/sifrp/names/Westeros/female.txt</file>
         <file alias="names/Westeros/male.txt">addons/sifrp/names/Westeros/male.txt</file>
         <file alias="names/Westeros/surname.txt">addons/sifrp/names/Westeros/surname.txt</file>
+    </qresource>
+    <qresource prefix="/ui">
+        <file>styles.ini</file>
     </qresource>
 </RCC>

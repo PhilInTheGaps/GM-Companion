@@ -197,6 +197,7 @@ Page {
                     width: parent.width
                     height: parent.height - parent.spacing - title_row.height
 
+                    alternatingRowColors: false
                     model: table_model
 
                     Controls1_4.TableViewColumn {

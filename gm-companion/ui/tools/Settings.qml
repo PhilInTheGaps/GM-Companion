@@ -82,21 +82,26 @@ Page {
         TabBar {
             id: tab_bar
             width: parent.width - parent.padding * 2
+            height: color_scheme.toolbarHeight
 
             TabButton {
                 text: qsTr("General")
+                height: parent.height
             }
 
             TabButton {
                 text: qsTr("Paths")
+                height: parent.height
             }
 
             TabButton {
                 text: qsTr("RPG Addons")
+                height: parent.height
             }
 
             TabButton {
                 text: qsTr("Info")
+                height: parent.height
             }
         }
 

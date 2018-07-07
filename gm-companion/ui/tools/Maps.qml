@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
 
 import gm.companion.maptool 1.0
 import "maps"
@@ -67,13 +66,14 @@ Page {
 
             Column {
                 id: maps_tab_column
-                height: parent.height
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
                 width: platform.isAndroid ? parent.width / 4 : 200
 
                 TabBar {
                     id: maps_tab_bar
                     width: parent.width
-                    height: platform.isAndroid ? width / 6 : 40
+                    height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
 
                     currentIndex: maps_swipe_view.currentIndex
 
@@ -88,7 +88,8 @@ Page {
 
                         TabButton {
                             text: map_tool.categories[index]
-                            height: maps_tab_bar.height
+                            height: color_scheme.toolbarHeight
+                            font.pointSize: 12
                         }
                     }
                 }
@@ -148,20 +149,26 @@ Page {
                     }
                 }
 
-                Image {
-                    id: maps_image
-                    height: maps_page.height
-                    width: maps_page.width - maps_tab_column.width
-                    fillMode: Image.PreserveAspectFit
+                Rectangle {
+                    width: maps_image.width
+                    height: maps_image.height
+                    color: color_scheme.backgroundColor
+
+                    Image {
+                        id: maps_image
+                        height: maps_page.height
+                        width: maps_page.width - maps_tab_column.width
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
             }
         }
 
         Rectangle {
             id: maps_control_bar
-            height: platform.isAndroid ? parent.height / 12 : parent.height / 18
+            height: platform.isAndroid ? parent.height / 12 : color_scheme.toolbarHeight
             width: parent.width
-            color: color_scheme.menuColor
+            color: color_scheme.toolbarColor
 
             Button {
                 Image {

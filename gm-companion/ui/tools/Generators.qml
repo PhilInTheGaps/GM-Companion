@@ -22,10 +22,33 @@ Page {
 
         TabBar {
             id: tab_bar
-            width: parent.width
+            height: color_scheme.toolbarHeight
+            anchors.left: parent.left
+            anchors.right: parent.right
+            background: Rectangle {
+                color: color_scheme.toolbarColor
+            }
 
             TabButton {
-                text: qsTr("Name Generator")
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Row {
+                    id: name_generator_tab_row
+                    padding: 10
+                    anchors.centerIn: parent
+
+                    Label {
+                        text: qsTr("Name Generator")
+                        color: "white"
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                    }
+                }
+
+                background: Rectangle {
+                    color: parent.pressed ? "black" : color_scheme.toolbarColor
+                }
             }
         }
 

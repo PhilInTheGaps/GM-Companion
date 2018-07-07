@@ -112,6 +112,7 @@ Page {
 
             Row {
                 id: top_left_row
+                height: color_scheme.toolbarHeight
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 5
@@ -120,7 +121,7 @@ Page {
                 Button {
                     id: active_button
                     text: qsTr("Active")
-                    height: platform.isAndroid ? width / 3 : 40
+                    height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
                     onClicked: {
                         character_tool.setActive(true)
                         showActiveCharacters()
@@ -130,7 +131,7 @@ Page {
                 Button {
                     id: inactive_button
                     text: qsTr("Inactive")
-                    height: platform.isAndroid ? width / 3 : 40
+                    height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
                     onClicked: {
                         showInactiveCharacters()
                         character_tool.setActive(false)
@@ -140,6 +141,7 @@ Page {
 
             Row {
                 id: top_right_row
+                height: color_scheme.toolbarHeight
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 5
@@ -154,8 +156,8 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    width: active_button.height
-                    height: width
+                    height: parent.height - parent.padding * 2
+                    width: height
 
                     onClicked: {
 
@@ -178,8 +180,8 @@ Page {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    width: active_button.height
-                    height: width
+                    width: height
+                    height: parent.height - parent.padding * 2
 
                     onClicked: {
                         character_image.height *= 0.5
@@ -204,8 +206,8 @@ Page {
                         mirror: true
                     }
 
-                    width: active_button.height
-                    height: width
+                    width: height
+                    height: parent.height - parent.padding * 2
 
                     onClicked: {
                         character_image.width = character_flickable.width
@@ -254,6 +256,7 @@ Page {
 
                     contentWidth: character_image.width
                     contentHeight: character_image.height
+                    boundsBehavior: Flickable.StopAtBounds
 
                     PinchArea {
                         width: Math.max(character_flickable.contentWidth,
@@ -290,10 +293,17 @@ Page {
                         }
                     }
 
-                    Image {
-                        id: character_image
-                        width: mid_column.width
-                        fillMode: Image.PreserveAspectFit
+                    Rectangle {
+                        width: character_image.width
+                        height: character_image.height
+                        color: color_scheme.backgroundColor
+
+                        Image {
+                            id: character_image
+                            width: mid_column.width
+                            height: mid_column.height
+                            fillMode: Image.PreserveAspectFit
+                        }
                     }
                 }
             }
@@ -309,6 +319,7 @@ Page {
             Row {
                 id: bottom_row
                 anchors.centerIn: parent
+                height: color_scheme.toolbarHeight
                 padding: 5
                 spacing: 5
             }

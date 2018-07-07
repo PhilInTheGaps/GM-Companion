@@ -9,6 +9,7 @@ import gm.companion.platforms 1.0
 
 Item {
     id: dice_page
+    height: main_item.height
 
     DiceTool {
         id: dice_tool
@@ -24,7 +25,9 @@ Item {
 
     Rectangle {
         id: main_item
-        anchors.fill: parent
+        height: dice_row.height
+        anchors.left: parent.left
+        anchors.right: parent.right
         color: color_scheme.backgroundColor
 
         Row {

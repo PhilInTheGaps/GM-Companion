@@ -1,11 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import gm.companion.colorscheme 1.0
 
 Dialog {
     id: add_combatant_dialog
 
     signal addCombatant(string name, int ini, int health, bool sort)
+    property bool addAdditionalCombatants: false
 
     title: qsTr("Add Combatant")
     width: parent.width * 0.8
@@ -14,25 +14,26 @@ Dialog {
     y: (parent.height - height) / 2
     modal: true
 
-    ColorScheme {
-        id: color_scheme
-    }
-
     contentItem: Page {
-        background: Rectangle {
-            color: color_scheme.backgroundColor
-        }
 
         padding: 10
         footer: dialog_footer
 
-        Row {
+        Item {
             id: dialog_footer
+            height: sort_checkbox.height
 
             CheckBox {
                 id: sort_checkbox
                 text: qsTr("Sort combatants by initiative")
                 checked: true
+
+                background: Rectangle {
+                    color: "white"
+                }
+
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -51,25 +52,23 @@ Dialog {
                     id: header_spacer
                     width: (parent.width - parent.spacing * 3) / 4
                     height: 5
+                    color: "transparent"
                 }
 
                 Text {
                     text: qsTr("Name")
-                    color: color_scheme.textColor
                     width: (parent.width - parent.spacing * 3) / 4
                     horizontalAlignment: Text.AlignHCenter
                 }
 
                 Text {
                     text: qsTr("INI")
-                    color: color_scheme.textColor
                     width: (parent.width - parent.spacing * 3) / 4
                     horizontalAlignment: Text.AlignHCenter
                 }
 
                 Text {
                     text: qsTr("Health")
-                    color: color_scheme.textColor
                     width: (parent.width - parent.spacing * 3) / 4
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -91,11 +90,13 @@ Dialog {
                         width: parent.width / 2
                         anchors.right: parent.right
                         onClicked: {
-                            if (scroll_view.visible) {
+                            if (addAdditionalCombatants) {
                                 scroll_view.visible = false
+                                addAdditionalCombatants = false
                                 text = qsTr("Add More")
                             } else {
                                 scroll_view.visible = true
+                                addAdditionalCombatants = true
                                 text = qsTr("Hide List")
                             }
                         }
@@ -215,7 +216,8 @@ Dialog {
 
     onAccepted: {
         // Add all characters
-        if (scroll_view.visible) {
+        console.log(addAdditionalCombatants)
+        if (addAdditionalCombatants) {
             addCombatant(name_field.text, ini_spinbox.value,
                          health_spinbox.value, false)
             addCombatant(row1.getName(), row1.getIni(), row1.getHealth(), false)

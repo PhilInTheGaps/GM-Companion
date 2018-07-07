@@ -221,12 +221,19 @@ Page {
     ToolBar {
         id: tool_bar
         width: parent.width
+        background: Rectangle {
+            color: color_scheme.toolbarColor
+        }
 
         Row {
             width: parent.width
+            height: 40
             spacing: 5
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 Image {
                     source: "/icons/media/playBackwards.png"
                     width: parent.height * 0.9
@@ -239,32 +246,73 @@ Page {
                     sourceSize.height: height
                 }
 
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
+
+                width: height
+
                 onClicked: backToTool()
             }
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 text: qsTr("New Project")
                 onClicked: new_project_dialog.open()
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
             }
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 text: qsTr("Save Project")
                 onClicked: editor_tool.saveProject()
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
             }
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 text: qsTr("New Category")
                 onClicked: new_category_dialog.open()
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
             }
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 text: qsTr("New Scenario")
                 onClicked: new_scenario_dialog.open()
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
             }
 
             ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+
                 text: qsTr("New Element")
                 onClicked: new_element_dialog.open()
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : "lightgrey"
+                }
             }
         }
     }

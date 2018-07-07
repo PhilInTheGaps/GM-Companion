@@ -10,7 +10,8 @@ Button {
     property string icon_source
 
     id: button
-    width: parent.width
+    anchors.left: parent.left
+    anchors.right: parent.right
     height: platform.isAndroid ? drawer.height / 15 : 45
 
     background: Rectangle {
