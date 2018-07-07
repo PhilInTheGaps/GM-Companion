@@ -13,6 +13,11 @@ Item {
 
     DiceTool {
         id: dice_tool
+
+        onMixedCriticalResult: roll_result.color = "brown"
+        onSuccessfulCriticalResult: roll_result.color = "green"
+        onFailedCriticalResult: roll_result.color = "red"
+        onNormalResult: roll_result.color = color_scheme.textColor
     }
 
     ColorScheme {

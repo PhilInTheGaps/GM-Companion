@@ -16,6 +16,11 @@ Page {
         id: dice_tool
 
         onCalculationStringChanged: calculation_text_edit.text = calculationString
+
+        onMixedCriticalResult: roll_result.color = "brown"
+        onSuccessfulCriticalResult: roll_result.color = "green"
+        onFailedCriticalResult: roll_result.color = "red"
+        onNormalResult: roll_result.color = color_scheme.textColor
     }
 
     ColorScheme {
@@ -30,6 +35,63 @@ Page {
         color: color_scheme.backgroundColor
     }
 
+    Dialog {
+        id: dice_settings_dialog
+        title: qsTr("Dice Settings")
+
+        contentItem: Column {
+            padding: 5
+            spacing: 5
+
+            CheckBox {
+                id: enable_criticals_checkbox
+                text: qsTr("Enable Criticals")
+                checked: dice_tool.getCriticalEnabled()
+            }
+
+            Text {
+                text: qsTr("Critical Success") + ":"
+            }
+
+            SpinBox {
+                id: success_spinbox
+                from: 0
+                to: 1000
+                value: dice_tool.getSuccess()
+                editable: true
+            }
+
+            Text {
+                text: qsTr("Critical Failure") + ":"
+            }
+
+            SpinBox {
+                id: failure_spinbox
+                from: 0
+                to: 1000
+                value: dice_tool.getFailure()
+                editable: true
+            }
+        }
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: {
+            dice_tool.setDiceSettings(enable_criticals_checkbox.checked,
+                                      success_spinbox.value,
+                                      failure_spinbox.value)
+        }
+    }
+
+    Button {
+        text: qsTr("Settings")
+        x: 10
+        y: 10
+        visible: !combat_tracker_mode
+
+        onClicked: dice_settings_dialog.open()
+    }
+
     Column {
         id: dice_column
         spacing: 10
@@ -37,7 +99,7 @@ Page {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        padding: combat_tracker_mode ? 0 : height * 0.15
+        padding: combat_tracker_mode ? 10 : height * 0.15
 
         Row {
             id: dice_button_row
@@ -54,6 +116,11 @@ Page {
                     anchors.centerIn: parent
                     sourceSize.height: height
                     sourceSize.width: width
+                }
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : dice_type_spin_box.value
+                                            == 4 ? "darkred" : "lightgrey"
                 }
 
                 ToolTip.text: qsTr("D4")
@@ -80,6 +147,11 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : dice_type_spin_box.value
+                                            == 6 ? "darkred" : "lightgrey"
+                }
+
                 width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 6
@@ -100,6 +172,11 @@ Page {
                 ToolTip.visible: hovered
                 hoverEnabled: true
 
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : dice_type_spin_box.value
+                                            == 12 ? "darkred" : "lightgrey"
+                }
+
                 width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
                 onClicked: dice_type_spin_box.value = 12
@@ -119,6 +196,11 @@ Page {
                 ToolTip.text: qsTr("D20")
                 ToolTip.visible: hovered
                 hoverEnabled: true
+
+                background: Rectangle {
+                    color: parent.pressed ? "grey" : dice_type_spin_box.value
+                                            == 20 ? "darkred" : "lightgrey"
+                }
 
                 width: dice_page.width > 800 ? 800 / 6 : dice_page.width / 6
                 height: width
@@ -182,6 +264,7 @@ Page {
                 }
 
                 SpinBox {
+                    id: modifier_spin_box
                     height: dice_button_row.height / 2
                     width: dice_button_row.width / 3
                     value: 0
