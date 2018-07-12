@@ -139,7 +139,7 @@ private:
     QList<int> l_elementTypes;
     QString l_currentElement;
 
-    bool l_isPlaying;
+    bool l_isPlaying = false;
 
     int soundVolume;
     QList<QMediaPlayer*> soundPlayerList;

@@ -43,6 +43,7 @@ Page {
                         color: "white"
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
+                        font.bold: true
                     }
                 }
 

@@ -4,7 +4,7 @@ import QtQuick.Controls 2.3
 
 import gm.companion.maptool 1.0
 import "maps"
-
+import "../fontawesome"
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 
@@ -61,7 +61,8 @@ Page {
         anchors.fill: parent
 
         Row {
-            width: parent.width
+            anchors.left: parent.left
+            anchors.right: parent.right
             height: parent.height - maps_control_bar.height
 
             Column {
@@ -171,12 +172,17 @@ Page {
             color: color_scheme.toolbarColor
 
             Button {
-                Image {
-                    source: "/icons/menu/three_bars_dark.png"
-                    width: parent.height / 1.5
-                    height: width
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    icon: icons.fa_bars
+                    pointSize: 25
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
                 width: parent.height - 10
@@ -196,13 +202,19 @@ Page {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                // Larger
                 Button {
-                    Image {
-                        source: "/icons/menu/plus_sign_dark.png"
-                        width: parent.height / 1.5
-                        height: width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        icon: icons.fa_plus
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     width: parent.height - parent.padding * 2
@@ -222,13 +234,19 @@ Page {
                     }
                 }
 
+                // Smaller
                 Button {
-                    Image {
-                        source: "/icons/menu/vertical_bar_dark.png"
-                        width: parent.height / 1.5
-                        height: width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        icon: icons.fa_minus
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     width: parent.height - parent.padding * 2
@@ -246,25 +264,27 @@ Page {
                     }
                 }
 
+                // Reset
                 Button {
-                    Image {
-                        source: "/icons/menu/ring_arrow_dark.png"
-                        width: parent.height / 1.5
-                        height: width
+                    hoverEnabled: true
 
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    background: Rectangle {
+                        color: "transparent"
+                    }
 
-                        mirror: true
+                    Icon {
+                        icon: icons.fa_undo
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     width: parent.height - parent.padding * 2
                     height: width
 
                     onClicked: {
-
                         maps_image.height = maps_page.height
-                        maps_image.width = maps_page.width - maps_tab_column.width
+                        maps_image.width = maps_tab_column.visible ? maps_page.width - maps_tab_column.width : maps_page.width
                     }
                 }
             }

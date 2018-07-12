@@ -1,13 +1,12 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
-import QtQuick.Controls.Styles 1.4
-import QtMultimedia 5.9
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import "./audio"
+import "../fontawesome"
 
 import gm.companion.colorscheme 1.0
 
@@ -20,17 +19,18 @@ Page {
         id: platform
     }
 
-    SwipeView {
-        id: audio_swipe
+    StackView {
+        id: audio_stack
         anchors.fill: parent
-        interactive: false
         clip: true
+        initialItem: audio_page
 
         background: Rectangle {
             color: color_scheme.backgroundColor
         }
 
         Page {
+            id: audio_page
             background: Rectangle {
                 color: color_scheme.backgroundColor
             }
@@ -164,11 +164,6 @@ Page {
                     audio_busy_indicator.visible = false
                 }
 
-                onIsPlayingChanged: {
-                    audio_play_pause_icon.source
-                            = isPlaying ? "/icons/media/pause.png" : "/icons/media/play.png"
-                }
-
                 onSongsChanged: {
                     for (var i = playlist_model.count; i > 0; i--) {
                         playlist_model.remove(i - 1)
@@ -197,35 +192,62 @@ Page {
             // Bar at the bottom
             ToolBar {
                 id: audio_control_bar
-                width: parent.width
                 height: platform.isAndroid ? parent.height / 12 : color_scheme.toolbarHeight
                 anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
                 visible: true
 
                 background: Rectangle {
                     color: color_scheme.menuColor
                 }
 
+                // Three Bars
                 Button {
-                    anchors.left: parent.left
+                    id: audio_project_structure_button
                     height: parent.height - 10
                     width: height
-                    y: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    hoverEnabled: true
 
-                    id: audio_project_structure_button
+                    background: Rectangle {
+                        color: "transparent"
+                    }
 
-                    Image {
-                        source: "/icons/menu/three_bars_dark.png"
-                        width: parent.height / 1.5
-                        height: width
-
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
+                    Icon {
+                        icon: icons.fa_bars
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     onClicked: audio_project_menu.visible ? audio_project_menu.visible = false : audio_project_menu.visible = true
                 }
 
+                // Playlist Button
+                Button {
+                    height: parent.height - 10
+                    width: height
+                    x: parent.width - width - 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        icon: icons.fa_list_ol
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    onClicked: audio_info_frame.visible ? audio_info_frame.visible
+                                                          = false : audio_info_frame.visible = true
+                }
+
+                // Volume Control
                 Column {
                     width: parent.width / 5
                     height: audio_control_bar.height
@@ -310,76 +332,69 @@ Page {
                     }
                 }
 
-                Button {
-                    anchors.right: parent.right
-
-                    height: parent.height - 10
-                    width: height
-                    y: 5
-
-                    Image {
-                        source: "/icons/media/playlist.png"
-                        width: parent.height / 1.5
-                        height: width
-
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    onClicked: audio_info_frame.visible ? audio_info_frame.visible
-                                                          = false : audio_info_frame.visible = true
-                }
-
+                // Play Pause Skip
                 Row {
                     spacing: 5
                     anchors.horizontalCenter: parent.horizontalCenter
                     height: parent.height - 10
                     y: 5
 
-                    RoundButton {
+                    // Back
+                    Button {
                         height: parent.height
                         width: parent.height
+                        hoverEnabled: true
 
-                        Image {
-                            source: "/icons/media/seekBack_weight_centered.png"
-                            width: parent.height / 1.5
-                            height: width
+                        background: Rectangle {
+                            color: "transparent"
+                        }
 
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
+                        Icon {
+                            icon: icons.fa_backward
+                            pointSize: 20
+                            anchors.centerIn: parent
+                            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
 
                         onClicked: audio_tool.musicAgain()
                     }
 
-                    RoundButton {
+                    // Play Pause
+                    Button {
                         height: parent.height
                         width: parent.height
+                        hoverEnabled: true
 
-                        Image {
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        Icon {
                             id: audio_play_pause_icon
-                            source: "/icons/media/play_weight_centered.png"
-                            width: parent.height / 1.5
-                            height: width
-
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
+                            icon: audio_tool.isPlaying ? icons.fa_pause_circle : icons.fa_play_circle
+                            pointSize: 30
+                            anchors.centerIn: parent
+                            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
 
                         onClicked: audio_tool.musicPausePlay()
                     }
 
-                    RoundButton {
+                    // Skip
+                    Button {
                         height: parent.height
                         width: parent.height
+                        hoverEnabled: true
 
-                        Image {
-                            source: "/icons/media/seekForward_weight_centered.png"
-                            width: parent.height / 1.5
-                            height: width
+                        background: Rectangle {
+                            color: "transparent"
+                        }
 
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
+                        Icon {
+                            icon: icons.fa_forward
+                            pointSize: 20
+                            anchors.centerIn: parent
+                            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
 
                         onClicked: audio_tool.musicNext()
@@ -394,15 +409,10 @@ Page {
                 Column {
                     id: audio_project_menu
                     height: parent.height - audio_control_bar.height
-                    width: platform.isAndroid ? parent.width / 5 : 150
+                    width: platform.isAndroid ? parent.width / 5 : 175
 
                     spacing: platform.isAndroid ? 10 : 5
                     padding: 5
-
-                    Text {
-                        text: qsTr("Project")
-                        color: color_scheme.textColor
-                    }
 
                     ComboBox {
                         id: audio_project_combo_box
@@ -415,11 +425,28 @@ Page {
 
                     Button {
                         id: editor_button
+
+                        Icon {
+                            x: 10
+                            icon: icons.fa_edit
+                            pointSize: 15
+                            anchors.verticalCenter: parent.verticalCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
                         text: qsTr("Editor")
+
                         width: parent.width - parent.padding
                         visible: !platform.isAndroid
 
-                        onClicked: audio_swipe.currentIndex = 1
+                        onClicked: {
+                            if (audio_stack.currentItem == audio_page) {
+                                audio_page.visible = false
+                                audio_editor.visible = true
+                                audio_stack.pop(null)
+                                audio_stack.push(audio_editor)
+                            }
+                        }
 
                         Component.onCompleted: {
                             if (platform.isAndroid)
@@ -493,6 +520,7 @@ Page {
                         Flow {
                             id: audio_scroll_flow
                             padding: 5
+                            topPadding: 0
                             spacing: 5
 
                             width: audio_scroll_view.width
@@ -500,99 +528,129 @@ Page {
                     }
                 }
 
-                Frame {
+                Item {
                     id: audio_info_frame
                     height: parent.height - audio_control_bar.height
-                    width: platform.isAndroid ? parent.width / 5 : 200
-                    visible: false
+                    width: platform.isAndroid ? parent.width / 5 : 175
+                    visible: true
 
                     Column {
                         anchors.fill: parent
                         spacing: 10
+                        padding: 5
 
                         Column {
                             id: sound_info_column
-                            width: parent.width
+                            width: parent.width - parent.padding * 2
                             spacing: 5
 
                             Text {
                                 text: qsTr("Sounds")
                                 color: color_scheme.textColor
+                                font.bold: true
                             }
                         }
 
                         Text {
+                            text: qsTr("No sounds playing.")
+                            visible: sound_info_column.height < 20
+                        }
+
+                        Rectangle {
+                            height: 1
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            color: color_scheme.dividerColor
+                        }
+
+                        Text {
                             id: music_element_name
-                            text: qsTr("No Music Selected")
+                            text: qsTr("Music")
                             wrapMode: Text.WordWrap
-                            width: parent.width
+                            width: parent.width - parent.padding * 2
+                            color: color_scheme.textColor
+                            font.bold: true
+                        }
+
+                        Text {
+                            id: song_name_text
+                            width: parent.width - parent.padding * 2
+                            text: " - "
+                            clip: true
+                            elide: Text.ElideRight
                             color: color_scheme.textColor
                         }
 
-                        Frame {
-                            id: music_metadata_column
-                            width: parent.width
-                            spacing: 5
-                            padding: 5
+                        Text {
+                            id: artist_text
+                            width: parent.width - parent.padding * 2
+                            text: " - "
+                            clip: true
+                            elide: Text.ElideRight
+                            color: color_scheme.textColor
+                        }
 
-                            Column {
-                                width: parent.width
+                        Text {
+                            id: album_text
+                            width: parent.width - parent.padding * 2
+                            text: " - "
+                            clip: true
+                            elide: Text.ElideRight
+                            color: color_scheme.textColor
+                        }
 
-                                Text {
-                                    id: song_name_text
-                                    width: parent.width - parent.padding * 2
-                                    text: ""
-                                    clip: true
-                                    elide: Text.ElideRight
-                                    color: color_scheme.textColor
-                                }
-
-                                Text {
-                                    id: artist_text
-                                    width: parent.width - parent.padding * 2
-                                    text: ""
-                                    clip: true
-                                    elide: Text.ElideRight
-                                    color: color_scheme.textColor
-                                }
-
-                                Text {
-                                    id: album_text
-                                    width: parent.width - parent.padding * 2
-                                    text: ""
-                                    clip: true
-                                    elide: Text.ElideRight
-                                    color: color_scheme.textColor
-                                }
-                            }
+                        Rectangle {
+                            height: 1
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            color: color_scheme.dividerColor
                         }
 
                         ListView {
                             id: playlist_view
-                            width: parent.width
-                            height: parent.height - sound_info_column.height
-                                    - music_element_name.height - parent.spacing
-                                    * 3 - music_metadata_column.height
+                            width: parent.width - parent.padding * 2
+                            height: parent.height - y - parent.padding * 2
+
                             clip: true
 
                             highlight: Rectangle {
                                 color: "lightgrey"
                             }
 
+                            ScrollBar.vertical: ScrollBar {
+                            }
+
                             model: PlaylistModel {
                                 id: playlist_model
                             }
 
-                            delegate: Text {
+                            delegate: Item {
                                 width: parent.width
-                                clip: true
-                                elide: Text.ElideRight
-                                text: name
-                                color: color_scheme.textColor
+                                height: playlist_text.height + 10
+
+                                Text {
+                                    id: playlist_text
+                                    clip: true
+                                    elide: Text.ElideRight
+                                    text: name
+                                    color: color_scheme.textColor
+                                    font.pointSize: 10
+                                    anchors.centerIn: parent
+                                    width: parent.width - 10
+                                }
+
+                                ToolTip {
+                                    id: playlist_tooltip
+                                    text: name
+                                }
 
                                 MouseArea {
+                                    hoverEnabled: true
                                     anchors.fill: parent
                                     onClicked: audio_tool.setMusicIndex(index)
+
+                                    onEntered: playlist_tooltip.visible = true
+                                    onExited: playlist_tooltip.visible = false
                                 }
                             }
                         }
@@ -603,8 +661,18 @@ Page {
 
         Editor {
             id: audio_editor
+            visible: false
 
-            onBackToTool: audio_swipe.currentIndex = 0
+            onBackToTool: {
+                if (audio_stack.currentItem == audio_editor) {
+                    audio_editor.visible = false
+                    audio_page.visible = true
+
+                    audio_stack.pop(null)
+                    audio_stack.push(audio_page)
+                }
+            }
+
             onProjectAdded: {
                 audio_project_combo_box.model = audio_tool.projectList
             }

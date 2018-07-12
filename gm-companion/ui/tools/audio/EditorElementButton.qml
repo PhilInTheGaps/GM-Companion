@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
+import "../../fontawesome"
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -54,6 +55,7 @@ Rectangle {
 
         Text {
             text: element
+            font.pointSize: 10
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
             width: parent.width - parent.spacing * 3 - up_down_column.width
                    - parent.padding * 2 - image.width - delay_button.width
@@ -66,18 +68,21 @@ Rectangle {
             id: up_down_column
             height: parent.height - parent.padding * 2
             width: height
+            anchors.verticalCenter: parent.verticalCenter
 
             Button {
                 height: parent.height / 2
                 width: parent.width
 
-                Image {
-                    source: "/icons/menu/arrow_up_dark.png"
-                    width: parent.width * 0.8
-                    height: parent.height
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    anchors.horizontalCenter: parent.horizontalCenter
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    icon: icons.fa_angle_up
+                    pointSize: 18
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
                 ToolTip.text: qsTr("Move Up")
@@ -91,13 +96,15 @@ Rectangle {
                 height: parent.height / 2
                 width: parent.width
 
-                Image {
-                    source: "/icons/menu/arrow_down_dark.png"
-                    width: parent.width * 0.8
-                    height: parent.height
-                    sourceSize.width: width
-                    sourceSize.height: height
-                    anchors.horizontalCenter: parent.horizontalCenter
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    icon: icons.fa_angle_down
+                    pointSize: 18
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
                 ToolTip.text: qsTr("Move Down")
@@ -119,12 +126,15 @@ Rectangle {
             ToolTip.visible: hovered
             hoverEnabled: true
 
-            Image {
-                source: "/icons/menu/x_sign_dark.png"
-                width: parent.width
-                height: parent.height
-                sourceSize.width: width
-                sourceSize.height: height
+            background: Rectangle {
+                color: "transparent"
+            }
+
+            Icon {
+                icon: icons.fa_times
+                pointSize: 18
+                anchors.centerIn: parent
+                color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
             }
 
             onActivated: element_button.remove(element_button.element,

@@ -7,6 +7,7 @@ import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 
 import "./combat_tracker"
+import "../fontawesome"
 
 Page {
     id: combat_tracker
@@ -70,33 +71,145 @@ Page {
             id: top_row
             anchors.fill: parent
 
-            padding: 5
-            leftPadding: 0
-            spacing: 5
+            padding: 10
+            spacing: 10
 
             Button {
-                text: qsTr("Next")
+                hoverEnabled: true
+                width: next_row.width
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Row {
+                    id: next_row
+                    anchors.centerIn: parent
+                    spacing: 10
+                    padding: 10
+
+                    Icon {
+                        icon: icons.fa_chevron_right
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    Text {
+                        text: qsTr("Next")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+                }
+
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: tool.next()
             }
 
             Button {
-                text: qsTr("Add")
+                hoverEnabled: true
+                width: add_row.width
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Row {
+                    id: add_row
+                    anchors.centerIn: parent
+                    spacing: 10
+                    padding: 10
+
+                    Icon {
+                        icon: icons.fa_plus
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    Text {
+                        text: qsTr("Add")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+                }
+
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: add_combatant_dialog.open()
             }
 
             Button {
-                text: qsTr("Sort by INI")
+                hoverEnabled: true
+                width: sort_row.width
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Row {
+                    id: sort_row
+                    anchors.centerIn: parent
+                    spacing: 10
+                    padding: 10
+
+                    Icon {
+                        icon: icons.fa_sort
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    Text {
+                        text: qsTr("Sort by INI")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+                }
+
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: tool.sortByIni()
             }
 
             Button {
-                text: qsTr("Dice")
+                hoverEnabled: true
+                width: dice_row.width
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Row {
+                    id: dice_row
+                    anchors.centerIn: parent
+                    spacing: 10
+                    padding: 10
+
+                    Image {
+                        source: "/icons/menu/dice.png"
+                        height: dice_text.height * 1.4
+                        width: height
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        id: dice_text
+                        text: qsTr("Dice")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+                }
+
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: dice_enabled ? dice_enabled = false : dice_enabled = true
@@ -191,13 +304,17 @@ Page {
 
             delegate: Rectangle {
                 height: delegate_row.height
-                width: list_view.width
+                anchors.left: parent.left
+                anchors.right: parent.right
                 color: index == tool.currentIndex ? color_scheme.primaryButtonColor : "transparent"
 
                 Row {
                     id: delegate_row
                     padding: 10
                     spacing: 10
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: color_scheme.toolbarHeight * 1.3
 
                     Text {
                         text: name
@@ -207,47 +324,58 @@ Page {
                         elide: Text.ElideRight
                         anchors.verticalCenter: parent.verticalCenter
                         font.pointSize: 12
+                        font.bold: true
                     }
 
-                    SpinBox {
-                        value: ini
-                        width: list_view.width / 6
-                        editable: true
-                        onValueChanged: tool.setIni(index, value)
+                    ListSpinBox {
+                        field_value: ini
+                        onValueChanged: tool.setIni(index, field_value)
+                        text_color: index == tool.currentIndex ? "white" : "black"
+                        current_item: index == tool.currentIndex ? true : false
+                        from: 0
+                        to: 1000
                     }
 
-                    SpinBox {
-                        value: health
-                        width: list_view.width / 6
-                        editable: true
-                        onValueChanged: tool.setHealth(index, value)
+                    ListSpinBox {
+                        field_value: health
+                        onValueChanged: tool.setHealth(index, field_value)
+                        text_color: index == tool.currentIndex ? "white" : "black"
+                        current_item: index == tool.currentIndex ? true : false
+                        from: 0
+                        to: 1000
                     }
 
-                    TextField {
-                        text: status
-                        width: list_view.width / 6
-                        selectByMouse: true
-                        onTextEdited: tool.setStatus(index, text)
+                    ListTextField {
+                        onField_textChanged: tool.setStatus(index, field_text)
+                        text_color: index == tool.currentIndex ? "white" : "black"
+                        field_text: status
                     }
 
-                    TextField {
-                        text: notes
-                        width: list_view.width / 6
-                        selectByMouse: true
-                        onTextEdited: tool.setNotes(index, text)
+                    ListTextField {
+                        onField_textChanged: tool.setNotes(index, field_text)
+                        text_color: index == tool.currentIndex ? "white" : "black"
+                        field_text: notes
                     }
 
-                    Image {
+                    Button {
                         id: delegate_remove_image
-                        source: index == tool.currentIndex ? "/icons/menu/x_sign_bright.png" : "/icons/menu/x_sign_" + color_scheme.combatTrackerXType + ".png"
-                        height: (parent.height - parent.padding * 2) * 0.8
+                        hoverEnabled: true
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        Icon {
+                            icon: icons.fa_times
+                            pointSize: 25
+                            color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (index == tool.currentIndex ? "white" : color_scheme.primaryButtonColor))
+                            anchors.centerIn: parent
+                        }
+
+                        height: (parent.height - parent.padding * 2)
                         width: height
                         anchors.verticalCenter: parent.verticalCenter
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: tool.remove(index)
-                        }
+                        onClicked: tool.remove(index)
                     }
                 }
             }
@@ -299,39 +427,97 @@ Page {
                     leftPadding: 0
                     spacing: 5
 
-                    Rectangle {
-                        height: parent.height - parent.padding * 2
-                        width: 200
-                        color: "white"
-                        anchors.verticalCenter: parent.verticalCenter
+                    Row {
+                        spacing: 10
+                        padding: 10
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: 100
 
-                        Row {
-                            spacing: 5
-                            padding: 5
+                        Text {
+                            text: qsTr("Round:")
                             anchors.verticalCenter: parent.verticalCenter
+                            color: "white"
+                            font.bold: true
+                            font.pointSize: 12
+                        }
 
-                            Text {
-                                text: qsTr("Round:")
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
-
-                            Text {
-                                text: tool.currentRound
-                                anchors.verticalCenter: parent.verticalCenter
-                            }
+                        Text {
+                            text: tool.currentRound
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "white"
+                            font.bold: true
+                            font.pointSize: 12
                         }
                     }
 
                     Button {
                         id: reset_button
-                        text: qsTr("Reset")
+
+                        hoverEnabled: true
+                        width: reset_row.width
+
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        Row {
+                            id: reset_row
+                            anchors.centerIn: parent
+                            spacing: 10
+                            padding: 10
+
+                            Icon {
+                                icon: icons.fa_undo
+                                pointSize: 15
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            }
+
+                            Text {
+                                text: qsTr("Reset")
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                                font.bold: true
+                                font.pointSize: 12
+                            }
+                        }
+
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height - parent.padding * 2
                         onClicked: tool.resetRounds()
                     }
 
                     Button {
-                        text: qsTr("Clear")
+                        hoverEnabled: true
+                        width: clear_row.width
+
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        Row {
+                            id: clear_row
+                            anchors.centerIn: parent
+                            spacing: 10
+                            padding: 10
+
+                            Icon {
+                                icon: icons.fa_times
+                                pointSize: 17
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            }
+
+                            Text {
+                                text: qsTr("Clear")
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                                font.bold: true
+                                font.pointSize: 12
+                            }
+                        }
+
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height - parent.padding * 2
                         onClicked: tool.clear()

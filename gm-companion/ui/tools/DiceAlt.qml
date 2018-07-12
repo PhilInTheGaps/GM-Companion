@@ -49,13 +49,14 @@ Item {
                 from: 1
                 onValueChanged: dice_tool.setAmount(value)
                 editable: true
-                font.pixelSize: parent.height * 0.25
+                font.pixelSize: parent.height * 0.4
             }
 
             Text {
                 text: qsTr("D")
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
 
             // Dice Type
@@ -65,13 +66,14 @@ Item {
                 to: 1000
                 editable: true
                 onValueChanged: dice_tool.setSides(value)
-                font.pixelSize: parent.height * 0.25
+                font.pixelSize: parent.height * 0.4
             }
 
             Text {
                 text: "+"
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
 
             // Modifier
@@ -81,7 +83,7 @@ Item {
                 to: 99
                 onValueChanged: dice_tool.setModifier(value)
                 editable: true
-                font.pixelSize: parent.height * 0.25
+                font.pixelSize: parent.height * 0.4
             }
 
             // "Roll!"
@@ -111,6 +113,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 color: color_scheme.textColor
                 font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
 
             // Result
@@ -120,6 +123,7 @@ Item {
                 color: color_scheme.textColor
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: parent.height * 0.5
+                font.bold: true
             }
         }
     }

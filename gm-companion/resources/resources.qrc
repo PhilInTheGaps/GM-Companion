@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>splash.jpg</file>
+        <file>fonts/fontawesome-webfont.ttf</file>
     </qresource>
     <qresource prefix="/names/Generic">
         <file alias="Elves/female.txt">names/Generic/Elves/female.txt</file>
@@ -94,6 +95,8 @@
         <file alias="d20.png">icons/dice/dice-twenty-faces-twenty.png</file>
         <file alias="d6.png">icons/dice/perspective-dice-six.png</file>
         <file alias="dice_roll.png">icons/dice/rolling-dice-cup.png</file>
+        <file alias="d10.png">icons/dice/d10.png</file>
+        <file alias="d8.png">icons/dice/dice-eight-faces-eight.png</file>
     </qresource>
     <qresource prefix="/addons/dsa5">
         <file alias="addon.ini">addons/dsa5/addon.ini</file>

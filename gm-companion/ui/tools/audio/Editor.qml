@@ -2,10 +2,10 @@ import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.audioeditor 1.0
 import gm.companion.colorscheme 1.0
+import "../../fontawesome"
 
 Page {
     id: audio_editor
@@ -40,7 +40,15 @@ Page {
 
             file_browser.setType(type)
 
-            element_swipe_view.setCurrentIndex(1)
+            if (element_stack_view.currentItem == radio_page)
+                element_stack_view.pop(null)
+
+            if (element_stack_view.currentItem != audio_list_page) {
+                element_stack_view.push(audio_list_page)
+
+                audio_list_page.visible = true
+                radio_page.visible = false
+            }
         }
 
         function selectRadio(name) {
@@ -53,7 +61,15 @@ Page {
             radio_page.setURL(getURL())
             radio_page.setIcon(getCurrentListIcon())
 
-            element_swipe_view.setCurrentIndex(2)
+            if (element_stack_view.currentItem == audio_list_page)
+                element_stack_view.pop(null)
+
+            if (element_stack_view.currentItem != radio_page) {
+                element_stack_view.push(radio_page)
+
+                audio_list_page.visible = false
+                radio_page.visible = true
+            }
         }
 
         function moveElementUp(element, type) {
@@ -227,27 +243,23 @@ Page {
 
         Row {
             width: parent.width
-            height: 40
+            height: color_scheme.toolbarHeight
             spacing: 5
 
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-
-                Image {
-                    source: "/icons/media/playBackwards.png"
-                    width: parent.height * 0.9
-                    height: width
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    sourceSize.width: width
-                    sourceSize.height: height
-                }
+                hoverEnabled: true
 
                 background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
+                    color: "transparent"
+                }
+
+                Icon {
+                    icon: icons.fa_arrow_circle_left
+                    pointSize: 25
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
                 width: height
@@ -258,61 +270,111 @@ Page {
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                width: new_project_text.width + 10
+                hoverEnabled: true
 
-                text: qsTr("New Project")
+                Text {
+                    id: new_project_text
+                    text: qsTr("New Project")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
                 onClicked: new_project_dialog.open()
-
-                background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
-                }
             }
 
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                width: save_project_text.width + 10
+                hoverEnabled: true
 
-                text: qsTr("Save Project")
+                Text {
+                    id: save_project_text
+                    text: qsTr("Save Project")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
                 onClicked: editor_tool.saveProject()
-
-                background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
-                }
             }
 
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                width: new_category_text.width + 10
+                hoverEnabled: true
 
-                text: qsTr("New Category")
+                Text {
+                    id: new_category_text
+                    text: qsTr("New Category")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
                 onClicked: new_category_dialog.open()
-
-                background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
-                }
             }
 
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                width: new_scenario_text.width + 10
+                hoverEnabled: true
 
-                text: qsTr("New Scenario")
+                Text {
+                    id: new_scenario_text
+                    text: qsTr("New Scenario")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
                 onClicked: new_scenario_dialog.open()
-
-                background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
-                }
             }
 
             ToolButton {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                width: new_element_text.width + 10
+                hoverEnabled: true
 
-                text: qsTr("New Element")
-                onClicked: new_element_dialog.open()
+                Text {
+                    id: new_element_text
+                    text: qsTr("New Element")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
 
                 background: Rectangle {
-                    color: parent.pressed ? "grey" : "lightgrey"
+                    color: "transparent"
                 }
+
+                onClicked: new_element_dialog.open()
             }
         }
     }
@@ -325,7 +387,7 @@ Page {
 
         Column {
             id: left_column
-            width: parent.width / 6
+            width: 175
             height: parent.height
             spacing: 5
             padding: 5
@@ -375,7 +437,9 @@ Page {
 
                 onCurrentTextChanged: {
                     editor_tool.setCurrentScenario(currentText)
-                    element_swipe_view.setCurrentIndex(0)
+                    element_stack_view.pop(null)
+                    audio_list_page.visible = false
+                    radio_page.visible = false
                 }
             }
 
@@ -415,17 +479,21 @@ Page {
             width: parent.width - parent.spacing * 2 - left_column.width - file_browser.width
             height: parent.height
             spacing: 5
+            topPadding: 5
+            bottomPadding: 5
 
-            SwipeView {
-                id: element_swipe_view
+            StackView {
+                id: element_stack_view
                 width: parent.width
-                height: parent.height
+                height: parent.height - parent.topPadding * 2
                 clip: true
                 topPadding: 5
                 bottomPadding: 5
-                interactive: false
+
+                initialItem: no_element_text
 
                 Column {
+                    id: no_element_text
                     Text {
                         text: qsTr("No Element Selected")
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -435,6 +503,8 @@ Page {
 
                 EditorAudioListPage {
                     id: audio_list_page
+
+                    visible: false
 
                     onRemoveFile: editor_tool.removeFile(fileIndex)
                     onSaveList: editor_tool.saveList(type)
@@ -446,6 +516,8 @@ Page {
                 EditorRadioPage {
                     id: radio_page
 
+                    visible: false
+
                     onSaveRadio: editor_tool.saveList(2)
                     onChangeIcon: editor_tool.setCurrentListIcon(path)
                     onChangeLocal: editor_tool.setLocal(local)
@@ -456,10 +528,10 @@ Page {
 
         EditorFileBrowser {
             id: file_browser
-            width: parent.width / 6
+            width: 175
             height: parent.height
 
-            visible: element_swipe_view.currentIndex == 0 ? false : true
+            visible: element_stack_view.currentItem == no_element_text ? false : true
 
             onAddFile: {
                 if (fileType == 2) {

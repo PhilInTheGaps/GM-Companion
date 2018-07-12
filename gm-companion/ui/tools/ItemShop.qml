@@ -1,10 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4 as Controls1_4
+import QtQuick.Controls 2.2
 
 import "./shop"
+import "../fontawesome"
 import gm.companion.shoptool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
@@ -82,14 +81,14 @@ Page {
         onShopDescriptionChanged: shop_description_text.text = shopDescription
 
         onItemsChanged: {
-            table_model.clear()
+            list_model.clear()
 
             for (var i = 0; i < item_names.length; i++) {
-                table_model.append({
-                                       item: item_names[i],
-                                       price: item_prices[i],
-                                       description: item_descriptions[i]
-                                   })
+                list_model.append({
+                                      item: item_names[i],
+                                      price: item_prices[i],
+                                      description: item_descriptions[i]
+                                  })
             }
         }
     }
@@ -106,20 +105,14 @@ Page {
 
             Column {
                 id: control_column
-                width: platform.isAndroid ? parent.width / 5 : 200
+                width: platform.isAndroid ? parent.width / 5 : 175
                 height: parent.height - parent.topPadding - parent.bottomPadding
                 spacing: 5
-
-                Text {
-                    id: projects_text
-                    text: qsTr("Projects")
-                    color: color_scheme.textColor
-                }
 
                 ComboBox {
                     id: project_combo_box
                     width: parent.width
-                    height: platform.isAndroid ? width / 6 : 40
+                    height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
 
                     model: shop_tool.projects
 
@@ -128,8 +121,17 @@ Page {
 
                 Button {
                     id: open_editor_button
-                    height: platform.isAndroid ? width / 6 : 40
+                    height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
                     width: parent.width
+
+                    Icon {
+                        x: 10
+                        icon: icons.fa_edit
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
                     text: qsTr("Open Editor")
                     visible: !platform.isAndroid
 
@@ -139,7 +141,7 @@ Page {
                 ScrollView {
                     id: type_scroll_view
                     width: parent.width
-                    height: parent.height - parent.spacing * 3 - projects_text.height
+                    height: parent.height - parent.spacing * 2
                             - project_combo_box.height - open_editor_button.height
 
                     clip: true
@@ -161,72 +163,175 @@ Page {
                 Row {
                     id: title_row
                     width: parent.width
+                    height: color_scheme.toolbarHeight
                     spacing: 5
 
                     Text {
                         id: shop_title_text
                         text: qsTr("No Shop Selected")
                         font.pointSize: 20
+                        font.bold: true
                         color: color_scheme.textColor
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     Column {
                         width: parent.width - shop_title_text.width - parent.spacing
+                        anchors.verticalCenter: parent.verticalCenter
 
                         Text {
                             id: shop_owner_text
                             text: qsTr("Owner: No Owner Available")
                             color: color_scheme.textColor
+                            font.pointSize: 10
                         }
 
                         Text {
                             id: shop_description_text
                             text: qsTr("Description: No Description Available")
                             color: color_scheme.textColor
+                            font.pointSize: 10
                         }
                     }
                 }
 
-                ListModel {
-                    id: table_model
+                Rectangle {
+                    id: table_header
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: color_scheme.toolbarHeight
+                    color: color_scheme.listHeaderBackgroundColor
+
+                    Row {
+                        anchors.fill: parent
+                        padding: 10
+                        spacing: 20
+
+                        Text {
+                            text: qsTr("Item")
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width / 5
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pointSize: 12
+                            color: color_scheme.listHeaderTextColor
+                        }
+
+                        Text {
+                            text: qsTr("Price")
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width / 5
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pointSize: 12
+                            color: color_scheme.listHeaderTextColor
+                        }
+
+                        Text {
+                            text: qsTr("Description")
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width * (3 / 5)
+                            horizontalAlignment: Text.AlignHCenter
+                            font.pointSize: 12
+                            color: color_scheme.listHeaderTextColor
+                        }
+                    }
                 }
 
-                Controls1_4.TableView {
-                    id: shop_table
+                ListView {
+                    id: list_view
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                    width: parent.width
-                    height: parent.height - parent.spacing - title_row.height
+                    height: parent.height - y
 
-                    alternatingRowColors: false
-                    model: table_model
+                    clip: true
+                    spacing: 0
 
-                    Controls1_4.TableViewColumn {
-                        id: item_column
-                        title: qsTr("Item")
-                        role: "item"
-                        movable: false
+                    ScrollBar.vertical: ScrollBar {
                     }
 
-                    Controls1_4.TableViewColumn {
-                        id: price_column
-                        title: qsTr("Price")
-                        role: "price"
-                        movable: false
+                    model: ListModel {
+                        id: list_model
                     }
 
-                    Controls1_4.TableViewColumn {
-                        id: description_column
-                        title: qsTr("Description")
-                        role: "description"
-                        movable: false
-                        width: shop_table.width - item_column.width - price_column.width - 5
+                    delegate: Rectangle {
+                        height: delegate_row.height
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        color: "transparent"
+
+                        Row {
+                            id: delegate_row
+                            padding: 5
+                            leftPadding: 10
+                            rightPadding: 10
+                            spacing: 20
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: color_scheme.toolbarHeight
+
+                            Text {
+                                text: item
+                                color: color_scheme.textColor
+                                width: (parent.width - parent.padding * 2 - parent.spacing * 2) / 5
+                                clip: true
+                                elide: Text.ElideRight
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pointSize: 12
+                                font.bold: true
+                            }
+
+                            Text {
+                                text: price
+                                color: color_scheme.textColor
+                                width: (parent.width - parent.padding * 2 - parent.spacing * 2) / 5
+                                clip: true
+                                elide: Text.ElideRight
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pointSize: 12
+                                horizontalAlignment: Text.AlignRight
+                            }
+
+                            Item {
+                                width: (parent.width - parent.padding * 2
+                                        - parent.spacing * 2) * (3 / 5)
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: item_desc_text.height
+
+                                Text {
+                                    id: item_desc_text
+                                    text: description
+                                    color: color_scheme.textColor
+
+                                    clip: true
+                                    elide: Text.ElideRight
+
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    font.pointSize: 12
+                                }
+
+                                ToolTip {
+                                    id: item_desc_tooltip
+                                    text: description
+                                }
+
+                                MouseArea {
+                                    hoverEnabled: true
+                                    id: item_desc_mouse_area
+                                    anchors.fill: parent
+
+                                    onEntered: item_desc_tooltip.visible = true
+                                    onExited: item_desc_tooltip.visible = false
+                                }
+                            }
+                        }
                     }
                 }
             }
 
             Column {
                 id: shop_sidebar
-                width: platform.isAndroid ? parent.width / 5 : 200
+                width: platform.isAndroid ? parent.width / 5 : 175
                 height: parent.height
 
                 ScrollView {

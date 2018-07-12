@@ -580,6 +580,12 @@ void AudioTool::onMetaDataChanged()
         #else  // ifdef __linux__
         getMetaData();
         #endif  // ifdef __linux__
+
+        if (l_album.isEmpty()) l_album = " - ";
+
+        if (l_artist.isEmpty()) l_artist = " - ";
+
+        if (l_songName.isEmpty()) l_songName = " - ";
     }
 
     emit metaDataChanged();

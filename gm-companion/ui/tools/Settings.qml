@@ -85,8 +85,8 @@ Page {
             height: color_scheme.toolbarHeight
 
             TabButton {
-                text: qsTr("General")
                 height: parent.height
+                text: qsTr("General")
             }
 
             TabButton {

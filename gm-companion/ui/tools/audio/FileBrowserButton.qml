@@ -3,6 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
 import QtQuick.Controls.Styles 1.4
 
+import "../../fontawesome"
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -26,15 +27,13 @@ Rectangle {
         padding: 5
         spacing: 5
 
-        Image {
-            id: arrow_image
-            source: "/icons/media/playBackwards_bright.png"
-            width: (parent.height - parent.padding * 2) * 0.8
-            height: width
-            sourceSize.width: width
-            sourceSize.height: height
+        Icon {
+            id: plus_icon
+            icon: icons.fa_plus
+            pointSize: 14
             anchors.verticalCenter: parent.verticalCenter
             visible: type !== 3
+            color: "white"
         }
 
         Image {
@@ -48,16 +47,16 @@ Rectangle {
             Component.onCompleted: {
                 switch (type) {
                 case 0:
-                    source = "/icons/media/music.png"
+                    source = "/icons/media/music_bright.png"
                     break
                 case 1:
-                    source = "/icons/media/sound.png"
+                    source = "/icons/media/sound_bright.png"
                     break
                 case 2:
                     source = "/icons/media/radio.png"
                     break
                 case 3:
-                    source = "/icons/menu/three_bars_dark.png"
+                    source = "/icons/menu/three_bars_white.png"
                     break
                 }
             }
@@ -67,7 +66,7 @@ Rectangle {
             text: element
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
             width: parent.width - parent.spacing - parent.padding * 3
-                   - image.width - arrow_image.width
+                   - image.width - plus_icon.width
             clip: true
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter

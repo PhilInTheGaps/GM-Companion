@@ -91,7 +91,7 @@ Page {
         Column {
             id: left_column
             height: parent.height - parent.topPadding * 2
-            width: platform.isAndroid ? parent.width / 5 : parent.width / 8
+            width: platform.isAndroid ? parent.width / 5 : 175
             spacing: 5
 
             Text {
@@ -193,7 +193,7 @@ Page {
 
         Column {
             id: right_column
-            width: platform.isAndroid ? parent.width / 5 : parent.width / 8
+            width: platform.isAndroid ? parent.width / 5 : 175
             height: parent.height - parent.topPadding * 2
             spacing: 5
 

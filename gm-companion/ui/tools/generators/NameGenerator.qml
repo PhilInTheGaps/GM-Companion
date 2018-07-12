@@ -76,7 +76,7 @@ Item {
 
         Column {
             id: left_column
-            width: platform.isAndroid ? parent.width / 5 : 150
+            width: platform.isAndroid ? parent.width / 5 : 175
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
@@ -168,6 +168,8 @@ Item {
                         id: male_names_text
                         text: qsTr("Male Names")
                         color: color_scheme.textColor
+                        font.pointSize: 12
+                        font.bold: true
                     }
 
                     TextArea {
@@ -191,6 +193,8 @@ Item {
                         id: female_names_text
                         text: qsTr("Female Names")
                         color: color_scheme.textColor
+                        font.pointSize: 12
+                        font.bold: true
                     }
 
                     TextArea {

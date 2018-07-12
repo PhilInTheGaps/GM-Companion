@@ -44,33 +44,42 @@ Page {
             color: color_scheme.textColor
         }
 
-        Button {
-            text: qsTr("Save Radio")
-            onClicked: saveRadio()
-        }
+        Row {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 5
 
-        Switch {
-            id: local_switch
-            text: qsTr("Local Mode")
-            checked: false
-
-            ToolTip.text: qsTr("In local mode, a local playlist is read instead of a web URL.")
-            ToolTip.visible: hovered
-            hoverEnabled: true
-
-            background: Rectangle {
-                color: "#e0e0e0"
+            Button {
+                id: save_button
+                text: qsTr("Save Radio")
+                onClicked: saveRadio()
             }
 
-            onCheckedChanged: {
-                changeLocal(checked)
+            Switch {
+                id: local_switch
+                text: qsTr("Local Mode")
+                checked: false
 
-                if (checked) {
-                    url_text.text = qsTr("Playlist")
-                    url_textfield.placeholderText = qsTr("Radio Playlist")
-                } else {
-                    url_text.text = qsTr("URL")
-                    url_textfield.placeholderText = qsTr("Radio URL")
+                width: parent.width - parent.spacing - save_button.width
+
+                ToolTip.text: qsTr("In local mode, a local playlist is read instead of a web URL.")
+                ToolTip.visible: hovered
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "#e0e0e0"
+                }
+
+                onCheckedChanged: {
+                    changeLocal(checked)
+
+                    if (checked) {
+                        url_text.text = qsTr("Playlist")
+                        url_textfield.placeholderText = qsTr("Radio Playlist")
+                    } else {
+                        url_text.text = qsTr("URL")
+                        url_textfield.placeholderText = qsTr("Radio URL")
+                    }
                 }
             }
         }

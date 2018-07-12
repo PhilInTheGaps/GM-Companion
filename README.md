@@ -14,7 +14,9 @@ A tool for the gamemaster of a tabletop RPG session.
 
 ## Credits
  
-Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
+Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)  
+[FontAwesome](https://fontawesome.com/)  
+[FontAwesome QML Implementation](https://github.com/qCring/QMLFontAwesome) by [qCring](https://github.com/qCring) under [BSD 3-Clause License](https://github.com/qCring/QMLFontAwesome/blob/master/LICENSE)  
 
 # Installation
 

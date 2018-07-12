@@ -32,7 +32,7 @@ Rectangle {
         }
     }
 
-    color: mouse_area.pressed ? "white" : colors.menuColor
+    color: mouse_area.pressed ? "white" : colors.primaryButtonColor
 
     MouseArea {
         anchors.fill: parent

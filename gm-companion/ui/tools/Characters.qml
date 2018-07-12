@@ -6,6 +6,7 @@ import gm.companion.charactertool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 import "./characters"
+import "../fontawesome"
 
 Page {
     id: characters
@@ -115,12 +116,27 @@ Page {
                 height: color_scheme.toolbarHeight
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 5
-                padding: 5
+                spacing: 20
+                padding: 10
 
                 Button {
                     id: active_button
-                    text: qsTr("Active")
+                    width: active_text.width
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Text {
+                        id: active_text
+                        text: qsTr("Active")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+
                     height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
                     onClicked: {
                         character_tool.setActive(true)
@@ -130,7 +146,22 @@ Page {
 
                 Button {
                     id: inactive_button
-                    text: qsTr("Inactive")
+                    width: inactive_text.width
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Text {
+                        id: inactive_text
+                        text: qsTr("Inctive")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+
                     height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
                     onClicked: {
                         showInactiveCharacters()
@@ -148,12 +179,18 @@ Page {
                 padding: 5
 
                 Button {
-                    Image {
-                        source: "/icons/menu/plus_sign_dark.png"
-                        width: parent.height / 1.5
-                        height: width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        x: 10
+                        icon: icons.fa_plus
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     height: parent.height - parent.padding * 2
@@ -172,12 +209,18 @@ Page {
                 }
 
                 Button {
-                    Image {
-                        source: "/icons/menu/vertical_bar_dark.png"
-                        width: parent.height / 1.5
-                        height: width
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        x: 10
+                        icon: icons.fa_minus
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     width: height
@@ -195,15 +238,18 @@ Page {
                 }
 
                 Button {
-                    Image {
-                        source: "/icons/menu/ring_arrow_dark.png"
-                        width: parent.height / 1.5
-                        height: width
+                    hoverEnabled: true
 
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
+                    background: Rectangle {
+                        color: "transparent"
+                    }
 
-                        mirror: true
+                    Icon {
+                        x: 10
+                        icon: icons.fa_undo
+                        pointSize: 25
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
 
                     width: height
@@ -230,7 +276,7 @@ Page {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
-                width: platform.isAndroid ? parent.width / 5 : 150
+                width: platform.isAndroid ? parent.width / 5 : 175
                 clip: true
 
                 Column {

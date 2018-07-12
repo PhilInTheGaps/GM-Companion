@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QDir>
-
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
@@ -75,6 +75,8 @@ int main(int argc, char *argv[])
 
     if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
+
+    QFontDatabase::addApplicationFont(":/fonts/fontawesome-webfont.ttf");
 
     // Create program files and remove old ones that are no longer required
     FileManager fileManager;

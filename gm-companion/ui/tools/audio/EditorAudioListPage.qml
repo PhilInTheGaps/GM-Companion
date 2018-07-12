@@ -2,8 +2,8 @@ import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4 as Controls1_4
 
+import "../../fontawesome"
 import gm.companion.colorscheme 1.0
 
 Page {
@@ -56,8 +56,7 @@ Page {
     }
 
     Column {
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         spacing: 5
 
         Text {
@@ -66,137 +65,155 @@ Page {
             color: color_scheme.textColor
         }
 
-        Text {
-            id: selected_file_text
-            text: qsTr("Selected File:")
-            color: color_scheme.textColor
-        }
-
-        Row {
-            id: selected_file_properties_row
-            width: parent.width
-            spacing: 5
-
-            Button {
-                width: height
-
-                Image {
-                    source: "/icons/menu/arrow_up_dark.png"
-                    width: parent.height * 0.8
-                    height: parent.height * 0.8
-                    sourceSize.width: width
-                    sourceSize.height: height
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                onClicked: {
-                    var row = table_view.currentRow
-
-                    if (row - 1 > -1) {
-                        moveFile(row, -1)
-
-                        var rowData = table_model.get(row).file
-
-                        table_model.remove(table_view.currentRow)
-                        table_model.insert(row - 1, {
-                                               file: rowData
-                                           })
-                        table_view.currentRow = row - 1
-                    }
-                }
-            }
-
-            Button {
-                width: height
-
-                Image {
-                    source: "/icons/menu/arrow_down_dark.png"
-                    width: parent.height * 0.8
-                    height: parent.height * 0.8
-                    sourceSize.width: width
-                    sourceSize.height: height
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                onClicked: {
-                    var row = table_view.currentRow
-
-                    if (table_view.rowCount > row + 1) {
-                        moveFile(row, 1)
-
-                        var rowData = table_model.get(row).file
-
-                        table_model.remove(table_view.currentRow)
-                        table_model.insert(row + 1, {
-                                               file: rowData
-                                           })
-                        table_view.currentRow = row + 1
-                    }
-                }
-            }
-
-            Button {
-                text: qsTr("Remove")
-
-                onClicked: {
-                    var row = table_view.currentRow
-                    removeFile(row)
-
-                    table_model.remove(table_view.currentRow)
-
-                    if (row > 0) {
-                        table_view.selectedRow = row - 1
-                    } else {
-                        table_view.currentRow = row
-                    }
-                }
-            }
-
-            Button {
-                text: qsTr("Save List")
-
-                onClicked: saveList(type)
-            }
-        }
-
         Row {
             width: parent.width
-            height: parent.height - parent.spacing * 3 - list_name_text.height
-                    - selected_file_properties_row.height - selected_file_text.height
-            spacing: 5
+            height: parent.height - parent.spacing - list_name_text.height
 
             Column {
                 width: parent.width - parent.spacing - properties_column.width
                 height: parent.height
                 spacing: 5
 
-                Controls1_4.TableView {
+                ListView {
                     id: table_view
-                    width: parent.width
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                     height: parent.height
 
                     property int selectedRow: -1
+
+                    clip: true
+                    spacing: 0
 
                     model: ListModel {
                         id: table_model
                     }
 
-                    Controls1_4.TableViewColumn {
-                        id: table_column
-                        title: qsTr("Files")
-                        role: "file"
-                        movable: false
-                        width: table_view.width - 2
+                    ScrollBar.vertical: ScrollBar {
                     }
 
-                    onRowCountChanged: {
-                        currentRow = selectedRow
-                        table_view.positionViewAtRow(currentRow,
-                                                     ListView.Bottom)
+                    delegate: Rectangle {
+                        height: delegate_row.height
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        color: "transparent"
+
+                        MouseArea {
+                            id: mouse_area
+                            anchors.fill: parent
+                            hoverEnabled: true
+
+                            z: 2
+                            onClicked: mouse.accepted = false
+                            onPressed: mouse.accepted = false
+                            onReleased: mouse.accepted = false
+                            onDoubleClicked: mouse.accepted = false
+                            onPositionChanged: mouse.accepted = false
+                            onPressAndHold: mouse.accepted = false
+                        }
+
+                        Row {
+                            id: delegate_row
+                            padding: 5
+                            leftPadding: 10
+                            rightPadding: 10
+                            spacing: 10
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: 35
+
+                            Text {
+                                text: file
+                                color: color_scheme.textColor
+                                width: parent.width - parent.leftPadding
+                                       - parent.rightPadding - x_button.width
+                                       - up_down_column.width - parent.spacing * 2
+                                clip: true
+                                elide: Text.ElideRight
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.pointSize: 10
+                                font.bold: true
+                            }
+
+                            Column {
+                                id: up_down_column
+                                height: parent.height - parent.topPadding - parent.bottomPadding
+                                width: height
+
+                                visible: mouse_area.containsMouse
+
+                                Button {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    height: parent.height / 2
+                                    hoverEnabled: true
+
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
+
+                                    Icon {
+                                        icon: icons.fa_angle_up
+                                        pointSize: 20
+                                        anchors.centerIn: parent
+                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                    }
+
+                                    onClicked: {
+                                        moveFile(index, -1)
+                                        table_model.move(index, index - 1, 1)
+                                    }
+                                }
+
+                                Button {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    height: parent.height / 2
+                                    hoverEnabled: true
+
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
+
+                                    Icon {
+                                        icon: icons.fa_angle_down
+                                        pointSize: 20
+                                        anchors.centerIn: parent
+                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                    }
+
+                                    onClicked: {
+                                        moveFile(index, 1)
+                                        table_model.move(index, index + 1, 1)
+                                    }
+                                }
+                            }
+
+                            Button {
+                                id: x_button
+                                height: parent.height - parent.topPadding - parent.bottomPadding
+                                width: height
+                                hoverEnabled: true
+
+                                visible: mouse_area.containsMouse
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                }
+
+                                Icon {
+                                    icon: icons.fa_times
+                                    pointSize: 20
+                                    anchors.centerIn: parent
+                                    color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                }
+
+                                onClicked: {
+                                    removeFile(index)
+                                    table_model.remove(index)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -206,6 +223,12 @@ Page {
                 width: parent.width / 4
                 height: parent.height
                 spacing: 5
+
+                Button {
+                    text: qsTr("Save List")
+                    onClicked: saveList(type)
+                    width: parent.width
+                }
 
                 Text {
                     text: qsTr("Playback Mode")

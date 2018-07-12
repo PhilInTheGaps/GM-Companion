@@ -1,7 +1,8 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
+
+import "../../fontawesome"
+import gm.companion.colorscheme 1.0
 
 Rectangle {
     property var element
@@ -10,14 +11,18 @@ Rectangle {
 
     objectName: element
     width: parent ? parent.width : 0
-    height: 30
+    height: 40
+
+    ColorScheme {
+        id: color_scheme
+    }
 
     Image {
         id: icon
         source: element_icon
-        width: parent.height * 0.8
-        height: width
-        x: (parent.height - height) / 2
+        width: height
+        height: parent.height - 10
+        x: 5
         anchors.verticalCenter: parent.verticalCenter
 
         sourceSize.width: width
@@ -27,31 +32,37 @@ Rectangle {
     Text {
         id: text
         text: element
-        color: mouse_area.pressed ? "white" : "black"
+        color: "black"
         x: icon.width + 10
         y: 5
-        width: parent.width - icon.width - 10
+        width: parent.width - icon.width - 10 - x_button.width
         clip: true
         elide: Text.ElideRight
+        font.pointSize: 12
 
         anchors.verticalCenter: parent.verticalCenter
     }
 
-    color: mouse_area.pressed ? "#262f31" : "lightgrey"
+    color: "transparent"
 
-    MouseArea {
-        anchors.fill: parent
-        id: mouse_area
+    Button {
+        x: parent.width - width - 5
+        id: x_button
+        hoverEnabled: true
+        height: parent.height - 10
+        width: height
+        anchors.verticalCenter: parent.verticalCenter
 
-        ToolTip {
-            id: tool_tip
-            text: qsTr("Stop Sound: ") + element
+        background: Rectangle {
+            color: "transparent"
         }
 
-        hoverEnabled: true
-
-        onEntered: tool_tip.visible = true
-        onExited: tool_tip.visible = false
+        Icon {
+            icon: icons.fa_times
+            pointSize: 17
+            anchors.centerIn: parent
+            color: parent.pressed ? "darkgrey" : parent.hovered ? "grey" : color_scheme.primaryButtonColor
+        }
 
         onClicked: parent.clicked(parent.element)
     }
