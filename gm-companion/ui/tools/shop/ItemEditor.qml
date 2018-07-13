@@ -1,10 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.itemeditor 1.0
+import "../../fontawesome"
 
 Page {
     id: editor
@@ -37,43 +36,45 @@ Page {
         }
     }
 
+    header: header_bar
+
+    Rectangle {
+        id: header_bar
+        color: color_scheme.toolbarColor
+        height: color_scheme.toolbarHeight
+
+        Button {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            hoverEnabled: true
+
+            background: Rectangle {
+                color: "transparent"
+            }
+
+            Icon {
+                icon: icons.fa_arrow_circle_left
+                pointSize: 25
+                anchors.centerIn: parent
+                color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+            }
+
+            width: height
+            onClicked: backToShopEditor()
+        }
+    }
+
     Row {
         width: parent.width
         height: parent.height
         spacing: 5
+        padding: 5
 
         Column {
             id: item_properties_column
-            width: (parent.width - parent.spacing) / 3
-            height: parent.height
+            width: (parent.width - parent.spacing * 2 - parent.padding * 2 - mid_spacer.width) / 3
+            height: parent.height - parent.padding * 2
             spacing: 5
-
-            Button {
-
-                ToolTip.text: qsTr("Back")
-                ToolTip.visible: hovered
-                hoverEnabled: true
-
-                Image {
-                    source: "/icons/media/playBackwards.png"
-                    width: parent.height * 0.9
-                    height: width
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    sourceSize.width: width
-                    sourceSize.height: height
-                }
-
-                width: height
-                onClicked: backToShopEditor()
-            }
-
-            Text {
-                text: qsTr("Add New Items")
-                color: color_scheme.textColor
-            }
 
             Row {
                 width: parent.width
@@ -117,9 +118,11 @@ Page {
                 }
             }
 
-            Text {
-                text: qsTr("Add New Categories")
-                color: color_scheme.textColor
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 1
+                color: color_scheme.dividerColor
             }
 
             Row {
@@ -142,6 +145,13 @@ Page {
                     width: parent.width - parent.spacing - add_category_button.width
                     placeholderText: qsTr("Category Name")
                 }
+            }
+
+            Rectangle {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 1
+                color: color_scheme.dividerColor
             }
 
             TextArea {
@@ -170,22 +180,83 @@ Items
             }
         }
 
+        Rectangle {
+            id: mid_spacer
+            height: parent.height - parent.padding * 2
+            width: 1
+            color: color_scheme.dividerColor
+        }
+
         Column {
-            width: parent.width - parent.spacing - item_properties_column.width
-            height: parent.height
+            id: table_column
+            width: parent.width - parent.spacing * 2 - parent.padding * 2
+                   - item_properties_column.width - mid_spacer.width
+            height: parent.height - parent.padding * 2
             spacing: 5
 
-            Button {
-                id: delete_item_button
-                text: qsTr("Delete Selected Item")
+            Rectangle {
+                id: item_header
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: color_scheme.toolbarHeight
+                color: color_scheme.listHeaderBackgroundColor
 
-                onClicked: editor_tool.deleteItem(item_table_view.currentRow)
+                Row {
+                    anchors.fill: parent
+                    padding: 5
+                    leftPadding: 10
+                    rightPadding: 10
+                    spacing: 10
+
+                    Text {
+                        text: qsTr("Item")
+                        color: color_scheme.listHeaderTextColor
+                        font.pointSize: 12
+                        font.bold: true
+                        width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: qsTr("Price")
+                        color: color_scheme.listHeaderTextColor
+                        font.pointSize: 12
+                        font.bold: true
+                        width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: qsTr("Category")
+                        color: color_scheme.listHeaderTextColor
+                        font.pointSize: 12
+                        font.bold: true
+                        width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: qsTr("Description")
+                        color: color_scheme.listHeaderTextColor
+                        font.pointSize: 12
+                        font.bold: true
+                        width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 2
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
             }
 
-            Controls1_4.TableView {
+            ListView {
                 id: item_table_view
-                width: parent.width
-                height: parent.height - parent.spacing - delete_item_button.height
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: parent.height
+
+                clip: true
+                spacing: 0
+
+                ScrollBar.vertical: ScrollBar {
+                }
 
                 model: ListModel {
                     id: table_model
@@ -193,37 +264,98 @@ Items
 
                 Component.onCompleted: editor_tool.updateItems()
 
-                Controls1_4.TableViewColumn {
-                    id: item_column
-                    title: qsTr("Item")
-                    role: "name"
-                    movable: false
-                    width: item_table_view.width / 6
-                }
+                delegate: Rectangle {
+                    height: delegate_row.height
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    color: "transparent"
 
-                Controls1_4.TableViewColumn {
-                    id: price_column
-                    title: qsTr("Price")
-                    role: "price"
-                    movable: false
-                    width: item_table_view.width / 6
-                }
+                    MouseArea {
+                        id: mouse_area
+                        anchors.fill: parent
+                        hoverEnabled: true
 
-                Controls1_4.TableViewColumn {
-                    id: category_column
-                    title: qsTr("Category")
-                    role: "category"
-                    movable: false
-                    width: item_table_view.width / 6
-                }
+                        z: 2
+                        onClicked: mouse.accepted = false
+                        onPressed: mouse.accepted = false
+                        onReleased: mouse.accepted = false
+                        onDoubleClicked: mouse.accepted = false
+                        onPositionChanged: mouse.accepted = false
+                        onPressAndHold: mouse.accepted = false
+                    }
 
-                Controls1_4.TableViewColumn {
-                    id: description_column
-                    title: qsTr("Description")
-                    role: "description"
-                    movable: false
-                    width: item_table_view.width - item_column.width
-                           - price_column.width - category_column.width - 2
+                    Row {
+                        id: delegate_row
+                        padding: 5
+                        leftPadding: 10
+                        rightPadding: 10
+                        spacing: 10
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: 30
+
+                        Text {
+                            text: name
+                            color: color_scheme.textColor
+                            width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                            clip: true
+                            elide: Text.ElideRight
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pointSize: 12
+                        }
+
+                        Text {
+                            text: price
+                            color: color_scheme.textColor
+                            width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                            clip: true
+                            elide: Text.ElideRight
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pointSize: 12
+                        }
+
+                        Text {
+                            text: category
+                            color: color_scheme.textColor
+                            width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
+                            clip: true
+                            elide: Text.ElideRight
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pointSize: 12
+                        }
+
+                        Text {
+                            text: description
+                            color: color_scheme.textColor
+                            width: (parent.width - x - delete_button.width
+                                    - parent.spacing - parent.rightPadding)
+                            clip: true
+                            elide: Text.ElideRight
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pointSize: 12
+                        }
+
+                        Button {
+                            id: delete_button
+                            height: parent.height - parent.topPadding * 2
+                            width: height
+                            hoverEnabled: true
+                            visible: mouse_area.containsMouse
+
+                            background: Rectangle {
+                                color: "transparent"
+                            }
+
+                            Icon {
+                                icon: icons.fa_times
+                                pointSize: 20
+                                anchors.centerIn: parent
+                                color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                            }
+
+                            onClicked: editor_tool.deleteItem(index)
+                        }
+                    }
                 }
             }
         }

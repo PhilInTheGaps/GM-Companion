@@ -554,6 +554,7 @@ Page {
                         Text {
                             text: qsTr("No sounds playing.")
                             visible: sound_info_column.height < 20
+                            color: color_scheme.textColor
                         }
 
                         Rectangle {

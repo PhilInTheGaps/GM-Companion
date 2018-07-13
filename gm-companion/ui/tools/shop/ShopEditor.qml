@@ -6,6 +6,7 @@ import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.shoptool 1.0
 import gm.companion.shopeditor 1.0
+import "../../fontawesome"
 
 Page {
     id: editor
@@ -80,9 +81,7 @@ Page {
             }
         }
 
-        function addListItem() {
-            var index = item_list_table.currentRow
-
+        function addListItem(index) {
             addItem(getListItem(index))
 
             fillItemTable()
@@ -93,10 +92,159 @@ Page {
         color: color_scheme.backgroundColor
     }
 
+    header: tool_bar
+
+    Rectangle {
+        id: tool_bar
+        color: color_scheme.toolbarColor
+        height: color_scheme.toolbarHeight
+
+        Row {
+            anchors.fill: parent
+            spacing: 5
+
+            Button {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    icon: icons.fa_arrow_circle_left
+                    pointSize: 25
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                }
+
+                width: height
+                onClicked: backToViewer()
+            }
+
+            Button {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: new_project_text.width + 10
+                hoverEnabled: true
+
+                Text {
+                    id: new_project_text
+                    text: qsTr("Create New Project")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    new_project_dialog.open()
+                }
+            }
+
+            Button {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: new_category_text.width + 10
+                hoverEnabled: true
+
+                Text {
+                    id: new_category_text
+                    text: qsTr("Create New Category")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    new_category_dialog.open()
+                }
+            }
+
+            Button {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: new_shop_text.width + 10
+                hoverEnabled: true
+
+                Text {
+                    id: new_shop_text
+                    text: qsTr("Create New Shop")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    new_shop_dialog.open()
+                }
+            }
+        }
+
+        Button {
+            id: open_item_editor_button
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: open_item_editor_row.width
+            hoverEnabled: true
+            x: parent.width - width - 5
+
+            background: Rectangle {
+                color: "transparent"
+            }
+
+            Row {
+                id: open_item_editor_row
+                leftPadding: 5
+                rightPadding: 5
+                spacing: 5
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                x: parent.width - width - 5
+
+                Icon {
+                    icon: icons.fa_edit
+                    pointSize: 12
+                    color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                    id: open_item_editor_text
+                    text: qsTr("Open Item Editor")
+                    color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+            }
+
+            onClicked: switchToItemEditor()
+        }
+    }
+
     Column {
         width: parent.width
         height: parent.height
         spacing: 5
+        padding: 5
 
         Dialog {
             id: new_project_dialog
@@ -170,65 +318,13 @@ Page {
         }
 
         Row {
-            id: tool_bar
-            width: parent.height
-            spacing: 5
-
-            Button {
-
-                ToolTip.text: qsTr("Back")
-                ToolTip.visible: hovered
-                hoverEnabled: true
-
-                Image {
-                    source: "/icons/media/playBackwards.png"
-                    width: parent.height * 0.9
-                    height: width
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    sourceSize.width: width
-                    sourceSize.height: height
-                }
-
-                width: height
-                onClicked: backToViewer()
-            }
-
-            Button {
-                text: qsTr("Create New Project")
-
-                onClicked: {
-                    new_project_dialog.open()
-                }
-            }
-
-            Button {
-                text: qsTr("Create New Category")
-
-                onClicked: {
-                    new_category_dialog.open()
-                }
-            }
-
-            Button {
-                text: qsTr("Create New Shop")
-
-                onClicked: {
-                    new_shop_dialog.open()
-                }
-            }
-        }
-
-        Row {
-            width: parent.width
-            height: parent.height - parent.spacing - tool_bar.height
+            width: parent.width - parent.padding * 2
+            height: parent.height - parent.padding * 2
             spacing: 5
 
             Column {
                 id: shop_properties_column
-                width: parent.width / 8
+                width: 175
                 height: parent.height
                 spacing: 5
 
@@ -311,13 +407,148 @@ Page {
                         height: parent.height
                         spacing: 5
 
+                        Rectangle {
+                            id: shop_action_row
+                            width: parent.width
+                            color: color_scheme.toolbarColor
+                            height: color_scheme.toolbarHeight
+
+                            Row {
+                                anchors.fill: parent
+                                spacing: 5
+                                leftPadding: 5
+                                rightPadding: 5
+
+                                Button {
+                                    width: save_shop_row.width
+                                    hoverEnabled: true
+
+                                    height: parent.height
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
+
+                                    Row {
+                                        id: save_shop_row
+                                        leftPadding: 5
+                                        rightPadding: 5
+                                        spacing: 5
+                                        anchors.centerIn: parent
+
+                                        Icon {
+                                            icon: icons.fa_save
+                                            pointSize: 12
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+
+                                        Text {
+                                            text: qsTr("Save Shop")
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            font.pointSize: 12
+                                            font.bold: true
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+                                    }
+
+                                    onClicked: editor_tool.saveShop()
+                                }
+
+                                DelayButton {
+                                    width: delete_shop_row.width
+                                    delay: 1200
+                                    ToolTip.text: qsTr("Hold to delete shop")
+                                    ToolTip.visible: hovered
+                                    hoverEnabled: true
+
+                                    height: parent.height
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
+
+                                    Row {
+                                        id: delete_shop_row
+                                        leftPadding: 5
+                                        rightPadding: 5
+                                        spacing: 5
+                                        anchors.centerIn: parent
+
+                                        Icon {
+                                            icon: icons.fa_trash
+                                            pointSize: 12
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+
+                                        Text {
+                                            text: qsTr("Delete Shop")
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            font.pointSize: 12
+                                            font.bold: true
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+                                    }
+
+                                    onActivated: {
+                                        editor_tool.deleteShop()
+
+                                        editor_tool.updateShopFlow()
+                                    }
+                                }
+
+                                DelayButton {
+                                    width: remove_all_items_row.width
+                                    delay: 1200
+
+                                    ToolTip.text: qsTr("Hold to remove all items")
+                                    ToolTip.visible: hovered
+                                    hoverEnabled: true
+
+                                    height: parent.height
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
+
+                                    Row {
+                                        id: remove_all_items_row
+                                        leftPadding: 5
+                                        rightPadding: 5
+                                        spacing: 5
+                                        anchors.centerIn: parent
+
+                                        Icon {
+                                            icon: icons.fa_times
+                                            pointSize: 12
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+
+                                        Text {
+                                            text: qsTr("Remove All Items")
+                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            font.pointSize: 12
+                                            font.bold: true
+                                            anchors.verticalCenter: parent.verticalCenter
+                                        }
+                                    }
+
+                                    onActivated: {
+                                        editor_tool.removeAllItems()
+                                        editor_tool.fillItemTable()
+                                    }
+                                }
+                            }
+                        }
+
                         Text {
                             id: shop_name_text
                             text: qsTr("No Shop Selected")
                             font.pointSize: 20
                             color: color_scheme.textColor
+                            verticalAlignment: Text.AlignVCenter
 
                             width: parent.width
+                            height: item_tab_bar.height
                             clip: true
                             elide: Text.ElideRight
                         }
@@ -347,113 +578,177 @@ Page {
                             }
                         }
 
-                        Row {
-                            id: shop_action_row
-                            width: parent.width
-                            spacing: 5
+                        Rectangle {
+                            id: item_header
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: color_scheme.toolbarHeight
+                            color: color_scheme.listHeaderBackgroundColor
 
-                            Button {
-                                width: (parent.width - parent.spacing * 3) / 4
-                                text: qsTr("Save Shop")
+                            Row {
+                                anchors.fill: parent
+                                padding: 5
+                                leftPadding: 10
+                                rightPadding: 10
+                                spacing: 10
 
-                                onClicked: editor_tool.saveShop()
-                            }
-
-                            DelayButton {
-                                width: (parent.width - parent.spacing * 3) / 4
-                                text: qsTr("Delete Shop")
-                                delay: 1200
-
-                                onActivated: {
-                                    editor_tool.deleteShop()
-
-                                    editor_tool.updateShopFlow()
+                                Text {
+                                    text: qsTr("Item")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 4
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
-                            }
 
-                            Button {
-                                width: (parent.width - parent.spacing * 3) / 4
-                                text: qsTr("Remove Selected Item")
-
-                                ToolTip.text: qsTr("Remove Selected Item")
-                                ToolTip.visible: hovered
-                                hoverEnabled: true
-
-                                onClicked: {
-                                    var tableIndex = shop_items_table.currentRow
-
-                                    if (tableIndex > -1) {
-                                        editor_tool.removeItem(tableIndex)
-
-                                        editor_tool.fillItemTable()
-
-                                        // Make sure next index is a legitimate index
-                                        if (tableIndex >= shop_items_table.rowCount - 1) {
-                                            tableIndex = shop_items_table.rowCount - 2
-                                        }
-
-                                        shop_items_table.currentRow = tableIndex
-                                    }
+                                Text {
+                                    text: qsTr("Price")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 5
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
-                            }
 
-                            DelayButton {
-                                width: (parent.width - parent.spacing * 3) / 4
-                                text: qsTr("Remove All Items")
-                                delay: 1200
+                                Text {
+                                    text: qsTr("Category")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 5
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
 
-                                ToolTip.text: qsTr("Remove All Items")
-                                ToolTip.visible: hovered
-                                hoverEnabled: true
-
-                                onActivated: {
-                                    editor_tool.removeAllItems()
-                                    editor_tool.fillItemTable()
+                                Text {
+                                    text: qsTr("Description")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: parent.width - parent.rightPadding - x
+                                    anchors.verticalCenter: parent.verticalCenter
                                 }
                             }
                         }
 
-                        Controls1_4.TableView {
+                        ListView {
                             id: shop_items_table
-                            width: parent.width
-                            height: parent.height - parent.spacing * 3 - shop_properties_row.height
-                                    - shop_name_text.height - shop_action_row.height
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+
+                            height: parent.height - parent.spacing * 4
+                                    - shop_properties_row.height - shop_name_text.height
+                                    - shop_action_row.height - item_header.height
+
+                            clip: true
+                            spacing: 0
+
+                            ScrollBar.vertical: ScrollBar {
+                            }
 
                             model: ListModel {
                                 id: table_model
                             }
 
-                            Controls1_4.TableViewColumn {
-                                id: item_column
-                                title: qsTr("Item")
-                                role: "name"
-                                movable: false
-                                width: shop_items_table.width / 6
-                            }
+                            delegate: Rectangle {
+                                height: delegate_row.height
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                color: "transparent"
 
-                            Controls1_4.TableViewColumn {
-                                id: price_column
-                                title: qsTr("Price")
-                                role: "price"
-                                movable: false
-                                width: shop_items_table.width / 6
-                            }
+                                MouseArea {
+                                    id: mouse_area
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    z: 2
 
-                            Controls1_4.TableViewColumn {
-                                id: category_column
-                                title: qsTr("Category")
-                                role: "category"
-                                movable: false
-                                width: shop_items_table.width / 6
-                            }
+                                    onClicked: mouse.accepted = false
+                                    onPressed: mouse.accepted = false
+                                    onReleased: mouse.accepted = false
+                                    onDoubleClicked: mouse.accepted = false
+                                    onPositionChanged: mouse.accepted = false
+                                    onPressAndHold: mouse.accepted = false
+                                }
 
-                            Controls1_4.TableViewColumn {
-                                id: description_column
-                                title: qsTr("Description")
-                                role: "description"
-                                movable: false
-                                width: shop_items_table.width - item_column.width
-                                       - price_column.width - category_column.width - 2
+                                Row {
+                                    id: delegate_row
+                                    padding: 5
+                                    leftPadding: 10
+                                    rightPadding: 10
+                                    spacing: 10
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    height: 30
+
+                                    Text {
+                                        text: name
+                                        color: mouse_area.pressed ? "grey" : color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 4
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: price
+                                        color: color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 5
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: category
+                                        color: color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 5
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: description
+                                        color: color_scheme.textColor
+                                        width: (parent.width - x - parent.rightPadding)
+                                               - x_button.width - parent.spacing
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Button {
+                                        id: x_button
+                                        height: parent.height - parent.topPadding * 2
+                                        width: height
+                                        visible: mouse_area.containsMouse
+
+                                        background: Rectangle {
+                                            color: "transparent"
+                                        }
+
+                                        Icon {
+                                            icon: icons.fa_times
+                                            pointSize: 12
+                                            anchors.centerIn: parent
+                                            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                        }
+
+                                        onClicked: {
+                                            editor_tool.removeItem(index)
+                                            table_model.remove(index)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -466,6 +761,11 @@ Page {
                         TabBar {
                             id: item_tab_bar
                             width: parent.width
+                            height: color_scheme.toolbarHeight
+
+                            background: Rectangle {
+                                color: color_scheme.toolbarColor
+                            }
 
                             spacing: 5
 
@@ -482,38 +782,94 @@ Page {
                                 model: 0
 
                                 TabButton {
-                                    text: editor_tool.getItemListTabNames(
-                                              )[index]
+                                    hoverEnabled: true
+                                    height: parent.height
+                                    anchors.verticalCenter: parent.verticalCenter
+
+                                    Text {
+                                        text: editor_tool.getItemListTabNames(
+                                                  )[index]
+                                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                        font.pointSize: 12
+                                        font.bold: true
+                                        anchors.centerIn: parent
+                                    }
+
+                                    background: Rectangle {
+                                        color: "transparent"
+                                    }
                                 }
                             }
                         }
 
-                        Row {
-                            id: item_header_row
-                            width: parent.width
-                            spacing: 5
+                        Rectangle {
+                            id: item_list_header
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            height: color_scheme.toolbarHeight
+                            color: color_scheme.listHeaderBackgroundColor
 
-                            Button {
-                                width: (parent.width - parent.spacing) / 2
-                                text: qsTr("Add Selected Item")
+                            Row {
+                                anchors.fill: parent
+                                padding: 5
+                                leftPadding: 10
+                                rightPadding: 10
+                                spacing: 10
 
-                                onClicked: editor_tool.addListItem()
-                            }
+                                Text {
+                                    text: qsTr("Item")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 4
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
 
-                            Button {
-                                id: item_editor_button
-                                width: (parent.width - parent.spacing) / 2
-                                text: qsTr("Open Item Editor")
+                                Text {
+                                    text: qsTr("Price")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 5
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
 
-                                onClicked: switchToItemEditor()
+                                Text {
+                                    text: qsTr("Category")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: (parent.width - parent.leftPadding
+                                            * 2 - parent.spacing * 2) / 5
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: qsTr("Description")
+                                    color: color_scheme.listHeaderTextColor
+                                    font.pointSize: 12
+                                    font.bold: true
+                                    width: parent.width - parent.rightPadding - x
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
                             }
                         }
 
-                        Controls1_4.TableView {
+                        ListView {
                             id: item_list_table
-                            width: parent.width
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+
                             height: parent.height - parent.spacing * 2
-                                    - item_tab_bar.height - item_header_row.height
+                                    - item_tab_bar.height - item_list_header.height
+
+                            clip: true
+                            spacing: 0
+
+                            ScrollBar.vertical: ScrollBar {
+                            }
 
                             model: ListModel {
                                 id: item_list_model
@@ -527,39 +883,88 @@ Page {
                                 editor_tool.fillItemListTable()
                             }
 
-                            onDoubleClicked: editor_tool.addListItem()
+                            delegate: Rectangle {
+                                height: delegate_row.height
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                color: "transparent"
 
-                            Controls1_4.TableViewColumn {
-                                id: list_item_column
-                                title: qsTr("Item")
-                                role: "name"
-                                movable: false
-                                width: item_list_table.width / 6
-                            }
+                                MouseArea {
+                                    id: mouse_area
+                                    anchors.fill: parent
+                                    hoverEnabled: true
 
-                            Controls1_4.TableViewColumn {
-                                id: list_price_column
-                                title: qsTr("Price")
-                                role: "price"
-                                movable: false
-                                width: item_list_table.width / 6
-                            }
+                                    z: 2
 
-                            Controls1_4.TableViewColumn {
-                                id: list_category_column
-                                title: qsTr("Category")
-                                role: "category"
-                                movable: false
-                                width: item_list_table.width / 6
-                            }
+                                    onClicked: {
+                                        editor_tool.addListItem(index)
+                                    }
+                                }
 
-                            Controls1_4.TableViewColumn {
-                                id: list_description_column
-                                title: qsTr("Description")
-                                role: "description"
-                                movable: false
-                                width: item_list_table.width - list_item_column.width
-                                       - list_price_column.width - list_category_column.width - 2
+                                Row {
+                                    id: delegate_row
+                                    padding: 5
+                                    leftPadding: 10
+                                    rightPadding: 10
+                                    spacing: 10
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    height: 30
+
+                                    Icon {
+                                        id: add_icon
+                                        icon: icons.fa_plus
+                                        color: mouse_area.pressed ? "grey" : "darkgreen"
+                                        pointSize: 15
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        visible: mouse_area.containsMouse
+                                    }
+
+                                    Text {
+                                        text: name
+                                        color: mouse_area.pressed ? "grey" : color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 4
+                                               - (add_icon.visible ? add_icon.width
+                                                                     + parent.spacing : 0)
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: price
+                                        color: color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 5
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: category
+                                        color: color_scheme.textColor
+                                        width: (parent.width - parent.leftPadding
+                                                * 2 - parent.spacing * 2) / 5
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+
+                                    Text {
+                                        text: description
+                                        color: color_scheme.textColor
+                                        width: (parent.width - x - parent.rightPadding)
+                                        clip: true
+                                        elide: Text.ElideRight
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        font.pointSize: 12
+                                    }
+                                }
                             }
                         }
                     }

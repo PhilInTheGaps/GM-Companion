@@ -454,6 +454,14 @@ Page {
                 onClicked: editor_tool.sortElements()
                 width: parent.width - parent.padding * 2
                 id: sort_button
+
+                Icon {
+                    icon: icons.fa_sort_alpha_down
+                    pointSize: 15
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    x: 10
+                }
             }
 
             ScrollView {

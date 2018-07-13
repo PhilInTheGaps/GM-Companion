@@ -93,15 +93,15 @@ Page {
         }
     }
 
-    SwipeView {
-        id: shop_swipe_view
+    StackView {
+        id: shop_stack_view
         anchors.fill: parent
-        padding: 5
-        spacing: 5
-        interactive: false
+        initialItem: shop_page
 
         Row {
+            id: shop_page
             spacing: 5
+            padding: 5
 
             Column {
                 id: control_column
@@ -135,7 +135,16 @@ Page {
                     text: qsTr("Open Editor")
                     visible: !platform.isAndroid
 
-                    onClicked: shop_swipe_view.setCurrentIndex(1)
+                    onClicked: {
+                        if (shop_stack_view.currentItem != shop_editor) {
+                            item_editor.visible = false
+                            shop_page.visible = false
+                            shop_editor.visible = true
+
+                            shop_stack_view.pop(null)
+                            shop_stack_view.push(shop_editor)
+                        }
+                    }
                 }
 
                 ScrollView {
@@ -349,18 +358,48 @@ Page {
                 }
             }
         }
+    }
 
-        ShopEditor {
-            id: shop_editor
+    ShopEditor {
+        id: shop_editor
+        visible: false
 
-            onBackToViewer: shop_swipe_view.setCurrentIndex(0)
-            onSwitchToItemEditor: shop_swipe_view.setCurrentIndex(2)
+        onBackToViewer: {
+            if (shop_stack_view.currentItem != shop_page) {
+                item_editor.visible = false
+                shop_page.visible = true
+                shop_editor.visible = false
+
+                shop_stack_view.pop(null)
+                shop_stack_view.push(shop_page)
+            }
         }
 
-        ItemEditor {
-            id: item_editor
+        onSwitchToItemEditor: {
+            if (shop_stack_view.currentItem != item_editor) {
+                item_editor.visible = true
+                shop_page.visible = false
+                shop_editor.visible = false
 
-            onBackToShopEditor: shop_swipe_view.setCurrentIndex(1)
+                shop_stack_view.pop(null)
+                shop_stack_view.push(item_editor)
+            }
+        }
+    }
+
+    ItemEditor {
+        id: item_editor
+        visible: false
+
+        onBackToShopEditor: {
+            if (shop_stack_view.currentItem != shop_editor) {
+                item_editor.visible = false
+                shop_page.visible = false
+                shop_editor.visible = true
+
+                shop_stack_view.pop(null)
+                shop_stack_view.push(shop_editor)
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 
 import gm.companion.audioeditorfilebrowser 1.0
 import gm.companion.colorscheme 1.0
+import "../../fontawesome"
 
 Column {
     id: file_browser
@@ -66,33 +67,15 @@ Column {
     function setType(type) {
         tool.setType(type)
         fileType = type
-
-        switch (type) {
-        case 0:
-            type_text.text = qsTr("Music")
-            break
-        case 1:
-            type_text.text = qsTr("Sounds")
-            break
-        case 2:
-            type_text.text = qsTr("Radios")
-            break
-        }
     }
 
     padding: 5
     spacing: 5
 
-    Text {
-        id: type_text
-        text: qsTr("Audio Type")
-        color: color_scheme.textColor
-    }
-
     ScrollView {
         id: scroll_view
         width: parent.width - parent.padding * 2
-        height: parent.height - parent.spacing - parent.padding * 2 - type_text.height
+        height: parent.height - parent.padding * 2
         clip: true
 
         Column {
@@ -110,13 +93,12 @@ Column {
                 width: parent.width
                 text: qsTr("Back")
 
-                Image {
-                    source: "/icons/media/playBackwards.png"
-                    height: parent.height * 0.8
-                    width: height
-                    sourceSize.height: height
-                    sourceSize.width: width
+                Icon {
+                    icon: icons.fa_chevron_left
+                    pointSize: 15
                     anchors.verticalCenter: parent.verticalCenter
+
+                    x: 10
                 }
 
                 onClicked: tool.folderBack()

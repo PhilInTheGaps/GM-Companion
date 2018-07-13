@@ -225,7 +225,22 @@ Page {
                 spacing: 5
 
                 Button {
-                    text: qsTr("Save List")
+
+                    Row {
+                        spacing: 5
+                        anchors.centerIn: parent
+
+                        Icon {
+                            icon: icons.fa_save
+                            pointSize: 15
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: qsTr("Save List")
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
                     onClicked: saveList(type)
                     width: parent.width
                 }
@@ -316,9 +331,23 @@ Page {
                 }
 
                 Button {
-                    text: qsTr("Remove Missing Files")
-                    width: parent.width
+                    Row {
+                        spacing: 5
+                        anchors.centerIn: parent
 
+                        Icon {
+                            icon: icons.fa_trash
+                            pointSize: 15
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: qsTr("Remove Missing Files")
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    width: parent.width
                     onClicked: editor_tool.removeMissingFiles()
                 }
 
