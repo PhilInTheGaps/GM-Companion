@@ -128,3 +128,21 @@ void SettingsTool::setPath(QString type, QString path)
         qDebug() << "Error: Invalid path setting" << type;
     }
 }
+
+void SettingsTool::setCheckForUpdates(bool check)
+{
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+
+    settings.beginGroup("Updates");
+    settings.setValue("checkForUpdates", check);
+
+    emit checkForUdatesChanged();
+}
+
+bool SettingsTool::getCheckForUpdates()
+{
+    QSettings settings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+
+    settings.beginGroup("Updates");
+    return settings.value("checkForUpdates", false).toBool();
+}

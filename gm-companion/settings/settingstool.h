@@ -24,6 +24,9 @@ public:
 
     Q_INVOKABLE void setAddonEnabled(QString addon, bool enabled);
 
+    Q_INVOKABLE void setCheckForUpdates(bool check);
+    Q_INVOKABLE bool getCheckForUpdates();
+
 signals:
     void audioPathChanged();
     void musicPathChanged();
@@ -37,6 +40,7 @@ signals:
 
     void currentLanguageIndexChanged();
     void uiStyleChanged();
+    void checkForUdatesChanged();
 
 private:
     SettingsManager *sManager;

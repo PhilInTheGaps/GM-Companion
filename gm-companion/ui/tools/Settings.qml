@@ -23,7 +23,9 @@ Page {
             addon_manager.updateAddonList()
 
             setCurrentVersion(1000)
-            checkForUpdates()
+
+            if (settings_tool.getCheckForUpdates())
+                checkForUpdates()
         }
 
         onUpdateAvailable: {
@@ -239,6 +241,15 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         visible: false
                         color: "green"
+                    }
+                }
+
+                CheckBox {
+                    text: qsTr("Automatically check for updates")
+                    checked: settings_tool.getCheckForUpdates()
+
+                    onCheckedChanged: {
+                        settings_tool.setCheckForUpdates(checked)
                     }
                 }
 
