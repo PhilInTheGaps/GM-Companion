@@ -153,7 +153,7 @@ Page {
                                     }
 
                                     Icon {
-                                        icon: icons.fa_angle_up
+                                        icon: icons.fas_angle_up
                                         pointSize: 20
                                         anchors.centerIn: parent
                                         color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
@@ -176,7 +176,7 @@ Page {
                                     }
 
                                     Icon {
-                                        icon: icons.fa_angle_down
+                                        icon: icons.fas_angle_down
                                         pointSize: 20
                                         anchors.centerIn: parent
                                         color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
@@ -202,7 +202,7 @@ Page {
                                 }
 
                                 Icon {
-                                    icon: icons.fa_times
+                                    icon: icons.fas_times
                                     pointSize: 20
                                     anchors.centerIn: parent
                                     color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
@@ -231,7 +231,7 @@ Page {
                         anchors.centerIn: parent
 
                         Icon {
-                            icon: icons.fa_save
+                            icon: icons.far_save
                             pointSize: 15
                             anchors.verticalCenter: parent.verticalCenter
                         }
@@ -336,7 +336,7 @@ Page {
                         anchors.centerIn: parent
 
                         Icon {
-                            icon: icons.fa_trash
+                            icon: icons.far_trash_alt
                             pointSize: 15
                             anchors.verticalCenter: parent.verticalCenter
                         }

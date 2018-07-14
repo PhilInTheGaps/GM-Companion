@@ -187,7 +187,7 @@ Page {
 
                     Icon {
                         x: 10
-                        icon: icons.fa_plus
+                        icon: icons.fas_plus
                         pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -217,7 +217,7 @@ Page {
 
                     Icon {
                         x: 10
-                        icon: icons.fa_minus
+                        icon: icons.fas_minus
                         pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -246,7 +246,7 @@ Page {
 
                     Icon {
                         x: 10
-                        icon: icons.fa_undo
+                        icon: icons.fas_undo
                         pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"

@@ -126,7 +126,7 @@ Page {
 
                     Icon {
                         x: 10
-                        icon: icons.fa_edit
+                        icon: icons.far_edit
                         pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         verticalAlignment: Text.AlignVCenter

@@ -113,7 +113,7 @@ Page {
                 }
 
                 Icon {
-                    icon: icons.fa_arrow_circle_left
+                    icon: icons.far_arrow_alt_circle_left
                     pointSize: 25
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -219,7 +219,7 @@ Page {
                 x: parent.width - width - 5
 
                 Icon {
-                    icon: icons.fa_edit
+                    icon: icons.far_edit
                     pointSize: 12
                     color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.verticalCenter: parent.verticalCenter
@@ -436,7 +436,7 @@ Page {
                                         anchors.centerIn: parent
 
                                         Icon {
-                                            icon: icons.fa_save
+                                            icon: icons.far_save
                                             pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
@@ -474,7 +474,7 @@ Page {
                                         anchors.centerIn: parent
 
                                         Icon {
-                                            icon: icons.fa_trash
+                                            icon: icons.far_trash_alt
                                             pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
@@ -517,7 +517,7 @@ Page {
                                         anchors.centerIn: parent
 
                                         Icon {
-                                            icon: icons.fa_times
+                                            icon: icons.fas_times
                                             pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
@@ -737,7 +737,7 @@ Page {
                                         }
 
                                         Icon {
-                                            icon: icons.fa_times
+                                            icon: icons.fas_times
                                             pointSize: 12
                                             anchors.centerIn: parent
                                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
@@ -884,13 +884,13 @@ Page {
                             }
 
                             delegate: Rectangle {
-                                height: delegate_row.height
+                                height: delegate_row2.height
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 color: "transparent"
 
                                 MouseArea {
-                                    id: mouse_area
+                                    id: mouse_area2
                                     anchors.fill: parent
                                     hoverEnabled: true
 
@@ -902,7 +902,7 @@ Page {
                                 }
 
                                 Row {
-                                    id: delegate_row
+                                    id: delegate_row2
                                     padding: 5
                                     leftPadding: 10
                                     rightPadding: 10
@@ -913,16 +913,16 @@ Page {
 
                                     Icon {
                                         id: add_icon
-                                        icon: icons.fa_plus
-                                        color: mouse_area.pressed ? "grey" : "darkgreen"
+                                        icon: icons.fas_plus
+                                        color: mouse_area2.pressed ? "grey" : "darkgreen"
                                         pointSize: 15
                                         anchors.verticalCenter: parent.verticalCenter
-                                        visible: mouse_area.containsMouse
+                                        visible: mouse_area2.containsMouse
                                     }
 
                                     Text {
                                         text: name
-                                        color: mouse_area.pressed ? "grey" : color_scheme.textColor
+                                        color: mouse_area2.pressed ? "grey" : color_scheme.textColor
                                         width: (parent.width - parent.leftPadding
                                                 * 2 - parent.spacing * 2) / 4
                                                - (add_icon.visible ? add_icon.width

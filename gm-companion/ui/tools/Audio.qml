@@ -215,7 +215,7 @@ Page {
                     }
 
                     Icon {
-                        icon: icons.fa_bars
+                        icon: icons.fas_bars
                         pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -237,7 +237,7 @@ Page {
                     }
 
                     Icon {
-                        icon: icons.fa_list_ol
+                        icon: icons.fas_list_ol
                         pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -350,7 +350,7 @@ Page {
                         }
 
                         Icon {
-                            icon: icons.fa_backward
+                            icon: icons.fas_backward
                             pointSize: 20
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -371,7 +371,7 @@ Page {
 
                         Icon {
                             id: audio_play_pause_icon
-                            icon: audio_tool.isPlaying ? icons.fa_pause_circle : icons.fa_play_circle
+                            icon: audio_tool.isPlaying ? icons.fas_pause_circle : icons.fas_play_circle
                             pointSize: 30
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -391,7 +391,7 @@ Page {
                         }
 
                         Icon {
-                            icon: icons.fa_forward
+                            icon: icons.fas_forward
                             pointSize: 20
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -428,7 +428,7 @@ Page {
 
                         Icon {
                             x: 10
-                            icon: icons.fa_edit
+                            icon: icons.far_edit
                             pointSize: 15
                             anchors.verticalCenter: parent.verticalCenter
                             verticalAlignment: Text.AlignVCenter

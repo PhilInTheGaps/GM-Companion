@@ -53,7 +53,7 @@ Page {
             }
 
             Icon {
-                icon: icons.fa_arrow_circle_left
+                icon: icons.far_arrow_alt_circle_left
                 pointSize: 25
                 anchors.centerIn: parent
                 color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -347,7 +347,7 @@ Items
                             }
 
                             Icon {
-                                icon: icons.fa_times
+                                icon: icons.fas_times
                                 pointSize: 20
                                 anchors.centerIn: parent
                                 color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)

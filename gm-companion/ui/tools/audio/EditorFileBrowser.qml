@@ -94,7 +94,7 @@ Column {
                 text: qsTr("Back")
 
                 Icon {
-                    icon: icons.fa_chevron_left
+                    icon: icons.fas_chevron_left
                     pointSize: 15
                     anchors.verticalCenter: parent.verticalCenter
 

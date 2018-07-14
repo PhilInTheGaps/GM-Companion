@@ -29,7 +29,7 @@ Rectangle {
 
         Icon {
             id: plus_icon
-            icon: icons.fa_plus
+            icon: icons.fas_plus
             pointSize: 14
             anchors.verticalCenter: parent.verticalCenter
             visible: type !== 3

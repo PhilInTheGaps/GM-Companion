@@ -79,7 +79,7 @@ Rectangle {
                 }
 
                 Icon {
-                    icon: icons.fa_angle_up
+                    icon: icons.fas_angle_up
                     pointSize: 18
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -101,7 +101,7 @@ Rectangle {
                 }
 
                 Icon {
-                    icon: icons.fa_angle_down
+                    icon: icons.fas_angle_down
                     pointSize: 18
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -131,7 +131,7 @@ Rectangle {
             }
 
             Icon {
-                icon: icons.fa_times
+                icon: icons.fas_times
                 pointSize: 18
                 anchors.centerIn: parent
                 color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"

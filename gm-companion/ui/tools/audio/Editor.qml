@@ -256,7 +256,7 @@ Page {
                 }
 
                 Icon {
-                    icon: icons.fa_arrow_circle_left
+                    icon: icons.far_arrow_alt_circle_left
                     pointSize: 25
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
@@ -450,17 +450,24 @@ Page {
             }
 
             Button {
-                text: qsTr("Sort Alphabetically")
                 onClicked: editor_tool.sortElements()
                 width: parent.width - parent.padding * 2
                 id: sort_button
 
-                Icon {
-                    icon: icons.fa_sort_alpha_down
-                    pointSize: 15
-                    anchors.verticalCenter: parent.verticalCenter
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 5
 
-                    x: 10
+                    Icon {
+                        icon: icons.fas_sort_alpha_down
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    Text {
+                        text: qsTr("Sort Alphabetically")
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
                 }
             }
 

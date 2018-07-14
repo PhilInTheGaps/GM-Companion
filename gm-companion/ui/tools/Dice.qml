@@ -115,7 +115,7 @@ Page {
                     anchors.centerIn: parent
 
                     Icon {
-                        icon: icons.fa_cog
+                        icon: icons.fas_cog
                         pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"

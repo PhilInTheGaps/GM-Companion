@@ -89,7 +89,7 @@ Page {
                     padding: 10
 
                     Icon {
-                        icon: icons.fa_chevron_right
+                        icon: icons.fas_chevron_right
                         pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
@@ -124,7 +124,7 @@ Page {
                     padding: 10
 
                     Icon {
-                        icon: icons.fa_plus
+                        icon: icons.fas_plus
                         pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
@@ -159,7 +159,7 @@ Page {
                     padding: 10
 
                     Icon {
-                        icon: icons.fa_sort
+                        icon: icons.fas_sort
                         pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
@@ -365,7 +365,7 @@ Page {
                         }
 
                         Icon {
-                            icon: icons.fa_times
+                            icon: icons.fas_times
                             pointSize: 25
                             color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (index == tool.currentIndex ? "white" : color_scheme.primaryButtonColor))
                             anchors.centerIn: parent
@@ -468,7 +468,7 @@ Page {
                             padding: 10
 
                             Icon {
-                                icon: icons.fa_undo
+                                icon: icons.fas_undo
                                 pointSize: 15
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
@@ -503,7 +503,7 @@ Page {
                             padding: 10
 
                             Icon {
-                                icon: icons.fa_times
+                                icon: icons.fas_times
                                 pointSize: 17
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"

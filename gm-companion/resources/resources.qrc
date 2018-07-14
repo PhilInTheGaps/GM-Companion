@@ -1,7 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>splash.jpg</file>
-        <file>fonts/fontawesome-webfont.ttf</file>
+        <file>fonts/fa-brands.ttf</file>
+        <file>fonts/fa-regular.ttf</file>
+        <file>fonts/fa-solid.ttf</file>
     </qresource>
     <qresource prefix="/names/Generic">
         <file alias="Elves/female.txt">names/Generic/Elves/female.txt</file>

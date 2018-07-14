@@ -45,7 +45,7 @@ SpinBox {
         }
 
         Icon {
-            icon: icons.fa_minus
+            icon: icons.fas_minus
             pointSize: 20
             color: box.from >= field_value ? "lightgrey" : parent.pressed ? "grey" : parent.hovered ? "lightgrey" : current_item ? "white" : color_scheme.primaryButtonColor
             anchors.centerIn: parent
@@ -69,7 +69,7 @@ SpinBox {
         }
 
         Icon {
-            icon: icons.fa_plus
+            icon: icons.fas_plus
             pointSize: 20
             color: box.to <= field_value ? "lightgrey" : parent.pressed ? "grey" : parent.hovered ? "lightgrey" : current_item ? "white" : color_scheme.primaryButtonColor
             anchors.centerIn: parent
