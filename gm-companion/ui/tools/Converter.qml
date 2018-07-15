@@ -1,42 +1,18 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
 
 import gm.companion.convertertool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
+import "../fontawesome"
+import "./converter"
 
 Page {
     id: converter
 
     ConverterTool {
         id: converter_tool
-
-        onLengthUnitsChanged: {
-            length_units_1.model = lengthUnits
-            length_units_2.model = lengthUnits
-        }
-
-        onAreaUnitsChanged: {
-            area_units_1.model = areaUnits
-            area_units_2.model = areaUnits
-        }
-
-        onVolumeUnitsChanged: {
-            volume_units_1.model = volumeUnits
-            volume_units_2.model = volumeUnits
-        }
-
-        onWeightUnitsChanged: {
-            weight_units_1.model = weightUnits
-            weight_units_2.model = weightUnits
-        }
-
-        onMoneyUnitsChanged: {
-            money_units_1.model = moneyUnits
-            money_units_2.model = moneyUnits
-        }
     }
 
     PlatformDetails {
@@ -51,396 +27,328 @@ Page {
         color: color_scheme.backgroundColor
     }
 
-    ScrollView {
-        width: parent.width
-        height: parent.height
-        clip: true
-        ScrollBar.horizontal.interactive: false
-        ScrollBar.vertical.interactive: true
+    Dialog {
+        id: add_unit_dialog
 
-        Column {
-            width: parent.width
-            spacing: 10
-            padding: 5
+        title: qsTr("Add Units")
 
-            Dialog {
-                id: add_unit_dialog
+        contentItem: Column {
+            spacing: 5
 
-                title: qsTr("Add Units")
+            ComboBox {
+                id: unit_type
+                model: ["Length", "Area", "Volume", "Weight", "Money"]
 
-                contentItem: Column {
-                    spacing: 5
-
-                    ComboBox {
-                        id: unit_type
-                        model: ["Length", "Area", "Volume", "Weight", "Money"]
-
-                        onCurrentTextChanged: refUnit_text.text = converter_tool.refUnitName(
-                                                  currentText)
-                    }
-
-                    Row {
-                        spacing: 5
-
-                        Grid {
-                            spacing: 5
-                            columns: 2
-
-                            Text {
-                                text: qsTr("Unit Name:")
-                                color: color_scheme.textColor
-                            }
-
-                            Text {
-                                id: refUnit_text
-                                text: "Meters"
-                                color: color_scheme.textColor
-                            }
-
-                            TextField {
-                                id: unit_name
-                            }
-
-                            TextField {
-                                id: unit_value
-                            }
-                        }
-                    }
-
-                    Button {
-                        text: qsTr("Add Unit")
-
-                        onClicked: converter_tool.addUnit(unit_name.text,
-                                                          unit_value.text,
-                                                          unit_type.currentText)
-                    }
-                }
-
-                standardButtons: Dialog.Close
+                onCurrentTextChanged: refUnit_text.text = converter_tool.refUnitName(
+                                          currentText)
             }
 
-            Column {
-                id: column
+            Row {
                 spacing: 5
 
-                Button {
-                    text: qsTr("Add Custom Units")
-                    height: platform.isAndroid ? width / 3 : 40
+                Grid {
+                    spacing: 5
+                    columns: 2
 
-                    onClicked: add_unit_dialog.open()
+                    Text {
+                        text: qsTr("Unit Name:")
+                        color: color_scheme.textColor
+                    }
+
+                    Text {
+                        id: refUnit_text
+                        text: "Meters"
+                        color: color_scheme.textColor
+                    }
+
+                    TextField {
+                        id: unit_name
+                    }
+
+                    TextField {
+                        id: unit_value
+                    }
                 }
+            }
+
+            Button {
+                text: qsTr("Add Unit")
+
+                onClicked: converter_tool.addUnit(unit_name.text,
+                                                  unit_value.text,
+                                                  unit_type.currentText)
+            }
+        }
+
+        standardButtons: Dialog.Close
+    }
+
+    header: header_rect
+
+    Rectangle {
+        id: header_rect
+        color: color_scheme.toolbarColor
+        height: color_scheme.toolbarHeight
+
+        Row {
+            anchors.fill: parent
+            padding: 5
+
+            Button {
+                hoverEnabled: true
+                width: add_units_row.width
+                height: parent.height - parent.padding * 2
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Row {
+                    id: add_units_row
+                    anchors.centerIn: parent
+                    spacing: 10
+                    padding: 10
+
+                    Icon {
+                        icon: icons.fas_plus
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    Text {
+                        id: add_units_text
+                        text: qsTr("Add Custom Units")
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                        font.bold: true
+                        font.pointSize: 12
+                    }
+                }
+
+                onClicked: add_unit_dialog.open()
+            }
+        }
+    }
+
+    Rectangle {
+        id: header_rect_2
+        height: color_scheme.toolbarHeight * 2
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: side_bar.left
+
+        color: color_scheme.backgroundColor
+
+        Row {
+            anchors.centerIn: parent
+            padding: 10
+            spacing: 10
+
+            TextField {
+                id: left_value_text_field
+                width: 150
+                height: header_rect_2.height * 2 / 3
+                selectByMouse: true
+                font.pointSize: 12
+
+                onTextEdited: {
+                    converter_tool.setUnit1ValueString(text)
+                }
+            }
+
+            Rectangle {
+                border.color: converter_tool.isUnit1Next ? "darkgreen" : color_scheme.primaryButtonColor
+                border.width: converter_tool.isUnit1Next ? 3 : 1
+                width: left_value_text_field.width
+                height: parent.height - parent.padding * 2
 
                 Text {
-                    text: qsTr("Length")
-                    color: color_scheme.textColor
+                    id: left_unit_text
+                    font.pointSize: 14
+                    text: converter_tool.unit1
+                    width: parent.width - 10
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.centerIn: parent
                 }
 
-                Row {
-                    id: length_row_1
-                    width: parent.width
-                    spacing: 5
+                MouseArea {
+                    anchors.fill: parent
 
-                    TextField {
-                        id: length_units_text_1
-                        selectByMouse: true
-                        height: platform.isAndroid ? width / 3 : 40
-
-                        onTextChanged: {
-                            length_output.text = converter_tool.convertLength(
-                                        length_units_1.currentText,
-                                        length_units_2.currentText, text)
-                        }
-                    }
-
-                    ComboBox {
-                        id: length_units_1
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.lengthUnits
-
-                        onCurrentTextChanged: {
-                            length_output.text = converter_tool.convertLength(
-                                        currentText,
-                                        length_units_2.currentText,
-                                        length_units_text_1.text)
-                        }
+                    onClicked: {
+                        converter_tool.setIsUnit1Next(true)
                     }
                 }
+            }
 
-                Row {
-                    id: length_row_2
-                    width: parent.width
-                    spacing: 5
+            Icon {
+                icon: icons.fas_arrow_right
+                pointSize: 15
+                color: color_scheme.textColor
+                anchors.verticalCenter: parent.verticalCenter
+            }
 
-                    TextField {
-                        id: length_output
-                        height: platform.isAndroid ? width / 3 : 40
-                        readOnly: true
-                        selectByMouse: true
-                    }
+            TextField {
+                id: right_value_text_field
+                width: 150
+                height: header_rect_2.height * 2 / 3
+                selectByMouse: true
+                font.pointSize: 12
+                readOnly: true
+                text: converter_tool.unit2ValueString
+            }
 
-                    ComboBox {
-                        id: length_units_2
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.lengthUnits
-
-                        onCurrentTextChanged: {
-                            length_output.text = converter_tool.convertLength(
-                                        length_units_1.currentText,
-                                        currentText, length_units_text_1.text)
-                        }
-                    }
-                }
+            Rectangle {
+                border.color: !converter_tool.isUnit1Next ? "darkgreen" : color_scheme.primaryButtonColor
+                border.width: !converter_tool.isUnit1Next ? 3 : 1
+                width: right_value_text_field.width
+                height: parent.height - parent.padding * 2
 
                 Text {
-                    text: qsTr("Area")
-                    color: color_scheme.textColor
+                    id: right_unit_text
+                    font.pointSize: 14
+                    text: converter_tool.unit2
+                    anchors.centerIn: parent
+                    width: parent.width - 10
+                    elide: Text.ElideRight
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
-                Row {
-                    id: area_row_1
-                    width: parent.width
-                    spacing: 5
+                MouseArea {
+                    anchors.fill: parent
 
-                    TextField {
-                        id: area_units_text_1
-                        height: platform.isAndroid ? width / 3 : 40
-                        selectByMouse: true
-
-                        onTextChanged: {
-                            area_output.text = converter_tool.convertArea(
-                                        area_units_1.currentText,
-                                        area_units_2.currentText, text)
-                        }
-                    }
-
-                    ComboBox {
-                        id: area_units_1
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-
-                        model: converter_tool.areaUnits
-                        onCurrentTextChanged: {
-                            area_output.text = converter_tool.convertArea(
-                                        currentText, area_units_2.currentText,
-                                        area_units_text_1.text)
-                        }
+                    onClicked: {
+                        converter_tool.setIsUnit1Next(false)
                     }
                 }
+            }
+        }
+    }
 
-                Row {
-                    id: area_row_2
-                    width: parent.width
-                    spacing: 5
+    ConverterUnitPage {
+        id: unit_page
+        anchors.top: header_rect_2.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: side_bar.left
 
-                    TextField {
-                        id: area_output
-                        height: platform.isAndroid ? width / 3 : 40
-                        readOnly: true
-                        selectByMouse: true
-                    }
+        categories: converter_tool.categories
+        units: converter_tool.units
 
-                    ComboBox {
-                        id: area_units_2
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
+        onSetCategory: converter_tool.setCurrentCategory(category)
+        onSetUnit: converter_tool.setUnit(unit)
+    }
 
-                        model: converter_tool.areaUnits
-                        onCurrentTextChanged: {
-                            area_output.text = converter_tool.convertArea(
-                                        area_units_1.currentText, currentText,
-                                        area_units_text_1.text)
-                        }
-                    }
+    Rectangle {
+        id: side_bar
+        color: color_scheme.toolbarColor
+        width: color_scheme.toolbarHeight
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+
+        Column {
+            anchors.fill: parent
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                Text {
-                    text: qsTr("Volume")
-                    color: color_scheme.textColor
+                Icon {
+                    icon: icons.fas_ruler
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
                 }
 
-                Row {
-                    id: volume_row_1
-                    width: parent.width
-                    spacing: 5
+                onClicked: converter_tool.setCurrentType(0)
+            }
 
-                    TextField {
-                        id: volume_units_text_1
-                        selectByMouse: true
-                        height: platform.isAndroid ? width / 3 : 40
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                        onTextChanged: {
-                            volume_output.text = converter_tool.convertVolume(
-                                        volume_units_1.currentText,
-                                        volume_units_2.currentText, text)
-                        }
-                    }
-
-                    ComboBox {
-                        id: volume_units_1
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.volumeUnits
-
-                        onCurrentTextChanged: {
-                            volume_output.text = converter_tool.convertVolume(
-                                        currentText,
-                                        volume_units_2.currentText,
-                                        volume_units_text_1.text)
-                        }
-                    }
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                Row {
-                    id: volume_row_2
-                    width: parent.width
-                    spacing: 5
-
-                    TextField {
-                        id: volume_output
-                        readOnly: true
-                        height: platform.isAndroid ? width / 3 : 40
-                        selectByMouse: true
-                    }
-
-                    ComboBox {
-                        id: volume_units_2
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.volumeUnits
-
-                        onCurrentTextChanged: {
-                            volume_output.text = converter_tool.convertVolume(
-                                        volume_units_1.currentText,
-                                        currentText, volume_units_text_1.text)
-                        }
-                    }
+                Icon {
+                    icon: icons.fas_ruler_combined
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
                 }
 
-                Text {
-                    text: qsTr("Weight")
-                    color: color_scheme.textColor
+                onClicked: converter_tool.setCurrentType(1)
+            }
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                Row {
-                    id: weight_row_1
-                    width: parent.width
-                    spacing: 5
-
-                    TextField {
-                        id: weight_units_text_1
-                        selectByMouse: true
-                        height: platform.isAndroid ? width / 3 : 40
-                        onTextChanged: {
-                            weight_output.text = converter_tool.convertWeight(
-                                        weight_units_1.currentText,
-                                        weight_units_2.currentText, text)
-                        }
-                    }
-
-                    ComboBox {
-                        id: weight_units_1
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.weightUnits
-
-                        onCurrentTextChanged: {
-                            weight_output.text = converter_tool.convertWeight(
-                                        currentText,
-                                        weight_units_2.currentText,
-                                        weight_units_text_1.text)
-                        }
-                    }
+                Icon {
+                    icon: icons.fas_prescription_bottle
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
                 }
 
-                Row {
-                    id: weight_row_2
-                    width: parent.width
-                    spacing: 5
+                onClicked: converter_tool.setCurrentType(2)
+            }
 
-                    TextField {
-                        id: weight_output
-                        readOnly: true
-                        height: platform.isAndroid ? width / 3 : 40
-                        selectByMouse: true
-                    }
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                    ComboBox {
-                        id: weight_units_2
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.weightUnits
-
-                        onCurrentTextChanged: {
-                            weight_output.text = converter_tool.convertWeight(
-                                        weight_units_1.currentText,
-                                        currentText, weight_units_text_1.text)
-                        }
-                    }
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                Text {
-                    text: qsTr("Money")
-                    color: color_scheme.textColor
+                Icon {
+                    icon: icons.fas_balance_scale
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
                 }
 
-                Row {
-                    id: money_row_1
-                    width: parent.width
-                    spacing: 5
+                onClicked: converter_tool.setCurrentType(3)
+            }
 
-                    TextField {
-                        id: money_units_text_1
-                        selectByMouse: true
-                        height: platform.isAndroid ? width / 3 : 40
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                        onTextChanged: {
-                            money_output.text = converter_tool.convertMoney(
-                                        money_units_1.currentText,
-                                        money_units_2.currentText, text)
-                        }
-                    }
-
-                    ComboBox {
-                        id: money_units_1
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.moneyUnits
-
-                        onCurrentTextChanged: {
-                            money_output.text = converter_tool.convertMoney(
-                                        currentText, money_units_2.currentText,
-                                        money_units_text_1.text)
-                        }
-                    }
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                Row {
-                    id: money_row_2
-                    width: parent.width
-                    spacing: 5
-
-                    TextField {
-                        id: money_output
-                        readOnly: true
-                        height: platform.isAndroid ? width / 3 : 40
-                        selectByMouse: true
-                    }
-
-                    ComboBox {
-                        id: money_units_2
-                        width: platform.isAndroid ? converter.width / 4 : 200
-                        height: platform.isAndroid ? width / 6 : 40
-                        model: converter_tool.moneyUnits
-
-                        onCurrentTextChanged: {
-                            money_output.text = converter_tool.convertMoney(
-                                        money_units_1.currentText, currentText,
-                                        money_units_text_1.text)
-                        }
-                    }
+                Icon {
+                    icon: icons.fas_dollar_sign
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
                 }
+
+                onClicked: converter_tool.setCurrentType(4)
             }
         }
     }

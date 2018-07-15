@@ -193,11 +193,11 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Image {
-                        source: "/icons/menu/dice.png"
-                        height: dice_text.height * 1.4
-                        width: height
+                    Icon {
+                        icon: icons.fas_dice
+                        pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
+                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
 
                     Text {

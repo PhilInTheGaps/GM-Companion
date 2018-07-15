@@ -21,8 +21,6 @@
         <file>tools/maps/MapListItem.qml</file>
         <file>tools/maps/MapListTab.qml</file>
         <file>menu/SideMenuButton.qml</file>
-        <file>tools/notes/ChapterButton.qml</file>
-        <file>tools/notes/PageButton.qml</file>
         <file>tools/settings/PathItem.qml</file>
         <file>tools/generators/NameGenerator.qml</file>
         <file>tools/generators/NameGeneratorButton.qml</file>
@@ -46,5 +44,6 @@
         <file>fontawesome/Icon.qml</file>
         <file>tools/combat_tracker/ListTextField.qml</file>
         <file>tools/combat_tracker/ListSpinBox.qml</file>
+        <file>tools/converter/ConverterUnitPage.qml</file>
     </qresource>
 </RCC>

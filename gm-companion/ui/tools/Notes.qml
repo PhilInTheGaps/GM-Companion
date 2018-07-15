@@ -1,11 +1,10 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
 
 import gm.companion.notestool 1.0
 import gm.companion.colorscheme 1.0
-import "./notes"
+import "../fontawesome"
 
 Page {
     id: notes_page
@@ -24,20 +23,7 @@ Page {
         }
 
         function loadChapters() {
-            chapter_column.children = []
-            page_column.children = []
-
-            var component = Qt.createComponent("./notes/ChapterButton.qml")
-
-            for (var i = 0; i < chapters.length; i++) {
-                var button = component.createObject(chapter_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        chapter: chapters[i],
-                                                        parent_width: chapter_column.width
-                                                    })
-                button.clicked.connect(setChapter)
-            }
+            header_combo_box.model = chapters
         }
 
         onChaptersChanged: {
@@ -50,24 +36,25 @@ Page {
             if (pages.length > 0) {
                 setCurrentPage(pages[0])
             } else {
-                text_edit.text = ""
+                text_edit.text = qsTr("No Pages added yet!")
             }
+
+            header_combo_box.currentIndex = getCurrentChapterIndex()
         }
 
         onPagesChanged: {
-            page_column.children = []
-
-            var component = Qt.createComponent("./notes/PageButton.qml")
+            tab_button_repeater.model = 0
 
             for (var i = 0; i < pages.length; i++) {
-                var button = component.createObject(page_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        page: pages[i],
-                                                        parent_width: page_column.width
-                                                    })
-                button.clicked.connect(setPage)
+                tab_button_repeater.model++
             }
+
+            if (pages.length === 0)
+                text_edit.readOnly = true
+            else
+                text_edit.readOnly = false
+
+            header_tab_bar.setCurrentIndex(0)
         }
 
         onCurrentPageChanged: {
@@ -83,181 +70,338 @@ Page {
         color: color_scheme.backgroundColor
     }
 
-    Row {
-        anchors.fill: parent
-        spacing: 5
-        padding: 5
+    header: header_rect
 
-        Column {
-            id: left_column
-            height: parent.height - parent.topPadding * 2
-            width: platform.isAndroid ? parent.width / 5 : 175
-            spacing: 5
+    Dialog {
+        id: add_dialog
+        x: add_button.x + add_button.width + 10
+        y: 10
+        title: qsTr("Add Page / Chapter")
 
-            Text {
-                id: font_size_text
-                text: qsTr("Font Size:")
-                color: color_scheme.textColor
-            }
+        contentItem: Column {
+            padding: 10
+            spacing: 10
 
-            SpinBox {
-                id: font_size_spin_box
-                value: 12
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                //                onValueChanged: text_edit.font.pointSize = value
+            ComboBox {
+                id: type_combo_box
+                model: [qsTr("Page"), qsTr("Chapter")]
             }
 
             TextField {
-                id: add_chapter_text_field
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                placeholderText: qsTr("Chapter")
+                id: title_field
+                placeholderText: qsTr("Title")
+                width: parent.width - parent.padding * 2
+                enabled: type_combo_box.currentIndex
+                         == 0 ? (category_combo_box.currentIndex > -1 ? true : false) : true
+            }
+
+            ComboBox {
+                id: category_combo_box
+                enabled: type_combo_box.currentIndex == 0
+                model: notes_tool.chapters
+            }
+        }
+
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onOpened: {
+            type_combo_box.currentIndex = 0
+            title_field.clear()
+        }
+
+        onAccepted: {
+            if (title_field.text != "") {
+                switch (type_combo_box.currentIndex) {
+                case 0:
+                    if (category_combo_box.currentIndex > -1)
+                        notes_tool.addPage(title_field.text)
+                    break
+                case 1:
+                    notes_tool.addChapter(title_field.text)
+                    break
+                default:
+                    console.error("Error: No Type Selected!")
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: header_rect
+        height: color_scheme.toolbarHeight
+        color: color_scheme.toolbarColor
+
+        Row {
+            anchors.fill: parent
+            spacing: 15
+
+            Row {
+                id: chapter_prop_row
+                spacing: 15
+                height: parent.height
+
+                ComboBox {
+                    id: header_combo_box
+                    height: parent.height
+                    width: 200
+                    model: notes_tool.chapters
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    contentItem: Text {
+                        text: parent.displayText
+                        verticalAlignment: Text.AlignVCenter
+                        leftPadding: 5
+                        rightPadding: parent.indicator.width - 5
+
+                        elide: Text.ElideRight
+                        color: color_scheme.toolbarTextColor
+                        font.pointSize: 11
+                    }
+
+                    indicator: Icon {
+                        icon: icons.fas_sort
+                        pointSize: 15
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: color_scheme.toolbarTextColor
+                        x: parent.width - width - 5
+                    }
+
+                    onCurrentTextChanged: {
+                        notes_tool.setChapter(currentText)
+                    }
+                }
+
+                DelayButton {
+                    id: delete_chapter_button
+                    height: parent.height - parent.padding * 2
+                    width: delete_chapter_icon.width
+                    hoverEnabled: true
+                    delay: 600
+
+                    ToolTip.text: qsTr("Hold to delete chapter")
+                    ToolTip.visible: hovered
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Icon {
+                        id: delete_chapter_icon
+                        icon: icons.fas_trash_alt
+                        pointSize: 15
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    onActivated: {
+                        if (header_combo_box.currentText != "")
+                            notes_tool.deleteChapter(
+                                        header_combo_box.currentText)
+
+                        progress = 0
+                    }
+                }
+            }
+
+            Rectangle {
+                id: header_spacer_1
+                width: 1
+                height: parent.height - parent.padding * 2
+                color: color_scheme.dividerColor
             }
 
             Button {
-                id: add_chapter_button
-                text: qsTr("Add Chapter")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
+                id: add_button
+                height: parent.height - parent.padding * 2
+                width: add_icon.width
+                hoverEnabled: true
 
-                onClicked: notes_tool.addChapter(add_chapter_text_field.text)
-            }
+                background: Rectangle {
+                    color: "transparent"
+                }
 
-            DelayButton {
-                id: delete_chapter_button
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                text: qsTr("Delete Chapter")
-                delay: 1200
-                onActivated: notes_tool.deleteChapter(notes_tool.currentChapter)
-            }
-
-            Frame {
-                id: chapters_text_frame
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                padding: 5
-
-                Text {
-                    text: qsTr("Chapters")
-                    color: color_scheme.textColor
+                Icon {
+                    id: add_icon
+                    icon: icons.fas_plus
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.verticalCenter: parent.verticalCenter
                 }
+
+                onClicked: {
+                    add_dialog.open()
+                }
             }
 
-            ScrollView {
-                width: parent.width
-                height: parent.height - font_size_text.height
-                        - font_size_spin_box.height - chapters_text_frame.height
-                        - delete_chapter_button.height - add_chapter_text_field.height
-                        - add_chapter_button.height - parent.spacing * 6
+            TabBar {
+                id: header_tab_bar
+                height: parent.height - parent.padding * 2
+                width: parent.width - x - parent.rightPadding
 
                 clip: true
 
-                Column {
-                    id: chapter_column
-                    width: parent.parent.width
+                background: Rectangle {
+                    color: "transparent"
+                }
 
-                    spacing: 5
+                Repeater {
+                    id: tab_button_repeater
+                    model: 0
+
+                    TabButton {
+                        Text {
+                            id: tab_button_text
+                            text: notes_tool.pages[index]
+                            anchors.centerIn: parent
+                            font.pointSize: 11
+
+                            color: parent.checked ? color_scheme.textColor : color_scheme.toolbarTextColor
+                        }
+
+                        height: header_tab_bar.height
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                        width: tab_button_text.width + 10
+
+                        background: Rectangle {
+                            color: parent.checked ? color_scheme.backgroundColor : color_scheme.toolbarColor
+                        }
+                    }
+                }
+
+                onCurrentIndexChanged: {
+                    notes_tool.setCurrentPage(notes_tool.pages[currentIndex])
                 }
             }
         }
+    }
 
-        Column {
-            id: text_edit_column
-            height: parent.height - parent.topPadding * 2
-            width: parent.width - left_column.width - parent.spacing * 2
-                   - parent.leftPadding * 2 - right_column.width
+    ScrollView {
+        anchors.left: parent.left
+        anchors.right: right_rect.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        clip: true
 
-            ScrollView {
-                width: parent.width
-                height: parent.height
-                clip: true
+        TextArea {
+            id: text_edit
+            selectByMouse: true
+            wrapMode: TextEdit.WordWrap
+            color: color_scheme.textColor
+            font.pointSize: 12
+            padding: 10
 
-                TextArea {
-                    id: text_edit
-                    width: parent.width
-
-                    selectByMouse: true
-                    wrapMode: TextEdit.WordWrap
-                    color: color_scheme.textColor
-                    font.pointSize: font_size_spin_box.value
-
-                    onTextChanged: notes_tool.saveCurrentPageContent(text)
-                }
-            }
+            onTextChanged: notes_tool.saveCurrentPageContent(text)
         }
+    }
+
+    Rectangle {
+        id: right_rect
+        width: color_scheme.toolbarHeight
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        color: color_scheme.toolbarColor
 
         Column {
             id: right_column
-            width: platform.isAndroid ? parent.width / 5 : 175
-            height: parent.height - parent.topPadding * 2
-            spacing: 5
-
-            TextField {
-                id: add_page_text_field
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                placeholderText: qsTr("Page")
-            }
-
-            Button {
-                id: add_page_button
-                text: qsTr("Add Page")
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-
-                onClicked: notes_tool.addPage(add_page_text_field.text)
-            }
+            anchors.fill: parent
+            spacing: 10
+            padding: 5
+            topPadding: 10
+            bottomPadding: 10
 
             DelayButton {
                 id: delete_page_button
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                text: qsTr("Delete Page")
+                width: parent.width - parent.padding * 2
+                height: delete_page_icon.height + 10
 
-                delay: 1200
+                hoverEnabled: true
+                delay: 600
+
+                ToolTip.text: qsTr("Hold to delete page")
+                ToolTip.visible: hovered
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    id: delete_page_icon
+                    icon: icons.fas_trash_alt
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
+                }
+
                 onActivated: notes_tool.deletePage(notes_tool.currentPage)
             }
 
             Button {
                 id: encrypt_button
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                text: qsTr("Encrypt Page")
+                width: parent.width - parent.padding * 2
+                height: delete_page_icon.height + 10
+                hoverEnabled: true
+
+                ToolTip.text: qsTr("Encrypt Page")
+                ToolTip.visible: hovered
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                Icon {
+                    id: encrypt_page_icon
+                    icon: icons.fas_eye
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
+                }
 
                 onClicked: text_edit.text = notes_tool.encrypt(text_edit.text)
             }
 
-            Frame {
-                id: pages_text_frame
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                padding: 5
+            Button {
+                width: parent.width - parent.padding * 2
+                height: delete_page_icon.height + 10
+                hoverEnabled: true
 
-                Text {
-                    text: qsTr("Pages")
-                    color: color_scheme.textColor
-                    anchors.verticalCenter: parent.verticalCenter
+                background: Rectangle {
+                    color: "transparent"
                 }
+
+                Icon {
+                    id: larger_font_icon
+                    icon: icons.fas_search_plus
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
+                }
+
+                onClicked: text_edit.font.pointSize++
             }
 
-            ScrollView {
-                width: parent.width
-                height: parent.height - pages_text_frame.height - add_page_button.height
-                        - add_page_text_field.height - parent.spacing * 5
-                        - delete_page_button.height - encrypt_button.height
+            Button {
+                width: parent.width - parent.padding * 2
+                height: delete_page_icon.height + 10
+                hoverEnabled: true
 
-                clip: true
-
-                Column {
-                    id: page_column
-                    width: right_column.width
-                    spacing: 5
+                background: Rectangle {
+                    color: "transparent"
                 }
+
+                Icon {
+                    id: smaller_font_icon
+                    icon: icons.fas_search_minus
+                    pointSize: 15
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    anchors.centerIn: parent
+                }
+
+                onClicked: text_edit.font.pointSize--
             }
         }
     }
