@@ -155,7 +155,7 @@ Page {
 
                     Text {
                         id: inactive_text
-                        text: qsTr("Inctive")
+                        text: qsTr("Inactive")
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         font.bold: true
