@@ -1,11 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
+
 import "./tools"
 import "./menu"
 import gm.companion.platforms 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.settingstool 1.0
+import gm.companion.updatemanager 1.0
 
 Window {
     id: window
@@ -51,6 +53,41 @@ Window {
                 text: qsTr("Loading ...")
                 color: "white"
             }
+        }
+    }
+
+    SettingsTool {
+        id: settings_tool
+    }
+
+    UpdateManager {
+        id: update_manager
+
+        Component.onCompleted: {
+            setCurrentVersion(1000)
+
+            if (settings_tool.getCheckForUpdates())
+                checkForUpdates()
+        }
+
+        onUpdateAvailable: {
+            update_dialog.open()
+        }
+    }
+
+    Dialog {
+        id: update_dialog
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        title: qsTr("Update Available!")
+
+        Button {
+            text: qsTr("Download")
+
+            onClicked: Qt.openUrlExternally(
+                           "https://github.com/PhilInTheGaps/GM-Companion/releases")
         }
     }
 

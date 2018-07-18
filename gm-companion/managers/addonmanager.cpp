@@ -26,12 +26,22 @@ void AddonManager::updateAddonList()
             {
                 QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
 
-                m_addonNames.append(settings.value("name", "UNKNOWN ADDON").toString());
-                m_addonDescriptions.append(settings.value("description", "").toString());
-                m_addonPathNames.append(addon);
-                m_addonEnabledList.append(sManager.getIsAddonEnabled(addon));
+                if (settings.value("addons_version", 1).toInt() == 2)
+                {
+                    m_addonNames.append(settings.value("name", tr("UNKNOWN ADDON")).toString());
+                    m_addonDescriptions.append(settings.value("description", "").toString());
+                    m_addonPathNames.append(addon);
+                    m_addonEnabledList.append(sManager.getIsAddonEnabled(addon));
+                }
+                else
+                {
+                    m_addonNames.append(settings.value("name", tr("UNKNOWN ADDON")).toString() + " - " + tr("OUTDATED"));
+                    m_addonDescriptions.append(settings.value("description", "").toString());
+                    m_addonPathNames.append(addon);
+                    m_addonEnabledList.append(false);
 
-                qDebug() << addon;
+                    sManager.setAddonEnabled(addon, false);
+                }
             }
         }
     }

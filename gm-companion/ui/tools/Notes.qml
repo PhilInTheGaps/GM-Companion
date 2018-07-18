@@ -54,7 +54,7 @@ Page {
             else
                 text_edit.readOnly = false
 
-            header_tab_bar.setCurrentIndex(0)
+            header_tab_bar.setCurrentIndex(getCurrentPageIndex())
         }
 
         onCurrentPageChanged: {
@@ -258,7 +258,8 @@ Page {
                             anchors.centerIn: parent
                             font.pointSize: 11
 
-                            color: parent.checked ? color_scheme.textColor : color_scheme.toolbarTextColor
+                            color: header_tab_bar.currentIndex
+                                   == index ? color_scheme.textColor : color_scheme.toolbarTextColor
                         }
 
                         height: header_tab_bar.height
@@ -267,7 +268,7 @@ Page {
                         width: tab_button_text.width + 10
 
                         background: Rectangle {
-                            color: parent.checked ? color_scheme.backgroundColor : color_scheme.toolbarColor
+                            color: header_tab_bar.currentIndex == index ? color_scheme.backgroundColor : color_scheme.toolbarColor
                         }
                     }
                 }

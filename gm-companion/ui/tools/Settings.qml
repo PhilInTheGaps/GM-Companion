@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.3
 
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
@@ -77,6 +77,21 @@ Page {
         color: color_scheme.backgroundColor
     }
 
+    FileDialog {
+        id: file_dialog
+
+        property var text_field
+
+        selectFolder: true
+
+        onAccepted: {
+            if (platform_details.isWindows)
+                text_field.text = fileUrl.toString().replace("file:///", "")
+            else
+                text_field.text = fileUrl.toString().replace("file://", "")
+        }
+    }
+
     Column {
         anchors.fill: parent
         bottomPadding: 5
@@ -88,22 +103,70 @@ Page {
 
             TabButton {
                 height: parent.height
-                text: qsTr("General")
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: qsTr("General")
+                    color: tab_bar.currentIndex == 0 ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: tab_bar.currentIndex == 0 ? "white" : color_scheme.toolbarColor
+                }
             }
 
             TabButton {
-                text: qsTr("Paths")
                 height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: qsTr("Paths")
+                    color: tab_bar.currentIndex == 1 ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: tab_bar.currentIndex == 1 ? "white" : color_scheme.toolbarColor
+                }
             }
 
             TabButton {
-                text: qsTr("RPG Addons")
                 height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: qsTr("RPG Addons")
+                    color: tab_bar.currentIndex == 2 ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: tab_bar.currentIndex == 2 ? "white" : color_scheme.toolbarColor
+                }
             }
 
             TabButton {
-                text: qsTr("Info")
                 height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: qsTr("Info")
+                    color: tab_bar.currentIndex == 3 ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: tab_bar.currentIndex == 3 ? "white" : color_scheme.toolbarColor
+                }
             }
         }
 

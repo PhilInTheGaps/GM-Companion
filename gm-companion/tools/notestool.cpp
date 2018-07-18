@@ -152,7 +152,7 @@ void NotesTool::addPage(QString page)
             updatePages();
             emit pagesChanged();
 
-            l_currentPage = page;
+            //            l_currentPage = page;
             emit currentPageChanged();
         }
     }
@@ -178,7 +178,9 @@ void NotesTool::deleteChapter(QString chapter)
         updateChapters();
         emit chaptersChanged();
 
-        l_currentChapter = l_chapters.at(0);
+        if (l_chapters.size() > 0) l_currentChapter = l_chapters.at(0);
+        else l_currentChapter = "";
+
         emit currentChapterChanged();
     }
 }
@@ -187,14 +189,15 @@ void NotesTool::deletePage(QString page)
 {
     QFile f(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter + "/" + page + ".txt");
 
-    if (!f.exists())
+    if (f.exists())
     {
         f.remove();
 
         updatePages();
         emit pagesChanged();
 
-        l_currentPage = l_pages.at(0);
+        if (l_pages.size() > 0) l_currentPage = l_pages.at(0);
+        else l_currentPage = "";
         emit currentPageChanged();
     }
 }

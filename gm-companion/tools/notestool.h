@@ -43,6 +43,7 @@ public:
     Q_INVOKABLE QString encrypt(QString content);
 
     Q_INVOKABLE int getCurrentChapterIndex() const { return l_chapters.indexOf(l_currentChapter); }
+    Q_INVOKABLE int getCurrentPageIndex() const { return l_pages.indexOf(l_currentPage); }
 
 signals:
     void chaptersChanged();
