@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 
 import gm.companion.audioeditor 1.0
 import gm.companion.colorscheme 1.0
+import gm.companion.settingstool 1.0
 import "../../fontawesome"
 
 Page {
@@ -26,7 +27,16 @@ Page {
             populateElementColumn()
         }
 
-        onListChanged: audio_list_page.populateTable(getCurrentFileNames())
+        onListChanged: {
+            audio_list_page.basePath = getCurrentBasePath()
+
+            audio_list_page.list_index = getListIndex()
+
+            audio_list_page.populateTable(getCurrentFileNames(),
+                                          getCurrentFilePaths(),
+                                          getCurrentFileMissing())
+        }
+
         onUrlChanged: radio_page.setURL(getURL())
 
         function selectList(name, type) {
@@ -130,6 +140,10 @@ Page {
                 button.moveDown.connect(moveElementDown)
             }
         }
+    }
+
+    SettingsTool {
+        id: settings_tool
     }
 
     background: Rectangle {

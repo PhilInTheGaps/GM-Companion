@@ -41,17 +41,21 @@ public:
     Q_INVOKABLE void setCurrentList(QString list, int type);
     Q_INVOKABLE QStringList getCurrentFileNames();
     Q_INVOKABLE QStringList getCurrentFilePaths();
+    Q_INVOKABLE QList<bool> getCurrentFileMissing() const { return l_currentFileMissing; }
+    Q_INVOKABLE QString getCurrentBasePath() const { return l_currentBasePath; }
     Q_INVOKABLE QString getCurrentListIcon();
     Q_INVOKABLE int getCurrentListMode();
     Q_INVOKABLE void addFile(QString name, QString path);
-    Q_INVOKABLE void addFiles(QStringList names, QStringList paths);
+    Q_INVOKABLE void addFiles(QStringList names, QStringList paths, QList<bool> missing);
     Q_INVOKABLE void removeFile(int index);
     Q_INVOKABLE void saveList(int type);
     Q_INVOKABLE void deleteList(QString list, int type);
     Q_INVOKABLE void moveFile(int index, int positions);
     Q_INVOKABLE void setCurrentListMode(int mode);
     Q_INVOKABLE void setCurrentListIcon(QString icon);
-    Q_INVOKABLE void removeMissingFiles(int type);
+    Q_INVOKABLE void removeMissingFiles();
+    Q_INVOKABLE void replaceMissingFolder(int index, QString folder, int type);
+    Q_INVOKABLE int getListIndex() const { return l_lastListIndex > l_currentFileNames.size() ? 0 : l_lastListIndex; }
 
     Q_INVOKABLE bool getLocal();
     Q_INVOKABLE QString getURL();
@@ -88,8 +92,11 @@ private:
     QString l_currentList;
     QStringList l_currentFileNames;
     QStringList l_currentFilePaths;
+    QList<bool> l_currentFileMissing;
     int l_currentListMode;
     QString l_currentListIcon;
+    QString l_currentBasePath;
+    int l_lastListIndex = 0;
 
     bool l_local;
     QString l_url;

@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QSettings>
+#include <QDir>
+#include <QFile>
 
 AudioEditor::AudioEditor(QObject *parent) : QObject(parent)
 {
@@ -334,6 +336,7 @@ void AudioEditor::setCurrentList(QString list, int type)
 {
     l_currentFileNames.clear();
     l_currentFilePaths.clear();
+    l_currentFileMissing.clear();
 
     if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (list != ""))
     {
@@ -343,21 +346,24 @@ void AudioEditor::setCurrentList(QString list, int type)
 
         switch (type) {
         case 0: // Music List
-            suffix        = "_music";
-            fileArrayName = "songs";
-            fileArrayFile = "song";
+            suffix            = "_music";
+            fileArrayName     = "songs";
+            fileArrayFile     = "song";
+            l_currentBasePath = sManager->getSetting(Setting::musicPath);
             break;
 
         case 1: // Sound List
-            suffix        = "_sounds";
-            fileArrayName = "sounds";
-            fileArrayFile = "sound";
+            suffix            = "_sounds";
+            fileArrayName     = "sounds";
+            fileArrayFile     = "sound";
+            l_currentBasePath = sManager->getSetting(Setting::soundPath);
             break;
 
         case 2: // Radio
-            suffix        = "_radio";
-            fileArrayName = "radios";
-            fileArrayFile = "radio";
+            suffix            = "_radio";
+            fileArrayName     = "radios";
+            fileArrayFile     = "radio";
+            l_currentBasePath = sManager->getSetting(Setting::radioPath);
             break;
         }
 
@@ -376,6 +382,7 @@ void AudioEditor::setCurrentList(QString list, int type)
         l_local = settings.value("local", false).toBool();
         l_url   = settings.value("url", "").toString();
 
+        // Add every list element
         int count = settings.beginReadArray(fileArrayName);
 
         for (int i = 0; i < count; i++)
@@ -384,6 +391,7 @@ void AudioEditor::setCurrentList(QString list, int type)
 
             l_currentFileNames.append(settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(0));
             l_currentFilePaths.append(settings.value(fileArrayFile, "UNKNOWN PATH").toStringList().at(1));
+            l_currentFileMissing.append(!QFile(l_currentBasePath + "/" + settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(1)).exists());
         }
 
         settings.endArray();
@@ -399,17 +407,19 @@ void AudioEditor::addFile(QString name, QString path)
     {
         l_currentFileNames.append(name);
         l_currentFilePaths.append(path);
+        l_currentFileMissing.append(false);
 
         emit listChanged();
     }
 }
 
-void AudioEditor::addFiles(QStringList names, QStringList paths)
+void AudioEditor::addFiles(QStringList names, QStringList paths, QList<bool>missing)
 {
     if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (l_currentList != ""))
     {
         l_currentFileNames.append(names);
         l_currentFilePaths.append(paths);
+        l_currentFileMissing.append(missing);
 
         emit listChanged();
     }
@@ -421,6 +431,7 @@ void AudioEditor::removeFile(int index)
     {
         l_currentFileNames.removeAt(index);
         l_currentFilePaths.removeAt(index);
+        l_currentFileMissing.removeAt(index);
 
         // Because of Performance reasons, don't emit listChanged()
         // The table row is removed through qml
@@ -519,6 +530,7 @@ void AudioEditor::deleteList(QString list, int type)
 
     l_currentFileNames.clear();
     l_currentFilePaths.clear();
+    l_currentFileMissing.clear();
     l_currentList.clear();
 
     updateElementList();
@@ -548,34 +560,24 @@ void AudioEditor::moveFile(int index, int positions)
 
     l_currentFilePaths.removeAt(index);
     l_currentFilePaths.insert(index + positions, path);
+
+    bool missing = l_currentFileMissing.at(index);
+
+    l_currentFileMissing.removeAt(index);
+    l_currentFileMissing.insert(index + positions, missing);
 }
 
-void AudioEditor::removeMissingFiles(int type)
+void AudioEditor::removeMissingFiles()
 {
-    QString basePath;
-
-    switch (type) {
-    case 0: // Music List
-        basePath = sManager->getSetting(Setting::musicPath);
-        break;
-
-    case 1: // Sound List
-        basePath = sManager->getSetting(Setting::soundPath);
-        break;
-
-    case 2: // Radio
-        basePath = sManager->getSetting(Setting::radioPath);
-        break;
-    }
-
     bool removedFiles = false;
 
     for (int i = 0; i < l_currentFilePaths.size(); i++)
     {
-        if (!QFile(basePath + "/" + l_currentFilePaths.at(i)).exists())
+        if (l_currentFileMissing[i])
         {
             l_currentFileNames.removeAt(i);
             l_currentFilePaths.removeAt(i);
+            l_currentFileMissing.removeAt(i);
             i--;
             removedFiles = true;
         }
@@ -594,6 +596,22 @@ void AudioEditor::setURL(QString url)
 void AudioEditor::setLocal(bool local)
 {
     l_local = local;
+}
+
+void AudioEditor::replaceMissingFolder(int index, QString folder, int type)
+{
+    QString path = folder.replace("file://", "");
+
+    path  = path.replace(l_currentBasePath, "");
+    path += "/" + l_currentFileNames[index];
+
+    l_currentFilePaths[index] = path;
+
+    l_currentFileMissing[index] = !QFile(l_currentBasePath + path).exists();
+
+    saveList(type);
+    l_lastListIndex = index;
+    emit listChanged();
 }
 
 QStringList AudioEditor::getCurrentFileNames()

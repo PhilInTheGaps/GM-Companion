@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.2
 
 import "../../fontawesome"
 import gm.companion.colorscheme 1.0
@@ -16,20 +16,26 @@ Page {
     signal changeIcon(string path)
 
     property string resourcesPath
+    property string basePath
     property int type
+    property int list_index: 0
 
     function setName(name) {
         list_name_text.text = name
     }
 
-    function populateTable(files) {
+    function populateTable(files, paths, missing) {
         table_model.clear()
 
         for (var i = 0; i < files.length; i++) {
             table_model.append({
-                                   file: files[i]
+                                   file: files[i],
+                                   path: paths[i],
+                                   missing: missing[i]
                                })
         }
+
+        table_view.positionViewAtIndex(list_index, ListView.Center)
     }
 
     function setPlaybackMode(mode) {
@@ -55,6 +61,20 @@ Page {
         color: color_scheme.backgroundColor
     }
 
+    FileDialog {
+        id: file_dialog
+        title: qsTr("Set Folder")
+        property int index: 0
+
+        folder: "file://" + basePath
+
+        selectFolder: true
+
+        onAccepted: {
+            editor_tool.replaceMissingFolder(index, fileUrl.toString(), type)
+        }
+    }
+
     Column {
         anchors.fill: parent
         spacing: 5
@@ -68,6 +88,7 @@ Page {
         Row {
             width: parent.width
             height: parent.height - parent.spacing - list_name_text.height
+            spacing: 10
 
             Column {
                 width: parent.width - parent.spacing - properties_column.width
@@ -96,7 +117,10 @@ Page {
                         height: delegate_row.height
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        color: "transparent"
+                        color: missing ? "darkred" : "transparent"
+
+                        ToolTip.text: path
+                        ToolTip.visible: mouse_area.containsMouse
 
                         MouseArea {
                             id: mouse_area
@@ -123,16 +147,41 @@ Page {
                             height: 35
 
                             Text {
-                                text: file
-                                color: color_scheme.textColor
-                                width: parent.width - parent.leftPadding
-                                       - parent.rightPadding - x_button.width
-                                       - up_down_column.width - parent.spacing * 2
+                                text: missing ? file + " - " + qsTr(
+                                                    "MISSING!") : file
+                                color: missing ? "white" : color_scheme.textColor
+                                width: parent.width - parent.leftPadding - parent.rightPadding
+                                       - x_button.width - up_down_column.width
+                                       - set_folder_button.width - parent.spacing * 3
                                 clip: true
                                 elide: Text.ElideRight
                                 anchors.verticalCenter: parent.verticalCenter
                                 font.pointSize: 10
                                 font.bold: true
+                            }
+
+                            Button {
+                                id: set_folder_button
+                                visible: missing && mouse_area.containsMouse
+                                height: parent.height - parent.topPadding - parent.bottomPadding
+                                width: height
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                }
+
+                                Icon {
+                                    id: set_folder_icon
+                                    icon: icons.fas_folder_open
+                                    color: "white"
+                                    pointSize: 20
+                                    anchors.centerIn: parent
+                                }
+
+                                onClicked: {
+                                    file_dialog.index = index
+                                    file_dialog.open()
+                                }
                             }
 
                             Column {
@@ -156,7 +205,7 @@ Page {
                                         icon: icons.fas_angle_up
                                         pointSize: 20
                                         anchors.centerIn: parent
-                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                     }
 
                                     onClicked: {
@@ -179,7 +228,7 @@ Page {
                                         icon: icons.fas_angle_down
                                         pointSize: 20
                                         anchors.centerIn: parent
-                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                     }
 
                                     onClicked: {
@@ -205,7 +254,7 @@ Page {
                                     icon: icons.fas_times
                                     pointSize: 20
                                     anchors.centerIn: parent
-                                    color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
+                                    color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                 }
 
                                 onClicked: {
