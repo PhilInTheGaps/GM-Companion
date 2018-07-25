@@ -27,10 +27,10 @@ Page {
 
             for (var i = 0; i < getItemNames().length; i++) {
                 table_model.append({
-                                       name: getItemNames()[i],
-                                       price: getItemPrices()[i],
-                                       category: getItemCategories()[i],
-                                       description: getItemDescriptions()[i]
+                                       "name": getItemNames()[i],
+                                       "price": getItemPrices()[i],
+                                       "category": getItemCategories()[i],
+                                       "description": getItemDescriptions()[i]
                                    })
             }
         }
@@ -84,12 +84,14 @@ Page {
                     id: item_name_field
                     width: (parent.width - parent.spacing * 2) / 3
                     placeholderText: qsTr("Item Name")
+                    selectByMouse: true
                 }
 
                 TextField {
                     id: item_price_field
                     width: (parent.width - parent.spacing * 2) / 3
                     placeholderText: qsTr("Price")
+                    selectByMouse: true
                 }
 
                 ComboBox {
@@ -102,6 +104,7 @@ Page {
                 id: item_description_field
                 width: parent.width
                 placeholderText: qsTr("Item Description")
+                selectByMouse: true
             }
 
             Button {
@@ -144,6 +147,7 @@ Page {
                     id: category_name_field
                     width: parent.width - parent.spacing - add_category_button.width
                     placeholderText: qsTr("Category Name")
+                    selectByMouse: true
                 }
             }
 

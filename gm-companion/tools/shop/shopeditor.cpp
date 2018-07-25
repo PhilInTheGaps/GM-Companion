@@ -115,11 +115,30 @@ void ShopEditor::saveShop()
 
         int shopIndex = l_shopList.indexOf(l_shopName);
 
+        // Save Shop Info
         settings.beginWriteArray(l_category + "_shops");
         settings.setArrayIndex(shopIndex);
 
         QStringList shop = { l_shopName, l_shopOwner, l_shopDescription };
         settings.setValue("shop", shop);
+
+        settings.endArray();
+
+        // Save Items
+        settings.beginWriteArray(l_category + "_" + l_shopName + "_items");
+
+        for (int i = 0; i < l_itemNames.size(); i++)
+        {
+            settings.setArrayIndex(i);
+
+            QStringList item;
+            item.append(l_itemNames[i]);
+            item.append(l_itemPrices[i]);
+            item.append(l_itemCategories[i]);
+            item.append(l_itemDescriptions[i]);
+
+            settings.setValue("item", item);
+        }
 
         settings.endArray();
     }
