@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui multimedia multimediawidgets network quick qml
+QT       += core multimedia network quick qml networkauth
 
 win32:QT += winextras
 
@@ -49,7 +49,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/settings/settingsmanager.cpp \
     gm-companion/platformdetails.cpp \
     gm-companion/managers/addonmanager.cpp \
-    gm-companion/managers/filemanager.cpp
+    gm-companion/managers/filemanager.cpp \
+    gm-companion/tools/audio/spotify.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -100,7 +101,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/settings/settingsmanager.h \
     gm-companion/platformdetails.h \
     gm-companion/managers/addonmanager.h \
-    gm-companion/managers/filemanager.h
+    gm-companion/managers/filemanager.h \
+    gm-companion/tools/audio/spotify.h
 
 
 DISTFILES += \

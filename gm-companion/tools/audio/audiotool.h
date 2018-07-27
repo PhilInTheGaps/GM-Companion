@@ -1,9 +1,7 @@
 #ifndef AUDIOTOOL_H
 #define AUDIOTOOL_H
 
-//#include <QWidget>
 #include <QStringList>
-#include <QFrame>
 #include <QSettings>
 #include <QSignalMapper>
 #include <QMediaPlayer>
@@ -12,6 +10,7 @@
 #include <QList>
 
 #include "gm-companion/settings/settingsmanager.h"
+#include "spotify.h"
 
 struct Song {
     QString title;
@@ -28,6 +27,7 @@ class AudioTool : public QObject
     Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
     Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
     Q_PROPERTY(int currentSongIndex READ currentSongIndex NOTIFY currentSongChanged)
+    Q_PROPERTY(QStringList elementIcons READ elementIcons NOTIFY elementIconsChanged)
 
     Q_PROPERTY(QString currentProject READ currentProject WRITE setCurrentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(QString currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
@@ -57,6 +57,7 @@ public:
     Q_INVOKABLE void findElements();
     QStringList elements();
     QString currentElement();
+    QStringList elementIcons() const { return m_elementIcons; }
     Q_INVOKABLE QString elementIcon(QString element);
     Q_INVOKABLE void setCurrentElement(QString element);
     Q_INVOKABLE int elementType(int index);
@@ -73,6 +74,10 @@ public:
     Q_INVOKABLE QString getSongName();
     Q_INVOKABLE QString getArtist();
     Q_INVOKABLE QString getAlbum();
+
+    // Spotify
+    Q_INVOKABLE void playSpotify(QString element);
+    Q_INVOKABLE void grantSpotify() { m_spotify.grant(); }
 
     // Sound
     Q_INVOKABLE void playSound(QString element);
@@ -104,47 +109,54 @@ signals:
     void songsChanged();
     void metaDataChanged();
 
+    void elementIconsChanged();
+
 private slots:
     void onCurrentSongChanged();
     void onMetaDataChanged();
 
+    void onSpotifyIconChanged(int index, QString url);
+
 private:
-    SettingsManager *sManager;
+    SettingsManager *m_sManager;
 
     // Music
-    int musicVolume;
-    QMediaPlayer *musicPlayer;
-    QMediaPlaylist *musicPlaylist;
-    QStringList l_songs;
-    bool musicNotRadio;
+    int m_musicVolume;
+    QMediaPlayer *m_musicPlayer;
+    QMediaPlaylist *m_musicPlaylist;
+    QStringList m_songs;
+    bool m_musicNotRadio;
     void getMetaData();
     void getMetaDataTagLib();
 
-    QString l_songName;
-    QString l_artist;
-    QString l_album;
+    QString m_songName;
+    QString m_artist;
+    QString m_album;
+
+    Spotify m_spotify;
 
     // Project
-    QStringList projects;
-    QString l_currentProject;
+    QStringList m_projects;
+    QString m_currentProject;
 
-    QStringList l_categories;
-    QString l_currentCategory;
+    QStringList m_categories;
+    QString m_currentCategory;
 
-    QStringList l_scenarios;
-    QString l_currentScenario;
+    QStringList m_scenarios;
+    QString m_currentScenario;
 
-    QStringList l_elements;
-    QStringList l_elementIcons;
-    QList<int> l_elementTypes;
-    QString l_currentElement;
+    QStringList m_elements;
+    QStringList m_elementIcons;
+    QList<int> m_elementTypes;
+    QString m_currentElement;
 
-    bool l_isPlaying = false;
+    bool m_isPlaying = false;
+    bool m_spotifyPlaying = false;
 
-    int soundVolume;
-    QList<QMediaPlayer*> soundPlayerList;
+    int m_soundVolume;
+    QList<QMediaPlayer*> m_soundPlayerList;
 
-    QMediaPlaylist *radioPlaylist;
+    QMediaPlaylist *m_radioPlaylist;
 };
 
 #endif // AUDIOTOOL_H

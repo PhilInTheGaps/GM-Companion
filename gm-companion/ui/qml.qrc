@@ -45,5 +45,6 @@
         <file>tools/combat_tracker/ListTextField.qml</file>
         <file>tools/combat_tracker/ListSpinBox.qml</file>
         <file>tools/converter/ConverterUnitPage.qml</file>
+        <file>tools/audio/EditorSpotifyPlaylistPage.qml</file>
     </qresource>
 </RCC>

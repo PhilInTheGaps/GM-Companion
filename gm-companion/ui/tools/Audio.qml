@@ -74,15 +74,19 @@ Page {
                     playRadio(element)
                 }
 
+                function setSpotify(element) {
+                    playSpotify(element)
+                }
+
                 function addSoundToSidebar(element) {
                     var component = Qt.createComponent(
                                 "./audio/SoundButton.qml")
                     var button = component.createObject(sound_info_column, {
-                                                            x: 0,
-                                                            y: 0,
-                                                            element: element,
-                                                            element_icon: elementIcon(element),
-                                                            frame_width: audio_info_frame.width
+                                                            "x": 0,
+                                                            "y": 0,
+                                                            "element": element,
+                                                            "element_icon": elementIcon(element),
+                                                            "frame_width": audio_info_frame.width
                                                         })
                     button.clicked.connect(stopSound)
                 }
@@ -99,11 +103,11 @@ Page {
                     for (var i = 0; i < categories.length; i++) {
                         var button = component.createObject(
                                     audio_project_structure, {
-                                        x: 0,
-                                        y: 0,
-                                        category: categories[i],
-                                        buttonId: categories[i],
-                                        max_width: audio_project_menu.width - 5
+                                        "x": 0,
+                                        "y": 0,
+                                        "category": categories[i],
+                                        "buttonId": categories[i],
+                                        "max_width": audio_project_menu.width - 5
                                     })
                         button.clicked.connect(setCategory)
                     }
@@ -119,11 +123,11 @@ Page {
 
                     for (var i = 0; i < scenarios.length; i++) {
                         var button = component.createObject(scenario_flow, {
-                                                                x: 0,
-                                                                y: 0,
-                                                                scenario: scenarios[i],
-                                                                buttonId: scenarios[i],
-                                                                max_width: 150
+                                                                "x": 0,
+                                                                "y": 0,
+                                                                "scenario": scenarios[i],
+                                                                "buttonId": scenarios[i],
+                                                                "max_width": 150
                                                             })
                         button.clicked.connect(setScenario)
                     }
@@ -145,11 +149,11 @@ Page {
                     for (var i = 0; i < elements.length; i++) {
 
                         var button = component.createObject(audio_scroll_flow, {
-                                                                x: 0,
-                                                                y: 0,
-                                                                element_name: elements[i],
-                                                                element_type: elementType(i),
-                                                                icon_path: elementIcon(elements[i])
+                                                                "x": 0,
+                                                                "y": 0,
+                                                                "element_name": elements[i],
+                                                                "element_type": elementType(i),
+                                                                "icon_path": elementIcons[i]
                                                             })
 
                         if (audio_tool.elementType(i) === 0) {
@@ -158,10 +162,20 @@ Page {
                             button.clicked.connect(setSound)
                         } else if (audio_tool.elementType(i) === 2) {
                             button.clicked.connect(setRadio)
+                        } else if (audio_tool.elementType(i) === 3) {
+                            button.clicked.connect(setSpotify)
                         }
                     }
 
                     audio_busy_indicator.visible = false
+                }
+
+                onElementIconsChanged: {
+                    console.log("Icons Changed!")
+
+                    for (var i = 0; i < audio_scroll_flow.children.length; i++) {
+                        audio_scroll_flow.children[i].icon_path = elementIcons[i]
+                    }
                 }
 
                 onSongsChanged: {
@@ -171,7 +185,7 @@ Page {
 
                     for (var i = 0; i < songs.length; i++) {
                         playlist_model.append({
-                                                  name: songs[i]
+                                                  "name": songs[i]
                                               })
                     }
                 }

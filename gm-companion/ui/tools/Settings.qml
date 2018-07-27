@@ -53,13 +53,12 @@ Page {
             for (var i = 0; i < getAddonNames().length; i++) {
 
                 var addonItem = component.createObject(addon_column, {
-                                                           addon: getAddonNames(
-                                                                      )[i],
-                                                           description: getAddonDescriptions(
-                                                                            )[i],
-                                                           folder: getAddonPathNames(
-                                                                       )[i],
-                                                           addon_enabled: getAddonEnabledList()[i]
+                                                           "addon": getAddonNames(
+                                                                        )[i],
+                                                           "description": getAddonDescriptions()[i],
+                                                           "folder": getAddonPathNames(
+                                                                         )[i],
+                                                           "addon_enabled": getAddonEnabledList()[i]
                                                        })
             }
         }
@@ -325,6 +324,51 @@ Page {
                         Qt.openUrlExternally(
                                     "https://github.com/PhilInTheGaps/GM-Companion/releases")
                     }
+                }
+
+                Text {
+                    text: qsTr("Spotify")
+                    font.bold: true
+                    visible: platform_details.isAndroid ? false : true
+                    color: color_scheme.textColor
+                }
+
+                Row {
+                    spacing: 10
+                    Text {
+                        text: qsTr("Client ID")
+                        width: platform_details.isAndroid ? settings_page.width
+                                                            / 4 : language_box.width
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: color_scheme.textColor
+                    }
+
+                    TextField {
+                        selectByMouse: true
+                        onTextChanged: settings_tool.setSpotifyID(text)
+                    }
+                }
+
+                Row {
+                    spacing: 10
+                    Text {
+                        text: qsTr("Client Secret")
+                        width: platform_details.isAndroid ? settings_page.width
+                                                            / 4 : language_box.width
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: color_scheme.textColor
+                    }
+
+                    TextField {
+                        selectByMouse: true
+                        onTextChanged: settings_tool.setSpotifySecret(text)
+                    }
+                }
+
+                Text {
+                    text: qsTr("Requires Spotify Premium")
+                    visible: platform_details.isAndroid ? false : true
+                    color: color_scheme.textColor
                 }
             }
 

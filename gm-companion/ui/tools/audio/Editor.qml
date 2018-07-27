@@ -39,6 +39,8 @@ Page {
 
         onUrlChanged: radio_page.setURL(getURL())
 
+        onSpotifyIDChanged: spotify_page.setID(getID())
+
         function selectList(name, type) {
             setCurrentList(name, type)
 
@@ -50,7 +52,8 @@ Page {
 
             file_browser.setType(type)
 
-            if (element_stack_view.currentItem == radio_page)
+            if (element_stack_view.currentItem == radio_page
+                    || element_stack_view.currentItem == spotify_page)
                 element_stack_view.pop(null)
 
             if (element_stack_view.currentItem != audio_list_page) {
@@ -58,6 +61,7 @@ Page {
 
                 audio_list_page.visible = true
                 radio_page.visible = false
+                spotify_page.visible = false
             }
         }
 
@@ -71,14 +75,37 @@ Page {
             radio_page.setURL(getURL())
             radio_page.setIcon(getCurrentListIcon())
 
-            if (element_stack_view.currentItem == audio_list_page)
+            if (element_stack_view.currentItem == audio_list_page
+                    || element_stack_view.currentItem == spotify_page)
                 element_stack_view.pop(null)
 
             if (element_stack_view.currentItem != radio_page) {
                 element_stack_view.push(radio_page)
 
                 audio_list_page.visible = false
+                spotify_page.visible = false
                 radio_page.visible = true
+            }
+        }
+
+        function selectSpotifyList(name) {
+            setCurrentList(name, 3)
+
+            spotify_page.setName(name)
+            spotify_page.resourcesPath = getResourcesPath()
+            spotify_page.setID(getSpotifyID())
+            spotify_page.setIcon(getCurrentListIcon())
+
+            if (element_stack_view.currentItem == audio_list_page
+                    || element_stack_view.currentItem == radio_page)
+                element_stack_view.pop(null)
+
+            if (element_stack_view.currentItem != spotify_page) {
+                element_stack_view.push(spotify_page)
+
+                audio_list_page.visible = false
+                radio_page.visible = false
+                spotify_page.visible = true
             }
         }
 
@@ -97,11 +124,9 @@ Page {
                 var component = Qt.createComponent("./EditorElementButton.qml")
 
                 var button = component.createObject(elements_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        element: getMusicLists(
-                                                                     )[i],
-                                                        type: 0
+                                                        "element": getMusicLists(
+                                                                       )[i],
+                                                        "type": 0
                                                     })
                 button.clicked.connect(selectList)
                 button.remove.connect(deleteList)
@@ -113,11 +138,9 @@ Page {
                 var component = Qt.createComponent("./EditorElementButton.qml")
 
                 var button = component.createObject(elements_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        element: getSoundLists(
-                                                                     )[i],
-                                                        type: 1
+                                                        "element": getSoundLists(
+                                                                       )[i],
+                                                        "type": 1
                                                     })
                 button.clicked.connect(selectList)
                 button.remove.connect(deleteList)
@@ -129,12 +152,25 @@ Page {
                 var component = Qt.createComponent("./EditorElementButton.qml")
 
                 var button = component.createObject(elements_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        element: getRadios()[i],
-                                                        type: 2
+                                                        "element": getRadios(
+                                                                       )[i],
+                                                        "type": 2
                                                     })
                 button.clicked.connect(selectRadio)
+                button.remove.connect(deleteList)
+                button.moveUp.connect(moveElementUp)
+                button.moveDown.connect(moveElementDown)
+            }
+
+            for (var i = 0; i < getSpotifyPlaylists().length; i++) {
+                var component = Qt.createComponent("./EditorElementButton.qml")
+
+                var button = component.createObject(elements_column, {
+                                                        "element": getSpotifyPlaylists(
+                                                                       )[i],
+                                                        "type": 3
+                                                    })
+                button.clicked.connect(selectSpotifyList)
                 button.remove.connect(deleteList)
                 button.moveUp.connect(moveElementUp)
                 button.moveDown.connect(moveElementDown)
@@ -224,7 +260,8 @@ Page {
 
             ComboBox {
                 id: element_combo_box
-                model: [qsTr("Music List"), qsTr("Sound List"), qsTr("Radio")]
+                model: [qsTr("Music List"), qsTr("Sound List"), qsTr(
+                        "Radio"), qsTr("Spotify Playlist")]
                 width: element_textfield.width
             }
 
@@ -454,6 +491,7 @@ Page {
                     element_stack_view.pop(null)
                     audio_list_page.visible = false
                     radio_page.visible = false
+                    spotify_page.visible = false
                 }
             }
 
@@ -551,6 +589,16 @@ Page {
                     onChangeIcon: editor_tool.setCurrentListIcon(path)
                     onChangeLocal: editor_tool.setLocal(local)
                     onChangeURL: editor_tool.setURL(url)
+                }
+
+                EditorSpotifyPlaylistPage {
+                    id: spotify_page
+
+                    visible: false
+
+                    onSavePlaylist: editor_tool.saveList(3)
+                    onChangeIcon: editor_tool.setCurrentListIcon(path)
+                    onChangeID: editor_tool.setSpotifyID(id)
                 }
             }
         }

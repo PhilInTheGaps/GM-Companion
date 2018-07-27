@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE QStringList getMusicLists();
     Q_INVOKABLE QStringList getSoundLists();
     Q_INVOKABLE QStringList getRadios();
+    Q_INVOKABLE QStringList getSpotifyPlaylists() const { return m_spotifyPlaylists; }
 
     Q_INVOKABLE void saveProject();
     Q_INVOKABLE QString getResourcesPath();
@@ -62,6 +63,9 @@ public:
     Q_INVOKABLE void setURL(QString url);
     Q_INVOKABLE void setLocal(bool local);
 
+    Q_INVOKABLE QString getSpotifyID() const { return m_spotifyID; }
+    Q_INVOKABLE void setSpotifyID(QString id) { m_spotifyID = id; }
+
 signals:
     void projectListChanged();
     void categoryListChanged();
@@ -70,6 +74,7 @@ signals:
 
     void listChanged();
     void urlChanged();
+    void spotifyIDChanged();
 
 private:
     SettingsManager *sManager;
@@ -86,6 +91,7 @@ private:
     QStringList l_musicLists;
     QStringList l_soundLists;
     QStringList l_radios;
+    QStringList m_spotifyPlaylists;
 
     QString l_currentElement;
 
@@ -100,6 +106,8 @@ private:
 
     bool l_local;
     QString l_url;
+
+    QString m_spotifyID;
 };
 
 #endif // AUDIOEDITOR_H

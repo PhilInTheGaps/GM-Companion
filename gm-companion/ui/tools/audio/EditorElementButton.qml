@@ -24,6 +24,22 @@ Rectangle {
         id: color_scheme
     }
 
+    Icon {
+        visible: false
+        font.pixelSize: image.height
+        x: image.x
+        y: image.y
+
+        color: "white"
+
+        Component.onCompleted: {
+            if (type == 3) {
+                icon = icons.fab_spotify
+                visible = true
+            }
+        }
+    }
+
     Row {
         id: row
         anchors.fill: parent
@@ -49,6 +65,8 @@ Rectangle {
                 case 2:
                     source = "/icons/media/radio.png"
                     break
+                default:
+                    source = ""
                 }
             }
         }

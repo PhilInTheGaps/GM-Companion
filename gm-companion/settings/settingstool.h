@@ -27,6 +27,11 @@ public:
     Q_INVOKABLE void setCheckForUpdates(bool check);
     Q_INVOKABLE bool getCheckForUpdates();
 
+    Q_INVOKABLE void setSpotifyID(QString id) { sManager->setSetting(Setting::spotifyID, 1, id); }
+    Q_INVOKABLE QString getSpotifyID() const { return sManager->getSetting(Setting::spotifyID); }
+    Q_INVOKABLE void setSpotifySecret(QString secret) { sManager->setSetting(Setting::spotifySecret, 1, secret); }
+    Q_INVOKABLE QString getSpotifySecret() const { return sManager->getSetting(Setting::spotifySecret); }
+
 signals:
     void audioPathChanged();
     void musicPathChanged();

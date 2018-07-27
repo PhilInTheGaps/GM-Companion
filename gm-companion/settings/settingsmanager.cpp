@@ -74,16 +74,24 @@ QString SettingsManager::getSetting(Setting setting)
         settingString = settings->value("uiMode", "Bright").toString();
         break;
 
-    case Setting::openWhatIsNewWindow:
-        settingString = settings->value("openWhatIsNewWindow", 1).toInt();
-        break;
-
     case Setting::language:
         settingString = settings->value("language", "en").toString();
         break;
 
     case Setting::version:
         settingString = QString::number(settings->value("version", 0).toInt());
+        break;
+
+    case Setting::spotifyID:
+        settings->beginGroup("Spotify");
+        settingString = settings->value("spotifyID", "").toString();
+        settings->endGroup();
+        break;
+
+    case Setting::spotifySecret:
+        settings->beginGroup("Spotify");
+        settingString = settings->value("spotifySecret", "").toString();
+        settings->endGroup();
         break;
 
     default:
@@ -196,6 +204,24 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
 
     case Setting::version:
         settings->setValue("version", value);
+        break;
+
+    case Setting::spotifyID:
+
+        if (value.length() > 1) {
+            settings->beginGroup("Spotify");
+            settings->setValue("spotifyID", value);
+            settings->endGroup();
+        }
+        break;
+
+    case Setting::spotifySecret:
+
+        if (value.length() > 1) {
+            settings->beginGroup("Spotify");
+            settings->setValue("spotifySecret", value);
+            settings->endGroup();
+        }
         break;
 
     default:

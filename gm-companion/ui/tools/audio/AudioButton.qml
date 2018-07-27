@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
+import "../../fontawesome"
 
 Rectangle {
     property var element_name
@@ -15,8 +16,10 @@ Rectangle {
             "/icons/media/music_image.png"
         } else if (element_type === 1) {
             "/icons/media/sound_image.png"
-        } else {
+        } else if (element_type === 2) {
             "/icons/media/radio_image.png"
+        } else if (element_type === 3) {
+            ""
         }
     }
 
@@ -43,7 +46,8 @@ Rectangle {
 
         Image {
             id: large_icon
-            source: icon_path === default_icon ? icon_path : "file:///" + icon_path
+            source: icon_path === default_icon || icon_path.startsWith(
+                        "http") ? icon_path : "file:///" + icon_path
             x: 5
             y: 5
 
@@ -57,8 +61,8 @@ Rectangle {
 
         Image {
             id: small_icon
-            visible: icon_path === default_icon ? false : true
 
+            visible: icon_path === default_icon ? false : true
             source: default_icon
 
             width: parent.width / 5
@@ -70,6 +74,17 @@ Rectangle {
             sourceSize.width: width
             sourceSize.height: height
         }
+    }
+
+    Icon {
+        visible: element_type === 3
+
+        font.pixelSize: parent.width / 5
+        x: small_icon.x
+        y: small_icon.y
+
+        color: "white"
+        icon: icons.fab_spotify
     }
 
     Text {

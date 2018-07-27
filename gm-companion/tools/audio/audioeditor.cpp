@@ -180,9 +180,10 @@ void AudioEditor::updateElementList()
 
         settings.beginGroup(l_currentCategory);
 
-        l_musicLists = settings.value(l_currentScenario + "_music").toStringList();
-        l_soundLists = settings.value(l_currentScenario + "_sounds").toStringList();
-        l_radios     = settings.value(l_currentScenario + "_radios").toStringList();
+        l_musicLists       = settings.value(l_currentScenario + "_music").toStringList();
+        l_soundLists       = settings.value(l_currentScenario + "_sounds").toStringList();
+        l_radios           = settings.value(l_currentScenario + "_radios").toStringList();
+        m_spotifyPlaylists = settings.value(l_currentScenario + "_spotify").toStringList();
 
         settings.endGroup();
 
@@ -199,17 +200,20 @@ void AudioEditor::sortElements()
 
         settings.beginGroup(l_currentCategory);
 
-        l_musicLists = settings.value(l_currentScenario + "_music").toStringList();
-        l_soundLists = settings.value(l_currentScenario + "_sounds").toStringList();
-        l_radios     = settings.value(l_currentScenario + "_radios").toStringList();
+        l_musicLists       = settings.value(l_currentScenario + "_music").toStringList();
+        l_soundLists       = settings.value(l_currentScenario + "_sounds").toStringList();
+        l_radios           = settings.value(l_currentScenario + "_radios").toStringList();
+        m_spotifyPlaylists = settings.value(l_currentScenario + "_spotify").toStringList();
 
         l_musicLists.sort();
         l_soundLists.sort();
         l_radios.sort();
+        m_spotifyPlaylists.sort();
 
-        settings.setValue(l_currentScenario + "_music",  l_musicLists);
-        settings.setValue(l_currentScenario + "_sounds", l_soundLists);
-        settings.setValue(l_currentScenario + "_radios",     l_radios);
+        settings.setValue(l_currentScenario + "_music",         l_musicLists);
+        settings.setValue(l_currentScenario + "_sounds",        l_soundLists);
+        settings.setValue(l_currentScenario + "_radios",            l_radios);
+        settings.setValue(l_currentScenario + "_spotify", m_spotifyPlaylists);
 
         settings.endGroup();
 
@@ -233,6 +237,10 @@ void AudioEditor::moveElement(QString element, int type, int positions)
 
     case 2:
         elements = &l_radios;
+        break;
+
+    case 3:
+        elements = &m_spotifyPlaylists;
         break;
     }
 
@@ -276,6 +284,11 @@ void AudioEditor::createList(QString listName, int type)
             suffix2 = "_radio";
             list    = &l_radios;
             break;
+
+        case 3: // Spotify
+            suffix1 = "_spotify";
+            suffix2 = suffix1;
+            list    = &m_spotifyPlaylists;
         }
 
         if (!list->contains(listName))
@@ -323,9 +336,10 @@ void AudioEditor::saveProject()
         {
             settings.beginGroup(l_currentCategory);
 
-            settings.setValue(l_currentScenario + "_music",  l_musicLists);
-            settings.setValue(l_currentScenario + "_sounds", l_soundLists);
-            settings.setValue(l_currentScenario + "_radios",     l_radios);
+            settings.setValue(l_currentScenario + "_music",         l_musicLists);
+            settings.setValue(l_currentScenario + "_sounds",        l_soundLists);
+            settings.setValue(l_currentScenario + "_radios",            l_radios);
+            settings.setValue(l_currentScenario + "_spotify", m_spotifyPlaylists);
 
             settings.endGroup();
         }
@@ -365,6 +379,11 @@ void AudioEditor::setCurrentList(QString list, int type)
             fileArrayFile     = "radio";
             l_currentBasePath = sManager->getSetting(Setting::radioPath);
             break;
+
+        case 3: // Spotify
+            suffix        = "_spotify";
+            fileArrayName = "playlists";
+            fileArrayFile = "playlist";
         }
 
         l_currentList = list;
@@ -381,6 +400,8 @@ void AudioEditor::setCurrentList(QString list, int type)
 
         l_local = settings.value("local", false).toBool();
         l_url   = settings.value("url", "").toString();
+
+        m_spotifyID = settings.value("id", "").toString();
 
         // Add every list element
         int count = settings.beginReadArray(fileArrayName);
@@ -432,9 +453,6 @@ void AudioEditor::removeFile(int index)
         l_currentFileNames.removeAt(index);
         l_currentFilePaths.removeAt(index);
         l_currentFileMissing.removeAt(index);
-
-        // Because of Performance reasons, don't emit listChanged()
-        // The table row is removed through qml
     }
 }
 
@@ -465,11 +483,20 @@ void AudioEditor::saveList(int type)
         fileArrayName = "radios";
         fileArrayFile = "radio";
         break;
+
+    case 3: // Spotify
+        suffix        = "_spotify";
+        fileArrayName = "playlists";
+        fileArrayFile = "playlist";
     }
 
     settings.beginGroup(l_currentCategory + "_" + l_currentScenario + "_" + l_currentList + suffix);
 
-    if (type == 2)
+    if (type == 3)
+    {
+        settings.setValue("id", m_spotifyID);
+    }
+    else if (type == 2)
     {
         settings.setValue("url",     l_url);
         settings.setValue("local", l_local);
@@ -497,36 +524,45 @@ void AudioEditor::saveList(int type)
 
 void AudioEditor::deleteList(QString list, int type)
 {
-    QString suffix;
+    QString suffix1;
+    QString suffix2;
     QStringList *pList;
 
     switch (type) {
     case 0: // Music List
-        suffix = "_music";
-        pList  = &l_musicLists;
+        suffix1 = "_music";
+        suffix2 = suffix1;
+        pList   = &l_musicLists;
         break;
 
     case 1: // Sound List
-        suffix = "_sounds";
-        pList  = &l_soundLists;
+        suffix1 = "_sounds";
+        suffix2 = suffix1;
+        pList   = &l_soundLists;
         break;
 
     case 2: // Radio
-        suffix = "_radios";
-        pList  = &l_radios;
+        suffix1 = "_radios";
+        suffix2 = "_radio";
+        pList   = &l_radios;
         break;
+
+    case 3: // Spotify
+        suffix1 = "_spotify";
+        suffix2 = suffix1;
+        pList   = &m_spotifyPlaylists;
     }
 
-    l_musicLists.removeAll(list);
+    pList->removeAll(list);
 
     QString   projectPath = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
     QSettings settings(projectPath, QSettings::IniFormat);
 
     settings.beginGroup(l_currentCategory);
-    settings.setValue(l_currentScenario + "_music", *pList);
+    settings.setValue(l_currentScenario + suffix1, *pList);
     settings.endGroup();
 
-    settings.remove(l_currentCategory + "_" + l_currentScenario + "_" + list + suffix);
+    settings.remove(l_currentCategory + "_" + l_currentScenario + "_" + list + suffix2);
 
     l_currentFileNames.clear();
     l_currentFilePaths.clear();

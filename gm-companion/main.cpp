@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
 
     QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
     QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
 
     // Create program files and remove old ones that are no longer required
     FileManager fileManager;
