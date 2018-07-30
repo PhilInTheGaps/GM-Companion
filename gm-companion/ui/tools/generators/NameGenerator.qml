@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 
 import gm.companion.namegeneratortool 1.0
@@ -24,8 +23,8 @@ Item {
                             "NameGeneratorCategoryButton.qml")
 
                 var button = component.createObject(names_categories_column, {
-                                                        category: categories[i],
-                                                        max_width: left_column.width
+                                                        "category": categories[i],
+                                                        "max_width": left_column.width
                                                     })
 
                 button.clicked.connect(loadNames)
@@ -41,10 +40,10 @@ Item {
                 var component = Qt.createComponent("NameGeneratorButton.qml")
 
                 var button = component.createObject(names_flow, {
-                                                        name: names[i],
-                                                        category: category,
-                                                        path: categoryPath(
-                                                                  category) + "/" + names[i]
+                                                        "name": names[i],
+                                                        "category": category,
+                                                        "path": categoryPath(
+                                                                    category) + "/" + names[i]
                                                     })
 
                 button.clicked.connect(displayGeneratedNames)

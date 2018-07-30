@@ -1,5 +1,4 @@
 #include "filemanager.h"
-#include <QApplication>
 #include <QDebug>
 #include <QDir>
 #include <gm-companion/functions.h>

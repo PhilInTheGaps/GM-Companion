@@ -18,10 +18,10 @@ matrix:
       compiler: gcc
       
       before_install:
-        - sudo add-apt-repository --yes ppa:beineri/opt-qt593-trusty
+        - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
         - sudo apt-get update -qq
-        - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev qt59declarative
-        - source /opt/qt59/bin/qt59-env.sh
+        - sudo apt-get -y install libtag1-dev binutils libpulse-dev  qt510base  qt510declarative  qt510multimedia  qt510networkauth-no-lgpl  qt510qbs  qt510quickcontrols  qt510quickcontrols2  qt510script  qt510tools  qt510translations  qt510webengine
+        - source /opt/qt510/bin/qt510-env.sh
       script:
         - qmake
         - make

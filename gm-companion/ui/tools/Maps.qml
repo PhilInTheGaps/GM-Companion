@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 
 import gm.companion.maptool 1.0
 import "maps"
@@ -34,10 +34,10 @@ Page {
 
                 var component = Qt.createComponent("./maps/MapListTab.qml")
                 var tab = component.createObject(maps_swipe_view, {
-                                                     list: maps(mapCategories[i]),
-                                                     paths: mapPaths(
-                                                                mapCategories[i]),
-                                                     category: mapCategories[i]
+                                                     "list": maps(mapCategories[i]),
+                                                     "paths": mapPaths(
+                                                                  mapCategories[i]),
+                                                     "category": mapCategories[i]
                                                  })
 
                 tab.clicked.connect(loadMap)

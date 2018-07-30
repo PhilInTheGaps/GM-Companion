@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 
 import gm.companion.charactertool 1.0
 import gm.companion.colorscheme 1.0
@@ -37,9 +37,9 @@ Page {
             var component = Qt.createComponent(
                         "./characters/CharacterButton.qml")
             var button = component.createObject(active_column, {
-                                                    character_name: character_tool.getActiveCharacterList(
-                                                                        )[i],
-                                                    active: true
+                                                    "character_name": character_tool.getActiveCharacterList(
+                                                                          )[i],
+                                                    "active": true
                                                 })
             button.clicked.connect(loadCharacter)
             button.toggle_active_clicked.connect(toggleInactive)
@@ -54,9 +54,9 @@ Page {
             var component = Qt.createComponent(
                         "./characters/CharacterButton.qml")
             var button = component.createObject(active_column, {
-                                                    character_name: character_tool.getInactiveCharacterList(
-                                                                        )[i],
-                                                    active: false
+                                                    "character_name": character_tool.getInactiveCharacterList(
+                                                                          )[i],
+                                                    "active": false
                                                 })
             button.clicked.connect(loadCharacter)
             button.toggle_active_clicked.connect(toggleInactive)
@@ -71,9 +71,9 @@ Page {
         for (var i = 0; i < images.length; i++) {
             var component = Qt.createComponent("./characters/PageButton.qml")
             var button = component.createObject(bottom_row, {
-                                                    display_text: character_tool.getButtonText(
-                                                                      i),
-                                                    source: images[i]
+                                                    "display_text": character_tool.getButtonText(
+                                                                        i),
+                                                    "source": images[i]
                                                 })
             button.clicked.connect(loadImage)
         }

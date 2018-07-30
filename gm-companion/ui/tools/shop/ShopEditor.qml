@@ -1,8 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4 as Controls1_4
 
 import gm.companion.shoptool 1.0
 import gm.companion.shopeditor 1.0
@@ -35,9 +33,9 @@ Page {
                 console.log(getShopList()[i])
 
                 var button = component.createObject(shop_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        shop: getShopList()[i]
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "shop": getShopList()[i]
                                                     })
 
                 button.clicked.connect(updateShopInformation)
@@ -59,10 +57,10 @@ Page {
 
             for (var i = 0; i < getItemNames().length; i++) {
                 table_model.append({
-                                       name: getItemNames()[i],
-                                       price: getItemPrices()[i],
-                                       category: getItemCategories()[i],
-                                       description: getItemDescriptions()[i]
+                                       "name": getItemNames()[i],
+                                       "price": getItemPrices()[i],
+                                       "category": getItemCategories()[i],
+                                       "description": getItemDescriptions()[i]
                                    })
             }
         }
@@ -72,11 +70,12 @@ Page {
 
             for (var i = 0; i < getItemListNames().length; i++) {
                 item_list_model.append({
-                                           name: getItemListNames()[i],
-                                           price: getItemListPrices()[i],
-                                           category: getItemListCategories()[i],
-                                           description: getItemListDescriptions(
-                                                            )[i]
+                                           "name": getItemListNames()[i],
+                                           "price": getItemListPrices()[i],
+                                           "category": getItemListCategories(
+                                                           )[i],
+                                           "description": getItemListDescriptions(
+                                                              )[i]
                                        })
             }
         }

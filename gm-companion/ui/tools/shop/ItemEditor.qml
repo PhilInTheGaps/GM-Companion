@@ -254,7 +254,7 @@ Items
                 id: item_table_view
                 anchors.left: parent.left
                 anchors.right: parent.right
-                height: parent.height
+                height: parent.height - y - parent.bottomPadding
 
                 clip: true
                 spacing: 0

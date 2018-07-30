@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.2
 
 import gm.companion.audioeditorfilebrowser 1.0
 import gm.companion.colorscheme 1.0
@@ -29,13 +28,13 @@ Column {
                 var component = Qt.createComponent("./FileBrowserButton.qml")
 
                 var button = component.createObject(folder_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        element: getFolderList(
-                                                                     )[i],
-                                                        path: getFolderPaths(
-                                                                  )[i],
-                                                        type: 3
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "element": getFolderList(
+                                                                       )[i],
+                                                        "path": getFolderPaths(
+                                                                    )[i],
+                                                        "type": 3
                                                     })
                 button.clicked.connect(folderButtonClicked)
             }
@@ -52,12 +51,13 @@ Column {
                 var component = Qt.createComponent("./FileBrowserButton.qml")
 
                 var button = component.createObject(file_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        element: getFileList(
-                                                                     )[i],
-                                                        path: getFilePaths()[i],
-                                                        type: tool.getType()
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "element": getFileList(
+                                                                       )[i],
+                                                        "path": getFilePaths(
+                                                                    )[i],
+                                                        "type": tool.getType()
                                                     })
                 button.clicked.connect(fileButtonClicked)
             }

@@ -1,6 +1,6 @@
 ﻿import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 
 import gm.companion.combattracker 1.0
 import gm.companion.colorscheme 1.0
@@ -23,11 +23,11 @@ Page {
 
             for (var i = 0; i < getListSize(); i++) {
                 tracker_model.append({
-                                         name: getName(i),
-                                         ini: getIni(i),
-                                         health: getHealth(i),
-                                         status: getStatus(i),
-                                         notes: getNotes(i)
+                                         "name": getName(i),
+                                         "ini": getIni(i),
+                                         "health": getHealth(i),
+                                         "status": getStatus(i),
+                                         "notes": getNotes(i)
                                      })
             }
         }
@@ -43,7 +43,7 @@ Page {
 
     Component.onCompleted: {
         combat_dice.setSource("Dice.qml", {
-                                  combat_tracker_mode: true
+                                  "combat_tracker_mode": true
                               })
     }
 

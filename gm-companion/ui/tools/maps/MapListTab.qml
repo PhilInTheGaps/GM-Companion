@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 
 Column {
@@ -28,8 +28,8 @@ Column {
             for (var i = 0; i < list.length; i++) {
                 var component = Qt.createComponent("MapListItem.qml")
                 var button = component.createObject(column, {
-                                                        name: list[i],
-                                                        path: paths[i]
+                                                        "name": list[i],
+                                                        "path": paths[i]
                                                     })
 
                 button.clicked.connect(tab.clicked)

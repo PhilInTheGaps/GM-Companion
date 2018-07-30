@@ -41,8 +41,6 @@ Currently only Ubuntu is officially supported, but an Arch Linux package will be
 
 ### Ubuntu
 
-__As version 1.0 requires Qt5.10 or higher, the Ubuntu repository version will not work, the latest working one is Beta 3.3. If you are on Ubuntu and want the newest version, please compile from source instead!__
-
 For Ubuntu the easiest way is to add the gm-companion software repository and install the gm-companion from there.
 
 ```
@@ -71,7 +69,7 @@ GM-Companion requires Qt5 to build.
 So the build steps would look something like this:  
 1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion)  
 2. Install [Qt5](https://www.qt.io/) (GM-Companion requires at least version 5.10)  
-3. If you are on Linux install TagLib  
+3. If you are on Linux install [TagLib](http://taglib.org/)  
 4. Switch to the GM-Companion folder  
 5. Run qmake  
 6. Run make  

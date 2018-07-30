@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.3
+import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
@@ -29,9 +29,9 @@ Page {
 
         for (var i = 0; i < files.length; i++) {
             table_model.append({
-                                   file: files[i],
-                                   path: paths[i],
-                                   missing: missing[i]
+                                   "file": files[i],
+                                   "path": paths[i],
+                                   "missing": missing[i]
                                })
         }
 
