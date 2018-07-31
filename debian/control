@@ -2,7 +2,7 @@ Source: gm-companion
 Section: misc
 Priority: optional
 Maintainer: Phil Hoffmann <phil.hoffmann@zoho.eu>
-Build-Depends: g++, debhelper (>= 9), cdbs, libtag1-dev, qtbase5-dev, qt5-default, qttools5-dev, qttools5-dev-tools, qtmultimedia5-dev, libqt5opengl5-dev, qtscript5-dev, libqt5webkit5-dev, libqt5x11extras5-dev, libqt5xmlpatterns5-dev, qtdeclarative5-dev libqoauth2 libqt5network5
+Build-Depends: g++, debhelper (>= 9), cdbs, libtag1-dev, qtbase5-dev, qt5-default, qttools5-dev, qttools5-dev-tools, qtmultimedia5-dev, libqt5opengl5-dev, qtscript5-dev, libqt5webkit5-dev, libqt5x11extras5-dev, libqt5xmlpatterns5-dev, qtdeclarative5-dev, libqoauth2, libqt5network5
 Standards-Version: 3.9.8
 Homepage: https://gm-companion.github.io
 #Vcs-Git: https://anonscm.debian.org/collab-maint/gm-companion.git
@@ -10,7 +10,7 @@ Homepage: https://gm-companion.github.io
 
 Package: gm-companion
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5, libqt5qml5, libqt5quick5, qml-module-qtquick-layouts, qml-module-qtquick-window2, qml-module-qtquick2, qml-module-qtquick-controls, qml-module-qtquick-controls-styles-breeze libqoauth2
+Depends: ${shlibs:Depends}, ${misc:Depends}, libqt5core5a, libqt5multimedia5, libqt5multimedia5-plugins, libqt5network5, libqt5opengl5, libqt5script5, libqt5scripttools5, libqt5sql5, libqt5webkit5, libqt5widgets5, libqt5x11extras5, libqt5xml5, libqt5xmlpatterns5, libqt5gui5, libqt5qml5, libqt5quick5, qml-module-qtquick-layouts, qml-module-qtquick-window2, qml-module-qtquick2, qml-module-qtquick-controls, qml-module-qtquick-controls-styles-breeze, libqoauth2
 Description: A tool for the gamemaster of a tabletop rpg session.
  The "GM-Companion" is a tool for the gamemaster of a tabletop rpg session.
  .
