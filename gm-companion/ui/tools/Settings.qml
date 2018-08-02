@@ -326,6 +326,12 @@ Page {
                     }
                 }
 
+                Rectangle {
+                    height: 10
+                    width: height
+                    color: "transparent"
+                }
+
                 Text {
                     text: qsTr("Spotify")
                     font.bold: true
@@ -346,6 +352,9 @@ Page {
                     TextField {
                         selectByMouse: true
                         onTextChanged: settings_tool.setSpotifyID(text)
+                        width: settings_page.width / 6
+
+                        Component.onCompleted: text = settings_tool.getSpotifyID()
                     }
                 }
 
@@ -362,6 +371,9 @@ Page {
                     TextField {
                         selectByMouse: true
                         onTextChanged: settings_tool.setSpotifySecret(text)
+                        width: settings_page.width / 6
+
+                        Component.onCompleted: text = settings_tool.getSpotifySecret()
                     }
                 }
 

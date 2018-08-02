@@ -208,6 +208,18 @@ Window {
                             color: color_scheme.dividerColor
                         }
 
+                        function buttonClicked(tool) {
+                            if (stack.currentItem !== tool) {
+                                stack.pop(null)
+                                tool.active = true
+                                stack.push(tool)
+                            }
+
+                            if (inPortrait || platform.isAndroid) {
+                                drawer.close()
+                            }
+                        }
+
                         SideMenuButton {
                             tool_name: qsTr("Audio")
                             icon_source: "../icons/menu/audio.png"
@@ -231,16 +243,7 @@ Window {
 
                             onClicked: {
                                 tool_label.text = qsTr("Current Tool: Maps")
-
-                                if (stack.currentItem !== maps) {
-                                    stack.pop(null)
-                                    maps.active = true
-                                    stack.push(maps)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(maps)
                             }
                         }
 
@@ -250,16 +253,7 @@ Window {
 
                             onClicked: {
                                 tool_label.text = qsTr("Current Tool: Dice")
-
-                                if (stack.currentItem !== dice) {
-                                    stack.pop(null)
-                                    dice.active = true
-                                    stack.push(dice)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(dice)
                             }
                         }
 
@@ -270,16 +264,7 @@ Window {
                             onClicked: {
                                 tool_label.text = qsTr(
                                             "Current Tool: Combat Tracker")
-
-                                if (stack.currentItem !== combat) {
-                                    stack.pop(null)
-                                    combat.active = true
-                                    stack.push(combat)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(combat)
                             }
                         }
 
@@ -290,16 +275,7 @@ Window {
                             onClicked: {
                                 tool_label.text = qsTr(
                                             "Current Tool: Item Shop")
-
-                                if (stack.currentItem !== shop) {
-                                    stack.pop(null)
-                                    shop.active = true
-                                    stack.push(shop)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(shop)
                             }
                         }
 
@@ -310,16 +286,7 @@ Window {
                             onClicked: {
                                 tool_label.text = qsTr(
                                             "Current Tool: Characters")
-
-                                if (stack.currentItem !== characters) {
-                                    stack.pop(null)
-                                    characters.active = true
-                                    stack.push(characters)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(characters)
                             }
                         }
 
@@ -330,16 +297,7 @@ Window {
                             onClicked: {
                                 tool_label.text = qsTr(
                                             "Current Tool: Generators")
-
-                                if (stack.currentItem !== generators) {
-                                    stack.pop(null)
-                                    generators.active = true
-                                    stack.push(generators)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(generators)
                             }
                         }
 
@@ -349,16 +307,7 @@ Window {
 
                             onClicked: {
                                 tool_label.text = qsTr("Current Tool: Notes")
-
-                                if (stack.currentItem !== notes) {
-                                    stack.pop(null)
-                                    notes.active = true
-                                    stack.push(notes)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(notes)
                             }
                         }
 
@@ -369,16 +318,7 @@ Window {
                             onClicked: {
                                 tool_label.text = qsTr(
                                             "Current Tool: Unit Converter")
-
-                                if (stack.currentItem !== converter) {
-                                    stack.pop(null)
-                                    converter.active = true
-                                    stack.push(converter)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(converter)
                             }
                         }
 
@@ -394,16 +334,7 @@ Window {
 
                             onClicked: {
                                 tool_label.text = qsTr("Settings")
-
-                                if (stack.currentItem !== settings) {
-                                    stack.pop(null)
-                                    settings.active = true
-                                    stack.push(settings)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
-                                }
+                                parent.buttonClicked(settings)
                             }
                         }
                     }

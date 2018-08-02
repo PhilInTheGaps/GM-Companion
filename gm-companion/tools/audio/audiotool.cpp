@@ -90,12 +90,6 @@ QStringList AudioTool::categories()
     return m_categories;
 }
 
-// Returns the currently selected category
-QString AudioTool::currentCategory()
-{
-    return m_currentCategory;
-}
-
 // Set the current category
 void AudioTool::setCurrentCategory(QString category)
 {
@@ -116,11 +110,6 @@ QStringList AudioTool::scenarios()
     }
 
     return m_scenarios;
-}
-
-QString AudioTool::currentScenario()
-{
-    return m_currentScenario;
 }
 
 void AudioTool::setCurrentScenario(QString scenario)
@@ -219,21 +208,6 @@ void AudioTool::findElements()
 
         emit elementsChanged();
     }
-}
-
-QStringList AudioTool::elements()
-{
-    return m_elements;
-}
-
-QString AudioTool::currentElement()
-{
-    return m_currentElement;
-}
-
-int AudioTool::elementType(int index)
-{
-    return m_elementTypes.at(index);
 }
 
 void AudioTool::setCurrentElement(QString element)
@@ -392,26 +366,6 @@ void AudioTool::musicPausePlay()
             emit isPlayingChanged();
         }
     }
-}
-
-bool AudioTool::isPlaying()
-{
-    return m_isPlaying;
-}
-
-QStringList AudioTool::songs()
-{
-    return m_songs;
-}
-
-int AudioTool::currentSongIndex()
-{
-    return m_musicPlaylist->currentIndex();
-}
-
-void AudioTool::onCurrentSongChanged()
-{
-    if (m_musicNotRadio) currentSongChanged();
 }
 
 void AudioTool::setMusicVolume(float volume)
@@ -585,6 +539,10 @@ void AudioTool::playSpotify(QString element)
         m_spotify.play(id);
         m_isPlaying = m_spotify.isPlaying();
 
+        m_songs.clear();
+
+        emit currentElementChanged();
+        emit songsChanged();
         emit isPlayingChanged();
     }
 }
@@ -630,10 +588,11 @@ void AudioTool::onMetaDataChanged()
 
     if (m_musicPlayer->isMetaDataAvailable())
     {
-        // Reading tags using TagLib, as it is way more reliable than
-
         #ifdef Q_OS_LINUX
         # ifndef Q_OS_ANDROID
+
+        // Reading tags using TagLib, as it is way more reliable than the Qt
+        // implementation
         getMetaDataTagLib();
         # else // ifndef Q_OS_ANDROID
         getMetaData();
@@ -654,7 +613,7 @@ void AudioTool::onMetaDataChanged()
 
 void AudioTool::onSpotifyIconChanged(int index, QString url)
 {
-    if (index > -1)
+    if ((index > -1) && (m_elementIcons.size() > index))
     {
         m_elementIcons[index] = url;
         emit elementIconsChanged();
@@ -663,19 +622,4 @@ void AudioTool::onSpotifyIconChanged(int index, QString url)
     {
         qDebug() << "Did not find element!";
     }
-}
-
-QString AudioTool::getSongName()
-{
-    return m_songName;
-}
-
-QString AudioTool::getArtist()
-{
-    return m_artist;
-}
-
-QString AudioTool::getAlbum()
-{
-    return m_album;
 }

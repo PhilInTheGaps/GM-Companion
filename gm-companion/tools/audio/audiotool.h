@@ -3,7 +3,6 @@
 
 #include <QStringList>
 #include <QSettings>
-#include <QSignalMapper>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QKeyEvent>
@@ -45,22 +44,22 @@ public:
 
     // Categories
     QStringList categories();
-    QString currentCategory();
+    QString currentCategory() const { return m_currentCategory; }
     Q_INVOKABLE void setCurrentCategory(QString category);
 
     // Scenarios
     QStringList scenarios();
-    QString currentScenario();
+    QString currentScenario() const { return m_currentScenario; }
     Q_INVOKABLE void setCurrentScenario(QString scenario);
 
     // Elements
     Q_INVOKABLE void findElements();
-    QStringList elements();
-    QString currentElement();
+    QStringList elements() const { return m_elements; }
+    QString currentElement() const { return m_currentElement; }
     QStringList elementIcons() const { return m_elementIcons; }
     Q_INVOKABLE QString elementIcon(QString element);
     Q_INVOKABLE void setCurrentElement(QString element);
-    Q_INVOKABLE int elementType(int index);
+    Q_INVOKABLE int elementType(int index) const { return m_elementTypes.at(index); }
 
     // Music
     Q_INVOKABLE void playMusic(QString element);
@@ -68,12 +67,12 @@ public:
     Q_INVOKABLE void musicAgain();
     Q_INVOKABLE void musicPausePlay();
     Q_INVOKABLE void setMusicIndex(int index);
-    QStringList songs();
-    int currentSongIndex();
-    bool isPlaying();
-    Q_INVOKABLE QString getSongName();
-    Q_INVOKABLE QString getArtist();
-    Q_INVOKABLE QString getAlbum();
+    QStringList songs() const { return m_songs; }
+    int currentSongIndex() const { return m_musicPlaylist->currentIndex(); }
+    bool isPlaying() const { return m_isPlaying; }
+    Q_INVOKABLE QString getSongName() const { return m_songName; }
+    Q_INVOKABLE QString getArtist() const { return m_artist; }
+    Q_INVOKABLE QString getAlbum() const { return m_album; }
 
     // Spotify
     Q_INVOKABLE void playSpotify(QString element);
@@ -112,7 +111,7 @@ signals:
     void elementIconsChanged();
 
 private slots:
-    void onCurrentSongChanged();
+    void onCurrentSongChanged() { if (m_musicNotRadio) currentSongChanged(); }
     void onMetaDataChanged();
 
     void onSpotifyIconChanged(int index, QString url);

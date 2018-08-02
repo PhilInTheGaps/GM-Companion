@@ -51,6 +51,7 @@ void Spotify::granted()
         break;
 
     default:
+        fetchQueuedIcons();
         break;
     }
 }
@@ -204,8 +205,19 @@ void Spotify::fetchIcon(QString id, int index)
     }
     else
     {
-        //        m_tempId       = id;
-        //        m_afterGranted = 2;
-        //        grant();
+        Playlist p;
+        p.index = index;
+        p.id    = id;
+
+        iconFetchQueue.enqueue(p);
+    }
+}
+
+void Spotify::fetchQueuedIcons()
+{
+    while (!iconFetchQueue.isEmpty())
+    {
+        Playlist p = iconFetchQueue.dequeue();
+        fetchIcon(p.id, p.index);
     }
 }

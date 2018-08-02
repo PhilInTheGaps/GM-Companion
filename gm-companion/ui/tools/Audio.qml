@@ -75,6 +75,7 @@ Page {
                 }
 
                 function setSpotify(element) {
+                    music_element_name.text = element
                     playSpotify(element)
                 }
 

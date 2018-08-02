@@ -3,8 +3,15 @@
 
 #include <QObject>
 #include <QtNetworkAuth>
+#include <QQueue>
 
 #include "gm-companion/settings/settingsmanager.h"
+
+struct Playlist
+{
+    QString id;
+    int index;
+};
 
 class Spotify : public QObject
 {
@@ -34,11 +41,15 @@ private:
     QOAuth2AuthorizationCodeFlow m_spotify;
     SettingsManager m_sManager;
 
+    QQueue<Playlist> iconFetchQueue;
+
     bool m_isGranted = false;
     QString m_tempId;
     bool m_isPlaying = false;
     int m_volume;
     int m_afterGranted = 0;
+
+    void fetchQueuedIcons();
 
 signals:
     void iconChanged(int index, QString url);
@@ -47,5 +58,7 @@ private slots:
     void authStatusChanged(QAbstractOAuth::Status status);
     void granted();
 };
+
+
 
 #endif // SPOTIFY_H

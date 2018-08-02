@@ -58,6 +58,12 @@ Rectangle {
             sourceSize.height: height
         }
 
+        BusyIndicator {
+            visible: large_icon.status == Image.Loading
+            anchors.verticalCenter: large_icon.verticalCenter
+            anchors.horizontalCenter: large_icon.horizontalCenter
+        }
+
         Image {
             id: small_icon
 
