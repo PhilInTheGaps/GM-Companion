@@ -24,20 +24,32 @@ void MapTool::findMaps()
     l_maps.clear();
     l_categories.clear();
 
-    // Custom maps in maps folder
-    for (QString m : getFiles(basePath))
+    // Get folders
+    for (QString f : getFolders(basePath))
     {
-        if (m.endsWith(".jpg") || m.endsWith(".jpeg") || m.endsWith(".png"))
+        if (!f.contains("."))
         {
-            Map map;
-            map.name     = m;
-            map.path     = basePath + "/" + m;
-            map.category = "Custom";
+            bool containsMaps = false;
 
-            l_maps.append(map);
+            // Get maps
+            for (QString m : getFiles(basePath + "/" + f))
+            {
+                if (m.endsWith(".jpg") || m.endsWith(".jpeg") || m.endsWith(".png"))
+                {
+                    Map map;
+                    map.name     = m;
+                    map.path     = basePath + "/" + f + "/" + m;
+                    map.category = f;
+
+                    l_maps.append(map);
+
+                    containsMaps = true;
+                }
+            }
+
+            if (containsMaps) l_categories.append(f);
         }
     }
-    l_categories.append("Custom");
 
     // Addon maps
     for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
@@ -67,6 +79,8 @@ void MapTool::findMaps()
             }
         }
     }
+
+    qDebug() << l_categories;
 
     emit categoriesChanged();
 }

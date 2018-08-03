@@ -75,8 +75,18 @@ QString SettingsManager::getSetting(Setting setting)
         break;
 
     case Setting::language:
-        settingString = settings->value("language", "en").toString();
+    {
+        settingString = settings->value("language", "default").toString();
+
+        if (settingString == "default")
+        {
+            settingString = QLocale::languageToString(QLocale::system().language());
+
+            if (settingString == "German") settingString = "Deutsch";
+        }
+
         break;
+    }
 
     case Setting::version:
         settingString = QString::number(settings->value("version", 0).toInt());

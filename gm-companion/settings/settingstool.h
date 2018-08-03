@@ -50,7 +50,7 @@ signals:
 private:
     SettingsManager *sManager;
     QStringList languages = {"English", "Deutsch"};
-    QStringList styles = {tr("Dark"), tr("Bright")};
+    QStringList styles = {"Dark", "Bright"};
 
 };
 

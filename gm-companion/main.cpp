@@ -8,6 +8,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
+#include <QMap>
 
 #include "tools/audio/audiotool.h"
 #include "tools/audio/audioeditor.h"
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
     SettingsManager *settingsManager = new SettingsManager;
     QTranslator     *translator      = new QTranslator();
 
-    if (translator->load("gm-companion_" + settingsManager->getSetting(language), ":/translations")) app.installTranslator(translator);
+    if (translator->load("gm-companion_" + settingsManager->getSetting(Setting::language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
 
     QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");

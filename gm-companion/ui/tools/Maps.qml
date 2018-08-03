@@ -57,6 +57,48 @@ Page {
         color: color_scheme.backgroundColor
     }
 
+    header: maps_tab_bar
+
+    TabBar {
+        id: maps_tab_bar
+        width: parent.width
+        height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
+
+        currentIndex: maps_swipe_view.currentIndex
+
+        onCurrentIndexChanged: {
+            maps_swipe_view.currentIndex = currentIndex
+        }
+
+        background: Rectangle {
+            color: color_scheme.toolbarColor
+        }
+
+        Repeater {
+            id: tab_button_repeater
+
+            model: 0
+
+            TabButton {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: map_tool.categories[index]
+                    color: maps_tab_bar.currentIndex
+                           == index ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: maps_tab_bar.currentIndex == index ? "white" : color_scheme.toolbarColor
+                }
+            }
+        }
+    }
+
     Column {
         anchors.fill: parent
 
@@ -71,34 +113,10 @@ Page {
                 anchors.bottom: parent.bottom
                 width: platform.isAndroid ? parent.width / 4 : 200
 
-                TabBar {
-                    id: maps_tab_bar
-                    width: parent.width
-                    height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
-
-                    currentIndex: maps_swipe_view.currentIndex
-
-                    onCurrentIndexChanged: {
-                        maps_swipe_view.currentIndex = currentIndex
-                    }
-
-                    Repeater {
-                        id: tab_button_repeater
-
-                        model: 0
-
-                        TabButton {
-                            text: map_tool.categories[index]
-                            height: color_scheme.toolbarHeight
-                            font.pointSize: 12
-                        }
-                    }
-                }
-
                 SwipeView {
                     id: maps_swipe_view
                     width: parent.width
-                    height: parent.height - parent.spacing - maps_tab_bar.height
+                    height: parent.height
 
                     currentIndex: maps_tab_bar.currentIndex
                     clip: true
@@ -109,7 +127,7 @@ Page {
                 id: maps_image_flickable
                 width: maps_tab_column.visible ? maps_page.width
                                                  - maps_tab_column.width : maps_page.width
-                height: maps_page.height - maps_control_bar.height
+                height: parent.height
                 clip: true
                 interactive: true
 
