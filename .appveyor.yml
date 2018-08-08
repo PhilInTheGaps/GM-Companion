@@ -9,8 +9,6 @@ configuration:
   - release
 
 install:
-  - '%QTDIR%\bin\qtenv2.bat'
-  - qmake -v
   - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
   - call "%ProgramFiles(x86)%\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" %ARCH%
   - set make=nmake.exe
