@@ -1,11 +1,12 @@
 version: '{branch}-{build}'
 
 environment:
-  - QTDIR: C:\Qt\5.11.1\msvc2017_64
+  matrix:
+    - QTDIR: C:\Qt\5.11.1\msvc2017_64
 
 configuration:
- - debug
- - release
+  - debug
+  - release
 
 install:
   - '%QTDIR%\bin\qtenv2.bat'
