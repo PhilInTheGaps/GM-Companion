@@ -1,22 +1,9 @@
 version: '{branch}-{build}'
 
-environment:
-  matrix:
-    - QTDIR: C:\Qt\5.11.1\msvc2017_64
-
-configuration:
-  - debug
-  - release
-
 install:
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
-  - call "%ProgramFiles(x86)%\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" %ARCH%
-  - set make=nmake.exe
-
-before_build:
-  - mkdir %APPVEYOR_BUILD_FOLDER%-build
-  - qmake -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
-
+  - set QTDIR=C:\Qt\5.11.0\mingw53_32
+  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin
+  
 build_script:
-  - cd %APPVEYOR_BUILD_FOLDER%-build
-  - '%make%'
+  - qmake GM-Companion.pro
+  - mingw32-make
