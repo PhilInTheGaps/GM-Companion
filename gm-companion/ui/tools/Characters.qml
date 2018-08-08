@@ -188,7 +188,7 @@ Page {
                     Icon {
                         x: 10
                         icon: icons.fas_plus
-                        pointSize: 25
+                        pointSize: 22
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -218,7 +218,7 @@ Page {
                     Icon {
                         x: 10
                         icon: icons.fas_minus
-                        pointSize: 25
+                        pointSize: 22
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -247,7 +247,7 @@ Page {
                     Icon {
                         x: 10
                         icon: icons.fas_undo
-                        pointSize: 25
+                        pointSize: 22
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -278,10 +278,11 @@ Page {
 
                 width: platform.isAndroid ? parent.width / 5 : 175
                 clip: true
+                rightPadding: 10
 
                 Column {
                     id: active_column
-                    width: character_scrollview.width
+                    width: character_scrollview.width - character_scrollview.rightPadding
                     spacing: 5
                     topPadding: 5
                     bottomPadding: 5

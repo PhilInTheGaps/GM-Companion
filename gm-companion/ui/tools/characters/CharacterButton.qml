@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
+import "../../fontawesome"
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -39,6 +40,7 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         id: mouse_area
+        hoverEnabled: true
 
         onClicked: parent.clicked(parent.character_name)
     }
@@ -55,20 +57,17 @@ Rectangle {
         ToolTip.visible: hovered
         hoverEnabled: true
 
+        visible: mouse_area.containsMouse || hovered
+
         background: Rectangle {
             color: "transparent"
         }
 
-        Image {
-            source: character_button.active ? "/icons/menu/x_sign_bright.png" : "/icons/media/playBackwards_bright.png"
-            width: parent.height * 0.9
-            height: width
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            sourceSize.width: width
-            sourceSize.height: height
+        Icon {
+            icon: character_button.active ? icons.fas_times : icons.fas_plus
+            pointSize: 15
+            anchors.centerIn: parent
+            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
         }
 
         onClicked: parent.toggle_active_clicked(parent.character_name,
