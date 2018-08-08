@@ -1,0 +1,23 @@
+version: '{branch}-{build}'
+
+environment:
+  - QTDIR: C:\Qt\5.11.1\msvc2017_64
+
+configuration:
+ - debug
+ - release
+
+install:
+  - '%QTDIR%\bin\qtenv2.bat'
+  - qmake -v
+  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+  - call "%ProgramFiles(x86)%\Microsoft Visual Studio 15.0\VC\vcvarsall.bat" %ARCH%
+  - set make=nmake.exe
+
+before_build:
+  - mkdir %APPVEYOR_BUILD_FOLDER%-build
+  - qmake -o %APPVEYOR_BUILD_FOLDER%-build -r -Wall -Wlogic -Wparser CONFIG+=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
+
+build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%-build
+  - '%make%'
