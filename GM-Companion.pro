@@ -50,7 +50,8 @@ SOURCES += gm-companion/main.cpp \
     gm-companion/platformdetails.cpp \
     gm-companion/managers/addonmanager.cpp \
     gm-companion/managers/filemanager.cpp \
-    gm-companion/tools/audio/spotify.cpp
+    gm-companion/tools/audio/spotify.cpp \
+    gm-companion/tools/audio/audioexporter.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -102,7 +103,8 @@ HEADERS  += gm-companion/functions.h \
     gm-companion/platformdetails.h \
     gm-companion/managers/addonmanager.h \
     gm-companion/managers/filemanager.h \
-    gm-companion/tools/audio/spotify.h
+    gm-companion/tools/audio/spotify.h \
+    gm-companion/tools/audio/audioexporter.h
 
 
 DISTFILES += \

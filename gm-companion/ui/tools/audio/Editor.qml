@@ -284,6 +284,14 @@ Page {
         }
     }
 
+    AudioExporter {
+        id: audio_exporter
+        width: parent.width - 100
+        height: parent.height - 100
+        x: 50
+        y: 50
+    }
+
     ToolBar {
         id: tool_bar
         width: parent.width
@@ -425,6 +433,31 @@ Page {
                 }
 
                 onClicked: new_element_dialog.open()
+            }
+
+            ToolButton {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: export_audio_files.width + 10
+                hoverEnabled: true
+
+                Text {
+                    id: export_audio_files
+                    text: qsTr("Export Audio Files")
+                    anchors.centerIn: parent
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    font.bold: true
+                    font.pointSize: 12
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    audio_exporter.project = project_combo_box.currentText
+                    audio_exporter.open()
+                }
             }
         }
     }

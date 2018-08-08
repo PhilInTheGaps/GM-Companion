@@ -46,5 +46,6 @@
         <file>tools/combat_tracker/ListSpinBox.qml</file>
         <file>tools/converter/ConverterUnitPage.qml</file>
         <file>tools/audio/EditorSpotifyPlaylistPage.qml</file>
+        <file>tools/audio/AudioExporter.qml</file>
     </qresource>
 </RCC>
