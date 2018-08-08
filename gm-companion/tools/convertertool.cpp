@@ -156,6 +156,61 @@ void ConverterTool::addUnit(QString name, QString refUnits, QString type)
     }
 }
 
+// Delete a (custom) unit
+void ConverterTool::deleteUnit(int index)
+{
+    QSettings settings(QDir::homePath() + "/.gm-companion/units/custom.ini", QSettings::IniFormat);
+
+    settings.setIniCodec("UTF-8");
+
+    struct Unit
+    {
+        QString name;
+        QString category;
+        double  refUnits;
+    };
+
+    QList<Unit> tempList;
+
+    // Get all units
+    int size = settings.beginReadArray(m_unitTypes[m_typeIndex]);
+
+    for (int i = 0; i < size; i++)
+    {
+        settings.setArrayIndex(i);
+
+        Unit u;
+        u.name     = settings.value("name").toString();
+        u.category = settings.value("category").toString();
+        u.refUnits = settings.value("refUnits").toDouble();
+
+        tempList.push_back(u);
+    }
+
+    settings.endArray();
+
+    // Remove selected unit
+    if (index < tempList.size()) tempList.removeAt(index);
+
+    // Write all other units back to file
+    settings.beginWriteArray(m_unitTypes[m_typeIndex]);
+
+    for (int i = 0; i < tempList.size(); i++)
+    {
+        settings.setArrayIndex(i);
+
+        Unit u = tempList[i];
+
+        settings.setValue("name",     u.name);
+        settings.setValue("refUnits", u.refUnits);
+        settings.setValue("category", "Custom");
+    }
+
+    settings.endArray();
+
+    updateUnits();
+}
+
 // Return the name of the reference unit that belongs to the unit type.
 // Example: returns "Meters" for "Length"
 QString ConverterTool::refUnitName(QString unit)

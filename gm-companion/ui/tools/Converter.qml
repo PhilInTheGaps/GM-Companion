@@ -63,10 +63,12 @@ Page {
 
                     TextField {
                         id: unit_name
+                        selectByMouse: true
                     }
 
                     TextField {
                         id: unit_value
+                        selectByMouse: true
                     }
                 }
             }
@@ -238,6 +240,7 @@ Page {
 
         onSetCategory: converter_tool.setCurrentCategory(category)
         onSetUnit: converter_tool.setUnit(unit)
+        onDeleteUnit: converter_tool.deleteUnit(unit)
     }
 
     Rectangle {

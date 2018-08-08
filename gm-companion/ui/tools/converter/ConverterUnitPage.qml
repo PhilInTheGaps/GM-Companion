@@ -1,14 +1,17 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import "../../fontawesome"
 
 Page {
     id: page
 
     signal setCategory(int category)
     signal setUnit(int unit)
+    signal deleteUnit(int unit)
 
     property var categories
     property var units
+    property string category: ""
 
     background: Rectangle {
         color: color_scheme.backgroundColor
@@ -37,9 +40,34 @@ Page {
 
                 Button {
                     text: modelData
-                    width: parent.width
+                    width: main_column.width - main_column.padding * 2
+                    hoverEnabled: true
 
                     font.pointSize: 12
+
+                    Button {
+                        width: times_icon.width + 20
+                        hoverEnabled: true
+
+                        Icon {
+                            id: times_icon
+                            icon: icons.fas_times
+                            pointSize: 15
+                            anchors.centerIn: parent
+                            color: parent.pressed ? "darkgrey" : parent.hovered ? "grey" : "black"
+                            visible: parent.parent.hovered
+                                     && category == "Custom"
+                        }
+
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        x: parent.width - width
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        onClicked: deleteUnit(index)
+                    }
 
                     onClicked: setUnit(index)
                 }
@@ -65,6 +93,8 @@ Page {
                 id: category_repeater
                 model: categories
 
+                onModelChanged: category = categories[0]
+
                 Button {
                     height: color_scheme.toolbarHeight
                     width: category_text.width
@@ -85,6 +115,7 @@ Page {
 
                     onClicked: {
                         setCategory(index)
+                        category = categories[index]
                     }
                 }
             }

@@ -33,6 +33,8 @@ public:
     Q_INVOKABLE void addUnit(QString name, QString refUnits, QString type);
     Q_INVOKABLE QString refUnitName(QString unit);
 
+    Q_INVOKABLE void deleteUnit(int index);
+
     Q_INVOKABLE void setCurrentType(int index);
     Q_INVOKABLE void setCurrentCategory(int index);
     Q_INVOKABLE void setUnit(int index);
