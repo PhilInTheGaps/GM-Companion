@@ -31,7 +31,7 @@ Button {
             id: button_icon
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
-            sourceSize.height: parent.height - 10
+            sourceSize.height: parent.height - parent.padding * 2
             height: sourceSize.height
             source: icon_source
         }
@@ -39,6 +39,7 @@ Button {
         Text {
             text: tool_name
             font.pixelSize: platform.isAndroid ? parent.height / 2 : 17
+            visible: !inPortrait
 
             width: parent.width - parent.spacing - parent.padding * 2 - button_icon.width
             clip: true

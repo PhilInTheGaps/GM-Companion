@@ -517,6 +517,15 @@ Page {
                 }
 
                 Button {
+                    text: qsTr("Changelog")
+                    width: parent.width > 400 ? parent.width / 3 : parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    onClicked: Qt.openUrlExternally(
+                                   "https://github.com/PhilInTheGaps/GM-Companion/wiki/changelog")
+                }
+
+                Button {
                     text: qsTr("About")
                     width: parent.width > 400 ? parent.width / 3 : parent.width
                     anchors.horizontalCenter: parent.horizontalCenter

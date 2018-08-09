@@ -91,71 +91,17 @@ Window {
         }
     }
 
-    Item {
+    Page {
         id: main_item
         anchors.fill: parent
-
-        ToolBar {
-            id: toolbar
-            width: {
-                platform.isAndroid ? parent.width : inPortrait ? parent.width : drawer.opened ? parent.width - drawer.width : parent.width
-            }
-
-            height: color_scheme.toolbarHeight
-
-            visible: platform.isAndroid || inPortrait ? true : false
-            anchors.right: parent.right
-
-            background: Rectangle {
-                id: toolbar_bg
-                color: color_scheme.toolbarColor
-            }
-
-            Row {
-                id: toolbar_row_left
-                height: parent.height
-
-                ToolButton {
-                    id: tools_button
-
-                    Image {
-                        anchors.centerIn: parent
-                        width: parent.width - 10
-                        height: parent.height - 10
-                        source: "/icons/menu/three_bars_white.png"
-                    }
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
-                    height: parent.height
-                    width: height
-                    visible: !drawer.opened || inPortrait ? true : false
-
-                    onClicked: drawer.open()
-                }
-            }
-
-            Label {
-                id: tool_label
-                text: "Current Tool: Audio"
-
-                color: color_scheme.toolbarTextColor
-                height: parent.height
-                verticalAlignment: "AlignVCenter"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: toolbar_row_left.verticalCenter
-            }
-        }
 
         Drawer {
             id: drawer
             width: {
                 if (platform.isAndroid) {
-                    inPortrait ? parent.width / 2 : parent.width / 4
+                    inPortrait ? color_scheme.toolbarHeight : parent.width / 4
                 } else {
-                    inPortrait ? parent.width / 3 : 200
+                    inPortrait ? color_scheme.toolbarHeight : 200
                 }
             }
 
@@ -164,10 +110,14 @@ Window {
                 color: color_scheme.menuColor
             }
 
-            modal: inPortrait || platform.isAndroid
-            interactive: inPortrait || platform.isAndroid
-            position: inPortrait ? 0 : platform.isAndroid ? 0 : 1
-            visible: !inPortrait || !platform.isAndroid
+            //            modal: inPortrait || platform.isAndroid
+            modal: false
+            //            interactive: inPortrait || platform.isAndroid
+            interactive: false
+            //            position: inPortrait ? 0 : platform.isAndroid ? 0 : 1
+            //            position: 1
+            //            visible: !inPortrait || !platform.isAndroid
+            visible: true
 
             ScrollView {
                 anchors.fill: parent
@@ -186,11 +136,24 @@ Window {
                             text: "Tools"
                             color: color_scheme.toolbarTextColor
                             font.pointSize: 14
+                            visible: !inPortrait
 
                             anchors.centerIn: parent
 
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
+                        }
+
+                        Image {
+                            anchors.centerIn: parent
+                            visible: inPortrait
+
+                            width: parent.width - 10
+                            height: width
+
+                            source: "../icons/gm-companion/icon256_new.png"
+                            sourceSize.width: width
+                            sourceSize.height: height
                         }
 
                         color: color_scheme.toolbarColor
@@ -214,10 +177,6 @@ Window {
                                 tool.active = true
                                 stack.push(tool)
                             }
-
-                            if (inPortrait || platform.isAndroid) {
-                                drawer.close()
-                            }
                         }
 
                         SideMenuButton {
@@ -225,14 +184,8 @@ Window {
                             icon_source: "../icons/menu/audio.png"
 
                             onClicked: {
-                                tool_label.text = qsTr("Current Tool: Audio")
-
                                 if (stack.currentItem !== audio) {
                                     stack.pop(null)
-                                }
-
-                                if (inPortrait || platform.isAndroid) {
-                                    drawer.close()
                                 }
                             }
                         }
@@ -241,85 +194,56 @@ Window {
                             tool_name: qsTr("Maps")
                             icon_source: "../icons/menu/maps.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr("Current Tool: Maps")
-                                parent.buttonClicked(maps)
-                            }
+                            onClicked: parent.buttonClicked(maps)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Dice")
                             icon_source: "../icons/menu/dice.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr("Current Tool: Dice")
-                                parent.buttonClicked(dice)
-                            }
+                            onClicked: parent.buttonClicked(dice)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Combat Tracker")
                             icon_source: "../icons/menu/combat.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr(
-                                            "Current Tool: Combat Tracker")
-                                parent.buttonClicked(combat)
-                            }
+                            onClicked: parent.buttonClicked(combat)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Item Shop")
                             icon_source: "../icons/menu/item-shop.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr(
-                                            "Current Tool: Item Shop")
-                                parent.buttonClicked(shop)
-                            }
+                            onClicked: parent.buttonClicked(shop)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Characters")
                             icon_source: "../icons/menu/characters.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr(
-                                            "Current Tool: Characters")
-                                parent.buttonClicked(characters)
-                            }
+                            onClicked: parent.buttonClicked(characters)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Generators")
                             icon_source: "../icons/menu/generators.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr(
-                                            "Current Tool: Generators")
-                                parent.buttonClicked(generators)
-                            }
+                            onClicked: parent.buttonClicked(generators)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Notes")
                             icon_source: "../icons/menu/notes.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr("Current Tool: Notes")
-                                parent.buttonClicked(notes)
-                            }
+                            onClicked: parent.buttonClicked(notes)
                         }
 
                         SideMenuButton {
                             tool_name: qsTr("Converter")
                             icon_source: "../icons/menu/converter.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr(
-                                            "Current Tool: Unit Converter")
-                                parent.buttonClicked(converter)
-                            }
+                            onClicked: parent.buttonClicked(converter)
                         }
 
                         Rectangle {
@@ -332,10 +256,7 @@ Window {
                             tool_name: qsTr("Settings")
                             icon_source: "../icons/menu/settings.png"
 
-                            onClicked: {
-                                tool_label.text = qsTr("Settings")
-                                parent.buttonClicked(settings)
-                            }
+                            onClicked: parent.buttonClicked(settings)
                         }
                     }
                 }
@@ -346,13 +267,15 @@ Window {
             id: stack
             width: {
                 if (inPortrait || platform.isAndroid) {
-                    parent.width
+                    parent.width - drawer.width
                 } else {
                     parent.width - drawer.width
                 }
             }
 
-            anchors.top: toolbar.visible ? toolbar.bottom : parent.top
+            clip: true
+
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
 

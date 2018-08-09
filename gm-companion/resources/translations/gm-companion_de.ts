@@ -476,6 +476,39 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
+    <name>AudioExporter</name>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="11"/>
+        <source>Export Audio Files</source>
+        <translation>Audio Dateien Exportieren</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="64"/>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="78"/>
+        <source>Set Folder</source>
+        <translation>Ordner Festlegen</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="99"/>
+        <source>Categories to Export</source>
+        <translation>Zu exportierende Kategorien</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="153"/>
+        <source>Scenarios to Export</source>
+        <translation>Zu exportierende Szenarien</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="219"/>
+        <source>Elements to Export</source>
+        <translation>Zu exportierende Elemente</translation>
+    </message>
+</context>
+<context>
     <name>AudioTool</name>
     <message>
         <source>List</source>
@@ -1340,12 +1373,12 @@ p, li { white-space: pre-wrap; }
         <translation>Einheit:</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="75"/>
+        <location filename="../../ui/tools/Converter.qml" line="77"/>
         <source>Add Unit</source>
         <translation>Einheit Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="121"/>
+        <location filename="../../ui/tools/Converter.qml" line="123"/>
         <source>Add Custom Units</source>
         <translation>Eigene Einheiten Hinzufügen</translation>
     </message>
@@ -1418,27 +1451,27 @@ p, li { white-space: pre-wrap; }
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="167"/>
+        <location filename="../../tools/convertertool.cpp" line="222"/>
         <source>Meters</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="171"/>
+        <location filename="../../tools/convertertool.cpp" line="226"/>
         <source>Square Meters</source>
         <translation>Quadratmeter</translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="175"/>
+        <location filename="../../tools/convertertool.cpp" line="230"/>
         <source>Cubic Meters</source>
         <translation>Kubikmeter</translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="179"/>
+        <location filename="../../tools/convertertool.cpp" line="234"/>
         <source>Kilograms</source>
         <translation>Kilogramm</translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="183"/>
+        <location filename="../../tools/convertertool.cpp" line="238"/>
         <source>Dollars</source>
         <translation>Dollar</translation>
     </message>
@@ -1869,57 +1902,62 @@ Zwischenergebnis: </translation>
         <translation>Element</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="328"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="336"/>
         <source>New Project</source>
         <translation>Neues Projekt</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="350"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="358"/>
         <source>Save Project</source>
         <translation>Projekt Speichern</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="372"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="380"/>
         <source>New Category</source>
         <translation>Neue Kategorie</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="394"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="402"/>
         <source>New Scenario</source>
         <translation>Neues Szenario</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="416"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="424"/>
         <source>New Element</source>
         <translation>Neues Element</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="447"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="446"/>
+        <source>Export Audio Files</source>
+        <translation>Audio Dateien Exportieren</translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/Editor.qml" line="480"/>
         <source>Project</source>
         <translation>Projekt</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="464"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="497"/>
         <source>Category</source>
         <translation>Kategorie</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="480"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="513"/>
         <source>Scenario</source>
         <translation>Szenario</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="499"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="532"/>
         <source>Elements</source>
         <translation>Elemente</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="519"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="552"/>
         <source>Sort Alphabetically</source>
         <translation>Alphabetisch Sortieren</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="564"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="597"/>
         <source>No Element Selected</source>
         <translation>Kein Element Ausgewählt</translation>
     </message>
@@ -4221,98 +4259,88 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="224"/>
+        <location filename="../../ui/main.qml" line="183"/>
         <source>Audio</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="228"/>
         <source>Current Tool: Audio</source>
-        <translation>Aktuelles Tool: Audio</translation>
+        <translation type="vanished">Aktuelles Tool: Audio</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="241"/>
+        <location filename="../../ui/main.qml" line="194"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="245"/>
         <source>Current Tool: Maps</source>
-        <translation>Aktuelles Tool: Karten</translation>
+        <translation type="vanished">Aktuelles Tool: Karten</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="251"/>
+        <location filename="../../ui/main.qml" line="201"/>
         <source>Dice</source>
         <translation>Würfel</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="255"/>
         <source>Current Tool: Dice</source>
-        <translation>Aktuelles Tool: Würfel</translation>
+        <translation type="vanished">Aktuelles Tool: Würfel</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="261"/>
+        <location filename="../../ui/main.qml" line="208"/>
         <source>Combat Tracker</source>
         <translation>Kampfrunden</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="265"/>
         <source>Current Tool: Combat Tracker</source>
-        <translation>Aktuelles Tool: Kampfrunden</translation>
+        <translation type="vanished">Aktuelles Tool: Kampfrunden</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="272"/>
+        <location filename="../../ui/main.qml" line="215"/>
         <source>Item Shop</source>
         <translation>Item Shop</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="276"/>
         <source>Current Tool: Item Shop</source>
-        <translation>Aktuelles Tool: Item Shop</translation>
+        <translation type="vanished">Aktuelles Tool: Item Shop</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="283"/>
+        <location filename="../../ui/main.qml" line="222"/>
         <source>Characters</source>
         <translation>Charaktere</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="287"/>
         <source>Current Tool: Characters</source>
-        <translation>Aktuelles Tool: Charaktere</translation>
+        <translation type="vanished">Aktuelles Tool: Charaktere</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="294"/>
+        <location filename="../../ui/main.qml" line="229"/>
         <source>Generators</source>
         <translation>Generatoren</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="298"/>
         <source>Current Tool: Generators</source>
-        <translation>Aktuelles Tool: Generatoren</translation>
+        <translation type="vanished">Aktuelles Tool: Generatoren</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="305"/>
+        <location filename="../../ui/main.qml" line="236"/>
         <source>Notes</source>
         <translation>Notizen</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="309"/>
         <source>Current Tool: Notes</source>
-        <translation>Aktuelles Tool: Notizen</translation>
+        <translation type="vanished">Aktuelles Tool: Notizen</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="315"/>
+        <location filename="../../ui/main.qml" line="243"/>
         <source>Converter</source>
         <translation>Umrechner</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="319"/>
         <source>Current Tool: Unit Converter</source>
-        <translation>Aktuelles Tool: Umrechner</translation>
+        <translation type="vanished">Aktuelles Tool: Umrechner</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="332"/>
-        <location filename="../../ui/main.qml" line="336"/>
+        <location filename="../../ui/main.qml" line="256"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>

@@ -64,6 +64,39 @@
     </message>
 </context>
 <context>
+    <name>AudioExporter</name>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="11"/>
+        <source>Export Audio Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="64"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="78"/>
+        <source>Set Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="99"/>
+        <source>Categories to Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="153"/>
+        <source>Scenarios to Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/AudioExporter.qml" line="219"/>
+        <source>Elements to Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CharEditor</name>
     <message>
         <source>Character Editor</source>
@@ -267,12 +300,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="75"/>
+        <location filename="../../ui/tools/Converter.qml" line="77"/>
         <source>Add Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="121"/>
+        <location filename="../../ui/tools/Converter.qml" line="123"/>
         <source>Add Custom Units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -285,27 +318,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="167"/>
+        <location filename="../../tools/convertertool.cpp" line="222"/>
         <source>Meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="171"/>
+        <location filename="../../tools/convertertool.cpp" line="226"/>
         <source>Square Meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="175"/>
+        <location filename="../../tools/convertertool.cpp" line="230"/>
         <source>Cubic Meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="179"/>
+        <location filename="../../tools/convertertool.cpp" line="234"/>
         <source>Kilograms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/convertertool.cpp" line="183"/>
+        <location filename="../../tools/convertertool.cpp" line="238"/>
         <source>Dollars</source>
         <translation type="unfinished"></translation>
     </message>
@@ -521,57 +554,62 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="328"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="336"/>
         <source>New Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="350"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="358"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="372"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="380"/>
         <source>New Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="394"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="402"/>
         <source>New Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="416"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="424"/>
         <source>New Element</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="447"/>
-        <source>Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="464"/>
-        <source>Category</source>
+        <location filename="../../ui/tools/audio/Editor.qml" line="446"/>
+        <source>Export Audio Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../ui/tools/audio/Editor.qml" line="480"/>
+        <source>Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/Editor.qml" line="497"/>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/Editor.qml" line="513"/>
         <source>Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="499"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="532"/>
         <source>Elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="519"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="552"/>
         <source>Sort Alphabetically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/Editor.qml" line="564"/>
+        <location filename="../../ui/tools/audio/Editor.qml" line="597"/>
         <source>No Element Selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1326,98 +1364,52 @@ Items
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="224"/>
+        <location filename="../../ui/main.qml" line="183"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="228"/>
-        <source>Current Tool: Audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="241"/>
+        <location filename="../../ui/main.qml" line="194"/>
         <source>Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="245"/>
-        <source>Current Tool: Maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="251"/>
+        <location filename="../../ui/main.qml" line="201"/>
         <source>Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="255"/>
-        <source>Current Tool: Dice</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="261"/>
+        <location filename="../../ui/main.qml" line="208"/>
         <source>Combat Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="265"/>
-        <source>Current Tool: Combat Tracker</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="272"/>
+        <location filename="../../ui/main.qml" line="215"/>
         <source>Item Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="276"/>
-        <source>Current Tool: Item Shop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="283"/>
+        <location filename="../../ui/main.qml" line="222"/>
         <source>Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="287"/>
-        <source>Current Tool: Characters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="294"/>
+        <location filename="../../ui/main.qml" line="229"/>
         <source>Generators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="298"/>
-        <source>Current Tool: Generators</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="305"/>
+        <location filename="../../ui/main.qml" line="236"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="309"/>
-        <source>Current Tool: Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="315"/>
+        <location filename="../../ui/main.qml" line="243"/>
         <source>Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="319"/>
-        <source>Current Tool: Unit Converter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/main.qml" line="332"/>
-        <location filename="../../ui/main.qml" line="336"/>
+        <location filename="../../ui/main.qml" line="256"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
