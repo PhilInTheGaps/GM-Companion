@@ -306,12 +306,20 @@ Page {
                     }
                 }
 
-                CheckBox {
-                    text: qsTr("Automatically check for updates")
-                    checked: settings_tool.getCheckForUpdates()
 
-                    onCheckedChanged: {
-                        settings_tool.setCheckForUpdates(checked)
+                Row {
+                    CheckBox {
+                        checked: settings_tool.getCheckForUpdates()
+
+                        onCheckedChanged: {
+                            settings_tool.setCheckForUpdates(checked)
+                        }
+                    }
+
+                    Text {
+                        text: qsTr("Automatically check for updates")
+                        color: color_scheme.textColor
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 

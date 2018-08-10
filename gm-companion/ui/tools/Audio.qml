@@ -520,7 +520,6 @@ Page {
                         visible: false
 
                         anchors.horizontalCenter: audio_scenario_element_column.horizontalCenter
-                        anchors.verticalCenter: audio_scenario_element_column.verticalCenter
                     }
 
                     ScrollView {

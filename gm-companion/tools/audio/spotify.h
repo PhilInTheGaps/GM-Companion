@@ -20,7 +20,7 @@ public:
     explicit Spotify(QObject *parent = nullptr);
     ~Spotify() {}
 
-    void grant() { m_spotify.grant(); }
+    void grant();
     bool isGranted() const { return m_isGranted; }
 
     void play(QString id);

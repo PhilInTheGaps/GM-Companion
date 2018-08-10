@@ -40,6 +40,17 @@ void Spotify::authStatusChanged(QAbstractOAuth::Status status)
     qDebug() << "Status Changed:" << s;
 }
 
+void Spotify::grant()
+{
+    QString clientID = m_sManager.getSetting(Setting::spotifyID);
+    QString secretKey = m_sManager.getSetting(Setting::spotifySecret);
+
+    if (clientID != "" && secretKey != "")
+    {
+        m_spotify.grant();
+    }
+}
+
 void Spotify::granted()
 {
     m_isGranted = true;
