@@ -43,10 +43,10 @@ Page {
 
             for (var i = 0; i < categories.length; i++) {
                 var button = component.createObject(category_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        category: categories[i],
-                                                        parent_width: category_column.width
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "category": categories[i],
+                                                        "parent_width": category_column.width
                                                     })
 
                 button.clicked.connect(updateCategory)
@@ -63,9 +63,9 @@ Page {
 
             for (var i = 0; i < shops.length; i++) {
                 var button = component.createObject(shop_list_column, {
-                                                        x: 0,
-                                                        y: 0,
-                                                        shop: shops[i]
+                                                        "x": 0,
+                                                        "y": 0,
+                                                        "shop": shops[i]
                                                     })
 
                 button.clicked.connect(loadShop)
@@ -85,9 +85,9 @@ Page {
 
             for (var i = 0; i < item_names.length; i++) {
                 list_model.append({
-                                      item: item_names[i],
-                                      price: item_prices[i],
-                                      description: item_descriptions[i]
+                                      "item": item_names[i],
+                                      "price": item_prices[i],
+                                      "description": item_descriptions[i]
                                   })
             }
         }
@@ -384,6 +384,10 @@ Page {
                 shop_stack_view.pop(null)
                 shop_stack_view.push(item_editor)
             }
+        }
+
+        onProjectsChanged: {
+            project_combo_box.model = shop_tool.projects
         }
     }
 

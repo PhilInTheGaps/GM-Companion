@@ -256,6 +256,8 @@ void ShopEditor::createShop(QString shop)
         settings.setValue("shop", shopValues);
 
         settings.endArray();
+
+        l_shopList.append(shop);
     }
     else
     {

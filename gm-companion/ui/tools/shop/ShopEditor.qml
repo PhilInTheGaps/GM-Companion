@@ -11,6 +11,7 @@ Page {
 
     signal backToViewer
     signal switchToItemEditor
+    signal projectsChanged
 
     ShopTool {
         id: shop_tool
@@ -264,6 +265,7 @@ Page {
                 editor_tool.createProject(project_textfield.text)
 
                 project_combo_box.model = shop_tool.projects
+                projectsChanged()
             }
         }
 
