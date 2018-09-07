@@ -650,7 +650,7 @@ Page {
                 }
             }
 
-            onAddAllFiles: editor_tool.addFiles(fileNames, filePaths)
+            onAddAllFiles: editor_tool.addFiles(fileNames, filePaths, [""])
         }
     }
 }

@@ -440,7 +440,8 @@ void AudioEditor::addFiles(QStringList names, QStringList paths, QList<bool>miss
     {
         l_currentFileNames.append(names);
         l_currentFilePaths.append(paths);
-        l_currentFileMissing.append(missing);
+
+        if (!missing.isEmpty()) l_currentFileMissing.append(missing);
 
         emit listChanged();
     }
