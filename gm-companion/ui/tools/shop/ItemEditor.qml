@@ -150,38 +150,6 @@ Page {
                     selectByMouse: true
                 }
             }
-
-            Rectangle {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 1
-                color: color_scheme.dividerColor
-            }
-
-            TextArea {
-                width: parent.width
-                padding: 0
-                readOnly: true
-                wrapMode: "WordWrap"
-                clip: true
-
-                color: color_scheme.textColor
-                text: qsTr("Tutorial:\n
-Categories
-- To add a new item category enter a category name
-and click \"Add Category\"
-
-Items
-- Items are organized in categories
-- If you have not created any categories, read \"Categories\" above
-
-- How to add a new Item:
-- Enter item name in \"Item Name\" field
-- Set a price the item sells at (not required)
-- Choose a category from the combo box
-- Enter a description in the \"Item Description\" field (not required)
-- Click \"Add Item\"")
-            }
         }
 
         Rectangle {

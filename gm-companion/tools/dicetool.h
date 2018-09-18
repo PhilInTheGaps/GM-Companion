@@ -24,10 +24,12 @@ public:
     Q_INVOKABLE void setAmount(int amount) { l_amount = amount; }
     Q_INVOKABLE void setModifier(int modifier) { l_modifier = modifier; }
 
-    Q_INVOKABLE void setDiceSettings(bool enableCriticals, int success, int failure);
+    Q_INVOKABLE void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax);
     Q_INVOKABLE bool getCriticalEnabled() const { return settings->value("enableCriticals", true).toBool(); }
     Q_INVOKABLE int getSuccess() const { return settings->value("success", 20).toInt(); }
     Q_INVOKABLE int getFailure() const { return settings->value("failure", 1).toInt(); }
+    Q_INVOKABLE bool getMinMax() const { return settings->value("useMinMax", true).toBool(); }
+    Q_INVOKABLE bool getSuccessMax() const { return settings->value("successMax", true).toBool(); }
 
 signals:
     void sidesChanged();

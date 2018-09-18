@@ -91,6 +91,7 @@ Page {
         }
     }
 
+    // Header
     Column {
         anchors.fill: parent
         bottomPadding: 5
@@ -169,6 +170,7 @@ Page {
             }
         }
 
+        // Main
         SwipeView {
             id: swipe_view
             width: parent.width - parent.padding * 2
@@ -179,6 +181,7 @@ Page {
             spacing: 5
             interactive: false
 
+            // General Settings
             Column {
                 id: general_column
 
@@ -306,7 +309,6 @@ Page {
                     }
                 }
 
-
                 Row {
                     CheckBox {
                         checked: settings_tool.getCheckForUpdates()
@@ -392,6 +394,7 @@ Page {
                 }
             }
 
+            // Paths
             Column {
                 spacing: 5
 
@@ -456,23 +459,23 @@ Page {
                 }
             }
 
+            // Addons
             Column {
                 spacing: 5
 
-                TextArea {
-                    id: addon_text_area
+                Text {
+                    id: addon_text
                     width: parent.width
-                    padding: 0
-                    readOnly: true
-
                     text: qsTr("The following addons are available:")
+                    color: color_scheme.textColor
+                    font.pointSize: 12
                     clip: true
                     wrapMode: "WordWrap"
                 }
 
                 ScrollView {
                     width: parent.width
-                    height: parent.height - addon_text_area.height - parent.spacing * 2
+                    height: parent.height - addon_text.height - parent.spacing * 2
                     clip: true
 
                     Column {

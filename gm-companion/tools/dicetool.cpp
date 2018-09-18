@@ -17,20 +17,41 @@ void DiceTool::setSides(int sides)
     emit sidesChanged();
 }
 
-void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure)
+void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax)
 {
     settings->setValue("enableCriticals", enableCriticals);
     settings->setValue("success",         success);
     settings->setValue("failure",         failure);
+    settings->setValue("useMinMax",       minMax);
+    settings->setValue("successMax",      successMax);
 }
 
 int DiceTool::roll()
 {
-    int result            = 0;
-    int criticalSuccesses = 0;
-    int criticalSuccess   = getSuccess();
-    int criticalFailures  = 0;
-    int criticalFailure   = getFailure();
+    int result = 0;
+    int criticalSuccesses = 0, criticalFailures = 0;
+    int criticalSuccess = 0, criticalFailure = 0;
+
+    // Initialize values for crits
+    if (getMinMax())
+    {
+        if (getSuccessMax())
+        {
+            criticalSuccess = l_sides;
+            criticalFailure = 1;
+        }
+        else
+        {
+            criticalSuccess = 1;
+            criticalFailure = l_sides;
+        }
+    }
+    else
+    {
+        criticalSuccess = getSuccess();
+        criticalFailure = getFailure();
+    }
+
 
     l_calculation_string = tr("Roll:\n") + QString::number(l_amount) + "x " + tr("D") + QString::number(l_sides);
 
@@ -67,7 +88,7 @@ int DiceTool::roll()
     {
         l_calculation_string.append(tr("Bonus Dice:\n"));
 
-        // TODO
+        // TODO for later, is currently not important
 
         l_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
     }
@@ -79,6 +100,7 @@ int DiceTool::roll()
     emit rollChanged();
     emit calculationStringChanged();
 
+    // Evaluate Crits
     if (getCriticalEnabled())
     {
         if ((criticalSuccesses > 0) && (criticalFailures > 0)) emit mixedCriticalResult();
