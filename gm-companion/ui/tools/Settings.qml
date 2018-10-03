@@ -343,7 +343,7 @@ Page {
                 }
 
                 Text {
-                    text: qsTr("Spotify")
+                    text: qsTr("Spotify (Experimental Feature)")
                     font.bold: true
                     visible: platform_details.isAndroid ? false : true
                     color: color_scheme.textColor

@@ -22,6 +22,7 @@ class ColorScheme : public QObject
     Q_PROPERTY(QString listHeaderTextColor READ listHeaderTextColor NOTIFY listHeaderTextColorChanged)
     Q_PROPERTY(QString combatTrackerXType READ combatTrackerXType NOTIFY combatTrackerXTypeChanged)
     Q_PROPERTY(int toolbarHeight READ toolbarHeight NOTIFY toolbarHeightChanged)
+    Q_PROPERTY(QString playlistHiglightTextColor READ playlistHiglightTextColor NOTIFY playlistHiglightTextColorChanged)
 
 public:
     explicit ColorScheme(QObject *parent = nullptr);
@@ -40,6 +41,7 @@ public:
     QString listHeaderBackgroundColor() { return getColor("list_header_background_color", "grey"); }
     QString listHeaderTextColor() { return getColor("list_header_text_color", "black"); }
     QString combatTrackerXType() { return getColor("combat_tracker_x_type", "dark"); }
+    QString playlistHiglightTextColor() { return getColor("playlist_higlight_text_color", "black"); }
     int toolbarHeight() { return stylesheet->value("toolbar_height", 40).toInt(); }
 
 signals:
@@ -55,6 +57,7 @@ signals:
     void listHeaderBackgroundColorChanged();
     void listHeaderTextColorChanged();
     void combatTrackerXTypeChanged();
+    void playlistHiglightTextColorChanged();
     void toolbarHeightChanged();
 
 private:

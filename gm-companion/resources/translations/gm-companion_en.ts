@@ -31,27 +31,27 @@
 <context>
     <name>Audio</name>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="452"/>
+        <location filename="../../ui/tools/Audio.qml" line="454"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="473"/>
+        <location filename="../../ui/tools/Audio.qml" line="475"/>
         <source>Project Structure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="563"/>
+        <location filename="../../ui/tools/Audio.qml" line="566"/>
         <source>Sounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="570"/>
+        <location filename="../../ui/tools/Audio.qml" line="573"/>
         <source>No sounds playing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="584"/>
+        <location filename="../../ui/tools/Audio.qml" line="587"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -356,72 +356,92 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="57"/>
+        <location filename="../../ui/tools/Dice.qml" line="58"/>
+        <source>Min / Max</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Dice.qml" line="68"/>
+        <source>Success: Maximum, Failure: Minimum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Dice.qml" line="73"/>
+        <source>Success: Minimum, Failure: Maximum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Dice.qml" line="79"/>
+        <source>Fixed Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Dice.qml" line="88"/>
         <source>Critical Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="69"/>
+        <location filename="../../ui/tools/Dice.qml" line="100"/>
         <source>Critical Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="125"/>
+        <location filename="../../ui/tools/Dice.qml" line="160"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="167"/>
+        <location filename="../../ui/tools/Dice.qml" line="202"/>
         <source>D4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="188"/>
+        <location filename="../../ui/tools/Dice.qml" line="223"/>
         <source>D6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="220"/>
+        <location filename="../../ui/tools/Dice.qml" line="255"/>
         <source>D8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="247"/>
+        <location filename="../../ui/tools/Dice.qml" line="282"/>
         <source>D10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="268"/>
+        <location filename="../../ui/tools/Dice.qml" line="303"/>
         <source>D12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="294"/>
+        <location filename="../../ui/tools/Dice.qml" line="329"/>
         <source>D20</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="325"/>
+        <location filename="../../ui/tools/Dice.qml" line="360"/>
         <source>Dice Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="350"/>
+        <location filename="../../ui/tools/Dice.qml" line="385"/>
         <source>Dice Sides</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="375"/>
+        <location filename="../../ui/tools/Dice.qml" line="410"/>
         <source>Modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="420"/>
+        <location filename="../../ui/tools/Dice.qml" line="455"/>
         <source>Roll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Dice.qml" line="430"/>
+        <location filename="../../ui/tools/Dice.qml" line="465"/>
         <source>Result:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -447,41 +467,41 @@
 <context>
     <name>DiceTool</name>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="35"/>
+        <location filename="../../tools/dicetool.cpp" line="56"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="35"/>
+        <location filename="../../tools/dicetool.cpp" line="56"/>
         <source>Roll:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="60"/>
+        <location filename="../../tools/dicetool.cpp" line="81"/>
         <source>Roll </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="63"/>
-        <location filename="../../tools/dicetool.cpp" line="72"/>
+        <location filename="../../tools/dicetool.cpp" line="84"/>
+        <location filename="../../tools/dicetool.cpp" line="93"/>
         <source>
 Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="68"/>
+        <location filename="../../tools/dicetool.cpp" line="89"/>
         <source>Bonus Dice:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="77"/>
+        <location filename="../../tools/dicetool.cpp" line="98"/>
         <source>Modifier: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../tools/dicetool.cpp" line="77"/>
+        <location filename="../../tools/dicetool.cpp" line="98"/>
         <source>Result: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -838,7 +858,7 @@ Temporary Result: </source>
     </message>
     <message>
         <location filename="../../ui/tools/shop/ItemEditor.qml" line="93"/>
-        <location filename="../../ui/tools/shop/ItemEditor.qml" line="225"/>
+        <location filename="../../ui/tools/shop/ItemEditor.qml" line="193"/>
         <source>Price</source>
         <translation type="unfinished"></translation>
     </message>
@@ -863,37 +883,17 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ItemEditor.qml" line="169"/>
-        <source>Tutorial:
-
-Categories
-- To add a new item category enter a category name
-and click &quot;Add Category&quot;
-
-Items
-- Items are organized in categories
-- If you have not created any categories, read &quot;Categories&quot; above
-
-- How to add a new Item:
-- Enter item name in &quot;Item Name&quot; field
-- Set a price the item sells at (not required)
-- Choose a category from the combo box
-- Enter a description in the &quot;Item Description&quot; field (not required)
-- Click &quot;Add Item&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/shop/ItemEditor.qml" line="216"/>
+        <location filename="../../ui/tools/shop/ItemEditor.qml" line="184"/>
         <source>Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ItemEditor.qml" line="234"/>
+        <location filename="../../ui/tools/shop/ItemEditor.qml" line="202"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ItemEditor.qml" line="243"/>
+        <location filename="../../ui/tools/shop/ItemEditor.qml" line="211"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1038,162 +1038,167 @@ Items
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="433"/>
+        <location filename="../../ui/tools/Settings.qml" line="346"/>
+        <source>Spotify (Experimental Feature)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Settings.qml" line="444"/>
         <source>Shop Projects / Item Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="534"/>
+        <location filename="../../ui/tools/Settings.qml" line="554"/>
         <source>Changing settings requires a program restart!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="188"/>
+        <location filename="../../ui/tools/Settings.qml" line="191"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="197"/>
+        <location filename="../../ui/tools/Settings.qml" line="200"/>
         <source>Select Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="230"/>
+        <location filename="../../ui/tools/Settings.qml" line="233"/>
         <source>User Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="239"/>
+        <location filename="../../ui/tools/Settings.qml" line="242"/>
         <source>Select Style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="272"/>
+        <location filename="../../ui/tools/Settings.qml" line="275"/>
         <source>Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="284"/>
+        <location filename="../../ui/tools/Settings.qml" line="287"/>
         <source>Check for Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="321"/>
+        <location filename="../../ui/tools/Settings.qml" line="331"/>
         <source>Open Download Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="125"/>
+        <location filename="../../ui/tools/Settings.qml" line="126"/>
         <source>Paths</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="108"/>
+        <location filename="../../ui/tools/Settings.qml" line="109"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="142"/>
+        <location filename="../../ui/tools/Settings.qml" line="143"/>
         <source>RPG Addons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="159"/>
+        <location filename="../../ui/tools/Settings.qml" line="160"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="310"/>
+        <location filename="../../ui/tools/Settings.qml" line="322"/>
         <source>Automatically check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="336"/>
-        <source>Spotify</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/Settings.qml" line="345"/>
+        <location filename="../../ui/tools/Settings.qml" line="355"/>
         <source>Client ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="364"/>
+        <location filename="../../ui/tools/Settings.qml" line="374"/>
         <source>Client Secret</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="381"/>
+        <location filename="../../ui/tools/Settings.qml" line="391"/>
         <source>Requires Spotify Premium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="391"/>
+        <location filename="../../ui/tools/Settings.qml" line="402"/>
         <source>Audio Projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="397"/>
+        <location filename="../../ui/tools/Settings.qml" line="408"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="403"/>
+        <location filename="../../ui/tools/Settings.qml" line="414"/>
         <source>Sound</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="409"/>
+        <location filename="../../ui/tools/Settings.qml" line="420"/>
         <source>Internet Radio Playlists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="415"/>
+        <location filename="../../ui/tools/Settings.qml" line="426"/>
         <source>Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="421"/>
+        <location filename="../../ui/tools/Settings.qml" line="432"/>
         <source>Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="427"/>
+        <location filename="../../ui/tools/Settings.qml" line="438"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="439"/>
+        <location filename="../../ui/tools/Settings.qml" line="450"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="460"/>
+        <location filename="../../ui/tools/Settings.qml" line="469"/>
         <source>The following addons are available:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="484"/>
+        <location filename="../../ui/tools/Settings.qml" line="495"/>
         <source>Open Wiki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="493"/>
+        <location filename="../../ui/tools/Settings.qml" line="504"/>
         <source>Report a Bug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="502"/>
+        <location filename="../../ui/tools/Settings.qml" line="513"/>
         <source>Download older Versions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="511"/>
+        <location filename="../../ui/tools/Settings.qml" line="522"/>
         <source>View GM-Companion on GitHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Settings.qml" line="520"/>
+        <location filename="../../ui/tools/Settings.qml" line="531"/>
+        <source>Changelog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Settings.qml" line="540"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1205,115 +1210,115 @@ Items
         <translation type="obsolete">Save</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="133"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="250"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="134"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="251"/>
         <source>Create New Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="256"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="257"/>
         <source>Project Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="157"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="272"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="158"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="274"/>
         <source>Create New Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="279"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="281"/>
         <source>Category Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="181"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="298"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="182"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="300"/>
         <source>Create New Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="305"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="307"/>
         <source>Shop Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="332"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="334"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="352"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="615"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="839"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="354"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="617"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="841"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="374"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="376"/>
         <source>Shops</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="459"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="461"/>
         <source>Hold to delete shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="502"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="504"/>
         <source>Hold to remove all items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="544"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="546"/>
         <source>No Shop Selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="563"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="565"/>
         <source>Shop Owner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="572"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="574"/>
         <source>Shop Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="445"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="447"/>
         <source>Save Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="483"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="485"/>
         <source>Delete Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="526"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="528"/>
         <source>Remove All Items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="595"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="819"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="597"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="821"/>
         <source>Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="605"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="829"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="607"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="831"/>
         <source>Price</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="625"/>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="849"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="627"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="851"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/shop/ShopEditor.qml" line="229"/>
+        <location filename="../../ui/tools/shop/ShopEditor.qml" line="230"/>
         <source>Open Item Editor</source>
         <translation type="unfinished"></translation>
     </message>

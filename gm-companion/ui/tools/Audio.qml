@@ -417,10 +417,12 @@ Page {
                 }
             }
 
+            // Main Row
             Row {
                 id: audio_row
                 anchors.fill: parent
 
+                // Left Menu
                 Column {
                     id: audio_project_menu
                     height: parent.height - audio_control_bar.height
@@ -489,6 +491,7 @@ Page {
                     }
                 }
 
+                // Mid Column
                 Column {
                     id: audio_scenario_element_column
                     height: parent.height - audio_control_bar.height
@@ -542,6 +545,7 @@ Page {
                     }
                 }
 
+                // Right Menu
                 Item {
                     id: audio_info_frame
                     height: parent.height - audio_control_bar.height
@@ -621,6 +625,7 @@ Page {
                             color: color_scheme.dividerColor
                         }
 
+                        // Playlist
                         ListView {
                             id: playlist_view
                             width: parent.width - parent.padding * 2
@@ -648,7 +653,7 @@ Page {
                                     clip: true
                                     elide: Text.ElideRight
                                     text: name
-                                    color: color_scheme.textColor
+                                    color: playlist_view.currentIndex === index ? color_scheme.playlistHiglightTextColor : color_scheme.textColor
                                     font.pointSize: 10
                                     anchors.centerIn: parent
                                     width: parent.width - 10
