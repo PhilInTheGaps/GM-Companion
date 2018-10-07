@@ -741,7 +741,7 @@ Page {
                                             icon: icons.fas_times
                                             pointSize: 12
                                             anchors.centerIn: parent
-                                            color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                                            color: parent.pressed ? "grey" : mouse_area.hovered ? "black" : color_scheme.textColor
                                         }
 
                                         onClicked: {

@@ -217,6 +217,7 @@ Page {
         }
     }
 
+    // List Header
     Rectangle {
         id: list_header
         anchors.left: parent.left
@@ -285,6 +286,7 @@ Page {
         anchors.top: list_header.bottom
         anchors.bottom: parent.bottom
 
+        // Combatant List
         ListView {
             id: list_view
 
@@ -330,7 +332,7 @@ Page {
                     ListSpinBox {
                         field_value: ini
                         onValueChanged: tool.setIni(index, field_value)
-                        text_color: index == tool.currentIndex ? "white" : "black"
+                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
                         current_item: index == tool.currentIndex ? true : false
                         from: 0
                         to: 1000
@@ -339,7 +341,7 @@ Page {
                     ListSpinBox {
                         field_value: health
                         onValueChanged: tool.setHealth(index, field_value)
-                        text_color: index == tool.currentIndex ? "white" : "black"
+                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
                         current_item: index == tool.currentIndex ? true : false
                         from: 0
                         to: 1000
@@ -347,13 +349,13 @@ Page {
 
                     ListTextField {
                         onField_textChanged: tool.setStatus(index, field_text)
-                        text_color: index == tool.currentIndex ? "white" : "black"
+                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
                         field_text: status
                     }
 
                     ListTextField {
                         onField_textChanged: tool.setNotes(index, field_text)
-                        text_color: index == tool.currentIndex ? "white" : "black"
+                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
                         field_text: notes
                     }
 

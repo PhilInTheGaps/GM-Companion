@@ -115,6 +115,12 @@ void CombatTracker::remove(int index)
     if ((index > -1) && (l_combatants.size() > index))
     {
         l_combatants.removeAt(index);
+
+        if ((l_currentIndex == index) && (l_currentIndex > 0))
+        {
+            l_currentIndex--;
+            emit currentIndexChanged();
+        }
     }
 
     emit combatantsChanged();
