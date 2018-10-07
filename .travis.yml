@@ -22,6 +22,7 @@ matrix:
         - sudo apt-get update -qq
         - sudo apt-get -y install libtag1-dev binutils libpulse-dev qt510base qt510declarative qt510multimedia qt510networkauth-no-lgpl qt510quickcontrols qt510quickcontrols2 qt510script qt510tools qt510translations qt510webengine
         - source /opt/qt510/bin/qt510-env.sh
+
       script:
         - qmake
         - make
