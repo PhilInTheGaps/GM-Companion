@@ -1,5 +1,10 @@
-/AddonManager/out/
+/gm-companion/AddonManager/out/
+/gm-companion/deploy/
 /deploy/
+/repo-analysis/
+
+/vendor/
+qpm.json
 
 # C++ objects and libs
 
@@ -47,3 +52,4 @@ target_wrapper.*
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+PKGBUILD

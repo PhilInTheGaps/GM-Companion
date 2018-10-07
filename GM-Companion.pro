@@ -4,101 +4,138 @@
 #
 #-------------------------------------------------
 
-QT       += core gui \
-            multimedia \
-            multimediawidgets \
-            network \
-            sql
+QT       += core multimedia network quick qml networkauth
 
 win32:QT += winextras
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = gm-companion
+TARGET = out/gm-companion
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-SOURCES += main.cpp\
-    mainwindow.cpp \
-    functions.cpp \
-    tools/audiotool.cpp \
-    tools/dicetool.cpp \
-    tools/mapviewertool.cpp \
-    editors/audioeditor.cpp \
-    managers/filemanager.cpp \
-    managers/settingsmanager.cpp \
-    dialogs/notesdialog.cpp \
-    dialogs/optionsdialog.cpp \
-    dialogs/deletecharacterdialog.cpp \
-    dialogs/whatisnewwindow.cpp \
-    addontools/sifrp.cpp \
-    ui/flowlayout.cpp \
-    tools/characterviewertool.cpp \
-    managers/generatormanager.cpp \
-    generators/namegenerator.cpp \
-    managers/updatemanager.cpp \
-    dialogs/updatedialog.cpp \
-    tools/notestool.cpp \
-    tools/convertertool.cpp \
-    dialogs/aboutdialog.cpp \
-    tools/combattracker.cpp
+SOURCES += gm-companion/main.cpp \
+    # UI
+    gm-companion/ui/colorscheme.cpp \
+    # Other
+    gm-companion/functions.cpp \
+    # Tools
+    gm-companion/tools/maptool.cpp \
+    gm-companion/tools/dicetool.cpp \
+    gm-companion/tools/combattracker.cpp \
+    gm-companion/tools/notestool.cpp \
+    gm-companion/tools/convertertool.cpp \
+    gm-companion/tools/generators/namegenerator.cpp \
+    gm-companion/tools/project_converter/projectconverter.cpp \
+    gm-companion/tools/project_converter/shopconverter.cpp \
+    # Tools AUDIO
+    gm-companion/tools/audio/audiotool.cpp \
+    gm-companion/tools/project_converter/audioconverter.cpp \
+    gm-companion/tools/audio/audioeditor.cpp \
+    gm-companion/tools/audio/audioeditorfilebrowser.cpp \
+    # Tools ADDONS
+#    gm-companion/tools/addons/sifrp.cpp \
+    # Tools CHARACTERS
+    gm-companion/tools/characters/charactertool.cpp \
+    # Tools ITEMS
+    gm-companion/tools/shop/itemeditor.cpp \
+    gm-companion/tools/shop/shopeditor.cpp \
+    gm-companion/tools/shop/shoptool.cpp \
+    # Managers
+    gm-companion/managers/updatemanager.cpp \
+    # Settings
+    gm-companion/settings/settingstool.cpp \
+    gm-companion/settings/settingsmanager.cpp \
+    gm-companion/platformdetails.cpp \
+    gm-companion/managers/addonmanager.cpp \
+    gm-companion/managers/filemanager.cpp \
+    gm-companion/tools/audio/spotify.cpp \
+    gm-companion/tools/audio/audioexporter.cpp
 
-HEADERS  += mainwindow.h \
-    functions.h \
-    version.h \
-    tools/audiotool.h \
-    tools/mapviewertool.h \
-    tools/dicetool.h \
-    editors/audioeditor.h \
-    managers/filemanager.h \
-    managers/settingsmanager.h \
-    dialogs/notesdialog.h \
-    dialogs/optionsdialog.h \
-    dialogs/deletecharacterdialog.h \
-    dialogs/whatisnewwindow.h \
-    addontools/sifrp.h \
-    ui/flowlayout.h \
-    tools/characterviewertool.h \
-    managers/generatormanager.h \
-    generators/namegenerator.h \
-    managers/updatemanager.h \
-    dialogs/updatedialog.h \
-    tools/notestool.h \
-    tools/convertertool.h \
-    dialogs/aboutdialog.h \
-    tools/combattracker.h
+lupdate_only{
+SOURCES += *.qml \
+    menu/*.qml \
+    tools/*.qml \
+    tools/audio/*.qml \
+    tools/characters/*.qml \
+    tools/combat_tracker/*.qml \
+    tools/generators/*.qml \
+    tools/maps/*.qml \
+    tools/notes/*.qml \
+    tools/settings/*.qml \
+    tools/shop/*.qml \
+}
 
-FORMS    += mainwindow.ui \
-    tools/audiotool.ui \
-    editors/audioeditor.ui \
-    dialogs/notesdialog.ui \
-    dialogs/optionsdialog.ui \
-    tools/dicetool.ui \
-    dialogs/deletecharacterdialog.ui \
-    dialogs/whatisnewwindow.ui \
-    tools/mapviewertool.ui \
-    addontools/sifrp.ui \
-    tools/characterviewertool.ui \
-    managers/generatormanager.ui \
-    generators/namegenerator.ui \
-    dialogs/updatedialog.ui \
-    tools/notestool.ui \
-    tools/convertertool.ui \
-    dialogs/aboutdialog.ui \
-    tools/combattracker.ui
+HEADERS  += gm-companion/functions.h \
+    # UI
+    gm-companion/ui/colorscheme.h \
+    # Other
+    gm-companion/version.h \
+    # Tools
+    gm-companion/tools/maptool.h \
+    gm-companion/tools/audio/audiotool.h \
+    gm-companion/tools/dicetool.h \
+    gm-companion/tools/combattracker.h \
+    gm-companion/tools/notestool.h \
+    gm-companion/tools/convertertool.h \
+    gm-companion/tools/project_converter/projectconverter.h \
+    # Tools AUDIO
+    gm-companion/tools/project_converter/audioconverter.h \
+    gm-companion/tools/audio/audioeditor.h \
+    gm-companion/tools/audio/audioeditorfilebrowser.h \
+    # Tools CHARACTERS
+    gm-companion/tools/characters/charactertool.h \
+    # Tools ADDONS
+#    gm-companion/tools/addons/sifrp.h \
+    # Tools GENERATORS
+     gm-companion/tools/generators/namegenerator.h \
+    # Tools ITEMS
+    gm-companion/tools/project_converter/shopconverter.h \
+    gm-companion/tools/shop/shoptool.h \
+    gm-companion/tools/shop/itemeditor.h \
+    gm-companion/tools/shop/shopeditor.h \
+    # Managers
+    gm-companion/managers/updatemanager.h \
+    # Settings
+    gm-companion/settings/settingstool.h \
+    gm-companion/settings/settingsmanager.h \
+    gm-companion/platformdetails.h \
+    gm-companion/managers/addonmanager.h \
+    gm-companion/managers/filemanager.h \
+    gm-companion/tools/audio/spotify.h \
+    gm-companion/tools/audio/audioexporter.h
 
-DISTFILES +=
 
-RC_FILE = GM-Companion.rc
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
 
-RESOURCES += resources.qrc \
-    styles/qdarkstyle/style.qrc
+QML_IMPORT_PATH =
 
-TRANSLATIONS+=  translations/gm-companion_en.ts
-TRANSLATIONS+=  translations/gm-companion_de.ts
+RC_FILE = gm-companion/GM-Companion.rc
+
+RESOURCES += gm-companion/resources/resources.qrc \
+    gm-companion/ui/qml.qrc
+
+TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts
+TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
 
 !win32 {
     QMAKE_CXXFLAGS += -std=c++11
@@ -119,3 +156,7 @@ TRANSLATIONS+=  translations/gm-companion_de.ts
     INSTALLS += desktop
     INSTALLS += resources
 }
+
+unix:!macx:!android: LIBS += -ltag
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

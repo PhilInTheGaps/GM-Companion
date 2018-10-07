@@ -7,7 +7,7 @@ addons:
     project:
       name: "PhilInTheGaps/GM-Companion"
       description: "A gamemaster tool."
-    notification_email: phil.hoffmann@inbox.com
+    notification_email: phil.hoffmann@zoho.eu
     build_command_prepend: qmake
     build_command: make
     branch_pattern: coverity_scan
@@ -15,18 +15,18 @@ addons:
 matrix:
   include:
     - os: linux
-      compiler: clang
-      env:
-        - QMAKESPEC=linux-clang
-        - MAKEFLAGS=-j2
+      compiler: gcc
+      
       before_install:
-        - sudo add-apt-repository --yes ppa:beineri/opt-qt593-trusty
+        - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
         - sudo apt-get update -qq
-        - sudo apt-get -y install libtag1-dev qt59base qt59svg qt59imageformats qt59tools qt59qbs qt59multimedia qt59scxml qt59translations qt59webengine binutils libpulse-dev
-        - source /opt/qt59/bin/qt59-env.sh
+        - sudo apt-get -y install libtag1-dev binutils libpulse-dev qt510base qt510declarative qt510multimedia qt510networkauth-no-lgpl qt510quickcontrols qt510quickcontrols2 qt510script qt510tools qt510translations qt510webengine
+        - source /opt/qt510/bin/qt510-env.sh
+
       script:
         - qmake
         - make
+        
     - os: osx
       before_install:
         - brew update
@@ -38,3 +38,7 @@ matrix:
 
 before_script:
   - qmake -version
+
+
+notifications:
+    slack: gm-companion:hYQtgVm2LokcpUT6SbnELwSN
