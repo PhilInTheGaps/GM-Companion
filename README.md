@@ -23,15 +23,11 @@ Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite
 
 ## Windows
 
-For Windows there are 64-bit and 32-bit installers available:
+For Windows there is only a 64 bits version available. If you want to use the GM-Companion on a 32 bits machine, you have to build the program from source. 
 
-[Beta 3.3 (Win x64 Installer)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win64_setup.exe)  
-[Beta 3.3 (Win x86 Installer)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win32_setup.exe)  
+[Release 1.0 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.0.0.0/gm-companion_1.0.0.0_win64.zip)  
 
-If you don't want an installer and instead want a zipped version that runs without an installer:
-
-[Beta 3.3 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win64.zip)  
-[Beta 3.3 (Win x86)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/0.3.3.0/gm-companion_0.3.3_win32.zip)  
+The program works without an installer. Simply extract all the files from the .zip archive to a folder and run _gm-companion.exe_
 
 Older versions are available at the [GitHub Release Page](https://github.com/PhilInTheGaps/GM-Companion/releases)  
 
@@ -42,7 +38,8 @@ Currently only Ubuntu is officially supported, but an Arch Linux package will be
 
 ### Ubuntu
 
-For Ubuntu the easiest way is to add the gm-companion software repository and install the gm-companion from there.
+For Ubuntu the easiest way is to add the gm-companion software repository and install the gm-companion from there.  
+Note that the GM-Companion requires at least Qt 5.10, currently only Ubuntu 18.10 meets that requirement.
 
 ```
 sudo add-apt-repository ppa:rophil/gm-companion  
