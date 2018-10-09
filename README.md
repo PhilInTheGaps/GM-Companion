@@ -27,14 +27,20 @@ For Windows there is only a 64 bits version available. If you want to use the GM
 
 [Release 1.0 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.0.0.0/gm-companion_1.0.0.0_win64.zip)  
 
-The program works without an installer. Simply extract all the files from the .zip archive to a folder and run _gm-companion.exe_
+The program works without an installer. Simply extract all the files from the .zip archive to a folder and run _gm-companion.exe_.
 
 Older versions are available at the [GitHub Release Page](https://github.com/PhilInTheGaps/GM-Companion/releases)  
 
 
 ## Linux
 
-Currently only Ubuntu is officially supported, but an Arch Linux package will be available in the future.
+### Arch
+
+Install from AUR:
+
+```
+aurman -S gm-companion
+```
 
 ### Ubuntu
 
