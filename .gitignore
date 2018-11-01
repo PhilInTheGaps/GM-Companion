@@ -3,6 +3,9 @@
 /deploy/
 /repo-analysis/
 
+/html/
+/latex/
+
 /vendor/
 qpm.json
 

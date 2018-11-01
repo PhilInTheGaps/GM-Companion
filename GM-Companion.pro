@@ -15,43 +15,43 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
-SOURCES += gm-companion/main.cpp \
+SOURCES += src/main.cpp \
     # UI
-    gm-companion/ui/colorscheme.cpp \
+    src/ui/colorscheme.cpp \
     # Other
-    gm-companion/functions.cpp \
+    src/functions.cpp \
     # Tools
-    gm-companion/tools/maptool.cpp \
-    gm-companion/tools/dicetool.cpp \
-    gm-companion/tools/combattracker.cpp \
-    gm-companion/tools/notestool.cpp \
-    gm-companion/tools/convertertool.cpp \
-    gm-companion/tools/generators/namegenerator.cpp \
-    gm-companion/tools/project_converter/projectconverter.cpp \
-    gm-companion/tools/project_converter/shopconverter.cpp \
+    src/tools/maptool.cpp \
+    src/tools/dicetool.cpp \
+    src/tools/combattracker.cpp \
+    src/tools/notestool.cpp \
+    src/tools/convertertool.cpp \
+    src/tools/generators/namegenerator.cpp \
+    src/tools/project_converter/projectconverter.cpp \
+    src/tools/project_converter/shopconverter.cpp \
     # Tools AUDIO
-    gm-companion/tools/audio/audiotool.cpp \
-    gm-companion/tools/project_converter/audioconverter.cpp \
-    gm-companion/tools/audio/audioeditor.cpp \
-    gm-companion/tools/audio/audioeditorfilebrowser.cpp \
+    src/tools/audio/audiotool.cpp \
+    src/tools/project_converter/audioconverter.cpp \
+    src/tools/audio/audioeditor.cpp \
+    src/tools/audio/audioeditorfilebrowser.cpp \
     # Tools ADDONS
-#    gm-companion/tools/addons/sifrp.cpp \
+#    src/tools/addons/sifrp.cpp \
     # Tools CHARACTERS
-    gm-companion/tools/characters/charactertool.cpp \
+    src/tools/characters/charactertool.cpp \
     # Tools ITEMS
-    gm-companion/tools/shop/itemeditor.cpp \
-    gm-companion/tools/shop/shopeditor.cpp \
-    gm-companion/tools/shop/shoptool.cpp \
+    src/tools/shop/itemeditor.cpp \
+    src/tools/shop/shopeditor.cpp \
+    src/tools/shop/shoptool.cpp \
     # Managers
-    gm-companion/managers/updatemanager.cpp \
+    src/managers/updatemanager.cpp \
     # Settings
-    gm-companion/settings/settingstool.cpp \
-    gm-companion/settings/settingsmanager.cpp \
-    gm-companion/platformdetails.cpp \
-    gm-companion/managers/addonmanager.cpp \
-    gm-companion/managers/filemanager.cpp \
-    gm-companion/tools/audio/spotify.cpp \
-    gm-companion/tools/audio/audioexporter.cpp
+    src/settings/settingstool.cpp \
+    src/settings/settingsmanager.cpp \
+    src/platformdetails.cpp \
+    src/managers/addonmanager.cpp \
+    src/managers/filemanager.cpp \
+    src/tools/audio/spotify.cpp \
+    src/tools/audio/audioexporter.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -67,44 +67,44 @@ SOURCES += *.qml \
     tools/shop/*.qml \
 }
 
-HEADERS  += gm-companion/functions.h \
+HEADERS  += src/functions.h \
     # UI
-    gm-companion/ui/colorscheme.h \
+    src/ui/colorscheme.h \
     # Other
-    gm-companion/version.h \
+    src/version.h \
     # Tools
-    gm-companion/tools/maptool.h \
-    gm-companion/tools/audio/audiotool.h \
-    gm-companion/tools/dicetool.h \
-    gm-companion/tools/combattracker.h \
-    gm-companion/tools/notestool.h \
-    gm-companion/tools/convertertool.h \
-    gm-companion/tools/project_converter/projectconverter.h \
+    src/tools/maptool.h \
+    src/tools/audio/audiotool.h \
+    src/tools/dicetool.h \
+    src/tools/combattracker.h \
+    src/tools/notestool.h \
+    src/tools/convertertool.h \
+    src/tools/project_converter/projectconverter.h \
     # Tools AUDIO
-    gm-companion/tools/project_converter/audioconverter.h \
-    gm-companion/tools/audio/audioeditor.h \
-    gm-companion/tools/audio/audioeditorfilebrowser.h \
+    src/tools/project_converter/audioconverter.h \
+    src/tools/audio/audioeditor.h \
+    src/tools/audio/audioeditorfilebrowser.h \
     # Tools CHARACTERS
-    gm-companion/tools/characters/charactertool.h \
+    src/tools/characters/charactertool.h \
     # Tools ADDONS
-#    gm-companion/tools/addons/sifrp.h \
+#    src/tools/addons/sifrp.h \
     # Tools GENERATORS
-     gm-companion/tools/generators/namegenerator.h \
+     src/tools/generators/namegenerator.h \
     # Tools ITEMS
-    gm-companion/tools/project_converter/shopconverter.h \
-    gm-companion/tools/shop/shoptool.h \
-    gm-companion/tools/shop/itemeditor.h \
-    gm-companion/tools/shop/shopeditor.h \
+    src/tools/project_converter/shopconverter.h \
+    src/tools/shop/shoptool.h \
+    src/tools/shop/itemeditor.h \
+    src/tools/shop/shopeditor.h \
     # Managers
-    gm-companion/managers/updatemanager.h \
+    src/managers/updatemanager.h \
     # Settings
-    gm-companion/settings/settingstool.h \
-    gm-companion/settings/settingsmanager.h \
-    gm-companion/platformdetails.h \
-    gm-companion/managers/addonmanager.h \
-    gm-companion/managers/filemanager.h \
-    gm-companion/tools/audio/spotify.h \
-    gm-companion/tools/audio/audioexporter.h
+    src/settings/settingstool.h \
+    src/settings/settingsmanager.h \
+    src/platformdetails.h \
+    src/managers/addonmanager.h \
+    src/managers/filemanager.h \
+    src/tools/audio/spotify.h \
+    src/tools/audio/audioexporter.h
 
 
 DISTFILES += \
@@ -129,13 +129,13 @@ DISTFILES += \
 
 QML_IMPORT_PATH =
 
-RC_FILE = gm-companion/GM-Companion.rc
+RC_FILE = src/GM-Companion.rc
 
-RESOURCES += gm-companion/resources/resources.qrc \
-    gm-companion/ui/qml.qrc
+RESOURCES += src/resources/resources.qrc \
+    src/ui/qml.qrc
 
-TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_en.ts
-TRANSLATIONS+=  gm-companion/resources/translations/gm-companion_de.ts
+TRANSLATIONS+=  src/resources/translations/gm-companion_en.ts
+TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
 
 !win32 {
     QMAKE_CXXFLAGS += -std=c++11
