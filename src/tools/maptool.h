@@ -35,8 +35,8 @@ signals:
 private:
     SettingsManager *sManager;
 
-    QList<Map> l_maps;
-    QStringList l_categories;
+    QList<Map> m_maps;
+    QStringList m_categories;
 
 };
 

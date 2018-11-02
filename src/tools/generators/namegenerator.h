@@ -30,8 +30,8 @@ signals:
 private:
     SettingsManager sManager;
 
-    QStringList l_categories;
-    QStringList l_categoryPaths;
+    QStringList m_categories;
+    QStringList m_categoryPaths;
 
     QStringList generateNames(QString category, QString folder, QString type, int count);
 };

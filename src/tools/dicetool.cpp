@@ -13,7 +13,7 @@ DiceTool::DiceTool(QObject *parent) : QObject(parent)
 
 void DiceTool::setSides(int sides)
 {
-    l_sides = sides;
+    m_sides = sides;
     emit sidesChanged();
 }
 
@@ -37,13 +37,13 @@ int DiceTool::roll()
     {
         if (getSuccessMax())
         {
-            criticalSuccess = l_sides;
+            criticalSuccess = m_sides;
             criticalFailure = 1;
         }
         else
         {
             criticalSuccess = 1;
-            criticalFailure = l_sides;
+            criticalFailure = m_sides;
         }
     }
     else
@@ -53,21 +53,21 @@ int DiceTool::roll()
     }
 
 
-    l_calculation_string = tr("Roll:\n") + QString::number(l_amount) + "x " + tr("D") + QString::number(l_sides);
+    m_calculation_string = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(m_sides);
 
-    if (l_modifier < 0)
+    if (m_modifier < 0)
     {
-        l_calculation_string.append(" " + QString::number(l_modifier) + "\n\n");
+        m_calculation_string.append(" " + QString::number(m_modifier) + "\n\n");
     }
     else
     {
-        l_calculation_string.append(" + " + QString::number(l_modifier) + "\n\n");
+        m_calculation_string.append(" + " + QString::number(m_modifier) + "\n\n");
     }
 
-    for (int i = 0; i < l_amount; i++)
+    for (int i = 0; i < m_amount; i++)
     {
         // Generate random integer
-        int temp = rand() % l_sides + 1;
+        int temp = rand() % m_sides + 1;
 
         // Check for critical successes or failures
         if (temp == criticalSuccess) criticalSuccesses++;
@@ -78,24 +78,24 @@ int DiceTool::roll()
         result += temp;
 
         // Add roll to calculation string
-        l_calculation_string.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
+        m_calculation_string.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
     }
 
-    l_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+    m_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
 
     // Remove bonus dice from calculation
-    if (l_bonus_dice > 0)
+    if (m_bonus_dice > 0)
     {
-        l_calculation_string.append(tr("Bonus Dice:\n"));
+        m_calculation_string.append(tr("Bonus Dice:\n"));
 
         // TODO for later, is currently not important
 
-        l_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+        m_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
     }
 
     // Add modifier
-    result += l_modifier;
-    l_calculation_string.append(tr("Modifier: ") + QString::number(l_modifier) + "\n\n" + tr("Result: ") + QString::number(result));
+    result += m_modifier;
+    m_calculation_string.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") + QString::number(result));
 
     emit rollChanged();
     emit calculationStringChanged();

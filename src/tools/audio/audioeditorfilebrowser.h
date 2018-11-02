@@ -31,17 +31,17 @@ signals:
 private:
     SettingsManager sManager;
 
-    QString l_basePath;
-    QStringList l_relativeFolders;
-    QString l_currentPath();
+    QString m_basePath;
+    QStringList m_relativeFolders;
+    QString m_currentPath();
 
-    int l_type = 0;
+    int m_type = 0;
 
-    QStringList l_folders;
-    QStringList l_folderPaths;
+    QStringList m_folders;
+    QStringList m_folderPaths;
 
-    QStringList l_files;
-    QStringList l_filePaths;
+    QStringList m_files;
+    QStringList m_filePaths;
 };
 
 #endif // AUDIOEDITORFILEBROWSER_H

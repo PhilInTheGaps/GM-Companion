@@ -21,8 +21,8 @@ void MapTool::findMaps()
     qDebug() << "Finding Maps ...";
     QString basePath = sManager->getSetting(Setting::mapsPath);
 
-    l_maps.clear();
-    l_categories.clear();
+    m_maps.clear();
+    m_categories.clear();
 
     // Get folders
     for (QString f : getFolders(basePath))
@@ -41,13 +41,13 @@ void MapTool::findMaps()
                     map.path     = basePath + "/" + f + "/" + m;
                     map.category = f;
 
-                    l_maps.append(map);
+                    m_maps.append(map);
 
                     containsMaps = true;
                 }
             }
 
-            if (containsMaps) l_categories.append(f);
+            if (containsMaps) m_categories.append(f);
         }
     }
 
@@ -61,7 +61,7 @@ void MapTool::findMaps()
                 if (QDir(path + "/" + addon + "/maps").exists())
                 {
                     QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
-                    l_categories.append(settings.value("name", addon).toString());
+                    m_categories.append(settings.value("name", addon).toString());
 
                     for (QString m : getFiles(path + "/" + addon + "/maps"))
                     {
@@ -72,7 +72,7 @@ void MapTool::findMaps()
                             map.path     = path + "/" + addon + "/maps/" + m;
                             map.category = addon;
 
-                            l_maps.append(map);
+                            m_maps.append(map);
                         }
                     }
                 }
@@ -80,7 +80,7 @@ void MapTool::findMaps()
         }
     }
 
-    qDebug() << l_categories;
+    qDebug() << m_categories;
 
     emit categoriesChanged();
 }
@@ -89,11 +89,11 @@ QStringList MapTool::maps(QString category)
 {
     QStringList maps;
 
-    for (int i = 0; i < l_maps.size(); i++)
+    for (int i = 0; i < m_maps.size(); i++)
     {
-        if (l_maps.at(i).category == category)
+        if (m_maps.at(i).category == category)
         {
-            maps.append(l_maps.at(i).name);
+            maps.append(m_maps.at(i).name);
         }
     }
     return maps;
@@ -101,18 +101,18 @@ QStringList MapTool::maps(QString category)
 
 QStringList MapTool::categories()
 {
-    return l_categories;
+    return m_categories;
 }
 
 QStringList MapTool::mapPaths(QString category)
 {
     QStringList paths;
 
-    for (int i = 0; i < l_maps.size(); i++)
+    for (int i = 0; i < m_maps.size(); i++)
     {
-        if (l_maps.at(i).category == category)
+        if (m_maps.at(i).category == category)
         {
-            paths.append(l_maps.at(i).path);
+            paths.append(m_maps.at(i).path);
         }
     }
 

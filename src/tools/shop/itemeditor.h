@@ -36,13 +36,13 @@ private:
     SettingsManager *sManager;
     QSettings *settings;
 
-    QString l_filePath;
-    QStringList l_categories;
+    QString m_filePath;
+    QStringList m_categories;
 
-    QStringList l_itemNames;
-    QStringList l_itemPrices;
-    QStringList l_itemCategories;
-    QStringList l_itemDescriptions;
+    QStringList m_itemNames;
+    QStringList m_itemPrices;
+    QStringList m_itemCategories;
+    QStringList m_itemDescriptions;
 };
 
 #endif // ITEMEDITOR_H

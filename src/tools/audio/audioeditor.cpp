@@ -22,13 +22,13 @@ void AudioEditor::updateProjectList()
 {
     QString path = sManager->getSetting(Setting::audioPath);
 
-    l_projectList.clear();
+    m_projectList.clear();
 
     for (QString file : getFiles(path))
     {
         if (file.endsWith(".audio"))
         {
-            l_projectList.append(file.replace(".audio", ""));
+            m_projectList.append(file.replace(".audio", ""));
         }
     }
 
@@ -37,17 +37,17 @@ void AudioEditor::updateProjectList()
 
 QStringList AudioEditor::getProjectList()
 {
-    return l_projectList;
+    return m_projectList;
 }
 
 void AudioEditor::setCurrentProject(QString project)
 {
-    l_currentProject = project;
+    m_currentProject = project;
 
-    l_scenarioList.clear();
-    l_musicLists.clear();
-    l_soundLists.clear();
-    l_radios.clear();
+    m_scenarioList.clear();
+    m_musicLists.clear();
+    m_soundLists.clear();
+    m_radios.clear();
 
     emit scenarioListChanged();
     emit elementListChanged();
@@ -67,7 +67,7 @@ void AudioEditor::createProject(QString project)
             settings.setValue("version",           1);
             settings.setValue("ProjectName", project);
 
-            l_projectList.append(project);
+            m_projectList.append(project);
 
             projectListChanged();
         }
@@ -76,14 +76,14 @@ void AudioEditor::createProject(QString project)
 
 void AudioEditor::updateCategoryList()
 {
-    l_categoryList.clear();
+    m_categoryList.clear();
 
-    if (l_currentProject != "")
+    if (m_currentProject != "")
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        l_categoryList = settings.value("categories").toStringList();
+        m_categoryList = settings.value("categories").toStringList();
     }
 
     emit categoryListChanged();
@@ -91,28 +91,28 @@ void AudioEditor::updateCategoryList()
 
 QStringList AudioEditor::getCategoryList()
 {
-    return l_categoryList;
+    return m_categoryList;
 }
 
 void AudioEditor::setCurrentCategory(QString category)
 {
-    l_currentCategory = category;
+    m_currentCategory = category;
 
     updateScenarioList();
 }
 
 void AudioEditor::createCategory(QString category)
 {
-    if ((category != "") && (l_currentProject != ""))
+    if ((category != "") && (m_currentProject != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        if (!l_categoryList.contains(category))
+        if (!m_categoryList.contains(category))
         {
-            l_categoryList.append(category);
+            m_categoryList.append(category);
 
-            settings.setValue("categories", l_categoryList);
+            settings.setValue("categories", m_categoryList);
 
             emit categoryListChanged();
         }
@@ -121,16 +121,16 @@ void AudioEditor::createCategory(QString category)
 
 void AudioEditor::updateScenarioList()
 {
-    l_scenarioList.clear();
+    m_scenarioList.clear();
 
-    if ((l_currentProject != "") && (l_currentCategory != ""))
+    if ((m_currentProject != "") && (m_currentCategory != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.beginGroup(l_currentCategory);
+        settings.beginGroup(m_currentCategory);
 
-        l_scenarioList = settings.value("scenarios").toStringList();
+        m_scenarioList = settings.value("scenarios").toStringList();
 
         settings.endGroup();
     }
@@ -140,29 +140,29 @@ void AudioEditor::updateScenarioList()
 
 QStringList AudioEditor::getScenarioList()
 {
-    return l_scenarioList;
+    return m_scenarioList;
 }
 
 void AudioEditor::setCurrentScenario(QString scenario)
 {
-    l_currentScenario = scenario;
+    m_currentScenario = scenario;
 
     updateElementList();
 }
 
 void AudioEditor::createScenario(QString scenario)
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (scenario != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (scenario != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        if (!l_scenarioList.contains(scenario))
+        if (!m_scenarioList.contains(scenario))
         {
-            settings.beginGroup(l_currentCategory);
+            settings.beginGroup(m_currentCategory);
 
-            l_scenarioList.append(scenario);
-            settings.setValue("scenarios", l_scenarioList);
+            m_scenarioList.append(scenario);
+            settings.setValue("scenarios", m_scenarioList);
 
             settings.endGroup();
 
@@ -173,17 +173,17 @@ void AudioEditor::createScenario(QString scenario)
 
 void AudioEditor::updateElementList()
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.beginGroup(l_currentCategory);
+        settings.beginGroup(m_currentCategory);
 
-        l_musicLists       = settings.value(l_currentScenario + "_music").toStringList();
-        l_soundLists       = settings.value(l_currentScenario + "_sounds").toStringList();
-        l_radios           = settings.value(l_currentScenario + "_radios").toStringList();
-        m_spotifyPlaylists = settings.value(l_currentScenario + "_spotify").toStringList();
+        m_musicLists       = settings.value(m_currentScenario + "_music").toStringList();
+        m_soundLists       = settings.value(m_currentScenario + "_sounds").toStringList();
+        m_radios           = settings.value(m_currentScenario + "_radios").toStringList();
+        m_spotifyPlaylists = settings.value(m_currentScenario + "_spotify").toStringList();
 
         settings.endGroup();
 
@@ -193,27 +193,27 @@ void AudioEditor::updateElementList()
 
 void AudioEditor::sortElements()
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.beginGroup(l_currentCategory);
+        settings.beginGroup(m_currentCategory);
 
-        l_musicLists       = settings.value(l_currentScenario + "_music").toStringList();
-        l_soundLists       = settings.value(l_currentScenario + "_sounds").toStringList();
-        l_radios           = settings.value(l_currentScenario + "_radios").toStringList();
-        m_spotifyPlaylists = settings.value(l_currentScenario + "_spotify").toStringList();
+        m_musicLists       = settings.value(m_currentScenario + "_music").toStringList();
+        m_soundLists       = settings.value(m_currentScenario + "_sounds").toStringList();
+        m_radios           = settings.value(m_currentScenario + "_radios").toStringList();
+        m_spotifyPlaylists = settings.value(m_currentScenario + "_spotify").toStringList();
 
-        l_musicLists.sort();
-        l_soundLists.sort();
-        l_radios.sort();
+        m_musicLists.sort();
+        m_soundLists.sort();
+        m_radios.sort();
         m_spotifyPlaylists.sort();
 
-        settings.setValue(l_currentScenario + "_music",         l_musicLists);
-        settings.setValue(l_currentScenario + "_sounds",        l_soundLists);
-        settings.setValue(l_currentScenario + "_radios",            l_radios);
-        settings.setValue(l_currentScenario + "_spotify", m_spotifyPlaylists);
+        settings.setValue(m_currentScenario + "_music",         m_musicLists);
+        settings.setValue(m_currentScenario + "_sounds",        m_soundLists);
+        settings.setValue(m_currentScenario + "_radios",            m_radios);
+        settings.setValue(m_currentScenario + "_spotify", m_spotifyPlaylists);
 
         settings.endGroup();
 
@@ -228,15 +228,15 @@ void AudioEditor::moveElement(QString element, int type, int positions)
 
     switch (type) {
     case 0:
-        elements = &l_musicLists;
+        elements = &m_musicLists;
         break;
 
     case 1:
-        elements = &l_soundLists;
+        elements = &m_soundLists;
         break;
 
     case 2:
-        elements = &l_radios;
+        elements = &m_radios;
         break;
 
     case 3:
@@ -257,9 +257,9 @@ void AudioEditor::moveElement(QString element, int type, int positions)
 
 void AudioEditor::createList(QString listName, int type)
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (listName != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (listName != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
         QString suffix1;
@@ -270,19 +270,19 @@ void AudioEditor::createList(QString listName, int type)
         case 0: // Music List
             suffix1 = "_music";
             suffix2 = suffix1;
-            list    = &l_musicLists;
+            list    = &m_musicLists;
             break;
 
         case 1: // Sound List
             suffix1 = "_sounds";
             suffix2 = suffix1;
-            list    = &l_soundLists;
+            list    = &m_soundLists;
             break;
 
         case 2: // Radio
             suffix1 = "_radios";
             suffix2 = "_radio";
-            list    = &l_radios;
+            list    = &m_radios;
             break;
 
         case 3: // Spotify
@@ -295,11 +295,11 @@ void AudioEditor::createList(QString listName, int type)
         {
             list->append(listName);
 
-            settings.beginGroup(l_currentCategory);
-            settings.setValue(l_currentScenario + suffix1, *list);
+            settings.beginGroup(m_currentCategory);
+            settings.setValue(m_currentScenario + suffix1, *list);
             settings.endGroup();
 
-            settings.beginGroup(l_currentCategory + "_" + l_currentScenario + "_" + listName + suffix2);
+            settings.beginGroup(m_currentCategory + "_" + m_currentScenario + "_" + listName + suffix2);
             settings.setValue("name", listName);
             settings.endGroup();
 
@@ -310,36 +310,36 @@ void AudioEditor::createList(QString listName, int type)
 
 QStringList AudioEditor::getMusicLists()
 {
-    return l_musicLists;
+    return m_musicLists;
 }
 
 QStringList AudioEditor::getSoundLists()
 {
-    return l_soundLists;
+    return m_soundLists;
 }
 
 QStringList AudioEditor::getRadios()
 {
-    return l_radios;
+    return m_radios;
 }
 
 void AudioEditor::saveProject()
 {
-    if ((l_currentProject != ""))
+    if ((m_currentProject != ""))
     {
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.setValue("categories", l_categoryList);
+        settings.setValue("categories", m_categoryList);
 
-        if ((l_currentCategory != "") && (l_currentScenario != ""))
+        if ((m_currentCategory != "") && (m_currentScenario != ""))
         {
-            settings.beginGroup(l_currentCategory);
+            settings.beginGroup(m_currentCategory);
 
-            settings.setValue(l_currentScenario + "_music",         l_musicLists);
-            settings.setValue(l_currentScenario + "_sounds",        l_soundLists);
-            settings.setValue(l_currentScenario + "_radios",            l_radios);
-            settings.setValue(l_currentScenario + "_spotify", m_spotifyPlaylists);
+            settings.setValue(m_currentScenario + "_music",         m_musicLists);
+            settings.setValue(m_currentScenario + "_sounds",        m_soundLists);
+            settings.setValue(m_currentScenario + "_radios",            m_radios);
+            settings.setValue(m_currentScenario + "_spotify", m_spotifyPlaylists);
 
             settings.endGroup();
         }
@@ -348,11 +348,11 @@ void AudioEditor::saveProject()
 
 void AudioEditor::setCurrentList(QString list, int type)
 {
-    l_currentFileNames.clear();
-    l_currentFilePaths.clear();
-    l_currentFileMissing.clear();
+    m_currentFileNames.clear();
+    m_currentFilePaths.clear();
+    m_currentFileMissing.clear();
 
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (list != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (list != ""))
     {
         QString suffix;
         QString fileArrayName;
@@ -363,21 +363,21 @@ void AudioEditor::setCurrentList(QString list, int type)
             suffix            = "_music";
             fileArrayName     = "songs";
             fileArrayFile     = "song";
-            l_currentBasePath = sManager->getSetting(Setting::musicPath);
+            m_currentBasePath = sManager->getSetting(Setting::musicPath);
             break;
 
         case 1: // Sound List
             suffix            = "_sounds";
             fileArrayName     = "sounds";
             fileArrayFile     = "sound";
-            l_currentBasePath = sManager->getSetting(Setting::soundPath);
+            m_currentBasePath = sManager->getSetting(Setting::soundPath);
             break;
 
         case 2: // Radio
             suffix            = "_radio";
             fileArrayName     = "radios";
             fileArrayFile     = "radio";
-            l_currentBasePath = sManager->getSetting(Setting::radioPath);
+            m_currentBasePath = sManager->getSetting(Setting::radioPath);
             break;
 
         case 3: // Spotify
@@ -386,20 +386,20 @@ void AudioEditor::setCurrentList(QString list, int type)
             fileArrayFile = "playlist";
         }
 
-        l_currentList = list;
+        m_currentList = list;
 
-        QString   path = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+        QString   path = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
         QSettings settings(path, QSettings::IniFormat);
 
-        settings.beginGroup(l_currentCategory + "_" + l_currentScenario + "_" + list + suffix);
+        settings.beginGroup(m_currentCategory + "_" + m_currentScenario + "_" + list + suffix);
 
-        l_currentListMode = settings.value("mode", 0).toInt();
+        m_currentListMode = settings.value("mode", 0).toInt();
 
         QString iconPath = settings.value("icon").toString();
-        l_currentListIcon = iconPath;
+        m_currentListIcon = iconPath;
 
-        l_local = settings.value("local", false).toBool();
-        l_url   = settings.value("url", "").toString();
+        m_local = settings.value("local", false).toBool();
+        m_url   = settings.value("url", "").toString();
 
         m_spotifyID = settings.value("id", "").toString();
 
@@ -410,9 +410,9 @@ void AudioEditor::setCurrentList(QString list, int type)
         {
             settings.setArrayIndex(i);
 
-            l_currentFileNames.append(settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(0));
-            l_currentFilePaths.append(settings.value(fileArrayFile, "UNKNOWN PATH").toStringList().at(1));
-            l_currentFileMissing.append(!QFile(l_currentBasePath + "/" + settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(1)).exists());
+            m_currentFileNames.append(settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(0));
+            m_currentFilePaths.append(settings.value(fileArrayFile, "UNKNOWN PATH").toStringList().at(1));
+            m_currentFileMissing.append(!QFile(m_currentBasePath + "/" + settings.value(fileArrayFile, "UNKNOWN FILE").toStringList().at(1)).exists());
         }
 
         settings.endArray();
@@ -424,11 +424,11 @@ void AudioEditor::setCurrentList(QString list, int type)
 
 void AudioEditor::addFile(QString name, QString path)
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (l_currentList != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (m_currentList != ""))
     {
-        l_currentFileNames.append(name);
-        l_currentFilePaths.append(path);
-        l_currentFileMissing.append(false);
+        m_currentFileNames.append(name);
+        m_currentFilePaths.append(path);
+        m_currentFileMissing.append(false);
 
         emit listChanged();
     }
@@ -436,12 +436,12 @@ void AudioEditor::addFile(QString name, QString path)
 
 void AudioEditor::addFiles(QStringList names, QStringList paths, QList<bool>missing)
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (l_currentList != ""))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (m_currentList != ""))
     {
-        l_currentFileNames.append(names);
-        l_currentFilePaths.append(paths);
+        m_currentFileNames.append(names);
+        m_currentFilePaths.append(paths);
 
-        if (!missing.isEmpty()) l_currentFileMissing.append(missing);
+        if (!missing.isEmpty()) m_currentFileMissing.append(missing);
 
         emit listChanged();
     }
@@ -449,17 +449,17 @@ void AudioEditor::addFiles(QStringList names, QStringList paths, QList<bool>miss
 
 void AudioEditor::removeFile(int index)
 {
-    if ((l_currentProject != "") && (l_currentCategory != "") && (l_currentScenario != "") && (l_currentList != "") && (l_currentFileNames.size() > index))
+    if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (m_currentList != "") && (m_currentFileNames.size() > index))
     {
-        l_currentFileNames.removeAt(index);
-        l_currentFilePaths.removeAt(index);
-        l_currentFileMissing.removeAt(index);
+        m_currentFileNames.removeAt(index);
+        m_currentFilePaths.removeAt(index);
+        m_currentFileMissing.removeAt(index);
     }
 }
 
 void AudioEditor::saveList(int type)
 {
-    QString   projectPath = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+    QString   projectPath = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
     QSettings settings(projectPath, QSettings::IniFormat);
 
     QString suffix;
@@ -491,7 +491,7 @@ void AudioEditor::saveList(int type)
         fileArrayFile = "playlist";
     }
 
-    settings.beginGroup(l_currentCategory + "_" + l_currentScenario + "_" + l_currentList + suffix);
+    settings.beginGroup(m_currentCategory + "_" + m_currentScenario + "_" + m_currentList + suffix);
 
     if (type == 3)
     {
@@ -499,26 +499,26 @@ void AudioEditor::saveList(int type)
     }
     else if (type == 2)
     {
-        settings.setValue("url",     l_url);
-        settings.setValue("local", l_local);
+        settings.setValue("url",     m_url);
+        settings.setValue("local", m_local);
     }
     else
     {
         settings.beginWriteArray(fileArrayName);
 
-        for (int i = 0; i < l_currentFileNames.size(); i++)
+        for (int i = 0; i < m_currentFileNames.size(); i++)
         {
             settings.setArrayIndex(i);
-            QStringList file = { l_currentFileNames.at(i), l_currentFilePaths.at(i) };
+            QStringList file = { m_currentFileNames.at(i), m_currentFilePaths.at(i) };
             settings.setValue(fileArrayFile, file);
         }
 
         settings.endArray();
 
-        settings.setValue("mode", l_currentListMode);
+        settings.setValue("mode", m_currentListMode);
     }
 
-    settings.setValue("icon", l_currentListIcon);
+    settings.setValue("icon", m_currentListIcon);
 
     settings.endGroup();
 }
@@ -533,19 +533,19 @@ void AudioEditor::deleteList(QString list, int type)
     case 0: // Music List
         suffix1 = "_music";
         suffix2 = suffix1;
-        pList   = &l_musicLists;
+        pList   = &m_musicLists;
         break;
 
     case 1: // Sound List
         suffix1 = "_sounds";
         suffix2 = suffix1;
-        pList   = &l_soundLists;
+        pList   = &m_soundLists;
         break;
 
     case 2: // Radio
         suffix1 = "_radios";
         suffix2 = "_radio";
-        pList   = &l_radios;
+        pList   = &m_radios;
         break;
 
     case 3: // Spotify
@@ -556,19 +556,19 @@ void AudioEditor::deleteList(QString list, int type)
 
     pList->removeAll(list);
 
-    QString   projectPath = sManager->getSetting(Setting::audioPath) + "/" + l_currentProject + ".audio";
+    QString   projectPath = sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio";
     QSettings settings(projectPath, QSettings::IniFormat);
 
-    settings.beginGroup(l_currentCategory);
-    settings.setValue(l_currentScenario + suffix1, *pList);
+    settings.beginGroup(m_currentCategory);
+    settings.setValue(m_currentScenario + suffix1, *pList);
     settings.endGroup();
 
-    settings.remove(l_currentCategory + "_" + l_currentScenario + "_" + list + suffix2);
+    settings.remove(m_currentCategory + "_" + m_currentScenario + "_" + list + suffix2);
 
-    l_currentFileNames.clear();
-    l_currentFilePaths.clear();
-    l_currentFileMissing.clear();
-    l_currentList.clear();
+    m_currentFileNames.clear();
+    m_currentFilePaths.clear();
+    m_currentFileMissing.clear();
+    m_currentList.clear();
 
     updateElementList();
 
@@ -577,44 +577,44 @@ void AudioEditor::deleteList(QString list, int type)
 
 void AudioEditor::setCurrentListMode(int mode)
 {
-    l_currentListMode = mode;
+    m_currentListMode = mode;
 }
 
 void AudioEditor::setCurrentListIcon(QString icon)
 {
-    l_currentListIcon = icon;
+    m_currentListIcon = icon;
 }
 
 // Move song in list
 void AudioEditor::moveFile(int index, int positions)
 {
-    QString name = l_currentFileNames.at(index);
+    QString name = m_currentFileNames.at(index);
 
-    l_currentFileNames.removeAt(index);
-    l_currentFileNames.insert(index + positions, name);
+    m_currentFileNames.removeAt(index);
+    m_currentFileNames.insert(index + positions, name);
 
-    QString path = l_currentFilePaths.at(index);
+    QString path = m_currentFilePaths.at(index);
 
-    l_currentFilePaths.removeAt(index);
-    l_currentFilePaths.insert(index + positions, path);
+    m_currentFilePaths.removeAt(index);
+    m_currentFilePaths.insert(index + positions, path);
 
-    bool missing = l_currentFileMissing.at(index);
+    bool missing = m_currentFileMissing.at(index);
 
-    l_currentFileMissing.removeAt(index);
-    l_currentFileMissing.insert(index + positions, missing);
+    m_currentFileMissing.removeAt(index);
+    m_currentFileMissing.insert(index + positions, missing);
 }
 
 void AudioEditor::removeMissingFiles()
 {
     bool removedFiles = false;
 
-    for (int i = 0; i < l_currentFilePaths.size(); i++)
+    for (int i = 0; i < m_currentFilePaths.size(); i++)
     {
-        if (l_currentFileMissing[i])
+        if (m_currentFileMissing[i])
         {
-            l_currentFileNames.removeAt(i);
-            l_currentFilePaths.removeAt(i);
-            l_currentFileMissing.removeAt(i);
+            m_currentFileNames.removeAt(i);
+            m_currentFilePaths.removeAt(i);
+            m_currentFileMissing.removeAt(i);
             i--;
             removedFiles = true;
         }
@@ -625,58 +625,58 @@ void AudioEditor::removeMissingFiles()
 
 void AudioEditor::setURL(QString url)
 {
-    l_url = url;
+    m_url = url;
 
-    if (l_local) emit urlChanged();
+    if (m_local) emit urlChanged();
 }
 
 void AudioEditor::setLocal(bool local)
 {
-    l_local = local;
+    m_local = local;
 }
 
 void AudioEditor::replaceMissingFolder(int index, QString folder, int type)
 {
     QString path = folder.replace("file://", "");
 
-    path  = path.replace(l_currentBasePath, "");
-    path += "/" + l_currentFileNames[index];
+    path  = path.replace(m_currentBasePath, "");
+    path += "/" + m_currentFileNames[index];
 
-    l_currentFilePaths[index] = path;
+    m_currentFilePaths[index] = path;
 
-    l_currentFileMissing[index] = !QFile(l_currentBasePath + path).exists();
+    m_currentFileMissing[index] = !QFile(m_currentBasePath + path).exists();
 
     saveList(type);
-    l_lastListIndex = index;
+    m_lastListIndex = index;
     emit listChanged();
 }
 
 QStringList AudioEditor::getCurrentFileNames()
 {
-    return l_currentFileNames;
+    return m_currentFileNames;
 }
 
 QStringList AudioEditor::getCurrentFilePaths()
 {
-    return l_currentFilePaths;
+    return m_currentFilePaths;
 }
 
 QString AudioEditor::getCurrentListIcon()
 {
-    return l_currentListIcon;
+    return m_currentListIcon;
 }
 
 int AudioEditor::getCurrentListMode()
 {
-    return l_currentListMode;
+    return m_currentListMode;
 }
 
 bool AudioEditor::getLocal()
 {
-    return l_local;
+    return m_local;
 }
 
 QString AudioEditor::getURL()
 {
-    return l_url;
+    return m_url;
 }

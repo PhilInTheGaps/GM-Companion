@@ -24,8 +24,8 @@ private:
     QNetworkAccessManager *networkManager;
 
     QString feedURL;
-    QString l_newestVersion;
-    int l_currentVersion;
+    QString m_newestVersion;
+    int m_currentVersion;
 
 signals:
     void updateAvailable();

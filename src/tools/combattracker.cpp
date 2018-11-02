@@ -9,17 +9,17 @@ CombatTracker::CombatTracker(QObject *parent) : QObject(parent)
 
 void CombatTracker::resetRounds()
 {
-    l_currentRound = 1;
-    l_currentIndex = getStartIndex();
+    m_currentRound = 1;
+    m_currentIndex = getStartIndex();
 
     emit currentRoundChanged();
 }
 
 void CombatTracker::clear()
 {
-    l_combatants.clear();
-    l_currentIndex = 0;
-    l_currentRound = 1;
+    m_combatants.clear();
+    m_currentIndex = 0;
+    m_currentRound = 1;
 
     emit combatantsChanged();
     emit currentRoundChanged();
@@ -30,15 +30,15 @@ void CombatTracker::next()
 {
     int next = getNextIndex();
 
-    if ((l_currentIndex < l_combatants.size()) && (next > -1))
+    if ((m_currentIndex < m_combatants.size()) && (next > -1))
     {
-        l_currentIndex = next;
+        m_currentIndex = next;
         emit currentIndexChanged();
     }
     else
     {
-        l_currentIndex = getStartIndex();
-        l_currentRound++;
+        m_currentIndex = getStartIndex();
+        m_currentRound++;
         emit currentRoundChanged();
         emit currentIndexChanged();
     }
@@ -47,21 +47,21 @@ void CombatTracker::next()
 // Returns the index of the next combatant
 int CombatTracker::getNextIndex()
 {
-    int  oldIni         = (l_combatants.size() > 0) ? l_combatants.at(l_currentIndex).ini : -1;
+    int  oldIni         = (m_combatants.size() > 0) ? m_combatants.at(m_currentIndex).ini : -1;
     int  newIni         = -1;
     int  index          = -1;
     bool foundDoubleIni = false;
 
-    for (int i = 0; i < l_combatants.size(); i++)
+    for (int i = 0; i < m_combatants.size(); i++)
     {
-        int tempIni = l_combatants.at(i).ini;
+        int tempIni = m_combatants.at(i).ini;
 
         if ((tempIni < oldIni) && (tempIni > newIni))
         {
             newIni = tempIni;
             index  = i;
         }
-        else if ((tempIni == oldIni) && (l_currentIndex < i) && !foundDoubleIni)
+        else if ((tempIni == oldIni) && (m_currentIndex < i) && !foundDoubleIni)
         {
             foundDoubleIni = true;
             index          = i;
@@ -77,9 +77,9 @@ int CombatTracker::getStartIndex()
 {
     int index = 0;
 
-    for (int i = 0; i < l_combatants.size(); i++)
+    for (int i = 0; i < m_combatants.size(); i++)
     {
-        if (l_combatants.at(i).ini > l_combatants.at(index).ini)
+        if (m_combatants.at(i).ini > m_combatants.at(index).ini)
         {
             index = i;
         }
@@ -101,7 +101,7 @@ void CombatTracker::add(QString name, int ini, int health, bool sort)
         c.status = tr("Alive");
         c.notes  = "";
 
-        l_combatants.append(c);
+        m_combatants.append(c);
 
         if (!sort) emit combatantsChanged();
     }
@@ -112,13 +112,13 @@ void CombatTracker::add(QString name, int ini, int health, bool sort)
 // Remove Combatant from list
 void CombatTracker::remove(int index)
 {
-    if ((index > -1) && (l_combatants.size() > index))
+    if ((index > -1) && (m_combatants.size() > index))
     {
-        l_combatants.removeAt(index);
+        m_combatants.removeAt(index);
 
-        if ((l_currentIndex == index) && (l_currentIndex > 0))
+        if ((m_currentIndex == index) && (m_currentIndex > 0))
         {
-            l_currentIndex--;
+            m_currentIndex--;
             emit currentIndexChanged();
         }
     }
@@ -130,14 +130,14 @@ void CombatTracker::sortByIni()
 {
     QList<Combatant> sorted;
 
-    while (!l_combatants.isEmpty())
+    while (!m_combatants.isEmpty())
     {
         int ini   = -1;
         int index = 0;
 
-        for (int i = 0; i < l_combatants.size(); i++)
+        for (int i = 0; i < m_combatants.size(); i++)
         {
-            Combatant c = l_combatants.at(i);
+            Combatant c = m_combatants.at(i);
 
             if (c.ini > ini)
             {
@@ -146,46 +146,46 @@ void CombatTracker::sortByIni()
             }
         }
 
-        sorted.append(l_combatants.at(index));
-        l_combatants.removeAt(index);
+        sorted.append(m_combatants.at(index));
+        m_combatants.removeAt(index);
     }
 
-    l_combatants = sorted;
+    m_combatants = sorted;
     emit combatantsChanged();
 }
 
 void CombatTracker::setIni(int index, int ini)
 {
-    Combatant c = l_combatants.at(index);
+    Combatant c = m_combatants.at(index);
 
     c.ini = ini;
 
-    l_combatants.replace(index, c);
+    m_combatants.replace(index, c);
 }
 
 void CombatTracker::setHealth(int index, int health)
 {
-    Combatant c = l_combatants.at(index);
+    Combatant c = m_combatants.at(index);
 
     c.health = health;
 
-    l_combatants.replace(index, c);
+    m_combatants.replace(index, c);
 }
 
 void CombatTracker::setStatus(int index, QString status)
 {
-    Combatant c = l_combatants.at(index);
+    Combatant c = m_combatants.at(index);
 
     c.status = status;
 
-    l_combatants.replace(index, c);
+    m_combatants.replace(index, c);
 }
 
 void CombatTracker::setNotes(int index, QString notes)
 {
-    Combatant c = l_combatants.at(index);
+    Combatant c = m_combatants.at(index);
 
     c.notes = notes;
 
-    l_combatants.replace(index, c);
+    m_combatants.replace(index, c);
 }

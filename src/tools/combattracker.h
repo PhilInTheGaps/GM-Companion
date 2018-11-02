@@ -22,8 +22,8 @@ class CombatTracker : public QObject
 public:
     explicit CombatTracker(QObject *parent = nullptr);
 
-    int currentRound() const { return l_currentRound; }
-    int currentIndex() const { return l_currentIndex; }
+    int currentRound() const { return m_currentRound; }
+    int currentIndex() const { return m_currentIndex; }
 
     Q_INVOKABLE void next();
     Q_INVOKABLE void add(QString name, int ini, int health, bool sort = false);
@@ -31,7 +31,7 @@ public:
     Q_INVOKABLE void resetRounds();
     Q_INVOKABLE void remove(int index);
 
-    Q_INVOKABLE int getListSize() const { return l_combatants.size(); }
+    Q_INVOKABLE int getListSize() const { return m_combatants.size(); }
 
     Q_INVOKABLE void setIni(int index, int ini);
     Q_INVOKABLE void setHealth(int index, int health);
@@ -39,11 +39,11 @@ public:
     Q_INVOKABLE void setNotes(int index, QString notes);
     Q_INVOKABLE void sortByIni();
 
-    Q_INVOKABLE QString getName(int index) const { return l_combatants.at(index).name; }
-    Q_INVOKABLE int getIni(int index) const { return l_combatants.at(index).ini; }
-    Q_INVOKABLE int getHealth(int index) const { return l_combatants.at(index).health; }
-    Q_INVOKABLE QString getStatus(int index) const { return l_combatants.at(index).status; }
-    Q_INVOKABLE QString getNotes(int index) const { return l_combatants.at(index).notes; }
+    Q_INVOKABLE QString getName(int index) const { return m_combatants.at(index).name; }
+    Q_INVOKABLE int getIni(int index) const { return m_combatants.at(index).ini; }
+    Q_INVOKABLE int getHealth(int index) const { return m_combatants.at(index).health; }
+    Q_INVOKABLE QString getStatus(int index) const { return m_combatants.at(index).status; }
+    Q_INVOKABLE QString getNotes(int index) const { return m_combatants.at(index).notes; }
 
 signals:
     void currentRoundChanged();
@@ -51,13 +51,13 @@ signals:
     void combatantsChanged();
 
 private:
-    QList<Combatant> l_combatants;
+    QList<Combatant> m_combatants;
 
     int getNextIndex();
     int getStartIndex();
 
-    int l_currentIndex = 0;
-    int l_currentRound = 1;
+    int m_currentIndex = 0;
+    int m_currentRound = 1;
 
 };
 
