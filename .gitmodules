@@ -1,0 +1,3 @@
+[submodule "lib/fa-qml"]
+	path = lib/fa-qml
+	url = https://github.com/PhilInTheGaps/fa-qml
