@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import "../../fontawesome"
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -63,9 +63,10 @@ Rectangle {
             color: "transparent"
         }
 
-        Icon {
-            icon: character_button.active ? icons.fas_times : icons.fas_plus
-            pointSize: 15
+        Text {
+            text: character_button.active ? FontAwesome.times : FontAwesome.plus
+            font.family: FontAwesome.familySolid
+            font.pointSize: 15
             anchors.centerIn: parent
             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
         }

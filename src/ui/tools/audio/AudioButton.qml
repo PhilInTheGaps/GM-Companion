@@ -4,13 +4,26 @@ import QtQuick.Controls 2.2
 
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
-import "../../fontawesome"
+
+import FontAwesome 2.0
 
 Rectangle {
     property var element_name
     property var icon_path
     property var element_type
     property var default_icon: {
+        if (element_type === 0) {
+            FontAwesome.music
+        } else if (element_type === 1) {
+            FontAwesome.drum
+        } else if (element_type === 2) {
+            FontAwesome.broadcastTower
+        } else if (element_type === 3) {
+            FontAwesome.spotify
+        }
+    }
+
+    property var default_image: {
         if (element_type === 0) {
             "/icons/media/music_image.png"
         } else if (element_type === 1) {
@@ -45,7 +58,7 @@ Rectangle {
 
         Image {
             id: large_icon
-            source: icon_path === default_icon || icon_path.startsWith(
+            source: icon_path === default_image || icon_path.startsWith(
                         "http") ? icon_path : "file:///" + icon_path
             x: 5
             y: 5
@@ -64,32 +77,16 @@ Rectangle {
             anchors.horizontalCenter: large_icon.horizontalCenter
         }
 
-        Image {
-            id: small_icon
-
+        Text {
             visible: icon_path === default_icon ? false : true
-            source: default_icon
-
-            width: parent.width / 5
-            height: width
-
+            font.pixelSize: parent.height / 5
             x: 10
-            y: parent.height - 10 - width
+            y: parent.height - 10 - height
 
-            sourceSize.width: width
-            sourceSize.height: height
+            color: "white"
+            text: default_icon
+            font.family: element_type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
         }
-    }
-
-    Icon {
-        visible: element_type === 3
-
-        font.pixelSize: parent.width / 5
-        x: small_icon.x
-        y: small_icon.y
-
-        color: "white"
-        icon: icons.fab_spotify
     }
 
     Text {

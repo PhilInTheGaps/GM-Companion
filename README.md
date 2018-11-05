@@ -19,7 +19,7 @@ A tool for the gamemaster of a tabletop RPG session.
  
 Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite.com/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)  
 [FontAwesome](https://fontawesome.com/)  
-[FontAwesome 5.1 QML Implementation](https://gitlab.com/Rophil/qml-fontawesome-5) based on [QMLFontAwesome](https://github.com/qCring/QMLFontAwesome) by [qCring](https://github.com/qCring)  
+[FontAwesome QML Implementation](https://github.com/PhilInTheGaps/fontawesome.pri) fork of [FontAwesome.pri](https://github.com/benlau/fontawesome.pri) by [Ben Lau](https://github.com/benlau)  
 
 # Installation
 
@@ -73,7 +73,7 @@ Even though the travis.ci build for MacOS compiles without errors, I don't know 
 GM-Companion requires Qt5 to build.  
 
 So the build steps would look something like this:  
-1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion)  
+1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion). Make sure to initialize all submodules!  
 2. Install [Qt5](https://www.qt.io/) (GM-Companion requires at least version 5.10)  
 3. If you are on Linux install [TagLib](http://taglib.org/)  
 4. Switch to the GM-Companion folder  

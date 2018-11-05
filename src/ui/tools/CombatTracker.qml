@@ -7,7 +7,7 @@ import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 
 import "./combat_tracker"
-import "../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: combat_tracker
@@ -88,9 +88,10 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Icon {
-                        icon: icons.fas_chevron_right
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.chevronRight
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
@@ -123,9 +124,10 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Icon {
-                        icon: icons.fas_plus
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
@@ -158,9 +160,10 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Icon {
-                        icon: icons.fas_sort
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.sort
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
@@ -193,9 +196,10 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Icon {
-                        icon: icons.fas_dice
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.dice
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
@@ -366,9 +370,10 @@ Page {
                             color: "transparent"
                         }
 
-                        Icon {
-                            icon: icons.fas_times
-                            pointSize: 25
+                        Text {
+                            text: FontAwesome.times
+                            font.family: FontAwesome.familySolid
+                            font.pointSize: 25
                             color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (index == tool.currentIndex ? "white" : color_scheme.primaryButtonColor))
                             anchors.centerIn: parent
                         }
@@ -469,9 +474,10 @@ Page {
                             spacing: 10
                             padding: 10
 
-                            Icon {
-                                icon: icons.fas_undo
-                                pointSize: 15
+                            Text {
+                                text: FontAwesome.undo
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 14
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                             }
@@ -504,9 +510,10 @@ Page {
                             spacing: 10
                             padding: 10
 
-                            Icon {
-                                icon: icons.fas_times
-                                pointSize: 17
+                            Text {
+                                text: FontAwesome.times
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 17
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                             }

@@ -5,7 +5,7 @@ import QtQuick.Window 2.2
 import gm.companion.audioeditor 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.settingstool 1.0
-import "../../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: audio_editor
@@ -313,9 +313,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.far_arrow_alt_circle_left
-                    pointSize: 25
+                Text {
+                    text: FontAwesome.arrowAltCircleLeft
+                    font.pixelSize: parent.height - 10
+                    font.family: FontAwesome.familySolid
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
@@ -542,9 +543,10 @@ Page {
                     anchors.centerIn: parent
                     spacing: 5
 
-                    Icon {
-                        icon: icons.fas_sort_alpha_down
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.sortAlphaDown
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height
                         anchors.verticalCenter: parent.verticalCenter
                     }
 

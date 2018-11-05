@@ -6,8 +6,7 @@ import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import "./audio"
-import "../fontawesome"
-
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
 Page {
@@ -229,9 +228,12 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
-                        icon: icons.fas_bars
-                        pointSize: 25
+                    Text {
+                        text: FontAwesome.bars
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
+                        height: parent.height - 10
+                        width: height
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -251,9 +253,10 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
-                        icon: icons.fas_list_ol
-                        pointSize: 25
+                    Text {
+                        text: FontAwesome.listOl
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -364,9 +367,10 @@ Page {
                             color: "transparent"
                         }
 
-                        Icon {
-                            icon: icons.fas_backward
-                            pointSize: 20
+                        Text {
+                            text: FontAwesome.backward
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: parent.height - 10
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
@@ -384,10 +388,11 @@ Page {
                             color: "transparent"
                         }
 
-                        Icon {
+                        Text {
                             id: audio_play_pause_icon
-                            icon: audio_tool.isPlaying ? icons.fas_pause_circle : icons.fas_play_circle
-                            pointSize: 30
+                            text: audio_tool.isPlaying ? FontAwesome.pauseCircle : FontAwesome.playCircle
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: parent.height
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
@@ -405,9 +410,10 @@ Page {
                             color: "transparent"
                         }
 
-                        Icon {
-                            icon: icons.fas_forward
-                            pointSize: 20
+                        Text {
+                            text: FontAwesome.forward
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: parent.height - 10
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                         }
@@ -443,12 +449,12 @@ Page {
                     Button {
                         id: editor_button
 
-                        Icon {
+                        Text {
                             x: 10
-                            icon: icons.far_edit
-                            pointSize: 15
+                            text: FontAwesome.edit
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: parent.height - 15
                             anchors.verticalCenter: parent.verticalCenter
-                            verticalAlignment: Text.AlignVCenter
                         }
 
                         text: qsTr("Editor")

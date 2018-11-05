@@ -6,7 +6,7 @@ import gm.companion.charactertool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 import "./characters"
-import "../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: characters
@@ -185,10 +185,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_plus
-                        pointSize: 22
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -215,10 +216,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_minus
-                        pointSize: 22
+                        text: FontAwesome.minus
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -244,10 +246,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_undo
-                        pointSize: 22
+                        text: FontAwesome.undo
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }

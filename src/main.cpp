@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
 
     QQmlApplicationEngine engine;
+    engine.addImportPath("qrc:///");
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;

@@ -40,8 +40,6 @@
         <file>tools/DiceAlt.qml</file>
         <file>tools/combat_tracker/CombatantDialog.qml</file>
         <file>tools/combat_tracker/AddCombatantRow.qml</file>
-        <file>fontawesome/fontawesome.js</file>
-        <file>fontawesome/Icon.qml</file>
         <file>tools/combat_tracker/ListTextField.qml</file>
         <file>tools/combat_tracker/ListSpinBox.qml</file>
         <file>tools/converter/ConverterUnitPage.qml</file>

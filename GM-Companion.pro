@@ -8,6 +8,8 @@ QT       += core multimedia network quick qml networkauth
 
 win32:QT += winextras
 
+include(lib/fontawesome.pri/fontawesome.pri)
+
 TARGET = out/gm-companion
 TEMPLATE = app
 

@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-import "../../fontawesome"
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -25,36 +25,38 @@ Rectangle {
         padding: 5
         spacing: 5
 
-        Icon {
+        Text {
             id: plus_icon
-            icon: icons.fas_plus
-            pointSize: 14
+            text: FontAwesome.plus
+            font.pixelSize: parent.height - 10
+            font.family: FontAwesome.familySolid
+
             anchors.verticalCenter: parent.verticalCenter
             visible: type !== 3
             color: "white"
         }
 
-        Image {
-            id: image
-            width: (parent.height - parent.padding * 2) * 0.8
-            height: width
-            sourceSize.width: width
-            sourceSize.height: height
+        Text {
+            id: icon
+            font.pixelSize: (parent.height - parent.padding * 2) * 0.8
+            font.family: FontAwesome.familySolid
             anchors.verticalCenter: parent.verticalCenter
+
+            color: "white"
 
             Component.onCompleted: {
                 switch (type) {
                 case 0:
-                    source = "/icons/media/music_bright.png"
+                    text = FontAwesome.music
                     break
                 case 1:
-                    source = "/icons/media/sound_bright.png"
+                    text = FontAwesome.drum
                     break
                 case 2:
-                    source = "/icons/media/radio.png"
+                    text = FontAwesome.broadcastTower
                     break
                 case 3:
-                    source = "/icons/menu/three_bars_white.png"
+                    text = FontAwesome.bars
                     break
                 }
             }
@@ -63,8 +65,7 @@ Rectangle {
         Text {
             text: element
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
-            width: parent.width - parent.spacing - parent.padding * 3
-                   - image.width - plus_icon.width
+            width: parent.width - parent.spacing - parent.padding * 3 - icon.width - plus_icon.width
             clip: true
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter

@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 
 import gm.companion.notestool 1.0
 import gm.companion.colorscheme 1.0
-import "../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: notes_page
@@ -161,9 +161,10 @@ Page {
                         font.pointSize: 11
                     }
 
-                    indicator: Icon {
-                        icon: icons.fas_sort
-                        pointSize: 15
+                    indicator: Text {
+                        text: FontAwesome.sort
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.toolbarTextColor
                         x: parent.width - width - 5
@@ -188,10 +189,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         id: delete_chapter_icon
-                        icon: icons.fas_trash_alt
-                        pointSize: 15
+                        text: FontAwesome.trashAlt
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -223,10 +225,11 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
+                Text {
                     id: add_icon
-                    icon: icons.fas_plus
-                    pointSize: 15
+                    text: FontAwesome.plus
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -330,10 +333,11 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
+                Text {
                     id: delete_page_icon
-                    icon: icons.fas_trash_alt
-                    pointSize: 15
+                    text: FontAwesome.trashAlt
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -354,10 +358,11 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
+                Text {
                     id: encrypt_page_icon
-                    icon: icons.fas_eye
-                    pointSize: 15
+                    text: FontAwesome.eye
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -374,10 +379,11 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
+                Text {
                     id: larger_font_icon
-                    icon: icons.fas_search_plus
-                    pointSize: 15
+                    text: FontAwesome.searchPlus
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -394,10 +400,11 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
+                Text {
                     id: smaller_font_icon
-                    icon: icons.fas_search_minus
-                    pointSize: 15
+                    text: FontAwesome.searchMinus
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
