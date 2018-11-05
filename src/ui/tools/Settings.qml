@@ -235,6 +235,7 @@ Page {
                     color: color_scheme.textColor
                 }
 
+                // UI Style
                 Row {
                     width: parent.width
 
@@ -262,6 +263,23 @@ Page {
                             currentIndex = settings_tool.uiStyleIndex
                             loaded = true
                         }
+                    }
+                }
+
+                // Alternative Menu
+                Row {
+                    CheckBox {
+                        checked: settings_tool.getAltMenu()
+
+                        onCheckedChanged: {
+                            settings_tool.setAltMenu(checked)
+                        }
+                    }
+
+                    Text {
+                        text: qsTr("Alternative Menu")
+                        color: color_scheme.textColor
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 

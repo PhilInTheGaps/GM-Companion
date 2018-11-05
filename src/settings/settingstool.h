@@ -32,6 +32,9 @@ public:
     Q_INVOKABLE void setSpotifySecret(QString secret) { sManager->setSetting(Setting::spotifySecret, 1, secret); }
     Q_INVOKABLE QString getSpotifySecret() const { return sManager->getSetting(Setting::spotifySecret); }
 
+    Q_INVOKABLE void setAltMenu(bool enabled = true) { sManager->setSetting(Setting::altMenu, enabled); }
+    Q_INVOKABLE bool getAltMenu() { return sManager->getSetting(Setting::altMenu).toInt(); }
+
 signals:
     void audioPathChanged();
     void musicPathChanged();
