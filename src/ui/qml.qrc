@@ -45,5 +45,7 @@
         <file>tools/converter/ConverterUnitPage.qml</file>
         <file>tools/audio/EditorSpotifyPlaylistPage.qml</file>
         <file>tools/audio/AudioExporter.qml</file>
+        <file>tools/audio/VolumeDialog.qml</file>
+        <file>tools/audio/VolumeSlider.qml</file>
     </qresource>
 </RCC>

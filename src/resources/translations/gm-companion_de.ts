@@ -127,27 +127,27 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Projekt</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="460"/>
+        <location filename="../../ui/tools/Audio.qml" line="420"/>
         <source>Editor</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="481"/>
+        <location filename="../../ui/tools/Audio.qml" line="442"/>
         <source>Project Structure</source>
         <translation>Projekt Struktur</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="572"/>
+        <location filename="../../ui/tools/Audio.qml" line="533"/>
         <source>Sounds</source>
         <translation>Geräusche</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="579"/>
+        <location filename="../../ui/tools/Audio.qml" line="540"/>
         <source>No sounds playing.</source>
         <translation>Keine aktiven Geräusche.</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="593"/>
+        <location filename="../../ui/tools/Audio.qml" line="554"/>
         <source>Music</source>
         <translation>Musik</translation>
     </message>
@@ -1166,12 +1166,12 @@ p, li { white-space: pre-wrap; }
         <translation type="vanished">Neuer Charakter</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Characters.qml" line="133"/>
+        <location filename="../../ui/tools/Characters.qml" line="146"/>
         <source>Active</source>
         <translation>Aktiv</translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Characters.qml" line="158"/>
+        <location filename="../../ui/tools/Characters.qml" line="185"/>
         <source>Inactive</source>
         <translation>Inaktiv</translation>
     </message>
@@ -4288,7 +4288,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="194"/>
+        <location filename="../../ui/main.qml" line="192"/>
         <source>Audio</source>
         <translation></translation>
     </message>
@@ -4297,7 +4297,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Audio</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="205"/>
+        <location filename="../../ui/main.qml" line="203"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
@@ -4306,7 +4306,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Karten</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="212"/>
+        <location filename="../../ui/main.qml" line="210"/>
         <source>Dice</source>
         <translation>Würfel</translation>
     </message>
@@ -4315,7 +4315,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Würfel</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="219"/>
+        <location filename="../../ui/main.qml" line="217"/>
         <source>Combat Tracker</source>
         <translation>Kampfrunden</translation>
     </message>
@@ -4324,7 +4324,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Kampfrunden</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="226"/>
+        <location filename="../../ui/main.qml" line="224"/>
         <source>Item Shop</source>
         <translation>Item Shop</translation>
     </message>
@@ -4333,7 +4333,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Item Shop</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="233"/>
+        <location filename="../../ui/main.qml" line="231"/>
         <source>Characters</source>
         <translation>Charaktere</translation>
     </message>
@@ -4342,7 +4342,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Charaktere</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="240"/>
+        <location filename="../../ui/main.qml" line="238"/>
         <source>Generators</source>
         <translation>Generatoren</translation>
     </message>
@@ -4351,7 +4351,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Generatoren</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="247"/>
+        <location filename="../../ui/main.qml" line="245"/>
         <source>Notes</source>
         <translation>Notizen</translation>
     </message>
@@ -4360,7 +4360,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Notizen</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="254"/>
+        <location filename="../../ui/main.qml" line="252"/>
         <source>Converter</source>
         <translation>Umrechner</translation>
     </message>
@@ -4369,7 +4369,7 @@ Bitte wähle eine benutzerdefinierte Kategorie aus!</translation>
         <translation type="vanished">Aktuelles Tool: Umrechner</translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="269"/>
+        <location filename="../../ui/main.qml" line="267"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>

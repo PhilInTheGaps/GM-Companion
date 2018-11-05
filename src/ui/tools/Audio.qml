@@ -18,6 +18,12 @@ Page {
         id: platform
     }
 
+    function closeVolumePopup() {
+        if (volume_dialog.opened) {
+            volume_dialog.close()
+        }
+    }
+
     StackView {
         id: audio_stack
         anchors.fill: parent
@@ -203,6 +209,19 @@ Page {
                 }
             }
 
+            // Volume Dialog
+            VolumeDialog {
+                id: volume_dialog
+                x: parent.width - width
+                y: parent.height - audio_control_bar.height - height
+
+                initialMusicVolume: 1
+                initialSoundVolume: 0.5
+
+                onMusicVolumeChanged: audio_tool.setMusicVolume(value)
+                onSoundVolumeChanged: audio_tool.setSoundVolume(value)
+            }
+
             // Bar at the bottom
             ToolBar {
                 id: audio_control_bar
@@ -241,8 +260,34 @@ Page {
                     onClicked: audio_project_menu.visible ? audio_project_menu.visible = false : audio_project_menu.visible = true
                 }
 
+                // Volume Control Button
+                Button {
+                    id: volume_button
+                    height: parent.height - 10
+                    width: height
+                    x: parent.width - width - 10 - playlist_button.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    hoverEnabled: true
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Text {
+                        text: FontAwesome.volumeUp
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
+                        anchors.centerIn: parent
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                    }
+
+                    onClicked: volume_dialog.opened ? volume_dialog.close(
+                                                          ) : volume_dialog.open()
+                }
+
                 // Playlist Button
                 Button {
+                    id: playlist_button
                     height: parent.height - 10
                     width: height
                     x: parent.width - width - 5
@@ -263,91 +308,6 @@ Page {
 
                     onClicked: audio_info_frame.visible ? audio_info_frame.visible
                                                           = false : audio_info_frame.visible = true
-                }
-
-                // Volume Control
-                Column {
-                    width: parent.width / 5
-                    height: audio_control_bar.height
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: audio_project_structure_button.width + 10
-
-                    padding: 5
-                    spacing: 5
-
-                    Row {
-                        width: parent.width
-                        height: (parent.height - parent.spacing
-                                 - parent.topPadding - parent.bottomPadding) / 2
-                        spacing: 5
-
-                        Image {
-                            id: music_icon
-                            source: "/icons/media/music_bright.png"
-                            height: parent.height
-                            width: height
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Slider {
-                            width: parent.width - music_icon.width - parent.spacing
-                            height: parent.height
-                            from: 0
-                            value: 1.5
-                            to: 2
-
-                            handle: Rectangle {
-                                x: parent.leftPadding + parent.visualPosition
-                                   * (parent.availableWidth - width)
-                                y: parent.topPadding + parent.availableHeight / 2 - height / 2
-
-                                implicitWidth: parent.height
-                                implicitHeight: parent.height
-                                radius: 13
-                                color: parent.pressed ? "#f0f0f0" : "#f6f6f6"
-                                border.color: "#bdbebf"
-                            }
-
-                            onValueChanged: audio_tool.setMusicVolume(value)
-                        }
-                    }
-
-                    Row {
-                        width: parent.width
-                        height: (parent.height - parent.spacing
-                                 - parent.topPadding - parent.bottomPadding) / 2
-                        spacing: 5
-
-                        Image {
-                            id: sound_icon
-                            source: "/icons/media/sound_bright.png"
-                            height: parent.height
-                            width: height
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Slider {
-                            width: parent.width - sound_icon.width - parent.spacing
-                            height: parent.height
-                            from: 0
-                            value: 0.5
-                            to: 2
-
-                            handle: Rectangle {
-                                x: parent.leftPadding + parent.visualPosition
-                                   * (parent.availableWidth - width)
-                                y: parent.topPadding + parent.availableHeight / 2 - height / 2
-
-                                implicitWidth: parent.height
-                                implicitHeight: parent.height
-                                radius: 13
-                                color: parent.pressed ? "#f0f0f0" : "#f6f6f6"
-                                border.color: "#bdbebf"
-                            }
-
-                            onValueChanged: audio_tool.setSoundVolume(value)
-                        }
-                    }
                 }
 
                 // Play Pause Skip
@@ -464,6 +424,7 @@ Page {
 
                         onClicked: {
                             if (audio_stack.currentItem == audio_page) {
+                                closeVolumePopup()
                                 audio_page.visible = false
                                 audio_editor.visible = true
                                 audio_stack.pop(null)

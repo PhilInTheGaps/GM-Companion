@@ -137,7 +137,6 @@ Window {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         height: color_scheme.toolbarHeight
-                        visible: !altMenu || inPortrait
 
                         // Tools Text
                         Text {
@@ -155,7 +154,7 @@ Window {
                         // GM-Companion Icon
                         Image {
                             anchors.centerIn: parent
-                            visible: inPortrait
+                            visible: inPortrait || altMenu
 
                             width: parent.width - 10
                             height: width
@@ -179,7 +178,6 @@ Window {
                             anchors.right: parent.right
                             height: 2
                             color: color_scheme.dividerColor
-                            visible: !altMenu || inPortrait
                         }
 
                         function buttonClicked(tool) {

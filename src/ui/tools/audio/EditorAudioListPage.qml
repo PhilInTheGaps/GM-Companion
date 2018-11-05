@@ -203,7 +203,7 @@ Page {
                                     }
 
                                     Text {
-                                        text: FontAwesome.angleUp
+                                        text: FontAwesome.chevronUp
                                         font.pixelSize: parent.height
                                         font.family: FontAwesome.familySolid
                                         anchors.centerIn: parent
@@ -227,7 +227,7 @@ Page {
                                     }
 
                                     Text {
-                                        text: FontAwesome.angleDown
+                                        text: FontAwesome.chevronDown
                                         font.pixelSize: parent.height
                                         font.family: FontAwesome.familySolid
                                         anchors.centerIn: parent

@@ -31,27 +31,27 @@
 <context>
     <name>Audio</name>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="460"/>
+        <location filename="../../ui/tools/Audio.qml" line="420"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="481"/>
+        <location filename="../../ui/tools/Audio.qml" line="442"/>
         <source>Project Structure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="572"/>
+        <location filename="../../ui/tools/Audio.qml" line="533"/>
         <source>Sounds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="579"/>
+        <location filename="../../ui/tools/Audio.qml" line="540"/>
         <source>No sounds playing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Audio.qml" line="593"/>
+        <location filename="../../ui/tools/Audio.qml" line="554"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -169,12 +169,12 @@
 <context>
     <name>Characters</name>
     <message>
-        <location filename="../../ui/tools/Characters.qml" line="133"/>
+        <location filename="../../ui/tools/Characters.qml" line="146"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Characters.qml" line="158"/>
+        <location filename="../../ui/tools/Characters.qml" line="185"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1374,52 +1374,52 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="194"/>
+        <location filename="../../ui/main.qml" line="192"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="205"/>
+        <location filename="../../ui/main.qml" line="203"/>
         <source>Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="212"/>
+        <location filename="../../ui/main.qml" line="210"/>
         <source>Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="219"/>
+        <location filename="../../ui/main.qml" line="217"/>
         <source>Combat Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="226"/>
+        <location filename="../../ui/main.qml" line="224"/>
         <source>Item Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="233"/>
+        <location filename="../../ui/main.qml" line="231"/>
         <source>Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="240"/>
+        <location filename="../../ui/main.qml" line="238"/>
         <source>Generators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="247"/>
+        <location filename="../../ui/main.qml" line="245"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="254"/>
+        <location filename="../../ui/main.qml" line="252"/>
         <source>Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="269"/>
+        <location filename="../../ui/main.qml" line="267"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>

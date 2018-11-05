@@ -56,7 +56,7 @@ Rectangle {
                     text = FontAwesome.broadcastTower
                     break
                 case 3:
-                    text = FontAwesome.bars
+                    text = FontAwesome.folder
                     break
                 }
             }
