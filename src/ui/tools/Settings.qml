@@ -22,8 +22,6 @@ Page {
         Component.onCompleted: {
             addon_manager.updateAddonList()
 
-            setCurrentVersion(1000)
-
             if (settings_tool.getCheckForUpdates())
                 checkForUpdates()
         }
@@ -561,8 +559,13 @@ Page {
 
                     onClicked: {
                         Qt.openUrlExternally(
-                                    "https://gm-companion.github.io/pages/about/")
+                                    "https://gm-companion.github.io/about.html")
                     }
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "Version: " + update_manager.getCurrentVersion()
                 }
             }
         }

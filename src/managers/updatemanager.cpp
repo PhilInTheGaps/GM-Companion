@@ -2,13 +2,14 @@
 
 #include <QXmlStreamReader>
 #include <QDebug>
+#include <QSettings>
 
 UpdateManager::UpdateManager()
 {
     qDebug().noquote() << "Initializing update manager ...";
 
     // GitHub Release feed
-    feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
+    m_feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
     networkManager = new QNetworkAccessManager;
     connect(networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(on_networkManager_finished(QNetworkReply *)));
@@ -16,38 +17,50 @@ UpdateManager::UpdateManager()
     // Check if openSSL is installed, required for network access to work
     qDebug().noquote() << "Checking SSL installation...";
 
-    if (!QSslSocket::supportsSsl()) qDebug().noquote() << "Please install openSSL";
+    if (!QSslSocket::supportsSsl()) qWarning().noquote() << "Please install openSSL";
     else qDebug().noquote() << "SSL is installed.";
-}
 
-void UpdateManager::setCurrentVersion(int version)
-{
-    m_currentVersion = version;
+    // Get current release version
+    QSettings s(":/release.ini", QSettings::IniFormat);
+    m_currentVersion = s.value("version", "0.0.0").toString();
 }
 
 void UpdateManager::checkForUpdates()
 {
     qDebug().noquote() << "Checking for updates ...";
     qDebug().noquote() << "Current version:" << m_currentVersion;
-    qDebug().noquote() << "Releases feed URL:" << feedURL;
+    qDebug().noquote() << "Releases feed URL:" << m_feedURL;
 
     // Get the release feed to check for a new version
-    networkManager->get(QNetworkRequest(QUrl(feedURL)));
+    networkManager->get(QNetworkRequest(QUrl(m_feedURL)));
 }
 
-QString UpdateManager::newestVersion()
+// Returns if v1 is greater than v2
+bool UpdateManager::compareVersions(QString v1, QString v2)
 {
-    return m_newestVersion;
-}
+    QStringList v1_l = v1.split('.');
+    QStringList v2_l = v2.split('.');
 
-int UpdateManager::newestVersionInt()
-{
-    return m_newestVersion.replace(".", "").toInt();
-}
+    for (int i = 0; i < v1_l.size(); i++)
+    {
+        if (i < v2_l.size())
+        {
+            if (v1_l[i].toInt() > v2_l[i].toInt())
+            {
+                return true;
+            }
+            else if (v1_l[i].toInt() < v2_l[i].toInt())
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-int UpdateManager::getCurrentVersion()
-{
-    return m_currentVersion;
+    return false;
 }
 
 // Evaluate the release feed
@@ -58,9 +71,8 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     QString replyString = reply->readAll();
     QXmlStreamReader reader(replyString);
 
-    int newestVersion = 0;       // 320              Newest Version without dots
     QString newestVersionTitle;  // Beta 3.2         Title of the Version
-    QString newestVersionString; // 0.3.2.0          Newest Version with dots
+    m_newestVersion = "0.0.0";
 
     // Release feed is XML, so here is a XML reader
     qDebug() << "Found the following versions:";
@@ -74,7 +86,7 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
                 if (reader.name() == "entry")
                 {
                     QString id;
-                    QString versionString;
+                    QString version;
                     QString title;
                     QString content;
 
@@ -93,39 +105,33 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
 
                     // Version is converted from git tag, so we have to remove a
                     // bunch of junk
-                    versionString = id.replace("tag:github.com,2008:Repository/78660365/", "");
+                    version = id.replace("tag:github.com,2008:Repository/78660365/", "");
+                    qDebug() << version;
 
-                    // Remove all the dots to make it a
-                    // number and easier to compare
-                    int versionNumber = versionString.replace(".", "").toInt();
-
-                    if (versionNumber > newestVersion)
+                    // Compare with current newest version
+                    if (compareVersions(version, m_newestVersion))
                     {
-                        newestVersion      = versionNumber;
+                        m_newestVersion      = version;
                         newestVersionTitle = title;
-
-                        // Forgot why I did not simply use versionString, but
-                        // must have had a reason
-                        newestVersionString = id.replace("tag:github.com,2008:Repository/78660365/", "");
                     }
-
-                    qDebug().noquote() << " -" << title << "(" << versionString << ")";
                 } else reader.skipCurrentElement();
             }
         }
         else reader.raiseError("Incorrect file");
     }
 
+    qDebug() << "Newest version:" << m_newestVersion;
+
     // Decide if a newer version is available than the one installed
-    if (newestVersion > m_currentVersion)
+    if (compareVersions(m_currentVersion, m_newestVersion))
+    {
+        qDebug().noquote() << "Your version is the newest one.";
+        emit noUpdateAvailable();
+    }
+    else
     {
         qDebug().noquote() << "Found a newer version:" << newestVersionTitle;
         m_newestVersion = newestVersionTitle;
         emit updateAvailable();
-    }
-    else
-    {
-        qDebug().noquote() << "Your version is the newest one.";
-        emit noUpdateAvailable();
     }
 }

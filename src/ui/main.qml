@@ -68,8 +68,6 @@ Window {
         id: update_manager
 
         Component.onCompleted: {
-            setCurrentVersion(1000)
-
             if (settings_tool.getCheckForUpdates())
                 checkForUpdates()
         }
@@ -129,6 +127,8 @@ Window {
                 contentWidth: -1
                 anchors.left: parent.left
                 anchors.right: parent.right
+
+                ScrollBar.vertical.visible: false
 
                 Column {
                     width: drawer.width

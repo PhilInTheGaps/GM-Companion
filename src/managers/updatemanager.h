@@ -7,15 +7,13 @@
 class UpdateManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString newestVersion READ newestVersion NOTIFY updateAvailable)
+    Q_PROPERTY(QString newestVersion READ getNewestVersion NOTIFY updateAvailable)
 
 public:
     UpdateManager();
     Q_INVOKABLE void checkForUpdates();
-    Q_INVOKABLE void setCurrentVersion(int version);
-    QString newestVersion();
-    Q_INVOKABLE int newestVersionInt();
-    Q_INVOKABLE int getCurrentVersion();
+    Q_INVOKABLE QString getNewestVersion() const { return m_newestVersion; }
+    Q_INVOKABLE QString getCurrentVersion() const { return m_currentVersion; }
 
 private slots:
     void on_networkManager_finished(QNetworkReply*reply);
@@ -23,9 +21,11 @@ private slots:
 private:
     QNetworkAccessManager *networkManager;
 
-    QString feedURL;
+    QString m_feedURL;
     QString m_newestVersion;
-    int m_currentVersion;
+    QString m_currentVersion;
+
+    bool compareVersions(QString v1, QString v2);
 
 signals:
     void updateAvailable();

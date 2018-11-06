@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>splash.jpg</file>
+        <file>release.ini</file>
     </qresource>
     <qresource prefix="/names/Generic">
         <file alias="Elves/female.txt">names/Generic/Elves/female.txt</file>
