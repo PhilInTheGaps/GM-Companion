@@ -27,7 +27,7 @@ Dice icons by [Skoll](http://game-icons.net/) and [Delapouite](http://delapouite
 
 For Windows there is only a 64 bits version available. If you want to use the GM-Companion on a 32 bits machine, you have to build the program from source. 
 
-[Release 1.0 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.0.0.0/gm-companion_1.0.0.0_win64.zip)  
+[Release 1.0.1 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.0.1.0/gm-companion_1.0.1_win64.zip)  
 
 The program works without an installer. Simply extract all the files from the .zip archive to a folder and run _gm-companion.exe_.
 
