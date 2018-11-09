@@ -22,7 +22,8 @@ enum Setting{
     radioPath,
     drive_music,
     spotifyID,
-    spotifySecret
+    spotifySecret,
+    altMenu
 };
 
 class SettingsManager

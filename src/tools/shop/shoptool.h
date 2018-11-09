@@ -57,16 +57,16 @@ signals:
 private:
     SettingsManager *sManager;
 
-    QString l_category;
-    QStringList l_categories;
-    QStringList l_shops;
-    QString l_shopName;
-    QString l_shopDescription;
-    QString l_shopOwner;
+    QString m_category;
+    QStringList m_categories;
+    QStringList m_shops;
+    QString m_shopName;
+    QString m_shopDescription;
+    QString m_shopOwner;
 
-    QStringList l_item_names;
-    QStringList l_item_prices;
-    QStringList l_item_descriptions;
+    QStringList m_item_names;
+    QStringList m_item_prices;
+    QStringList m_item_descriptions;
 };
 
 #endif // SHOPTOOL_H

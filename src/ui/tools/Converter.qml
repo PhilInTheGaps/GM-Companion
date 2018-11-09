@@ -5,7 +5,7 @@ import QtQuick.Controls 2.2
 import gm.companion.convertertool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
-import "../fontawesome"
+import FontAwesome 2.0
 import "./converter"
 
 Page {
@@ -111,9 +111,10 @@ Page {
                     spacing: 10
                     padding: 10
 
-                    Icon {
-                        icon: icons.fas_plus
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }
@@ -184,9 +185,10 @@ Page {
                 }
             }
 
-            Icon {
-                icon: icons.fas_arrow_right
-                pointSize: 15
+            Text {
+                text: FontAwesome.arrowRight
+                font.family: FontAwesome.familySolid
+                font.pointSize: 15
                 color: color_scheme.textColor
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -264,9 +266,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_ruler
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.ruler
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -284,9 +287,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_ruler_combined
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.rulerCombined
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -304,9 +308,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_prescription_bottle
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.prescriptionBottle
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -324,9 +329,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_balance_scale
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.balanceScale
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }
@@ -344,9 +350,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_dollar_sign
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.dollarSign
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 15
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.centerIn: parent
                 }

@@ -60,31 +60,31 @@ signals:
 private:
     SettingsManager *sManager;
 
-    QStringList l_shopList;
+    QStringList m_shopList;
 
-    QString l_projectPath;
-    QString l_category;
+    QString m_projectPath;
+    QString m_category;
 
-    QStringList l_categories;
+    QStringList m_categories;
 
-    QString l_shopName;
-    QString l_shopOwner;
-    QString l_shopDescription;
+    QString m_shopName;
+    QString m_shopOwner;
+    QString m_shopDescription;
 
-    QStringList l_itemNames;
-    QStringList l_itemPrices;
-    QStringList l_itemCategories;
-    QStringList l_itemDescriptions;
+    QStringList m_itemNames;
+    QStringList m_itemPrices;
+    QStringList m_itemCategories;
+    QStringList m_itemDescriptions;
 
     // Item List
-    QStringList l_itemListTabNames;
-    QStringList l_itemListTabPaths;
-    int l_itemListTabIndex = 0;
+    QStringList m_itemListTabNames;
+    QStringList m_itemListTabPaths;
+    int m_itemListTabIndex = 0;
 
-    QStringList l_itemListNames;
-    QStringList l_itemListPrices;
-    QStringList l_itemListCategories;
-    QStringList l_itemListDescriptions;
+    QStringList m_itemListNames;
+    QStringList m_itemListPrices;
+    QStringList m_itemListCategories;
+    QStringList m_itemListDescriptions;
 };
 
 #endif // SHOPEDITOR_H

@@ -30,7 +30,7 @@ QStringList ShopTool::projects()
 
 QStringList ShopTool::categories()
 {
-    return l_categories;
+    return m_categories;
 }
 
 // Load Category List
@@ -42,13 +42,13 @@ void ShopTool::loadCategories(QString project)
 
     QSettings settings(path, QSettings::IniFormat);
 
-    l_categories = settings.value("categories", {}).toStringList();
+    m_categories = settings.value("categories", {}).toStringList();
 }
 
 // Load Shop list
 void ShopTool::loadShops(QString project)
 {
-    qDebug() << "Loading shops for category:" << l_category;
+    qDebug() << "Loading shops for category:" << m_category;
 
     QString path = sManager->getSetting(Setting::shopPath) + "/" + project + ".shop";
 
@@ -56,7 +56,7 @@ void ShopTool::loadShops(QString project)
 
     QStringList shops;
 
-    int count = settings.beginReadArray(l_category + "_shops");
+    int count = settings.beginReadArray(m_category + "_shops");
 
     for (int i = 0; i < count; i++)
     {
@@ -67,7 +67,7 @@ void ShopTool::loadShops(QString project)
 
     settings.endArray();
 
-    l_shops = shops;
+    m_shops = shops;
 }
 
 // Load a shop
@@ -79,15 +79,15 @@ void ShopTool::load(QString project, QString shop)
 
     QSettings settings(path, QSettings::IniFormat);
 
-    l_item_names.clear();
-    l_item_prices.clear();
-    l_item_descriptions.clear();
+    m_item_names.clear();
+    m_item_prices.clear();
+    m_item_descriptions.clear();
 
     // Get Shop Information
-    l_shopName = shop;
+    m_shopName = shop;
     QStringList shopValues;
 
-    int shopCount = settings.beginReadArray(l_category + "_shops");
+    int shopCount = settings.beginReadArray(m_category + "_shops");
 
     for (int i = 0; i < shopCount; i++)
     {
@@ -98,11 +98,11 @@ void ShopTool::load(QString project, QString shop)
 
     settings.endArray();
 
-    l_shopOwner       = shopValues.at(1);
-    l_shopDescription = shopValues.at(2);
+    m_shopOwner       = shopValues.at(1);
+    m_shopDescription = shopValues.at(2);
 
     // Get Items
-    int count = settings.beginReadArray(l_category + "_" + shop + "_items");
+    int count = settings.beginReadArray(m_category + "_" + shop + "_items");
 
     for (int i = 0; i < count; i++)
     {
@@ -110,9 +110,9 @@ void ShopTool::load(QString project, QString shop)
 
         QStringList item = settings.value("item").toStringList();
 
-        l_item_names.append(item.at(0));
-        l_item_prices.append(item.at(1));
-        l_item_descriptions.append(item.at(3));
+        m_item_names.append(item.at(0));
+        m_item_prices.append(item.at(1));
+        m_item_descriptions.append(item.at(3));
     }
 
     settings.endArray();
@@ -125,47 +125,47 @@ void ShopTool::load(QString project, QString shop)
 
 QString ShopTool::category()
 {
-    return l_category;
+    return m_category;
 }
 
 void ShopTool::setCategory(QString category)
 {
-    l_category = category;
+    m_category = category;
 
     emit categoryChanged();
 }
 
 QStringList ShopTool::shops()
 {
-    return l_shops;
+    return m_shops;
 }
 
 QString ShopTool::shopName()
 {
-    return l_shopName;
+    return m_shopName;
 }
 
 QString ShopTool::shopOwner()
 {
-    return l_shopOwner;
+    return m_shopOwner;
 }
 
 QString ShopTool::shopDescription()
 {
-    return l_shopDescription;
+    return m_shopDescription;
 }
 
 QStringList ShopTool::item_names()
 {
-    return l_item_names;
+    return m_item_names;
 }
 
 QStringList ShopTool::item_prices()
 {
-    return l_item_prices;
+    return m_item_prices;
 }
 
 QStringList ShopTool::item_descriptions()
 {
-    return l_item_descriptions;
+    return m_item_descriptions;
 }

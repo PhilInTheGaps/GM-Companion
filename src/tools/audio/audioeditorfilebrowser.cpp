@@ -10,41 +10,41 @@ AudioEditorFileBrowser::AudioEditorFileBrowser(QObject *parent) : QObject(parent
 
 void AudioEditorFileBrowser::setType(int type)
 {
-    l_type = type;
+    m_type = type;
 
     switch (type) {
     case 0: // Music
-        l_basePath = sManager.getSetting(Setting::musicPath);
+        m_basePath = sManager.getSetting(Setting::musicPath);
         break;
 
     case 1: // Sound
-        l_basePath = sManager.getSetting(Setting::soundPath);
+        m_basePath = sManager.getSetting(Setting::soundPath);
         break;
 
     case 2: // Radio
-        l_basePath = sManager.getSetting(Setting::radioPath);
+        m_basePath = sManager.getSetting(Setting::radioPath);
         break;
 
     default:
         break;
     }
 
-    l_relativeFolders.clear();
+    m_relativeFolders.clear();
     updateFolders();
     updateFiles();
 }
 
 int AudioEditorFileBrowser::getType()
 {
-    return l_type;
+    return m_type;
 }
 
 // Calculate current path
-QString AudioEditorFileBrowser::l_currentPath()
+QString AudioEditorFileBrowser::m_currentPath()
 {
     QString path;
 
-    for (QString f : l_relativeFolders)
+    for (QString f : m_relativeFolders)
     {
         path += "/" + f;
     }
@@ -56,7 +56,7 @@ void AudioEditorFileBrowser::setCurrentFolder(QString folder)
 {
     if (folder != "")
     {
-        l_relativeFolders.append(folder);
+        m_relativeFolders.append(folder);
 
         updateFolders();
         updateFiles();
@@ -65,9 +65,9 @@ void AudioEditorFileBrowser::setCurrentFolder(QString folder)
 
 void AudioEditorFileBrowser::folderBack()
 {
-    if (l_relativeFolders.size() > 0)
+    if (m_relativeFolders.size() > 0)
     {
-        l_relativeFolders.pop_back();
+        m_relativeFolders.pop_back();
         updateFolders();
         updateFiles();
     }
@@ -75,15 +75,15 @@ void AudioEditorFileBrowser::folderBack()
 
 void AudioEditorFileBrowser::updateFolders()
 {
-    l_folders.clear();
-    QString currentPath = l_currentPath();
+    m_folders.clear();
+    QString currentPath = m_currentPath();
 
-    for (QString f : getFolders(l_basePath + currentPath))
+    for (QString f : getFolders(m_basePath + currentPath))
     {
         if (!f.contains("."))
         {
-            l_folders.append(f);
-            l_folderPaths.append(currentPath + "/" + f);
+            m_folders.append(f);
+            m_folderPaths.append(currentPath + "/" + f);
         }
     }
 
@@ -92,17 +92,17 @@ void AudioEditorFileBrowser::updateFolders()
 
 void AudioEditorFileBrowser::updateFiles()
 {
-    l_files.clear();
-    l_filePaths.clear();
+    m_files.clear();
+    m_filePaths.clear();
 
-    QString currentPath = l_currentPath();
+    QString currentPath = m_currentPath();
 
-    for (QString f : getFiles(l_basePath + currentPath))
+    for (QString f : getFiles(m_basePath + currentPath))
     {
         if (!f.endsWith("."))
         {
-            l_files.append(f);
-            l_filePaths.append(currentPath + "/" + f);
+            m_files.append(f);
+            m_filePaths.append(currentPath + "/" + f);
         }
     }
 
@@ -111,20 +111,20 @@ void AudioEditorFileBrowser::updateFiles()
 
 QStringList AudioEditorFileBrowser::getFolderList()
 {
-    return l_folders;
+    return m_folders;
 }
 
 QStringList AudioEditorFileBrowser::getFolderPaths()
 {
-    return l_folderPaths;
+    return m_folderPaths;
 }
 
 QStringList AudioEditorFileBrowser::getFileList()
 {
-    return l_files;
+    return m_files;
 }
 
 QStringList AudioEditorFileBrowser::getFilePaths()
 {
-    return l_filePaths;
+    return m_filePaths;
 }

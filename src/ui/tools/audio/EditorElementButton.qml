@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import "../../fontawesome"
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
 Rectangle {
@@ -23,70 +23,48 @@ Rectangle {
         id: color_scheme
     }
 
-    Icon {
-        visible: false
-        font.pixelSize: image.height
-        x: image.x
-        y: image.y
-
-        color: "white"
-
-        Component.onCompleted: {
-            if (type == 3) {
-                icon = icons.fab_spotify
-                visible = true
-            }
-        }
-    }
-
     Row {
         id: row
         anchors.fill: parent
         padding: 5
         spacing: 5
 
-        Image {
-            id: image
-            width: (parent.height - parent.padding * 2) * 0.8
+        // Left icon
+        Text {
+            id: icon
+            visible: true
+            font.pixelSize: (parent.height - parent.padding * 3)
             height: width
-            sourceSize.width: width
-            sourceSize.height: height
             anchors.verticalCenter: parent.verticalCenter
 
-            Component.onCompleted: {
-                switch (type) {
-                case 0:
-                    source = "/icons/media/music_bright.png"
-                    break
-                case 1:
-                    source = "/icons/media/sound_bright.png"
-                    break
-                case 2:
-                    source = "/icons/media/radio.png"
-                    break
-                default:
-                    source = ""
-                }
-            }
+            text: type === 0 ? FontAwesome.music : type
+                               === 1 ? FontAwesome.drum : type
+                                       === 2 ? FontAwesome.broadcastTower : type
+                                               === 3 ? FontAwesome.spotify : FontAwesome.question
+            color: "white"
+            font.family: type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
         }
 
+        // Element Name
         Text {
             text: element
             font.pointSize: 10
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
             width: parent.width - parent.spacing * 3 - up_down_column.width
-                   - parent.padding * 2 - image.width - delay_button.width
+                   - parent.padding * 2 - icon.width - delay_button.width
             clip: true
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter
         }
 
+        // Move Buttons
         Column {
             id: up_down_column
             height: parent.height - parent.padding * 2
-            width: height
+            width: height / 2
             anchors.verticalCenter: parent.verticalCenter
 
+            // Up
             Button {
                 height: parent.height / 2
                 width: parent.width
@@ -95,10 +73,10 @@ Rectangle {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_angle_up
-                    pointSize: 18
-                    anchors.centerIn: parent
+                Text {
+                    text: FontAwesome.chevronUp
+                    font.pixelSize: parent.height
+                    font.family: FontAwesome.familySolid
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
@@ -109,6 +87,7 @@ Rectangle {
                 onClicked: moveUp(element_button.element, element_button.type)
             }
 
+            // Down
             Button {
                 height: parent.height / 2
                 width: parent.width
@@ -117,10 +96,10 @@ Rectangle {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_angle_down
-                    pointSize: 18
-                    anchors.centerIn: parent
+                Text {
+                    text: FontAwesome.chevronDown
+                    font.pixelSize: parent.height
+                    font.family: FontAwesome.familySolid
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
@@ -132,12 +111,13 @@ Rectangle {
             }
         }
 
+        // Delete
         DelayButton {
             id: delay_button
             delay: 1200
 
-            width: (parent.height - parent.padding * 2)
-            height: width
+            height: parent.height - (parent.padding * 2)
+            width: height
 
             ToolTip.text: qsTr("Delete ") + element
             ToolTip.visible: hovered
@@ -147,10 +127,10 @@ Rectangle {
                 color: "transparent"
             }
 
-            Icon {
-                icon: icons.fas_times
-                pointSize: 18
-                anchors.centerIn: parent
+            Text {
+                text: FontAwesome.times
+                font.pixelSize: parent.height
+                font.family: FontAwesome.familySolid
                 color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
             }
 

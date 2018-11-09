@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
 import gm.companion.itemeditor 1.0
-import "../../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: editor
@@ -52,9 +52,10 @@ Page {
                 color: "transparent"
             }
 
-            Icon {
-                icon: icons.far_arrow_alt_circle_left
-                pointSize: 25
+            Text {
+                text: FontAwesome.arrowAltCircleLeft
+                font.family: FontAwesome.familySolid
+                font.pointSize: 25
                 anchors.centerIn: parent
                 color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
             }
@@ -318,9 +319,10 @@ Page {
                                 color: "transparent"
                             }
 
-                            Icon {
-                                icon: icons.fas_times
-                                pointSize: 20
+                            Text {
+                                text: FontAwesome.times
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 20
                                 anchors.centerIn: parent
                                 color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
                             }

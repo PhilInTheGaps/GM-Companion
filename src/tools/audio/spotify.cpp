@@ -149,8 +149,6 @@ void Spotify::again()
 
 void Spotify::setVolume(int volume)
 {
-    qDebug() << "Setting Volume:" << volume << "...";
-
     m_spotify.put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" + QString::number(volume)));
 
     m_volume = volume;

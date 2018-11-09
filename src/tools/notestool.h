@@ -42,8 +42,8 @@ public:
 
     Q_INVOKABLE QString encrypt(QString content);
 
-    Q_INVOKABLE int getCurrentChapterIndex() const { return l_chapters.indexOf(l_currentChapter); }
-    Q_INVOKABLE int getCurrentPageIndex() const { return l_pages.indexOf(l_currentPage); }
+    Q_INVOKABLE int getCurrentChapterIndex() const { return m_chapters.indexOf(m_currentChapter); }
+    Q_INVOKABLE int getCurrentPageIndex() const { return m_pages.indexOf(m_currentPage); }
 
 signals:
     void chaptersChanged();
@@ -54,10 +54,10 @@ signals:
 private:
     SettingsManager *sManager;
 
-    QStringList l_chapters;
-    QStringList l_pages;
-    QString l_currentChapter;
-    QString l_currentPage;
+    QStringList m_chapters;
+    QStringList m_pages;
+    QString m_currentChapter;
+    QString m_currentPage;
 };
 
 #endif // NOTESTOOL_H

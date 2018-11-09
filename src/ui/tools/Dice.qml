@@ -6,7 +6,7 @@ import QtQuick.Controls.Styles 1.4
 import gm.companion.dicetool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
-import "../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: dice_page
@@ -149,9 +149,10 @@ Page {
                     spacing: 10
                     anchors.centerIn: parent
 
-                    Icon {
-                        icon: icons.fas_cog
-                        pointSize: 15
+                    Text {
+                        text: FontAwesome.cog
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
                     }

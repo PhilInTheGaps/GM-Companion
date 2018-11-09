@@ -104,6 +104,10 @@ QString SettingsManager::getSetting(Setting setting)
         settings->endGroup();
         break;
 
+    case Setting::altMenu:
+        settingString = settings->value("altMenu", "0").toString();
+        break;
+
     default:
         settingString = "";
         break;
@@ -232,6 +236,10 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
             settings->setValue("spotifySecret", value);
             settings->endGroup();
         }
+        break;
+
+    case Setting::altMenu:
+        settings->setValue("altMenu", checked);
         break;
 
     default:

@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 
 import gm.companion.audioeditorfilebrowser 1.0
 import gm.companion.colorscheme 1.0
-import "../../fontawesome"
+import FontAwesome 2.0
 
 Column {
     id: file_browser
@@ -93,9 +93,10 @@ Column {
                 width: parent.width
                 text: qsTr("Back")
 
-                Icon {
-                    icon: icons.fas_chevron_left
-                    pointSize: 15
+                Text {
+                    text: FontAwesome.chevronLeft
+                    font.pixelSize: parent.height - 10
+                    font.family: FontAwesome.familySolid
                     anchors.verticalCenter: parent.verticalCenter
 
                     x: 10

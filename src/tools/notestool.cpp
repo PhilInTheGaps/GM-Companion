@@ -15,7 +15,7 @@ NotesTool::NotesTool(QObject *parent) : QObject(parent)
 // Returns list of all available chapters
 QStringList NotesTool::chapters()
 {
-    return l_chapters;
+    return m_chapters;
 }
 
 // Get all Chapters from Notes path
@@ -23,13 +23,13 @@ void NotesTool::updateChapters()
 {
     qDebug() << "Updating Notes Chapters ...";
 
-    l_chapters.clear();
+    m_chapters.clear();
 
     for (QString chapter : getFolders(sManager->getSetting(Setting::notesPath)))
     {
         if (!chapter.contains("."))
         {
-            l_chapters.append(chapter);
+            m_chapters.append(chapter);
         }
     }
 
@@ -38,18 +38,18 @@ void NotesTool::updateChapters()
 
 QStringList NotesTool::pages()
 {
-    return l_pages;
+    return m_pages;
 }
 
 void NotesTool::updatePages()
 {
     qDebug() << "Updating Notes Pages ...";
 
-    l_pages.clear();
+    m_pages.clear();
 
-    for (QString page : getFiles(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter))
+    for (QString page : getFiles(sManager->getSetting(Setting::notesPath) + "/" + m_currentChapter))
     {
-        l_pages.append(page.replace(".txt", ""));
+        m_pages.append(page.replace(".txt", ""));
     }
 
     emit pagesChanged();
@@ -58,33 +58,33 @@ void NotesTool::updatePages()
 // Returns the current chapter
 QString NotesTool::currentChapter()
 {
-    return l_currentChapter;
+    return m_currentChapter;
 }
 
 // Set current Chapter
 void NotesTool::setCurrentChapter(QString chapter)
 {
-    l_currentChapter = chapter;
+    m_currentChapter = chapter;
     emit currentChapterChanged();
 }
 
 // Returns the current page
 QString NotesTool::currentPage()
 {
-    return l_currentPage;
+    return m_currentPage;
 }
 
 // Set current page
 void NotesTool::setCurrentPage(QString page)
 {
-    l_currentPage = page;
+    m_currentPage = page;
     emit currentPageChanged();
 }
 
 // Save current page to file
 void NotesTool::saveCurrentPageContent(QString content)
 {
-    QFile f(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter + "/" + l_currentPage + ".txt");
+    QFile f(sManager->getSetting(Setting::notesPath) + "/" + m_currentChapter + "/" + m_currentPage + ".txt");
 
     if (f.exists())
     {
@@ -105,7 +105,7 @@ QString NotesTool::currentPageContent()
 {
     QString content = "";
 
-    QFile f(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter + "/" + l_currentPage + ".txt");
+    QFile f(sManager->getSetting(Setting::notesPath) + "/" + m_currentChapter + "/" + m_currentPage + ".txt");
 
     if (f.exists())
     {
@@ -132,7 +132,7 @@ void NotesTool::addChapter(QString chapter)
             updateChapters();
             emit chaptersChanged();
 
-            l_currentChapter = chapter;
+            m_currentChapter = chapter;
             emit currentChapterChanged();
         }
     }
@@ -142,7 +142,7 @@ void NotesTool::addPage(QString page)
 {
     if (page.length() > 0)
     {
-        QFile f(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter + "/" + page + ".txt");
+        QFile f(sManager->getSetting(Setting::notesPath) + "/" + m_currentChapter + "/" + page + ".txt");
 
         if (!f.exists())
         {
@@ -152,7 +152,7 @@ void NotesTool::addPage(QString page)
             updatePages();
             emit pagesChanged();
 
-            //            l_currentPage = page;
+            //            m_currentPage = page;
             emit currentPageChanged();
         }
     }
@@ -178,8 +178,8 @@ void NotesTool::deleteChapter(QString chapter)
         updateChapters();
         emit chaptersChanged();
 
-        if (l_chapters.size() > 0) l_currentChapter = l_chapters.at(0);
-        else l_currentChapter = "";
+        if (m_chapters.size() > 0) m_currentChapter = m_chapters.at(0);
+        else m_currentChapter = "";
 
         emit currentChapterChanged();
     }
@@ -187,7 +187,7 @@ void NotesTool::deleteChapter(QString chapter)
 
 void NotesTool::deletePage(QString page)
 {
-    QFile f(sManager->getSetting(Setting::notesPath) + "/" + l_currentChapter + "/" + page + ".txt");
+    QFile f(sManager->getSetting(Setting::notesPath) + "/" + m_currentChapter + "/" + page + ".txt");
 
     if (f.exists())
     {
@@ -196,8 +196,8 @@ void NotesTool::deletePage(QString page)
         updatePages();
         emit pagesChanged();
 
-        if (l_pages.size() > 0) l_currentPage = l_pages.at(0);
-        else l_currentPage = "";
+        if (m_pages.size() > 0) m_currentPage = m_pages.at(0);
+        else m_currentPage = "";
         emit currentPageChanged();
     }
 }

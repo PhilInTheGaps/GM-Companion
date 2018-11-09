@@ -6,7 +6,7 @@ import gm.companion.charactertool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 import "./characters"
-import "../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: characters
@@ -121,20 +121,34 @@ Page {
 
                 Button {
                     id: active_button
-                    width: active_text.width
+                    width: active_row.width
                     hoverEnabled: true
 
                     background: Rectangle {
                         color: "transparent"
                     }
 
-                    Text {
-                        id: active_text
-                        text: qsTr("Active")
+                    Row {
+                        id: active_row
+                        spacing: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                        font.bold: true
-                        font.pointSize: 12
+
+                        Text {
+                            text: FontAwesome.user
+                            font.family: FontAwesome.familySolid
+                            font.pointSize: 12
+                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            id: active_text
+                            text: qsTr("Active")
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            font.bold: true
+                            font.pointSize: 12
+                        }
                     }
 
                     height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
@@ -146,20 +160,34 @@ Page {
 
                 Button {
                     id: inactive_button
-                    width: inactive_text.width
+                    width: inactive_row.width
                     hoverEnabled: true
 
                     background: Rectangle {
                         color: "transparent"
                     }
 
-                    Text {
-                        id: inactive_text
-                        text: qsTr("Inactive")
+                    Row {
+                        id: inactive_row
+                        spacing: 10
                         anchors.verticalCenter: parent.verticalCenter
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                        font.bold: true
-                        font.pointSize: 12
+
+                        Text {
+                            text: FontAwesome.userSlash
+                            font.family: FontAwesome.familySolid
+                            font.pointSize: 12
+                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            id: inactive_text
+                            text: qsTr("Inactive")
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
+                            font.bold: true
+                            font.pointSize: 12
+                        }
                     }
 
                     height: platform.isAndroid ? width / 3 : parent.height - parent.padding * 2
@@ -185,10 +213,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_plus
-                        pointSize: 22
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -215,10 +244,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_minus
-                        pointSize: 22
+                        text: FontAwesome.minus
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -244,10 +274,11 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.fas_undo
-                        pointSize: 22
+                        text: FontAwesome.undo
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height - 10
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }

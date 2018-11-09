@@ -4,7 +4,7 @@ import QtQuick.Window 2.2
 
 import gm.companion.shoptool 1.0
 import gm.companion.shopeditor 1.0
-import "../../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: editor
@@ -112,9 +112,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.far_arrow_alt_circle_left
-                    pointSize: 25
+                Text {
+                    text: FontAwesome.arrowAltCircleLeft
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 25
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
@@ -218,9 +219,10 @@ Page {
                 anchors.bottom: parent.bottom
                 x: parent.width - width - 5
 
-                Icon {
-                    icon: icons.far_edit
-                    pointSize: 12
+                Text {
+                    text: FontAwesome.edit
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 12
                     color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -436,9 +438,10 @@ Page {
                                         spacing: 5
                                         anchors.centerIn: parent
 
-                                        Icon {
-                                            icon: icons.far_save
-                                            pointSize: 12
+                                        Text {
+                                            text: FontAwesome.save
+                                            font.family: FontAwesome.familySolid
+                                            font.pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -474,9 +477,10 @@ Page {
                                         spacing: 5
                                         anchors.centerIn: parent
 
-                                        Icon {
-                                            icon: icons.far_trash_alt
-                                            pointSize: 12
+                                        Text {
+                                            text: FontAwesome.trashAlt
+                                            font.family: FontAwesome.familySolid
+                                            font.pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -517,9 +521,10 @@ Page {
                                         spacing: 5
                                         anchors.centerIn: parent
 
-                                        Icon {
-                                            icon: icons.fas_times
-                                            pointSize: 12
+                                        Text {
+                                            text: FontAwesome.times
+                                            font.family: FontAwesome.familySolid
+                                            font.pointSize: 12
                                             color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                             anchors.verticalCenter: parent.verticalCenter
                                         }
@@ -737,9 +742,10 @@ Page {
                                             color: "transparent"
                                         }
 
-                                        Icon {
-                                            icon: icons.fas_times
-                                            pointSize: 12
+                                        Text {
+                                            text: FontAwesome.times
+                                            font.family: FontAwesome.familySolid
+                                            font.pointSize: 12
                                             anchors.centerIn: parent
                                             color: parent.pressed ? "grey" : mouse_area.hovered ? "black" : color_scheme.textColor
                                         }
@@ -912,11 +918,12 @@ Page {
                                     anchors.right: parent.right
                                     height: 30
 
-                                    Icon {
+                                    Text {
                                         id: add_icon
-                                        icon: icons.fas_plus
+                                        text: FontAwesome.plus
+                                        font.family: FontAwesome.familySolid
                                         color: mouse_area2.pressed ? "grey" : "darkgreen"
-                                        pointSize: 15
+                                        font.pointSize: 15
                                         anchors.verticalCenter: parent.verticalCenter
                                         visible: mouse_area2.containsMouse
                                     }

@@ -17,6 +17,7 @@ Window {
     title: qsTr("GM-Companion")
 
     readonly property bool inPortrait: window.width < window.height
+    property bool altMenu: false
 
     PlatformDetails {
         id: platform
@@ -26,6 +27,7 @@ Window {
         id: color_scheme
     }
 
+    // Loading screen
     Popup {
         id: splash
         width: parent.width
@@ -58,14 +60,14 @@ Window {
 
     SettingsTool {
         id: settings_tool
+
+        Component.onCompleted: altMenu = getAltMenu()
     }
 
     UpdateManager {
         id: update_manager
 
         Component.onCompleted: {
-            setCurrentVersion(1000)
-
             if (settings_tool.getCheckForUpdates())
                 checkForUpdates()
         }
@@ -75,6 +77,7 @@ Window {
         }
     }
 
+    // Update popup
     Dialog {
         id: update_dialog
 
@@ -91,17 +94,20 @@ Window {
         }
     }
 
+    // Main item
     Page {
         id: main_item
         anchors.fill: parent
 
+        // Menu
         Drawer {
             id: drawer
             width: {
                 if (platform.isAndroid) {
-                    inPortrait ? color_scheme.toolbarHeight : parent.width / 4
+                    inPortrait
+                            || altMenu ? color_scheme.toolbarHeight : parent.width / 4
                 } else {
-                    inPortrait ? color_scheme.toolbarHeight : 200
+                    inPortrait || altMenu ? color_scheme.toolbarHeight : 200
                 }
             }
 
@@ -110,19 +116,19 @@ Window {
                 color: color_scheme.menuColor
             }
 
-            //            modal: inPortrait || platform.isAndroid
             modal: false
-            //            interactive: inPortrait || platform.isAndroid
             interactive: false
-            //            position: inPortrait ? 0 : platform.isAndroid ? 0 : 1
-            //            position: 1
-            //            visible: !inPortrait || !platform.isAndroid
             visible: true
 
+            // Contains all the menu stuff
             ScrollView {
                 anchors.fill: parent
                 clip: true
                 contentWidth: -1
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                ScrollBar.vertical.visible: false
 
                 Column {
                     width: drawer.width
@@ -132,11 +138,12 @@ Window {
                         anchors.right: parent.right
                         height: color_scheme.toolbarHeight
 
+                        // Tools Text
                         Text {
                             text: "Tools"
                             color: color_scheme.toolbarTextColor
                             font.pointSize: 14
-                            visible: !inPortrait
+                            visible: !inPortrait && !altMenu
 
                             anchors.centerIn: parent
 
@@ -144,9 +151,10 @@ Window {
                             verticalAlignment: Text.AlignVCenter
                         }
 
+                        // GM-Companion Icon
                         Image {
                             anchors.centerIn: parent
-                            visible: inPortrait
+                            visible: inPortrait || altMenu
 
                             width: parent.width - 10
                             height: width
@@ -164,6 +172,7 @@ Window {
                         anchors.right: parent.right
                         spacing: 5
 
+                        // Top divider
                         Rectangle {
                             anchors.left: parent.left
                             anchors.right: parent.right
@@ -246,10 +255,12 @@ Window {
                             onClicked: parent.buttonClicked(converter)
                         }
 
+                        // Bottom divider
                         Rectangle {
                             width: parent.width
                             height: 2
                             color: color_scheme.dividerColor
+                            visible: !altMenu || inPortrait
                         }
 
                         SideMenuButton {

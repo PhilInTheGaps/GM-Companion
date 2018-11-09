@@ -22,8 +22,6 @@ Page {
         Component.onCompleted: {
             addon_manager.updateAddonList()
 
-            setCurrentVersion(1000)
-
             if (settings_tool.getCheckForUpdates())
                 checkForUpdates()
         }
@@ -235,6 +233,7 @@ Page {
                     color: color_scheme.textColor
                 }
 
+                // UI Style
                 Row {
                     width: parent.width
 
@@ -262,6 +261,23 @@ Page {
                             currentIndex = settings_tool.uiStyleIndex
                             loaded = true
                         }
+                    }
+                }
+
+                // Alternative Menu
+                Row {
+                    CheckBox {
+                        checked: settings_tool.getAltMenu()
+
+                        onCheckedChanged: {
+                            settings_tool.setAltMenu(checked)
+                        }
+                    }
+
+                    Text {
+                        text: qsTr("Alternative Menu")
+                        color: color_scheme.textColor
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 
@@ -543,8 +559,13 @@ Page {
 
                     onClicked: {
                         Qt.openUrlExternally(
-                                    "https://gm-companion.github.io/pages/about/")
+                                    "https://gm-companion.github.io/about.html")
                     }
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "Version: " + update_manager.getCurrentVersion()
                 }
             }
         }

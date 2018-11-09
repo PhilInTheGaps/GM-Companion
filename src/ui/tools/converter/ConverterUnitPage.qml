@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import "../../fontawesome"
+import FontAwesome 2.0
 
 Page {
     id: page
@@ -49,10 +49,11 @@ Page {
                         width: times_icon.width + 20
                         hoverEnabled: true
 
-                        Icon {
+                        Text {
                             id: times_icon
-                            icon: icons.fas_times
-                            pointSize: 15
+                            text: FontAwesome.times
+                            font.family: FontAwesome.familySolid
+                            font.pointSize: 15
                             anchors.centerIn: parent
                             color: parent.pressed ? "darkgrey" : parent.hovered ? "grey" : "black"
                             visible: parent.parent.hovered

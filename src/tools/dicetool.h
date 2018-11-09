@@ -15,14 +15,14 @@ class DiceTool : public QObject
 public:
     explicit DiceTool(QObject *parent = nullptr);
 
-    int sides() const { return l_sides; }
+    int sides() const { return m_sides; }
     int roll();
-    QString calculationString() const { return l_calculation_string; }
+    QString calculationString() const { return m_calculation_string; }
 
     Q_INVOKABLE void setSides(int sides);
-    Q_INVOKABLE void setBonusDice(int count) { l_bonus_dice = count; }
-    Q_INVOKABLE void setAmount(int amount) { l_amount = amount; }
-    Q_INVOKABLE void setModifier(int modifier) { l_modifier = modifier; }
+    Q_INVOKABLE void setBonusDice(int count) { m_bonus_dice = count; }
+    Q_INVOKABLE void setAmount(int amount) { m_amount = amount; }
+    Q_INVOKABLE void setModifier(int modifier) { m_modifier = modifier; }
 
     Q_INVOKABLE void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax);
     Q_INVOKABLE bool getCriticalEnabled() const { return settings->value("enableCriticals", true).toBool(); }
@@ -42,14 +42,14 @@ signals:
     void normalResult();
 
 private:
-    int l_sides = 20;
-    int l_bonus_dice = 0;
-    int l_modifier = 0;
-    int l_amount = 1;
+    int m_sides = 20;
+    int m_bonus_dice = 0;
+    int m_modifier = 0;
+    int m_amount = 1;
 
     QSettings *settings;
 
-    QString l_calculation_string;
+    QString m_calculation_string;
 };
 
 #endif // DICETOOL_H

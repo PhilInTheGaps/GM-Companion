@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 
 import gm.companion.maptool 1.0
 import "maps"
-import "../fontawesome"
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 
@@ -196,9 +196,10 @@ Page {
                     color: "transparent"
                 }
 
-                Icon {
-                    icon: icons.fas_bars
-                    pointSize: 25
+                Text {
+                    text: FontAwesome.bars
+                    font.family: FontAwesome.familySolid
+                    font.pointSize: 25
                     anchors.centerIn: parent
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
@@ -228,9 +229,10 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
-                        icon: icons.fas_plus
-                        pointSize: 25
+                    Text {
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -260,9 +262,10 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
-                        icon: icons.fas_minus
-                        pointSize: 25
+                    Text {
+                        text: FontAwesome.minus
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }
@@ -290,9 +293,10 @@ Page {
                         color: "transparent"
                     }
 
-                    Icon {
-                        icon: icons.fas_undo
-                        pointSize: 25
+                    Text {
+                        text: FontAwesome.undo
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 25
                         anchors.centerIn: parent
                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                     }

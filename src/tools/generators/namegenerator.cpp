@@ -15,20 +15,20 @@ void NameGenerator::updateCategories()
 {
     qDebug() << "Updating Name Categories ...";
 
-    l_categories.clear();
-    l_categoryPaths.clear();
+    m_categories.clear();
+    m_categoryPaths.clear();
 
     // Generic Default Names
-    l_categories.append("Generic");
-    l_categoryPaths.append(":/names/Generic");
+    m_categories.append("Generic");
+    m_categoryPaths.append(":/names/Generic");
 
     // Custom Names
     for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/names"))
     {
         if (!folder.contains("."))
         {
-            l_categories.append(folder);
-            l_categoryPaths.append(QDir::homePath() + "/.gm-companion/names/" + folder);
+            m_categories.append(folder);
+            m_categoryPaths.append(QDir::homePath() + "/.gm-companion/names/" + folder);
         }
     }
 
@@ -40,8 +40,8 @@ void NameGenerator::updateCategories()
             if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
             {
                 QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
-                l_categories.append(settings.value("name", addon).toString());
-                l_categoryPaths.append(path + "/" + addon + "/names");
+                m_categories.append(settings.value("name", addon).toString());
+                m_categoryPaths.append(path + "/" + addon + "/names");
             }
         }
     }
@@ -51,16 +51,16 @@ void NameGenerator::updateCategories()
 
 QStringList NameGenerator::categories()
 {
-    return l_categories;
+    return m_categories;
 }
 
 QString NameGenerator::categoryPath(QString category)
 {
-    int index = l_categories.indexOf(category);
+    int index = m_categories.indexOf(category);
 
     if (index > -1)
     {
-        return l_categoryPaths.at(index);
+        return m_categoryPaths.at(index);
     }
     else
     {
@@ -71,13 +71,13 @@ QString NameGenerator::categoryPath(QString category)
 
 QStringList NameGenerator::categoryNames(QString category)
 {
-    int index = l_categories.indexOf(category);
+    int index = m_categories.indexOf(category);
 
     QStringList names;
 
     if (index > -1)
     {
-        QString path = l_categoryPaths.at(index);
+        QString path = m_categoryPaths.at(index);
 
         for (QString folder : getFolders(path))
         {

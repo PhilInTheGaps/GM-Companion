@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import "./shop"
-import "../fontawesome"
+import FontAwesome 2.0
 import gm.companion.shoptool 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
@@ -124,10 +124,11 @@ Page {
                     height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
                     width: parent.width
 
-                    Icon {
+                    Text {
                         x: 10
-                        icon: icons.far_edit
-                        pointSize: 15
+                        text: FontAwesome.edit
+                        font.family: FontAwesome.familySolid
+                        font.pointSize: 15
                         anchors.verticalCenter: parent.verticalCenter
                         verticalAlignment: Text.AlignVCenter
                     }

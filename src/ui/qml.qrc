@@ -40,12 +40,12 @@
         <file>tools/DiceAlt.qml</file>
         <file>tools/combat_tracker/CombatantDialog.qml</file>
         <file>tools/combat_tracker/AddCombatantRow.qml</file>
-        <file>fontawesome/fontawesome.js</file>
-        <file>fontawesome/Icon.qml</file>
         <file>tools/combat_tracker/ListTextField.qml</file>
         <file>tools/combat_tracker/ListSpinBox.qml</file>
         <file>tools/converter/ConverterUnitPage.qml</file>
         <file>tools/audio/EditorSpotifyPlaylistPage.qml</file>
         <file>tools/audio/AudioExporter.qml</file>
+        <file>tools/audio/VolumeDialog.qml</file>
+        <file>tools/audio/VolumeSlider.qml</file>
     </qresource>
 </RCC>

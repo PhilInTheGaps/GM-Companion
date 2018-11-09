@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
-import "../../fontawesome"
+import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
 Page {
@@ -170,12 +170,13 @@ Page {
                                     color: "transparent"
                                 }
 
-                                Icon {
+                                Text {
                                     id: set_folder_icon
-                                    icon: icons.fas_folder_open
-                                    color: "white"
-                                    pointSize: 20
+                                    text: FontAwesome.folderOpen
+                                    font.pixelSize: parent.height - 5
+                                    font.family: FontAwesome.familySolid
                                     anchors.centerIn: parent
+                                    color: "white"
                                 }
 
                                 onClicked: {
@@ -201,9 +202,10 @@ Page {
                                         color: "transparent"
                                     }
 
-                                    Icon {
-                                        icon: icons.fas_angle_up
-                                        pointSize: 20
+                                    Text {
+                                        text: FontAwesome.chevronUp
+                                        font.pixelSize: parent.height
+                                        font.family: FontAwesome.familySolid
                                         anchors.centerIn: parent
                                         color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                     }
@@ -224,9 +226,10 @@ Page {
                                         color: "transparent"
                                     }
 
-                                    Icon {
-                                        icon: icons.fas_angle_down
-                                        pointSize: 20
+                                    Text {
+                                        text: FontAwesome.chevronDown
+                                        font.pixelSize: parent.height
+                                        font.family: FontAwesome.familySolid
                                         anchors.centerIn: parent
                                         color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                     }
@@ -250,9 +253,10 @@ Page {
                                     color: "transparent"
                                 }
 
-                                Icon {
-                                    icon: icons.fas_times
-                                    pointSize: 20
+                                Text {
+                                    text: FontAwesome.times
+                                    font.pixelSize: parent.height
+                                    font.family: FontAwesome.familySolid
                                     anchors.centerIn: parent
                                     color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
                                 }
@@ -279,9 +283,10 @@ Page {
                         spacing: 5
                         anchors.centerIn: parent
 
-                        Icon {
-                            icon: icons.far_save
-                            pointSize: 15
+                        Text {
+                            text: FontAwesome.save
+                            font.pixelSize: parent.height
+                            font.family: FontAwesome.familySolid
                             anchors.verticalCenter: parent.verticalCenter
                         }
 
@@ -384,9 +389,10 @@ Page {
                         spacing: 5
                         anchors.centerIn: parent
 
-                        Icon {
-                            icon: icons.far_trash_alt
-                            pointSize: 15
+                        Text {
+                            text: FontAwesome.trashAlt
+                            font.pixelSize: parent.height
+                            font.family: FontAwesome.familySolid
                             anchors.verticalCenter: parent.verticalCenter
                         }
 

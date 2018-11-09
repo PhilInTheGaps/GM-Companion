@@ -39,7 +39,7 @@ Button {
         Text {
             text: tool_name
             font.pixelSize: platform.isAndroid ? parent.height / 2 : 17
-            visible: !inPortrait
+            visible: !inPortrait || !altMenu
 
             width: parent.width - parent.spacing - parent.padding * 2 - button_icon.width
             clip: true
