@@ -1,9 +1,21 @@
 version: '{branch}-{build}'
 
+platform:
+  - x64
+
+configuration:
+  - Release
+
 install:
-  - set QTDIR=C:\Qt\5.11.1\mingw53_32
+  - set QTDIR=C:\Qt\5.11\mingw53_32
   - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin
+  - git submodule init
+  - git submodule update
   
 build_script:
   - qmake GM-Companion.pro
   - mingw32-make
+  
+artifacts:
+  - path: '**\*.exe'
+  - name: gm-companion
