@@ -111,11 +111,14 @@ signals:
 
     void elementIconsChanged();
 
+    void soundPlayerRemoved(int index);
+
 private slots:
     void onCurrentSongChanged() { if (m_musicNotRadio) currentSongChanged(); }
     void onMetaDataChanged();
 
     void onSpotifyIconChanged(int index, QString url);
+    void onSoundPlaybackStateChanged(QMediaPlayer::State status);
 
 private:
     SettingsManager *m_sManager;
@@ -135,7 +138,15 @@ private:
     QString m_cover;
     QString convertCoverImage();
 
+    // Sounds
+    int m_soundVolume;
+    QList<QMediaPlayer*> m_soundPlayerList;
+
+    // Spotify
     Spotify m_spotify;
+    int m_spotifyVolume;
+
+    QMediaPlaylist *m_radioPlaylist;
 
     // Project
     QStringList m_projects;
@@ -154,11 +165,6 @@ private:
 
     bool m_isPlaying = false;
     bool m_spotifyPlaying = false;
-
-    int m_soundVolume;
-    QList<QMediaPlayer*> m_soundPlayerList;
-
-    QMediaPlaylist *m_radioPlaylist;
 };
 
 #endif // AUDIOTOOL_H

@@ -97,6 +97,10 @@ Page {
                     button.clicked.connect(stopSound)
                 }
 
+                onSoundPlayerRemoved: {
+                    sound_info_column.children[index + 1].destroy()
+                }
+
                 onCurrentProjectChanged: {
                     audio_project_structure.children = []
                     scenario_flow.children = []
@@ -206,8 +210,8 @@ Page {
                 x: parent.width - width
                 y: parent.height - audio_control_bar.height - height
 
-                initialMusicVolume: 1
-                initialSoundVolume: 0.5
+                initialMusicVolume: 0.5
+                initialSoundVolume: 0.25
 
                 onMusicVolumeChanged: audio_tool.setMusicVolume(value)
                 onSoundVolumeChanged: audio_tool.setSoundVolume(value)
