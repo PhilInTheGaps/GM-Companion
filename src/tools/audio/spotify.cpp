@@ -131,7 +131,7 @@ void Spotify::next()
 
     connect(reply, &QNetworkReply::finished, [ = ]() {
         if (reply->error() != QNetworkReply::NoError) {
-            qDebug() << "Error:" << reply->errorString();
+            qDebug() << "Spotify Error:" << reply->errorString();
             return;
         }
         const auto data = reply->readAll();
@@ -168,7 +168,7 @@ void Spotify::fetchIcon(QString id, int index)
 
             connect(reply, &QNetworkReply::finished, [ = ]() {
                 if (reply->error() != QNetworkReply::NoError) {
-                    qDebug() << "Error:" << reply->errorString();
+                    qDebug() << "Spotify Error:" << reply->errorString();
                     return;
                 }
                 const auto data     = reply->readAll();
@@ -197,7 +197,7 @@ void Spotify::fetchIcon(QString id, int index)
 
             connect(reply, &QNetworkReply::finished, [ = ]() {
                 if (reply->error() != QNetworkReply::NoError) {
-                    qDebug() << "Error:" << reply->errorString();
+                    qDebug() << "Spotify Error:" << reply->errorString();
                     return;
                 }
                 const auto data     = reply->readAll();

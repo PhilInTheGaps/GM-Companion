@@ -481,8 +481,11 @@ void AudioTool::playRadio(QString element)
 {
     if ((m_currentProject != NULL) && (m_currentCategory != NULL) && (m_currentScenario != NULL) && (element != NULL))
     {
+        qDebug() << "Playing radio:" << element;
+
         m_musicPlaylist->clear();
         m_currentElement = element;
+        m_songs.clear();
 
         // Read properties
         QSettings settings(m_sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio", QSettings::IniFormat);
@@ -495,6 +498,7 @@ void AudioTool::playRadio(QString element)
 
         if (local)
         {
+            qDebug() << "Playing from local playlist:" << basePath + url;
             url = basePath + url;
             m_radioPlaylist->load(QUrl::fromLocalFile(url));
             m_musicPlayer->setPlaylist(m_radioPlaylist);
@@ -506,6 +510,9 @@ void AudioTool::playRadio(QString element)
 
         settings.endGroup();
 
+        m_spotify.stop();
+        m_spotifyPlaying = false;
+
         m_musicPlayer->setVolume(m_musicVolume);
         m_musicNotRadio = false;
         m_musicPlayer->play();
@@ -515,6 +522,7 @@ void AudioTool::playRadio(QString element)
             m_isPlaying = true;
             emit isPlayingChanged();
         }
+
     }
 }
 
@@ -568,13 +576,17 @@ void AudioTool::getMetaDataTagLib()
 
     if (m_musicPlayer->bufferStatus() == 100)
     {
-        QString path = m_musicPlaylist->currentMedia().resources().first().url().path();
 
-        // Album, Artist and Title
-        TagLib::FileRef f(path.toUtf8());
-        m_album    = f.tag()->album().toCString(true);
-        m_artist   = f.tag()->artist().toCString(true);
-        m_songName =  f.tag()->title().toCString(true);
+        if (m_musicPlayer->currentMedia().resources().size() > 0)
+        {
+            QString path = m_musicPlaylist->currentMedia().resources().first().url().path();
+
+            // Album, Artist and Title
+            TagLib::FileRef f(path.toUtf8());
+            m_album    = f.tag()->album().toCString(true);
+            m_artist   = f.tag()->artist().toCString(true);
+            m_songName =  f.tag()->title().toCString(true);
+        }
     }
     # endif // ifndef Q_OS_ANDROID
     #endif  // ifdef Q_OS_LINUX
@@ -593,7 +605,8 @@ void AudioTool::onMetaDataChanged()
 
         // Reading tags using TagLib, as it is way more reliable than the Qt
         // implementation
-        getMetaDataTagLib();
+        if (m_musicNotRadio) getMetaDataTagLib();
+        else getMetaData(); // TagLib bugs out with radios somehow
         # else // ifndef Q_OS_ANDROID
         getMetaData();
         # endif // ifndef Q_OS_ANDROID

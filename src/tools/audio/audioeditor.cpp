@@ -48,6 +48,7 @@ void AudioEditor::setCurrentProject(QString project)
     m_musicLists.clear();
     m_soundLists.clear();
     m_radios.clear();
+    m_spotifyPlaylists.clear();
 
     emit scenarioListChanged();
     emit elementListChanged();
