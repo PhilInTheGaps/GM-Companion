@@ -25,11 +25,10 @@ Column {
             folder_column.children = []
 
             for (var i = 0; i < getFolderList().length; i++) {
-                var component = Qt.createComponent("./FileBrowserButton.qml")
+                var component = Qt.createComponent(
+                            "../buttons/FileBrowserButton.qml")
 
                 var button = component.createObject(folder_column, {
-                                                        "x": 0,
-                                                        "y": 0,
                                                         "element": getFolderList(
                                                                        )[i],
                                                         "path": getFolderPaths(
@@ -48,11 +47,10 @@ Column {
             file_column.children = []
 
             for (var i = 0; i < getFileList().length; i++) {
-                var component = Qt.createComponent("./FileBrowserButton.qml")
+                var component = Qt.createComponent(
+                            "../buttons/FileBrowserButton.qml")
 
                 var button = component.createObject(file_column, {
-                                                        "x": 0,
-                                                        "y": 0,
                                                         "element": getFileList(
                                                                        )[i],
                                                         "path": getFilePaths(

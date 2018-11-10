@@ -522,7 +522,6 @@ void AudioTool::playRadio(QString element)
             m_isPlaying = true;
             emit isPlayingChanged();
         }
-
     }
 }
 
@@ -555,6 +554,28 @@ void AudioTool::playSpotify(QString element)
     }
 }
 
+#include <QImage>
+
+QString AudioTool::convertCoverImage()
+{
+    if (m_musicPlayer->availableMetaData().contains("CoverArtImage"))
+    {
+        QImage myImage = m_musicPlayer->metaData(QMediaMetaData::CoverArtImage).value<QImage>();
+        QByteArray bArray;
+        QBuffer    buffer(&bArray);
+        buffer.open(QIODevice::WriteOnly);
+        myImage.save(&buffer, "JPEG");
+
+        QString image("data:image/jpg;base64,");
+        image.append(QString::fromLatin1(bArray.toBase64().data()));
+        return image;
+    }
+    else
+    {
+        return "";
+    }
+}
+
 void AudioTool::getMetaData()
 {
     // I can't get TagLib to work on Windows though, so this mess below has
@@ -567,6 +588,8 @@ void AudioTool::getMetaData()
     if (m_artist.isNull()) m_artist = m_musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
 
     if (m_artist.isNull()) m_artist = m_musicPlayer->metaData(QMediaMetaData::Composer).toString();
+
+    m_cover = convertCoverImage();
 }
 
 void AudioTool::getMetaDataTagLib()
@@ -576,7 +599,6 @@ void AudioTool::getMetaDataTagLib()
 
     if (m_musicPlayer->bufferStatus() == 100)
     {
-
         if (m_musicPlayer->currentMedia().resources().size() > 0)
         {
             QString path = m_musicPlaylist->currentMedia().resources().first().url().path();
@@ -586,6 +608,7 @@ void AudioTool::getMetaDataTagLib()
             m_album    = f.tag()->album().toCString(true);
             m_artist   = f.tag()->artist().toCString(true);
             m_songName =  f.tag()->title().toCString(true);
+            m_cover    = convertCoverImage();
         }
     }
     # endif // ifndef Q_OS_ANDROID
@@ -606,7 +629,8 @@ void AudioTool::onMetaDataChanged()
         // Reading tags using TagLib, as it is way more reliable than the Qt
         // implementation
         if (m_musicNotRadio) getMetaDataTagLib();
-        else getMetaData(); // TagLib bugs out with radios somehow
+        else getMetaData();  // TagLib bugs out with radios somehow
+
         # else // ifndef Q_OS_ANDROID
         getMetaData();
         # endif // ifndef Q_OS_ANDROID

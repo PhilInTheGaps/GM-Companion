@@ -6,6 +6,8 @@ import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import "./audio"
+import "./audio/buttons"
+import "./audio/editor"
 import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
@@ -86,10 +88,8 @@ Page {
 
                 function addSoundToSidebar(element) {
                     var component = Qt.createComponent(
-                                "./audio/SoundButton.qml")
+                                "./audio/buttons/SoundButton.qml")
                     var button = component.createObject(sound_info_column, {
-                                                            "x": 0,
-                                                            "y": 0,
                                                             "element": element,
                                                             "element_icon": elementIcon(element),
                                                             "frame_width": audio_info_frame.width
@@ -103,17 +103,13 @@ Page {
                     audio_scroll_flow.children = []
 
                     var component = Qt.createComponent(
-                                "./audio/CategoryButton.qml")
+                                "./audio/buttons/CategoryButton.qml")
                     var categories = audio_tool.categories
 
                     for (var i = 0; i < categories.length; i++) {
                         var button = component.createObject(
                                     audio_project_structure, {
-                                        "x": 0,
-                                        "y": 0,
-                                        "category": categories[i],
-                                        "buttonId": categories[i],
-                                        "max_width": audio_project_menu.width - 5
+                                        "buttonText": categories[i]
                                     })
                         button.clicked.connect(setCategory)
                     }
@@ -124,16 +120,12 @@ Page {
                     audio_scroll_flow.children = []
 
                     var component = Qt.createComponent(
-                                "./audio/ScenarioButton.qml")
+                                "./audio/buttons/ScenarioButton.qml")
                     var scenarios = audio_tool.scenarios
 
                     for (var i = 0; i < scenarios.length; i++) {
                         var button = component.createObject(scenario_flow, {
-                                                                "x": 0,
-                                                                "y": 0,
-                                                                "scenario": scenarios[i],
-                                                                "buttonId": scenarios[i],
-                                                                "max_width": 150
+                                                                "buttonText": scenarios[i]
                                                             })
                         button.clicked.connect(setScenario)
                     }
@@ -148,15 +140,13 @@ Page {
 
                     audio_scroll_flow.children = []
                     var component = Qt.createComponent(
-                                "./audio/AudioButton.qml")
+                                "./audio/buttons/AudioButton.qml")
 
                     var elements = audio_tool.elements
 
                     for (var i = 0; i < elements.length; i++) {
 
                         var button = component.createObject(audio_scroll_flow, {
-                                                                "x": 0,
-                                                                "y": 0,
                                                                 "element_name": elements[i],
                                                                 "element_type": elementType(i),
                                                                 "icon_path": elementIcons[i]
@@ -206,6 +196,7 @@ Page {
                     song_name_text.text = getSongName()
                     artist_text.text = getArtist()
                     album_text.text = getAlbum()
+                    cover_image.source = getCoverArt()
                 }
             }
 
@@ -583,6 +574,13 @@ Page {
                             clip: true
                             elide: Text.ElideRight
                             color: color_scheme.textColor
+                        }
+
+                        Image {
+                            id: cover_image
+                            visible: source != ""
+                            width: parent.width - parent.padding * 2
+                            sourceSize.width: width
                         }
 
                         Rectangle {

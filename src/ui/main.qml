@@ -3,7 +3,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import "./tools"
-import "./menu"
+import "./components"
 import gm.companion.platforms 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.settingstool 1.0
@@ -119,6 +119,7 @@ Window {
             modal: false
             interactive: false
             visible: true
+            bottomPadding: 10
 
             // Contains all the menu stuff
             ScrollView {

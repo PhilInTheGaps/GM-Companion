@@ -73,6 +73,7 @@ public:
     Q_INVOKABLE QString getSongName() const { return m_songName; }
     Q_INVOKABLE QString getArtist() const { return m_artist; }
     Q_INVOKABLE QString getAlbum() const { return m_album; }
+    Q_INVOKABLE QString getCoverArt() const { return m_cover; }
 
     // Spotify
     Q_INVOKABLE void playSpotify(QString element);
@@ -131,6 +132,8 @@ private:
     QString m_songName;
     QString m_artist;
     QString m_album;
+    QString m_cover;
+    QString convertCoverImage();
 
     Spotify m_spotify;
 
