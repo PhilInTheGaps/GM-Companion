@@ -102,37 +102,17 @@ Page {
                 }
 
                 onCurrentProjectChanged: {
-                    audio_project_structure.children = []
-                    scenario_flow.children = []
-                    audio_scroll_flow.children = []
-
-                    var component = Qt.createComponent(
-                                "./audio/buttons/CategoryButton.qml")
-                    var categories = audio_tool.categories
-
-                    for (var i = 0; i < categories.length; i++) {
-                        var button = component.createObject(
-                                    audio_project_structure, {
-                                        "buttonText": categories[i]
-                                    })
-                        button.clicked.connect(setCategory)
-                    }
+                    if (audio_tool.categories.length > 0)
+                        setCurrentCategory(categories[0])
+                    else
+                        clearElements()
                 }
 
                 onCurrentCategoryChanged: {
-                    scenario_flow.children = []
-                    audio_scroll_flow.children = []
-
-                    var component = Qt.createComponent(
-                                "./audio/buttons/ScenarioButton.qml")
-                    var scenarios = audio_tool.scenarios
-
-                    for (var i = 0; i < scenarios.length; i++) {
-                        var button = component.createObject(scenario_flow, {
-                                                                "buttonText": scenarios[i]
-                                                            })
-                        button.clicked.connect(setScenario)
-                    }
+                    if (scenarios.length > 0)
+                        setCurrentScenario(scenarios[0])
+                    else
+                        clearElements()
                 }
 
                 onCurrentScenarioChanged: {
@@ -141,41 +121,7 @@ Page {
                 }
 
                 onElementsChanged: {
-
-                    audio_scroll_flow.children = []
-                    var component = Qt.createComponent(
-                                "./audio/buttons/AudioButton.qml")
-
-                    var elements = audio_tool.elements
-
-                    for (var i = 0; i < elements.length; i++) {
-
-                        var button = component.createObject(audio_scroll_flow, {
-                                                                "element_name": elements[i],
-                                                                "element_type": elementType(i),
-                                                                "icon_path": elementIcons[i]
-                                                            })
-
-                        if (audio_tool.elementType(i) === 0) {
-                            button.clicked.connect(setMusic)
-                        } else if (audio_tool.elementType(i) === 1) {
-                            button.clicked.connect(setSound)
-                        } else if (audio_tool.elementType(i) === 2) {
-                            button.clicked.connect(setRadio)
-                        } else if (audio_tool.elementType(i) === 3) {
-                            button.clicked.connect(setSpotify)
-                        }
-                    }
-
                     audio_busy_indicator.visible = false
-                }
-
-                onElementIconsChanged: {
-                    console.log("Icons Changed!")
-
-                    for (var i = 0; i < audio_scroll_flow.children.length; i++) {
-                        audio_scroll_flow.children[i].icon_path = elementIcons[i]
-                    }
                 }
 
                 onSongsChanged: {
@@ -438,6 +384,7 @@ Page {
                         color: color_scheme.textColor
                     }
 
+                    // Categories
                     ScrollView {
                         id: audio_project_scroll_view
                         width: parent.width - parent.padding
@@ -449,6 +396,18 @@ Page {
                             id: audio_project_structure
                             width: audio_project_menu.width - audio_project_menu.padding
                             spacing: 5
+
+                            Repeater {
+                                id: category_repeater
+                                model: audio_tool.categories
+
+                                CategoryButton {
+                                    buttonText: modelData
+
+                                    onClicked: audio_tool.setCategory(
+                                                   buttonText)
+                                }
+                            }
                         }
                     }
                 }
@@ -473,11 +432,23 @@ Page {
                         }
                     }
 
+                    // Scenarios
                     Flow {
                         id: scenario_flow
                         width: parent.width
                         spacing: 5
                         padding: 5
+
+                        Repeater {
+                            id: scenario_repeater
+                            model: audio_tool.scenarios
+
+                            ScenarioButton {
+                                buttonText: modelData
+
+                                onClicked: audio_tool.setScenario(buttonText)
+                            }
+                        }
                     }
 
                     BusyIndicator {
@@ -503,6 +474,35 @@ Page {
                             spacing: 5
 
                             width: audio_scroll_view.width
+
+                            Repeater {
+                                id: element_repeater
+
+                                model: audio_tool.elements
+
+                                AudioButton {
+                                    element_name: modelData
+                                    element_type: audio_tool.elementType(index)
+                                    icon_path: audio_tool.elementIcons[index]
+
+                                    onClicked: {
+                                        switch (element_type) {
+                                        case 0:
+                                            audio_tool.setMusic(element_name)
+                                            break
+                                        case 1:
+                                            audio_tool.setSound(element_name)
+                                            break
+                                        case 2:
+                                            audio_tool.setRadio(element_name)
+                                            break
+                                        case 3:
+                                            audio_tool.setSpotify(element_name)
+                                            break
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

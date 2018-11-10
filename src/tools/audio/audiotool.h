@@ -60,6 +60,7 @@ public:
     Q_INVOKABLE QString elementIcon(QString element);
     Q_INVOKABLE void setCurrentElement(QString element);
     Q_INVOKABLE int elementType(int index) const { return m_elementTypes.at(index); }
+    Q_INVOKABLE void clearElements() { m_elements.clear(); emit elementsChanged(); }
 
     // Music
     Q_INVOKABLE void playMusic(QString element);

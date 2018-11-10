@@ -62,6 +62,7 @@ void AudioTool::setCurrentProject(QString project)
 {
     m_currentProject = project;
     emit currentProjectChanged();
+    emit categoriesChanged();
 }
 
 // Returns list of all categories in project
@@ -95,6 +96,7 @@ void AudioTool::setCurrentCategory(QString category)
 {
     m_currentCategory = category;
     emit currentCategoryChanged();
+    emit scenariosChanged();
 }
 
 QStringList AudioTool::scenarios()
