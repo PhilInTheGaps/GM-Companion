@@ -1,20 +1,15 @@
 version: '{branch}-{build}'
 
-image:
-  - Visual Studio 2017
-
-platform:
-  - x64
-
-configuration:
-  - Release
+branches:
+  except:
+    - ubuntu-build
 
 install:
   - set QTDIR=C:\Qt\5.11\mingw53_32
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32
+  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
   
 build_script:
-  - cmd: qmake GM-Companion.pro
+  - qmake GM-Companion.pro
   - mingw32-make
   
 artifacts:
