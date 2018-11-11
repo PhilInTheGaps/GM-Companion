@@ -23,7 +23,11 @@ before_build:
 build_script:
   - nmake
   - nmake check
-  
+
+after_build:
+  - windeployqt.exe --release --qmldir %QTDIR%\qml release\out\gm-companion.exe
+
 artifacts:
-  - path: '**\*.exe'
-    name: gm-companion
+  - path: release\out
+    name: gm-companion-win64
+    type: zip
