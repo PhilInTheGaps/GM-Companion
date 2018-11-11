@@ -9,10 +9,10 @@ configuration:
 install:
   - set QTDIR=C:\Qt\5.11\mingw53_32
   - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin
-  - git submodule update --init --recursive
+  - cmd: git submodule update --init --recursive
   
 build_script:
-  - qmake GM-Companion.pro
+  - cmd: qmake GM-Companion.pro
   - mingw32-make
   
 artifacts:
