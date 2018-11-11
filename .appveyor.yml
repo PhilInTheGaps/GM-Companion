@@ -4,14 +4,25 @@ branches:
   except:
     - ubuntu-build
 
+image: Visual Studio 2017
+
+platform: x64
+
+configuration:
+  - Release
+
 install:
-  - set QTDIR=C:\Qt\5.11\mingw53_32
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
-  
-build_script:
+  - set QTDIR=C:\Qt\5.11\msvc2017_64
+  - set PATH=%QTDIR%\bin;%PATH%
+
+before_build:
   - git submodule update --init --recursive
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%
   - qmake GM-Companion.pro
-  - mingw32-make
+
+build_script:
+  - nmake
+  - nmake check
   
 artifacts:
   - path: '**\*.exe'
