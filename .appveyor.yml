@@ -25,7 +25,10 @@ build_script:
   - nmake check
 
 after_build:
-  - windeployqt.exe --release --qmldir %QTDIR%\qml release\out\gm-companion.exe
+  - windeployqt.exe --release --no-compiler-runtime --qmldir %QTDIR%\qml release\out\gm-companion.exe
+  - cmd: mkdir release\out\QtWebEngine
+  - cmd: xcopy %QTDIR%\qml\QtWebEngine release\out\QtWebEngine /E /H
+  - cmd: copy /y "C:\OpenSSL-Win64\bin\*eay32.dll" release\out
 
 artifacts:
   - path: release\out
