@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core multimedia network quick qml networkauth
+QT       += core multimedia network quick qml networkauth webengine
 
 win32:QT += winextras
 

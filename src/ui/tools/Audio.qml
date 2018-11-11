@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
+import QtWebEngine 1.5
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
@@ -148,6 +149,52 @@ Page {
                     album_text.text = getAlbum()
                     cover_image.source = getCoverArt()
                 }
+
+                onAuthorizeSpotify: {
+
+                    console.log("AUTHORIZING SPOTIFY: " + url)
+
+                    spotify_view.url = url
+                    spotify_view.reload()
+                    spotify_dialog.open()
+                }
+
+                onSpotifyAuthorized: spotify_dialog.close()
+            }
+
+            Dialog {
+                id: spotify_dialog
+
+                width: parent.width * 0.75
+                height: parent.height * 0.75
+
+                x: (parent.width - width) / 2
+                y: (parent.height - audio_control_bar.height - height) / 2
+
+                contentItem: Item {
+
+                    WebEngineView {
+                        id: spotify_view
+                        onUrlChanged: console.log(url)
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: spotify_error_text.top
+                    }
+
+                    Text {
+                        id: spotify_error_text
+                        text: qsTr("If page shows \"INVALID CLIENT: Invalid redirect URI\" close all instances of this program and try again.")
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+                }
+
+                onOpened: console.log("OPENED SPOTIFY DIALOG")
             }
 
             // Volume Dialog

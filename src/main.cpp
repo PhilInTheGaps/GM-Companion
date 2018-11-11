@@ -9,6 +9,7 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <QMap>
+#include <QtWebEngine>
 
 #include "tools/audio/audiotool.h"
 #include "tools/audio/audioeditor.h"
@@ -70,6 +71,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qDebug().noquote() << "Starting GM-Companion ...";
+
+    QtWebEngine::initialize();
 
     // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";

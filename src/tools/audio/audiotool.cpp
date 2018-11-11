@@ -34,6 +34,8 @@ AudioTool::AudioTool(QObject *parent) : QObject(parent)
     m_radioPlaylist = new QMediaPlaylist;
 
     connect(&m_spotify, &Spotify::iconChanged, this, &AudioTool::onSpotifyIconChanged);
+    connect(&m_spotify, &Spotify::authorize, this, &AudioTool::onSpotifyAuthorize);
+    connect(&m_spotify, &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 }
 
 // Returns list of all project files found

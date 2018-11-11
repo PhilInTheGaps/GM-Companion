@@ -22,30 +22,76 @@ Spotify::Spotify(QObject *parent) : QObject(parent)
                        "user-read-playback-state");
 
     // Signals
-    connect(&m_spotify, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
+    connect(&m_spotify, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &Spotify::authorizeReady);
     connect(&m_spotify, &QOAuth2AuthorizationCodeFlow::statusChanged,        this, &Spotify::authStatusChanged);
     connect(&m_spotify, &QOAuth2AuthorizationCodeFlow::granted,              this, &Spotify::granted);
+    connect(&m_spotify, &QOAuth2AuthorizationCodeFlow::requestFailed,        this, &Spotify::failed);
+}
+
+void Spotify::failed(const QAbstractOAuth::Error error)
+{
+    QString s;
+
+    switch (error) {
+    case QAbstractOAuth::Error::NetworkError:
+        s = "NETWORK ERROR";
+        break;
+
+    case QAbstractOAuth::Error::ServerError:
+        s = "SERVER ERROR";
+        break;
+
+    case QAbstractOAuth::Error::OAuthTokenNotFoundError:
+        s = "TOKEN NOT FOUND";
+        break;
+
+    case QAbstractOAuth::Error::OAuthTokenSecretNotFoundError:
+        s = "SECRET NOT FOUND";
+        break;
+
+    case QAbstractOAuth::Error::OAuthCallbackNotVerified:
+        s = "CALLBACK NOT VERIFIED";
+        break;
+
+    default:
+        break;
+    }
+
+    qDebug() << "FAILED:" << s;
 }
 
 void Spotify::authStatusChanged(QAbstractOAuth::Status status)
 {
     QString s;
 
-    if (status == QAbstractOAuth::Status::Granted) s = "granted";
+    switch (status)
+    {
+    case QAbstractOAuth::Status::Granted:
+        s = "GRANTED";
+        break;
 
-    if (status == QAbstractOAuth::Status::TemporaryCredentialsReceived) {
-        s = "temp credentials";
+    case QAbstractOAuth::Status::TemporaryCredentialsReceived:
+        s = "TEMP CREDENTIALS";
+        break;
+
+    case QAbstractOAuth::Status::NotAuthenticated:
+        s = "NOT AUTHENTICATED";
+        break;
+
+    case QAbstractOAuth::Status::RefreshingToken:
+        s = "REFRESHING TOKEN";
+        break;
     }
 
-    qDebug() << "Status Changed:" << s;
+    qDebug() << "Spotify Status Changed:" << s;
 }
 
 void Spotify::grant()
 {
-    QString clientID = m_sManager.getSetting(Setting::spotifyID);
+    QString clientID  = m_sManager.getSetting(Setting::spotifyID);
     QString secretKey = m_sManager.getSetting(Setting::spotifySecret);
 
-    if (clientID != "" && secretKey != "")
+    if ((clientID != "") && (secretKey != ""))
     {
         m_spotify.grant();
     }
@@ -54,6 +100,8 @@ void Spotify::grant()
 void Spotify::granted()
 {
     m_isGranted = true;
+
+    emit authorized();
 
     switch (m_afterGranted)
     {

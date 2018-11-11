@@ -111,6 +111,8 @@ signals:
     void metaDataChanged();
 
     void elementIconsChanged();
+    void authorizeSpotify(QUrl url);
+    void spotifyAuthorized();
 
     void soundPlayerRemoved(int index);
 
@@ -119,6 +121,8 @@ private slots:
     void onMetaDataChanged();
 
     void onSpotifyIconChanged(int index, QString url);
+    void onSpotifyAuthorize(QUrl url) { emit authorizeSpotify(url); }
+    void onSpotifyAuthorized() { emit spotifyAuthorized(); }
     void onSoundPlaybackStateChanged(QMediaPlayer::State status);
 
 private:
