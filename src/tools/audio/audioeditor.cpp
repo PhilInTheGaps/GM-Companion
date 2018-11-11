@@ -35,11 +35,6 @@ void AudioEditor::updateProjectList()
     emit projectListChanged();
 }
 
-QStringList AudioEditor::getProjectList()
-{
-    return m_projectList;
-}
-
 void AudioEditor::setCurrentProject(QString project)
 {
     m_currentProject = project;
@@ -48,6 +43,7 @@ void AudioEditor::setCurrentProject(QString project)
     m_musicLists.clear();
     m_soundLists.clear();
     m_radios.clear();
+    m_spotifyPlaylists.clear();
 
     emit scenarioListChanged();
     emit elementListChanged();
@@ -87,11 +83,6 @@ void AudioEditor::updateCategoryList()
     }
 
     emit categoryListChanged();
-}
-
-QStringList AudioEditor::getCategoryList()
-{
-    return m_categoryList;
 }
 
 void AudioEditor::setCurrentCategory(QString category)
@@ -136,11 +127,6 @@ void AudioEditor::updateScenarioList()
     }
 
     emit scenarioListChanged();
-}
-
-QStringList AudioEditor::getScenarioList()
-{
-    return m_scenarioList;
 }
 
 void AudioEditor::setCurrentScenario(QString scenario)
@@ -306,21 +292,6 @@ void AudioEditor::createList(QString listName, int type)
             emit elementListChanged();
         }
     }
-}
-
-QStringList AudioEditor::getMusicLists()
-{
-    return m_musicLists;
-}
-
-QStringList AudioEditor::getSoundLists()
-{
-    return m_soundLists;
-}
-
-QStringList AudioEditor::getRadios()
-{
-    return m_radios;
 }
 
 void AudioEditor::saveProject()
@@ -575,16 +546,6 @@ void AudioEditor::deleteList(QString list, int type)
     emit listChanged();
 }
 
-void AudioEditor::setCurrentListMode(int mode)
-{
-    m_currentListMode = mode;
-}
-
-void AudioEditor::setCurrentListIcon(QString icon)
-{
-    m_currentListIcon = icon;
-}
-
 // Move song in list
 void AudioEditor::moveFile(int index, int positions)
 {
@@ -630,53 +591,33 @@ void AudioEditor::setURL(QString url)
     if (m_local) emit urlChanged();
 }
 
-void AudioEditor::setLocal(bool local)
-{
-    m_local = local;
-}
-
 void AudioEditor::replaceMissingFolder(int index, QString folder, int type)
 {
     QString path = folder.replace("file://", "");
 
-    path  = path.replace(m_currentBasePath, "");
-    path += "/" + m_currentFileNames[index];
+    path = path.replace(m_currentBasePath, "") + "/";
 
-    m_currentFilePaths[index] = path;
+    QString relPath = path + m_currentFileNames[index];
+    m_currentFilePaths[index] = relPath;
 
-    m_currentFileMissing[index] = !QFile(m_currentBasePath + path).exists();
+    bool newFileExists = QFile(m_currentBasePath + relPath).exists();
+    m_currentFileMissing[index] = !newFileExists;
+
+    // If new path was correct, try to set this path for all other missing files
+    // as well
+    if (newFileExists)
+    {
+        for (int i = 0; i < m_currentFileNames.size(); i++)
+        {
+            if (m_currentFileMissing[i] && QFile(m_currentBasePath + path + m_currentFileNames[i]).exists())
+            {
+                m_currentFilePaths[i]   = path + m_currentFileNames[i];
+                m_currentFileMissing[i] = false;
+            }
+        }
+    }
 
     saveList(type);
     m_lastListIndex = index;
     emit listChanged();
-}
-
-QStringList AudioEditor::getCurrentFileNames()
-{
-    return m_currentFileNames;
-}
-
-QStringList AudioEditor::getCurrentFilePaths()
-{
-    return m_currentFilePaths;
-}
-
-QString AudioEditor::getCurrentListIcon()
-{
-    return m_currentListIcon;
-}
-
-int AudioEditor::getCurrentListMode()
-{
-    return m_currentListMode;
-}
-
-bool AudioEditor::getLocal()
-{
-    return m_local;
-}
-
-QString AudioEditor::getURL()
-{
-    return m_url;
 }

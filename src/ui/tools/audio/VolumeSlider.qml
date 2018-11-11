@@ -27,7 +27,7 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         value: initialVolume
         from: 0
-        to: 2
+        to: 1
 
         onValueChanged: volumeChanged(value)
     }

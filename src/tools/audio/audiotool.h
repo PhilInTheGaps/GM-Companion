@@ -60,6 +60,7 @@ public:
     Q_INVOKABLE QString elementIcon(QString element);
     Q_INVOKABLE void setCurrentElement(QString element);
     Q_INVOKABLE int elementType(int index) const { return m_elementTypes.at(index); }
+    Q_INVOKABLE void clearElements() { m_elements.clear(); emit elementsChanged(); }
 
     // Music
     Q_INVOKABLE void playMusic(QString element);
@@ -73,6 +74,7 @@ public:
     Q_INVOKABLE QString getSongName() const { return m_songName; }
     Q_INVOKABLE QString getArtist() const { return m_artist; }
     Q_INVOKABLE QString getAlbum() const { return m_album; }
+    Q_INVOKABLE QString getCoverArt() const { return m_cover; }
 
     // Spotify
     Q_INVOKABLE void playSpotify(QString element);
@@ -109,12 +111,19 @@ signals:
     void metaDataChanged();
 
     void elementIconsChanged();
+    void authorizeSpotify(QUrl url);
+    void spotifyAuthorized();
+
+    void soundPlayerRemoved(int index);
 
 private slots:
     void onCurrentSongChanged() { if (m_musicNotRadio) currentSongChanged(); }
     void onMetaDataChanged();
 
     void onSpotifyIconChanged(int index, QString url);
+    void onSpotifyAuthorize(QUrl url) { emit authorizeSpotify(url); }
+    void onSpotifyAuthorized() { emit spotifyAuthorized(); }
+    void onSoundPlaybackStateChanged(QMediaPlayer::State status);
 
 private:
     SettingsManager *m_sManager;
@@ -131,8 +140,18 @@ private:
     QString m_songName;
     QString m_artist;
     QString m_album;
+    QString m_cover;
+    QString convertCoverImage();
 
+    // Sounds
+    int m_soundVolume;
+    QList<QMediaPlayer*> m_soundPlayerList;
+
+    // Spotify
     Spotify m_spotify;
+    int m_spotifyVolume;
+
+    QMediaPlaylist *m_radioPlaylist;
 
     // Project
     QStringList m_projects;
@@ -151,11 +170,6 @@ private:
 
     bool m_isPlaying = false;
     bool m_spotifyPlaying = false;
-
-    int m_soundVolume;
-    QList<QMediaPlayer*> m_soundPlayerList;
-
-    QMediaPlaylist *m_radioPlaylist;
 };
 
 #endif // AUDIOTOOL_H

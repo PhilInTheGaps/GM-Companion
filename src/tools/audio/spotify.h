@@ -10,13 +10,14 @@
 struct Playlist
 {
     QString id;
-    int index;
+    int     index;
 };
 
-class Spotify : public QObject
-{
+class Spotify : public QObject {
     Q_OBJECT
+
 public:
+
     explicit Spotify(QObject *parent = nullptr);
     ~Spotify() {}
 
@@ -38,10 +39,11 @@ public:
     void fetchIcon(QString id, int index);
 
 private:
+
     QOAuth2AuthorizationCodeFlow m_spotify;
     SettingsManager m_sManager;
 
-    QQueue<Playlist> iconFetchQueue;
+    QQueue<Playlist>iconFetchQueue;
 
     bool m_isGranted = false;
     QString m_tempId;
@@ -52,13 +54,19 @@ private:
     void fetchQueuedIcons();
 
 signals:
+
     void iconChanged(int index, QString url);
+    void authorize(QUrl url);
+    void authorized();
 
 private slots:
-    void authStatusChanged(QAbstractOAuth::Status status);
-    void granted();
-};
 
+    void authStatusChanged(QAbstractOAuth::Status status);
+    void authorizeReady(QUrl url) { emit authorize(url); }
+
+    void granted();
+    void failed(const QAbstractOAuth::Error error);
+};
 
 
 #endif // SPOTIFY_H

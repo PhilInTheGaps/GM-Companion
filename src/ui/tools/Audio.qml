@@ -1,11 +1,14 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
+import QtWebEngine 1.5
 
 import gm.companion.audiotool 1.0
 import gm.companion.platforms 1.0
 import gm.companion.settingstool 1.0
 import "./audio"
+import "./audio/buttons"
+import "./audio/editor"
 import FontAwesome 2.0
 import gm.companion.colorscheme 1.0
 
@@ -86,10 +89,8 @@ Page {
 
                 function addSoundToSidebar(element) {
                     var component = Qt.createComponent(
-                                "./audio/SoundButton.qml")
+                                "./audio/buttons/SoundButton.qml")
                     var button = component.createObject(sound_info_column, {
-                                                            "x": 0,
-                                                            "y": 0,
                                                             "element": element,
                                                             "element_icon": elementIcon(element),
                                                             "frame_width": audio_info_frame.width
@@ -97,46 +98,22 @@ Page {
                     button.clicked.connect(stopSound)
                 }
 
+                onSoundPlayerRemoved: {
+                    sound_info_column.children[index + 1].destroy()
+                }
+
                 onCurrentProjectChanged: {
-                    audio_project_structure.children = []
-                    scenario_flow.children = []
-                    audio_scroll_flow.children = []
-
-                    var component = Qt.createComponent(
-                                "./audio/CategoryButton.qml")
-                    var categories = audio_tool.categories
-
-                    for (var i = 0; i < categories.length; i++) {
-                        var button = component.createObject(
-                                    audio_project_structure, {
-                                        "x": 0,
-                                        "y": 0,
-                                        "category": categories[i],
-                                        "buttonId": categories[i],
-                                        "max_width": audio_project_menu.width - 5
-                                    })
-                        button.clicked.connect(setCategory)
-                    }
+                    if (audio_tool.categories.length > 0)
+                        setCurrentCategory(categories[0])
+                    else
+                        clearElements()
                 }
 
                 onCurrentCategoryChanged: {
-                    scenario_flow.children = []
-                    audio_scroll_flow.children = []
-
-                    var component = Qt.createComponent(
-                                "./audio/ScenarioButton.qml")
-                    var scenarios = audio_tool.scenarios
-
-                    for (var i = 0; i < scenarios.length; i++) {
-                        var button = component.createObject(scenario_flow, {
-                                                                "x": 0,
-                                                                "y": 0,
-                                                                "scenario": scenarios[i],
-                                                                "buttonId": scenarios[i],
-                                                                "max_width": 150
-                                                            })
-                        button.clicked.connect(setScenario)
-                    }
+                    if (scenarios.length > 0)
+                        setCurrentScenario(scenarios[0])
+                    else
+                        clearElements()
                 }
 
                 onCurrentScenarioChanged: {
@@ -145,43 +122,7 @@ Page {
                 }
 
                 onElementsChanged: {
-
-                    audio_scroll_flow.children = []
-                    var component = Qt.createComponent(
-                                "./audio/AudioButton.qml")
-
-                    var elements = audio_tool.elements
-
-                    for (var i = 0; i < elements.length; i++) {
-
-                        var button = component.createObject(audio_scroll_flow, {
-                                                                "x": 0,
-                                                                "y": 0,
-                                                                "element_name": elements[i],
-                                                                "element_type": elementType(i),
-                                                                "icon_path": elementIcons[i]
-                                                            })
-
-                        if (audio_tool.elementType(i) === 0) {
-                            button.clicked.connect(setMusic)
-                        } else if (audio_tool.elementType(i) === 1) {
-                            button.clicked.connect(setSound)
-                        } else if (audio_tool.elementType(i) === 2) {
-                            button.clicked.connect(setRadio)
-                        } else if (audio_tool.elementType(i) === 3) {
-                            button.clicked.connect(setSpotify)
-                        }
-                    }
-
                     audio_busy_indicator.visible = false
-                }
-
-                onElementIconsChanged: {
-                    console.log("Icons Changed!")
-
-                    for (var i = 0; i < audio_scroll_flow.children.length; i++) {
-                        audio_scroll_flow.children[i].icon_path = elementIcons[i]
-                    }
                 }
 
                 onSongsChanged: {
@@ -206,7 +147,54 @@ Page {
                     song_name_text.text = getSongName()
                     artist_text.text = getArtist()
                     album_text.text = getAlbum()
+                    cover_image.source = getCoverArt()
                 }
+
+                onAuthorizeSpotify: {
+
+                    console.log("AUTHORIZING SPOTIFY: " + url)
+
+                    spotify_view.url = url
+                    spotify_view.reload()
+                    spotify_dialog.open()
+                }
+
+                onSpotifyAuthorized: spotify_dialog.close()
+            }
+
+            Dialog {
+                id: spotify_dialog
+
+                width: parent.width * 0.75
+                height: parent.height * 0.75
+
+                x: (parent.width - width) / 2
+                y: (parent.height - audio_control_bar.height - height) / 2
+
+                contentItem: Item {
+
+                    WebEngineView {
+                        id: spotify_view
+                        onUrlChanged: console.log(url)
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: spotify_error_text.top
+                    }
+
+                    Text {
+                        id: spotify_error_text
+                        text: qsTr("If page shows \"INVALID CLIENT: Invalid redirect URI\" close all instances of this program and try again.")
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.WordWrap
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+                }
+
+                onOpened: console.log("OPENED SPOTIFY DIALOG")
             }
 
             // Volume Dialog
@@ -215,8 +203,8 @@ Page {
                 x: parent.width - width
                 y: parent.height - audio_control_bar.height - height
 
-                initialMusicVolume: 1
-                initialSoundVolume: 0.5
+                initialMusicVolume: 0.5
+                initialSoundVolume: 0.25
 
                 onMusicVolumeChanged: audio_tool.setMusicVolume(value)
                 onSoundVolumeChanged: audio_tool.setSoundVolume(value)
@@ -443,6 +431,7 @@ Page {
                         color: color_scheme.textColor
                     }
 
+                    // Categories
                     ScrollView {
                         id: audio_project_scroll_view
                         width: parent.width - parent.padding
@@ -454,6 +443,18 @@ Page {
                             id: audio_project_structure
                             width: audio_project_menu.width - audio_project_menu.padding
                             spacing: 5
+
+                            Repeater {
+                                id: category_repeater
+                                model: audio_tool.categories
+
+                                CategoryButton {
+                                    buttonText: modelData
+
+                                    onClicked: audio_tool.setCategory(
+                                                   buttonText)
+                                }
+                            }
                         }
                     }
                 }
@@ -478,11 +479,23 @@ Page {
                         }
                     }
 
+                    // Scenarios
                     Flow {
                         id: scenario_flow
                         width: parent.width
                         spacing: 5
                         padding: 5
+
+                        Repeater {
+                            id: scenario_repeater
+                            model: audio_tool.scenarios
+
+                            ScenarioButton {
+                                buttonText: modelData
+
+                                onClicked: audio_tool.setScenario(buttonText)
+                            }
+                        }
                     }
 
                     BusyIndicator {
@@ -508,6 +521,35 @@ Page {
                             spacing: 5
 
                             width: audio_scroll_view.width
+
+                            Repeater {
+                                id: element_repeater
+
+                                model: audio_tool.elements
+
+                                AudioButton {
+                                    element_name: modelData
+                                    element_type: audio_tool.elementType(index)
+                                    icon_path: audio_tool.elementIcons[index]
+
+                                    onClicked: {
+                                        switch (element_type) {
+                                        case 0:
+                                            audio_tool.setMusic(element_name)
+                                            break
+                                        case 1:
+                                            audio_tool.setSound(element_name)
+                                            break
+                                        case 2:
+                                            audio_tool.setRadio(element_name)
+                                            break
+                                        case 3:
+                                            audio_tool.setSpotify(element_name)
+                                            break
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -583,6 +625,13 @@ Page {
                             clip: true
                             elide: Text.ElideRight
                             color: color_scheme.textColor
+                        }
+
+                        Image {
+                            id: cover_image
+                            visible: source != ""
+                            width: parent.width - parent.padding * 2
+                            sourceSize.width: width
                         }
 
                         Rectangle {

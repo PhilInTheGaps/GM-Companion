@@ -8,6 +8,10 @@ import gm.companion.platforms 1.0
 import FontAwesome 2.0
 
 Rectangle {
+    readonly property int min_width: 175
+    readonly property int count_per_row: parent ? Math.floor(
+                                                      parent.width / min_width) : 1
+
     property var element_name
     property var icon_path
     property var element_type
@@ -45,8 +49,16 @@ Rectangle {
         id: platform
     }
 
-    width: platform.isAndroid ? (parent ? parent.parent.width / 8 : 0) : 150
-    height: platform.isAndroid ? width + text.height : 180
+    width: {
+        if (platform.isAndroid) {
+            parent ? parent.parent.width / 8 : 0
+        } else {
+            parent ? (parent.width - parent.spacing * (count_per_row - 1)
+                      - parent.padding * 2) / count_per_row : 0
+        }
+    }
+
+    height: width + text.height
 
     color: color_scheme.backgroundColor
 
@@ -58,8 +70,9 @@ Rectangle {
 
         Image {
             id: large_icon
-            source: icon_path === default_image || icon_path.startsWith(
-                        "http") ? icon_path : "file:///" + icon_path
+            source: parent ? (icon_path === default_image
+                              || icon_path.startsWith(
+                                  "http") ? icon_path : "file:///" + icon_path) : ""
             x: 5
             y: 5
 
@@ -87,6 +100,24 @@ Rectangle {
             text: default_icon
             font.family: element_type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
         }
+
+        Rectangle {
+            id: overlay
+            anchors.centerIn: parent
+            width: parent.width - 10
+            height: width
+
+            visible: mouse_area.containsMouse
+            color: Qt.rgba(0, 0, 0, 0.4)
+
+            Text {
+                text: FontAwesome.playCircle
+                font.pointSize: 35
+                font.family: FontAwesome.familyRegular
+                color: mouse_area.pressed ? "silver" : "white"
+                anchors.centerIn: parent
+            }
+        }
     }
 
     Text {
@@ -102,8 +133,9 @@ Rectangle {
     }
 
     MouseArea {
-        anchors.fill: parent
         id: mouse_area
+        anchors.fill: parent
+        hoverEnabled: true
 
         onClicked: parent.clicked(parent.element_name)
     }

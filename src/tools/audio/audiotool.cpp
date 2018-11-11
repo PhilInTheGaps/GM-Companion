@@ -34,6 +34,8 @@ AudioTool::AudioTool(QObject *parent) : QObject(parent)
     m_radioPlaylist = new QMediaPlaylist;
 
     connect(&m_spotify, &Spotify::iconChanged, this, &AudioTool::onSpotifyIconChanged);
+    connect(&m_spotify, &Spotify::authorize, this, &AudioTool::onSpotifyAuthorize);
+    connect(&m_spotify, &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 }
 
 // Returns list of all project files found
@@ -62,6 +64,7 @@ void AudioTool::setCurrentProject(QString project)
 {
     m_currentProject = project;
     emit currentProjectChanged();
+    emit categoriesChanged();
 }
 
 // Returns list of all categories in project
@@ -95,6 +98,7 @@ void AudioTool::setCurrentCategory(QString category)
 {
     m_currentCategory = category;
     emit currentCategoryChanged();
+    emit scenariosChanged();
 }
 
 QStringList AudioTool::scenarios()
@@ -370,14 +374,22 @@ void AudioTool::musicPausePlay()
 
 void AudioTool::setMusicVolume(float volume)
 {
-    m_musicVolume = volume / 2 * 100;
+    // Convert volume to logarithmic scale
+    qreal linearVolume = QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
+
+    m_musicVolume = qRound(linearVolume * 100);
     m_musicPlayer->setVolume(m_musicVolume);
-    m_spotify.setVolume(volume / 2 * 100);
+
+    m_spotifyVolume = qRound(volume * 100);
+    m_spotify.setVolume(m_spotifyVolume); // Spotify takes linear volume
 }
 
 void AudioTool::setSoundVolume(float volume)
 {
-    m_soundVolume = volume / 2 * 100;
+    // Convert volume to logarithmic scale
+    qreal linearVolume = QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
+
+    m_soundVolume = qRound(linearVolume * 100);
 
     for (QMediaPlayer *player : m_soundPlayerList)
     {
@@ -445,6 +457,8 @@ void AudioTool::playSound(QString element)
                 break;
             }
 
+            connect(player, &QMediaPlayer::stateChanged, this, &AudioTool::onSoundPlaybackStateChanged);
+
             player->setVolume(m_soundVolume);
             player->play();
         }
@@ -464,6 +478,42 @@ bool AudioTool::isSoundPlayling(QString element)
     return false;
 }
 
+void AudioTool::onSoundPlaybackStateChanged(QMediaPlayer::State status)
+{
+    qDebug() << "Sound Status:" << status;
+
+    // Check if status is EndOfMedia, find endet sound player and remove it
+    if (status == QMediaPlayer::StoppedState)
+    {
+        QMediaPlayer *player = nullptr;
+
+        int  i             = 0;
+        bool removedPlayer = false;
+
+        while (!removedPlayer)
+        {
+            player = m_soundPlayerList[i];
+
+            if (player->state() == QMediaPlayer::StoppedState)
+            {
+                qDebug() << "Found player!";
+
+                player->stop();
+                m_soundPlayerList.removeOne(player);
+
+                qDebug() << "Emitting signal...";
+                emit soundPlayerRemoved(i);
+
+                removedPlayer = true;
+            }
+
+            i++;
+        }
+
+        player->deleteLater();
+    }
+}
+
 void AudioTool::removeSound(QString element)
 {
     for (QMediaPlayer *player : m_soundPlayerList)
@@ -481,8 +531,11 @@ void AudioTool::playRadio(QString element)
 {
     if ((m_currentProject != NULL) && (m_currentCategory != NULL) && (m_currentScenario != NULL) && (element != NULL))
     {
+        qDebug() << "Playing radio:" << element;
+
         m_musicPlaylist->clear();
         m_currentElement = element;
+        m_songs.clear();
 
         // Read properties
         QSettings settings(m_sManager->getSetting(Setting::audioPath) + "/" + m_currentProject + ".audio", QSettings::IniFormat);
@@ -495,6 +548,7 @@ void AudioTool::playRadio(QString element)
 
         if (local)
         {
+            qDebug() << "Playing from local playlist:" << basePath + url;
             url = basePath + url;
             m_radioPlaylist->load(QUrl::fromLocalFile(url));
             m_musicPlayer->setPlaylist(m_radioPlaylist);
@@ -505,6 +559,9 @@ void AudioTool::playRadio(QString element)
         }
 
         settings.endGroup();
+
+        m_spotify.stop();
+        m_spotifyPlaying = false;
 
         m_musicPlayer->setVolume(m_musicVolume);
         m_musicNotRadio = false;
@@ -532,7 +589,7 @@ void AudioTool::playSpotify(QString element)
         QString id = settings.value("id").toString();
         settings.endGroup();
 
-        m_spotify.setVolume(m_musicVolume);
+        m_spotify.setVolume(m_spotifyVolume);
         m_spotifyPlaying = true;
         m_musicPlayer->pause();
 
@@ -544,6 +601,28 @@ void AudioTool::playSpotify(QString element)
         emit currentElementChanged();
         emit songsChanged();
         emit isPlayingChanged();
+    }
+}
+
+#include <QImage>
+
+QString AudioTool::convertCoverImage()
+{
+    if (m_musicPlayer->availableMetaData().contains("CoverArtImage"))
+    {
+        QImage myImage = m_musicPlayer->metaData(QMediaMetaData::CoverArtImage).value<QImage>();
+        QByteArray bArray;
+        QBuffer    buffer(&bArray);
+        buffer.open(QIODevice::WriteOnly);
+        myImage.save(&buffer, "JPEG");
+
+        QString image("data:image/jpg;base64,");
+        image.append(QString::fromLatin1(bArray.toBase64().data()));
+        return image;
+    }
+    else
+    {
+        return "";
     }
 }
 
@@ -559,6 +638,8 @@ void AudioTool::getMetaData()
     if (m_artist.isNull()) m_artist = m_musicPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
 
     if (m_artist.isNull()) m_artist = m_musicPlayer->metaData(QMediaMetaData::Composer).toString();
+
+    m_cover = convertCoverImage();
 }
 
 void AudioTool::getMetaDataTagLib()
@@ -568,13 +649,17 @@ void AudioTool::getMetaDataTagLib()
 
     if (m_musicPlayer->bufferStatus() == 100)
     {
-        QString path = m_musicPlaylist->currentMedia().resources().first().url().path();
+        if (m_musicPlayer->currentMedia().resources().size() > 0)
+        {
+            QString path = m_musicPlaylist->currentMedia().resources().first().url().path();
 
-        // Album, Artist and Title
-        TagLib::FileRef f(path.toUtf8());
-        m_album    = f.tag()->album().toCString(true);
-        m_artist   = f.tag()->artist().toCString(true);
-        m_songName =  f.tag()->title().toCString(true);
+            // Album, Artist and Title
+            TagLib::FileRef f(path.toUtf8());
+            m_album    = f.tag()->album().toCString(true);
+            m_artist   = f.tag()->artist().toCString(true);
+            m_songName =  f.tag()->title().toCString(true);
+            m_cover    = convertCoverImage();
+        }
     }
     # endif // ifndef Q_OS_ANDROID
     #endif  // ifdef Q_OS_LINUX
@@ -593,7 +678,9 @@ void AudioTool::onMetaDataChanged()
 
         // Reading tags using TagLib, as it is way more reliable than the Qt
         // implementation
-        getMetaDataTagLib();
+        if (m_musicNotRadio) getMetaDataTagLib();
+        else getMetaData();  // TagLib bugs out with radios somehow
+
         # else // ifndef Q_OS_ANDROID
         getMetaData();
         # endif // ifndef Q_OS_ANDROID
