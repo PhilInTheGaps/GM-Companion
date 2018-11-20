@@ -126,16 +126,27 @@ QString AudioExporter::getDefaultPath()
 // Export all files
 void AudioExporter::exportFiles()
 {
-    QString path = m_path == "" ? getDefaultPath() : m_path;
+    QString path   = m_path == "" ? getDefaultPath() : m_path;
+    Worker *worker = new Worker(path, m_project, m_categories, m_exportCategories, m_exportScenarios, m_exportElements);
 
+    worker->moveToThread(&workerThread);
+    connect(&workerThread, &QThread::finished,           worker, &QObject::deleteLater);
+    connect(worker,        &Worker::progressChanged,     this,   &AudioExporter::updateProgress);
+    connect(this,          &AudioExporter::startCopying, worker, &Worker::copyFiles);
+    workerThread.start();
+    emit startCopying();
+}
+
+void Worker::copyFiles()
+{
     // Create path if it does not exist
-    if (!QDir(path).exists())
+    if (!QDir(m_path).exists())
     {
-        QDir d = QDir(path);
-        d.mkpath(path);
+        QDir d = QDir(m_path);
+        d.mkpath(m_path);
     }
 
-    qDebug() << "AudioExporter: Exporting files to:" << path << "...";
+    qDebug() << "AudioExporter: Exporting files to:" << m_path << "...";
 
     // Find all relevant elements
     QStringList elementsToExport;
@@ -260,6 +271,7 @@ void AudioExporter::exportFiles()
     for (int i = 0; i < files.size(); i++)
     {
         qDebug() << "   Progress:" << index << "/" << files.size();
+        emit progressChanged(static_cast<float>(index) / files.size());
         index++;
 
         QString file = files[i];
@@ -279,7 +291,7 @@ void AudioExporter::exportFiles()
         if (f.exists())
         {
             QString fileName = file.section("/", -1, -1);
-            QString dir      = path + "/" + type + file.section("/", 0, -2);
+            QString dir      = m_path + "/" + type + file.section("/", 0, -2);
 
             if (!QDir(dir).exists())
             {

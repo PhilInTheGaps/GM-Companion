@@ -18,6 +18,10 @@ Dialog {
 
     AudioExporter {
         id: tool
+
+        onProgressChanged: {
+            progress_bar.value = progress
+        }
     }
 
     ColorScheme {
@@ -117,7 +121,7 @@ Dialog {
         }
 
         CheckScrollView {
-            id: ele_scroll
+            id: ele_scroll1
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -136,9 +140,39 @@ Dialog {
         color: colors.backgroundColor
     }
 
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    footer: Rectangle {
+        height: buttons.height
+        color: color_scheme.backgroundColor
 
-    onAccepted: {
-        tool.exportFiles()
+        ProgressBar {
+            id: progress_bar
+            value: 0
+            anchors.left: parent.left
+            anchors.right: buttons.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 15
+        }
+
+        DialogButtonBox {
+            id: buttons
+            anchors.right: parent.right
+            anchors.top: parent.top
+
+            Button {
+                text: qsTr("Export")
+                DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
+            }
+
+            standardButtons: Dialog.Close
+
+            onApplied: {
+                tool.exportFiles()
+            }
+
+            onRejected: {
+                dialog.close()
+            }
+        }
     }
 }
