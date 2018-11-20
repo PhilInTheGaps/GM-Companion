@@ -145,6 +145,8 @@
         <file alias="icons/patzer-vtgk-at.png">addons/dsa5/icons/patzer-vtgk-at.png</file>
         <file alias="icons/parade-at.png">addons/dsa5/icons/parade-at.png</file>
         <file alias="icons/patzer-vtgk-at-schild.png">addons/dsa5/icons/patzer-vtgk-at-schild.png</file>
+        <file alias="icons/patzer-liturgie.png">addons/dsa5/icons/patzer-liturgie.png</file>
+        <file alias="icons/patzer-zauber.png">addons/dsa5/icons/patzer-zauber.png</file>
     </qresource>
     <qresource prefix="/addons/sifrp">
         <file alias="addon.ini">addons/sifrp/addon.ini</file>
