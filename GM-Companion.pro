@@ -25,7 +25,7 @@ SOURCES += src/main.cpp \
     # Tools
     src/tools/maptool.cpp \
     src/tools/dicetool.cpp \
-    src/tools/combattracker.cpp \
+    src/tools/combat_tracker/combattracker.cpp \
     src/tools/notestool.cpp \
     src/tools/convertertool.cpp \
     src/tools/generators/namegenerator.cpp \
@@ -53,18 +53,24 @@ SOURCES += src/main.cpp \
     src/managers/addonmanager.cpp \
     src/managers/filemanager.cpp \
     src/tools/audio/spotify.cpp \
-    src/tools/audio/audioexporter.cpp
+    src/tools/audio/audioexporter.cpp \
+    src/tools/combat_tracker/effecttool.cpp \
+    src/tools/combat_tracker/effect.cpp
 
 lupdate_only{
 SOURCES += *.qml \
-    menu/*.qml \
+    components/*.qml \
     tools/*.qml \
     tools/audio/*.qml \
+    tools/audio/audio_exporter/*.qml \
+    tools/audio/buttons/*.qml \
+    tools/audio/editor/*.qml \
     tools/characters/*.qml \
     tools/combat_tracker/*.qml \
+    tools/converter/*.qml \
+    tools/dice/*.qml \
     tools/generators/*.qml \
     tools/maps/*.qml \
-    tools/notes/*.qml \
     tools/settings/*.qml \
     tools/shop/*.qml \
 }
@@ -78,7 +84,7 @@ HEADERS  += src/functions.h \
     src/tools/maptool.h \
     src/tools/audio/audiotool.h \
     src/tools/dicetool.h \
-    src/tools/combattracker.h \
+    src/tools/combat_tracker/combattracker.h \
     src/tools/notestool.h \
     src/tools/convertertool.h \
     src/tools/project_converter/projectconverter.h \
@@ -106,7 +112,9 @@ HEADERS  += src/functions.h \
     src/managers/addonmanager.h \
     src/managers/filemanager.h \
     src/tools/audio/spotify.h \
-    src/tools/audio/audioexporter.h
+    src/tools/audio/audioexporter.h \
+    src/tools/combat_tracker/effecttool.h \
+    src/tools/combat_tracker/effect.h
 
 
 DISTFILES += \
@@ -129,7 +137,7 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat
 
-QML_IMPORT_PATH =
+QML_IMPORT_PATH += lib/fontawesome.pri
 
 RC_FILE = src/GM-Companion.rc
 

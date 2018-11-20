@@ -137,6 +137,14 @@
         <file alias="names/Weiden/male.txt">addons/dsa5/names/Weiden/male.txt</file>
         <file alias="names/Zwerge/female.txt">addons/dsa5/names/Zwerge/female.txt</file>
         <file alias="names/Zwerge/male.txt">addons/dsa5/names/Zwerge/male.txt</file>
+        <file alias="combat_effects.ini">addons/dsa5/combat_effects.ini</file>
+        <file alias="icons/angriff-at.png">addons/dsa5/icons/angriff-at.png</file>
+        <file alias="icons/parade-fk.png">addons/dsa5/icons/parade-fk.png</file>
+        <file alias="icons/patzer-at.png">addons/dsa5/icons/patzer-at.png</file>
+        <file alias="icons/patzer-fk.png">addons/dsa5/icons/patzer-fk.png</file>
+        <file alias="icons/patzer-vtgk-at.png">addons/dsa5/icons/patzer-vtgk-at.png</file>
+        <file alias="icons/parade-at.png">addons/dsa5/icons/parade-at.png</file>
+        <file alias="icons/patzer-vtgk-at-schild.png">addons/dsa5/icons/patzer-vtgk-at-schild.png</file>
     </qresource>
     <qresource prefix="/addons/sifrp">
         <file alias="addon.ini">addons/sifrp/addon.ini</file>

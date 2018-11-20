@@ -20,7 +20,8 @@
 #include "tools/shop/shoptool.h"
 #include "tools/shop/shopeditor.h"
 #include "tools/shop/itemeditor.h"
-#include "tools/combattracker.h"
+#include "tools/combat_tracker/combattracker.h"
+#include "tools/combat_tracker/effecttool.h"
 #include "tools/notestool.h"
 #include "tools/convertertool.h"
 #include "tools/generators/namegenerator.h"
@@ -48,6 +49,7 @@ void loadQmlClasses()
     qmlRegisterType<ShopEditor>(            "gm.companion.shopeditor",             1, 0, "ShopEditorTool");
     qmlRegisterType<ItemEditor>(            "gm.companion.itemeditor",             1, 0, "ItemEditorTool");
     qmlRegisterType<CombatTracker>(         "gm.companion.combattracker",          1, 0, "CombatTrackerTool");
+    qmlRegisterType<EffectTool>(            "gm.companion.effecttool",             1, 0, "EffectTool");
     qmlRegisterType<NotesTool>(             "gm.companion.notestool",              1, 0, "NotesTool");
     qmlRegisterType<ConverterTool>(         "gm.companion.convertertool",          1, 0, "ConverterTool");
     qmlRegisterType<NameGenerator>(         "gm.companion.namegeneratortool",      1, 0, "NameGeneratorTool");

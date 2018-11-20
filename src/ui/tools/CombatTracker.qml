@@ -7,12 +7,13 @@ import gm.companion.colorscheme 1.0
 import gm.companion.platforms 1.0
 
 import "./combat_tracker"
+import "./dice"
 import FontAwesome 2.0
 
 Page {
     id: combat_tracker
 
-    readonly property bool inPortrait: width < height
+    readonly property bool inPortrait: width < height || width < 1200
     property bool dice_enabled: false
 
     CombatTrackerTool {
@@ -42,8 +43,8 @@ Page {
     }
 
     Component.onCompleted: {
-        combat_dice.setSource("Dice.qml", {
-                                  "combat_tracker_mode": true
+        combat_dice.setSource("dice/DiceCombatTracker.qml", {
+
                               })
     }
 
@@ -62,6 +63,7 @@ Page {
         }
     }
 
+    // Top Bar
     Rectangle {
         id: top_bar
         height: color_scheme.toolbarHeight
@@ -221,82 +223,92 @@ Page {
         }
     }
 
-    // List Header
-    Rectangle {
-        id: list_header
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
+    // Main Item
+    Item {
+        anchors.fill: parent
 
-        height: top_bar.height
+        // List Header
+        Rectangle {
+            id: list_header
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: top_bar.height
 
-        color: color_scheme.listHeaderBackgroundColor
+            color: color_scheme.listHeaderBackgroundColor
 
-        Row {
-            anchors.fill: parent
-            spacing: 10
-            padding: 10
+            Row {
+                anchors.fill: parent
+                spacing: 10
+                padding: 10
 
-            Text {
-                text: qsTr("Name")
-                anchors.verticalCenter: parent.verticalCenter
-                width: list_view.width / 5
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 12
-                color: color_scheme.listHeaderTextColor
+                Text {
+                    text: qsTr("Name")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: list_view.width / 5
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    color: color_scheme.listHeaderTextColor
+                }
+
+                Text {
+                    text: qsTr("Initiative")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: list_view.width / 6
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    color: color_scheme.listHeaderTextColor
+                }
+
+                Text {
+                    text: qsTr("Health")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: list_view.width / 6
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    color: color_scheme.listHeaderTextColor
+                }
+
+                Text {
+                    text: qsTr("Status")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: list_view.width / 6
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    color: color_scheme.listHeaderTextColor
+                }
+
+                Text {
+                    text: qsTr("Notes")
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: list_view.width / 6
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 12
+                    color: color_scheme.listHeaderTextColor
+                }
             }
 
             Text {
-                text: qsTr("Initiative")
+                text: qsTr("Dice")
                 anchors.verticalCenter: parent.verticalCenter
-                width: list_view.width / 6
+                x: combat_dice.x + 10
                 horizontalAlignment: Text.AlignHCenter
                 font.pointSize: 12
                 color: color_scheme.listHeaderTextColor
-            }
-
-            Text {
-                text: qsTr("Health")
-                anchors.verticalCenter: parent.verticalCenter
-                width: list_view.width / 6
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 12
-                color: color_scheme.listHeaderTextColor
-            }
-
-            Text {
-                text: qsTr("Status")
-                anchors.verticalCenter: parent.verticalCenter
-                width: list_view.width / 6
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 12
-                color: color_scheme.listHeaderTextColor
-            }
-
-            Text {
-                text: qsTr("Notes")
-                anchors.verticalCenter: parent.verticalCenter
-                width: list_view.width / 6
-                horizontalAlignment: Text.AlignHCenter
-                font.pointSize: 12
-                color: color_scheme.listHeaderTextColor
+                visible: dice_enabled && !inPortrait
             }
         }
-    }
-
-    Flow {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: list_header.bottom
-        anchors.bottom: parent.bottom
 
         // Combatant List
         ListView {
             id: list_view
 
-            width: combat_dice.visible
-                   && !inPortrait ? parent.width * 0.6 : parent.width
-            height: parent.height
+            anchors.left: parent.left
+            anchors.top: list_header.bottom
+            anchors.bottom: parent.bottom
+            anchors.right: dice_enabled
+                           && !inPortrait ? undefined : parent.right
+            width: dice_enabled && !inPortrait ? parent.width * 0.65 : 0
 
             clip: true
             spacing: 10
@@ -391,9 +403,10 @@ Page {
         Loader {
             id: combat_dice
 
-            width: parent.width - list_view.width
-            height: parent.height
-
+            anchors.left: list_view.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             visible: !inPortrait && dice_enabled
             asynchronous: true
         }

@@ -54,5 +54,9 @@
         <file>tools/audio/editor/EditorNewThingDialog.qml</file>
         <file>tools/audio/buttons/EditorToolButton.qml</file>
         <file>tools/audio/editor/EditorLabeledComboBox.qml</file>
+        <file>tools/dice/DiceSettings.qml</file>
+        <file>tools/dice/DiceButton.qml</file>
+        <file>tools/dice/DiceCombatTracker.qml</file>
+        <file>tools/combat_tracker/EffectPage.qml</file>
     </qresource>
 </RCC>
