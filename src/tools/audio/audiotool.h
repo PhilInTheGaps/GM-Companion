@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE void musicPausePlay();
     Q_INVOKABLE void setMusicIndex(int index);
     QStringList songs() const { return m_songs; }
-    int currentSongIndex() const { return m_musicPlaylist->currentIndex(); }
+    int currentSongIndex();
     bool isPlaying() const { return m_isPlaying; }
     Q_INVOKABLE QString getSongName() const { return m_songName; }
     Q_INVOKABLE QString getArtist() const { return m_artist; }
@@ -124,6 +124,8 @@ private slots:
     void onSpotifyAuthorize(QUrl url) { emit authorizeSpotify(url); }
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
     void onSoundPlaybackStateChanged(QMediaPlayer::State status);
+    void onSpotifySongChanged(QString title, QString artist, QString album, QString image);
+    void onSpotifyPlaylistChanged(QStringList songs);
 
 private:
     SettingsManager *m_sManager;

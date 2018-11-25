@@ -4,11 +4,12 @@
 #
 #-------------------------------------------------
 
-QT       += core multimedia network quick qml networkauth webengine
+QT       += core multimedia network quick qml webengine
 
 win32:QT += winextras
 
 include(lib/fontawesome.pri/fontawesome.pri)
+include(lib/o2/src/src.pri)
 
 TARGET = out/gm-companion
 TEMPLATE = app

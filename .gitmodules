@@ -4,3 +4,6 @@
 [submodule "lib/fontawesome.pri"]
 	path = lib/fontawesome.pri
 	url = https://github.com/PhilInTheGaps/fontawesome.pri
+[submodule "lib/o2"]
+	path = lib/o2
+	url = https://github.com/pipacs/o2

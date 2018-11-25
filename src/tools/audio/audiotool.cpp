@@ -33,9 +33,11 @@ AudioTool::AudioTool(QObject *parent) : QObject(parent)
 
     m_radioPlaylist = new QMediaPlaylist;
 
-    connect(&m_spotify, &Spotify::iconChanged, this, &AudioTool::onSpotifyIconChanged);
-    connect(&m_spotify, &Spotify::authorize, this, &AudioTool::onSpotifyAuthorize);
-    connect(&m_spotify, &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
+    connect(&m_spotify, &Spotify::iconChanged,            this, &AudioTool::onSpotifyIconChanged);
+    connect(&m_spotify, &Spotify::authorize,              this, &AudioTool::onSpotifyAuthorize);
+    connect(&m_spotify, &Spotify::authorized,             this, &AudioTool::onSpotifyAuthorized);
+    connect(&m_spotify, &Spotify::currentSongChanged,     this, &AudioTool::onSpotifySongChanged);
+    connect(&m_spotify, &Spotify::currentPlaylistChanged, this, &AudioTool::onSpotifyPlaylistChanged);
 }
 
 // Returns list of all project files found
@@ -331,8 +333,9 @@ void AudioTool::setMusicIndex(int index)
     else
     {
         m_musicPlaylist->setCurrentIndex(index);
-        emit currentSongChanged();
     }
+
+    emit currentSongChanged();
 }
 
 void AudioTool::musicNext()
@@ -369,6 +372,18 @@ void AudioTool::musicPausePlay()
             m_isPlaying = true;
             emit isPlayingChanged();
         }
+    }
+}
+
+int AudioTool::currentSongIndex()
+{
+    if (m_spotifyPlaying)
+    {
+        return m_spotify.getIndex();
+    }
+    else
+    {
+        return m_musicPlaylist->currentIndex();
     }
 }
 
@@ -709,4 +724,21 @@ void AudioTool::onSpotifyIconChanged(int index, QString url)
     {
         qDebug() << "Did not find element!";
     }
+}
+
+void AudioTool::onSpotifySongChanged(QString title, QString artist, QString album, QString image)
+{
+    m_songName = title;
+    m_artist   = artist;
+    m_album    = album;
+    m_cover    = image;
+
+    emit currentSongChanged();
+    emit metaDataChanged();
+}
+
+void AudioTool::onSpotifyPlaylistChanged(QStringList songs)
+{
+    m_songs = songs;
+    emit songsChanged();
 }

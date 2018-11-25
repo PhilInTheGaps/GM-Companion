@@ -2,9 +2,11 @@
 #define SPOTIFY_H
 
 #include <QObject>
-#include <QtNetworkAuth>
 #include <QQueue>
+#include <QBuffer>
+#include <QTimer>
 
+#include "lib/o2/src/o2spotify.h"
 #include "src/settings/settingsmanager.h"
 
 struct Playlist
@@ -17,19 +19,19 @@ class Spotify : public QObject {
     Q_OBJECT
 
 public:
-
     explicit Spotify(QObject *parent = nullptr);
     ~Spotify() {}
 
     void grant();
-    bool isGranted() const { return m_isGranted; }
+    bool isGranted() const { return m_spotify->linked(); }
 
-    void play(QString id);
+    void play(QString id, int offset = 0);
     void play();
     void stop();
     void pausePlay();
 
     void setIndex(int index);
+    int getIndex();
     void next();
     void again();
 
@@ -39,33 +41,37 @@ public:
     void fetchIcon(QString id, int index);
 
 private:
-
-    QOAuth2AuthorizationCodeFlow m_spotify;
+    O2Spotify *m_spotify;
     SettingsManager m_sManager;
+    QTimer *m_timer;
 
     QQueue<Playlist>iconFetchQueue;
 
-    bool m_isGranted = false;
     QString m_tempId;
+    QString m_currentId;
     bool m_isPlaying = false;
     int m_volume;
     int m_afterGranted = 0;
+    int m_currentIndex = 0;
+    QStringList m_trackList;
+    QStringList m_trackIdList;
+    QString m_currentSongName;
 
     void fetchQueuedIcons();
+    void getCurrentSong();
+    void getCurrentPlaylist();
+    void put(QUrl url, QString params = "");
 
 signals:
-
     void iconChanged(int index, QString url);
     void authorize(QUrl url);
     void authorized();
+    void currentSongChanged(QString title, QString artist, QString album, QString image);
+    void currentPlaylistChanged(QStringList songs);
 
 private slots:
-
-    void authStatusChanged(QAbstractOAuth::Status status);
     void authorizeReady(QUrl url) { emit authorize(url); }
-
     void granted();
-    void failed(const QAbstractOAuth::Error error);
 };
 
 

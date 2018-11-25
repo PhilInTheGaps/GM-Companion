@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
 #endif // if defined(Q_OS_WIN)
 
     QGuiApplication app(argc, argv);
+    app.setApplicationName("GM-Companion");
+    app.setOrganizationName("GM-Companion");
+    app.setOrganizationDomain("gm-companion.github.io");
 
     qDebug().noquote() << "Starting GM-Companion ...";
 
