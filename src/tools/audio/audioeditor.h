@@ -30,7 +30,7 @@ public:
     Q_INVOKABLE void moveElement(QString element, int type, int positions);
     Q_INVOKABLE void sortElements();
 
-    Q_INVOKABLE void createList(QString listName, int type);
+    Q_INVOKABLE void createList(QString listName, int type, QStringList args = {});
     Q_INVOKABLE QStringList getMusicLists() const { return m_musicLists; }
     Q_INVOKABLE QStringList getSoundLists() const { return m_soundLists; }
     Q_INVOKABLE QStringList getRadios() const { return m_radios; }

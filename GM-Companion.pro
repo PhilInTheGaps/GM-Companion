@@ -56,7 +56,8 @@ SOURCES += src/main.cpp \
     src/tools/audio/spotify.cpp \
     src/tools/audio/audioexporter.cpp \
     src/tools/combat_tracker/effecttool.cpp \
-    src/tools/combat_tracker/effect.cpp
+    src/tools/combat_tracker/effect.cpp \
+    src/tools/audio/addonelementmanager.cpp
 
 lupdate_only{
 SOURCES += *.qml \
@@ -115,7 +116,8 @@ HEADERS  += src/functions.h \
     src/tools/audio/spotify.h \
     src/tools/audio/audioexporter.h \
     src/tools/combat_tracker/effecttool.h \
-    src/tools/combat_tracker/effect.h
+    src/tools/combat_tracker/effect.h \
+    src/tools/audio/addonelementmanager.h
 
 
 DISTFILES += \

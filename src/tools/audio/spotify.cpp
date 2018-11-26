@@ -26,6 +26,8 @@ Spotify::Spotify(QObject *parent) : QObject(parent)
     m_spotify->setScope("user-library-read playlist-read-private streaming user-modify-playback-state user-read-currently-playing "
                         "user-read-playback-state");
 
+    // Settings Store for tokens
+    // TODO: Replace with secure keychain or something similar
     O0SettingsStore *settings = new O0SettingsStore("gm-companion");
     m_spotify->setStore(settings);
 
@@ -38,6 +40,7 @@ Spotify::Spotify(QObject *parent) : QObject(parent)
         emit authorize(url);
     });
 
+    // Timer for "current song" updates
     m_timer = new QTimer;
     m_timer->setInterval(5000);
     connect(m_timer, &QTimer::timeout, [ = ]() {
@@ -45,11 +48,7 @@ Spotify::Spotify(QObject *parent) : QObject(parent)
     });
 }
 
-void Spotify::grant()
-{
-    m_spotify->link();
-}
-
+// After linking succeeded
 void Spotify::granted()
 {
     emit authorized();
@@ -66,6 +65,7 @@ void Spotify::granted()
     }
 }
 
+// Send a put request
 void Spotify::put(QUrl url, QString params)
 {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
@@ -76,6 +76,7 @@ void Spotify::put(QUrl url, QString params)
     requestor->put(r, params.toLocal8Bit());
 }
 
+// Play a specific playlist or album
 void Spotify::play(QString id, int offset)
 {
     if (isGranted())
@@ -87,7 +88,7 @@ void Spotify::play(QString id, int offset)
         QJsonObject jo;
         jo.insert("context_uri", id);
 
-        if (offset < m_trackIdList.size())
+        if ((offset < m_trackIdList.size()) && (offset > -1))
         {
             QJsonObject jOffset;
             jOffset.insert("uri", m_trackIdList[offset]);
@@ -114,6 +115,7 @@ void Spotify::play(QString id, int offset)
     }
 }
 
+// Conitinue playback
 void Spotify::play()
 {
     qDebug() << "Playing...";
@@ -125,6 +127,7 @@ void Spotify::play()
     getCurrentPlaylist();
 }
 
+// Stop playback
 void Spotify::stop()
 {
     m_timer->stop();
@@ -132,6 +135,7 @@ void Spotify::stop()
     m_isPlaying = false;
 }
 
+// Toggle pause / play
 void Spotify::pausePlay()
 {
     if (m_isPlaying)
@@ -146,11 +150,13 @@ void Spotify::pausePlay()
     }
 }
 
+// Start playing song at index in playlist
 void Spotify::setIndex(int index)
 {
     play(m_currentId, index);
 }
 
+// Switch to next song in playlist
 void Spotify::next()
 {
     qDebug() << "Switching to next song ...";
@@ -166,18 +172,21 @@ void Spotify::next()
     requestor->post(request, "");
 }
 
+// Play current song again
 void Spotify::again()
 {
     qDebug() << "Playing track again ...";
     put(QUrl("https://api.spotify.com/v1/me/player/seek?position_ms=" + QString::number(1)));
 }
 
+// Set the volume, takes linear scale
 void Spotify::setVolume(int volume)
 {
     put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" + QString::number(volume)));
     m_volume = volume;
 }
 
+// Get MetaData of the song that's currently playing
 void Spotify::getCurrentSong()
 {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
@@ -212,18 +221,13 @@ void Spotify::getCurrentSong()
     requestor->get(request);
 }
 
-int Spotify::getIndex()
-{
-    return m_currentIndex;
-}
-
+// Get track list of current playlist
 void Spotify::getCurrentPlaylist()
 {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
     O2Requestor *requestor = new O2Requestor(manager, m_spotify, this);
     QString id             = m_currentId;
-
 
     QString user          = id.replace("spotify:user:", "");
     QString replaceString = "spotify:user:";
@@ -232,7 +236,6 @@ void Spotify::getCurrentPlaylist()
     QString playlist = id.replace(replaceString, "").replace(user, "").replace(":playlist:", "");
 
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/playlists/" + playlist));
-
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
 
     connect(requestor, &O2Requestor::finished, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data) {

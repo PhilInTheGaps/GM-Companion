@@ -162,4 +162,8 @@
     <qresource prefix="/ui">
         <file>styles.ini</file>
     </qresource>
+    <qresource prefix="/addons/audio">
+        <file alias="addon.ini">addons/audio/addon.ini</file>
+        <file alias="spotify.json">addons/audio/spotify.json</file>
+    </qresource>
 </RCC>

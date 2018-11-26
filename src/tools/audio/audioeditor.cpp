@@ -241,7 +241,7 @@ void AudioEditor::moveElement(QString element, int type, int positions)
     }
 }
 
-void AudioEditor::createList(QString listName, int type)
+void AudioEditor::createList(QString listName, int type, QStringList args)
 {
     if ((m_currentProject != "") && (m_currentCategory != "") && (m_currentScenario != "") && (listName != ""))
     {
@@ -287,6 +287,12 @@ void AudioEditor::createList(QString listName, int type)
 
             settings.beginGroup(m_currentCategory + "_" + m_currentScenario + "_" + listName + suffix2);
             settings.setValue("name", listName);
+
+            if ((type == 3) && (args.size() > 0))
+            {
+                settings.setValue("id", args[0]);
+            }
+
             settings.endGroup();
 
             emit elementListChanged();

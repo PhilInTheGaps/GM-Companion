@@ -138,7 +138,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
-                    text: qsTr("RPG Addons")
+                    text: qsTr("Addons")
                     color: tab_bar.currentIndex == 2 ? "black" : color_scheme.toolbarTextColor
                     font.pointSize: 12
                     font.bold: true

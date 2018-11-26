@@ -58,5 +58,6 @@
         <file>tools/dice/DiceButton.qml</file>
         <file>tools/dice/DiceCombatTracker.qml</file>
         <file>tools/combat_tracker/EffectPage.qml</file>
+        <file>tools/audio/editor/AddonElementDialog.qml</file>
     </qresource>
 </RCC>

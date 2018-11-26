@@ -34,11 +34,6 @@ void AudioEditorFileBrowser::setType(int type)
     updateFiles();
 }
 
-int AudioEditorFileBrowser::getType()
-{
-    return m_type;
-}
-
 // Calculate current path
 QString AudioEditorFileBrowser::m_currentPath()
 {
@@ -76,6 +71,8 @@ void AudioEditorFileBrowser::folderBack()
 void AudioEditorFileBrowser::updateFolders()
 {
     m_folders.clear();
+    m_folderPaths.clear();
+
     QString currentPath = m_currentPath();
 
     for (QString f : getFolders(m_basePath + currentPath))
@@ -107,24 +104,4 @@ void AudioEditorFileBrowser::updateFiles()
     }
 
     emit filesChanged();
-}
-
-QStringList AudioEditorFileBrowser::getFolderList()
-{
-    return m_folders;
-}
-
-QStringList AudioEditorFileBrowser::getFolderPaths()
-{
-    return m_folderPaths;
-}
-
-QStringList AudioEditorFileBrowser::getFileList()
-{
-    return m_files;
-}
-
-QStringList AudioEditorFileBrowser::getFilePaths()
-{
-    return m_filePaths;
 }

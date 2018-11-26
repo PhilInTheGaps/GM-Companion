@@ -15,6 +15,7 @@
 #include "tools/audio/audioeditor.h"
 #include "tools/audio/audioexporter.h"
 #include "tools/audio/audioeditorfilebrowser.h"
+#include "tools/audio/addonelementmanager.h"
 #include "tools/maptool.h"
 #include "tools/dicetool.h"
 #include "tools/shop/shoptool.h"
@@ -42,6 +43,7 @@ void loadQmlClasses()
     qmlRegisterType<AudioEditor>(           "gm.companion.audioeditor",            1, 0, "AudioEditor");
     qmlRegisterType<AudioExporter>(         "gm.companion.audioexporter",          1, 0, "AudioExporter");
     qmlRegisterType<AudioEditorFileBrowser>("gm.companion.audioeditorfilebrowser", 1, 0, "AudioEditorFileBrowserTool");
+    qmlRegisterType<AddonElementManager>(   "gm.companion.addonelementmanager",    1, 0, "AddonElementManager");
 
     qmlRegisterType<MapTool>(               "gm.companion.maptool",                1, 0, "MapTool");
     qmlRegisterType<DiceTool>(              "gm.companion.dicetool",               1, 0, "DiceTool");
