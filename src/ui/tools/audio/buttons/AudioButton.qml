@@ -8,10 +8,6 @@ import gm.companion.platforms 1.0
 import FontAwesome 2.0
 
 Rectangle {
-    readonly property int min_width: 175
-    readonly property int count_per_row: parent ? Math.floor(
-                                                      parent.width / min_width) : 1
-
     property var element_name
     property var icon_path
     property var element_type
@@ -50,12 +46,7 @@ Rectangle {
     }
 
     width: {
-        if (platform.isAndroid) {
-            parent ? parent.parent.width / 8 : 0
-        } else {
-            parent ? (parent.width - parent.spacing * (count_per_row - 1)
-                      - parent.padding * 2) / count_per_row : 0
-        }
+        parent.button_width
     }
 
     height: width + text.height

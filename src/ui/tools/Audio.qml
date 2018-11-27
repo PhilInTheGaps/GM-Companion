@@ -522,6 +522,10 @@ Page {
 
                             width: audio_scroll_view.width
 
+                            readonly property int min_width: 175
+                            readonly property int count_per_row: parent ? Math.floor(parent.width / min_width) : 1
+                            readonly property int button_width: platform.isAndroid ? (width / 8) : ((width - spacing * (count_per_row - 1) - padding * 2) / count_per_row)
+
                             Repeater {
                                 id: element_repeater
 
