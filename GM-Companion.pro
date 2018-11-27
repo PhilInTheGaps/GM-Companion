@@ -14,7 +14,7 @@ include(lib/o2/src/src.pri)
 TARGET = out/gm-companion
 TEMPLATE = app
 
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
 
 CONFIG += c++11
 

@@ -10,6 +10,7 @@
 #include <QIcon>
 #include <QMap>
 #include <QtWebEngine>
+#include <QSGRendererInterface>
 
 #include "tools/audio/audiotool.h"
 #include "tools/audio/audioeditor.h"
@@ -68,14 +69,17 @@ void loadQmlClasses()
 
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_WIN)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif // if defined(Q_OS_WIN)
-
     QGuiApplication app(argc, argv);
     app.setApplicationName("GM-Companion");
     app.setOrganizationName("GM-Companion");
     app.setOrganizationDomain("gm-companion.github.io");
+
+#if defined(Q_OS_WIN)
+//    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    app.setFont(QFont("Segoe UI"));
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
+#endif // if defined(Q_OS_WIN)
 
     qDebug().noquote() << "Starting GM-Companion ...";
 
