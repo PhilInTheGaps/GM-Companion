@@ -74,6 +74,7 @@ void AddonElementManager::resetChecked()
     emit elementsChanged();
 }
 
+// Find Spotify Playlists (and Albums)
 void AddonElementManager::findSpotifyPlaylists()
 {
     m_spotifyPlaylistNames.clear();
@@ -99,18 +100,21 @@ void AddonElementManager::findSpotifyPlaylists()
 
                 if (folderName == m_currentSpotifyFolder)
                 {
-                    auto playlists = folder.toObject().value("playlists").toArray();
-
-                    for (auto playlist : playlists)
+                    for (QString value : { "playlists", "albums" })
                     {
-                        auto name = playlist.toObject().value("name").toString();
+                        auto playlists = folder.toObject().value(value).toArray();
 
-                        if (!m_spotifyPlaylistNames.contains(name))
+                        for (auto playlist : playlists)
                         {
-                            auto uri = playlist.toObject().value("uri").toString();
-                            m_spotifyPlaylistURIs.append(uri);
-                            m_spotifyPlaylistNames.append(name);
-                            m_addSpotifyPlaylists.append(false);
+                            auto name = playlist.toObject().value("name").toString();
+
+                            if (!m_spotifyPlaylistNames.contains(name))
+                            {
+                                auto uri = playlist.toObject().value("uri").toString();
+                                m_spotifyPlaylistURIs.append(uri);
+                                m_spotifyPlaylistNames.append(name);
+                                m_addSpotifyPlaylists.append(false);
+                            }
                         }
                     }
                 }

@@ -1,0 +1,18 @@
+{
+	"data": [
+		{
+			"folder": "DSA",
+			"playlists": [],
+			"albums": [
+				{
+					"name": "Nostria / Andergast",
+					"uri": "spotify:album:6bNTAa9CqIDv3pycA2eH8f"
+				},
+				{
+					"name": "Die Siebenwindküste",
+					"uri": "spotify:album:5IKJkdsDfDT8RX22Sbjud3"
+				}
+			]
+		}
+	]
+}

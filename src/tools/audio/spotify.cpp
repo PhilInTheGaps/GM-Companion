@@ -81,7 +81,7 @@ void Spotify::play(QString id, int offset)
 {
     if (isGranted())
     {
-        qDebug() << "Playing:" << id;
+        qDebug() << "Playing:" << id << "Offset:" << offset;
         m_currentId    = id;
         m_currentIndex = offset;
 
@@ -118,7 +118,6 @@ void Spotify::play(QString id, int offset)
 // Conitinue playback
 void Spotify::play()
 {
-    qDebug() << "Playing...";
     put(QUrl("https://api.spotify.com/v1/me/player/play"));
     m_isPlaying = true;
     m_timer->start();
@@ -159,14 +158,13 @@ void Spotify::setIndex(int index)
 // Switch to next song in playlist
 void Spotify::next()
 {
-    qDebug() << "Switching to next song ...";
-
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     O2Requestor *requestor         = new O2Requestor(manager, m_spotify, this);
 
     QUrl url = QUrl("https://api.spotify.com/v1/me/player/next");
 
     QNetworkRequest request(url);
+
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
 
     requestor->post(request, "");
@@ -221,43 +219,76 @@ void Spotify::getCurrentSong()
     requestor->get(request);
 }
 
-// Get track list of current playlist
+// Get track list of current playlist or album
 void Spotify::getCurrentPlaylist()
 {
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    O2Requestor *requestor         = new O2Requestor(manager, m_spotify, this);
+    QString id                     = m_currentId;
 
-    O2Requestor *requestor = new O2Requestor(manager, m_spotify, this);
-    QString id             = m_currentId;
+    bool isPlaylist = id.contains("playlist");
 
-    QString user          = id.replace("spotify:user:", "");
-    QString replaceString = "spotify:user:";
+    if (isPlaylist)
+    {
+        QString user          = id.replace("spotify:user:", "");
+        QString replaceString = "spotify:user:";
 
-    user = user.left(user.indexOf(":"));
-    QString playlist = id.replace(replaceString, "").replace(user, "").replace(":playlist:", "");
+        user = user.left(user.indexOf(":"));
+        QString playlist = id.replace(replaceString, "").replace(user, "").replace(":playlist:", "");
 
-    QNetworkRequest request(QUrl("https://api.spotify.com/v1/playlists/" + playlist));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
+        QNetworkRequest request(QUrl("https://api.spotify.com/v1/playlists/" + playlist));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
 
-    connect(requestor, &O2Requestor::finished, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data) {
-        const auto document    = QJsonDocument::fromJson(data);
-        const auto root        = document.object();
-        const auto tracks      = root.value("tracks").toObject();
-        const auto tracksArray = tracks.value("items").toArray();
+        connect(requestor, &O2Requestor::finished, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data) {
+            const auto document    = QJsonDocument::fromJson(data);
+            const auto root        = document.object();
+            const auto tracks      = root.value("tracks").toObject();
+            const auto tracksArray = tracks.value("items").toArray();
 
-        m_trackList.clear();
-        m_trackIdList.clear();
+            m_trackList.clear();
+            m_trackIdList.clear();
 
-        for (auto trackPl : tracksArray)
-        {
-            const auto track = trackPl.toObject().value("track").toObject();
-            m_trackList.append(track.value("name").toString());
-            m_trackIdList.append(track.value("uri").toString());
-        }
+            for (auto trackPl : tracksArray)
+            {
+                const auto track = trackPl.toObject().value("track").toObject();
+                m_trackList.append(track.value("name").toString());
+                m_trackIdList.append(track.value("uri").toString());
+            }
 
-        emit currentPlaylistChanged(m_trackList);
-    });
+            emit currentPlaylistChanged(m_trackList);
+        });
 
-    requestor->get(request);
+        requestor->get(request);
+    }
+    else // Album
+    {
+        QString album = id.replace("spotify:album:", "");
+
+        QNetworkRequest request(QUrl("https://api.spotify.com/v1/albums/" + album + "/tracks"));
+        request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
+
+        connect(requestor, &O2Requestor::finished, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data) {
+            const auto document    = QJsonDocument::fromJson(data);
+            const auto root        = document.object();
+            const auto tracksArray = root.value("items").toArray();
+
+            m_trackList.clear();
+            m_trackIdList.clear();
+
+            qDebug() << tracksArray;
+
+            for (auto trackO : tracksArray)
+            {
+                qDebug() << trackO.toObject();
+                m_trackList.append(trackO.toObject().value("name").toString());
+                m_trackIdList.append(trackO.toObject().value("uri").toString());
+            }
+
+            emit currentPlaylistChanged(m_trackList);
+        });
+
+        requestor->get(request);
+    }
 }
 
 void Spotify::fetchIcon(QString id, int index)

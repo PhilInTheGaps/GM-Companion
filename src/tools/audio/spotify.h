@@ -25,7 +25,7 @@ public:
     void grant() { m_spotify->link(); }
     bool isGranted() const { return m_spotify->linked(); }
 
-    void play(QString id, int offset = 0);
+    void play(QString id, int offset = -1);
     void play();
     void stop();
     void pausePlay();
