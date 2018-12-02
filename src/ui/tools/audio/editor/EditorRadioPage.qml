@@ -103,15 +103,26 @@ Page {
             color: color_scheme.textColor
         }
 
-        TextField {
-            id: icon_textfield
-            width: parent.width
-            selectByMouse: true
-            placeholderText: qsTr("Icon Path")
+        Row {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 5
 
-            onTextChanged: {
-                changeIcon(text)
-                icon_image.source = "file://" + resourcesPath + text
+            TextField {
+                id: icon_textfield
+                width: parent.width - parent.spacing - icon_finder
+                selectByMouse: true
+                placeholderText: qsTr("Icon Path")
+
+                onTextChanged: {
+                    changeIcon(text)
+                    icon_image.source = "file://" + resourcesPath + text
+                }
+            }
+
+            IconFinder {
+                id: icon_finder
+                text_field: icon_textfield
             }
         }
 

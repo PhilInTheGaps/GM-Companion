@@ -5,6 +5,7 @@ import QtQuick.Window 2.2
 import gm.companion.audioeditor 1.0
 import gm.companion.colorscheme 1.0
 import gm.companion.settingstool 1.0
+import gm.companion.platforms 1.0
 import FontAwesome 2.0
 import "../buttons"
 import "../audio_exporter"
@@ -115,6 +116,10 @@ Page {
 
     background: Rectangle {
         color: color_scheme.backgroundColor
+    }
+
+    PlatformDetails {
+        id: platform_details
     }
 
     // New Project
@@ -272,10 +277,14 @@ Page {
                 id: sort_button
 
                 Row {
-                    anchors.centerIn: parent
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 5
                     spacing: 5
 
                     Text {
+                        id: sort_icon
                         text: FontAwesome.sortAlphaDown
                         font.family: FontAwesome.familySolid
                         font.pixelSize: parent.height
@@ -285,6 +294,8 @@ Page {
                     Text {
                         text: qsTr("Sort Alphabetically")
                         anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width - parent.spacing - sort_icon.width
+                        elide: Text.ElideRight
                     }
                 }
             }

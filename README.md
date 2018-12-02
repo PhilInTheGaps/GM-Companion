@@ -16,17 +16,18 @@ A tool for the gamemaster of a tabletop RPG session.
 [Documentation](https://github.com/PhilInTheGaps/GM-Companion/wiki)
 
 ## Credits
- 
-Dice and effect icons by [Skoll](http://game-icons.net/), [Delapouite](http://delapouite.com/), [Lorc](http://lorcblog.blogspot.com/) and [Cathelineau](https://game-icons.net/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)  
-[FontAwesome](https://fontawesome.com/)  
-[FontAwesome QML Implementation](https://github.com/PhilInTheGaps/fontawesome.pri) fork of [FontAwesome.pri](https://github.com/benlau/fontawesome.pri) by [Ben Lau](https://github.com/benlau)  
-[o2 (OAuth2 library)](https://github.com/pipacs/o2) by [pipacs](https://github.com/pipacs)  
+
+- Dice and effect icons by [Skoll](http://game-icons.net/), [Delapouite](http://delapouite.com/), [Lorc](http://lorcblog.blogspot.com/) and [Cathelineau](https://game-icons.net/) under the [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)  
+- [FontAwesome](https://fontawesome.com/)  
+- [FontAwesome QML Implementation](https://github.com/PhilInTheGaps/fontawesome.pri) fork of [FontAwesome.pri](https://github.com/benlau/fontawesome.pri) by [Ben Lau](https://github.com/benlau)  
+- [o2 (OAuth2 library)](https://github.com/pipacs/o2) by [pipacs](https://github.com/pipacs)  
+- Spotify playlists by [Brian Davis (Bezoing)](https://open.spotify.com/user/bezoing?si=acN6RQebQTS2iZEUWDKRKA) and [gentilpuck](https://open.spotify.com/user/gentilpuck?si=nZpk5I8wTBuWdcBrrix_qg)
 
 # Installation
 
 ## Windows
 
-For Windows there is only a 64 bits version available. If you want to use the GM-Companion on a 32 bits machine, you have to build the program from source. 
+For Windows there is only a 64 bits version available. If you want to use the GM-Companion on a 32 bits machine, you have to build the program from source.
 
 [Release 1.0.2 (Win x64)](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.0.2/gm-companion_1.0.2_win64.zip)  
 
@@ -75,12 +76,46 @@ GM-Companion requires Qt5 to build.
 
 So the build steps would look something like this:  
 1. Clone the [GitHub repository](https://github.com/PhilInTheGaps/GM-Companion). Make sure to initialize all submodules!  
+`git clone --recursive https://github.com/PhilInTheGaps/GM-Companion`
 2. Install [Qt5](https://www.qt.io/) (GM-Companion requires at least version 5.10)  
 3. If you are on Linux install [TagLib](http://taglib.org/)  
 4. Switch to the GM-Companion folder  
 5. Run qmake  
 6. Run make  
 
+# Usage / Quickstart
 
+For detailed instructions see the [Wiki](https://github.com/PhilInTheGaps/GM-Companion/wiki).
+
+## Audio Tool
+
+- Go to settings, set path of music and sound files
+- Open audio editor, create new project
+- Add a category and a scenario
+- Create an element, add music/sound files, radio playlist file or URL
+- Optionally create a thumbnail image, place it in your resources path, add image to element
+
+### Spotify
+
+Using Spotify with GM-Companion requires some additional steps first:
+
+- Go to [Spotify developer page](https://developer.spotify.com/dashboard)
+- "Create an App"
+- In app settings add _http://127.0.0.1:1965/_ as a redirect URI
+- Go to GM-Companion settings, add "Client ID" and "Client Secret" of your app
+- Restart GM-Companion
+- You can now add Spotify playlists and albums as elements, the "_Audio Addon_" has some great RPG related playlists. You can add by adding a Spotify element and pressing "_Add from Addons_"
+
+## Map Tool
+
+- Open your maps folder (see "Paths" settings)
+- Create a new folder
+- Place map images inside
+
+## Character Tool
+
+- Open your characters folder (see "Paths" settings)
+- Create a new folder and name it after the character
+- Place images of the character sheet inside
 
 Have fun!

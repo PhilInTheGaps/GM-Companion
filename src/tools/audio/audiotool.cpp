@@ -718,8 +718,11 @@ void AudioTool::onSpotifyIconChanged(int index, QString url)
     if ((index > -1) && (index < m_elementIcons.size()))
     {
         try {
-            m_elementIcons[index] = url;
-            emit elementIconsChanged();
+            if (m_elementIcons[index] == "")
+            {
+                m_elementIcons[index] = url;
+                emit elementIconsChanged();
+            }
         } catch (...) {
             qWarning() << "Something went wrong changing a Spotify icon";
         }

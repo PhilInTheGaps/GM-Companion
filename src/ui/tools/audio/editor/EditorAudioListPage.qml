@@ -419,13 +419,18 @@ Page {
                     TextField {
                         id: icon_path_textfield
                         placeholderText: qsTr("Icon Path")
-                        width: parent.width
+                        width: parent.width - parent.spacing - icon_finder.width
                         selectByMouse: true
 
                         onTextChanged: {
                             changeIcon(text)
                             icon_image.source = "file://" + resourcesPath + text
                         }
+                    }
+
+                    IconFinder {
+                        id: icon_finder
+                        text_field: icon_path_textfield
                     }
                 }
 
