@@ -15,17 +15,17 @@ addons:
 matrix:
   include:
     - os: linux
-	  addons:
-		apt:
-		  sources:
-			- ubuntu-toolchain-r-test
-		  packages:
-			- g++-7
-	  env:
-		- MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       compiler: gcc
       before_install:
-      	- eval "${MATRIX_EVAL}"
+        - eval "${MATRIX_EVAL}"
         - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
         - sudo apt-get update -qq
         - sudo apt-get -y install binutils libpulse-dev qt510base qt510declarative qt510multimedia qt510networkauth-no-lgpl qt510quickcontrols qt510quickcontrols2 qt510script qt510tools qt510translations qt510webengine
@@ -36,11 +36,11 @@ matrix:
         - make
         
     - os: osx
-	  osx_image: xcode8
+      osx_image: xcode8
       env:
         - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
       before_install:
-      	- eval "${MATRIX_EVAL}"
+        - eval "${MATRIX_EVAL}"
         - brew update
         - brew install qt5
         - brew link qt5 --force
