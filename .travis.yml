@@ -18,8 +18,8 @@ matrix:
       compiler: gcc
       before_install:
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        - sudo apt-get update binutils libpulse-dev qt512base qt512declarative qt512graphicaleffects qt512imageformats qt512multimedia qt512networkauth-no-lgpl qt512quickcontrols qt512quickcontrols2 qt512script qt512tools qt512translations qt512webengine -q
-        - sudo apt-get install  -y
+        - sudo apt-get update -q
+        - sudo apt-get install binutils libpulse-dev qt512base qt512declarative qt512graphicaleffects qt512imageformats qt512multimedia qt512networkauth-no-lgpl qt512quickcontrols qt512quickcontrols2 qt512script qt512tools qt512translations qt512webengine -y
         - source /opt/qt512/bin/qt512-env.sh
 
       script:
