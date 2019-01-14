@@ -202,6 +202,4 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
     INSTALLS += resources
 }
 
-unix:!macx:!android: LIBS += -ltag
-
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
