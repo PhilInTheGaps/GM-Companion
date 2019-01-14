@@ -1,6 +1,6 @@
 language: cpp
 sudo: required
-dist: trusty
+dist: xenial
 
 addons:
   coverity_scan:
@@ -18,29 +18,32 @@ matrix:
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - ppa:beineri/opt-qt-5.12.0-xenial
           packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+            - binutils
+            - libpulse-dev
+            - qt512base
+            - qt512declarative
+            - qt512graphicaleffects
+            - qt512imageformats
+            - qt512multimedia
+            - qt512networkauth-no-lgpl
+            - qt512quickcontrols
+            - qt512quickcontrols2
+            - qt512script
+            - qt512tools
+            - qt512translations
+            - qt512webengine
       compiler: gcc
       before_install:
-        - eval "${MATRIX_EVAL}"
-        - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty
-        - sudo apt-get update -qq
-        - sudo apt-get -y install binutils libpulse-dev qt510base qt510declarative qt510multimedia qt510networkauth-no-lgpl qt510quickcontrols qt510quickcontrols2 qt510script qt510tools qt510translations qt510webengine
-        - source /opt/qt510/bin/qt510-env.sh
+        - source /opt/qt512/bin/qt512-env.sh
 
       script:
         - qmake
         - make
         
     - os: osx
-      osx_image: xcode8
-      env:
-        - MATRIX_EVAL="brew install gcc && CC=gcc-7 && CXX=g++-7"
       before_install:
-        - eval "${MATRIX_EVAL}"
         - brew update
         - brew install qt5
         - brew link qt5 --force

@@ -18,8 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
 
 CONFIG += c++14
 
-#CONFIG(debug, release|debug):DEFINES += _DEBUG
-CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT _DEBUG
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += src/main.cpp \
     # UI
