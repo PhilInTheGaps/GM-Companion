@@ -2,69 +2,75 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
 
-Rectangle {
+Button {
+    id: root
     property var element
     property var element_icon
-    signal clicked(string element)
+    property bool has_icon: true
 
-    objectName: element
-    width: parent ? parent.width : 0
-    height: 40
-
-    ColorScheme {
-        id: color_scheme
-    }
+    height: color_scheme.toolbarHeight
+    hoverEnabled: true
 
     Image {
         id: icon
-        source: element_icon
-        width: height
-        height: parent.height - 10
-        x: 5
-        anchors.verticalCenter: parent.verticalCenter
+        source: if (element_icon.startsWith("http")) {
+                    element_icon
+                } else if (has_icon) {
+                    "file:///" + element_icon
+                } else {
+                    "/icons/media/sound_image.png"
+                }
+
+        anchors.fill: parent
 
         sourceSize.width: width
         sourceSize.height: height
+
+        fillMode: Image.PreserveAspectCrop
     }
 
-    Text {
-        id: text
-        text: element
-        color: "black"
-        x: icon.width + 10
-        y: 5
-        width: parent.width - icon.width - 10 - x_button.width
-        clip: true
-        elide: Text.ElideRight
-        font.pointSize: 12
+    Rectangle {
+        id: text_overlay
+        color: Qt.rgba(0, 0, 0, 0.4)
+        anchors.fill: parent
 
-        anchors.verticalCenter: parent.verticalCenter
-    }
+        Text {
+            id: text
+            text: element
+            color: "white"
 
-    color: "transparent"
+            anchors.fill: parent
+            anchors.margins: 5
 
-    Button {
-        x: parent.width - width - 5
-        id: x_button
-        hoverEnabled: true
-        height: parent.height - 10
-        width: height
-        anchors.verticalCenter: parent.verticalCenter
+            //        font.pointSize: 12
+            clip: true
+            elide: Text.ElideRight
 
-        background: Rectangle {
-            color: "transparent"
+            verticalAlignment: Text.AlignVCenter
         }
+    }
+
+    Rectangle {
+        id: overlay
+        anchors.fill: parent
+        color: Qt.rgba(0, 0, 0, 0.5)
+        visible: parent.hovered
 
         Text {
             text: FontAwesome.times
             font.pixelSize: parent.height - 10
             font.family: FontAwesome.familySolid
             anchors.centerIn: parent
-            color: parent.pressed ? "darkgrey" : parent.hovered ? "grey" : color_scheme.primaryButtonColor
+            color: parent.parent.pressed ? "darkgrey" : "white"
         }
+    }
 
-        onClicked: parent.clicked(parent.element)
+    background: Rectangle {
+        color: "transparent"
+    }
+
+    onClicked: {
+        audio_tool.stopSound(element)
     }
 }

@@ -3,31 +3,24 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.3
 
-import gm.companion.platforms 1.0
-import gm.companion.settingstool 1.0
-import gm.companion.updatemanager 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.addonmanager 1.0
 import "./settings"
 
 Page {
     id: settings_page
 
-    SettingsTool {
-        id: settings_tool
+    Component.onCompleted: {
+        addon_manager.updateAddonList()
+
+        if (settings_tool.getCheckForUpdates())
+            update_manager.checkForUpdates()
     }
 
-    UpdateManager {
-        id: update_manager
-        Component.onCompleted: {
-            addon_manager.updateAddonList()
-
-            if (settings_tool.getCheckForUpdates())
-                checkForUpdates()
-        }
+    Connections {
+        target: update_manager
 
         onUpdateAvailable: {
-            update_text.text = qsTr("Found new Version: ") + newestVersion
+            update_text.text = qsTr(
+                        "Found new Version: ") + update_manager.newestVersion
             update_text.visible = true
             open_downloads_button.visible = true
             update_busy_indicator.visible = false
@@ -40,34 +33,26 @@ Page {
         }
     }
 
-    AddonManager {
-        id: addon_manager
+    Connections {
+        target: addon_manager
 
         onAddonListChanged: {
             addon_column.children = []
 
             var component = Qt.createComponent("./settings/AddonItem.qml")
 
-            for (var i = 0; i < getAddonNames().length; i++) {
+            for (var i = 0; i < addon_manager.getAddonNames().length; i++) {
 
                 var addonItem = component.createObject(addon_column, {
-                                                           "addon": getAddonNames(
+                                                           "addon": addon_manager.getAddonNames(
                                                                         )[i],
-                                                           "description": getAddonDescriptions()[i],
-                                                           "folder": getAddonPathNames(
+                                                           "description": addon_manager.getAddonDescriptions()[i],
+                                                           "folder": addon_manager.getAddonPathNames(
                                                                          )[i],
-                                                           "addon_enabled": getAddonEnabledList()[i]
+                                                           "addon_enabled": addon_manager.getAddonEnabledList()[i]
                                                        })
             }
         }
-    }
-
-    PlatformDetails {
-        id: platform_details
-    }
-
-    ColorScheme {
-        id: color_scheme
     }
 
     background: Rectangle {
@@ -82,7 +67,7 @@ Page {
         selectFolder: true
 
         onAccepted: {
-            if (platform_details.isWindows)
+            if (platform.isWindows)
                 text_field.text = fileUrl.toString().replace("file:///", "")
             else
                 text_field.text = fileUrl.toString().replace("file://", "")
@@ -138,7 +123,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
-                    text: qsTr("Addons")
+                    text: qsTr("Cloud Storage")
                     color: tab_bar.currentIndex == 2 ? "black" : color_scheme.toolbarTextColor
                     font.pointSize: 12
                     font.bold: true
@@ -155,7 +140,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
-                    text: qsTr("Info")
+                    text: qsTr("Addons")
                     color: tab_bar.currentIndex == 3 ? "black" : color_scheme.toolbarTextColor
                     font.pointSize: 12
                     font.bold: true
@@ -164,6 +149,23 @@ Page {
 
                 background: Rectangle {
                     color: tab_bar.currentIndex == 3 ? "white" : color_scheme.toolbarColor
+                }
+            }
+
+            TabButton {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    text: qsTr("Info")
+                    color: tab_bar.currentIndex == 4 ? "black" : color_scheme.toolbarTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    anchors.centerIn: parent
+                }
+
+                background: Rectangle {
+                    color: tab_bar.currentIndex == 4 ? "white" : color_scheme.toolbarColor
                 }
             }
         }
@@ -196,8 +198,7 @@ Page {
 
                     Text {
                         text: qsTr("Select Language")
-                        width: platform_details.isAndroid ? settings_page.width
-                                                            / 4 : language_box.width
+                        width: platform.isAndroid ? settings_page.width / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -239,8 +240,7 @@ Page {
 
                     Text {
                         text: qsTr("Select Style")
-                        width: platform_details.isAndroid ? settings_page.width
-                                                            / 4 : language_box.width
+                        width: platform.isAndroid ? settings_page.width / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -254,6 +254,7 @@ Page {
                         onCurrentTextChanged: {
                             if (loaded) {
                                 settings_tool.setUiStyle(currentText)
+                                color_scheme.updateColors()
                             }
                         }
 
@@ -287,10 +288,11 @@ Page {
                     color: "transparent"
                 }
 
+                // Updates
                 Text {
                     text: qsTr("Updates")
                     font.bold: true
-                    visible: platform_details.isAndroid ? false : true
+                    visible: platform.isAndroid ? false : true
                     color: color_scheme.textColor
                 }
 
@@ -301,7 +303,7 @@ Page {
                     Button {
                         id: check_for_updates_button
                         text: qsTr("Check for Updates")
-                        visible: platform_details.isAndroid ? false : true
+                        visible: platform.isAndroid ? false : true
 
                         onClicked: {
                             update_text.visible = false
@@ -358,10 +360,11 @@ Page {
                     color: "transparent"
                 }
 
+                // Spotify
                 Text {
                     text: qsTr("Spotify (Experimental Feature)")
                     font.bold: true
-                    visible: platform_details.isAndroid ? false : true
+                    visible: platform.isAndroid ? false : true
                     color: color_scheme.textColor
                 }
 
@@ -369,8 +372,7 @@ Page {
                     spacing: 10
                     Text {
                         text: qsTr("Client ID")
-                        width: platform_details.isAndroid ? settings_page.width
-                                                            / 4 : language_box.width
+                        width: platform.isAndroid ? settings_page.width / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -388,8 +390,7 @@ Page {
                     spacing: 10
                     Text {
                         text: qsTr("Client Secret")
-                        width: platform_details.isAndroid ? settings_page.width
-                                                            / 4 : language_box.width
+                        width: platform.isAndroid ? settings_page.width / 4 : language_box.width
                         anchors.verticalCenter: parent.verticalCenter
                         color: color_scheme.textColor
                     }
@@ -405,7 +406,7 @@ Page {
 
                 Text {
                     text: qsTr("Requires Spotify Premium")
-                    visible: platform_details.isAndroid ? false : true
+                    visible: platform.isAndroid ? false : true
                     color: color_scheme.textColor
                 }
             }
@@ -473,6 +474,11 @@ Page {
                     width: height
                     color: "transparent"
                 }
+            }
+
+            // Cloud Storage
+            CloudPage {
+                id: cloud_page
             }
 
             // Addons

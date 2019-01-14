@@ -1,8 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 
-import gm.companion.addonelementmanager 1.0
-
 Dialog {
     id: root
 
@@ -10,15 +8,8 @@ Dialog {
 
     title: qsTr("Add Element from Addon")
 
-    AddonElementManager {
-        id: manager
-
-        onElementsChanged: element_repeater.model = getElements()
-    }
-
-    Component.onCompleted: {
-        manager.setFolder(manager.getSpotifyFolders()[manager.getSpotifyFolders(
-                                                          ).length - 1])
+    Connections {
+        target: audio_addon_element_manager
     }
 
     contentItem: Item {
@@ -29,12 +20,12 @@ Dialog {
             anchors.top: parent.top
 
             Repeater {
-                model: manager.getSpotifyFolders()
+                model: audio_addon_element_manager.spotifyFolders
 
                 TabButton {
                     text: modelData
 
-                    onClicked: manager.setFolder(modelData)
+                    onClicked: audio_addon_element_manager.setFolder(modelData)
                 }
             }
         }
@@ -56,13 +47,15 @@ Dialog {
 
                 Repeater {
                     id: element_repeater
+                    model: audio_addon_element_manager.elementNames
 
                     Row {
                         spacing: 1
+
                         CheckBox {
                             checked: false
-                            onCheckedChanged: manager.setAddElement(index,
-                                                                    checked)
+                            onCheckedChanged: audio_addon_element_manager.setAddElement(
+                                                  index, checked)
                         }
 
                         Text {
@@ -80,10 +73,7 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onAccepted: {
-        addAddonElements(manager.getElements(), manager.getURIs(),
-                         manager.getChecked())
-
-        element_repeater.model = []
-        manager.resetChecked()
+        audio_addon_element_manager.addElements()
+        audio_addon_element_manager.resetChecked()
     }
 }

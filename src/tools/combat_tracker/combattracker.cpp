@@ -1,191 +1,195 @@
 #include "combattracker.h"
 
 #include <QDebug>
+#include <algorithm>
 
-CombatTracker::CombatTracker(QObject *parent) : QObject(parent)
+CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), qmlEngine(engine)
 {
     qDebug() << "Loading Combat Tracker ...";
+
+    effectTool = new EffectTool;
+
+    combatantListModel = new CombatantListModel;
+    qmlEngine->rootContext()->setContextProperty("combatantListModel", combatantListModel);
 }
 
+/**
+ * @brief Reset the rounds and the current index
+ */
 void CombatTracker::resetRounds()
 {
     m_currentRound = 1;
-    m_currentIndex = getStartIndex();
+    m_currentIndex = 0;
 
     emit currentRoundChanged();
+    emit currentIndexChanged();
 }
 
+/**
+ * @brief Delete all combatants
+ */
 void CombatTracker::clear()
 {
+    combatantListModel->clear();
+
+    for (auto c : m_combatants)
+    {
+        if (c) c->deleteLater();
+    }
+
     m_combatants.clear();
     m_currentIndex = 0;
-    m_currentRound = 1;
+    m_currentRound = 0;
 
     emit combatantsChanged();
     emit currentRoundChanged();
+    emit currentIndexChanged();
 }
 
-// Switch to next combatant
+/**
+ * @brief Switch to next combatant
+ */
 void CombatTracker::next()
 {
-    int next = getNextIndex();
-
-    if ((m_currentIndex < m_combatants.size()) && (next > -1))
+    if (m_currentIndex + 1 < m_combatants.size())
     {
-        m_currentIndex = next;
-        emit currentIndexChanged();
+        m_currentIndex++;
     }
     else
     {
-        m_currentIndex = getStartIndex();
+        m_currentIndex = 0;
         m_currentRound++;
         emit currentRoundChanged();
+    }
+
+    emit currentIndexChanged();
+}
+
+/**
+ * @brief Add a combatant to the list
+ * @param name Name of the combatant
+ * @param ini Initiative of combatant
+ * @param health Health of combatant
+ * @param sort If combatant list should be sorted after adding
+ */
+void CombatTracker::add(QString name, int ini, int health, bool sort)
+{
+    if (!name.isEmpty() && (ini > -1))
+    {
+        auto c = new Combatant(name, "", ini, health);
+        m_combatants.append(c);
+        combatantListModel->setElements(m_combatants);
+
+        if ((m_currentRound == 0) && sort)
+        {
+            sortByIni();
+            m_currentRound = 1;
+            emit currentRoundChanged();
+        }
+    }
+    else if (sort) sortByIni();
+}
+
+/**
+ * @brief Remove combatant from list
+ * @param index Index of the combatant
+ */
+void CombatTracker::remove(int index)
+{
+    if ((index < m_combatants.size()) && (index > -1))
+    {
+        auto c = m_combatants.takeAt(index);
+        c->deleteLater();
+
+        if ((m_currentIndex == index) && (m_currentIndex > 0))
+        {
+            if (m_currentIndex == m_combatants.size())
+            {
+                m_currentIndex--;
+            }
+            else if (m_currentIndex < m_combatants.size() - 1)
+            {
+                m_currentIndex++;
+            }
+        }
+
+        combatantListModel->setElements(m_combatants);
+        emit combatantsChanged();
         emit currentIndexChanged();
     }
 }
 
-// Returns the index of the next combatant
-int CombatTracker::getNextIndex()
-{
-    int  oldIni         = (m_combatants.size() > 0) ? m_combatants.at(m_currentIndex).ini : -1;
-    int  newIni         = -1;
-    int  index          = -1;
-    bool foundDoubleIni = false;
-
-    for (int i = 0; i < m_combatants.size(); i++)
-    {
-        int tempIni = m_combatants.at(i).ini;
-
-        if ((tempIni < oldIni) && (tempIni > newIni))
-        {
-            newIni = tempIni;
-            index  = i;
-        }
-        else if ((tempIni == oldIni) && (m_currentIndex < i) && !foundDoubleIni)
-        {
-            foundDoubleIni = true;
-            index          = i;
-            newIni         = tempIni;
-        }
-    }
-
-    return index;
-}
-
-// Returns index of highest initiative
-int CombatTracker::getStartIndex()
-{
-    int index = 0;
-
-    for (int i = 0; i < m_combatants.size(); i++)
-    {
-        if (m_combatants.at(i).ini > m_combatants.at(index).ini)
-        {
-            index = i;
-        }
-    }
-
-    return index;
-}
-
-// Add a combatant to the list
-void CombatTracker::add(QString name, int ini, int health, bool sort)
-{
-    if ((name != NULL) && (ini > 0))
-    {
-        Combatant c;
-
-        c.name   = name;
-        c.ini    = ini;
-        c.health = health;
-        c.status = tr("Alive");
-        c.notes  = "";
-
-        m_combatants.append(c);
-
-        if (!sort) emit combatantsChanged();
-    }
-
-    if (sort) sortByIni();
-}
-
-// Remove Combatant from list
-void CombatTracker::remove(int index)
-{
-    if ((index > -1) && (m_combatants.size() > index))
-    {
-        m_combatants.removeAt(index);
-
-        if ((m_currentIndex == index) && (m_currentIndex > 0))
-        {
-            m_currentIndex--;
-            emit currentIndexChanged();
-        }
-    }
-
-    emit combatantsChanged();
-}
-
+/**
+ * @brief Sort the list of combatants by initiative
+ */
 void CombatTracker::sortByIni()
 {
-    QList<Combatant> sorted;
+    qDebug() << "CombatTracker: Sorting combatants ...";
 
-    while (!m_combatants.isEmpty())
-    {
-        int ini   = -1;
-        int index = 0;
+    Combatant *c = nullptr;
 
-        for (int i = 0; i < m_combatants.size(); i++)
-        {
-            Combatant c = m_combatants.at(i);
+    if (m_currentIndex < m_combatants.size()) c = m_combatants[m_currentIndex];
 
-            if (c.ini > ini)
-            {
-                index = i;
-                ini   = c.ini;
-            }
-        }
+    std::sort(m_combatants.begin(), m_combatants.end(), [](Combatant *a, Combatant *b) { return a->ini() > b->ini(); });
 
-        sorted.append(m_combatants.at(index));
-        m_combatants.removeAt(index);
-    }
+    combatantListModel->setElements(m_combatants);
 
-    m_combatants = sorted;
+    if (c && (m_currentRound > 0)) m_currentIndex = m_combatants.indexOf(c);
     emit combatantsChanged();
+    emit currentIndexChanged();
 }
 
+/**
+ * @brief Set the initiative of combatant
+ * @param index Index of combatant
+ * @param ini New initiative of combatant
+ */
 void CombatTracker::setIni(int index, int ini)
 {
-    Combatant c = m_combatants.at(index);
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
 
-    c.ini = ini;
+        if (!c) return;
 
-    m_combatants.replace(index, c);
+        if (ini > -1) c->setIni(ini);
+        else c->setIni(0);
+
+        sortByIni();
+    }
 }
 
+/**
+ * @brief Set the health of combatant
+ * @param index Index of combatant
+ * @param ini New health of combatant
+ */
 void CombatTracker::setHealth(int index, int health)
 {
-    Combatant c = m_combatants.at(index);
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
 
-    c.health = health;
+        if (!c) return;
 
-    m_combatants.replace(index, c);
+        if (health > -100) c->setHealth(health);
+        else c->setHealth(0);
+    }
 }
 
-void CombatTracker::setStatus(int index, QString status)
-{
-    Combatant c = m_combatants.at(index);
-
-    c.status = status;
-
-    m_combatants.replace(index, c);
-}
-
+/**
+ * @brief Set the notes on combatant
+ * @param index Index of combatant
+ * @param ini New notes on combatant
+ */
 void CombatTracker::setNotes(int index, QString notes)
 {
-    Combatant c = m_combatants.at(index);
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
 
-    c.notes = notes;
+        if (!c) return;
 
-    m_combatants.replace(index, c);
+        c->setNotes(notes);
+    }
 }

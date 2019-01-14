@@ -18,12 +18,11 @@ public:
     Q_INVOKABLE void loadEffects();
     QStringList effectTypes() const { return m_effectTypes; }
 
+    QStringList addons() const { return m_addonNames; }
     Q_INVOKABLE void loadAddons();
     Q_INVOKABLE void setCurrentAddon(QString addon) { m_currentAddon = m_addons[m_addonNames.indexOf(addon)]; loadEffects(); }
-    QStringList addons() const { return m_addonNames; }
 
     Q_INVOKABLE QString getIcon(int index);
-
     Q_INVOKABLE QString randomEffect(QString effectType);
 
 private:

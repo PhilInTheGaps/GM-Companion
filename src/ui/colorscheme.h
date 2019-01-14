@@ -9,26 +9,27 @@ class ColorScheme : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString textColor READ textColor NOTIFY textColorChanged)
-    Q_PROPERTY(QString backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QString toolbarColor READ toolbarColor NOTIFY toolbarColorChanged)
-    Q_PROPERTY(QString menuColor READ menuColor NOTIFY menuColorChanged)
-    Q_PROPERTY(QString dividerColor READ dividerColor NOTIFY dividerColorChanged)
-    Q_PROPERTY(QString primaryButtonColor READ primaryButtonColor NOTIFY primaryButtonColorChanged)
-    Q_PROPERTY(QString secondaryButtonColor READ secondaryButtonColor NOTIFY secondaryButtonColorChanged)
-    Q_PROPERTY(QString toolbarTextColor READ toolbarTextColor NOTIFY toolbarTextColorChanged)
-    Q_PROPERTY(QString buttonTextColor READ buttonTextColor NOTIFY buttonTextColorChanged)
-    Q_PROPERTY(QString listHeaderBackgroundColor READ listHeaderBackgroundColor NOTIFY listHeaderBackgroundColorChanged)
-    Q_PROPERTY(QString listHeaderTextColor READ listHeaderTextColor NOTIFY listHeaderTextColorChanged)
-    Q_PROPERTY(QString combatTrackerXType READ combatTrackerXType NOTIFY combatTrackerXTypeChanged)
-    Q_PROPERTY(int toolbarHeight READ toolbarHeight NOTIFY toolbarHeightChanged)
-    Q_PROPERTY(QString playlistHiglightTextColor READ playlistHiglightTextColor NOTIFY playlistHiglightTextColorChanged)
+    Q_PROPERTY(QString textColor READ textColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString backgroundColor READ backgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString toolbarColor READ toolbarColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString menuColor READ menuColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString dividerColor READ dividerColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString primaryButtonColor READ primaryButtonColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString secondaryButtonColor READ secondaryButtonColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString toolbarTextColor READ toolbarTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString buttonTextColor READ buttonTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString listHeaderBackgroundColor READ listHeaderBackgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString listHeaderTextColor READ listHeaderTextColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString combatTrackerXType READ combatTrackerXType NOTIFY colorsChanged)
+    Q_PROPERTY(int toolbarHeight READ toolbarHeight NOTIFY colorsChanged)
+    Q_PROPERTY(QString playlistHiglightTextColor READ playlistHiglightTextColor NOTIFY colorsChanged)
 
 public:
     explicit ColorScheme(QObject *parent = nullptr);
 
-    QString getColor(QString name, QString defaultValue = "white");
+    Q_INVOKABLE void updateColors();
 
+    QString getColor(QString name, QString defaultValue = "white");
     QString textColor() { return getColor("text_color", "black"); }
     QString backgroundColor() { return getColor("background_color", "white"); }
     QString toolbarColor() { return getColor("toolbar_color", "black"); }
@@ -45,20 +46,8 @@ public:
     int toolbarHeight() { return stylesheet->value("toolbar_height", 40).toInt(); }
 
 signals:
-    void textColorChanged();
-    void backgroundColorChanged();
-    void toolbarColorChanged();
-    void menuColorChanged();
-    void dividerColorChanged();
-    void primaryButtonColorChanged();
-    void secondaryButtonColorChanged();
-    void toolbarTextColorChanged();
-    void buttonTextColorChanged();
-    void listHeaderBackgroundColorChanged();
-    void listHeaderTextColorChanged();
-    void combatTrackerXTypeChanged();
-    void playlistHiglightTextColorChanged();
-    void toolbarHeightChanged();
+    void colorsChanged();
+
 
 private:
     SettingsManager *sManager;

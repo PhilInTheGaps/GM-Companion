@@ -7,10 +7,26 @@
 
 FileManager::FileManager()
 {
-    // The FileManager is responsible for creating .gm-companion directories and
-    // deleting old obsolete files
+    qDebug() << "Starting FileManager ...";
+
+    google   = new GoogleDrive;
+    sManager = new SettingsManager;
+    updateMode();
+
+    audioFileManager = new AudioFileManager(google);
+    mapsFileManager  = new MapsFileManager(google);
 }
 
+FileManager::~FileManager()
+{
+    google->deleteLater();
+    delete sManager;
+    audioFileManager->deleteLater();
+}
+
+/**
+ * @brief Create dirs and remove stuff from older versions
+ */
 void FileManager::run()
 {
     // Local home directory
@@ -20,10 +36,10 @@ void FileManager::run()
     QStringList dirList = { "addons", "audio", "characters", "maps", "music", "names", "shop", "notes", "radio", "resources", "units", "sounds", "styles", "logs" };
 
     // List of all files to be deleted
-    filesToBeDeleted.append({ "styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss", "styles/Dark.qss", "styles/White.qss" });
+    m_filesToBeDeleted.append({ "styles/DarkStyle.qss", "styles/DarkStyleTest.qss", "styles/DarkOrange.qss", "styles/Legacy.qss", "styles/Dark.qss", "styles/White.qss" });
 
     // List of all folders to be deleted
-    foldersToBeDeleted.append({ "names/DSA5", "names/SIFRP", "names/Generic" });
+    m_foldersToBeDeleted.append({ "names/DSA5", "names/SIFRP", "names/Generic" });
 
     // Check if local .gm-companion directory exists and create it if not
     if (!lDir.exists())
@@ -43,9 +59,9 @@ void FileManager::run()
     }
 
     // Delete obsolete Files
-    if (!filesToBeDeleted.isEmpty())
+    if (!m_filesToBeDeleted.isEmpty())
     {
-        for (QString file : filesToBeDeleted)
+        for (QString file : m_filesToBeDeleted)
         {
             QFile f(QDir::homePath() + "/.gm-companion/" + file);
 
@@ -58,9 +74,9 @@ void FileManager::run()
     }
 
     // Delete obsolete Folders
-    if (!foldersToBeDeleted.isEmpty())
+    if (!m_foldersToBeDeleted.isEmpty())
     {
-        for (QString folder : foldersToBeDeleted)
+        for (QString folder : m_foldersToBeDeleted)
         {
             if (QDir(QDir::homePath() + "/.gm-companion/" + folder).exists())
             {
@@ -91,4 +107,11 @@ bool FileManager::removeDir(const QString& dirName)
         result = QDir().rmdir(dirName);
     }
     return result;
+}
+
+void FileManager::updateMode()
+{
+    int mode = sManager->getSetting(Setting::cloudMode).toInt();
+
+    m_mode = static_cast<CloudMode>(mode);
 }

@@ -4,90 +4,79 @@ import QtQuick.Controls 2.2
 
 import "./shop"
 import FontAwesome 2.0
-import gm.companion.shoptool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 
 Page {
     id: item_shop
-
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
-    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
     }
 
-    ShopTool {
-        id: shop_tool
+    function updateCategory(cat) {
+        console.log("Changing category to " + cat)
 
-        onProjectsChanged: project_combo_box.model = projects
+        shop_tool.category = cat
+    }
 
-        function updateCategory(cat) {
-            console.log("Changing category to " + cat)
+    function updateCategories() {
+        shop_tool.loadCategories(project_combo_box.currentText)
+        category_column.children = []
+        shop_list_column.children = []
 
-            category = cat
+        var component = Qt.createComponent("./shop/CategoryButton.qml")
+
+        for (var i = 0; i < shop_tool.categories.length; i++) {
+            var button = component.createObject(category_column, {
+                                                    "x": 0,
+                                                    "y": 0,
+                                                    "category": shop_tool.categories[i],
+                                                    "parent_width": category_column.width
+                                                })
+
+            button.clicked.connect(updateCategory)
         }
+    }
 
-        function updateCategories() {
-            loadCategories(project_combo_box.currentText)
-            category_column.children = []
-            shop_list_column.children = []
+    function loadShop(shop) {
+        shop_tool.load(project_combo_box.currentText, shop)
+    }
 
-            var component = Qt.createComponent("./shop/CategoryButton.qml")
+    Connections {
+        target: shop_tool
 
-            for (var i = 0; i < categories.length; i++) {
-                var button = component.createObject(category_column, {
-                                                        "x": 0,
-                                                        "y": 0,
-                                                        "category": categories[i],
-                                                        "parent_width": category_column.width
-                                                    })
-
-                button.clicked.connect(updateCategory)
-            }
-        }
+        onProjectsChanged: project_combo_box.model = shop_tool.projects
 
         onCategoryChanged: {
             console.log("Category Changed")
 
-            loadShops(project_combo_box.currentText)
+            shop_tool.loadShops(project_combo_box.currentText)
             shop_list_column.children = []
 
             var component = Qt.createComponent("./shop/ShopButton.qml")
 
-            for (var i = 0; i < shops.length; i++) {
+            for (var i = 0; i < shop_tool.shops.length; i++) {
                 var button = component.createObject(shop_list_column, {
                                                         "x": 0,
                                                         "y": 0,
-                                                        "shop": shops[i]
+                                                        "shop": shop_tool.shops[i]
                                                     })
 
                 button.clicked.connect(loadShop)
             }
         }
 
-        function loadShop(shop) {
-            load(project_combo_box.currentText, shop)
-        }
-
-        onShopNameChanged: shop_title_text.text = shopName
-        onShopOwnerChanged: shop_owner_text.text = shopOwner
-        onShopDescriptionChanged: shop_description_text.text = shopDescription
+        onShopNameChanged: shop_title_text.text = shop_tool.shopName
+        onShopOwnerChanged: shop_owner_text.text = shop_tool.shopOwner
+        onShopDescriptionChanged: shop_description_text.text = shop_tool.shopDescription
 
         onItemsChanged: {
             list_model.clear()
 
-            for (var i = 0; i < item_names.length; i++) {
+            for (var i = 0; i < shop_tool.item_names.length; i++) {
                 list_model.append({
-                                      "item": item_names[i],
-                                      "price": item_prices[i],
-                                      "description": item_descriptions[i]
+                                      "item": shop_tool.item_names[i],
+                                      "price": shop_tool.item_prices[i],
+                                      "description": shop_tool.item_descriptions[i]
                                   })
             }
         }
@@ -116,7 +105,7 @@ Page {
 
                     model: shop_tool.projects
 
-                    onCurrentTextChanged: shop_tool.updateCategories()
+                    onCurrentTextChanged: updateCategories()
                 }
 
                 Button {
@@ -137,13 +126,13 @@ Page {
                     visible: !platform.isAndroid
 
                     onClicked: {
-                        if (shop_stack_view.currentItem != shop_editor) {
-                            item_editor.visible = false
+                        if (shop_stack_view.currentItem != shop_editor_page) {
+                            item_editor_page.visible = false
                             shop_page.visible = false
-                            shop_editor.visible = true
+                            shop_editor_page.visible = true
 
                             shop_stack_view.pop(null)
-                            shop_stack_view.push(shop_editor)
+                            shop_stack_view.push(shop_editor_page)
                         }
                     }
                 }
@@ -362,14 +351,14 @@ Page {
     }
 
     ShopEditor {
-        id: shop_editor
+        id: shop_editor_page
         visible: false
 
         onBackToViewer: {
             if (shop_stack_view.currentItem != shop_page) {
-                item_editor.visible = false
+                item_editor_page.visible = false
                 shop_page.visible = true
-                shop_editor.visible = false
+                shop_editor_page.visible = false
 
                 shop_stack_view.pop(null)
                 shop_stack_view.push(shop_page)
@@ -377,13 +366,13 @@ Page {
         }
 
         onSwitchToItemEditor: {
-            if (shop_stack_view.currentItem != item_editor) {
-                item_editor.visible = true
+            if (shop_stack_view.currentItem != item_editor_page) {
+                item_editor_page.visible = true
                 shop_page.visible = false
-                shop_editor.visible = false
+                shop_editor_page.visible = false
 
                 shop_stack_view.pop(null)
-                shop_stack_view.push(item_editor)
+                shop_stack_view.push(item_editor_page)
             }
         }
 
@@ -393,17 +382,17 @@ Page {
     }
 
     ItemEditor {
-        id: item_editor
+        id: item_editor_page
         visible: false
 
         onBackToShopEditor: {
-            if (shop_stack_view.currentItem != shop_editor) {
-                item_editor.visible = false
+            if (shop_stack_view.currentItem != shop_editor_page) {
+                item_editor_page.visible = false
                 shop_page.visible = false
-                shop_editor.visible = true
+                shop_editor_page.visible = true
 
                 shop_stack_view.pop(null)
-                shop_stack_view.push(shop_editor)
+                shop_stack_view.push(shop_editor_page)
             }
         }
     }

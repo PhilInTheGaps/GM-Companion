@@ -2,68 +2,62 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.notestool 1.0
-import gm.companion.colorscheme 1.0
 import FontAwesome 2.0
 
 Page {
     id: notes_page
 
-    Component.onCompleted: notes_tool.loadChapters()
+    Component.onCompleted: loadChapters()
 
-    NotesTool {
-        id: notes_tool
+    function setChapter(chapter) {
+        notes_tool.setCurrentChapter(chapter)
+    }
 
-        function setChapter(chapter) {
-            setCurrentChapter(chapter)
-        }
+    function setPage(page) {
+        notes_tool.setCurrentPage(page)
+    }
 
-        function setPage(page) {
-            setCurrentPage(page)
-        }
+    function loadChapters() {
+        header_combo_box.model = notes_tool.chapters
+    }
 
-        function loadChapters() {
-            header_combo_box.model = chapters
-        }
+    Connections {
+        target: notes_tool
 
         onChaptersChanged: {
             loadChapters()
         }
 
         onCurrentChapterChanged: {
-            updatePages()
+            notes_tool.updatePages()
 
-            if (pages.length > 0) {
-                setCurrentPage(pages[0])
+            if (notes_tool.pages.length > 0) {
+                notes_tool.setCurrentPage(notes_tool.pages[0])
             } else {
                 text_edit.text = qsTr("No Pages added yet!")
             }
 
-            header_combo_box.currentIndex = getCurrentChapterIndex()
+            header_combo_box.currentIndex = notes_tool.getCurrentChapterIndex()
         }
 
         onPagesChanged: {
             tab_button_repeater.model = 0
 
-            for (var i = 0; i < pages.length; i++) {
+            for (var i = 0; i < notes_tool.pages.length; i++) {
                 tab_button_repeater.model++
             }
 
-            if (pages.length === 0)
+            if (notes_tool.pages.length === 0)
                 text_edit.readOnly = true
             else
                 text_edit.readOnly = false
 
-            header_tab_bar.setCurrentIndex(getCurrentPageIndex())
+            header_tab_bar.setCurrentIndex(notes_tool.getCurrentPageIndex())
         }
 
         onCurrentPageChanged: {
-            text_edit.text = currentPageContent
+            text_edit.text = notes_tool.currentPageContent
         }
-    }
-
-    ColorScheme {
-        id: color_scheme
     }
 
     background: Rectangle {
@@ -171,7 +165,7 @@ Page {
                     }
 
                     onCurrentTextChanged: {
-                        notes_tool.setChapter(currentText)
+                        setChapter(currentText)
                     }
                 }
 

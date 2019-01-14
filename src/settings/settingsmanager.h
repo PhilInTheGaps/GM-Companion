@@ -23,7 +23,12 @@ enum Setting{
     drive_music,
     spotifyID,
     spotifySecret,
-    altMenu
+    altMenu,
+    googleID,
+    googleSecret,
+    googleConnect,
+    googlePath,
+    cloudMode
 };
 
 class SettingsManager
@@ -31,8 +36,8 @@ class SettingsManager
 public:
     SettingsManager();
 
-    void setSetting(Setting setting, int checked = 1, QString value = "");
-    QString getSetting(Setting);
+    void setSetting(Setting setting, int checked = 1, QString value = "", QString value2 = "");
+    QString getSetting(Setting setting, QString value = "");
 
     void setAddonEnabled(QString addon, bool enabled);
     bool getIsAddonEnabled(QString addon);

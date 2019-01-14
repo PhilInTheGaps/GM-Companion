@@ -1,11 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Styles 1.4
+import QtQuick.Controls 2.3
 
-import gm.companion.dicetool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 import FontAwesome 2.0
 
 import "./dice"
@@ -19,23 +15,15 @@ Page {
     property alias diceTypeSpinBox: dice_type_spin_box
     readonly property int minimalHeight: main_column.height
 
-    DiceTool {
-        id: dice_tool
+    Connections {
+        target: dice_tool
 
-        onCalculationStringChanged: calculation_text_edit.text = calculationString
+        onCalculationStringChanged: calculation_text_edit.text = dice_tool.calculationString
 
         onMixedCriticalResult: roll_result.color = "brown"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
         onNormalResult: roll_result.color = color_scheme.textColor
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
     }
 
     background: Rectangle {
@@ -46,6 +34,7 @@ Page {
 
     DiceSettings {
         id: dice_settings_dialog
+        anchors.centerIn: parent
     }
 
     // Top Bar

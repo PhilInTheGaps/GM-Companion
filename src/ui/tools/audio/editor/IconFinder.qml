@@ -1,7 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-import gm.companion.platforms 1.0
+
+import FontAwesome 2.0
 
 Button {
     id: icon_button
@@ -12,15 +13,24 @@ Button {
     anchors.bottom: parent.bottom
     width: height
 
-    text: "..."
+    background: Rectangle {
+        color: color_scheme.menuColor
+    }
+
+    Text {
+        text: FontAwesome.ellipsisH
+        font.family: FontAwesome.familySolid
+        font.pixelSize: height
+        anchors.fill: parent
+        anchors.margins: 10
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        color: color_scheme.toolbarTextColor
+    }
 
     onClicked: {
         file_dialog.folder = "file://" + resourcesPath
         file_dialog.open()
-    }
-
-    PlatformDetails {
-        id: platform_details
     }
 
     FileDialog {
@@ -30,8 +40,7 @@ Button {
         selectFolder: false
 
         onAccepted: {
-
-            if (platform_details.isWindows)
+            if (platform.isWindows)
                 text_field.text = fileUrl.toString().replace(
                             "file:///" + resourcesPath, "")
             else

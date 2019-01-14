@@ -17,7 +17,7 @@ Column {
         id: text
         text: headline
         font.bold: true
-        color: colors.textColor
+        color: color_scheme.textColor
     }
 
     ScrollView {

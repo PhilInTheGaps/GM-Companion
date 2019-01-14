@@ -1,64 +1,21 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
+import "../buttons"
 
 Page {
     id: audio_list_page
 
-    signal removeFile(int fileIndex)
-    signal saveList(int type)
-    signal moveFile(int index, int positions)
-    signal changeMode(int mode)
-    signal changeIcon(string path)
-
-    property string resourcesPath
-    property string basePath
-    property int type
-    property int list_index: 0
-
-    function setName(name) {
-        list_name_text.text = name
-    }
-
-    function populateTable(files, paths, missing) {
-        table_model.clear()
-
-        for (var i = 0; i < files.length; i++) {
-            table_model.append({
-                                   "file": files[i],
-                                   "path": paths[i],
-                                   "missing": missing[i]
-                               })
-        }
-
-        table_view.positionViewAtIndex(list_index, ListView.Center)
-    }
-
-    function setPlaybackMode(mode) {
-        switch (mode) {
-        case 1:
-            mode_radio_1.checked = true
-            break
-        case 2:
-            mode_radio_2.checked = true
-            break
-        case 3:
-            mode_radio_3.checked = true
-            break
-        }
-    }
-
-    function setIconPath(path) {
-        icon_path_textfield.text = path
-        icon_image.source = "file://" + resourcesPath + path
-    }
-
     background: Rectangle {
         color: color_scheme.backgroundColor
+    }
+
+    Connections {
+        target: audio_editor
+        onFileIndexChanged: file_list.currentIndex = index
     }
 
     FileDialog {
@@ -66,380 +23,387 @@ Page {
         title: qsTr("Set Folder")
         property int index: 0
 
-        folder: "file://" + basePath
+        folder: "file://" + audio_editor.basePath(audio_editor.type)
 
         selectFolder: true
 
         onAccepted: {
-            editor_tool.replaceMissingFolder(index, fileUrl.toString(), type)
+            audio_editor.replaceFileFolder(audio_editor.name,
+                                           audio_editor.type, index,
+                                           fileUrl.toString())
         }
     }
 
-    Column {
-        anchors.fill: parent
-        spacing: 5
+    ListView {
+        id: file_list
+        anchors.left: parent.left
+        anchors.right: file_browser.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 5
 
-        Text {
-            id: list_name_text
-            text: qsTr("Audio List")
-            color: color_scheme.textColor
-        }
+        model: audio_editor.files
+        interactive: true
+        clip: true
+        focus: true
+        keyNavigationEnabled: true
+        highlightFollowsCurrentItem: false
 
-        Row {
+        delegate: Item {
+            id: delegate_root
+
+            Rectangle {
+                anchors.fill: parent
+
+                color: audio_editor.missing[index] ? "darkred" : file_list.currentIndex
+                                                     == index ? color_scheme.menuColor : "white"
+            }
+
+            Text {
+                id: delegate_label
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.ListView.isCurrentItem ? delegate_row.left : parent.right
+                anchors.margins: 5
+
+                text: modelData
+                color: file_list.currentIndex
+                       == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
+
             width: parent.width
-            height: parent.height - parent.spacing - list_name_text.height
-            spacing: 10
+            height: ListView.isCurrentItem ? color_scheme.toolbarHeight : delegate_label.height + 10
 
-            Column {
-                width: parent.width - parent.spacing - properties_column.width
-                height: parent.height
+            MouseArea {
+                id: mouse_area
+                anchors.fill: parent
+                onClicked: file_list.currentIndex = index
+            }
+
+            Row {
+                id: delegate_row
+
+                visible: parent.ListView.isCurrentItem
+
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
                 spacing: 5
 
-                ListView {
-                    id: table_view
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: parent.height
+                // Folder
+                ControlBarButton {
+                    fa_icon: FontAwesome.folder
 
-                    property int selectedRow: -1
-
-                    clip: true
-                    spacing: 0
-
-                    model: ListModel {
-                        id: table_model
+                    onClicked: {
+                        file_dialog.index = index
+                        file_dialog.open()
                     }
+                }
 
-                    ScrollBar.vertical: ScrollBar {
-                    }
+                Item {
+                    id: file_up_down
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 5
+                    width: height / 2
 
-                    delegate: Rectangle {
-                        height: delegate_row.height
+                    Button {
+                        id: file_up
+                        anchors.top: parent.top
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        color: missing ? "darkred" : "transparent"
+                        height: parent.height / 2
 
-                        ToolTip.text: path
-                        ToolTip.visible: mouse_area.containsMouse
+                        background: Rectangle {
+                            color: "transparent"
+                        }
 
-                        MouseArea {
-                            id: mouse_area
+                        Text {
+                            text: FontAwesome.chevronUp
+                            font.family: FontAwesome.familySolid
+                            color: color_scheme.toolbarTextColor
                             anchors.fill: parent
-                            hoverEnabled: true
-
-                            z: 2
-                            onClicked: mouse.accepted = false
-                            onPressed: mouse.accepted = false
-                            onReleased: mouse.accepted = false
-                            onDoubleClicked: mouse.accepted = false
-                            onPositionChanged: mouse.accepted = false
-                            onPressAndHold: mouse.accepted = false
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
                         }
 
-                        Row {
-                            id: delegate_row
-                            padding: 5
-                            leftPadding: 10
-                            rightPadding: 10
-                            spacing: 10
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            height: 35
-
-                            Text {
-                                text: missing ? file + " - " + qsTr(
-                                                    "MISSING!") : file
-                                color: missing ? "white" : color_scheme.textColor
-                                width: parent.width - parent.leftPadding - parent.rightPadding
-                                       - x_button.width - up_down_column.width
-                                       - set_folder_button.width - parent.spacing * 3
-                                clip: true
-                                elide: Text.ElideRight
-                                anchors.verticalCenter: parent.verticalCenter
-                                font.pointSize: 10
-                                font.bold: true
-                            }
-
-                            Button {
-                                id: set_folder_button
-                                visible: missing && mouse_area.containsMouse
-                                height: parent.height - parent.topPadding - parent.bottomPadding
-                                width: height
-
-                                background: Rectangle {
-                                    color: "transparent"
-                                }
-
-                                Text {
-                                    id: set_folder_icon
-                                    text: FontAwesome.folderOpen
-                                    font.pixelSize: parent.height - 5
-                                    font.family: FontAwesome.familySolid
-                                    anchors.centerIn: parent
-                                    color: "white"
-                                }
-
-                                onClicked: {
-                                    file_dialog.index = index
-                                    file_dialog.open()
-                                }
-                            }
-
-                            Column {
-                                id: up_down_column
-                                height: parent.height - parent.topPadding - parent.bottomPadding
-                                width: height
-
-                                visible: mouse_area.containsMouse
-
-                                Button {
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    height: parent.height / 2
-                                    hoverEnabled: true
-
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
-
-                                    Text {
-                                        text: FontAwesome.chevronUp
-                                        font.pixelSize: parent.height
-                                        font.family: FontAwesome.familySolid
-                                        anchors.centerIn: parent
-                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
-                                    }
-
-                                    onClicked: {
-                                        moveFile(index, -1)
-                                        table_model.move(index, index - 1, 1)
-                                    }
-                                }
-
-                                Button {
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    height: parent.height / 2
-                                    hoverEnabled: true
-
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
-
-                                    Text {
-                                        text: FontAwesome.chevronDown
-                                        font.pixelSize: parent.height
-                                        font.family: FontAwesome.familySolid
-                                        anchors.centerIn: parent
-                                        color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
-                                    }
-
-                                    onClicked: {
-                                        moveFile(index, 1)
-                                        table_model.move(index, index + 1, 1)
-                                    }
-                                }
-                            }
-
-                            Button {
-                                id: x_button
-                                height: parent.height - parent.topPadding - parent.bottomPadding
-                                width: height
-                                hoverEnabled: true
-
-                                visible: mouse_area.containsMouse
-
-                                background: Rectangle {
-                                    color: "transparent"
-                                }
-
-                                Text {
-                                    text: FontAwesome.times
-                                    font.pixelSize: parent.height
-                                    font.family: FontAwesome.familySolid
-                                    anchors.centerIn: parent
-                                    color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : missing ? "white" : color_scheme.primaryButtonColor)
-                                }
-
-                                onClicked: {
-                                    removeFile(index)
-                                    table_model.remove(index)
-                                }
-                            }
+                        onClicked: {
+                            delegate_root.ListView.view.last_index = index
+                            audio_editor.moveFile(audio_editor.name,
+                                                  audio_editor.type, index, -1)
+                            delegate_root.ListView.view.currentIndex
+                                    = delegate_root.ListView.view.last_index - 1
+                            delegate_root.ListView.view.positionViewAtIndex(
+                                        delegate_root.ListView.view.currentIndex,
+                                        ListView.Center)
                         }
+                    }
+
+                    Button {
+                        id: file_down
+                        anchors.top: file_up.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        Text {
+                            text: FontAwesome.chevronDown
+                            font.family: FontAwesome.familySolid
+                            color: color_scheme.toolbarTextColor
+                            anchors.fill: parent
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+
+                        onClicked: {
+                            delegate_root.ListView.view.last_index = index
+                            audio_editor.moveFile(audio_editor.name,
+                                                  audio_editor.type, index, 1)
+                            delegate_root.ListView.view.currentIndex
+                                    = delegate_root.ListView.view.last_index + 1
+                            delegate_root.ListView.view.positionViewAtIndex(
+                                        delegate_root.ListView.view.currentIndex,
+                                        ListView.Center)
+                        }
+                    }
+                }
+
+                // Delete
+                ControlBarButton {
+                    fa_icon: FontAwesome.trashAlt
+
+                    onClicked: {
+                        audio_editor.removeFile(audio_editor.name,
+                                                audio_editor.type, index)
                     }
                 }
             }
+        }
 
-            Column {
-                id: properties_column
-                width: parent.width / 4
-                height: parent.height
-                spacing: 5
+        highlight: Rectangle {
+            color: "lightsteelblue"
+        }
 
-                Button {
+        ScrollBar.vertical: ScrollBar {
+        }
+    }
 
-                    Row {
-                        spacing: 5
-                        anchors.centerIn: parent
+    EditorFileBrowser {
+        id: file_browser
+        width: 175
 
-                        Text {
-                            text: FontAwesome.save
-                            font.pixelSize: parent.height
-                            font.family: FontAwesome.familySolid
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: right_item.left
+        anchors.rightMargin: 5
+    }
 
-                        Text {
-                            text: qsTr("Save List")
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                    }
-                    onClicked: saveList(type)
-                    width: parent.width
+    Rectangle {
+        id: right_item
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: color_scheme.toolbarHeight
+
+        color: color_scheme.menuColor
+
+        Column {
+            anchors.fill: parent
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
                 }
+
+                ToolTip.text: qsTr(
+                                  "Playlist is shuffled before playing. Loops.")
+                ToolTip.visible: hovered
 
                 Text {
-                    text: qsTr("Playback Mode")
-                    color: color_scheme.textColor
+                    text: FontAwesome.listOl
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: audio_editor.mode == 0 ? "green" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "lightgrey")
                 }
 
-                RadioButton {
-                    id: mode_radio_0
-                    checked: true
-                    text: qsTr("Shuffle List")
-                    width: parent.width
+                Label {
+                    text: FontAwesome.random
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+
+                    height: parent.height / 3
+                    width: height
+                    x: parent.width - width * 1.5
+                    y: parent.height - height * 1.5
+
+                    color: audio_editor.mode == 0 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                     background: Rectangle {
-                        color: "#e0e0e0"
-                    }
-
-                    ToolTip.text: qsTr("Playlist is shuffled before playing. Loops.")
-                    ToolTip.visible: hovered
-                    hoverEnabled: true
-
-                    onCheckedChanged: {
-                        if (checked)
-                            changeMode(0)
+                        color: color_scheme.menuColor
                     }
                 }
 
-                RadioButton {
-                    id: mode_radio_1
-                    checked: false
-                    text: qsTr("Random Mode")
-                    width: parent.width
+                onClicked: audio_editor.setMode(audio_editor.name,
+                                                audio_editor.type, 0)
+            }
 
-                    background: Rectangle {
-                        color: "#e0e0e0"
-                    }
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                    ToolTip.text: qsTr("Files are played randomly, does not stop.")
-                    ToolTip.visible: hovered
-                    hoverEnabled: true
-
-                    onCheckedChanged: {
-                        if (checked)
-                            changeMode(1)
-                    }
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                RadioButton {
-                    id: mode_radio_2
-                    checked: false
-                    text: qsTr("Loop List")
-                    width: parent.width
-
-                    background: Rectangle {
-                        color: "#e0e0e0"
-                    }
-
-                    ToolTip.text: qsTr("Playlist loops in sequential order.")
-                    ToolTip.visible: hovered
-                    hoverEnabled: true
-
-                    onCheckedChanged: {
-                        if (checked)
-                            changeMode(2)
-                    }
-                }
-
-                RadioButton {
-                    id: mode_radio_3
-                    checked: false
-                    text: qsTr("Sequential Order")
-                    width: parent.width
-
-                    background: Rectangle {
-                        color: "#e0e0e0"
-                    }
-
-                    ToolTip.text: qsTr("Playlist is played in set order. Does not loop.")
-                    ToolTip.visible: hovered
-                    hoverEnabled: true
-
-                    onCheckedChanged: {
-                        if (checked)
-                            changeMode(3)
-                    }
-                }
-
-                Button {
-                    Row {
-                        spacing: 5
-                        anchors.centerIn: parent
-
-                        Text {
-                            text: FontAwesome.trashAlt
-                            font.pixelSize: parent.height
-                            font.family: FontAwesome.familySolid
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-
-                        Text {
-                            text: qsTr("Remove Missing Files")
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                    }
-
-                    width: parent.width
-                    onClicked: editor_tool.removeMissingFiles()
-                }
+                ToolTip.text: qsTr("Files are played randomly, does not stop.")
+                ToolTip.visible: hovered
 
                 Text {
-                    text: qsTr("List Icon")
-                    width: parent.width
-                    color: color_scheme.textColor
+                    text: FontAwesome.random
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: audio_editor.mode == 1 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
                 }
 
-                Row {
-                    width: parent.width
-                    spacing: 5
+                onClicked: audio_editor.setMode(audio_editor.name,
+                                                audio_editor.type, 1)
+            }
 
-                    TextField {
-                        id: icon_path_textfield
-                        placeholderText: qsTr("Icon Path")
-                        width: parent.width - parent.spacing - icon_finder.width
-                        selectByMouse: true
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                        onTextChanged: {
-                            changeIcon(text)
-                            icon_image.source = "file://" + resourcesPath + text
-                        }
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                ToolTip.text: qsTr("Playlist loops in sequential order.")
+                ToolTip.visible: hovered
+
+                Text {
+                    text: FontAwesome.listOl
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: audio_editor.mode == 2 ? "green" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "lightgrey")
+                }
+
+                Label {
+                    text: FontAwesome.sync
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+
+                    height: parent.height / 3
+                    width: height
+                    x: parent.width - width * 1.5
+                    y: parent.height - height * 1.5
+
+                    color: audio_editor.mode == 2 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
+
+                    background: Rectangle {
+                        color: color_scheme.menuColor
                     }
+                }
 
-                    IconFinder {
-                        id: icon_finder
-                        text_field: icon_path_textfield
+                onClicked: audio_editor.setMode(audio_editor.name,
+                                                audio_editor.type, 2)
+            }
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                ToolTip.text: qsTr("Playlist is played in set order. Does not loop.")
+                ToolTip.visible: hovered
+
+                Text {
+                    text: FontAwesome.listOl
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: audio_editor.mode == 3 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
+                }
+
+                onClicked: audio_editor.setMode(audio_editor.name,
+                                                audio_editor.type, 3)
+            }
+
+            Rectangle {
+                height: 2
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: color_scheme.toolbarTextColor
+            }
+
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                ToolTip.text: qsTr("Remove missing files.")
+                ToolTip.visible: hovered
+
+                Text {
+                    text: FontAwesome.fileAudio
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "darkred"
+                }
+
+                Label {
+                    text: FontAwesome.trashAlt
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+
+                    height: parent.height / 3
+                    width: height
+                    x: parent.width - width * 1.5
+                    y: parent.height - height * 1.5
+
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+
+                    background: Rectangle {
+                        color: color_scheme.menuColor
                     }
                 }
 
-                Image {
-                    id: icon_image
-
-                    width: parent.width
-                    height: width
-                }
+                onClicked: audio_editor.removeMissingFiles(audio_editor.name,
+                                                           audio_editor.type)
             }
         }
     }

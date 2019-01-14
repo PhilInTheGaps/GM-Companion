@@ -10,7 +10,8 @@ ShopEditor::ShopEditor(QObject *parent) : QObject(parent)
 {
     qDebug() << "Loading Shop Editor ...";
 
-    sManager = new SettingsManager;
+    itemEditor = new ItemEditor;
+    sManager   = new SettingsManager;
 }
 
 // Set the project file path

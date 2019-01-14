@@ -3,7 +3,6 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
 
 Rectangle {
     id: character_button
@@ -15,10 +14,6 @@ Rectangle {
 
     width: parent ? parent.width : 0
     height: platform.isAndroid ? width / 6 : 40
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     Row {
         anchors.fill: parent

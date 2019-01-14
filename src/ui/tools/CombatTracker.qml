@@ -2,51 +2,15 @@
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.combattracker 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
-
 import "./combat_tracker"
 import "./dice"
 import FontAwesome 2.0
 
 Page {
-    id: combat_tracker
+    id: root
 
     readonly property bool inPortrait: width < height || width < 1200
     property bool dice_enabled: false
-
-    CombatTrackerTool {
-        id: tool
-
-        onCombatantsChanged: {
-            tracker_model.clear()
-
-            for (var i = 0; i < getListSize(); i++) {
-                tracker_model.append({
-                                         "name": getName(i),
-                                         "ini": getIni(i),
-                                         "health": getHealth(i),
-                                         "status": getStatus(i),
-                                         "notes": getNotes(i)
-                                     })
-            }
-        }
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
-    }
-
-    Component.onCompleted: {
-        combat_dice.setSource("dice/DiceCombatTracker.qml", {
-
-                              })
-    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
@@ -58,9 +22,7 @@ Page {
     CombatantDialog {
         id: add_combatant_dialog
 
-        onAddCombatant: {
-            tool.add(name, ini, health, sort)
-        }
+        onAddCombatant: combat_tracker.add(name, ini, health, sort)
     }
 
     // Top Bar
@@ -109,7 +71,7 @@ Page {
 
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: tool.next()
+                onClicked: combat_tracker.next()
             }
 
             Button {
@@ -146,42 +108,6 @@ Page {
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: add_combatant_dialog.open()
-            }
-
-            Button {
-                hoverEnabled: true
-                width: sort_row.width
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Row {
-                    id: sort_row
-                    anchors.centerIn: parent
-                    spacing: 10
-                    padding: 10
-
-                    Text {
-                        text: FontAwesome.sort
-                        font.family: FontAwesome.familySolid
-                        font.pointSize: 15
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
-                    }
-
-                    Text {
-                        text: qsTr("Sort by INI")
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : "white"
-                        font.bold: true
-                        font.pointSize: 12
-                    }
-                }
-
-                height: parent.height - parent.padding * 2
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: tool.sortByIni()
             }
 
             Button {
@@ -237,58 +163,59 @@ Page {
 
             color: color_scheme.listHeaderBackgroundColor
 
-            Row {
-                anchors.fill: parent
-                spacing: 10
-                padding: 10
-
-                Text {
-                    text: qsTr("Name")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: list_view.width / 5
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    color: color_scheme.listHeaderTextColor
-                }
-
-                Text {
-                    text: qsTr("Initiative")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: list_view.width / 6
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    color: color_scheme.listHeaderTextColor
-                }
-
-                Text {
-                    text: qsTr("Health")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: list_view.width / 6
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    color: color_scheme.listHeaderTextColor
-                }
-
-                Text {
-                    text: qsTr("Status")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: list_view.width / 6
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    color: color_scheme.listHeaderTextColor
-                }
-
-                Text {
-                    text: qsTr("Notes")
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: list_view.width / 6
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pointSize: 12
-                    color: color_scheme.listHeaderTextColor
-                }
+            Text {
+                id: name_header
+                text: qsTr("Name")
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.margins: 10
+                width: list_view.width / 5
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
             }
 
             Text {
+                id: ini_header
+                text: qsTr("Initiative")
+                anchors.left: name_header.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.margins: 10
+                width: list_view.width / 6
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
+            }
+
+            Text {
+                id: health_header
+                text: qsTr("Health")
+                anchors.left: ini_header.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.margins: 10
+                width: list_view.width / 6
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
+            }
+
+            Text {
+                id: notes_header
+                text: qsTr("Notes")
+                anchors.left: health_header.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.margins: 10
+                width: dice_label.visible ? parent.width - combat_dice.width - x
+                                            - 10 - color_scheme.toolbarHeight
+                                            * 1.3 - 20 : parent.width - x - 10
+                                            - color_scheme.toolbarHeight * 1.3 - 20
+                horizontalAlignment: Text.AlignHCenter
+                font.pointSize: 12
+                color: color_scheme.listHeaderTextColor
+            }
+
+            Text {
+                id: dice_label
                 text: qsTr("Dice")
                 anchors.verticalCenter: parent.verticalCenter
                 x: combat_dice.x + 10
@@ -312,19 +239,18 @@ Page {
 
             clip: true
             spacing: 10
+            currentIndex: combat_tracker.currentIndex
 
             ScrollBar.vertical: ScrollBar {
             }
-
-            model: ListModel {
-                id: tracker_model
-            }
+            model: combatantListModel
 
             delegate: Rectangle {
+                id: delegate_root
                 height: delegate_row.height
                 anchors.left: parent.left
                 anchors.right: parent.right
-                color: index == tool.currentIndex ? color_scheme.primaryButtonColor : "transparent"
+                color: ListView.isCurrentItem ? color_scheme.primaryButtonColor : "transparent"
 
                 Row {
                     id: delegate_row
@@ -334,9 +260,10 @@ Page {
                     anchors.right: parent.right
                     height: color_scheme.toolbarHeight * 1.3
 
+                    // Name
                     Text {
-                        text: name
-                        color: index == tool.currentIndex ? "white" : color_scheme.textColor
+                        text: modelData.name
+                        color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
                         width: list_view.width / 5
                         clip: true
                         elide: Text.ElideRight
@@ -345,38 +272,40 @@ Page {
                         font.bold: true
                     }
 
+                    // INI
                     ListSpinBox {
-                        field_value: ini
-                        onValueChanged: tool.setIni(index, field_value)
-                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
-                        current_item: index == tool.currentIndex ? true : false
+                        field_value: modelData.ini
+                        onValueChanged: combat_tracker.setIni(index,
+                                                              field_value)
+                        text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
+                        current_item: delegate_root.ListView.isCurrentItem
                         from: 0
                         to: 1000
                     }
 
+                    // Health
                     ListSpinBox {
-                        field_value: health
-                        onValueChanged: tool.setHealth(index, field_value)
-                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
-                        current_item: index == tool.currentIndex ? true : false
+                        id: health_spinbox
+                        field_value: modelData.health
+                        onValueChanged: combat_tracker.setHealth(index,
+                                                                 field_value)
+                        text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
+                        current_item: delegate_root.ListView.isCurrentItem
                         from: 0
                         to: 1000
                     }
 
+                    // Notes
                     ListTextField {
-                        onField_textChanged: tool.setStatus(index, field_text)
-                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
-                        field_text: status
-                    }
-
-                    ListTextField {
-                        onField_textChanged: tool.setNotes(index, field_text)
-                        text_color: index == tool.currentIndex ? "white" : color_scheme.textColor
-                        field_text: notes
+                        width: parent.width - x - 20 - delegate_remove_button.width
+                        onField_textChanged: combat_tracker.setNotes(index,
+                                                                     field_text)
+                        text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
+                        field_text: modelData.notes
                     }
 
                     Button {
-                        id: delegate_remove_image
+                        id: delegate_remove_button
                         hoverEnabled: true
                         background: Rectangle {
                             color: "transparent"
@@ -386,7 +315,7 @@ Page {
                             text: FontAwesome.times
                             font.family: FontAwesome.familySolid
                             font.pointSize: 25
-                            color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (index == tool.currentIndex ? "white" : color_scheme.primaryButtonColor))
+                            color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (delegate_root.ListView.isCurrentItem ? "white" : color_scheme.primaryButtonColor))
                             anchors.centerIn: parent
                         }
 
@@ -394,7 +323,7 @@ Page {
                         width: height
                         anchors.verticalCenter: parent.verticalCenter
 
-                        onClicked: tool.remove(index)
+                        onClicked: combat_tracker.remove(index)
                     }
                 }
             }
@@ -402,6 +331,7 @@ Page {
 
         Loader {
             id: combat_dice
+            source: "dice/DiceCombatTracker.qml"
 
             anchors.left: list_view.right
             anchors.right: parent.right
@@ -463,7 +393,7 @@ Page {
                         }
 
                         Text {
-                            text: tool.currentRound
+                            text: combat_tracker.currentRound
                             anchors.verticalCenter: parent.verticalCenter
                             color: "white"
                             font.bold: true
@@ -506,7 +436,7 @@ Page {
 
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height - parent.padding * 2
-                        onClicked: tool.resetRounds()
+                        onClicked: combat_tracker.resetRounds()
                     }
 
                     Button {
@@ -542,7 +472,7 @@ Page {
 
                         anchors.verticalCenter: parent.verticalCenter
                         height: parent.height - parent.padding * 2
-                        onClicked: tool.clear()
+                        onClicked: combat_tracker.clear()
                     }
                 }
             }

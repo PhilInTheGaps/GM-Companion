@@ -21,5 +21,5 @@ QString Effect::getEffect()
 
     roll = roll - m_dice;
 
-    return m_effects[roll];
+    return tr("Dice Result: ") + QString::number(roll + 2) + "\n" + m_effects[roll];
 }

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.2
 Dialog {
     id: root
     title: qsTr("Dice Settings")
+    modal: true
 
     contentItem: Column {
         padding: 5

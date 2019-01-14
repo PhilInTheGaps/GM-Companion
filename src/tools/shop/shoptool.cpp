@@ -8,7 +8,8 @@ ShopTool::ShopTool(QObject *parent) : QObject(parent)
 {
     qDebug() << "Loading Shop Tool ...";
 
-    sManager = new SettingsManager;
+    shopEditor = new ShopEditor;
+    sManager   = new SettingsManager;
 }
 
 QStringList ShopTool::projects()
@@ -93,13 +94,19 @@ void ShopTool::load(QString project, QString shop)
     {
         settings.setArrayIndex(i);
 
-        if (settings.value("shop").toStringList().at(0) == shop) shopValues = settings.value("shop").toStringList();
+        QStringList tempList = settings.value("shop").toStringList();
+
+        if ((tempList.size() > 0) && (tempList[0] == shop))
+        {
+            shopValues = tempList;
+        }
     }
 
     settings.endArray();
 
-    m_shopOwner       = shopValues.at(1);
-    m_shopDescription = shopValues.at(2);
+    if (shopValues.size() > 1) m_shopOwner = shopValues.at(1);
+
+    if (shopValues.size() > 2) m_shopDescription = shopValues.at(2);
 
     // Get Items
     int count = settings.beginReadArray(m_category + "_" + shop + "_items");
@@ -110,9 +117,11 @@ void ShopTool::load(QString project, QString shop)
 
         QStringList item = settings.value("item").toStringList();
 
-        m_item_names.append(item.at(0));
-        m_item_prices.append(item.at(1));
-        m_item_descriptions.append(item.at(3));
+        if (item.size() > 0) m_item_names.append(item[0]);
+
+        if (item.size() > 1) m_item_prices.append(item[1]);
+
+        if (item.size() > 2) m_item_descriptions.append(item[2]);
     }
 
     settings.endArray();

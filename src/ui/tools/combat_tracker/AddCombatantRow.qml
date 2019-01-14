@@ -57,11 +57,17 @@ Row {
         id: add_ini_spinbox
         width: (parent.width - parent.spacing * 3) / 4
         editable: true
+
+        from: 0
+        to: 99999
     }
 
     SpinBox {
         id: add_health_spinbox
         width: (parent.width - parent.spacing * 3) / 4
         editable: true
+
+        from: 0
+        to: 99999
     }
 }

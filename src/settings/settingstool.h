@@ -32,6 +32,16 @@ public:
     Q_INVOKABLE void setSpotifySecret(QString secret) { sManager->setSetting(Setting::spotifySecret, 1, secret); }
     Q_INVOKABLE QString getSpotifySecret() const { return sManager->getSetting(Setting::spotifySecret); }
 
+    Q_INVOKABLE QString getGoogleID() const { return sManager->getSetting(Setting::googleID); }
+    Q_INVOKABLE QString getGoogleSecret() const { return sManager->getSetting(Setting::googleSecret); }
+    Q_INVOKABLE void setGoogleConnect(bool connect) { sManager->setSetting(Setting::googleConnect, connect); }
+    Q_INVOKABLE bool getGoogleConnect() { return sManager->getSetting(Setting::googleConnect).toInt(); }
+    Q_INVOKABLE void setGooglePath(QString name, QString value) { sManager->setSetting(Setting::googlePath, 1, name, value); }
+    Q_INVOKABLE QString getGooglePath(QString name) { return sManager->getSetting(Setting::googlePath, name); }
+
+    Q_INVOKABLE void setCloudMode(int mode) { sManager->setSetting(Setting::cloudMode, 1, QString::number(mode)); }
+    Q_INVOKABLE int getCloudMode() { return sManager->getSetting(Setting::cloudMode).toInt(); }
+
     Q_INVOKABLE void setAltMenu(bool enabled = true) { sManager->setSetting(Setting::altMenu, enabled); }
     Q_INVOKABLE bool getAltMenu() { return sManager->getSetting(Setting::altMenu).toInt(); }
 

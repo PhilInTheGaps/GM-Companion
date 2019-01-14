@@ -2,26 +2,11 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.convertertool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 import FontAwesome 2.0
 import "./converter"
 
 Page {
     id: converter
-
-    ConverterTool {
-        id: converter_tool
-    }
-
-    PlatformDetails {
-        id: platform
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor

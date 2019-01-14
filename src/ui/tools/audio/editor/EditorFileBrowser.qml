@@ -2,136 +2,95 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.audioeditorfilebrowser 1.0
-import gm.companion.colorscheme 1.0
 import FontAwesome 2.0
+import "../buttons"
 
-Column {
+Item {
     id: file_browser
 
-    signal addFile(string file, string path)
-    signal addAllFiles(var fileNames, var filePaths)
+    Connections {
+        target: audio_editor_file_browser
+    }
 
-    property int fileType
+    Connections {
+        target: audio_editor
 
-    AudioEditorFileBrowserTool {
-        id: tool
-
-        function folderButtonClicked(folder, path) {
-            setCurrentFolder(folder)
-        }
-
-        onFoldersChanged: {
-            folder_column.children = []
-
-            for (var i = 0; i < getFolderList().length; i++) {
-                var component = Qt.createComponent(
-                            "../buttons/FileBrowserButton.qml")
-
-                var button = component.createObject(folder_column, {
-                                                        "element": getFolderList(
-                                                                       )[i],
-                                                        "path": getFolderPaths(
-                                                                    )[i],
-                                                        "type": 3
-                                                    })
-                button.clicked.connect(folderButtonClicked)
-            }
-        }
-
-        function fileButtonClicked(file, path) {
-            addFile(file, path)
-        }
-
-        onFilesChanged: {
-            file_column.children = []
-
-            for (var i = 0; i < getFileList().length; i++) {
-                var component = Qt.createComponent(
-                            "../buttons/FileBrowserButton.qml")
-
-                var button = component.createObject(file_column, {
-                                                        "element": getFileList(
-                                                                       )[i],
-                                                        "path": getFilePaths(
-                                                                    )[i],
-                                                        "type": tool.getType()
-                                                    })
-                button.clicked.connect(fileButtonClicked)
-            }
+        onCurrentElementChanged: {
+            audio_editor_file_browser.type = audio_editor.type
         }
     }
 
-    function setType(type) {
-        tool.setType(type)
-        fileType = type
-    }
+    Rectangle {
+        id: browser_control_bar
 
-    padding: 5
-    spacing: 5
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: color_scheme.toolbarHeight
+        color: color_scheme.menuColor
+
+        Row {
+            anchors.fill: parent
+            spacing: 5
+            leftPadding: 5
+            rightPadding: 5
+
+            ControlBarButton {
+                fa_icon: FontAwesome.chevronUp
+                onClicked: audio_editor_file_browser.folderBack()
+            }
+
+            ControlBarButton {
+                fa_icon: FontAwesome.home
+                onClicked: audio_editor_file_browser.home()
+            }
+
+            ControlBarButton {
+                visible: audio_editor.type != 2
+                fa_icon: FontAwesome.plus
+                onClicked: {
+                    audio_editor.setFileIndex(file_list.currentIndex)
+                    audio_editor_file_browser.addAllFiles()
+                }
+            }
+        }
+    }
 
     ScrollView {
         id: scroll_view
-        width: parent.width - parent.padding * 2
-        height: parent.height - parent.padding * 2
+        anchors.top: browser_control_bar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
         clip: true
 
         Column {
             id: scroll_view_column
-            width: file_browser.width - file_browser.padding * 2
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            topPadding: 5
             spacing: 5
 
-            Text {
-                text: qsTr("Folders:")
-                color: color_scheme.textColor
-            }
+            // Folder
+            Repeater {
+                model: audio_editor_file_browser.folderNames
 
-            Button {
-                id: folder_back_button
-                width: parent.width
-                text: qsTr("Back")
-
-                Text {
-                    text: FontAwesome.chevronLeft
-                    font.pixelSize: parent.height - 10
-                    font.family: FontAwesome.familySolid
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    x: 10
+                FileBrowserButton {
+                    file: modelData
+                    type: 3
                 }
-
-                onClicked: tool.folderBack()
             }
 
-            Column {
-                id: folder_column
-                width: parent.width
-                spacing: 5
-            }
+            // Files
+            Repeater {
+                model: audio_editor_file_browser.fileNames
 
-            Rectangle {
-                width: parent.width
-                height: 10
-                color: "transparent"
-            }
-
-            Text {
-                text: qsTr("Files:")
-                color: color_scheme.textColor
-            }
-
-            Button {
-                width: parent.width
-                text: qsTr("Add All Files")
-                visible: file_browser.fileType !== 2
-
-                onClicked: addAllFiles(tool.getFileList(), tool.getFilePaths())
-            }
-
-            Column {
-                id: file_column
-                width: parent.width
-                spacing: 5
+                FileBrowserButton {
+                    file: modelData
+                    type: audio_editor.type
+                    path: audio_editor_file_browser.filePaths[index]
+                }
             }
         }
     }

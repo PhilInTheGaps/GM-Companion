@@ -3,21 +3,25 @@
 
 #include <QObject>
 #include "src/settings/settingsmanager.h"
+#include "audioelement.h"
 
 class AddonElementManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList spotifyFolders READ spotifyFolders NOTIFY spotifyFoldersChanged)
+    Q_PROPERTY(QStringList elementNames READ elements NOTIFY elementsChanged)
+
 public:
     explicit AddonElementManager(QObject *parent = nullptr);
 
-    Q_INVOKABLE QStringList getSpotifyFolders() const { return m_spotifyFolders; }
+    QStringList spotifyFolders() const { return m_spotifyFolders; }
     Q_INVOKABLE void setFolder(QString folder);
-    Q_INVOKABLE QStringList getElements() const { return m_spotifyPlaylistNames; }
-    Q_INVOKABLE void setAddElement(int index, bool add) { m_addSpotifyPlaylists[index] = add; }
 
-    Q_INVOKABLE QStringList getURIs() const { return m_spotifyPlaylistURIs; }
-    Q_INVOKABLE QList<bool> getChecked() const { return m_addSpotifyPlaylists; }
+    QStringList elements() const { return m_spotifyNames; }
+    Q_INVOKABLE void setAddElement(int index, bool add);
+
     Q_INVOKABLE void resetChecked();
+    Q_INVOKABLE void addElements();
 
 private:
     SettingsManager sManager;
@@ -31,12 +35,13 @@ private:
     QString m_currentSpotifyFolder;
 
     void findSpotifyPlaylists();
-    QStringList m_spotifyPlaylistNames;
-    QStringList m_spotifyPlaylistURIs;
-    QList<bool> m_addSpotifyPlaylists;
+    QList<SpotifyElement*> m_spotifyElements;
+    QStringList m_spotifyNames;
 
 signals:
+    void spotifyFoldersChanged();
     void elementsChanged();
+    void exportElements(QList<SpotifyElement*>);
 };
 
 #endif // ADDONELEMENTMANAGER_H

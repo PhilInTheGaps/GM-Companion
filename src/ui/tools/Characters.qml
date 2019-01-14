@@ -2,26 +2,19 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.charactertool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 import "./characters"
 import FontAwesome 2.0
 
 Page {
     id: characters
 
-    PlatformDetails {
-        id: platform
-    }
+    Component.onCompleted: character_tool.updateCharacterList()
 
-    CharacterTool {
-        id: character_tool
-
-        Component.onCompleted: updateCharacterList()
+    Connections {
+        target: character_tool
 
         onCharactersUpdated: {
-            if (getActive()) {
+            if (character_tool.getActive()) {
                 showActiveCharacters()
             } else {
                 showInactiveCharacters()
@@ -91,10 +84,6 @@ Page {
         } else {
             character_tool.setCharacterActive(character)
         }
-    }
-
-    ColorScheme {
-        id: color_scheme
     }
 
     background: Rectangle {

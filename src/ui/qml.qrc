@@ -11,10 +11,8 @@
         <file>tools/Maps.qml</file>
         <file>tools/Notes.qml</file>
         <file>tools/Settings.qml</file>
-        <file>tools/audio/PlaylistModel.qml</file>
         <file>tools/audio/PlaylistModelItem.qml</file>
         <file>tools/maps/MapListItem.qml</file>
-        <file>tools/maps/MapListTab.qml</file>
         <file>tools/settings/PathItem.qml</file>
         <file>tools/generators/NameGenerator.qml</file>
         <file>tools/generators/NameGeneratorButton.qml</file>
@@ -50,8 +48,6 @@
         <file>tools/audio/editor/EditorSpotifyPlaylistPage.qml</file>
         <file>tools/audio/editor/EditorElementColumn.qml</file>
         <file>tools/audio/buttons/FileBrowserButton.qml</file>
-        <file>tools/audio/editor/EditorNewElementDialog.qml</file>
-        <file>tools/audio/editor/EditorNewThingDialog.qml</file>
         <file>tools/audio/buttons/EditorToolButton.qml</file>
         <file>tools/audio/editor/EditorLabeledComboBox.qml</file>
         <file>tools/dice/DiceSettings.qml</file>
@@ -60,5 +56,13 @@
         <file>tools/combat_tracker/EffectPage.qml</file>
         <file>tools/audio/editor/AddonElementDialog.qml</file>
         <file>tools/audio/editor/IconFinder.qml</file>
+        <file>tools/settings/CloudPage.qml</file>
+        <file>main/LoadingScreen.qml</file>
+        <file>tools/audio/ControlBar.qml</file>
+        <file>tools/audio/buttons/ControlBarButton.qml</file>
+        <file>tools/settings/CloudPathItem.qml</file>
+        <file>tools/audio/editor/EditorNewThingDialog.qml</file>
+        <file>tools/audio/MetaDataDisplay.qml</file>
+        <file>components/ToolBarComboBox.qml</file>
     </qresource>
 </RCC>

@@ -15,3 +15,12 @@ QString ColorScheme::getColor(QString name, QString defaultValue)
 {
     return stylesheet->value(name, defaultValue).toString();
 }
+
+void ColorScheme::updateColors()
+{
+    stylesheet->endGroup();
+    style = sManager->getSetting(Setting::uiMode);
+    stylesheet->beginGroup(style);
+
+    emit colorsChanged();
+}

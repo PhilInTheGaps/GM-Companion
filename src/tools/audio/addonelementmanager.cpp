@@ -11,6 +11,24 @@ AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
     qDebug() << "Loading Addon Element Manager ...";
 
     findAddons();
+
+    if (m_spotifyFolders.size() > 0) setFolder(m_spotifyFolders[m_spotifyFolders.size() - 1]);
+}
+
+void AddonElementManager::addElements()
+{
+    QList<SpotifyElement *> list;
+
+    for (auto e : m_spotifyElements)
+    {
+        if (e && e->isExport())
+        {
+            auto e2 = new SpotifyElement(e->name(), e->id());
+            list.append(e2);
+        }
+    }
+
+    if (list.size() > 0) emit exportElements(list);
 }
 
 void AddonElementManager::setFolder(QString folder)
@@ -64,11 +82,27 @@ void AddonElementManager::findSpotifyFolders()
     }
 }
 
+void AddonElementManager::setAddElement(int index, bool add)
+{
+    if (index < m_spotifyElements.size())
+    {
+        auto e = m_spotifyElements[index];
+
+        if (e)
+        {
+            e->setExport(add);
+        }
+    }
+}
+
 void AddonElementManager::resetChecked()
 {
-    for (int i = 0; i < m_addSpotifyPlaylists.size(); i++)
+    for (auto e : m_spotifyElements)
     {
-        m_addSpotifyPlaylists[i] = false;
+        if (e)
+        {
+            e->setExport(false);
+        }
     }
 
     emit elementsChanged();
@@ -77,9 +111,10 @@ void AddonElementManager::resetChecked()
 // Find Spotify Playlists (and Albums)
 void AddonElementManager::findSpotifyPlaylists()
 {
-    m_spotifyPlaylistNames.clear();
-    m_spotifyPlaylistURIs.clear();
-    m_addSpotifyPlaylists.clear();
+    for (auto e : m_spotifyElements) e->deleteLater();
+
+    m_spotifyNames.clear();
+    m_spotifyElements.clear();
 
     if (!m_currentSpotifyFolder.isEmpty())
     {
@@ -87,10 +122,9 @@ void AddonElementManager::findSpotifyPlaylists()
         {
             QFile f(file);
             f.open(QIODevice::ReadOnly);
-            QString content = f.readAll();
+            auto doc = QJsonDocument::fromJson(f.readAll());
             f.close();
 
-            auto doc     = QJsonDocument::fromJson(content.toLocal8Bit());
             auto root    = doc.object();
             auto folders = root.value("data").toArray();
 
@@ -108,12 +142,14 @@ void AddonElementManager::findSpotifyPlaylists()
                         {
                             auto name = playlist.toObject().value("name").toString();
 
-                            if (!m_spotifyPlaylistNames.contains(name))
+                            if (!m_spotifyNames.contains(name))
                             {
-                                auto uri = playlist.toObject().value("uri").toString();
-                                m_spotifyPlaylistURIs.append(uri);
-                                m_spotifyPlaylistNames.append(name);
-                                m_addSpotifyPlaylists.append(false);
+                                auto uri     = playlist.toObject().value("uri").toString();
+                                auto element = new SpotifyElement(name, uri);
+                                element->setExport(false);
+
+                                m_spotifyNames.append(name);
+                                m_spotifyElements.append(element);
                             }
                         }
                     }

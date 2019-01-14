@@ -11,6 +11,9 @@ AddonManager::AddonManager(QObject *parent) : QObject(parent)
     qDebug() << "Loading Addon Manager ...";
 }
 
+/**
+ * @brief Find all available addons
+ */
 void AddonManager::updateAddonList()
 {
     m_addonNames.clear();

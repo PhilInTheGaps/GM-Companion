@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "itemeditor.h"
 #include "src/settings/settingsmanager.h"
 
 class ShopEditor : public QObject
@@ -10,6 +11,8 @@ class ShopEditor : public QObject
     Q_OBJECT
 public:
     explicit ShopEditor(QObject *parent = nullptr);
+
+    ItemEditor* getItemEditor() const { return itemEditor; }
 
     Q_INVOKABLE void setCurrentProject(QString project);
     Q_INVOKABLE void setCurrentCategory(QString category);
@@ -59,6 +62,7 @@ signals:
 
 private:
     SettingsManager *sManager;
+    ItemEditor *itemEditor;
 
     QStringList m_shopList;
 

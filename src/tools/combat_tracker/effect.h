@@ -1,10 +1,11 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
+#include <QObject>
 #include <QStringList>
 #include "src/tools/dicetool.h"
 
-class Effect
+class Effect : QObject
 {
 public:
     Effect(QString name, int dice, int sides, int mod, QStringList effects, QString icon = "");

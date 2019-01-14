@@ -3,26 +3,21 @@ import QtQuick.Controls 2.2
 
 import ".."
 import "../combat_tracker"
-import gm.companion.colorscheme 1.0
 
 Item {
     id: root
 
-    ColorScheme {
-        id: colors
-    }
-
     Rectangle {
         id: spacer
         anchors.top: parent.top
-        height: colors.toolbarHeight
+        height: color_scheme.toolbarHeight
     }
 
     Rectangle {
         id: sidebar
-        color: colors.toolbarColor
+        color: color_scheme.toolbarColor
 
-        width: colors.toolbarHeight
+        width: color_scheme.toolbarHeight
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -31,7 +26,7 @@ Item {
             id: dice_col
             anchors.fill: parent
             anchors.margins: 5
-            anchors.topMargin: colors.toolbarHeight + 5
+            anchors.topMargin: color_scheme.toolbarHeight + 5
             spacing: 10
 
             Repeater {

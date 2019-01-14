@@ -114,12 +114,18 @@ Dialog {
                     id: ini_spinbox
                     width: (parent.width - parent.spacing * 3) / 4
                     editable: true
+
+                    from: 0
+                    to: 99999
                 }
 
                 SpinBox {
                     id: health_spinbox
                     width: (parent.width - parent.spacing * 3) / 4
                     editable: true
+
+                    from: 0
+                    to: 99999
                 }
             }
 
@@ -228,11 +234,10 @@ Dialog {
             addCombatant(row6.getName(), row6.getIni(), row6.getHealth(), false)
             addCombatant(row7.getName(), row7.getIni(), row7.getHealth(), false)
             addCombatant(row8.getName(), row8.getIni(), row8.getHealth(), false)
-            addCombatant(row9.getName(), row9.getIni(), row9.getHealth(),
-                         sort_checkbox.checked)
+            addCombatant(row9.getName(), row9.getIni(), row9.getHealth(), true)
         } else {
             addCombatant(name_field.text, ini_spinbox.value,
-                         health_spinbox.value, sort_checkbox.checked)
+                         health_spinbox.value, true)
         }
 
         // Clear all rows

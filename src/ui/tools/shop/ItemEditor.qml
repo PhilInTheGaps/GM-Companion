@@ -2,7 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
-import gm.companion.itemeditor 1.0
 import FontAwesome 2.0
 
 Page {
@@ -10,29 +9,34 @@ Page {
 
     signal backToShopEditor
 
-    Component.onCompleted: editor_tool.updateCategories()
+    Component.onCompleted: {
+        item_editor.updateCategories()
+        item_editor.updateItems()
+    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
     }
 
-    ItemEditorTool {
-        id: editor_tool
+    Connections {
+        target: item_editor
 
-        onCategoriesChanged: category_combobox.model = categories
+        onCategoriesChanged: category_combobox.model = item_editor.categories
         onItemsChanged: loadItemTable()
+    }
 
-        function loadItemTable() {
-            table_model.clear()
+    function loadItemTable() {
+        table_model.clear()
 
-            for (var i = 0; i < getItemNames().length; i++) {
-                table_model.append({
-                                       "name": getItemNames()[i],
-                                       "price": getItemPrices()[i],
-                                       "category": getItemCategories()[i],
-                                       "description": getItemDescriptions()[i]
-                                   })
-            }
+        for (var i = 0; i < item_editor.getItemNames().length; i++) {
+            table_model.append({
+                                   "name": item_editor.getItemNames()[i],
+                                   "price": item_editor.getItemPrices()[i],
+                                   "category": item_editor.getItemCategories(
+                                                   )[i],
+                                   "description": item_editor.getItemDescriptions(
+                                                      )[i]
+                               })
         }
     }
 
@@ -114,7 +118,7 @@ Page {
                 onClicked: {
                     if (item_name_field.text != ""
                             && category_combobox.currentText != "") {
-                        editor_tool.addItem(item_name_field.text,
+                        item_editor.addItem(item_name_field.text,
                                             item_price_field.text,
                                             category_combobox.currentText,
                                             item_description_field.text)
@@ -139,7 +143,7 @@ Page {
 
                     onClicked: {
                         if (category_name_field.text != "") {
-                            editor_tool.addCategory(category_name_field.text)
+                            item_editor.addCategory(category_name_field.text)
                         }
                     }
                 }
@@ -235,7 +239,7 @@ Page {
                     id: table_model
                 }
 
-                Component.onCompleted: editor_tool.updateItems()
+                Component.onCompleted: item_editor.updateItems()
 
                 delegate: Rectangle {
                     height: delegate_row.height
@@ -327,7 +331,7 @@ Page {
                                 color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : color_scheme.primaryButtonColor)
                             }
 
-                            onClicked: editor_tool.deleteItem(index)
+                            onClicked: item_editor.deleteItem(index)
                         }
                     }
                 }

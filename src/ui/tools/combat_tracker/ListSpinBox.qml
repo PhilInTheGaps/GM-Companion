@@ -6,7 +6,7 @@ SpinBox {
     id: box
     width: parent.width / 6
     height: parent.height - parent.padding * 2
-    editable: false
+    editable: true
     value: field_value
 
     property string text_color: white
@@ -18,15 +18,32 @@ SpinBox {
     }
 
     contentItem: TextInput {
-        text: (textFromValue(field_value, parent.locale))
+        text: Number.fromLocaleString(parent.locale, field_value)
+
+        onTextChanged: {
+            try {
+                var new_health = Number.fromLocaleString(parent.locale, text)
+
+                if (new_health < -100) {
+                    new_health = 0
+                    text = Number(new_health).toString()
+                }
+            } catch (error) {
+                new_health = 0
+                text = Number(new_health).toString()
+            }
+
+            field_value = new_health
+        }
+
         color: text_color
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
         font.pointSize: 12
         font.bold: true
+
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
         validator: parent.validator
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        onTextChanged: field_value = (valueFromText(text, locale))
         anchors.centerIn: parent
         width: parent.width - up_button.width - down_button.width - 10
         readOnly: !parent.editable

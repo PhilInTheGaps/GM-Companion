@@ -2,6 +2,9 @@
 #define AUDIOCONVERTER_H
 
 #include <QObject>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class AudioConverter : public QObject
 {
@@ -11,9 +14,8 @@ public:
 
     void convert();
 
-signals:
-
-public slots:
+private:
+    void convertTo3(QString file);
 };
 
 #endif // AUDIOCONVERTER_H

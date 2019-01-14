@@ -2,8 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.platforms 1.0
-
 Button {
     property string tool_name
     property string icon_source
@@ -16,10 +14,6 @@ Button {
     background: Rectangle {
         implicitHeight: 40
         color: parent.down ? "white" : "transparent"
-    }
-
-    PlatformDetails {
-        id: platform
     }
 
     Row {
@@ -37,7 +31,7 @@ Button {
         }
 
         Text {
-            text: tool_name
+            text: button.tool_name
             font.pixelSize: platform.isAndroid ? parent.height / 2 : 17
             visible: !inPortrait || !altMenu
 

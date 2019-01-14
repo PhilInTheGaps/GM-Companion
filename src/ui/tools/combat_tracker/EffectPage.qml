@@ -1,40 +1,29 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
-import gm.companion.colorscheme 1.0
-
-import gm.companion.effecttool 1.0
 
 Item {
     id: root
 
-    readonly property bool hasTables: tool.addons.length !== 0
+    readonly property bool hasTables: combat_tracker_effects.addons.length !== 0
 
-    Component.onCompleted: tool.loadAddons()
-
-    EffectTool {
-        id: tool
-    }
-
-    ColorScheme {
-        id: colors
-    }
+    Component.onCompleted: combat_tracker_effects.loadAddons()
 
     TabBar {
         id: tab_bar
-        height: colors.toolbarHeight
+        height: color_scheme.toolbarHeight
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.leftMargin: 10
 
         background: Rectangle {
-            color: colors.toolbarColor
+            color: color_scheme.toolbarColor
         }
 
         Repeater {
             id: addon_repeater
-            model: tool.addons
+            model: combat_tracker_effects.addons
 
             TabButton {
                 height: parent.height
@@ -48,10 +37,10 @@ Item {
                     font.bold: true
                 }
 
-                onClicked: tool.setCurrentAddon(modelData)
+                onClicked: combat_tracker_effects.setCurrentAddon(modelData)
 
                 background: Rectangle {
-                    color: parent.pressed ? "black" : colors.toolbarColor
+                    color: parent.pressed ? "black" : color_scheme.toolbarColor
                 }
             }
         }
@@ -68,28 +57,25 @@ Item {
 
         Repeater {
             id: type_repeater
-            model: tool.effectTypes
+            model: combat_tracker_effects.effectTypes
 
             Button {
                 text: icon.source != "" ? "" : modelData
-                onClicked: effect_text.text = tool.randomEffect(modelData)
+                onClicked: effect_text.text = combat_tracker_effects.randomEffect(
+                               modelData)
                 hoverEnabled: true
 
                 ToolTip {
                     visible: parent.hovered && parent.text == ""
-
                     text: modelData
                 }
 
                 Image {
                     id: icon
-                    source: tool.getIcon(index)
+                    source: combat_tracker_effects.getIcon(index)
 
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
+                    anchors.fill: parent
                     anchors.margins: 5
-                    anchors.horizontalCenter: parent.horizontalCenter
-
                     sourceSize.height: height
                     sourceSize.width: width
                     smooth: true
@@ -111,8 +97,8 @@ Item {
     }
 
     Rectangle {
-        color: colors.listHeaderBackgroundColor
-        height: colors.toolbarHeight * 2 + 20
+        color: color_scheme.listHeaderBackgroundColor
+        height: color_scheme.toolbarHeight * 2 + 20
 
         anchors.top: flow.bottom
         anchors.bottom: parent.bottom
@@ -124,7 +110,7 @@ Item {
             anchors.fill: parent
             anchors.margins: 5
 
-            color: colors.backgroundColor
+            color: color_scheme.backgroundColor
 
             ScrollView {
                 anchors.fill: parent
@@ -136,7 +122,7 @@ Item {
                     font.pointSize: 12
                     width: parent.parent.width - 10
                     wrapMode: Text.WordWrap
-                    color: colors.textColor
+                    color: color_scheme.textColor
                 }
             }
         }

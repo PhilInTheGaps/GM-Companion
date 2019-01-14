@@ -2,8 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
-import gm.companion.shoptool 1.0
-import gm.companion.shopeditor 1.0
 import FontAwesome 2.0
 
 Page {
@@ -13,79 +11,80 @@ Page {
     signal switchToItemEditor
     signal projectsChanged
 
-    ShopTool {
-        id: shop_tool
+    function updateShopFlow() {
+        shop_editor.updateShopList()
+
+        shop_column.children = []
+
+        var component = Qt.createComponent("./ShopButton.qml")
+
+        console.log(shop_editor.getShopList())
+
+        for (var i = 0; i < shop_editor.getShopList().length; i++) {
+
+            console.log(shop_editor.getShopList()[i])
+
+            var button = component.createObject(shop_column, {
+                                                    "x": 0,
+                                                    "y": 0,
+                                                    "shop": shop_editor.getShopList(
+                                                                )[i]
+                                                })
+
+            button.clicked.connect(updateShopInformation)
+        }
     }
 
-    ShopEditorTool {
-        id: editor_tool
+    function updateShopInformation(shop) {
+        loadShop(shop)
 
-        function updateShopFlow() {
-            updateShopList()
+        shop_name_text.text = shop_editor.getShopName()
+        shop_owner_textfield.text = shop_editor.getShopOwner()
+        shop_description_textfield.text = shop_editor.getShopDescription()
 
-            shop_column.children = []
+        fillItemTable()
+    }
 
-            var component = Qt.createComponent("./ShopButton.qml")
+    function loadShop(shop) {
+        shop_editor.loadShop(shop)
+    }
 
-            console.log(getShopList())
+    function fillItemTable() {
+        table_model.clear()
 
-            for (var i = 0; i < getShopList().length; i++) {
-
-                console.log(getShopList()[i])
-
-                var button = component.createObject(shop_column, {
-                                                        "x": 0,
-                                                        "y": 0,
-                                                        "shop": getShopList()[i]
-                                                    })
-
-                button.clicked.connect(updateShopInformation)
-            }
+        for (var i = 0; i < shop_editor.getItemNames().length; i++) {
+            table_model.append({
+                                   "name": shop_editor.getItemNames()[i],
+                                   "price": shop_editor.getItemPrices()[i],
+                                   "category": shop_editor.getItemCategories(
+                                                   )[i],
+                                   "description": shop_editor.getItemDescriptions(
+                                                      )[i]
+                               })
         }
+    }
 
-        function updateShopInformation(shop) {
-            loadShop(shop)
+    function fillItemListTable() {
+        item_list_model.clear()
 
-            shop_name_text.text = getShopName()
-            shop_owner_textfield.text = getShopOwner()
-            shop_description_textfield.text = getShopDescription()
-
-            fillItemTable()
-        }
-
-        function fillItemTable() {
-            table_model.clear()
-
-            for (var i = 0; i < getItemNames().length; i++) {
-                table_model.append({
-                                       "name": getItemNames()[i],
-                                       "price": getItemPrices()[i],
-                                       "category": getItemCategories()[i],
-                                       "description": getItemDescriptions()[i]
+        for (var i = 0; i < shop_editor.getItemListNames().length; i++) {
+            item_list_model.append({
+                                       "name": shop_editor.getItemListNames(
+                                                   )[i],
+                                       "price": shop_editor.getItemListPrices(
+                                                    )[i],
+                                       "category": shop_editor.getItemListCategories(
+                                                       )[i],
+                                       "description": shop_editor.getItemListDescriptions(
+                                                          )[i]
                                    })
-            }
         }
+    }
 
-        function fillItemListTable() {
-            item_list_model.clear()
+    function addListItem(index) {
+        shop_editor.addItem(shop_editor.getListItem(index))
 
-            for (var i = 0; i < getItemListNames().length; i++) {
-                item_list_model.append({
-                                           "name": getItemListNames()[i],
-                                           "price": getItemListPrices()[i],
-                                           "category": getItemListCategories(
-                                                           )[i],
-                                           "description": getItemListDescriptions(
-                                                              )[i]
-                                       })
-            }
-        }
-
-        function addListItem(index) {
-            addItem(getListItem(index))
-
-            fillItemTable()
-        }
+        fillItemTable()
     }
 
     background: Rectangle {
@@ -215,8 +214,6 @@ Page {
                 rightPadding: 5
                 spacing: 5
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
                 x: parent.width - width - 5
 
                 Text {
@@ -264,7 +261,7 @@ Page {
             standardButtons: Dialog.Ok | Dialog.Cancel
 
             onAccepted: {
-                editor_tool.createProject(project_textfield.text)
+                shop_editor.createProject(project_textfield.text)
 
                 project_combo_box.model = shop_tool.projects
                 projectsChanged()
@@ -288,11 +285,11 @@ Page {
             standardButtons: Dialog.Ok | Dialog.Cancel
 
             onAccepted: {
-                editor_tool.createCategory(category_textfield.text)
+                shop_editor.createCategory(category_textfield.text)
 
-                category_combo_box.model = editor_tool.getCategories()
+                category_combo_box.model = shop_editor.getCategories()
 
-                category_combo_box.currentIndex = editor_tool.getCategories(
+                category_combo_box.currentIndex = shop_editor.getCategories(
                             ).length - 1
             }
         }
@@ -314,9 +311,9 @@ Page {
             standardButtons: Dialog.Ok | Dialog.Cancel
 
             onAccepted: {
-                editor_tool.createShop(shop_name_textfield.text)
+                shop_editor.createShop(shop_name_textfield.text)
 
-                editor_tool.updateShopFlow()
+                updateShopFlow()
             }
         }
 
@@ -344,9 +341,9 @@ Page {
 
                     onCurrentTextChanged: {
                         if (currentText != "") {
-                            editor_tool.setCurrentProject(currentText)
+                            shop_editor.setCurrentProject(currentText)
 
-                            category_combo_box.model = editor_tool.getCategories()
+                            category_combo_box.model = shop_editor.getCategories()
                         }
                     }
                 }
@@ -361,14 +358,14 @@ Page {
                     id: category_combo_box
                     width: parent.width
                     Component.onCompleted: {
-                        model = editor_tool.getCategories()
+                        model = shop_editor.getCategories()
                     }
 
                     onCurrentTextChanged: {
                         if (currentText != "") {
-                            editor_tool.setCurrentCategory(currentText)
+                            shop_editor.setCurrentCategory(currentText)
 
-                            editor_tool.updateShopFlow()
+                            updateShopFlow()
                         }
                     }
                 }
@@ -455,7 +452,7 @@ Page {
                                         }
                                     }
 
-                                    onClicked: editor_tool.saveShop()
+                                    onClicked: shop_editor.saveShop()
                                 }
 
                                 DelayButton {
@@ -495,9 +492,9 @@ Page {
                                     }
 
                                     onActivated: {
-                                        editor_tool.deleteShop()
+                                        shop_editor.deleteShop()
 
-                                        editor_tool.updateShopFlow()
+                                        updateShopFlow()
                                     }
                                 }
 
@@ -539,8 +536,8 @@ Page {
                                     }
 
                                     onActivated: {
-                                        editor_tool.removeAllItems()
-                                        editor_tool.fillItemTable()
+                                        shop_editor.removeAllItems()
+                                        fillItemTable()
                                     }
                                 }
                             }
@@ -570,7 +567,7 @@ Page {
                                 placeholderText: qsTr("Shop Owner")
                                 selectByMouse: true
 
-                                onTextEdited: editor_tool.setShopOwner(text)
+                                onTextEdited: shop_editor.setShopOwner(text)
                             }
 
                             TextField {
@@ -579,7 +576,7 @@ Page {
                                 placeholderText: qsTr("Shop Description")
                                 selectByMouse: true
 
-                                onTextEdited: editor_tool.setShopDescription(
+                                onTextEdited: shop_editor.setShopDescription(
                                                   text)
                             }
                         }
@@ -751,7 +748,7 @@ Page {
                                         }
 
                                         onClicked: {
-                                            editor_tool.removeItem(index)
+                                            shop_editor.removeItem(index)
                                             table_model.remove(index)
                                         }
                                     }
@@ -779,9 +776,9 @@ Page {
                             onCurrentIndexChanged: {
                                 console.log(currentIndex)
 
-                                editor_tool.setItemListTabIndex(currentIndex)
-                                editor_tool.loadItemList()
-                                editor_tool.fillItemListTable()
+                                shop_editor.setItemListTabIndex(currentIndex)
+                                shop_editor.loadItemList()
+                                fillItemListTable()
                             }
 
                             Repeater {
@@ -794,7 +791,7 @@ Page {
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     Text {
-                                        text: editor_tool.getItemListTabNames(
+                                        text: shop_editor.getItemListTabNames(
                                                   )[index]
                                         color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
                                         font.pointSize: 12
@@ -883,11 +880,11 @@ Page {
                             }
 
                             Component.onCompleted: {
-                                editor_tool.loadItemListTabs()
-                                item_tab_bar_repeater.model = editor_tool.getItemListTabNames()
+                                shop_editor.loadItemListTabs()
+                                item_tab_bar_repeater.model = shop_editor.getItemListTabNames()
 
-                                editor_tool.loadItemList()
-                                editor_tool.fillItemListTable()
+                                shop_editor.loadItemList()
+                                fillItemListTable()
                             }
 
                             delegate: Rectangle {
@@ -904,7 +901,7 @@ Page {
                                     z: 2
 
                                     onClicked: {
-                                        editor_tool.addListItem(index)
+                                        addListItem(index)
                                     }
                                 }
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 
+#include "shopeditor.h"
 #include "src/settings/settingsmanager.h"
 
 class ShopTool : public QObject
@@ -24,6 +25,8 @@ class ShopTool : public QObject
 
 public:
     explicit ShopTool(QObject *parent = nullptr);
+
+    ShopEditor* getShopEditor() const { return shopEditor; }
 
     QStringList projects();
     QString category();
@@ -56,6 +59,7 @@ signals:
 
 private:
     SettingsManager *sManager;
+    ShopEditor *shopEditor;
 
     QString m_category;
     QStringList m_categories;
