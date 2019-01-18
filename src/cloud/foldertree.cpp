@@ -187,7 +187,7 @@ void Folder::printSubfolders(int level, bool recursive)
     {
         for (Folder *f : m_children)
         {
-            f->printSubfolders(level + 1);
+            if (f) f->printSubfolders(level + 1);
         }
     }
 
