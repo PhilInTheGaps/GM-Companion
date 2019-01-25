@@ -17,25 +17,6 @@ Dialog {
     contentItem: Page {
 
         padding: 10
-        footer: dialog_footer
-
-        Item {
-            id: dialog_footer
-            height: sort_checkbox.height
-
-            CheckBox {
-                id: sort_checkbox
-                text: qsTr("Sort combatants by initiative")
-                checked: true
-
-                background: Rectangle {
-                    color: "white"
-                }
-
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
 
         Column {
             id: main_column
@@ -234,11 +215,13 @@ Dialog {
             addCombatant(row6.getName(), row6.getIni(), row6.getHealth(), false)
             addCombatant(row7.getName(), row7.getIni(), row7.getHealth(), false)
             addCombatant(row8.getName(), row8.getIni(), row8.getHealth(), false)
-            addCombatant(row9.getName(), row9.getIni(), row9.getHealth(), true)
+            addCombatant(row9.getName(), row9.getIni(), row9.getHealth(), false)
         } else {
             addCombatant(name_field.text, ini_spinbox.value,
-                         health_spinbox.value, true)
+                         health_spinbox.value, false)
         }
+
+        combat_tracker.sortByIni()
 
         // Clear all rows
         name_field.clear()

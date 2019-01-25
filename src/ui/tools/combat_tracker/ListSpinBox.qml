@@ -2,100 +2,141 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
 
-SpinBox {
-    id: box
-    width: parent.width / 6
-    height: parent.height - parent.padding * 2
-    editable: true
-    value: field_value
+Item {
+    id: root
 
-    property string text_color: white
-    property int field_value: 0
-    property bool current_item: false
+    property string value
+    property bool edit_mode: false
+    property string font_color: "black"
 
-    background: Rectangle {
-        color: "transparent"
+    signal valueEdited(string new_value)
+    signal valueIncreased(int steps)
+
+    onEdit_modeChanged: {
+        if (!edit_mode) {
+            valueEdited(textfield.text)
+        }
     }
 
-    contentItem: TextInput {
-        text: Number.fromLocaleString(parent.locale, field_value)
+    Label {
+        id: label
+        text: root.value
+        anchors.centerIn: parent
+        color: root.font_color
+        font.pixelSize: parent.height - 30
 
-        onTextChanged: {
-            try {
-                var new_health = Number.fromLocaleString(parent.locale, text)
+        verticalAlignment: Text.AlignHCenter
+        horizontalAlignment: Text.AlignVCenter
+    }
 
-                if (new_health < -100) {
-                    new_health = 0
-                    text = Number(new_health).toString()
-                }
-            } catch (error) {
-                new_health = 0
-                text = Number(new_health).toString()
+    Item {
+        id: input_item
+        visible: edit_mode
+        anchors.fill: parent
+
+        TextField {
+            id: textfield
+            text: root.value
+            anchors.fill: parent
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
+            font.pointSize: 12
+
+            validator: IntValidator {
+                top: 99999
+                bottom: -100
             }
 
-            field_value = new_health
-        }
+            horizontalAlignment: Text.AlignHCenter
 
-        color: text_color
-        font.pointSize: 12
-        font.bold: true
-
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
-        validator: parent.validator
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        anchors.centerIn: parent
-        width: parent.width - up_button.width - down_button.width - 10
-        readOnly: !parent.editable
-    }
-
-    down.indicator: Button {
-        id: down_button
-        height: parent.height
-        width: height
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        hoverEnabled: true
-
-        background: Rectangle {
-            color: "transparent"
+            onAccepted: edit_mode = false
         }
 
         Text {
+            id: edit_icon
+            text: FontAwesome.checkCircle
+            font.family: FontAwesome.familySolid
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.margins: 10
+            font.pixelSize: parent.height - 30
+            color: "green"
+        }
+
+        MouseArea {
+            id: edit_mouse_area
+            onClicked: edit_mode = false
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: edit_icon.width + edit_icon.anchors.margins
+        }
+    }
+
+    Item {
+        id: left_button
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        visible: !edit_mode
+        width: left_icon.width + 20
+
+        Text {
+            id: left_icon
             text: FontAwesome.minus
             font.family: FontAwesome.familySolid
-            font.pointSize: 20
-            color: box.from >= field_value ? "lightgrey" : parent.pressed ? "grey" : parent.hovered ? "lightgrey" : current_item ? "white" : color_scheme.primaryButtonColor
+            font.pointSize: 13
+            color: left_area.pressed ? "black" : left_area.containsMouse ? "grey" : font_color
             anchors.centerIn: parent
         }
 
-        enabled: box.from < field_value
-
-        onClicked: field_value--
+        MouseArea {
+            id: left_area
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: valueIncreased(-1)
+        }
     }
 
-    up.indicator: Button {
-        id: up_button
-        height: parent.height
-        width: height
-        anchors.verticalCenter: parent.verticalCenter
+    Item {
+        id: right_button
         anchors.right: parent.right
-        hoverEnabled: true
-
-        background: Rectangle {
-            color: "transparent"
-        }
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 10
+        visible: !edit_mode
+        width: right_icon.width + 20
 
         Text {
+            id: right_icon
             text: FontAwesome.plus
             font.family: FontAwesome.familySolid
-            font.pointSize: 20
-            color: box.to <= field_value ? "lightgrey" : parent.pressed ? "grey" : parent.hovered ? "lightgrey" : current_item ? "white" : color_scheme.primaryButtonColor
+            font.pointSize: 13
+            color: right_area.pressed ? "black" : right_area.containsMouse ? "grey" : font_color
             anchors.centerIn: parent
         }
 
-        enabled: box.to > field_value
+        MouseArea {
+            id: right_area
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: valueIncreased(1)
+        }
+    }
 
-        onClicked: field_value++
+    MouseArea {
+        id: mouse_area
+        visible: !edit_mode
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: left_button.right
+        anchors.right: right_button.left
+        anchors.margins: 10
+        cursorShape: Qt.IBeamCursor
+
+        onClicked: {
+            root.edit_mode = true
+            textfield.forceActiveFocus()
+        }
     }
 }

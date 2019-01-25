@@ -29,9 +29,11 @@ public:
     Q_INVOKABLE void remove(int index);
 
     Q_INVOKABLE void setIni(int index, int ini);
+    Q_INVOKABLE void modifyIni(int index, int steps = 1);
     Q_INVOKABLE void setHealth(int index, int health);
+    Q_INVOKABLE void modifyHealth(int index, int steps = 1);
     Q_INVOKABLE void setNotes(int index, QString notes);
-    void sortByIni();
+    Q_INVOKABLE void sortByIni();
 
 signals:
     void currentRoundChanged();

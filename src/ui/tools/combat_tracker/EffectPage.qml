@@ -79,6 +79,7 @@ Item {
                     sourceSize.height: height
                     sourceSize.width: width
                     smooth: true
+                    asynchronous: true
                 }
 
                 ColorOverlay {

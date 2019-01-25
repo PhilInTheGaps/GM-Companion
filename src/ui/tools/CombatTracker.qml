@@ -170,7 +170,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.margins: 10
                 width: list_view.width / 5
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 font.pointSize: 12
                 color: color_scheme.listHeaderTextColor
             }
@@ -209,7 +209,7 @@ Page {
                                             - 10 - color_scheme.toolbarHeight
                                             * 1.3 - 20 : parent.width - x - 10
                                             - color_scheme.toolbarHeight * 1.3 - 20
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment: Text.AlignLeft
                 font.pointSize: 12
                 color: color_scheme.listHeaderTextColor
             }
@@ -239,8 +239,8 @@ Page {
 
             clip: true
             spacing: 10
-            currentIndex: combat_tracker.currentIndex
 
+            currentIndex: combat_tracker.currentIndex
             ScrollBar.vertical: ScrollBar {
             }
             model: combatantListModel
@@ -274,25 +274,27 @@ Page {
 
                     // INI
                     ListSpinBox {
-                        field_value: modelData.ini
-                        onValueChanged: combat_tracker.setIni(index,
-                                                              field_value)
-                        text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
-                        current_item: delegate_root.ListView.isCurrentItem
-                        from: 0
-                        to: 1000
+                        value: modelData.ini
+                        width: list_view.width / 6
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        font_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
+                        onValueEdited: combat_tracker.setIni(index, new_value)
+                        onValueIncreased: combat_tracker.modifyIni(index, steps)
                     }
 
                     // Health
                     ListSpinBox {
                         id: health_spinbox
-                        field_value: modelData.health
-                        onValueChanged: combat_tracker.setHealth(index,
-                                                                 field_value)
-                        text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
-                        current_item: delegate_root.ListView.isCurrentItem
-                        from: 0
-                        to: 1000
+                        width: list_view.width / 6
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        value: modelData.health
+                        font_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
+                        onValueEdited: combat_tracker.setHealth(index,
+                                                                new_value)
+                        onValueIncreased: combat_tracker.modifyHealth(index,
+                                                                      steps)
                     }
 
                     // Notes

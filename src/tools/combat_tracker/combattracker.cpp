@@ -135,6 +135,7 @@ void CombatTracker::sortByIni()
     combatantListModel->setElements(m_combatants);
 
     if (c && (m_currentRound > 0)) m_currentIndex = m_combatants.indexOf(c);
+
     emit combatantsChanged();
     emit currentIndexChanged();
 }
@@ -146,11 +147,36 @@ void CombatTracker::sortByIni()
  */
 void CombatTracker::setIni(int index, int ini)
 {
+    qDebug() << "Setting INI  ...";
+
     if (index < m_combatants.size())
     {
         auto c = m_combatants[index];
 
         if (!c) return;
+
+        if (ini > -1) c->setIni(ini);
+        else c->setIni(0);
+
+        sortByIni();
+    }
+}
+
+/**
+ * @brief Increase or decrease INI at index
+ * @param index Index of Combatant
+ * @param steps Steps to increase INI by. Default: +1
+ */
+void CombatTracker::modifyIni(int index, int steps)
+{
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
+
+        if (!c) return;
+
+        auto ini = c->ini();
+        ini += steps;
 
         if (ini > -1) c->setIni(ini);
         else c->setIni(0);
@@ -171,6 +197,27 @@ void CombatTracker::setHealth(int index, int health)
         auto c = m_combatants[index];
 
         if (!c) return;
+
+        if (health > -100) c->setHealth(health);
+        else c->setHealth(0);
+    }
+}
+
+/**
+ * @brief Increase or decrease health at index
+ * @param index Index of Combatant
+ * @param steps Steps to increase INI by. Default: +1
+ */
+void CombatTracker::modifyHealth(int index, int steps)
+{
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
+
+        if (!c) return;
+
+        auto health = c->health();
+        health += steps;
 
         if (health > -100) c->setHealth(health);
         else c->setHealth(0);
