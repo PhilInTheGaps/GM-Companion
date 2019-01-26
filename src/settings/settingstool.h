@@ -4,12 +4,15 @@
 #include "settingsmanager.h"
 
 #include <QObject>
+#include <QFile>
 
 class SettingsTool : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int currentLanguageIndex READ currentLanguageIndex NOTIFY currentLanguageIndexChanged)
     Q_PROPERTY(int uiStyleIndex READ uiStyleIndex NOTIFY uiStyleChanged)
+    Q_PROPERTY(bool showToolNames READ showToolNames WRITE setShowToolNames NOTIFY showToolNamesChanged)
+    Q_PROPERTY(bool classicIcons READ classicIcons WRITE setClassicIcons NOTIFY classicIconsChanged)
 
 public:
     explicit SettingsTool(QObject *parent = nullptr);
@@ -42,8 +45,13 @@ public:
     Q_INVOKABLE void setCloudMode(int mode) { sManager->setSetting(Setting::cloudMode, 1, QString::number(mode)); }
     Q_INVOKABLE int getCloudMode() { return sManager->getSetting(Setting::cloudMode).toInt(); }
 
-    Q_INVOKABLE void setAltMenu(bool enabled = true) { sManager->setSetting(Setting::altMenu, enabled); }
-    Q_INVOKABLE bool getAltMenu() { return sManager->getSetting(Setting::altMenu).toInt(); }
+    bool classicIcons() const { return sManager->getSetting(Setting::classicIcons).toInt(); }
+    void setClassicIcons(bool b) { sManager->setSetting(Setting::classicIcons, b); emit classicIconsChanged(); }
+
+    bool showToolNames() const { return sManager->getSetting(Setting::showToolNames).toInt(); }
+    void setShowToolNames(bool b) { sManager->setSetting(Setting::showToolNames, b); emit showToolNamesChanged(); }
+
+    Q_INVOKABLE QString getCreditsPage();
 
 signals:
     void audioPathChanged();
@@ -59,6 +67,8 @@ signals:
     void currentLanguageIndexChanged();
     void uiStyleChanged();
     void checkForUdatesChanged();
+    void showToolNamesChanged();
+    void classicIconsChanged();
 
 private:
     SettingsManager *sManager;

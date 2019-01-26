@@ -2,6 +2,7 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
+import FontAwesome 2.0
 import "./tools"
 import "./components"
 import "./main"
@@ -14,7 +15,6 @@ Window {
     title: qsTr("GM-Companion")
 
     readonly property bool inPortrait: window.width < window.height
-    property bool altMenu: settings_tool.getAltMenu()
 
     Component.onCompleted: {
         if (settings_tool.getCheckForUpdates())
@@ -62,9 +62,10 @@ Window {
             width: {
                 if (platform.isAndroid) {
                     inPortrait
-                            || altMenu ? color_scheme.toolbarHeight : parent.width / 4
+                            || !settings_tool.showToolNames ? color_scheme.toolbarHeight : parent.width / 4
                 } else {
-                    inPortrait || altMenu ? color_scheme.toolbarHeight : 200
+                    inPortrait
+                            || !settings_tool.showToolNames ? color_scheme.toolbarHeight : 200
                 }
             }
 
@@ -101,7 +102,7 @@ Window {
                             text: "Tools"
                             color: color_scheme.toolbarTextColor
                             font.pointSize: 14
-                            visible: !inPortrait && !altMenu
+                            visible: !inPortrait && settings_tool.showToolNames
 
                             anchors.centerIn: parent
 
@@ -112,7 +113,7 @@ Window {
                         // GM-Companion Icon
                         Image {
                             anchors.centerIn: parent
-                            visible: inPortrait || altMenu
+                            visible: inPortrait || !settings_tool.showToolNames
 
                             width: parent.width - 10
                             height: width
@@ -155,6 +156,7 @@ Window {
                                 "Notes"), qsTr("Converter")]
                         property var icons: ["../icons/menu/audio.png", "../icons/menu/maps.png", "../icons/menu/dice.png", "../icons/menu/combat.png", "../icons/menu/item-shop.png", "../icons/menu/characters.png", "../icons/menu/generators.png", "../icons/menu/notes.png", "../icons/menu/converter.png"]
                         property var tools: [audio, maps, dice, combat, shop, characters, generators, notes, converter]
+                        property var fa_icons: [FontAwesome.music, FontAwesome.mapMarkedAlt, FontAwesome.diceD20, FontAwesome.bookDead, FontAwesome.shoppingCart, FontAwesome.addressCard, FontAwesome.industry, FontAwesome.book, FontAwesome.balanceScale]
 
                         Repeater {
                             model: parent.toolNames
@@ -162,6 +164,8 @@ Window {
                             SideMenuButton {
                                 tool_name: modelData
                                 icon_source: parent.icons[index]
+                                fa_icon: parent.fa_icons[index]
+                                current_tool: stack.currentItem == tool_column.tools[index]
 
                                 onClicked: {
                                     if (index == 0) {
@@ -185,6 +189,8 @@ Window {
 
                 tool_name: qsTr("Settings")
                 icon_source: "../icons/menu/settings.png"
+                fa_icon: FontAwesome.cog
+                current_tool: stack.currentItem == settings
 
                 onClicked: tool_column.buttonClicked(settings)
             }

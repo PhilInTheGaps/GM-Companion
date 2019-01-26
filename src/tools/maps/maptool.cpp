@@ -12,7 +12,8 @@ MapTool::MapTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *
 
     connect(fManager->getMapsFileManger(), &MapsFileManager::mapsChanged, [ = ](QList<MapCategory *>categories) {
         m_categories = categories;
-        setCurrentCategory(0);
+
+        if (m_categories.size() > 0) setCurrentCategory(m_categories.size() - 1);
         emit categoriesChanged();
     });
 

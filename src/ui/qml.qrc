@@ -64,5 +64,9 @@
         <file>tools/audio/editor/EditorNewThingDialog.qml</file>
         <file>tools/audio/MetaDataDisplay.qml</file>
         <file>components/ToolBarComboBox.qml</file>
+        <file>tools/settings/GeneralPage.qml</file>
+        <file>tools/settings/PathsPage.qml</file>
+        <file>tools/settings/AddonsPage.qml</file>
+        <file>tools/settings/InfoPage.qml</file>
     </qresource>
 </RCC>

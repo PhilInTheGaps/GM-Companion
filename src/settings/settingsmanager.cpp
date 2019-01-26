@@ -104,8 +104,12 @@ QString SettingsManager::getSetting(Setting setting, QString value)
         settings->endGroup();
         break;
 
-    case Setting::altMenu:
-        settingString = settings->value("altMenu", "0").toString();
+    case Setting::showToolNames:
+        settingString = settings->value("showToolNames", "0").toString();
+        break;
+
+    case Setting::classicIcons:
+        settingString = settings->value("classicIcons", "0").toString();
         break;
 
     case Setting::googleID:
@@ -266,8 +270,12 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
         }
         break;
 
-    case Setting::altMenu:
-        settings->setValue("altMenu", checked);
+    case Setting::showToolNames:
+        settings->setValue("showToolNames", checked);
+        break;
+
+    case Setting::classicIcons:
+        settings->setValue("classicIcons", checked);
         break;
 
     case Setting::googleID:

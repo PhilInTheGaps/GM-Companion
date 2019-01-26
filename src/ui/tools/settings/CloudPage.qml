@@ -70,11 +70,20 @@ Page {
                 Label {
                     text: qsTr("Select File Storage")
                     font.bold: true
+                    color: color_scheme.textColor
                 }
 
                 RadioButton {
-                    text: qsTr("Local")
+                    id: radio_local
                     checked: parent.cloudMode == 0
+
+                    Text {
+                        text: qsTr("Local")
+                        color: color_scheme.textColor
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: radio_local.indicator.width + 20
+                    }
 
                     onCheckedChanged: {
                         if (checked)
@@ -84,8 +93,15 @@ Page {
 
                 RadioButton {
                     id: google_drive_radio_button
-                    text: qsTr("Google Drive")
                     checked: parent.cloudMode == 1
+
+                    Text {
+                        text: qsTr("Google Drive")
+                        color: color_scheme.textColor
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        x: google_drive_radio_button.indicator.width + 20
+                    }
 
                     onCheckedChanged: {
                         if (checked)
@@ -105,6 +121,7 @@ Page {
                     Text {
                         id: google_id_text
                         text: qsTr("Client ID")
+                        color: color_scheme.textColor
                         width: google_secret_text.width
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -126,6 +143,7 @@ Page {
                     Text {
                         id: google_secret_text
                         text: qsTr("Client Secret")
+                        color: color_scheme.textColor
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -144,7 +162,8 @@ Page {
 
                     Button {
                         id: google_connect_button
-                        text: qsTr("Connect")
+                        text: google_drive_tool.linked ? qsTr("Disconnect") : qsTr(
+                                                             "Connect")
 
                         onClicked: {
                             if (settings_tool.getGoogleConnect()) {
