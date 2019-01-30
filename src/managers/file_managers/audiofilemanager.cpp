@@ -88,6 +88,7 @@ AudioFileManager::AudioFileManager(GoogleDrive *google) : googleDrive(google)
  */
 void AudioFileManager::findProjects(int mode)
 {
+    qDebug() << "AudioFileManager: Finding audio projects for audio tool ...";
     m_mode = mode;
 
     switch (mode)
@@ -120,6 +121,7 @@ void AudioFileManager::findProjects(int mode)
  */
 void AudioFileManager::findEditorProjects(int mode)
 {
+    qDebug() << "AudioFileManager: Finding audio projects for audio editor ...";
     m_mode = mode;
 
     switch (mode)

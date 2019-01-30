@@ -68,5 +68,9 @@
         <file>tools/settings/PathsPage.qml</file>
         <file>tools/settings/AddonsPage.qml</file>
         <file>tools/settings/InfoPage.qml</file>
+        <file>tools/shop/ShopPage.qml</file>
+        <file>components/ToolBarIconButton.qml</file>
+        <file>tools/shop/EditorNewThingDialog.qml</file>
+        <file>components/ToolBarTextButton.qml</file>
     </qresource>
 </RCC>

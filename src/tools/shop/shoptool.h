@@ -5,72 +5,65 @@
 #include <QStringList>
 
 #include "shopeditor.h"
+#include "shopproject.h"
 #include "src/settings/settingsmanager.h"
+#include "src/managers/filemanager.h"
+#include <QQmlApplicationEngine>
 
 class ShopTool : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(QStringList projects READ projects NOTIFY projectsChanged)
-    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
     Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList shops READ shops NOTIFY shopsChanged)
-    Q_PROPERTY(QString shopName READ shopName NOTIFY shopNameChanged)
-    Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY shopOwnerChanged)
-    Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY shopDescriptionChanged)
 
-    Q_PROPERTY(QStringList item_names READ item_names NOTIFY itemsChanged)
-    Q_PROPERTY(QStringList item_prices READ item_prices NOTIFY itemsChanged)
-    Q_PROPERTY(QStringList item_descriptions READ item_descriptions NOTIFY itemsChanged)
+    Q_PROPERTY(QString shopName READ shopName NOTIFY currentShopChanged)
+    Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY currentShopChanged)
+    Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
 
 public:
-    explicit ShopTool(QObject *parent = nullptr);
+    explicit ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     ShopEditor* getShopEditor() const { return shopEditor; }
 
     QStringList projects();
-    QString category();
-    void setCategory(QString category);
+    Q_INVOKABLE void setCurrentProject(int index);
+
     QStringList categories();
+    Q_INVOKABLE void setCurrentCategory(int index);
 
     QStringList shops();
+    Q_INVOKABLE void setCurrentShop(int index);
 
-    QString shopName();
-    QString shopOwner();
-    QString shopDescription();
-
-    QStringList item_names();
-    QStringList item_prices();
-    QStringList item_descriptions();
-
-    Q_INVOKABLE void load(QString project, QString shop);
-    Q_INVOKABLE void loadCategories(QString project);
-    Q_INVOKABLE void loadShops(QString project);
+    QString shopName() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->name(); else return ""; }
+    QString shopOwner() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->owner(); else return ""; }
+    QString shopDescription() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->description(); else return ""; }
 
 signals:
     void projectsChanged();
-    void categoryChanged();
     void categoriesChanged();
     void shopsChanged();
+    void currentShopChanged();
+
     void shopNameChanged();
     void shopOwnerChanged();
     void shopDescriptionChanged();
-    void itemsChanged();
 
 private:
     SettingsManager *sManager;
     ShopEditor *shopEditor;
+    FileManager *fileManager;
+    QQmlApplicationEngine *qmlEngine;
+    ItemModel *itemModel;
 
-    QString m_category;
-    QStringList m_categories;
-    QStringList m_shops;
-    QString m_shopName;
-    QString m_shopDescription;
-    QString m_shopOwner;
+    QList<ShopProject*> m_projects;
+    ShopProject *m_currentProject = nullptr;
 
-    QStringList m_item_names;
-    QStringList m_item_prices;
-    QStringList m_item_descriptions;
+private slots:
+    void projectsReceived(QList<ShopProject*> projects);
+    void updateItems();
+    void shopEditorSaved(QList<ShopProject*> projects);
 };
 
 #endif // SHOPTOOL_H

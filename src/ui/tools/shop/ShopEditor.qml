@@ -3,978 +3,879 @@ import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
 import FontAwesome 2.0
+import "../../components"
 
 Page {
-    id: editor
+    id: root
 
     signal backToViewer
     signal switchToItemEditor
-    signal projectsChanged
 
-    function updateShopFlow() {
-        shop_editor.updateShopList()
+    Connections {
+        target: shop_editor
 
-        shop_column.children = []
-
-        var component = Qt.createComponent("./ShopButton.qml")
-
-        console.log(shop_editor.getShopList())
-
-        for (var i = 0; i < shop_editor.getShopList().length; i++) {
-
-            console.log(shop_editor.getShopList()[i])
-
-            var button = component.createObject(shop_column, {
-                                                    "x": 0,
-                                                    "y": 0,
-                                                    "shop": shop_editor.getShopList(
-                                                                )[i]
-                                                })
-
-            button.clicked.connect(updateShopInformation)
+        onShowInfoBar: {
+            info_text.text = message
+            info_bar.visible = true
+            info_bar_timer.start()
         }
-    }
-
-    function updateShopInformation(shop) {
-        loadShop(shop)
-
-        shop_name_text.text = shop_editor.getShopName()
-        shop_owner_textfield.text = shop_editor.getShopOwner()
-        shop_description_textfield.text = shop_editor.getShopDescription()
-
-        fillItemTable()
-    }
-
-    function loadShop(shop) {
-        shop_editor.loadShop(shop)
-    }
-
-    function fillItemTable() {
-        table_model.clear()
-
-        for (var i = 0; i < shop_editor.getItemNames().length; i++) {
-            table_model.append({
-                                   "name": shop_editor.getItemNames()[i],
-                                   "price": shop_editor.getItemPrices()[i],
-                                   "category": shop_editor.getItemCategories(
-                                                   )[i],
-                                   "description": shop_editor.getItemDescriptions(
-                                                      )[i]
-                               })
-        }
-    }
-
-    function fillItemListTable() {
-        item_list_model.clear()
-
-        for (var i = 0; i < shop_editor.getItemListNames().length; i++) {
-            item_list_model.append({
-                                       "name": shop_editor.getItemListNames(
-                                                   )[i],
-                                       "price": shop_editor.getItemListPrices(
-                                                    )[i],
-                                       "category": shop_editor.getItemListCategories(
-                                                       )[i],
-                                       "description": shop_editor.getItemListDescriptions(
-                                                          )[i]
-                                   })
-        }
-    }
-
-    function addListItem(index) {
-        shop_editor.addItem(shop_editor.getListItem(index))
-
-        fillItemTable()
     }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
     }
 
-    header: tool_bar
+    EditorNewThingDialog {
+        id: new_thing_dialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+    }
 
-    Rectangle {
+    header: Rectangle {
         id: tool_bar
         color: color_scheme.toolbarColor
         height: color_scheme.toolbarHeight
 
         Row {
-            anchors.fill: parent
+            id: header_row_left
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             spacing: 5
 
-            Button {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                hoverEnabled: true
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Text {
-                    text: FontAwesome.arrowAltCircleLeft
-                    font.family: FontAwesome.familySolid
-                    font.pointSize: 25
-                    anchors.centerIn: parent
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                }
-
-                width: height
+            // Back
+            ToolBarIconButton {
+                fa_icon: FontAwesome.arrowAltCircleLeft
                 onClicked: backToViewer()
             }
 
-            Button {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: new_project_text.width + 10
-                hoverEnabled: true
-
-                Text {
-                    id: new_project_text
-                    text: qsTr("Create New Project")
-                    anchors.centerIn: parent
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    font.bold: true
-                    font.pointSize: 12
-                }
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                onClicked: {
-                    new_project_dialog.open()
-                }
+            // New thing
+            ToolBarIconButton {
+                fa_icon: FontAwesome.fileMedical
+                onClicked: new_thing_dialog.open()
             }
 
-            Button {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: new_category_text.width + 10
-                hoverEnabled: true
+            // Save
+            ToolBarIconButton {
+                fa_icon: FontAwesome.fileDownload
+                onClicked: shop_editor.save()
 
                 Text {
-                    id: new_category_text
-                    text: qsTr("Create New Category")
-                    anchors.centerIn: parent
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    font.bold: true
-                    font.pointSize: 12
-                }
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                onClicked: {
-                    new_category_dialog.open()
-                }
-            }
-
-            Button {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: new_shop_text.width + 10
-                hoverEnabled: true
-
-                Text {
-                    id: new_shop_text
-                    text: qsTr("Create New Shop")
-                    anchors.centerIn: parent
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    font.bold: true
-                    font.pointSize: 12
-                }
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                onClicked: {
-                    new_shop_dialog.open()
-                }
-            }
-        }
-
-        Button {
-            id: open_item_editor_button
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: open_item_editor_row.width
-            hoverEnabled: true
-            x: parent.width - width - 5
-
-            background: Rectangle {
-                color: "transparent"
-            }
-
-            Row {
-                id: open_item_editor_row
-                leftPadding: 5
-                rightPadding: 5
-                spacing: 5
-                anchors.verticalCenter: parent.verticalCenter
-                x: parent.width - width - 5
-
-                Text {
-                    text: FontAwesome.edit
+                    visible: !shop_editor.isSaved
+                    text: FontAwesome.asterisk
+                    color: "darkred"
                     font.family: FontAwesome.familySolid
-                    font.pointSize: 12
-                    color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Text {
-                    id: open_item_editor_text
-                    text: qsTr("Open Item Editor")
-                    color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    font.pointSize: 12
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                    verticalAlignment: Text.AlignVCenter
+                    anchors.right: parent.right
+                    y: parent.height - height * 1.5
                 }
             }
 
-            onClicked: switchToItemEditor()
-        }
-    }
+            // Projects
+            ToolBarComboBox {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 5
+                model: shop_editor.projectNames
 
-    Column {
-        width: parent.width
-        height: parent.height
-        spacing: 5
-        padding: 5
-
-        Dialog {
-            id: new_project_dialog
-            title: qsTr("Create New Project")
-
-            contentItem: Column {
-                TextField {
-                    id: project_textfield
-                    width: parent.width
-                    placeholderText: qsTr("Project Name")
-                    selectByMouse: true
-                }
+                onCurrentIndexChanged: shop_editor.setCurrentProject(
+                                           currentIndex)
             }
 
-            standardButtons: Dialog.Ok | Dialog.Cancel
+            // Categories
+            ToolBarComboBox {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 5
+                model: shop_editor.categoryNames
 
-            onAccepted: {
-                shop_editor.createProject(project_textfield.text)
-
-                project_combo_box.model = shop_tool.projects
-                projectsChanged()
-            }
-        }
-
-        Dialog {
-            id: new_category_dialog
-            title: qsTr("Create New Category")
-
-            contentItem: Column {
-
-                TextField {
-                    id: category_textfield
-                    width: parent.width
-                    placeholderText: qsTr("Category Name")
-                    selectByMouse: true
-                }
-            }
-
-            standardButtons: Dialog.Ok | Dialog.Cancel
-
-            onAccepted: {
-                shop_editor.createCategory(category_textfield.text)
-
-                category_combo_box.model = shop_editor.getCategories()
-
-                category_combo_box.currentIndex = shop_editor.getCategories(
-                            ).length - 1
-            }
-        }
-
-        Dialog {
-            id: new_shop_dialog
-            title: qsTr("Create New Shop")
-
-            contentItem: Column {
-
-                TextField {
-                    id: shop_name_textfield
-                    width: parent.width
-                    placeholderText: qsTr("Shop Name")
-                    selectByMouse: true
-                }
-            }
-
-            standardButtons: Dialog.Ok | Dialog.Cancel
-
-            onAccepted: {
-                shop_editor.createShop(shop_name_textfield.text)
-
-                updateShopFlow()
+                onCurrentIndexChanged: shop_editor.setCurrentCategory(
+                                           currentIndex)
             }
         }
 
         Row {
-            width: parent.width - parent.padding * 2
-            height: parent.height - parent.padding * 2
+            id: header_row_right
+            anchors.left: header_row_left.right
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: 5
+
+            layoutDirection: Qt.RightToLeft
+
+            // Item Editor
+            ToolBarIconButton {
+                fa_icon: FontAwesome.edit
+                onClicked: switchToItemEditor()
+            }
+
+            // Item Groups
+            ToolBarComboBox {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.margins: 5
+
+                model: shop_editor.itemGroups
+                onCurrentIndexChanged: shop_editor.setCurrentItemGroup(
+                                           currentIndex)
+            }
+        }
+    }
+
+    // Left
+    ScrollView {
+        id: left_scroll_view
+        width: 175
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 5
+
+        clip: true
+
+        Column {
+            id: shop_column
+            anchors.left: parent.left
+            anchors.right: parent.right
             spacing: 5
 
-            Column {
-                id: shop_properties_column
-                width: 175
-                height: parent.height
-                spacing: 5
+            Repeater {
+                model: shop_editor.shopNames
 
-                Text {
-                    id: project_text
-                    text: qsTr("Project")
-                    color: color_scheme.textColor
+                ShopButton {
+                    shop: modelData
+                    width: left_scroll_view.width
+
+                    onClicked: shop_editor.setCurrentShop(index)
                 }
+            }
+        }
+    }
 
-                ComboBox {
-                    id: project_combo_box
-                    width: parent.width
-                    model: shop_tool.projects
+    // Mid
+    Column {
+        id: mid_column
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: left_scroll_view.right
+        anchors.right: right_column.left
+        anchors.margins: 5
+        spacing: 5
 
-                    onCurrentTextChanged: {
-                        if (currentText != "") {
-                            shop_editor.setCurrentProject(currentText)
+        // Shop Info
+        Item {
+            id: shop_info_item
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: color_scheme.toolbarHeight
 
-                            category_combo_box.model = shop_editor.getCategories()
+            // Move up and down
+            Item {
+                id: shop_up_down
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: height / 2
+
+                // Up
+                Button {
+                    id: shop_up
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    height: parent.height / 2
+
+                    background: Rectangle {
+                        color: color_scheme.menuColor
+                    }
+
+                    Text {
+                        text: shop_name_field.edit_mode ? FontAwesome.checkCircle : FontAwesome.chevronUp
+                        font.family: FontAwesome.familySolid
+                        color: shop_name_field.edit_mode ? "limegreen" : color_scheme.toolbarTextColor
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    onClicked: {
+                        if (shop_name_field.edit_mode) {
+                            shop_name_field.edit_mode = false
+                            shop_editor.name = shop_name_field.text
+                        } else {
+                            shop_editor.moveShop(-1)
                         }
                     }
                 }
 
-                Text {
-                    id: category_text
-                    text: qsTr("Category")
-                    color: color_scheme.textColor
-                }
+                // Down
+                Button {
+                    id: shop_down_down
+                    anchors.top: shop_up.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
 
-                ComboBox {
-                    id: category_combo_box
-                    width: parent.width
-                    Component.onCompleted: {
-                        model = shop_editor.getCategories()
+                    background: Rectangle {
+                        color: color_scheme.menuColor
                     }
 
-                    onCurrentTextChanged: {
-                        if (currentText != "") {
-                            shop_editor.setCurrentCategory(currentText)
+                    Text {
+                        text: shop_name_field.edit_mode ? FontAwesome.timesCircle : FontAwesome.chevronDown
+                        font.family: FontAwesome.familySolid
+                        color: shop_name_field.edit_mode ? "red" : color_scheme.toolbarTextColor
+                        anchors.fill: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
 
-                            updateShopFlow()
+                    onClicked: {
+                        if (shop_name_field.edit_mode) {
+                            shop_name_field.edit_mode = false
+                            shop_name_field.text = shop_editor.name
+                        } else {
+                            shop_editor.moveShop(1)
                         }
-                    }
-                }
-
-                Text {
-                    id: shops_text
-                    text: qsTr("Shops")
-                    color: color_scheme.textColor
-                }
-
-                ScrollView {
-                    width: parent.width
-                    height: parent.height - parent.spacing * 5 - category_combo_box.height
-                            - category_text.height - shops_text.height
-                            - project_combo_box.height - project_text.height
-
-                    clip: true
-
-                    Column {
-                        id: shop_column
-                        width: parent.parent.width
-                        spacing: 5
                     }
                 }
             }
 
-            Column {
-                width: parent.width - parent.spacing - shop_properties_column.width
-                height: parent.height
-                spacing: 5
+            // Name of shop
+            TextField {
+                id: shop_name_field
+                text: shop_editor.name
+                anchors.left: shop_up_down.right
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                selectByMouse: true
+
+                property bool edit_mode: false
+                activeFocusOnPress: edit_mode
+                focus: edit_mode
+
+                Button {
+                    anchors.top: parent.top
+                    anchors.right: shop_delete_button.left
+                    anchors.bottom: parent.bottom
+                    width: height
+                    visible: !shop_name_field.edit_mode
+
+                    background: Rectangle {
+                        color: "transparent"
+                    }
+
+                    Text {
+                        text: FontAwesome.pen
+                        font.family: FontAwesome.familySolid
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    onClicked: shop_name_field.edit_mode = true
+                }
+
+                // Delete Shop
+                Button {
+                    id: shop_delete_button
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    width: height
+
+                    background: Rectangle {
+                        color: color_scheme.menuColor
+                    }
+
+                    Text {
+                        text: FontAwesome.trashAlt
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: height
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        color: "red"
+                    }
+
+                    onClicked: shop_delete_overlay.visible = true
+
+                    // Confirm deletion
+                    Rectangle {
+                        id: shop_delete_overlay
+                        visible: false
+                        anchors.fill: parent
+                        color: color_scheme.menuColor
+
+                        Text {
+                            text: FontAwesome.trashAlt
+                            font.family: FontAwesome.familySolid
+                            color: color_scheme.toolbarTextColor
+                            font.pixelSize: parent.height / 3
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            anchors.left: parent.left
+                            width: height / 2
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                        }
+
+                        // Yes
+                        Button {
+                            anchors.top: parent.top
+                            anchors.right: parent.right
+                            width: parent.width / 2
+                            height: parent.height / 2
+
+                            background: Rectangle {
+                                color: "transparent"
+                            }
+
+                            Text {
+                                text: FontAwesome.checkCircle
+                                font.family: FontAwesome.familySolid
+                                color: "limegreen"
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            onClicked: {
+                                shop_editor.deleteShop()
+                                shop_delete_overlay.visible = false
+                            }
+                        }
+
+                        // No
+                        Button {
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            width: parent.width / 2
+                            height: parent.height / 2
+
+                            background: Rectangle {
+                                color: "transparent"
+                            }
+
+                            Text {
+                                text: FontAwesome.timesCircle
+                                font.family: FontAwesome.familySolid
+                                color: "red"
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+
+                            onClicked: {
+                                shop_delete_overlay.visible = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Further info
+        Row {
+            id: shop_properties_row
+            width: parent.width
+            spacing: 5
+
+            // Owner
+            TextField {
+                id: shop_owner_textfield
+                width: parent.width / 4
+                placeholderText: qsTr("Shop Owner")
+                selectByMouse: true
+                text: shop_editor.owner
+
+                onTextEdited: shop_editor.setOwner(text)
+            }
+
+            // Description
+            TextField {
+                id: shop_description_textfield
+                width: parent.width - parent.spacing - shop_owner_textfield.width
+                placeholderText: qsTr("Shop Description")
+                selectByMouse: true
+                text: shop_editor.description
+
+                onTextEdited: shop_editor.setDescription(text)
+            }
+        }
+
+        Rectangle {
+            id: item_header
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: color_scheme.toolbarHeight
+            color: color_scheme.listHeaderBackgroundColor
+
+            Row {
+                anchors.fill: parent
+                padding: 5
+                leftPadding: 10
+                rightPadding: 10
+                spacing: 10
+
+                Text {
+                    text: qsTr("Item")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 4
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                    text: qsTr("Price")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    horizontalAlignment: Text.AlignRight
+                }
+
+                Text {
+                    text: qsTr("Category")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Text {
+                    text: qsTr("Description")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: parent.width - parent.rightPadding - x
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+        }
+
+        ListView {
+            id: shop_items_table
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: parent.height - y
+
+            interactive: true
+            clip: true
+            focus: true
+            keyNavigationEnabled: true
+            highlightFollowsCurrentItem: false
+
+            currentIndex: 0
+            onModelChanged: currentIndex = 0
+
+            ScrollBar.vertical: ScrollBar {
+            }
+
+            model: shopEditorItemModel
+
+            delegate: Rectangle {
+                id: delegate_item
+                height: shop_items_table.currentIndex == index ? (description_text.lineCount > 1 ? description_text.height + 10 : color_scheme.toolbarHeight) : delegate_row.height + 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: shop_items_table.currentIndex
+                       == index ? color_scheme.menuColor : "transparent"
 
                 Row {
-                    width: parent.width
-                    height: parent.height
-                    spacing: 5
+                    id: delegate_row
+                    padding: 5
+                    leftPadding: 10
+                    rightPadding: 10
+                    spacing: 10
+                    anchors.left: parent.left
+                    anchors.right: shop_items_table.currentIndex
+                                   == index ? delete_item_button.left : parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 30
 
-                    Column {
-                        width: (parent.width - parent.spacing) / 2
-                        height: parent.height
-                        spacing: 5
+                    Text {
+                        text: modelData.name
+                        color: shop_items_table.currentIndex
+                               == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+                        width: (delegate_item.width - parent.leftPadding * 2
+                                - parent.spacing * 2) / 4
+                        clip: true
+                        elide: Text.ElideRight
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                    }
 
-                        Rectangle {
-                            id: shop_action_row
-                            width: parent.width
-                            color: color_scheme.toolbarColor
-                            height: color_scheme.toolbarHeight
+                    Text {
+                        text: modelData.price
+                        color: shop_items_table.currentIndex
+                               == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+                        width: (delegate_item.width - parent.leftPadding * 2
+                                - parent.spacing * 2) / 5
+                        clip: true
+                        elide: Text.ElideRight
+                        horizontalAlignment: Text.AlignRight
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                    }
 
-                            Row {
-                                anchors.fill: parent
-                                spacing: 5
-                                leftPadding: 5
-                                rightPadding: 5
+                    Text {
+                        text: modelData.category
+                        color: shop_items_table.currentIndex
+                               == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+                        width: (delegate_item.width - parent.leftPadding * 2
+                                - parent.spacing * 2) / 5
+                        clip: true
+                        elide: Text.ElideRight
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                    }
 
-                                Button {
-                                    width: save_shop_row.width
-                                    hoverEnabled: true
+                    Text {
+                        id: description_text
+                        text: modelData.description
+                        color: shop_items_table.currentIndex
+                               == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+                        width: parent.width - x - parent.rightPadding
+                        clip: true
+                        elide: Text.ElideRight
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.pointSize: 12
+                        wrapMode: shop_items_table.currentIndex
+                                  == index ? Text.WordWrap : Text.NoWrap
+                    }
+                }
 
-                                    height: parent.height
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
+                MouseArea {
+                    id: mouse_area
+                    anchors.fill: parent
+                    onClicked: {
+                        shop_items_table.forceActiveFocus()
+                        shop_items_table.currentIndex = index
+                    }
+                }
 
-                                    Row {
-                                        id: save_shop_row
-                                        leftPadding: 5
-                                        rightPadding: 5
-                                        spacing: 5
-                                        anchors.centerIn: parent
+                ToolBarIconButton {
+                    id: delete_item_button
+                    fa_icon: FontAwesome.times
+                    anchors.top: undefined
+                    anchors.bottom: undefined
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    height: color_scheme.toolbarHeight - 10
+                    visible: shop_items_table.currentIndex == index
+                    onClicked: shop_editor.deleteItem(index)
+                }
+            }
+        }
+    }
 
-                                        Text {
-                                            text: FontAwesome.save
-                                            font.family: FontAwesome.familySolid
-                                            font.pointSize: 12
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
+    // Right
+    Column {
+        id: right_column
+        width: (root.width - left_scroll_view.width - 10) / 2 - item_right_bar.width
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: item_right_bar.left
+        anchors.margins: 5
+        spacing: 5
 
-                                        Text {
-                                            text: qsTr("Save Shop")
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            font.pointSize: 12
-                                            font.bold: true
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
-                                    }
+        Rectangle {
+            id: item_list_header
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: color_scheme.toolbarHeight
+            color: color_scheme.listHeaderBackgroundColor
 
-                                    onClicked: shop_editor.saveShop()
-                                }
+            Row {
+                anchors.fill: parent
+                padding: 5
+                leftPadding: 10
+                rightPadding: 10
+                spacing: 10
 
-                                DelayButton {
-                                    width: delete_shop_row.width
-                                    delay: 1200
-                                    ToolTip.text: qsTr("Hold to delete shop")
-                                    ToolTip.visible: hovered
-                                    hoverEnabled: true
+                Text {
+                    text: qsTr("Item")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: (parent.width - parent.leftPadding * 2 - parent.spacing) * 2 / 3
+                    anchors.verticalCenter: parent.verticalCenter
+                }
 
-                                    height: parent.height
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
+                Text {
+                    id: item_header_price_label
+                    text: qsTr("Price")
+                    color: color_scheme.listHeaderTextColor
+                    font.pointSize: 12
+                    font.bold: true
+                    width: parent.width - x - parent.rightPadding
+                    anchors.verticalCenter: parent.verticalCenter
+                    horizontalAlignment: Text.AlignRight
+                }
+            }
+        }
 
-                                    Row {
-                                        id: delete_shop_row
-                                        leftPadding: 5
-                                        rightPadding: 5
-                                        spacing: 5
-                                        anchors.centerIn: parent
+        ListView {
+            id: item_list_table
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-                                        Text {
-                                            text: FontAwesome.trashAlt
-                                            font.family: FontAwesome.familySolid
-                                            font.pointSize: 12
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
+            height: parent.height - parent.spacing - item_list_header.height
 
-                                        Text {
-                                            text: qsTr("Delete Shop")
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            font.pointSize: 12
-                                            font.bold: true
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
-                                    }
+            interactive: true
+            clip: true
+            focus: true
+            keyNavigationEnabled: true
+            highlightFollowsCurrentItem: false
 
-                                    onActivated: {
-                                        shop_editor.deleteShop()
+            currentIndex: 0
+            onModelChanged: currentIndex = 0
 
-                                        updateShopFlow()
-                                    }
-                                }
+            ScrollBar.vertical: ScrollBar {
+            }
 
-                                DelayButton {
-                                    width: remove_all_items_row.width
-                                    delay: 1200
+            model: shopEditorItemModel2
 
-                                    ToolTip.text: qsTr("Hold to remove all items")
-                                    ToolTip.visible: hovered
-                                    hoverEnabled: true
+            delegate: Rectangle {
+                id: item_delegate_rect
+                height: item_list_table.currentIndex
+                        == index ? Math.max(
+                                       item_delegate_text_column.height,
+                                       color_scheme.toolbarHeight) : item_delegate_text_column.height
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: item_list_table.currentIndex
+                       == index ? color_scheme.menuColor : "transparent"
 
-                                    height: parent.height
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
+                Column {
+                    id: item_delegate_text_column
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: item_list_table.currentIndex
+                                  == index ? add_item_button.right : parent.left
+                    anchors.right: parent.right
+                    anchors.margins: 5
 
-                                    Row {
-                                        id: remove_all_items_row
-                                        leftPadding: 5
-                                        rightPadding: 5
-                                        spacing: 5
-                                        anchors.centerIn: parent
+                    Item {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        height: Math.max(30, item_name_text.height,
+                                         item_price_text.height)
 
-                                        Text {
-                                            text: FontAwesome.times
-                                            font.family: FontAwesome.familySolid
-                                            font.pointSize: 12
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
+                        Text {
+                            id: item_name_text
+                            anchors.left: parent.left
+                            anchors.right: item_price_text.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            verticalAlignment: Text.AlignVCenter
 
-                                        Text {
-                                            text: qsTr("Remove All Items")
-                                            color: parent.parent.pressed ? "grey" : parent.parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                            font.pointSize: 12
-                                            font.bold: true
-                                            anchors.verticalCenter: parent.verticalCenter
-                                        }
-                                    }
+                            text: modelData.name
+                            font.pointSize: 12
+                            color: item_list_table.currentIndex
+                                   == index ? color_scheme.toolbarTextColor : color_scheme.textColor
 
-                                    onActivated: {
-                                        shop_editor.removeAllItems()
-                                        fillItemTable()
-                                    }
-                                }
-                            }
+                            clip: true
+                            elide: Text.ElideRight
+                            wrapMode: item_list_table.currentIndex
+                                      == index ? Text.Wrap : Text.NoWrap
                         }
 
                         Text {
-                            id: shop_name_text
-                            text: qsTr("No Shop Selected")
-                            font.pointSize: 20
-                            color: color_scheme.textColor
+                            id: item_price_text
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: item_header_price_label.width
                             verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignRight
 
-                            width: parent.width
-                            height: item_tab_bar.height
+                            text: modelData.price
+                            font.pointSize: 12
+                            color: item_list_table.currentIndex
+                                   == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+
                             clip: true
                             elide: Text.ElideRight
-                        }
-
-                        Row {
-                            id: shop_properties_row
-                            width: parent.width
-                            spacing: 5
-
-                            TextField {
-                                id: shop_owner_textfield
-                                width: parent.width / 4
-                                placeholderText: qsTr("Shop Owner")
-                                selectByMouse: true
-
-                                onTextEdited: shop_editor.setShopOwner(text)
-                            }
-
-                            TextField {
-                                id: shop_description_textfield
-                                width: parent.width - parent.spacing - shop_owner_textfield.width
-                                placeholderText: qsTr("Shop Description")
-                                selectByMouse: true
-
-                                onTextEdited: shop_editor.setShopDescription(
-                                                  text)
-                            }
-                        }
-
-                        Rectangle {
-                            id: item_header
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            height: color_scheme.toolbarHeight
-                            color: color_scheme.listHeaderBackgroundColor
-
-                            Row {
-                                anchors.fill: parent
-                                padding: 5
-                                leftPadding: 10
-                                rightPadding: 10
-                                spacing: 10
-
-                                Text {
-                                    text: qsTr("Item")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Price")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 5
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Category")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 5
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Description")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: parent.width - parent.rightPadding - x
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                            }
-                        }
-
-                        ListView {
-                            id: shop_items_table
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-
-                            height: parent.height - parent.spacing * 4
-                                    - shop_properties_row.height - shop_name_text.height
-                                    - shop_action_row.height - item_header.height
-
-                            clip: true
-                            spacing: 0
-
-                            ScrollBar.vertical: ScrollBar {
-                            }
-
-                            model: ListModel {
-                                id: table_model
-                            }
-
-                            delegate: Rectangle {
-                                height: delegate_row.height
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                color: "transparent"
-
-                                MouseArea {
-                                    id: mouse_area
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    z: 2
-
-                                    onClicked: mouse.accepted = false
-                                    onPressed: mouse.accepted = false
-                                    onReleased: mouse.accepted = false
-                                    onDoubleClicked: mouse.accepted = false
-                                    onPositionChanged: mouse.accepted = false
-                                    onPressAndHold: mouse.accepted = false
-                                }
-
-                                Row {
-                                    id: delegate_row
-                                    padding: 5
-                                    leftPadding: 10
-                                    rightPadding: 10
-                                    spacing: 10
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    height: 30
-
-                                    Text {
-                                        text: name
-                                        color: mouse_area.pressed ? "grey" : color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 4
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: price
-                                        color: color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 5
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: category
-                                        color: color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 5
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: description
-                                        color: color_scheme.textColor
-                                        width: (parent.width - x - parent.rightPadding)
-                                               - x_button.width - parent.spacing
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Button {
-                                        id: x_button
-                                        height: parent.height - parent.topPadding * 2
-                                        width: height
-                                        visible: mouse_area.containsMouse
-
-                                        background: Rectangle {
-                                            color: "transparent"
-                                        }
-
-                                        Text {
-                                            text: FontAwesome.times
-                                            font.family: FontAwesome.familySolid
-                                            font.pointSize: 12
-                                            anchors.centerIn: parent
-                                            color: parent.pressed ? "grey" : mouse_area.hovered ? "black" : color_scheme.textColor
-                                        }
-
-                                        onClicked: {
-                                            shop_editor.removeItem(index)
-                                            table_model.remove(index)
-                                        }
-                                    }
-                                }
-                            }
+                            wrapMode: item_list_table.currentIndex
+                                      == index ? Text.WordWrap : Text.NoWrap
                         }
                     }
 
-                    Column {
-                        width: (parent.width - parent.spacing) / 2
-                        height: parent.height
-                        spacing: 5
+                    Text {
+                        id: item_description_text
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        verticalAlignment: Text.AlignTop
+                        visible: item_list_table.currentIndex == index
+                                 && modelData.description !== ""
 
-                        TabBar {
-                            id: item_tab_bar
-                            width: parent.width
-                            height: color_scheme.toolbarHeight
+                        text: modelData.description
+                        font.pointSize: 12
+                        color: item_list_table.currentIndex
+                               == index ? color_scheme.toolbarTextColor : color_scheme.textColor
 
-                            background: Rectangle {
-                                color: color_scheme.toolbarColor
+                        clip: true
+                        elide: Text.ElideRight
+                        wrapMode: item_list_table.currentIndex
+                                  == index ? Text.WordWrap : Text.NoWrap
+                    }
+
+                    Rectangle {
+                        visible: item_description_text.visible
+                        height: 5
+                        width: 5
+                        color: "transparent"
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        item_list_table.forceActiveFocus()
+                        item_list_table.currentIndex = index
+                    }
+                }
+
+                ToolBarIconButton {
+                    id: add_item_button
+                    anchors.top: undefined
+                    anchors.bottom: undefined
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.topMargin: 5
+                    height: color_scheme.toolbarHeight - 10
+                    visible: item_list_table.currentIndex == index
+
+                    fa_icon: FontAwesome.chevronCircleLeft
+                    onClicked: shop_editor.addItem(index)
+                }
+            }
+        }
+    }
+
+    Item {
+        id: item_right_bar
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 5
+        width: 175
+
+        Rectangle {
+            id: item_category_select_bar
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            color: color_scheme.listHeaderBackgroundColor
+            height: color_scheme.toolbarHeight
+
+            ToolBarTextButton {
+                labeltext: qsTr("All")
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                width: parent.width / 2 - 10
+
+                textColor: color_scheme.listHeaderTextColor
+                hoverColor: "darkgrey"
+                onClicked: shop_editor.enableAllItemCategories()
+            }
+
+            ToolBarTextButton {
+                labeltext: qsTr("None")
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.rightMargin: 5
+                width: parent.width / 2 - 10
+
+                textColor: color_scheme.listHeaderTextColor
+                hoverColor: "darkgrey"
+                onClicked: shop_editor.enableAllItemCategories(false)
+            }
+        }
+
+        ScrollView {
+            id: item_category_scroll_view
+
+            anchors.top: item_category_select_bar.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.topMargin: 5
+            clip: true
+
+            Column {
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Repeater {
+                    id: item_category_repeater
+                    model: shop_editor.itemCategories
+
+                    Item {
+                        width: item_category_scroll_view.width
+                        height: category_checkbox.height
+
+                        CheckBox {
+                            id: category_checkbox
+                            anchors.left: parent.left
+                            checked: true
+
+                            Connections {
+                                target: shop_editor
+                                onItemGroupChanged: category_checkbox.checked
+                                                    = shop_editor.isItemCategoryEnabled(
+                                                        modelData)
                             }
 
-                            spacing: 5
-
-                            onCurrentIndexChanged: {
-                                console.log(currentIndex)
-
-                                shop_editor.setItemListTabIndex(currentIndex)
-                                shop_editor.loadItemList()
-                                fillItemListTable()
-                            }
-
-                            Repeater {
-                                id: item_tab_bar_repeater
-                                model: 0
-
-                                TabButton {
-                                    hoverEnabled: true
-                                    height: parent.height
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    Text {
-                                        text: shop_editor.getItemListTabNames(
-                                                  )[index]
-                                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                                        font.pointSize: 12
-                                        font.bold: true
-                                        anchors.centerIn: parent
-                                    }
-
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
-                                }
-                            }
+                            onClicked: shop_editor.setItemCategoryEnabled(
+                                           modelData, checked)
                         }
 
-                        Rectangle {
-                            id: item_list_header
-                            anchors.left: parent.left
+                        Text {
+                            text: modelData
+                            color: color_scheme.textColor
+                            anchors.left: category_checkbox.right
                             anchors.right: parent.right
-                            height: color_scheme.toolbarHeight
-                            color: color_scheme.listHeaderBackgroundColor
-
-                            Row {
-                                anchors.fill: parent
-                                padding: 5
-                                leftPadding: 10
-                                rightPadding: 10
-                                spacing: 10
-
-                                Text {
-                                    text: qsTr("Item")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 4
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Price")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 5
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Category")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: (parent.width - parent.leftPadding
-                                            * 2 - parent.spacing * 2) / 5
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-
-                                Text {
-                                    text: qsTr("Description")
-                                    color: color_scheme.listHeaderTextColor
-                                    font.pointSize: 12
-                                    font.bold: true
-                                    width: parent.width - parent.rightPadding - x
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                            }
-                        }
-
-                        ListView {
-                            id: item_list_table
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-
-                            height: parent.height - parent.spacing * 2
-                                    - item_tab_bar.height - item_list_header.height
-
-                            clip: true
-                            spacing: 0
-
-                            ScrollBar.vertical: ScrollBar {
-                            }
-
-                            model: ListModel {
-                                id: item_list_model
-                            }
-
-                            Component.onCompleted: {
-                                shop_editor.loadItemListTabs()
-                                item_tab_bar_repeater.model = shop_editor.getItemListTabNames()
-
-                                shop_editor.loadItemList()
-                                fillItemListTable()
-                            }
-
-                            delegate: Rectangle {
-                                height: delegate_row2.height
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                color: "transparent"
-
-                                MouseArea {
-                                    id: mouse_area2
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-
-                                    z: 2
-
-                                    onClicked: {
-                                        addListItem(index)
-                                    }
-                                }
-
-                                Row {
-                                    id: delegate_row2
-                                    padding: 5
-                                    leftPadding: 10
-                                    rightPadding: 10
-                                    spacing: 10
-                                    anchors.left: parent.left
-                                    anchors.right: parent.right
-                                    height: 30
-
-                                    Text {
-                                        id: add_icon
-                                        text: FontAwesome.plus
-                                        font.family: FontAwesome.familySolid
-                                        color: mouse_area2.pressed ? "grey" : "darkgreen"
-                                        font.pointSize: 15
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        visible: mouse_area2.containsMouse
-                                    }
-
-                                    Text {
-                                        text: name
-                                        color: mouse_area2.pressed ? "grey" : color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 4
-                                               - (add_icon.visible ? add_icon.width
-                                                                     + parent.spacing : 0)
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: price
-                                        color: color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 5
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: category
-                                        color: color_scheme.textColor
-                                        width: (parent.width - parent.leftPadding
-                                                * 2 - parent.spacing * 2) / 5
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-
-                                    Text {
-                                        text: description
-                                        color: color_scheme.textColor
-                                        width: (parent.width - x - parent.rightPadding)
-                                        clip: true
-                                        elide: Text.ElideRight
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        font.pointSize: 12
-                                    }
-                                }
-                            }
+                            elide: Text.ElideRight
+                            anchors.verticalCenter: parent.verticalCenter
                         }
                     }
                 }
             }
+        }
+    }
+
+    Rectangle {
+        id: info_bar
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: color_scheme.toolbarHeight
+        color: color_scheme.menuColor
+        visible: false
+
+        Timer {
+            id: info_bar_timer
+            interval: 2000
+
+            onTriggered: {
+                info_bar.visible = false
+                stop()
+            }
+        }
+
+        Text {
+            id: info_text
+            anchors.fill: parent
+            anchors.margins: 10
+            font.pixelSize: height
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: color_scheme.toolbarTextColor
         }
     }
 }

@@ -462,13 +462,13 @@ int GoogleDrive::getFolderContent(QString id)
             }
         }
 
-        emit receivedFolderContent(m_requestCount, list);
+        emit receivedFolderContent(reqId, list);
     });
 
-    requestor->get(request);
+    int requestId = requestor->get(request);
     m_requestCount++;
 
-    return m_requestCount;
+    return requestId;
 }
 
 /**
@@ -493,13 +493,13 @@ int GoogleDrive::getFile(QString id)
 
     connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished), [ = ](int reqId, QNetworkReply::NetworkError error, QByteArray data) {
         qDebug() << "Google Drive: Received file!";
-        emit receivedFile(m_requestCount, data);
+        emit receivedFile(reqId, data);
     });
 
-    requestor->get(request);
+    int requestId = requestor->get(request);
     m_requestCount++;
 
-    return m_requestCount;
+    return requestId;
 }
 
 /**

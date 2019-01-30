@@ -73,7 +73,10 @@ SOURCES += src/main.cpp \
     src/cloud/googledrive.cpp \
     src/cloud/foldertree.cpp \
     src/managers/file_managers/mapsfilemanager.cpp \
-    src/tools/combat_tracker/combatant.cpp
+    src/tools/combat_tracker/combatant.cpp \
+    src/tools/shop/shopproject.cpp \
+    src/tools/shop/itemshop.cpp \
+    src/managers/file_managers/shopfilemanager.cpp
     # Addons
 #    src/tools/addons/sifrp.cpp \
 
@@ -149,7 +152,10 @@ HEADERS  += src/functions.h \
     src/tools/audio/players/audioplayer.h \
     src/tools/maps/map.h \
     src/managers/file_managers/mapsfilemanager.h \
-    src/tools/combat_tracker/combatant.h
+    src/tools/combat_tracker/combatant.h \
+    src/tools/shop/shopproject.h \
+    src/tools/shop/itemshop.h \
+    src/managers/file_managers/shopfilemanager.h
 
 
 DISTFILES += \

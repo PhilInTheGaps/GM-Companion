@@ -2,179 +2,150 @@
 
 #include <QDebug>
 #include <QSettings>
+#include <QQmlContext>
 #include "src/functions.h"
 
-ShopTool::ShopTool(QObject *parent) : QObject(parent)
+ShopTool::ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), fileManager(fManager), qmlEngine(engine)
 {
     qDebug() << "Loading Shop Tool ...";
 
-    shopEditor = new ShopEditor;
+    shopEditor = new ShopEditor(fManager, engine);
     sManager   = new SettingsManager;
+
+    itemModel = new ItemModel;
+    qmlEngine->rootContext()->setContextProperty("shopItemModel", itemModel);
+
+    connect(fManager->getShopFileManager(), &ShopFileManager::receivedShops, this, &ShopTool::projectsReceived);
+    connect(this,                           &ShopTool::currentShopChanged,   this, &ShopTool::updateItems);
+    connect(shopEditor,                     &ShopEditor::projectsSaved,      this, &ShopTool::shopEditorSaved);
+
+    fManager->getShopFileManager()->findShops(fManager->getModeInt());
 }
 
+/**
+ * @brief When file manager finishes initializing projects
+ * @param projects List of ShopProject pointers
+ */
+void ShopTool::projectsReceived(QList<ShopProject *>projects)
+{
+    m_projects = projects;
+
+    if (m_projects.size() > 0) m_currentProject = m_projects[0];
+
+    else m_currentProject = nullptr;
+
+    emit projectsChanged();
+}
+
+void ShopTool::shopEditorSaved(QList<ShopProject *>projects)
+{
+    // Delete old projects
+    for (auto p : m_projects)
+    {
+        if (p) p->deleteLater();
+    }
+
+    // Use new ones
+    m_projects = projects;
+
+    if (m_projects.size() > 0) m_currentProject = m_projects[0];
+
+    else m_currentProject = nullptr;
+
+    emit projectsChanged();
+    emit categoriesChanged();
+    emit shopsChanged();
+    emit currentShopChanged();
+}
+
+/**
+ * @brief Get a list of project names
+ * @return Project names
+ */
 QStringList ShopTool::projects()
 {
-    QStringList project_list;
+    QStringList names;
 
-    QString path = sManager->getSetting(Setting::shopPath);
-
-    for (QString file : getFiles(path))
+    for (auto p : m_projects)
     {
-        if (file.endsWith(".shop"))
-        {
-            project_list.append(file.replace(".shop", ""));
-        }
+        if (p) names.append(p->name());
     }
 
-    return project_list;
+    return names;
 }
 
+void ShopTool::setCurrentProject(int index)
+{
+    if ((index > -1) && (index < m_projects.size()))
+    {
+        m_currentProject = m_projects[index];
+    }
+    else
+    {
+        m_currentProject = nullptr;
+    }
+
+    emit categoriesChanged();
+    emit shopsChanged();
+    emit currentShopChanged();
+}
+
+/**
+ * @brief Get a list of category names
+ * @return Category names
+ */
 QStringList ShopTool::categories()
 {
-    return m_categories;
-}
+    if (!m_currentProject) return {};
 
-// Load Category List
-void ShopTool::loadCategories(QString project)
-{
-    qDebug() << "Loading categories for shop project:" << project;
+    QStringList categories;
 
-    QString path = sManager->getSetting(Setting::shopPath) + "/" + project + ".shop";
-
-    QSettings settings(path, QSettings::IniFormat);
-
-    m_categories = settings.value("categories", {}).toStringList();
-}
-
-// Load Shop list
-void ShopTool::loadShops(QString project)
-{
-    qDebug() << "Loading shops for category:" << m_category;
-
-    QString path = sManager->getSetting(Setting::shopPath) + "/" + project + ".shop";
-
-    QSettings settings(path, QSettings::IniFormat);
-
-    QStringList shops;
-
-    int count = settings.beginReadArray(m_category + "_shops");
-
-    for (int i = 0; i < count; i++)
+    for (auto c : m_currentProject->categories())
     {
-        settings.setArrayIndex(i);
-
-        shops.append(settings.value("shop").toStringList().at(0));
+        if (c) categories.append(c->name());
     }
 
-    settings.endArray();
-
-    m_shops = shops;
+    return categories;
 }
 
-// Load a shop
-void ShopTool::load(QString project, QString shop)
+void ShopTool::setCurrentCategory(int index)
 {
-    qDebug() << "Loading shop:" << shop;
-
-    QString path = sManager->getSetting(Setting::shopPath) + "/" + project + ".shop";
-
-    QSettings settings(path, QSettings::IniFormat);
-
-    m_item_names.clear();
-    m_item_prices.clear();
-    m_item_descriptions.clear();
-
-    // Get Shop Information
-    m_shopName = shop;
-    QStringList shopValues;
-
-    int shopCount = settings.beginReadArray(m_category + "_shops");
-
-    for (int i = 0; i < shopCount; i++)
+    if ((index > -1) && m_currentProject && (m_currentProject->categories().size() > index))
     {
-        settings.setArrayIndex(i);
-
-        QStringList tempList = settings.value("shop").toStringList();
-
-        if ((tempList.size() > 0) && (tempList[0] == shop))
-        {
-            shopValues = tempList;
-        }
+        m_currentProject->setCurrentCategory(index);
+        emit shopsChanged();
+        emit currentShopChanged();
     }
-
-    settings.endArray();
-
-    if (shopValues.size() > 1) m_shopOwner = shopValues.at(1);
-
-    if (shopValues.size() > 2) m_shopDescription = shopValues.at(2);
-
-    // Get Items
-    int count = settings.beginReadArray(m_category + "_" + shop + "_items");
-
-    for (int i = 0; i < count; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QStringList item = settings.value("item").toStringList();
-
-        if (item.size() > 0) m_item_names.append(item[0]);
-
-        if (item.size() > 1) m_item_prices.append(item[1]);
-
-        if (item.size() > 2) m_item_descriptions.append(item[2]);
-    }
-
-    settings.endArray();
-
-    emit shopNameChanged();
-    emit shopOwnerChanged();
-    emit shopDescriptionChanged();
-    emit itemsChanged();
-}
-
-QString ShopTool::category()
-{
-    return m_category;
-}
-
-void ShopTool::setCategory(QString category)
-{
-    m_category = category;
-
-    emit categoryChanged();
 }
 
 QStringList ShopTool::shops()
 {
-    return m_shops;
+    if (!m_currentProject || !m_currentProject->currentCategory()) return {};
+
+    QStringList shops;
+
+    for (auto s : m_currentProject->currentCategory()->shops())
+    {
+        if (s) shops.append(s->name());
+    }
+
+    return shops;
 }
 
-QString ShopTool::shopName()
+void ShopTool::setCurrentShop(int index)
 {
-    return m_shopName;
+    if ((index > -1) && m_currentProject && m_currentProject->currentCategory() && (index < m_currentProject->currentCategory()->shops().size()))
+    {
+        m_currentProject->currentCategory()->setCurrentShop(index);
+        emit currentShopChanged();
+    }
 }
 
-QString ShopTool::shopOwner()
+void ShopTool::updateItems()
 {
-    return m_shopOwner;
-}
-
-QString ShopTool::shopDescription()
-{
-    return m_shopDescription;
-}
-
-QStringList ShopTool::item_names()
-{
-    return m_item_names;
-}
-
-QStringList ShopTool::item_prices()
-{
-    return m_item_prices;
-}
-
-QStringList ShopTool::item_descriptions()
-{
-    return m_item_descriptions;
+    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop())
+    {
+        itemModel->setElements(m_currentProject->currentCategory()->currentShop()->items());
+    }
 }

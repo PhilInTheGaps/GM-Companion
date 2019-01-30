@@ -10,7 +10,7 @@ ToolManager::ToolManager(FileManager *fManager, QQmlApplicationEngine *engine, Q
     mapTool       = new MapTool(fManager, qmlEngine, this);
     diceTool      = new DiceTool;
     combatTracker = new CombatTracker(qmlEngine);
-    shopTool      = new ShopTool;
+    shopTool      = new ShopTool(fManager, qmlEngine, this);
     characterTool = new CharacterTool;
     nameGenerator = new NameGenerator;
     notesTool     = new NotesTool();

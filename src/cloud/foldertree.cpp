@@ -20,9 +20,13 @@ FolderTree::FolderTree(QStringList ids, QString rootName, QObject *parent) : QOb
     m_radio->setId(ids[2]);
     m_root->addChild(m_radio);
 
-    m_resources = new Folder("Maps");
-    m_resources->setId(ids[4]);
+    m_maps = new Folder("Maps");
+    m_maps->setId(ids[4]);
     m_root->addChild(m_maps);
+
+    m_shop = new Folder("Shops");
+    m_shop->setId(ids[5]);
+    m_root->addChild(m_shop);
 
     m_resources = new Folder("Resources");
     m_resources->setId(ids[8]);

@@ -29,7 +29,7 @@ void AddonManager::updateAddonList()
             {
                 QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
 
-                if (settings.value("addons_version", 1).toInt() == 2)
+                if (settings.value("addons_version", 0).toInt() == 3)
                 {
                     m_addonNames.append(settings.value("name", tr("UNKNOWN ADDON")).toString());
                     m_addonDescriptions.append(settings.value("description", "").toString());

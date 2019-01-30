@@ -15,6 +15,7 @@ FileManager::FileManager()
 
     audioFileManager = new AudioFileManager(google);
     mapsFileManager  = new MapsFileManager(google);
+    shopFileManager  = new ShopFileManager(google);
 }
 
 FileManager::~FileManager()
