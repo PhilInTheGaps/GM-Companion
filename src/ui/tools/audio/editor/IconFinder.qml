@@ -29,7 +29,7 @@ Button {
     }
 
     onClicked: {
-        file_dialog.folder = "file://" + resourcesPath
+        file_dialog.folder = (platform.isWindows ? "file:///" : "file://") + resourcesPath
         file_dialog.open()
     }
 
@@ -40,12 +40,8 @@ Button {
         selectFolder: false
 
         onAccepted: {
-            if (platform.isWindows)
-                text_field.text = fileUrl.toString().replace(
-                            "file:///" + resourcesPath, "")
-            else
-                text_field.text = fileUrl.toString().replace(
-                            "file://" + resourcesPath, "")
+            text_field.text = fileUrl.toString().replace((platform.isWindows ? "file:///" : "file://") + resourcesPath, "")
+
         }
     }
 }

@@ -34,7 +34,8 @@ Page {
 
     DiceSettings {
         id: dice_settings_dialog
-        anchors.centerIn: parent
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
     }
 
     // Top Bar

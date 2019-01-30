@@ -23,7 +23,7 @@ Page {
         title: qsTr("Set Folder")
         property int index: 0
 
-        folder: "file://" + audio_editor.basePath(audio_editor.type)
+        folder: (platform.isWindows ? "file:///" : "file://") + audio_editor.basePath(audio_editor.type)
 
         selectFolder: true
 

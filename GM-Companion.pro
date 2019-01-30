@@ -6,8 +6,6 @@
 
 QT       += core multimedia network quick qml webengine
 
-win32:QT += winextras
-
 include(lib/fontawesome.pri/fontawesome.pri)
 include(lib/o2/src/src.pri)
 
@@ -156,7 +154,6 @@ HEADERS  += src/functions.h \
     src/tools/shop/shopproject.h \
     src/tools/shop/itemshop.h \
     src/managers/file_managers/shopfilemanager.h
-
 
 DISTFILES += \
     android/AndroidManifest.xml \

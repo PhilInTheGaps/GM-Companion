@@ -49,11 +49,12 @@ Page {
     Dialog {
         id: large_image_dialog
         modal: true
-        anchors.centerIn: parent
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: "file://" + audio_editor.resourcesPath(
-                        ) + element_icon_field.text
+            source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath() + element_icon_field.text
 
             fillMode: Image.PreserveAspectFit
         }
@@ -440,7 +441,7 @@ Page {
                     Image {
                         id: element_icon_image
                         visible: status == Image.Ready
-                        source: "file://" + audio_editor.resourcesPath(
+                        source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
                                     ) + element_icon_field.text
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
