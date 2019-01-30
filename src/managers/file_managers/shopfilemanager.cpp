@@ -14,6 +14,7 @@ ShopFileManager::ShopFileManager(GoogleDrive *google)
 {
     qDebug() << "Loading ShopFileManager ...";
 
+    // Evaluate folder content and send requests for files
     connect(google, &GoogleDrive::receivedFolderContent, [ = ](int id, QList<GoogleFile>list) {
         if (id == m_projectRequestId)
         {
@@ -41,11 +42,12 @@ ShopFileManager::ShopFileManager(GoogleDrive *google)
         }
     });
 
+    // Save downloaded content into temporary files and pass files to init
+    // functions
     connect(google, &GoogleDrive::receivedFile, [ = ](int id, QByteArray data) {
         if (m_projectRequestIds.contains(id))
         {
             QTemporaryFile f;
-            f.setAutoRemove(false);
 
             if (f.open())
             {
@@ -64,7 +66,6 @@ ShopFileManager::ShopFileManager(GoogleDrive *google)
         else if (m_itemRequestIds.contains(id))
         {
             QTemporaryFile f;
-            f.setAutoRemove(false);
 
             if (f.open())
             {
@@ -86,6 +87,11 @@ ShopFileManager::ShopFileManager(GoogleDrive *google)
     });
 }
 
+/**
+ * @brief Find shops for shop tool or editor
+ * @param mode 0: Local, 1: GoogleDrive
+ * @param editor If finished signal should be sent to editor
+ */
 void ShopFileManager::findShops(int mode, bool editor)
 {
     qDebug() << "ShopFileManager: Finding shops ( mode:" << mode << ") ...";
@@ -111,6 +117,10 @@ void ShopFileManager::findShops(int mode, bool editor)
     }
 }
 
+/**
+ * @brief Find shops on local disc
+ * @param editor If project list should be sent to shop editor
+ */
 void ShopFileManager::findLocalShops(bool editor)
 {
     QList<ShopProject *> projects;
@@ -132,6 +142,11 @@ void ShopFileManager::findLocalShops(bool editor)
     else emit receivedShops(projects);
 }
 
+/**
+ * @brief Create a shop project from a json file
+ * @param filePath Path to shop files
+ * @return Pointer to ShopProject object
+ */
 ShopProject * ShopFileManager::initProject(QString filePath)
 {
     QFile file(filePath);
@@ -194,6 +209,10 @@ ShopProject * ShopFileManager::initProject(QString filePath)
     return nullptr;
 }
 
+/**
+ * @brief Save a ShopProject to disc
+ * @param project Pointer to project object to be saved
+ */
 void ShopFileManager::saveProject(ShopProject *project)
 {
     if (!project) return;
@@ -258,6 +277,11 @@ void ShopFileManager::saveProject(ShopProject *project)
     }
 }
 
+/**
+ * @brief Find ItemGroups for shop editor or item editor
+ * @param mode 0: Local, 1: GoogleDrive
+ * @param editor true: send items to item editor, false: to shop editor
+ */
 void ShopFileManager::findItems(int mode, bool editor)
 {
     qDebug() << "ShopFileManager: Finding items ( mode:" << mode << ") ...";
@@ -285,6 +309,10 @@ void ShopFileManager::findItems(int mode, bool editor)
     }
 }
 
+/**
+ * @brief Find ItemGroups on disc
+ * @param editor true: send items to item editor, false: to shop editor
+ */
 void ShopFileManager::findLocalItems(bool editor)
 {
     QString path = sManager.getSetting(Setting::shopPath);
@@ -302,6 +330,10 @@ void ShopFileManager::findLocalItems(bool editor)
     }
 }
 
+/**
+ * @brief Find ItemGroups in addons
+ * @return List of ItemGroup pointers
+ */
 QList<ItemGroup *>ShopFileManager::findAddonItems()
 {
     QList<ItemGroup *> groups;
@@ -329,6 +361,12 @@ QList<ItemGroup *>ShopFileManager::findAddonItems()
     return groups;
 }
 
+/**
+ * @brief Load an ItemGroup from disc
+ * @param groupName Name of the ItemGroup
+ * @param path Path to item file
+ * @return Pointer to an ItemGroup object
+ */
 ItemGroup * ShopFileManager::loadItemGroup(QString groupName, QString path)
 {
     QList<Item *> items;
@@ -362,6 +400,10 @@ ItemGroup * ShopFileManager::loadItemGroup(QString groupName, QString path)
     return group;
 }
 
+/**
+ * @brief Save custom items to disc
+ * @param group Pointer to ItemGroup
+ */
 void ShopFileManager::saveItems(ItemGroup *group)
 {
     if (!group) return;

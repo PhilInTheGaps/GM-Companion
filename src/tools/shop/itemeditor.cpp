@@ -16,6 +16,10 @@ ItemEditor::ItemEditor(FileManager *fManager, QQmlApplicationEngine *engine, QOb
     fManager->getShopFileManager()->findItems(fManager->getModeInt(), true);
 }
 
+/**
+ * @brief ShopFileManager found items
+ * @param group ItemGroup with custom items
+ */
 void ItemEditor::receivedItems(ItemGroup *group)
 {
     qDebug() << "ItemEditor: Received items!";
@@ -24,8 +28,14 @@ void ItemEditor::receivedItems(ItemGroup *group)
     updateItemModel();
 }
 
+/**
+ * @brief Add an item category
+ * @param name Name of the category
+ */
 void ItemEditor::addCategory(QString name)
 {
+    qDebug() << "ItemEditor: Adding category" << name << "...";
+
     if (!m_categories.contains(name))
     {
         m_categories.append(name);
@@ -34,6 +44,9 @@ void ItemEditor::addCategory(QString name)
     }
 }
 
+/**
+ * @brief Get all categories from items
+ */
 void ItemEditor::updateCategories()
 {
     m_categories.clear();
@@ -52,6 +65,13 @@ void ItemEditor::updateCategories()
     emit categoriesChanged();
 }
 
+/**
+ * @brief Add an item
+ * @param name Name (Must not be empty)
+ * @param price Price
+ * @param category Category (Must not be empty)
+ * @param description Description
+ */
 void ItemEditor::addItem(QString name, QString price, QString category, QString description)
 {
     if (name.isEmpty() || category.isEmpty()) return;
@@ -87,6 +107,9 @@ void ItemEditor::addItem(QString name, QString price, QString category, QString 
     madeChanges();
 }
 
+/**
+ * @brief Add items to item model
+ */
 void ItemEditor::updateItemModel()
 {
     itemModel->clear();
@@ -97,6 +120,10 @@ void ItemEditor::updateItemModel()
     }
 }
 
+/**
+ * @brief Remove an item
+ * @param index Index of the item
+ */
 void ItemEditor::deleteItem(int index)
 {
     if (!m_itemGroup) return;
@@ -113,8 +140,14 @@ void ItemEditor::deleteItem(int index)
     }
 }
 
+/**
+ * @brief Save the custom items to disc and send them to the shop editor
+ */
 void ItemEditor::save()
 {
+    // Save only when changes were made
+    if (m_isSaved) return;
+
     // Save to disk
     fileManager->getShopFileManager()->saveItems(m_itemGroup);
 
@@ -128,6 +161,9 @@ void ItemEditor::save()
     emit showInfoBar(tr("Saved!"));
 }
 
+/**
+ * @brief Notify UI that changes were made
+ */
 void ItemEditor::madeChanges()
 {
     m_isSaved = false;

@@ -38,6 +38,10 @@ void ShopTool::projectsReceived(QList<ShopProject *>projects)
     emit projectsChanged();
 }
 
+/**
+ * @brief The shop editor has sent new updated projects
+ * @param projects List of projects
+ */
 void ShopTool::shopEditorSaved(QList<ShopProject *>projects)
 {
     // Delete old projects
@@ -75,6 +79,10 @@ QStringList ShopTool::projects()
     return names;
 }
 
+/**
+ * @brief Set the current project
+ * @param index Project index
+ */
 void ShopTool::setCurrentProject(int index)
 {
     if ((index > -1) && (index < m_projects.size()))
@@ -109,6 +117,10 @@ QStringList ShopTool::categories()
     return categories;
 }
 
+/**
+ * @brief Set the current category
+ * @param index Category index
+ */
 void ShopTool::setCurrentCategory(int index)
 {
     if ((index > -1) && m_currentProject && (m_currentProject->categories().size() > index))
@@ -119,6 +131,10 @@ void ShopTool::setCurrentCategory(int index)
     }
 }
 
+/**
+ * @brief Get the names of all shops in current category
+ * @return Shop names
+ */
 QStringList ShopTool::shops()
 {
     if (!m_currentProject || !m_currentProject->currentCategory()) return {};
@@ -133,6 +149,10 @@ QStringList ShopTool::shops()
     return shops;
 }
 
+/**
+ * @brief Set the current shop
+ * @param index Shop index
+ */
 void ShopTool::setCurrentShop(int index)
 {
     if ((index > -1) && m_currentProject && m_currentProject->currentCategory() && (index < m_currentProject->currentCategory()->shops().size()))
@@ -142,6 +162,9 @@ void ShopTool::setCurrentShop(int index)
     }
 }
 
+/**
+ * @brief Update the item model
+ */
 void ShopTool::updateItems()
 {
     if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop())
