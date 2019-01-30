@@ -39,6 +39,7 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     spotify = new Spotify(fileManager, metaDataReader);
     connect(spotify, &Spotify::startedPlaying,   this, &AudioTool::onStartedPlaying);
     connect(spotify, &Spotify::songNamesChanged, [ = ]() { emit songsChanged(); });
+    connect(spotify, &Spotify::authorize,        [ = ](QUrl url) { emit authorizeSpotify(url); });
     musicPlayers.append(spotify);
 
     elementModel = new AudioElementModel;

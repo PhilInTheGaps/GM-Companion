@@ -77,6 +77,8 @@ public:
 
     // Spotify
     Q_INVOKABLE void grantSpotify() { spotify->grant(); }
+    Q_INVOKABLE bool isSpotifyWaitingForAuth() const { if (spotify) return spotify->isWaitingForAuth(); else return false; }
+    Q_INVOKABLE QUrl spotifyAuthUrl() const { if (spotify) return spotify->authUrl(); else return QUrl(""); }
 
 signals:
     void projectsChanged();

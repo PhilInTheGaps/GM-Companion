@@ -55,8 +55,7 @@ Page {
             Rectangle {
                 anchors.fill: parent
 
-                color: audio_editor.missing[index] ? "darkred" : file_list.currentIndex
-                                                     == index ? color_scheme.menuColor : "white"
+                color: audio_editor.missing[index] ? "darkred" : file_list.currentIndex == index ? color_scheme.menuColor : color_scheme.backgroundColor
             }
 
             Text {

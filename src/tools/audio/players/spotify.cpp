@@ -24,6 +24,7 @@ Spotify::Spotify(FileManager *fManager, MetaDataReader *mDReader)
     // Scopes
     m_spotify->setScope("user-library-read playlist-read-private streaming user-modify-playback-state user-read-currently-playing "
                         "user-read-playback-state");
+    m_spotify->setLocalPort(59991);
 
     // Settings Store for tokens
     // TODO: Replace with secure keychain or something similar
@@ -31,8 +32,8 @@ Spotify::Spotify(FileManager *fManager, MetaDataReader *mDReader)
     m_spotify->setStore(settings);
 
     // Signals
-    connect(m_spotify, &O2Spotify::linkingSucceeded, [ = ]() { if (m_spotify->linked()) granted(); });
-    connect(m_spotify, &O2Spotify::openBrowser,      [ = ](QUrl url) {  emit authorize(url); });
+    connect(m_spotify, &O2Spotify::linkingSucceeded, [ = ]() { if (m_spotify->linked()) { m_waitingForAuth = false; granted(); } });
+    connect(m_spotify, &O2Spotify::openBrowser,      [ = ](QUrl url) { m_authUrl = url; m_waitingForAuth = true; emit authorize(url); });
 
     // Timer for "current song" updates
     m_timer = new QTimer;
@@ -350,6 +351,8 @@ void Spotify::gotCurrentPlaylist(int id, QNetworkReply::NetworkError error, QByt
 void Spotify::fetchIcons(AudioScenario *scenario)
 {
     qDebug() << "SPOTIFY: Fetching element icons ...";
+
+    qDebug() << "Linked:" << m_spotify->linked();
 
     if (!scenario) return;
 

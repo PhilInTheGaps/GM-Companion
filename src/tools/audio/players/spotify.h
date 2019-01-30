@@ -23,6 +23,8 @@ public:
 
     void grant();
     bool isGranted() const { return m_spotify->linked(); }
+    bool isWaitingForAuth() const { return m_waitingForAuth; }
+    QUrl authUrl() const { return m_authUrl; }
 
     void play(QString id, int offset = -1);
     void play(SpotifyElement *element) { play(element->id(), 0); currentElement = element; }
@@ -66,6 +68,8 @@ private:
     QStringList m_trackList;
     QStringList m_trackIdList;
     QString m_currentSongName;
+    bool m_waitingForAuth = false;
+    QUrl m_authUrl;
 
     void getCurrentSong();
     void getCurrentPlaylist();

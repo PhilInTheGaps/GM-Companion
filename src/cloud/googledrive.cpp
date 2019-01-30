@@ -31,7 +31,7 @@ GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
     drive->setClientId(sManager.getSetting(Setting::googleID));
     drive->setClientSecret(sManager.getSetting(Setting::googleSecret));
     drive->setScope("https://www.googleapis.com/auth/drive");
-    drive->setLocalPort(1966);
+    drive->setLocalPort(59990);
 
     // TODO: Replace with secure keychain or something similar
     O0SettingsStore *settings = new O0SettingsStore("gm-companion");

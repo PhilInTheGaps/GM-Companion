@@ -5,6 +5,7 @@ import FontAwesome 2.0
 
 ComboBox {
     id: control
+    padding: 5
     hoverEnabled: true
 
     delegate: ItemDelegate {
@@ -43,10 +44,7 @@ ComboBox {
     }
 
     background: Rectangle {
-        implicitWidth: 120
-        implicitHeight: 40
         color: "transparent"
-        border.width: 0
     }
 
     popup: Popup {
