@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QIcon>
 #include <QSGRendererInterface>
+#include <QQuickWindow>
 
 #include "tools/toolmanager.h"
 

@@ -370,6 +370,7 @@ Page {
                             width: mid_column.width
                             height: mid_column.height
                             fillMode: Image.PreserveAspectFit
+                            asynchronous: true
                         }
                     }
                 }
