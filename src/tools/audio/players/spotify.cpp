@@ -33,7 +33,7 @@ Spotify::Spotify(FileManager *fManager, MetaDataReader *mDReader)
 
     // Signals
     connect(m_spotify, &O2Spotify::linkingSucceeded, [ = ]() { if (m_spotify->linked()) { m_waitingForAuth = false; granted(); } });
-    connect(m_spotify, &O2Spotify::openBrowser,      [ = ](QUrl url) { m_authUrl = url; m_waitingForAuth = true; emit authorize(url); });
+    connect(m_spotify, &O2Spotify::openBrowser,      [ = ](QUrl url) { m_authUrl = url; m_waitingForAuth = true; QDesktopServices::openUrl(url); emit authorize(url); });
 
     // Timer for "current song" updates
     m_timer = new QTimer;

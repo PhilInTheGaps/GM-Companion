@@ -6,7 +6,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
-#include <QtWebEngine>
 #include <QSGRendererInterface>
 
 #include "tools/toolmanager.h"
@@ -34,8 +33,6 @@ int main(int argc, char *argv[])
 #endif // if defined(Q_OS_WIN)
 
     qDebug().noquote() << "Starting GM-Companion ...";
-
-    QtWebEngine::initialize();
 
     // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";

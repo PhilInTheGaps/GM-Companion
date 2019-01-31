@@ -1,50 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtWebEngine 1.5
 
 Page {
     id: root
 
     background: Rectangle {
         color: color_scheme.backgroundColor
-    }
-
-    Connections {
-        target: google_drive_tool
-
-        onOpenWebsite: {
-            web_view.url = url
-            web_view.reload()
-            web_dialog.open()
-        }
-
-        onLinkStatusChanged: {
-            if (google_drive_tool.linked) {
-                web_dialog.close()
-            }
-        }
-    }
-
-    Dialog {
-        id: web_dialog
-
-        width: parent.width * 0.75
-        height: parent.height * 0.75
-
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-
-        contentItem: Item {
-
-            WebEngineView {
-                id: web_view
-                onUrlChanged: console.log(url)
-
-                anchors.fill: parent
-            }
-        }
-
-        onOpened: console.log("OPENED CLOUD AUTH DIALOG")
     }
 
     contentItem: Item {

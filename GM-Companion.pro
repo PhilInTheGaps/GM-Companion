@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core multimedia network quick qml webengine
+QT       += core multimedia network quick qml
 
 include(lib/fontawesome.pri/fontawesome.pri)
 include(lib/o2/src/src.pri)

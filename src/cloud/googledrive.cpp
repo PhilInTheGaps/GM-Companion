@@ -9,6 +9,7 @@
 #include <QHttpMultiPart>
 #include <QUrlQuery>
 #include <QNetworkReply>
+#include <QDesktopServices>
 
 GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
 {
@@ -49,6 +50,7 @@ GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
     });
 
     connect(drive, &O2Google::openBrowser, [ = ](QUrl url) {
+        QDesktopServices::openUrl(url);
         emit openWebsite(url);
     });
 

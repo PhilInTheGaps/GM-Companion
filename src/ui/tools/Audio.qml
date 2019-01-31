@@ -16,14 +16,6 @@ Page {
         }
     }
 
-    Connections {
-        target: audio_tool
-        onAuthorizeSpotify: {
-            spotify_view.url = url
-            spotify_dialog.open()
-        }
-    }
-
     StackView {
         id: audio_stack
         anchors.fill: parent
@@ -38,38 +30,6 @@ Page {
             id: audio_page
             background: Rectangle {
                 color: color_scheme.backgroundColor
-            }
-
-            Dialog {
-                id: spotify_dialog
-
-                width: parent.width * 0.75
-                height: parent.height * 0.75
-
-                x: (parent.width - width) / 2
-                y: (parent.height - audio_control_bar.height - height) / 2
-
-                contentItem: Item {
-
-                    WebEngineView {
-                        id: spotify_view
-                        onUrlChanged: {
-                            reload()
-                            console.log(url)
-                        }
-
-                        anchors.fill: parent
-                    }
-                }
-
-                onOpened: console.log("OPENED SPOTIFY DIALOG")
-
-                Component.onCompleted: {
-                    if (audio_tool.isSpotifyWaitingForAuth()) {
-                        spotify_view.url = audio_tool.spotifyAuthUrl()
-                        open()
-                    }
-                }
             }
 
             // Volume Dialog
