@@ -20,7 +20,7 @@ Page {
 
         onCalculationStringChanged: calculation_text_edit.text = dice_tool.calculationString
 
-        onMixedCriticalResult: roll_result.color = "brown"
+        onMixedCriticalResult: roll_result.color = "orange"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
         onNormalResult: roll_result.color = color_scheme.textColor

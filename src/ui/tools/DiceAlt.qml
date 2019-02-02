@@ -10,7 +10,7 @@ Item {
     Connections {
         target: dice_tool
 
-        onMixedCriticalResult: roll_result.color = "brown"
+        onMixedCriticalResult: roll_result.color = "orange"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
         onNormalResult: roll_result.color = color_scheme.textColor

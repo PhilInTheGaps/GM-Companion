@@ -38,7 +38,7 @@ Page {
                 x: parent.width - width
                 y: parent.height - audio_control_bar.height - height
 
-                initialMusicVolume: 0.5
+                initialMusicVolume: 0.25
                 initialSoundVolume: 0.25
             }
 
