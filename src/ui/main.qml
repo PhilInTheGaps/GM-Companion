@@ -165,7 +165,7 @@ Window {
                                 tool_name: modelData
                                 icon_source: parent.icons[index]
                                 fa_icon: parent.fa_icons[index]
-                                current_tool: stack.currentItem == tool_column.tools[index]
+                                current_tool: stack.currentItem === tool_column.tools[index]
 
                                 onClicked: {
                                     if (index == 0) {
@@ -215,6 +215,18 @@ Window {
 
             background: Rectangle {
                 color: color_scheme.backgroundColor
+            }
+
+            pushEnter: Transition {
+            }
+
+            pushExit: Transition {
+            }
+
+            popEnter: Transition {
+            }
+
+            popExit: Transition {
             }
 
             initialItem: audio

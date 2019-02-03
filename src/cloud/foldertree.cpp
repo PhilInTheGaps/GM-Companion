@@ -28,6 +28,14 @@ FolderTree::FolderTree(QStringList ids, QString rootName, QObject *parent) : QOb
     m_shop->setId(ids[5]);
     m_root->addChild(m_shop);
 
+    m_characters = new Folder("Characters");
+    m_characters->setId(ids[6]);
+    m_root->addChild(m_characters);
+
+    m_notes = new Folder("Notes");
+    m_notes->setId(ids[7]);
+    m_root->addChild(m_notes);
+
     m_resources = new Folder("Resources");
     m_resources->setId(ids[8]);
     m_root->addChild(m_resources);

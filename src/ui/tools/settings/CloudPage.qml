@@ -199,7 +199,7 @@ Page {
 
                 CloudPathItem {
                     path_type: qsTr("Characters")
-                    setting: "chracters"
+                    setting: "characters"
                 }
 
                 CloudPathItem {

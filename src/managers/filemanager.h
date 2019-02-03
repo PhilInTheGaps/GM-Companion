@@ -13,6 +13,7 @@
 #include "file_managers/audiofilemanager.h"
 #include "file_managers/mapsfilemanager.h"
 #include "file_managers/shopfilemanager.h"
+#include "file_managers/characterfilemanager.h"
 
 enum CloudMode
 {
@@ -35,6 +36,7 @@ public:
     AudioFileManager* getAudioFileManager() const { return audioFileManager; }
     MapsFileManager* getMapsFileManger() const { return mapsFileManager; }
     ShopFileManager* getShopFileManager() const { return shopFileManager; }
+    CharacterFileManager* getCharacterFileManager() const { return characterFileManager; }
 
 private:
     GoogleDrive *google;
@@ -43,6 +45,7 @@ private:
     AudioFileManager *audioFileManager;
     MapsFileManager *mapsFileManager;
     ShopFileManager *shopFileManager;
+    CharacterFileManager *characterFileManager;
 
     CloudMode m_mode;
 

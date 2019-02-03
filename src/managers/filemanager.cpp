@@ -13,9 +13,10 @@ FileManager::FileManager()
     sManager = new SettingsManager;
     updateMode();
 
-    audioFileManager = new AudioFileManager(google);
-    mapsFileManager  = new MapsFileManager(google);
-    shopFileManager  = new ShopFileManager(google);
+    audioFileManager     = new AudioFileManager(google);
+    mapsFileManager      = new MapsFileManager(google);
+    shopFileManager      = new ShopFileManager(google);
+    characterFileManager = new CharacterFileManager(google);
 }
 
 FileManager::~FileManager()

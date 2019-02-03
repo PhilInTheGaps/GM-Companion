@@ -10,9 +10,10 @@ Rectangle {
     property bool active: true
 
     signal clicked(string character_name)
-    signal toggle_active_clicked(string character_name, bool active)
+    signal toggle_active_clicked
 
-    width: parent ? parent.width : 0
+    anchors.left: parent.left
+    anchors.right: parent.right
     height: platform.isAndroid ? width / 6 : 40
 
     Row {
@@ -66,7 +67,6 @@ Rectangle {
             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
         }
 
-        onClicked: parent.toggle_active_clicked(parent.character_name,
-                                                parent.active)
+        onClicked: parent.toggle_active_clicked()
     }
 }

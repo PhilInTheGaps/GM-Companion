@@ -515,7 +515,7 @@ int GoogleDrive::getSubfolderIDs(QString parentId)
 
     O2Requestor *requestor = new O2Requestor(m_manager, drive, this);
 
-    QUrl url("https://www.googleapis.com/drive/v3/files/?q='" + parentId + "'+in+parents&mimeType='application/vnd.google-apps.folder'&fields=files(name, webContentLink, mimeType, id)");
+    QUrl url("https://www.googleapis.com/drive/v3/files/?q='" + parentId + "'+in+parents&mimeType='application/vnd.google-apps.folder'&fields=files(name, trashed, webContentLink, mimeType, id)");
     QNetworkRequest request(url);
     qDebug() << url;
 
@@ -532,7 +532,7 @@ int GoogleDrive::getSubfolderIDs(QString parentId)
 
         for (auto f : folders)
         {
-            if (f.toObject().value("mimeType") == "application/vnd.google-apps.folder")
+            if ((f.toObject().value("mimeType") == "application/vnd.google-apps.folder") && !f.toObject().value("trashed").toBool())
             {
                 qDebug() << f.toObject().value("name").toString() << f.toObject().value("webContentLink").toString();
                 GoogleFile g;

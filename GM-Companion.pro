@@ -26,7 +26,6 @@ SOURCES += src/main.cpp \
     # Tools
     src/tools/toolmanager.cpp \
     src/tools/dicetool.cpp \
-    src/tools/combat_tracker/combattracker.cpp \
     src/tools/notestool.cpp \
     src/tools/convertertool.cpp \
     src/tools/generators/namegenerator.cpp \
@@ -52,8 +51,14 @@ SOURCES += src/main.cpp \
     # Tool COMBAT TRACKER
     src/tools/combat_tracker/effecttool.cpp \
     src/tools/combat_tracker/effect.cpp \
+    src/tools/combat_tracker/combattracker.cpp \
+    src/tools/combat_tracker/combatant.cpp \
+    # Tools Shop
+    src/tools/shop/shopproject.cpp \
+    src/tools/shop/itemshop.cpp \
     # Tools CHARACTERS
     src/tools/characters/charactertool.cpp \
+    src/tools/characters/character.cpp \
     # Tools ITEMS
     src/tools/shop/itemeditor.cpp \
     src/tools/shop/shopeditor.cpp \
@@ -63,24 +68,23 @@ SOURCES += src/main.cpp \
     src/managers/filemanager.cpp \
     src/managers/addonmanager.cpp \
     src/managers/file_managers/audiofilemanager.cpp \
+    src/managers/file_managers/mapsfilemanager.cpp \
+    src/managers/file_managers/shopfilemanager.cpp \
+    src/managers/file_managers/characterfilemanager.cpp \
     # Settings
     src/settings/settingstool.cpp \
     src/settings/settingsmanager.cpp \
     src/platformdetails.cpp \
     # Cloud
     src/cloud/googledrive.cpp \
-    src/cloud/foldertree.cpp \
-    src/managers/file_managers/mapsfilemanager.cpp \
-    src/tools/combat_tracker/combatant.cpp \
-    src/tools/shop/shopproject.cpp \
-    src/tools/shop/itemshop.cpp \
-    src/managers/file_managers/shopfilemanager.cpp
+    src/cloud/foldertree.cpp
     # Addons
 #    src/tools/addons/sifrp.cpp \
 
 lupdate_only{
 SOURCES += *.qml \
     components/*.qml \
+    main/*.qml \
     tools/*.qml \
     tools/audio/*.qml \
     tools/audio/audio_exporter/*.qml \
@@ -102,21 +106,40 @@ HEADERS  += src/functions.h \
     # Other
     src/version.h \
     # Tools
-    src/tools/maps/maptool.h \
-    src/tools/audio/audiotool.h \
+    src/tools/toolmanager.h \
     src/tools/dicetool.h \
-    src/tools/combat_tracker/combattracker.h \
     src/tools/notestool.h \
     src/tools/convertertool.h \
     src/tools/project_converter/projectconverter.h \
     # Tools AUDIO
+    src/tools/audio/audiotool.h \
     src/tools/project_converter/audioconverter.h \
     src/tools/audio/audioeditor.h \
     src/tools/audio/audioeditorfilebrowser.h \
+    src/tools/audio/players/spotify.h \
+    src/tools/audio/audioexporter.h \
+    src/tools/audio/addonelementmanager.h \
+    src/tools/audio/players/musicplayer.h \
+    src/tools/audio/players/soundplayer.h \
+    src/tools/audio/players/radioplayer.h \
+    src/tools/audio/metadatareader.h \
+    src/tools/audio/audioproject.h \
+    src/tools/audio/audioelement.h \
+    src/tools/audio/players/audioplayer.h \
+    # Tools MAPS
+    src/tools/maps/map.h \
+    src/tools/maps/maptool.h \
+    # Tools COMBAT TRACKER
+    src/tools/combat_tracker/combattracker.h \
+    src/tools/combat_tracker/effecttool.h \
+    src/tools/combat_tracker/effect.h \
+    src/tools/combat_tracker/combatant.h \
+    # Tools Shops
+    src/tools/shop/shopproject.h \
+    src/tools/shop/itemshop.h \
     # Tools CHARACTERS
     src/tools/characters/charactertool.h \
-    # Tools ADDONS
-#    src/tools/addons/sifrp.h \
+    src/tools/characters/character.h \
     # Tools GENERATORS
      src/tools/generators/namegenerator.h \
     # Tools ITEMS
@@ -126,34 +149,21 @@ HEADERS  += src/functions.h \
     src/tools/shop/shopeditor.h \
     # Managers
     src/managers/updatemanager.h \
+    src/managers/addonmanager.h \
+    src/managers/filemanager.h \
+    src/managers/file_managers/audiofilemanager.h \
+    src/managers/file_managers/mapsfilemanager.h \
+    src/managers/file_managers/shopfilemanager.h \
+    src/managers/file_managers/characterfilemanager.h \
     # Settings
     src/settings/settingstool.h \
     src/settings/settingsmanager.h \
     src/platformdetails.h \
-    src/managers/addonmanager.h \
-    src/managers/filemanager.h \
-    src/tools/audio/players/spotify.h \
-    src/tools/audio/audioexporter.h \
-    src/tools/combat_tracker/effecttool.h \
-    src/tools/combat_tracker/effect.h \
-    src/tools/audio/addonelementmanager.h \
+    # Cloud
     src/cloud/googledrive.h \
-    src/tools/toolmanager.h \
-    src/cloud/foldertree.h \
-    src/tools/audio/players/musicplayer.h \
-    src/tools/audio/players/soundplayer.h \
-    src/tools/audio/players/radioplayer.h \
-    src/tools/audio/metadatareader.h \
-    src/managers/file_managers/audiofilemanager.h \
-    src/tools/audio/audioproject.h \
-    src/tools/audio/audioelement.h \
-    src/tools/audio/players/audioplayer.h \
-    src/tools/maps/map.h \
-    src/managers/file_managers/mapsfilemanager.h \
-    src/tools/combat_tracker/combatant.h \
-    src/tools/shop/shopproject.h \
-    src/tools/shop/itemshop.h \
-    src/managers/file_managers/shopfilemanager.h
+    src/cloud/foldertree.h
+    # Tools ADDONS
+#    src/tools/addons/sifrp.h \
 
 DISTFILES += \
     android/AndroidManifest.xml \
@@ -206,3 +216,5 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
 }
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+unix:!macx: LIBS += -lpoppler-qt5

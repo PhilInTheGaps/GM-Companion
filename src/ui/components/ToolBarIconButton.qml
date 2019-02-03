@@ -7,6 +7,7 @@ Button {
     id: root
 
     property string fa_icon: FontAwesome.bars
+    property string icon_color: "white"
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
@@ -26,6 +27,6 @@ Button {
         height: parent.height - 10
         width: height
         anchors.centerIn: parent
-        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : root.icon_color
     }
 }

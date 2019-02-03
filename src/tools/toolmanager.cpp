@@ -11,7 +11,7 @@ ToolManager::ToolManager(FileManager *fManager, QQmlApplicationEngine *engine, Q
     diceTool      = new DiceTool;
     combatTracker = new CombatTracker(qmlEngine);
     shopTool      = new ShopTool(fManager, qmlEngine, this);
-    characterTool = new CharacterTool;
+    characterTool = new CharacterTool(fManager, this);
     nameGenerator = new NameGenerator;
     notesTool     = new NotesTool();
     converterTool = new ConverterTool();
