@@ -23,13 +23,6 @@ Page {
         color: color_scheme.backgroundColor
     }
 
-    Connections {
-        target: item_editor
-
-        onCategoriesChanged: category_combobox.model = item_editor.categories
-        onItemsChanged: loadItemTable()
-    }
-
     header: Rectangle {
         id: header_bar
         color: color_scheme.toolbarColor
@@ -132,6 +125,7 @@ Page {
             height: color_scheme.toolbarHeight * 4
             clip: true
             contentWidth: -1
+            contentHeight: item_description_field.implicitHeight
 
             TextArea {
                 id: item_description_field

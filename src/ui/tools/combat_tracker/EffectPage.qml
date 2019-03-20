@@ -117,6 +117,7 @@ Item {
                 anchors.fill: parent
                 padding: 5
                 clip: true
+                contentHeight: effect_text.implicitHeight
 
                 Text {
                     id: effect_text

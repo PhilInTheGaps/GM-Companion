@@ -20,8 +20,10 @@ Page {
             clip: true
             padding: 10
             contentWidth: -1
+            contentHeight: left_scroll_column.implicitHeight
 
             Column {
+                id: left_scroll_column
                 spacing: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -163,6 +165,7 @@ Page {
             anchors.bottom: parent.bottom
             clip: true
             contentWidth: -1
+            contentHeight: path_fields_column.implicitHeight
             visible: google_drive_radio_button.checked
 
             Column {

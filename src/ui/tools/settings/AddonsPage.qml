@@ -21,6 +21,7 @@ Item {
         anchors.top: addon_text.bottom
         anchors.topMargin: 10
         clip: true
+        contentHeight: addon_column.implicitHeight
 
         Column {
             id: addon_column

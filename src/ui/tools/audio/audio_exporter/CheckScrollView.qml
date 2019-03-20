@@ -25,6 +25,7 @@ Column {
         width: parent.width - parent.padding * 2
         height: parent.height - text.height - parent.padding * 2
         clip: true
+        contentHeight: col.implicitHeight
 
         Column {
             id: col

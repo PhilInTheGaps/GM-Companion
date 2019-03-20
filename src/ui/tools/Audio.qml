@@ -110,6 +110,7 @@ Page {
                 width: platform.isAndroid ? parent.width / 5 : 175
                 clip: true
                 contentWidth: -1
+                contentHeight: audio_project_structure.implicitHeight
 
                 Column {
                     id: audio_project_structure
@@ -189,6 +190,7 @@ Page {
 
                     clip: true
                     contentWidth: -1
+                    contentHeight: audio_scroll_flow.implicitHeight
 
                     Flow {
                         id: audio_scroll_flow

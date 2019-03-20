@@ -283,6 +283,7 @@ Page {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         clip: true
+        contentHeight: text_edit.implicitHeight
 
         TextArea {
             id: text_edit

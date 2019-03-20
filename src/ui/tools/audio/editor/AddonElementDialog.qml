@@ -36,6 +36,7 @@ Dialog {
             anchors.top: tab_bar.bottom
             anchors.bottom: parent.bottom
             clip: true
+            contentHeight: column.implicitHeight
 
             Column {
                 id: column

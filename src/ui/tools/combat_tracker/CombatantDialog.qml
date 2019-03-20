@@ -118,8 +118,10 @@ Dialog {
 
                 visible: false
                 clip: true
+                contentHeight: scroll_column.implicitHeight
 
                 Column {
+                    id: scroll_column
                     width: main_column.width
                     spacing: 10
 

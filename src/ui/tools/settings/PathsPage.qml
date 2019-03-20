@@ -3,9 +3,10 @@ import QtQuick.Controls 2.2
 
 ScrollView {
     contentWidth: -1
+    contentHeight: main_column.implicitHeight
 
     Column {
-
+        id: main_column
         anchors.left: parent.left
         anchors.right: parent.right
 

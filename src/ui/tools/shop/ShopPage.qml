@@ -99,6 +99,7 @@ Page {
             width: platform.isAndroid ? parent.width / 5 : 175
 
             clip: true
+            contentHeight: category_column.implicitHeight
 
             Column {
                 id: category_column
@@ -249,6 +250,7 @@ Page {
             anchors.bottom: parent.bottom
             anchors.margins: 5
             clip: true
+            contentHeight: shop_list_column.implicitHeight
 
             Column {
                 id: shop_list_column

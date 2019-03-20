@@ -63,6 +63,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         clip: true
+        contentHeight: scroll_view_column.implicitHeight
 
         Column {
             id: scroll_view_column

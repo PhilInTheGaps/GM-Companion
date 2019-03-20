@@ -88,8 +88,10 @@ Window {
                 anchors.bottom: settings_button.top
 
                 ScrollBar.vertical.visible: false
+                contentHeight: menu_column.implicitHeight
 
                 Column {
+                    id: menu_column
                     width: drawer.width
 
                     Rectangle {

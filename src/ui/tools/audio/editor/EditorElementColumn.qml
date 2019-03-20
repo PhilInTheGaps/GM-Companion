@@ -13,6 +13,7 @@ ScrollView {
 
     clip: true
     contentWidth: -1
+    contentHeight: elements_column.implicitHeight
 
     Column {
         id: elements_column

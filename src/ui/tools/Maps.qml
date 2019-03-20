@@ -78,10 +78,11 @@ Page {
         anchors.topMargin: 5
         width: 200
 
-        contentWidth: -1
+        contentHeight: c.height
         clip: true
 
         Column {
+            id: c
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 5

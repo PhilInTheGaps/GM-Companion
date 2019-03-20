@@ -235,6 +235,7 @@ Page {
 
         clip: true
         padding: 10
+        contentHeight: calculation_text_edit.implicitHeight
 
         TextEdit {
             id: calculation_text_edit

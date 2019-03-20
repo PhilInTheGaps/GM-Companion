@@ -128,6 +128,7 @@ Item {
                         - names_categories_text.height - parent.spacing * 5
 
                 clip: true
+                contentHeight: names_categories_column.implicitHeight
 
                 Column {
                     id: names_categories_column

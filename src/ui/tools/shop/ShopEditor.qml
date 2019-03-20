@@ -132,6 +132,7 @@ Page {
         anchors.margins: 5
 
         clip: true
+        contentHeight: shop_column.implicitHeight
 
         Column {
             id: shop_column
@@ -806,8 +807,10 @@ Page {
             anchors.bottom: parent.bottom
             anchors.topMargin: 5
             clip: true
+            contentHeight: item_category_column.implicitHeight
 
             Column {
+                id: item_category_column
                 anchors.left: parent.left
                 anchors.right: parent.right
 

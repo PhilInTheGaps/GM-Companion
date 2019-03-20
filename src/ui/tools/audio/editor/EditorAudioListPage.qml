@@ -23,7 +23,8 @@ Page {
         title: qsTr("Set Folder")
         property int index: 0
 
-        folder: (platform.isWindows ? "file:///" : "file://") + audio_editor.basePath(audio_editor.type)
+        folder: (platform.isWindows ? "file:///" : "file://") + audio_editor.basePath(
+                    audio_editor.type)
 
         selectFolder: true
 
@@ -48,6 +49,8 @@ Page {
         focus: true
         keyNavigationEnabled: true
         highlightFollowsCurrentItem: false
+
+        property int last_index: 0
 
         delegate: Item {
             id: delegate_root
