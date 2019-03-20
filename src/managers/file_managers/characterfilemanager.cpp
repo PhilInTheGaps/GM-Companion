@@ -105,7 +105,7 @@ void CharacterFileManager::findLocalCharacters()
     // Find pdf characters
     for (auto file : getFiles(path))
     {
-        if (file.endsWith("pdf"))
+        if (file.endsWith("pdf") || file.endsWith("json"))
         {
             auto c = new Character(file.left(file.lastIndexOf('.')));
             c->addFile(CharacterFile(file, path + "/" + file));

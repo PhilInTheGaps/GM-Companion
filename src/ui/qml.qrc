@@ -72,5 +72,19 @@
         <file>components/ToolBarIconButton.qml</file>
         <file>tools/shop/EditorNewThingDialog.qml</file>
         <file>components/ToolBarTextButton.qml</file>
+        <file>tools/characters/ClassicPage.qml</file>
+        <file>tools/characters/DSA5Page.qml</file>
+        <file>tools/characters/dsa5/ProfileOverview.qml</file>
+        <file>tools/characters/dsa5/ProfileRules.qml</file>
+        <file>tools/characters/dsa5/Attributes.qml</file>
+        <file>tools/characters/dsa5/Advantages.qml</file>
+        <file>tools/characters/dsa5/AbilitiesTalents.qml</file>
+        <file>tools/characters/dsa5/BelongingsItems.qml</file>
+        <file>tools/characters/dsa5/BelongingsPets.qml</file>
+        <file>tools/characters/dsa5/DSA5ItemList.qml</file>
+        <file>tools/characters/dsa5/AbilitiesCombat.qml</file>
+        <file>tools/characters/dsa5/AbilitiesSpecial.qml</file>
+        <file>tools/characters/dsa5/AbilitiesLiturgies.qml</file>
+        <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
     </qresource>
 </RCC>

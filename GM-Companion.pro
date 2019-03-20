@@ -77,7 +77,11 @@ SOURCES += src/main.cpp \
     src/platformdetails.cpp \
     # Cloud
     src/cloud/googledrive.cpp \
-    src/cloud/foldertree.cpp
+    src/cloud/foldertree.cpp \
+    src/tools/characters/viewers/characterimageviewer.cpp \
+    src/tools/characters/viewers/characterviewer.cpp \
+    src/tools/characters/viewers/characterdsa5viewer.cpp \
+    src/tools/characters/viewers/dsa5/dsa5listitem.cpp
     # Addons
 #    src/tools/addons/sifrp.cpp \
 
@@ -161,7 +165,11 @@ HEADERS  += src/functions.h \
     src/platformdetails.h \
     # Cloud
     src/cloud/googledrive.h \
-    src/cloud/foldertree.h
+    src/cloud/foldertree.h \
+    src/tools/characters/viewers/characterimageviewer.h \
+    src/tools/characters/viewers/characterviewer.h \
+    src/tools/characters/viewers/characterdsa5viewer.h \
+    src/tools/characters/viewers/dsa5/dsa5listitem.h
     # Tools ADDONS
 #    src/tools/addons/sifrp.h \
 

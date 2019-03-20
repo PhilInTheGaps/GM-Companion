@@ -3,30 +3,34 @@
 
 #include <QObject>
 #include <QList>
+#include <QQmlApplicationEngine>
 #include "character.h"
 #include "src/settings/settingsmanager.h"
 #include "src/managers/filemanager.h"
+#include "viewers/characterimageviewer.h"
+#include "viewers/characterdsa5viewer.h"
 
 class CharacterTool : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QStringList characters READ characters NOTIFY charactersChanged)
-    Q_PROPERTY(QStringList images READ images NOTIFY currentCharacterChanged)
-    Q_PROPERTY(QString image READ image NOTIFY imageChanged)
-    Q_PROPERTY(int imageIndex READ imageIndex NOTIFY imageChanged)
+    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
+    Q_PROPERTY(int categoryIndex READ categoryIndex NOTIFY categoryChanged)
     Q_PROPERTY(bool active READ active NOTIFY charactersChanged)
+    Q_PROPERTY(int pageIndex READ pageIndex NOTIFY pageIndexChanged)
 
 public:
-    explicit CharacterTool(FileManager *fManager, QObject *parent = nullptr);
+    explicit CharacterTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+
+    CharacterImageViewer *getImageViewer() const { return m_imageViewer; }
+    CharacterDSA5Viewer *getDSA5Viewer() const { return m_dsa5Viewer; }
 
     QStringList characters() const { return m_characterNames; }
-    QStringList images() const { return m_images; }
+    QStringList categories() const { if (m_currentViewer) return m_currentViewer->categories(); else return {}; }
+    int categoryIndex() const { if (m_currentViewer) return m_currentViewer->categoryIndex(); else return 0; }
+    int pageIndex() const { if (m_currentViewer) return m_currentViewer->pageIndex(); else return 0; }
 
-    QString image() const { return m_image; }
-    Q_INVOKABLE void setImage(int index);
-
-    int imageIndex() const { return m_imageIndex; }
-    Q_INVOKABLE void nextImage(bool right);
+    Q_INVOKABLE void setCurrentCategory(int index);
 
     bool active() const { return m_active; }
     Q_INVOKABLE void toggleCharacterActive(int index);
@@ -37,25 +41,28 @@ public:
 signals:
     void charactersChanged();
     void currentCharacterChanged();
-    void imageChanged();
+    void categoryChanged();
+    void categoriesChanged();
+    void pageIndexChanged();
 
 private:
     SettingsManager sManager;
     FileManager *fileManager = nullptr;
 
-    QStringList m_characterNames, m_images, m_inactiveCharacters;
-    QString m_image;
-    int m_imageIndex = 0;
+    CharacterViewer *m_currentViewer = nullptr;
+    CharacterImageViewer *m_imageViewer = nullptr;
+    CharacterDSA5Viewer *m_dsa5Viewer = nullptr;
 
+    QStringList m_characterNames, m_inactiveCharacters;
     QList<Character*> m_characters;
     QList<Character*> m_visibleCharacters;
     Character *m_currentCharacter = nullptr;
 
     bool m_active = true;
 
-    void updateImages();
     void loadInactiveCharacters();
     void saveInactiveCharacters();
+    void updateCharacter();
 
 private slots:
     void receivedCharacters(QList<Character*> characters);

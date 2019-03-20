@@ -101,6 +101,7 @@
         <file alias="icons/patzer-liturgie.png">addons/dsa5/icons/patzer-liturgie.png</file>
         <file alias="icons/patzer-zauber.png">addons/dsa5/icons/patzer-zauber.png</file>
         <file alias="spotify.json">addons/dsa5/spotify.json</file>
+        <file alias="character_tool.json">addons/dsa5/character_tool.json</file>
     </qresource>
     <qresource prefix="/addons/sifrp">
         <file alias="addon.ini">addons/sifrp/addon.ini</file>

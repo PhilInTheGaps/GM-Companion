@@ -13,5 +13,7 @@ int Character::type() const
 
     if (m_files[0].name().endsWith("pdf")) return 1;
 
+    if (m_files[0].name().endsWith("json")) return 2;
+
     return 0;
 }

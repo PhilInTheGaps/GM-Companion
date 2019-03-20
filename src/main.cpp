@@ -85,10 +85,14 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("shop_editor", toolManager->getShopTool()->getShopEditor());
     engine.rootContext()->setContextProperty("item_editor", toolManager->getShopTool()->getShopEditor()->getItemEditor());
 
+    // Characters
+    engine.rootContext()->setContextProperty("character_tool", toolManager->getCharacterTool());
+    engine.rootContext()->setContextProperty("character_image_viewer", toolManager->getCharacterTool()->getImageViewer());
+    engine.rootContext()->setContextProperty("character_dsa5_viewer", toolManager->getCharacterTool()->getDSA5Viewer());
+
     // Other Tools
     engine.rootContext()->setContextProperty("map_tool", toolManager->getMapTool());
     engine.rootContext()->setContextProperty("dice_tool", toolManager->getDiceTool());
-    engine.rootContext()->setContextProperty("character_tool", toolManager->getCharacterTool());
     engine.rootContext()->setContextProperty("name_generator", toolManager->getNameGenerator());
     engine.rootContext()->setContextProperty("notes_tool", toolManager->getNotesTool());
     engine.rootContext()->setContextProperty("converter_tool", toolManager->getConverterTool());
