@@ -86,5 +86,6 @@
         <file>tools/characters/dsa5/AbilitiesSpecial.qml</file>
         <file>tools/characters/dsa5/AbilitiesLiturgies.qml</file>
         <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
+        <file>tools/settings/CreditsItem.qml</file>
     </qresource>
 </RCC>

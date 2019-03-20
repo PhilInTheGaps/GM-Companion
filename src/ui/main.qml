@@ -88,96 +88,47 @@ Window {
                 anchors.bottom: settings_button.top
 
                 ScrollBar.vertical.visible: false
-                contentHeight: menu_column.implicitHeight
+                contentHeight: tool_column.implicitHeight
 
+                // Column with tool buttons
                 Column {
-                    id: menu_column
+                    id: tool_column
                     width: drawer.width
+                    spacing: 5
 
-                    Rectangle {
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        height: color_scheme.toolbarHeight
-
-                        // Tools Text
-                        Text {
-                            text: "Tools"
-                            color: color_scheme.toolbarTextColor
-                            font.pointSize: 14
-                            visible: !inPortrait && settings_tool.showToolNames
-
-                            anchors.centerIn: parent
-
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                    function buttonClicked(tool) {
+                        if (stack.currentItem !== tool) {
+                            stack.pop(null)
+                            tool.active = true
+                            stack.push(tool)
                         }
-
-                        // GM-Companion Icon
-                        Image {
-                            anchors.centerIn: parent
-                            visible: inPortrait || !settings_tool.showToolNames
-
-                            width: parent.width - 10
-                            height: width
-
-                            source: "../icons/gm-companion/icon.png"
-                            sourceSize.width: width
-                            sourceSize.height: height
-                        }
-
-                        color: color_scheme.toolbarColor
                     }
 
-                    // Column with tool buttons
-                    Column {
-                        id: tool_column
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        spacing: 5
+                    property var toolNames: [qsTr("Audio"), qsTr("Maps"), qsTr(
+                            "Dice"), qsTr("Combat Tracker"), qsTr(
+                            "Item Shop"), qsTr("Characters"), qsTr(
+                            "Generators"), qsTr("Notes"), qsTr("Converter")]
+                    property var icons: ["../icons/menu/audio.png", "../icons/menu/maps.png", "../icons/menu/dice.png", "../icons/menu/combat.png", "../icons/menu/item-shop.png", "../icons/menu/characters.png", "../icons/menu/generators.png", "../icons/menu/notes.png", "../icons/menu/converter.png"]
+                    property var tools: [audio, maps, dice, combat, shop, characters, generators, notes, converter]
+                    property var fa_icons: [FontAwesome.music, FontAwesome.mapMarkedAlt, FontAwesome.diceD20, FontAwesome.bookDead, FontAwesome.shoppingCart, FontAwesome.addressCard, FontAwesome.industry, FontAwesome.book, FontAwesome.balanceScale]
 
-                        // Top divider
-                        Rectangle {
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            height: 2
-                            color: color_scheme.dividerColor
-                        }
+                    Repeater {
+                        model: parent.toolNames
 
-                        function buttonClicked(tool) {
-                            if (stack.currentItem !== tool) {
-                                stack.pop(null)
-                                tool.active = true
-                                stack.push(tool)
-                            }
-                        }
+                        SideMenuButton {
+                            tool_name: modelData
+                            icon_source: parent.icons[index]
+                            fa_icon: parent.fa_icons[index]
+                            current_tool: stack.currentItem === tool_column.tools[index]
 
-                        property var toolNames: [qsTr("Audio"), qsTr(
-                                "Maps"), qsTr("Dice"), qsTr(
-                                "Combat Tracker"), qsTr("Item Shop"), qsTr(
-                                "Characters"), qsTr("Generators"), qsTr(
-                                "Notes"), qsTr("Converter")]
-                        property var icons: ["../icons/menu/audio.png", "../icons/menu/maps.png", "../icons/menu/dice.png", "../icons/menu/combat.png", "../icons/menu/item-shop.png", "../icons/menu/characters.png", "../icons/menu/generators.png", "../icons/menu/notes.png", "../icons/menu/converter.png"]
-                        property var tools: [audio, maps, dice, combat, shop, characters, generators, notes, converter]
-                        property var fa_icons: [FontAwesome.music, FontAwesome.mapMarkedAlt, FontAwesome.diceD20, FontAwesome.bookDead, FontAwesome.shoppingCart, FontAwesome.addressCard, FontAwesome.industry, FontAwesome.book, FontAwesome.balanceScale]
-
-                        Repeater {
-                            model: parent.toolNames
-
-                            SideMenuButton {
-                                tool_name: modelData
-                                icon_source: parent.icons[index]
-                                fa_icon: parent.fa_icons[index]
-                                current_tool: stack.currentItem === tool_column.tools[index]
-
-                                onClicked: {
-                                    if (index == 0) {
-                                        if (stack.currentItem !== audio) {
-                                            stack.pop(null)
-                                        }
-                                    } else {
-                                        tool_column.buttonClicked(
-                                                    tool_column.tools[index])
+                            onClicked: {
+                                if (index == 0) {
+                                    if (stack.currentItem !== audio) {
+                                        stack.pop(null)
                                     }
+                                } else {
+                                    tool_column.buttonClicked(
+                                                tool_column.tools[index])
                                 }
                             }
                         }
