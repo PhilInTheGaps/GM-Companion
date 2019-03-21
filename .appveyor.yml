@@ -44,7 +44,7 @@ build_script:
   - if not %platform%==mingw (nmake check)
 
 after_build:
-  - windeployqt.exe --release --no-compiler-runtime --qmldir %QTDIR%\qml release\out\gm-companion.exe
+  - windeployqt.exe --release --no-compiler-runtime --qmldir C:\Qt\%qt%\qml release\out\gm-companion.exe
   - cmd: copy /y "C:\OpenSSL-Win64\bin\*eay32.dll" release\out
 
 artifacts:
