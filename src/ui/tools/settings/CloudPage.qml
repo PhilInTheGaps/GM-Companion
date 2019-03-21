@@ -208,6 +208,7 @@ Page {
                 CloudPathItem {
                     path_type: qsTr("Notes")
                     setting: "notes"
+                    enabled: false
                 }
 
                 CloudPathItem {

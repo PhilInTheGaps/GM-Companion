@@ -24,6 +24,8 @@ CharacterFileManager::CharacterFileManager(GoogleDrive *google, QObject *parent)
 
     // Received list of images in character folder
     connect(google, qOverload<int, QList<GoogleFile> >(&GoogleDrive::receivedFileUrls), [ = ](int reqId, QList<GoogleFile>files) {
+        qDebug() << "CharacterFileManager: Received some files!" << m_requestIDs << reqId;
+
         if (m_requestIDs.contains(reqId))
         {
             if ((files.size() > 0) && (files[0].parent == sManager.getSetting(Setting::googlePath, "characters")))
@@ -122,7 +124,9 @@ void CharacterFileManager::findFiles(Character *character)
     {
         if (character->requestId() == -1)
         {
-            character->setRequestId(googleDrive->getFileUrls(character->cloudId()));
+            int reqId = googleDrive->getFileUrls(character->cloudId());
+            m_requestIDs.append(reqId);
+            character->setRequestId(reqId);
         }
     }
 }
