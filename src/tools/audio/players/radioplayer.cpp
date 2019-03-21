@@ -102,7 +102,7 @@ void RadioPlayer::onMetaDataChanged()
 {
     qDebug() << "RadioPlayer: MetaData changed!";
 
-    if (player->bufferStatus() == 100)
+    if (player->bufferStatus() == 100 || player->mediaStatus() == QMediaPlayer::BufferedMedia)
     {
         emit metaDataChanged(player);
     }

@@ -32,6 +32,20 @@ QString MetaDataReader::convertCoverImage(QMediaPlayer *mediaPlayer)
         image.append(QString::fromLatin1(bArray.toBase64().data()));
         return image;
     }
+    // Windows somehow uses ThumbnailImage instead,
+    // the documentation says this is a photo metadata attribute but whatever. It works somehow.
+    else if (mediaPlayer->availableMetaData().contains("ThumbnailImage"))
+    {
+        QImage myImage = mediaPlayer->metaData(QMediaMetaData::ThumbnailImage).value<QImage>();
+        QByteArray bArray;
+        QBuffer    buffer(&bArray);
+        buffer.open(QIODevice::WriteOnly);
+        myImage.save(&buffer, "JPEG");
+
+        QString image("data:image/jpg;base64,");
+        image.append(QString::fromLatin1(bArray.toBase64().data()));
+        return image;
+    }
     else
     {
         return "";

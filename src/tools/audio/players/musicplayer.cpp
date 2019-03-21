@@ -18,6 +18,14 @@ MusicPlayer::MusicPlayer(FileManager *fManager)
         if (player->state() == QMediaPlayer::PlayingState) emit startedPlaying();
     });
 
+    connect(player, &QMediaPlayer::bufferStatusChanged, [=]() {
+        qDebug() << "BUFFER STATUS:" << player->bufferStatus();
+    });
+
+    connect(player, &QMediaPlayer::mediaStatusChanged, [=]() {
+        qDebug() << "MEDIA STATUS:" << player->mediaStatus();
+    });
+
     connect(player, QOverload<>::of(&QMediaObject::metaDataChanged), this, &MusicPlayer::onMetaDataChanged);
 }
 
@@ -150,7 +158,7 @@ void MusicPlayer::stop()
  */
 void MusicPlayer::onMetaDataChanged()
 {
-    if (player->bufferStatus() == 100)
+    if (player->bufferStatus() == 100 || player->mediaStatus() == QMediaPlayer::BufferedMedia)
     {
         qDebug() << "MusicPlayer: MetaData changed!";
         emit metaDataChanged(player);

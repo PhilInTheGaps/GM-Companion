@@ -1,7 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Window 2.2
-import QtWebEngine 1.5
 
 import "./audio"
 import "./audio/buttons"
