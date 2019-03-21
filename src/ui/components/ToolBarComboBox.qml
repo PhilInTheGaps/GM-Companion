@@ -10,7 +10,6 @@ ComboBox {
 
     delegate: ItemDelegate {
         width: control.width
-
         contentItem: Text {
             text: modelData
             color: "black"
@@ -54,6 +53,7 @@ ComboBox {
         padding: 1
 
         contentItem: ListView {
+            id: popup_content
             clip: true
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null

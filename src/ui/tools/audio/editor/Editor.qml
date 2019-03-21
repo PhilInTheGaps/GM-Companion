@@ -54,10 +54,15 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath() + element_icon_field.text
+            source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
+                        ) + element_icon_field.text
 
             fillMode: Image.PreserveAspectFit
         }
+    }
+
+    EditorRenameDialog {
+        id: rename_dialog
     }
 
     // Top Bar
@@ -111,6 +116,7 @@ Page {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.margins: 5
+                width: 150
 
                 model: audio_editor.projectNames
                 currentIndex: audio_editor.projectIndex
@@ -119,11 +125,25 @@ Page {
                                            currentIndex)
             }
 
+            EditorToolButton {
+                anchors.margins: 5
+                labeltext: FontAwesome.pen
+                onClicked: {
+                    rename_dialog.mode = 0
+                    rename_dialog.title = qsTr("Rename Project")
+                    rename_dialog.origName = project_box.currentText
+                    rename_dialog.x = project_box.x
+                    rename_dialog.y = tool_bar.height
+                    rename_dialog.open()
+                }
+            }
+
             ToolBarComboBox {
                 id: category_box
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.margins: 5
+                width: 150
 
                 model: audio_editor.categoryNames
                 currentIndex: audio_editor.categoryIndex
@@ -132,11 +152,25 @@ Page {
                                           currentText)
             }
 
+            EditorToolButton {
+                anchors.margins: 5
+                labeltext: FontAwesome.pen
+                onClicked: {
+                    rename_dialog.mode = 1
+                    rename_dialog.title = qsTr("Rename Category")
+                    rename_dialog.origName = category_box.currentText
+                    rename_dialog.x = category_box.x
+                    rename_dialog.y = tool_bar.height
+                    rename_dialog.open()
+                }
+            }
+
             ToolBarComboBox {
                 id: scenario_box
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.margins: 5
+                width: 150
 
                 model: audio_editor.scenarioNames
                 currentIndex: audio_editor.scenarioIndex
@@ -147,6 +181,19 @@ Page {
                     audio_list_page.visible = false
                     radio_page.visible = false
                     spotify_page.visible = false
+                }
+            }
+
+            EditorToolButton {
+                anchors.margins: 5
+                labeltext: FontAwesome.pen
+                onClicked: {
+                    rename_dialog.mode = 2
+                    rename_dialog.title = qsTr("Rename Scenario")
+                    rename_dialog.origName = scenario_box.currentText
+                    rename_dialog.x = scenario_box.x
+                    rename_dialog.y = tool_bar.height
+                    rename_dialog.open()
                 }
             }
 
@@ -441,7 +488,8 @@ Page {
                     Image {
                         id: element_icon_image
                         visible: status == Image.Ready
-                        source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
+                        source: (platform.isWindows ? "file:///" : "file://")
+                                + audio_editor.resourcesPath(
                                     ) + element_icon_field.text
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom

@@ -14,24 +14,6 @@ Page {
             update_manager.checkForUpdates()
     }
 
-    Connections {
-        target: update_manager
-
-        onUpdateAvailable: {
-            update_text.text = qsTr(
-                        "Found new Version: ") + update_manager.newestVersion
-            update_text.visible = true
-            open_downloads_button.visible = true
-            update_busy_indicator.visible = false
-        }
-
-        onNoUpdateAvailable: {
-            update_text.text = qsTr("No newer version found")
-            update_text.visible = true
-            update_busy_indicator.visible = false
-        }
-    }
-
     background: Rectangle {
         color: color_scheme.backgroundColor
     }

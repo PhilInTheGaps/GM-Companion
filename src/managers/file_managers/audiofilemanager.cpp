@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QTemporaryFile>
+#include <QFileInfo>
 
 AudioFileManager::AudioFileManager(GoogleDrive *google) : googleDrive(google)
 {
@@ -645,15 +646,37 @@ void AudioFileManager::saveProject(AudioProject *project)
     // Write to disc
     QJsonDocument doc(root);
 
-    qDebug() << "    Done.";
-    project->setSaved(true);
-
     QFile f(sManager.getSetting(Setting::audioPath) + "/" + project->name() + ".audio");
 
     if (f.open(QIODevice::WriteOnly))
     {
         f.write(doc.toJson(QJsonDocument::Indented));
         f.close();
+
+        if (project->wasRenamed())
+        {
+            QFile f2(sManager.getSetting(Setting::audioPath) + "/" + project->oldName() + ".audio");
+            QFileInfo f2i(f2);
+
+            // Safety clause, don't delete file if a project was renamed and
+            // one with the old name was created
+            if (f2.exists() && (f2i.lastModified().secsTo(QDateTime::currentDateTime()) > 5))
+            {
+                if (!f2.remove())
+                {
+                    qDebug() << "AudioFileManager: Could not delete old project file.";
+                }
+            }
+
+            project->setWasRenamed(false);
+        }
+
+        project->setSaved(true);
+        qDebug() << "    Done.";
+    }
+    else
+    {
+        qDebug() << "AudioFileManager: Error: Could not save project to disk.";
     }
 }
 

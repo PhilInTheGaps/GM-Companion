@@ -42,6 +42,7 @@ public:
     // Project
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE void createProject(QString name);
+    Q_INVOKABLE void renameProject(QString name);
     Q_INVOKABLE void saveProject();
     void setCurrentProject(AudioProject* project);
     QStringList projectNames();
@@ -51,12 +52,14 @@ public:
     // Categories
     Q_INVOKABLE void setCurrentCategory(QString name);
     Q_INVOKABLE void createCategory(QString name);
+    Q_INVOKABLE void renameCategory(QString name);
     QStringList categoryNames() const { if (!m_currentProject) return {}; else return m_currentProject->categoryNames(); }
     int categoryIndex() const;
 
     // Scenarios
     Q_INVOKABLE void setCurrentScenario(QString name);
     Q_INVOKABLE void createScenario(QString name);
+    Q_INVOKABLE void renameScenario(QString name);
     QStringList scenarioNames() const;
     int scenarioIndex() const;
 

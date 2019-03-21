@@ -13,6 +13,7 @@ public:
     virtual ~AudioScenario() {}
 
     QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
     QList<AudioElement*> elements();
     void sortElements();
     void setExport(bool e) { m_export = e; }
@@ -63,6 +64,7 @@ public:
     virtual ~AudioCategory() {}
 
     QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
     void setExport(bool e) { m_export = e; }
     bool isExport() const { return m_export; }
 
@@ -87,6 +89,14 @@ public:
     explicit AudioProject(QString name, int version, QList<AudioCategory*> categories, QObject *parent = nullptr);
 
     QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
+
+    QString oldName() const { return m_oldName; }
+    void setOldName(QString name) { m_oldName = name; }
+
+    bool wasRenamed() const { return m_wasRenamed; }
+    void setWasRenamed(bool renamed) { m_wasRenamed = renamed; }
+
     int version() const { return m_version; }
     bool isSaved() const { return m_isSaved; }
     void setSaved(bool saved) { m_isSaved = saved; }
@@ -103,9 +113,9 @@ public:
     AudioCategory* currentCategory() const { return m_currentCategory; }
     void addCategory(AudioCategory* category) { m_categories.append(category); }
 private:
-    QString m_name;
+    QString m_name, m_oldName;
     int m_version;
-    bool m_isSaved, m_export = true;
+    bool m_isSaved, m_wasRenamed = false, m_export = true;
 
     QList<AudioCategory*> m_categories;
     AudioCategory *m_currentCategory;

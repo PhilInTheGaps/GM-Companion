@@ -142,6 +142,27 @@ void AudioEditor::createProject(QString name)
 }
 
 /**
+ * @brief Rename the current project
+ * @param name New name
+ */
+void AudioEditor::renameProject(QString name)
+{
+    if (!m_currentProject || name.isEmpty()) return;
+
+    qDebug() << "AudioEditor: Renaming project" << m_currentProject->name() << "to" << name << "...";
+
+    if (!m_currentProject->wasRenamed())
+    {
+        m_currentProject->setWasRenamed(true);
+        m_currentProject->setOldName(m_currentProject->name());
+    }
+
+    m_currentProject->setName(name);
+    emit projectsChanged();
+    madeChanges();
+}
+
+/**
  * @brief Set the current category
  * @param name Name of new active category
  */
@@ -184,6 +205,21 @@ void AudioEditor::createCategory(QString name)
 
         madeChanges();
     }
+}
+
+/**
+ * @brief Rename the current category
+ * @param name New name
+ */
+void AudioEditor::renameCategory(QString name)
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || name.isEmpty()) return;
+
+    qDebug() << "AudioEditor: Renaming category" << m_currentProject->currentCategory()->name() << "to" << name << "...";
+
+    m_currentProject->currentCategory()->setName(name);
+    emit currentProjectChanged();
+    madeChanges();
 }
 
 /**
@@ -248,6 +284,21 @@ void AudioEditor::createScenario(QString name)
 
         madeChanges();
     }
+}
+
+/**
+ * @brief Rename the current scenario
+ * @param name New name
+ */
+void AudioEditor::renameScenario(QString name)
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario() || name.isEmpty()) return;
+
+    qDebug() << "AudioEditor: Renaming scenario" << m_currentProject->currentCategory()->currentScenario()->name() << "to" << name << "...";
+
+    m_currentProject->currentCategory()->currentScenario()->setName(name);
+    emit currentCategoryChanged();
+    madeChanges();
 }
 
 /**

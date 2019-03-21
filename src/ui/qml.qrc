@@ -87,5 +87,6 @@
         <file>tools/characters/dsa5/AbilitiesLiturgies.qml</file>
         <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
         <file>tools/settings/CreditsItem.qml</file>
+        <file>tools/audio/editor/EditorRenameDialog.qml</file>
     </qresource>
 </RCC>
