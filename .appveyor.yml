@@ -29,7 +29,6 @@ environment:
 
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - if %platform%==mingw set PATH=C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\bin;%PATH%
   - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %platform%
 
 configuration:
@@ -42,7 +41,7 @@ before_build:
   - qmake GM-Companion.pro
 
 build_script:
-  - if not %platform%==mingw (nmake) else (mingw32-make)
+  - if not %platform%==mingw (nmake) else (c:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\bin\mingw32-make.exe)
   - if not %platform%==mingw (nmake check)
 
 after_build:
