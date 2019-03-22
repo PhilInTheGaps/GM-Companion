@@ -1,4 +1,5 @@
 version: '{branch}-{build}'
+image: Visual Studio 2017
 
 branches:
   except:
@@ -6,34 +7,19 @@ branches:
 
 environment:
   matrix:
-  # MinGW x64
-  - name: x64_mingw
-    platform: x64
-    qt: 5.12\mingw73_64
-    image: Visual Studio 2015
-    
-  # MinGW x86
-  - name: x86_mingw
-    platform: x86
-    qt: 5.11.3\mingw53_32
-    image: Visual Studio 2015
-    
   # MSVC x64
-  - name: x64_msvc
+  - name: x64
     platform: x64
     qt: 5.12\msvc2017_64
-    image: Visual Studio 2017
     
   # MSVC x86
-  - name: x86_msvc
+  - name: x86
     platform: x86
     qt: 5.12\msvc2017
-    image: Visual Studio 2017
 
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - if %name%==x64_msvc call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-  - if %name%==x86_msvc call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %platform%
 
 configuration:
   - Release
@@ -43,12 +29,8 @@ before_build:
 
 build_script:
   - qmake GM-Companion.pro
-  - if %name%==x64_msvc (nmake)
-  - if %name%==x86_msvc (nmake)
-  - if %name%==x64_msvc (nmake check)
-  - if %name%==x86_msvc (nmake check)
-  - if %name%==x64_mingw (C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\bin\mingw32-make.exe)
-  - if %name%==x64_mingw (C:\MinGW\bin\mingw32-make.exe)
+  - nmake
+  - nmake check
 
 after_build:
   - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\out\gm-companion.exe
