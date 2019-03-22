@@ -11,11 +11,13 @@ environment:
   - name: x64
     platform: x64
     qt: 5.12\msvc2017_64
+    openssl: C:\OpenSSL-Win64
     
   # MSVC x86
   - name: x86
     platform: x86
     qt: 5.12\msvc2017
+    openssl: C:\OpenSSL-Win32
 
 init:
   - set PATH=C:\Qt\%qt%\bin;%PATH%
@@ -34,7 +36,7 @@ build_script:
 
 after_build:
   - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\out\gm-companion.exe
-  - cmd: copy /y "C:\OpenSSL-Win64\bin\*eay32.dll" release\out
+  - cmd: copy /y "%openssl%\bin\*eay32.dll" release\out
 
 artifacts:
   - path: release\out
