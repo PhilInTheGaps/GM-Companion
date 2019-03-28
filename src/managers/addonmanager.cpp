@@ -28,6 +28,7 @@ void AddonManager::updateAddonList()
             if ((addon != ".") && (addon != ".."))
             {
                 QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
+                settings.setIniCodec("UTF-8");
 
                 if (settings.value("addons_version", 0).toInt() == 3)
                 {
