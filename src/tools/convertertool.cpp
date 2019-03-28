@@ -105,7 +105,7 @@ double ConverterTool::textToNumber(QString text)
 // Add custom unit
 void ConverterTool::addUnit(QString name, QString refUnits, QString type)
 {
-    if (!name.isNull() && !refUnits.isNull() && !type.isNull())
+    if (!name.isEmpty() && !refUnits.isEmpty() && !type.isEmpty())
     {
         QSettings settings(QDir::homePath() + "/.gm-companion/units/custom.ini", QSettings::IniFormat);
         settings.setIniCodec("UTF-8");

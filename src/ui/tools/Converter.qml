@@ -14,8 +14,11 @@ Page {
 
     Dialog {
         id: add_unit_dialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
 
         title: qsTr("Add Units")
+        modal: true
 
         contentItem: Column {
             spacing: 5
@@ -28,33 +31,27 @@ Page {
                                           currentText)
             }
 
-            Row {
+            Grid {
                 spacing: 5
+                columns: 2
 
-                Grid {
-                    spacing: 5
-                    columns: 2
+                Text {
+                    text: qsTr("Unit Name:")
+                }
 
-                    Text {
-                        text: qsTr("Unit Name:")
-                        color: color_scheme.textColor
-                    }
+                Text {
+                    id: refUnit_text
+                    text: "Meters"
+                }
 
-                    Text {
-                        id: refUnit_text
-                        text: "Meters"
-                        color: color_scheme.textColor
-                    }
+                TextField {
+                    id: unit_name
+                    selectByMouse: true
+                }
 
-                    TextField {
-                        id: unit_name
-                        selectByMouse: true
-                    }
-
-                    TextField {
-                        id: unit_value
-                        selectByMouse: true
-                    }
+                TextField {
+                    id: unit_value
+                    selectByMouse: true
                 }
             }
 
