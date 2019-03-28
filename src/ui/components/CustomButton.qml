@@ -1,34 +1,31 @@
 import QtQuick 2.9
-import QtQuick.Controls 2.2
-
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
+import QtQuick.Controls 2.3
 
 Rectangle {
     property alias text: text
     property var buttonText
     signal clicked(string info)
 
-    ColorScheme {
-        id: color_scheme
-    }
-
     Text {
         id: text
         text: buttonText
-        padding: 5
-        color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
-        width: parent.width - parent.padding * 2
+        color: mouse_area.pressed ? "black" : mouse_area.hovered ? "lightgrey" : "white"
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 5
         anchors.verticalCenter: parent.verticalCenter
+
         clip: true
         elide: Text.ElideRight
     }
 
-    color: mouse_area.pressed ? "white" : color_scheme.primaryButtonColor
+    color: mouse_area.pressed ? "lightgrey" : color_scheme.primaryButtonColor
 
     MouseArea {
         anchors.fill: parent
         id: mouse_area
+        hoverEnabled: true
 
         onClicked: parent.clicked(parent.buttonText)
     }

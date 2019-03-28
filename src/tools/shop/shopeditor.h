@@ -3,88 +3,107 @@
 
 #include <QObject>
 
+#include "itemeditor.h"
 #include "src/settings/settingsmanager.h"
+#include "src/managers/filemanager.h"
+#include <QQmlApplicationEngine>
 
 class ShopEditor : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectListChanged)
+    Q_PROPERTY(QStringList categoryNames READ categoryNames NOTIFY projectChanged)
+    Q_PROPERTY(QStringList shopNames READ shopNames NOTIFY categoryChanged)
+
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY shopChanged)
+    Q_PROPERTY(QString owner READ owner WRITE setOwner NOTIFY shopChanged)
+    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY shopChanged)
+
+    Q_PROPERTY(QStringList itemGroups READ itemGroups NOTIFY itemGroupChanged)
+    Q_PROPERTY(QStringList itemCategories READ itemCategories NOTIFY itemGroupChanged)
+
+    Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
+
 public:
-    explicit ShopEditor(QObject *parent = nullptr);
+    explicit ShopEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    ItemEditor* getItemEditor() const { return itemEditor; }
 
-    Q_INVOKABLE void setCurrentProject(QString project);
-    Q_INVOKABLE void setCurrentCategory(QString category);
+    QStringList projectNames() const;
+    QStringList categoryNames() const;
+    QStringList shopNames() const;
 
-    Q_INVOKABLE void createProject(QString project);
-    Q_INVOKABLE void createCategory(QString category);
-    Q_INVOKABLE void createShop(QString shop);
+    Q_INVOKABLE void setCurrentProject(int index);
+    Q_INVOKABLE void setCurrentCategory(int index);
+    Q_INVOKABLE void setCurrentShop(int index);
 
-    Q_INVOKABLE void updateShopList();
-    Q_INVOKABLE QStringList getShopList();
+    QString name() const;
+    void setName(QString name);
 
-    Q_INVOKABLE void loadShop(QString shop);
-    Q_INVOKABLE void saveShop();
+    QString owner() const;
+    Q_INVOKABLE void setOwner(QString owner);
+
+    QString description() const;
+    Q_INVOKABLE void setDescription(QString description);
+
+    Q_INVOKABLE void moveShop(int positions);
     Q_INVOKABLE void deleteShop();
+    Q_INVOKABLE void deleteItem(int index);
+    Q_INVOKABLE void createThing(QString name, int index);
+    Q_INVOKABLE void addItem(int index);
+    Q_INVOKABLE void save();
 
-    Q_INVOKABLE QStringList getCategories();
+    QStringList itemGroups() const;
+    QStringList itemCategories() const;
 
-    Q_INVOKABLE QString getShopName();
-    Q_INVOKABLE QString getShopOwner();
-    Q_INVOKABLE void setShopOwner(QString owner);
-    Q_INVOKABLE QString getShopDescription();
-    Q_INVOKABLE void setShopDescription(QString description);
+    Q_INVOKABLE void setCurrentItemGroup(int index);
+    Q_INVOKABLE void enableAllItemCategories(bool b = true);
+    Q_INVOKABLE void setItemCategoryEnabled(QString category, bool b = true);
+    Q_INVOKABLE bool isItemCategoryEnabled(QString category) const { return !m_disabledItemCategories.contains(category); }
 
-    Q_INVOKABLE void addItem(QStringList item);
-    Q_INVOKABLE QStringList getItemNames();
-    Q_INVOKABLE QStringList getItemPrices();
-    Q_INVOKABLE QStringList getItemCategories();
-    Q_INVOKABLE QStringList getItemDescriptions();
-
-    Q_INVOKABLE void removeItem(int index);
-    Q_INVOKABLE void removeAllItems();
-
-    // Item List on the right
-    Q_INVOKABLE void loadItemListTabs();
-    Q_INVOKABLE QStringList getItemListTabNames();
-    Q_INVOKABLE void setItemListTabIndex(int index);
-
-    Q_INVOKABLE void loadItemList();
-    Q_INVOKABLE QStringList getItemListNames();
-    Q_INVOKABLE QStringList getItemListPrices();
-    Q_INVOKABLE QStringList getItemListCategories();
-    Q_INVOKABLE QStringList getItemListDescriptions();
-
-    Q_INVOKABLE QStringList getListItem(int index);
+    bool isSaved() const { return m_isSaved; }
 
 signals:
+    void projectListChanged();
+    void projectChanged();
+    void categoryChanged();
+    void shopChanged();
+
+    void itemGroupChanged();
+    void itemGroupsChanged();
+
+    void isSavedChanged();
+    void showInfoBar(QString message);
+    void projectsSaved(QList<ShopProject*> projects);
 
 private:
-    SettingsManager *sManager;
+    SettingsManager sManager;
+    ItemEditor *itemEditor;
+    FileManager *fileManager;
+    QQmlApplicationEngine *qmlEngine;
+    ItemModel *itemModel;
+    ItemModel *itemModel2;
 
-    QStringList m_shopList;
+    QList<ShopProject*> m_projects;
+    ShopProject *m_currentProject = nullptr;
 
-    QString m_projectPath;
-    QString m_category;
+    QList<ItemGroup*> m_itemGroups;
+    ItemGroup *m_currentItemGroup = nullptr;
+    QStringList m_disabledItemCategories;
+    QList<Item*> m_items;
 
-    QStringList m_categories;
+    bool m_isSaved = true;
+    void madeChanges();
 
-    QString m_shopName;
-    QString m_shopOwner;
-    QString m_shopDescription;
+    void createProject(QString name);
+    void createCategory(QString name);
+    void createShop(QString name);
 
-    QStringList m_itemNames;
-    QStringList m_itemPrices;
-    QStringList m_itemCategories;
-    QStringList m_itemDescriptions;
-
-    // Item List
-    QStringList m_itemListTabNames;
-    QStringList m_itemListTabPaths;
-    int m_itemListTabIndex = 0;
-
-    QStringList m_itemListNames;
-    QStringList m_itemListPrices;
-    QStringList m_itemListCategories;
-    QStringList m_itemListDescriptions;
+private slots:
+    void projectsReceived(QList<ShopProject*> projects);
+    void itemsReceived(QList<ItemGroup*> groups);
+    void onShopChanged();
+    void onItemsChanged();
+    void itemEditorSaved(ItemGroup *group);
 };
 
 #endif // SHOPEDITOR_H

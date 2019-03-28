@@ -6,13 +6,13 @@
 
 UpdateManager::UpdateManager()
 {
-    qDebug().noquote() << "Initializing update manager ...";
+    qDebug().noquote() << "Initializing UpdateManager ...";
 
     // GitHub Release feed
     m_feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
     networkManager = new QNetworkAccessManager;
-    connect(networkManager, SIGNAL(finished(QNetworkReply *)), this, SLOT(on_networkManager_finished(QNetworkReply *)));
+    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_networkManager_finished(QNetworkReply*)));
 
     // Check if openSSL is installed, required for network access to work
     qDebug().noquote() << "Checking SSL installation...";
@@ -25,6 +25,9 @@ UpdateManager::UpdateManager()
     m_currentVersion = s.value("version", "0.0.0").toString();
 }
 
+/**
+ * @brief Check the release feed if updates are available
+ */
 void UpdateManager::checkForUpdates()
 {
     qDebug().noquote() << "Checking for updates ...";
@@ -35,7 +38,12 @@ void UpdateManager::checkForUpdates()
     networkManager->get(QNetworkRequest(QUrl(m_feedURL)));
 }
 
-// Returns if v1 is greater than v2
+/**
+ * @brief Get if version 1 is newer than version 2
+ * @param v1 Version 1
+ * @param v2 Version 2
+ * @return True if v1 is newer than v2
+ */
 bool UpdateManager::compareVersions(QString v1, QString v2)
 {
     QStringList v1_l = v1.split('.');
@@ -63,7 +71,10 @@ bool UpdateManager::compareVersions(QString v1, QString v2)
     return false;
 }
 
-// Evaluate the release feed
+/**
+ * @brief Evaluate the received release feed
+ * @param reply NetworkReply with data from the feed
+ */
 void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
 {
     qDebug().noquote() << "Finished getting update feed ...";
@@ -71,7 +82,7 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
     QString replyString = reply->readAll();
     QXmlStreamReader reader(replyString);
 
-    QString newestVersionTitle;  // Beta 3.2         Title of the Version
+    QString newestVersionTitle; // Beta 3.2         Title of the Version
     m_newestVersion = "0.0.0";
 
     // Release feed is XML, so here is a XML reader
@@ -111,7 +122,7 @@ void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
                     // Compare with current newest version
                     if (compareVersions(version, m_newestVersion))
                     {
-                        m_newestVersion      = version;
+                        m_newestVersion    = version;
                         newestVersionTitle = title;
                     }
                 } else reader.skipCurrentElement();

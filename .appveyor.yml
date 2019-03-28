@@ -1,36 +1,44 @@
 version: '{branch}-{build}'
+image: Visual Studio 2017
 
 branches:
   except:
     - ubuntu-build
 
-image: Visual Studio 2017
+environment:
+  matrix:
+  # MSVC x64
+  - name: x64
+    platform: x64
+    qt: 5.12\msvc2017_64
+    openssl: C:\OpenSSL-Win64
+    
+  # MSVC x86
+  - name: x86
+    platform: x86
+    qt: 5.12\msvc2017
+    openssl: C:\OpenSSL-Win32
 
-platform: x64
+init:
+  - set PATH=C:\Qt\%qt%\bin;%PATH%
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %platform%
 
 configuration:
   - Release
 
-install:
-  - set QTDIR=C:\Qt\5.11\msvc2017_64
-  - set PATH=%QTDIR%\bin;%PATH%
-
 before_build:
   - git submodule update --init --recursive
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %PLATFORM%
-  - qmake GM-Companion.pro
 
 build_script:
+  - qmake GM-Companion.pro
   - nmake
   - nmake check
 
 after_build:
-  - windeployqt.exe --release --no-compiler-runtime --qmldir %QTDIR%\qml release\out\gm-companion.exe
-  - cmd: mkdir release\out\QtWebEngine
-  - cmd: xcopy %QTDIR%\qml\QtWebEngine release\out\QtWebEngine /E /H
-  - cmd: copy /y "C:\OpenSSL-Win64\bin\*eay32.dll" release\out
+  - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\out\gm-companion.exe
+  - cmd: copy /y "%openssl%\bin\*eay32.dll" release\out
 
 artifacts:
   - path: release\out
-    name: gm-companion-win64
+    name: gm-companion-%platform%
     type: zip

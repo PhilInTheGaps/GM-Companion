@@ -7,11 +7,13 @@
 class AddonManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList addonNames READ addonNames NOTIFY addonListChanged)
+
 public:
     explicit AddonManager(QObject *parent = nullptr);
 
     Q_INVOKABLE void updateAddonList();
-    Q_INVOKABLE QStringList getAddonNames() const { return m_addonNames; }
+    QStringList addonNames() const { return m_addonNames; }
     Q_INVOKABLE QStringList getAddonDescriptions() const { return m_addonDescriptions; }
     Q_INVOKABLE QStringList getAddonPathNames() const { return m_addonPathNames; }
     Q_INVOKABLE QList<bool> getAddonEnabledList() const { return m_addonEnabledList; }

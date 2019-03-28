@@ -1,18 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
-import gm.companion.colorscheme 1.0
 
 Column {
     property var name
     property var path
-    signal clicked(string path)
 
-    width: parent.width - parent.padding * 2
-
-    ColorScheme {
-        id: color_scheme
-    }
+    anchors.left: parent.left
+    anchors.right: parent.right
 
     BusyIndicator {
         visible: image.status !== Image.Ready
@@ -20,15 +15,19 @@ Column {
     }
 
     Item {
-        width: parent.width
+        anchors.left: parent.left
+        anchors.right: parent.right
         height: image.height
 
         Image {
             id: image
-            width: parent.width
+            anchors.left: parent.left
+            anchors.right: parent.right
+
             sourceSize.width: width
             sourceSize.height: height
-            source: "file:///" + path
+            source: path.startsWith("http") ? path : "file:///" + path
+
             asynchronous: true
         }
 
@@ -36,11 +35,16 @@ Column {
             anchors.fill: parent
             id: mouse_area
 
-            onClicked: parent.parent.clicked(parent.parent.path)
+            onClicked: {
+                maps_image.source = path.startsWith(
+                            "http") ? path : "file:///" + path
+
+                maps_image.rotation = 0
+            }
         }
     }
     Text {
-        text: name
+        text: parent.name
         color: color_scheme.textColor
 
         width: parent.width - 10

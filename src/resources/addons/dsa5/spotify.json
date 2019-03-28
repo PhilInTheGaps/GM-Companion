@@ -1,0 +1,26 @@
+{
+	"data": [
+		{
+			"folder": "DSA",
+			"playlists": [],
+			"albums": [
+				{
+					"name": "Nostria / Andergast",
+					"uri": "spotify:album:6bNTAa9CqIDv3pycA2eH8f"
+				},
+				{
+					"name": "Die Siebenwindküste",
+					"uri": "spotify:album:5IKJkdsDfDT8RX22Sbjud3"
+				},
+				{
+					"name": "Havena",
+					"uri": "spotify:album:3CEH5gaAFlf6ZIww4TitS6"
+				},
+				{
+					"name": "Wege der Vereinigungen",
+					"uri": "spotify:album:29pqpfi1CAkDUjKuojJx8G"
+				}
+			]
+		}
+	]
+}

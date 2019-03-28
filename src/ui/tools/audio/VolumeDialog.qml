@@ -23,7 +23,7 @@ Dialog {
             icon: FontAwesome.music
             initialVolume: initialMusicVolume
 
-            onVolumeChanged: musicVolumeChanged(value)
+            onVolumeChanged: audio_tool.setMusicVolume(value)
         }
 
         VolumeSlider {
@@ -31,7 +31,7 @@ Dialog {
             icon: FontAwesome.drum
             initialVolume: initialSoundVolume
 
-            onVolumeChanged: soundVolumeChanged(value)
+            onVolumeChanged: audio_tool.setSoundVolume(value)
         }
     }
 }

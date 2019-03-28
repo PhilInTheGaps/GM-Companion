@@ -5,11 +5,6 @@ import QtQuick.Window 2.2
 Page {
     id: radio_page
 
-    signal saveRadio
-    signal changeIcon(string path)
-    signal changeURL(string url)
-    signal changeLocal(bool local)
-
     property string resourcesPath
 
     function setName(name) {
@@ -24,102 +19,61 @@ Page {
         url_textfield.text = url
     }
 
-    function setIcon(path) {
-        icon_textfield.text = path
-        icon_image.source = "file://" + resourcesPath + path
-    }
-
     background: Rectangle {
         color: color_scheme.backgroundColor
     }
 
-    Column {
-        anchors.fill: parent
-        spacing: 5
+    TextField {
+        id: url_textfield
+        anchors.left: parent.left
+        anchors.right: local_switch.left
+        anchors.top: parent.top
+        height: color_scheme.toolbarHeight
 
-        Text {
-            id: name_text
-            text: qsTr("Radio")
-            color: color_scheme.textColor
+        selectByMouse: true
+        placeholderText: audio_editor.local ? qsTr("Radio Playlist") : qsTr(
+                                                  "Radio URL")
+        text: audio_editor.url
+
+        onTextEdited: audio_editor.setUrl(audio_editor.name,
+                                          audio_editor.type, text)
+    }
+
+    Switch {
+        id: local_switch
+        text: qsTr("Local Mode")
+        checked: audio_editor.local
+
+        anchors.top: parent.top
+        anchors.right: radio_file_browser.left
+        height: color_scheme.toolbarHeight
+
+        ToolTip.text: qsTr("In local mode, a local playlist is read instead of a web URL.")
+        ToolTip.visible: hovered
+        hoverEnabled: true
+
+        onClicked: {
+            audio_editor.setLocal(audio_editor.name, audio_editor.type, checked)
         }
+    }
 
-        Row {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 5
+    EditorFileBrowser {
+        id: radio_file_browser
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: right_item.left
+        anchors.rightMargin: 5
+        width: 175
+    }
 
-            Button {
-                id: save_button
-                text: qsTr("Save Radio")
-                onClicked: saveRadio()
-            }
+    Rectangle {
+        id: right_item
 
-            Switch {
-                id: local_switch
-                text: qsTr("Local Mode")
-                checked: false
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
 
-                width: parent.width - parent.spacing - save_button.width
-
-                ToolTip.text: qsTr("In local mode, a local playlist is read instead of a web URL.")
-                ToolTip.visible: hovered
-                hoverEnabled: true
-
-                background: Rectangle {
-                    color: "#e0e0e0"
-                }
-
-                onCheckedChanged: {
-                    changeLocal(checked)
-
-                    if (checked) {
-                        url_text.text = qsTr("Playlist")
-                        url_textfield.placeholderText = qsTr("Radio Playlist")
-                    } else {
-                        url_text.text = qsTr("URL")
-                        url_textfield.placeholderText = qsTr("Radio URL")
-                    }
-                }
-            }
-        }
-
-        Text {
-            id: url_text
-            text: qsTr("URL")
-            color: color_scheme.textColor
-        }
-
-        TextField {
-            id: url_textfield
-            width: parent.width
-            selectByMouse: true
-            placeholderText: qsTr("Radio URL")
-
-            onTextChanged: changeURL(text)
-        }
-
-        Text {
-            text: qsTr("Radio Icon")
-            color: color_scheme.textColor
-        }
-
-        TextField {
-            id: icon_textfield
-            width: parent.width
-            selectByMouse: true
-            placeholderText: qsTr("Icon Path")
-
-            onTextChanged: {
-                changeIcon(text)
-                icon_image.source = "file://" + resourcesPath + text
-            }
-        }
-
-        Image {
-            id: icon_image
-            width: parent.width / 4
-            height: width
-            source: "/icons/media/radio_image.png"
-        }
+        width: color_scheme.toolbarHeight
+        color: color_scheme.menuColor
     }
 }

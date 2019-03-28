@@ -28,6 +28,7 @@ Column {
         value: initialVolume
         from: 0
         to: 1
+        live: false
 
         onValueChanged: volumeChanged(value)
     }

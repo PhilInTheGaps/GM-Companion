@@ -60,6 +60,11 @@ void AudioConverter::convert()
 
             int file_version = settings.value("version", 0).toInt();
 
+            if ((file_version == 0) && settings.value("ProjectName", "").toString().isEmpty())
+            {
+                file_version = 3;
+            }
+
             if (file_version == 0)
             {
                 settings.setValue("version", 1);
@@ -337,12 +342,13 @@ void AudioConverter::convert()
                     }
                 }
             }
-            else if (file_version == 1)
+
+            if (file_version == 1)
             {
                 file_version = 2;
                 settings.setValue("version", 2);
 
-                QStringList toRemove = {"_MusicList", "_MusicLists", "_Order", "_SoundLists", "_SoundList", "_Radios"};
+                QStringList toRemove = { "_MusicList", "_MusicLists", "_Order", "_SoundLists", "_SoundList", "_Radios" };
 
                 for (QString group : settings.childGroups())
                 {
@@ -356,10 +362,171 @@ void AudioConverter::convert()
                     }
                 }
             }
+
+            if (file_version == 2)
+            {
+                file_version = 3;
+                convertTo3(basePath + "/" + file);
+            }
             else
             {
                 qDebug() << "   Project has already been converted.";
             }
         }
+    }
+}
+
+void AudioConverter::convertTo3(QString file)
+{
+    qDebug() << "Converting project" << file << "to version 3 ...";
+    QSettings settings(file, QSettings::IniFormat);
+
+    // Basic Info
+    QJsonObject project;
+    project.insert("name", settings.value("ProjectName").toString());
+    project.insert("version",     3);
+
+    // Categories
+    QJsonArray  categories;
+    QStringList categoryNames = settings.value("categories", {}).toStringList();
+
+    qDebug() << categoryNames;
+
+    for (auto c : categoryNames)
+    {
+        QJsonObject category;
+        category.insert("name", c);
+
+        // Scenarios
+        settings.beginGroup(c);
+        QStringList scenarioNames = settings.value("scenarios", {}).toStringList();
+        QJsonArray  scenarios;
+        settings.endGroup();
+
+        for (auto s : scenarioNames)
+        {
+            QJsonObject scenario;
+            scenario.insert("name", s);
+
+            // Elements
+            settings.beginGroup(c);
+            QStringList musicElementNames   = settings.value(s + "_music").toStringList();
+            QStringList soundElementNames   = settings.value(s + "_sounds").toStringList();
+            QStringList radioElementNames   = settings.value(s + "_radios").toStringList();
+            QStringList spotifyElementNames = settings.value(s + "_spotify").toStringList();
+            settings.endGroup();
+
+            QJsonArray musicElements;
+            QJsonArray soundElements;
+            QJsonArray radioElements;
+            QJsonArray spotifyElements;
+
+            // Music Lists
+            for (auto e : musicElementNames)
+            {
+                QJsonObject element;
+                settings.beginGroup(c + "_" + s + "_" + e + "_music");
+                element.insert("name",        e);
+                element.insert("icon", settings.value("icon").toString());
+                element.insert("mode", settings.value("mode").toInt());
+
+                QJsonArray files;
+                int size = settings.beginReadArray("songs");
+
+                for (int i = 0; i < size; i++)
+                {
+                    settings.setArrayIndex(i);
+                    QStringList temp = settings.value("song").toStringList();
+
+                    if (temp.size() > 1) files.append(temp[1]);
+                    else files.append(temp[0]);
+                }
+                settings.endArray();
+                settings.endGroup();
+
+                element.insert("files", files);
+                musicElements.append(element);
+            }
+
+            // Sound Lists
+            for (auto e : soundElementNames)
+            {
+                QJsonObject element;
+                settings.beginGroup(c + "_" + s + "_" + e + "_sounds");
+                element.insert("name",        e);
+                element.insert("icon", settings.value("icon").toString());
+                element.insert("mode", settings.value("mode").toInt());
+
+                QJsonArray files;
+                int size = settings.beginReadArray("sounds");
+
+                for (int i = 0; i < size; i++)
+                {
+                    settings.setArrayIndex(i);
+                    QStringList temp = settings.value("sound").toStringList();
+
+                    if (temp.size() > 1) files.append(temp[1]);
+                    else files.append(temp[0]);
+                }
+                settings.endArray();
+                settings.endGroup();
+
+                element.insert("files", files);
+                soundElements.append(element);
+            }
+
+            // Radios
+            for (auto e : radioElementNames)
+            {
+                QJsonObject element;
+                settings.beginGroup(c + "_" + s + "_" + e + "_radio");
+                element.insert("name",         e);
+                element.insert("icon",  settings.value("icon").toString());
+                element.insert("url",   settings.value("url").toString());
+                element.insert("local", settings.value("local", false).toBool());
+                settings.endGroup();
+                radioElements.append(element);
+            }
+
+            // Spotify
+            for (auto e : spotifyElementNames)
+            {
+                QJsonObject element;
+                settings.beginGroup(c + "_" + s + "_" + e + "_spotify");
+                element.insert("name",        e);
+                element.insert("icon", settings.value("icon").toString());
+                element.insert("id",   settings.value("id").toString());
+                settings.endGroup();
+                spotifyElements.append(element);
+            }
+
+            scenario.insert("music_elements",     musicElements);
+            scenario.insert("sound_elements",     soundElements);
+            scenario.insert("radio_elements",     radioElements);
+            scenario.insert("spotify_elements", spotifyElements);
+            scenarios.append(scenario);
+        }
+
+        category.insert("scenarios", scenarios);
+        categories.append(category);
+    }
+
+    project.insert("categories", categories);
+
+    QJsonDocument doc(project);
+
+    QFile(file).rename(file + "_old");
+    QFile f(file);
+
+    if (f.open(QIODevice::WriteOnly))
+    {
+        f.write(doc.toJson(QJsonDocument::Indented));
+        f.close();
+
+        qDebug() << "Successfully converted" << file << "to version 3.";
+    }
+    else
+    {
+        qDebug() << "Error: Could not open file" << file << "!";
     }
 }

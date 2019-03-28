@@ -3,29 +3,17 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Styles 1.4
 
-import gm.companion.dicetool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
-
 Item {
     id: dice_page
     height: main_item.height
 
-    DiceTool {
-        id: dice_tool
+    Connections {
+        target: dice_tool
 
-        onMixedCriticalResult: roll_result.color = "brown"
+        onMixedCriticalResult: roll_result.color = "orange"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
         onNormalResult: roll_result.color = color_scheme.textColor
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
     }
 
     Rectangle {

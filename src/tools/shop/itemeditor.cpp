@@ -1,144 +1,171 @@
 #include "itemeditor.h"
 
 #include <QDebug>
+#include <QQmlContext>
 
-ItemEditor::ItemEditor(QObject *parent) : QObject(parent)
+ItemEditor::ItemEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), fileManager(fManager), qmlEngine(engine)
 {
     qDebug() << "Loading Item Editor ...";
 
-    sManager = new SettingsManager;
+    itemModel = new ItemModel;
+    qmlEngine->rootContext()->setContextProperty("itemEditorItemModel", itemModel);
 
-    m_filePath = sManager->getSetting(Setting::shopPath) + "/CustomItems.items";
+    connect(fManager->getShopFileManager(), &ShopFileManager::receivedEditorItems, this, &ItemEditor::receivedItems);
 
-    settings = new QSettings(m_filePath, QSettings::IniFormat);
+    fManager->getShopFileManager()->findItems(fManager->getModeInt(), true);
 }
 
-QStringList ItemEditor::categories()
+/**
+ * @brief ShopFileManager found items
+ * @param group ItemGroup with custom items
+ */
+void ItemEditor::receivedItems(ItemGroup *group)
 {
-    return m_categories;
+    qDebug() << "ItemEditor: Received items!";
+    m_itemGroup = group;
+    updateCategories();
+    updateItemModel();
 }
 
-// Update category list
+/**
+ * @brief Add an item category
+ * @param name Name of the category
+ */
+void ItemEditor::addCategory(QString name)
+{
+    qDebug() << "ItemEditor: Adding category" << name << "...";
+
+    if (!m_categories.contains(name))
+    {
+        m_categories.append(name);
+        emit categoriesChanged();
+        madeChanges();
+    }
+}
+
+/**
+ * @brief Get all categories from items
+ */
 void ItemEditor::updateCategories()
 {
-    qDebug() << "Updating Item Categories ...";
+    m_categories.clear();
 
-    m_categories = settings->value("categories", { "" }).toStringList();
+    if (m_itemGroup)
+    {
+        for (auto i : m_itemGroup->items())
+        {
+            if (i && !m_categories.contains(i->category()))
+            {
+                m_categories.append(i->category());
+            }
+        }
+    }
+
     emit categoriesChanged();
 }
 
-// Add a Category
-void ItemEditor::addCategory(QString category)
-{
-    qDebug() << "Adding Item Category:" << category << "...";
-
-    if (!m_categories.contains(category))
-    {
-        m_categories.append(category);
-
-        settings->setValue("categories", m_categories);
-
-        emit categoriesChanged();
-    }
-}
-
-// Update Item Lists
-void ItemEditor::updateItems()
-{
-    qDebug() << "Updating Item List ...";
-
-    m_itemNames.clear();
-    m_itemPrices.clear();
-    m_itemCategories.clear();
-    m_itemDescriptions.clear();
-
-    int count = settings->beginReadArray("items");
-
-    for (int i = 0; i < count; i++)
-    {
-        settings->setArrayIndex(i);
-
-        m_itemNames.append(settings->value("name", "").toString());
-        m_itemPrices.append(settings->value("price", "").toString());
-        m_itemCategories.append(settings->value("category", "").toString());
-        m_itemDescriptions.append(settings->value("description", "").toString());
-    }
-
-    settings->endArray();
-
-    emit itemsChanged();
-}
-
-// Add an Item
+/**
+ * @brief Add an item
+ * @param name Name (Must not be empty)
+ * @param price Price
+ * @param category Category (Must not be empty)
+ * @param description Description
+ */
 void ItemEditor::addItem(QString name, QString price, QString category, QString description)
 {
-    qDebug() << "Adding Item:" << name << "...";
+    if (name.isEmpty() || category.isEmpty()) return;
 
-    int index = m_itemNames.size();
+    Item *item = new Item(name, price, description.replace("\n", " "), category);
+    QList<Item *> items;
+    int insert = -1;
 
-    settings->beginWriteArray("items");
-    settings->setArrayIndex(index);
-
-    m_itemNames.append(name);
-    settings->setValue("name", name);
-
-    m_itemPrices.append(price);
-    settings->setValue("price", price);
-
-    m_itemCategories.append(category);
-    settings->setValue("category", category);
-
-    m_itemDescriptions.append(description);
-    settings->setValue("description", description);
-
-    settings->endArray();
-
-    emit itemsChanged();
-}
-
-// Delete an Item
-void ItemEditor::deleteItem(int index)
-{
-    qDebug() << "Deleting Item:" << m_itemNames.at(index);
-
-    m_itemNames.removeAt(index);
-    m_itemPrices.removeAt(index);
-    m_itemCategories.removeAt(index);
-    m_itemDescriptions.removeAt(index);
-
-    settings->beginWriteArray("items");
-
-    for (int i = 0; i < m_itemNames.size(); i++)
+    if (m_itemGroup)
     {
-        settings->setArrayIndex(i);
+        items = m_itemGroup->items();
 
-        settings->setValue("name",        m_itemNames.at(i));
-        settings->setValue("price",       m_itemPrices.at(i));
-        settings->setValue("category",    m_itemCategories.at(i));
-        settings->setValue("description", m_itemDescriptions.at(i));
+        // Find insertion index
+        for (int i = 0; i < items.size(); i++)
+        {
+            if (items[i] && (items[i]->category() == category)) insert = i;
+        }
     }
 
-    settings->endArray();
+    if (insert < 0)
+    {
+        items.append(item);
+    }
+    else
+    {
+        items.insert(insert + 1, item);
+    }
 
-    emit itemsChanged();
+    if (!m_itemGroup) m_itemGroup = new ItemGroup(tr("Custom"), items);
+    else m_itemGroup->setItems(items);
+
+    itemModel->setElements(items);
+    madeChanges();
 }
 
-QStringList ItemEditor::getItemNames()
+/**
+ * @brief Add items to item model
+ */
+void ItemEditor::updateItemModel()
 {
-    return m_itemNames;
+    itemModel->clear();
+
+    if (m_itemGroup)
+    {
+        itemModel->setElements(m_itemGroup->items());
+    }
 }
 
-QStringList ItemEditor::getItemPrices()
+/**
+ * @brief Remove an item
+ * @param index Index of the item
+ */
+void ItemEditor::deleteItem(int index)
 {
-    return m_itemPrices;
+    if (!m_itemGroup) return;
+
+    if ((index > -1) && (index < m_itemGroup->items().size()))
+    {
+        auto items = m_itemGroup->items();
+        auto item  = items.takeAt(index);
+        m_itemGroup->setItems(items);
+        itemModel->setElements(items);
+
+        item->deleteLater();
+        madeChanges();
+    }
 }
 
-QStringList ItemEditor::getItemCategories()
+/**
+ * @brief Save the custom items to disc and send them to the shop editor
+ */
+void ItemEditor::save()
 {
-    return m_itemCategories;
+    // Save only when changes were made
+    if (m_isSaved) return;
+
+    // Save to disk
+    fileManager->getShopFileManager()->saveItems(m_itemGroup);
+
+    // Copy all items and send them to the shop editor
+    ItemGroup *copy = new ItemGroup(m_itemGroup);
+    emit itemsSaved(copy);
+
+    // Notify editor
+    m_isSaved = true;
+    emit isSavedChanged();
+    emit showInfoBar(tr("Saved!"));
 }
 
-QStringList ItemEditor::getItemDescriptions()
+/**
+ * @brief Notify UI that changes were made
+ */
+void ItemEditor::madeChanges()
 {
-    return m_itemDescriptions;
+    m_isSaved = false;
+    emit isSavedChanged();
 }

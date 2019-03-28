@@ -2,31 +2,10 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.3 as OldDialogs
 
-import gm.companion.audioexporter 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
-
 Dialog {
     id: dialog
     title: qsTr("Export Audio Files")
     modal: true
-
-    property alias project: tool.project
-    property alias categories: tool.categories
-    property alias scenarios: tool.scenarios
-    property alias elements: tool.elements
-
-    AudioExporter {
-        id: tool
-    }
-
-    ColorScheme {
-        id: colors
-    }
-
-    PlatformDetails {
-        id: platform_details
-    }
 
     OldDialogs.FileDialog {
         id: file_dialog
@@ -36,7 +15,7 @@ Dialog {
         selectFolder: true
 
         onAccepted: {
-            if (platform_details.isWindows)
+            if (platform.isWindows)
                 path_text_field.text = fileUrl.toString().replace("file:///",
                                                                   "")
             else
@@ -62,16 +41,17 @@ Dialog {
 
             Text {
                 text: qsTr("Settings")
-                color: colors.textColor
+                color: color_scheme.textColor
             }
 
             TextField {
                 id: path_text_field
+
                 width: parent.width - parent.padding * 2
                 selectByMouse: true
-                text: tool.getDefaultPath()
+                text: audio_exporter.getDefaultPath()
 
-                onTextChanged: tool.setPath(text)
+                onTextChanged: audio_exporter.setPath(text)
             }
 
             Button {
@@ -93,11 +73,11 @@ Dialog {
             width: (parent.width - left_column.width) / 3
 
             headline: qsTr("Categories to Export")
-            repModel: categories
-            checkedFunc: tool.isCategoryEnabled
+            repModel: audio_exporter.categories
+            checkedFunc: audio_exporter.isCategoryEnabled
 
-            onItemChecked: tool.setCategoryEnabled(index, checked)
-            onItemClicked: tool.setCategory(index, checked)
+            onItemChecked: audio_exporter.setCategoryEnabled(index, checked)
+            onItemClicked: audio_exporter.setCategory(index)
         }
 
         CheckScrollView {
@@ -109,11 +89,11 @@ Dialog {
             width: (parent.width - left_column.width) / 3
 
             headline: qsTr("Scenarios to Export")
-            repModel: scenarios
-            checkedFunc: tool.isScenarioEnabled
+            repModel: audio_exporter.scenarios
+            checkedFunc: audio_exporter.isScenarioEnabled
 
-            onItemChecked: tool.setScenarioEnabled(index, checked)
-            onItemClicked: tool.setScenario(index, checked)
+            onItemChecked: audio_exporter.setScenarioEnabled(index, checked)
+            onItemClicked: audio_exporter.setScenario(index)
         }
 
         CheckScrollView {
@@ -125,20 +105,50 @@ Dialog {
             anchors.right: parent.right
 
             headline: qsTr("Elements to Export")
-            repModel: elements
-            checkedFunc: tool.isElementEnabled
+            repModel: audio_exporter.elements
+            checkedFunc: audio_exporter.isElementEnabled
 
-            onItemChecked: tool.setElementEnabled(index, checked)
+            onItemChecked: audio_exporter.setElementEnabled(index, checked)
         }
     }
 
     background: Rectangle {
-        color: colors.backgroundColor
+        color: color_scheme.backgroundColor
     }
 
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    footer: Rectangle {
+        height: buttons.height
+        color: color_scheme.backgroundColor
 
-    onAccepted: {
-        tool.exportFiles()
+        ProgressBar {
+            id: progress_bar
+            value: audio_exporter.progress
+            anchors.left: parent.left
+            anchors.right: buttons.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 15
+        }
+
+        DialogButtonBox {
+            id: buttons
+            anchors.right: parent.right
+            anchors.top: parent.top
+
+            Button {
+                text: qsTr("Export")
+                DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
+            }
+
+            standardButtons: Dialog.Close
+
+            onApplied: {
+                audio_exporter.exportFiles()
+            }
+
+            onRejected: {
+                dialog.close()
+            }
+        }
     }
 }

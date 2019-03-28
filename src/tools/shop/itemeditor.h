@@ -4,45 +4,53 @@
 #include <QObject>
 #include <QStringList>
 #include <QSettings>
+#include <QQmlApplicationEngine>
+#include "src/managers/filemanager.h"
 #include "src/settings/settingsmanager.h"
 
 class ItemEditor : public QObject
 {
     Q_OBJECT
-
     Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
+    Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
 
 public:
-    explicit ItemEditor(QObject *parent = nullptr);
+    explicit ItemEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    QStringList categories();
-    Q_INVOKABLE void updateCategories();
-    Q_INVOKABLE void addCategory(QString category);
+    QStringList categories() const { return m_categories; }
 
-    Q_INVOKABLE void updateItems();
+    Q_INVOKABLE void addCategory(QString name);
     Q_INVOKABLE void addItem(QString name, QString price, QString category, QString description);
     Q_INVOKABLE void deleteItem(int index);
 
-    Q_INVOKABLE QStringList getItemNames();
-    Q_INVOKABLE QStringList getItemPrices();
-    Q_INVOKABLE QStringList getItemCategories();
-    Q_INVOKABLE QStringList getItemDescriptions();
+    Q_INVOKABLE void save();
+    bool isSaved() const { return m_isSaved; }
 
 signals:
     void categoriesChanged();
-    void itemsChanged();
+    void isSavedChanged();
+    void showInfoBar(QString message);
+    void itemsSaved(ItemGroup *group);
 
 private:
-    SettingsManager *sManager;
+    SettingsManager sManager;
     QSettings *settings;
+    FileManager *fileManager;
+    QQmlApplicationEngine *qmlEngine;
+    ItemModel *itemModel;
 
-    QString m_filePath;
+    ItemGroup *m_itemGroup = nullptr;
     QStringList m_categories;
 
-    QStringList m_itemNames;
-    QStringList m_itemPrices;
-    QStringList m_itemCategories;
-    QStringList m_itemDescriptions;
+    void updateCategories();
+    void updateItemModel();
+    void madeChanges();
+
+    bool m_isSaved = true;
+
+private slots:
+    void receivedItems(ItemGroup *group);
+
 };
 
 #endif // ITEMEDITOR_H

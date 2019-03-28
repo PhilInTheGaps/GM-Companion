@@ -1,15 +1,28 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import gm.companion.platforms 1.0
-import "../../../components"
 
-CustomButton {
-    width: text.width > 100 ? text.width + 10 : 100
-    height: platform.isAndroid ? (parent ? parent.parent.height / 15 : 0) : 40
+import FontAwesome 2.0
 
-    text.anchors.horizontalCenter: horizontalCenter
+Button {
+    id: root
 
-    PlatformDetails {
-        id: platform
+    property string labeltext
+    property alias label: textlabel
+
+    width: textlabel.width + 20
+    height: color_scheme.toolbarHeight
+    hoverEnabled: true
+
+    Text {
+        id: textlabel
+        text: root.labeltext
+        anchors.centerIn: parent
+        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+        font.pixelSize: parent.height - 30
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    background: Rectangle {
+        color: "transparent"
     }
 }

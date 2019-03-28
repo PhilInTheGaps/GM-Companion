@@ -2,174 +2,133 @@
 #define AUDIOTOOL_H
 
 #include <QStringList>
-#include <QSettings>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QKeyEvent>
-#include <QList>
+#include <QQmlApplicationEngine>
+
+#include "audioeditor.h"
+#include "players/spotify.h"
+#include "players/musicplayer.h"
+#include "players/soundplayer.h"
+#include "players/radioplayer.h"
+#include "metadatareader.h"
 
 #include "src/settings/settingsmanager.h"
-#include "spotify.h"
-
-struct Song {
-    QString title;
-    QString path;
-};
+#include "src/managers/filemanager.h"
 
 class AudioTool : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList projectList READ projectList NOTIFY projectListChanged)
-    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenariosChanged)
-    Q_PROPERTY(QStringList elements READ elements NOTIFY elementsChanged)
-    Q_PROPERTY(bool isPlaying READ isPlaying NOTIFY isPlayingChanged)
+    Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
+    Q_PROPERTY(QStringList categoryNames READ categoryNames NOTIFY currentProjectChanged)
+    Q_PROPERTY(QStringList scenarioNames READ scenarioNames NOTIFY currentCategoryChanged)
+
+    Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
+
+    Q_PROPERTY(QString type READ type NOTIFY metaDataChanged)
+    Q_PROPERTY(QString title READ title NOTIFY metaDataChanged)
+    Q_PROPERTY(QString artist READ artist NOTIFY metaDataChanged)
+    Q_PROPERTY(QString album READ album NOTIFY metaDataChanged)
+    Q_PROPERTY(QString cover READ cover NOTIFY metaDataChanged)
     Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
-    Q_PROPERTY(int currentSongIndex READ currentSongIndex NOTIFY currentSongChanged)
-    Q_PROPERTY(QStringList elementIcons READ elementIcons NOTIFY elementIconsChanged)
-
-    Q_PROPERTY(QString currentProject READ currentProject WRITE setCurrentProject NOTIFY currentProjectChanged)
-    Q_PROPERTY(QString currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
-    Q_PROPERTY(QString currentScenario READ currentScenario WRITE setCurrentScenario NOTIFY currentScenarioChanged)
-    Q_PROPERTY(QString currentElement READ currentElement WRITE setCurrentElement NOTIFY currentElementChanged)
-
+    Q_PROPERTY(int index READ index NOTIFY metaDataChanged)
 
 public:
-    explicit AudioTool(QObject *parent = 0);
+    explicit AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    ~AudioTool();
+
+    AudioEditor* getEditor() const { return editor; }
 
     // Project
-    QStringList projectList();
-    QString currentProject();
-    void setCurrentProject(QString project);
+    void updateProjectList() { if (fileManager) fileManager->getAudioFileManager()->findProjects(fileManager->getModeInt()); }
+    QStringList projectNames();
+    QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
+    Q_INVOKABLE void setCurrentProject(int index);
 
     // Categories
-    QStringList categories();
-    QString currentCategory() const { return m_currentCategory; }
+    QStringList categoryNames() const { if (m_currentProject) return m_currentProject->categoryNames(); else return {}; }
+    QString currentCategoryName() const { if (m_currentProject) return m_currentProject->currentCategory()->name(); else return ""; }
     Q_INVOKABLE void setCurrentCategory(QString category);
 
     // Scenarios
-    QStringList scenarios();
-    QString currentScenario() const { return m_currentScenario; }
+    QStringList scenarioNames() const { if (m_currentProject) return m_currentProject->currentCategory()->scenarioNames(); else return {}; }
+    QString currentScenarioName() const { if (m_currentProject) return m_currentProject->currentCategory()->currentScenario()->name(); else return ""; }
     Q_INVOKABLE void setCurrentScenario(QString scenario);
 
     // Elements
-    Q_INVOKABLE void findElements();
-    QStringList elements() const { return m_elements; }
-    QString currentElement() const { return m_currentElement; }
-    QStringList elementIcons() const { return m_elementIcons; }
-    Q_INVOKABLE QString elementIcon(QString element);
-    Q_INVOKABLE void setCurrentElement(QString element);
-    Q_INVOKABLE int elementType(int index) const { return m_elementTypes.at(index); }
-    Q_INVOKABLE void clearElements() { m_elements.clear(); emit elementsChanged(); }
+    QList<AudioElement*> elements() const { if (m_currentProject) return m_currentProject->currentCategory()->currentScenario()->elements(); else return {}; }
+    Q_INVOKABLE void playElement(QString name, int type);
 
-    // Music
-    Q_INVOKABLE void playMusic(QString element);
-    Q_INVOKABLE void musicNext();
-    Q_INVOKABLE void musicAgain();
-    Q_INVOKABLE void musicPausePlay();
-    Q_INVOKABLE void setMusicIndex(int index);
-    QStringList songs() const { return m_songs; }
-    int currentSongIndex() const { return m_musicPlaylist->currentIndex(); }
-    bool isPlaying() const { return m_isPlaying; }
-    Q_INVOKABLE QString getSongName() const { return m_songName; }
-    Q_INVOKABLE QString getArtist() const { return m_artist; }
-    Q_INVOKABLE QString getAlbum() const { return m_album; }
-    Q_INVOKABLE QString getCoverArt() const { return m_cover; }
-
-    // Spotify
-    Q_INVOKABLE void playSpotify(QString element);
-    Q_INVOKABLE void grantSpotify() { m_spotify.grant(); }
-
-    // Sound
-    Q_INVOKABLE void playSound(QString element);
-    Q_INVOKABLE bool isSoundPlayling(QString element);
-    Q_INVOKABLE void removeSound(QString element);
-
-    // Radio
-    Q_INVOKABLE void playRadio(QString element);
-
-    // Volume
+    Q_INVOKABLE void next();
     Q_INVOKABLE void setMusicVolume(float volume);
     Q_INVOKABLE void setSoundVolume(float volume);
+    Q_INVOKABLE void playPause();
+    Q_INVOKABLE void again();
+    Q_INVOKABLE void setMusicIndex(int index);
+    Q_INVOKABLE void stopSound(QString sound) { soundPlayer->stop(sound); }
+    bool isPaused() const { return m_isPaused; }
+
+    // Meta Data
+    QString type() const { return m_metaData.type; }
+    QString title() const { return m_metaData.title; }
+    QString artist() const { return m_metaData.artist; }
+    QString album() const { return m_metaData.album; }
+    QString cover() const { return m_metaData.cover; }
+    QStringList songs() const;
+    int index() const;
+
+    // Spotify
+    Q_INVOKABLE void grantSpotify() { spotify->grant(); }
+    Q_INVOKABLE bool isSpotifyWaitingForAuth() const { if (spotify) return spotify->isWaitingForAuth(); else return false; }
+    Q_INVOKABLE QUrl spotifyAuthUrl() const { if (spotify) return spotify->authUrl(); else return QUrl(""); }
 
 signals:
-    void projectListChanged();
+    void projectsChanged();
     void currentProjectChanged();
-
-    void categoriesChanged();
     void currentCategoryChanged();
-
-    void scenariosChanged();
     void currentScenarioChanged();
+    void isPausedChanged();
+    void soundsChanged();
 
-    void elementsChanged();
-    void currentElementChanged();
-
-    void isPlayingChanged();
-    void currentSongChanged();
     void songsChanged();
     void metaDataChanged();
-
-    void elementIconsChanged();
     void authorizeSpotify(QUrl url);
     void spotifyAuthorized();
 
-    void soundPlayerRemoved(int index);
-
 private slots:
-    void onCurrentSongChanged() { if (m_musicNotRadio) currentSongChanged(); }
-    void onMetaDataChanged();
+    void onProjectsChanged(QList<AudioProject*> projects);
+    void onCurrentScenarioChanged();
 
-    void onSpotifyIconChanged(int index, QString url);
+    void onStartedPlaying() { m_isPaused = false; emit isPausedChanged(); }
+    void onMetaDataUpdated(MetaData metaData) { m_metaData = metaData; emit metaDataChanged(); }
+
+    void onSoundsChanged(QList<SoundElement*> elements);
+
     void onSpotifyAuthorize(QUrl url) { emit authorizeSpotify(url); }
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
-    void onSoundPlaybackStateChanged(QMediaPlayer::State status);
 
 private:
-    SettingsManager *m_sManager;
+    SettingsManager *sManager = nullptr;
+    AudioEditor *editor = nullptr;
+    FileManager *fileManager = nullptr;
+    QQmlApplicationEngine *qmlEngine = nullptr;
+    MetaDataReader *metaDataReader = nullptr;
 
-    // Music
-    int m_musicVolume;
-    QMediaPlayer *m_musicPlayer;
-    QMediaPlaylist *m_musicPlaylist;
-    QStringList m_songs;
-    bool m_musicNotRadio;
-    void getMetaData();
-    void getMetaDataTagLib();
+    // Players
+    MusicPlayer *musicPlayer = nullptr;
+    SoundPlayer *soundPlayer = nullptr;
+    RadioPlayer *radioPlayer = nullptr;
+    Spotify *spotify = nullptr;
+    QList<AudioPlayer*> musicPlayers;
 
-    QString m_songName;
-    QString m_artist;
-    QString m_album;
-    QString m_cover;
-    QString convertCoverImage();
+    AudioElementModel *elementModel = nullptr;
+    AudioElementModel *soundModel = nullptr;
 
-    // Sounds
-    int m_soundVolume;
-    QList<QMediaPlayer*> m_soundPlayerList;
-
-    // Spotify
-    Spotify m_spotify;
-    int m_spotifyVolume;
-
-    QMediaPlaylist *m_radioPlaylist;
+    int m_musicMode;
+    bool m_isPaused = true;
+    MetaData m_metaData;
 
     // Project
-    QStringList m_projects;
-    QString m_currentProject;
-
-    QStringList m_categories;
-    QString m_currentCategory;
-
-    QStringList m_scenarios;
-    QString m_currentScenario;
-
-    QStringList m_elements;
-    QStringList m_elementIcons;
-    QList<int> m_elementTypes;
-    QString m_currentElement;
-
-    bool m_isPlaying = false;
-    bool m_spotifyPlaying = false;
+    QList<AudioProject*> m_projects;
+    AudioProject *m_currentProject = nullptr;
 };
 
 #endif // AUDIOTOOL_H

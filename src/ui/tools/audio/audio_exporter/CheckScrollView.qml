@@ -17,7 +17,7 @@ Column {
         id: text
         text: headline
         font.bold: true
-        color: colors.textColor
+        color: color_scheme.textColor
     }
 
     ScrollView {
@@ -25,6 +25,7 @@ Column {
         width: parent.width - parent.padding * 2
         height: parent.height - text.height - parent.padding * 2
         clip: true
+        contentHeight: col.implicitHeight
 
         Column {
             id: col

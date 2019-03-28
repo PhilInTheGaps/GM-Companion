@@ -2,8 +2,6 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.colorscheme 1.0
-
 Rectangle {
     id: page_button
     property var display_text
@@ -15,10 +13,6 @@ Rectangle {
     height: platform.isAndroid ? width / 6 : parent ? parent.height - parent.padding * 2 : 0
 
     color: "transparent"
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     Row {
         id: row

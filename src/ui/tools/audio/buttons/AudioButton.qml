@@ -2,20 +2,20 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
-
 import FontAwesome 2.0
 
 Rectangle {
-    readonly property int min_width: 175
-    readonly property int count_per_row: parent ? Math.floor(
-                                                      parent.width / min_width) : 1
-
+    id: root
     property var element_name
     property var icon_path
     property var element_type
-    property var default_icon: {
+    property bool has_icon: true
+    property bool overlay_enabled: true
+    property bool small_mode: false
+
+    signal clicked
+
+    property var type_icon: {
         if (element_type === 0) {
             FontAwesome.music
         } else if (element_type === 1) {
@@ -27,7 +27,7 @@ Rectangle {
         }
     }
 
-    property var default_image: {
+    property var default_icon: {
         if (element_type === 0) {
             "/icons/media/music_image.png"
         } else if (element_type === 1) {
@@ -35,101 +35,96 @@ Rectangle {
         } else if (element_type === 2) {
             "/icons/media/radio_image.png"
         } else if (element_type === 3) {
-            ""
+            "/icons/media/music_image.png"
         }
     }
 
-    signal clicked(string element_name)
-
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
-    }
-
-    width: {
-        if (platform.isAndroid) {
-            parent ? parent.parent.width / 8 : 0
-        } else {
-            parent ? (parent.width - parent.spacing * (count_per_row - 1)
-                      - parent.padding * 2) / count_per_row : 0
-        }
-    }
-
-    height: width + text.height
+    height: small_mode ? width / 4 : width
 
     color: color_scheme.backgroundColor
 
+    Image {
+        id: thumbnail
+        source: {
+            if (icon_path.startsWith("http")) {
+                icon_path
+            } else if (has_icon) {
+                "file:///" + icon_path
+            } else {
+                default_icon
+            }
+        }
+
+        anchors.fill: parent
+        asynchronous: true
+
+        fillMode: small_mode ? Image.PreserveAspectCrop : Image.Stretch
+
+        sourceSize.width: width
+        sourceSize.height: height
+    }
+
+    BusyIndicator {
+        visible: thumbnail.status == Image.Loading
+        anchors.verticalCenter: thumbnail.verticalCenter
+        anchors.horizontalCenter: thumbnail.horizontalCenter
+    }
+
     Rectangle {
-        id: rect
-        color: mouse_area.pressed ? "#262f31" : "lightgrey"
-        width: parent.width
-        height: width
+        id: overlay
+        anchors.fill: parent
 
-        Image {
-            id: large_icon
-            source: parent ? (icon_path === default_image
-                              || icon_path.startsWith(
-                                  "http") ? icon_path : "file:///" + icon_path) : ""
-            x: 5
-            y: 5
-
-            asynchronous: true
-            width: parent.width - 10
-            height: width
-
-            sourceSize.width: width
-            sourceSize.height: height
-        }
-
-        BusyIndicator {
-            visible: large_icon.status == Image.Loading
-            anchors.verticalCenter: large_icon.verticalCenter
-            anchors.horizontalCenter: large_icon.horizontalCenter
-        }
+        visible: mouse_area.containsMouse
+        color: Qt.rgba(0, 0, 0, 0.4)
 
         Text {
-            visible: icon_path === default_icon ? false : true
-            font.pixelSize: parent.height / 5
-            x: 10
-            y: parent.height - 10 - height
-
-            color: "white"
-            text: default_icon
-            font.family: element_type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
-        }
-
-        Rectangle {
-            id: overlay
+            text: FontAwesome.playCircle
+            font.pointSize: 35
+            font.family: FontAwesome.familyRegular
+            color: mouse_area.pressed ? "silver" : "white"
             anchors.centerIn: parent
-            width: parent.width - 10
-            height: width
-
-            visible: mouse_area.containsMouse
-            color: Qt.rgba(0, 0, 0, 0.4)
-
-            Text {
-                text: FontAwesome.playCircle
-                font.pointSize: 35
-                font.family: FontAwesome.familyRegular
-                color: mouse_area.pressed ? "silver" : "white"
-                anchors.centerIn: parent
-            }
+            visible: overlay_enabled
         }
     }
 
-    Text {
-        id: text
-        y: rect.height
-        x: 5
-        width: parent.width - 10
-        text: element_name
-        color: color_scheme.textColor
-        anchors.horizontalCenter: parent.horizontalCenter
-        wrapMode: Text.WordWrap
-        clip: true
+    Rectangle {
+        id: text_rect
+
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: parent.width / 4
+
+        color: Qt.rgba(0, 0, 0, 0.5)
+
+        Text {
+            id: text
+
+            anchors.left: parent.left
+            anchors.right: type_icon_text.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.margins: 5
+
+            clip: true
+            elide: Text.ElideRight
+            wrapMode: Text.WordWrap
+            verticalAlignment: Text.AlignVCenter
+            text: element_name
+            color: "white"
+        }
+
+        Text {
+            id: type_icon_text
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 10
+
+            font.pixelSize: parent.height * 0.5
+            color: "white"
+            text: type_icon
+            font.family: element_type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
+        }
     }
 
     MouseArea {
@@ -137,6 +132,6 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
 
-        onClicked: parent.clicked(parent.element_name)
+        onClicked: root.clicked()
     }
 }

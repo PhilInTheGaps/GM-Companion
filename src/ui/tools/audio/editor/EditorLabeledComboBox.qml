@@ -6,6 +6,7 @@ Column {
 
     property string text
     property alias currentText: combobox.currentText
+    property alias currentIndex: combobox.currentIndex
     signal comboboxTextChanged(string currentText)
     property alias combo_box: combobox
 

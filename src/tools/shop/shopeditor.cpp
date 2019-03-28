@@ -1,417 +1,601 @@
 #include "shopeditor.h"
 
 #include <QDebug>
-#include <QSettings>
-#include <QDir>
+#include <QQmlContext>
 
-#include "src/functions.h"
-
-ShopEditor::ShopEditor(QObject *parent) : QObject(parent)
+ShopEditor::ShopEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), fileManager(fManager), qmlEngine(engine)
 {
     qDebug() << "Loading Shop Editor ...";
+    itemEditor = new ItemEditor(fManager, engine);
 
-    sManager = new SettingsManager;
+    itemModel  = new ItemModel;
+    itemModel2 = new ItemModel;
+    qmlEngine->rootContext()->setContextProperty("shopEditorItemModel", itemModel);
+    qmlEngine->rootContext()->setContextProperty("shopEditorItemModel2", itemModel2);
+
+    connect(fManager->getShopFileManager(), &ShopFileManager::receivedEditorShops, this, &ShopEditor::projectsReceived);
+    connect(fManager->getShopFileManager(), &ShopFileManager::receivedItems,       this, &ShopEditor::itemsReceived);
+    connect(this,                           &ShopEditor::shopChanged,              this, &ShopEditor::onShopChanged);
+    connect(this,                           &ShopEditor::itemGroupChanged,         this, &ShopEditor::onItemsChanged);
+    connect(itemEditor,                     &ItemEditor::itemsSaved,               this, &ShopEditor::itemEditorSaved);
+
+    fManager->getShopFileManager()->findShops(fManager->getModeInt(), true);
+    fManager->getShopFileManager()->findItems(fManager->getModeInt(), false);
 }
 
-// Set the project file path
-void ShopEditor::setCurrentProject(QString project)
+/**
+ * @brief Received projects from ShopFileManager
+ * @param projects List of ShopProjects
+ */
+void ShopEditor::projectsReceived(QList<ShopProject *>projects)
 {
-    m_projectPath = sManager->getSetting(Setting::shopPath) + "/" + project + ".shop";
+    m_projects = projects;
 
-    QSettings settings(m_projectPath, QSettings::IniFormat);
+    if (projects.size() > 0) m_currentProject = projects[0];
+    else m_currentProject = nullptr;
 
-    m_categories = settings.value("categories", {}).toStringList();
-    m_shopList.clear();
+    emit projectListChanged();
+    emit projectChanged();
 }
 
-// Set the current category
-void ShopEditor::setCurrentCategory(QString category)
+/**
+ * @brief Received items from ShopFileManager
+ * @param groups List of ItemGroups
+ */
+void ShopEditor::itemsReceived(QList<ItemGroup *>groups)
 {
-    m_category = category;
+    m_itemGroups = groups;
+
+    if (groups.size() > 0) m_currentItemGroup = groups[0];
+    else m_currentItemGroup = nullptr;
+
+    emit itemGroupsChanged();
+    emit itemGroupChanged();
 }
 
-// Load list of all available shops
-void ShopEditor::updateShopList()
+/**
+ * @brief Get the names of all shop projects
+ * @return List of names
+ */
+QStringList ShopEditor::projectNames() const
 {
-    QSettings settings(m_projectPath, QSettings::IniFormat);
+    QStringList names;
 
-    QStringList list;
-
-    int count = settings.beginReadArray(m_category + "_shops");
-
-    for (int i = 0; i < count; i++)
+    for (auto p : m_projects)
     {
-        settings.setArrayIndex(i);
-
-        list.append(settings.value("shop").toStringList().at(0));
+        if (p) names.append(p->name());
     }
 
-    settings.endArray();
-
-    m_shopList = list;
+    return names;
 }
 
-// Return list of all shops in the category
-QStringList ShopEditor::getShopList()
+/**
+ * @brief Get the names of all categories in current project
+ * @return List of names
+ */
+QStringList ShopEditor::categoryNames() const
 {
-    return m_shopList;
-}
+    if (!m_currentProject) return {};
 
-// Load all data of a shop
-void ShopEditor::loadShop(QString shop)
-{
-    qDebug() << "Shop Editor: Loading Shop:" << shop << "...";
+    QStringList names;
 
-    QSettings settings(m_projectPath, QSettings::IniFormat);
-
-    // Load Basic Shop Information
-    m_shopName = shop;
-    int count = settings.beginReadArray(m_category + "_shops");
-
-    for (int i = 0; i < count; i++)
+    for (auto c : m_currentProject->categories())
     {
-        settings.setArrayIndex(i);
-
-        if (settings.value("shop").toStringList().at(0) == shop)
-        {
-            m_shopOwner       = settings.value("shop").toStringList().at(1);
-            m_shopDescription = settings.value("shop").toStringList().at(2);
-        }
+        if (c) names.append(c->name());
     }
 
-    settings.endArray();
+    return names;
+}
 
-    // Load Items
-    m_itemNames.clear();
-    m_itemPrices.clear();
-    m_itemCategories.clear();
-    m_itemDescriptions.clear();
+/**
+ * @brief Get the names of all shops in current category
+ * @return List of names
+ */
+QStringList ShopEditor::shopNames() const
+{
+    if (!m_currentProject || !m_currentProject->currentCategory()) return {};
 
-    count = settings.beginReadArray(m_category + "_" + shop + "_items");
+    QStringList names;
 
-    for (int i = 0; i < count; i++)
+    for (auto s : m_currentProject->currentCategory()->shops())
     {
-        settings.setArrayIndex(i);
-
-        QStringList item = settings.value("item").toStringList();
-
-        m_itemNames.append(item.at(0));
-        m_itemPrices.append(item.at(1));
-        m_itemCategories.append(item.at(2));
-        m_itemDescriptions.append(item.at(3));
+        if (s) names.append(s->name());
     }
 
-    settings.endArray();
+    return names;
 }
 
-// Save Shop to project
-void ShopEditor::saveShop()
+/**
+ * @brief Set the current project
+ * @param index Index of project
+ */
+void ShopEditor::setCurrentProject(int index)
 {
-    qDebug() << "Shop Editor: Saving Shop:" << m_shopName << "...";
-
-    if (!m_shopName.isNull() && (m_shopName != ""))
+    if ((index > -1) && (index < m_projects.size()))
     {
-        QSettings settings(m_projectPath, QSettings::IniFormat);
-
-        int shopIndex = m_shopList.indexOf(m_shopName);
-
-        // Save Shop Info
-        settings.beginWriteArray(m_category + "_shops");
-        settings.setArrayIndex(shopIndex);
-
-        QStringList shop = { m_shopName, m_shopOwner, m_shopDescription };
-        settings.setValue("shop", shop);
-
-        settings.endArray();
-
-        // Save Items
-        settings.beginWriteArray(m_category + "_" + m_shopName + "_items");
-
-        for (int i = 0; i < m_itemNames.size(); i++)
-        {
-            settings.setArrayIndex(i);
-
-            QStringList item;
-            item.append(m_itemNames[i]);
-            item.append(m_itemPrices[i]);
-            item.append(m_itemCategories[i]);
-            item.append(m_itemDescriptions[i]);
-
-            settings.setValue("item", item);
-        }
-
-        settings.endArray();
-    }
-}
-
-// Delete the current Shop
-void ShopEditor::deleteShop()
-{
-    qDebug() << "Deleting Shop:" << m_shopName << "...";
-
-    QSettings settings(m_projectPath, QSettings::IniFormat);
-
-    int index = m_shopList.indexOf(m_shopName);
-
-    // Get list of all shops
-    QList<QStringList> shops;
-
-    int count = settings.beginReadArray(m_category + "_shops");
-
-    for (int i = 0; i < count; i++)
-    {
-        settings.setArrayIndex(i);
-
-        shops.append(settings.value("shop").toStringList());
-    }
-
-    settings.endArray();
-
-    // Remove current shop from list and write all others back to file
-    if (shops.size() > index)
-    {
-        shops.removeAt(index);
-
-        settings.beginWriteArray(m_category + "_shops");
-
-        for (int i = 0; i < shops.size(); i++)
-        {
-            settings.setArrayIndex(i);
-
-            settings.setValue("shop", shops.at(i));
-        }
-
-        settings.endArray();
-    }
-}
-
-// Remove an Item from the Shop
-void ShopEditor::removeItem(int index)
-{
-    qDebug() << "Removing Item:" << m_itemNames.at(index);
-
-    m_itemNames.removeAt(index);
-    m_itemPrices.removeAt(index);
-    m_itemCategories.removeAt(index);
-    m_itemDescriptions.removeAt(index);
-}
-
-// Remove all items
-void ShopEditor::removeAllItems()
-{
-    qDebug() << "Removing All Items ...";
-
-    m_itemNames.clear();
-    m_itemPrices.clear();
-    m_itemCategories.clear();
-    m_itemDescriptions.clear();
-}
-
-// Create a new Project file
-void ShopEditor::createProject(QString project)
-{
-    qDebug() << "Creating New Shop Project:" << project << "...";
-
-    QSettings settings(sManager->getSetting(Setting::shopPath) + "/" + project + ".shop", QSettings::IniFormat);
-
-    settings.setValue("project_name", project);
-    settings.setValue("version",      2);
-}
-
-// Create a new Category
-void ShopEditor::createCategory(QString category)
-{
-    qDebug() << "Creating New Category:" << category << "...";
-
-    if (!m_categories.contains(category))
-    {
-        m_categories.append(category);
-
-        QSettings settings(m_projectPath, QSettings::IniFormat);
-
-        settings.setValue("categories", m_categories);
-    }
-}
-
-QStringList ShopEditor::getCategories()
-{
-    return m_categories;
-}
-
-// Create a new Shop
-void ShopEditor::createShop(QString shop)
-{
-    qDebug() << "Creating New Shop:" << shop << "...";
-
-    if ((m_category != "") && !m_category.isNull())
-    {
-        QSettings settings(m_projectPath, QSettings::IniFormat);
-
-        int index = m_shopList.size();
-
-        settings.beginWriteArray(m_category + "_shops");
-        settings.setArrayIndex(index);
-
-        QStringList shopValues = { shop, "", "" };
-        settings.setValue("shop", shopValues);
-
-        settings.endArray();
-
-        m_shopList.append(shop);
+        m_currentProject = m_projects[index];
     }
     else
     {
-        qDebug() << "Error: Cannot create shop, no category available!";
+        m_currentProject = nullptr;
+    }
+
+    emit projectChanged();
+    emit categoryChanged();
+    emit shopChanged();
+}
+
+/**
+ * @brief Set the current category
+ * @param index Index of category
+ */
+void ShopEditor::setCurrentCategory(int index)
+{
+    if (m_currentProject && (index > -1) && (index < m_currentProject->categories().size()))
+    {
+        m_currentProject->setCurrentCategory(index);
+    }
+
+    emit categoryChanged();
+    emit shopChanged();
+}
+
+/**
+ * @brief Set the current shop
+ * @param index Index of shop
+ */
+void ShopEditor::setCurrentShop(int index)
+{
+    if (m_currentProject && m_currentProject->currentCategory() && (index > -1) && (index < m_currentProject->currentCategory()->shops().size()))
+    {
+        m_currentProject->currentCategory()->setCurrentShop(index);
+    }
+
+    emit shopChanged();
+}
+
+/**
+ * @brief Get the name of the current shop
+ * @return Shop name
+ */
+QString ShopEditor::name() const
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return "";
+
+    return m_currentProject->currentCategory()->currentShop()->name();
+}
+
+/**
+ * @brief Set the name of the current shop
+ * @param name Shop name
+ */
+void ShopEditor::setName(QString name)
+{
+    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) m_currentProject->currentCategory()->currentShop()->setName(name);
+
+    madeChanges();
+    emit categoryChanged();
+    emit shopChanged();
+}
+
+/**
+ * @brief Get the owner of the current shop
+ * @return Shop owner
+ */
+QString ShopEditor::owner() const
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return "";
+
+    return m_currentProject->currentCategory()->currentShop()->owner();
+}
+
+/**
+ * @brief Set the owner of the current shop
+ * @param owner Shop owner
+ */
+void ShopEditor::setOwner(QString owner)
+{
+    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) m_currentProject->currentCategory()->currentShop()->setOwner(owner);
+
+    madeChanges();
+    emit shopChanged();
+}
+
+/**
+ * @brief Get the description of the current shop
+ * @return Shop description
+ */
+QString ShopEditor::description() const
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return "";
+
+    return m_currentProject->currentCategory()->currentShop()->description();
+}
+
+/**
+ * @brief Set the description of the current shop
+ * @param description Shop description
+ */
+void ShopEditor::setDescription(QString description)
+{
+    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) m_currentProject->currentCategory()->currentShop()->setDescription(description);
+
+    madeChanges();
+    emit shopChanged();
+}
+
+/**
+ * @brief Update the item model
+ */
+void ShopEditor::onShopChanged()
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop())
+    {
+        itemModel->clear();
+        return;
+    }
+
+    itemModel->setElements(m_currentProject->currentCategory()->currentShop()->items());
+}
+
+/**
+ * @brief Move a shop in the list
+ * @param positions Positions to move shop by (-1 for up, 1 for down)
+ */
+void ShopEditor::moveShop(int positions)
+{
+    qDebug() << "ShopEditor: Moving shop by" << positions << "position(s) ...";
+
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return;
+
+    auto shops = m_currentProject->currentCategory()->shops();
+    int  index = shops.indexOf(m_currentProject->currentCategory()->currentShop());
+
+    if ((index + positions < shops.size()) && (index + positions > -1))
+    {
+        shops.move(index, index + positions);
+        m_currentProject->currentCategory()->setShops(shops);
+        m_currentProject->currentCategory()->setCurrentShop(index + positions);
+        emit categoryChanged();
+
+        madeChanges();
     }
 }
 
-QString ShopEditor::getShopName()
+/**
+ * @brief Delete the current shop
+ */
+void ShopEditor::deleteShop()
 {
-    return m_shopName;
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return;
+
+    auto shops = m_currentProject->currentCategory()->shops();
+    int  index = shops.indexOf(m_currentProject->currentCategory()->currentShop());
+    auto s     = shops.takeAt(index);
+
+    m_currentProject->currentCategory()->setShops(shops);
+
+    if (index == 0) m_currentProject->currentCategory()->setCurrentShop(0); else m_currentProject->currentCategory()->setCurrentShop(index - 1);
+
+    emit categoryChanged();
+    emit shopChanged();
+    madeChanges();
+
+    s->deleteLater();
 }
 
-QString ShopEditor::getShopOwner()
+/**
+ * @brief Remove an item from the current shop
+ * @param index Item index
+ */
+void ShopEditor::deleteItem(int index)
 {
-    return m_shopOwner;
-}
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return;
 
-void ShopEditor::setShopOwner(QString owner)
-{
-    m_shopOwner = owner;
-}
+    auto items = m_currentProject->currentCategory()->currentShop()->items();
 
-QString ShopEditor::getShopDescription()
-{
-    return m_shopDescription;
-}
-
-void ShopEditor::setShopDescription(QString description)
-{
-    m_shopDescription = description;
-}
-
-QStringList ShopEditor::getItemNames()
-{
-    return m_itemNames;
-}
-
-QStringList ShopEditor::getItemPrices()
-{
-    return m_itemPrices;
-}
-
-QStringList ShopEditor::getItemCategories()
-{
-    return m_itemCategories;
-}
-
-QStringList ShopEditor::getItemDescriptions()
-{
-    return m_itemDescriptions;
-}
-
-// Load list of all item files
-void ShopEditor::loadItemListTabs()
-{
-    m_itemListTabNames.clear();
-    m_itemListTabNames.append("Custom");
-    m_itemListTabPaths.clear();
-    m_itemListTabPaths.append(sManager->getSetting(Setting::shopPath) + "/CustomItems.items");
-
-    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
+    if ((index > -1) && (index < items.size()))
     {
-        for (QString addon : getFolders(path))
-        {
-            if (sManager->getIsAddonEnabled(addon))
-            {
-                QString addonItemPath = path + "/" + addon + "/shop/AddonItems.items";
+        auto i = items.takeAt(index);
+        m_currentProject->currentCategory()->currentShop()->setItems(items);
+        emit shopChanged();
+        i->deleteLater();
+        madeChanges();
+    }
+}
 
-                if (QFile(addonItemPath).exists())
-                {
-                    QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
-                    m_itemListTabNames.append(settings.value("name", addon).toString());
-                    m_itemListTabPaths.append(addonItemPath);
-                }
+/**
+ * @brief Add an item to the current shop
+ * @param index Item index
+ */
+void ShopEditor::addItem(int index)
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop() || !m_currentItemGroup) return;
+
+    qDebug() << "ShopEditor: Adding item at index" << index << "...";
+
+    if ((index > -1) && (index < m_items.size()))
+    {
+        int insert       = -1;
+        QString category = m_currentItemGroup->items()[index]->category();
+        auto    items    = m_currentProject->currentCategory()->currentShop()->items();
+
+        // Find last item with same category for insertion
+        for (int i = 0; i < items.size(); i++)
+        {
+            if (items[i] && (items[i]->category() == category))
+            {
+                insert = i + 1;
+            }
+        }
+
+        if (insert == -1) insert = items.size();
+
+        // Insert copy of item
+        items.insert(insert, new Item(m_items[index]));
+        m_currentProject->currentCategory()->currentShop()->setItems(items);
+        emit shopChanged();
+        madeChanges();
+    }
+}
+
+/**
+ * @brief Save shops to disc and send copies to shop tool
+ */
+void ShopEditor::save()
+{
+    // Save to disc
+    for (auto p : m_projects)
+    {
+        fileManager->getShopFileManager()->saveProject(p);
+    }
+
+    // Copy all projects and send them to ShopTool
+    QList<ShopProject *> copies;
+
+    for (auto p : m_projects)
+    {
+        ShopProject *copy = new ShopProject(p);
+        copies.append(copy);
+    }
+
+    emit projectsSaved(copies);
+
+    // Notify ShopEditor UI
+    m_isSaved = true;
+    emit isSavedChanged();
+    emit showInfoBar(tr("Saved!"));
+}
+
+/**
+ * @brief Notify UI that changes were made
+ */
+void ShopEditor::madeChanges()
+{
+    if (!m_currentProject) return;
+
+    m_isSaved = false;
+    emit isSavedChanged();
+}
+
+/**
+ * @brief Create a project, category or shop
+ * @param name Name
+ * @param index 0: Project, 1: Category, 2: Shop
+ */
+void ShopEditor::createThing(QString name, int index)
+{
+    switch (index)
+    {
+    case 0: // Project
+        createProject(name);
+        break;
+
+    case 1: // Category
+        createCategory(name);
+        break;
+
+    case 2: // Shop
+        createShop(name);
+        break;
+
+    default: return;
+    }
+
+    madeChanges();
+}
+
+/**
+ * @brief Create a project
+ * @param name Project name
+ */
+void ShopEditor::createProject(QString name)
+{
+    if (name.isEmpty()) return;
+
+    auto p = new ShopProject(name, {});
+
+    m_projects.append(p);
+    emit projectListChanged();
+
+    if (m_projects.size() == 1) setCurrentProject(0);
+
+    madeChanges();
+}
+
+/**
+ * @brief Create a category in current project
+ * @param name Category name
+ */
+void ShopEditor::createCategory(QString name)
+{
+    if (!m_currentProject || name.isEmpty()) return;
+
+    auto c    = new ShopCategory(name, {});
+    auto list = m_currentProject->categories();
+    list.append(c);
+    m_currentProject->setCategories(list);
+    emit projectChanged();
+    madeChanges();
+}
+
+/**
+ * @brief Create a shop in current category
+ * @param name Shop name
+ */
+void ShopEditor::createShop(QString name)
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || name.isEmpty()) return;
+
+    auto s    = new ItemShop(name, "", "", {});
+    auto list = m_currentProject->currentCategory()->shops();
+    list.append(s);
+    m_currentProject->currentCategory()->setShops(list);
+    emit categoryChanged();
+    emit shopChanged();
+    madeChanges();
+}
+
+/**
+ * @brief Get the names of all item groups
+ * @return List of names
+ */
+QStringList ShopEditor::itemGroups() const
+{
+    QStringList names;
+
+    for (auto g : m_itemGroups)
+    {
+        if (g) names.append(g->name());
+    }
+
+    return names;
+}
+
+/**
+ * @brief Get the names of all item categories
+ * @return List of names
+ */
+QStringList ShopEditor::itemCategories() const
+{
+    if (!m_currentItemGroup) return {};
+
+    QStringList names;
+
+    for (auto i : m_currentItemGroup->items())
+    {
+        if (i && !names.contains(i->category()))
+        {
+            names.append(i->category());
+        }
+    }
+
+    return names;
+}
+
+/**
+ * @brief Set the current item group
+ * @param index Index of item group
+ */
+void ShopEditor::setCurrentItemGroup(int index)
+{
+    if ((index > -1) && (index < m_itemGroups.size()))
+    {
+        m_currentItemGroup = m_itemGroups[index];
+    }
+    else
+    {
+        m_currentItemGroup = nullptr;
+    }
+
+    enableAllItemCategories();
+}
+
+/**
+ * @brief Update item list model
+ */
+void ShopEditor::onItemsChanged()
+{
+    m_items.clear();
+
+    if (!m_currentItemGroup)
+    {
+        itemModel2->clear();
+        return;
+    }
+
+    for (auto i : m_currentItemGroup->items())
+    {
+        if (i && !m_disabledItemCategories.contains(i->category()))
+        {
+            m_items.append(i);
+        }
+    }
+
+    itemModel2->setElements(m_items);
+}
+
+/**
+ * @brief Set all item categories enabled or not
+ * @param b true: enable all, false: disable all
+ */
+void ShopEditor::enableAllItemCategories(bool b)
+{
+    if (b)
+    {
+        m_disabledItemCategories.clear();
+    }
+    else
+    {
+        for (auto i : m_currentItemGroup->items())
+        {
+            if (i && !m_disabledItemCategories.contains(i->category()))
+            {
+                m_disabledItemCategories.append(i->category());
             }
         }
     }
+
+    emit itemGroupChanged();
 }
 
-QStringList ShopEditor::getItemListTabNames()
+/**
+ * @brief Set a specific item category enabled or not
+ * @param category Name of the category
+ * @param b true: set enabled, false: set disabled
+ */
+void ShopEditor::setItemCategoryEnabled(QString category, bool b)
 {
-    return m_itemListTabNames;
-}
-
-void ShopEditor::setItemListTabIndex(int index)
-{
-    m_itemListTabIndex = index;
-}
-
-// Load all items of item list
-void ShopEditor::loadItemList()
-{
-    qDebug() << "Loading Items of Type:" << m_itemListTabNames.at(m_itemListTabIndex);
-
-    m_itemListNames.clear();
-    m_itemListPrices.clear();
-    m_itemListCategories.clear();
-    m_itemListDescriptions.clear();
-
-    QSettings settings(m_itemListTabPaths.at(m_itemListTabIndex), QSettings::IniFormat);
-
-    int count = settings.beginReadArray("items");
-
-    for (int i = 0; i < count; i++)
+    if (!b && !m_disabledItemCategories.contains(category))
     {
-        settings.setArrayIndex(i);
-
-        m_itemListNames.append(settings.value("name").toString());
-        m_itemListPrices.append(settings.value("price").toString());
-        m_itemListCategories.append(settings.value("category").toString());
-        m_itemListDescriptions.append(settings.value("description").toString());
+        m_disabledItemCategories.append(category);
+    }
+    else
+    {
+        m_disabledItemCategories.removeOne(category);
     }
 
-    settings.endArray();
+    emit itemGroupChanged();
 }
 
-// Return Item at index
-QStringList ShopEditor::getListItem(int index)
+/**
+ * @brief The item has sent a new custom item group
+ * @param group Custom item group
+ */
+void ShopEditor::itemEditorSaved(ItemGroup *group)
 {
-    QStringList item;
+    qDebug() << "ShopEditor: Received new items from ItemEditor ...";
 
-    item.append(m_itemListNames.at(index));
-    item.append(m_itemListPrices.at(index));
-    item.append(m_itemListCategories.at(index));
-    item.append(m_itemListDescriptions.at(index));
+    if (m_itemGroups.size() > 0)
+    {
+        auto old = m_itemGroups.takeAt(0);
+        old->deleteLater();
+    }
 
-    return item;
-}
+    m_itemGroups.insert(0, group);
+    m_currentItemGroup = group;
 
-// Add an item to the shop
-void ShopEditor::addItem(QStringList item)
-{
-    m_itemNames.append(item.at(0));
-    m_itemPrices.append(item.at(1));
-    m_itemCategories.append(item.at(2));
-    m_itemDescriptions.append(item.at(3));
-}
-
-QStringList ShopEditor::getItemListNames()
-{
-    return m_itemListNames;
-}
-
-QStringList ShopEditor::getItemListPrices()
-{
-    return m_itemListPrices;
-}
-
-QStringList ShopEditor::getItemListCategories()
-{
-    return m_itemListCategories;
-}
-
-QStringList ShopEditor::getItemListDescriptions()
-{
-    return m_itemListDescriptions;
+    emit itemGroupsChanged();
+    emit itemGroupChanged();
 }

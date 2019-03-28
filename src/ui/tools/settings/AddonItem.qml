@@ -2,10 +2,6 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Window 2.2
 
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
-import gm.companion.settingstool 1.0
-
 Row {
     id: addon_row
     property string addon: "Placeholder Addon"
@@ -19,18 +15,6 @@ Row {
     padding: 5
     spacing: 5
 
-    ColorScheme {
-        id: color_scheme
-    }
-
-    PlatformDetails {
-        id: platform
-    }
-
-    SettingsTool {
-        id: settings
-    }
-
     Row {
         spacing: 5
         anchors.top: parent.top
@@ -41,7 +25,7 @@ Row {
             padding: 0
 
             onClicked: {
-                settings.setAddonEnabled(folder, checked)
+                settings_tool.setAddonEnabled(folder, checked)
             }
         }
 

@@ -27,6 +27,7 @@ Page {
         width: 500
         clip: true
         bottomPadding: 10
+        contentHeight: main_column.implicitHeight
 
         Column {
             id: main_column

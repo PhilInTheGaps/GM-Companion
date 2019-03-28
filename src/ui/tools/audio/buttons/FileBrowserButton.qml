@@ -2,23 +2,17 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
 
 Rectangle {
     id: file_browser_button
 
-    property var element
-    property var path
+    property string file
+    property string path
     property var type
 
-    signal clicked(string element, string path)
-
-    width: parent ? parent.width : 0
+    anchors.left: parent.left
+    anchors.right: parent.right
     height: 30
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     Row {
         anchors.fill: parent
@@ -26,23 +20,12 @@ Rectangle {
         spacing: 5
 
         Text {
-            id: plus_icon
-            text: FontAwesome.plus
-            font.pixelSize: parent.height - 10
-            font.family: FontAwesome.familySolid
-
-            anchors.verticalCenter: parent.verticalCenter
-            visible: type !== 3
-            color: "white"
-        }
-
-        Text {
             id: icon
             font.pixelSize: (parent.height - parent.padding * 2) * 0.8
             font.family: FontAwesome.familySolid
             anchors.verticalCenter: parent.verticalCenter
 
-            color: "white"
+            color: mouse_area.pressed ? color_scheme.secondaryButtonColor : "white"
 
             Component.onCompleted: {
                 switch (type) {
@@ -63,9 +46,9 @@ Rectangle {
         }
 
         Text {
-            text: element
+            text: file
             color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
-            width: parent.width - parent.spacing - parent.padding * 3 - icon.width - plus_icon.width
+            width: parent.width - parent.spacing - parent.padding * 2 - icon.width
             clip: true
             elide: Text.ElideRight
             anchors.verticalCenter: parent.verticalCenter
@@ -80,11 +63,18 @@ Rectangle {
 
         ToolTip {
             id: tool_tip
-            text: type === 3 ? element : "Add: " + element
+            text: type === 3 ? file : "Add: " + file
         }
 
         onClicked: {
-            parent.clicked(parent.element, parent.path)
+            if (type === 3) {
+                audio_editor_file_browser.setCurrentFolder(file)
+            } else if (type === 2) {
+                audio_editor.addFile(audio_editor.name, audio_editor.type, path)
+            } else {
+                audio_editor.setFileIndex(file_list.currentIndex)
+                audio_editor.addFile(audio_editor.name, audio_editor.type, path)
+            }
         }
 
         hoverEnabled: true

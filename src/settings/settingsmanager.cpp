@@ -11,7 +11,7 @@ SettingsManager::SettingsManager()
 }
 
 // Returns a specific setting
-QString SettingsManager::getSetting(Setting setting)
+QString SettingsManager::getSetting(Setting setting, QString value)
 {
     QString settingString;
 
@@ -104,8 +104,40 @@ QString SettingsManager::getSetting(Setting setting)
         settings->endGroup();
         break;
 
-    case Setting::altMenu:
-        settingString = settings->value("altMenu", "0").toString();
+    case Setting::showToolNames:
+        settingString = settings->value("showToolNames", "0").toString();
+        break;
+
+    case Setting::classicIcons:
+        settingString = settings->value("classicIcons", "0").toString();
+        break;
+
+    case Setting::googleID:
+        settings->beginGroup("Google");
+        settingString = settings->value("googleID", "").toString();
+        settings->endGroup();
+        break;
+
+    case Setting::googleSecret:
+        settings->beginGroup("Google");
+        settingString = settings->value("googleSecret", "").toString();
+        settings->endGroup();
+        break;
+
+    case Setting::googleConnect:
+        settings->beginGroup("Google");
+        settingString = QString::number(settings->value("googleConnect", "").toInt());
+        settings->endGroup();
+        break;
+
+    case Setting::googlePath:
+        settings->beginGroup("Google");
+        settingString = settings->value(value).toString();
+        settings->endGroup();
+        break;
+
+    case Setting::cloudMode:
+        settingString = QString::number(settings->value("cloudMode", 0).toInt());
         break;
 
     default:
@@ -116,7 +148,7 @@ QString SettingsManager::getSetting(Setting setting)
 }
 
 // Sets a specific setting
-void SettingsManager::setSetting(Setting setting, int checked, QString value)
+void SettingsManager::setSetting(Setting setting, int checked, QString value, QString value2)
 {
     switch (setting) {
     case Setting::musicPath:
@@ -238,8 +270,46 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value)
         }
         break;
 
-    case Setting::altMenu:
-        settings->setValue("altMenu", checked);
+    case Setting::showToolNames:
+        settings->setValue("showToolNames", checked);
+        break;
+
+    case Setting::classicIcons:
+        settings->setValue("classicIcons", checked);
+        break;
+
+    case Setting::googleID:
+
+        if (value.length() > 1) {
+            settings->beginGroup("Google");
+            settings->setValue("googleID", value);
+            settings->endGroup();
+        }
+        break;
+
+    case Setting::googleSecret:
+
+        if (value.length() > 1) {
+            settings->beginGroup("Google");
+            settings->setValue("googleSecret", value);
+            settings->endGroup();
+        }
+        break;
+
+    case Setting::googleConnect:
+        settings->beginGroup("Google");
+        settings->setValue("googleConnect", checked);
+        settings->endGroup();
+        break;
+
+    case Setting::googlePath:
+        settings->beginGroup("Google");
+        settings->setValue(value, value2);
+        settings->endGroup();
+        break;
+
+    case Setting::cloudMode:
+        settings->setValue("cloudMode", value);
         break;
 
     default:

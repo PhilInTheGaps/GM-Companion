@@ -2,56 +2,11 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.maptool 1.0
 import "maps"
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 
 Page {
     id: maps_page
-
-    PlatformDetails {
-        id: platform
-    }
-
-    MapTool {
-        id: map_tool
-
-        Component.onCompleted: {
-            findMaps()
-        }
-
-        function loadMap(path) {
-            maps_image.source = "file:///" + path
-        }
-
-        onCategoriesChanged: {
-            var mapCategories = categories
-
-            for (var i = 0; i < mapCategories.length; i++) {
-                var list = maps(mapCategories[i])
-
-                var component = Qt.createComponent("./maps/MapListTab.qml")
-                var tab = component.createObject(maps_swipe_view, {
-                                                     "list": maps(mapCategories[i]),
-                                                     "paths": mapPaths(
-                                                                  mapCategories[i]),
-                                                     "category": mapCategories[i]
-                                                 })
-
-                tab.clicked.connect(loadMap)
-
-                tab_button_repeater.model++
-            }
-
-            maps_tab_bar.setCurrentIndex(0)
-        }
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
@@ -61,13 +16,15 @@ Page {
 
     TabBar {
         id: maps_tab_bar
-        width: parent.width
-        height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
 
-        currentIndex: maps_swipe_view.currentIndex
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
+        currentIndex: 0
 
         onCurrentIndexChanged: {
-            maps_swipe_view.currentIndex = currentIndex
+            map_tool.setCurrentCategory(currentIndex)
         }
 
         background: Rectangle {
@@ -77,238 +34,303 @@ Page {
         Repeater {
             id: tab_button_repeater
 
-            model: 0
+            model: map_tool.categories
 
             TabButton {
                 height: parent.height
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
-                    text: map_tool.categories[index]
-                    color: maps_tab_bar.currentIndex
-                           == index ? "black" : color_scheme.toolbarTextColor
+                    text: modelData
+                    color: color_scheme.toolbarTextColor
                     font.pointSize: 12
                     font.bold: true
                     anchors.centerIn: parent
                 }
 
+                Rectangle {
+                    color: "white"
+                    height: 2
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 5
+                    visible: maps_tab_bar.currentIndex == index
+                }
+
                 background: Rectangle {
-                    color: maps_tab_bar.currentIndex == index ? "white" : color_scheme.toolbarColor
+                    color: color_scheme.toolbarColor
+                }
+
+                onClicked: {
+                    left_item.visible = true
                 }
             }
         }
     }
 
-    Column {
-        anchors.fill: parent
+    ScrollView {
+        id: left_item
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.bottomMargin: 5
+        anchors.topMargin: 5
+        width: 200
 
-        Row {
+        contentHeight: c.height
+        clip: true
+
+        Column {
+            id: c
             anchors.left: parent.left
             anchors.right: parent.right
-            height: parent.height - maps_control_bar.height
+            anchors.margins: 5
+            spacing: 10
 
-            Column {
-                id: maps_tab_column
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: platform.isAndroid ? parent.width / 4 : 200
+            Repeater {
+                model: mapListModel
 
-                SwipeView {
-                    id: maps_swipe_view
-                    width: parent.width
-                    height: parent.height
-
-                    currentIndex: maps_tab_bar.currentIndex
-                    clip: true
+                MapListItem {
+                    name: modelData.name
+                    path: modelData.path
                 }
             }
+        }
+    }
 
-            Flickable {
-                id: maps_image_flickable
-                width: maps_tab_column.visible ? maps_page.width
-                                                 - maps_tab_column.width : maps_page.width
-                height: parent.height
-                clip: true
-                interactive: true
+    Flickable {
+        id: maps_image_flickable
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: left_item.visible ? left_item.right : parent.left
+        anchors.right: maps_control_bar.left
 
-                contentWidth: maps_image.width
-                contentHeight: maps_image.height
+        clip: true
+        interactive: true
 
-                PinchArea {
-                    width: Math.max(maps_image_flickable.contentWidth,
-                                    maps_image_flickable.width)
-                    height: Math.max(maps_image_flickable.contentHeight,
-                                     maps_image_flickable.height)
+        contentWidth: maps_image.width
+        contentHeight: maps_image.height
 
-                    property real initialWidth
-                    property real initialHeight
+        // For touchscreen zooming
+        PinchArea {
+            width: Math.max(maps_image_flickable.contentWidth,
+                            maps_image_flickable.width)
+            height: Math.max(maps_image_flickable.contentHeight,
+                             maps_image_flickable.height)
 
-                    onPinchStarted: {
-                        initialWidth = maps_image_flickable.contentWidth
-                        initialHeight = maps_image_flickable.contentHeight
-                    }
+            property real initialWidth
+            property real initialHeight
 
-                    onPinchUpdated: {
-                        // adjust content pos due to drag
-                        maps_image_flickable.contentX += pinch.previousCenter.x - pinch.center.x
-                        maps_image_flickable.contentY += pinch.previousCenter.y - pinch.center.y
+            onPinchStarted: {
+                initialWidth = maps_image_flickable.contentWidth
+                initialHeight = maps_image_flickable.contentHeight
+            }
 
-                        // resize content
-                        maps_image_flickable.resizeContent(
-                                    initialWidth * pinch.scale,
-                                    initialHeight * pinch.scale, pinch.center)
+            onPinchUpdated: {
+                // adjust content pos due to drag
+                maps_image_flickable.contentX += pinch.previousCenter.x - pinch.center.x
+                maps_image_flickable.contentY += pinch.previousCenter.y - pinch.center.y
 
-                        maps_image.width = maps_image_flickable.contentWidth
-                        maps_image.height = maps_image_flickable.contentHeight
-                    }
+                // resize content
+                maps_image_flickable.resizeContent(initialWidth * pinch.scale,
+                                                   initialHeight * pinch.scale,
+                                                   pinch.center)
 
-                    onPinchFinished: {
-                        // Move its content within bounds.
-                        maps_image_flickable.returnToBounds()
-                    }
-                }
+                maps_image.width = maps_image_flickable.contentWidth
+                maps_image.height = maps_image_flickable.contentHeight
+            }
 
-                Rectangle {
-                    width: maps_image.width
-                    height: maps_image.height
-                    color: color_scheme.backgroundColor
-
-                    Image {
-                        id: maps_image
-                        height: maps_page.height
-                        width: maps_page.width - maps_tab_column.width
-                        fillMode: Image.PreserveAspectFit
-                    }
-                }
+            onPinchFinished: {
+                // Move its content within bounds.
+                maps_image_flickable.returnToBounds()
             }
         }
 
         Rectangle {
-            id: maps_control_bar
-            height: platform.isAndroid ? parent.height / 12 : color_scheme.toolbarHeight
-            width: parent.width
-            color: color_scheme.toolbarColor
+            width: maps_image.width
+            height: maps_image.height
+            color: color_scheme.backgroundColor
 
+            Image {
+                id: maps_image
+                height: maps_image_flickable.height
+                width: maps_image_flickable.width
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+    }
+
+    Rectangle {
+        id: maps_control_bar
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: color_scheme.toolbarHeight
+        color: color_scheme.menuColor
+
+        Column {
+            anchors.fill: parent
+
+            // Larger
             Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
                 hoverEnabled: true
+
+                Text {
+                    text: FontAwesome.plus
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                }
 
                 background: Rectangle {
                     color: "transparent"
                 }
 
+                onClicked: {
+                    maps_image.height *= 2
+                    maps_image.width *= 2
+
+                    maps_image_flickable.contentY = maps_image_flickable.contentHeight
+                            / 2 - maps_image_flickable.height / 2
+                    maps_image_flickable.contentX = maps_image_flickable.contentWidth
+                            / 2 - maps_image_flickable.width / 2
+                }
+            }
+
+            // Smaller
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
                 Text {
-                    text: FontAwesome.bars
+                    text: FontAwesome.minus
                     font.family: FontAwesome.familySolid
-                    font.pointSize: 25
-                    anchors.centerIn: parent
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
                     color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
-                width: parent.height - 10
-                height: width
-                x: 5
-                y: 5
+                background: Rectangle {
+                    color: "transparent"
+                }
 
-                onClicked: maps_tab_column.visible ? maps_tab_column.visible
-                                                     = false : maps_tab_column.visible = true
+                onClicked: {
+                    maps_image.height *= 0.5
+                    maps_image.width *= 0.5
+
+                    maps_image_flickable.contentY = maps_image_flickable.contentHeight
+                            / 2 - maps_image_flickable.height / 2
+                    maps_image_flickable.contentX = maps_image_flickable.contentWidth
+                            / 2 - maps_image_flickable.width / 2
+                }
             }
 
-            Row {
-                id: controls
-                height: parent.height
-                padding: 5
-                spacing: 5
+            // Fit
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
 
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                // Larger
-                Button {
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
-                    Text {
-                        text: FontAwesome.plus
-                        font.family: FontAwesome.familySolid
-                        font.pointSize: 25
-                        anchors.centerIn: parent
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    }
-
-                    width: parent.height - parent.padding * 2
-                    height: width
-
-                    font.pointSize: height / 2
-
-                    onClicked: {
-
-                        maps_image.height *= 2
-                        maps_image.width *= 2
-
-                        maps_image_flickable.contentY = maps_image_flickable.contentHeight
-                                / 2 - maps_image_flickable.height / 2
-                        maps_image_flickable.contentX = maps_image_flickable.contentWidth
-                                / 2 - maps_image_flickable.width / 2
-                    }
+                Text {
+                    text: FontAwesome.expand
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
                 }
 
-                // Smaller
-                Button {
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
-                    Text {
-                        text: FontAwesome.minus
-                        font.family: FontAwesome.familySolid
-                        font.pointSize: 25
-                        anchors.centerIn: parent
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    }
-
-                    width: parent.height - parent.padding * 2
-                    height: width
-
-                    onClicked: {
-
-                        maps_image.height *= 0.5
-                        maps_image.width *= 0.5
-
-                        maps_image_flickable.contentY = maps_image_flickable.contentHeight
-                                / 2 - maps_image_flickable.height / 2
-                        maps_image_flickable.contentX = maps_image_flickable.contentWidth
-                                / 2 - maps_image_flickable.width / 2
-                    }
+                background: Rectangle {
+                    color: "transparent"
                 }
 
-                // Reset
-                Button {
-                    hoverEnabled: true
-
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
-                    Text {
-                        text: FontAwesome.undo
-                        font.family: FontAwesome.familySolid
-                        font.pointSize: 25
-                        anchors.centerIn: parent
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-                    }
-
-                    width: parent.height - parent.padding * 2
-                    height: width
-
-                    onClicked: {
-                        maps_image.height = maps_page.height
-                        maps_image.width = maps_tab_column.visible ? maps_page.width - maps_tab_column.width : maps_page.width
-                    }
+                onClicked: {
+                    maps_image.height = maps_image_flickable.height
+                    maps_image.width = maps_image_flickable.width
                 }
+            }
+
+            // Rotate Left
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                Text {
+                    text: FontAwesome.undo
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    maps_image.rotation -= 90
+                }
+            }
+
+            // Rotate Right
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                Text {
+                    text: FontAwesome.redo
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: {
+                    maps_image.rotation += 90
+                }
+            }
+
+            // Show / Hide left Item
+            Button {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: width
+                hoverEnabled: true
+
+                Text {
+                    text: FontAwesome.bars
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+                }
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                onClicked: left_item.visible = !left_item.visible
             }
         }
     }

@@ -2,26 +2,11 @@ import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
-import gm.companion.convertertool 1.0
-import gm.companion.colorscheme 1.0
-import gm.companion.platforms 1.0
 import FontAwesome 2.0
 import "./converter"
 
 Page {
     id: converter
-
-    ConverterTool {
-        id: converter_tool
-    }
-
-    PlatformDetails {
-        id: platform
-    }
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     background: Rectangle {
         color: color_scheme.backgroundColor
@@ -29,8 +14,11 @@ Page {
 
     Dialog {
         id: add_unit_dialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
 
         title: qsTr("Add Units")
+        modal: true
 
         contentItem: Column {
             spacing: 5
@@ -43,33 +31,27 @@ Page {
                                           currentText)
             }
 
-            Row {
+            Grid {
                 spacing: 5
+                columns: 2
 
-                Grid {
-                    spacing: 5
-                    columns: 2
+                Text {
+                    text: qsTr("Unit Name:")
+                }
 
-                    Text {
-                        text: qsTr("Unit Name:")
-                        color: color_scheme.textColor
-                    }
+                Text {
+                    id: refUnit_text
+                    text: "Meters"
+                }
 
-                    Text {
-                        id: refUnit_text
-                        text: "Meters"
-                        color: color_scheme.textColor
-                    }
+                TextField {
+                    id: unit_name
+                    selectByMouse: true
+                }
 
-                    TextField {
-                        id: unit_name
-                        selectByMouse: true
-                    }
-
-                    TextField {
-                        id: unit_value
-                        selectByMouse: true
-                    }
+                TextField {
+                    id: unit_value
+                    selectByMouse: true
                 }
             }
 

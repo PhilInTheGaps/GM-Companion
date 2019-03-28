@@ -2,30 +2,14 @@
 
 #include <QTranslator>
 #include <QDebug>
-#include <QSettings>
-#include <QDir>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QIcon>
-#include <QMap>
-#include <QtWebEngine>
+#include <QSGRendererInterface>
+#include <QQuickWindow>
 
-#include "tools/audio/audiotool.h"
-#include "tools/audio/audioeditor.h"
-#include "tools/audio/audioexporter.h"
-#include "tools/audio/audioeditorfilebrowser.h"
-#include "tools/maptool.h"
-#include "tools/dicetool.h"
-#include "tools/shop/shoptool.h"
-#include "tools/shop/shopeditor.h"
-#include "tools/shop/itemeditor.h"
-#include "tools/combattracker.h"
-#include "tools/notestool.h"
-#include "tools/convertertool.h"
-#include "tools/generators/namegenerator.h"
-
-#include "tools/characters/charactertool.h"
+#include "tools/toolmanager.h"
 
 #include "settings/settingstool.h"
 #include "managers/addonmanager.h"
@@ -35,44 +19,21 @@
 #include "ui/colorscheme.h"
 #include "tools/project_converter/projectconverter.h"
 
-void loadQmlClasses()
-{
-    qmlRegisterType<AudioTool>(             "gm.companion.audiotool",              1, 0, "AudioTool");
-    qmlRegisterType<AudioEditor>(           "gm.companion.audioeditor",            1, 0, "AudioEditor");
-    qmlRegisterType<AudioExporter>(         "gm.companion.audioexporter",          1, 0, "AudioExporter");
-    qmlRegisterType<AudioEditorFileBrowser>("gm.companion.audioeditorfilebrowser", 1, 0, "AudioEditorFileBrowserTool");
-
-    qmlRegisterType<MapTool>(               "gm.companion.maptool",                1, 0, "MapTool");
-    qmlRegisterType<DiceTool>(              "gm.companion.dicetool",               1, 0, "DiceTool");
-    qmlRegisterType<ShopTool>(              "gm.companion.shoptool",               1, 0, "ShopTool");
-    qmlRegisterType<ShopEditor>(            "gm.companion.shopeditor",             1, 0, "ShopEditorTool");
-    qmlRegisterType<ItemEditor>(            "gm.companion.itemeditor",             1, 0, "ItemEditorTool");
-    qmlRegisterType<CombatTracker>(         "gm.companion.combattracker",          1, 0, "CombatTrackerTool");
-    qmlRegisterType<NotesTool>(             "gm.companion.notestool",              1, 0, "NotesTool");
-    qmlRegisterType<ConverterTool>(         "gm.companion.convertertool",          1, 0, "ConverterTool");
-    qmlRegisterType<NameGenerator>(         "gm.companion.namegeneratortool",      1, 0, "NameGeneratorTool");
-
-    qmlRegisterType<SettingsTool>(          "gm.companion.settingstool",           1, 0, "SettingsTool");
-    qmlRegisterType<AddonManager>(          "gm.companion.addonmanager",           1, 0, "AddonManager");
-
-    qmlRegisterType<CharacterTool>(         "gm.companion.charactertool",          1, 0, "CharacterTool");
-
-    qmlRegisterType<UpdateManager>(         "gm.companion.updatemanager",          1, 0, "UpdateManager");
-    qmlRegisterType<PlatformDetails>(       "gm.companion.platforms",              1, 0, "PlatformDetails");
-    qmlRegisterType<ColorScheme>(           "gm.companion.colorscheme",            1, 0, "ColorScheme");
-}
-
 int main(int argc, char *argv[])
 {
-#if defined(Q_OS_WIN)
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif // if defined(Q_OS_WIN)
-
     QGuiApplication app(argc, argv);
 
-    qDebug().noquote() << "Starting GM-Companion ...";
+    app.setApplicationName("GM-Companion");
+    app.setOrganizationName("GM-Companion");
+    app.setOrganizationDomain("gm-companion.github.io");
 
-    QtWebEngine::initialize();
+#if defined(Q_OS_WIN)
+    app.setFont(QFont("Segoe UI"));
+    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
+    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
+#endif // if defined(Q_OS_WIN)
+
+    qDebug().noquote() << "Starting GM-Companion ...";
 
     // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";
@@ -82,13 +43,14 @@ int main(int argc, char *argv[])
     if (translator->load("gm-companion_" + settingsManager->getSetting(Setting::language), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
 
+    // Install fonts for FontAwesome.pri
     QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
     QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
     QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
 
     // Create program files and remove old ones that are no longer required
-    FileManager fileManager;
-    fileManager.run();
+    FileManager *fileManager = new FileManager;
+    fileManager->run();
 
     // Convert Projects to newest version
     ProjectConverter projConverter;
@@ -97,13 +59,54 @@ int main(int argc, char *argv[])
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
 
-    loadQmlClasses();
-
-    // Set Icon
-    app.setWindowIcon(QIcon(":/icons/gm-companion/icon256_new.png"));
+    // Set Window Icon
+    app.setWindowIcon(QIcon(":/icons/gm-companion/icon.png"));
 
     QQmlApplicationEngine engine;
     engine.addImportPath("qrc:///");
+    ToolManager *toolManager = new ToolManager(fileManager, &engine, nullptr);
+
+    // Load Tools
+    engine.rootContext()->setContextProperty("tool_manager", toolManager);
+
+    // Audio
+    engine.rootContext()->setContextProperty("audio_tool", toolManager->getAudioTool());
+    engine.rootContext()->setContextProperty("audio_editor", toolManager->getAudioTool()->getEditor());
+    engine.rootContext()->setContextProperty("audio_exporter", toolManager->getAudioTool()->getEditor()->getAudioExporter());
+    engine.rootContext()->setContextProperty("audio_addon_element_manager", toolManager->getAudioTool()->getEditor()->getAddonElementManager());
+    engine.rootContext()->setContextProperty("audio_editor_file_browser", toolManager->getAudioTool()->getEditor()->getFileBrowser());
+
+    // Combat Tracker
+    engine.rootContext()->setContextProperty("combat_tracker", toolManager->getCombatTracker());
+    engine.rootContext()->setContextProperty("combat_tracker_effects", toolManager->getCombatTracker()->getEffectTool());
+
+    // Item Shop
+    engine.rootContext()->setContextProperty("shop_tool", toolManager->getShopTool());
+    engine.rootContext()->setContextProperty("shop_editor", toolManager->getShopTool()->getShopEditor());
+    engine.rootContext()->setContextProperty("item_editor", toolManager->getShopTool()->getShopEditor()->getItemEditor());
+
+    // Characters
+    engine.rootContext()->setContextProperty("character_tool", toolManager->getCharacterTool());
+    engine.rootContext()->setContextProperty("character_image_viewer", toolManager->getCharacterTool()->getImageViewer());
+    engine.rootContext()->setContextProperty("character_dsa5_viewer", toolManager->getCharacterTool()->getDSA5Viewer());
+
+    // Other Tools
+    engine.rootContext()->setContextProperty("map_tool", toolManager->getMapTool());
+    engine.rootContext()->setContextProperty("dice_tool", toolManager->getDiceTool());
+    engine.rootContext()->setContextProperty("name_generator", toolManager->getNameGenerator());
+    engine.rootContext()->setContextProperty("notes_tool", toolManager->getNotesTool());
+    engine.rootContext()->setContextProperty("converter_tool", toolManager->getConverterTool());
+    engine.rootContext()->setContextProperty("settings_tool", toolManager->getSettingsTool());
+
+    // Misc
+    engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
+    engine.rootContext()->setContextProperty("platform", new PlatformDetails);
+    engine.rootContext()->setContextProperty("color_scheme", new ColorScheme);
+    engine.rootContext()->setContextProperty("addon_manager", new AddonManager);
+
+    // Cloud
+    engine.rootContext()->setContextProperty("google_drive_tool", fileManager->getGoogleDrive());
+
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;

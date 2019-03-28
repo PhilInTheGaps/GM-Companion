@@ -5,7 +5,6 @@ Item {
     property string field_text: ""
     property string text_color: "white"
 
-    width: parent.width / 6
     height: parent.height - parent.padding * 2
     anchors.verticalCenter: parent.verticalCenter
 

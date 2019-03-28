@@ -3,7 +3,6 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
-import gm.companion.colorscheme 1.0
 
 Rectangle {
     id: character_button
@@ -11,14 +10,11 @@ Rectangle {
     property bool active: true
 
     signal clicked(string character_name)
-    signal toggle_active_clicked(string character_name, bool active)
+    signal toggle_active_clicked
 
-    width: parent ? parent.width : 0
+    anchors.left: parent.left
+    anchors.right: parent.right
     height: platform.isAndroid ? width / 6 : 40
-
-    ColorScheme {
-        id: color_scheme
-    }
 
     Row {
         anchors.fill: parent
@@ -71,7 +67,6 @@ Rectangle {
             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
         }
 
-        onClicked: parent.toggle_active_clicked(parent.character_name,
-                                                parent.active)
+        onClicked: parent.toggle_active_clicked()
     }
 }

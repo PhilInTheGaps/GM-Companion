@@ -146,3 +146,18 @@ bool SettingsTool::getCheckForUpdates()
     settings.beginGroup("Updates");
     return settings.value("checkForUpdates", false).toBool();
 }
+
+QString SettingsTool::getCreditsPage()
+{
+    QString content;
+
+    QFile f(":/credits.html");
+
+    if (f.open(QIODevice::ReadOnly))
+    {
+        content = f.readAll();
+        f.close();
+    }
+
+    return content;
+}

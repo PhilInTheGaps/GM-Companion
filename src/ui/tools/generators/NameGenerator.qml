@@ -1,70 +1,67 @@
 import QtQuick 2.9
 import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.1
-
-import gm.companion.namegeneratortool 1.0
 
 Item {
-    NameGeneratorTool {
-        id: name_generator_tool
+    Component.onCompleted: name_generator.updateCategories()
 
-        Component.onCompleted: updateCategories()
+    Connections {
+        target: name_generator
 
         onCategoriesChanged: {
             loadCategories()
         }
+    }
 
-        function loadCategories() {
-            names_categories_column.children = []
+    function loadCategories() {
+        names_categories_column.children = []
 
-            for (var i = 0; i < categories.length; i++) {
-                var component = Qt.createComponent(
-                            "NameGeneratorCategoryButton.qml")
+        for (var i = 0; i < name_generator.categories.length; i++) {
+            var component = Qt.createComponent(
+                        "NameGeneratorCategoryButton.qml")
 
-                var button = component.createObject(names_categories_column, {
-                                                        "category": categories[i],
-                                                        "max_width": left_column.width
-                                                    })
+            var button = component.createObject(names_categories_column, {
+                                                    "category": name_generator.categories[i],
+                                                    "max_width": left_column.width
+                                                })
 
-                button.clicked.connect(loadNames)
-            }
+            button.clicked.connect(loadNames)
         }
+    }
 
-        function loadNames(category) {
-            names_flow.children = []
+    function loadNames(category) {
+        names_flow.children = []
 
-            var names = categoryNames(category)
+        var names = name_generator.categoryNames(category)
 
-            for (var i = 0; i < names.length; i++) {
-                var component = Qt.createComponent("NameGeneratorButton.qml")
+        for (var i = 0; i < names.length; i++) {
+            var component = Qt.createComponent("NameGeneratorButton.qml")
 
-                var button = component.createObject(names_flow, {
-                                                        "name": names[i],
-                                                        "category": category,
-                                                        "path": categoryPath(
-                                                                    category) + "/" + names[i]
-                                                    })
+            var button = component.createObject(names_flow, {
+                                                    "name": names[i],
+                                                    "category": category,
+                                                    "path": name_generator.categoryPath(
+                                                                category) + "/" + names[i]
+                                                })
 
-                button.clicked.connect(displayGeneratedNames)
-            }
+            button.clicked.connect(displayGeneratedNames)
         }
+    }
 
-        function displayGeneratedNames(category, name) {
-            male_names_text_area.cursorPosition = 0
-            female_names_text_area.cursorPosition = 0
+    function displayGeneratedNames(category, name) {
+        male_names_text_area.cursorPosition = 0
+        female_names_text_area.cursorPosition = 0
 
-            male_names_text_area.text = ""
-            female_names_text_area.text = ""
+        male_names_text_area.text = ""
+        female_names_text_area.text = ""
 
-            var count = names_count_spinbox.value
-            var male_names = maleNames(category, name, count)
-            var female_names = femaleNames(category, name, count)
+        var count = names_count_spinbox.value
+        var male_names = name_generator.maleNames(category, name, count)
+        var female_names = name_generator.femaleNames(category, name, count)
 
-            for (var i = 0; i < count; i++) {
-                male_names_text_area.append(male_names[i])
-                female_names_text_area.append(female_names[i])
-            }
+        for (var i = 0; i < count; i++) {
+            male_names_text_area.append(male_names[i])
+            female_names_text_area.append(female_names[i])
         }
     }
 
@@ -131,6 +128,7 @@ Item {
                         - names_categories_text.height - parent.spacing * 5
 
                 clip: true
+                contentHeight: names_categories_column.implicitHeight
 
                 Column {
                     id: names_categories_column
