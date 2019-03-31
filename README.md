@@ -54,7 +54,12 @@ sudo apt-get install qtbase5-dev qt5-default qttools5-dev qtmultimedia5-dev libq
 cd GM-Companion
 qmake
 make
-./out/gm-companion
+```
+run: `./gm-companion`  
+or install:
+```
+make install
+gm-companion
 ```
 
 #### Ubuntu 18.04
@@ -71,7 +76,12 @@ source /opt/qt512/bin/qt512-env.sh
 cd GM-Companion
 qmake
 make
-./out/gm-companion
+```
+run: `./gm-companion`  
+or install:
+```
+make install
+gm-companion
 ```
 
 #### Ubuntu 16.04
@@ -88,7 +98,12 @@ source /opt/qt512/bin/qt512-env.sh
 cd GM-Companion
 qmake
 make
-./out/gm-companion
+```
+run: `./gm-companion`  
+or install:
+```
+make install
+gm-companion
 ```
 
 ## Other Distros
@@ -101,7 +116,12 @@ make
 cd GM-Companion
 qmake
 make
-./out/gm-companion
+```
+run: `./gm-companion`  
+or install:
+```
+make install
+gm-companion
 ```
 
 ## Windows
