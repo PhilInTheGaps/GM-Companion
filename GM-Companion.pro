@@ -9,7 +9,7 @@ QT       += core multimedia network quick qml
 include(lib/fontawesome.pri/fontawesome.pri)
 include(lib/o2/src/src.pri)
 
-TARGET = out/gm-companion
+TARGET = gm-companion
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
@@ -204,24 +204,22 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_en.ts
 TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
 
 !win32 {
-    QMAKE_CXXFLAGS += -std=c++11
+	isEmpty(PREFIX) {
+	    PREFIX = /usr
+	}
+	
+    target.path = $$PREFIX/bin
+    
+    shortcutfiles.files = misc/gm-companion.desktop
+    shortcutfiles.path = $$PREFIX/share/applications/
+    data.files += misc/gm-companion.png
+    data.path = $$PREFIX/share/pixmaps/
 
-    target.path = /usr/bin
-    INSTALLS += target
-
-    data.path = /usr/share/gm-companion
-    data.files = data/share/gm-companion/*
-
-    resources.path = /usr/share/gm-companion/resources
-    resources.files += data/share/resources/*
-
-    desktop.path = /usr/share/applications
-    desktop.files = data/share/applications/*
-
-    INSTALLS += data
-    INSTALLS += desktop
-    INSTALLS += resources
+    INSTALLS += shortcutfiles
+	INSTALLS += data
 }
+
+INSTALLS += target
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

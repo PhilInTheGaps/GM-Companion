@@ -1,0 +1,11 @@
+[Desktop Entry]
+Comment=A tool for rpg gamemasters.
+Exec=gm-companion
+GenericName=GM-Companion
+Icon=gm-companion
+Name=GM-Companion
+NoDisplay=false
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Qt;

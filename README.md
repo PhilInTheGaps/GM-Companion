@@ -24,9 +24,16 @@ A tool for the gamemaster of a tabletop RPG session.
 
 ## Linux
 
-### Arch
+### AppImage
 
-Install from AUR:
+[Download 64-bit](https://github.com/PhilInTheGaps/GM-Companion/releases/download/1.1.0/gm-companion-1.1.0_amd64.AppImage)  
+The AppImage is built using Ubuntu 16.04 LTS.
+
+You might have to install gstreamer 1.0 otherwise audio cannot be played. For me this version works on Ubuntu but not on Manjaro.
+
+### Arch Linux
+
+Install from [AUR](https://aur.archlinux.org/packages/gm-companion/):
 
 ```
 yay -S gm-companion

@@ -19,12 +19,20 @@ matrix:
       before_install:
         - sudo add-apt-repository ppa:beineri/opt-qt-5.12.0-xenial -y
         - sudo apt-get update -q
-        - sudo apt-get install binutils libpulse-dev qt512base qt512declarative qt512graphicaleffects qt512imageformats qt512multimedia qt512networkauth-no-lgpl qt512quickcontrols qt512quickcontrols2 qt512script qt512tools qt512translations qt512webengine libegl1-mesa-dev libgl1-mesa-dev libglu1-mesa-dev mesa-utils libpoppler-qt5-1 libpoppler-qt5-dev -y
+        - sudo apt-get install binutils libpulse-dev qt512base qt512declarative qt512graphicaleffects qt512imageformats qt512multimedia qt512networkauth-no-lgpl qt512quickcontrols qt512quickcontrols2 qt512script qt512tools qt512translations qt512webengine libegl1-mesa-dev libgl1-mesa-dev libglu1-mesa-dev mesa-utils libpoppler-qt5-1 libpoppler-qt5-dev curl -y
         - source /opt/qt512/bin/qt512-env.sh
 
       script:
-        - qmake
+        - qmake CONFIG+=release PREFIX=/usr
         - make
+          # Build AppImage
+        - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/
+        - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+        - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+        - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+        - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -always-overwrite -qmldir=/opt/qt512/qml
+          # Upload AppImage to transfer.sh
+        - curl --upload-file GM-Companion*.AppImage https://transfer.sh/gm-companion.AppImage
         
     - os: osx
       before_install:

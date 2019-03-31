@@ -35,10 +35,10 @@ build_script:
   - nmake check
 
 after_build:
-  - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\out\gm-companion.exe
+  - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\gm-companion.exe
   - cmd: copy /y "%openssl%\bin\*eay32.dll" release\out
 
 artifacts:
-  - path: release\out
+  - path: release\
     name: gm-companion-%platform%
     type: zip
