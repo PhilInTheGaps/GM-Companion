@@ -12,7 +12,8 @@ public:
     MetaData() {}
     ~MetaData() {}
 
-    QString artist = "", album = "", title = "", cover = "", type = "";
+    QString artist = "", album = "", title = "", cover = "", type = "", elementIcon = "";
+    qulonglong length = 0;
 };
 
 class MetaDataReader : public QObject
@@ -29,7 +30,7 @@ signals:
     void metaDataUpdated(MetaData m);
 
 public slots:
-    void updateMetaData(QMediaPlayer *mediaPlayer);
+    void updateMetaData(QMediaPlayer *mediaPlayer, QString elementIcon);
 };
 
 #endif // METADATAREADER_H

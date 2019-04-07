@@ -27,7 +27,7 @@ private:
 
 signals:
     void startedPlaying();
-    void metaDataChanged(QMediaPlayer *mediaPlayer);
+    void metaDataChanged(QMediaPlayer *mediaPlayer, QString elementIcon);
 
 public slots:
     void onUrlChanged(QUrl url);

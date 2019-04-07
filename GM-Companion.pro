@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core multimedia network quick qml
+QT       += core multimedia network quick qml dbus
 
 include(lib/fontawesome.pri/fontawesome.pri)
 include(lib/o2/src/src.pri)
@@ -45,6 +45,8 @@ SOURCES += src/main.cpp \
     src/tools/audio/metadatareader.cpp \
     src/tools/audio/audioproject.cpp \
     src/tools/audio/audioelement.cpp \
+    src/tools/audio/mpris/mprisadaptor.cpp \
+    src/tools/audio/mpris/mprisplayeradaptor.cpp \
     # Tools MAPS
     src/tools/maps/maptool.cpp \
     src/tools/maps/map.cpp \
@@ -130,6 +132,8 @@ HEADERS  += src/functions.h \
     src/tools/audio/audioproject.h \
     src/tools/audio/audioelement.h \
     src/tools/audio/players/audioplayer.h \
+    src/tools/audio/mpris/mprisadaptor.h \
+    src/tools/audio/mpris/mprisplayeradaptor.h \
     # Tools MAPS
     src/tools/maps/map.h \
     src/tools/maps/maptool.h \

@@ -32,8 +32,10 @@ QString MetaDataReader::convertCoverImage(QMediaPlayer *mediaPlayer)
         image.append(QString::fromLatin1(bArray.toBase64().data()));
         return image;
     }
+
     // Windows somehow uses ThumbnailImage instead,
-    // the documentation says this is a photo metadata attribute but whatever. It works somehow.
+    // the documentation says this is a photo metadata attribute but whatever.
+    // It works somehow.
     else if (mediaPlayer->availableMetaData().contains("ThumbnailImage"))
     {
         QImage myImage = mediaPlayer->metaData(QMediaMetaData::ThumbnailImage).value<QImage>();
@@ -56,7 +58,7 @@ QString MetaDataReader::convertCoverImage(QMediaPlayer *mediaPlayer)
  * @brief Read MetaData from media
  * @param mediaPlayer Pointer to QMediaPlayer with the media object
  */
-void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
+void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer, QString elementIcon)
 {
     MetaData m;
 
@@ -64,12 +66,16 @@ void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
     m.album  = mediaPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
     m.artist = mediaPlayer->metaData(QMediaMetaData::Author).toString();
     m.type   = mediaPlayer->objectName();
+    m.length = mediaPlayer->duration() * 1000; // Milliseconds to Microseconds
+
+    qDebug() << "MEDIA DURATION:" << mediaPlayer->duration();
 
     if (m.artist.isEmpty()) m.artist = mediaPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
 
     if (m.artist.isEmpty()) m.artist = mediaPlayer->metaData(QMediaMetaData::Composer).toString();
 
-    m.cover = convertCoverImage(mediaPlayer);
+    m.cover       = convertCoverImage(mediaPlayer);
+    m.elementIcon = elementIcon;
 
     // Fill empty fields with "-"
     if (m.title.isEmpty()) m.title = "-";

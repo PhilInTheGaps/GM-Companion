@@ -6,6 +6,11 @@
 #include <QQmlContext>
 #include <cstdlib>
 
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusObjectPath>
+#include <QDBusMetaType>
+
 AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), fileManager(fManager), qmlEngine(engine)
 {
     qDebug().noquote() << "Loading AudioTool ...";
@@ -53,6 +58,20 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     connect(radioPlayer,                        &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
     connect(metaDataReader,                     &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
 
+    // Connect to DBus
+    mprisAdaptor       = new MprisAdaptor(this);
+    mprisPlayerAdaptor = new MprisPlayerAdaptor(this);
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::next,         [ = ]() { next(); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::changeVolume, [ = ](double volume) { setMusicVolume(volume); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::pause,        [ = ]() { if (!m_isPaused) playPause(); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::previous,     [ = ]() { again(); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::playPause,    [ = ]() { playPause(); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::stop,         [ = ]() { if (!m_isPaused) playPause(); });
+    connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::play,         [ = ]() { if (m_isPaused) playPause(); });
+
+    QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
+    QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.gm-companion");
+
     // Find and load projects
     fileManager->getAudioFileManager()->findProjects(fileManager->getModeInt());
 
@@ -69,6 +88,9 @@ AudioTool::~AudioTool()
     soundPlayer->deleteLater();
     radioPlayer->deleteLater();
     spotify->deleteLater();
+
+    mprisAdaptor->deleteLater();
+    mprisPlayerAdaptor->deleteLater();
 
     editor->deleteLater();
     fileManager->deleteLater();
@@ -227,6 +249,8 @@ void AudioTool::setMusicVolume(float volume)
         a->setVolume(logarithmicVolume);
         a->setVolume(linearVolume);
     }
+
+    mprisPlayerAdaptor->setVolume(logarithmicVolume);
 }
 
 /**
@@ -274,6 +298,9 @@ void AudioTool::playPause()
 
         m_isPaused = true;
         emit isPausedChanged();
+
+        mprisPlayerAdaptor->setPlaybackStatus(2);
+        sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
     }
 }
 
@@ -356,4 +383,47 @@ void AudioTool::onSoundsChanged(QList<SoundElement *>elements)
     }
 
     soundModel->setElements(list);
+}
+
+/**
+ * @brief Send a PropertiesChanged notification via dbus
+ * @param property Name of the property
+ * @param value Value of the property
+ */
+void AudioTool::sendMprisUpdateSignal(QString property, QVariant value)
+{
+    QDBusMessage signal = QDBusMessage::createSignal(
+        "/org/mpris/MediaPlayer2",
+        "org.freedesktop.DBus.Properties",
+        "PropertiesChanged");
+
+    signal << "org.mpris.MediaPlayer2.Player";
+
+    QVariantMap changedProps;
+    changedProps.insert(property, value);
+    signal << changedProps;
+
+    QStringList invalidatedProps;
+    signal << invalidatedProps;
+
+    QDBusConnection::sessionBus().send(signal);
+}
+
+void AudioTool::onMetaDataUpdated(MetaData metaData)
+{
+    m_metaData = metaData;
+    emit metaDataChanged();
+
+    // Change MPRIS Metadata
+    QMap<QString, QVariant> map;
+    map.insert("mpris:trackid",     "gmcompanion:music");
+    map.insert("mpris:length",      metaData.length);
+    map.insert("mpris:artUrl",      "file://" + m_metaData.elementIcon);
+    map.insert("xesam:album",       m_metaData.album.isEmpty() ? tr("Unknown Album") : m_metaData.album);
+    map.insert("xesam:albumArtist", m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
+    map.insert("xesam:artist",      m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
+    map.insert("xesam:title",       m_metaData.title.isEmpty() ? tr("Unknown Title") : m_metaData.title);
+    mprisPlayerAdaptor->setMetadata(map);
+
+    sendMprisUpdateSignal("Metadata", map);
 }

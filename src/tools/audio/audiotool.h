@@ -14,6 +14,9 @@
 #include "src/settings/settingsmanager.h"
 #include "src/managers/filemanager.h"
 
+#include "mpris/mprisadaptor.h"
+#include "mpris/mprisplayeradaptor.h"
+
 class AudioTool : public QObject
 {
     Q_OBJECT
@@ -97,8 +100,8 @@ private slots:
     void onProjectsChanged(QList<AudioProject*> projects);
     void onCurrentScenarioChanged();
 
-    void onStartedPlaying() { m_isPaused = false; emit isPausedChanged(); }
-    void onMetaDataUpdated(MetaData metaData) { m_metaData = metaData; emit metaDataChanged(); }
+    void onStartedPlaying() { m_isPaused = false; emit isPausedChanged(); mprisPlayerAdaptor->setPlaybackStatus(1); sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus()); }
+    void onMetaDataUpdated(MetaData metaData);
 
     void onSoundsChanged(QList<SoundElement*> elements);
 
@@ -111,6 +114,11 @@ private:
     FileManager *fileManager = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;
     MetaDataReader *metaDataReader = nullptr;
+
+    // MPRIS
+    MprisAdaptor *mprisAdaptor = nullptr;
+    MprisPlayerAdaptor *mprisPlayerAdaptor = nullptr;
+    void sendMprisUpdateSignal(QString property, QVariant value);
 
     // Players
     MusicPlayer *musicPlayer = nullptr;
