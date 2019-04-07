@@ -19,12 +19,6 @@ Page {
     header: top_bar
     footer: bottom_bar
 
-    CombatantDialog {
-        id: add_combatant_dialog
-
-        onAddCombatant: combat_tracker.add(name, ini, health, sort)
-    }
-
     // Top Bar
     Rectangle {
         id: top_bar
@@ -107,7 +101,10 @@ Page {
 
                 height: parent.height - parent.padding * 2
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: add_combatant_dialog.open()
+                onClicked: {
+                    add_rect.visible = !add_rect.visible
+                    name_textfield.forceActiveFocus()
+                }
             }
 
             Button {
@@ -226,12 +223,121 @@ Page {
             }
         }
 
+        Rectangle {
+            id: add_rect
+            visible: false
+            height: color_scheme.toolbarHeight * 1.3
+            anchors.top: list_header.bottom
+            anchors.left: parent.left
+            anchors.right: dice_enabled
+                           && !inPortrait ? combat_dice.left : parent.right
+
+            color: color_scheme.backgroundColor
+
+            function addCombatants() {
+                if (name_textfield.text != "") {
+                    combat_tracker.add(name_textfield.text, ini_spinbox.value,
+                                       health_spinbox.value,
+                                       notes_textfield.text)
+                }
+            }
+
+            function clearAddFields() {
+                name_textfield.clear()
+                ini_spinbox.value = 0
+                health_spinbox.value = 0
+                notes_textfield.clear()
+            }
+
+            Item {
+                anchors.fill: parent
+                anchors.margins: 10
+
+                Row {
+                    anchors.left: parent.left
+                    anchors.right: add_button.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: 10
+                    spacing: 10
+
+                    TextField {
+                        id: name_textfield
+                        width: list_view.width / 5
+                        selectByMouse: true
+
+                        placeholderText: qsTr("Name")
+
+                        onAccepted: {
+                            add_rect.addCombatants()
+                            add_rect.clearAddFields()
+                        }
+                    }
+
+                    SpinBox {
+                        id: ini_spinbox
+                        width: list_view.width / 6
+                        from: 0
+                        to: 99999
+                        editable: true
+                    }
+
+                    SpinBox {
+                        id: health_spinbox
+                        width: list_view.width / 6
+                        from: 0
+                        to: 99999
+                        editable: true
+                    }
+
+                    TextField {
+                        id: notes_textfield
+                        width: parent.width - x
+
+                        onAccepted: {
+                            add_rect.addCombatants()
+                            add_rect.clearAddFields()
+                            name_textfield.forceActiveFocus()
+                        }
+                    }
+                }
+
+                Button {
+                    id: add_button
+
+                    hoverEnabled: true
+                    background: Rectangle {
+                        color: parent.pressed ? "lightgrey" : "white"
+                    }
+
+                    Text {
+                        text: FontAwesome.plus
+                        font.family: FontAwesome.familySolid
+                        font.pixelSize: parent.height / 2
+                        color: "black"
+                        anchors.centerIn: parent
+                    }
+
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    width: height
+
+                    onClicked: {
+                        add_rect.addCombatants()
+                        add_rect.clearAddFields()
+                        add_rect.visible = false
+                    }
+                }
+            }
+        }
+
         // Combatant List
         ListView {
             id: list_view
 
             anchors.left: parent.left
-            anchors.top: list_header.bottom
+            anchors.top: add_rect.visible ? add_rect.bottom : list_header.bottom
             anchors.bottom: parent.bottom
             anchors.right: dice_enabled
                            && !inPortrait ? undefined : parent.right
@@ -285,7 +391,6 @@ Page {
 
                     // Health
                     ListSpinBox {
-                        id: health_spinbox
                         width: list_view.width / 6
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
@@ -299,33 +404,65 @@ Page {
 
                     // Notes
                     ListTextField {
-                        width: parent.width - x - 20 - delegate_remove_button.width
+                        width: parent.width - x - 20 - delegate_button_row.width
                         onField_textChanged: combat_tracker.setNotes(index,
                                                                      field_text)
                         text_color: delegate_root.ListView.isCurrentItem ? "white" : color_scheme.textColor
                         field_text: modelData.notes
                     }
 
-                    Button {
-                        id: delegate_remove_button
-                        hoverEnabled: true
-                        background: Rectangle {
-                            color: "transparent"
+                    Row {
+                        id: delegate_button_row
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.margins: parent.padding
+
+                        Button {
+                            id: delegate_delay_button
+                            hoverEnabled: true
+                            background: Rectangle {
+                                color: "transparent"
+                            }
+
+                            visible: !modelData.delay
+                                     && delegate_root.ListView.isCurrentItem
+
+                            Text {
+                                text: FontAwesome.clock
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 20
+                                color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : "white")
+                                anchors.centerIn: parent
+                            }
+
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: height
+
+                            onClicked: combat_tracker.delayTurn(index)
                         }
 
-                        Text {
-                            text: FontAwesome.times
-                            font.family: FontAwesome.familySolid
-                            font.pointSize: 25
-                            color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (delegate_root.ListView.isCurrentItem ? "white" : color_scheme.primaryButtonColor))
-                            anchors.centerIn: parent
+                        Button {
+                            id: delegate_remove_button
+                            hoverEnabled: true
+                            background: Rectangle {
+                                color: "transparent"
+                            }
+
+                            Text {
+                                text: FontAwesome.times
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 25
+                                color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : (delegate_root.ListView.isCurrentItem ? "white" : color_scheme.primaryButtonColor))
+                                anchors.centerIn: parent
+                            }
+
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
+                            width: height
+
+                            onClicked: combat_tracker.remove(index)
                         }
-
-                        height: (parent.height - parent.padding * 2)
-                        width: height
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        onClicked: combat_tracker.remove(index)
                     }
                 }
             }

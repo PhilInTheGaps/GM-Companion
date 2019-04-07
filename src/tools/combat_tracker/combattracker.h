@@ -23,7 +23,7 @@ public:
     int currentIndex() const { return m_currentIndex; }
 
     Q_INVOKABLE void next();
-    Q_INVOKABLE void add(QString name, int ini, int health, bool sort = true);
+    Q_INVOKABLE void add(QString name, int ini, int health, QString notes, bool sort = true);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void resetRounds();
     Q_INVOKABLE void remove(int index);
@@ -33,7 +33,9 @@ public:
     Q_INVOKABLE void setHealth(int index, int health);
     Q_INVOKABLE void modifyHealth(int index, int steps = 1);
     Q_INVOKABLE void setNotes(int index, QString notes);
-    Q_INVOKABLE void sortByIni();
+    Q_INVOKABLE void sortByIni(bool keepDelay = false);
+
+    Q_INVOKABLE void delayTurn(int index);
 
 signals:
     void currentRoundChanged();

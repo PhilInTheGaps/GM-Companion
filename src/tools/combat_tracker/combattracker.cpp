@@ -18,6 +18,8 @@ CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : Q
  */
 void CombatTracker::resetRounds()
 {
+    sortByIni();
+
     m_currentRound = 1;
     m_currentIndex = 0;
 
@@ -57,10 +59,13 @@ void CombatTracker::next()
     }
     else
     {
+        sortByIni();
         m_currentIndex = 0;
         m_currentRound++;
         emit currentRoundChanged();
     }
+
+    qDebug() << m_currentIndex;
 
     emit currentIndexChanged();
 }
@@ -72,18 +77,18 @@ void CombatTracker::next()
  * @param health Health of combatant
  * @param sort If combatant list should be sorted after adding
  */
-void CombatTracker::add(QString name, int ini, int health, bool sort)
+void CombatTracker::add(QString name, int ini, int health, QString notes, bool sort)
 {
     if (!name.isEmpty() && (ini > -1))
     {
-        auto c = new Combatant(name, "", ini, health);
+        auto c = new Combatant(name, notes, ini, health);
         m_combatants.append(c);
         combatantListModel->setElements(m_combatants);
 
         if ((m_currentRound == 0) && sort)
         {
             sortByIni();
-            m_currentRound = 1;
+            m_currentIndex = 0;
             emit currentRoundChanged();
         }
     }
@@ -122,18 +127,31 @@ void CombatTracker::remove(int index)
 /**
  * @brief Sort the list of combatants by initiative
  */
-void CombatTracker::sortByIni()
+void CombatTracker::sortByIni(bool keepDelay)
 {
     qDebug() << "CombatTracker: Sorting combatants ...";
 
+    // Reset delay
+    if (!keepDelay)
+        for (auto c : m_combatants) if (c) c->setDelay(false);
+
+    // Get current combatant to find current index later
     Combatant *c = nullptr;
 
     if (m_currentIndex < m_combatants.size()) c = m_combatants[m_currentIndex];
 
-    std::sort(m_combatants.begin(), m_combatants.end(), [](Combatant *a, Combatant *b) { return a->ini() > b->ini(); });
+    // Sort
+    std::sort(m_combatants.begin(), m_combatants.end(), [ = ](Combatant *a, Combatant *b) {
+        if (keepDelay && a->delay() && !b->delay()) return false;
+
+        if (keepDelay && !a->delay() && b->delay()) return true;
+
+        return a->ini() > b->ini();
+    });
 
     combatantListModel->setElements(m_combatants);
 
+    // Find current index
     if (c && (m_currentRound > 0)) m_currentIndex = m_combatants.indexOf(c);
 
     emit combatantsChanged();
@@ -158,7 +176,7 @@ void CombatTracker::setIni(int index, int ini)
         if (ini > -1) c->setIni(ini);
         else c->setIni(0);
 
-        sortByIni();
+        sortByIni(true);
     }
 }
 
@@ -181,7 +199,7 @@ void CombatTracker::modifyIni(int index, int steps)
         if (ini > -1) c->setIni(ini);
         else c->setIni(0);
 
-        sortByIni();
+        sortByIni(true);
     }
 }
 
@@ -238,5 +256,23 @@ void CombatTracker::setNotes(int index, QString notes)
         if (!c) return;
 
         c->setNotes(notes);
+    }
+}
+
+void CombatTracker::delayTurn(int index)
+{
+    if (index < m_combatants.size())
+    {
+        auto c = m_combatants[index];
+
+        if (!c) return;
+
+        c->setDelay(true);
+
+        m_combatants.move(m_combatants.indexOf(c), m_combatants.size() - 1);
+        combatantListModel->setElements(m_combatants);
+
+        emit combatantsChanged();
+        emit currentIndexChanged();
     }
 }

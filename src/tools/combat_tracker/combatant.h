@@ -12,6 +12,7 @@ class Combatant : public QObject
     Q_PROPERTY(QString notes READ notes NOTIFY notesChanged)
     Q_PROPERTY(int ini READ ini NOTIFY iniChanged)
     Q_PROPERTY(int health READ health NOTIFY healthChanged)
+    Q_PROPERTY(bool delay READ delay NOTIFY delayChanged)
 
 public:
     explicit Combatant(QString name, QString notes, int ini, int health, QObject *parent = nullptr);
@@ -28,15 +29,20 @@ public:
     int health() const { return m_health; }
     void setHealth(int health) { m_health = health; emit healthChanged(); }
 
+    bool delay() const { return m_delay; }
+    void setDelay(bool delay) { m_delay = delay; emit delayChanged(); }
+
 signals:
     void nameChanged();
     void notesChanged();
     void iniChanged();
     void healthChanged();
+    void delayChanged();
 
 private:
     QString m_name, m_notes;
     int m_ini, m_health;
+    bool m_delay = false;
 };
 
 // Model for QML
