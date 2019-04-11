@@ -15,7 +15,7 @@ Item {
         property var button_names: [qsTr("Open Wiki"), qsTr(
                 "Report a Bug"), qsTr("Download older Versions"), qsTr(
                 "View on GitHub"), qsTr("Changelog"), qsTr("About")]
-        property var button_urls: ["https://github.com/PhilInTheGaps/GM-Companion/wiki", "https://github.com/PhilInTheGaps/GM-Companion/issues", "https://github.com/PhilInTheGaps/GM-Companion/releases", "https://github.com/PhilInTheGaps/GM-Companion", "https://github.com/PhilInTheGaps/GM-Companion/wiki/changelog", "https://gm-companion.github.io/about.html"]
+        property var button_urls: ["https://gm-companion.github.io/documentation.html", "https://github.com/PhilInTheGaps/GM-Companion/issues", "https://github.com/PhilInTheGaps/GM-Companion/releases", "https://github.com/PhilInTheGaps/GM-Companion", "https://gm-companion.github.io/documentation/changelog.html", "https://gm-companion.github.io/about.html"]
 
         Repeater {
             model: left_column.button_names
