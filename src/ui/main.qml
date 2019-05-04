@@ -121,7 +121,7 @@ Window {
                             fa_icon: parent.fa_icons[index]
                             current_tool: stack.currentItem === tool_column.tools[index]
 
-                            onClicked: {
+                            function switchTool() {
                                 if (index == 0) {
                                     if (stack.currentItem !== audio) {
                                         stack.pop(null)
@@ -130,6 +130,16 @@ Window {
                                     tool_column.buttonClicked(
                                                 tool_column.tools[index])
                                 }
+                            }
+
+                            Shortcut {
+                                onActivated: switchTool()
+                                sequences: ["Ctrl+" + (index + 1)]
+                                context: Qt.ApplicationShortcut
+                            }
+
+                            onClicked: {
+                                switchTool()
                             }
                         }
                     }
