@@ -8,6 +8,10 @@ ComboBox {
     padding: 5
     hoverEnabled: true
 
+    property alias textItem: text_item
+    property string textColor: "white"
+    property bool darkBackground: true
+
     delegate: ItemDelegate {
         width: control.width
         contentItem: Text {
@@ -28,16 +32,17 @@ ComboBox {
         text: FontAwesome.caretDown
         font.family: FontAwesome.familySolid
         font.pixelSize: parent.height - 20
-        color: "white"
+        color: textColor
     }
 
     contentItem: Text {
+        id: text_item
         leftPadding: 5
         rightPadding: control.indicator.width + control.spacing
 
         text: control.displayText
         font.pixelSize: parent.height - 20
-        color: control.pressed ? "grey" : control.hovered ? "lightgrey" : "white"
+        color: control.pressed ? (control.darkBackground ? "grey" : "lightgrey") : control.hovered ? (control.darkBackground ? "lightgrey" : "grey") : textColor
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }

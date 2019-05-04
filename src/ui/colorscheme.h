@@ -11,6 +11,7 @@ class ColorScheme : public QObject
 
     Q_PROPERTY(QString textColor READ textColor NOTIFY colorsChanged)
     Q_PROPERTY(QString backgroundColor READ backgroundColor NOTIFY colorsChanged)
+    Q_PROPERTY(QString secondaryBackgroundColor READ secondaryBackgroundColor NOTIFY colorsChanged)
     Q_PROPERTY(QString toolbarColor READ toolbarColor NOTIFY colorsChanged)
     Q_PROPERTY(QString menuColor READ menuColor NOTIFY colorsChanged)
     Q_PROPERTY(QString dividerColor READ dividerColor NOTIFY colorsChanged)
@@ -24,6 +25,8 @@ class ColorScheme : public QObject
     Q_PROPERTY(int toolbarHeight READ toolbarHeight NOTIFY colorsChanged)
     Q_PROPERTY(QString playlistHiglightTextColor READ playlistHiglightTextColor NOTIFY colorsChanged)
 
+    Q_PROPERTY(bool dark READ dark NOTIFY colorsChanged)
+
 public:
     explicit ColorScheme(QObject *parent = nullptr);
 
@@ -32,6 +35,7 @@ public:
     QString getColor(QString name, QString defaultValue = "white");
     QString textColor() { return getColor("text_color", "black"); }
     QString backgroundColor() { return getColor("background_color", "white"); }
+    QString secondaryBackgroundColor() { return getColor("secondary_background_color", "grey"); }
     QString toolbarColor() { return getColor("toolbar_color", "black"); }
     QString menuColor() { return getColor("menu_color", "black"); }
     QString dividerColor() { return getColor("divider_color", "gray"); }
@@ -44,6 +48,8 @@ public:
     QString combatTrackerXType() { return getColor("combat_tracker_x_type", "dark"); }
     QString playlistHiglightTextColor() { return getColor("playlist_higlight_text_color", "black"); }
     int toolbarHeight() { return stylesheet->value("toolbar_height", 40).toInt(); }
+
+    bool dark() const { return stylesheet->value("dark", true).toBool(); }
 
 signals:
     void colorsChanged();

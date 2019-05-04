@@ -19,8 +19,7 @@ ToolBar {
     ControlBarButton {
         id: audio_project_structure_button
         fa_icon: FontAwesome.bars
-        onClicked: audio_project_menu.visible ? audio_project_menu.visible
-                                                = false : audio_project_menu.visible = true
+        onClicked: left_menu.visible = !left_menu.visible
     }
 
     // Volume Control Button

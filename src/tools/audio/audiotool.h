@@ -69,6 +69,8 @@ public:
     Q_INVOKABLE void stopSound(QString sound) { soundPlayer->stop(sound); }
     bool isPaused() const { return m_isPaused; }
 
+    Q_INVOKABLE void findElement(QString element);
+
     // Meta Data
     QString type() const { return m_metaData.type; }
     QString title() const { return m_metaData.title; }

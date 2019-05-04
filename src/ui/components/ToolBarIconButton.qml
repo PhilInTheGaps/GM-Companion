@@ -8,6 +8,7 @@ Button {
 
     property string fa_icon: FontAwesome.bars
     property string icon_color: "white"
+    property bool darkBackground: true
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
@@ -27,6 +28,6 @@ Button {
         height: parent.height - 10
         width: height
         anchors.centerIn: parent
-        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : root.icon_color
+        color: parent.pressed ? (darkBackground ? "grey" : "lightgrey") : parent.hovered ? (darkBackground ? "lightgrey" : "grey") : root.icon_color
     }
 }

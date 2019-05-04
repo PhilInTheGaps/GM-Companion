@@ -427,3 +427,24 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
 
     sendMprisUpdateSignal("Metadata", map);
 }
+
+void AudioTool::findElement(QString element)
+{
+    if (element.isEmpty())
+    {
+        emit currentScenarioChanged();
+        return;
+    }
+
+    QList<AudioElement *> newElements;
+
+    for (auto e : elements())
+    {
+        if (e && e->name().contains(element))
+        {
+            newElements.append(e);
+        }
+    }
+
+    elementModel->setElements(newElements);
+}

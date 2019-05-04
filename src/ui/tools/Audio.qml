@@ -45,19 +45,18 @@ Page {
             Rectangle {
                 id: top_bar
                 anchors.left: parent.left
-                anchors.right: parent.right
+                width: left_menu.width
                 anchors.top: parent.top
                 height: color_scheme.toolbarHeight
-                color: color_scheme.menuColor
+                color: color_scheme.secondaryBackgroundColor
+                visible: left_menu.visible
 
                 // Left side
                 Row {
                     id: top_left_row
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
                     anchors.margins: 5
-                    width: audio_project_menu.width
+                    anchors.leftMargin: 0
+                    anchors.fill: parent
                     spacing: 5
 
                     // Project ComboBox
@@ -66,7 +65,10 @@ Page {
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         width: parent.width - editor_button.width - parent.spacing
+                        textColor: color_scheme.textColor
+                        darkBackground: color_scheme.dark
 
+                        textItem.leftPadding: 0
                         model: audio_tool.projectNames
 
                         onCurrentTextChanged: audio_tool.setCurrentProject(
@@ -78,6 +80,8 @@ Page {
                         id: editor_button
                         fa_icon: FontAwesome.edit
                         anchors.margins: 2
+                        icon_color: color_scheme.textColor
+                        darkBackground: color_scheme.dark
 
                         onClicked: {
                             if (audio_stack.currentItem == audio_page) {
@@ -98,37 +102,79 @@ Page {
             }
 
             // Categories
-            ScrollView {
-                id: audio_project_menu
+            Rectangle {
+                id: left_menu
+                color: color_scheme.secondaryBackgroundColor
+
                 anchors.top: top_bar.bottom
                 anchors.bottom: audio_control_bar.top
-                anchors.bottomMargin: 5
                 anchors.left: parent.left
-                anchors.leftMargin: 5
-
                 width: platform.isAndroid ? parent.width / 5 : 175
-                clip: true
-                contentWidth: -1
-                contentHeight: audio_project_structure.implicitHeight
+
+                ScrollView {
+                    id: audio_project_menu
+
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: sound_column.top
+                    anchors.margins: 5
+
+                    clip: true
+                    contentWidth: -1
+                    contentHeight: audio_project_structure.implicitHeight
+
+                    Column {
+                        id: audio_project_structure
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        Repeater {
+                            id: category_repeater
+
+                            model: audio_tool.categoryNames
+
+                            CategoryButton {
+                                buttonText: modelData
+
+                                onClicked: audio_tool.setCurrentCategory(
+                                               buttonText)
+                            }
+                        }
+                    }
+                }
 
                 Column {
-                    id: audio_project_structure
+                    id: sound_column
+                    anchors.bottom: cover_image.top
                     anchors.left: parent.left
                     anchors.right: parent.right
                     spacing: 5
-                    topPadding: 5
+                    bottomPadding: 5
 
                     Repeater {
-                        id: category_repeater
+                        id: sound_repeater
+                        model: soundModel
 
-                        model: audio_tool.categoryNames
-
-                        CategoryButton {
-                            buttonText: modelData
-
-                            onClicked: audio_tool.setCurrentCategory(buttonText)
+                        SoundButton {
+                            element: modelData.name
+                            element_icon: modelData.icon
+                            has_icon: modelData.hasIcon
+                            anchors.left: parent.left
+                            anchors.right: parent.right
                         }
                     }
+                }
+
+                Image {
+                    id: cover_image
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+
+                    visible: source != ""
+                    sourceSize.width: width
+                    source: audio_tool.cover
                 }
             }
 
@@ -138,8 +184,8 @@ Page {
                 anchors.top: parent.top
                 anchors.bottom: audio_control_bar.top
                 anchors.bottomMargin: 5
-                anchors.left: audio_project_menu.visible ? audio_project_menu.right : parent.left
-                anchors.right: parent.right
+                anchors.left: left_menu.visible ? left_menu.right : parent.left
+                anchors.right: audio_info_frame.visible ? audio_info_frame.left : parent.right
 
                 // Scenarios
                 Item {
@@ -153,7 +199,7 @@ Page {
 
                     Rectangle {
                         anchors.fill: parent
-                        color: color_scheme.menuColor
+                        color: color_scheme.backgroundColor
                     }
 
                     Flow {
@@ -183,7 +229,7 @@ Page {
                     anchors.top: scenario_container.bottom
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
-                    anchors.right: sound_bar.visible ? sound_bar.left : (audio_info_frame.visible ? audio_info_frame.left : parent.right)
+                    anchors.right: parent.right
 
                     anchors.topMargin: 5
 
@@ -205,6 +251,8 @@ Page {
                                                                           / min_width) : 1
                         readonly property int button_width: platform.isAndroid ? (width / 8) : ((width - spacing * (count_per_row - 1) - leftPadding * 2) / count_per_row)
 
+                        onWidthChanged: console.log(button_width)
+
                         Repeater {
                             id: element_repeater
                             model: elementModel
@@ -223,118 +271,149 @@ Page {
                     }
                 }
 
-                // Sound Buttons
+                // Search
                 Rectangle {
-                    id: sound_bar
-                    color: "transparent"
-
-                    visible: !soundModel.isEmpty
-                    anchors.top: scenario_container.bottom
+                    height: color_scheme.toolbarHeight
                     anchors.bottom: parent.bottom
-                    anchors.right: audio_info_frame.visible ? audio_info_frame.left : parent.right
-                    anchors.topMargin: 5
-                    anchors.rightMargin: 5
-                    width: audio_project_menu.width
+                    anchors.right: parent.right
 
-                    Column {
-                        id: sound_flow
-                        anchors.fill: parent
-                        spacing: 5
+                    // Search Button
+                    Rectangle {
+                        id: search_button
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        width: height
+                        radius: search_field.visible ? 0 : width / 2
 
-                        Repeater {
-                            id: sound_repeater
-                            model: soundModel
+                        color: color_scheme.primaryButtonColor
 
-                            SoundButton {
-                                element: modelData.name
-                                element_icon: modelData.icon
-                                has_icon: modelData.hasIcon
-                                anchors.left: parent.left
-                                anchors.right: parent.right
+                        Text {
+                            font.family: FontAwesome.familySolid
+                            text: search_field.visible ? FontAwesome.times : FontAwesome.search
+                            anchors.centerIn: parent
+                            color: search_mouse_area.containsMouse ? "grey" : color_scheme.buttonTextColor
+                            font.pixelSize: parent.height / 2
+                        }
+
+                        MouseArea {
+                            id: search_mouse_area
+                            anchors.fill: parent
+                            hoverEnabled: true
+
+                            onClicked: {
+                                search_field.visible = !search_field.visible
+                                search_field.clear()
+
+                                if (search_field.visible) {
+                                    search_field.forceActiveFocus()
+                                }
+                            }
+                        }
+                    }
+
+                    TextField {
+                        id: search_field
+                        anchors.right: search_button.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        visible: false
+
+                        onTextChanged: audio_tool.findElement(text)
+
+                        Keys.onEscapePressed: {
+                            if (search_field.activeFocus) {
+                                search_field.clear()
+                                search_field.visible = false
                             }
                         }
                     }
                 }
+            }
 
-                // Info
-                Item {
-                    id: audio_info_frame
-                    anchors.top: scenario_container.bottom
-                    anchors.topMargin: 5
-                    anchors.bottom: parent.bottom
+            // Info
+            Item {
+                id: audio_info_frame
+                anchors.top: parent.top
+                anchors.bottom: audio_control_bar.top
+                anchors.right: parent.right
+                anchors.rightMargin: 5
+                width: platform.isAndroid ? parent.width / 5 : 175
+                visible: true
+
+                // Meta Data
+                MetaDataDisplay {
+                    id: meta_data_display
+                    anchors.topMargin: 15
+                    anchors.top: parent.top
+                    anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.rightMargin: 5
-                    width: platform.isAndroid ? parent.width / 5 : 175
-                    visible: true
+                }
 
-                    // Meta Data
-                    MetaDataDisplay {
-                        id: meta_data_display
-                        anchors.top: parent.top
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                Text {
+                    id: playlist_menu_text
+                    anchors.top: meta_data_display.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.topMargin: 15
+
+                    text: qsTr("Playlist")
+                    wrapMode: Text.WordWrap
+                    color: color_scheme.textColor
+                    font.bold: true
+                    visible: playlist_view.count > 0
+                }
+
+                // Playlist
+                ListView {
+                    id: playlist_view
+                    anchors.top: playlist_menu_text.bottom
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.topMargin: 5
+
+                    //                        height: parent.height - y - parent.padding * 2
+                    //                        anchors.bottom:
+                    clip: true
+
+                    highlight: Rectangle {
+                        color: "lightgrey"
                     }
 
-                    Rectangle {
-                        id: right_spacer
-                        height: 1
-                        anchors.top: meta_data_display.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.topMargin: 5
-                        color: color_scheme.dividerColor
+                    ScrollBar.vertical: ScrollBar {
                     }
 
-                    // Playlist
-                    ListView {
-                        id: playlist_view
-                        anchors.top: right_spacer.bottom
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.topMargin: 5
-                        height: parent.height - y - parent.padding * 2
+                    model: audio_tool.songs
+                    currentIndex: audio_tool.index
 
-                        clip: true
+                    delegate: Item {
+                        width: parent.width
+                        height: playlist_text.height + 10
 
-                        highlight: Rectangle {
-                            color: "lightgrey"
+                        Text {
+                            id: playlist_text
+                            clip: true
+                            elide: Text.ElideRight
+                            text: modelData
+                            color: playlist_view.currentIndex === index ? color_scheme.playlistHiglightTextColor : color_scheme.textColor
+                            font.pointSize: 10
+                            anchors.centerIn: parent
+                            width: parent.width - 10
                         }
 
-                        ScrollBar.vertical: ScrollBar {
+                        ToolTip {
+                            id: playlist_tooltip
+                            text: modelData
                         }
 
-                        model: audio_tool.songs
-                        currentIndex: audio_tool.index
+                        MouseArea {
+                            hoverEnabled: true
+                            anchors.fill: parent
 
-                        delegate: Item {
-                            width: parent.width
-                            height: playlist_text.height + 10
-
-                            Text {
-                                id: playlist_text
-                                clip: true
-                                elide: Text.ElideRight
-                                text: modelData
-                                color: playlist_view.currentIndex === index ? color_scheme.playlistHiglightTextColor : color_scheme.textColor
-                                font.pointSize: 10
-                                anchors.centerIn: parent
-                                width: parent.width - 10
-                            }
-
-                            ToolTip {
-                                id: playlist_tooltip
-                                text: modelData
-                            }
-
-                            MouseArea {
-                                hoverEnabled: true
-                                anchors.fill: parent
-
-                                onClicked: audio_tool.setMusicIndex(index)
-                                onEntered: playlist_tooltip.visible = true
-                                onExited: playlist_tooltip.visible = false
-                            }
+                            onClicked: audio_tool.setMusicIndex(index)
+                            onEntered: playlist_tooltip.visible = true
+                            onExited: playlist_tooltip.visible = false
                         }
                     }
                 }

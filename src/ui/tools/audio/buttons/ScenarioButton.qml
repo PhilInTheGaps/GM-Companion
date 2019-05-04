@@ -17,7 +17,7 @@ Button {
         id: textlabel
         text: root.labeltext
         anchors.centerIn: parent
-        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+        color: parent.pressed ? (color_scheme.dark ? "grey" : "lightgrey") : parent.hovered ? (color_scheme.dark ? "lightgrey" : "grey") : color_scheme.textColor
         font.pixelSize: parent.height - 30
         verticalAlignment: Text.AlignVCenter
     }

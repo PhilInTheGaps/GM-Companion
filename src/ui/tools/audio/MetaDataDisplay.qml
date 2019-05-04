@@ -47,14 +47,4 @@ Column {
         elide: Text.ElideRight
         color: color_scheme.textColor
     }
-
-    Image {
-        id: cover_image
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        visible: source != ""
-        sourceSize.width: width
-        source: audio_tool.cover
-    }
 }
