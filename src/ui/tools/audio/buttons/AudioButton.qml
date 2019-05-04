@@ -55,6 +55,12 @@ Rectangle {
             }
         }
 
+        onStatusChanged: {
+            if (status == Image.Error) {
+                source = default_icon
+            }
+        }
+
         anchors.fill: parent
         asynchronous: true
 
