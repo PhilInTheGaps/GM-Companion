@@ -5,6 +5,8 @@ import QtQuick.Controls 2.2
 import "maps"
 import FontAwesome 2.0
 
+// Zoom functionality adapted from an example by oniongarlic:
+// https://github.com/oniongarlic/qtquick-flickable-image-zoom
 Page {
     id: maps_page
 
@@ -21,7 +23,6 @@ Page {
         anchors.right: parent.right
 
         height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
-        currentIndex: 0
 
         onCurrentIndexChanged: {
             map_tool.setCurrentCategory(currentIndex)
@@ -35,6 +36,12 @@ Page {
             id: tab_button_repeater
 
             model: map_tool.categories
+
+            onItemAdded: {
+                if (index == 0) {
+                    maps_tab_bar.currentIndex = 0
+                }
+            }
 
             TabButton {
                 height: parent.height
@@ -69,95 +76,172 @@ Page {
         }
     }
 
-    ScrollView {
+    Rectangle {
         id: left_item
+        color: color_scheme.secondaryBackgroundColor
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.bottomMargin: 5
-        anchors.topMargin: 5
         width: 200
 
-        contentHeight: c.height
-        clip: true
+        ScrollView {
+            id: left_item_scrollview
 
-        Column {
-            id: c
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: 5
-            spacing: 10
+            anchors.fill: parent
+            anchors.bottomMargin: 5
+            anchors.topMargin: 5
 
-            Repeater {
-                model: mapListModel
+            contentHeight: c.height
+            contentWidth: -1
+            clip: true
 
-                MapListItem {
-                    name: modelData.name
-                    path: modelData.path
+            Column {
+                id: c
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: 5
+                spacing: 10
+
+                Repeater {
+                    model: mapListModel
+
+                    MapListItem {
+                        name: modelData.name
+                        path: modelData.path
+                    }
                 }
             }
         }
     }
 
     Flickable {
-        id: maps_image_flickable
+        id: flickable
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: left_item.visible ? left_item.right : parent.left
         anchors.right: maps_control_bar.left
 
+        boundsBehavior: Flickable.StopAtBounds
+        contentHeight: image_container.height
+        contentWidth: image_container.width
         clip: true
         interactive: true
 
-        contentWidth: maps_image.width
-        contentHeight: maps_image.height
+        property bool fitToScreenActive: true
+        property real minZoom: 0.1
+        property real maxZoom: 5
+        property real zoomStep: 0.25
 
-        // For touchscreen zooming
-        PinchArea {
-            width: Math.max(maps_image_flickable.contentWidth,
-                            maps_image_flickable.width)
-            height: Math.max(maps_image_flickable.contentHeight,
-                             maps_image_flickable.height)
+        onWidthChanged: {
+            if (fitToScreenActive)
+                fitToScreen()
+        }
+        onHeightChanged: {
+            if (fitToScreenActive)
+                fitToScreen()
+        }
 
-            property real initialWidth
-            property real initialHeight
+        Item {
+            id: image_container
+            width: Math.max(image.width * image.scale, flickable.width)
+            height: Math.max(image.height * image.scale, flickable.height)
 
-            onPinchStarted: {
-                initialWidth = maps_image_flickable.contentWidth
-                initialHeight = maps_image_flickable.contentHeight
-            }
+            Image {
+                id: image
 
-            onPinchUpdated: {
-                // adjust content pos due to drag
-                maps_image_flickable.contentX += pinch.previousCenter.x - pinch.center.x
-                maps_image_flickable.contentY += pinch.previousCenter.y - pinch.center.y
+                property real prevScale: 1.0
 
-                // resize content
-                maps_image_flickable.resizeContent(initialWidth * pinch.scale,
-                                                   initialHeight * pinch.scale,
-                                                   pinch.center)
+                anchors.centerIn: parent
+                transformOrigin: Item.Center
 
-                maps_image.width = maps_image_flickable.contentWidth
-                maps_image.height = maps_image_flickable.contentHeight
-            }
+                asynchronous: true
+                cache: false
+                smooth: true
+                fillMode: Image.PreserveAspectFit
 
-            onPinchFinished: {
-                // Move its content within bounds.
-                maps_image_flickable.returnToBounds()
+                onScaleChanged: {
+                    if ((width * scale) > flickable.width) {
+                        var xoff = (flickable.width / 2 + flickable.contentX) * scale / prevScale
+                        flickable.contentX = xoff - flickable.width / 2
+                    }
+
+                    if ((height * scale) > flickable.height) {
+                        var yoff = (flickable.height / 2 + flickable.contentY) * scale / prevScale
+                        flickable.contentY = yoff - flickable.height / 2
+                    }
+
+                    prevScale = scale
+                }
+
+                onStatusChanged: {
+                    if (status === Image.Ready) {
+                        flickable.fitToScreen()
+                    }
+                }
             }
         }
 
-        Rectangle {
-            width: maps_image.width
-            height: maps_image.height
-            color: color_scheme.backgroundColor
+        function fitToScreen() {
+            var s = Math.min(flickable.width / image.width,
+                             flickable.height / image.height, 1)
+            image.scale = s
+            flickable.minZoom = s
+            image.prevScale = scale
+            fitToScreenActive = true
+            flickable.returnToBounds()
+        }
 
-            Image {
-                id: maps_image
-                height: maps_image_flickable.height
-                width: maps_image_flickable.width
-                fillMode: Image.PreserveAspectFit
-            }
+        function zoomIn() {
+            if (image.scale < flickable.maxZoom)
+                image.scale += zoomStep
+            flickable.returnToBounds()
+            fitToScreenActive = false
+            flickable.returnToBounds()
+        }
+
+        function zoomOut() {
+            if (image.scale > flickable.minZoom)
+                image.scale -= zoomStep
+            else
+                image.scale = flickable.minZoom
+            flickable.returnToBounds()
+            fitToScreenActive = false
+            flickable.returnToBounds()
+        }
+
+        function zoomFull() {
+            image.scale = 1
+            fitToScreenActive = false
+            flickable.returnToBounds()
+        }
+
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
+
+        ScrollIndicator.horizontal: ScrollIndicator {
+        }
+    }
+
+    PinchArea {
+        id: pinch_area
+        anchors.fill: flickable
+        enabled: image.status === Image.Ready
+        pinch.target: image
+        pinch.maximumScale: flickable.maxZoom
+        pinch.minimumScale: flickable.minZoom
+
+        onPinchStarted: {
+            flickable.interactive = false
+        }
+
+        onPinchUpdated: {
+            flickable.contentX += pinch.previousCenter.x - pinch.center.x
+            flickable.contentY += pinch.previousCenter.y - pinch.center.y
+        }
+
+        onPinchFinished: {
+            flickable.interactive = true
+            flickable.returnToBounds()
         }
     }
 
@@ -174,6 +258,7 @@ Page {
 
             // Larger
             Button {
+                id: larger_button
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: width
@@ -192,14 +277,43 @@ Page {
                     color: "transparent"
                 }
 
-                onClicked: {
-                    maps_image.height *= 2
-                    maps_image.width *= 2
+                onClicked: flickable.zoomIn()
+            }
 
-                    maps_image_flickable.contentY = maps_image_flickable.contentHeight
-                            / 2 - maps_image_flickable.height / 2
-                    maps_image_flickable.contentX = maps_image_flickable.contentWidth
-                            / 2 - maps_image_flickable.width / 2
+            Slider {
+                id: scale_slider
+                orientation: Qt.Vertical
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                from: 0 //flickable.minZoom
+                to: flickable.maxZoom
+                stepSize: flickable.zoomStep
+                snapMode: Slider.SnapAlways
+                value: image.scale
+
+                onMoved: {
+                    if (value < flickable.minZoom)
+                        image.scale = flickable.minZoom
+                    else
+                        image.scale = value
+                }
+
+                background: Rectangle {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: scale_slider.topPadding
+                    implicitWidth: 6
+                    implicitHeight: 200
+                    width: implicitWidth
+                    height: scale_slider.availableHeight
+                    radius: 2
+                    color: "#6c7a89" //"#21be2b"
+
+                    Rectangle {
+                        width: parent.width
+                        height: scale_slider.visualPosition * parent.height
+                        color: "#bdbebf"
+                        radius: 2
+                    }
                 }
             }
 
@@ -223,15 +337,7 @@ Page {
                     color: "transparent"
                 }
 
-                onClicked: {
-                    maps_image.height *= 0.5
-                    maps_image.width *= 0.5
-
-                    maps_image_flickable.contentY = maps_image_flickable.contentHeight
-                            / 2 - maps_image_flickable.height / 2
-                    maps_image_flickable.contentX = maps_image_flickable.contentWidth
-                            / 2 - maps_image_flickable.width / 2
-                }
+                onClicked: flickable.zoomOut()
             }
 
             // Fit
@@ -254,10 +360,7 @@ Page {
                     color: "transparent"
                 }
 
-                onClicked: {
-                    maps_image.height = maps_image_flickable.height
-                    maps_image.width = maps_image_flickable.width
-                }
+                onClicked: flickable.fitToScreen()
             }
 
             // Rotate Left
@@ -281,7 +384,7 @@ Page {
                 }
 
                 onClicked: {
-                    maps_image.rotation -= 90
+                    image.rotation -= 90
                 }
             }
 
@@ -306,7 +409,7 @@ Page {
                 }
 
                 onClicked: {
-                    maps_image.rotation += 90
+                    image.rotation += 90
                 }
             }
 
