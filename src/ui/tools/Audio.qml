@@ -251,8 +251,6 @@ Page {
                                                                           / min_width) : 1
                         readonly property int button_width: platform.isAndroid ? (width / 8) : ((width - spacing * (count_per_row - 1) - leftPadding * 2) / count_per_row)
 
-                        onWidthChanged: console.log(button_width)
-
                         Repeater {
                             id: element_repeater
                             model: elementModel

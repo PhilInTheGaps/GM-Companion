@@ -3,6 +3,9 @@
 
 #include <QImage>
 #include <QImageReader>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 MapsFileManager::MapsFileManager(GoogleDrive *google, QObject *parent) : QObject(parent), googleDrive(google)
 {
@@ -32,17 +35,62 @@ void MapsFileManager::findMaps(int mode)
             if (!f.contains("."))
             {
                 QList<Map *> maps;
+                QStringList  markerFiles;
 
-                // Get maps
+                // Get maps and markers
                 for (QString m : getFiles(basePath + "/" + f))
                 {
                     auto path = basePath + "/" + f + "/" + m;
 
-                    if (!QImageReader::imageFormat(path).isEmpty())
+                    if (m.endsWith(".json")) // Marker file
+                    {
+                        markerFiles.append(m);
+                    }
+                    else if (!QImageReader::imageFormat(path).isEmpty()) // Map
                     {
                         Map *map = new Map(m, "/" + f + "/" + m);
                         map->setPath(path);
                         maps.append(map);
+                    }
+                }
+
+                // Add markers to maps
+                for (auto m : markerFiles)
+                {
+                    for (int i = 0; i < maps.length(); i++)
+                    {
+                        auto map        = maps[i];
+                        QString mapName = m;
+                        mapName.replace(".json", "");
+
+                        if (map->name() == mapName)
+                        {
+                            auto  path = basePath + "/" + f + "/" + m;
+                            QFile f(path);
+
+                            if (f.open(QIODevice::ReadOnly))
+                            {
+                                auto content = f.readAll();
+                                f.close();
+
+                                auto markers = QJsonDocument::fromJson(content).object().value("markers").toArray();
+
+                                for (auto marker : markers)
+                                {
+                                    QString title       = marker.toObject().value("title").toString();
+                                    qreal   x           = marker.toObject().value("x").toDouble();
+                                    qreal   y           = marker.toObject().value("y").toDouble();
+                                    QString description = marker.toObject().value("description").toString();
+                                    QString color       = marker.toObject().value("color").toString();
+                                    QString icon        = marker.toObject().value("icon").toString();
+                                    map->addMarker(new MapMarker(title, description, x, y, icon, color));
+                                }
+
+                                maps.replace(i, map);
+                            }
+
+                            break;
+                        }
                     }
                 }
 
@@ -159,14 +207,53 @@ void MapsFileManager::mapsReceived(int reqId, QList<GoogleFile>files)
 
             for (auto f : files)
             {
-                auto map = new Map(f.fileName, f.weblink);
-                map->setPath(f.weblink);
-                maps.append(map);
+                if (!f.fileName.endsWith(".json"))
+                {
+                    auto map = new Map(f.fileName, f.weblink);
+                    map->setPath(f.weblink);
+                    maps.append(map);
+                }
             }
 
             c->setMaps(maps);
             emit mapsChanged(m_categories);
             return;
         }
+    }
+}
+
+/**
+ * @brief Save all marker properties to a json file
+ * @param map Pointer to map with changed markers
+ */
+void MapsFileManager::saveMarkers(Map *map, QString category)
+{
+    if (!map) return;
+
+    QJsonArray array;
+
+    for (auto m : map->markers()->elements())
+    {
+        QJsonObject o;
+        o.insert("title",       m->name());
+        o.insert("description", m->description());
+        o.insert("icon",        m->icon());
+        o.insert("color",       m->color());
+        o.insert("x",           m->x());
+        o.insert("y",           m->y());
+        array.append(o);
+    }
+
+    QJsonObject root;
+    root.insert("markers", array);
+
+    auto doc = QJsonDocument(root);
+
+    QFile f(sManager.getSetting(Setting::mapsPath) + "/" + category + "/" + map->name() + ".json");
+
+    if (f.open(QIODevice::WriteOnly))
+    {
+        f.write(doc.toJson());
+        f.close();
     }
 }

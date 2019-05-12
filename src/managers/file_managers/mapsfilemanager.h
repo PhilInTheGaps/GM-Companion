@@ -16,6 +16,8 @@ public:
     void findMaps(int mode);
     void findMapPaths(int index);
 
+    void saveMarkers(Map* map, QString category);
+
 signals:
     void mapsChanged(QList<MapCategory*> categories);
 

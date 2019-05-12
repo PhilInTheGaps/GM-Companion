@@ -5,11 +5,15 @@
 #include <QList>
 #include <QAbstractListModel>
 
+#include "mapmarker.h"
+
 class Map : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    Q_PROPERTY(MapMarkerModel* markers READ markers NOTIFY markersChanged)
+    Q_PROPERTY(bool hasMarkers READ hasMarkers NOTIFY markersChanged)
 
 public:
     explicit Map(QString name, QString relPath, QObject *parent = nullptr);
@@ -23,12 +27,21 @@ public:
     QString relativePath() const { return m_relativePath; }
     void setRelativePath(QString path) { m_relativePath = path; }
 
+    bool hasMarkers() const { return !m_markers->isEmpty(); }
+    MapMarkerModel* markers() const { return m_markers; }
+    void setMarkers(MapMarkerModel* markers) { m_markers = markers;  } // emit markersChanged();
+    void addMarker(MapMarker* marker) { m_markers->addElement(marker); } // emit markersChanged();
+
+    void deleteMarker(int index);
+
 signals:
     void nameChanged();
     void pathChanged();
+    void markersChanged();
 
 private:
     QString m_name, m_path, m_relativePath;
+    MapMarkerModel* m_markers;
 };
 
 // Model for QML

@@ -20,6 +20,7 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += src/main.cpp \
     # UI
+    src/tools/maps/mapmarker.cpp \
     src/ui/colorscheme.cpp \
     # Other
     src/functions.cpp \
@@ -108,6 +109,7 @@ SOURCES += *.qml \
 
 HEADERS  += src/functions.h \
     # UI
+    src/tools/maps/mapmarker.h \
     src/ui/colorscheme.h \
     # Other
     src/version.h \

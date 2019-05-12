@@ -86,5 +86,7 @@
         <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
         <file>tools/settings/CreditsItem.qml</file>
         <file>tools/audio/editor/EditorRenameDialog.qml</file>
+        <file>tools/maps/MapMarker.qml</file>
+        <file>tools/maps/MarkerEditor.qml</file>
     </qresource>
 </RCC>

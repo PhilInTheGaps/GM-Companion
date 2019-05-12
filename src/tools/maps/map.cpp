@@ -3,6 +3,15 @@
 Map::Map(QString name, QString relPath, QObject *parent)
     : QObject(parent), m_name(name), m_relativePath(relPath)
 {
+    m_markers = new MapMarkerModel;
+}
+
+void Map::deleteMarker(int index)
+{
+    if ((index > -1) && (index < m_markers->elements().size()))
+    {
+        m_markers->removeAt(index);
+    }
 }
 
 MapCategory::MapCategory(QString name, QList<Map *>maps, QObject *parent)

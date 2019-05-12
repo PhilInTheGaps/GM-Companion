@@ -1,9 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import FontAwesome 2.0
 
 Rectangle {
     property var name
     property var path
+    property var markers
+    property bool hasMarkers: false
+    property int mapIndex: -1
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -24,6 +28,7 @@ Rectangle {
     }
 
     Label {
+        id: name_label
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
@@ -40,6 +45,22 @@ Rectangle {
         }
     }
 
+    Text {
+        text: FontAwesome.mapMarkerAlt
+        font.family: FontAwesome.familySolid
+        color: "white"
+        anchors.bottom: name_label.top
+        anchors.right: parent.right
+        anchors.margins: 5
+
+        style: Text.Outline
+        styleColor: "black"
+
+        font.pixelSize: 25
+
+        visible: hasMarkers
+    }
+
     BusyIndicator {
         visible: preview_image.status !== Image.Ready
         anchors.centerIn: parent
@@ -50,8 +71,13 @@ Rectangle {
         id: mouse_area
 
         onClicked: {
+            map_tool.mapIndex = mapIndex
             image.source = path.startsWith("http") ? path : "file:///" + path
             image.rotation = 0
+
+            if (hasMarkers) {
+                left_swipe_view.currentIndex = 1
+            }
         }
     }
 }
