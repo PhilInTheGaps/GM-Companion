@@ -959,7 +959,7 @@ void AudioEditor::setIcon(QString element, int type, QString path)
 
     AudioElement *e = getElement(element, type);
 
-    if (path.startsWith("http:") or path.startsWith("https:"))
+    if (path.startsWith("http:") || path.startsWith("https:"))
     {
         e->setRelativeIcon(path);
         e->setIcon(path);
