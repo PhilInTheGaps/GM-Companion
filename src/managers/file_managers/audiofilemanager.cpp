@@ -152,6 +152,9 @@ QString AudioFileManager::iconPath(QString icon)
     switch (m_mode)
     {
     case 0: // LOCAL
+
+        if (icon.startsWith("http:") or icon.startsWith("https:")) return icon;
+
         return sManager.getSetting(Setting::resourcesPath) + icon;
 
     default:
@@ -577,7 +580,11 @@ void AudioFileManager::findMissingFiles(QStringList files, QString basePath)
     finder->moveToThread(&workerThread);
 
     connect(this,   &AudioFileManager::startFindingMissingFiles, finder, &FileFinder::findMissingFiles);
-    connect(finder, &FileFinder::finished,                       this,   [ = ](QList<bool>missing) { missingFilesFound(missing); delete finder; });
+    connect(finder, &FileFinder::finished,                       this,   [ = ](QList<bool>missing) {
+        missingFilesFound(missing);
+
+        if (finder) delete finder;
+    });
     workerThread.start();
 
     emit startFindingMissingFiles();

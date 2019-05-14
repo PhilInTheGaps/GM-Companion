@@ -88,5 +88,6 @@
         <file>tools/audio/editor/EditorRenameDialog.qml</file>
         <file>tools/maps/MapMarker.qml</file>
         <file>tools/maps/MarkerEditor.qml</file>
+        <file>tools/audio/editor/IconFinderUnsplash.qml</file>
     </qresource>
 </RCC>

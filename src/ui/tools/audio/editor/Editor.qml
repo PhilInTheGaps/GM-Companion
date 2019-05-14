@@ -38,6 +38,12 @@ Page {
         id: new_thing_dialog
     }
 
+    IconFinderUnsplash {
+        id: unsplash_dialog
+        x: (parent.width - width - stack.x) / 2
+        y: (parent.height - height) / 2
+    }
+
     AudioExporter {
         id: audio_exporter_dialog
         width: parent.width - 100
@@ -54,8 +60,12 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
-                        ) + element_icon_field.text
+            source: if (element_icon_field.text.startsWith("http")) {
+                        element_icon_field.text
+                    } else {
+                        (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
+                                    ) + element_icon_field.text
+                    }
 
             fillMode: Image.PreserveAspectFit
         }
@@ -245,6 +255,7 @@ Page {
                 anchors.right: parent.right
                 spacing: 5
 
+                // Element name and position
                 Item {
                     id: element_info_row_0
                     anchors.left: parent.left
@@ -461,6 +472,7 @@ Page {
                     }
                 }
 
+                // Element icon
                 Item {
                     id: element_info_row_1
                     anchors.left: parent.left
@@ -488,12 +500,17 @@ Page {
                     Image {
                         id: element_icon_image
                         visible: status == Image.Ready
-                        source: (platform.isWindows ? "file:///" : "file://")
-                                + audio_editor.resourcesPath(
-                                    ) + element_icon_field.text
+                        source: if (element_icon_field.text.startsWith(
+                                            "http")) {
+                                    element_icon_field.text
+                                } else {
+                                    (platform.isWindows ? "file:///" : "file://")
+                                            + audio_editor.resourcesPath(
+                                                ) + element_icon_field.text
+                                }
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.right: icon_finder.left
+                        anchors.right: unsplash_finder.left
                         width: height
                     }
 
@@ -512,6 +529,34 @@ Page {
                         anchors.fill: element_icon_image
                         onClicked: large_image_dialog.open()
                         hoverEnabled: true
+                    }
+
+                    Button {
+                        id: unsplash_finder
+
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: icon_finder.left
+                        width: height
+
+                        background: Rectangle {
+                            color: color_scheme.menuColor
+                        }
+
+                        Text {
+                            text: FontAwesome.search
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: height
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: color_scheme.toolbarTextColor
+                        }
+
+                        onClicked: {
+                            unsplash_dialog.open()
+                        }
                     }
 
                     IconFinder {

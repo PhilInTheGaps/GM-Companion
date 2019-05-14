@@ -20,6 +20,8 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += src/main.cpp \
     # UI
+    src/tools/audio/unsplash/unsplashimage.cpp \
+    src/tools/audio/unsplash/unsplashparser.cpp \
     src/tools/maps/mapmarker.cpp \
     src/ui/colorscheme.cpp \
     # Other
@@ -109,6 +111,8 @@ SOURCES += *.qml \
 
 HEADERS  += src/functions.h \
     # UI
+    src/tools/audio/unsplash/unsplashimage.h \
+    src/tools/audio/unsplash/unsplashparser.h \
     src/tools/maps/mapmarker.h \
     src/ui/colorscheme.h \
     # Other

@@ -17,6 +17,7 @@ AudioEditor::AudioEditor(FileManager *fManager, QQmlApplicationEngine *engine, Q
     addonElementManager = new AddonElementManager;
     audioExporter       = new AudioExporter;
     fileBrowser         = new AudioEditorFileBrowser;
+    unsplashParser      = new UnsplashParser(engine);
 
     elementModel = new AudioElementModel;
     qmlEngine->rootContext()->setContextProperty("editorElementModel", elementModel);
@@ -390,6 +391,40 @@ void AudioEditor::loadElement(QString name, int type)
 void AudioEditor::foundMissingFiles(QList<bool>missing)
 {
     qDebug() << "AudioEditor: Found some missing files.";
+
+    if (!m_currentProject || !m_currentProject->currentCategory() ||
+        !m_currentProject->currentCategory()->currentScenario()) return;
+
+    switch (m_type)
+    {
+    case 0: // Music
+
+        if (m_currentProject->currentCategory()->currentScenario()->musicElement(m_name)->files().size() != missing.size()) return;
+
+        break;
+
+    case 1: // Sounds
+
+        if (m_currentProject->currentCategory()->currentScenario()->soundElement(m_name)->files().size() != missing.size()) return;
+
+        break;
+
+    case 2: // Radio
+
+        if (m_currentProject->currentCategory()->currentScenario()->radioElement(m_name)->files().size() != missing.size()) return;
+
+        break;
+
+    case 3: // Spotify
+
+        if (m_currentProject->currentCategory()->currentScenario()->spotifyElement(m_name)->files().size() != missing.size()) return;
+
+        break;
+
+    default:
+        return;
+    }
+
     m_missing = missing;
     emit missingChanged();
 }
@@ -924,7 +959,13 @@ void AudioEditor::setIcon(QString element, int type, QString path)
 
     AudioElement *e = getElement(element, type);
 
-    if (e->relativeIcon() != path)
+    if (path.startsWith("http:") or path.startsWith("https:"))
+    {
+        e->setRelativeIcon(path);
+        e->setIcon(path);
+        madeChanges();
+    }
+    else if (e->relativeIcon() != path)
     {
         e->setRelativeIcon(path);
         e->setIcon(resourcesPath() + path);

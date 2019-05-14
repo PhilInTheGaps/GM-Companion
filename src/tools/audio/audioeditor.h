@@ -9,6 +9,7 @@
 #include "audioexporter.h"
 #include "audioeditorfilebrowser.h"
 #include "src/managers/filemanager.h"
+#include "unsplash/unsplashparser.h"
 
 class AudioEditor : public QObject
 {
@@ -86,6 +87,9 @@ public:
     Q_INVOKABLE void setLocal(QString element, int type, bool local);
     Q_INVOKABLE void setId(QString element, int type, QString id);
 
+    Q_INVOKABLE void findUnsplashImages(QString text) { unsplashParser->findImage(text); }
+    Q_INVOKABLE void shuffleUnsplashImages() { unsplashParser->shuffle(); }
+
     // Elements
     QString name() const { return m_name; }
     QString icon() const { return m_icon; }
@@ -122,6 +126,7 @@ private:
     AudioEditorFileBrowser *fileBrowser = nullptr;
     FileManager *fileManager = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;
+    UnsplashParser *unsplashParser = nullptr;
 
     QList<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
