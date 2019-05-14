@@ -153,7 +153,7 @@ QString AudioFileManager::iconPath(QString icon)
     {
     case 0: // LOCAL
 
-        if (icon.startsWith("http:") or icon.startsWith("https:")) return icon;
+        if (icon.startsWith("http:") || icon.startsWith("https:")) return icon;
 
         return sManager.getSetting(Setting::resourcesPath) + icon;
 
