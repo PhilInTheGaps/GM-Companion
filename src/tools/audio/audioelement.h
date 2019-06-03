@@ -61,8 +61,38 @@ public:
     void clear();
     bool isEmpty() const { return m_items.isEmpty(); }
 
+    Q_INVOKABLE QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
+
 public slots:
     void insert(QObject* item);
+    void remove(QObject* item);
+
+signals:
+    void isEmptyChanged();
+
+protected:
+    QHash<int, QByteArray> roleNames() const override;
+
+private:
+    QVector<QObject*> m_items = {};
+    QString m_name;
+};
+
+class AudioElementModelModel : public QAbstractListModel {
+    Q_OBJECT
+    Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+public:
+    int rowCount(const QModelIndex&) const override { return m_items.size(); }
+    QVariant data(const QModelIndex& index, int role) const override;
+    void setElements(QList<AudioElementModel *> elements);
+    void clear();
+    bool isEmpty() const { return m_items.isEmpty(); }
+    AudioElementModel* element(int index) { if (m_items.size() > 0) return static_cast<AudioElementModel*>(m_items[index]); else return nullptr; }
+
+public slots:
+    void insert(QObject* item);
+    void append(QObject* item);
     void remove(QObject* item);
 
 signals:

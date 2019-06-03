@@ -15,7 +15,7 @@ AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
     if (m_spotifyFolders.size() > 0) setFolder(m_spotifyFolders[m_spotifyFolders.size() - 1]);
 }
 
-void AddonElementManager::addElements()
+void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
 {
     QList<SpotifyElement *> list;
 
@@ -28,7 +28,7 @@ void AddonElementManager::addElements()
         }
     }
 
-    if (list.size() > 0) emit exportElements(list);
+    if (list.size() > 0) emit exportElements(list, subscenario, scenarioIndex);
 }
 
 void AddonElementManager::setFolder(QString folder)

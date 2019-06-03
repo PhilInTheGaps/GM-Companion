@@ -57,8 +57,8 @@ public:
     Q_INVOKABLE void setCurrentScenario(QString scenario);
 
     // Elements
-    QList<AudioElement*> elements() const { if (m_currentProject) return m_currentProject->currentCategory()->currentScenario()->elements(); else return {}; }
-    Q_INVOKABLE void playElement(QString name, int type);
+    QList<QList<AudioElement*>> elements() const;
+    Q_INVOKABLE void playElement(QString name, int type, QString subscenario);
 
     Q_INVOKABLE void next();
     Q_INVOKABLE void setMusicVolume(float volume);
@@ -129,7 +129,7 @@ private:
     Spotify *spotify = nullptr;
     QList<AudioPlayer*> musicPlayers;
 
-    AudioElementModel *elementModel = nullptr;
+    AudioElementModelModel *elementModel = nullptr;
     AudioElementModel *soundModel = nullptr;
 
     int m_musicMode;

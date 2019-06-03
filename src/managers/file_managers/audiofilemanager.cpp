@@ -193,6 +193,14 @@ void AudioFileManager::updateIconPaths()
                                 {
                                     if (!d->hasIcon()) d->setIcon(m_iconMap[d->relativeIcon()]);
                                 }
+
+                                for (auto s : c->scenarios())
+                                {
+                                    for (auto d : c->elements())
+                                    {
+                                        if (!d->hasIcon()) d->setIcon(m_iconMap[d->relativeIcon()]);
+                                    }
+                                }
                             }
                         }
                     }
@@ -415,7 +423,15 @@ AudioScenario * AudioFileManager::initScenario(QJsonObject object)
     auto radioArray   = object.value("radio_elements").toArray();
     auto spotifyArray = object.value("spotify_elements").toArray();
 
-    return new AudioScenario(name, initMusicLists(musicArray), initSoundLists(soundArray), initRadios(radioArray), initSpotifyElements(spotifyArray));
+    auto scenarioArray = object.value("scenarios").toArray();
+    QList<AudioScenario *> scenarios;
+
+    for (auto s : scenarioArray)
+    {
+        scenarios.append(initScenario(s.toObject()));
+    }
+
+    return new AudioScenario(name, initMusicLists(musicArray), initSoundLists(soundArray), initRadios(radioArray), initSpotifyElements(spotifyArray), scenarios);
 }
 
 /**
@@ -729,6 +745,12 @@ QJsonObject AudioFileManager::saveScenario(AudioScenario *scenario)
         object.insert("sound_elements",   saveSoundElements(scenario));
         object.insert("radio_elements",   saveRadioElements(scenario));
         object.insert("spotify_elements", saveSpotifyElements(scenario));
+
+        QJsonArray a;
+
+        for (auto s : scenario->scenarios()) a.append(saveScenario(s));
+
+        object.insert("scenarios", a);
     }
 
     return object;

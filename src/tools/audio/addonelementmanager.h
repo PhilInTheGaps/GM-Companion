@@ -21,7 +21,7 @@ public:
     Q_INVOKABLE void setAddElement(int index, bool add);
 
     Q_INVOKABLE void resetChecked();
-    Q_INVOKABLE void addElements();
+    Q_INVOKABLE void addElements(bool subscenario = false, int scenarioIndex = 0);
 
 private:
     SettingsManager sManager;
@@ -41,7 +41,7 @@ private:
 signals:
     void spotifyFoldersChanged();
     void elementsChanged();
-    void exportElements(QList<SpotifyElement*>);
+    void exportElements(QList<SpotifyElement*>, bool subscenario, int scenarioIndex);
 };
 
 #endif // ADDONELEMENTMANAGER_H

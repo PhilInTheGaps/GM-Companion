@@ -8,8 +8,8 @@ class AudioScenario : public QObject
 {
     Q_OBJECT
 public:
-    AudioScenario(QString name, QList<MusicElement*> musicLists, QList<SoundElement*> soundLists, QList<RadioElement*> radios, QList<SpotifyElement*> spotifyElements) :
-        m_name(name), m_musicLists(musicLists), m_soundLists(soundLists), m_radios(radios), m_spotifyElements(spotifyElements) {}
+    AudioScenario(QString name, QList<MusicElement*> musicLists, QList<SoundElement*> soundLists, QList<RadioElement*> radios, QList<SpotifyElement*> spotifyElements, QList<AudioScenario*> scenarios) :
+        m_name(name), m_musicLists(musicLists), m_soundLists(soundLists), m_radios(radios), m_spotifyElements(spotifyElements), m_scenarios(scenarios) {}
     virtual ~AudioScenario() {}
 
     QString name() const { return m_name; }
@@ -23,29 +23,36 @@ public:
     QStringList musicElementNames();
     QList<MusicElement*> musicElements() const { return m_musicLists; }
     void addMusicElement(MusicElement *element) { m_musicLists.append(element); }
-    void removeMusicElement(QString name);
+    void removeMusicElement(QString name, bool deleteElement = true);
     void moveMusicElement(QString name, int steps);
 
     SoundElement *soundElement(QString name);
     QStringList soundElementNames();
     QList<SoundElement*> soundElements() const { return m_soundLists; }
     void addSoundElement(SoundElement *element) { m_soundLists.append(element); }
-    void removeSoundElement(QString name);
+    void removeSoundElement(QString name, bool deleteElement = true);
     void moveSoundElement(QString name, int steps);
 
     RadioElement *radioElement(QString name);
     QStringList radioElementNames();
     QList<RadioElement*> radioElements() const { return m_radios; }
     void addRadioElement(RadioElement *element) { m_radios.append(element); }
-    void removeRadioElement(QString name);
+    void removeRadioElement(QString name, bool deleteElement = true);
     void moveRadioElement(QString name, int steps);
 
     SpotifyElement *spotifyElement(QString name);
     QList<SpotifyElement*> spotifyElements() const { return m_spotifyElements; }
     QStringList spotifyElementNames();
     void addSpotifyElement(SpotifyElement *element) { m_spotifyElements.append(element); }
-    void removeSpotifyElement(QString name);
+    void removeSpotifyElement(QString name, bool deleteElement = true);
     void moveSpotifyElement(QString name, int steps);
+
+    AudioScenario *scenario(QString name);
+    QList<AudioScenario*> scenarios() const { return m_scenarios; }
+    QStringList scenarioNames();
+    void addScenario(AudioScenario *scenario) { m_scenarios.append(scenario); }
+    void removeScenario(QString name);
+    void moveScenario(QString name, int steps);
 
 private:
     bool m_export = true;
@@ -54,6 +61,7 @@ private:
     QList<SoundElement*> m_soundLists;
     QList<RadioElement*> m_radios;
     QList<SpotifyElement*> m_spotifyElements;
+    QList<AudioScenario*> m_scenarios;
 };
 
 class AudioCategory : public QObject

@@ -74,7 +74,9 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onAccepted: {
-        audio_addon_element_manager.addElements()
+        audio_addon_element_manager.addElements(
+                    new_thing_dialog.subscenarioChecked,
+                    new_thing_dialog.subscenarioIndex - 1)
         audio_addon_element_manager.resetChecked()
     }
 }

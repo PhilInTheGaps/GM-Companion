@@ -235,35 +235,63 @@ Page {
 
                     clip: true
                     contentWidth: -1
-                    contentHeight: audio_scroll_flow.implicitHeight
+                    contentHeight: audio_element_column.implicitHeight
 
-                    Flow {
-                        id: audio_scroll_flow
-                        leftPadding: 5
-                        rightPadding: 5
-                        spacing: 5
+                    Column {
+                        id: audio_element_column
+                        anchors.margins: 5
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        spacing: 10
 
-                        width: audio_scroll_view.width
-
-                        readonly property int min_width: 175
+                        readonly property int min_width: 170
                         readonly property int count_per_row: parent ? Math.floor(
                                                                           parent.width
                                                                           / min_width) : 1
-                        readonly property int button_width: platform.isAndroid ? (width / 8) : ((width - spacing * (count_per_row - 1) - leftPadding * 2) / count_per_row)
+                        readonly property int button_width: platform.isAndroid ? (width / 8) : ((width - 5 * (count_per_row - 1)) / count_per_row)
 
                         Repeater {
-                            id: element_repeater
                             model: elementModel
 
-                            AudioButton {
-                                element_name: modelData.name
-                                element_type: modelData.type
-                                icon_path: modelData.icon
-                                has_icon: modelData.hasIcon
-                                width: audio_scroll_flow.button_width
+                            Column {
+                                width: audio_element_column.width
+                                spacing: 10
 
-                                onClicked: audio_tool.playElement(
-                                               modelData.name, modelData.type)
+                                Text {
+                                    id: subscenario_text
+                                    text: modelData.name()
+                                    visible: text != ""
+                                    color: color_scheme.textColor
+                                    font.bold: true
+                                    font.pointSize: 15
+                                }
+
+                                Flow {
+                                    id: audio_scroll_flow
+
+                                    spacing: 5
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+
+                                    Repeater {
+                                        id: element_repeater
+                                        model: modelData
+
+                                        AudioButton {
+                                            element_name: modelData.name
+                                            element_type: modelData.type
+                                            subscenario_name: subscenario_text.text
+                                            icon_path: modelData.icon
+                                            has_icon: modelData.hasIcon
+                                            width: audio_element_column.button_width
+
+                                            onClicked: audio_tool.playElement(
+                                                           modelData.name,
+                                                           modelData.type,
+                                                           subscenario_name)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

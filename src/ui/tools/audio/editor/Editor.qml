@@ -131,8 +131,11 @@ Page {
                 model: audio_editor.projectNames
                 currentIndex: audio_editor.projectIndex
 
-                onCurrentIndexChanged: audio_editor.setCurrentProject(
-                                           currentIndex)
+                onCurrentIndexChanged: {
+                    subscenario_combo_box.isSetEnabled = false
+                    audio_editor.setCurrentProject(currentIndex)
+                    subscenario_combo_box.isSetEnabled = true
+                }
             }
 
             EditorToolButton {
@@ -158,8 +161,11 @@ Page {
                 model: audio_editor.categoryNames
                 currentIndex: audio_editor.categoryIndex
 
-                onCurrentTextChanged: audio_editor.setCurrentCategory(
-                                          currentText)
+                onCurrentTextChanged: {
+                    subscenario_combo_box.isSetEnabled = false
+                    audio_editor.setCurrentCategory(currentText)
+                    subscenario_combo_box.isSetEnabled = true
+                }
             }
 
             EditorToolButton {
@@ -186,11 +192,13 @@ Page {
                 currentIndex: audio_editor.scenarioIndex
 
                 onCurrentTextChanged: {
+                    subscenario_combo_box.isSetEnabled = false
                     audio_editor.setCurrentScenario(currentText)
                     element_stack_view.pop(null)
                     audio_list_page.visible = false
                     radio_page.visible = false
                     spotify_page.visible = false
+                    subscenario_combo_box.isSetEnabled = true
                 }
             }
 
@@ -264,6 +272,7 @@ Page {
 
                     Item {
                         id: element_up_down
+                        anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         width: height / 2
@@ -340,7 +349,7 @@ Page {
                         id: element_name_field
                         text: audio_editor.name
                         anchors.left: element_up_down.right
-                        anchors.right: parent.right
+                        anchors.right: subscenario_combo_box_rect.visible ? subscenario_combo_box_rect.left : element_delete_button.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
                         selectByMouse: true
@@ -351,7 +360,7 @@ Page {
 
                         Button {
                             anchors.top: parent.top
-                            anchors.right: element_delete_button.left
+                            anchors.right: parent.right
                             anchors.bottom: parent.bottom
                             width: height
                             visible: !element_name_field.edit_mode
@@ -371,101 +380,128 @@ Page {
 
                             onClicked: element_name_field.edit_mode = true
                         }
+                    }
 
-                        Button {
-                            id: element_delete_button
-                            anchors.top: parent.top
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            width: height
+                    Rectangle {
+                        id: subscenario_combo_box_rect
+                        color: color_scheme.menuColor
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: element_delete_button.left
+                        width: 180
 
-                            background: Rectangle {
-                                color: color_scheme.menuColor
+                        ToolBarComboBox {
+                            id: subscenario_combo_box
+                            property bool isSetEnabled: false
+
+                            model: audio_editor.subscenarioNames
+
+                            onCurrentIndexChanged: {
+                                if (isSetEnabled) {
+                                    audio_editor.setSubscenario(
+                                                audio_editor.name,
+                                                audio_editor.type, currentIndex)
+                                }
                             }
+
+                            anchors.fill: parent
+                            anchors.topMargin: 5
+                            anchors.bottomMargin: 5
+                        }
+                    }
+
+                    Button {
+                        id: element_delete_button
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        width: height
+
+                        background: Rectangle {
+                            color: color_scheme.menuColor
+                        }
+
+                        Text {
+                            text: FontAwesome.trashAlt
+                            font.family: FontAwesome.familySolid
+                            font.pixelSize: height
+                            anchors.fill: parent
+                            anchors.margins: 10
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: "red"
+                        }
+
+                        onClicked: element_delete_overlay.visible = true
+
+                        Rectangle {
+                            id: element_delete_overlay
+                            visible: false
+                            anchors.fill: parent
+                            color: color_scheme.menuColor
 
                             Text {
                                 text: FontAwesome.trashAlt
                                 font.family: FontAwesome.familySolid
-                                font.pixelSize: height
-                                anchors.fill: parent
-                                anchors.margins: 10
+                                color: color_scheme.toolbarTextColor
+                                font.pixelSize: parent.height / 3
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                anchors.left: parent.left
+                                width: height / 2
                                 verticalAlignment: Text.AlignVCenter
                                 horizontalAlignment: Text.AlignHCenter
-                                color: "red"
                             }
 
-                            onClicked: element_delete_overlay.visible = true
+                            Button {
+                                anchors.top: parent.top
+                                anchors.right: parent.right
+                                width: parent.width / 2
+                                height: parent.height / 2
 
-                            Rectangle {
-                                id: element_delete_overlay
-                                visible: false
-                                anchors.fill: parent
-                                color: color_scheme.menuColor
+                                background: Rectangle {
+                                    color: "transparent"
+                                }
 
                                 Text {
-                                    text: FontAwesome.trashAlt
+                                    text: FontAwesome.checkCircle
                                     font.family: FontAwesome.familySolid
-                                    color: color_scheme.toolbarTextColor
-                                    font.pixelSize: parent.height / 3
-                                    anchors.top: parent.top
-                                    anchors.bottom: parent.bottom
-                                    anchors.left: parent.left
-                                    width: height / 2
+                                    color: "limegreen"
+                                    anchors.fill: parent
                                     verticalAlignment: Text.AlignVCenter
                                     horizontalAlignment: Text.AlignHCenter
                                 }
 
-                                Button {
-                                    anchors.top: parent.top
-                                    anchors.right: parent.right
-                                    width: parent.width / 2
-                                    height: parent.height / 2
+                                onClicked: {
+                                    audio_editor.deleteElement(
+                                                audio_editor.name,
+                                                audio_editor.type)
+                                    element_delete_overlay.visible = false
+                                    element_stack_view.replace(no_element_text)
+                                }
+                            }
 
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
+                            Button {
+                                anchors.bottom: parent.bottom
+                                anchors.right: parent.right
+                                width: parent.width / 2
+                                height: parent.height / 2
 
-                                    Text {
-                                        text: FontAwesome.checkCircle
-                                        font.family: FontAwesome.familySolid
-                                        color: "limegreen"
-                                        anchors.fill: parent
-                                        verticalAlignment: Text.AlignVCenter
-                                        horizontalAlignment: Text.AlignHCenter
-                                    }
-
-                                    onClicked: {
-                                        audio_editor.deleteElement(
-                                                    audio_editor.name,
-                                                    audio_editor.type)
-                                        element_delete_overlay.visible = false
-                                        element_stack_view.replace(
-                                                    no_element_text)
-                                    }
+                                background: Rectangle {
+                                    color: "transparent"
                                 }
 
-                                Button {
-                                    anchors.bottom: parent.bottom
-                                    anchors.right: parent.right
-                                    width: parent.width / 2
-                                    height: parent.height / 2
+                                Text {
+                                    text: FontAwesome.timesCircle
+                                    font.family: FontAwesome.familySolid
+                                    color: "red"
+                                    anchors.fill: parent
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
 
-                                    background: Rectangle {
-                                        color: "transparent"
-                                    }
-
-                                    Text {
-                                        text: FontAwesome.timesCircle
-                                        font.family: FontAwesome.familySolid
-                                        color: "red"
-                                        anchors.fill: parent
-                                        verticalAlignment: Text.AlignVCenter
-                                        horizontalAlignment: Text.AlignHCenter
-                                    }
-
-                                    onClicked: {
-                                        element_delete_overlay.visible = false
-                                    }
+                                onClicked: {
+                                    element_delete_overlay.visible = false
                                 }
                             }
                         }
@@ -483,9 +519,7 @@ Page {
                         id: element_icon_field
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.right: element_icon_image.status
-                                       == Image.Ready ? element_icon_image.left : icon_finder.left
+                        width: element_name_field.width + element_up_down.width
 
                         selectByMouse: true
                         text: audio_editor.icon
@@ -510,8 +544,16 @@ Page {
                                 }
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        anchors.right: unsplash_finder.left
+                        anchors.left: element_icon_field.right
                         width: height
+                    }
+
+                    Rectangle {
+                        anchors.left: element_icon_image.status == Image.Ready ? element_icon_image.right : element_icon_field.right
+                        anchors.right: unsplash_finder.left
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        color: color_scheme.menuColor
                     }
 
                     Text {
@@ -561,8 +603,17 @@ Page {
 
                     IconFinder {
                         id: icon_finder
-                        anchors.right: parent.right
+                        anchors.right: spacer_rect.left
                         text_field: element_icon_field
+                    }
+
+                    Rectangle {
+                        id: spacer_rect
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        width: color_scheme.toolbarHeight
+                        color: color_scheme.menuColor
                     }
                 }
             }
@@ -600,6 +651,10 @@ Page {
                 EditorSpotifyPlaylistPage {
                     id: spotify_page
                     visible: false
+                }
+
+                Item {
+                    id: empty_page
                 }
             }
         }

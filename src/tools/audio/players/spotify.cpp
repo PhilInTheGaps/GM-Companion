@@ -360,6 +360,8 @@ void Spotify::fetchIcons(AudioScenario *scenario)
     {
         if (!a->hasIcon() && !iconFetchQueue.contains(a)) fetchIcon(a);
     }
+
+    for (auto s : scenario->scenarios()) fetchIcons(s);
 }
 
 /**

@@ -6,6 +6,9 @@ Dialog {
     title: qsTr("New")
     modal: true
 
+    property alias subscenarioChecked: subscenario_check_box.checked
+    property alias subscenarioIndex: subscenario_combo_box.currentIndex
+
     AddonElementDialog {
         id: addon_dialog
 
@@ -14,7 +17,7 @@ Dialog {
         x: (editor_root.width - width) / 2
 
         onAddAddonElements: {
-            for (var i = 0; i < names.length; i++) {
+            for (; i < names.length; i++) {
                 if (checked[i]) {
                     audio_editor.createSpotifyElement(names[i])
                 }
@@ -37,8 +40,32 @@ Dialog {
             width: textfield.width
         }
 
+        CheckBox {
+            id: subscenario_check_box
+            text: (combo_box.currentIndex == 2 ? qsTr("As") : qsTr(
+                                                     "In")) + " " + qsTr(
+                      "Subscenario")
+            checked: false
+            visible: combo_box.currentIndex > 1
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+
+        ComboBox {
+            id: subscenario_combo_box
+            model: audio_editor.subscenarioNames
+
+            onModelChanged: console.log(model)
+
+            visible: combo_box.currentIndex > 2 && subscenario_check_box.checked
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
+
         Button {
             id: add_from_addons_button
+
+            visible: combo_box.currentIndex > 2
 
             anchors.left: parent.left
             anchors.right: parent.right
@@ -67,19 +94,28 @@ Dialog {
                 audio_editor.createCategory(textfield.text)
                 break
             case 2:
-                audio_editor.createScenario(textfield.text)
+                audio_editor.createScenario(textfield.text,
+                                            subscenario_check_box.checked)
                 break
             case 3:
-                audio_editor.createMusicElement(textfield.text)
+                audio_editor.createMusicElement(
+                            textfield.text, subscenario_check_box.checked,
+                            subscenario_combo_box.currentIndex)
                 break
             case 4:
-                audio_editor.createSoundElement(textfield.text)
+                audio_editor.createSoundElement(
+                            textfield.text, subscenario_check_box.checked,
+                            subscenario_combo_box.currentIndex)
                 break
             case 5:
-                audio_editor.createRadioElement(textfield.text)
+                audio_editor.createRadioElement(
+                            textfield.text, subscenario_check_box.checked,
+                            subscenario_combo_box.currentIndex)
                 break
             case 6:
-                audio_editor.createSpotifyElement(textfield.text)
+                audio_editor.createSpotifyElement(
+                            textfield.text, subscenario_check_box.checked,
+                            subscenario_combo_box.currentIndex)
                 break
             }
 

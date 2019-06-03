@@ -12,6 +12,7 @@ Rectangle {
     property bool has_icon: true
     property bool overlay_enabled: true
     property bool small_mode: false
+    property string subscenario_name: ""
 
     signal clicked
 
@@ -66,8 +67,8 @@ Rectangle {
 
         fillMode: small_mode ? Image.PreserveAspectCrop : Image.Stretch
 
-        sourceSize.width: width
-        sourceSize.height: height
+        sourceSize.width: 500
+        sourceSize.height: 500
     }
 
     BusyIndicator {

@@ -47,7 +47,8 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     connect(spotify, &Spotify::authorize,        [ = ](QUrl url) { emit authorizeSpotify(url); });
     musicPlayers.append(spotify);
 
-    elementModel = new AudioElementModel;
+    elementModel = new AudioElementModelModel;
+    elementModel->setElements({ new AudioElementModel });
     qmlEngine->rootContext()->setContextProperty("elementModel", elementModel);
 
     connect(fileManager->getAudioFileManager(), &AudioFileManager::projectsChanged, this,           &AudioTool::onProjectsChanged);
@@ -171,23 +172,49 @@ void AudioTool::setCurrentScenario(QString scenario)
  */
 void AudioTool::onCurrentScenarioChanged()
 {
-    elementModel->setElements(elements());
+    elementModel->element(0)->setElements(elements()[0]);
+
+    elementModel->clear();
 
     if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario()) return;
 
     spotify->addElements(m_currentProject->currentCategory()->currentScenario()->spotifyElements());
+
+    for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios()) spotify->addElements(s->spotifyElements());
+
+    qDebug() << m_currentProject->currentCategory()->currentScenario()->scenarioNames();
+
+    for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+    {
+        auto m = new AudioElementModel;
+        m->setName(s->name());
+        m->setElements(s->elements());
+
+        spotify->addElements(s->spotifyElements());
+        elementModel->append(m);
+    }
 }
 
 /**
  * @brief Start playing an element
  * @param name Name of the element
  * @param type Type of the element. 0: Music, 1: Sounds, 2: Radio, 3: Spotify
+ * @param subscenario Name of the subscenario, empty if top level
  */
-void AudioTool::playElement(QString name, int type)
+void AudioTool::playElement(QString name, int type, QString subscenario)
 {
     if (!m_currentProject) return;
 
-    AudioScenario *scenario = m_currentProject->currentCategory()->currentScenario();
+    AudioScenario *scenario;
+
+    if (subscenario.isEmpty())
+    {
+        scenario = m_currentProject->currentCategory()->currentScenario();
+    }
+    else
+    {
+        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(subscenario);
+    }
 
     if (type != 1) m_musicMode = type;
 
@@ -428,6 +455,25 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     sendMprisUpdateSignal("Metadata", map);
 }
 
+QList<QList<AudioElement *> >AudioTool::elements() const
+{
+    if (m_currentProject)
+    {
+        QList<QList<AudioElement *> > list;
+
+        list.append(m_currentProject->currentCategory()->currentScenario()->elements());
+
+        for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+        {
+            list.append(s->elements());
+        }
+
+        return list;
+    }
+
+    return {};
+}
+
 void AudioTool::findElement(QString element)
 {
     if (element.isEmpty())
@@ -436,15 +482,25 @@ void AudioTool::findElement(QString element)
         return;
     }
 
-    QList<AudioElement *> newElements;
+    QList<QList<AudioElement *> > newElements;
 
-    for (auto e : elements())
+    for (auto l : elements())
     {
-        if (e && e->name().contains(element))
+        QList<AudioElement *> l2;
+
+        for (auto e : l)
         {
-            newElements.append(e);
+            if (e && e->name().contains(element, Qt::CaseInsensitive))
+            {
+                l2.append(e);
+            }
         }
+
+        newElements.append(l2);
     }
 
-    elementModel->setElements(newElements);
+    for (int i = 0; i < newElements.length(); i++)
+    {
+        elementModel->element(i)->setElements(newElements[i]);
+    }
 }

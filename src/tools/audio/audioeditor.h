@@ -17,6 +17,7 @@ class AudioEditor : public QObject
     Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
     Q_PROPERTY(QStringList categoryNames READ categoryNames  NOTIFY currentProjectChanged)
     Q_PROPERTY(QStringList scenarioNames READ scenarioNames NOTIFY currentCategoryChanged)
+    Q_PROPERTY(QStringList subscenarioNames READ subscenarioNames NOTIFY subscenariosChanged)
     Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
 
     Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
@@ -59,21 +60,24 @@ public:
 
     // Scenarios
     Q_INVOKABLE void setCurrentScenario(QString name);
-    Q_INVOKABLE void createScenario(QString name);
+    Q_INVOKABLE void createScenario(QString name, bool subscenario = false);
     Q_INVOKABLE void renameScenario(QString name);
     QStringList scenarioNames() const;
     int scenarioIndex() const;
+    QStringList subscenarioNames() const;
 
     // Element positions
     Q_INVOKABLE void moveElement(QString element, int type, int positions);
     Q_INVOKABLE void sortElements();
     Q_INVOKABLE void deleteElement(QString element, int type);
+    Q_INVOKABLE void setSubscenario(QString element, int type, int index);
+    Q_INVOKABLE int getSubscenarioIndex(QString scenario);
 
     // Create new element
-    Q_INVOKABLE void createMusicElement(QString name);
-    Q_INVOKABLE void createSoundElement(QString name);
-    Q_INVOKABLE void createRadioElement(QString name);
-    Q_INVOKABLE void createSpotifyElement(QString name);
+    Q_INVOKABLE void createMusicElement(QString name, bool subscenario, int scenarioIndex);
+    Q_INVOKABLE void createSoundElement(QString name, bool subscenario, int scenarioIndex);
+    Q_INVOKABLE void createRadioElement(QString name, bool subscenario, int scenarioIndex);
+    Q_INVOKABLE void createSpotifyElement(QString name, bool subscenario, int scenarioIndex);
 
     // Edit element
     Q_INVOKABLE void setName(QString element, int type, QString name);
@@ -101,7 +105,7 @@ public:
     QString url() const { return m_url; }
     QString id() const { return m_id; }
     QList<bool> missing() const { return m_missing; }
-    Q_INVOKABLE void loadElement(QString name, int type);
+    Q_INVOKABLE void loadElement(QString name, int type, QString subscenario);
     Q_INVOKABLE QString resourcesPath() const { return sManager->getSetting(Setting::resourcesPath); }
     Q_INVOKABLE QString basePath(int type);
 
@@ -112,6 +116,7 @@ signals:
     void currentProjectChanged();
     void currentCategoryChanged();
     void currentScenarioChanged();
+    void subscenariosChanged();
     void isSavedChanged();
     void missingChanged();
 
@@ -132,10 +137,10 @@ private:
     AudioProject *m_currentProject = nullptr;
     bool m_isSaved = true;
 
-    AudioElementModel *elementModel = nullptr;
+    AudioElementModelModel *elementModel = nullptr;
 
     // Elements
-    QString m_name, m_icon, m_url, m_id;
+    QString m_name, m_subscenario, m_icon, m_url, m_id;
     QStringList m_files;
     int m_mode, m_type;
     QList<bool> m_missing;
