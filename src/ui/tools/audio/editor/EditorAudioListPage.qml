@@ -55,6 +55,9 @@ Page {
         delegate: Item {
             id: delegate_root
 
+            width: parent.width
+            height: ListView.isCurrentItem ? color_scheme.toolbarHeight : delegate_label.height + 20
+
             Rectangle {
                 anchors.fill: parent
 
@@ -74,9 +77,6 @@ Page {
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
-
-            width: parent.width
-            height: ListView.isCurrentItem ? color_scheme.toolbarHeight : delegate_label.height + 10
 
             MouseArea {
                 id: mouse_area
@@ -181,8 +181,14 @@ Page {
                     fa_icon: FontAwesome.trashAlt
 
                     onClicked: {
+                        delegate_root.ListView.view.last_index = index
                         audio_editor.removeFile(audio_editor.name,
                                                 audio_editor.type, index)
+                        delegate_root.ListView.view.currentIndex
+                                = delegate_root.ListView.view.last_index
+                        delegate_root.ListView.view.positionViewAtIndex(
+                                    delegate_root.ListView.view.currentIndex,
+                                    ListView.Center)
                     }
                 }
             }

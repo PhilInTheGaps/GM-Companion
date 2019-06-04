@@ -41,7 +41,7 @@ public:
 protected:
     QString m_name, m_icon, m_relativeIcon;
     QStringList m_files;
-    int m_mode;
+    int m_mode = 0;
     bool m_export = true;
 
 signals:

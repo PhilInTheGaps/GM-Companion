@@ -541,6 +541,7 @@ void AudioEditor::createMusicElement(QString name, bool subscenario, int scenari
 
     qDebug() << "AudioEditor: Creating music element" << name << "...";
 
+    // In Subscenario
     if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->musicElementNames().contains(name))
     {
         MusicElement *element = new MusicElement(name);
@@ -548,12 +549,13 @@ void AudioEditor::createMusicElement(QString name, bool subscenario, int scenari
         emit currentScenarioChanged();
         madeChanges();
     }
+
+    // Default
     else if (!m_currentProject->currentCategory()->currentScenario()->musicElementNames().contains(name))
     {
         MusicElement *element = new MusicElement(name);
         m_currentProject->currentCategory()->currentScenario()->addMusicElement(element);
         emit currentScenarioChanged();
-
         madeChanges();
     }
 }
@@ -891,6 +893,7 @@ void AudioEditor::removeFile(QString element, int type, int index, bool findMiss
 
     qDebug() << "AudioEditor: Deleting file in element" << element << "of type" << type << "at index" << index << "...";
 
+    // Get scenario
     AudioScenario *scenario;
 
     if (m_subscenario.isEmpty())
@@ -906,6 +909,7 @@ void AudioEditor::removeFile(QString element, int type, int index, bool findMiss
     QString basePath;
     QStringList list;
 
+    // Set basePath and find element
     switch (type)
     {
     case 0: // Music
@@ -921,11 +925,12 @@ void AudioEditor::removeFile(QString element, int type, int index, bool findMiss
     default: return;
     }
 
+    // Remove file from list
     if (e)
     {
         list = e->files();
 
-        if ((index < list.size()) && (index > 0))
+        if ((index < list.size()) && (index > -1))
         {
             list.removeAt(index);
             e->setFiles(list);
