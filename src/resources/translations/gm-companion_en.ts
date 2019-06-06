@@ -2,19 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
-    <name>AddCombatantRow</name>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/AddCombatantRow.qml" line="42"/>
-        <source>Copy Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/AddCombatantRow.qml" line="52"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AddonElementDialog</name>
     <message>
         <location filename="../../ui/tools/audio/editor/AddonElementDialog.qml" line="9"/>
@@ -25,13 +12,13 @@
 <context>
     <name>AddonManager</name>
     <message>
-        <location filename="../../managers/addonmanager.cpp" line="34"/>
-        <location filename="../../managers/addonmanager.cpp" line="41"/>
+        <location filename="../../managers/addonmanager.cpp" line="35"/>
+        <location filename="../../managers/addonmanager.cpp" line="42"/>
         <source>UNKNOWN ADDON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../managers/addonmanager.cpp" line="41"/>
+        <location filename="../../managers/addonmanager.cpp" line="42"/>
         <source>OUTDATED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -133,13 +120,26 @@
     </message>
 </context>
 <context>
+    <name>Audio</name>
+    <message>
+        <location filename="../../ui/tools/Audio.qml" line="386"/>
+        <source>Playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AudioEditor</name>
     <message>
         <source>Save</source>
         <translation type="obsolete">Save</translation>
     </message>
     <message>
-        <location filename="../../tools/audio/audioeditor.cpp" line="595"/>
+        <location filename="../../tools/audio/audioeditor.cpp" line="270"/>
+        <source>No Subscenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../tools/audio/audioeditor.cpp" line="796"/>
         <source>Saved!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -179,6 +179,25 @@
     <message>
         <location filename="../../ui/tools/audio/audio_exporter/AudioExporter.qml" line="139"/>
         <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AudioTool</name>
+    <message>
+        <location filename="../../tools/audio/audiotool.cpp" line="449"/>
+        <source>Unknown Album</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../tools/audio/audiotool.cpp" line="450"/>
+        <location filename="../../tools/audio/audiotool.cpp" line="451"/>
+        <source>Unknown Artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../tools/audio/audiotool.cpp" line="452"/>
+        <source>Unknown Title</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -455,96 +474,62 @@
 <context>
     <name>CombatTracker</name>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="100"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="94"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="168"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="165"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="269"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="192"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="189"/>
         <source>Health</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="64"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="58"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="137"/>
-        <location filename="../../ui/tools/CombatTracker.qml" line="219"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="134"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="216"/>
         <source>Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="180"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="177"/>
         <source>Initiative</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="204"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="201"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="390"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="527"/>
         <source>Round:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="431"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="568"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/CombatTracker.qml" line="467"/>
+        <location filename="../../ui/tools/CombatTracker.qml" line="604"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>CombatantDialog</name>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="10"/>
-        <source>Add Combatant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="40"/>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="90"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="46"/>
-        <source>INI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="52"/>
-        <source>Health</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="70"/>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="77"/>
-        <source>Add More</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../ui/tools/combat_tracker/CombatantDialog.qml" line="81"/>
-        <source>Hide List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Converter</name>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="18"/>
+        <location filename="../../ui/tools/Converter.qml" line="20"/>
         <source>Add Units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -554,12 +539,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="62"/>
+        <location filename="../../ui/tools/Converter.qml" line="59"/>
         <source>Add Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/Converter.qml" line="109"/>
+        <location filename="../../ui/tools/Converter.qml" line="106"/>
         <source>Add Custom Units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -731,27 +716,27 @@ Temporary Result: </source>
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../../ui/tools/audio/editor/Editor.qml" line="133"/>
+        <location filename="../../ui/tools/audio/editor/Editor.qml" line="146"/>
         <source>Rename Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/Editor.qml" line="160"/>
+        <location filename="../../ui/tools/audio/editor/Editor.qml" line="176"/>
         <source>Rename Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/Editor.qml" line="192"/>
+        <location filename="../../ui/tools/audio/editor/Editor.qml" line="210"/>
         <source>Rename Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/Editor.qml" line="480"/>
+        <location filename="../../ui/tools/audio/editor/Editor.qml" line="526"/>
         <source>Icon Path (Leave empty for default icon)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/Editor.qml" line="539"/>
+        <location filename="../../ui/tools/audio/editor/Editor.qml" line="635"/>
         <source>No Element Selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -764,27 +749,27 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="378"/>
+        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="384"/>
         <source>Remove missing files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="232"/>
+        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="238"/>
         <source>Playlist is shuffled before playing. Loops.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="276"/>
+        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="282"/>
         <source>Files are played randomly, does not stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="302"/>
+        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="308"/>
         <source>Playlist loops in sequential order.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="345"/>
+        <location filename="../../ui/tools/audio/editor/EditorAudioListPage.qml" line="351"/>
         <source>Playlist is played in set order. Does not loop.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -798,54 +783,69 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="29"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="32"/>
         <source>Element Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="34"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="37"/>
         <location filename="../../ui/tools/shop/EditorNewThingDialog.qml" line="16"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="34"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="37"/>
         <location filename="../../ui/tools/shop/EditorNewThingDialog.qml" line="16"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="34"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="37"/>
         <source>Scenario</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="34"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="37"/>
         <source>Music List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="35"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="38"/>
         <source>Sound List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="35"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="38"/>
         <source>Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="35"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="38"/>
         <source>Spotify Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="47"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="45"/>
+        <source>As</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="45"/>
+        <source>In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="46"/>
+        <source>Subscenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="74"/>
         <source>Add from Addons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="53"/>
+        <location filename="../../ui/tools/audio/editor/EditorNewThingDialog.qml" line="80"/>
         <source>Element Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -990,6 +990,19 @@ Temporary Result: </source>
     <message>
         <location filename="../../ui/tools/audio/editor/IconFinder.qml" line="38"/>
         <source>Set Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>IconFinderUnsplash</name>
+    <message>
+        <location filename="../../ui/tools/audio/editor/IconFinderUnsplash.qml" line="8"/>
+        <source>Find icon from unsplash.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/audio/editor/IconFinderUnsplash.qml" line="141"/>
+        <source>Shuffle</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1165,10 +1178,77 @@ Temporary Result: </source>
     </message>
 </context>
 <context>
+    <name>MapMarker</name>
+    <message>
+        <location filename="../../ui/tools/maps/MapMarker.qml" line="7"/>
+        <source>New Location</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MapTool</name>
+    <message>
+        <location filename="../../tools/maps/maptool.cpp" line="114"/>
+        <source>New Marker</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Maps</name>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="158"/>
+        <source>Map List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="175"/>
+        <source>Markers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="307"/>
+        <source>Marker List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="406"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="461"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/Maps.qml" line="528"/>
+        <source>Delete?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MarkerEditor</name>
+    <message>
+        <location filename="../../ui/tools/maps/MarkerEditor.qml" line="13"/>
+        <source>Edit Marker</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/maps/MarkerEditor.qml" line="86"/>
+        <source>Icon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../ui/tools/maps/MarkerEditor.qml" line="143"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MusicPlayer</name>
     <message>
         <location filename="../../tools/audio/players/musicplayer.cpp" line="15"/>
-        <location filename="../../tools/audio/players/musicplayer.cpp" line="41"/>
+        <location filename="../../tools/audio/players/musicplayer.cpp" line="49"/>
         <source>Music</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1604,7 +1684,7 @@ Temporary Result: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../ui/main.qml" line="143"/>
+        <location filename="../../ui/main.qml" line="153"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>

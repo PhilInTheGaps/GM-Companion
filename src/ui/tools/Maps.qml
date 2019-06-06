@@ -161,6 +161,7 @@ Page {
                             font.pointSize: 16
                             verticalAlignment: Text.AlignVCenter
                             anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width - x
 
                             MouseArea {
                                 anchors.fill: parent
@@ -382,7 +383,7 @@ Page {
 
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.bottom: parent.bottom
+                    anchors.bottom: delete_marker_button.top
                     anchors.margins: 10
 
                     Row {
@@ -426,6 +427,133 @@ Page {
                         }
                     }
                 }
+
+                // Delete
+                Rectangle {
+                    id: delete_marker_button
+                    height: color_scheme.toolbarHeight
+                    color: color_scheme.backgroundColor
+                    border.width: marker_delete_mouse_area.containsMouse ? 2 : 0
+                    border.color: color_scheme.primaryButtonColor
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 10
+
+                    Row {
+                        anchors.fill: parent
+                        anchors.margins: 10
+                        spacing: 10
+
+                        Text {
+                            text: FontAwesome.trash
+                            font.family: FontAwesome.familySolid
+                            width: height
+                            color: color_scheme.textColor
+                            font.pointSize: 14
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+
+                        Text {
+                            text: qsTr("Delete")
+                            color: color_scheme.textColor
+                            font.pointSize: 14
+                            width: parent.width - x
+                            elide: Text.ElideRight
+                            verticalAlignment: Text.AlignVCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                    }
+
+                    MouseArea {
+                        id: marker_delete_mouse_area
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onClicked: {
+                            marker_delete_rect.markerIndex = map_tool.markerIndex
+                            marker_delete_rect.visible = true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Marker Label
+    Label {
+        id: marker_name_label
+        z: 150
+        anchors.horizontalCenter: flickable.horizontalCenter
+        y: 20
+
+        font.pointSize: 15
+        color: "white"
+        padding: 10
+
+        visible: false
+
+        background: Rectangle {
+            color: "black"
+            opacity: 0.8
+        }
+    }
+
+    // Delete Marker ?
+    Rectangle {
+        id: marker_delete_rect
+        anchors.horizontalCenter: flickable.horizontalCenter
+        anchors.bottom: flickable.bottom
+        anchors.bottomMargin: 20
+        z: 150
+
+        width: marker_delete_rect_row.width
+        height: marker_delete_rect_row.height
+        color: color_scheme.secondaryBackgroundColor
+
+        visible: false
+
+        property int markerIndex: -1
+
+        Row {
+            id: marker_delete_rect_row
+            anchors.centerIn: parent
+            spacing: 10
+            padding: 10
+
+            Text {
+                text: qsTr("Delete?")
+                font.pointSize: 12
+                color: color_scheme.textColor
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            ToolBarIconButton {
+                fa_icon: FontAwesome.check
+                anchors.top: undefined
+                anchors.bottom: undefined
+
+                height: 30
+
+                onClicked: {
+                    marker_delete_rect.visible = false
+                    console.log(marker_delete_rect.markerIndex)
+                    map_tool.deleteMarker(marker_delete_rect.markerIndex)
+                    left_swipe_view.currentIndex = 1
+                }
+            }
+
+            ToolBarIconButton {
+                fa_icon: FontAwesome.times
+                anchors.top: undefined
+                anchors.bottom: undefined
+
+                height: 30
+
+                onClicked: marker_delete_rect.visible = false
             }
         }
     }
@@ -775,7 +903,10 @@ Page {
                     color: "transparent"
                 }
 
-                onClicked: left_swipe_view.currentIndex = 1
+                onClicked: {
+                    left_swipe_view.currentIndex = 1
+                    left_item.visible = true
+                }
             }
 
             // Show / Hide left Item

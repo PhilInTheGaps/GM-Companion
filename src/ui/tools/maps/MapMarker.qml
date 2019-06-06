@@ -44,6 +44,14 @@ Item {
             drag.smoothed: false
             preventStealing: true
 
+            onContainsMouseChanged: {
+                if (containsMouse) {
+                    marker_name_label.text = root.name
+                }
+
+                marker_name_label.visible = containsMouse
+            }
+
             onClicked: {
                 left_swipe_view.currentIndex = 2
                 marker_name.text = root.name
@@ -68,69 +76,8 @@ Item {
             acceptedButtons: Qt.RightButton
 
             onClicked: {
-                root.showDelete = true
-            }
-        }
-    }
-
-    Label {
-        text: root.name
-        font.pointSize: 14
-        color: "white"
-        padding: 5
-
-        visible: mouse_area.containsMouse
-
-        x: -width / 2
-        y: 10
-        z: 100
-
-        background: Rectangle {
-            color: "black"
-            opacity: 0.7
-        }
-    }
-
-    // Dialog for deletion
-    Rectangle {
-        color: color_scheme.secondaryBackgroundColor
-        width: 150
-        height: 150
-        z: 150
-        y: -(height / 2)
-        x: 25
-
-        visible: root.showDelete
-
-        Column {
-            id: dialog_column
-            anchors.fill: parent
-            anchors.margins: 10
-            spacing: 5
-
-            Text {
-                text: qsTr("Delete?")
-                font.pointSize: 12
-                color: color_scheme.textColor
-            }
-
-            Button {
-                text: qsTr("Yes")
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                onClicked: {
-                    root.showDelete = false
-                    map_tool.deleteMarker(root.markerIndex)
-                }
-            }
-
-            Button {
-                text: qsTr("No")
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                onClicked: root.showDelete = false
+                marker_delete_rect.markerIndex = root.markerIndex
+                marker_delete_rect.visible = true
             }
         }
     }
