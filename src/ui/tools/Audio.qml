@@ -10,9 +10,7 @@ import FontAwesome 2.0
 
 Page {
     function closeVolumePopup() {
-        if (volume_dialog.opened) {
-            volume_dialog.close()
-        }
+        volume_dialog.visible = false
     }
 
     StackView {
@@ -36,6 +34,9 @@ Page {
                 id: volume_dialog
                 x: parent.width - width
                 y: parent.height - audio_control_bar.height - height
+                z: 100
+
+                visible: false
 
                 initialMusicVolume: 0.25
                 initialSoundVolume: 0.25

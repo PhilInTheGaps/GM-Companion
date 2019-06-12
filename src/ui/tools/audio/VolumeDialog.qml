@@ -3,7 +3,7 @@ import QtQuick.Controls 2.3
 
 import FontAwesome 2.0
 
-Dialog {
+Rectangle {
     id: root
 
     property real initialMusicVolume: 1
@@ -12,11 +12,18 @@ Dialog {
     signal musicVolumeChanged(real value)
     signal soundVolumeChanged(real value)
 
-    modal: false
+    width: row.width + 20
+    height: row.height + 20
 
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        propagateComposedEvents: false
+    }
 
-    contentItem: Row {
+    Row {
+        id: row
+        anchors.centerIn: parent
 
         VolumeSlider {
             id: music

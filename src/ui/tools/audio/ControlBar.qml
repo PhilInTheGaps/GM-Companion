@@ -28,8 +28,7 @@ ToolBar {
         fa_icon: FontAwesome.volumeUp
         x: parent.width - width - 10 - playlist_button.width
 
-        onClicked: volume_dialog.opened ? volume_dialog.close(
-                                              ) : volume_dialog.open()
+        onClicked: volume_dialog.visible = !volume_dialog.visible
     }
 
     // Playlist Button
