@@ -115,9 +115,19 @@ void Spotify::play(QString id, int offset)
         m_currentIndex = offset;
 
         QJsonObject jo;
-        jo.insert("context_uri", id);
 
-        if ((offset < m_trackIdList.size()) && (offset > -1))
+        if (id.contains("track:"))
+        {
+            QJsonArray uris;
+            uris.append(id);
+            jo.insert("uris", uris);
+        }
+        else
+        {
+            jo.insert("context_uri", id);
+        }
+
+        if ((offset < m_trackIdList.size()) && (offset > -1) && (offset != 0))
         {
             QJsonObject jOffset;
             jOffset.insert("uri", m_trackIdList[offset]);
@@ -133,6 +143,7 @@ void Spotify::play(QString id, int offset)
 
         m_timer->stop();
         m_timer->start(3000);
+
         getCurrentPlaylist();
         m_isPlaying = true;
 
@@ -278,7 +289,7 @@ void Spotify::getCurrentPlaylist()
     QString id             = m_currentId;
     QUrl    url;
 
-    if (id.contains("playlist")) // Element is playlist
+    if (id.contains("playlist:")) // Element is playlist
     {
         QString playlist = id.right(id.length() - id.lastIndexOf(':') - 1);
         url = QUrl("https://api.spotify.com/v1/playlists/" + playlist);
@@ -312,12 +323,12 @@ void Spotify::gotCurrentPlaylist(int id, QNetworkReply::NetworkError error, QByt
     bool isPlaylist = false;
     QJsonArray tracks;
 
-    if (root.value("items").isArray())
+    if (root.value("items").isArray()) // Album
     {
         qDebug() << "SPOTIFY: Current playlist is an album!";
         tracks = root.value("items").toArray();
     }
-    else
+    else // Playlist
     {
         qDebug() << "SPOTIFY: Current playlist is a playlist!";
         tracks     = root.value("tracks").toObject().value("items").toArray();
@@ -384,11 +395,17 @@ void Spotify::fetchIcon(SpotifyElement *element)
         {
             url = QUrl("https://api.spotify.com/v1/albums/" + id.replace("spotify:album:", ""));
         }
-        else // Element is playlist
+        else if (id.contains("playlist:")) // Element is playlist
         {
             QString playlist = id.right(id.length() - id.lastIndexOf(':') - 1);
 
             url = QUrl("https://api.spotify.com/v1/playlists/" + playlist + "/images");
+        }
+        else if (id.contains("track:")) // Single track
+        {
+            QString track = id.right(id.length() - id.lastIndexOf(':') - 1);
+
+            url = QUrl("https://api.spotify.com/v1/tracks/" + track);
         }
 
         connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished), this, &Spotify::fetchedIcon);
@@ -445,7 +462,14 @@ void Spotify::fetchedIcon(int id, QNetworkReply::NetworkError error, QByteArray 
             }
             else // Object containing an Array of Images
             {
-                image = doc.object().value("images").toArray()[0].toObject();
+                if (doc.object().keys().contains("album"))
+                {
+                    image = doc.object().value("album").toObject().value("images").toArray()[0].toObject();
+                }
+                else
+                {
+                    image = doc.object().value("images").toArray()[0].toObject();
+                }
             }
 
             e->setIcon(image.value("url").toString());
