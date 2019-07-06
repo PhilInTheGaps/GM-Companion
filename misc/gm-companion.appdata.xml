@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>gm-companion</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>GPL-3.0</project_license>
+	<name>GM-Companion</name>
+	<summary>A tool for rpg gamemasters</summary>
+	<description>
+		<p>GM-Companion is a tool for rpg gamemasters that can be used to play music and sounds, display maps, roll dice, keep track of combat situations and more.</p>
+	</description>
+	<launchable type="desktop-id">gm-companion.desktop</launchable>
+	<url type="homepage">https://gm-companion.github.io/</url>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://gm-companion.github.io/assets/images/screenshots/audio-tool-01.png</image>
+		</screenshot>
+	</screenshots>
+	<provides>
+		<id>gm-companion.desktop</id>
+	</provides>
+</component>

@@ -214,19 +214,24 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_en.ts
 TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
 
 !win32 {
-	isEmpty(PREFIX) {
-	    PREFIX = /usr
-	}
+    isEmpty(PREFIX) {
+        PREFIX = /usr
+    }
 	
     target.path = $$PREFIX/bin
     
     shortcutfiles.files = misc/gm-companion.desktop
     shortcutfiles.path = $$PREFIX/share/applications/
+
     data.files += misc/gm-companion.png
     data.path = $$PREFIX/share/pixmaps/
 
+    appdata.files = misc/gm-companion.appdata.xml
+    appdata.path = $$PREFIX/usr/share/metainfo/
+
     INSTALLS += shortcutfiles
-	INSTALLS += data
+    INSTALLS += data
+    INSTALLS += appdata
 }
 
 INSTALLS += target
