@@ -32,7 +32,8 @@ matrix:
         - chmod a+x linuxdeployqt-continuous-x86_64.AppImage # make linuxdeployqt executable
         - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH # unset paths
         - ls -R # ls for debugging
-        - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage -bundle-non-qt-libs -always-overwrite -qmldir=/opt/qt512/qml -verbose=2 -extra-plugins=audio,imageformats,mediaservice,playlistformats
+        - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -always-overwrite -qmldir=/opt/qt512/qml -verbose=2 -extra-plugins=audio,imageformats,mediaservice,playlistformats
+        - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage -verbose=2
         - ls
           # Upload AppImage to transfer.sh
         - curl --upload-file GM-Companion*.AppImage https://transfer.sh/gm-companion.AppImage

@@ -28,7 +28,6 @@
         <file>tools/combat_tracker/ListTextField.qml</file>
         <file>tools/combat_tracker/ListSpinBox.qml</file>
         <file>tools/converter/ConverterUnitPage.qml</file>
-        <file>tools/audio/VolumeDialog.qml</file>
         <file>tools/audio/VolumeSlider.qml</file>
         <file>components/SideMenuButton.qml</file>
         <file>tools/audio/buttons/AudioButton.qml</file>
@@ -89,5 +88,6 @@
         <file>tools/maps/MapMarker.qml</file>
         <file>tools/maps/MarkerEditor.qml</file>
         <file>tools/audio/editor/IconFinderUnsplash.qml</file>
+        <file>tools/audio/VolumeItem.qml</file>
     </qresource>
 </RCC>

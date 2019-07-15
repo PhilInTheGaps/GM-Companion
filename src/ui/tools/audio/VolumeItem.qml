@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.9
 import QtQuick.Controls 2.3
 
 import FontAwesome 2.0
@@ -12,8 +12,8 @@ Rectangle {
     signal musicVolumeChanged(real value)
     signal soundVolumeChanged(real value)
 
-    width: row.width + 20
-    height: row.height + 20
+    height: column.height
+    color: "transparent"
 
     MouseArea {
         anchors.fill: parent
@@ -21,24 +21,31 @@ Rectangle {
         propagateComposedEvents: false
     }
 
-    Row {
-        id: row
-        anchors.centerIn: parent
+    Column {
+        id: column
+        anchors.left: parent.left
+        anchors.right: parent.right
+        topPadding: 5
+        bottomPadding: 5
 
         VolumeSlider {
             id: music
             icon: FontAwesome.music
             initialVolume: initialMusicVolume
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-            onVolumeChanged: audio_tool.setMusicVolume(value)
+            onValueChanged: audio_tool.setMusicVolume(value)
         }
 
         VolumeSlider {
             id: sound
             icon: FontAwesome.drum
             initialVolume: initialSoundVolume
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-            onVolumeChanged: audio_tool.setSoundVolume(value)
+            onValueChanged: audio_tool.setSoundVolume(value)
         }
     }
 }

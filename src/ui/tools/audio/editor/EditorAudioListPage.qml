@@ -132,11 +132,16 @@ Page {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.last_index = index
+                            delegate_root.ListView.view.last_index
+                                    = delegate_root.ListView.view.currentIndex
+
                             audio_editor.moveFile(audio_editor.name,
                                                   audio_editor.type, index, -1)
-                            delegate_root.ListView.view.currentIndex
-                                    = delegate_root.ListView.view.last_index - 1
+
+                            if (delegate_root.ListView.view.last_index > 0)
+                                delegate_root.ListView.view.currentIndex
+                                        = delegate_root.ListView.view.last_index - 1
+
                             delegate_root.ListView.view.positionViewAtIndex(
                                         delegate_root.ListView.view.currentIndex,
                                         ListView.Center)

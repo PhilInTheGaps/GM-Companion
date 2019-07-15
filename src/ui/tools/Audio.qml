@@ -9,10 +9,6 @@ import "../components"
 import FontAwesome 2.0
 
 Page {
-    function closeVolumePopup() {
-        volume_dialog.visible = false
-    }
-
     StackView {
         id: audio_stack
         anchors.fill: parent
@@ -27,19 +23,6 @@ Page {
             id: audio_page
             background: Rectangle {
                 color: color_scheme.backgroundColor
-            }
-
-            // Volume Dialog
-            VolumeDialog {
-                id: volume_dialog
-                x: parent.width - width
-                y: parent.height - audio_control_bar.height - height
-                z: 100
-
-                visible: false
-
-                initialMusicVolume: 0.25
-                initialSoundVolume: 0.25
             }
 
             // Bar at the top
@@ -86,7 +69,6 @@ Page {
 
                         onClicked: {
                             if (audio_stack.currentItem == audio_page) {
-                                closeVolumePopup()
                                 audio_page.visible = false
                                 audio_editor_page.visible = true
                                 audio_stack.pop(null)
@@ -395,13 +377,12 @@ Page {
                 ListView {
                     id: playlist_view
                     anchors.top: playlist_menu_text.bottom
-                    anchors.bottom: parent.bottom
+                    anchors.bottom: volume_item.visible ? volume_item.top : parent.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.topMargin: 5
+                    anchors.bottomMargin: volume_item.visible ? 5 : 0
 
-                    //                        height: parent.height - y - parent.padding * 2
-                    //                        anchors.bottom:
                     clip: true
 
                     highlight: Rectangle {
@@ -443,6 +424,21 @@ Page {
                             onExited: playlist_tooltip.visible = false
                         }
                     }
+                }
+
+                // Volume Dialog
+                VolumeItem {
+                    id: volume_item
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    //                    x: parent.width - width
+                    //                    y: parent.height - audio_control_bar.height - height
+                    visible: true
+
+                    initialMusicVolume: 0.25
+                    initialSoundVolume: 0.25
                 }
             }
         }

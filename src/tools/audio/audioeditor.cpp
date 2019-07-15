@@ -1062,7 +1062,7 @@ void AudioEditor::moveFile(QString element, int type, int index, int positions)
     default: return;
     }
 
-    if (e && (index + positions < list.size()) && (index + positions > 0))
+    if (e && (index + positions < list.size()) && (index + positions > -1))
     {
         list.move(index, index + positions);
         e->setFiles(list);

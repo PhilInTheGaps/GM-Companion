@@ -227,7 +227,7 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
     data.path = $$PREFIX/share/pixmaps/
 
     appdata.files = misc/gm-companion.appdata.xml
-    appdata.path = $$PREFIX/usr/share/metainfo/
+    appdata.path = $$PREFIX/share/metainfo/
 
     INSTALLS += shortcutfiles
     INSTALLS += data
