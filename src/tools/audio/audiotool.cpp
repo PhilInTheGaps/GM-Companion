@@ -79,7 +79,7 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     connect(spotify, &Spotify::authorize,                this, &AudioTool::onSpotifyAuthorize);
     connect(spotify, &Spotify::authorized,               this, &AudioTool::onSpotifyAuthorized);
     connect(this,    &AudioTool::currentScenarioChanged, [ = ]() {
-        if (spotify) spotify->fetchIcons(m_currentProject->currentCategory()->currentScenario());
+        if (spotify && m_currentProject->currentCategory()) spotify->fetchIcons(m_currentProject->currentCategory()->currentScenario());
     });
 }
 
@@ -106,6 +106,7 @@ AudioTool::~AudioTool()
 void AudioTool::onProjectsChanged(QList<AudioProject *>projects)
 {
     m_projects = projects;
+
     emit projectsChanged();
 }
 
@@ -172,7 +173,8 @@ void AudioTool::setCurrentScenario(QString scenario)
  */
 void AudioTool::onCurrentScenarioChanged()
 {
-    elementModel->element(0)->setElements(elements()[0]);
+    if (elements().size() > 0) elementModel->element(0)->setElements(elements()[0]);
+    else elementModel->element(0)->setElements({});
 
     elementModel->clear();
 
@@ -182,7 +184,7 @@ void AudioTool::onCurrentScenarioChanged()
 
     for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios()) spotify->addElements(s->spotifyElements());
 
-    qDebug() << m_currentProject->currentCategory()->currentScenario()->scenarioNames();
+    qDebug() << "AudioTool: Scenario Names:" << m_currentProject->currentCategory()->scenarios().size() << m_currentProject->currentCategory()->currentScenario()->scenarioNames();
 
     for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
     {
@@ -461,14 +463,17 @@ QList<QList<AudioElement *> >AudioTool::elements() const
     {
         QList<QList<AudioElement *> > list;
 
-        list.append(m_currentProject->currentCategory()->currentScenario()->elements());
-
-        for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+        if (m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentScenario())
         {
-            list.append(s->elements());
-        }
+            list.append(m_currentProject->currentCategory()->currentScenario()->elements());
 
-        return list;
+            for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+            {
+                list.append(s->elements());
+            }
+
+            return list;
+        }
     }
 
     return {};

@@ -34,7 +34,8 @@ AudioEditor::AudioEditor(FileManager *fManager, QQmlApplicationEngine *engine, Q
     });
 
     connect(this, &AudioEditor::currentScenarioChanged, [ = ]() {
-        if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario())
+        if (!m_currentProject || !m_currentProject->currentCategory()
+            || !m_currentProject->currentCategory()->currentScenario())
         {
             elementModel->element(0)->setElements({});
             elementModel->clear();
@@ -106,9 +107,14 @@ void AudioEditor::setCurrentProject(int index)
     {
         m_currentProject = m_projects[index];
         audioExporter->setProject(m_currentProject);
+
+        qDebug() << "       Emitting project changed";
         emit currentProjectChanged();
+        qDebug() << "       Emitting category changed";
         emit currentCategoryChanged();
+        qDebug() << "       Emitting scenario changed";
         emit currentScenarioChanged();
+        qDebug() << "       Done";
     }
 }
 
@@ -279,7 +285,7 @@ QStringList AudioEditor::subscenarioNames() const
  */
 void AudioEditor::setCurrentScenario(QString name)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario() || name.isEmpty()) return;
+    if (!m_currentProject || !m_currentProject->currentCategory() || name.isEmpty()) return;
 
     qDebug() << "AudioEditor: Setting current scenario" << name << "...";
 

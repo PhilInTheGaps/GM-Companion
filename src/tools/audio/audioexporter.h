@@ -84,9 +84,9 @@ signals:
 private:
     SettingsManager sManager;
 
-    AudioProject* m_project;
-    AudioCategory* m_category;
-    AudioScenario* m_scenario;
+    AudioProject* m_project = nullptr;
+    AudioCategory* m_category = nullptr;
+    AudioScenario* m_scenario = nullptr;
 
     QStringList m_categoryNames;
     QStringList m_scenarioNames;

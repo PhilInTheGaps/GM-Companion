@@ -52,8 +52,8 @@ public:
     Q_INVOKABLE void setCurrentCategory(QString category);
 
     // Scenarios
-    QStringList scenarioNames() const { if (m_currentProject) return m_currentProject->currentCategory()->scenarioNames(); else return {}; }
-    QString currentScenarioName() const { if (m_currentProject) return m_currentProject->currentCategory()->currentScenario()->name(); else return ""; }
+    QStringList scenarioNames() const { if (m_currentProject && m_currentProject->currentCategory()) return m_currentProject->currentCategory()->scenarioNames(); else return {}; }
+    QString currentScenarioName() const { if (m_currentProject && m_currentProject->currentCategory()) return m_currentProject->currentCategory()->currentScenario()->name(); else return ""; }
     Q_INVOKABLE void setCurrentScenario(QString scenario);
 
     // Elements

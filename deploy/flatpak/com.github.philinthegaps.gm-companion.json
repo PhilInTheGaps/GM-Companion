@@ -1,0 +1,109 @@
+{
+    "app-id": "com.github.philinthegaps.gm-companion",
+    "runtime": "org.kde.Platform",
+    "runtime-version": "5.12",
+    "sdk": "org.kde.Sdk",
+    "command": "gm-companion",
+    "rename-desktop-file": "gm-companion.desktop",
+    "finish-args": [
+        "--socket=x11",
+        "--socket=fallback-x11",
+        "--share=ipc",
+        "--socket=wayland",
+        "--share=network",
+        "--device=dri",
+        "--socket=pulseaudio",
+        "--talk-name=org.freedesktop.Notifications",
+        "--own-name=org.mpris.gm-companion",
+        "--own-name=org.mpris.MediaPlayer2.gm-companion",
+        "--talk-name=org.gnome.SessionManager",
+        "--talk-name=org.gnome.SettingsDaemon.MediaKeys",
+        "--filesystem=host"
+    ],
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/pkgconfig",
+        "/share/aclocal",
+        "/man",
+        "/share/man",
+        "/share/gtk-doc",
+        "/share/vala",
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
+        {
+            "name": "openjpeg",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DBUILD_CODEC=OFF"
+            ],
+            "cleanup": [
+                "/lib/openjpeg-2.3"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/uclouvain/openjpeg.git",
+                    "commit": "d2205ba2ee78faeea659263383446c4472b1f9df"
+                }
+            ]
+        },
+        {
+            "name": "popplerdata",
+            "no-autogen": true,
+            "make-install-args": [
+                "prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-data-0.4.9.tar.gz",
+                    "sha256": "1f9c7e7de9ecd0db6ab287349e31bf815ca108a5a175cf906a90163bdbe32012"
+                }
+            ]
+        },
+        {
+            "name": "poppler",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_INSTALL_LIBDIR=/app/lib",
+                "-DCMAKE_INSTALL_INCLUDEDIR=/app/include"
+            ],
+            "cleanup": [
+                "/bin"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-0.74.0.tar.xz",
+                    "sha256": "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f"
+                }
+            ]
+        },
+        {
+            "name": "gm-companion",
+            "buildsystem": "qmake",
+            "build-options": {
+                "env": {
+                    "LD_LIBRARY_PATH": "/app/lib:/app/lib/x86_64-linux-gnu"
+                }
+            },
+            "config-opts": [
+                "CONFIG+=release",
+                "PREFIX=/app",
+                "QT_INSTALL_LIBS=lib",
+                "INCLUDEPATH+=/app/include",
+                "LIBS+=-L/app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/philinthegaps/gm-companion.git"
+                }
+            ]
+        }
+    ]
+}
+

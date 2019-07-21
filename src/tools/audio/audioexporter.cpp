@@ -34,7 +34,6 @@ void AudioExporter::updateCategories()
     }
 
     updateScenarios();
-
     emit categoriesChanged();
 }
 

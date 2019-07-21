@@ -8,4 +8,4 @@ NoDisplay=false
 StartupNotify=false
 Terminal=false
 Type=Application
-Categories=Qt;
+Categories=Utility;Player;Audio;AudioVideo;Viewer;Qt;

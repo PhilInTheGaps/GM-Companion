@@ -87,7 +87,7 @@ private:
     QString m_name;
     bool m_export = true;
     QList<AudioScenario*> m_scenarios;
-    AudioScenario *m_currentScenario;
+    AudioScenario *m_currentScenario = nullptr;
 };
 
 class AudioProject : public QObject
@@ -126,7 +126,7 @@ private:
     bool m_isSaved, m_wasRenamed = false, m_export = true;
 
     QList<AudioCategory*> m_categories;
-    AudioCategory *m_currentCategory;
+    AudioCategory *m_currentCategory = nullptr;
 };
 
 #endif // AUDIOPROJECT_H
