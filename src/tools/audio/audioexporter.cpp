@@ -80,6 +80,13 @@ void AudioExporter::updateElements()
         m_elementNames += m_scenario->musicElementNames();
         m_elementNames += m_scenario->soundElementNames();
         m_elementNames += m_scenario->radioElementNames();
+
+        for (auto s : m_scenario->scenarios())
+        {
+            m_elementNames += s->musicElementNames();
+            m_elementNames += s->soundElementNames();
+            m_elementNames += s->radioElementNames();
+        }
     }
 
     emit elementsChanged();
@@ -207,14 +214,27 @@ void AudioExporter::setElementEnabled(int index, bool enabled)
  */
 bool AudioExporter::isElementEnabled(int index) const
 {
-    if (m_project && m_category && m_scenario && (index < m_scenario->elements().size()))
+    if (m_project && m_category && m_scenario)
     {
-        return m_scenario->elements()[index]->isExport();
+        if (index < m_scenario->elements().size())
+        {
+            return m_scenario->elements()[index]->isExport();
+        }
+
+        int count = m_scenario->elements().size();
+
+        for (auto s : m_scenario->scenarios())
+        {
+            if (s->elements().size() > index - count)
+            {
+                return s->elements()[index - count]->isExport();
+            }
+
+            count += s->elements().size();
+        }
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 /**
@@ -254,10 +274,6 @@ void Worker::copyFiles()
     qDebug() << "AudioExporter: Exporting files to:" << m_path << "...";
 
     // Find all files to export
-    QStringList musicFiles;
-    QStringList soundFiles;
-    QStringList radioFiles;
-
     // Categories
     for (auto c : m_project->categories())
     {
@@ -268,38 +284,9 @@ void Worker::copyFiles()
             {
                 if (s && s->isExport())
                 {
-                    // Music Elements
-                    for (auto e : s->musicElements())
-                    {
-                        if (e && e->isExport())
-                        {
-                            for (auto f : e->files())
-                            {
-                                if (!musicFiles.contains(f)) musicFiles.append(f);
-                            }
-                        }
-                    }
+                    copyElements(s);
 
-                    // Sound Elements
-                    for (auto e : s->soundElements())
-                    {
-                        if (e && e->isExport())
-                        {
-                            for (auto f : e->files())
-                            {
-                                if (!soundFiles.contains(f)) soundFiles.append(f);
-                            }
-                        }
-                    }
-
-                    // Radio Elements
-                    for (auto e : s->radioElements())
-                    {
-                        if (e && e->isExport() && e->local())
-                        {
-                            if (!radioFiles.contains(e->url().toString())) radioFiles.append(e->url().toString());
-                        }
-                    }
+                    for (auto s2 : s->scenarios()) copyElements(s2);
                 }
             }
         }
@@ -368,4 +355,40 @@ void Worker::copyFiles()
 
     emit progressChanged(1);
     qDebug() << "Done ...";
+}
+
+void Worker::copyElements(AudioScenario *scenario)
+{
+    // Music Elements
+    for (auto e : scenario->musicElements())
+    {
+        if (e && e->isExport())
+        {
+            for (auto f : e->files())
+            {
+                if (!musicFiles.contains(f)) musicFiles.append(f);
+            }
+        }
+    }
+
+    // Sound Elements
+    for (auto e : scenario->soundElements())
+    {
+        if (e && e->isExport())
+        {
+            for (auto f : e->files())
+            {
+                if (!soundFiles.contains(f)) soundFiles.append(f);
+            }
+        }
+    }
+
+    // Radio Elements
+    for (auto e : scenario->radioElements())
+    {
+        if (e && e->isExport() && e->local())
+        {
+            if (!radioFiles.contains(e->url().toString())) radioFiles.append(e->url().toString());
+        }
+    }
 }

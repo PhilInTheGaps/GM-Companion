@@ -25,6 +25,12 @@ private:
     AudioProject* m_project;
     SettingsManager sManager;
 
+    QStringList musicFiles;
+    QStringList soundFiles;
+    QStringList radioFiles;
+
+    void copyElements(AudioScenario* scenario);
+
 public slots:
     void copyFiles();
 
