@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.3 as OldDialogs
+import QtQuick.Dialogs 1.2 as OldDialogs
 
 Dialog {
     id: dialog
@@ -138,13 +138,10 @@ Dialog {
             Button {
                 text: qsTr("Export")
                 DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
+                onClicked: audio_exporter.exportFiles()
             }
 
             standardButtons: Dialog.Close
-
-            onApplied: {
-                audio_exporter.exportFiles()
-            }
 
             onRejected: {
                 dialog.close()

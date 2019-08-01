@@ -1,0 +1,132 @@
+name: gm-companion
+base: core18
+version: '1.2.0'
+license: GPL-3.0
+summary: A tool for rpg gamemasters
+icon: misc/gm-companion.png
+description: |
+  GM-Companion is a tool for local rpg sessions that lets you play music, sounds, webradios
+  or spotify playlists that fit the current scene. You can also view maps and character sheets,
+  roll dice, keep track of a combat scene, generate npc names, write notes and convert units.
+
+grade: stable
+confinement: strict
+  
+apps:
+  gm-companion:
+    command: desktop-launch gm-companion
+    desktop: usr/share/applications/gm-companion.desktop
+    plugs: [alsa,browser-support,daemon-notify,desktop,desktop-legacy,home,network,opengl,pulseaudio,removable-media,wayland,x11,unity7]
+    slots: [mpris]
+
+parts:
+  gm-companion:
+    after: [qtnetworkauth, desktop-qt5]
+    source: .
+    plugin: qmake
+    project-files: ["GM-Companion.pro"]
+    qt-version: qt5
+    options:
+      - CONFIG+=release
+      - DEFINES+=NO_DBUS # dbus leads to a crash that can not be caught in code somehow
+    organize:
+      usr/lib/*/pulseaudio/libpulsecommon-11.1.so: usr/lib/libpulsecommon-11.1.so
+    build-packages:
+      - build-essential
+      - g++
+      - make
+      - bash
+      - binutils
+      - libpulse-dev
+      - libegl1-mesa-dev
+      - libgl1-mesa-dev
+      - libglu1-mesa-dev
+      - libpoppler-qt5-dev
+      - qtbase5-dev
+      - qttools5-dev
+      - qttools5-dev-tools
+      - qtmultimedia5-dev
+      - libqt5opengl5-dev
+      - libqt5x11extras5-dev
+      - libqt5xmlpatterns5-dev
+      - qtdeclarative5-dev
+      - libqt5network5
+    stage-packages:
+      - mesa-utils
+      - libpoppler-qt5-1
+      - openssl
+      - qt5-default
+      - libqt5core5a
+      - libqt5multimedia5
+      - libqt5multimedia5-plugins
+      - libgstreamer1.0-0
+      - gstreamer1.0-qt5
+      - gstreamer1.0-alsa
+      - gstreamer1.0-pulseaudio
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-ugly
+      - libqt5network5
+      - libqt5opengl5
+      - libqt5script5
+      - libqt5qml5
+      - libqt5widgets5
+      - libqt5x11extras5
+      - libqt5xml5
+      - libqt5xmlpatterns5
+      - libqt5gui5
+      - libqt5svg5
+      - libqt5dbus5
+      - qml-module-qtquick-controls
+      - qml-module-qtquick-controls2
+      - qml-module-qtquick-dialogs
+      - qml-module-qt-labs-platform
+      - qml-module-qtgraphicaleffects
+      - qml-module-qtquick-layouts
+      - qml-module-qtquick-window2
+      - qml-module-qtquick2
+      - qml-module-qtwayland-compositor
+      - qml-module-qtquick-xmllistmodel
+      - qml-module-qt-labs-folderlistmodel
+      - qml-module-qt-labs-settings
+      - libqt5quickwidgets5
+      - libqt5quickcontrols2-5
+      - qtwayland5
+      - libpulse0
+      - libgpm2
+
+  qtnetworkauth:
+    organize:
+      5.9.5/gcc_64/lib: /usr/lib/x86_64-linux-gnu/
+      5.9.5/gcc_64/mkspecs: /usr/lib/x86_64-linux-gnu/qt5/mkspecs
+      5.9.5/gcc_64/include: /usr/include/x86_64-linux-gnu/qt5
+    plugin: dump
+    source: https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/qt5_595/qt.595.qtnetworkauth.gcc_64/5.9.5-0-201804111034qtnetworkauth-Linux-RHEL_7_4-GCC-Linux-RHEL_7_4-X86_64.7z
+    source-type: 7z
+    
+  desktop-qt5:
+    build-packages: [qtbase5-dev, dpkg-dev]
+    make-parameters:
+      – FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    make-parameters: ["FLAVOR=qt5"]
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - try: [appmenu-qt5] # not available on core18
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
+    
+    

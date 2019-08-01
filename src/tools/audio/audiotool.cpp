@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QQmlContext>
 #include <cstdlib>
+#include <exception>
 
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -59,6 +60,8 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     connect(radioPlayer,                        &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
     connect(metaDataReader,                     &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
 
+#ifndef NO_DBUS
+
     // Connect to DBus
     mprisAdaptor       = new MprisAdaptor(this);
     mprisPlayerAdaptor = new MprisPlayerAdaptor(this);
@@ -72,6 +75,7 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 
     QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
     QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.gm-companion");
+#endif // ifdef NO_DBUS
 
     // Find and load projects
     fileManager->getAudioFileManager()->findProjects(fileManager->getModeInt());
@@ -90,8 +94,9 @@ AudioTool::~AudioTool()
     radioPlayer->deleteLater();
     spotify->deleteLater();
 
-    mprisAdaptor->deleteLater();
-    mprisPlayerAdaptor->deleteLater();
+    if (mprisAdaptor) mprisAdaptor->deleteLater();
+
+    if (mprisPlayerAdaptor) mprisPlayerAdaptor->deleteLater();
 
     editor->deleteLater();
     fileManager->deleteLater();
@@ -279,7 +284,7 @@ void AudioTool::setMusicVolume(float volume)
         a->setVolume(linearVolume);
     }
 
-    mprisPlayerAdaptor->setVolume(logarithmicVolume);
+    if (mprisPlayerAdaptor) mprisPlayerAdaptor->setVolume(logarithmicVolume);
 }
 
 /**
@@ -328,8 +333,11 @@ void AudioTool::playPause()
         m_isPaused = true;
         emit isPausedChanged();
 
-        mprisPlayerAdaptor->setPlaybackStatus(2);
-        sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
+        if (mprisPlayerAdaptor)
+        {
+            mprisPlayerAdaptor->setPlaybackStatus(2);
+            sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
+        }
     }
 }
 
@@ -452,7 +460,8 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     map.insert("xesam:albumArtist", m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
     map.insert("xesam:artist",      m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
     map.insert("xesam:title",       m_metaData.title.isEmpty() ? tr("Unknown Title") : m_metaData.title);
-    mprisPlayerAdaptor->setMetadata(map);
+
+    if (mprisPlayerAdaptor) mprisPlayerAdaptor->setMetadata(map);
 
     sendMprisUpdateSignal("Metadata", map);
 }

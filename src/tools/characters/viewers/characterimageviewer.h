@@ -22,6 +22,10 @@ public:
     Q_INVOKABLE void nextImage(bool right);
     void updateImages();
 
+signals:
+    void categoryChanged();
+    void categoriesChanged();
+
 private:
     QString m_image;
 

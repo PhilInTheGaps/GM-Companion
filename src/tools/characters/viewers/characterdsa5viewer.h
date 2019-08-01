@@ -47,6 +47,7 @@ public:
 
 signals:
     void characterChanged();
+    void categoryChanged();
     void subCategoryChanged();
 
 private:

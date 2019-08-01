@@ -4,6 +4,8 @@
 /vendor/
 qpm.json
 
+*.snap
+
 # C++ objects and libs
 
 *.slo
