@@ -102,7 +102,18 @@ private slots:
     void onProjectsChanged(QList<AudioProject*> projects);
     void onCurrentScenarioChanged();
 
-    void onStartedPlaying() { m_isPaused = false; emit isPausedChanged(); mprisPlayerAdaptor->setPlaybackStatus(1); sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus()); }
+    void onStartedPlaying()
+    {
+        m_isPaused = false;
+        emit isPausedChanged();
+
+        if (mprisAdaptor && mprisPlayerAdaptor)
+        {
+            mprisPlayerAdaptor->setPlaybackStatus(1);
+            sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
+        }
+    }
+
     void onMetaDataUpdated(MetaData metaData);
 
     void onSoundsChanged(QList<SoundElement*> elements);

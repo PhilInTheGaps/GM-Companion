@@ -161,6 +161,7 @@ void MusicPlayer::onMetaDataChanged()
     if ((player->bufferStatus() == 100) || (player->mediaStatus() == QMediaPlayer::BufferedMedia))
     {
         qDebug() << "MusicPlayer: MetaData changed!";
+
         emit metaDataChanged(player, currentElement ? currentElement->icon() : "");
     }
 }
