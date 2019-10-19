@@ -4,6 +4,96 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include <QUrl>
+#include <QList>
+
+class AudioFile : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(int source READ source WRITE setSource NOTIFY fileChanged)
+    Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY fileChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY fileChanged)
+    Q_PROPERTY(bool missing READ missing WRITE setMissing NOTIFY fileChanged)
+
+public:
+    explicit AudioFile(QString url, int source, QString title = "") :
+        m_source(source), m_url(url), m_title(title){}
+
+    friend void swap(AudioFile & first, AudioFile & second) {
+        // d_ptr swap doesn't take care of parentage
+        QObject * firstParent = first.parent();
+        QObject * secondParent = second.parent();
+        first.setParent(nullptr);
+        second.setParent(nullptr);
+        first.d_ptr.swap(second.d_ptr);
+        second.setParent(firstParent);
+        first.setParent(secondParent);
+    }
+
+    AudioFile(const AudioFile &other) : QObject(other.parent()) {
+        m_url = other.m_url;
+        m_source = other.m_source;
+        m_title = other.m_title;
+    }
+
+    AudioFile & operator=(AudioFile other) {
+        swap(*this, other);
+        return *this;
+    }
+
+    int source() const { return m_source; }
+    void setSource(int source) { m_source = source; emit fileChanged(); }
+
+    QString url() const { return m_url; }
+    void setUrl(QString url) { m_url = url; emit fileChanged(); }
+
+    QString title() const { return m_title; }
+    void setTitle(QString title) { m_title = title; emit fileChanged(); }
+
+    bool missing() const { return m_missing; }
+    void setMissing(bool missing) { m_missing = missing; emit fileChanged(); }
+
+private:
+    int m_source = -1;
+    QString m_url, m_title;
+    bool m_missing = false;
+
+signals:
+    void fileChanged();
+};
+
+
+class AudioFileModel : public QAbstractListModel {
+    Q_OBJECT
+    Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+public:
+    int rowCount(const QModelIndex&) const override { return m_items.size(); }
+    QVariant data(const QModelIndex& index, int role) const override;
+
+    QVector<QObject*> elements() const { return m_items; }
+    void setElements(QList<AudioFile*> elements);
+    void setElements(QList<AudioFile> elements);
+
+    void clear();
+    bool isEmpty() const { return m_items.isEmpty(); }
+
+    Q_INVOKABLE QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
+
+    void insert(int index, QObject* item);
+    void remove(QObject* item);
+    void append(QObject* item);
+    bool moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent, int destinationChild);
+
+signals:
+    void isEmptyChanged();
+
+protected:
+    QHash<int, QByteArray> roleNames() const override;
+
+private:
+    QVector<QObject*> m_items = {};
+    QString m_name;
+};
 
 class AudioElement : public QObject
 {
@@ -27,8 +117,8 @@ public:
     void setRelativeIcon(QString icon) { m_relativeIcon = icon; }
     bool hasIcon() const { return !m_icon.isEmpty(); }
 
-    QStringList files() const { return m_files; }
-    void setFiles(QStringList files) { m_files = files; }
+    void setFiles(QList<AudioFile> files) { m_files = files; }
+    QList<AudioFile> files() const { return m_files; }
 
     int mode() const { return m_mode; }
     void setMode(int mode) { m_mode = mode; }
@@ -40,9 +130,9 @@ public:
 
 protected:
     QString m_name, m_icon, m_relativeIcon;
-    QStringList m_files;
     int m_mode = 0;
     bool m_export = true;
+    QList<AudioFile> m_files;
 
 signals:
     void nameChanged();
@@ -113,6 +203,7 @@ public:
     int type() const { return 0; }
 };
 
+// Sound
 class SoundElement : public AudioElement
 {
 public:
@@ -120,40 +211,12 @@ public:
     int type() const { return 1; }
 };
 
+// Radio
 class RadioElement : public AudioElement
 {
 public:
-    RadioElement(QString name, bool local);
-
-    bool local() const { return m_local; }
-    void setLocal(bool local) { m_local = local; }
-
-    QUrl url() const { return m_url; }
-    void setUrl(QUrl url) { m_url = url; }
-
+    RadioElement(QString name);
     int type() const { return 2; }
-
-private:
-    bool m_local;
-    QUrl m_url;
-};
-
-class SpotifyElement : public AudioElement
-{
-public:
-    SpotifyElement(QString name, QString id);
-
-    QString id() const { return m_id; }
-    void setId(QString id) { m_id = id; }
-
-    int iconRequestId() const { return m_iconRequestId; }
-    void setIconRequestId(int id) { m_iconRequestId = id; }
-
-    int type() const { return 3; }
-
-private:
-    QString m_id;
-    int m_iconRequestId = -1;
 };
 
 #endif // AUDIOELEMENT_H

@@ -13,7 +13,7 @@ FileManager::FileManager()
     sManager = new SettingsManager;
     updateMode();
 
-    audioFileManager     = new AudioFileManager(google);
+    audioSaveLoad        = new AudioSaveLoad(m_mode, google);
     mapsFileManager      = new MapsFileManager(google);
     shopFileManager      = new ShopFileManager(google);
     characterFileManager = new CharacterFileManager(google);
@@ -23,7 +23,6 @@ FileManager::~FileManager()
 {
     google->deleteLater();
     delete sManager;
-    audioFileManager->deleteLater();
 }
 
 /**

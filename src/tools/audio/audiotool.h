@@ -41,7 +41,7 @@ public:
     AudioEditor* getEditor() const { return editor; }
 
     // Project
-    void updateProjectList() { if (fileManager) fileManager->getAudioFileManager()->findProjects(fileManager->getModeInt()); }
+    void updateProjectList() { if (fileManager) fileManager->getAudioSaveLoad()->findProjects(fileManager->getModeInt()); }
     QStringList projectNames();
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
@@ -81,9 +81,9 @@ public:
     int index() const;
 
     // Spotify
-    Q_INVOKABLE void grantSpotify() { spotify->grant(); }
-    Q_INVOKABLE bool isSpotifyWaitingForAuth() const { if (spotify) return spotify->isWaitingForAuth(); else return false; }
-    Q_INVOKABLE QUrl spotifyAuthUrl() const { if (spotify) return spotify->authUrl(); else return QUrl(""); }
+//    Q_INVOKABLE void grantSpotify() { spotify->grant(); }
+//    Q_INVOKABLE bool isSpotifyWaitingForAuth() const { if (spotify) return spotify->isWaitingForAuth(); else return false; }
+//    Q_INVOKABLE QUrl spotifyAuthUrl() const { if (spotify) return spotify->authUrl(); else return QUrl(""); }
 
 signals:
     void projectsChanged();

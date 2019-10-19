@@ -37,20 +37,35 @@ void SoundPlayer::play(SoundElement *element)
         });
 
         players.append(player);
-
-        QStringList sounds = element->files();
+        auto sounds = element->files();
 
         if (element->mode() == 0)
         {
-            // Shuffle song list
+            // Shuffle sound list
             std::random_shuffle(sounds.begin(), sounds.end());
+        }
+
+        for (auto sound : sounds)
+        {
+            switch (sound.source())
+            {
+            case 0:
+                playlist->addMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::soundPath) + sound.url()));
+                break;
+
+            default:
+                playlist->addMedia(QUrl(sound.url()));
+                break;
+            }
         }
 
         // Fetch sound urls
         // args[0] = Name of element
         // args[1] = Playlist mode
-        fileManager->getAudioFileManager()->fetchSoundPaths(sounds, { element->name(), QString::number(element->mode()) });
+        //        fileManager->getAudioSaveLoad()->fetchSoundPaths(sounds, {
+        // element->name(), QString::number(element->mode()) });
 
+        player->play();
         emit soundsChanged(elements);
     }
 }
@@ -62,49 +77,50 @@ void SoundPlayer::play(SoundElement *element)
  */
 void SoundPlayer::onSoundPathsChanged(QList<QUrl>urls, QStringList args)
 {
-    qDebug() << "Sound paths changed!" << urls << args;
+    //    qDebug() << "Sound paths changed!" << urls << args;
 
-    QString name = args[0];
-    int     mode = args[1].toInt();
+    //    QString name = args[0];
+    //    int     mode = args[1].toInt();
 
-    for (auto a : players)
-    {
-        if (a->objectName() == name)
-        {
-            // Add sounds to playlist
-            for (auto b : urls)
-            {
-                a->playlist()->addMedia(b);
-            }
+    //    for (auto a : players)
+    //    {
+    //        if (a->objectName() == name)
+    //        {
+    //            // Add sounds to playlist
+    //            for (auto b : urls)
+    //            {
+    //                a->playlist()->addMedia(b);
+    //            }
 
-            // Set playlist mode
-            switch (mode)
-            {
-            case 0: // Shuffle Playlist
-            case 2: // Loop
-                a->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-                break;
+    //            // Set playlist mode
+    //            switch (mode)
+    //            {
+    //            case 0: // Shuffle Playlist
+    //            case 2: // Loop
+    //                a->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
+    //                break;
 
-            case 1: // Complete Random Mode
-                a->playlist()->setPlaybackMode(QMediaPlaylist::Random);
-                a->playlist()->next();
-                break;
+    //            case 1: // Complete Random Mode
+    //                a->playlist()->setPlaybackMode(QMediaPlaylist::Random);
+    //                a->playlist()->next();
+    //                break;
 
-            case 3: // Sequential
-                a->playlist()->setPlaybackMode(QMediaPlaylist::Sequential);
-                break;
+    //            case 3: // Sequential
+    //
+    //              a->playlist()->setPlaybackMode(QMediaPlaylist::Sequential);
+    //                break;
 
-            default: break;
-            }
+    //            default: break;
+    //            }
 
-            if (a->state() != QMediaPlayer::State::PlayingState)
-            {
-                a->play();
-            }
+    //            if (a->state() != QMediaPlayer::State::PlayingState)
+    //            {
+    //                a->play();
+    //            }
 
-            return;
-        }
-    }
+    //            return;
+    //        }
+    //    }
 }
 
 /**

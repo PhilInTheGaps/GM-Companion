@@ -6,6 +6,7 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
+#include "src/settings/settingsmanager.h"
 
 class SoundPlayer : public AudioPlayer
 {
@@ -20,6 +21,7 @@ public:
 private:
     QList<QMediaPlayer*> players;
     QList<SoundElement*> elements;
+    SettingsManager sManager;
 
     float m_volume;
     bool isSoundPlaying(SoundElement* element);

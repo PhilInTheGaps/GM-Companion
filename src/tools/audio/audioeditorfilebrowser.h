@@ -2,53 +2,118 @@
 #define AUDIOEDITORFILEBROWSER_H
 
 #include <QObject>
+#include <QAbstractListModel>
+#include <QQmlApplicationEngine>
+
 #include "src/settings/settingsmanager.h"
+
+class AudioEditorFile : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY fileChanged)
+    Q_PROPERTY(QStringList path READ path WRITE setPath NOTIFY fileChanged)
+    Q_PROPERTY(int type READ type WRITE setType NOTIFY fileChanged)
+    Q_PROPERTY(int depth READ depth NOTIFY fileChanged)
+    Q_PROPERTY(bool opened READ opened WRITE setOpened NOTIFY openedChanged)
+
+public:
+    AudioEditorFile(QString name, QStringList path, int type)
+        : m_name(name), m_path(path), m_type(type) {}
+
+    QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; emit fileChanged(); }
+
+    QStringList path() const { return m_path; }
+    void setPath(QStringList path) { m_path = path; emit fileChanged(); }
+
+    int type() const { return m_type; }
+    void setType(int type) { m_type = type; emit fileChanged(); }
+
+    int depth() const { return m_path.count(); }
+
+    bool opened() const { return m_opened; }
+    void setOpened(bool opened) { m_opened = opened; emit openedChanged(); }
+
+signals:
+    void fileChanged();
+    void openedChanged();
+
+private:
+    QString m_name;
+    QStringList m_path;
+    int m_type;
+    bool m_opened = false;
+};
+
+
+
+class AudioEditorFileModel : public QAbstractListModel {
+    Q_OBJECT
+    Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
+public:
+    int rowCount(const QModelIndex&) const override { return m_items.size(); }
+    QVariant data(const QModelIndex& index, int role) const override;
+
+    QVector<QObject*> elements() const { return m_items; }
+    void setElements(QList<AudioEditorFile*> elements);
+
+    void clear();
+    bool isEmpty() const { return m_items.isEmpty(); }
+
+    Q_INVOKABLE QString name() const { return m_name; }
+    void setName(QString name) { m_name = name; }
+
+    void insert(int index, QObject* item);
+    void remove(QObject* item);
+    void append(QObject* item);
+
+signals:
+    void isEmptyChanged();
+
+protected:
+    QHash<int, QByteArray> roleNames() const override;
+
+private:
+    QVector<QObject*> m_items = {};
+    QString m_name;
+};
+
+
+
 
 class AudioEditorFileBrowser : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QStringList folderNames READ folderNames NOTIFY foldersChanged)
-    Q_PROPERTY(QStringList fileNames READ fileNames NOTIFY filesChanged)
-    Q_PROPERTY(QStringList filePaths READ filePaths NOTIFY filesChanged)
 
 public:
-    explicit AudioEditorFileBrowser(QObject *parent = nullptr);
+    explicit AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     void setType(int type);
     int type() const { return m_type; }
 
-    Q_INVOKABLE void setCurrentFolder(QString folder);
-    Q_INVOKABLE void folderBack();
-    Q_INVOKABLE void home();
     Q_INVOKABLE void addAllFiles();
-
-    QStringList folderNames() const { return m_folders; }
-    QStringList fileNames() const { return m_files; }
-    QStringList filePaths() const { return m_filePaths; }
+    Q_INVOKABLE void openFolder(bool open, QString folder, QStringList path);
 
 signals:
-    void foldersChanged();
-    void filesChanged();
     void typeChanged();
-    void addFiles(QStringList files);
 
 private:
     SettingsManager sManager;
-
-    void updateFolders();
-    void updateFiles();
-
     QString m_basePath;
-    QStringList m_relativeFolders;
-    QString currentPath();
+    int m_type;
 
-    int m_type = 0;
+    QQmlApplicationEngine *qmlEngine = nullptr;
+    AudioEditorFileModel *m_fileModel = nullptr;
+//    QList<AudioEditorFile*> m_files;
 
-    QStringList m_folders;
-
-    QStringList m_files;
-    QStringList m_filePaths;
+    void updateFiles();
+    int addFolders(QStringList path, int index = -1);
+    int addFiles(QStringList path, int index = -1);
+    void removeElement(QStringList path);
+    void clearFiles();
 };
+
+
 
 #endif // AUDIOEDITORFILEBROWSER_H

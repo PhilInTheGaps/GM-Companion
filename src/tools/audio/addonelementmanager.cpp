@@ -17,13 +17,14 @@ AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
 
 void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
 {
-    QList<SpotifyElement *> list;
+    QList<MusicElement *> list;
 
     for (auto e : m_spotifyElements)
     {
         if (e && e->isExport())
         {
-            auto e2 = new SpotifyElement(e->name(), e->id());
+            auto e2 = new MusicElement(e->name());
+            e2->setFiles(e->files());
             list.append(e2);
         }
     }
@@ -145,7 +146,10 @@ void AddonElementManager::findSpotifyPlaylists()
                             if (!m_spotifyNames.contains(name))
                             {
                                 auto uri     = playlist.toObject().value("uri").toString();
-                                auto element = new SpotifyElement(name, uri);
+                                auto element = new MusicElement(name);
+                                AudioFile af(uri, 2);
+
+                                element->setFiles({ af });
                                 element->setExport(false);
 
                                 m_spotifyNames.append(name);

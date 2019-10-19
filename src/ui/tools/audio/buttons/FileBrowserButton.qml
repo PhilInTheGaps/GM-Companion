@@ -7,15 +7,25 @@ Rectangle {
     id: file_browser_button
 
     property string file
-    property string path
+    property var path
     property var type
+    property bool opened
+    property int depth: 0
+
+    signal folderClicked
 
     anchors.left: parent.left
     anchors.right: parent.right
-    height: 30
+    anchors.leftMargin: 5 + depth * 10
+    anchors.rightMargin: 5
+    height: 35
+
+    color: mouse_area.pressed ? "white" : color_scheme.secondaryButtonColor
 
     Row {
+        id: row
         anchors.fill: parent
+
         padding: 5
         spacing: 5
 
@@ -55,25 +65,23 @@ Rectangle {
         }
     }
 
-    color: mouse_area.pressed ? "white" : color_scheme.secondaryButtonColor
-
     MouseArea {
-        anchors.fill: parent
         id: mouse_area
+        anchors.fill: parent
 
         ToolTip {
             id: tool_tip
-            text: type === 3 ? file : "Add: " + file
+            text: type === 3 ? file : qsTr("Add: ") + file
         }
 
         onClicked: {
             if (type === 3) {
-                audio_editor_file_browser.setCurrentFolder(file)
-            } else if (type === 2) {
-                audio_editor.addFile(audio_editor.name, audio_editor.type, path)
+                // Is Folder
+                audio_editor_file_browser.openFolder(!opened, file, path)
+                folderClicked()
             } else {
-                audio_editor.setFileIndex(file_list.currentIndex)
-                audio_editor.addFile(audio_editor.name, audio_editor.type, path)
+                audio_editor.addFile(audio_editor.name, audio_editor.type,
+                                     path, file)
             }
         }
 

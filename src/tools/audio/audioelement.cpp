@@ -1,5 +1,6 @@
 #include "audioelement.h"
 #include <QDebug>
+#include <QTimer>
 
 AudioElement::AudioElement(QString name, QString icon) :
     m_name(name), m_icon(icon) {}
@@ -14,16 +15,9 @@ SoundElement::SoundElement(QString name)
     m_name = name;
 }
 
-RadioElement::RadioElement(QString name, bool local)
-{
-    m_name  = name;
-    m_local = local;
-}
-
-SpotifyElement::SpotifyElement(QString name, QString id)
+RadioElement::RadioElement(QString name)
 {
     m_name = name;
-    m_id   = id;
 }
 
 QVariant AudioElementModel::data(const QModelIndex& index, int /*role*/) const
@@ -155,6 +149,104 @@ void AudioElementModelModel::setElements(QList<AudioElementModel *>elements)
     for (int i = elements.size() - 1; i > -1; i--)
     {
         insert(elements[i]);
+    }
+
+    emit isEmptyChanged();
+}
+
+QVariant AudioFileModel::data(const QModelIndex& index, int /*role*/) const
+{
+    QObject *item = m_items.at(index.row());
+
+    return QVariant::fromValue(item);
+}
+
+void AudioFileModel::insert(int index, QObject *item)
+{
+    beginInsertRows(QModelIndex(), index, index);
+    m_items.insert(index, item);
+    endInsertRows();
+
+    emit isEmptyChanged();
+}
+
+void AudioFileModel::append(QObject *item)
+{
+    beginInsertRows(QModelIndex(), m_items.size(), m_items.size());
+    m_items.append(item);
+    endInsertRows();
+
+    emit isEmptyChanged();
+}
+
+bool AudioFileModel::moveRow(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild)
+{
+    if (beginMoveRows(sourceParent, sourceRow, sourceRow, sourceParent, (destinationChild > sourceRow) ? destinationChild + 1 : destinationChild))
+    {
+        m_items.move(sourceRow, destinationChild);
+        endMoveRows();
+    }
+
+    return true;
+}
+
+void AudioFileModel::remove(QObject *item)
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items.at(i) == item) {
+            beginRemoveRows(QModelIndex(), i, i);
+            m_items.remove(i);
+
+            if (item) item->deleteLater();
+            endRemoveRows();
+            break;
+        }
+    }
+
+    emit isEmptyChanged();
+}
+
+QHash<int, QByteArray>AudioFileModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+
+    roles[Qt::UserRole + 1] = "item";
+    return roles;
+}
+
+void AudioFileModel::clear()
+{
+    while (m_items.size() > 0)
+    {
+        beginRemoveRows(QModelIndex(), 0, 0);
+        m_items[0]->deleteLater();
+        m_items.remove(0);
+        endRemoveRows();
+    }
+
+
+    emit isEmptyChanged();
+}
+
+void AudioFileModel::setElements(QList<AudioFile *>elements)
+{
+    clear();
+
+    for (auto element : elements)
+    {
+        append(element);
+    }
+
+    emit isEmptyChanged();
+}
+
+void AudioFileModel::setElements(QList<AudioFile>elements)
+{
+    clear();
+
+    for (auto element : elements)
+    {
+        append(new AudioFile(element));
     }
 
     emit isEmptyChanged();

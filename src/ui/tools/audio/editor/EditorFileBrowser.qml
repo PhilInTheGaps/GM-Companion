@@ -5,12 +5,9 @@ import QtQuick.Controls 2.2
 import FontAwesome 2.0
 import "../buttons"
 
-Item {
+Rectangle {
     id: file_browser
-
-    Connections {
-        target: audio_editor_file_browser
-    }
+    color: "transparent"
 
     Connections {
         target: audio_editor
@@ -20,79 +17,24 @@ Item {
         }
     }
 
-    Rectangle {
-        id: browser_control_bar
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        height: color_scheme.toolbarHeight
-        color: color_scheme.menuColor
-
-        Row {
-            anchors.fill: parent
-            spacing: 5
-            leftPadding: 5
-            rightPadding: 5
-
-            ControlBarButton {
-                fa_icon: FontAwesome.chevronUp
-                onClicked: audio_editor_file_browser.folderBack()
-            }
-
-            ControlBarButton {
-                fa_icon: FontAwesome.home
-                onClicked: audio_editor_file_browser.home()
-            }
-
-            ControlBarButton {
-                visible: audio_editor.type != 2
-                fa_icon: FontAwesome.plus
-                onClicked: {
-                    audio_editor.setFileIndex(file_list.currentIndex)
-                    audio_editor_file_browser.addAllFiles()
-                }
-            }
-        }
-    }
-
-    ScrollView {
-        id: scroll_view
-        anchors.top: browser_control_bar.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+    ListView {
+        anchors.fill: parent
         clip: true
-        contentHeight: scroll_view_column.implicitHeight
+        spacing: 2
 
-        Column {
-            id: scroll_view_column
-            anchors.left: parent.left
-            anchors.right: parent.right
+        model: audioEditorFileBrowserModel
 
-            topPadding: 5
-            spacing: 5
+        delegate: FileBrowserButton {
+            file: modelData.name
+            type: modelData.type
+            path: modelData.path
+            depth: modelData.depth
+            opened: modelData.opened
 
-            // Folder
-            Repeater {
-                model: audio_editor_file_browser.folderNames
+            onFolderClicked: modelData.opened = !opened
+        }
 
-                FileBrowserButton {
-                    file: modelData
-                    type: 3
-                }
-            }
-
-            // Files
-            Repeater {
-                model: audio_editor_file_browser.fileNames
-
-                FileBrowserButton {
-                    file: modelData
-                    type: audio_editor.type
-                    path: audio_editor_file_browser.filePaths[index]
-                }
-            }
+        ScrollBar.vertical: ScrollBar {
         }
     }
 }

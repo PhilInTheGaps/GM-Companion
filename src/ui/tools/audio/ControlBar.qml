@@ -26,7 +26,7 @@ ToolBar {
     ControlBarButton {
         id: volume_button
         fa_icon: FontAwesome.volumeUp
-        x: parent.width - width - 10 - playlist_button.width
+        x: parent.width - width - 20 - playlist_button.width
 
         onClicked: volume_item.visible = !volume_item.visible
     }
@@ -45,6 +45,7 @@ ToolBar {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 5
 
         // Back
         ControlBarButton {

@@ -6,30 +6,44 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
+#include "spotify.h"
+#include "src/settings/settingsmanager.h"
+#include "youtube.h"
 
 class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(FileManager *fManager);
+    explicit MusicPlayer(FileManager *fManager, Spotify *spotify);
     ~MusicPlayer();
 
     void play(MusicElement *element);
     void play();
     void pause();
     void stop();
-    void setVolume(float volume) { player->setVolume(volume); }
-    void next() { playlist->next(); }
-    void again() { player->setPosition(0); }
-    void setIndex(int index) { playlist->setCurrentIndex(index); player->play(); }
+    void setVolume(float volume);
+    void setVolume(int volume);
+    void next();
+    void again();
+    void setIndex(int index);
 
     QStringList songNames() const { return m_songNames; }
-    int index() const { return playlist->currentIndex(); }
+    int index() const { return m_playlistIndex; }
 
 private:
+    Spotify *spotify;
     QMediaPlayer *player;
-    QMediaPlaylist *playlist;
     MusicElement *currentElement;
+    SettingsManager sManager;
+    YouTube youtube;
+
+    QList<AudioFile> m_playlist;
+    int m_playlistIndex;
+    int m_playerType;
+    int m_youtubeRequestId;
+    void loadMedia(AudioFile file);
+    void loadSongNames(bool initial = false, bool reloadYt = false);
+    void applyShuffleMode(bool keepIndex = false, QString url = "");
 
     QStringList m_songNames;
     bool m_waitingForUrls;
@@ -39,11 +53,20 @@ signals:
     void metaDataChanged(QMediaPlayer *mediaPlayer, QString elementIcon);
     void songNamesChanged();
 
-public slots:
-    void onSongPathsChanged(QList<QUrl> urls);
+//public slots:
+//    void onSongPathsChanged(QList<QUrl> urls);
 
 private slots:
     void onMetaDataChanged();
+    void onMediaPlayerStateChanged();
+    void onMediaPlayerBufferStatusChanged();
+    void onMediaPlayerMediaStatusChanged();
+    void onMediaPlayerError(QMediaPlayer::Error error);
+    void onMediaPlayerMediaChanged();
+    void onSpotifySongEnded();
+    void onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QString playlistId);
+    void onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int reqId);
+    void onYtReceivedVideo(Video video, int reqId);
 };
 
 #endif // MUSICPLAYER_H

@@ -21,44 +21,48 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     editor         = new AudioEditor(fManager, qmlEngine, this);
     metaDataReader = new MetaDataReader;
 
+    // Spotify
+    spotify = new Spotify(fileManager, metaDataReader);
+    connect(spotify, &Spotify::authorize,  [ = ](QUrl url) { emit authorizeSpotify(url); });
+    connect(spotify, &Spotify::authorize,  this, &AudioTool::onSpotifyAuthorize);
+    connect(spotify, &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
+
     // Music Player
-    musicPlayer = new MusicPlayer(fileManager);
-    connect(musicPlayer,                        &MusicPlayer::startedPlaying,        this,        &AudioTool::onStartedPlaying);
-    connect(musicPlayer,                        &MusicPlayer::songNamesChanged,      [ = ]() { emit songsChanged(); });
-    connect(fileManager->getAudioFileManager(), &AudioFileManager::songPathsChanged, musicPlayer, &MusicPlayer::onSongPathsChanged);
+    musicPlayer = new MusicPlayer(fileManager, spotify);
+    connect(musicPlayer, &MusicPlayer::startedPlaying,   this, &AudioTool::onStartedPlaying);
+    connect(musicPlayer, &MusicPlayer::songNamesChanged, [ = ]() { emit songsChanged(); });
+
+    //    connect(fileManager->getAudioSaveLoad(),
+    // &AudioSaveLoad::songPathsChanged, musicPlayer,
+    // &MusicPlayer::onSongPathsChanged);
     musicPlayers.append(musicPlayer);
 
     // Sound Player
     soundPlayer = new SoundPlayer(fileManager);
-    connect(fileManager->getAudioFileManager(), &AudioFileManager::soundPathsChanged, soundPlayer, &SoundPlayer::onSoundPathsChanged);
-    connect(soundPlayer,                        &SoundPlayer::soundsChanged,          this,        &AudioTool::onSoundsChanged);
+    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::soundPathsChanged, soundPlayer, &SoundPlayer::onSoundPathsChanged);
+    connect(soundPlayer,                     &SoundPlayer::soundsChanged,       this,        &AudioTool::onSoundsChanged);
     soundModel = new AudioElementModel;
     qmlEngine->rootContext()->setContextProperty("soundModel", soundModel);
 
     // Radio Player
     radioPlayer = new RadioPlayer(fileManager);
-    connect(fileManager->getAudioFileManager(), &AudioFileManager::radioPathChanged, radioPlayer, &RadioPlayer::onUrlChanged);
-    connect(radioPlayer,                        &RadioPlayer::startedPlaying,        this,        &AudioTool::onStartedPlaying);
+    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::radioPathChanged, radioPlayer, &RadioPlayer::onUrlChanged);
+    connect(radioPlayer,                     &RadioPlayer::startedPlaying,     this,        &AudioTool::onStartedPlaying);
     musicPlayers.append(radioPlayer);
-
-    // Spotify
-    spotify = new Spotify(fileManager, metaDataReader);
-    connect(spotify, &Spotify::startedPlaying,   this, &AudioTool::onStartedPlaying);
-    connect(spotify, &Spotify::songNamesChanged, [ = ]() { emit songsChanged(); });
-    connect(spotify, &Spotify::authorize,        [ = ](QUrl url) { emit authorizeSpotify(url); });
-    musicPlayers.append(spotify);
 
     elementModel = new AudioElementModelModel;
     elementModel->setElements({ new AudioElementModel });
     qmlEngine->rootContext()->setContextProperty("elementModel", elementModel);
 
-    connect(fileManager->getAudioFileManager(), &AudioFileManager::projectsChanged, this,           &AudioTool::onProjectsChanged);
-    connect(this,                               &AudioTool::currentScenarioChanged, this,           &AudioTool::onCurrentScenarioChanged);
+    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::foundProjects,      [ = ](QList<AudioProject *>projects, bool isEditor) {
+        if (!isEditor) onProjectsChanged(projects);
+    });
+    connect(this,                            &AudioTool::currentScenarioChanged, this,           &AudioTool::onCurrentScenarioChanged);
 
     // Meta Data
-    connect(musicPlayer,                        &MusicPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(radioPlayer,                        &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(metaDataReader,                     &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
+    connect(musicPlayer,                     &MusicPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
+    connect(radioPlayer,                     &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
+    connect(metaDataReader,                  &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
 
 #ifndef NO_DBUS
 
@@ -78,13 +82,7 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 #endif // ifdef NO_DBUS
 
     // Find and load projects
-    fileManager->getAudioFileManager()->findProjects(fileManager->getModeInt());
-
-    connect(spotify, &Spotify::authorize,                this, &AudioTool::onSpotifyAuthorize);
-    connect(spotify, &Spotify::authorized,               this, &AudioTool::onSpotifyAuthorized);
-    connect(this,    &AudioTool::currentScenarioChanged, [ = ]() {
-        if (spotify && m_currentProject->currentCategory()) spotify->fetchIcons(m_currentProject->currentCategory()->currentScenario());
-    });
+    fileManager->getAudioSaveLoad()->findProjects(fileManager->getModeInt());
 }
 
 AudioTool::~AudioTool()
@@ -185,10 +183,6 @@ void AudioTool::onCurrentScenarioChanged()
 
     if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario()) return;
 
-    spotify->addElements(m_currentProject->currentCategory()->currentScenario()->spotifyElements());
-
-    for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios()) spotify->addElements(s->spotifyElements());
-
     qDebug() << "AudioTool: Scenario Names:" << m_currentProject->currentCategory()->scenarios().size() << m_currentProject->currentCategory()->currentScenario()->scenarioNames();
 
     for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
@@ -197,7 +191,6 @@ void AudioTool::onCurrentScenarioChanged()
         m->setName(s->name());
         m->setElements(s->elements());
 
-        spotify->addElements(s->spotifyElements());
         elementModel->append(m);
     }
 }
@@ -205,7 +198,7 @@ void AudioTool::onCurrentScenarioChanged()
 /**
  * @brief Start playing an element
  * @param name Name of the element
- * @param type Type of the element. 0: Music, 1: Sounds, 2: Radio, 3: Spotify
+ * @param type Type of the element. 0: Music, 1: Sounds, 2: Radio
  * @param subscenario Name of the subscenario, empty if top level
  */
 void AudioTool::playElement(QString name, int type, QString subscenario)
@@ -228,7 +221,6 @@ void AudioTool::playElement(QString name, int type, QString subscenario)
     switch (type)
     {
     case 0: // Music
-        spotify->stop();
         radioPlayer->stop();
         musicPlayer->play(scenario->musicElement(name));
         break;
@@ -238,15 +230,8 @@ void AudioTool::playElement(QString name, int type, QString subscenario)
         break;
 
     case 2: // Radio
-        spotify->stop();
         musicPlayer->stop();
         radioPlayer->play(scenario->radioElement(name));
-        break;
-
-    case 3: // Spotify
-        musicPlayer->stop();
-        radioPlayer->stop();
-        spotify->play(scenario->spotifyElement(name));
         break;
     }
 }
@@ -260,14 +245,12 @@ void AudioTool::next()
     {
     case 0: musicPlayer->next(); break;
 
-    case 3: spotify->next(); break;
-
     default: return;
     }
 }
 
 /**
- * @brief Set volume of music players (music, radio, spotify)
+ * @brief Set volume of music players (music, radio)
  * @param volume Volume, float between 0 and 1
  */
 void AudioTool::setMusicVolume(float volume)
@@ -312,8 +295,6 @@ void AudioTool::playPause()
 
         case 2: radioPlayer->play();  break;
 
-        case 3: spotify->play(); break;
-
         default: break;
         }
     }
@@ -324,8 +305,6 @@ void AudioTool::playPause()
         case 0: musicPlayer->pause(); break;
 
         case 2: radioPlayer->pause(); break;
-
-        case 3: spotify->pause(); break;
 
         default: break;
         }
@@ -350,8 +329,6 @@ void AudioTool::again()
     {
     case 0: musicPlayer->again(); break;
 
-    case 3: spotify->again(); break;
-
     default: break;
     }
 }
@@ -366,8 +343,6 @@ QStringList AudioTool::songs() const
     {
     case 0: return musicPlayer->songNames();
 
-    case 3: return spotify->songNames();
-
     default: return {};
     }
 }
@@ -380,9 +355,9 @@ int AudioTool::index() const
 {
     switch (m_musicMode)
     {
-    case 0: return musicPlayer->index();
-
-    case 3: return spotify->index();
+    case 0:
+        qDebug() << "INDEX:" << musicPlayer->index();
+        return musicPlayer->index();
 
     default: return 0;
     }
@@ -397,8 +372,6 @@ void AudioTool::setMusicIndex(int index)
     switch (m_musicMode)
     {
     case 0: musicPlayer->setIndex(index); break;
-
-    case 3: spotify->setIndex(index); break;
 
     default: return;
     }

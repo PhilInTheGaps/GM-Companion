@@ -10,7 +10,7 @@
 #include "src/cloud/googledrive.h"
 #include "src/settings/settingsmanager.h"
 
-#include "file_managers/audiofilemanager.h"
+#include "src/tools/audio/audiosaveload.h"
 #include "file_managers/mapsfilemanager.h"
 #include "file_managers/shopfilemanager.h"
 #include "file_managers/characterfilemanager.h"
@@ -18,7 +18,8 @@
 enum CloudMode
 {
     LOCAL,
-    GOOGLE_DRIVE
+    GOOGLE_DRIVE,
+    GENERIC_CLOUD
 };
 
 class FileManager : public QObject
@@ -33,7 +34,8 @@ public:
     int getModeInt() const { return static_cast<int>(m_mode); }
 
     GoogleDrive* getGoogleDrive() const { return google; }
-    AudioFileManager* getAudioFileManager() const { return audioFileManager; }
+
+    AudioSaveLoad* getAudioSaveLoad() const { return audioSaveLoad; }
     MapsFileManager* getMapsFileManger() const { return mapsFileManager; }
     ShopFileManager* getShopFileManager() const { return shopFileManager; }
     CharacterFileManager* getCharacterFileManager() const { return characterFileManager; }
@@ -42,7 +44,7 @@ private:
     GoogleDrive *google;
     SettingsManager *sManager;
 
-    AudioFileManager *audioFileManager;
+    AudioSaveLoad *audioSaveLoad;
     MapsFileManager *mapsFileManager;
     ShopFileManager *shopFileManager;
     CharacterFileManager *characterFileManager;

@@ -1,5 +1,5 @@
-#ifndef AUDIOFILEMANAGER_H
-#define AUDIOFILEMANAGER_H
+#ifndef AUDIOSAVELOAD_H
+#define AUDIOSAVELOAD_H
 
 #include <QObject>
 #include <QList>
@@ -15,36 +15,36 @@
 #include "src/settings/settingsmanager.h"
 #include "src/cloud/googledrive.h"
 
+class LocalAudioFileSource;
+
 class FileFinder : public QObject
 {
     Q_OBJECT
 public:
-    FileFinder(QStringList files, QString basePath) :
+    FileFinder(QVector<QObject*> files, QString basePath) :
     m_files(files), m_basePath(basePath) {}
     virtual ~FileFinder() {}
 
 private:
-    QStringList m_files;
+    QVector<QObject*> m_files;
     QString m_basePath;
 
 public slots:
     void findMissingFiles();
 
 signals:
-    void finished(QList<bool> missingFiles);
+    void finished();
 };
 
-class AudioFileManager : public QObject
+
+class AudioSaveLoad : public QObject
 {
     Q_OBJECT
     QThread workerThread;
 
 public:
-    explicit AudioFileManager(GoogleDrive *google);
-    ~AudioFileManager() {
-        workerThread.quit();
-        workerThread.wait();
-    }
+    explicit AudioSaveLoad(int mode, GoogleDrive *google);
+    ~AudioSaveLoad();
 
     void findProjects(int mode);
     void findEditorProjects(int mode);
@@ -52,30 +52,28 @@ public:
     void fetchSoundPaths(QStringList paths, QStringList args);
     void fetchRadioPath(QString path);
 
-    void findMissingFiles(QStringList files, QString basePath);
+    void findIconPaths(QList<AudioProject*> projects);
+    void findMissingFiles(QVector<QObject *> files, QString basePath);
 
     void saveProject(AudioProject *project);
 
+    void setMode(int mode) { m_mode = mode; }
+
+    AudioProject *initProject(QString path);
+
 private:
     SettingsManager sManager;
+    GoogleDrive *googleDrive;
+    LocalAudioFileSource *localSource;
+
     QList<AudioProject*> m_projects;
     QList<AudioProject*> m_editorProjects;
-    GoogleDrive *googleDrive;
 
-    AudioProject *initProject(QString path, int mode);
-    AudioCategory *initCategory(QJsonObject object);
-    AudioScenario *initScenario(QJsonObject object);
-
-    QList<MusicElement*> initMusicLists(QJsonArray array);
-    QList<SoundElement*> initSoundLists(QJsonArray array);
-    QList<RadioElement*> initRadios(QJsonArray array);
-    QList<SpotifyElement*> initSpotifyElements(QJsonArray array);
+    // Icons
+    void findIconPaths(QStringList icons);
+    QMap<QString, QString> m_iconMap;
 
     QUrl musicPath(QString path, int mode);
-
-    QString iconPath(QString icon);
-    QMap<QString, QString> m_iconMap;
-    void updateIconPaths();
 
     int m_radioRequestID;
     QString m_relativeRadioPath;
@@ -85,17 +83,24 @@ private:
 
     int m_mode;
 
+    // Initialize elements
+    AudioCategory *initCategory(QJsonObject object);
+    AudioScenario *initScenario(QJsonObject object);
+    QList<MusicElement*> initMusicLists(QJsonArray array);
+    QList<SoundElement*> initSoundLists(QJsonArray array);
+    QList<RadioElement*> initRadios(QJsonArray array);
+    void initAudioElement(AudioElement *element, QJsonObject object);
+
     // Save Project
     QJsonObject saveCategory(AudioCategory *category);
     QJsonObject saveScenario(AudioScenario *scenario);
     QJsonArray saveMusicElements(AudioScenario *scenario);
     QJsonArray saveSoundElements(AudioScenario *scenario);
     QJsonArray saveRadioElements(AudioScenario *scenario);
-    QJsonArray saveSpotifyElements(AudioScenario *scenario);
+    QJsonObject saveAudioElement(AudioElement *element);
 
 signals:
-    void projectsChanged(QList<AudioProject*>);
-    void editorProjectsChanged(QList<AudioProject*>);
+    void foundProjects(QList<AudioProject*> projects, bool forEditor);
     void songPathsChanged(QList<QUrl>);
     void soundPathsChanged(QList<QUrl>, QStringList);
     void radioPathChanged(QUrl url);
@@ -103,10 +108,8 @@ signals:
     void missingFilesFound(QList<bool> missingFiles);
 
 private slots:
-    void onProjectsChanged() { updateIconPaths(); }
-    void onMusicPathsChanged(QList<QUrl>urls, int mode, QStringList args);
-    void onSoundPathsChanged(QList<QUrl>urls, int mode, QStringList args);
-    void onRadioPathChanged(QList<QUrl>urls, int mode, QStringList args);
+    void onFoundProjects(QList<AudioProject*> projects, bool forEditor);
+    void onFoundIconPaths(QMap<QString, QString> iconMap);
 };
 
-#endif // AUDIOFILEMANAGER_H
+#endif // AUDIOSAVELOAD_H

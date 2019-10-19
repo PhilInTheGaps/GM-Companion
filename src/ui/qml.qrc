@@ -39,7 +39,6 @@
         <file>tools/audio/audio_exporter/AudioExporter.qml</file>
         <file>tools/audio/audio_exporter/CheckScrollView.qml</file>
         <file>tools/audio/editor/Editor.qml</file>
-        <file>tools/audio/editor/EditorAudioListPage.qml</file>
         <file>tools/audio/editor/EditorFileBrowser.qml</file>
         <file>tools/audio/editor/EditorRadioPage.qml</file>
         <file>tools/audio/editor/EditorSpotifyPlaylistPage.qml</file>
@@ -89,5 +88,11 @@
         <file>tools/maps/MarkerEditor.qml</file>
         <file>tools/audio/editor/IconFinderUnsplash.qml</file>
         <file>tools/audio/VolumeItem.qml</file>
+        <file>tools/audio/editor/EditorRightColumn.qml</file>
+        <file>components/CustomToolBar.qml</file>
+        <file>tools/audio/editor/views/ElementPropertiesView.qml</file>
+        <file>tools/audio/editor/views/ElementFileAddView.qml</file>
+        <file>tools/audio/editor/views/EditorFileListView.qml</file>
+        <file>tools/audio/editor/views/PlaybackModeView.qml</file>
     </qresource>
 </RCC>

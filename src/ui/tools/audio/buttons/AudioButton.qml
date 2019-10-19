@@ -40,7 +40,7 @@ Rectangle {
         }
     }
 
-    height: small_mode ? width / 4 : width
+    height: small_mode ? color_scheme.toolbarHeight : width
 
     color: color_scheme.backgroundColor
 
@@ -67,8 +67,8 @@ Rectangle {
 
         fillMode: small_mode ? Image.PreserveAspectCrop : Image.Stretch
 
-        sourceSize.width: 500
-        sourceSize.height: 500
+        sourceSize.width: 400
+        sourceSize.height: 400
     }
 
     BusyIndicator {
@@ -100,7 +100,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: parent.width / 4
+        height: small_mode ? parent.height : parent.width / 4
 
         color: Qt.rgba(0, 0, 0, 0.5)
 

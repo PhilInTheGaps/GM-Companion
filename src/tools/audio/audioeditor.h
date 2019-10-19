@@ -4,12 +4,16 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QStringList>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+
 #include "src/settings/settingsmanager.h"
 #include "addonelementmanager.h"
 #include "audioexporter.h"
 #include "audioeditorfilebrowser.h"
 #include "src/managers/filemanager.h"
 #include "unsplash/unsplashparser.h"
+#include "youtube.h"
 
 class AudioEditor : public QObject
 {
@@ -27,12 +31,9 @@ class AudioEditor : public QObject
     Q_PROPERTY(QString name READ name NOTIFY currentElementChanged)
     Q_PROPERTY(int type READ type NOTIFY currentElementChanged)
     Q_PROPERTY(QString icon READ icon NOTIFY currentElementChanged)
-    Q_PROPERTY(QStringList files READ files NOTIFY currentElementChanged)
     Q_PROPERTY(int mode READ mode NOTIFY currentElementChanged)
-    Q_PROPERTY(QString url READ url NOTIFY currentElementChanged)
-    Q_PROPERTY(bool local READ local NOTIFY currentElementChanged)
     Q_PROPERTY(QString id READ id NOTIFY currentElementChanged)
-    Q_PROPERTY(QList<bool> missing READ missing NOTIFY missingChanged)
+    Q_PROPERTY(int subscenario READ subscenario NOTIFY currentElementChanged)
 
 public:
     explicit AudioEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent);
@@ -77,19 +78,18 @@ public:
     Q_INVOKABLE void createMusicElement(QString name, bool subscenario, int scenarioIndex);
     Q_INVOKABLE void createSoundElement(QString name, bool subscenario, int scenarioIndex);
     Q_INVOKABLE void createRadioElement(QString name, bool subscenario, int scenarioIndex);
-    Q_INVOKABLE void createSpotifyElement(QString name, bool subscenario, int scenarioIndex);
 
     // Edit element
     Q_INVOKABLE void setName(QString element, int type, QString name);
-    Q_INVOKABLE void addFile(QString element, int type, QString path);
-    Q_INVOKABLE void removeFile(QString element, int type, int index, bool findMissing = true);
-    Q_INVOKABLE void moveFile(QString element, int type, int index, int positions);
-    Q_INVOKABLE void removeMissingFiles(QString element, int type);
-    Q_INVOKABLE void replaceFileFolder(QString element, int type, int index, QString folder);
-    Q_INVOKABLE void setMode(QString element, int type, int mode);
-    Q_INVOKABLE void setUrl(QString element, int type, QString url);
-    Q_INVOKABLE void setLocal(QString element, int type, bool local);
-    Q_INVOKABLE void setId(QString element, int type, QString id);
+    Q_INVOKABLE void addFile(QString element, int type, QStringList path, QString filename);
+    Q_INVOKABLE void removeFile(QString name, int type, int index, bool findMissing = true);
+    Q_INVOKABLE void moveFile(QString name, int type, int index, int positions);
+    Q_INVOKABLE void removeMissingFiles(QString name, int type);
+    Q_INVOKABLE void replaceFileFolder(QString name, int type, int index, QString folder);
+    Q_INVOKABLE void setMode(QString name, int type, int mode);
+    Q_INVOKABLE void addUrl(QString name, int type, QString url, int mode, QString title = "");
+    Q_INVOKABLE void addYtUrl(QString elementName, int type, QString videoUrl);
+//    Q_INVOKABLE void setId(QString element, int type, QString id);
 
     Q_INVOKABLE void findUnsplashImages(QString text) { unsplashParser->findImage(text); }
     Q_INVOKABLE void shuffleUnsplashImages() { unsplashParser->shuffle(); }
@@ -98,13 +98,10 @@ public:
     QString name() const { return m_name; }
     QString icon() const { return m_icon; }
     Q_INVOKABLE void setIcon(QString element, int type, QString path);
-    QStringList files() const { return m_files; }
     int type() const { return m_type; }
     int mode() const { return m_mode; }
-    bool local() const { return m_local; }
-    QString url() const { return m_url; }
     QString id() const { return m_id; }
-    QList<bool> missing() const { return m_missing; }
+    int subscenario() { return getSubscenarioIndex(m_subscenario); }
     Q_INVOKABLE void loadElement(QString name, int type, QString subscenario);
     Q_INVOKABLE QString resourcesPath() const { return sManager->getSetting(Setting::resourcesPath); }
     Q_INVOKABLE QString basePath(int type);
@@ -118,7 +115,6 @@ signals:
     void currentScenarioChanged();
     void subscenariosChanged();
     void isSavedChanged();
-    void missingChanged();
 
     void currentElementChanged();
     void fileIndexChanged(int index);
@@ -132,19 +128,20 @@ private:
     FileManager *fileManager = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;
     UnsplashParser *unsplashParser = nullptr;
+    QNetworkAccessManager m_networkManager;
+    YouTube m_youtube;
 
     QList<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
     bool m_isSaved = true;
 
     AudioElementModelModel *elementModel = nullptr;
+    AudioFileModel *fileModel = nullptr;
 
     // Elements
-    QString m_name, m_subscenario, m_icon, m_url, m_id;
-    QStringList m_files;
+    QString m_name, m_subscenario, m_icon, m_id;
     int m_mode, m_type;
-    QList<bool> m_missing;
-    bool m_local;
+    void clearCurrentElement();
 
     AudioElement* getElement(QString name, int type);
     int m_fileIndex;
@@ -153,7 +150,6 @@ private:
     void madeChanges();
 
 private slots:
-    void foundMissingFiles(QList<bool> missing);
     void addFiles(QStringList files);
 
 };

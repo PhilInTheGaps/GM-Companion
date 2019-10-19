@@ -13,10 +13,6 @@ Dialog {
 
     property string imageSource
 
-    onAccepted: {
-        element_icon_field.text = imageSource
-    }
-
     contentItem: Row {
         spacing: 10
 

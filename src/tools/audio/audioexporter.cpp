@@ -366,7 +366,7 @@ void Worker::copyElements(AudioScenario *scenario)
         {
             for (auto f : e->files())
             {
-                if (!musicFiles.contains(f)) musicFiles.append(f);
+                if (!musicFiles.contains(f.url())) musicFiles.append(f.url());
             }
         }
     }
@@ -378,7 +378,7 @@ void Worker::copyElements(AudioScenario *scenario)
         {
             for (auto f : e->files())
             {
-                if (!soundFiles.contains(f)) soundFiles.append(f);
+                if (!soundFiles.contains(f.url())) soundFiles.append(f.url());
             }
         }
     }
@@ -386,9 +386,10 @@ void Worker::copyElements(AudioScenario *scenario)
     // Radio Elements
     for (auto e : scenario->radioElements())
     {
-        if (e && e->isExport() && e->local())
-        {
-            if (!radioFiles.contains(e->url().toString())) radioFiles.append(e->url().toString());
-        }
+        //        if (e && e->isExport() && e->local())
+        //        {
+        //            if (!radioFiles.contains(e->url().toString()))
+        // radioFiles.append(e->url().toString());
+        //        }
     }
 }

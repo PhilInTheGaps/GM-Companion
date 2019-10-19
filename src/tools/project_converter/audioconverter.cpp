@@ -62,7 +62,14 @@ void AudioConverter::convert()
 
             if ((file_version == 0) && settings.value("ProjectName", "").toString().isEmpty())
             {
-                file_version = 3;
+                QFile f(basePath + "/" + file);
+
+                if (f.open(QIODevice::ReadOnly))
+                {
+                    QJsonDocument doc = QJsonDocument::fromJson(f.readAll());
+                    f.close();
+                    file_version = doc.object().value("version").toInt();
+                }
             }
 
             if (file_version == 0)
@@ -368,6 +375,12 @@ void AudioConverter::convert()
                 file_version = 3;
                 convertTo3(basePath + "/" + file);
             }
+
+            if (file_version == 3)
+            {
+                file_version = 4;
+                convertTo4(basePath + "/" + file);
+            }
             else
             {
                 qDebug() << "   Project has already been converted.";
@@ -380,6 +393,8 @@ void AudioConverter::convertTo3(QString file)
 {
     qDebug() << "Converting project" << file << "to version 3 ...";
     QSettings settings(file, QSettings::IniFormat);
+
+    if (settings.value("ProjectName").toString().isEmpty()) return;
 
     // Basic Info
     QJsonObject project;
@@ -529,4 +544,181 @@ void AudioConverter::convertTo3(QString file)
     {
         qDebug() << "Error: Could not open file" << file << "!";
     }
+}
+
+void AudioConverter::convertTo4(QString file)
+{
+    qDebug() << "Converting project" << file << "to version 4 ...";
+
+    QFile f(file);
+    QJsonDocument doc;
+
+    if (f.open(QIODevice::ReadOnly))
+    {
+        doc = QJsonDocument::fromJson(f.readAll());
+        f.close();
+    }
+    else
+    {
+        qDebug() << "Error: Could not open file" << file << "!";
+        return;
+    }
+
+    QJsonArray categories = doc.object().value("categories").toArray();
+    QJsonArray categoriesNew;
+
+    for (auto category : categories)
+    {
+        QJsonObject categoryNew{ { "name", category.toObject().value("name") } };
+
+        QJsonArray scenariosNew;
+
+        for (auto scenario : category.toObject().value("scenarios").toArray())
+        {
+            scenariosNew.append(convertScenarioTo4(scenario.toObject()));
+        }
+
+        categoryNew.insert("scenarios", scenariosNew);
+        categoriesNew.append(categoryNew);
+    }
+
+    QJsonObject projectNew
+    {
+        { "name", doc.object().value("name") },
+        { "version", 4 },
+        { "categories", categoriesNew }
+    };
+
+    QJsonDocument docNew(projectNew);
+
+    QFile(file).rename(file + "_old");
+    QFile f2(file);
+
+    if (f2.open(QIODevice::WriteOnly))
+    {
+        f2.write(docNew.toJson(QJsonDocument::Indented));
+        f2.close();
+
+        qDebug() << "Successfully converted" << file << "to version 4.";
+    }
+    else
+    {
+        qDebug() << "Error: Could not open file" << file << "!";
+    }
+}
+
+QJsonObject AudioConverter::convertScenarioTo4(QJsonObject scenario)
+{
+    QJsonObject scenarioNew { { "name", scenario.value("name") } };
+
+    // Music
+    QJsonArray musicElementsNew;
+
+    for (auto musicElement : scenario.value("music_elements").toArray())
+    {
+        QJsonObject musicElementNew
+        {
+            { "name", musicElement.toObject().value("name") },
+            { "icon", musicElement.toObject().value("icon") },
+            { "mode", musicElement.toObject().value("mode") }
+        };
+
+        QJsonArray filesNew;
+
+        for (auto file : musicElement.toObject().value("files").toArray())
+        {
+            filesNew.append(QJsonObject
+            {
+                { "url", file.toString() },
+                { "source", 0 }
+            });
+        }
+
+        musicElementNew.insert("files", filesNew);
+        musicElementsNew.append(musicElementNew);
+    }
+
+    for (auto spotifyElement : scenario.value("spotify_elements").toArray())
+    {
+        QJsonObject musicElementNew
+        {
+            { "name", spotifyElement.toObject().value("name") },
+            { "icon", spotifyElement.toObject().value("icon") },
+        };
+
+        QJsonArray filesNew;
+        filesNew.append(QJsonObject
+        {
+            { "url", spotifyElement.toObject().value("id") },
+            { "source", 2 }
+        });
+
+        musicElementNew.insert("files", filesNew);
+        musicElementsNew.append(musicElementNew);
+    }
+    scenarioNew.insert("music_elements", musicElementsNew);
+
+    // Sound
+    QJsonArray soundElementsNew;
+
+    for (auto soundElement : scenario.value("sound_elements").toArray())
+    {
+        QJsonObject soundElementNew
+        {
+            { "name", soundElement.toObject().value("name") },
+            { "icon", soundElement.toObject().value("icon") },
+            { "mode", soundElement.toObject().value("mode") }
+        };
+
+        QJsonArray filesNew;
+
+        for (auto file : soundElement.toObject().value("files").toArray())
+        {
+            filesNew.append(QJsonObject
+            {
+                { "url", file.toString() },
+                { "source", 0 }
+            });
+        }
+
+        soundElementNew.insert("files", filesNew);
+        soundElementsNew.append(soundElementNew);
+    }
+    scenarioNew.insert("sound_elements", soundElementsNew);
+
+    // Radio
+    QJsonArray radioElementsNew;
+
+    for (auto radioElement : scenario.value("radio_elements").toArray())
+    {
+        QJsonObject radioElementNew
+        {
+            { "name", radioElement.toObject().value("name") },
+            { "icon", radioElement.toObject().value("icon") },
+            { "mode", 0 }
+        };
+
+        QJsonArray filesNew;
+        filesNew.append(QJsonObject
+        {
+            { "url", radioElement.toObject().value("url") },
+            { "source", radioElement.toObject().value("local").toBool() ? 0 : 1 }
+        });
+
+        radioElementNew.insert("files", filesNew);
+        radioElementsNew.append(radioElementNew);
+    }
+    scenarioNew.insert("radio_elements", radioElementsNew);
+
+    // Subscenarios
+    QJsonArray subscenariosNew;
+
+    for (auto subscenario : scenario.value("scenarios").toArray())
+    {
+        subscenariosNew.append(convertScenarioTo4(subscenario.toObject()));
+    }
+
+    scenarioNew.insert("scenarios", subscenariosNew);
+
+    return scenarioNew;
 }

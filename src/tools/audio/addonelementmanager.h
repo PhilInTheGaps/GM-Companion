@@ -35,13 +35,13 @@ private:
     QString m_currentSpotifyFolder;
 
     void findSpotifyPlaylists();
-    QList<SpotifyElement*> m_spotifyElements;
+    QList<MusicElement*> m_spotifyElements;
     QStringList m_spotifyNames;
 
 signals:
     void spotifyFoldersChanged();
     void elementsChanged();
-    void exportElements(QList<SpotifyElement*>, bool subscenario, int scenarioIndex);
+    void exportElements(QList<MusicElement*>, bool subscenario, int scenarioIndex);
 };
 
 #endif // ADDONELEMENTMANAGER_H

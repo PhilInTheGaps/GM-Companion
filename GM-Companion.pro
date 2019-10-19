@@ -8,6 +8,7 @@ QT       += core multimedia network quick qml dbus
 
 include(lib/fontawesome.pri/fontawesome.pri)
 include(lib/o2/src/src.pri)
+include(lib/qytlib/qytlib.pri)
 
 TARGET = gm-companion
 TEMPLATE = app
@@ -20,6 +21,8 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += src/main.cpp \
     # UI
+    src/tools/audio/audiosaveload.cpp \
+    src/tools/audio/filesource/localaudiofilesource.cpp \
     src/tools/audio/unsplash/unsplashimage.cpp \
     src/tools/audio/unsplash/unsplashparser.cpp \
     src/tools/maps/mapmarker.cpp \
@@ -72,7 +75,6 @@ SOURCES += src/main.cpp \
     src/managers/updatemanager.cpp \
     src/managers/filemanager.cpp \
     src/managers/addonmanager.cpp \
-    src/managers/file_managers/audiofilemanager.cpp \
     src/managers/file_managers/mapsfilemanager.cpp \
     src/managers/file_managers/shopfilemanager.cpp \
     src/managers/file_managers/characterfilemanager.cpp \
@@ -86,7 +88,8 @@ SOURCES += src/main.cpp \
     src/tools/characters/viewers/characterimageviewer.cpp \
     src/tools/characters/viewers/characterviewer.cpp \
     src/tools/characters/viewers/characterdsa5viewer.cpp \
-    src/tools/characters/viewers/dsa5/dsa5listitem.cpp
+    src/tools/characters/viewers/dsa5/dsa5listitem.cpp \
+    src/utils/processinfo.cpp
     # Addons
 #    src/tools/addons/sifrp.cpp \
 
@@ -111,11 +114,15 @@ SOURCES += *.qml \
 
 HEADERS  += src/functions.h \
     # UI
+    src/tools/audio/audiosaveload.h \
+    src/tools/audio/filesource/audiofilesource.h \
+    src/tools/audio/filesource/localaudiofilesource.h \
     src/tools/audio/unsplash/unsplashimage.h \
     src/tools/audio/unsplash/unsplashparser.h \
     src/tools/maps/mapmarker.h \
     src/ui/colorscheme.h \
     # Other
+    src/utils/processinfo.h \
     src/version.h \
     # Tools
     src/tools/toolmanager.h \
@@ -165,7 +172,6 @@ HEADERS  += src/functions.h \
     src/managers/updatemanager.h \
     src/managers/addonmanager.h \
     src/managers/filemanager.h \
-    src/managers/file_managers/audiofilemanager.h \
     src/managers/file_managers/mapsfilemanager.h \
     src/managers/file_managers/shopfilemanager.h \
     src/managers/file_managers/characterfilemanager.h \

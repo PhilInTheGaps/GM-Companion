@@ -5,3 +5,6 @@
 	path = lib/o2
 	url = https://github.com/pipacs/o2
 
+[submodule "lib/qytlib"]
+	path = lib/qytlib
+	url = https://github.com/PhilInTheGaps/qytlib

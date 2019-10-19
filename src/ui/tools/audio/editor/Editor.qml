@@ -6,6 +6,7 @@ import FontAwesome 2.0
 import "../buttons"
 import "../audio_exporter"
 import "../../../components"
+import "views"
 
 Page {
     id: editor_root
@@ -19,12 +20,6 @@ Page {
 
     Connections {
         target: audio_editor
-
-        onCurrentScenarioChanged: {
-            if (element_stack_view.currentItem !== no_element_text) {
-                element_stack_view.replace(no_element_text)
-            }
-        }
 
         onShowInfoBar: {
             info_text.text = message
@@ -60,15 +55,17 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: if (element_icon_field.text.startsWith("http")) {
-                        element_icon_field.text
+            source: if (audio_editor.icon.startsWith("http")) {
+                        audio_editor.icon
                     } else {
                         (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
-                                    ) + element_icon_field.text
+                                    ) + audio_editor.icon
                     }
 
             fillMode: Image.PreserveAspectFit
         }
+
+        onOpened: console.log(contentItem.source)
     }
 
     EditorRenameDialog {
@@ -76,50 +73,33 @@ Page {
     }
 
     // Top Bar
-    ToolBar {
+    CustomToolBar {
         id: tool_bar
-        width: parent.width
-        background: Rectangle {
-            color: color_scheme.toolbarColor
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        enable_back: true
+        enable_add: true
+        enable_save: true
+        enable_export: true
+
+        is_saved: audio_editor.isSaved
+
+        onBackClicked: backToTool()
+        onAddClicked: new_thing_dialog.open()
+        onSaveClicked: audio_editor.saveProject()
+        onExportClicked: {
+            audio_exporter.project = project_box.currentText
+            audio_exporter_dialog.open()
         }
 
         Row {
-            width: parent.width
-            height: color_scheme.toolbarHeight
-            spacing: 5
+            anchors.left: tool_bar.button_row.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-            // Back
-            EditorToolButton {
-                labeltext: FontAwesome.arrowAltCircleLeft
-                onClicked: backToTool()
-            }
-
-            EditorToolButton {
-                labeltext: FontAwesome.fileMedical
-                onClicked: new_thing_dialog.open()
-            }
-
-            EditorToolButton {
-                labeltext: FontAwesome.fileDownload
-                onClicked: audio_editor.saveProject()
-
-                Text {
-                    visible: !audio_editor.isSaved
-                    text: FontAwesome.asterisk
-                    color: "darkred"
-                    font.family: FontAwesome.familySolid
-                    anchors.right: parent.right
-                    y: parent.height - height * 1.5
-                }
-            }
-
-            EditorToolButton {
-                labeltext: FontAwesome.fileExport
-                onClicked: {
-                    audio_exporter.project = project_box.currentText
-                    audio_exporter_dialog.open()
-                }
-            }
+            padding: 10
+            spacing: 10
 
             ToolBarComboBox {
                 id: project_box
@@ -131,11 +111,8 @@ Page {
                 model: audio_editor.projectNames
                 currentIndex: audio_editor.projectIndex
 
-                onCurrentIndexChanged: {
-                    subscenario_combo_box.isSetEnabled = false
-                    audio_editor.setCurrentProject(currentIndex)
-                    subscenario_combo_box.isSetEnabled = true
-                }
+                onCurrentIndexChanged: audio_editor.setCurrentProject(
+                                           currentIndex)
             }
 
             EditorToolButton {
@@ -161,11 +138,8 @@ Page {
                 model: audio_editor.categoryNames
                 currentIndex: audio_editor.categoryIndex
 
-                onCurrentTextChanged: {
-                    subscenario_combo_box.isSetEnabled = false
-                    audio_editor.setCurrentCategory(currentText)
-                    subscenario_combo_box.isSetEnabled = true
-                }
+                onCurrentTextChanged: audio_editor.setCurrentCategory(
+                                          currentText)
             }
 
             EditorToolButton {
@@ -192,13 +166,7 @@ Page {
                 currentIndex: audio_editor.scenarioIndex
 
                 onCurrentTextChanged: {
-                    subscenario_combo_box.isSetEnabled = false
                     audio_editor.setCurrentScenario(currentText)
-                    element_stack_view.pop(null)
-                    audio_list_page.visible = false
-                    radio_page.visible = false
-                    spotify_page.visible = false
-                    subscenario_combo_box.isSetEnabled = true
                 }
             }
 
@@ -226,436 +194,81 @@ Page {
                 fa_icon: element_column.small_mode ? FontAwesome.expand : FontAwesome.compress
                 onClicked: element_column.small_mode = !element_column.small_mode
             }
+
+            ToolBarIconButton {
+                fa_icon: FontAwesome.fileAudio
+                icon_color: "darkred"
+
+                ToolTip.text: qsTr("Remove missing files.")
+                ToolTip.visible: hovered
+
+                Label {
+                    text: FontAwesome.trashAlt
+                    font.family: FontAwesome.familySolid
+                    font.pixelSize: height
+
+                    height: parent.height / 3
+                    width: height
+                    x: parent.width - width * 1.5
+                    y: parent.height - height * 1.5
+
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
+
+                    background: Rectangle {
+                        color: color_scheme.menuColor
+                    }
+                }
+
+                onClicked: audio_editor.removeMissingFiles(audio_editor.name,
+                                                           audio_editor.type)
+            }
         }
     }
 
-    Row {
-        width: parent.width
-        height: parent.height - tool_bar.height
-        y: tool_bar.height
+    Item {
+        id: main_item
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: tool_bar.bottom
+        anchors.bottom: parent.bottom
 
         Item {
             id: left_item
-            width: 180
+            width: 220
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            anchors.left: parent.left
 
             EditorElementColumn {
                 id: element_column
             }
         }
 
-        Column {
-            id: mid_column
-            width: parent.width - left_item.width - 5
+        EditorFileListView {
+            id: mid_item
+
+            anchors.left: left_item.right
+            anchors.right: right_item.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            spacing: 5
-            bottomPadding: 5
-            topPadding: 5
+            anchors.topMargin: 5
+            anchors.bottomMargin: 5
+        }
 
-            Column {
-                id: element_info_item
-                visible: element_stack_view.currentItem != no_element_text
-                anchors.left: parent.left
-                anchors.right: parent.right
-                spacing: 5
+        Item {
+            id: right_item
+            width: 250
 
-                // Element name and position
-                Item {
-                    id: element_info_row_0
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: color_scheme.toolbarHeight
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: 5
 
-                    Item {
-                        id: element_up_down
-                        anchors.left: parent.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: height / 2
-
-                        Button {
-                            id: element_up
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            height: parent.height / 2
-
-                            background: Rectangle {
-                                color: color_scheme.menuColor
-                            }
-
-                            Text {
-                                text: element_name_field.edit_mode ? FontAwesome.checkCircle : FontAwesome.chevronUp
-                                font.family: FontAwesome.familySolid
-                                color: element_name_field.edit_mode ? "limegreen" : color_scheme.toolbarTextColor
-                                anchors.fill: parent
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            onClicked: {
-                                if (element_name_field.edit_mode) {
-                                    element_name_field.edit_mode = false
-                                    audio_editor.setName(
-                                                audio_editor.name,
-                                                audio_editor.type,
-                                                element_name_field.text)
-                                } else {
-                                    audio_editor.moveElement(audio_editor.name,
-                                                             audio_editor.type,
-                                                             -1)
-                                }
-                            }
-                        }
-
-                        Button {
-                            id: element_down
-                            anchors.top: element_up.bottom
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-
-                            background: Rectangle {
-                                color: color_scheme.menuColor
-                            }
-
-                            Text {
-                                text: element_name_field.edit_mode ? FontAwesome.timesCircle : FontAwesome.chevronDown
-                                font.family: FontAwesome.familySolid
-                                color: element_name_field.edit_mode ? "red" : color_scheme.toolbarTextColor
-                                anchors.fill: parent
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            onClicked: {
-                                if (element_name_field.edit_mode) {
-                                    element_name_field.edit_mode = false
-                                    element_name_field.text = audio_editor.name
-                                } else {
-                                    audio_editor.moveElement(audio_editor.name,
-                                                             audio_editor.type,
-                                                             1)
-                                }
-                            }
-                        }
-                    }
-
-                    TextField {
-                        id: element_name_field
-                        text: audio_editor.name
-                        anchors.left: element_up_down.right
-                        anchors.right: subscenario_combo_box_rect.visible ? subscenario_combo_box_rect.left : element_delete_button.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        selectByMouse: true
-
-                        property bool edit_mode: false
-                        activeFocusOnPress: edit_mode
-                        focus: edit_mode
-
-                        Button {
-                            anchors.top: parent.top
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                            width: height
-                            visible: !element_name_field.edit_mode
-
-                            background: Rectangle {
-                                color: "transparent"
-                            }
-
-                            Text {
-                                text: FontAwesome.pen
-                                font.family: FontAwesome.familySolid
-                                anchors.fill: parent
-                                anchors.margins: 10
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            onClicked: element_name_field.edit_mode = true
-                        }
-                    }
-
-                    Rectangle {
-                        id: subscenario_combo_box_rect
-                        color: color_scheme.menuColor
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: element_delete_button.left
-                        width: 180
-
-                        ToolBarComboBox {
-                            id: subscenario_combo_box
-                            property bool isSetEnabled: false
-
-                            model: audio_editor.subscenarioNames
-
-                            onCurrentIndexChanged: {
-                                if (isSetEnabled) {
-                                    audio_editor.setSubscenario(
-                                                audio_editor.name,
-                                                audio_editor.type, currentIndex)
-                                }
-                            }
-
-                            anchors.fill: parent
-                            anchors.topMargin: 5
-                            anchors.bottomMargin: 5
-                        }
-                    }
-
-                    Button {
-                        id: element_delete_button
-                        anchors.top: parent.top
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        width: height
-
-                        background: Rectangle {
-                            color: color_scheme.menuColor
-                        }
-
-                        Text {
-                            text: FontAwesome.trashAlt
-                            font.family: FontAwesome.familySolid
-                            font.pixelSize: height
-                            anchors.fill: parent
-                            anchors.margins: 10
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            color: "red"
-                        }
-
-                        onClicked: element_delete_overlay.visible = true
-
-                        Rectangle {
-                            id: element_delete_overlay
-                            visible: false
-                            anchors.fill: parent
-                            color: color_scheme.menuColor
-
-                            Text {
-                                text: FontAwesome.trashAlt
-                                font.family: FontAwesome.familySolid
-                                color: color_scheme.toolbarTextColor
-                                font.pixelSize: parent.height / 3
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-                                anchors.left: parent.left
-                                width: height / 2
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignHCenter
-                            }
-
-                            Button {
-                                anchors.top: parent.top
-                                anchors.right: parent.right
-                                width: parent.width / 2
-                                height: parent.height / 2
-
-                                background: Rectangle {
-                                    color: "transparent"
-                                }
-
-                                Text {
-                                    text: FontAwesome.checkCircle
-                                    font.family: FontAwesome.familySolid
-                                    color: "limegreen"
-                                    anchors.fill: parent
-                                    verticalAlignment: Text.AlignVCenter
-                                    horizontalAlignment: Text.AlignHCenter
-                                }
-
-                                onClicked: {
-                                    audio_editor.deleteElement(
-                                                audio_editor.name,
-                                                audio_editor.type)
-                                    element_delete_overlay.visible = false
-                                    element_stack_view.replace(no_element_text)
-                                }
-                            }
-
-                            Button {
-                                anchors.bottom: parent.bottom
-                                anchors.right: parent.right
-                                width: parent.width / 2
-                                height: parent.height / 2
-
-                                background: Rectangle {
-                                    color: "transparent"
-                                }
-
-                                Text {
-                                    text: FontAwesome.timesCircle
-                                    font.family: FontAwesome.familySolid
-                                    color: "red"
-                                    anchors.fill: parent
-                                    verticalAlignment: Text.AlignVCenter
-                                    horizontalAlignment: Text.AlignHCenter
-                                }
-
-                                onClicked: {
-                                    element_delete_overlay.visible = false
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Element icon
-                Item {
-                    id: element_info_row_1
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    height: color_scheme.toolbarHeight
-
-                    TextField {
-                        id: element_icon_field
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: element_name_field.width + element_up_down.width
-
-                        selectByMouse: true
-                        text: audio_editor.icon
-                        placeholderText: qsTr("Icon Path (Leave empty for default icon)")
-
-                        onTextChanged: {
-                            audio_editor.setIcon(audio_editor.name,
-                                                 audio_editor.type, text)
-                        }
-                    }
-
-                    Image {
-                        id: element_icon_image
-                        visible: status == Image.Ready
-                        source: if (element_icon_field.text.startsWith(
-                                            "http")) {
-                                    element_icon_field.text
-                                } else {
-                                    (platform.isWindows ? "file:///" : "file://")
-                                            + audio_editor.resourcesPath(
-                                                ) + element_icon_field.text
-                                }
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.left: element_icon_field.right
-                        width: height
-                    }
-
-                    Rectangle {
-                        anchors.left: element_icon_image.status == Image.Ready ? element_icon_image.right : element_icon_field.right
-                        anchors.right: unsplash_finder.left
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        color: color_scheme.menuColor
-                    }
-
-                    Text {
-                        anchors.fill: element_icon_image
-                        anchors.margins: 10
-                        text: FontAwesome.expand
-                        font.family: FontAwesome.familySolid
-                        font.pixelSize: height
-                        visible: element_icon_mouse_area.containsMouse
-                        color: "white"
-                    }
-
-                    MouseArea {
-                        id: element_icon_mouse_area
-                        anchors.fill: element_icon_image
-                        onClicked: large_image_dialog.open()
-                        hoverEnabled: true
-                    }
-
-                    Button {
-                        id: unsplash_finder
-
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: icon_finder.left
-                        width: height
-
-                        background: Rectangle {
-                            color: color_scheme.menuColor
-                        }
-
-                        Text {
-                            text: FontAwesome.search
-                            font.family: FontAwesome.familySolid
-                            font.pixelSize: height
-                            anchors.fill: parent
-                            anchors.margins: 10
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            color: color_scheme.toolbarTextColor
-                        }
-
-                        onClicked: {
-                            unsplash_dialog.open()
-                        }
-                    }
-
-                    IconFinder {
-                        id: icon_finder
-                        anchors.right: spacer_rect.left
-                        text_field: element_icon_field
-                    }
-
-                    Rectangle {
-                        id: spacer_rect
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: color_scheme.toolbarHeight
-                        color: color_scheme.menuColor
-                    }
-                }
-            }
-
-            StackView {
-                id: element_stack_view
-                width: parent.width
-                height: parent.height - parent.topPadding * 2
-                        - element_info_item.height - parent.spacing
-                clip: true
-                topPadding: 5
-                bottomPadding: 5
-
-                initialItem: no_element_text
-
-                Column {
-                    id: no_element_text
-                    Text {
-                        text: qsTr("No Element Selected")
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: color_scheme.textColor
-                    }
-                }
-
-                EditorAudioListPage {
-                    id: audio_list_page
-                    visible: false
-                }
-
-                EditorRadioPage {
-                    id: radio_page
-                    visible: false
-                }
-
-                EditorSpotifyPlaylistPage {
-                    id: spotify_page
-                    visible: false
-                }
-
-                Item {
-                    id: empty_page
-                }
+            EditorRightColumn {
+                id: right_column
+                anchors.fill: parent
             }
         }
     }

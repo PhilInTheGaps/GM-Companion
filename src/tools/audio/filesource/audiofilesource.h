@@ -1,0 +1,28 @@
+#ifndef AUDIOFILESOURCE_H
+#define AUDIOFILESOURCE_H
+
+#include <QObject>
+#include "src/settings/settingsmanager.h"
+#include "src/tools/audio/audiosaveload.h"
+
+class AudioFileSource : public QObject
+{
+    Q_OBJECT
+public:
+    explicit AudioFileSource(AudioSaveLoad *saveLoad, QObject *parent = nullptr) : QObject(parent) { }
+
+    virtual int findProjects(bool editor = false) { return 0; }
+    virtual int findIconPaths(QStringList icons) { return 0; }
+
+signals:
+    void foundProjects(QList<AudioProject*> projects, bool forEditor);
+    void foundIconPaths(QMap<QString, QString> iconMap);
+
+protected:
+    SettingsManager sManager;
+    AudioSaveLoad *audioSaveLoad;
+
+    int m_requestCount = 0;
+};
+
+#endif // AUDIOFILESOURCE_H

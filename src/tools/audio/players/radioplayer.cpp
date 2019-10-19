@@ -36,20 +36,19 @@ void RadioPlayer::play(RadioElement *element)
     player->setObjectName(tr("Radio") + ": " + element->name());
     currentElement = element;
 
-    if (element->local())
+    if (element->files().size() == 0) return;
+
+    auto audioFile = element->files()[0];
+
+    if (audioFile.source() == 0)
     {
-        qDebug() << "Playing radio from local playlist:" << element->url() << "...";
-
-        //        QStringList list = element->url().toString().split(".");
-        //        m_radioFormat = list.size() > 0 ? list[list.size() - 1] : "";
-        //        qDebug() << "Radio format:" << m_radioFormat;
-
-        fileManager->getAudioFileManager()->fetchRadioPath(element->url().toString());
+        qDebug() << "Playing radio from local playlist:" << audioFile.url() << "...";
+        fileManager->getAudioSaveLoad()->fetchRadioPath(audioFile.url());
     }
     else
     {
-        qDebug() << "Playing radio from url:" << element->url();
-        player->setMedia(element->url());
+        qDebug() << "Playing radio from url:" << audioFile.url();
+        player->setMedia(QUrl(audioFile.url()));
         player->play();
     }
 }

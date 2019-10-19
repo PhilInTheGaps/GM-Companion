@@ -16,6 +16,8 @@ public:
 
 private:
     void convertTo3(QString file);
+    void convertTo4(QString file);
+    QJsonObject convertScenarioTo4(QJsonObject scenario);
 };
 
 #endif // AUDIOCONVERTER_H

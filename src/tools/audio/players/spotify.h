@@ -13,56 +13,62 @@
 #include "../audioelement.h"
 #include "../metadatareader.h"
 
+struct SpotifyTrack
+{
+    QString title;
+    QString id;
+};
+
 class Spotify : public AudioPlayer
 {
     Q_OBJECT
 
 public:
     explicit Spotify(FileManager *fManager, MetaDataReader *mDReader);
-    ~Spotify() { stop(); }
+    ~Spotify();
 
     void grant();
     bool isGranted() const { return m_spotify->linked(); }
     bool isWaitingForAuth() const { return m_waitingForAuth; }
     QUrl authUrl() const { return m_authUrl; }
 
-    void play(QString id, int offset = -1);
-    void play(SpotifyElement *element) { play(element->id(), 0); currentElement = element; }
+    void play(QString id, int offset = -1, bool playOnce = false);
     void play();
     void pause() { stop(); }
     void stop();
     void pausePlay();
 
-    void setIndex(int index) { play(m_currentId, index); }
+    void setIndex(int index) { /*play(m_currentId, index);*/ }
     int index() const { return m_currentIndex; }
     void next();
     void again();
 
     void setVolume(int volume);
     bool isPlaying() const { return m_isPlaying; }
+    void getPlaylistTracks(QString id);
 
-    void fetchIcons(AudioScenario *scenario);
-    QStringList songNames() const { return m_trackList; }
-
-    void addElements(QList<SpotifyElement*> elements);
+//    void fetchIcons(AudioScenario *scenario);
+//    QStringList songNames() const { return m_trackList; }
 
 private:
     O2Spotify *m_spotify = nullptr;
     MetaDataReader *metaDataReader = nullptr;
-    SpotifyElement *currentElement = nullptr;
+    MusicElement *currentElement = nullptr;
 
     SettingsManager m_sManager;
     QTimer *m_timer;
+    QTimer *m_periodicTimer;
     QNetworkAccessManager *m_manager;
 
-    QQueue<SpotifyElement*>iconFetchQueue;
-    void fetchIcon(SpotifyElement *element);
-    void fetchQueuedIcons();
+    QQueue<MusicElement*>iconFetchQueue;
+//    void fetchIcon(SpotifyElement *element);
+//    void fetchQueuedIcons();
 
-    QList<SpotifyElement*> m_elements;
+    QList<MusicElement*> m_elements;
 
     QString m_currentId;
     bool m_isPlaying = false;
+    bool m_playOnce = false;
     int m_volume;
     int m_currentIndex = 0;
     QStringList m_trackList;
@@ -71,8 +77,11 @@ private:
     bool m_waitingForAuth = false;
     QUrl m_authUrl;
 
+    void forceCurrentMachine();
+    void openSpotify();
+
     void getCurrentSong();
-    void getCurrentPlaylist();
+    void startTimer(int interval = -1);
     void put(QUrl url, QString params = "");
 
 signals:
@@ -81,11 +90,13 @@ signals:
     void authorized();
     void songNamesChanged();
     void startedPlaying();
+    void songEnded();
+    void receivedPlaylistTracks(QList<SpotifyTrack> tracks, QString id);
 
 private slots:
     void authorizeReady(QUrl url) { emit authorize(url); }
     void granted();
-    void gotCurrentPlaylist(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void gotPlaylistInfo(int id, QNetworkReply::NetworkError error, QByteArray data);
     void fetchedIcon(int id, QNetworkReply::NetworkError error, QByteArray data);
 };
 

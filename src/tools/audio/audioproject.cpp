@@ -10,7 +10,7 @@ AudioProject::AudioProject(QString name, int version, QList<AudioCategory *>cate
 
     if (m_categories.size() > 0) m_currentCategory = m_categories[0];
 
-    for (auto *c : m_categories)
+    for (auto c : m_categories)
     {
         qDebug() << "       " << c->name();
     }
@@ -53,6 +53,20 @@ void AudioProject::setCurrentCategory(QString name)
     }
 }
 
+QList<AudioElement *>AudioProject::elements() const
+{
+    QList<AudioElement *> list;
+
+    qDebug() << m_categories;
+
+    for (auto category : m_categories)
+    {
+        if (category) list.append(category->elements());
+    }
+
+    return list;
+}
+
 /**
     Get the names of all scenarios in category
     @return QStringList with scenario names
@@ -87,11 +101,23 @@ void AudioCategory::setCurrentScenario(QString name)
     }
 }
 
+QList<AudioElement *>AudioCategory::elements() const
+{
+    QList<AudioElement *> list;
+
+    for (auto scenario : m_scenarios)
+    {
+        list.append(scenario->elements(true));
+    }
+
+    return list;
+}
+
 /**
  * @brief Get all elements
  * @return List of pointers to audio elements
  */
-QList<AudioElement *>AudioScenario::elements()
+QList<AudioElement *>AudioScenario::elements(bool recursive)
 {
     QList<AudioElement *> list;
 
@@ -101,7 +127,7 @@ QList<AudioElement *>AudioScenario::elements()
 
     for (AudioElement *e : m_radios) list.append(e);
 
-    for (AudioElement *e : m_spotifyElements) list.append(e);
+    if (recursive) for (auto scenario : m_scenarios) list.append(scenario->elements());
 
     return list;
 }
@@ -144,21 +170,6 @@ SoundElement * AudioScenario::soundElement(QString element)
 RadioElement * AudioScenario::radioElement(QString element)
 {
     for (auto e : m_radios)
-    {
-        if (e->name() == element) return e;
-    }
-
-    return nullptr;
-}
-
-/**
- * @brief Get pointer to spotify element
- * @param element Name of the spotify element
- * @return Pointer to SpotifyElement
- */
-SpotifyElement * AudioScenario::spotifyElement(QString element)
-{
-    for (auto e : m_spotifyElements)
     {
         if (e->name() == element) return e;
     }
@@ -215,19 +226,6 @@ QStringList AudioScenario::radioElementNames()
     return list;
 }
 
-/**
- * @brief Get a list of all spotify element names
- * @return List of element names
- */
-QStringList AudioScenario::spotifyElementNames()
-{
-    QStringList list;
-
-    for (auto e : m_spotifyElements) list.append(e->name());
-
-    return list;
-}
-
 QStringList AudioScenario::scenarioNames()
 {
     QStringList list;
@@ -256,10 +254,9 @@ bool compareElements(const AudioElement *e1, const AudioElement *e2)
 void AudioScenario::sortElements()
 {
     qDebug() << "Scenario: Sorting elements ...";
-    std::sort(m_musicLists.begin(),      m_musicLists.end(),      compareElements);
-    std::sort(m_soundLists.begin(),      m_soundLists.end(),      compareElements);
-    std::sort(m_radios.begin(),          m_radios.end(),          compareElements);
-    std::sort(m_spotifyElements.begin(), m_spotifyElements.end(), compareElements);
+    std::sort(m_musicLists.begin(), m_musicLists.end(), compareElements);
+    std::sort(m_soundLists.begin(), m_soundLists.end(), compareElements);
+    std::sort(m_radios.begin(),     m_radios.end(),     compareElements);
     qDebug() << "Done.";
 }
 
@@ -347,36 +344,6 @@ void AudioScenario::removeRadioElement(QString name, bool deleteElement)
         if (e->name() == name)
         {
             m_radios.removeOne(e);
-
-            if (deleteElement) e->deleteLater();
-            return;
-        }
-    }
-}
-
-/**
- * @brief Move a spotify element
- * @param name Name of the element
- * @param steps Positions to move element by
- */
-void AudioScenario::moveSpotifyElement(QString name, int steps)
-{
-    int index = m_spotifyElements.indexOf(spotifyElement(name));
-
-    if ((index + steps < m_spotifyElements.size()) && (index + steps > -1)) m_spotifyElements.move(index, index + steps);
-}
-
-/**
- * @brief Remove a spotify element from the current scenario
- * @param name Name of the element
- */
-void AudioScenario::removeSpotifyElement(QString name, bool deleteElement)
-{
-    for (auto e : m_spotifyElements)
-    {
-        if (e->name() == name)
-        {
-            m_spotifyElements.removeOne(e);
 
             if (deleteElement) e->deleteLater();
             return;
