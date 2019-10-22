@@ -7,7 +7,7 @@ import FontAwesome 2.0
 Rectangle {
     id: root
     property var element_name
-    property var icon_path
+    property var icon
     property var element_type
     property bool has_icon: true
     property bool overlay_enabled: true
@@ -23,8 +23,6 @@ Rectangle {
             FontAwesome.drum
         } else if (element_type === 2) {
             FontAwesome.broadcastTower
-        } else if (element_type === 3) {
-            FontAwesome.spotify
         }
     }
 
@@ -35,8 +33,6 @@ Rectangle {
             "/icons/media/sound_image.png"
         } else if (element_type === 2) {
             "/icons/media/radio_image.png"
-        } else if (element_type === 3) {
-            "/icons/media/music_image.png"
         }
     }
 
@@ -46,18 +42,18 @@ Rectangle {
 
     Image {
         id: thumbnail
-        source: {
-            if (icon_path.startsWith("http")) {
-                icon_path
-            } else if (has_icon) {
-                "file:///" + icon_path
-            } else {
-                default_icon
-            }
-        }
+        source: if (icon.background.startsWith("http")) {
+                    icon.background
+                } else if (icon.background.startsWith("data:")) {
+                    icon.background
+                } else if (has_icon) {
+                    "file:///" + icon.background
+                } else {
+                    default_icon
+                }
 
         onStatusChanged: {
-            if (status == Image.Error) {
+            if (status == Image.Error && source !== default_icon) {
                 source = default_icon
             }
         }

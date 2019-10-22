@@ -1153,13 +1153,13 @@ void AudioEditor::setIcon(QString element, int type, QString path)
     if (path.startsWith("http:") || path.startsWith("https:"))
     {
         e->setRelativeIcon(path);
-        e->setIcon(path);
+        e->icon()->setBackground(path);
         madeChanges();
     }
     else if (e->relativeIcon() != path)
     {
         e->setRelativeIcon(path);
-        e->setIcon(resourcesPath() + path);
+        e->icon()->setBackground(resourcesPath() + path);
 
         madeChanges();
     }

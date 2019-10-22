@@ -21,8 +21,11 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += src/main.cpp \
     # UI
+    src/services/spotify.cpp \
+    src/tools/audio/audioicongenerator.cpp \
     src/tools/audio/audiosaveload.cpp \
     src/tools/audio/filesource/localaudiofilesource.cpp \
+    src/tools/audio/players/spotifyplayer.cpp \
     src/tools/audio/unsplash/unsplashimage.cpp \
     src/tools/audio/unsplash/unsplashparser.cpp \
     src/tools/maps/mapmarker.cpp \
@@ -42,7 +45,6 @@ SOURCES += src/main.cpp \
     src/tools/project_converter/audioconverter.cpp \
     src/tools/audio/audioeditor.cpp \
     src/tools/audio/audioeditorfilebrowser.cpp \
-    src/tools/audio/players/spotify.cpp \
     src/tools/audio/audioexporter.cpp \
     src/tools/audio/addonelementmanager.cpp \
     src/tools/audio/players/musicplayer.cpp \
@@ -114,9 +116,12 @@ SOURCES += *.qml \
 
 HEADERS  += src/functions.h \
     # UI
+    src/services/spotify.h \
+    src/tools/audio/audioicongenerator.h \
     src/tools/audio/audiosaveload.h \
     src/tools/audio/filesource/audiofilesource.h \
     src/tools/audio/filesource/localaudiofilesource.h \
+    src/tools/audio/players/spotifyplayer.h \
     src/tools/audio/unsplash/unsplashimage.h \
     src/tools/audio/unsplash/unsplashparser.h \
     src/tools/maps/mapmarker.h \
@@ -135,7 +140,6 @@ HEADERS  += src/functions.h \
     src/tools/project_converter/audioconverter.h \
     src/tools/audio/audioeditor.h \
     src/tools/audio/audioeditorfilebrowser.h \
-    src/tools/audio/players/spotify.h \
     src/tools/audio/audioexporter.h \
     src/tools/audio/addonelementmanager.h \
     src/tools/audio/players/musicplayer.h \
@@ -245,3 +249,5 @@ INSTALLS += target
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 unix:!macx: LIBS += -lpoppler-qt5
+
+unix: LIBS += -ltag

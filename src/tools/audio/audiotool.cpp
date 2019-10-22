@@ -1,5 +1,6 @@
 #include "audiotool.h"
 #include "src/functions.h"
+#include "src/services/spotify.h"
 
 #include <QDebug>
 #include <QSettings>
@@ -22,20 +23,18 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
     metaDataReader = new MetaDataReader;
 
     // Spotify
-    spotify = new Spotify(fileManager, metaDataReader);
-    connect(spotify, &Spotify::authorize,  [ = ](QUrl url) { emit authorizeSpotify(url); });
-    connect(spotify, &Spotify::authorize,  this, &AudioTool::onSpotifyAuthorize);
-    connect(spotify, &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
+    spotifyPlayer = new SpotifyPlayer(fManager, metaDataReader);
+    connect(Spotify::getInstance(), &Spotify::authorize,  [ = ](QUrl url) { emit authorizeSpotify(url); });
+    connect(Spotify::getInstance(), &Spotify::authorize,  this, &AudioTool::onSpotifyAuthorize);
+    connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
-    musicPlayer = new MusicPlayer(fileManager, spotify);
-    connect(musicPlayer, &MusicPlayer::startedPlaying,   this, &AudioTool::onStartedPlaying);
-    connect(musicPlayer, &MusicPlayer::songNamesChanged, [ = ]() { emit songsChanged(); });
+    musicPlayer = new MusicPlayer(fileManager, spotifyPlayer);
+    connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
+    connect(musicPlayer, &MusicPlayer::songNamesChanged,    [ = ]() { emit songsChanged(); });
+    connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
 
-    //    connect(fileManager->getAudioSaveLoad(),
-    // &AudioSaveLoad::songPathsChanged, musicPlayer,
-    // &MusicPlayer::onSongPathsChanged);
-    musicPlayers.append(musicPlayer);
+    musicPlayers.append(static_cast<AudioPlayer *>(musicPlayer));
 
     // Sound Player
     soundPlayer = new SoundPlayer(fileManager);
@@ -90,7 +89,7 @@ AudioTool::~AudioTool()
     musicPlayer->deleteLater();
     soundPlayer->deleteLater();
     radioPlayer->deleteLater();
-    spotify->deleteLater();
+    spotifyPlayer->deleteLater();
 
     if (mprisAdaptor) mprisAdaptor->deleteLater();
 
@@ -356,10 +355,10 @@ int AudioTool::index() const
     switch (m_musicMode)
     {
     case 0:
-        qDebug() << "INDEX:" << musicPlayer->index();
         return musicPlayer->index();
 
-    default: return 0;
+    default:
+        return 0;
     }
 }
 
@@ -437,6 +436,7 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     if (mprisPlayerAdaptor) mprisPlayerAdaptor->setMetadata(map);
 
     sendMprisUpdateSignal("Metadata", map);
+    emit currentIndexChanged();
 }
 
 QList<QList<AudioElement *> >AudioTool::elements() const

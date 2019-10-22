@@ -264,7 +264,7 @@ Page {
                                             element_name: modelData.name
                                             element_type: modelData.type
                                             subscenario_name: subscenario_text.text
-                                            icon_path: modelData.icon
+                                            icon: modelData.icon
                                             has_icon: modelData.hasIcon
                                             width: audio_element_column.button_width
 
@@ -389,8 +389,7 @@ Page {
                         color: "lightgrey"
                     }
 
-                    ScrollBar.vertical: ScrollBar {
-                    }
+                    ScrollBar.vertical: ScrollBar {}
 
                     model: audio_tool.songs
                     currentIndex: audio_tool.index

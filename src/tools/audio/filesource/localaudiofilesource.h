@@ -11,7 +11,7 @@ public:
     LocalAudioFileSource(AudioSaveLoad *saveLoad, QObject *parent = nullptr);
 
     int findProjects(bool editor = false) override;
-    int findIconPaths(QStringList icons) override;
+    int findIconPaths(QStringList icons, bool editor) override;
 };
 
 #endif // LOCALAUDIOFILESOURCE_H

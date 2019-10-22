@@ -4,6 +4,10 @@
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QFileInfo>
+#include <QMediaPlayer>
+#include <QImage>
+#include <QBuffer>
+#include <QPainter>
 
 #include "filesource/localaudiofilesource.h"
 
@@ -66,11 +70,11 @@ void AudioSaveLoad::findEditorProjects(int mode)
     }
 }
 
-void AudioSaveLoad::findIconPaths(QList<AudioProject *>projects)
+void AudioSaveLoad::findIconPaths(QList<AudioProject *>projects, bool editor)
 {
     QStringList icons;
 
-    qDebug() << projects.length();
+    qDebug() << "Finding file icon paths ..." << projects.length();
 
     for (auto project : projects)
     {
@@ -85,15 +89,15 @@ void AudioSaveLoad::findIconPaths(QList<AudioProject *>projects)
         }
     }
 
-    findIconPaths(icons);
+    findIconPaths(icons, editor);
 }
 
-void AudioSaveLoad::findIconPaths(QStringList icons)
+void AudioSaveLoad::findIconPaths(QStringList icons, bool editor)
 {
     switch (m_mode)
     {
     case 0: // LOCAL
-        localSource->findIconPaths(icons);
+        localSource->findIconPaths(icons, editor);
         break;
 
     default:
@@ -640,16 +644,18 @@ void AudioSaveLoad::onFoundProjects(QList<AudioProject *>projects, bool forEdito
     }
 }
 
-void AudioSaveLoad::onFoundIconPaths(QMap<QString, QString>iconMap)
+void AudioSaveLoad::onFoundIconPaths(QMap<QString, QString>iconMap, bool editor)
 {
-    for (auto project : m_projects)
+    for (auto project : editor ? m_editorProjects : m_projects)
     {
         for (auto element : project->elements())
         {
             if (element && iconMap.contains(element->relativeIcon()))
             {
-                element->setIcon(iconMap[element->relativeIcon()]);
+                element->icon()->setBackground(iconMap[element->relativeIcon()]);
             }
         }
     }
+
+    iconGenerator.generateIcons(editor ? m_editorProjects : m_projects);
 }

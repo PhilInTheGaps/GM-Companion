@@ -21,14 +21,14 @@ int LocalAudioFileSource::findProjects(bool editor)
         }
     }
 
-    if (!editor) audioSaveLoad->findIconPaths(projects);
-
     emit foundProjects(projects, editor);
+
+    audioSaveLoad->findIconPaths(projects, editor);
 
     return m_requestCount++;
 }
 
-int LocalAudioFileSource::findIconPaths(QStringList icons)
+int LocalAudioFileSource::findIconPaths(QStringList icons, bool editor)
 {
     QMap<QString, QString> iconMap;
 
@@ -44,7 +44,7 @@ int LocalAudioFileSource::findIconPaths(QStringList icons)
         }
     }
 
-    emit foundIconPaths(iconMap);
+    emit foundIconPaths(iconMap, editor);
 
     return m_requestCount++;
 }

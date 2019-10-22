@@ -5,7 +5,7 @@
 #include <QQmlApplicationEngine>
 
 #include "audioeditor.h"
-#include "players/spotify.h"
+#include "players/spotifyplayer.h"
 #include "players/musicplayer.h"
 #include "players/soundplayer.h"
 #include "players/radioplayer.h"
@@ -32,7 +32,7 @@ class AudioTool : public QObject
     Q_PROPERTY(QString album READ album NOTIFY metaDataChanged)
     Q_PROPERTY(QString cover READ cover NOTIFY metaDataChanged)
     Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
-    Q_PROPERTY(int index READ index NOTIFY metaDataChanged)
+    Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
 
 public:
     explicit AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
@@ -80,11 +80,6 @@ public:
     QStringList songs() const;
     int index() const;
 
-    // Spotify
-//    Q_INVOKABLE void grantSpotify() { spotify->grant(); }
-//    Q_INVOKABLE bool isSpotifyWaitingForAuth() const { if (spotify) return spotify->isWaitingForAuth(); else return false; }
-//    Q_INVOKABLE QUrl spotifyAuthUrl() const { if (spotify) return spotify->authUrl(); else return QUrl(""); }
-
 signals:
     void projectsChanged();
     void currentProjectChanged();
@@ -95,6 +90,7 @@ signals:
 
     void songsChanged();
     void metaDataChanged();
+    void currentIndexChanged();
     void authorizeSpotify(QUrl url);
     void spotifyAuthorized();
 
@@ -137,7 +133,7 @@ private:
     MusicPlayer *musicPlayer = nullptr;
     SoundPlayer *soundPlayer = nullptr;
     RadioPlayer *radioPlayer = nullptr;
-    Spotify *spotify = nullptr;
+    SpotifyPlayer *spotifyPlayer = nullptr;
     QList<AudioPlayer*> musicPlayers;
 
     AudioElementModelModel *elementModel = nullptr;

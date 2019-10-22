@@ -2,8 +2,10 @@
 #include <QDebug>
 #include <QTimer>
 
-AudioElement::AudioElement(QString name, QString icon) :
-    m_name(name), m_icon(icon) {}
+AudioElement::AudioElement(QString name, AudioIcon *icon) :
+    m_name(name), m_icon(icon)
+{
+}
 
 MusicElement::MusicElement(QString name)
 {
@@ -250,4 +252,15 @@ void AudioFileModel::setElements(QList<AudioFile>elements)
     }
 
     emit isEmptyChanged();
+}
+
+int AudioIcon::addCollageIcon(QImage icon)
+{
+    if (m_collageIcons.contains(icon)) return -1;
+
+    m_collageIcons.append(icon);
+
+    if (m_collageIcons.count() > 4) qDebug() << " ---- COLLAGE ICON COUNT > 4";
+
+    return m_collageIcons.count();
 }

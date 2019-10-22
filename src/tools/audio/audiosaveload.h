@@ -14,6 +14,7 @@
 #include "src/tools/audio/audioproject.h"
 #include "src/settings/settingsmanager.h"
 #include "src/cloud/googledrive.h"
+#include "audioicongenerator.h"
 
 class LocalAudioFileSource;
 
@@ -52,7 +53,7 @@ public:
     void fetchSoundPaths(QStringList paths, QStringList args);
     void fetchRadioPath(QString path);
 
-    void findIconPaths(QList<AudioProject*> projects);
+    void findIconPaths(QList<AudioProject*> projects, bool editor);
     void findMissingFiles(QVector<QObject *> files, QString basePath);
 
     void saveProject(AudioProject *project);
@@ -63,6 +64,7 @@ public:
 
 private:
     SettingsManager sManager;
+    AudioIconGenerator iconGenerator;
     GoogleDrive *googleDrive;
     LocalAudioFileSource *localSource;
 
@@ -70,7 +72,7 @@ private:
     QList<AudioProject*> m_editorProjects;
 
     // Icons
-    void findIconPaths(QStringList icons);
+    void findIconPaths(QStringList icons, bool editor);
     QMap<QString, QString> m_iconMap;
 
     QUrl musicPath(QString path, int mode);
@@ -109,7 +111,7 @@ signals:
 
 private slots:
     void onFoundProjects(QList<AudioProject*> projects, bool forEditor);
-    void onFoundIconPaths(QMap<QString, QString> iconMap);
+    void onFoundIconPaths(QMap<QString, QString> iconMap, bool editor);
 };
 
 #endif // AUDIOSAVELOAD_H

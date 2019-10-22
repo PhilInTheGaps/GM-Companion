@@ -5,6 +5,7 @@
 #include <QAbstractListModel>
 #include <QUrl>
 #include <QList>
+#include <QImage>
 
 class AudioFile : public QObject
 {
@@ -52,6 +53,7 @@ public:
     bool missing() const { return m_missing; }
     void setMissing(bool missing) { m_missing = missing; emit fileChanged(); }
 
+
 private:
     int m_source = -1;
     QString m_url, m_title;
@@ -95,27 +97,66 @@ private:
     QString m_name;
 };
 
+class AudioIcon : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString background READ background WRITE setBackground NOTIFY iconChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY iconChanged)
+    Q_PROPERTY(QString subtitle READ subtitle WRITE setSubtitle NOTIFY iconChanged)
+
+public:
+    AudioIcon(QString background, QString title, QString subtitle)
+        : m_background(background), m_title(title), m_subtitle(subtitle) {}
+    AudioIcon() {}
+    virtual ~AudioIcon() {}
+
+    QString background() const { return m_background; }
+    void setBackground(QString background) { m_background = background; emit iconChanged(); }
+
+    QString title() const { return m_title; }
+    void setTitle(QString title) { m_title = title; emit iconChanged(); }
+
+    QString subtitle() const { return m_subtitle; }
+    void setSubtitle(QString subtitle) { m_subtitle = subtitle; emit iconChanged(); }
+
+    QList<QImage> collageIcons() const { return m_collageIcons; }
+    int addCollageIcon(QImage icon);
+
+    int lastFileIndex() const { return m_lastFileIndex; }
+    void setLastFileIndex(int index) { m_lastFileIndex = index; }
+
+signals:
+    void iconChanged();
+
+private:
+    QString m_background;
+    QString m_title, m_subtitle;
+    QList<QImage> m_collageIcons;
+    int m_lastFileIndex = 0;
+};
+
 class AudioElement : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
+    Q_PROPERTY(AudioIcon* icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(bool hasIcon READ hasIcon NOTIFY iconChanged)
     Q_PROPERTY(int type READ type NOTIFY typeChanged)
 
 public:
-    AudioElement(QString name, QString icon);
-    AudioElement(){}
+    AudioElement(QString name, AudioIcon *icon);
+    AudioElement(){ m_icon = new AudioIcon; }
+    ~AudioElement() { m_icon->deleteLater(); }
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }
 
-    QString icon() const { return m_icon; }
-    void setIcon(QString icon) { m_icon = icon; emit iconChanged(); }
+    AudioIcon *icon() const { return m_icon; }
+    void setIcon(AudioIcon *icon) { m_icon = icon; emit iconChanged(); }
 
     QString relativeIcon() const { return m_relativeIcon; }
     void setRelativeIcon(QString icon) { m_relativeIcon = icon; }
-    bool hasIcon() const { return !m_icon.isEmpty(); }
+    bool hasIcon() const { return !m_icon->background().isEmpty(); }
 
     void setFiles(QList<AudioFile> files) { m_files = files; }
     QList<AudioFile> files() const { return m_files; }
@@ -129,10 +170,11 @@ public:
     virtual int type() const { return -1; }
 
 protected:
-    QString m_name, m_icon, m_relativeIcon;
+    QString m_name, m_relativeIcon;
     int m_mode = 0;
     bool m_export = true;
     QList<AudioFile> m_files;
+    AudioIcon *m_icon;
 
 signals:
     void nameChanged();

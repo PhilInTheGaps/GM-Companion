@@ -103,6 +103,6 @@ void RadioPlayer::onMetaDataChanged()
 
     if ((player->bufferStatus() == 100) || (player->mediaStatus() == QMediaPlayer::BufferedMedia))
     {
-        emit metaDataChanged(player, currentElement ? currentElement->icon() : "");
+        emit metaDataChanged(player, currentElement ? currentElement->icon()->background() : "");
     }
 }

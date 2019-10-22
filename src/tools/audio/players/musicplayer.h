@@ -6,7 +6,7 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
-#include "spotify.h"
+#include "spotifyplayer.h"
 #include "src/settings/settingsmanager.h"
 #include "youtube.h"
 
@@ -14,7 +14,7 @@ class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(FileManager *fManager, Spotify *spotify);
+    explicit MusicPlayer(FileManager *fManager, SpotifyPlayer *spotifyPlayer);
     ~MusicPlayer();
 
     void play(MusicElement *element);
@@ -31,8 +31,8 @@ public:
     int index() const { return m_playlistIndex; }
 
 private:
-    Spotify *spotify;
-    QMediaPlayer *player;
+    SpotifyPlayer *spotifyPlayer;
+    QMediaPlayer *mediaPlayer;
     MusicElement *currentElement;
     SettingsManager sManager;
     YouTube youtube;
@@ -51,6 +51,7 @@ private:
 signals:
     void startedPlaying();
     void metaDataChanged(QMediaPlayer *mediaPlayer, QString elementIcon);
+    void currentIndexChanged();
     void songNamesChanged();
 
 //public slots:
