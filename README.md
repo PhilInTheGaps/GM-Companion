@@ -2,14 +2,16 @@
 
 A tool for the gamemaster of a tabletop RPG session.
 
-[![Build Status](https://travis-ci.org/PhilInTheGaps/GM-Companion.svg?branch=ui-update)](https://travis-ci.org/PhilInTheGaps/GM-Companion)
-[![Build status](https://ci.appveyor.com/api/projects/status/8q56pf3cnbtyp6f3?svg=true)](https://ci.appveyor.com/project/PhilInTheGaps/gm-companion)
 [![GitHub (pre-)release](https://img.shields.io/github/release/PhilInTheGaps/GM-Companion/all.svg)](https://github.com/PhilInTheGaps/GM-Companion/releases)
 [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
 
 **[Website](https://gm-companion.github.io/) | [Documentation](https://gm-companion.github.io/documentation.html)**
 
 ![Screenshot](https://gm-companion.github.io/assets/images/screenshots/audio-tool-01.png)
+
+Travis-CI | AppVeyor | Jenkins
+--|---|--
+ [![travis](https://travis-ci.org/PhilInTheGaps/GM-Companion.svg?branch=ui-update)](https://travis-ci.org/PhilInTheGaps/GM-Companion) | [![appveyor](https://ci.appveyor.com/api/projects/status/8q56pf3cnbtyp6f3?svg=true)](https://ci.appveyor.com/project/PhilInTheGaps/gm-companion) |  [![jenkins](http://jenkins.rophil.lol/buildStatus/icon?job=GM-Companion)](http://jenkins.rophil.lol/job/GM-Companion/)
 
 ## Credits
 
@@ -106,7 +108,27 @@ make install
 gm-companion
 ```
 
-## Other Distros
+### Debian
+
+#### Buster
+
+```
+git clone --recursive https://github.com/philinthegaps/gm-companion
+
+sudo apt install qt5-default qtmultimedia5-dev libqt5quick5 qtquickcontrols2-5-dev qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs qml-module-qtquick-extras qml-module-qtquick-window2 qml-module-qt-labs-folderlistmodel qml-module-qt-labs-settings qml-module-qtquick2 libqt5networkauth5-dev qtdeclarative5-dev libtag1-dev libpoppler-qt5-dev
+
+cd gm-companion
+qmake
+make
+```
+run: `./gm-companion`  
+or install:
+```
+make install
+gm-companion
+```
+
+### Other Distros
 
 1. `git clone --recursive https://github.com/PhilInTheGaps/GM-Companion`
 2. Install [Qt5](https://www.qt.io/) >=5.10  

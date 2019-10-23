@@ -169,8 +169,11 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
             {
                 if (e.url().contains(currentUrl))
                 {
-                    //                    m_playlistIndex = index;
+                    #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                     m_playlist.swapItemsAt(m_playlistIndex, index);
+                    #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+                    m_playlist.swap(m_playlistIndex, index);
+                    #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                     return;
                 }
                 index++;
