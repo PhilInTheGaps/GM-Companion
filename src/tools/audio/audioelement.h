@@ -73,7 +73,6 @@ public:
 
     QVector<QObject*> elements() const { return m_items; }
     void setElements(QList<AudioFile*> elements);
-    void setElements(QList<AudioFile> elements);
 
     void clear();
     bool isEmpty() const { return m_items.isEmpty(); }
@@ -146,7 +145,7 @@ class AudioElement : public QObject
 public:
     AudioElement(QString name, AudioIcon *icon);
     AudioElement(){ m_icon = new AudioIcon; }
-    ~AudioElement() { m_icon->deleteLater(); }
+    ~AudioElement();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }
@@ -158,8 +157,8 @@ public:
     void setRelativeIcon(QString icon) { m_relativeIcon = icon; }
     bool hasIcon() const { return !m_icon->background().isEmpty(); }
 
-    void setFiles(QList<AudioFile> files) { m_files = files; }
-    QList<AudioFile> files() const { return m_files; }
+    void setFiles(QList<AudioFile*> files) { m_files = files; }
+    QList<AudioFile*> files() const { return m_files; }
 
     int mode() const { return m_mode; }
     void setMode(int mode) { m_mode = mode; }
@@ -173,7 +172,7 @@ protected:
     QString m_name, m_relativeIcon;
     int m_mode = 0;
     bool m_export = true;
-    QList<AudioFile> m_files;
+    QList<AudioFile*> m_files;
     AudioIcon *m_icon;
 
 signals:

@@ -366,7 +366,7 @@ void Worker::copyElements(AudioScenario *scenario)
         {
             for (auto f : e->files())
             {
-                if (!musicFiles.contains(f.url())) musicFiles.append(f.url());
+                if (!musicFiles.contains(f->url())) musicFiles.append(f->url());
             }
         }
     }
@@ -378,7 +378,7 @@ void Worker::copyElements(AudioScenario *scenario)
         {
             for (auto f : e->files())
             {
-                if (!soundFiles.contains(f.url())) soundFiles.append(f.url());
+                if (!soundFiles.contains(f->url())) soundFiles.append(f->url());
             }
         }
     }

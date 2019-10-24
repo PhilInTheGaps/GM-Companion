@@ -1,11 +1,15 @@
 #include "soundplayer.h"
+#include "youtubeutils.h"
 #include <QDebug>
+#include <internal/heuristics.h>
 
 SoundPlayer::SoundPlayer(FileManager *fManager)
 {
     qDebug() << "Loading SoundPlayer ...";
 
     fileManager = fManager;
+
+    connect(&youtube, &YouTube::receivedVideoMediaStreamInfos, this, &SoundPlayer::onYtReceivedVideoMediaStreamInfos);
 }
 
 /**
@@ -39,88 +43,50 @@ void SoundPlayer::play(SoundElement *element)
         players.append(player);
         auto sounds = element->files();
 
-        if (element->mode() == 0)
+
+        switch (element->mode())
         {
-            // Shuffle sound list
+        case 0: // Shuffle Playlist
             std::random_shuffle(sounds.begin(), sounds.end());
+            playlist->setPlaybackMode(QMediaPlaylist::Loop);
+            break;
+
+        case 2: // Loop
+            playlist->setPlaybackMode(QMediaPlaylist::Loop);
+            break;
+
+        case 1: // Complete Random Mode
+            playlist->setPlaybackMode(QMediaPlaylist::Random);
+            playlist->next();
+            break;
+
+        case 3: // Sequential
+
+            playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+            break;
         }
 
         for (auto sound : sounds)
         {
-            switch (sound.source())
+            switch (sound->source())
             {
             case 0:
-                playlist->addMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::soundPath) + sound.url()));
+                playlist->addMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::soundPath) + sound->url()));
+                break;
+
+            case 3:
+                m_ytRequestMap.insert(youtube.getVideoMediaStreamInfos(YouTubeUtils::parseVideoId(sound->url())), player);
                 break;
 
             default:
-                playlist->addMedia(QUrl(sound.url()));
+                playlist->addMedia(QUrl(sound->url()));
                 break;
             }
         }
 
-        // Fetch sound urls
-        // args[0] = Name of element
-        // args[1] = Playlist mode
-        //        fileManager->getAudioSaveLoad()->fetchSoundPaths(sounds, {
-        // element->name(), QString::number(element->mode()) });
-
         player->play();
         emit soundsChanged(elements);
     }
-}
-
-/**
- * @brief Add new found URLs to sound playlist
- * @param urls List of new URLs
- * @param args Contains info on the audio playlist
- */
-void SoundPlayer::onSoundPathsChanged(QList<QUrl>urls, QStringList args)
-{
-    //    qDebug() << "Sound paths changed!" << urls << args;
-
-    //    QString name = args[0];
-    //    int     mode = args[1].toInt();
-
-    //    for (auto a : players)
-    //    {
-    //        if (a->objectName() == name)
-    //        {
-    //            // Add sounds to playlist
-    //            for (auto b : urls)
-    //            {
-    //                a->playlist()->addMedia(b);
-    //            }
-
-    //            // Set playlist mode
-    //            switch (mode)
-    //            {
-    //            case 0: // Shuffle Playlist
-    //            case 2: // Loop
-    //                a->playlist()->setPlaybackMode(QMediaPlaylist::Loop);
-    //                break;
-
-    //            case 1: // Complete Random Mode
-    //                a->playlist()->setPlaybackMode(QMediaPlaylist::Random);
-    //                a->playlist()->next();
-    //                break;
-
-    //            case 3: // Sequential
-    //
-    //              a->playlist()->setPlaybackMode(QMediaPlaylist::Sequential);
-    //                break;
-
-    //            default: break;
-    //            }
-
-    //            if (a->state() != QMediaPlayer::State::PlayingState)
-    //            {
-    //                a->play();
-    //            }
-
-    //            return;
-    //        }
-    //    }
 }
 
 /**
@@ -190,4 +156,38 @@ void SoundPlayer::removeElement(QString element)
             return;
         }
     }
+}
+
+void SoundPlayer::onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int requestId)
+{
+    if (!m_ytRequestMap.contains(requestId)) return;
+
+    QUrl   tempUrl;
+    qint64 tempBitrate = 0;
+    auto   mediaPlayer = m_ytRequestMap[requestId];
+    m_ytRequestMap.remove(requestId);
+
+    if (!mediaPlayer) return;
+
+    for (auto info : infos->audio())
+    {
+        auto encoding = Heuristics::audioEncodingToString(info->audioEncoding());
+        qDebug() << info->audioEncoding() << info->bitrate()
+                 << mediaPlayer->hasSupport("audio/" + encoding, { encoding });
+
+        if ((mediaPlayer->hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
+        {
+            tempUrl     = info->url();
+            tempBitrate = info->bitrate();
+        }
+    }
+
+    mediaPlayer->playlist()->addMedia(tempUrl);
+
+    if (mediaPlayer->state() != QMediaPlayer::PlayingState)
+    {
+        mediaPlayer->play();
+    }
+
+    delete infos;
 }

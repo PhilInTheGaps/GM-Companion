@@ -449,7 +449,7 @@ void AudioEditor::loadElement(QString name, int type, QString subscenario)
     emit currentElementChanged();
 
     // Tell AudioSaveLoad to find out if files are missing
-    fileManager->getAudioSaveLoad()->findMissingFiles(fileModel->elements(), basePath);
+    fileManager->getAudioSaveLoad()->findMissingFiles(element->files(), basePath);
 }
 
 void AudioEditor::clearCurrentElement()
@@ -751,19 +751,19 @@ void AudioEditor::addUrl(QString elementName, int type, QString url, int mode, Q
 
         if (mode == 1) source = 2;
 
-        AudioFile audioFile(url, source, title);
+        auto audioFile = new AudioFile(url, source, title);
 
         if (type == 2) // Radio
         {
             element->setFiles({ audioFile });
-            fileModel->setElements({ new AudioFile(audioFile) });
+            fileModel->setElements({ audioFile });
         }
         else
         {
             auto files = element->files();
             files.append(audioFile);
             element->setFiles(files);
-            fileModel->append(new AudioFile(audioFile));
+            fileModel->append(audioFile);
         }
 
         emit currentElementChanged();
@@ -782,12 +782,12 @@ void AudioEditor::addYtUrl(QString elementName, int type, QString videoUrl)
 
     if (element && YouTubeUtils::validateVideoId(videoId))
     {
-        AudioFile audioFile(videoUrl, 3, "");
+        auto audioFile = new AudioFile(videoUrl, 3, "");
 
         auto files = element->files();
         files.append(audioFile);
         element->setFiles(files);
-        fileModel->append(new AudioFile(audioFile));
+        fileModel->append(audioFile);
 
         emit currentElementChanged();
         emit fileIndexChanged(m_fileIndex);
@@ -814,19 +814,19 @@ void AudioEditor::addFile(QString elementName, int type, QStringList path, QStri
 
     if (element && !path.isEmpty())
     {
-        AudioFile audioFile(pathString, 0);
+        auto audioFile = new AudioFile(pathString, 0);
 
         if (type == 2) // Radio
         {
             element->setFiles({ audioFile });
-            fileModel->setElements({ new AudioFile(audioFile) });
+            fileModel->setElements({ audioFile });
         }
         else
         {
             auto files = element->files();
             files.append(audioFile);
             element->setFiles(files);
-            fileModel->append(new AudioFile(audioFile));
+            fileModel->append(audioFile);
         }
 
         emit currentElementChanged();
@@ -864,11 +864,11 @@ void AudioEditor::addFiles(QStringList files)
 
         if (!files.isEmpty())
         {
-            QList<AudioFile> elementFiles;
+            QList<AudioFile *> elementFiles;
 
             for (auto file : fileModel->elements())
             {
-                elementFiles.append(AudioFile(*static_cast<AudioFile *>(file)));
+                elementFiles.append(static_cast<AudioFile *>(file));
             }
             element->setFiles(elementFiles);
 
@@ -908,7 +908,7 @@ void AudioEditor::removeFile(QString name, int type, int index, bool findMissing
 
     AudioElement *element = nullptr;
     QString basePath;
-    QList<AudioFile> files;
+    QList<AudioFile *> files;
 
     // Set basePath and find element
     switch (type)
@@ -944,7 +944,7 @@ void AudioEditor::removeFile(QString name, int type, int index, bool findMissing
             if (findMissing)
             {
                 // Tell AudioSaveLoad to find out if files are missing
-                fileManager->getAudioSaveLoad()->findMissingFiles(fileModel->elements(), basePath);
+                fileManager->getAudioSaveLoad()->findMissingFiles(files, basePath);
             }
         }
     }
@@ -1033,8 +1033,8 @@ void AudioEditor::moveFile(QString name, int type, int index, int positions)
         scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
     }
 
-    AudioElement    *element = nullptr;
-    QList<AudioFile> files;
+    AudioElement *element = nullptr;
+    QList<AudioFile *> files;
 
     switch (type)
     {
@@ -1111,6 +1111,8 @@ void AudioEditor::replaceFileFolder(QString name, int type, int index, QString f
             QString folderPath    = path.left(path.lastIndexOf('/'));
             QString newFolderPath = folder.right(folder.length() - folder.indexOf(basePath(element->type())));
             newFolderPath = newFolderPath.replace(basePath(element->type()), "");
+
+            QList<AudioFile *> audioFiles;
             auto elementFiles = element->files();
 
             for (int i = 0; i < fileModel->elements().size(); i++)
@@ -1120,14 +1122,16 @@ void AudioEditor::replaceFileFolder(QString name, int type, int index, QString f
                 if (file->missing() && file->url().contains(folderPath) && (i < element->files().count()))
                 {
                     file->setUrl(file->url().replace(folderPath, newFolderPath));
-                    elementFiles[i] = AudioFile(*file);
+                    elementFiles[i] = file;
                 }
+
+                audioFiles.append(file);
             }
 
             element->setFiles(elementFiles);
             emit currentElementChanged();
 
-            fileManager->getAudioSaveLoad()->findMissingFiles(fileModel->elements(), basePath(element->type()));
+            fileManager->getAudioSaveLoad()->findMissingFiles(audioFiles, basePath(element->type()));
             madeChanges();
         }
     }

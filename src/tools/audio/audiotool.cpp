@@ -38,8 +38,7 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 
     // Sound Player
     soundPlayer = new SoundPlayer(fileManager);
-    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::soundPathsChanged, soundPlayer, &SoundPlayer::onSoundPathsChanged);
-    connect(soundPlayer,                     &SoundPlayer::soundsChanged,       this,        &AudioTool::onSoundsChanged);
+    connect(soundPlayer, &SoundPlayer::soundsChanged, this, &AudioTool::onSoundsChanged);
     soundModel = new AudioElementModel;
     qmlEngine->rootContext()->setContextProperty("soundModel", soundModel);
 

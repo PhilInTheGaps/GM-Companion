@@ -6,6 +6,7 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
+#include "youtube.h"
 #include "src/settings/settingsmanager.h"
 
 class SoundPlayer : public AudioPlayer
@@ -22,16 +23,19 @@ private:
     QList<QMediaPlayer*> players;
     QList<SoundElement*> elements;
     SettingsManager sManager;
+    YouTube youtube;
+
+    QMap<int, QMediaPlayer*> m_ytRequestMap;
 
     float m_volume;
     bool isSoundPlaying(SoundElement* element);
     void removeElement(QString element);
 
+private slots:
+    void onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int requestId);
+
 signals:
     void soundsChanged(QList<SoundElement*>);
-
-public slots:
-    void onSoundPathsChanged(QList<QUrl> urls, QStringList args);
 };
 
 #endif // SOUNDPLAYER_H

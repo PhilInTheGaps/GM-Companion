@@ -104,26 +104,26 @@ void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
 
     for (auto s : m_playlist)
     {
-        switch (s.source())
+        switch (s->source())
         {
         case 0:
-            m_songNames.append(s.url().right(s.url().length() - s.url().lastIndexOf("/") - 1));
+            m_songNames.append(s->url().right(s->url().length() - s->url().lastIndexOf("/") - 1));
             break;
 
         case 2:
-            m_songNames.append(s.title().isEmpty() ? s.url() : s.title());
+            m_songNames.append(s->title().isEmpty() ? s->url() : s->title());
 
-            if (initial) spotifyPlayer->getPlaylistTracks(s.url());
+            if (initial) spotifyPlayer->getPlaylistTracks(s->url());
             break;
 
         case 3:
-            m_songNames.append(s.title().isEmpty() ? s.url() : s.title());
+            m_songNames.append(s->title().isEmpty() ? s->url() : s->title());
 
-            if ((initial || reloadYt) && s.title().isEmpty()) youtube.getVideo(YouTubeUtils::parseVideoId(s.url()));
+            if ((initial || reloadYt) && s->title().isEmpty()) youtube.getVideo(YouTubeUtils::parseVideoId(s->url()));
             break;
 
         default:
-            m_songNames.append(s.url());
+            m_songNames.append(s->url());
             break;
         }
     }
@@ -134,13 +134,13 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
     // Playback mode
     if (currentElement->mode() == 0)
     {
-        QString currentUrl = url.isEmpty() ? m_playlist[m_playlistIndex].url() : url;
+        QString currentUrl = url.isEmpty() ? m_playlist[m_playlistIndex]->url() : url;
 
-        for (auto e : m_playlist) qDebug() << e.url();
+        for (auto e : m_playlist) qDebug() << e->url();
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
-        QList<AudioFile> temp;
+        QList<AudioFile *> temp;
 
         while (!m_playlist.isEmpty())
         {
@@ -167,7 +167,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
 
             for (auto e : m_playlist)
             {
-                if (e.url().contains(currentUrl))
+                if (e->url().contains(currentUrl))
                 {
                     #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                     m_playlist.swapItemsAt(m_playlistIndex, index);
@@ -182,34 +182,34 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
     }
 }
 
-void MusicPlayer::loadMedia(AudioFile file)
+void MusicPlayer::loadMedia(AudioFile *file)
 {
-    qDebug() << "MusicPlayer: Loading media (" << file.url() << ") ...";
+    qDebug() << "MusicPlayer: Loading media (" << file->url() << ") ...";
 
     mediaPlayer->stop();
     spotifyPlayer->stop();
-    m_playerType = file.source();
+    m_playerType = file->source();
     emit currentIndexChanged();
 
     switch (m_playerType)
     {
     case 0:
-        mediaPlayer->setMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::musicPath) + file.url()));
+        mediaPlayer->setMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::musicPath) + file->url()));
         mediaPlayer->play();
         break;
 
     case 1:
-        mediaPlayer->setMedia(QUrl(file.url()));
+        mediaPlayer->setMedia(QUrl(file->url()));
         mediaPlayer->play();
         break;
 
     case 2:
-        spotifyPlayer->play(file.url(), 0, true);
+        spotifyPlayer->play(file->url(), 0, true);
         emit startedPlaying();
         break;
 
     case 3:
-        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file.url()));
+        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
         break;
 
     default:
@@ -370,7 +370,7 @@ void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QSt
 {
     for (int i = 0; i < m_playlist.count(); i++)
     {
-        if ((m_playlist[i].source() == 2) && m_playlist[i].url().contains(playlistId))
+        if ((m_playlist[i]->source() == 2) && m_playlist[i]->url().contains(playlistId))
         {
             if (m_playlistIndex > i) m_playlistIndex += tracks.count();
 
@@ -379,7 +379,7 @@ void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QSt
 
             for (int j = 0; j < tracks.count(); j++)
             {
-                m_playlist.insert(i + j, AudioFile(tracks[j].id, 2, tracks[j].title));
+                m_playlist.insert(i + j, new AudioFile(tracks[j].id, 2, tracks[j].title));
             }
 
             applyShuffleMode(true, m_playlistIndex == i ? firstPlaylistTrack.id : "");
@@ -423,9 +423,9 @@ void MusicPlayer::onYtReceivedVideo(Video video, int reqId)
 {
     for (int i = 0; i < m_playlist.count(); i++)
     {
-        if ((m_playlist[i].source() == 3) && (YouTubeUtils::parseVideoId(m_playlist[i].url()) == video.id()))
+        if ((m_playlist[i]->source() == 3) && (YouTubeUtils::parseVideoId(m_playlist[i]->url()) == video.id()))
         {
-            m_playlist[i].setTitle(video.title());
+            m_playlist[i]->setTitle(video.title());
             loadSongNames();
             emit songNamesChanged();
             return;

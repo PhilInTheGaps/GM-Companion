@@ -55,7 +55,8 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: if (audio_editor.icon.startsWith("http")) {
+            source: if (audio_editor.icon.startsWith("http")
+                            || audio_editor.icon.startsWith("data:")) {
                         audio_editor.icon
                     } else {
                         (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(

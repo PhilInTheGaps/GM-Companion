@@ -22,12 +22,12 @@ class FileFinder : public QObject
 {
     Q_OBJECT
 public:
-    FileFinder(QVector<QObject*> files, QString basePath) :
+    FileFinder(QList<AudioFile*> files, QString basePath) :
     m_files(files), m_basePath(basePath) {}
     virtual ~FileFinder() {}
 
 private:
-    QVector<QObject*> m_files;
+    QList<AudioFile*> m_files;
     QString m_basePath;
 
 public slots:
@@ -54,7 +54,7 @@ public:
     void fetchRadioPath(QString path);
 
     void findIconPaths(QList<AudioProject*> projects, bool editor);
-    void findMissingFiles(QVector<QObject *> files, QString basePath);
+    void findMissingFiles(QList<AudioFile *> files, QString basePath);
 
     void saveProject(AudioProject *project);
 

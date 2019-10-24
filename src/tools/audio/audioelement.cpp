@@ -7,6 +7,16 @@ AudioElement::AudioElement(QString name, AudioIcon *icon) :
 {
 }
 
+AudioElement::~AudioElement()
+{
+    m_icon->deleteLater();
+
+    for (auto f : m_files)
+    {
+        if (f) f->deleteLater();
+    }
+}
+
 MusicElement::MusicElement(QString name)
 {
     m_name = name;
@@ -199,7 +209,7 @@ void AudioFileModel::remove(QObject *item)
             beginRemoveRows(QModelIndex(), i, i);
             m_items.remove(i);
 
-            if (item) item->deleteLater();
+            //            if (item) item->deleteLater();
             endRemoveRows();
             break;
         }
@@ -221,7 +231,8 @@ void AudioFileModel::clear()
     while (m_items.size() > 0)
     {
         beginRemoveRows(QModelIndex(), 0, 0);
-        m_items[0]->deleteLater();
+
+        //        m_items[0]->deleteLater();
         m_items.remove(0);
         endRemoveRows();
     }
@@ -242,25 +253,11 @@ void AudioFileModel::setElements(QList<AudioFile *>elements)
     emit isEmptyChanged();
 }
 
-void AudioFileModel::setElements(QList<AudioFile>elements)
-{
-    clear();
-
-    for (auto element : elements)
-    {
-        append(new AudioFile(element));
-    }
-
-    emit isEmptyChanged();
-}
-
 int AudioIcon::addCollageIcon(QImage icon)
 {
     if (m_collageIcons.contains(icon)) return -1;
 
     m_collageIcons.append(icon);
-
-    if (m_collageIcons.count() > 4) qDebug() << " ---- COLLAGE ICON COUNT > 4";
 
     return m_collageIcons.count();
 }

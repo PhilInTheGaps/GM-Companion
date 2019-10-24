@@ -147,7 +147,7 @@ void AddonElementManager::findSpotifyPlaylists()
                             {
                                 auto uri     = playlist.toObject().value("uri").toString();
                                 auto element = new MusicElement(name);
-                                AudioFile af(uri, 2);
+                                auto af      = new AudioFile(uri, 2);
 
                                 element->setFiles({ af });
                                 element->setExport(false);

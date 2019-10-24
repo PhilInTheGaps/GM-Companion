@@ -37,11 +37,11 @@ private:
     SettingsManager sManager;
     YouTube youtube;
 
-    QList<AudioFile> m_playlist;
+    QList<AudioFile*> m_playlist;
     int m_playlistIndex;
     int m_playerType;
     int m_youtubeRequestId;
-    void loadMedia(AudioFile file);
+    void loadMedia(AudioFile *file);
     void loadSongNames(bool initial = false, bool reloadYt = false);
     void applyShuffleMode(bool keepIndex = false, QString url = "");
 

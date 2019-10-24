@@ -1,13 +1,13 @@
-# GM-Companion
+# GM-Companion | [![GitHub (pre-)release](https://img.shields.io/github/release/PhilInTheGaps/GM-Companion/all.svg)](https://github.com/PhilInTheGaps/GM-Companion/releases) [![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
 
 A tool for the gamemaster of a tabletop RPG session.
 
-[![GitHub (pre-)release](https://img.shields.io/github/release/PhilInTheGaps/GM-Companion/all.svg)](https://github.com/PhilInTheGaps/GM-Companion/releases)
-[![GPL Licence](https://badges.frapsoft.com/os/gpl/gpl.svg?v=103)](https://opensource.org/licenses/GPL-3.0/)
 
 **[Website](https://gm-companion.github.io/) | [Documentation](https://gm-companion.github.io/documentation.html)**
 
 ![Screenshot](https://gm-companion.github.io/assets/images/screenshots/audio-tool-01.png)
+
+## Build Status
 
 Travis-CI | AppVeyor | Jenkins
 --|---|--
@@ -33,7 +33,7 @@ The AppImage is built using Ubuntu 16.04 LTS.
 
 You might have to install gstreamer 1.0 otherwise audio cannot be played. For me this version works on Ubuntu but not on Manjaro.
 
-### Arch Linux
+### Arch Linux / Manjaro
 
 Install from [AUR](https://aur.archlinux.org/packages/gm-companion/):
 

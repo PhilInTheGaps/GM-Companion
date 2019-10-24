@@ -371,12 +371,12 @@ void AudioSaveLoad::initAudioElement(AudioElement *element, QJsonObject object)
     element->setRelativeIcon(relativeIcon);
     element->setMode(object.value("mode").toInt());
 
-    QList<AudioFile> files;
+    QList<AudioFile *> files;
     auto fileArray = object.value("files").toArray();
 
     for (auto file : fileArray)
     {
-        AudioFile audioFile(file.toObject().value("url").toString(), file.toObject().value("source").toInt());
+        AudioFile *audioFile = new AudioFile(file.toObject().value("url").toString(), file.toObject().value("source").toInt());
         files.append(audioFile);
     }
 
@@ -384,7 +384,7 @@ void AudioSaveLoad::initAudioElement(AudioElement *element, QJsonObject object)
     qDebug() << "   " << name;
 }
 
-void AudioSaveLoad::findMissingFiles(QVector<QObject *>files, QString basePath)
+void AudioSaveLoad::findMissingFiles(QList<AudioFile *>files, QString basePath)
 {
     qDebug() << "AudioSaveLoad: Finding missing files ...";
 
@@ -619,8 +619,8 @@ QJsonObject AudioSaveLoad::saveAudioElement(AudioElement *element)
     for (auto f : element->files())
     {
         files.append(QJsonObject{
-            { "url", f.url() },
-            { "source", f.source() }
+            { "url", f->url() },
+            { "source", f->source() }
         });
     }
     object.insert("files", files);

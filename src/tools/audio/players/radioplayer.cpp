@@ -40,15 +40,15 @@ void RadioPlayer::play(RadioElement *element)
 
     auto audioFile = element->files()[0];
 
-    if (audioFile.source() == 0)
+    if (audioFile->source() == 0)
     {
-        qDebug() << "Playing radio from local playlist:" << audioFile.url() << "...";
-        fileManager->getAudioSaveLoad()->fetchRadioPath(audioFile.url());
+        qDebug() << "Playing radio from local playlist:" << audioFile->url() << "...";
+        fileManager->getAudioSaveLoad()->fetchRadioPath(audioFile->url());
     }
     else
     {
-        qDebug() << "Playing radio from url:" << audioFile.url();
-        player->setMedia(QUrl(audioFile.url()));
+        qDebug() << "Playing radio from url:" << audioFile->url();
+        player->setMedia(QUrl(audioFile->url()));
         player->play();
     }
 }

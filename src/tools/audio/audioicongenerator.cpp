@@ -64,17 +64,17 @@ void IconWorker::generateCollage(AudioElement *element, int index)
 
         auto file = element->files()[index];
 
-        if (file.source() == 2)
+        if (file->source() == 2)
         {
             fetchSpotifyIcon(element, index);
         }
-        else if (file.source() != 0)
+        else if (file->source() != 0)
         {
             generateCollage(element, index + 1);
         }
         else
         {
-            QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + file.url() : sManager.getSetting(Setting::soundPath) + file.url();
+            QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + file->url() : sManager.getSetting(Setting::soundPath) + file->url();
 
             // Get id3v2 meta data tag
             FileRef f(path.toLocal8Bit());
@@ -136,7 +136,7 @@ void IconWorker::fetchSpotifyIcon(AudioElement *element, int index)
 
     QUrl url;
     auto file = element->files()[index];
-    auto id   = file.url();
+    auto id   = file->url();
 
     // Element is album
     if (id.contains("album:"))

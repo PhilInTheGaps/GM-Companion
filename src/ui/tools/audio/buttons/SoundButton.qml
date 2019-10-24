@@ -14,10 +14,11 @@ Button {
 
     Image {
         id: icon
-        source: if (element_icon.startsWith("http")) {
-                    element_icon
+        source: if (element_icon.background.startsWith("http")
+                        || element_icon.background.startsWith("data:")) {
+                    element_icon.background
                 } else if (has_icon) {
-                    "file:///" + element_icon
+                    "file:///" + element_icon.background
                 } else {
                     "/icons/media/sound_image.png"
                 }

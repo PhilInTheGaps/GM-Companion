@@ -56,7 +56,8 @@ Rectangle {
 
             Rectangle {
                 anchors.fill: parent
-                color: modelData.missing ? "darkred" : (file_list.currentIndex == index ? color_scheme.menuColor : color_scheme.backgroundColor)
+                color: modelData
+                       && modelData.missing ? "darkred" : (file_list.currentIndex == index ? color_scheme.menuColor : color_scheme.backgroundColor)
             }
 
             Text {
@@ -66,8 +67,9 @@ Rectangle {
                 anchors.right: parent.ListView.isCurrentItem ? delegate_row.left : parent.right
                 anchors.margins: 5
 
-                text: modelData.title != "" ? modelData.title + "  |  "
-                                              + modelData.url : modelData.url
+                text: modelData
+                      && modelData.title !== "" ? modelData.title + "  |  "
+                                                  + modelData.url : modelData.url
                 color: file_list.currentIndex
                        == index ? color_scheme.toolbarTextColor : color_scheme.textColor
                 verticalAlignment: Text.AlignVCenter
@@ -92,7 +94,7 @@ Rectangle {
 
                 // Folder
                 ControlBarButton {
-                    visible: modelData.source === 0
+                    visible: modelData && modelData.source === 0
                     fa_icon: FontAwesome.folder
 
                     onClicked: {
@@ -205,7 +207,6 @@ Rectangle {
             color: "lightsteelblue"
         }
 
-        ScrollBar.vertical: ScrollBar {
-        }
+        ScrollBar.vertical: ScrollBar {}
     }
 }
