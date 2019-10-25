@@ -73,6 +73,10 @@ Page {
         id: rename_dialog
     }
 
+    EditorDeleteDialog {
+        id: delete_dialog
+    }
+
     // Top Bar
     CustomToolBar {
         id: tool_bar
@@ -118,6 +122,7 @@ Page {
 
             EditorToolButton {
                 anchors.margins: 5
+                space: 0
                 labeltext: FontAwesome.pen
                 onClicked: {
                     rename_dialog.mode = 0
@@ -126,6 +131,19 @@ Page {
                     rename_dialog.x = project_box.x
                     rename_dialog.y = tool_bar.height
                     rename_dialog.open()
+                }
+            }
+
+            EditorToolButton {
+                anchors.margins: 5
+                space: 0
+                labeltext: FontAwesome.trash
+                onClicked: {
+                    delete_dialog.x = project_box.x
+                    delete_dialog.y = tool_bar.height
+                    delete_dialog.element_name = project_box.currentText
+                    delete_dialog.mode = 0
+                    delete_dialog.open()
                 }
             }
 
@@ -145,6 +163,7 @@ Page {
 
             EditorToolButton {
                 anchors.margins: 5
+                space: 0
                 labeltext: FontAwesome.pen
                 onClicked: {
                     rename_dialog.mode = 1
@@ -153,6 +172,19 @@ Page {
                     rename_dialog.x = category_box.x
                     rename_dialog.y = tool_bar.height
                     rename_dialog.open()
+                }
+            }
+
+            EditorToolButton {
+                anchors.margins: 5
+                space: 0
+                labeltext: FontAwesome.trash
+                onClicked: {
+                    delete_dialog.x = category_box.x
+                    delete_dialog.y = tool_bar.height
+                    delete_dialog.element_name = category_box.currentText
+                    delete_dialog.mode = 1
+                    delete_dialog.open()
                 }
             }
 
@@ -173,6 +205,7 @@ Page {
 
             EditorToolButton {
                 anchors.margins: 5
+                space: 0
                 labeltext: FontAwesome.pen
                 onClicked: {
                     rename_dialog.mode = 2
@@ -182,6 +215,26 @@ Page {
                     rename_dialog.y = tool_bar.height
                     rename_dialog.open()
                 }
+            }
+
+            EditorToolButton {
+                anchors.margins: 5
+                space: 0
+                labeltext: FontAwesome.trash
+                onClicked: {
+                    delete_dialog.x = scenario_box.x
+                    delete_dialog.y = tool_bar.height
+                    delete_dialog.element_name = scenario_box.currentText
+                    delete_dialog.mode = 2
+                    delete_dialog.open()
+                }
+            }
+
+            // Spacer
+            Item {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 10
             }
 
             // Sort Elements

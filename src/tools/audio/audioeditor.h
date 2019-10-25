@@ -46,6 +46,7 @@ public:
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE void createProject(QString name);
     Q_INVOKABLE void renameProject(QString name);
+    Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
     void setCurrentProject(AudioProject* project);
     QStringList projectNames();
@@ -56,6 +57,7 @@ public:
     Q_INVOKABLE void setCurrentCategory(QString name);
     Q_INVOKABLE void createCategory(QString name);
     Q_INVOKABLE void renameCategory(QString name);
+    Q_INVOKABLE void deleteCategory();
     QStringList categoryNames() const { if (!m_currentProject) return {}; else return m_currentProject->categoryNames(); }
     int categoryIndex() const;
 
@@ -63,6 +65,8 @@ public:
     Q_INVOKABLE void setCurrentScenario(QString name);
     Q_INVOKABLE void createScenario(QString name, bool subscenario = false);
     Q_INVOKABLE void renameScenario(QString name);
+    Q_INVOKABLE void deleteScenario();
+    Q_INVOKABLE void deleteSubScenario(QString name);
     QStringList scenarioNames() const;
     int scenarioIndex() const;
     QStringList subscenarioNames() const;

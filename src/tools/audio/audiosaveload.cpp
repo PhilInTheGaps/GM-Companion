@@ -502,6 +502,21 @@ void AudioSaveLoad::saveProject(AudioProject *project)
     }
 }
 
+void AudioSaveLoad::deleteProject(AudioProject *project)
+{
+    if (!project) return;
+
+    switch (m_mode)
+    {
+    case 0:
+        localSource->deleteProject(project);
+        break;
+
+    default:
+        qWarning() << "Error: deleteProject() for mode" << m_mode << "not implemented.";
+    }
+}
+
 /**
  * @brief Save a category to a JsonObject
  * @param category Pointer to AudioCategory to save

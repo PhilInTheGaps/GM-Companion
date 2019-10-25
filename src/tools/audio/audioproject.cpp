@@ -16,6 +16,14 @@ AudioProject::AudioProject(QString name, int version, QList<AudioCategory *>cate
     }
 }
 
+AudioProject::~AudioProject()
+{
+    for (auto c : m_categories)
+    {
+        if (c) c->deleteLater();
+    }
+}
+
 /**
     Get the names of all categories in project
     @return QStringList with category names
@@ -33,6 +41,15 @@ QStringList AudioProject::categoryNames()
     qDebug() << "Done:" << names;
 
     return names;
+}
+
+void AudioProject::deleteCategory(AudioCategory *category)
+{
+    if (!category || !m_categories.contains(category)) return;
+
+    m_categories.removeOne(category);
+
+    category->deleteLater();
 }
 
 /**
@@ -71,6 +88,14 @@ QList<AudioElement *>AudioProject::elements() const
     Get the names of all scenarios in category
     @return QStringList with scenario names
  */
+AudioCategory::~AudioCategory()
+{
+    for (auto s : m_scenarios)
+    {
+        if (s) s->deleteLater();
+    }
+}
+
 QStringList AudioCategory::scenarioNames()
 {
     QStringList names;
@@ -101,6 +126,28 @@ void AudioCategory::setCurrentScenario(QString name)
     }
 }
 
+void AudioCategory::setCurrentScenario(AudioScenario *scenario)
+{
+    if (!scenario || !m_scenarios.contains(scenario))
+    {
+        m_currentScenario = scenario;
+        return;
+    }
+
+    qDebug() << "AudioCategory: Setting current scenario:" << scenario->name() << "...";
+
+    m_currentScenario = scenario;
+}
+
+void AudioCategory::deleteScenario(AudioScenario *scenario)
+{
+    if (!scenario || !m_scenarios.contains(scenario)) return;
+
+    m_scenarios.removeOne(scenario);
+
+    scenario->deleteLater();
+}
+
 QList<AudioElement *>AudioCategory::elements() const
 {
     QList<AudioElement *> list;
@@ -117,6 +164,19 @@ QList<AudioElement *>AudioCategory::elements() const
  * @brief Get all elements
  * @return List of pointers to audio elements
  */
+AudioScenario::~AudioScenario()
+{
+    for (auto s : m_scenarios)
+    {
+        if (s) s->deleteLater();
+    }
+
+    for (auto e : elements())
+    {
+        if (e) e->deleteLater();
+    }
+}
+
 QList<AudioElement *>AudioScenario::elements(bool recursive)
 {
     QList<AudioElement *> list;

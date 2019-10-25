@@ -1,7 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import FontAwesome 2.0
 
 import "../buttons"
+import "../../../components"
 
 ScrollView {
     id: root
@@ -32,8 +34,10 @@ ScrollView {
                 spacing: 5
 
                 Rectangle {
+                    id: subscenario_rect
                     anchors.left: parent.left
                     anchors.right: parent.right
+                    anchors.rightMargin: 10
                     height: subscenario_text.height + 4
                     color: color_scheme.primaryButtonColor
                     visible: subscenario_text.text != ""
@@ -46,21 +50,45 @@ ScrollView {
 
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
-                        anchors.right: parent.right
+                        anchors.right: subscenario_button_row.left
                         anchors.margins: 2
                         elide: Text.ElideRight
                     }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            element_stack_view.replace()
-                            subscenario_combo_box.isSetEnabled = false
-                            audio_editor.loadElement(modelData.name(), 4, "")
-                            element_stack_view.replace(empty_page)
-                            subscenario_combo_box_rect.visible = false
-                            element_info_row_1.visible = false
-                            subscenario_combo_box.currentIndex = 0
+                    Row {
+                        id: subscenario_button_row
+
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        anchors.leftMargin: 5
+                        anchors.rightMargin: 5
+                        spacing: 5
+
+                        ToolBarIconButton {
+                            fa_icon: FontAwesome.chevronUp
+                            anchors.margins: 0
+                            onClicked: audio_editor.moveElement(
+                                           modelData.name(), 4, -1)
+                        }
+
+                        ToolBarIconButton {
+                            fa_icon: FontAwesome.chevronDown
+                            anchors.margins: 0
+                            onClicked: audio_editor.moveElement(
+                                           modelData.name(), 4, 1)
+                        }
+
+                        ToolBarIconButton {
+                            fa_icon: FontAwesome.trash
+                            anchors.margins: 0
+                            onClicked: {
+                                delete_dialog.x = element_column.width
+                                delete_dialog.y = color_scheme.toolbarHeight
+                                delete_dialog.mode = 3
+                                delete_dialog.element_name = modelData.name()
+                                delete_dialog.open()
+                            }
                         }
                     }
                 }
@@ -78,6 +106,7 @@ ScrollView {
 
                         anchors.left: parent.left
                         anchors.right: parent.right
+                        anchors.rightMargin: 10
                     }
                 }
             }

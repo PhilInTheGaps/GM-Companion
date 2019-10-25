@@ -12,6 +12,8 @@ public:
 
     int findProjects(bool editor = false) override;
     int findIconPaths(QStringList icons, bool editor) override;
+
+    void deleteProject(AudioProject *project);
 };
 
 #endif // LOCALAUDIOFILESOURCE_H

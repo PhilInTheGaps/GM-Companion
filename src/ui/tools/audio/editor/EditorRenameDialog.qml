@@ -9,6 +9,9 @@ Dialog {
     margins: 0
     title: ""
 
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+
     contentItem: Column {
         TextField {
             id: field

@@ -41,7 +41,7 @@ matrix:
     - os: osx
       before_install:
         - brew update
-        - brew install qt5
+        - brew install qt5 taglib poppler
         - brew link qt5 --force
       script:
         - qmake

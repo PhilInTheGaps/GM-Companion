@@ -10,7 +10,7 @@ class AudioScenario : public QObject
 public:
     AudioScenario(QString name, QList<MusicElement*> musicLists, QList<SoundElement*> soundLists, QList<RadioElement*> radios, QList<AudioScenario*> scenarios) :
         m_name(name), m_musicLists(musicLists), m_soundLists(soundLists), m_radios(radios), m_scenarios(scenarios) {}
-    virtual ~AudioScenario() {}
+    ~AudioScenario();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -46,6 +46,7 @@ public:
     void addScenario(AudioScenario *scenario) { m_scenarios.append(scenario); }
     void removeScenario(QString name);
     void moveScenario(QString name, int steps);
+    void deleteScenario(QString name);
 
 private:
     bool m_export = true;
@@ -61,7 +62,7 @@ class AudioCategory : public QObject
     Q_OBJECT
 public:
     AudioCategory(QString name, QList<AudioScenario*> scenarios) : m_name(name), m_scenarios(scenarios) { if (m_scenarios.size() > 0) m_currentScenario = m_scenarios[0]; }
-    virtual ~AudioCategory() {}
+    ~AudioCategory();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -71,9 +72,11 @@ public:
     QList<AudioScenario*> scenarios() const { return m_scenarios; }
     QStringList scenarioNames();
     void setCurrentScenario(QString name);
+    void setCurrentScenario(AudioScenario *scenario);
     AudioScenario* currentScenario() const { return m_currentScenario; }
     void addScenario(AudioScenario *scenario) { m_scenarios.append(scenario); }
     int scenarioIndex() const { return m_scenarios.indexOf(m_currentScenario); }
+    void deleteScenario(AudioScenario *scenario);
 
     QList<AudioElement *> elements() const;
 
@@ -89,6 +92,7 @@ class AudioProject : public QObject
     Q_OBJECT
 public:
     explicit AudioProject(QString name, int version, QList<AudioCategory*> categories, QObject *parent = nullptr);
+    ~AudioProject();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -108,6 +112,7 @@ public:
     QList<AudioCategory*> categories() const { return m_categories; }
     QStringList categoryNames();
     int categoryIndex() const { return m_categories.indexOf(m_currentCategory); }
+    void deleteCategory(AudioCategory *category);
 
     void setCurrentCategory(QString name);
     void setCurrentCategory(AudioCategory *category = nullptr) { m_currentCategory = category; }

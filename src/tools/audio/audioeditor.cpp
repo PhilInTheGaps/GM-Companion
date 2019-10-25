@@ -121,6 +121,10 @@ void AudioEditor::setCurrentProject(int index)
         emit currentScenarioChanged();
         qDebug() << "       Done";
     }
+    else
+    {
+        m_currentProject = nullptr;
+    }
 }
 
 /**
@@ -190,14 +194,36 @@ void AudioEditor::renameProject(QString name)
     madeChanges();
 }
 
+void AudioEditor::deleteProject()
+{
+    if (!m_currentProject) return;
+
+    qDebug() << "AudioEditor: Deleting current project:" << m_currentProject->name();
+
+    auto project = m_currentProject;
+    m_projects.removeOne(project);
+    setCurrentProject(0);
+
+    fileManager->getAudioSaveLoad()->deleteProject(project);
+    emit projectsChanged();
+}
+
 /**
  * @brief Set the current category
  * @param name Name of new active category
  */
 void AudioEditor::setCurrentCategory(QString name)
 {
-    qDebug() << "AudioEditor: Setting current category" << name << "...";
-    m_currentProject->setCurrentCategory(name);
+    if (name.isEmpty())
+    {
+        m_currentProject->setCurrentCategory(nullptr);
+    }
+    else
+    {
+        qDebug() << "AudioEditor: Setting current category" << name << "(" << m_currentProject->name() + ") ...";
+        m_currentProject->setCurrentCategory(name);
+    }
+
     emit currentCategoryChanged();
     emit currentScenarioChanged();
 
@@ -255,6 +281,28 @@ void AudioEditor::renameCategory(QString name)
     madeChanges();
 }
 
+void AudioEditor::deleteCategory()
+{
+    if (!m_currentProject || !m_currentProject->currentCategory()) return;
+
+    qDebug() << "AudioEditor: Deleting current category:" << m_currentProject->currentCategory()->name();
+
+    m_currentProject->deleteCategory(m_currentProject->currentCategory());
+
+    emit currentProjectChanged();
+
+    if (m_currentProject->categories().count() > 0)
+    {
+        setCurrentCategory(m_currentProject->categories()[0]->name());
+    }
+    else
+    {
+        setCurrentCategory("");
+    }
+
+    madeChanges();
+}
+
 /**
  * @brief Get a list of all scenario names in current category
  * @return List of scenario names
@@ -301,10 +349,24 @@ void AudioEditor::setCurrentScenario(QString name)
         return;
     }
 
-    qDebug() << "AudioEditor: Setting current scenario" << name << "...";
+    if (name.isEmpty())
+    {
+        m_currentProject->currentCategory()->setCurrentScenario(nullptr);
+    }
+    else
+    {
+        qDebug() << "AudioEditor: Setting current scenario" << name << "...";
+        m_currentProject->currentCategory()->setCurrentScenario(name);
+    }
 
-    m_currentProject->currentCategory()->setCurrentScenario(name);
     emit currentScenarioChanged();
+
+    if (!m_currentProject->currentCategory()
+        || !m_currentProject->currentCategory()->currentScenario()
+        || (m_currentProject->currentCategory()->scenarios().count() == 0))
+    {
+        clearCurrentElement();
+    }
 }
 
 /**
@@ -363,6 +425,33 @@ void AudioEditor::renameScenario(QString name)
     m_currentProject->currentCategory()->currentScenario()->setName(name);
     emit currentCategoryChanged();
     madeChanges();
+}
+
+void AudioEditor::deleteScenario()
+{
+    if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentScenario()) return;
+
+    qDebug() << "AudioEditor: Deleting current scenario:" << m_currentProject->currentCategory()->currentScenario()->name();
+
+    m_currentProject->currentCategory()->deleteScenario(m_currentProject->currentCategory()->currentScenario());
+
+    emit currentCategoryChanged();
+
+    if (m_currentProject->currentCategory()->scenarios().count() > 0)
+    {
+        setCurrentScenario(m_currentProject->currentCategory()->scenarios()[0]->name());
+    }
+    else
+    {
+        setCurrentScenario("");
+    }
+
+    madeChanges();
+}
+
+void AudioEditor::deleteSubScenario(QString name)
+{
+    deleteElement(name, 4);
 }
 
 /**

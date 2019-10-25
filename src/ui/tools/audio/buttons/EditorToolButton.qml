@@ -8,10 +8,11 @@ ToolButton {
 
     property string labeltext
     property alias label: textlabel
+    property int space: 10
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
-    width: textlabel.width + 10
+    width: textlabel.width + space
     hoverEnabled: true
 
     Text {

@@ -94,5 +94,6 @@
         <file>tools/audio/editor/views/ElementFileAddView.qml</file>
         <file>tools/audio/editor/views/EditorFileListView.qml</file>
         <file>tools/audio/editor/views/PlaybackModeView.qml</file>
+        <file>tools/audio/editor/EditorDeleteDialog.qml</file>
     </qresource>
 </RCC>

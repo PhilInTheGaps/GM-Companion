@@ -48,3 +48,26 @@ int LocalAudioFileSource::findIconPaths(QStringList icons, bool editor)
 
     return m_requestCount++;
 }
+
+void LocalAudioFileSource::deleteProject(AudioProject *project)
+{
+    if (!project) return;
+
+    QFile f(sManager.getSetting(Setting::audioPath) + "/" + project->name() + ".audio");
+
+    qDebug() << "LocalAudioFileSource: Deleting project file" << f.fileName();
+
+    if (f.exists())
+    {
+        if (!f.remove())
+        {
+            qWarning() << "Error: Could not remove project" << project->name();
+        }
+    }
+    else
+    {
+        qWarning() << "Error: Project file" << f.fileName() << "does not exist.";
+    }
+
+    project->deleteLater();
+}

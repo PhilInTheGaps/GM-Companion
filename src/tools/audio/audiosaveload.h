@@ -57,6 +57,7 @@ public:
     void findMissingFiles(QList<AudioFile *> files, QString basePath);
 
     void saveProject(AudioProject *project);
+    void deleteProject(AudioProject *project);
 
     void setMode(int mode) { m_mode = mode; }
 
