@@ -4,9 +4,7 @@
 #include <QImage>
 #include <QBuffer>
 
-#ifdef Q_OS_LINUX
-# include <poppler/qt5/poppler-qt5.h>
-#endif // ifdef Q_OS_LINUX
+#include <poppler/qt5/poppler-qt5.h>
 
 CharacterImageViewer::CharacterImageViewer()
 {
@@ -41,7 +39,6 @@ void CharacterImageViewer::updateImages()
         // PDFs
         if (m_currentCharacter->type() == 1)
         {
-            #ifdef Q_OS_LINUX
             Poppler::Document *doc = Poppler::Document::load(m_currentCharacter->files()[0].path());
 
             if (!doc || doc->isLocked())
@@ -56,7 +53,6 @@ void CharacterImageViewer::updateImages()
             }
 
             delete doc;
-            #endif // ifdef Q_OS_LINUX
         }
         else
         {
@@ -96,7 +92,6 @@ void CharacterImageViewer::setCurrentCategory(int index)
 
 void CharacterImageViewer::setPDFImage(int index)
 {
-#ifdef Q_OS_LINUX
     Poppler::Document *doc = Poppler::Document::load(m_currentCharacter->files()[0].path());
 
     if (!doc || doc->isLocked())
@@ -127,7 +122,6 @@ void CharacterImageViewer::setPDFImage(int index)
     }
 
     delete doc;
-#endif // ifdef Q_OS_LINUX
 }
 
 void CharacterImageViewer::nextImage(bool right)

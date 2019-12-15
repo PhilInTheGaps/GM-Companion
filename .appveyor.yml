@@ -1,46 +1,49 @@
 version: '{branch}-{build}'
-image: Visual Studio 2017
+image: Visual Studio 2015
 
 branches:
   except:
     - ubuntu-build
 
 environment:
-  matrix:
-  # MSVC x64
-  - name: x64
-    platform: x64
-    qt: 5.12\msvc2017_64
-    openssl: C:\OpenSSL-Win64
+  matrix:  
+  # MinGW x86_64  
+  - COMPILER_NAME: mingw-64
+    PLATFORM_ARCH: x86_64
+    QT_PATH: C:\Qt\5.13\mingw73_64
+    MINGW_PATH: C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0
+    OPENSSL: C:\OpenSSL-Win64
+    BUILD_SCRIPT: build-mingw.bat
     
-  # MSVC x86
-  - name: x86
-    platform: x86
-    qt: 5.12\msvc2017
-    openssl: C:\OpenSSL-Win32
+  # MinGW x86  
+#  - COMPILER_NAME: mingw-32
+#    PLATFORM_ARCH: x86
+#    QT_PATH: C:\Qt\5.12\mingw73_32
+#    MINGW_PATH: C:\Qt\Tools\mingw730_32
+#    OPENSSL: C:\OpenSSL-Win32
+#    BUILD_SCRIPT: build-mingw.bat
 
 init:
-  - set PATH=C:\Qt\%qt%\bin;%PATH%
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %platform%
+  - cmd: set PATH=%MINGW_PATH%\bin;%PATH%
+  - cmd: set PATH=%QT_PATH%\bin;%PATH%
 
 configuration:
   - Release
 
 before_build:
   - git submodule update --init --recursive
+  - cmd: cd deploy\appyeyor
+  - cmd: call download-libs.bat
 
 build_script:
-  - qmake GM-Companion.pro
-  - nmake
-  - nmake check
+  - cmd: cd deploy\appyeyor
+  - cmd: call %BUILD_SCRIPT%
 
 after_build:
-  - cmd: mkdir release\deploy
-  - cmd: copy /y release\gm-companion.exe release\deploy
-  - windeployqt.exe --release --qmldir C:\Qt\%qt%\qml release\deploy\gm-companion.exe
-  - cmd: copy /y "%openssl%\bin\*eay32.dll" release\deploy
+  - cmd: cd deploy
+  - cmd: call deploy-win.bat
 
 artifacts:
   - path: release\deploy
-    name: gm-companion-%platform%
+    name: gm-companion-%COMPILER_NAME%
     type: zip

@@ -244,10 +244,22 @@ TRANSLATIONS+=  src/resources/translations/gm-companion_de.ts
     INSTALLS += appdata
 }
 
+win32 {
+    LIBS += -L$$PWD/lib/taglib/lib/ -llibtag.dll
+    INCLUDEPATH += $$PWD/lib/taglib/include
+    DEPENDPATH  += $$PWD/lib/taglib/include
+
+    LIBS += -L$$PWD/lib/poppler/lib -lpoppler-qt5.dll
+    INCLUDEPATH += $$PWD/lib/poppler/include
+    DEPENDPATH  += $$PWD/lib/poppler/include
+}
+
 INSTALLS += target
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 unix:!macx: LIBS += -lpoppler-qt5
+unix: LIBS+= -ltag
 
-unix: LIBS += -ltag
+
+

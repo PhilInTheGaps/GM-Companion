@@ -14,7 +14,7 @@
 #include <QJsonArray>
 #include <QUrlQuery>
 
-#define MAX_SPOTIFY_REQUESTS 3
+#define MAX_SPOTIFY_REQUESTS 2
 
 using namespace TagLib;
 
@@ -77,7 +77,7 @@ void IconWorker::generateCollage(AudioElement *element, int index)
             QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + file->url() : sManager.getSetting(Setting::soundPath) + file->url();
 
             // Get id3v2 meta data tag
-            FileRef f(path.toLocal8Bit());
+            FileRef f(path.toUtf8().data());
 
             if (TagLib::MPEG::File *file = dynamic_cast<TagLib::MPEG::File *>(f.file()))
             {
