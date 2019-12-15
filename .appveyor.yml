@@ -32,11 +32,11 @@ configuration:
 
 before_build:
   - git submodule update --init --recursive
-  - cmd: cd deploy\appyeyor
+  - cmd: cd deploy\appveyor
   - cmd: call download-libs.bat
 
 build_script:
-  - cmd: cd deploy\appyeyor
+  - cmd: cd deploy\appveyor
   - cmd: call %BUILD_SCRIPT%
 
 after_build:
