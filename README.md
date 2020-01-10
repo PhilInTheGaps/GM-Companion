@@ -148,7 +148,7 @@ Using Spotify with GM-Companion requires some additional steps first:
 
 - Go to [Spotify developer page](https://developer.spotify.com/dashboard)
 - "Create an App"
-- In app settings add _http://127.0.0.1:1965/_ as a redirect URI
+- In app settings add _http://127.0.0.1:59991/_ as a redirect URI
 - Go to GM-Companion settings, add "Client ID" and "Client Secret" of your app
 - Restart GM-Companion
 - You can now add Spotify playlists and albums as elements, the "_Audio Addon_" has some great RPG related playlists. You can add by adding a Spotify element and pressing "_Add from Addons_"
