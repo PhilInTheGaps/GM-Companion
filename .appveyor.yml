@@ -24,7 +24,6 @@ environment:
 #    BUILD_SCRIPT: build-mingw.bat
 
 init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - cmd: set PATH=%MINGW_PATH%\bin;%PATH%
   - cmd: set PATH=%QT_PATH%\bin;%PATH%
 
@@ -48,3 +47,6 @@ artifacts:
   - path: release\deploy
     name: gm-companion-%COMPILER_NAME%
     type: zip
+
+on_failure:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
