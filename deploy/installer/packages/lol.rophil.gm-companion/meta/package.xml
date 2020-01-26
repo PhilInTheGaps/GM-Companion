@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>GM-Companion</DisplayName>
+    <Description>The main program.</Description>
+    <Version>1.2.0-1</Version>
+    <ReleaseDate>2020-01-26</ReleaseDate>
+	<Name>lol.rophil.gm-companion</Name>
+    <Licenses>
+        <License name="General Public License v3" file="license.txt" />
+    </Licenses>
+	<ForcedInstallation>true</ForcedInstallation>
+    <Default>true</Default>
+</Package>

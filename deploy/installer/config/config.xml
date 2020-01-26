@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>GM-Companion</Name>
+    <Version>1.2.0</Version>
+    <Title>GM-Companion Installer</Title>
+    <Publisher>Phil Hoffmann</Publisher>
+	<ProductUrl>gm-companion.github.io</ProductUrl>
+    <StartMenuDir>GM-Companion</StartMenuDir>
+    <TargetDir>@ApplicationsDirX64@/GM-Companion</TargetDir>
+	<WizardStyle>Modern</WizardStyle>
+	<RunProgram>@TargetDir@/gm-companion.exe</RunProgram>
+</Installer>
