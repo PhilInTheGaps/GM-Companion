@@ -11,7 +11,7 @@ environment:
   - COMPILER_NAME: mingw-64
     PLATFORM_ARCH: x86_64
     QT_PATH: C:\Qt\5.13\mingw73_64
-    MINGW_PATH: C:\Qt\5.13.2\mingw73_64
+    MINGW_PATH: C:\mingw-w64\x86_64-7.3.0-posix-seh-rt_v5-rev0\mingw64
     OPENSSL: C:\OpenSSL-Win64
     BUILD_SCRIPT: build-mingw.bat
     
