@@ -43,6 +43,7 @@ build_script:
 after_build:
   - cmd: cd deploy
   - cmd: call deploy-win.bat
+  - cmd: dir deploy\installer
 
 artifacts:
   - path: release\deploy
