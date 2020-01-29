@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>GM-Companion</Name>
-    <Version>1.2.0</Version>
+    <Version>1.2.0-1</Version>
     <Title>GM-Companion Installer</Title>
     <Publisher>Phil Hoffmann</Publisher>
 	<ProductUrl>gm-companion.github.io</ProductUrl>
@@ -9,4 +9,34 @@
     <TargetDir>@ApplicationsDirX64@/GM-Companion</TargetDir>
 	<WizardStyle>Modern</WizardStyle>
 	<RunProgram>@TargetDir@/gm-companion.exe</RunProgram>
+	<RemoteRepositories>
+        <Repository>
+            <Url>https://downloads.rophil.lol/gm-companion/stable</Url>
+        </Repository>
+		<Repository>
+            <Url>https://downloads.rophil.lol/gm-companion/preview</Url>
+        </Repository>
+    </RemoteRepositories>
+	<RepositoryCategories>
+		<RemoteRepositories>
+			 <DisplayName>Stable</DisplayName>
+			 <Preselected>true</Preselected>
+			 <Tooltip>Stable Versions</Tooltip>
+			 <Repository>
+					 <Url>https://downloads.rophil.lol/gm-companion/stable</Url>
+					 <Enabled>1</Enabled>
+					 <DisplayName>Stable Repository</DisplayName>
+			 </Repository>
+		</RemoteRepositories>
+		<RemoteRepositories>
+			 <DisplayName>Preview</DisplayName>
+			 <Preselected>false</Preselected>
+			 <Tooltip>Unstable Preview Versions</Tooltip>
+			 <Repository>
+					 <Url>https://downloads.rophil.lol/gm-companion/preview</Url>
+					 <Enabled>1</Enabled>
+					 <DisplayName>Preview Repository</DisplayName>
+			 </Repository>
+		</RemoteRepositories>
+	</RepositoryCategories>
 </Installer>

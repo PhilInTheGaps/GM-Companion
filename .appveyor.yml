@@ -49,8 +49,15 @@ artifacts:
     name: gm-companion-%COMPILER_NAME%
     type: zip
     
+  - path: deploy\installer\repository
+    name: gm-companion-repository-%COMPILER_NAME%
+    type: zip
+    
   - path: deploy\installer\gm-companion-installer-x64.exe
     name: gm-companion-installer-x64.exe
+    
+  - path: deploy\installer\gm-companion-online-installer-x64.exe
+    name: gm-companion-online-installer-x64.exe
 
 on_failure:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

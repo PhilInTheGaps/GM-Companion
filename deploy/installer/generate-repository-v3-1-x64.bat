@@ -1,0 +1,1 @@
+%QT_TOOLS%\QtInstallerFramework\3.1\bin\repogen.exe -p packages repository
