@@ -12,9 +12,3 @@ xcopy lib\poppler\bin release\deploy /s /e
 xcopy lib\taglib\bin release\deploy /s /e
 
 xcopy release\deploy deploy\installer\packages\lol.rophil.gm-companion\data /s /e /i
-
-cd deploy\installer
-generate-repository-v3-1-x64.bat
-build-offline-v3-1-x64.bat
-build-online-v3-1-x64.bat
-cd ..\..

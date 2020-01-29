@@ -43,7 +43,11 @@ build_script:
 after_build:
   - cmd: cd deploy
   - cmd: call deploy-win.bat
-  - cmd: dir deploy\installer
+  - cmd: cd deploy\installer
+  - cmd: call generate-repository-v3-1-x64.bat
+  - cmd: call build-offline-v3-1-x64.bat
+  - cmd: call build-online-v3-1-x64.bat
+  - cmd: dir
 
 artifacts:
   - path: release\deploy
