@@ -26,7 +26,7 @@ matrix:
         - qmake CONFIG+=release PREFIX=/usr
         - make -j$(nproc)
           # Build AppImage
-        - make INSTALL_ROOT=appdir -j$(nproc) install ; find appdir/
+        - make INSTALL_ROOT=../appdir -j$(nproc) install ; find appdir/
         - make clean
         - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" # Get linuxdeployqt
         - chmod a+x linuxdeployqt-continuous-x86_64.AppImage # make linuxdeployqt executable
@@ -41,7 +41,7 @@ matrix:
     - os: osx
       before_install:
         - brew update
-        - brew install qt5 taglib poppler
+        - brew install qt5 taglib poppler qtkeychain
         - brew link qt5 --force
       script:
         - qmake

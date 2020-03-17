@@ -2,7 +2,7 @@ cd ..
 
 mkdir release\deploy
 
-copy /y release\gm-companion.exe release\deploy
+copy /y src\gm-companion.exe release\deploy
 
 windeployqt.exe --release --qmldir %QT_PATH%\qml release\deploy\gm-companion.exe
 
