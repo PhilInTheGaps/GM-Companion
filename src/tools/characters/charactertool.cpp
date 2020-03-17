@@ -1,5 +1,5 @@
 #include "charactertool.h"
-#include "src/functions.h"
+#include "functions.h"
 
 #include <QDebug>
 #include <QFile>
@@ -13,11 +13,17 @@ CharacterTool::CharacterTool(FileManager *fManager, QQmlApplicationEngine *engin
     m_imageViewer = new CharacterImageViewer;
     m_dsa5Viewer  = new CharacterDSA5Viewer(engine);
 
-    connect(m_imageViewer,                          &CharacterImageViewer::categoryChanged,    [ = ]() { if (m_currentViewer == m_imageViewer) emit categoryChanged(); });
-    //connect(m_dsa5Viewer,                           &CharacterImageViewer::categoryChanged,    [ = ]() { if (m_currentViewer == m_dsa5Viewer) emit categoryChanged(); });
+    connect(m_imageViewer, &CharacterImageViewer::categoryChanged, [ = ]() { if (m_currentViewer == m_imageViewer) emit categoryChanged(); });
 
-    connect(m_imageViewer,                          &CharacterImageViewer::categoriesChanged,  [ = ]() { if (m_currentViewer == m_imageViewer) emit categoriesChanged(); });
-    //connect(m_dsa5Viewer,                           &CharacterDSA5Viewer::categoriesChanged,   [ = ]() { if (m_currentViewer == m_dsa5Viewer) emit categoriesChanged(); });
+    // connect(m_dsa5Viewer,
+    //                           &CharacterImageViewer::categoryChanged,    [ =
+    // ]() { if (m_currentViewer == m_dsa5Viewer) emit categoryChanged(); });
+
+    connect(m_imageViewer, &CharacterImageViewer::categoriesChanged, [ = ]() { if (m_currentViewer == m_imageViewer) emit categoriesChanged(); });
+
+    // connect(m_dsa5Viewer,
+    //                           &CharacterDSA5Viewer::categoriesChanged,   [ =
+    // ]() { if (m_currentViewer == m_dsa5Viewer) emit categoriesChanged(); });
 
     connect(fileManager->getCharacterFileManager(), &CharacterFileManager::receivedCharacters, this, &CharacterTool::receivedCharacters);
     connect(fileManager->getCharacterFileManager(), &CharacterFileManager::receivedFiles,      this, &CharacterTool::receivedFiles);

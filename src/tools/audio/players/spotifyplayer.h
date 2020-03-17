@@ -6,7 +6,7 @@
 #include <QTimer>
 #include <QNetworkAccessManager>
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "audioplayer.h"
 #include "../audioelement.h"
 #include "../metadatareader.h"

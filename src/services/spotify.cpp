@@ -1,4 +1,5 @@
 #include "spotify.h"
+#include "logging.h"
 
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -8,9 +9,9 @@
 #include <QByteArray>
 #include <QUrlQuery>
 #include <QHostInfo>
-#include <QProcess>
+#include <QCoreApplication>
 
-#include "src/utils/processinfo.h"
+#include "utils/processinfo.h"
 
 #include "o0settingsstore.h"
 #include "o0requestparameter.h"
@@ -36,8 +37,14 @@ Spotify::Spotify()
     m_o2spotify->setLocalPort(59991);
 
     // Signals
-    connect(m_o2spotify, &O2Spotify::linkingSucceeded, this, &Spotify::onLinkingSucceeded);
-    connect(m_o2spotify, &O2Spotify::openBrowser,      this, &Spotify::onOpenBrowser);
+    connect(m_o2spotify,                  &O2Spotify::linkingSucceeded,   this,                &Spotify::onLinkingSucceeded);
+    connect(m_o2spotify,                  &O2Spotify::openBrowser,        this,                &Spotify::onOpenBrowser);
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::terminate);
+    connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
+        emit wrongPassword();
+        qCCritical(gmSpotify()) << "Librespot exited with code" << exitCode << exitStatus;
+    });
 }
 
 Spotify::~Spotify()
@@ -60,7 +67,7 @@ Spotify * Spotify::getInstance()
 
 void Spotify::grant()
 {
-    qDebug() << "SPOTIFY: Granting access ...";
+    qCDebug(gmSpotify) << "Granting access ...";
 
     QString id     = m_sManager.getSetting(Setting::spotifyID);
     QString secret = m_sManager.getSetting(Setting::spotifySecret);
@@ -71,12 +78,12 @@ void Spotify::grant()
 
     if (!id.isEmpty() && !secret.isEmpty())
     {
-        qDebug() << "SPOTIFY: Trying to link ...";
+        qCDebug(gmSpotify) << "Trying to link ...";
         m_o2spotify->link();
     }
     else
     {
-        qDebug() << "SPOTIFY ERROR: Client ID or Secret is empty!";
+        qCCritical(gmSpotify) << "Client ID or Secret is empty!";
     }
 }
 
@@ -113,12 +120,12 @@ int Spotify::put(QUrl url, QString params)
     connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
             [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
     {
-        qDebug() << "Completed PUT Request. ID:" << id;
+        qCDebug(gmSpotify) << "Completed PUT Request. ID:" << id;
 
         if (error != QNetworkReply::NoError) qWarning() << error;
 
-        qDebug() << "Reply:";
-        qDebug() << data;
+        qCDebug(gmSpotify) << "Reply:";
+        qCDebug(gmSpotify) << data;
 
         if (error == QNetworkReply::NetworkError::ContentNotFoundError)
         {
@@ -129,7 +136,7 @@ int Spotify::put(QUrl url, QString params)
         requestor->deleteLater();
     });
 
-    qDebug() << "SPOTIFY: Sending PUT Request to URL" << url << "and parameters:" << params;
+    qCDebug(gmSpotify) << "Sending PUT Request to URL" << url << "and parameters:" << params;
     return requestId;
 }
 
@@ -150,7 +157,7 @@ int Spotify::post(QNetworkRequest request, QByteArray data)
 
 void Spotify::forceCurrentMachine()
 {
-    qDebug() << "SPOTIFY: Setting current machine as active ...";
+    qCDebug(gmSpotify) << "Setting current machine as active device ...";
 
     auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/devices"));
@@ -170,12 +177,26 @@ void Spotify::openSpotify()
 {
     ProcessInfo pi;
 
-    if (pi.getProcIdByName("spotify") == -1)
+    if (pi.getProcIdByName("librespot") == -1)
     {
         #ifdef Q_OS_LINUX
-        QProcess::startDetached("spotify");
+
+        auto username = m_sManager.getSetting(Setting::spotifyUsername);
+        auto password = m_sManager.getSetting(Setting::spotifyPassword);
+
+        if (!username.isEmpty() && !password.isEmpty())
+        {
+            m_librespotProcess.start("librespot", { "-n", "GM-Companion",
+                                                    "-u", username,
+                                                    "-p", password
+                                     });
+        }
+
+
         #endif // ifdef Q_OS_LINUX
     }
+
+    forceCurrentMachine();
 }
 
 void Spotify::onLinkingSucceeded()
@@ -183,10 +204,9 @@ void Spotify::onLinkingSucceeded()
     if (!m_o2spotify->linked()) return;
 
     openSpotify();
-    forceCurrentMachine();
     m_waitingForAuth = false;
 
-    qDebug() << "SPOTIFY: Access has been granted!";
+    qCDebug(gmSpotify) << "Access has been granted!";
     emit authorized();
 }
 
@@ -204,9 +224,11 @@ void Spotify::onForcedCurrentMachine(int id, QNetworkReply::NetworkError error, 
 
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
 
+    qCDebug(gmSpotify) << "Devices:" << devices;
+
     for (auto device : devices)
     {
-        if ((device.toObject().value("name") == QHostInfo::localHostName()) &&
+        if ((device.toObject().value("name") == "GM-Companion") &&
             !device.toObject().value("is_active").toBool())
         {
             QJsonObject parameters

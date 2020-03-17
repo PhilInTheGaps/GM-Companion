@@ -8,7 +8,7 @@
 #include <QByteArray>
 #include <QNetworkAccessManager>
 #include "o2google.h"
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "foldertree.h"
 
 struct GoogleFile

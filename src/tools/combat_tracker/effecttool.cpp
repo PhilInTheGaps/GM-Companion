@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QDir>
 
-#include "src/functions.h"
+#include "functions.h"
 
 EffectTool::EffectTool(QObject *parent) : QObject(parent)
 {

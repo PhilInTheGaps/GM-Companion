@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QQmlContext>
-#include "src/functions.h"
+#include "functions.h"
 
 ShopTool::ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
     : QObject(parent), fileManager(fManager), qmlEngine(engine)

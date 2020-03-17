@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QList>
-#include "src/tools/maps/map.h"
-#include "src/cloud/googledrive.h"
-#include "src/settings/settingsmanager.h"
+#include "tools/maps/map.h"
+#include "cloud/googledrive.h"
+#include "settings/settingsmanager.h"
 
 class MapsFileManager : public QObject
 {

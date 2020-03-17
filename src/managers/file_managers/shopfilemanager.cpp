@@ -1,5 +1,5 @@
 #include "shopfilemanager.h"
-#include "src/functions.h"
+#include "functions.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>

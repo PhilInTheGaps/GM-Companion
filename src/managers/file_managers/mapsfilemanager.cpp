@@ -1,5 +1,5 @@
 #include "mapsfilemanager.h"
-#include "src/functions.h"
+#include "functions.h"
 
 #include <QImage>
 #include <QImageReader>

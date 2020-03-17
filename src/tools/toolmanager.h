@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "src/managers/filemanager.h"
+#include "managers/filemanager.h"
 #include "audio/audiotool.h"
 #include "maps/maptool.h"
 #include "dicetool.h"
@@ -14,7 +14,7 @@
 #include "generators/namegenerator.h"
 #include "notestool.h"
 #include "convertertool.h"
-#include "src/settings/settingstool.h"
+#include "settings/settingstool.h"
 
 class ToolManager : public QObject
 {

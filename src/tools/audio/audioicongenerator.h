@@ -7,8 +7,8 @@
 #include <QNetworkAccessManager>
 #include <QQueue>
 #include "audioproject.h"
-#include "src/settings/settingsmanager.h"
-#include "src/services/spotify.h"
+#include "settings/settingsmanager.h"
+#include "services/spotify.h"
 
 class IconWorker : public QObject
 {

@@ -1,7 +1,7 @@
 #ifndef NAMEGENERATOR_H
 #define NAMEGENERATOR_H
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 #include <QObject>
 #include <QStringList>

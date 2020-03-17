@@ -7,11 +7,11 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "addonelementmanager.h"
 #include "audioexporter.h"
 #include "audioeditorfilebrowser.h"
-#include "src/managers/filemanager.h"
+#include "managers/filemanager.h"
 #include "unsplash/unsplashparser.h"
 #include "youtube.h"
 

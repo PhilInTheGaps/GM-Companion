@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
-#include "src/tools/dicetool.h"
+#include "tools/dicetool.h"
 
 class Effect : QObject
 {

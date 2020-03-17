@@ -1,0 +1,10 @@
+#ifndef LOGGING_H
+#define LOGGING_H
+
+#include <QLoggingCategory>
+Q_DECLARE_LOGGING_CATEGORY(gmAudioTool)
+Q_DECLARE_LOGGING_CATEGORY(gmSpotify)
+Q_DECLARE_LOGGING_CATEGORY(gmAudioEditor)
+Q_DECLARE_LOGGING_CATEGORY(gmSettings)
+
+#endif // LOGGING_H

@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "effect.h"
 
 class EffectTool : public QObject

@@ -2,9 +2,9 @@
 #define SHOPFILEMANAGER_H
 
 #include <QObject>
-#include "src/cloud/googledrive.h"
-#include "src/tools/shop/shopproject.h"
-#include "src/settings/settingsmanager.h"
+#include "cloud/googledrive.h"
+#include "tools/shop/shopproject.h"
+#include "settings/settingsmanager.h"
 
 class ShopFileManager : public QObject
 {

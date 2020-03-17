@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QList>
 #include <QDir>
-#include "src/cloud/googledrive.h"
-#include "src/settings/settingsmanager.h"
-#include "src/tools/characters/character.h"
+#include "cloud/googledrive.h"
+#include "settings/settingsmanager.h"
+#include "tools/characters/character.h"
 
 class CharacterFileManager : public QObject
 {

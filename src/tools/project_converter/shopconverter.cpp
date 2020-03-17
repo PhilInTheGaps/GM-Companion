@@ -1,6 +1,6 @@
 #include "shopconverter.h"
-#include "src/settings/settingsmanager.h"
-#include "src/functions.h"
+#include "settings/settingsmanager.h"
+#include "functions.h"
 
 #include <QDebug>
 #include <QSettings>

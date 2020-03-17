@@ -104,12 +104,23 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("color_scheme", new ColorScheme);
     engine.rootContext()->setContextProperty("addon_manager", new AddonManager);
 
+    // Services
+    engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
+
     // Cloud
     engine.rootContext()->setContextProperty("google_drive_tool", fileManager->getGoogleDrive());
 
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;
+
+    #ifdef Q_OS_LINUX
+
+    //        QProcess::startDetached("spotify");
+    //    QProcess librespotProcess;
+    //    librespotProcess.start("librespot", { "-n", "GM-Companion", "-u",
+    // "icke03", "-p", "Schnak#YFI0815" });
+    #endif // ifdef Q_OS_LINUX
 
     return app.exec();
 }

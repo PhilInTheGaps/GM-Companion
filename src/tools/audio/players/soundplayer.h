@@ -7,7 +7,7 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "youtube.h"
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 class SoundPlayer : public AudioPlayer
 {

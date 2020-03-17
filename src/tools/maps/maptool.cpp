@@ -1,6 +1,6 @@
 #include "maptool.h"
-#include "src/functions.h"
-#include "src/cloud/googledrive.h"
+#include "functions.h"
+#include "cloud/googledrive.h"
 
 #include <QDebug>
 #include <QSettings>

@@ -1,5 +1,5 @@
 #include "namegenerator.h"
-#include "src/functions.h"
+#include "functions.h"
 
 #include <QDebug>
 #include <QDir>

@@ -2,7 +2,7 @@
 #define ADDONELEMENTMANAGER_H
 
 #include <QObject>
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "audioelement.h"
 
 class AddonElementManager : public QObject

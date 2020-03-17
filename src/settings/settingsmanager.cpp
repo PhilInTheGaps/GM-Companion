@@ -1,9 +1,11 @@
 #include "settingsmanager.h"
+#include "logging.h"
 
 #include <QTextStream>
 #include <QCoreApplication>
 #include <QDir>
 #include <QDebug>
+#include <qt5keychain/keychain.h>
 
 SettingsManager::SettingsManager()
 {
@@ -91,6 +93,33 @@ QString SettingsManager::getSetting(Setting setting, QString value)
     case Setting::version:
         settingString = QString::number(settings->value("version", 0).toInt());
         break;
+
+    case Setting::spotifyUsername:
+        settings->beginGroup("Spotify");
+        settingString = settings->value("spotifyUsername", "").toString();
+        settings->endGroup();
+        break;
+
+    case Setting::spotifyPassword:
+    {
+        QKeychain::ReadPasswordJob passwordJob("gm-companion.spotify");
+        passwordJob.setAutoDelete(false);
+        passwordJob.setKey(getSetting(Setting::spotifyUsername));
+        QEventLoop passwordLoop;
+        passwordLoop.connect(&passwordJob, SIGNAL(finished(QKeychain::Job*)),
+                             &passwordLoop, SLOT(quit()));
+        passwordJob.start();
+        passwordLoop.exec();
+
+        if (passwordJob.error()) {
+            settingString = "";
+            qCCritical(gmSettings) << "Could not read spotify password.";
+        } else {
+            settingString = passwordJob.textData();
+            qCDebug(gmSettings) << "Successfully read spotify password.";
+        }
+        break;
+    }
 
     case Setting::spotifyID:
         settings->beginGroup("Spotify");
@@ -251,6 +280,37 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
     case Setting::version:
         settings->setValue("version", value);
         break;
+
+    case Setting::spotifyUsername:
+
+        if (value.length() > 1) {
+            settings->beginGroup("Spotify");
+            settings->setValue("spotifyUsername", value);
+            settings->endGroup();
+        }
+        break;
+
+    case Setting::spotifyPassword:
+    {
+        QKeychain::WritePasswordJob passwordJob("gm-companion.spotify");
+        passwordJob.setAutoDelete(false);
+        passwordJob.setKey(getSetting(Setting::spotifyUsername));
+        passwordJob.setTextData(value);
+        QEventLoop passwordLoop;
+        passwordLoop.connect(&passwordJob, SIGNAL(finished(QKeychain::Job*)),
+                             &passwordLoop, SLOT(quit()));
+        passwordJob.start();
+        passwordLoop.exec();
+
+        if (passwordJob.error()) {
+            qCCritical(gmSettings) << "Unable to save spotify password!";
+        }
+        else
+        {
+            qCDebug(gmSettings) << "Successfully saved spotify password.";
+        }
+        break;
+    }
 
     case Setting::spotifyID:
 

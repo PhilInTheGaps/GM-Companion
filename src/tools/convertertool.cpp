@@ -1,5 +1,5 @@
 #include "convertertool.h"
-#include "src/functions.h"
+#include "functions.h"
 #include <QSettings>
 #include <QDir>
 #include <QDebug>

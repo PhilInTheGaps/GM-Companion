@@ -1,6 +1,6 @@
 #include "spotifyplayer.h"
 #include <QDateTime>
-#include "src/services/spotify.h"
+#include "services/spotify.h"
 
 #include "o0globals.h"
 

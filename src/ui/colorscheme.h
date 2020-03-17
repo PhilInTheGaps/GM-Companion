@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 class ColorScheme : public QObject
 {

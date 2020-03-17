@@ -45,8 +45,8 @@ Page {
         Repeater {
             id: tab_button_repeater
 
-            model: [qsTr("General"), qsTr("Paths"), qsTr("Cloud Storage"), qsTr(
-                    "Addons"), qsTr("Info")]
+            model: [qsTr("General"), qsTr("Paths"), qsTr("Accounts"), qsTr(
+                    "Cloud Storage"), qsTr("Addons"), qsTr("Info")]
 
             onItemAdded: tab_bar.currentIndex = 0
 
@@ -108,6 +108,11 @@ Page {
         // Paths
         PathsPage {
             id: paths_page
+        }
+
+        // Accounts
+        AccountsPage {
+            id: accounts_page
         }
 
         // Cloud Storage

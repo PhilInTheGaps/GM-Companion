@@ -2,8 +2,8 @@
 #define AUDIOFILESOURCE_H
 
 #include <QObject>
-#include "src/settings/settingsmanager.h"
-#include "src/tools/audio/audiosaveload.h"
+#include "settings/settingsmanager.h"
+#include "tools/audio/audiosaveload.h"
 
 class AudioFileSource : public QObject
 {

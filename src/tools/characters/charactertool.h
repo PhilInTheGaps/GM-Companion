@@ -5,8 +5,8 @@
 #include <QList>
 #include <QQmlApplicationEngine>
 #include "character.h"
-#include "src/settings/settingsmanager.h"
-#include "src/managers/filemanager.h"
+#include "settings/settingsmanager.h"
+#include "managers/filemanager.h"
 #include "viewers/characterimageviewer.h"
 #include "viewers/characterdsa5viewer.h"
 

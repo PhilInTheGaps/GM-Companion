@@ -1,7 +1,7 @@
 #ifndef CONVERTERTOOL_H
 #define CONVERTERTOOL_H
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 #include <QObject>
 #include <QStringList>

@@ -4,11 +4,12 @@
 #include <QObject>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QProcess>
 
 #include "o2spotify.h"
 #include "o2requestor.h"
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 
 class Spotify : public QObject
@@ -27,6 +28,8 @@ public:
     int put(QUrl url, QString params = "");
     int post(QNetworkRequest request, QByteArray data = "");
 
+    Q_INVOKABLE void openSpotify();
+
 private:
     Spotify();
 
@@ -36,12 +39,12 @@ private:
     O2Spotify *m_o2spotify = nullptr;
     QNetworkAccessManager *m_networkManager = nullptr;
     SettingsManager m_sManager;
+    QProcess m_librespotProcess;
 
     QUrl m_authUrl;
     bool m_waitingForAuth = false;
 
     void forceCurrentMachine();
-    void openSpotify();
 
 signals:
     void authorize(QUrl url);
@@ -49,6 +52,7 @@ signals:
     void receivedGet(int id, QNetworkReply::NetworkError error, QByteArray data);
     void receivedPut(int id, QNetworkReply::NetworkError error, QByteArray data);
     void receivedPost(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void wrongPassword();
 
 private slots:
     void onLinkingSucceeded();

@@ -1,7 +1,7 @@
 #ifndef ADDONMANAGER_H
 #define ADDONMANAGER_H
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include <QObject>
 
 class AddonManager : public QObject

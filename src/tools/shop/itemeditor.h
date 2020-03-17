@@ -5,8 +5,8 @@
 #include <QStringList>
 #include <QSettings>
 #include <QQmlApplicationEngine>
-#include "src/managers/filemanager.h"
-#include "src/settings/settingsmanager.h"
+#include "managers/filemanager.h"
+#include "settings/settingsmanager.h"
 
 class ItemEditor : public QObject
 {

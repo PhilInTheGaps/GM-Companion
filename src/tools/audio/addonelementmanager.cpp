@@ -1,5 +1,5 @@
 #include "addonelementmanager.h"
-#include "src/functions.h"
+#include "functions.h"
 
 #include <QDebug>
 #include <QJsonDocument>

@@ -1,7 +1,7 @@
 #include "filemanager.h"
 #include <QDebug>
 #include <QDir>
-#include <src/functions.h>
+#include "functions.h"
 #include <QFileInfo>
 #include <QDateTime>
 

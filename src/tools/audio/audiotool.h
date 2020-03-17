@@ -11,8 +11,8 @@
 #include "players/radioplayer.h"
 #include "metadatareader.h"
 
-#include "src/settings/settingsmanager.h"
-#include "src/managers/filemanager.h"
+#include "settings/settingsmanager.h"
+#include "managers/filemanager.h"
 
 #include "mpris/mprisadaptor.h"
 #include "mpris/mprisplayeradaptor.h"

@@ -5,7 +5,7 @@
 #include <QAbstractListModel>
 #include <QQmlApplicationEngine>
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 class AudioEditorFile : public QObject
 {

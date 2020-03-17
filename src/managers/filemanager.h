@@ -7,10 +7,10 @@
 #include <QList>
 #include <QUrl>
 
-#include "src/cloud/googledrive.h"
-#include "src/settings/settingsmanager.h"
+#include "cloud/googledrive.h"
+#include "settings/settingsmanager.h"
 
-#include "src/tools/audio/audiosaveload.h"
+#include "tools/audio/audiosaveload.h"
 #include "file_managers/mapsfilemanager.h"
 #include "file_managers/shopfilemanager.h"
 #include "file_managers/characterfilemanager.h"

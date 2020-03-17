@@ -1,7 +1,7 @@
 #ifndef NOTESTOOL_H
 #define NOTESTOOL_H
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 #include <QObject>
 #include <QStringList>

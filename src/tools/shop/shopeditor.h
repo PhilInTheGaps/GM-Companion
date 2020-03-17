@@ -4,8 +4,8 @@
 #include <QObject>
 
 #include "itemeditor.h"
-#include "src/settings/settingsmanager.h"
-#include "src/managers/filemanager.h"
+#include "settings/settingsmanager.h"
+#include "managers/filemanager.h"
 #include <QQmlApplicationEngine>
 
 class ShopEditor : public QObject

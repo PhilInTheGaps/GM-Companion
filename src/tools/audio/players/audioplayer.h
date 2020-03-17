@@ -2,7 +2,7 @@
 #define AUDIOPLAYER_H
 
 #include <QObject>
-#include "src/managers/filemanager.h"
+#include "managers/filemanager.h"
 
 class AudioPlayer : public QObject
 {

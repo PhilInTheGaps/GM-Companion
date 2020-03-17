@@ -34,6 +34,10 @@ public:
     Q_INVOKABLE QString getSpotifyID() const { return sManager->getSetting(Setting::spotifyID); }
     Q_INVOKABLE void setSpotifySecret(QString secret) { sManager->setSetting(Setting::spotifySecret, 1, secret); }
     Q_INVOKABLE QString getSpotifySecret() const { return sManager->getSetting(Setting::spotifySecret); }
+    Q_INVOKABLE void setSpotifyUsername(QString username) { sManager->setSetting(Setting::spotifyUsername, 1, username); }
+    Q_INVOKABLE QString getSpotifyUsername() { return sManager->getSetting(Setting::spotifyUsername); }
+    Q_INVOKABLE void setSpotifyPassword(QString password) { sManager->setSetting(Setting::spotifyPassword, 1, password); }
+    Q_INVOKABLE QString getSpotifyPassword() { return sManager->getSetting(Setting::spotifyPassword); }
 
     Q_INVOKABLE QString getGoogleID() const { return sManager->getSetting(Setting::googleID); }
     Q_INVOKABLE QString getGoogleSecret() const { return sManager->getSetting(Setting::googleSecret); }

@@ -95,5 +95,7 @@
         <file>tools/audio/editor/views/EditorFileListView.qml</file>
         <file>tools/audio/editor/views/PlaybackModeView.qml</file>
         <file>tools/audio/editor/EditorDeleteDialog.qml</file>
+        <file>tools/settings/AccountsPage.qml</file>
+        <file>tools/settings/accounts/SpotifyAccount.qml</file>
     </qresource>
 </RCC>

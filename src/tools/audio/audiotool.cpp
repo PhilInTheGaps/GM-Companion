@@ -1,6 +1,6 @@
 #include "audiotool.h"
-#include "src/functions.h"
-#include "src/services/spotify.h"
+#include "functions.h"
+#include "services/spotify.h"
 
 #include <QDebug>
 #include <QSettings>

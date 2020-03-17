@@ -21,6 +21,8 @@ enum Setting{
     audioPath,
     radioPath,
     drive_music,
+    spotifyUsername,
+    spotifyPassword,
     spotifyID,
     spotifySecret,
     showToolNames,

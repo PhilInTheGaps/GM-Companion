@@ -1,5 +1,5 @@
 #include "characterfilemanager.h"
-#include "src/functions.h"
+#include "functions.h"
 #include <QDebug>
 
 CharacterFileManager::CharacterFileManager(GoogleDrive *google, QObject *parent)

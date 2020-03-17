@@ -8,7 +8,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "audioproject.h"
 #include "audioelement.h"
 

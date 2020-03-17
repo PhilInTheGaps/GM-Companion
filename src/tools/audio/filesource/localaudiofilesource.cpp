@@ -1,5 +1,5 @@
 #include "localaudiofilesource.h"
-#include "src/functions.h"
+#include "functions.h"
 
 LocalAudioFileSource::LocalAudioFileSource(AudioSaveLoad *saveLoad, QObject *parent)
     : AudioFileSource(saveLoad, parent)

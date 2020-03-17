@@ -11,9 +11,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "src/tools/audio/audioproject.h"
-#include "src/settings/settingsmanager.h"
-#include "src/cloud/googledrive.h"
+#include "tools/audio/audioproject.h"
+#include "settings/settingsmanager.h"
+#include "cloud/googledrive.h"
 #include "audioicongenerator.h"
 
 class LocalAudioFileSource;

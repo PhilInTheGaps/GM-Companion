@@ -2,7 +2,7 @@
 #define CHARACTERVIEWER_H
 
 #include <QObject>
-#include "src/tools/characters/character.h"
+#include "tools/characters/character.h"
 
 class CharacterViewer : public QObject
 {

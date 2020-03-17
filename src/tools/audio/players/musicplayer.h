@@ -7,7 +7,7 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "spotifyplayer.h"
-#include "src/settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "youtube.h"
 
 class MusicPlayer : public AudioPlayer

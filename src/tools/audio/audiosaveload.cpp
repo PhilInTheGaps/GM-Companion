@@ -1,5 +1,5 @@
 #include "audiosaveload.h"
-#include "src/functions.h"
+#include "functions.h"
 #include <QDebug>
 #include <QSettings>
 #include <QTemporaryFile>
