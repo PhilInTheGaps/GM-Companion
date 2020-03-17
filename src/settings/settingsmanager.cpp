@@ -5,7 +5,14 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QDebug>
+
+#ifdef Q_OS_WIN
+#include <keychain.h>
+#else
 #include <qt5keychain/keychain.h>
+#endif
+
+
 
 SettingsManager::SettingsManager()
 {
@@ -292,6 +299,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
 
     case Setting::spotifyPassword:
     {
+
         QKeychain::WritePasswordJob passwordJob("gm-companion.spotify");
         passwordJob.setAutoDelete(false);
         passwordJob.setKey(getSetting(Setting::spotifyUsername));

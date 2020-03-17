@@ -241,13 +241,17 @@ TRANSLATIONS+=  resources/translations/gm-companion_de.ts
 }
 
 win32 {
-    LIBS += -L$$PWD/lib/taglib/lib/ -llibtag.dll
-    INCLUDEPATH += $$PWD/lib/taglib/include
-    DEPENDPATH  += $$PWD/lib/taglib/include
+    LIBS += -L$$PWD/../lib/taglib/lib/ -llibtag.dll
+    INCLUDEPATH += $$PWD/../lib/taglib/include
+    DEPENDPATH  += $$PWD/../lib/taglib/include
 
-    LIBS += -L$$PWD/lib/poppler/lib -lpoppler-qt5.dll
-    INCLUDEPATH += $$PWD/lib/poppler/include
-    DEPENDPATH  += $$PWD/lib/poppler/include
+    LIBS += -L$$PWD/../lib/poppler/lib -lpoppler-qt5.dll
+    INCLUDEPATH += $$PWD/../lib/poppler/include
+    DEPENDPATH  += $$PWD/../lib/poppler/include
+
+    LIBS += -L$$PWD/../lib/qt5keychain/lib -lqt5keychain.dll
+    INCLUDEPATH += $$PWD/../lib/qt5keychain/include
+    DEPENDPATH  += $$PWD/../lib/qt5keychain/include
 }
 
 INSTALLS += target

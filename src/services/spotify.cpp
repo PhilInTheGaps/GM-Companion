@@ -39,7 +39,7 @@ Spotify::Spotify()
     // Signals
     connect(m_o2spotify,                  &O2Spotify::linkingSucceeded,   this,                &Spotify::onLinkingSucceeded);
     connect(m_o2spotify,                  &O2Spotify::openBrowser,        this,                &Spotify::onOpenBrowser);
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::terminate);
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::kill);
     connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
         emit wrongPassword();
@@ -179,21 +179,24 @@ void Spotify::openSpotify()
 
     if (pi.getProcIdByName("librespot") == -1)
     {
-        #ifdef Q_OS_LINUX
-
         auto username = m_sManager.getSetting(Setting::spotifyUsername);
         auto password = m_sManager.getSetting(Setting::spotifyPassword);
 
         if (!username.isEmpty() && !password.isEmpty())
         {
+            #ifdef Q_OS_LINUX
             m_librespotProcess.start("librespot", { "-n", "GM-Companion",
                                                     "-u", username,
                                                     "-p", password
                                      });
+            #endif // ifdef Q_OS_LINUX
+            #ifdef Q_OS_WIN
+            m_librespotProcess.start("./librespot.exe", { "-n", "GM-Companion",
+                                                          "-u", username,
+                                                          "-p", password
+                                     });
+            #endif
         }
-
-
-        #endif // ifdef Q_OS_LINUX
     }
 
     forceCurrentMachine();

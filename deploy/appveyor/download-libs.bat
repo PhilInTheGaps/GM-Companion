@@ -43,6 +43,28 @@ if "%COMPILER_NAME%" == "mingw-64" (
 ) 
 
 del poppler.zip
+cd ..
+
+echo "Downloading qt5keychain ..."
+
+mkdir qt5keychain
+cd qt5keychain
+
+if "%COMPILER_NAME%" == "mingw-64" (
+
+    echo "https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/v0.10.0/qt5keychain-mingw-w64-7.3.0-qt5-13.zip"
+
+	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/v0.10.0/qt5keychain-mingw-w64-7.3.0-qt5-13.zip
+	7z x qt5keychain.zip
+	
+) else (
+    
+	echo "https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/v0.10.0/qt5keychain-mingw-w64-7.3.0-qt5-12.zip"
+
+	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/v0.10.0/qt5keychain-mingw-w64-7.3.0-qt5-12.zip
+	7z x qt5keychain.zip
+) 
+
+del qt5keychain.zip
 
 cd ..\..
-
