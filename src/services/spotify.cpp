@@ -124,8 +124,10 @@ int Spotify::put(QUrl url, QString params)
 
         if (error != QNetworkReply::NoError) qWarning() << error;
 
-        qCDebug(gmSpotify) << "Reply:";
-        qCDebug(gmSpotify) << data;
+        if (!data.isEmpty()) {
+            qCDebug(gmSpotify) << "Reply:";
+            qCDebug(gmSpotify) << data;
+        }
 
         if (error == QNetworkReply::NetworkError::ContentNotFoundError)
         {
@@ -195,7 +197,7 @@ void Spotify::openSpotify()
                                                           "-u", username,
                                                           "-p", password
                                      });
-            #endif
+            #endif // ifdef Q_OS_WIN
         }
     }
 

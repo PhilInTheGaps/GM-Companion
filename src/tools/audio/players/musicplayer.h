@@ -44,9 +44,10 @@ private:
     void loadMedia(AudioFile *file);
     void loadSongNames(bool initial = false, bool reloadYt = false);
     void applyShuffleMode(bool keepIndex = false, QString url = "");
+    void startPlaying();
 
     QStringList m_songNames;
-    bool m_waitingForUrls;
+    int m_waitingForUrls = 0;
 
 signals:
     void startedPlaying();

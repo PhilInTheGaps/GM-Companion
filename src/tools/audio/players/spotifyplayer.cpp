@@ -1,4 +1,5 @@
 #include "spotifyplayer.h"
+#include "logging.h"
 #include <QDateTime>
 #include "services/spotify.h"
 
@@ -31,7 +32,7 @@ SpotifyPlayer::SpotifyPlayer(FileManager *fManager, MetaDataReader *mDReader)
     });
 
     Spotify::getInstance()->grant();
-    qDebug() << "Spotify Tool loaded.";
+    qCDebug(gmAudioSpotify) << "Spotify player loaded.";
 }
 
 SpotifyPlayer::~SpotifyPlayer()
@@ -49,12 +50,12 @@ SpotifyPlayer::~SpotifyPlayer()
  */
 void SpotifyPlayer::play(QString id, int offset, bool playOnce)
 {
-    qDebug() << "SPOTIFY: Trying to play playlist or album ...";
+    qCDebug(gmAudioSpotify) << "Trying to play playlist or album ...";
     m_playOnce = playOnce;
 
     if (Spotify::getInstance()->isGranted())
     {
-        qDebug() << "SPOTIFY: Playing:" << id << "Offset:" << offset;
+        qCDebug(gmAudioSpotify) << "Playing:" << id << "Offset:" << offset;
         m_currentIndex = offset;
 
         QJsonObject jo;
@@ -86,7 +87,7 @@ void SpotifyPlayer::play(QString id, int offset, bool playOnce)
 
         m_isPlaying = true;
 
-        qDebug() << "SPOTIFY: Emitting startedPlaying()";
+        qCDebug(gmAudioSpotify) << "Emitting startedPlaying()";
         emit startedPlaying();
 
         m_currentIndex = m_trackIdList.indexOf(id);
@@ -103,7 +104,7 @@ void SpotifyPlayer::play(QString id, int offset, bool playOnce)
     }
     else
     {
-        qDebug() << "SPOTIFY: Tried to play element, but access has not been granted yet.";
+        qCWarning(gmSpotify) << "Tried to play element, but access has not been granted yet.";
         Spotify::getInstance()->grant();
     }
 }
@@ -113,7 +114,7 @@ void SpotifyPlayer::play(QString id, int offset, bool playOnce)
  */
 void SpotifyPlayer::play()
 {
-    qDebug() << "SPOTIFY: Continuing playback ...";
+    qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
     Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/play"));
     m_isPlaying = true;
@@ -128,7 +129,7 @@ void SpotifyPlayer::startTimer(int interval)
 
     if (interval > 0)
     {
-        qDebug() << "SPOTIFY: Resuming timer with remaining time:" << interval;
+        qCDebug(gmAudioSpotify) << "Resuming timer with remaining time:" << interval;
         m_timer->start(interval);
         return;
     }
@@ -139,7 +140,7 @@ void SpotifyPlayer::startTimer(int interval)
  */
 void SpotifyPlayer::stop()
 {
-    qDebug() << "SPOTIFY: Stopping playback ...";
+    qCDebug(gmAudioSpotify) << "Stopping playback ...";
 
     if (m_isPlaying)
     {
@@ -164,7 +165,7 @@ void SpotifyPlayer::pausePlay()
  */
 void SpotifyPlayer::next()
 {
-    qDebug() << "SPOTIFY: Skipping to next track ...";
+    qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/next"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
@@ -178,7 +179,7 @@ void SpotifyPlayer::next()
  */
 void SpotifyPlayer::again()
 {
-    qDebug() << "SPOTIFY: Playing track again ...";
+    qCDebug(gmAudioSpotify) << "Playing track again ...";
     Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/seek?position_ms=" + QString::number(1)));
 }
 
@@ -188,7 +189,7 @@ void SpotifyPlayer::again()
  */
 void SpotifyPlayer::setVolume(int volume)
 {
-    qDebug() << "SPOTIFY: Setting volume:" << volume;
+    qCDebug(gmAudioSpotify) << "Setting volume:" << volume;
     Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" +
                                      QString::number(volume)));
     m_volume = volume;
@@ -199,7 +200,7 @@ void SpotifyPlayer::setVolume(int volume)
  */
 void SpotifyPlayer::getCurrentSong()
 {
-    qDebug() << "SPOTIFY: Getting info on current song ...";
+    qCDebug(gmAudioSpotify) << "Getting info on current song ...";
 
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/currently-playing"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
@@ -245,7 +246,7 @@ void SpotifyPlayer::getCurrentSong()
  */
 void SpotifyPlayer::getPlaylistTracks(QString id)
 {
-    qDebug() << "SPOTIFY: Getting info on current playlist or album ...";
+    qCDebug(gmAudioSpotify) << "Getting info on current playlist or album ...";
 
     QUrl url;
 
@@ -282,7 +283,7 @@ void SpotifyPlayer::gotPlaylistInfo(int id, QNetworkReply::NetworkError error, Q
 {
     if (!(m_requestIdMap.contains("getPlaylistTracks") && (id == m_requestIdMap["getPlaylistTracks"]))) return;
 
-    qDebug() << "SPOTIFY: Got playlist info." << id;
+    qCDebug(gmAudioSpotify) << "Got playlist info." << id;
 
     if (error != QNetworkReply::NoError) qWarning() << "    Error:" << error;
 
@@ -307,26 +308,17 @@ void SpotifyPlayer::gotPlaylistInfo(int id, QNetworkReply::NetworkError error, Q
 
     for (auto t : tracks)
     {
-        if (isPlaylist)
-        {
-            SpotifyTrack track;
-            track.title = t.toObject().value("track").toObject().value("name").toString();
-            track.id    = t.toObject().value("track").toObject().value("uri").toString();
+        QJsonObject trackObject = isPlaylist ? t.toObject().value("track").toObject() : t.toObject();
 
-            trackList.append(track);
-            m_trackList.append(track.title);
-            m_trackIdList.append(track.id);
-        }
-        else
-        {
-            SpotifyTrack track;
-            track.title = t.toObject().value("name").toString();
-            track.id    = t.toObject().value("uri").toString();
+        if (trackObject.value("available_markets").toArray().isEmpty()) continue;
 
-            trackList.append(track);
-            m_trackList.append(track.title);
-            m_trackIdList.append(track.id);
-        }
+        SpotifyTrack track;
+        track.title = trackObject.value("name").toString();
+        track.id    = trackObject.value("uri").toString();
+
+        trackList.append(track);
+        m_trackList.append(track.title);
+        m_trackIdList.append(track.id);
     }
 
     emit receivedPlaylistTracks(trackList, playlistId);
