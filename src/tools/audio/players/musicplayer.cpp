@@ -383,7 +383,11 @@ void MusicPlayer::onMediaPlayerError(QMediaPlayer::Error error)
 
 void MusicPlayer::onMediaPlayerMediaChanged()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     qCDebug(gmAudioMusic) << "Media changed:" << mediaPlayer->media().request().url();
+#else // if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    qCDebug(gmAudioMusic) << "Media changed:" << mediaPlayer->media().canonicalUrl();
+#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 }
 
 void MusicPlayer::onSpotifySongEnded()
