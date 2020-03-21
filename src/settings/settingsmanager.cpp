@@ -7,11 +7,10 @@
 #include <QDebug>
 
 #ifdef Q_OS_WIN
-#include <keychain.h>
-#else
-#include <qt5keychain/keychain.h>
-#endif
-
+# include <keychain.h>
+#else // ifdef Q_OS_WIN
+# include <qt5keychain/keychain.h>
+#endif // ifdef Q_OS_WIN
 
 
 SettingsManager::SettingsManager()
@@ -120,7 +119,7 @@ QString SettingsManager::getSetting(Setting setting, QString value)
 
         if (passwordJob.error()) {
             settingString = "";
-            qCCritical(gmSettings) << "Could not read spotify password.";
+            qCCritical(gmSettings) << "Could not read spotify password:" << passwordJob.error() << passwordJob.errorString();
         } else {
             settingString = passwordJob.textData();
             qCDebug(gmSettings) << "Successfully read spotify password.";
@@ -299,7 +298,6 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
 
     case Setting::spotifyPassword:
     {
-
         QKeychain::WritePasswordJob passwordJob("gm-companion.spotify");
         passwordJob.setAutoDelete(false);
         passwordJob.setKey(getSetting(Setting::spotifyUsername));
@@ -311,7 +309,7 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
         passwordLoop.exec();
 
         if (passwordJob.error()) {
-            qCCritical(gmSettings) << "Unable to save spotify password!";
+            qCCritical(gmSettings) << "Unable to save spotify password:" << passwordJob.error() << passwordJob.errorString();
         }
         else
         {

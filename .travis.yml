@@ -16,8 +16,9 @@ matrix:
   include:
     - os: linux
       compiler: gcc
-      install:
+      before_install:
         - ./deploy/travis/install-qt.sh
+        - source /opt/qt512/bin/qt512-env.sh
         - ./deploy/travis/install-dependencies.sh
       script:
         - ./deploy/travis/build-linux.sh
