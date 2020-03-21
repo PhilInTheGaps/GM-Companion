@@ -13,7 +13,7 @@
 #include "audioeditorfilebrowser.h"
 #include "managers/filemanager.h"
 #include "unsplash/unsplashparser.h"
-#include "youtube.h"
+#include "../lib/qytlib/youtube.h"
 
 class AudioEditor : public QObject
 {

@@ -209,7 +209,7 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat
 
-QML_IMPORT_PATH += lib/fontawesome.pri
+QML_IMPORT_PATH += ../lib/fontawesome.pri
 
 RC_FILE = GM-Companion.rc
 
@@ -226,18 +226,18 @@ TRANSLATIONS+=  resources/translations/gm-companion_de.ts
 	
     target.path = $$PREFIX/bin
     
-    shortcutfiles.files = misc/gm-companion.desktop
+    shortcutfiles.files = ../misc/gm-companion.desktop
     shortcutfiles.path = $$PREFIX/share/applications/
 
-    data.files += misc/gm-companion.png
+    data.files += ../misc/gm-companion.png
     data.path = $$PREFIX/share/pixmaps/
 
-    appdata.files = misc/gm-companion.appdata.xml
+    appdata.files = ../misc/gm-companion.appdata.xml
     appdata.path = $$PREFIX/share/metainfo/
 
     INSTALLS += shortcutfiles
     INSTALLS += data
-    INSTALLS += appdata
+    # INSTALLS += appdata
 }
 
 win32 {

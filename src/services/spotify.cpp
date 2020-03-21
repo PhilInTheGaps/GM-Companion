@@ -45,6 +45,10 @@ Spotify::Spotify()
         emit wrongPassword();
         qCCritical(gmSpotify()) << "Librespot exited with code" << exitCode << exitStatus;
     });
+    connect(&m_librespotProcess,          &QProcess::errorOccurred, [ = ](QProcess::ProcessError error) {
+        qCCritical(gmSpotify) << "An error occurred with librespot:" << error;
+        qCCritical(gmSpotify) << m_librespotProcess.errorString();
+    });
 }
 
 Spotify::~Spotify()
@@ -187,15 +191,28 @@ void Spotify::openSpotify()
         if (!username.isEmpty() && !password.isEmpty())
         {
             #ifdef Q_OS_LINUX
-            m_librespotProcess.start("librespot", { "-n", "GM-Companion",
-                                                    "-u", username,
-                                                    "-p", password
+            auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot";
+            
+
+            if (QFile(librespotPath).exists()) {
+                qCDebug(gmSpotify) << "Using local librespot binary at" << librespotPath << ".";
+            } else {
+                qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
+                librespotPath = "librespot";
+            }
+ 
+            
+            m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
+                                                      "-u", username,
+                                                      "-p", password
                                      });
+            
             #endif // ifdef Q_OS_LINUX
             #ifdef Q_OS_WIN
-            m_librespotProcess.start("./librespot.exe", { "-n", "GM-Companion",
-                                                          "-u", username,
-                                                          "-p", password
+            auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot.exe";
+            m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
+                                                      "-u", username,
+                                                      "-p", password
                                      });
             #endif // ifdef Q_OS_WIN
         }
