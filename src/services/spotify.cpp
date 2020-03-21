@@ -190,24 +190,28 @@ void Spotify::openSpotify()
 
         if (!username.isEmpty() && !password.isEmpty())
         {
-            #ifdef Q_OS_LINUX
+            #if defined Q_OS_LINUX || defined Q_OS_UNIX
             auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot";
-            
 
             if (QFile(librespotPath).exists()) {
                 qCDebug(gmSpotify) << "Using local librespot binary at" << librespotPath << ".";
             } else {
-                qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
-                librespotPath = "librespot";
+                librespotPath = QDir::homePath() + "/.cargo/bin/librespot";
+
+                if (QFile(librespotPath).exists()) {
+                    qCDebug(gmSpotify) << "Using librespot binary in cargo path:" << librespotPath << ".";
+                } else {
+                    qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
+                    librespotPath = "librespot";
+                }
             }
- 
-            
+
             m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
                                                       "-u", username,
                                                       "-p", password
                                      });
             
-            #endif // ifdef Q_OS_LINUX
+            #endif // if defined Q_OS_LINUX || defined Q_OS_UNIX
             #ifdef Q_OS_WIN
             auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot.exe";
             m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",

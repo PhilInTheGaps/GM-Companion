@@ -9,7 +9,7 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
 
-CONFIG += c++14
+CONFIG += c++14 console
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
@@ -189,25 +189,6 @@ HEADERS  += functions.h \
     # Tools ADDONS
 #    tools/addons/sifrp.h \
 
-DISTFILES += \
-    android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
-    android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat \
-    android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
-    android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
 
 QML_IMPORT_PATH += ../lib/fontawesome.pri
 
@@ -230,7 +211,7 @@ TRANSLATIONS+=  resources/translations/gm-companion_de.ts
     shortcutfiles.path = $$PREFIX/share/applications/
 
     data.files += ../misc/gm-companion.png
-    data.path = $$PREFIX/share/pixmaps/
+    data.path = $$PREFIX/share/pixmaps/‚
 
     appdata.files = ../misc/gm-companion.appdata.xml
     appdata.path = $$PREFIX/share/metainfo/
@@ -238,6 +219,9 @@ TRANSLATIONS+=  resources/translations/gm-companion_de.ts
     INSTALLS += shortcutfiles
     INSTALLS += data
     # INSTALLS += appdata
+
+    LIBS += -L/usr/local/lib -ltag -lqt5keychain -lpoppler-qt5
+    INCLUDEPATH += /usr/local/include
 }
 
 win32 {
@@ -257,9 +241,6 @@ win32 {
 INSTALLS += target
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
-unix:!macx: LIBS += -lpoppler-qt5
-unix: LIBS+= -ltag -lqt5keychain
 
 
 

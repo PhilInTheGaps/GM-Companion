@@ -114,13 +114,5 @@ int main(int argc, char *argv[])
 
     if (engine.rootObjects().isEmpty()) return -1;
 
-    #ifdef Q_OS_LINUX
-
-    //        QProcess::startDetached("spotify");
-    //    QProcess librespotProcess;
-    //    librespotProcess.start("librespot", { "-n", "GM-Companion", "-u",
-    // "icke03", "-p", "Schnak#YFI0815" });
-    #endif // ifdef Q_OS_LINUX
-
     return app.exec();
 }
