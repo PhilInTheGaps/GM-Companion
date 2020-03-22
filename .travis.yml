@@ -1,41 +1,43 @@
 language: cpp
-sudo: required
-dist: xenial
-
+env:
+  global:
+  - secure: bQjC874BXKl4UBazEfwWHabdkOM2qqqqyweVPZdCwLNi8FxPl3kg2rEtJKvEvmksK3RdyNxocU5DIof4sbnlcUtGlxfELTcMeZzKgL8NFN4SGofguxMMq1xwLR01Gimp9773Bt+GmBR3DuPA9LLaYF+8P4x2I6ZtRGho5O2UgGTafwE5C6NGeqcDv1YjoGSq5+1uE8tfxovS8tWSIR+88B8PaEOlyzlA9/65ZfWDh7NEyFeK8PGP6YD7zg57Vhr5p9rr6gr0dbXCJsSHaklNiMu4HApzQDRWlDUqz9poWr8oiOIqa4DDfgr4OZb63u1k9zIIIockSl/QkuMBLZk0q2yDPIXxAV9DN6giz3rs65MpVq2EYuZyAzAR4S9/S/KSUi7FTlCw8e2PWZykNSx5WDwpkNtqSV2mWDfRs8boSCsV1tIdapHGYBLmQcBfC28oo5DMKEmao7ogF36Gxro3XDab/rIevHWIOOGIeA9FGLfKiXC19WOstjS20GdwroKXTjXr2WDosCEhDG7X67jKes0R07y2mySeKEcHPl3TJJtWXF/yspu/n6o143InGsps5lWyZjzvmWbckGuFe+nXSNnRTKjlJIhBJLZ9dBDP3Qy1gOeT5Hou17XBWmWTh4D8HtWSGTZSQYhOXtMPg/hRdai+E7bTp5PgOC4YF1D3EGc=
+matrix:
+  include:
+  - os: linux
+    compiler: gcc
+    before_install:
+    - "./deploy/travis/install-qt.sh"
+    - source /opt/qt512/bin/qt512-env.sh
+    - "./deploy/travis/install-dependencies.sh"
+    script:
+    - if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]]; then echo "Don't build on coverty_scan
+      branch."; exit 0; fi
+    - "./deploy/travis/build-linux.sh"
+    - "./deploy/travis/build-appimage.sh"
+    - "./deploy/travis/deploy-appimage.sh"
+  - os: osx
+    before_install:
+    - brew update
+    - brew install qt taglib poppler qtkeychain
+    - brew link qt --force
+    script:
+    - qmake
+    - make -j$(sysctl -n hw.physicalcpu)
+before_script:
+- qmake -version
 addons:
   coverity_scan:
     project:
-      name: "PhilInTheGaps/GM-Companion"
-      description: "A gamemaster tool."
+      name: PhilInTheGaps/GM-Companion
+      description: A tool for rpg gamemasters.
     notification_email: phil.hoffmann@zoho.eu
     build_command_prepend: qmake
     build_command: make
     branch_pattern: coverity_scan
-
-matrix:
-  include:
-    - os: linux
-      compiler: gcc
-      before_install:
-        - ./deploy/travis/install-qt.sh
-        - source /opt/qt512/bin/qt512-env.sh
-        - ./deploy/travis/install-dependencies.sh
-      script:
-        - ./deploy/travis/build-linux.sh
-        - ./deploy/travis/build-appimage.sh
-        - ./deploy/travis/deploy-appimage.sh
-        
-    - os: osx
-      before_install:
-        - brew update
-        - brew install qt5 taglib poppler qtkeychain
-        - brew link qt5 --force
-      script:
-        - qmake
-        - make
-
-before_script:
-  - qmake -version
-
 notifications:
-    slack: gm-companion:hYQtgVm2LokcpUT6SbnELwSN
+  email:
+    recipients:
+      - phil.hoffmann@zoho.eu
+    on_success: never
+    on_failure: always
