@@ -179,7 +179,7 @@ QString Spotify::getLibrespotPath()
     auto binaryName = "librespot";
 
     #ifdef Q_OS_WIN
-    binaryName = librespot.exe
+    binaryName = "librespot.exe"
     #endif // ifdef Q_OS_WIN
 
     // First check next to gm-companion binary
