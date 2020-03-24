@@ -34,7 +34,7 @@ HEADERS += \
 }
 
 win32 {
-    LIBS += -L$$PWD/../lib/qt5keychain/lib -lqt5keychain.dll
-    INCLUDEPATH += $$PWD/../lib/qt5keychain/include
-    DEPENDPATH  += $$PWD/../lib/qt5keychain/include
+    LIBS += -L$$PWD/../../lib/qt5keychain/lib -lqt5keychain.dll
+    INCLUDEPATH += $$PWD/../../lib/qt5keychain/include
+    DEPENDPATH  += $$PWD/../../lib/qt5keychain/include
 }

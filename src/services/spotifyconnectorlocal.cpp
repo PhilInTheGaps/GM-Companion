@@ -72,7 +72,7 @@ int SpotifyConnectorLocal::get(QNetworkRequest request)
     qCDebug(gmSpotifyLocal) << "Sending GET Request to URL" << request.url();
 
     auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
+    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             this, &SpotifyConnectorLocal::onReplyReceived);
 
     auto requestId  = getUniqueRequestId();
@@ -88,7 +88,7 @@ void SpotifyConnectorLocal::get(QNetworkRequest request, int requestId)
     qCDebug(gmSpotifyLocal) << "Sending GET Request to URL" << request.url();
 
     auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
+    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             this, &SpotifyConnectorLocal::onReplyReceived);
 
     auto internalId = requestor->get(request);
@@ -104,7 +104,7 @@ int SpotifyConnectorLocal::put(QUrl url, QString params)
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
 
     auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
+    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             this, &SpotifyConnectorLocal::onReplyReceived);
 
     auto requestId  = getUniqueRequestId();
@@ -120,7 +120,7 @@ int SpotifyConnectorLocal::post(QNetworkRequest request, QByteArray data)
     qCDebug(gmSpotifyLocal) << "Sending POST Request to URL" << request.url() << "with data" << data;
 
     auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
+    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             this, &SpotifyConnectorLocal::onReplyReceived);
 
     auto requestId  = getUniqueRequestId();
