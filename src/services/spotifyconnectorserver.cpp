@@ -1,0 +1,494 @@
+#include "spotifyconnectorserver.h"
+#include "logging.h"
+#include "services.h"
+
+#include <QDesktopServices>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QTimer>
+#include <QUrlQuery>
+
+SpotifyConnectorServer::SpotifyConnectorServer
+    (QNetworkAccessManager *networkManager) :
+    ISpotifyConnector(networkManager)
+{
+    m_settingsStore = new O0SettingsStore("gm-companion");
+
+    connect(&m_server, SIGNAL(newConnection()),                        this, SLOT(onIncomingConnection()));
+    connect(this,      &SpotifyConnectorServer::receivedReplyInternal, this, &SpotifyConnectorServer::onReceivedReply);
+}
+
+SpotifyConnectorServer::~SpotifyConnectorServer()
+{
+    qCDebug(gmSpotifyServer()) << "Closing spotify connector ...";
+    disconnect();
+
+    if (m_server.isListening()) m_server.close();
+    m_settingsStore->deleteLater();
+}
+
+void SpotifyConnectorServer::grantAccess()
+{
+    if (getRefreshToken().isEmpty())
+    {
+        qCDebug(gmSpotifyServer()) << "No refresh token found, initializing auth procedure ...";
+        authenticate();
+    }
+    else
+    {
+        qCDebug(gmSpotifyServer()) << "Refresh token exists, requesting new access token ...";
+        refreshAccessToken(true);
+    }
+}
+
+int SpotifyConnectorServer::get(QNetworkRequest request)
+{
+    int requestId = getUniqueRequestId();
+
+    get(request, requestId);
+    return requestId;
+}
+
+void SpotifyConnectorServer::get(QNetworkRequest request, int requestId)
+{
+    if (!canSendRequest())
+    {
+        enqueueRequest(RequestContainer(requestId, request, 0, ""));
+        return;
+    }
+
+    qCDebug(gmSpotifyServer) << "Sending GET Request to URL" << request.url();
+
+    m_currentRequestCount++;
+    request = addAuthHeader(request);
+    auto reply = m_networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, [ = ]() {
+        auto data    = reply->readAll();
+        auto error   = reply->error();
+        auto headers = reply->rawHeaderPairs();
+        emit receivedReplyInternal(RequestContainer(requestId, request, 0, ""), data, headers, error);
+        reply->deleteLater();
+    });
+}
+
+int SpotifyConnectorServer::put(QUrl url, QString params)
+{
+    int requestId = getUniqueRequestId();
+    QNetworkRequest request(url);
+
+    put(request, params, requestId);
+
+    return requestId;
+}
+
+void SpotifyConnectorServer::put(QNetworkRequest request, QString data, int requestId)
+{
+    if (!canSendRequest())
+    {
+        enqueueRequest(RequestContainer(requestId, request, 1, data.toUtf8()));
+        return;
+    }
+
+    qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << data;
+
+    m_currentRequestCount++;
+    request = addAuthHeader(request);
+    auto reply = m_networkManager->put(request, data.toUtf8());
+
+    connect(reply, &QNetworkReply::finished, [ = ]() {
+        auto replyData = reply->readAll();
+        auto error     = reply->error();
+        auto headers   = reply->rawHeaderPairs();
+        emit receivedReplyInternal(RequestContainer(requestId, request, 1, data.toUtf8()), replyData, headers, error);
+        reply->deleteLater();
+    });
+}
+
+int SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data)
+{
+    int requestId = getUniqueRequestId();
+
+    post(request, data, requestId);
+
+    return requestId;
+}
+
+void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int requestId)
+{
+    if (!canSendRequest())
+    {
+        enqueueRequest(RequestContainer(requestId, request, 2, data));
+        return;
+    }
+
+    qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url();
+
+    m_currentRequestCount++;
+    request = addAuthHeader(request);
+    auto reply = m_networkManager->post(request, data);
+
+    connect(reply, &QNetworkReply::finished, [ = ]() {
+        auto replyData = reply->readAll();
+        auto error     = reply->error();
+        auto headers   = reply->rawHeaderPairs();
+        emit receivedReplyInternal(RequestContainer(requestId, request, 2, data), replyData, headers, error);
+        reply->deleteLater();
+    });
+}
+
+void SpotifyConnectorServer::authenticate()
+{
+    qCDebug(gmSpotifyServer()) << "Authenticating ...";
+
+    if (!m_server.isListening())
+    {
+        m_server.listen(QHostAddress::LocalHost, SPOTIFY_SERVER_PORT);
+    }
+
+    auto url = QUrl(getServerUrl() + "/spotify/login");
+
+    QUrlQuery query;
+    query.addQueryItem("redirect_uri", QUrl::toPercentEncoding("http://localhost:" + QString::number(SPOTIFY_SERVER_PORT)));
+    url.setQuery(query);
+
+    qCDebug(gmSpotifyServer()) << "Started server, opening browser ...";
+
+    QDesktopServices::openUrl(url);
+}
+
+void SpotifyConnectorServer::requestAccessToken(QString code)
+{
+    qCDebug(gmSpotifyServer()) << "Requesting access token from server ...";
+
+    QUrl url(getServerUrl() + "/spotify/token");
+
+    QUrlQuery query;
+    query.addQueryItem("code", code);
+    url.setQuery(query);
+
+    auto reply = m_networkManager->get(QNetworkRequest(url));
+
+    connect(reply, &QNetworkReply::finished, [ = ]() {
+        qCDebug(gmSpotifyServer()) << "Received access token and refresh token ...";
+        auto params = QJsonDocument::fromJson(reply->readAll()).object();
+
+        saveAccessToken(params["access_token"].toString());
+        saveRefreshToken(params["refresh_token"].toString());
+        updateExpireTime(params["expires_in"].toInt());
+
+        m_isWaitingForToken = false;
+        m_isAccessGranted   = true;
+        emit accessGranted();
+
+        reply->deleteLater();
+    });
+}
+
+void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
+{
+    qCDebug(gmSpotifyServer()) << "Refreshing access token ...";
+
+    auto refreshToken = getRefreshToken();
+
+    if (refreshToken.isEmpty())
+    {
+        qCDebug(gmSpotifyServer()) << "No refresh token found, starting auth process ...";
+        m_isAccessGranted = false;
+        authenticate();
+    }
+    else
+    {
+        m_isWaitingForToken = true;
+        QUrl url(getServerUrl() + "/spotify/refresh");
+
+        qCDebug(gmSpotifyServer()) << url;
+
+        QUrlQuery query;
+        query.addQueryItem("refresh_token", refreshToken);
+        url.setQuery(query);
+
+        auto reply = m_networkManager->get(QNetworkRequest(url));
+        connect(reply, &QNetworkReply::finished, [ = ]() {
+            // Network error, maybe server is unreachable?
+            if (reply->error() != QNetworkReply::NoError)
+            {
+                qCCritical(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
+                return;
+            }
+            auto params = QJsonDocument::fromJson(reply->readAll()).object();
+            reply->deleteLater();
+
+            saveAccessToken(params["access_token"].toString());
+            updateExpireTime(params["expires_in"].toInt());
+
+            // If user revoked permission, the refresh token is no longer valid
+            if (params["error"].toString() == "invalid_grant")
+            {
+                qCWarning(gmSpotifyServer()) << "Refresh token was not valid, trying to authenticate again ...";
+                saveRefreshToken("");
+                authenticate();
+                return;
+            }
+            else if (!params["error"].toString().isEmpty())
+            {
+                qCCritical(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:" << params["error"].toString();
+                return;
+            }
+            else if (getAccessToken().isEmpty())
+            {
+                qCCritical(gmSpotifyServer()) << "Something went wrong, access token is empty.";
+                return;
+            }
+
+            // Everything is fine
+            qCDebug(gmSpotifyServer()) << "Received new access token ...";
+
+            if (updateAuthentication)
+            {
+                m_isAccessGranted = true;
+                emit accessGranted();
+            }
+
+            m_isWaitingForToken = false;
+            dequeueRequests();
+        });
+    }
+}
+
+void SpotifyConnectorServer::updateExpireTime(int expiresIn)
+{
+    m_expireTime = QDateTime::currentDateTime().addSecs(expiresIn);
+}
+
+QString SpotifyConnectorServer::getServerUrl()
+{
+    auto url = sManager.getSetting(Setting::serverUrl);
+
+    if (url.endsWith("/")) url.chop(1);
+    return url;
+}
+
+void SpotifyConnectorServer::dequeueRequests()
+{
+    while (!m_requestQueue.isEmpty() && m_currentRequestCount < SPOTIFY_MAX_REQUESTS)
+    {
+        auto element = m_requestQueue.dequeue();
+
+        switch (element.requestType)
+        {
+        case 0:
+            get(element.request, element.requestId);
+            break;
+
+        case 1:
+            put(element.request, element.data, element.requestId);
+            break;
+
+        case 2:
+            post(element.request, element.data, element.requestId);
+            break;
+
+        default:
+            qCCritical(gmSpotifyServer()) << "Unknown request type" << element.requestType;
+        }
+    }
+}
+
+QNetworkRequest SpotifyConnectorServer::addAuthHeader(QNetworkRequest request)
+{
+    request.setRawHeader("Authorization", QByteArray("Bearer " + getAccessToken().toUtf8()));
+    return request;
+}
+
+void SpotifyConnectorServer::handleRateLimit(RequestContainer container, QList<QPair<QByteArray, QByteArray> >headers)
+{
+    qCDebug(gmSpotifyServer) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
+
+    for (auto header : headers)
+    {
+        if (header.first == "Retry-After")
+        {
+            qCDebug(gmSpotifyServer()) << header;
+            int seconds = header.second.toInt();
+            startCooldown(seconds);
+            enqueueRequest(container);
+            return;
+        }
+    }
+
+    startCooldown(2);
+}
+
+void SpotifyConnectorServer::startCooldown(int seconds)
+{
+    m_isOnCooldown = true;
+    QTimer::singleShot(seconds * 1000, this, &SpotifyConnectorServer::onCooldownFinished);
+}
+
+bool SpotifyConnectorServer::canSendRequest()
+{
+    if (!m_isAccessGranted) return false;
+
+    if (isTokenExpired() || getAccessToken().isEmpty())
+    {
+        refreshAccessToken();
+        return false;
+    }
+
+    return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < SPOTIFY_MAX_REQUESTS;
+}
+
+void SpotifyConnectorServer::onReceivedReply(RequestContainer container, QByteArray data, QList<QPair<QByteArray, QByteArray> >headers, QNetworkReply::NetworkError error)
+{
+    m_currentRequestCount--;
+
+    // Check if rate limit was exceeded
+    if (error == QNetworkReply::UnknownContentError)
+    {
+        auto status = QJsonDocument::fromJson(data).object().value("error").toObject().value("status").toInt();
+
+        // HTTP 429 == Rate limit exceeded
+        if (status == 429)
+        {
+            handleRateLimit(container, headers);
+            return;
+        }
+    }
+
+    if (error != QNetworkReply::NoError)
+    {
+        qCWarning(gmSpotifyServer()) << "Error:" << error << data;
+    }
+
+    emit receivedReply(container.requestId, error, data);
+
+    // If there are requests in queue, send next
+    dequeueRequests();
+}
+
+void SpotifyConnectorServer::onCooldownFinished()
+{
+    qCDebug(gmSpotifyServer()) << "Cooldown finished. Continuing ...";
+    m_isOnCooldown = false;
+    dequeueRequests();
+}
+
+void SpotifyConnectorServer::onIncomingConnection()
+{
+    QTcpSocket *socket = m_server.nextPendingConnection();
+
+    connect(socket, SIGNAL(readyRead()),    this,   SLOT(onBytesReady()), Qt::UniqueConnection);
+    connect(socket, SIGNAL(disconnected()), socket, SLOT(deleteLater()));
+}
+
+void SpotifyConnectorServer::onBytesReady()
+{
+    qCDebug(gmSpotifyServer()) << "onBytesReady: Processing request";
+
+    // NOTE: on first call, the timeout timer is started
+    QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
+
+    if (!socket) {
+        qCWarning(gmSpotifyServer()) << "onBytesReady: No socket available";
+        return;
+    }
+
+    QFile f(":/services/auth-success.html");
+    QByteArray replyContent;
+
+    if (f.open(QIODevice::ReadOnly))
+    {
+        replyContent = f.readAll();
+        f.close();
+    }
+
+    QByteArray reply;
+    reply.append("HTTP/1.0 200 OK \r\n");
+    reply.append("Content-Type: text/html; charset=\"utf-8\"\r\n");
+    reply.append(QString("Content-Length: %1\r\n\r\n").arg(replyContent.size()).toLatin1());
+    reply.append(replyContent);
+    socket->write(reply);
+    qCDebug(gmSpotifyServer()) << "onBytesReady: Sent reply";
+
+    QByteArray data                    = socket->readAll();
+    QMap<QString, QString> queryParams = parseQueryParams(&data);
+
+    if (queryParams.isEmpty()) {
+        if (m_tries < 3) {
+            qCDebug(gmSpotifyServer()) << "onBytesReady: No query params found, waiting for more callbacks";
+            ++m_tries;
+            return;
+        } else {
+            m_tries = 0;
+            qCWarning(gmSpotifyServer()) << "onBytesReady: No query params found, maximum callbacks received";
+            closeServer(socket, false);
+            return;
+        }
+    }
+
+    qCDebug(gmSpotifyServer()) << "onBytesReady: Query params found, closing server";
+    closeServer(socket, true);
+
+    requestAccessToken(queryParams["code"]);
+}
+
+void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool hasparameters)
+{
+    qCDebug(gmSpotifyServer()) << "closeServer: Initiating";
+    int port = m_server.serverPort();
+
+    if (!socket && sender()) {
+        QTimer *timer = qobject_cast<QTimer *>(sender());
+
+        if (timer) {
+            qCWarning(gmSpotifyServer()) << "closeServer: Closing due to timeout";
+            timer->stop();
+            socket = qobject_cast<QTcpSocket *>(timer->parent());
+            timer->deleteLater();
+        }
+    }
+
+    if (socket) {
+        QTimer *timer = socket->findChild<QTimer *>("timeoutTimer");
+
+        if (timer) {
+            qCDebug(gmSpotifyServer()) << "closeServer: Stopping socket's timeout timer";
+            timer->stop();
+        }
+        socket->disconnectFromHost();
+    }
+    m_server.close();
+    qCDebug(gmSpotifyServer()) << "closeServer: Closed, no longer listening on port" << port;
+}
+
+QMap<QString, QString>SpotifyConnectorServer::parseQueryParams(QByteArray *data)
+{
+    qCDebug(gmSpotifyServer()) << "parseQueryParams";
+
+    QString splitGetLine = QString(*data).split("\r\n").first();
+    splitGetLine.remove("GET ");
+    splitGetLine.remove("HTTP/1.1");
+    splitGetLine.remove("\r\n");
+    splitGetLine.prepend("http://localhost");
+    QUrl getTokenUrl(splitGetLine);
+
+    QList<QPair<QString, QString> > tokens;
+#if QT_VERSION < 0x050000
+    tokens = getTokenUrl.queryItems();
+#else // if QT_VERSION < 0x050000
+    QUrlQuery query(getTokenUrl);
+    tokens = query.queryItems();
+#endif // if QT_VERSION < 0x050000
+    QMap<QString, QString>  queryParams;
+    QPair<QString, QString> tokenPair;
+    foreach(tokenPair, tokens) {
+        // FIXME: We are decoding key and value again. This helps with Google
+        // OAuth, but is it mandated by the standard?
+        QString key   = QUrl::fromPercentEncoding(QByteArray().append(tokenPair.first.trimmed().toLatin1()));
+        QString value = QUrl::fromPercentEncoding(QByteArray().append(tokenPair.second.trimmed().toLatin1()));
+
+        queryParams.insert(key, value);
+    }
+    return queryParams;
+}

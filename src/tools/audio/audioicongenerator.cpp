@@ -1,4 +1,6 @@
 #include "audioicongenerator.h"
+#include "logging.h"
+#include "services/services.h"
 
 #include <taglib/taglib.h>
 #include <taglib/fileref.h>
@@ -14,15 +16,17 @@
 #include <QJsonArray>
 #include <QUrlQuery>
 
-#define MAX_SPOTIFY_REQUESTS 2
-
 using namespace TagLib;
 
 QMap<QUrl, QImage> IconWorker::iconCache;
 
 IconWorker::IconWorker(QList<AudioProject *>projects) : m_projects(projects)
 {
-    connect(Spotify::getInstance(), &Spotify::authorized, this, &IconWorker::onSpotifyAuthorized);
+    connect(Spotify::getInstance(), &Spotify::authorized,           this,                   &IconWorker::onSpotifyAuthorized);
+    connect(Spotify::getInstance(), &Spotify::receivedReply,        this,                   &IconWorker::onReceivedSpotifyReply);
+    connect(this,                   &IconWorker::getSpotifyRequest, Spotify::getInstance(), qOverload<QNetworkRequest, int>(&Spotify::get));
+
+    loadPlaceholderImages();
 }
 
 IconWorker::~IconWorker()
@@ -30,7 +34,7 @@ IconWorker::~IconWorker()
     if (m_networkManager) m_networkManager->deleteLater();
 }
 
-void IconWorker::generate()
+void IconWorker::generateThumbnails()
 {
     if (!m_networkManager) m_networkManager = new QNetworkAccessManager;
 
@@ -44,233 +48,313 @@ void IconWorker::generate()
 
             if (element->icon()->background().isEmpty())
             {
-                generateCollage(element);
+                makeThumbnail(element);
             }
         }
     }
+
+    getImagesFromSpotify();
 }
 
-void IconWorker::generateCollage(AudioElement *element, int index)
+QImage IconWorker::getPlaceholderImage(AudioElement *element)
 {
-    if (!element) return;
-
-    if (element->type() < 2)
+    if (element)
     {
-        if (index >= element->files().length())
+        switch (element->type())
         {
-            generateCollageImage(element);
+        case 0: return m_musicPlaceholderImage;
+
+        case 1: return m_soundPlaceholderImage;
+
+        default: break;
+        }
+    }
+
+    QImage img;
+    img.fill(0);
+    return img;
+}
+
+void IconWorker::loadPlaceholderImages()
+{
+    m_musicPlaceholderImage = QImage(":/icons/media/music_image.png");
+    m_soundPlaceholderImage = QImage(":/icons/media/sound_image.png");
+}
+
+void IconWorker::makeThumbnail(AudioElement *element)
+{
+    // Is element null or radio?
+    if (!element || (element->type() == 2)) return;
+
+    // Select files for collage
+    auto fileCount = 0;
+
+    for (auto file : element->files())
+    {
+        // Skip all files that are not local (0) or from spotify (2)
+        // TODO 1: from url
+        // TODO 3: from youtube
+        if ((file->source() == 0) || (file->source() == 2))
+        {
+            if (element->icon()->addCollageIcon(getImageFromAudioFile(element, file)))
+            {
+                element->icon()->addCollageIconSource(file->url());
+
+                if (++fileCount >= 4) break;
+            }
+        }
+    }
+
+    generateCollageImage(element);
+}
+
+QImage IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audioFile)
+{
+    // Paranoid pointer check
+    if (!element || !audioFile) return getPlaceholderImage(element);
+
+    // Return placeholder image for spotify
+    // Also add url to list for batch-retrieval later
+    if (audioFile->source() == 2)
+    {
+        if (iconCache.contains(Spotify::getId(audioFile->url()))) {
+            return iconCache[Spotify::getId(audioFile->url())];
+        }
+        m_spotifyIconList.append(audioFile->url());
+        return getPlaceholderImage(element);
+    }
+
+    // Return empty placeholder image for non-local files
+    if (audioFile->source() != 0) return getPlaceholderImage(element);
+
+    // Resolve relative path
+    QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + audioFile->url() : sManager.getSetting(Setting::soundPath) + audioFile->url();
+
+    // Check if icon cache contains image already
+    if (iconCache.contains(QUrl(path)))
+    {
+        return iconCache[path];
+    }
+
+    // Get id3v2 meta data tag
+    FileRef f(path.toUtf8().data());
+
+    if (TagLib::MPEG::File *file = dynamic_cast<TagLib::MPEG::File *>(f.file()))
+    {
+        if (file->ID3v2Tag() && !file->ID3v2Tag()->isEmpty())
+        {
+            auto tag = file->ID3v2Tag();
+
+            if (!tag)
+            {
+                qCWarning(gmAudioIconGenerator) << "Could not read meta data tags from file" << path;
+                return getPlaceholderImage(element);
+            }
+
+            // Get frames from tag for image
+            auto frames = tag->frameList("APIC");
+
+            if (frames.isEmpty())
+            {
+                qCWarning(gmAudioIconGenerator) << "Meta data tags do not contain images" << path;
+                return getPlaceholderImage(element);
+            }
+
+            // Convert image to QImage
+            auto   frame = static_cast<ID3v2::AttachedPictureFrame *>(frames.front());
+            QImage coverImage;
+            coverImage.loadFromData(QByteArray(frame->picture().data(), static_cast<int>(frame->picture().size())));
+
+            qCDebug(gmAudioIconGenerator) << "Successfully loaded image from audio file.";
+            return coverImage;
+        }
+
+        qCWarning(gmAudioIconGenerator) << "File does not contain id3v2 tags" << path;
+        return getPlaceholderImage(element);
+    }
+
+    qCCritical(gmAudioIconGenerator) << "Could not cast taglib fileref.file() to taglib mpeg file" << path;
+    return getPlaceholderImage(element);
+}
+
+void IconWorker::getImagesFromSpotify()
+{
+    m_spotifyIconList.removeDuplicates();
+
+    while (!m_spotifyIconList.isEmpty())
+    {
+        QString firstUri = m_spotifyIconList.takeFirst();
+        QString firstId  = Spotify::getId(firstUri);
+        int     type     = Spotify::getUriType(firstUri);
+
+        QStringList idBatch;
+        idBatch.append(firstId);
+        int index = 0;
+
+        while (type != 1 && index < m_spotifyIconList.length() && SPOTIFY_BATCH_SIZE > idBatch.length())
+        {
+            if (Spotify::getUriType(m_spotifyIconList[index]) == type)
+            {
+                idBatch.append(Spotify::getId(m_spotifyIconList.takeAt(index)));
+            }
+            else
+            {
+                index++;
+            }
+        }
+
+        QUrl url;
+
+        switch (type)
+        {
+        case 0:
+            url = "https://api.spotify.com/v1/albums";
+            break;
+
+        case 1: url = "https://api.spotify.com/v1/playlists/" + firstId;
+            break;
+
+        case 2: url = "https://api.spotify.com/v1/tracks";
+            break;
+
+        default:
+            qCCritical(gmAudioIconGenerator) << "Invalid type" << type;
             return;
         }
 
-        auto file = element->files()[index];
-
-        if (file->source() == 2)
+        if (type != 1)
         {
-            fetchSpotifyIcon(element, index);
+            QUrlQuery query;
+            query.addQueryItem("ids", idBatch.join(","));
+            url.setQuery(query);
         }
-        else if (file->source() != 0)
-        {
-            generateCollage(element, index + 1);
-        }
-        else
-        {
-            QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + file->url() : sManager.getSetting(Setting::soundPath) + file->url();
 
-            // Get id3v2 meta data tag
-            FileRef f(path.toUtf8().data());
+        auto requestId = Spotify::getInstance()->getUniqueRequestId();
+        m_spotifyRequestList.append(requestId);
+        emit getSpotifyRequest(QNetworkRequest(url), requestId);
+    }
+}
 
-            if (TagLib::MPEG::File *file = dynamic_cast<TagLib::MPEG::File *>(f.file()))
+void IconWorker::insertImage(QImage image, QString uri)
+{
+    for (auto project : m_projects)
+    {
+        if (!project) continue;
+
+        for (auto element : project->elements())
+        {
+            if (!element || !element->icon()) continue;
+
+            for (int i = 0; i < element->icon()->collageIconSources().length(); i++)
             {
-                if (file->ID3v2Tag() && !file->ID3v2Tag()->isEmpty())
+                if (element->icon()->collageIconSources()[i].contains(uri))
                 {
-                    auto tag = file->ID3v2Tag();
-
-                    if (!tag)
-                    {
-                        generateCollage(element, index + 1);
-                        return;
-                    }
-
-                    // Get frames from tag for image
-                    auto frames = tag->frameList("APIC");
-
-                    if (frames.isEmpty())
-                    {
-                        generateCollage(element, index + 1);
-                        return;
-                    }
-
-                    // Convert image to QImage
-                    auto   frame = static_cast<ID3v2::AttachedPictureFrame *>(frames.front());
-                    QImage coverImage;
-                    coverImage.loadFromData(QByteArray(frame->picture().data(), static_cast<int>(frame->picture().size())));
-
-                    // Generate collage
-                    if (element->icon()->addCollageIcon(coverImage) < 4)
-                    {
-                        generateCollage(element, index + 1);
-                    }
-                    else
-                    {
-                        generateCollageImage(element);
-                    }
+                    element->icon()->setCollageIcon(image, i);
+                    generateCollageImage(element);
+                    break;
                 }
             }
         }
     }
 }
 
-void IconWorker::fetchSpotifyIcon(AudioElement *element, int index)
+void IconWorker::insertImageFromUrl(QString imageUrl, QString uri)
 {
-    if (!element) return;
+    qCDebug(gmAudioIconGenerator) << "Inserting image" << imageUrl << uri;
 
-    element->icon()->setLastFileIndex(index);
+    if (uri.isEmpty()) uri = imageUrl;
 
-    if (!Spotify::getInstance()->isGranted() || Spotify::getInstance()->token().isEmpty() || (m_currentSpotifyRequests >= MAX_SPOTIFY_REQUESTS))
+    if (iconCache.contains(imageUrl))
     {
-        m_queue.enqueue(element);
+        insertImage(iconCache[imageUrl], uri);
         return;
     }
 
-    m_currentSpotifyRequests++;
-
-    QUrl url;
-    auto file = element->files()[index];
-    auto id   = file->url();
-
-    // Element is album
-    if (id.contains("album:"))
-    {
-        url = QUrl("https://api.spotify.com/v1/albums/" + id.replace("spotify:album:", ""));
-    }
-
-    // Element is playlist
-    else if (id.contains("playlist:"))
-    {
-        QString playlist = id.right(id.length() - id.lastIndexOf(':') - 1);
-
-        url = QUrl("https://api.spotify.com/v1/playlists/" + playlist + "/images");
-    }
-
-    // Single track
-    else if (id.contains("track:"))
-    {
-        QString track = id.right(id.length() - id.lastIndexOf(':') - 1);
-
-        url = QUrl("https://api.spotify.com/v1/tracks/" + track);
-    }
-
-    QUrlQuery query(url);
-    query.addQueryItem(O2_OAUTH2_ACCESS_TOKEN, Spotify::getInstance()->token());
-    url.setQuery(query);
-
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
-
+    QNetworkRequest request(imageUrl);
     auto reply = m_networkManager->get(request);
-    connect(reply, &QNetworkReply::finished, [ = ]() { fetchedSpotifyIcon(reply, element); });
-}
 
-void IconWorker::startNextSpotifyRequest()
-{
-    if (m_queue.isEmpty()) return;
-
-    auto element = m_queue.dequeue();
-
-    fetchSpotifyIcon(element, element->icon()->lastFileIndex());
-}
-
-void IconWorker::fetchedSpotifyIcon(QNetworkReply *reply, AudioElement *element)
-{
-    if (!element) return;
-
-    m_currentSpotifyRequests--;
-
-    if (reply->error() != QNetworkReply::NoError)
+    connect(reply, &QNetworkReply::finished, [ = ]()
     {
-        m_queue.enqueue(element);
+        auto data = reply->readAll();
+        reply->deleteLater();
 
-        qDebug() << "Fetched Spotify icon:" << element->name();
-        qWarning() << "   Error:" << reply->error();
-        return;
-    }
-    else
-    {
-        startNextSpotifyRequest();
-    }
-
-    const auto doc = QJsonDocument::fromJson(reply->readAll());
-    reply->deleteLater();
-    QJsonObject image;
-
-    // Array of Images
-    if (doc.isArray())
-    {
-        image = doc.array()[0].toObject();
-    }
-
-    // Object containing an Array of Images
-    else
-    {
-        if (doc.object().keys().contains("album"))
-        {
-            image = doc.object().value("album").toObject().value("images").toArray()[0].toObject();
-        }
-        else
-        {
-            image = doc.object().value("images").toArray()[0].toObject();
-        }
-    }
-
-    // Get image data
-    QUrl url(image.value("url").toString());
-
-    // If image is in cache
-    if (iconCache.contains(url))
-    {
-        if (element->icon()->addCollageIcon(iconCache[url]) < 4)
-        {
-            generateCollage(element, element->icon()->lastFileIndex() + 1);
-        }
-        else
-        {
-            generateCollageImage(element);
-        }
-        return;
-    }
-
-    // Otherwise load it from url
-    QNetworkRequest request(url);
-    auto reply2 = m_networkManager->get(request);
-
-    connect(reply2, &QNetworkReply::finished, [ = ]()
-    {
-        auto data = reply2->readAll();
-        reply2->deleteLater();
-
-        QImage image;
+        QImage image = m_soundPlaceholderImage;
 
         if (!image.loadFromData(data, "JPG"))
         {
             if (!image.loadFromData(data, "PNG"))
             {
-                qDebug() << "Could not read image from data:" << element->name();
-                generateCollage(element, element->icon()->lastFileIndex() + 1);
+                qCDebug(gmAudioIconGenerator) << "Could not read image from data:" <<
+                imageUrl;
                 return;
             }
         }
 
-        iconCache[url] = image;
-
-        if (element->icon()->addCollageIcon(image) < 4)
-        {
-            generateCollage(element, element->icon()->lastFileIndex() + 1);
-        }
-        else
-        {
-            generateCollageImage(element);
-        }
+        iconCache[Spotify::getId(uri)] = image;
+        iconCache[imageUrl]            = image;
+        insertImage(image, uri);
     });
+}
+
+void IconWorker::insertImageFromSpotifyPlaylist(QJsonObject playlist)
+{
+    QString imageUrl = playlist["images"].toArray()[0].toObject()["url"].toString();
+    QString id       = playlist["id"].toString();
+
+    qCDebug(gmAudioIconGenerator) << "Inserting image from spotify playlist:" << id << imageUrl;
+    insertImageFromUrl(imageUrl, id);
+}
+
+void IconWorker::insertImageFromSpotifyAlbum(QJsonObject album)
+{
+    QString imageUrl = album["images"].toArray()[0].toObject()["url"].toString();
+    QString id       = album["id"].toString();
+
+    qCDebug(gmAudioIconGenerator) << "Inserting image from spotify album:" << id << imageUrl;
+    insertImageFromUrl(imageUrl, id);
+}
+
+void IconWorker::insertImageFromSpotifyTrack(QJsonObject track)
+{
+    QString imageUrl = track["album"].toObject()["images"].toArray()[0].toObject()["url"].toString();
+    QString id       = track["id"].toString();
+
+    qCDebug(gmAudioIconGenerator) << "Inserting image from spotify track:" << id << imageUrl;
+    insertImageFromUrl(imageUrl, id);
+}
+
+void IconWorker::onReceivedSpotifyReply(int id, QNetworkReply::NetworkError error, QByteArray data)
+{
+    if (!m_spotifyRequestList.contains(id)) return;
+
+    qCDebug(gmAudioIconGenerator) << "Received reply from spotify:" << id;
+
+    if (error != QNetworkReply::NoError) {
+        qCCritical(gmAudioIconGenerator) << "Error reply" << id << error << data;
+    }
+
+    m_spotifyRequestList.removeOne(id);
+
+    const auto doc = QJsonDocument::fromJson(data);
+
+    if (doc.object().contains("followers"))
+    {
+        insertImageFromSpotifyPlaylist(doc.object());
+    }
+    else if (doc.object().contains("albums"))
+    {
+        for (auto album : doc.object()["albums"].toArray())
+        {
+            insertImageFromSpotifyAlbum(album.toObject());
+        }
+    }
+    else if (doc.object().contains("tracks"))
+    {
+        for (auto track : doc.object()["tracks"].toArray())
+        {
+            insertImageFromSpotifyTrack(track.toObject());
+        }
+    }
 }
 
 void IconWorker::generateCollageImage(AudioElement *element)
@@ -307,17 +391,6 @@ void IconWorker::generateCollageImage(AudioElement *element)
     icon->setBackground(imageString);
 }
 
-int IconWorker::addCollageIcon(AudioElement *element, QImage image)
-{
-    // Read cover image from meta data
-    QByteArray bArray;
-    QBuffer    buffer(&bArray);
-
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "JPEG");
-    return element->icon()->addCollageIcon(image);
-}
-
 QRectF IconWorker::getTargetRect(int imageWidth, int imageHeight, int imageCount, int index)
 {
     if (imageCount > 3) imageCount = 4;
@@ -344,11 +417,7 @@ QRectF IconWorker::getSourceRect(QRect imageRect, int imageCount, int index)
 
 void IconWorker::onSpotifyAuthorized()
 {
-    while (m_currentSpotifyRequests < MAX_SPOTIFY_REQUESTS && !m_queue.isEmpty())
-    {
-        auto element = m_queue.dequeue();
-        fetchSpotifyIcon(element, element->icon()->lastFileIndex());
-    }
+    getImagesFromSpotify();
 }
 
 AudioIconGenerator::~AudioIconGenerator()
@@ -364,7 +433,7 @@ void AudioIconGenerator::generateIcons(QList<AudioProject *>projects)
     worker->moveToThread(&workerThread);
 
     connect(&workerThread, &QThread::finished,                   worker, &QObject::deleteLater);
-    connect(this,          &AudioIconGenerator::startGenerating, worker, &IconWorker::generate);
+    connect(this,          &AudioIconGenerator::startGenerating, worker, &IconWorker::generateThumbnails);
 
     workerThread.start();
     emit startGenerating();

@@ -24,8 +24,6 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 
     // Spotify
     spotifyPlayer = new SpotifyPlayer(fManager, metaDataReader);
-    connect(Spotify::getInstance(), &Spotify::authorize,  [ = ](QUrl url) { emit authorizeSpotify(url); });
-    connect(Spotify::getInstance(), &Spotify::authorize,  this, &AudioTool::onSpotifyAuthorize);
     connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player

@@ -16,6 +16,7 @@ class SettingsTool : public QObject
 
 public:
     explicit SettingsTool(QObject *parent = nullptr);
+    ~SettingsTool();
 
     int currentLanguageIndex();
     Q_INVOKABLE QString getPath(QString type);
@@ -29,6 +30,11 @@ public:
 
     Q_INVOKABLE void setCheckForUpdates(bool check);
     Q_INVOKABLE bool getCheckForUpdates();
+
+    Q_INVOKABLE void setServiceConnection(QString type) { sManager->setSetting(Setting::serviceConnection, 1, type); }
+    Q_INVOKABLE QString getServiceConnection() const { return sManager->getSetting(Setting::serviceConnection); }
+    Q_INVOKABLE void setServer(QString url) { sManager->setSetting(Setting::serverUrl, 1, url); }
+    Q_INVOKABLE QString getServer() const { return sManager->getSetting(Setting::serverUrl); }
 
     Q_INVOKABLE void setSpotifyID(QString id) { sManager->setSetting(Setting::spotifyID, 1, id); }
     Q_INVOKABLE QString getSpotifyID() const { return sManager->getSetting(Setting::spotifyID); }

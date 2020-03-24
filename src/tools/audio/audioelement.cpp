@@ -1,6 +1,7 @@
 #include "audioelement.h"
 #include <QDebug>
 #include <QTimer>
+#include "logging.h"
 
 AudioElement::AudioElement(QString name, AudioIcon *icon) :
     m_name(name), m_icon(icon)
@@ -253,11 +254,30 @@ void AudioFileModel::setElements(QList<AudioFile *>elements)
     emit isEmptyChanged();
 }
 
-int AudioIcon::addCollageIcon(QImage icon)
+bool AudioIcon::addCollageIcon(QImage icon)
 {
-    if (m_collageIcons.contains(icon)) return -1;
+    if (m_collageIcons.contains(icon)) return false;
 
     m_collageIcons.append(icon);
 
-    return m_collageIcons.count();
+    return true;
+}
+
+void AudioIcon::setCollageIcon(QImage icon, int index)
+{
+    qCDebug(gmAudioTool) << "Setting collage icon to index" << index;
+    qCDebug(gmAudioTool) << "   Icon count:" << m_collageIcons.length();
+
+    for (auto source : m_collageIconSources)
+    {
+        qCDebug(gmAudioTool) << "       " << source;
+    }
+
+    if (m_collageIcons.length() < index)
+    {
+        qCWarning(gmAudioTool) << "Could not set collage icon, index out of range";
+        return;
+    }
+
+    m_collageIcons.replace(index, icon);
 }

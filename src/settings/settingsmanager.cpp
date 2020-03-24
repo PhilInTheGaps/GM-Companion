@@ -1,5 +1,6 @@
 #include "settingsmanager.h"
 #include "logging.h"
+#include "services/services.h"
 
 #include <QTextStream>
 #include <QCoreApplication>
@@ -173,6 +174,23 @@ QString SettingsManager::getSetting(Setting setting, QString value)
 
     case Setting::cloudMode:
         settingString = QString::number(settings->value("cloudMode", 0).toInt());
+        break;
+
+    case Setting::serverUrl:
+
+        if (getSetting(Setting::serviceConnection) == "default")
+        {
+            settingString = DEFAULT_SERVER_URL;
+        }
+        else
+        {
+            settingString = settings->value("serverUrl", DEFAULT_SERVER_URL).toString();
+        }
+
+        break;
+
+    case Setting::serviceConnection:
+        settingString = settings->value("serviceConnection", "default").toString();
         break;
 
     default:
@@ -376,6 +394,14 @@ void SettingsManager::setSetting(Setting setting, int checked, QString value, QS
 
     case Setting::cloudMode:
         settings->setValue("cloudMode", value);
+        break;
+
+    case Setting::serverUrl:
+        settings->setValue("serverUrl", value);
+        break;
+
+    case Setting::serviceConnection:
+        settings->setValue("serviceConnection", value);
         break;
 
     default:

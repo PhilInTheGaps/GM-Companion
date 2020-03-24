@@ -25,13 +25,15 @@ enum Setting{
     spotifyPassword,
     spotifyID,
     spotifySecret,
+    serviceConnection,
     showToolNames,
     classicIcons,
     googleID,
     googleSecret,
     googleConnect,
     googlePath,
-    cloudMode
+    cloudMode,
+    serverUrl
 };
 
 class SettingsManager

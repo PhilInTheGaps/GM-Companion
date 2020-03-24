@@ -11,9 +11,9 @@ matrix:
     - source /opt/qt512/bin/qt512-env.sh
     - "./deploy/travis/install-dependencies.sh"
     script:
-    - if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]]; then echo "Don't build on coverty_scan
-      branch."; exit 0; fi
+    - if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]]; then echo "Don't build on coverity_scan branch."; exit 0; fi
     - "./deploy/travis/build-linux.sh"
+    - "./deploy/travis/test-linux.sh"
     - "./deploy/travis/build-appimage.sh"
     - "./deploy/travis/deploy-appimage.sh"
   - os: osx
@@ -24,6 +24,7 @@ matrix:
     script:
     - qmake
     - make -j$(sysctl -n hw.physicalcpu)
+    - make check
 before_script:
 - qmake -version
 addons:

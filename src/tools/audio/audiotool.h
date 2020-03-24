@@ -91,7 +91,6 @@ signals:
     void songsChanged();
     void metaDataChanged();
     void currentIndexChanged();
-    void authorizeSpotify(QUrl url);
     void spotifyAuthorized();
 
 private slots:
@@ -114,7 +113,6 @@ private slots:
 
     void onSoundsChanged(QList<SoundElement*> elements);
 
-    void onSpotifyAuthorize(QUrl url) { emit authorizeSpotify(url); }
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
 
 private:

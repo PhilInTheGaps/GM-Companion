@@ -119,7 +119,11 @@ public:
     void setSubtitle(QString subtitle) { m_subtitle = subtitle; emit iconChanged(); }
 
     QList<QImage> collageIcons() const { return m_collageIcons; }
-    int addCollageIcon(QImage icon);
+    bool addCollageIcon(QImage icon);
+     void setCollageIcon(QImage icon, int index);
+
+    QStringList collageIconSources() const { return m_collageIconSources; }
+    void addCollageIconSource(QString source) { m_collageIconSources.append(source); }
 
     int lastFileIndex() const { return m_lastFileIndex; }
     void setLastFileIndex(int index) { m_lastFileIndex = index; }
@@ -131,6 +135,7 @@ private:
     QString m_background;
     QString m_title, m_subtitle;
     QList<QImage> m_collageIcons;
+    QStringList m_collageIconSources;
     int m_lastFileIndex = 0;
 };
 

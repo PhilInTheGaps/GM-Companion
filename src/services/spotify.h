@@ -1,4 +1,4 @@
-#ifndef SPOTIFY_H
+﻿#ifndef SPOTIFY_H
 #define SPOTIFY_H
 
 #include <QObject>
@@ -6,11 +6,9 @@
 #include <QNetworkAccessManager>
 #include <QProcess>
 
-#include "o2spotify.h"
-#include "o2requestor.h"
-
+#include "spotifyconnectorlocal.h"
+#include "spotifyconnectorserver.h"
 #include "settings/settingsmanager.h"
-
 
 class Spotify : public QObject
 {
@@ -19,16 +17,23 @@ public:
     static Spotify* getInstance();
     ~Spotify();
 
-    void grant();
-    bool isGranted() const { return m_o2spotify->linked(); }
-    QString token() const { return m_o2spotify->token(); }
+    void grant() { m_connector->grantAccess(); }
+    bool isGranted() const { return m_connector->isAccessGranted(); }
+    Q_INVOKABLE void updateConnector();
 
-    int get(QNetworkRequest request);
-    int get(QUrl url);
-    int put(QUrl url, QString params = "");
-    int post(QNetworkRequest request, QByteArray data = "");
+    int get(QNetworkRequest request) { return m_connector->get(request); }
+    int get(QUrl url) { return m_connector->get(url); }
+    int put(QUrl url, QString params = "") { return m_connector->put(url, params); }
+    int post(QNetworkRequest request, QByteArray data = "") { return m_connector->post(request, data); }
 
-    Q_INVOKABLE void openSpotify();
+    int getUniqueRequestId() { return m_connector->getUniqueRequestId(); }
+    static int getUriType(QString uri);
+    static QString getId(QString uri);
+
+    Q_INVOKABLE void startLibrespot();
+
+public slots:
+    void get(QNetworkRequest request, int requestId) { m_connector->get(request, requestId); }
 
 private:
     Spotify();
@@ -36,29 +41,26 @@ private:
     static bool instanceFlag;
     static Spotify *single;
 
-    O2Spotify *m_o2spotify = nullptr;
     QNetworkAccessManager *m_networkManager = nullptr;
+    ISpotifyConnector *m_connector = nullptr;
     SettingsManager m_sManager;
     QProcess m_librespotProcess;
+    QMap<QString, int> m_requestMap;
 
-    QUrl m_authUrl;
-    bool m_waitingForAuth = false;
+    void handleNetworkError(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void setDeviceActive();
 
-    void forceCurrentMachine();
+    QString getLibrespotPath();
 
 signals:
-    void authorize(QUrl url);
     void authorized();
-    void receivedGet(int id, QNetworkReply::NetworkError error, QByteArray data);
-    void receivedPut(int id, QNetworkReply::NetworkError error, QByteArray data);
-    void receivedPost(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data);
     void wrongPassword();
 
 private slots:
-    void onLinkingSucceeded();
-    void onOpenBrowser(QUrl url);
-    void onForcedCurrentMachine(int id, QNetworkReply::NetworkError error, QByteArray data);
-
+    void onAccessGranted();
+    void onReceivedReply(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void onReceivedDevices(QByteArray data);
 };
 
 #endif // SPOTIFY_H

@@ -397,7 +397,9 @@ void MusicPlayer::onSpotifySongEnded()
 
 void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QString playlistId)
 {
-    qCDebug(gmAudioMusic) << "Received spotify playlist tracks ...";
+    qCDebug(gmAudioMusic) << "Received" << tracks.length() << "spotify playlist tracks ...";
+
+    if (tracks.length() < 1) return;
 
     auto wasWaiting = m_waitingForUrls > 0;
     qCDebug(gmAudioMusic) << "Are we waiting for track names?" << wasWaiting;

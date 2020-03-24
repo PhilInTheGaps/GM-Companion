@@ -6,6 +6,11 @@ SettingsTool::SettingsTool(QObject *parent) : QObject(parent)
     sManager = new SettingsManager;
 }
 
+SettingsTool::~SettingsTool()
+{
+    delete sManager;
+}
+
 void SettingsTool::setLanguage(QString lang)
 {
     sManager->setSetting(Setting::language, true, lang);

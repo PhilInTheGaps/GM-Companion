@@ -9,7 +9,7 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
 
-CONFIG += c++14 console
+CONFIG += c++14
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
@@ -17,6 +17,8 @@ SOURCES += main.cpp \
     # UI
     logging.cpp \
     services/spotify.cpp \
+    services/spotifyconnectorlocal.cpp \
+    services/spotifyconnectorserver.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
     tools/audio/filesource/localaudiofilesource.cpp \
@@ -112,7 +114,11 @@ SOURCES += *.qml \
 HEADERS  += functions.h \
     # UI
     logging.h \
+    services/services.h \
     services/spotify.h \
+    services/ispotifyconnector.h \
+    services/spotifyconnectorlocal.h \
+    services/spotifyconnectorserver.h \
     tools/audio/audioicongenerator.h \
     tools/audio/audiosaveload.h \
     tools/audio/filesource/audiofilesource.h \

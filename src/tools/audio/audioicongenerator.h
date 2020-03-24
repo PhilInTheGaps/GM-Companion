@@ -19,8 +19,7 @@ public:
     ~IconWorker();
 
 public slots:
-    void generate();
-    void fetchedSpotifyIcon(QNetworkReply *reply, AudioElement *element);
+    void generateThumbnails();
 
 private:
     SettingsManager sManager;
@@ -28,20 +27,35 @@ private:
     QNetworkAccessManager *m_networkManager = nullptr;
 
     static QMap<QUrl, QImage> iconCache;
-    int m_currentSpotifyRequests = 0;
-    QQueue<AudioElement*> m_queue;
 
-    void generateCollage(AudioElement *element, int index = 0);
-    void fetchSpotifyIcon(AudioElement *element, int index = 0);
-    void startNextSpotifyRequest();
+    QImage m_musicPlaceholderImage;
+    QImage m_soundPlaceholderImage;
+    QImage getPlaceholderImage(AudioElement *element);
+    void loadPlaceholderImages();
+
+    QStringList m_spotifyIconList;
+    QList<int> m_spotifyRequestList;
+    void makeThumbnail(AudioElement *element);
+    QImage getImageFromAudioFile(AudioElement *element, AudioFile *audioFile);
+    void getImagesFromSpotify();
+
+    void insertImage(QImage image, QString uri);
+    void insertImageFromSpotifyPlaylist(QJsonObject playlist);
+    void insertImageFromSpotifyAlbum(QJsonObject album);
+    void insertImageFromSpotifyTrack(QJsonObject track);
+    void insertImageFromUrl(QString imageUrl, QString uri = "");
+
     void generateCollageImage(AudioElement *element);
-    int addCollageIcon(AudioElement *element, QImage image);
 
     QRectF getTargetRect(int imageWidth, int imageHeight, int imageCount, int index);
     QRectF getSourceRect(QRect imageRect, int imageCount, int index);
 
 private slots:
     void onSpotifyAuthorized();
+    void onReceivedSpotifyReply(int id, QNetworkReply::NetworkError error, QByteArray data);
+
+signals:
+    void getSpotifyRequest(QNetworkRequest request, int requestId);
 };
 
 class AudioIconGenerator : public QObject

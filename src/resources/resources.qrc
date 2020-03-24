@@ -120,4 +120,7 @@
         <file alias="addon.ini">addons/audio/addon.ini</file>
         <file alias="spotify.json">addons/audio/spotify.json</file>
     </qresource>
+    <qresource prefix="/services">
+        <file alias="auth-success.html">services/auth-success.html</file>
+    </qresource>
 </RCC>

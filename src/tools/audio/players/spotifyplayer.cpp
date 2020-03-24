@@ -14,7 +14,7 @@ SpotifyPlayer::SpotifyPlayer(FileManager *fManager, MetaDataReader *mDReader)
     m_networkManager = new QNetworkAccessManager;
 
     // Signals
-    connect(Spotify::getInstance(), &Spotify::receivedGet, this, &SpotifyPlayer::gotPlaylistInfo);
+    connect(Spotify::getInstance(), &Spotify::receivedReply, this, &SpotifyPlayer::gotPlaylistInfo);
 
     // Timer for "current song" updates
     m_timer         = new QTimer;
@@ -94,13 +94,7 @@ void SpotifyPlayer::play(QString id, int offset, bool playOnce)
 
         startTimer();
 
-        QTimer *tempTimer = new QTimer;
-        connect(tempTimer, &QTimer::timeout, [ = ]() {
-            getCurrentSong();
-            tempTimer->deleteLater();
-        });
-        tempTimer->setSingleShot(true);
-        tempTimer->start(1000);
+        QTimer::singleShot(1000, [ = ]() { getCurrentSong(); });
     }
     else
     {
@@ -124,8 +118,10 @@ void SpotifyPlayer::play()
 
 void SpotifyPlayer::startTimer(int interval)
 {
+    int periodicInterval = interval > 10000 ? interval / 2 : 5000;
+
     m_timer->stop();
-    m_periodicTimer->start(10000);
+    m_periodicTimer->start(periodicInterval);
 
     if (interval > 0)
     {
@@ -207,7 +203,7 @@ void SpotifyPlayer::getCurrentSong()
 
     int requestId = Spotify::getInstance()->get(request);
 
-    connect(Spotify::getInstance(), &Spotify::receivedGet, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
+    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
     {
         if (requestId != id) return;
 

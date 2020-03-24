@@ -1,4 +1,5 @@
 #include "spotify.h"
+#include "services.h"
 #include "logging.h"
 
 #include <QDesktopServices>
@@ -10,42 +11,27 @@
 #include <QUrlQuery>
 #include <QHostInfo>
 #include <QCoreApplication>
-
-#include "utils/processinfo.h"
-
-#include "o0settingsstore.h"
-#include "o0requestparameter.h"
+#include <QNetworkRequest>
 #include "o0globals.h"
+#include "utils/processinfo.h"
 
 bool Spotify::instanceFlag = false;
 Spotify *Spotify::single   = nullptr;
 
 Spotify::Spotify()
 {
-    m_o2spotify      = new O2Spotify;
     m_networkManager = new QNetworkAccessManager;
 
-    // Settings Store for tokens
-    // TODO: Replace with secure keychain or something similar
-    O0SettingsStore *settings = new O0SettingsStore("gm-companion");
-    m_o2spotify->setStore(settings);
+    updateConnector();
 
-    // Scopes
-    m_o2spotify->setScope("user-library-read playlist-read-private streaming "
-                          "user-modify-playback-state user-read-currently-playing "
-                          "user-read-playback-state");
-    m_o2spotify->setLocalPort(59991);
-
-    // Signals
-    connect(m_o2spotify,                  &O2Spotify::linkingSucceeded,   this,                &Spotify::onLinkingSucceeded);
-    connect(m_o2spotify,                  &O2Spotify::openBrowser,        this,                &Spotify::onOpenBrowser);
+    // Librespot signals
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::kill);
     connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
         emit wrongPassword();
         qCCritical(gmSpotify()) << "Librespot exited with code" << exitCode << exitStatus;
     });
-    connect(&m_librespotProcess,          &QProcess::errorOccurred, [ = ](QProcess::ProcessError error) {
+    connect(&m_librespotProcess, &QProcess::errorOccurred, [ = ](QProcess::ProcessError error) {
         qCCritical(gmSpotify) << "An error occurred with librespot:" << error;
         qCCritical(gmSpotify) << m_librespotProcess.errorString();
     });
@@ -54,8 +40,66 @@ Spotify::Spotify()
 Spotify::~Spotify()
 {
     instanceFlag = false;
-    m_o2spotify->deleteLater();
+    m_connector->deleteLater();
     m_networkManager->deleteLater();
+}
+
+void Spotify::updateConnector()
+{
+    qCDebug(gmSpotify()) << "Updating spotify connector ...";
+
+    if (m_connector)
+    {
+        delete m_connector;
+    }
+
+    if (m_sManager.getSetting(Setting::serviceConnection) == "local")
+    {
+        m_connector = new SpotifyConnectorLocal(m_networkManager);
+    }
+    else
+    {
+        m_connector = new SpotifyConnectorServer(m_networkManager);
+    }
+
+    // Connector signals
+    connect(m_connector, &ISpotifyConnector::accessGranted, this, &Spotify::onAccessGranted);
+    connect(m_connector, &ISpotifyConnector::receivedReply, this, &Spotify::onReceivedReply);
+
+    m_connector->grantAccess();
+}
+
+/**
+ * @brief Get the type of a spotify uri.
+ * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
+ * @return 0: Album, 1: Playlist, 2: Track, 3: Artist, 4: episode, 5: show -1:
+ * unknown
+ */
+int Spotify::getUriType(QString uri)
+{
+    if (uri.contains("album:")) return 0;
+
+    if (uri.contains("playlist:")) return 1;
+
+    if (uri.contains("track:")) return 2;
+
+    if (uri.contains("artist:")) return 3;
+
+    if (uri.contains("episode:")) return 4;
+
+    if (uri.contains("show:")) return 5;
+
+    return -1;
+}
+
+/**
+ * @brief Get Spotify ID from Spotify URI
+ * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
+ * @return Spotify ID like 6rqhFgbbKwnb9MLmUQDhG6
+ */
+QString Spotify::getId(QString uri)
+{
+    return uri = uri.right(uri.count() - uri.lastIndexOf(":") - 1);
 }
 
 Spotify * Spotify::getInstance()
@@ -65,198 +109,34 @@ Spotify * Spotify::getInstance()
         single       = new Spotify;
         instanceFlag = true;
     }
-
     return single;
 }
 
-void Spotify::grant()
-{
-    qCDebug(gmSpotify) << "Granting access ...";
-
-    QString id     = m_sManager.getSetting(Setting::spotifyID);
-    QString secret = m_sManager.getSetting(Setting::spotifySecret);
-
-    // Client ID and Secret
-    m_o2spotify->setClientId(id);
-    m_o2spotify->setClientSecret(secret);
-
-    if (!id.isEmpty() && !secret.isEmpty())
-    {
-        qCDebug(gmSpotify) << "Trying to link ...";
-        m_o2spotify->link();
-    }
-    else
-    {
-        qCCritical(gmSpotify) << "Client ID or Secret is empty!";
-    }
-}
-
-int Spotify::get(QNetworkRequest request)
-{
-    auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    auto requestId = requestor->get(request);
-
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
-            [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
-    {
-        emit(receivedGet(id, error, data));
-        requestor->deleteLater();
-    });
-
-    return requestId;
-}
-
-int Spotify::get(QUrl url)
-{
-    QNetworkRequest request(url);
-
-    return get(request);
-}
-
-int Spotify::put(QUrl url, QString params)
-{
-    auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    QNetworkRequest request(url);
-
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
-    int requestId = requestor->put(request, params.toLocal8Bit());
-
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
-            [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
-    {
-        qCDebug(gmSpotify) << "Completed PUT Request. ID:" << id;
-
-        if (error != QNetworkReply::NoError) qWarning() << error;
-
-        if (!data.isEmpty()) {
-            qCDebug(gmSpotify) << "Reply:";
-            qCDebug(gmSpotify) << data;
-        }
-
-        if (error == QNetworkReply::NetworkError::ContentNotFoundError)
-        {
-            forceCurrentMachine();
-        }
-
-        emit receivedPut(id, error, data);
-        requestor->deleteLater();
-    });
-
-    qCDebug(gmSpotify) << "Sending PUT Request to URL" << url << "and parameters:" << params;
-    return requestId;
-}
-
-int Spotify::post(QNetworkRequest request, QByteArray data)
-{
-    auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
-    auto requestId = requestor->post(request, data);
-
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
-            [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
-    {
-        emit(receivedPost(id, error, data));
-        requestor->deleteLater();
-    });
-
-    return requestId;
-}
-
-void Spotify::forceCurrentMachine()
+void Spotify::setDeviceActive()
 {
     qCDebug(gmSpotify) << "Setting current machine as active device ...";
 
-    auto requestor = new O2Requestor(m_networkManager, m_o2spotify, this);
+    // Get a list of all available devices.
+    // Only the device name is not enough, we need the device id.
+
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/devices"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
 
-    connect(requestor, qOverload<int, QNetworkReply::NetworkError, QByteArray>(&O2Requestor::finished),
-            [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
-    {
-        requestor->deleteLater();
-        onForcedCurrentMachine(id, error, data);
-    });
-
-    requestor->get(request);
+    m_requestMap["devices"] = m_connector->get(request);
 }
 
-void Spotify::openSpotify()
+void Spotify::onReceivedDevices(QByteArray data)
 {
-    ProcessInfo pi;
-
-    if (pi.getProcIdByName("librespot") == -1)
-    {
-        auto username = m_sManager.getSetting(Setting::spotifyUsername);
-        auto password = m_sManager.getSetting(Setting::spotifyPassword);
-
-        if (!username.isEmpty() && !password.isEmpty())
-        {
-            #if defined Q_OS_LINUX || defined Q_OS_UNIX
-            auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot";
-
-            if (QFile(librespotPath).exists()) {
-                qCDebug(gmSpotify) << "Using local librespot binary at" << librespotPath << ".";
-            } else {
-                librespotPath = QDir::homePath() + "/.cargo/bin/librespot";
-
-                if (QFile(librespotPath).exists()) {
-                    qCDebug(gmSpotify) << "Using librespot binary in cargo path:" << librespotPath << ".";
-                } else {
-                    qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
-                    librespotPath = "librespot";
-                }
-            }
-
-            m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
-                                                      "-u", username,
-                                                      "-p", password
-                                     });
-            
-            #endif // if defined Q_OS_LINUX || defined Q_OS_UNIX
-            #ifdef Q_OS_WIN
-            auto librespotPath = QCoreApplication::applicationDirPath() + "/librespot.exe";
-            m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
-                                                      "-u", username,
-                                                      "-p", password
-                                     });
-            #endif // ifdef Q_OS_WIN
-        }
-    }
-
-    forceCurrentMachine();
-}
-
-void Spotify::onLinkingSucceeded()
-{
-    if (!m_o2spotify->linked()) return;
-
-    openSpotify();
-    m_waitingForAuth = false;
-
-    qCDebug(gmSpotify) << "Access has been granted!";
-    emit authorized();
-}
-
-void Spotify::onOpenBrowser(QUrl url)
-{
-    m_authUrl        = url;
-    m_waitingForAuth = true;
-    QDesktopServices::openUrl(url);
-    emit authorize(url);
-}
-
-void Spotify::onForcedCurrentMachine(int id, QNetworkReply::NetworkError error, QByteArray data)
-{
-    if (error != QNetworkReply::NoError) qWarning() << "(onForcedCurrentMachine()) ID:" << id << error;
-
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
 
     qCDebug(gmSpotify) << "Devices:" << devices;
 
     for (auto device : devices)
     {
-        if ((device.toObject().value("name") == "GM-Companion") &&
+        if ((device.toObject().value("name") == LIBRESPOT_DEVICE_NAME) &&
             !device.toObject().value("is_active").toBool())
         {
+            // If current device was found and it is not active, make it active.
             QJsonObject parameters
             {
                 { "device_ids", QJsonArray { device.toObject().value("id") } },
@@ -269,4 +149,90 @@ void Spotify::onForcedCurrentMachine(int id, QNetworkReply::NetworkError error, 
             return;
         }
     }
+
+    qCCritical(gmSpotify) << "Could not find spotify device" << LIBRESPOT_DEVICE_NAME;
+}
+
+void Spotify::startLibrespot()
+{
+    ProcessInfo pi;
+
+    if (pi.getProcIdByName("librespot") == -1)
+    {
+        auto username      = m_sManager.getSetting(Setting::spotifyUsername);
+        auto password      = m_sManager.getSetting(Setting::spotifyPassword);
+        auto librespotPath = getLibrespotPath();
+
+        if (username.isEmpty() || password.isEmpty()) return;
+
+        m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
+                                                  "-u", username,
+                                                  "-p", password
+                                 });
+    }
+
+    setDeviceActive();
+}
+
+QString Spotify::getLibrespotPath()
+{
+    auto binaryName = "librespot";
+
+    #ifdef Q_OS_WIN
+    binaryName = librespot.exe
+    #endif // ifdef Q_OS_WIN
+
+    // First check next to gm-companion binary
+    auto librespotPath = QCoreApplication::applicationDirPath() + "/" + binaryName;
+
+    if (QFile(librespotPath).exists()) {
+        qCDebug(gmSpotify) << "Using local librespot binary at" << librespotPath << ".";
+        return librespotPath;
+    }
+
+    // Then check in cargo build directory
+    librespotPath = QDir::homePath() + "/.cargo/bin/" + binaryName;
+
+    if (QFile(librespotPath).exists()) {
+        qCDebug(gmSpotify) << "Using librespot binary in cargo path:" << librespotPath << ".";
+        return librespotPath;
+    }
+
+    // Finally try to execute from PATH
+    qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
+    return binaryName;
+}
+
+void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, QByteArray data)
+{
+    if (error != QNetworkReply::NoError) {
+        handleNetworkError(id, error, data);
+    }
+
+    if (m_requestMap["devices"] == id) {
+        onReceivedDevices(data);
+        return;
+    }
+
+    emit receivedReply(id, error, data);
+}
+
+void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, QByteArray data)
+{
+    switch (error)
+    {
+    case QNetworkReply::ContentNotFoundError:
+        qCWarning(gmSpotify) << "No active spotify device set. Will try to set the current machine.";
+        setDeviceActive();
+        break;
+
+    default:
+        qCCritical(gmSpotify) << "A network error occurred:" << id << error << data;
+    }
+}
+
+void Spotify::onAccessGranted()
+{
+    qCDebug(gmSpotify) << "Access has been granted!";
+    startLibrespot();
 }
