@@ -29,7 +29,7 @@ cp $HOME/.cargo/bin/librespot AppDir/usr/bin/
 ./linuxdeploy-x86_64.AppImage \
   --appdir AppDir \
   -e AppDir/usr/bin/librespot \
-  -d AppDir/usr/share/applications/gm-companion.desktop \
+  -d AppDir/usr/share/applications/lol.rophil.gm_companion.desktop \
   --plugin gstreamer \
   --plugin qt \
   --output appimage

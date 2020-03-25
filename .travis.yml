@@ -35,6 +35,7 @@ addons:
     sources:
     - sourceline: 'ppa:beineri/opt-qt-5.12.7-xenial'
     packages:
+    - appstream/xenial-backports
     - qt512base
     - qt512declarative
     - qt512graphicaleffects

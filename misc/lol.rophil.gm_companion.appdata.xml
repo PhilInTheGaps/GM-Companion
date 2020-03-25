@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>lol.rophil.gm_companion</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<name>GM-Companion</name>
+	<summary>A tool for rpg gamemasters</summary>
+	<icon type="stock">gm-companion</icon>
+	<description>
+		<p>GM-Companion is a tool for rpg gamemasters that can be used to play music and sounds, display maps, roll dice, keep track of combat situations and more.</p>
+	</description>
+	<categories>
+		<category>Utility</category>
+​    		<category>Audio</category>
+		<category>AudioVideo</category>
+		<category>Graphics</category>
+		<category>Player</category>
+		<category>Music</category>
+		<category>Viewer</category>
+		<category>Qt</category>
+	</categories>
+	<url type="homepage">https://gm-companion.github.io/</url>
+	<url type="help">https://gm-companion.github.io/docs/en/getting-started.html</url>
+	<x-launchable type="desktop-id">lol.rophil.gm_companion.desktop</x-launchable>
+	<releases>
+​  		<release version="1.1.0" date="2019-03-28" />
+		<release version="1.0.2" date="2018-11-11" />
+		<release version="1.0.1" date="2018-11-09" />
+​		<release version="1.0.0" date="2018-10-08" />
+	​</releases>
+	<provides>
+		<id>gm-companion</id>
+	</provides>
+	<project_license>GPL-3.0+</project_license>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://gm-companion.github.io/assets/images/screenshots/audio-tool-01.png</image>
+			<caption>The audio tool.</caption>		
+		</screenshot>
+		<screenshot>
+			<image>https://gm-companion.github.io/assets/images/screenshots/dice-tool-01.png</image>
+			<caption>The dice tool.</caption>		
+		</screenshot>
+		<screenshot>
+			<image>https://gm-companion.github.io/assets/images/screenshots/combat-tracker-01.png</image>
+			<caption>The combat tracker.</caption>		
+		</screenshot>
+		<screenshot>
+			<image>https://gm-companion.github.io/assets/images/screenshots/map-tool-01.png</image>
+			<caption>The map tool.</caption>		
+		</screenshot>
+		<screenshot>
+			<image>https://gm-companion.github.io/assets/images/screenshots/shop-tool-01.png</image>
+			<caption>The shop tool.</caption>		
+		</screenshot>
+	</screenshots>
+</component>

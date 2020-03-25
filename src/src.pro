@@ -213,18 +213,22 @@ TRANSLATIONS+=  resources/translations/gm-companion_de.ts
 	
     target.path = $$PREFIX/bin
     
-    shortcutfiles.files = ../misc/gm-companion.desktop
+    shortcutfiles.files = ../misc/lol.rophil.gm_companion.desktop
     shortcutfiles.path = $$PREFIX/share/applications/
 
-    data.files += ../misc/gm-companion.png
-    data.path = $$PREFIX/share/pixmaps/‚
+    pixmaps.files += ../misc/gm-companion.png
+    pixmaps.path = $$PREFIX/share/pixmaps/
 
-    appdata.files = ../misc/gm-companion.appdata.xml
+    icons.files += ../misc/icons/*
+    icons.path = $$PREFIX/share/icons/
+
+    appdata.files = ../misc/lol.rophil.gm_companion.appdata.xml
     appdata.path = $$PREFIX/share/metainfo/
 
     INSTALLS += shortcutfiles
-    INSTALLS += data
-    # INSTALLS += appdata
+    INSTALLS += pixmaps
+    INSTALLS += icons
+    INSTALLS += appdata
 
     LIBS += -L/usr/local/lib -ltag -lqt5keychain -lpoppler-qt5
     INCLUDEPATH += /usr/local/include
