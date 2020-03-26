@@ -15,4 +15,7 @@
 
 #define SPOTIFY_SCOPE "user-library-read playlist-read-private streaming user-modify-playback-state user-read-currently-playing user-read-playback-state"
 
+/* --- GOOGLE --- */
+#define GOOGLE_LOCAL_PORT 59993
+
 #endif // SERVICES_H

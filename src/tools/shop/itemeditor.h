@@ -6,7 +6,6 @@
 #include <QSettings>
 #include <QQmlApplicationEngine>
 #include "managers/filemanager.h"
-#include "settings/settingsmanager.h"
 
 class ItemEditor : public QObject
 {
@@ -33,7 +32,6 @@ signals:
     void itemsSaved(ItemGroup *group);
 
 private:
-    SettingsManager sManager;
     QSettings *settings;
     FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;

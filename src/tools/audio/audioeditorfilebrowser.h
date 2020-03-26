@@ -5,8 +5,6 @@
 #include <QAbstractListModel>
 #include <QQmlApplicationEngine>
 
-#include "settings/settingsmanager.h"
-
 class AudioEditorFile : public QObject
 {
     Q_OBJECT
@@ -99,7 +97,6 @@ signals:
     void typeChanged();
 
 private:
-    SettingsManager sManager;
     QString m_basePath;
     int m_type;
 

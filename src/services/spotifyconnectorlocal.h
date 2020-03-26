@@ -4,14 +4,14 @@
 #include <QObject>
 #include <QQueue>
 #include <QTimer>
-#include "ispotifyconnector.h"
+#include "spotifyconnector.h"
 #include "settings/settingsmanager.h"
 
 #include "o2spotify.h"
 #include "o2requestor.h"
 #include "o0settingsstore.h"
 
-class SpotifyConnectorLocal : public ISpotifyConnector
+class SpotifyConnectorLocal : public SpotifyConnector
 {
     Q_OBJECT
 public:
@@ -33,7 +33,6 @@ public:
 private:
     O2Spotify *m_o2spotify = nullptr;
     O0SettingsStore *m_settingsStore = nullptr;
-    SettingsManager m_sManager;
 
     void handleRateLimit(QPair<QNetworkRequest, int> requestPair);
     void startCooldown(int seconds);

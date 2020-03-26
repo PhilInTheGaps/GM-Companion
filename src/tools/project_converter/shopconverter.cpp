@@ -4,7 +4,7 @@
 
 #include <QDebug>
 #include <QSettings>
-
+#include "settings/settingsmanager.h"
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -18,12 +18,10 @@ ShopConverter::ShopConverter(QObject *parent) : QObject(parent)
 
 void ShopConverter::convert()
 {
-    SettingsManager *sManager = new SettingsManager;
-
     // ITEMS
     qDebug() << "Converting Items ...";
 
-    QString path = sManager->getSetting(Setting::shopPath);
+    QString path = SettingsManager::getPath("shopPath");
 
     if (QFile(path + "/CustomItems.items").exists())
     {

@@ -5,7 +5,6 @@
 #include <QList>
 #include <QQmlApplicationEngine>
 #include "character.h"
-#include "settings/settingsmanager.h"
 #include "managers/filemanager.h"
 #include "viewers/characterimageviewer.h"
 #include "viewers/characterdsa5viewer.h"
@@ -46,7 +45,6 @@ signals:
     void pageIndexChanged();
 
 private:
-    SettingsManager sManager;
     FileManager *fileManager = nullptr;
 
     CharacterViewer *m_currentViewer = nullptr;

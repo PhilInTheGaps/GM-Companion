@@ -1,7 +1,7 @@
 #include "audioicongenerator.h"
 #include "logging.h"
 #include "services/services.h"
-
+#include "settings/settingsmanager.h"
 #include <taglib/taglib.h>
 #include <taglib/fileref.h>
 #include <taglib/id3v2tag.h>
@@ -128,7 +128,7 @@ QImage IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audio
     if (audioFile->source() != 0) return getPlaceholderImage(element);
 
     // Resolve relative path
-    QString path = element->type() == 0 ? sManager.getSetting(Setting::musicPath) + audioFile->url() : sManager.getSetting(Setting::soundPath) + audioFile->url();
+    QString path = element->type() == 0 ? SettingsManager::getPath("musicPath") + audioFile->url() : SettingsManager::getPath("soundPath") + audioFile->url();
 
     // Check if icon cache contains image already
     if (iconCache.contains(QUrl(path)))

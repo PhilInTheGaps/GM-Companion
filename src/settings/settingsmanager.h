@@ -5,44 +5,30 @@
 #include <QStringList>
 #include <QDir>
 #include <QSettings>
+#include "settings.h"
 
-enum Setting{
-    musicPath,
-    soundPath,
-    mapsPath,
-    shopPath,
-    resourcesPath,
-    uiMode,
-    charactersPath,
-    openWhatIsNewWindow,
-    language,
-    version,
-    notesPath,
-    audioPath,
-    radioPath,
-    drive_music,
-    spotifyUsername,
-    spotifyPassword,
-    spotifyID,
-    spotifySecret,
-    serviceConnection,
-    showToolNames,
-    classicIcons,
-    googleID,
-    googleSecret,
-    googleConnect,
-    googlePath,
-    cloudMode,
-    serverUrl
-};
-
-class SettingsManager
+class SettingsManager : public QObject
 {
+    Q_OBJECT
 public:
-    SettingsManager();
+    static SettingsManager* getInstance();
+    ~SettingsManager();
 
-    void setSetting(Setting setting, int checked = 1, QString value = "", QString value2 = "");
-    QString getSetting(Setting setting, QString value = "");
+    static QString getSetting(QString setting, QString defaultValue = "", QString group = DEFAULT_GROUP);
+    static void setSetting(QString setting, QString value, QString group = DEFAULT_GROUP);
+    static void setSetting(QString setting, int value, QString group = DEFAULT_GROUP);
+
+    static QString getPath(QString setting);
+    static void setPath(QString setting, QString value);
+
+    static QString getLanguage();
+    static void setLanguage(QString language);
+
+    static QString getServerUrl();
+    static void setServerUrl(QString url);
+
+    static QString getPassword(QString username, QString service);
+    static void setPassword(QString username, QString password, QString service);
 
     void setAddonEnabled(QString addon, bool enabled);
     bool getIsAddonEnabled(QString addon);
@@ -55,14 +41,20 @@ public:
     void updateSettings();
 
 private:
+    SettingsManager();
+    static bool instanceFlag;
+    static SettingsManager *single;
+
+    QString getDefaultPath(QString setting);
+
     // Normal Settings
-    QSettings *settings;
-    QStringList settingsList;
+    QSettings *m_settings;
+    QStringList m_settingsList;
 
     // Addon Settings
-    QSettings addonSettings;
+    QSettings m_addonSettings;
 
-    QStringList officialAddons = {
+    QStringList m_officialAddons = {
         "DSA5",
         "SIFRP",
         "HowToBeAHero",

@@ -3,129 +3,81 @@
 
 SettingsTool::SettingsTool(QObject *parent) : QObject(parent)
 {
-    sManager = new SettingsManager;
 }
 
 SettingsTool::~SettingsTool()
 {
-    delete sManager;
 }
 
-void SettingsTool::setLanguage(QString lang)
+void SettingsTool::setLanguage(QString language)
 {
-    sManager->setSetting(Setting::language, true, lang);
+    SettingsManager::setLanguage(language);
 }
 
 int SettingsTool::currentLanguageIndex()
 {
-    return languages.indexOf(sManager->getSetting(Setting::language));
+    return languages.indexOf(SettingsManager::getLanguage());
 }
 
 int SettingsTool::uiStyleIndex()
 {
-    return styles.indexOf(sManager->getSetting(Setting::uiMode));
+    return styles.indexOf(SettingsManager::getSetting("uiMode"));
 }
 
 void SettingsTool::setUiStyle(QString style)
 {
-    sManager->setSetting(Setting::uiMode, true, style);
+    SettingsManager::setSetting("uiMode", style);
     emit uiStyleChanged();
 }
 
 void SettingsTool::setAddonEnabled(QString addon, bool enabled)
 {
-    sManager->setAddonEnabled(addon, enabled);
+    SettingsManager::getInstance()->setAddonEnabled(addon, enabled);
 }
 
 QString SettingsTool::getPath(QString type)
 {
-    if (type == "audio")
-    {
-        return sManager->getSetting(Setting::audioPath);
-    }
-    else if (type == "music")
-    {
-        return sManager->getSetting(Setting::musicPath);
-    }
-    else if (type == "sound")
-    {
-        return sManager->getSetting(Setting::soundPath);
-    }
-    else if (type == "radio")
-    {
-        return sManager->getSetting(Setting::radioPath);
-    }
-    else if (type == "maps")
-    {
-        return sManager->getSetting(Setting::mapsPath);
-    }
-    else if (type == "characters")
-    {
-        return sManager->getSetting(Setting::charactersPath);
-    }
-    else if (type == "notes")
-    {
-        return sManager->getSetting(Setting::notesPath);
-    }
-    else if (type == "shop")
-    {
-        return sManager->getSetting(Setting::shopPath);
-    }
-    else if (type == "resources")
-    {
-        return sManager->getSetting(Setting::resourcesPath);
-    }
-    else
-    {
-        return "";
-    }
+    return SettingsManager::getPath(type + "Path");
 }
 
 void SettingsTool::setPath(QString type, QString path)
 {
+    SettingsManager::setPath(type + "Path", path);
+
     if (type == "audio")
     {
-        sManager->setSetting(Setting::audioPath, true, path);
         emit audioPathChanged();
     }
     else if (type == "music")
     {
-        sManager->setSetting(Setting::musicPath, true, path);
         emit musicPathChanged();
     }
     else if (type == "sound")
     {
-        sManager->setSetting(Setting::soundPath, true, path);
         emit soundPathChanged();
     }
     else if (type == "radio")
     {
-        sManager->setSetting(Setting::radioPath, true, path);
         emit radioPathChanged();
     }
     else if (type == "maps")
     {
-        sManager->setSetting(Setting::mapsPath, true, path);
         emit mapsPathChanged();
     }
     else if (type == "characters")
     {
-        sManager->setSetting(Setting::charactersPath, true, path);
         emit charactersPathChanged();
     }
     else if (type == "notes")
     {
-        sManager->setSetting(Setting::notesPath, true, path);
         emit notesPathChanged();
     }
     else if (type == "shop")
     {
-        sManager->setSetting(Setting::shopPath, true, path);
         emit shopPathChanged();
     }
     else if (type == "resources")
     {
-        sManager->setSetting(Setting::resourcesPath, true, path);
         emit resourcesPathChanged();
     }
     else

@@ -40,8 +40,8 @@ public:
     Q_INVOKABLE void unlink() { drive->unlink(); }
     bool linked() const { return drive->linked(); }
 
-    Q_INVOKABLE void setClientID(QString id) { m_id = id; sManager.setSetting(Setting::googleID, 1, id); }
-    Q_INVOKABLE void setClientSecret(QString secret) { m_secret = secret; sManager.setSetting(Setting::googleSecret, 1, secret); }
+    Q_INVOKABLE void setClientID(QString id) { m_id = id; SettingsManager::setSetting("googleID", id, "Google"); }
+    Q_INVOKABLE void setClientSecret(QString secret) { m_secret = secret; SettingsManager::setSetting("googleSecret", secret, "Google"); }
 
     int getFolderContent(QString id);
     int getFile(QString id);
@@ -50,7 +50,6 @@ public:
     int getSubfolderIDs(QString parentId);
 
 private:
-    SettingsManager sManager;
     O2Google *drive;
     FolderTree *folderTree;
     QNetworkAccessManager *m_manager;

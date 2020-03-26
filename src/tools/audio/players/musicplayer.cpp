@@ -7,6 +7,7 @@
 #include "youtubeutils.h"
 #include "internal/heuristics.h"
 #include <QTimer>
+#include "settings/settingsmanager.h"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 # include <QRandomGenerator>
@@ -218,7 +219,7 @@ void MusicPlayer::loadMedia(AudioFile *file)
     switch (m_playerType)
     {
     case 0:
-        mediaPlayer->setMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::musicPath) + file->url()));
+        mediaPlayer->setMedia(QUrl::fromLocalFile(SettingsManager::getPath("musicPath") + file->url()));
         mediaPlayer->play();
         break;
 

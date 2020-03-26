@@ -1,5 +1,6 @@
 #include "convertertool.h"
 #include "functions.h"
+#include "settings/settingsmanager.h"
 #include <QSettings>
 #include <QDir>
 #include <QDebug>
@@ -20,7 +21,7 @@ void ConverterTool::addAddonUnits()
     {
         for (QString addon : getFolders(path))
         {
-            if (sManager.getIsAddonEnabled(addon))
+            if (SettingsManager::getInstance()->getIsAddonEnabled(addon))
             {
                 if (QFile(path + "/" + addon + "/units.ini").exists())
                 {

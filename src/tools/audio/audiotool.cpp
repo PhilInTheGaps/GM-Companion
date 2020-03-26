@@ -17,8 +17,6 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 {
     qDebug().noquote() << "Loading AudioTool ...";
 
-    sManager = new SettingsManager;
-
     editor         = new AudioEditor(fManager, qmlEngine, this);
     metaDataReader = new MetaDataReader;
 
@@ -95,7 +93,6 @@ AudioTool::~AudioTool()
     editor->deleteLater();
     fileManager->deleteLater();
     metaDataReader->deleteLater();
-    delete sManager;
 }
 
 /**

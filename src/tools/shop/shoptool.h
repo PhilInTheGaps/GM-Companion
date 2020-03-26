@@ -6,7 +6,6 @@
 
 #include "shopeditor.h"
 #include "shopproject.h"
-#include "settings/settingsmanager.h"
 #include "managers/filemanager.h"
 #include <QQmlApplicationEngine>
 
@@ -51,7 +50,6 @@ signals:
     void shopDescriptionChanged();
 
 private:
-    SettingsManager *sManager;
     ShopEditor *shopEditor;
     FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;

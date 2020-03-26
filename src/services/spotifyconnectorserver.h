@@ -2,7 +2,7 @@
 #define SPOTIFYCONNECTORSERVER_H
 
 #include <QObject>
-#include "ispotifyconnector.h"
+#include "spotifyconnector.h"
 #include "settings/settingsmanager.h"
 
 #include <QQueue>
@@ -22,7 +22,7 @@ struct RequestContainer {
     QByteArray data;
 };
 
-class SpotifyConnectorServer : public ISpotifyConnector
+class SpotifyConnectorServer : public SpotifyConnector
 {
     Q_OBJECT
 public:
@@ -44,7 +44,6 @@ public:
 
 private:
     O0SettingsStore *m_settingsStore = nullptr;
-    SettingsManager sManager;
 
     QTcpServer m_server;
     int m_tries = 0;

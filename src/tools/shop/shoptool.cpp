@@ -11,7 +11,6 @@ ShopTool::ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject
     qDebug() << "Loading Shop Tool ...";
 
     shopEditor = new ShopEditor(fManager, engine);
-    sManager   = new SettingsManager;
 
     itemModel = new ItemModel;
     qmlEngine->rootContext()->setContextProperty("shopItemModel", itemModel);

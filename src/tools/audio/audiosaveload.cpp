@@ -121,7 +121,7 @@ void AudioSaveLoad::fetchMusicPaths(QStringList paths)
 
         for (auto s : paths)
         {
-            urls.append(QUrl::fromLocalFile(sManager.getSetting(Setting::musicPath) + s));
+            urls.append(QUrl::fromLocalFile(SettingsManager::getPath("musicPath") + s));
         }
 
         emit songPathsChanged(urls);
@@ -153,7 +153,7 @@ void AudioSaveLoad::fetchSoundPaths(QStringList paths, QStringList args)
 
         for (auto s : paths)
         {
-            urls.append(QUrl::fromLocalFile(sManager.getSetting(Setting::soundPath) + s));
+            urls.append(QUrl::fromLocalFile(SettingsManager::getPath("soundPath") + s));
         }
 
         emit soundPathsChanged(urls, args);
@@ -180,7 +180,7 @@ void AudioSaveLoad::fetchRadioPath(QString path)
     {
     case 0: // Local
     {
-        QUrl url = QUrl::fromLocalFile(sManager.getSetting(Setting::radioPath) + path);
+        QUrl url = QUrl::fromLocalFile(SettingsManager::getPath("radioPath") + path);
         emit radioPathChanged(url);
         break;
     }
@@ -189,7 +189,7 @@ void AudioSaveLoad::fetchRadioPath(QString path)
     {
         //        googleDrive->getFileUrls({ path }, 2);
         m_relativeRadioPath = path;
-        m_radioRequestID    = googleDrive->getFolderContent(sManager.getSetting(Setting::googlePath, "radio"));
+        m_radioRequestID    = googleDrive->getFolderContent(SettingsManager::getSetting("radio", "", "Google"));
         break;
     }
 
@@ -438,7 +438,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
 
     qDebug() << "AudioSaveLoad: Saving project:" << project->name() << "...";
 
-    if (!QFile(sManager.getSetting(Setting::audioPath) + "/" + project->name() + ".audio").exists())
+    if (!QFile(SettingsManager::getPath("audioPath") + "/" + project->name() + ".audio").exists())
     {
         qDebug() << "    Project does not yet exist on disk.";
         project->setSaved(false);
@@ -468,7 +468,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
     // Write to disc
     QJsonDocument doc(root);
 
-    QFile f(sManager.getSetting(Setting::audioPath) + "/" + project->name() + ".audio");
+    QFile f(SettingsManager::getPath("audioPath") + "/" + project->name() + ".audio");
 
     if (f.open(QIODevice::WriteOnly))
     {
@@ -477,7 +477,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
 
         if (project->wasRenamed())
         {
-            QFile f2(sManager.getSetting(Setting::audioPath) + "/" + project->oldName() + ".audio");
+            QFile f2(SettingsManager::getPath("audioPath") + "/" + project->oldName() + ".audio");
             QFileInfo f2i(f2);
 
             // Safety clause, don't delete file if a project was renamed and

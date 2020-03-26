@@ -27,7 +27,7 @@ void MapsFileManager::findMaps(int mode)
     {
     case 0: // Local
     {
-        QString basePath = sManager.getSetting(Setting::mapsPath);
+        QString basePath = SettingsManager::getPath("mapsPath");
 
         // Get Categories
         for (QString f : getFolders(basePath))
@@ -116,7 +116,7 @@ void MapsFileManager::findMaps(int mode)
             m_requestIDs.removeOne(reqId);
         });
 
-        m_requestIDs.append(googleDrive->getSubfolderIDs(sManager.getSetting(Setting::googlePath, "maps")));
+        m_requestIDs.append(googleDrive->getSubfolderIDs(SettingsManager::getSetting("maps", "", "Google")));
         break;
 
     default: break;
@@ -140,7 +140,7 @@ QList<MapCategory *>MapsFileManager::getAddonMaps()
     {
         for (QString addon : getFolders(path))
         {
-            if (sManager.getIsAddonEnabled(addon) && !addon.contains("."))
+            if (SettingsManager::getInstance()->getIsAddonEnabled(addon) && !addon.contains("."))
             {
                 if (QDir(path + "/" + addon + "/maps").exists())
                 {
@@ -249,7 +249,7 @@ void MapsFileManager::saveMarkers(Map *map, QString category)
 
     auto doc = QJsonDocument(root);
 
-    QFile f(sManager.getSetting(Setting::mapsPath) + "/" + category + "/" + map->name() + ".json");
+    QFile f(SettingsManager::getPath("mapsPath") + "/" + category + "/" + map->name() + ".json");
 
     if (f.open(QIODevice::WriteOnly))
     {

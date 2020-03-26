@@ -11,7 +11,6 @@
 #include "players/radioplayer.h"
 #include "metadatareader.h"
 
-#include "settings/settingsmanager.h"
 #include "managers/filemanager.h"
 
 #include "mpris/mprisadaptor.h"
@@ -116,7 +115,6 @@ private slots:
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
 
 private:
-    SettingsManager *sManager = nullptr;
     AudioEditor *editor = nullptr;
     FileManager *fileManager = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;

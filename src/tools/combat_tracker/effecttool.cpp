@@ -1,7 +1,7 @@
 #include "effecttool.h"
 #include <QDebug>
 #include <QDir>
-
+#include "settings/settingsmanager.h"
 #include "functions.h"
 
 EffectTool::EffectTool(QObject *parent) : QObject(parent)
@@ -24,7 +24,7 @@ void EffectTool::loadAddons()
     {
         for (QString addon : getFolders(folder))
         {
-            if (!addon.contains(".") && !m_addons.contains(addon) && sManager.getIsAddonEnabled(addon) && QFile(folder + "/" + addon + "/combat_effects.ini").exists())
+            if (!addon.contains(".") && !m_addons.contains(addon) && SettingsManager::getInstance()->getIsAddonEnabled(addon) && QFile(folder + "/" + addon + "/combat_effects.ini").exists())
             {
                 m_addons.append(addon);
                 m_addonPaths.append(folder + "/" + addon);
@@ -53,7 +53,7 @@ void EffectTool::loadEffects()
     QString addon     = m_addons[index];
     QString addonPath = m_addonPaths[index];
 
-    if (sManager.getIsAddonEnabled(addon))
+    if (SettingsManager::getInstance()->getIsAddonEnabled(addon))
     {
         QSettings s(addonPath + "/combat_effects.ini", QSettings::IniFormat);
         s.setIniCodec("UTF-8");

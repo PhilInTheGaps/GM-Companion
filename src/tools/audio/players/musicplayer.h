@@ -7,7 +7,6 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "spotifyplayer.h"
-#include "settings/settingsmanager.h"
 #include "youtube.h"
 
 class MusicPlayer : public AudioPlayer
@@ -34,7 +33,6 @@ private:
     SpotifyPlayer *spotifyPlayer;
     QMediaPlayer *mediaPlayer;
     MusicElement *currentElement;
-    SettingsManager sManager;
     YouTube youtube;
 
     QList<AudioFile*> m_playlist;

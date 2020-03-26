@@ -1,6 +1,6 @@
 #include "audioeditorfilebrowser.h"
 #include "functions.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QQmlContext>
 
@@ -30,15 +30,15 @@ void AudioEditorFileBrowser::setType(int type)
     switch (type)
     {
     case 0: // Music
-        m_basePath = sManager.getSetting(Setting::musicPath);
+        m_basePath = SettingsManager::getPath("musicPath");
         break;
 
     case 1: // Sounds
-        m_basePath = sManager.getSetting(Setting::soundPath);
+        m_basePath = SettingsManager::getPath("soundPath");
         break;
 
     case 2: // Radio
-        m_basePath = sManager.getSetting(Setting::radioPath);
+        m_basePath = SettingsManager::getPath("radioPath");
         break;
 
     default:

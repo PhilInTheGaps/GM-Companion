@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QSettings>
-#include "settings/settingsmanager.h"
 
 class ColorScheme : public QObject
 {
@@ -56,7 +55,6 @@ signals:
 
 
 private:
-    SettingsManager *sManager;
     QSettings *stylesheet;
 
     QString style;

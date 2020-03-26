@@ -1,10 +1,11 @@
 #include "addonelementmanager.h"
 #include "functions.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDir>
 
 AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
 {
@@ -47,7 +48,7 @@ void AddonElementManager::findAddons()
     {
         for (QString addon : getFolders(path))
         {
-            if (!addon.startsWith(".") && sManager.getIsAddonEnabled(addon))
+            if (!addon.startsWith(".") && SettingsManager::getInstance()->getIsAddonEnabled(addon))
             {
                 m_addonPaths.append(path + "/" + addon);
                 QString spotifyFile = path + "/" + addon + "/spotify.json";

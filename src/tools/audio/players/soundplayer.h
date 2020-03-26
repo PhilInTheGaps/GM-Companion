@@ -7,7 +7,6 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "youtube.h"
-#include "settings/settingsmanager.h"
 
 class SoundPlayer : public AudioPlayer
 {
@@ -22,7 +21,6 @@ public:
 private:
     QList<QMediaPlayer*> players;
     QList<SoundElement*> elements;
-    SettingsManager sManager;
     YouTube youtube;
 
     QMap<int, QMediaPlayer*> m_ytRequestMap;

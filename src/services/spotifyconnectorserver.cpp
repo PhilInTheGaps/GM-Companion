@@ -10,7 +10,7 @@
 
 SpotifyConnectorServer::SpotifyConnectorServer
     (QNetworkAccessManager *networkManager) :
-    ISpotifyConnector(networkManager)
+    SpotifyConnector(networkManager)
 {
     m_settingsStore = new O0SettingsStore("gm-companion");
 
@@ -210,12 +210,6 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 
         auto reply = m_networkManager->get(QNetworkRequest(url));
         connect(reply, &QNetworkReply::finished, [ = ]() {
-            // Network error, maybe server is unreachable?
-            if (reply->error() != QNetworkReply::NoError)
-            {
-                qCCritical(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
-                return;
-            }
             auto params = QJsonDocument::fromJson(reply->readAll()).object();
             reply->deleteLater();
 
@@ -223,11 +217,18 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
             updateExpireTime(params["expires_in"].toInt());
 
             // If user revoked permission, the refresh token is no longer valid
-            if (params["error"].toString() == "invalid_grant")
+            if ((params["error"].toString() == "invalid_grant") || (params["error"].toString() == "invalid_client"))
             {
                 qCWarning(gmSpotifyServer()) << "Refresh token was not valid, trying to authenticate again ...";
                 saveRefreshToken("");
                 authenticate();
+                return;
+            }
+
+            // Network error, maybe server is unreachable?
+            else if (reply->error() != QNetworkReply::NoError)
+            {
+                qCCritical(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
                 return;
             }
             else if (!params["error"].toString().isEmpty())
@@ -263,7 +264,7 @@ void SpotifyConnectorServer::updateExpireTime(int expiresIn)
 
 QString SpotifyConnectorServer::getServerUrl()
 {
-    auto url = sManager.getSetting(Setting::serverUrl);
+    auto url = SettingsManager::getServerUrl();
 
     if (url.endsWith("/")) url.chop(1);
     return url;

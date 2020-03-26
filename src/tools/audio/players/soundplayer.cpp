@@ -71,7 +71,7 @@ void SoundPlayer::play(SoundElement *element)
             switch (sound->source())
             {
             case 0:
-                playlist->addMedia(QUrl::fromLocalFile(sManager.getSetting(Setting::soundPath) + sound->url()));
+                playlist->addMedia(QUrl::fromLocalFile(SettingsManager::getPath("soundPath") + sound->url()));
                 break;
 
             case 3:

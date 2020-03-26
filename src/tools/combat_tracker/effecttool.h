@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QStringList>
-#include "settings/settingsmanager.h"
 #include "effect.h"
 
 class EffectTool : public QObject
@@ -26,7 +25,6 @@ public:
     Q_INVOKABLE QString randomEffect(QString effectType);
 
 private:
-    SettingsManager sManager;
     QStringList m_addons;
     QStringList m_addonNames;
     QString m_currentAddon;

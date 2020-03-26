@@ -1,8 +1,6 @@
 #ifndef NAMEGENERATOR_H
 #define NAMEGENERATOR_H
 
-#include "settings/settingsmanager.h"
-
 #include <QObject>
 #include <QStringList>
 
@@ -28,8 +26,6 @@ signals:
     void categoriesChanged();
 
 private:
-    SettingsManager sManager;
-
     QStringList m_categories;
     QStringList m_categoryPaths;
 

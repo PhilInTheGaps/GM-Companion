@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QNetworkAccessManager>
 
-#include "settings/settingsmanager.h"
 #include "audioplayer.h"
 #include "../audioelement.h"
 #include "../metadatareader.h"
@@ -43,7 +42,6 @@ public:
 private:
     MetaDataReader *metaDataReader = nullptr;
     QNetworkAccessManager *m_networkManager = nullptr;
-    SettingsManager m_sManager;
     QTimer *m_timer;
     QTimer *m_periodicTimer;
 

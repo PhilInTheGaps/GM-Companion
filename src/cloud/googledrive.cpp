@@ -10,6 +10,7 @@
 #include <QUrlQuery>
 #include <QNetworkReply>
 #include <QDesktopServices>
+#include "services/services.h"
 
 GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
 {
@@ -17,22 +18,22 @@ GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
 
     drive      = new O2Google;
     m_manager  = new QNetworkAccessManager;
-    folderTree = new FolderTree({ sManager.getSetting(Setting::googlePath, "music"),
-                                  sManager.getSetting(Setting::googlePath, "sounds"),
-                                  sManager.getSetting(Setting::googlePath, "radio"),
-                                  sManager.getSetting(Setting::googlePath, "audio"),
-                                  sManager.getSetting(Setting::googlePath, "maps"),
-                                  sManager.getSetting(Setting::googlePath, "shop"),
-                                  sManager.getSetting(Setting::googlePath, "characters"),
-                                  sManager.getSetting(Setting::googlePath, "notes"),
-                                  sManager.getSetting(Setting::googlePath, "resources")
+    folderTree = new FolderTree({ SettingsManager::getSetting("googlePath", "music",      "Google"),
+                                  SettingsManager::getSetting("googlePath", "sounds",     "Google"),
+                                  SettingsManager::getSetting("googlePath", "radio",      "Google"),
+                                  SettingsManager::getSetting("googlePath", "audio",      "Google"),
+                                  SettingsManager::getSetting("googlePath", "maps",       "Google"),
+                                  SettingsManager::getSetting("googlePath", "shop",       "Google"),
+                                  SettingsManager::getSetting("googlePath", "characters", "Google"),
+                                  SettingsManager::getSetting("googlePath", "notes",      "Google"),
+                                  SettingsManager::getSetting("googlePath", "resources",  "Google")
                                 }, "root", this);
 
     // Auth
-    drive->setClientId(sManager.getSetting(Setting::googleID));
-    drive->setClientSecret(sManager.getSetting(Setting::googleSecret));
+    drive->setClientId(SettingsManager::getSetting("googleID", "", "Google"));
+    drive->setClientSecret(SettingsManager::getSetting("googleSecret", "", "Google"));
     drive->setScope("https://www.googleapis.com/auth/drive");
-    drive->setLocalPort(59990);
+    drive->setLocalPort(GOOGLE_LOCAL_PORT);
 
     // TODO: Replace with secure keychain or something similar
     O0SettingsStore *settings = new O0SettingsStore("gm-companion");
@@ -54,7 +55,7 @@ GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
         emit openWebsite(url);
     });
 
-    if (sManager.getSetting(Setting::googleConnect).toInt())
+    if (SettingsManager::getSetting("googleConnect", "0", "Google").toInt())
     {
         drive->link();
     }

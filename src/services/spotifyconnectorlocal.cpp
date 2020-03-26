@@ -10,7 +10,7 @@
 
 SpotifyConnectorLocal::SpotifyConnectorLocal
     (QNetworkAccessManager *networkManager) :
-    ISpotifyConnector(networkManager)
+    SpotifyConnector(networkManager)
 {
     m_o2spotify = new O2Spotify;
 
@@ -41,8 +41,8 @@ void SpotifyConnectorLocal::grantAccess()
 {
     qCDebug(gmSpotifyLocal) << "Granting access ...";
 
-    QString id     = m_sManager.getSetting(Setting::spotifyID);
-    QString secret = m_sManager.getSetting(Setting::spotifySecret);
+    QString id     = SettingsManager::getSetting("spotifyID", "", "Spotify");
+    QString secret = SettingsManager::getSetting("spotifySecret", "", "Spotify");
 
     m_o2spotify->setClientId(id);
     m_o2spotify->setClientSecret(secret);

@@ -28,7 +28,7 @@ CharacterFileManager::CharacterFileManager(GoogleDrive *google, QObject *parent)
 
         if (m_requestIDs.contains(reqId))
         {
-            if ((files.size() > 0) && (files[0].parent == sManager.getSetting(Setting::googlePath, "characters")))
+            if ((files.size() > 0) && (files[0].parent == SettingsManager::getSetting("characters", "", "Google")))
             { // PDFs
                 for (auto f : files)
                 {
@@ -68,10 +68,10 @@ void CharacterFileManager::findCharacters(int mode)
         break;
 
     case 1: // Google Drive
-        m_requestIDs.append(googleDrive->getSubfolderIDs(sManager.getSetting(Setting::googlePath, "characters")));
+        m_requestIDs.append(googleDrive->getSubfolderIDs(SettingsManager::getSetting("characters", "", "Google")));
 
         // PDFs currently disabled, will change in future
-        // m_requestIDs.append(googleDrive->getFileUrls(sManager.getSetting(Setting::googlePath,
+        // m_requestIDs.append(googleDrive->getFileUrls(SettingsManager::getSetting(Setting::googlePath,
         // "characters")));
         break;
 
@@ -83,7 +83,7 @@ void CharacterFileManager::findLocalCharacters()
 {
     qDebug() << "CharacterFileManager: Finding local characters ...";
 
-    QString path = sManager.getSetting(Setting::charactersPath);
+    QString path = SettingsManager::getPath("charactersPath");
 
     // Find image based characters
     for (auto folder : getFolders(path))

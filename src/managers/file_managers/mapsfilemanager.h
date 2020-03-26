@@ -22,7 +22,6 @@ signals:
     void mapsChanged(QList<MapCategory*> categories);
 
 private:
-    SettingsManager sManager;
     GoogleDrive *googleDrive;
 
     QList<MapCategory*> m_categories;

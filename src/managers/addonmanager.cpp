@@ -1,5 +1,6 @@
 #include "addonmanager.h"
 #include "functions.h"
+#include "settings/settingsmanager.h"
 
 #include <QDebug>
 #include <QDir>
@@ -35,7 +36,7 @@ void AddonManager::updateAddonList()
                     m_addonNames.append(settings.value("name", tr("UNKNOWN ADDON")).toString());
                     m_addonDescriptions.append(settings.value("description", "").toString());
                     m_addonPathNames.append(addon);
-                    m_addonEnabledList.append(sManager.getIsAddonEnabled(addon));
+                    m_addonEnabledList.append(SettingsManager::getInstance()->getIsAddonEnabled(addon));
                 }
                 else
                 {
@@ -44,7 +45,7 @@ void AddonManager::updateAddonList()
                     m_addonPathNames.append(addon);
                     m_addonEnabledList.append(false);
 
-                    sManager.setAddonEnabled(addon, false);
+                    SettingsManager::getInstance()->setAddonEnabled(addon, false);
                 }
             }
         }

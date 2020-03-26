@@ -6,7 +6,6 @@
 #include <QQmlApplicationEngine>
 
 #include "managers/filemanager.h"
-#include "settings/settingsmanager.h"
 #include "map.h"
 
 class MapTool : public QObject
@@ -40,7 +39,6 @@ signals:
     void markerIndexChanged();
 
 private:
-    SettingsManager sManager;
     FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
 

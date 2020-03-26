@@ -7,7 +7,6 @@
 #include <QNetworkAccessManager>
 #include <QQueue>
 #include "audioproject.h"
-#include "settings/settingsmanager.h"
 #include "services/spotify.h"
 
 class IconWorker : public QObject
@@ -22,7 +21,6 @@ public slots:
     void generateThumbnails();
 
 private:
-    SettingsManager sManager;
     QList<AudioProject*> m_projects;
     QNetworkAccessManager *m_networkManager = nullptr;
 

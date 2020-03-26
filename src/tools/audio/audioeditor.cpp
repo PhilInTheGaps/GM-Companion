@@ -1,6 +1,7 @@
 #include "audioeditor.h"
 #include "functions.h"
 #include "youtubeutils.h"
+#include "settings/settingsmanager.h"
 
 #include <algorithm>
 #include <QDebug>
@@ -17,7 +18,6 @@ AudioEditor::AudioEditor(FileManager *fManager, QQmlApplicationEngine *engine, Q
 {
     qDebug() << "Loading Audio Editor ...";
 
-    sManager            = new SettingsManager;
     addonElementManager = new AddonElementManager;
     audioExporter       = new AudioExporter;
     fileBrowser         = new AudioEditorFileBrowser(engine, this);
@@ -506,17 +506,17 @@ void AudioEditor::loadElement(QString name, int type, QString subscenario)
     {
     case 0: // Music
         element  = scenario->musicElement(name);
-        basePath = sManager->getSetting(Setting::musicPath);
+        basePath = SettingsManager::getPath("musicPath");
         break;
 
     case 1: // Sounds
         element  = scenario->soundElement(name);
-        basePath = sManager->getSetting(Setting::soundPath);
+        basePath = SettingsManager::getPath("soundPath");
         break;
 
     case 2: // Radio
         element  = scenario->radioElement(name);
-        basePath = sManager->getSetting(Setting::radioPath);
+        basePath = SettingsManager::getPath("radioPath");
         break;
 
     case 4: // Subscenario
@@ -1004,12 +1004,12 @@ void AudioEditor::removeFile(QString name, int type, int index, bool findMissing
     {
     case 0: // Music
         element  = scenario->musicElement(name);
-        basePath = sManager->getSetting(Setting::musicPath);
+        basePath = SettingsManager::getPath("musicPath");
         break;
 
     case 1: // Sounds
         element  = scenario->soundElement(name);
-        basePath = sManager->getSetting(Setting::soundPath);
+        basePath = SettingsManager::getPath("soundPath");
         break;
 
     default: return;
@@ -1070,12 +1070,12 @@ void AudioEditor::removeMissingFiles(QString name, int type)
     {
     case 0: // Music
         element  = scenario->musicElement(name);
-        basePath = sManager->getSetting(Setting::musicPath);
+        basePath = SettingsManager::getPath("musicPath");
         break;
 
     case 1: // Sounds
         element  = scenario->soundElement(name);
-        basePath = sManager->getSetting(Setting::soundPath);
+        basePath = SettingsManager::getPath("soundPath");
         break;
 
     default: return;
@@ -1395,13 +1395,13 @@ QString AudioEditor::basePath(int type)
     switch (type)
     {
     case 0: // Music
-        return sManager->getSetting(Setting::musicPath);
+        return SettingsManager::getPath("musicPath");
 
     case 1: // Sounds
-        return sManager->getSetting(Setting::soundPath);
+        return SettingsManager::getPath("soundPath");
 
     case 2: // Radio
-        return sManager->getSetting(Setting::radioPath);
+        return SettingsManager::getPath("radioPath");
 
     default: return "";
     }

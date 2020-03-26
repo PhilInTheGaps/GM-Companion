@@ -7,8 +7,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QDir>
 
-#include "settings/settingsmanager.h"
 #include "audioproject.h"
 #include "audioelement.h"
 
@@ -23,7 +23,6 @@ public:
 private:
     QString m_path;
     AudioProject* m_project;
-    SettingsManager sManager;
 
     QStringList musicFiles;
     QStringList soundFiles;
@@ -88,8 +87,6 @@ signals:
     void startCopying();
 
 private:
-    SettingsManager sManager;
-
     AudioProject* m_project = nullptr;
     AudioCategory* m_category = nullptr;
     AudioScenario* m_scenario = nullptr;

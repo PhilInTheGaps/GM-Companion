@@ -1,8 +1,6 @@
 #ifndef NOTESTOOL_H
 #define NOTESTOOL_H
 
-#include "settings/settingsmanager.h"
-
 #include <QObject>
 #include <QStringList>
 
@@ -52,8 +50,6 @@ signals:
     void currentPageChanged();
 
 private:
-    SettingsManager *sManager;
-
     QStringList m_chapters;
     QStringList m_pages;
     QString m_currentChapter;

@@ -1,12 +1,11 @@
 #include "colorscheme.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 
 ColorScheme::ColorScheme(QObject *parent) : QObject(parent)
 {
-    sManager   = new SettingsManager;
     stylesheet = new QSettings(":/ui/styles.ini", QSettings::IniFormat);
-    style      = sManager->getSetting(Setting::uiMode);
+    style      = SettingsManager::getSetting("uiMode", DEFAULT_UI_MODE);
 
     stylesheet->beginGroup(style);
 }
@@ -19,7 +18,7 @@ QString ColorScheme::getColor(QString name, QString defaultValue)
 void ColorScheme::updateColors()
 {
     stylesheet->endGroup();
-    style = sManager->getSetting(Setting::uiMode);
+    style = SettingsManager::getSetting("uiMode", DEFAULT_UI_MODE);
     stylesheet->beginGroup(style);
 
     emit colorsChanged();

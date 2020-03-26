@@ -4,18 +4,17 @@
 LocalAudioFileSource::LocalAudioFileSource(AudioSaveLoad *saveLoad, QObject *parent)
     : AudioFileSource(saveLoad, parent)
 {
-    audioSaveLoad = saveLoad;
 }
 
 int LocalAudioFileSource::findProjects(bool editor)
 {
     QList<AudioProject *> projects;
 
-    for (QString s : getFiles(sManager.getSetting(Setting::audioPath)))
+    for (QString s : getFiles(SettingsManager::getPath("audioPath")))
     {
         if (s.endsWith(".audio"))
         {
-            auto project = audioSaveLoad->initProject(sManager.getSetting(Setting::audioPath) + "/" + s);
+            auto project = m_audioSaveLoad->initProject(SettingsManager::getPath("audioPath") + "/" + s);
 
             if (project) projects.append(project);
         }
@@ -23,7 +22,7 @@ int LocalAudioFileSource::findProjects(bool editor)
 
     emit foundProjects(projects, editor);
 
-    audioSaveLoad->findIconPaths(projects, editor);
+    m_audioSaveLoad->findIconPaths(projects, editor);
 
     return m_requestCount++;
 }
@@ -40,7 +39,7 @@ int LocalAudioFileSource::findIconPaths(QStringList icons, bool editor)
         }
         else if (!icon.isEmpty())
         {
-            iconMap[icon] = sManager.getSetting(Setting::resourcesPath) + icon;
+            iconMap[icon] = SettingsManager::getPath("resourcesPath") + icon;
         }
     }
 
@@ -53,7 +52,7 @@ void LocalAudioFileSource::deleteProject(AudioProject *project)
 {
     if (!project) return;
 
-    QFile f(sManager.getSetting(Setting::audioPath) + "/" + project->name() + ".audio");
+    QFile f(SettingsManager::getPath("audioPath") + "/" + project->name() + ".audio");
 
     qDebug() << "LocalAudioFileSource: Deleting project file" << f.fileName();
 

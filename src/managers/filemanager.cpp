@@ -9,8 +9,7 @@ FileManager::FileManager()
 {
     qDebug() << "Starting FileManager ...";
 
-    google   = new GoogleDrive;
-    sManager = new SettingsManager;
+    google = new GoogleDrive;
     updateMode();
 
     audioSaveLoad        = new AudioSaveLoad(m_mode, google);
@@ -22,7 +21,6 @@ FileManager::FileManager()
 FileManager::~FileManager()
 {
     google->deleteLater();
-    delete sManager;
 }
 
 /**
@@ -112,7 +110,7 @@ bool FileManager::removeDir(const QString& dirName)
 
 void FileManager::updateMode()
 {
-    int mode = sManager->getSetting(Setting::cloudMode).toInt();
+    int mode = SettingsManager::getSetting("cloudMode", "0").toInt();
 
     m_mode = static_cast<CloudMode>(mode);
 }

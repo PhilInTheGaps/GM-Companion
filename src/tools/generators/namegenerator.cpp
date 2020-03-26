@@ -1,6 +1,6 @@
 #include "namegenerator.h"
 #include "functions.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -37,7 +37,7 @@ void NameGenerator::updateCategories()
     {
         for (QString addon : getFolders(path))
         {
-            if (!addon.contains(".") && sManager.getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
+            if (!addon.contains(".") && SettingsManager::getInstance()->getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
             {
                 QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
                 m_categories.append(settings.value("name", addon).toString());

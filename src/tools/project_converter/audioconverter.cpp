@@ -37,11 +37,9 @@ AudioConverter::AudioConverter(QObject *parent) : QObject(parent)
 
 void AudioConverter::convert()
 {
-    SettingsManager *sManager = new SettingsManager;
-
     qDebug() << "Converting Audio Projects ...";
 
-    QString basePath = sManager->getSetting(Setting::audioPath);
+    QString basePath = SettingsManager::getPath("audioPath");
 
     for (QString file : getFiles(basePath))
     {

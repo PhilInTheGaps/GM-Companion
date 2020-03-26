@@ -5,13 +5,13 @@
 #include <QNetworkReply>
 #include <QObject>
 
-class ISpotifyConnector : public QObject
+class SpotifyConnector : public QObject
 {
     Q_OBJECT
 public:
-    explicit ISpotifyConnector(QNetworkAccessManager* networkManager):
+    explicit SpotifyConnector(QNetworkAccessManager* networkManager):
         m_networkManager(networkManager) {}
-    virtual ~ISpotifyConnector() {}
+    virtual ~SpotifyConnector() {}
 
     virtual void grantAccess() = 0;
     virtual bool isAccessGranted() const = 0;

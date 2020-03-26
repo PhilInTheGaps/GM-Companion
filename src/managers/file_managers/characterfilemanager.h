@@ -22,7 +22,6 @@ signals:
     void receivedFiles(int reqId, QList<CharacterFile> files);
 
 private:
-    SettingsManager sManager;
     GoogleDrive *googleDrive = nullptr;
 
     int m_mode = 0;

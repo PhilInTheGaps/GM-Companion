@@ -1,6 +1,6 @@
 #include "charactertool.h"
 #include "functions.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QFile>
 #include <QSettings>
@@ -145,7 +145,7 @@ void CharacterTool::toggleCharacterActive(int index)
 
 void CharacterTool::loadInactiveCharacters()
 {
-    QSettings settings(sManager.getSetting(Setting::charactersPath) + "/settings.ini", QSettings::IniFormat);
+    QSettings settings(SettingsManager::getPath("charactersPath") + "/settings.ini", QSettings::IniFormat);
 
     qDebug() << "CharacterTool:" << settings.fileName();
 
@@ -154,7 +154,7 @@ void CharacterTool::loadInactiveCharacters()
 
 void CharacterTool::saveInactiveCharacters()
 {
-    QSettings settings(sManager.getSetting(Setting::charactersPath) + "/settings.ini", QSettings::IniFormat);
+    QSettings settings(SettingsManager::getPath("charactersPath") + "/settings.ini", QSettings::IniFormat);
 
     settings.setValue("inactive", m_inactiveCharacters);
 }

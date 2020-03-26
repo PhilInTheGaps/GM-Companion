@@ -2,7 +2,6 @@
 #define ADDONELEMENTMANAGER_H
 
 #include <QObject>
-#include "settings/settingsmanager.h"
 #include "audioelement.h"
 
 class AddonElementManager : public QObject
@@ -24,8 +23,6 @@ public:
     Q_INVOKABLE void addElements(bool subscenario = false, int scenarioIndex = 0);
 
 private:
-    SettingsManager sManager;
-
     void findAddons();
     QStringList m_addonPaths;
     QStringList m_spotifyFiles;

@@ -1,5 +1,5 @@
 #include "audioexporter.h"
-
+#include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -308,19 +308,19 @@ void Worker::copyFiles()
         if (i < musicFiles.size())
         {
             file    = musicFiles[i];
-            base    = sManager.getSetting(Setting::musicPath);
+            base    = SettingsManager::getPath("musicPath");
             expBase = m_path + "/music";
         }
         else if (i < musicFiles.size() + soundFiles.size())
         {
             file    = soundFiles[i - musicFiles.size()];
-            base    = sManager.getSetting(Setting::soundPath);
+            base    = SettingsManager::getPath("soundPath");
             expBase = m_path + "/sounds";
         }
         else
         {
             file    = radioFiles[i - musicFiles.size() - soundFiles.size()];
-            base    = sManager.getSetting(Setting::radioPath);
+            base    = SettingsManager::getPath("radioPath");
             expBase = m_path + "/radio";
         }
 

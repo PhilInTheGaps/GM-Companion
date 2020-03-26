@@ -42,7 +42,6 @@ public:
 
 private:
     GoogleDrive *google;
-    SettingsManager *sManager;
 
     AudioSaveLoad *audioSaveLoad;
     MapsFileManager *mapsFileManager;

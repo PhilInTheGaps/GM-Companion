@@ -112,7 +112,7 @@ void ShopFileManager::findShops(int mode, bool editor)
     }
 
     case 1: // Google Drive
-        m_projectRequestId = googleDrive->getFolderContent(sManager.getSetting(Setting::googlePath, "shop"));
+        m_projectRequestId = googleDrive->getFolderContent(SettingsManager::getSetting("shop", "", "Google"));
         break;
     }
 }
@@ -124,7 +124,7 @@ void ShopFileManager::findShops(int mode, bool editor)
 void ShopFileManager::findLocalShops(bool editor)
 {
     QList<ShopProject *> projects;
-    QString path = sManager.getSetting(Setting::shopPath);
+    QString path = SettingsManager::getPath("shopPath");
 
     qDebug() << "ShopFileManager: Path:" << path;
 
@@ -268,7 +268,7 @@ void ShopFileManager::saveProject(ShopProject *project)
     QJsonDocument doc;
     doc.setObject(projectO);
 
-    QFile f(sManager.getSetting(Setting::shopPath) + "/" + project->name() + ".shop");
+    QFile f(SettingsManager::getPath("shopPath") + "/" + project->name() + ".shop");
 
     if (f.open(QIODevice::WriteOnly))
     {
@@ -302,7 +302,7 @@ void ShopFileManager::findItems(int mode, bool editor)
     }
 
     case 1: // Google Drive
-        m_itemRequestId = googleDrive->getFolderContent(sManager.getSetting(Setting::googlePath, "shop"));
+        m_itemRequestId = googleDrive->getFolderContent(SettingsManager::getSetting("shop", "", "Google"));
         m_itemGroups.append(findAddonItems());
         emit receivedItems(m_itemGroups);
         break;
@@ -315,7 +315,7 @@ void ShopFileManager::findItems(int mode, bool editor)
  */
 void ShopFileManager::findLocalItems(bool editor)
 {
-    QString path = sManager.getSetting(Setting::shopPath);
+    QString path = SettingsManager::getPath("shopPath");
 
     if (editor)
     {
@@ -350,7 +350,7 @@ QList<ItemGroup *>ShopFileManager::findAddonItems()
                 auto  file  = path + "/" + folder + "/shop/AddonItems.items";
                 QFile f(file);
 
-                if (sManager.getIsAddonEnabled(addon) && (settings.value("addons_version", 0).toInt() > 2) && f.exists())
+                if (SettingsManager::getInstance()->getIsAddonEnabled(addon) && (settings.value("addons_version", 0).toInt() > 2) && f.exists())
                 {
                     groups.append(loadItemGroup(addon, file));
                 }
@@ -408,7 +408,7 @@ void ShopFileManager::saveItems(ItemGroup *group)
 {
     if (!group) return;
 
-    QString path = sManager.getSetting(Setting::shopPath) + "/CustomItems.items";
+    QString path = SettingsManager::getPath("shopPath") + "/CustomItems.items";
 
     QJsonObject root;
     root.insert("version", 2);

@@ -42,8 +42,7 @@ private:
     static Spotify *single;
 
     QNetworkAccessManager *m_networkManager = nullptr;
-    ISpotifyConnector *m_connector = nullptr;
-    SettingsManager m_sManager;
+    SpotifyConnector *m_connector = nullptr;
     QProcess m_librespotProcess;
     QMap<QString, int> m_requestMap;
 

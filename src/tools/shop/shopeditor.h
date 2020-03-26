@@ -4,7 +4,6 @@
 #include <QObject>
 
 #include "itemeditor.h"
-#include "settings/settingsmanager.h"
 #include "managers/filemanager.h"
 #include <QQmlApplicationEngine>
 
@@ -76,7 +75,6 @@ signals:
     void projectsSaved(QList<ShopProject*> projects);
 
 private:
-    SettingsManager sManager;
     ItemEditor *itemEditor;
     FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;

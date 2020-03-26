@@ -53,7 +53,7 @@ void Spotify::updateConnector()
         delete m_connector;
     }
 
-    if (m_sManager.getSetting(Setting::serviceConnection) == "local")
+    if (SettingsManager::getSetting("serviceConnection", "default") == "local")
     {
         m_connector = new SpotifyConnectorLocal(m_networkManager);
     }
@@ -63,8 +63,8 @@ void Spotify::updateConnector()
     }
 
     // Connector signals
-    connect(m_connector, &ISpotifyConnector::accessGranted, this, &Spotify::onAccessGranted);
-    connect(m_connector, &ISpotifyConnector::receivedReply, this, &Spotify::onReceivedReply);
+    connect(m_connector, &SpotifyConnector::accessGranted, this, &Spotify::onAccessGranted);
+    connect(m_connector, &SpotifyConnector::receivedReply, this, &Spotify::onReceivedReply);
 
     m_connector->grantAccess();
 }
@@ -159,11 +159,21 @@ void Spotify::startLibrespot()
 
     if (pi.getProcIdByName("librespot") == -1)
     {
-        auto username      = m_sManager.getSetting(Setting::spotifyUsername);
-        auto password      = m_sManager.getSetting(Setting::spotifyPassword);
+        auto username      = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
+        auto password      = SettingsManager::getPassword(username, "Spotify");
         auto librespotPath = getLibrespotPath();
 
-        if (username.isEmpty() || password.isEmpty()) return;
+        if (username.isEmpty())
+        {
+            qCCritical(gmSpotify()) << "Could not start librespot, username is not set.";
+            return;
+        }
+
+        if (password.isEmpty())
+        {
+            qCCritical(gmSpotify()) << "Could not start librespot, password is not set.";
+            return;
+        }
 
         m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
                                                   "-u", username,

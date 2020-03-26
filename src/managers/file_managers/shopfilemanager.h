@@ -25,7 +25,6 @@ signals:
 
 private:
     GoogleDrive *googleDrive;
-    SettingsManager sManager;
 
     int m_mode;
 

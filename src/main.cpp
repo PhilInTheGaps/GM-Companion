@@ -37,10 +37,9 @@ int main(int argc, char *argv[])
 
     // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";
-    SettingsManager *settingsManager = new SettingsManager;
-    QTranslator     *translator      = new QTranslator();
+    QTranslator *translator = new QTranslator();
 
-    if (translator->load("gm-companion_" + settingsManager->getSetting(Setting::language), ":/translations")) app.installTranslator(translator);
+    if (translator->load("gm-companion_" + SettingsManager::getLanguage(), ":/translations")) app.installTranslator(translator);
     else qDebug() << "Could not load translation ...";
 
     // Install fonts for FontAwesome.pri

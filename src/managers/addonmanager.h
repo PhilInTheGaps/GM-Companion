@@ -1,7 +1,6 @@
 #ifndef ADDONMANAGER_H
 #define ADDONMANAGER_H
 
-#include "settings/settingsmanager.h"
 #include <QObject>
 
 class AddonManager : public QObject
@@ -22,8 +21,6 @@ signals:
     void addonListChanged();
 
 private:
-    SettingsManager sManager;
-
     QStringList m_addonNames;
     QStringList m_addonPathNames;
     QStringList m_addonDescriptions;

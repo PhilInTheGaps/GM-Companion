@@ -12,7 +12,6 @@
 #include <QJsonArray>
 
 #include "tools/audio/audioproject.h"
-#include "settings/settingsmanager.h"
 #include "cloud/googledrive.h"
 #include "audioicongenerator.h"
 
@@ -64,7 +63,6 @@ public:
     AudioProject *initProject(QString path);
 
 private:
-    SettingsManager sManager;
     AudioIconGenerator iconGenerator;
     GoogleDrive *googleDrive;
     LocalAudioFileSource *localSource;

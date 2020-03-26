@@ -116,9 +116,10 @@ HEADERS  += functions.h \
     logging.h \
     services/services.h \
     services/spotify.h \
-    services/ispotifyconnector.h \
+    services/spotifyconnector.h \
     services/spotifyconnectorlocal.h \
     services/spotifyconnectorserver.h \
+    settings/settings.h \
     tools/audio/audioicongenerator.h \
     tools/audio/audiosaveload.h \
     tools/audio/filesource/audiofilesource.h \
