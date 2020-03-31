@@ -6,37 +6,38 @@
 
 #include "shopeditor.h"
 #include "shopproject.h"
-#include "managers/filemanager.h"
 #include <QQmlApplicationEngine>
 
 class ShopTool : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList projects READ projects NOTIFY projectsChanged)
-    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    Q_PROPERTY(QStringList shops READ shops NOTIFY shopsChanged)
-
-    Q_PROPERTY(QString shopName READ shopName NOTIFY currentShopChanged)
-    Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY currentShopChanged)
-    Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
-
 public:
-    explicit ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ShopTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     ShopEditor* getShopEditor() const { return shopEditor; }
 
+    void findShops();
+
+    Q_PROPERTY(QStringList projects READ projects NOTIFY projectsChanged)
     QStringList projects();
     Q_INVOKABLE void setCurrentProject(int index);
 
+    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
     QStringList categories();
     Q_INVOKABLE void setCurrentCategory(int index);
 
+    Q_PROPERTY(QStringList shops READ shops NOTIFY shopsChanged)
     QStringList shops();
     Q_INVOKABLE void setCurrentShop(int index);
 
+    Q_PROPERTY(QString shopName READ shopName NOTIFY currentShopChanged)
     QString shopName() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->name(); else return ""; }
+
+    Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY currentShopChanged)
     QString shopOwner() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->owner(); else return ""; }
+
+    Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
     QString shopDescription() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->description(); else return ""; }
 
 signals:
@@ -51,7 +52,6 @@ signals:
 
 private:
     ShopEditor *shopEditor;
-    FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
     ItemModel *itemModel;
 
@@ -59,7 +59,6 @@ private:
     ShopProject *m_currentProject = nullptr;
 
 private slots:
-    void projectsReceived(QList<ShopProject*> projects);
     void updateItems();
     void shopEditorSaved(QList<ShopProject*> projects);
 };

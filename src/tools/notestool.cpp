@@ -1,11 +1,13 @@
 #include "notestool.h"
-#include "functions.h"
+#include "logging.h"
 #include "settings/settingsmanager.h"
-#include <QDebug>
+#include "filesystem/filemanager.h"
 
 NotesTool::NotesTool(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading Notes Tool ...";
+    qCDebug(gmNotesTool()) << "Loading Notes Tool ...";
+
+    connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &NotesTool::onReceivedFileList);
 
     updateChapters();
 }
@@ -19,19 +21,10 @@ QStringList NotesTool::chapters()
 // Get all Chapters from Notes path
 void NotesTool::updateChapters()
 {
-    qDebug() << "Updating Notes Chapters ...";
+    qCDebug(gmNotesTool()) << "Updating Notes Chapters ...";
 
-    m_chapters.clear();
-
-    for (QString chapter : getFolders(SettingsManager::getPath("notesPath")))
-    {
-        if (!chapter.contains("."))
-        {
-            m_chapters.append(chapter);
-        }
-    }
-
-    emit chaptersChanged();
+    m_folderListRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->getFileList(m_folderListRequestId, SettingsManager::getPath("notes"), true);
 }
 
 QStringList NotesTool::pages()
@@ -41,16 +34,10 @@ QStringList NotesTool::pages()
 
 void NotesTool::updatePages()
 {
-    qDebug() << "Updating Notes Pages ...";
+    qCDebug(gmNotesTool()) << "Updating Notes Pages ...";
 
-    m_pages.clear();
-
-    for (QString page : getFiles(SettingsManager::getPath("notesPath") + "/" + m_currentChapter))
-    {
-        m_pages.append(page.replace(".txt", ""));
-    }
-
-    emit pagesChanged();
+    m_pageListRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->getFileList(m_pageListRequestId, SettingsManager::getPath("notes") + "/" + m_currentChapter, false);
 }
 
 // Returns the current chapter
@@ -76,45 +63,27 @@ QString NotesTool::currentPage()
 void NotesTool::setCurrentPage(QString page)
 {
     m_currentPage = page;
+    m_currentContent.clear();
     emit currentPageChanged();
+}
+
+void NotesTool::loadPageContent()
+{
+    auto path = SettingsManager::getPath("notes") + "/" + m_currentChapter + "/" + m_currentPage + ".txt";
+
+    m_contentRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->getFile(m_contentRequestId, path);
 }
 
 // Save current page to file
 void NotesTool::saveCurrentPageContent(QString content)
 {
-    QFile f(SettingsManager::getPath("notesPath") + "/" + m_currentChapter + "/" + m_currentPage + ".txt");
+    m_currentContent = content;
 
-    if (f.exists())
-    {
-        f.open(QFile::WriteOnly);
+    auto path = SettingsManager::getPath("notes") + "/" + m_currentChapter + "/" + m_currentPage + ".txt";
+    auto data = content.toUtf8();
 
-        QTextStream stream(&f);
-        stream.setCodec("UTF-8");
-
-        QString output = content;
-        stream << output;
-
-        f.close();
-    }
-}
-
-// Return the content of the current page
-QString NotesTool::currentPageContent()
-{
-    QString content = "";
-
-    QFile f(SettingsManager::getPath("notesPath") + "/" + m_currentChapter + "/" + m_currentPage + ".txt");
-
-    if (f.exists())
-    {
-        f.open(QIODevice::ReadOnly);
-
-        content = f.readAll();
-
-        f.close();
-    }
-
-    return content;
+    FileManager::getInstance()->saveFile(path, data);
 }
 
 void NotesTool::addChapter(QString chapter)
@@ -138,70 +107,88 @@ void NotesTool::addChapter(QString chapter)
 
 void NotesTool::addPage(QString page)
 {
-    if (page.length() > 0)
-    {
-        QFile f(SettingsManager::getPath("notesPath") + "/" + m_currentChapter + "/" + page + ".txt");
+    if (page.length() < 1) return;
 
-        if (!f.exists())
-        {
-            f.open(QIODevice::WriteOnly);
-            f.close();
-
-            updatePages();
-            emit pagesChanged();
-
-            //            m_currentPage = page;
-            emit currentPageChanged();
-        }
-    }
+    auto pages = m_pages;
+    pages.append(page);
+    pages.sort();
+    loadPages(pages);
 }
 
 void NotesTool::deleteChapter(QString chapter)
 {
-    QDir d(SettingsManager::getPath("notesPath") + "/" + chapter);
+    auto path = SettingsManager::getPath("notes") + "/" + chapter;
 
-    if (d.exists())
-    {
-        if (!d.rmdir(d.absolutePath()))
-        {
-            for (QString f : getFiles(d.absolutePath()))
-            {
-                QFile file(d.absolutePath() + "/" + f);
-                file.remove();
-            }
+    FileManager::getInstance()->deleteFile(path);
 
-            d.rmdir(d.absolutePath());
-        }
+    m_chapters.removeOne(chapter);
+    emit chaptersChanged();
 
-        updateChapters();
-        emit chaptersChanged();
+    if (m_chapters.size() > 0) m_currentChapter = m_chapters.at(0);
+    else m_currentChapter = "";
 
-        if (m_chapters.size() > 0) m_currentChapter = m_chapters.at(0);
-        else m_currentChapter = "";
-
-        emit currentChapterChanged();
-    }
+    emit currentChapterChanged();
 }
 
 void NotesTool::deletePage(QString page)
 {
-    QFile f(SettingsManager::getPath("notesPath") + "/" + m_currentChapter + "/" + page + ".txt");
+    auto path = SettingsManager::getPath("notes") + "/" + m_currentChapter + "/" + page + ".txt";
 
-    if (f.exists())
+    auto pages = m_pages;
+
+    pages.removeOne(page);
+    loadPages(pages);
+
+    if (m_pages.size() > 0) m_currentPage = m_pages.at(0);
+    else m_currentPage = "";
+    emit currentPageChanged();
+}
+
+void NotesTool::loadChapters(QStringList folders)
+{
+    m_chapters.clear();
+
+    for (QString chapter : folders)
     {
-        f.remove();
+        m_chapters.append(chapter);
+    }
 
-        updatePages();
-        emit pagesChanged();
+    emit chaptersChanged();
+}
 
-        if (m_pages.size() > 0) m_currentPage = m_pages.at(0);
-        else m_currentPage = "";
-        emit currentPageChanged();
+void NotesTool::loadPages(QStringList files)
+{
+    m_pages.clear();
+
+    for (QString page : files)
+    {
+        m_pages.append(page.replace(".txt", ""));
+    }
+
+    emit pagesChanged();
+}
+
+void NotesTool::onReceivedFileList(int requestId, QStringList files)
+{
+    if (requestId == m_folderListRequestId)
+    {
+        loadChapters(files);
+        return;
+    }
+
+    if (requestId == m_pageListRequestId)
+    {
+        loadPages(files);
+        return;
     }
 }
 
-// Returns content ROT 13 encrypted
-QString NotesTool::encrypt(QString content)
+void NotesTool::onReceivedFile(int requestId, QByteArray data)
 {
-    return rot13(content);
+    if (requestId == m_contentRequestId)
+    {
+        m_currentContent = data;
+        emit currentPageChanged();
+        return;
+    }
 }

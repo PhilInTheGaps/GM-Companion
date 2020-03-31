@@ -5,7 +5,6 @@
 #include <QStringList>
 #include <QQmlApplicationEngine>
 
-#include "managers/filemanager.h"
 #include "map.h"
 
 class MapTool : public QObject
@@ -16,7 +15,7 @@ class MapTool : public QObject
     Q_PROPERTY(int markerIndex READ markerIndex WRITE setMarkerIndex NOTIFY markerIndexChanged)
 
 public:
-    explicit MapTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit MapTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
     ~MapTool();
 
     QStringList categories();
@@ -39,7 +38,6 @@ signals:
     void markerIndexChanged();
 
 private:
-    FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
 
     QList<MapCategory*> m_categories;
@@ -49,6 +47,14 @@ private:
 
     int m_mapIndex = -1;
     int m_markerIndex = -1;
+    int m_getCategoriesRequestId = -1;
+
+    void findCategories();
+    void receivedCategories(QStringList folders);
+
+private slots:
+    void onMapsLoaded(QString category);
+    void onFileListReceived(int id, QStringList files);
 };
 
 #endif // MAPVIEWERTOOL_H

@@ -25,7 +25,7 @@ void TestSpotify::getUriType()
     QCOMPARE(Spotify::getUriType(uri), type);
 }
 
-void TestSpotify::getId_data()
+void TestSpotify::getIdFromUri_data()
 {
     QTest::addColumn<QString>("uri");
     QTest::addColumn<QString>("id");
@@ -40,12 +40,30 @@ void TestSpotify::getId_data()
     QTest::newRow("unknown") << "spotify:something:xxxxxxxxx" << "xxxxxxxxx";
 }
 
-void TestSpotify::getId()
+void TestSpotify::getIdFromUri()
 {
     QFETCH(QString, uri);
     QFETCH(QString, id);
 
-    QCOMPARE(Spotify::getId(uri), id);
+    QCOMPARE(Spotify::getIdFromUri(uri), id);
+}
+
+void TestSpotify::getIdFromHref_data()
+{
+    QTest::addColumn<QString>("href");
+    QTest::addColumn<QString>("id");
+
+    QTest::newRow("album") << "https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2" << "6akEvsycLGftJxYudPjmqK";
+    QTest::newRow("playlist") << "https://api.spotify.com/v1/users/spotify_espa%C3%B1a/playlists/21THa8j9TaSGuXYNBU5tsC/tracks" << "21THa8j9TaSGuXYNBU5tsC";
+    QTest::newRow("track") << "https://api.spotify.com/v1/tracks/5TiMM0jscVmWgMwR42RLup" << "5TiMM0jscVmWgMwR42RLup";
+}
+
+void TestSpotify::getIdFromHref()
+{
+    QFETCH(QString, href);
+    QFETCH(QString, id);
+
+    QCOMPARE(Spotify::getIdFromHref(href), id);
 }
 
 QTEST_APPLESS_MAIN(TestSpotify)

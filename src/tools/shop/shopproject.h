@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QJsonObject>
 
 #include "itemshop.h"
 
@@ -13,6 +14,8 @@ public:
     ShopCategory(QString name, QList<ItemShop*> shops);
     ShopCategory(ShopCategory *other);
     ~ShopCategory();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -35,7 +38,10 @@ class ShopProject : public QObject
 public:
     explicit ShopProject(QString name, QList<ShopCategory*> categories, QObject *parent = nullptr);
     explicit ShopProject(ShopProject *other);
+    explicit ShopProject(QJsonObject json);
     ~ShopProject();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }

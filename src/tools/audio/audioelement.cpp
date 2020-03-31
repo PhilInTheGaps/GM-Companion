@@ -1,11 +1,15 @@
 #include "audioelement.h"
+#include <QBuffer>
 #include <QDebug>
+#include <QJsonArray>
 #include <QTimer>
 #include "logging.h"
 
-AudioElement::AudioElement(QString name, AudioIcon *icon) :
-    m_name(name), m_icon(icon)
+AudioElement::AudioElement(QString name, int type, QString path) :
+    m_name(name), m_type(type)
 {
+    m_path = path + "/" + QString::number(m_type) + "/" + name;
+    m_icon = new AudioIcon(path);
 }
 
 AudioElement::~AudioElement()
@@ -18,19 +22,42 @@ AudioElement::~AudioElement()
     }
 }
 
-MusicElement::MusicElement(QString name)
+AudioElement::AudioElement(QJsonObject object, int type, QString path, QObject *parent) : QObject(parent)
 {
-    m_name = name;
+    m_name             = object["name"].toString();
+    m_relativeIconPath = object["icon"].toString();
+    m_mode             = object["mode"].toInt();
+    m_path             = path + "/" + QString::number(type) + "/" + m_name;
+    m_icon             = new AudioIcon(m_path);
+    m_type             = type;
+
+    for (auto file : object.value("files").toArray())
+    {
+        m_files.append(new AudioFile(file.toObject()));
+    }
 }
 
-SoundElement::SoundElement(QString name)
+QJsonObject AudioElement::toJson()
 {
-    m_name = name;
-}
+    QJsonObject object;
 
-RadioElement::RadioElement(QString name)
-{
-    m_name = name;
+    object.insert("name", m_name);
+    object.insert("icon", m_relativeIconPath);
+    object.insert("mode", m_mode);
+
+    // Files
+    QJsonArray files;
+
+    for (auto f : m_files)
+    {
+        files.append(QJsonObject{
+            { "url", f->url() },
+            { "source", f->source() }
+        });
+    }
+    object.insert("files", files);
+
+    return object;
 }
 
 QVariant AudioElementModel::data(const QModelIndex& index, int /*role*/) const
@@ -194,7 +221,7 @@ void AudioFileModel::append(QObject *item)
 
 bool AudioFileModel::moveRow(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild)
 {
-    if (beginMoveRows(sourceParent, sourceRow, sourceRow, sourceParent, (destinationChild > sourceRow) ? destinationChild + 1 : destinationChild))
+    if (beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, (destinationChild > sourceRow) ? destinationChild + 1 : destinationChild))
     {
         m_items.move(sourceRow, destinationChild);
         endMoveRows();
@@ -254,24 +281,24 @@ void AudioFileModel::setElements(QList<AudioFile *>elements)
     emit isEmptyChanged();
 }
 
-bool AudioIcon::addCollageIcon(QImage icon)
+bool AudioIcon::addCollageIcon(const QPair<QString, QPixmap>icon)
 {
-    if (m_collageIcons.contains(icon)) return false;
+    // Check if icon already exists
+    for (auto entry : m_collageIcons)
+    {
+        if (entry.first == icon.first) return false;
+
+        if (entry.second.cacheKey() == icon.second.cacheKey()) return false;
+    }
 
     m_collageIcons.append(icon);
-
     return true;
 }
 
-void AudioIcon::setCollageIcon(QImage icon, int index)
+void AudioIcon::setCollageIcon(const QPair<QString, QPixmap>icon, int index)
 {
     qCDebug(gmAudioTool) << "Setting collage icon to index" << index;
     qCDebug(gmAudioTool) << "   Icon count:" << m_collageIcons.length();
-
-    for (auto source : m_collageIconSources)
-    {
-        qCDebug(gmAudioTool) << "       " << source;
-    }
 
     if (m_collageIcons.length() < index)
     {
@@ -280,4 +307,10 @@ void AudioIcon::setCollageIcon(QImage icon, int index)
     }
 
     m_collageIcons.replace(index, icon);
+}
+
+AudioFile::AudioFile(QJsonObject object, QObject *parent) : QObject(parent)
+{
+    m_url    = object["url"].toString();
+    m_source = object["source"].toInt();
 }

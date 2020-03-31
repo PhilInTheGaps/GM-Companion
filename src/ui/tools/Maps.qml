@@ -32,7 +32,7 @@ Page {
         height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
 
         onCurrentIndexChanged: {
-            map_tool.setCurrentCategory(currentIndex)
+
         }
 
         background: Rectangle {
@@ -46,7 +46,8 @@ Page {
 
             onItemAdded: {
                 if (index == 0) {
-                    maps_tab_bar.currentIndex = 0
+
+                    //                    maps_tab_bar.currentIndex = 0
                 }
             }
 
@@ -77,6 +78,7 @@ Page {
                 }
 
                 onClicked: {
+                    map_tool.setCurrentCategory(index)
                     left_swipe_view.currentIndex = 0
                     left_item.visible = true
                 }
@@ -120,6 +122,7 @@ Page {
                         MapListItem {
                             name: modelData.name
                             path: modelData.path
+                            imageData: modelData.imageData
                             markers: modelData.markers
                             hasMarkers: modelData.hasMarkers
                             mapIndex: index
@@ -675,11 +678,9 @@ Page {
             flickable.returnToBounds()
         }
 
-        ScrollIndicator.vertical: ScrollIndicator {
-        }
+        ScrollIndicator.vertical: ScrollIndicator {}
 
-        ScrollIndicator.horizontal: ScrollIndicator {
-        }
+        ScrollIndicator.horizontal: ScrollIndicator {}
     }
 
     PinchArea {

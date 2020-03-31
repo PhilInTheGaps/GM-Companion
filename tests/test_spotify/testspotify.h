@@ -13,8 +13,11 @@ private slots:
     void getUriType_data();
     void getUriType();
 
-    void getId_data();
-    void getId();
+    void getIdFromUri_data();
+    void getIdFromUri();
+
+    void getIdFromHref_data();
+    void getIdFromHref();
 };
 
 #endif // TESTSPOTIFY_H

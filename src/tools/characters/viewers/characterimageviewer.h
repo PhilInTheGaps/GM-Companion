@@ -4,6 +4,8 @@
 #include "characterviewer.h"
 #include <QObject>
 
+#include <poppler/qt5/poppler-qt5.h>
+
 class CharacterImageViewer : public CharacterViewer
 {
     Q_OBJECT
@@ -13,6 +15,7 @@ class CharacterImageViewer : public CharacterViewer
 
 public:
     explicit CharacterImageViewer();
+    ~CharacterImageViewer();
 
     void setCharacter(Character* character);
 
@@ -20,16 +23,24 @@ public:
     void setCurrentCategory(int index);
 
     Q_INVOKABLE void nextImage(bool right);
-    void updateImages();
 
 signals:
     void categoryChanged();
     void categoriesChanged();
 
 private:
+    Poppler::Document *m_pdfDocument = nullptr;
+    QString m_pdfCharacter;
     QString m_image;
 
-    void setPDFImage(int index);
+    void loadImage(QByteArray data);
+    void loadPDF(int index, QByteArray data);
+    void loadPDFCategories();
+    void setPDFPage(int index);
+
+private slots:
+    void onCharacterFileListLoaded(QList<CharacterFile> files);
+    void onCharacterFileDataLoaded(int index, QByteArray data);
 };
 
 #endif // CHARACTERIMAGEVIEWER_H

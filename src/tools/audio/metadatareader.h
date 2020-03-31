@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QMediaPlayer>
-#include <QImage>
 #include <cstdlib>
+#include <QPixmap>
 
 class MetaData
 {
@@ -25,12 +25,13 @@ public:
 
 private:
     QString convertCoverImage(QMediaPlayer *mediaPlayer);
+    QString m_currentImageUrl;
 
 signals:
     void metaDataUpdated(MetaData m);
 
 public slots:
-    void updateMetaData(QMediaPlayer *mediaPlayer, QString elementIcon);
+    void updateMetaData(QMediaPlayer *mediaPlayer, QPixmap elementIcon);
 };
 
 #endif // METADATAREADER_H

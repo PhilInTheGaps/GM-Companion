@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "managers/filemanager.h"
 #include "audio/audiotool.h"
 #include "maps/maptool.h"
 #include "dicetool.h"
@@ -20,7 +19,7 @@ class ToolManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToolManager(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ToolManager(QQmlApplicationEngine *engine, QObject *parent = nullptr);
     ~ToolManager();
 
     AudioTool* getAudioTool() const { return audioTool; }
@@ -35,7 +34,6 @@ public:
     SettingsTool* getSettingsTool() const { return settingsTool; }
 
 private:
-    FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
 
     AudioTool *audioTool;

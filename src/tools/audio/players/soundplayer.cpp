@@ -1,91 +1,45 @@
 #include "soundplayer.h"
+#include "logging.h"
+#include "filesystem/filemanager.h"
+#include "settings/settingsmanager.h"
+
 #include "youtubeutils.h"
-#include <QDebug>
 #include <internal/heuristics.h>
+#include <algorithm>
+#include <random>
+#include <cstdlib>
 
-SoundPlayer::SoundPlayer(FileManager *fManager)
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+# include <QRandomGenerator>
+#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+
+SoundPlayerController::SoundPlayerController(QObject *parent) : AudioPlayer(parent)
 {
-    qDebug() << "Loading SoundPlayer ...";
-
-    fileManager = fManager;
-
-    connect(&youtube, &YouTube::receivedVideoMediaStreamInfos, this, &SoundPlayer::onYtReceivedVideoMediaStreamInfos);
 }
 
 /**
  * @brief Play a sound element
  * @param element SoundElement to be played
  */
-void SoundPlayer::play(SoundElement *element)
+void SoundPlayerController::play(AudioElement *element)
 {
     if (!element) return;
 
-    qDebug() << "Playing sound list:" << element->name() << "...";
+    qCDebug(gmAudioSounds()) << "Playing sound list:" << element->name() << "...";
 
     if (!isSoundPlaying(element))
     {
-        QMediaPlayer   *player   = new QMediaPlayer;
-        QMediaPlaylist *playlist = new QMediaPlaylist;
-        player->setPlaylist(playlist);
-        player->setObjectName(element->name());
-        player->setVolume(m_volume);
-        elements.append(element);
+        auto player = new SoundPlayer(element, m_volume, this);
 
-        connect(player, &QMediaPlayer::stateChanged, [ = ](QMediaPlayer::State state) {
-            if (state == QMediaPlayer::State::StoppedState)
-            {
-                removeElement(player->objectName());
-                players.removeAll(player);
-                player->deleteLater();
-            }
-        });
+        connect(player, &SoundPlayer::playerStopped,         this,   &SoundPlayerController::onPlayerStopped);
+        connect(this,   &SoundPlayerController::setVolume,   player, &SoundPlayer::setLogarithmicVolume);
+        connect(this,   &SoundPlayerController::stopAll,     player, &SoundPlayer::stop);
+        connect(this,   &SoundPlayerController::stopElement, player, &SoundPlayer::stopElement);
 
-        players.append(player);
-        auto sounds = element->files();
-
-
-        switch (element->mode())
-        {
-        case 0: // Shuffle Playlist
-            std::random_shuffle(sounds.begin(), sounds.end());
-            playlist->setPlaybackMode(QMediaPlaylist::Loop);
-            break;
-
-        case 2: // Loop
-            playlist->setPlaybackMode(QMediaPlaylist::Loop);
-            break;
-
-        case 1: // Complete Random Mode
-            playlist->setPlaybackMode(QMediaPlaylist::Random);
-            playlist->next();
-            break;
-
-        case 3: // Sequential
-
-            playlist->setPlaybackMode(QMediaPlaylist::Sequential);
-            break;
-        }
-
-        for (auto sound : sounds)
-        {
-            switch (sound->source())
-            {
-            case 0:
-                playlist->addMedia(QUrl::fromLocalFile(SettingsManager::getPath("soundPath") + sound->url()));
-                break;
-
-            case 3:
-                m_ytRequestMap.insert(youtube.getVideoMediaStreamInfos(YouTubeUtils::parseVideoId(sound->url())), player);
-                break;
-
-            default:
-                playlist->addMedia(QUrl(sound->url()));
-                break;
-            }
-        }
-
+        m_players.append(player);
         player->play();
-        emit soundsChanged(elements);
+
+        emit soundsChanged(elements());
     }
 }
 
@@ -94,15 +48,13 @@ void SoundPlayer::play(SoundElement *element)
  * @param element SoundElement to be checked
  * @return True if element is playing
  */
-bool SoundPlayer::isSoundPlaying(SoundElement *element)
+bool SoundPlayerController::isSoundPlaying(AudioElement *element)
 {
-    qDebug() << "Checking if sound" << element->name() << "is playing ...";
+    qCDebug(gmAudioSounds()) << "Checking if sound" << element->name() << "is playing ...";
 
-    for (auto a : players)
+    for (auto player : m_players)
     {
-        qDebug() << "   " << a->objectName();
-
-        if (a->objectName() == element->name())
+        if (player && (player->element() == element))
         {
             return true;
         }
@@ -115,79 +67,253 @@ bool SoundPlayer::isSoundPlaying(SoundElement *element)
  * @brief Set the volume for all active sound elements
  * @param volume Volume value
  */
-void SoundPlayer::setVolume(float volume)
+void SoundPlayerController::setLogarithmicVolume(int volume)
 {
     m_volume = volume;
-
-    for (auto a : players) a->setVolume(volume);
+    emit setVolume(volume);
 }
 
 /**
- * @brief Stop playback of a sound element
- * @param element SoundElement to be stopped
+ * @brief Get all active sound elements
  */
-void SoundPlayer::stop(QString element)
+QList<AudioElement *>SoundPlayerController::elements() const
 {
-    for (auto a : players)
+    QList<AudioElement *> elements;
+
+    for (auto player : m_players)
     {
-        if (a->objectName() == element)
-        {
-            a->stop();
-            players.removeAll(a);
-            a->deleteLater();
-            removeElement(element);
-            return;
-        }
+        if (player) elements.append(player->element());
     }
+
+    return elements;
 }
 
 /**
- * @brief Remove a sound element from the active list
- * @param element SoundElement to be removed
+ * @brief A sound player stopped. Remove it from list and delete it.
  */
-void SoundPlayer::removeElement(QString element)
+void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
 {
-    for (auto a : elements)
+    m_players.removeOne(player);
+    delete player;
+    emit soundsChanged(elements());
+}
+
+SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) :
+    AudioPlayer(parent), m_element(element)
+{
+    if (!element)
     {
-        if (a->name() == element)
-        {
-            elements.removeOne(a);
-            emit soundsChanged(elements);
-            return;
-        }
+        qCCritical(gmAudioSounds()) << "Error: could not initialize soundplayer, element is null";
+        return;
+    }
+
+    m_mediaPlayer = new QMediaPlayer;
+    m_mediaPlayer->setObjectName(element->name());
+    m_mediaPlayer->setVolume(volume);
+
+    connect(m_mediaPlayer,              &QMediaPlayer::mediaStatusChanged,                        this, &SoundPlayer::onMediaStatusChanged);
+    connect(m_mediaPlayer,              QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &SoundPlayer::onMediaPlayerError);
+    connect(&youtube,                   &YouTube::receivedVideoMediaStreamInfos,                  this, &SoundPlayer::onReceivedAudioStreamInfo);
+    connect(FileManager::getInstance(), &FileManager::receivedFile,                               this, &SoundPlayer::onFileReceived);
+
+    m_playlist = element->files();
+    applyShuffleMode();
+}
+
+SoundPlayer::~SoundPlayer()
+{
+    m_mediaPlayer->stop();
+    m_mediaPlayer->deleteLater();
+}
+
+void SoundPlayer::loadMedia(AudioFile *file)
+{
+    qCDebug(gmAudioSounds()) << "Loading media" << file->url();
+
+    switch (file->source())
+    {
+    case 0:
+        m_fileRequestId = FileManager::getUniqueRequestId();
+        FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("sounds") + file->url());
+        break;
+
+    case 1:
+        m_mediaPlayer->setMedia(QUrl(file->url()));
+        m_mediaPlayer->play();
+        break;
+
+    case 3:
+        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
+        break;
+
+    default:
+        qCWarning(gmAudioSounds()) << "Media type" << file->source() << "is currently not supported.";
     }
 }
 
-void SoundPlayer::onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int requestId)
+void SoundPlayer::play()
 {
-    if (!m_ytRequestMap.contains(requestId)) return;
+    if (m_element->mode() == 1)
+    {
+        next();
+    }
+    else
+    {
+        loadMedia(m_playlist.first());
+    }
+}
+
+void SoundPlayer::stop()
+{
+    m_mediaPlayer->stop();
+    emit playerStopped(this);
+}
+
+void SoundPlayer::stopElement(QString element)
+{
+    if (m_element && (m_element->name() == element))
+    {
+        m_mediaPlayer->stop();
+    }
+}
+
+void SoundPlayer::next()
+{
+    if (!m_element || (m_playlist.length() < 1))
+    {
+        emit playerStopped(this);
+        return;
+    }
+
+    // Complete random
+    if (m_element->mode() == 1)
+    {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        m_playlistIndex = QRandomGenerator::system()->bounded(m_playlist.length());
+#else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
+        m_playlistIndex = dis(gen);
+#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        loadMedia(m_playlist[m_playlistIndex]);
+        return;
+    }
+
+    // choose next in line (mode 0, 2, 3)
+    if (m_playlistIndex < m_playlist.length() - 1)
+    {
+        loadMedia(m_playlist[++m_playlistIndex]);
+    }
+
+    // loop around (Mode 0 or 2)
+    else if (m_element->mode() != 3)
+    {
+        m_playlistIndex = 0;
+        loadMedia(m_playlist[0]);
+    }
+
+    // reached end of playlist, stop
+    else
+    {
+        emit playerStopped(this);
+    }
+}
+
+void SoundPlayer::applyShuffleMode()
+{
+    if (m_element->mode() != 0) return;
+
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    QList<AudioFile *> temp;
+
+    while (!m_playlist.isEmpty())
+    {
+        temp.append(m_playlist.takeAt(QRandomGenerator::global()->bounded(m_playlist.size())));
+    }
+    m_playlist = temp;
+
+    #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    QList<AudioFile> temp;
+
+    while (!m_playlist.isEmpty())
+    {
+        std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
+        temp.append(m_playlist.takeAt(dis(gen)));
+    }
+    m_playlist = temp;
+#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+}
+
+void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::EndOfMedia)
+    {
+        next();
+    }
+}
+
+void SoundPlayer::onMediaPlayerError(QMediaPlayer::Error error)
+{
+    qCWarning(gmAudioSounds()) << error << m_mediaPlayer->errorString();
+
+    if (error == QMediaPlayer::FormatError)
+    {
+        next();
+    }
+}
+
+void SoundPlayer::onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int requestId)
+{
+    if (m_youtubeRequestId != requestId) return;
 
     QUrl   tempUrl;
     qint64 tempBitrate = 0;
-    auto   mediaPlayer = m_ytRequestMap[requestId];
-    m_ytRequestMap.remove(requestId);
-
-    if (!mediaPlayer) return;
 
     for (auto info : infos->audio())
     {
         auto encoding = Heuristics::audioEncodingToString(info->audioEncoding());
-        qDebug() << info->audioEncoding() << info->bitrate()
-                 << mediaPlayer->hasSupport("audio/" + encoding, { encoding });
+        qCDebug(gmAudioSounds()) << info->audioEncoding() << info->bitrate()
+                                 << m_mediaPlayer->hasSupport("audio/" + encoding, { encoding });
 
-        if ((mediaPlayer->hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
+        if ((m_mediaPlayer->hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
         {
             tempUrl     = info->url();
             tempBitrate = info->bitrate();
         }
     }
 
-    mediaPlayer->playlist()->addMedia(tempUrl);
+    m_mediaPlayer->setMedia(tempUrl);
 
-    if (mediaPlayer->state() != QMediaPlayer::PlayingState)
+    if (m_mediaPlayer->state() != QMediaPlayer::PlayingState)
     {
-        mediaPlayer->play();
+        m_mediaPlayer->play();
     }
 
     delete infos;
+}
+
+void SoundPlayer::onFileReceived(int requestId, QByteArray data)
+{
+    if (m_fileRequestId != requestId) return;
+
+    m_mediaPlayer->stop();
+
+    if (data.isEmpty())
+    {
+        next();
+        return;
+    }
+
+    if (m_mediaBuffer) delete m_mediaBuffer;
+
+    m_mediaData   = data;
+    m_mediaBuffer = new QBuffer(&m_mediaData);
+    m_mediaBuffer->open(QIODevice::ReadOnly);
+    m_mediaBuffer->seek(0);
+
+    m_mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
+    m_mediaPlayer->play();
 }

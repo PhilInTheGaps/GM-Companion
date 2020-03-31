@@ -14,22 +14,25 @@ CONFIG += c++14
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += main.cpp \
-    # UI
+    filesystem/fileaccessgoogledrive.cpp \
+    filesystem/fileaccesslocal.cpp \
+    filesystem/filemanager.cpp \
+    filesystem/googledrivefile.cpp \
     logging.cpp \
+    services/googledrive.cpp \
+    services/googledriveconnectorlocal.cpp \
+    services/restserviceconnectorlocal.cpp \
     services/spotify.cpp \
     services/spotifyconnectorlocal.cpp \
     services/spotifyconnectorserver.cpp \
+    tools/audio/audioelementimageprovider.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
-    tools/audio/filesource/localaudiofilesource.cpp \
     tools/audio/players/spotifyplayer.cpp \
     tools/audio/unsplash/unsplashimage.cpp \
     tools/audio/unsplash/unsplashparser.cpp \
     tools/maps/mapmarker.cpp \
     ui/colorscheme.cpp \
-    # Other
-    functions.cpp \
-    # Tools
     tools/toolmanager.cpp \
     tools/dicetool.cpp \
     tools/notestool.cpp \
@@ -37,7 +40,6 @@ SOURCES += main.cpp \
     tools/generators/namegenerator.cpp \
     tools/project_converter/projectconverter.cpp \
     tools/project_converter/shopconverter.cpp \
-    # Tools AUDIO
     tools/audio/audiotool.cpp \
     tools/project_converter/audioconverter.cpp \
     tools/audio/audioeditor.cpp \
@@ -52,44 +54,30 @@ SOURCES += main.cpp \
     tools/audio/audioelement.cpp \
     tools/audio/mpris/mprisadaptor.cpp \
     tools/audio/mpris/mprisplayeradaptor.cpp \
-    # Tools MAPS
     tools/maps/maptool.cpp \
     tools/maps/map.cpp \
-    # Tool COMBAT TRACKER
     tools/combat_tracker/effecttool.cpp \
     tools/combat_tracker/effect.cpp \
     tools/combat_tracker/combattracker.cpp \
     tools/combat_tracker/combatant.cpp \
-    # Tools Shop
     tools/shop/shopproject.cpp \
     tools/shop/itemshop.cpp \
-    # Tools CHARACTERS
     tools/characters/charactertool.cpp \
     tools/characters/character.cpp \
-    # Tools ITEMS
     tools/shop/itemeditor.cpp \
     tools/shop/shopeditor.cpp \
     tools/shop/shoptool.cpp \
-    # Managers
     managers/updatemanager.cpp \
-    managers/filemanager.cpp \
     managers/addonmanager.cpp \
-    managers/file_managers/mapsfilemanager.cpp \
-    managers/file_managers/shopfilemanager.cpp \
-    managers/file_managers/characterfilemanager.cpp \
-    # Settings
     settings/settingstool.cpp \
     settings/settingsmanager.cpp \
     platformdetails.cpp \
-    # Cloud
-    cloud/googledrive.cpp \
-    cloud/foldertree.cpp \
     tools/characters/viewers/characterimageviewer.cpp \
     tools/characters/viewers/characterviewer.cpp \
     tools/characters/viewers/characterdsa5viewer.cpp \
     tools/characters/viewers/dsa5/dsa5listitem.cpp \
-    utils/processinfo.cpp
-    # Addons
+    utils/processinfo.cpp \
+    utils/utils.cpp
 #    tools/addons/sifrp.cpp \
 
 lupdate_only{
@@ -111,34 +99,37 @@ SOURCES += *.qml \
     tools/shop/*.qml \
 }
 
-HEADERS  += functions.h \
-    # UI
+HEADERS  += filesystem/fileaccess.h \
+    filesystem/fileaccessgoogledrive.h \
+    filesystem/fileaccesslocal.h \
+    filesystem/filemanager.h \
+    filesystem/googledrivefile.h \
     logging.h \
+    services/googledrive.h \
+    services/googledriveconnectorlocal.h \
+    services/restserviceconnector.h \
+    services/restserviceconnectorlocal.h \
     services/services.h \
     services/spotify.h \
-    services/spotifyconnector.h \
     services/spotifyconnectorlocal.h \
     services/spotifyconnectorserver.h \
     settings/settings.h \
+    tools/audio/audioelementimageprovider.h \
     tools/audio/audioicongenerator.h \
     tools/audio/audiosaveload.h \
-    tools/audio/filesource/audiofilesource.h \
-    tools/audio/filesource/localaudiofilesource.h \
     tools/audio/players/spotifyplayer.h \
     tools/audio/unsplash/unsplashimage.h \
     tools/audio/unsplash/unsplashparser.h \
     tools/maps/mapmarker.h \
     ui/colorscheme.h \
-    # Other
     utils/processinfo.h \
+    utils/utils.h \
     version.h \
-    # Tools
     tools/toolmanager.h \
     tools/dicetool.h \
     tools/notestool.h \
     tools/convertertool.h \
     tools/project_converter/projectconverter.h \
-    # Tools AUDIO
     tools/audio/audiotool.h \
     tools/project_converter/audioconverter.h \
     tools/audio/audioeditor.h \
@@ -154,46 +145,30 @@ HEADERS  += functions.h \
     tools/audio/players/audioplayer.h \
     tools/audio/mpris/mprisadaptor.h \
     tools/audio/mpris/mprisplayeradaptor.h \
-    # Tools MAPS
     tools/maps/map.h \
     tools/maps/maptool.h \
-    # Tools COMBAT TRACKER
     tools/combat_tracker/combattracker.h \
     tools/combat_tracker/effecttool.h \
     tools/combat_tracker/effect.h \
     tools/combat_tracker/combatant.h \
-    # Tools Shops
     tools/shop/shopproject.h \
     tools/shop/itemshop.h \
-    # Tools CHARACTERS
     tools/characters/charactertool.h \
     tools/characters/character.h \
-    # Tools GENERATORS
     tools/generators/namegenerator.h \
-    # Tools ITEMS
     tools/project_converter/shopconverter.h \
     tools/shop/shoptool.h \
     tools/shop/itemeditor.h \
     tools/shop/shopeditor.h \
-    # Managers
     managers/updatemanager.h \
     managers/addonmanager.h \
-    managers/filemanager.h \
-    managers/file_managers/mapsfilemanager.h \
-    managers/file_managers/shopfilemanager.h \
-    managers/file_managers/characterfilemanager.h \
-    # Settings
     settings/settingstool.h \
     settings/settingsmanager.h \
     platformdetails.h \
-    # Cloud
-    cloud/googledrive.h \
-    cloud/foldertree.h \
     tools/characters/viewers/characterimageviewer.h \
     tools/characters/viewers/characterviewer.h \
     tools/characters/viewers/characterdsa5viewer.h \
     tools/characters/viewers/dsa5/dsa5listitem.h
-    # Tools ADDONS
 #    tools/addons/sifrp.h \
 
 

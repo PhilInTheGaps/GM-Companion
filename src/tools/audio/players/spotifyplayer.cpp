@@ -1,17 +1,20 @@
 #include "spotifyplayer.h"
 #include "logging.h"
-#include <QDateTime>
 #include "services/spotify.h"
-
 #include "o0globals.h"
+#include "utils/utils.h"
 
-SpotifyPlayer::SpotifyPlayer(FileManager *fManager, MetaDataReader *mDReader)
+#include <QDateTime>
+#include <QJsonArray>
+#include <QJsonDocument>
+
+SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, QObject *parent) : AudioPlayer(parent)
 {
     qDebug() << "Loading Spotify Tool ...";
 
-    fileManager      = fManager;
     metaDataReader   = mDReader;
     m_networkManager = new QNetworkAccessManager;
+    m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
     // Signals
     connect(Spotify::getInstance(), &Spotify::receivedReply, this, &SpotifyPlayer::gotPlaylistInfo);
@@ -81,7 +84,7 @@ void SpotifyPlayer::play(QString id, int offset, bool playOnce)
         QJsonDocument d;
         d.setObject(jo);
 
-        setVolume(m_volume);
+        setLogarithmicVolume(m_volume);
         QUrl url("https://api.spotify.com/v1/me/player/play");
         Spotify::getInstance()->put(url, d.toJson(QJsonDocument::JsonFormat::Compact));
 
@@ -179,11 +182,7 @@ void SpotifyPlayer::again()
     Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/seek?position_ms=" + QString::number(1)));
 }
 
-/**
- * @brief Set the volume, takes linear scale
- * @param volume Volume value from 0 to 100
- */
-void SpotifyPlayer::setVolume(int volume)
+void SpotifyPlayer::setLinearVolume(int volume)
 {
     qCDebug(gmAudioSpotify) << "Setting volume:" << volume;
     Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" +
@@ -226,7 +225,6 @@ void SpotifyPlayer::getCurrentSong()
             m.cover = album.value("images").toArray()[0].toObject().value("url").toString();
         }
 
-
         int duration = item.value("duration_ms").toInt();
         int progress = root.value("progress_ms").toInt();
 
@@ -240,27 +238,29 @@ void SpotifyPlayer::getCurrentSong()
 /**
  * @brief Get track list of current playlist or album
  */
-void SpotifyPlayer::getPlaylistTracks(QString id)
+void SpotifyPlayer::getPlaylistTracks(QString uri)
 {
     qCDebug(gmAudioSpotify) << "Getting info on current playlist or album ...";
 
     QUrl url;
+    QString id = Spotify::getIdFromUri(uri);
 
-    // Element is playlist
-    if (id.contains("playlist:"))
+    switch (Spotify::getUriType(uri))
     {
-        QString playlist = id.right(id.length() - id.lastIndexOf(':') - 1);
-        url = QUrl("https://api.spotify.com/v1/playlists/" + playlist);
-    }
+    case 0: // Album
+        url = QUrl("https://api.spotify.com/v1/albums/" + id + "/tracks");
+        break;
 
-    // Album
-    else if (id.contains("album:"))
-    {
-        QString album = id.replace("spotify:album:", "");
-        url = QUrl("https://api.spotify.com/v1/albums/" + album + "/tracks");
-    }
-    else
-    {
+    case 1: // Playlist
+        url = QUrl("https://api.spotify.com/v1/playlists/" + id + "/tracks");
+        break;
+
+    case 2: // Track
+        url = QUrl("https://api.spotify.com/v1/tracks/" + id);
+        break;
+
+    default:
+        qCCritical(gmAudioSpotify()) << "Could not get tracks, unknown uri type" << uri;
         return;
     }
 
@@ -275,47 +275,52 @@ void SpotifyPlayer::getPlaylistTracks(QString id)
  * @param error Request Error
  * @param data Contains the received data in json form
  */
-void SpotifyPlayer::gotPlaylistInfo(int id, QNetworkReply::NetworkError error, QByteArray data)
+void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError error, QByteArray data)
 {
-    if (!(m_requestIdMap.contains("getPlaylistTracks") && (id == m_requestIdMap["getPlaylistTracks"]))) return;
+    if (!(m_requestIdMap.contains("getPlaylistTracks") && (requestId == m_requestIdMap["getPlaylistTracks"]))) return;
 
-    qCDebug(gmAudioSpotify) << "Got playlist info." << id;
+    qCDebug(gmAudioSpotify) << "Got playlist info." << requestId;
 
-    if (error != QNetworkReply::NoError) qWarning() << "    Error:" << error;
+    if (error != QNetworkReply::NoError) qCWarning(gmAudioSpotify()) << "    Error:" << error;
 
     const auto root = QJsonDocument::fromJson(data).object();
-    bool isPlaylist = false;
-    QJsonArray tracks;
-
-    if (root.value("items").isArray()) // Album
-    {
-        tracks = root.value("items").toArray();
-    }
-    else // Playlist
-    {
-        tracks     = root.value("tracks").toObject().value("items").toArray();
-        isPlaylist = true;
-    }
+    const auto href = root["href"].toString();
 
     m_trackList.clear();
     m_trackIdList.clear();
-    QList<SpotifyTrack> trackList;
-    QString playlistId = root.value("id").toString();
 
-    for (auto t : tracks)
+    if (href.contains("albums") || href.contains("playlists"))
     {
-        QJsonObject trackObject = isPlaylist ? t.toObject().value("track").toObject() : t.toObject();
+        auto id = Spotify::getIdFromHref(href);
+        QList<SpotifyTrack> trackList;
 
-        if (trackObject.value("available_markets").toArray().isEmpty()) continue;
+        for (auto track : root["items"].toArray())
+        {
+            auto trackObject = track.toObject().contains("track") ? track.toObject()["track"].toObject() : track.toObject();
 
-        SpotifyTrack track;
-        track.title = trackObject.value("name").toString();
-        track.id    = trackObject.value("uri").toString();
+            if (trackObject.value("available_markets").toArray().isEmpty()) continue;
 
-        trackList.append(track);
-        m_trackList.append(track.title);
-        m_trackIdList.append(track.id);
+            SpotifyTrack spotifyTrack;
+            spotifyTrack.title = trackObject["name"].toString();
+            spotifyTrack.uri   = trackObject["uri"].toString();
+
+            trackList.append(spotifyTrack);
+            m_trackList.append(spotifyTrack.title);
+            m_trackIdList.append(spotifyTrack.uri);
+        }
+
+        emit receivedPlaylistTracks(trackList, id);
     }
-
-    emit receivedPlaylistTracks(trackList, playlistId);
+    else if (href.contains("tracks"))
+    {
+        SpotifyTrack track;
+        track.title = root["name"].toString();
+        track.uri   = root["uri"].toString();
+        emit receivedPlaylistTracks({ track }, Spotify::getIdFromUri(track.uri));
+    }
+    else
+    {
+        qCCritical(gmAudioSpotify()) << "Received unknown track info" << data;
+        return;
+    }
 }

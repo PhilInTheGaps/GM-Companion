@@ -12,8 +12,12 @@ public:
     QString name() const { return m_name; }
     QString path() const { return m_path; }
 
+    QByteArray data() const { return m_data; }
+    void setData(QByteArray data) { m_data = data; }
+
 private:
     QString m_name, m_path;
+    QByteArray m_data;
 };
 
 class Character : public QObject
@@ -27,25 +31,28 @@ public:
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
 
+    int type() const;
+
     QList<CharacterFile> files() const { return m_files; }
     void setFiles(QList<CharacterFile> files) { m_files = files; }
     void addFile(CharacterFile file) { m_files.append(file); }
 
-    int type() const;
+    void loadFiles();
+    void loadFileList();
+    void loadFileData(int index);
 
-    QString cloudId() const { return m_cloudId; }
-    void setCloudId(QString id) { m_cloudId = id; }
-
-    int requestId() const { return m_requestId; }
-    void setRequestId(int id) { m_requestId = id; }
+    void setFolder(QString folder) { m_folder = folder; }
 
 signals:
     void nameChanged();
+    void fileListLoaded(QList<CharacterFile> files);
+    void fileDataLoaded(int index, QByteArray data);
 
 private:
-    QString m_name, m_cloudId;
+    QString m_name, m_folder;
     int m_requestId = -1;
     QList<CharacterFile> m_files;
+    bool m_wasLoaded = false;
 
 };
 

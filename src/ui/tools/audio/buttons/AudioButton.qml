@@ -9,7 +9,6 @@ Rectangle {
     property var element_name
     property var icon
     property var element_type
-    property bool has_icon: true
     property bool overlay_enabled: true
     property bool small_mode: false
     property string subscenario_name: ""
@@ -26,45 +25,33 @@ Rectangle {
         }
     }
 
-    property var default_icon: {
-        if (element_type === 0) {
-            "/icons/media/music_image.png"
-        } else if (element_type === 1) {
-            "/icons/media/sound_image.png"
-        } else if (element_type === 2) {
-            "/icons/media/radio_image.png"
-        }
-    }
-
     height: small_mode ? color_scheme.toolbarHeight : width
 
     color: color_scheme.backgroundColor
 
     Image {
         id: thumbnail
-        source: if (icon.background.startsWith("http")) {
-                    icon.background
-                } else if (icon.background.startsWith("data:")) {
-                    icon.background
-                } else if (has_icon) {
-                    "file:///" + icon.background
-                } else {
-                    default_icon
-                }
+        property bool counter: false
 
-        onStatusChanged: {
-            if (status == Image.Error && source !== default_icon) {
-                source = default_icon
-            }
-        }
-
+        source: "image://audioElementIcons/" + icon.imageId
         anchors.fill: parent
         asynchronous: true
+        cache: false
 
         fillMode: small_mode ? Image.PreserveAspectCrop : Image.Stretch
 
         sourceSize.width: 400
         sourceSize.height: 400
+
+        function reload() {
+            counter = !counter
+            source = "image://audioElementIcons/" + icon.imageId + "?r=" + counter
+        }
+
+        Connections {
+            target: icon
+            onIconChanged: thumbnail.reload()
+        }
     }
 
     BusyIndicator {

@@ -1,31 +1,44 @@
 #include "itemeditor.h"
+#include "logging.h"
+#include "filesystem/filemanager.h"
+#include "settings/settingsmanager.h"
 
-#include <QDebug>
+#include <QJsonDocument>
 #include <QQmlContext>
 
-ItemEditor::ItemEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), fileManager(fManager), qmlEngine(engine)
+ItemEditor::ItemEditor(QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), qmlEngine(engine)
 {
     qDebug() << "Loading Item Editor ...";
 
     itemModel = new ItemModel;
     qmlEngine->rootContext()->setContextProperty("itemEditorItemModel", itemModel);
 
-    connect(fManager->getShopFileManager(), &ShopFileManager::receivedEditorItems, this, &ItemEditor::receivedItems);
-
-    fManager->getShopFileManager()->findItems(fManager->getModeInt(), true);
+    findItems();
 }
 
-/**
- * @brief ShopFileManager found items
- * @param group ItemGroup with custom items
- */
-void ItemEditor::receivedItems(ItemGroup *group)
+void ItemEditor::findItems()
 {
-    qDebug() << "ItemEditor: Received items!";
-    m_itemGroup = group;
-    updateCategories();
-    updateItemModel();
+    qCDebug(gmShopsItemEditor()) << "Finding items ...";
+
+    auto requestId = FileManager::getUniqueRequestId();
+    auto context   = new QObject;
+
+    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
+        qCDebug(gmShopsItemEditor()) << "Test" << requestId << id;
+
+        if (id != requestId) return;
+
+        qCDebug(gmShopsItemEditor()) << "Received custom items.";
+
+        m_itemGroup = new ItemGroup(tr("Custom"), QJsonDocument::fromJson(data).object());
+        updateCategories();
+        updateItemModel();
+
+        delete context;
+    });
+
+    FileManager::getInstance()->getFile(requestId, SettingsManager::getPath("shops") + "/CustomItems.items");
 }
 
 /**
@@ -149,10 +162,12 @@ void ItemEditor::save()
     if (m_isSaved) return;
 
     // Save to disk
-    fileManager->getShopFileManager()->saveItems(m_itemGroup);
+    auto savePath = SettingsManager::getPath("shops") + "/CustomItems.items";
+    auto data     = QJsonDocument(m_itemGroup->toJson()).toJson();
+    FileManager::getInstance()->saveFile(savePath, data);
 
     // Copy all items and send them to the shop editor
-    ItemGroup *copy = new ItemGroup(m_itemGroup);
+    auto copy = new ItemGroup(m_itemGroup);
     emit itemsSaved(copy);
 
     // Notify editor

@@ -1,6 +1,5 @@
 #include "audioconverter.h"
 #include "settings/settingsmanager.h"
-#include "functions.h"
 
 #include <QDebug>
 #include <QSettings>
@@ -41,8 +40,9 @@ void AudioConverter::convert()
 
     QString basePath = SettingsManager::getPath("audioPath");
 
-    for (QString file : getFiles(basePath))
-    {
+    /*
+       for (QString file : getFiles(basePath))
+       {
         if (file.endsWith(".ini"))
         {
             QFile   f(basePath + "/" + file);
@@ -58,7 +58,8 @@ void AudioConverter::convert()
 
             int file_version = settings.value("version", 0).toInt();
 
-            if ((file_version == 0) && settings.value("ProjectName", "").toString().isEmpty())
+            if ((file_version == 0) && settings.value("ProjectName",
+               "").toString().isEmpty())
             {
                 QFile f(basePath + "/" + file);
 
@@ -93,7 +94,8 @@ void AudioConverter::convert()
                 // Scenarios
                 for (int i = 0; i < catCount; i++)
                 {
-                    int scenCount = settings.beginReadArray(categories.at(i) + "_Scenarios");
+                    int scenCount = settings.beginReadArray(categories.at(i) +
+                       "_Scenarios");
 
                     QStringList scenarios;
 
@@ -118,7 +120,9 @@ void AudioConverter::convert()
                         // Music Lists
                         QList<MusicList> musicLists;
 
-                        int mListCount = settings.beginReadArray(categories.at(i) + "_" + scenarios.at(j) + "_MusicLists");
+                        int mListCount =
+                           settings.beginReadArray(categories.at(i) + "_" +
+                           scenarios.at(j) + "_MusicLists");
 
                         for (int k = 0; k < mListCount; k++)
                         {
@@ -130,13 +134,17 @@ void AudioConverter::convert()
 
                             int mode = 0;
 
-                            if (settings.value("randomPlaylist", false).toBool()) mode = 0;
+                            if (settings.value("randomPlaylist",
+                               false).toBool()) mode = 0;
 
-                            if (settings.value("randomPlayback", false).toBool()) mode = 1;
+                            if (settings.value("randomPlayback",
+                               false).toBool()) mode = 1;
 
-                            if (settings.value("loop", false).toBool()) mode = 2;
+                            if (settings.value("loop", false).toBool()) mode =
+                               2;
 
-                            if (settings.value("sequential", false).toBool()) mode = 3;
+                            if (settings.value("sequential", false).toBool())
+                               mode = 3;
 
                             list.mode = mode;
 
@@ -169,7 +177,9 @@ void AudioConverter::convert()
                         // Sound Lists
                         QList<SoundList> soundLists;
 
-                        int sListCount = settings.beginReadArray(categories.at(i) + "_" + scenarios.at(j) + "_SoundLists");
+                        int sListCount =
+                           settings.beginReadArray(categories.at(i) + "_" +
+                           scenarios.at(j) + "_SoundLists");
 
                         for (int k = 0; k < sListCount; k++)
                         {
@@ -181,13 +191,17 @@ void AudioConverter::convert()
 
                             int mode = 0;
 
-                            if (settings.value("randomPlaylist", false).toBool()) mode = 0;
+                            if (settings.value("randomPlaylist",
+                               false).toBool()) mode = 0;
 
-                            if (settings.value("random", false).toBool()) mode = 1;
+                            if (settings.value("random", false).toBool()) mode =
+                               1;
 
-                            if (settings.value("loop", false).toBool()) mode = 2;
+                            if (settings.value("loop", false).toBool()) mode =
+                               2;
 
-                            if (settings.value("sequential", false).toBool()) mode = 3;
+                            if (settings.value("sequential", false).toBool())
+                               mode = 3;
 
                             list.mode = mode;
 
@@ -220,7 +234,8 @@ void AudioConverter::convert()
                         // Radios
                         QList<Radio> radios;
 
-                        int rCount = settings.beginReadArray(categories.at(i) + "_" + scenarios.at(j) + "_Radios");
+                        int rCount = settings.beginReadArray(categories.at(i) +
+                           "_" + scenarios.at(j) + "_Radios");
 
                         for (int k = 0; k < rCount; k++)
                         {
@@ -230,7 +245,8 @@ void AudioConverter::convert()
                             radio.name     = settings.value("name").toString();
                             radio.iconPath = settings.value("icon").toString();
                             radio.url      = settings.value("URL").toString();
-                            radio.local    = radio.url.startsWith("http") ? false : true;
+                            radio.local    = radio.url.startsWith("http") ?
+                               false : true;
 
                             radios.append(radio);
                         }
@@ -254,7 +270,8 @@ void AudioConverter::convert()
                             musicLists.append(musicListsList.at(k).at(l).name);
                         }
 
-                        settings.setValue(scenarios.at(k) + "_music", musicLists);
+                        settings.setValue(scenarios.at(k) + "_music",
+                           musicLists);
 
                         // Sound Lists
                         QStringList soundLists;
@@ -264,7 +281,8 @@ void AudioConverter::convert()
                             soundLists.append(soundListsList.at(k).at(l).name);
                         }
 
-                        settings.setValue(scenarios.at(k) + "_sounds", soundLists);
+                        settings.setValue(scenarios.at(k) + "_sounds",
+                           soundLists);
 
                         // Radios
                         QStringList radios;
@@ -287,7 +305,8 @@ void AudioConverter::convert()
                         {
                             MusicList list = musicListsList.at(k).at(l);
                             QString   name = list.name;
-                            settings.beginGroup(categories.at(i) + "_" + scenarios.at(k) + "_" + name + "_music");
+                            settings.beginGroup(categories.at(i) + "_" +
+                               scenarios.at(k) + "_" + name + "_music");
 
                             settings.setValue("name", name);
                             settings.setValue("icon", list.iconPath);
@@ -311,7 +330,8 @@ void AudioConverter::convert()
                         {
                             SoundList list = soundListsList.at(k).at(l);
                             QString   name = list.name;
-                            settings.beginGroup(categories.at(i) + "_" + scenarios.at(k) + "_" + name + "_sounds");
+                            settings.beginGroup(categories.at(i) + "_" +
+                               scenarios.at(k) + "_" + name + "_sounds");
 
                             settings.setValue("name", name);
                             settings.setValue("icon", list.iconPath);
@@ -335,7 +355,8 @@ void AudioConverter::convert()
                         {
                             Radio   radio = radioListsList.at(k).at(l);
                             QString name  = radio.name;
-                            settings.beginGroup(categories.at(i) + "_" + scenarios.at(k) + "_" + name + "_radio");
+                            settings.beginGroup(categories.at(i) + "_" +
+                               scenarios.at(k) + "_" + name + "_radio");
 
                             settings.setValue("name",   name);
                             settings.setValue("icon",  radio.iconPath);
@@ -353,7 +374,8 @@ void AudioConverter::convert()
                 file_version = 2;
                 settings.setValue("version", 2);
 
-                QStringList toRemove = { "_MusicList", "_MusicLists", "_Order", "_SoundLists", "_SoundList", "_Radios" };
+                QStringList toRemove = { "_MusicList", "_MusicLists", "_Order",
+                   "_SoundLists", "_SoundList", "_Radios" };
 
                 for (QString group : settings.childGroups())
                 {
@@ -384,7 +406,7 @@ void AudioConverter::convert()
                 qDebug() << "   Project has already been converted.";
             }
         }
-    }
+       }*/
 }
 
 void AudioConverter::convertTo3(QString file)
@@ -396,8 +418,8 @@ void AudioConverter::convertTo3(QString file)
 
     // Basic Info
     QJsonObject project;
-    project.insert("name", settings.value("ProjectName").toString());
-    project.insert("version",     3);
+    project.insert("name",    settings.value("ProjectName").toString());
+    project.insert("version", 3);
 
     // Categories
     QJsonArray  categories;
@@ -439,7 +461,7 @@ void AudioConverter::convertTo3(QString file)
             {
                 QJsonObject element;
                 settings.beginGroup(c + "_" + s + "_" + e + "_music");
-                element.insert("name",        e);
+                element.insert("name", e);
                 element.insert("icon", settings.value("icon").toString());
                 element.insert("mode", settings.value("mode").toInt());
 
@@ -466,7 +488,7 @@ void AudioConverter::convertTo3(QString file)
             {
                 QJsonObject element;
                 settings.beginGroup(c + "_" + s + "_" + e + "_sounds");
-                element.insert("name",        e);
+                element.insert("name", e);
                 element.insert("icon", settings.value("icon").toString());
                 element.insert("mode", settings.value("mode").toInt());
 
@@ -493,7 +515,7 @@ void AudioConverter::convertTo3(QString file)
             {
                 QJsonObject element;
                 settings.beginGroup(c + "_" + s + "_" + e + "_radio");
-                element.insert("name",         e);
+                element.insert("name",  e);
                 element.insert("icon",  settings.value("icon").toString());
                 element.insert("url",   settings.value("url").toString());
                 element.insert("local", settings.value("local", false).toBool());
@@ -506,16 +528,16 @@ void AudioConverter::convertTo3(QString file)
             {
                 QJsonObject element;
                 settings.beginGroup(c + "_" + s + "_" + e + "_spotify");
-                element.insert("name",        e);
+                element.insert("name", e);
                 element.insert("icon", settings.value("icon").toString());
                 element.insert("id",   settings.value("id").toString());
                 settings.endGroup();
                 spotifyElements.append(element);
             }
 
-            scenario.insert("music_elements",     musicElements);
-            scenario.insert("sound_elements",     soundElements);
-            scenario.insert("radio_elements",     radioElements);
+            scenario.insert("music_elements",   musicElements);
+            scenario.insert("sound_elements",   soundElements);
+            scenario.insert("radio_elements",   radioElements);
             scenario.insert("spotify_elements", spotifyElements);
             scenarios.append(scenario);
         }

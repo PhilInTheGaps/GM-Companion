@@ -1,45 +1,46 @@
 #include "musicplayer.h"
 #include "logging.h"
-#include <QDebug>
+#include "settings/settingsmanager.h"
+#include "filesystem/filemanager.h"
+#include "youtubeutils.h"
+#include "internal/heuristics.h"
+
 #include <algorithm>
 #include <random>
 #include <cstdlib>
-#include "youtubeutils.h"
-#include "internal/heuristics.h"
-#include <QTimer>
-#include "settings/settingsmanager.h"
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
-MusicPlayer::MusicPlayer(FileManager *fManager, SpotifyPlayer *spotify)
+MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, QObject *parent) : AudioPlayer(parent)
 {
-    qCDebug(gmAudioMusic) << "Loading MusicPlayer ...";
-
-    fileManager         = fManager;
     this->spotifyPlayer = spotify;
 
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
 
-    connect(mediaPlayer, &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
-    connect(mediaPlayer, &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
-    connect(mediaPlayer, &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
-    connect(mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
-    connect(mediaPlayer, &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
+    connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
+    connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
+    connect(mediaPlayer,                &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
+    connect(mediaPlayer,                QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
+    connect(mediaPlayer,                &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
+    connect(mediaPlayer,                QOverload<>::of(&QMediaObject::metaDataChanged),          this, &MusicPlayer::onMetaDataChanged);
 
-    connect(spotify,     &SpotifyPlayer::songEnded,                                this, &MusicPlayer::onSpotifySongEnded);
-    connect(spotify,     &SpotifyPlayer::receivedPlaylistTracks,                   this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
+    connect(FileManager::getInstance(), &FileManager::receivedFile,                               this, &MusicPlayer::onFileReceived);
 
-    connect(&youtube,    &YouTube::receivedVideoMediaStreamInfos,                  this, &MusicPlayer::onYtReceivedVideoMediaStreamInfos);
-    connect(&youtube,    &YouTube::receivedVideo,                                  this, &MusicPlayer::onYtReceivedVideo);
+    connect(spotify,                    &SpotifyPlayer::songEnded,                                this, &MusicPlayer::onSpotifySongEnded);
+    connect(spotify,                    &SpotifyPlayer::receivedPlaylistTracks,                   this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
 
-    connect(mediaPlayer, QOverload<>::of(&QMediaObject::metaDataChanged),          this, &MusicPlayer::onMetaDataChanged);
+    connect(&youtube,                   &YouTube::receivedVideoMediaStreamInfos,                  this, &MusicPlayer::onYtReceivedVideoMediaStreamInfos);
+    connect(&youtube,                   &YouTube::receivedVideo,                                  this, &MusicPlayer::onYtReceivedVideo);
+
+    connect(mediaPlayer,                QOverload<>::of(&QMediaObject::metaDataChanged),          this, &MusicPlayer::onMetaDataChanged);
 }
 
 MusicPlayer::~MusicPlayer()
 {
+    spotifyPlayer->deleteLater();
     mediaPlayer->deleteLater();
 }
 
@@ -47,7 +48,7 @@ MusicPlayer::~MusicPlayer()
  * @brief Play music list
  * @param name Name of the element
  */
-void MusicPlayer::play(MusicElement *element)
+void MusicPlayer::play(AudioElement *element)
 {
     if (!element) return;
 
@@ -113,11 +114,11 @@ void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
     {
         switch (s->source())
         {
-        case 0:
+        case 0: // Local files
             m_songNames.append(s->url().right(s->url().length() - s->url().lastIndexOf("/") - 1));
             break;
 
-        case 2:
+        case 2: // Spotify
             m_songNames.append(s->title().isEmpty() ? s->url() : s->title());
 
             if (initial) {
@@ -126,7 +127,7 @@ void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
             }
             break;
 
-        case 3:
+        case 3: // Youtube
             m_songNames.append(s->title().isEmpty() ? s->url() : s->title());
 
             if ((initial || reloadYt) && s->title().isEmpty()) youtube.getVideo(YouTubeUtils::parseVideoId(s->url()));
@@ -156,7 +157,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
 
         for (auto e : m_playlist) qCDebug(gmAudioMusic) << e->url();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
         QList<AudioFile *> temp;
 
@@ -166,7 +167,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
         }
         m_playlist = temp;
 
-#else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         std::random_device rd;
         std::mt19937 gen(rd());
         QList<AudioFile> temp;
@@ -177,7 +178,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, QString url)
             temp.append(m_playlist.takeAt(dis(gen)));
         }
         m_playlist = temp;
-#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+        #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
         qCDebug(gmAudioMusic) << "Shuffled playlist:";
 
@@ -219,8 +220,8 @@ void MusicPlayer::loadMedia(AudioFile *file)
     switch (m_playerType)
     {
     case 0:
-        mediaPlayer->setMedia(QUrl::fromLocalFile(SettingsManager::getPath("musicPath") + file->url()));
-        mediaPlayer->play();
+        m_fileRequestId = FileManager::getUniqueRequestId();
+        FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("music") + file->url());
         break;
 
     case 1:
@@ -330,14 +331,14 @@ void MusicPlayer::setIndex(int index)
     loadMedia(m_playlist[index]);
 }
 
-void MusicPlayer::setVolume(float volume)
+void MusicPlayer::setLogarithmicVolume(int volume)
 {
     mediaPlayer->setVolume(volume);
 }
 
-void MusicPlayer::setVolume(int volume)
+void MusicPlayer::setLinearVolume(int volume)
 {
-    spotifyPlayer->setVolume(volume);
+    spotifyPlayer->setLinearVolume(volume);
 }
 
 /**
@@ -349,7 +350,7 @@ void MusicPlayer::onMetaDataChanged()
     {
         qCDebug(gmAudioMusic) << "MetaData changed!";
 
-        emit metaDataChanged(mediaPlayer, currentElement ? currentElement->icon()->background() : "");
+        emit metaDataChanged(mediaPlayer, currentElement ? currentElement->icon()->imageId() : QPixmap());
     }
 }
 
@@ -365,7 +366,7 @@ void MusicPlayer::onMediaPlayerBufferStatusChanged()
 
 void MusicPlayer::onMediaPlayerMediaStatusChanged()
 {
-    if (mediaPlayer->mediaStatus() == QMediaPlayer::MediaStatus::EndOfMedia)
+    if (mediaPlayer->mediaStatus() == QMediaPlayer::EndOfMedia)
     {
         next();
     }
@@ -373,10 +374,9 @@ void MusicPlayer::onMediaPlayerMediaStatusChanged()
 
 void MusicPlayer::onMediaPlayerError(QMediaPlayer::Error error)
 {
-    qWarning() << error;
+    qCWarning(gmAudioMusic()) << error;
 
-    if ((error == QMediaPlayer::FormatError) ||
-        (error == QMediaPlayer::FormatError))
+    if (error == QMediaPlayer::FormatError)
     {
         next();
     }
@@ -389,6 +389,30 @@ void MusicPlayer::onMediaPlayerMediaChanged()
 #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     qCDebug(gmAudioMusic) << "Media changed:" << mediaPlayer->media().canonicalUrl();
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+}
+
+void MusicPlayer::onFileReceived(int id, QByteArray data)
+{
+    if (m_fileRequestId != id) return;
+
+    mediaPlayer->stop();
+
+    if (data.isEmpty())
+    {
+        next();
+        return;
+    }
+
+    if (m_mediaBuffer) delete m_mediaBuffer;
+
+    m_mediaData   = data;
+    m_mediaBuffer = new QBuffer(&m_mediaData);
+
+    m_mediaBuffer->open(QIODevice::ReadOnly);
+    m_mediaBuffer->seek(0);
+
+    mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
+    mediaPlayer->play();
 }
 
 void MusicPlayer::onSpotifySongEnded()
@@ -416,7 +440,7 @@ void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QSt
 
             for (int j = 0; j < tracks.count(); j++)
             {
-                m_playlist.insert(i + j, new AudioFile(tracks[j].id, 2, tracks[j].title));
+                m_playlist.insert(i + j, new AudioFile(tracks[j].uri, 2, tracks[j].title, currentElement));
             }
 
             emit songNamesChanged();

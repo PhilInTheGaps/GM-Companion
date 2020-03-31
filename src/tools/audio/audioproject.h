@@ -1,6 +1,7 @@
 #ifndef AUDIOPROJECT_H
 #define AUDIOPROJECT_H
 
+#include <QJsonObject>
 #include <QObject>
 #include "audioelement.h"
 
@@ -8,9 +9,12 @@ class AudioScenario : public QObject
 {
     Q_OBJECT
 public:
-    AudioScenario(QString name, QList<MusicElement*> musicLists, QList<SoundElement*> soundLists, QList<RadioElement*> radios, QList<AudioScenario*> scenarios) :
-        m_name(name), m_musicLists(musicLists), m_soundLists(soundLists), m_radios(radios), m_scenarios(scenarios) {}
+    AudioScenario(QString name, QString path, QList<AudioElement*> musicLists, QList<AudioElement*> soundLists, QList<AudioElement*> radios, QList<AudioScenario*> scenarios) :
+        m_name(name), m_path(path + "/" + name), m_musicLists(musicLists), m_soundLists(soundLists), m_radios(radios), m_scenarios(scenarios) {}
+    AudioScenario(QJsonObject object, QString path, QObject *parent = nullptr);
     ~AudioScenario();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
@@ -18,25 +22,26 @@ public:
     void sortElements();
     void setExport(bool e) { m_export = e; }
     bool isExport() const { return m_export; }
+    QString path() const { return m_path; }
 
-    MusicElement *musicElement(QString name);
+    AudioElement *musicElement(QString name);
     QStringList musicElementNames();
-    QList<MusicElement*> musicElements() const { return m_musicLists; }
-    void addMusicElement(MusicElement *element) { m_musicLists.append(element); }
+    QList<AudioElement*> musicElements() const { return m_musicLists; }
+    void addMusicElement(AudioElement *element) { m_musicLists.append(element); }
     void removeMusicElement(QString name, bool deleteElement = true);
     void moveMusicElement(QString name, int steps);
 
-    SoundElement *soundElement(QString name);
+    AudioElement *soundElement(QString name);
     QStringList soundElementNames();
-    QList<SoundElement*> soundElements() const { return m_soundLists; }
-    void addSoundElement(SoundElement *element) { m_soundLists.append(element); }
+    QList<AudioElement*> soundElements() const { return m_soundLists; }
+    void addSoundElement(AudioElement *element) { m_soundLists.append(element); }
     void removeSoundElement(QString name, bool deleteElement = true);
     void moveSoundElement(QString name, int steps);
 
-    RadioElement *radioElement(QString name);
+    AudioElement *radioElement(QString name);
     QStringList radioElementNames();
-    QList<RadioElement*> radioElements() const { return m_radios; }
-    void addRadioElement(RadioElement *element) { m_radios.append(element); }
+    QList<AudioElement*> radioElements() const { return m_radios; }
+    void addRadioElement(AudioElement *element) { m_radios.append(element); }
     void removeRadioElement(QString name, bool deleteElement = true);
     void moveRadioElement(QString name, int steps);
 
@@ -51,9 +56,10 @@ public:
 private:
     bool m_export = true;
     QString m_name;
-    QList<MusicElement*> m_musicLists;
-    QList<SoundElement*> m_soundLists;
-    QList<RadioElement*> m_radios;
+    QString m_path;
+    QList<AudioElement*> m_musicLists;
+    QList<AudioElement*> m_soundLists;
+    QList<AudioElement*> m_radios;
     QList<AudioScenario*> m_scenarios;
 };
 
@@ -61,13 +67,19 @@ class AudioCategory : public QObject
 {
     Q_OBJECT
 public:
-    AudioCategory(QString name, QList<AudioScenario*> scenarios) : m_name(name), m_scenarios(scenarios) { if (m_scenarios.size() > 0) m_currentScenario = m_scenarios[0]; }
+    AudioCategory(QString name, QString path, QList<AudioScenario*> scenarios) :
+        m_name(name), m_path(path + "/" + name), m_scenarios(scenarios)
+        { if (m_scenarios.size() > 0) m_currentScenario = m_scenarios[0]; }
+    AudioCategory(QJsonObject object, QString path, QObject *parent = nullptr);
     ~AudioCategory();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
     void setExport(bool e) { m_export = e; }
     bool isExport() const { return m_export; }
+    QString path() const { return m_path; }
 
     QList<AudioScenario*> scenarios() const { return m_scenarios; }
     QStringList scenarioNames();
@@ -81,7 +93,7 @@ public:
     QList<AudioElement *> elements() const;
 
 private:
-    QString m_name;
+    QString m_name, m_path;
     bool m_export = true;
     QList<AudioScenario*> m_scenarios;
     AudioScenario *m_currentScenario = nullptr;
@@ -91,8 +103,12 @@ class AudioProject : public QObject
 {
     Q_OBJECT
 public:
-    explicit AudioProject(QString name, int version, QList<AudioCategory*> categories, QObject *parent = nullptr);
+    AudioProject(QString name, int version, QList<AudioCategory*> categories, QObject *parent = nullptr);
     ~AudioProject();
+
+    AudioProject(QJsonObject object, QObject *parent = nullptr);
+    QJsonObject toJson();
+
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }

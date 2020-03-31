@@ -12,6 +12,7 @@ SOURCES += \
     ../../src/utils/processinfo.cpp\
     ../../src/settings/settingsmanager.cpp \
     ../../src/logging.cpp \
+    ../../src/services/restserviceconnectorlocal.cpp \
     ../../src/services/spotify.cpp \
     ../../src/services/spotifyconnectorlocal.cpp \
     ../../src/services/spotifyconnectorserver.cpp \
@@ -21,7 +22,8 @@ HEADERS += \
     ../../src/utils/processinfo.h\
     ../../src/settings/settingsmanager.h \
     ../../src/logging.h \
-    ../../src/services/ispotifyconnector.h \
+    ../../src/services/restserviceconnector.h \
+    ../../src/services/restserviceconnectorlocal.h \
     ../../src/services/services.h \
     ../../src/services/spotify.h \
     ../../src/services/spotifyconnectorlocal.h \

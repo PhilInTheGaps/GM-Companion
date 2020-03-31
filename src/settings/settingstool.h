@@ -20,7 +20,7 @@ public:
 
     int currentLanguageIndex();
     Q_INVOKABLE QString getPath(QString type);
-    Q_INVOKABLE void setPath(QString type, QString path);
+    Q_INVOKABLE void setPath(QString type, QString path, QString group = PATHS_GROUP);
     Q_INVOKABLE void setLanguage(QString language);
 
     int uiStyleIndex();

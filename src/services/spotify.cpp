@@ -1,4 +1,4 @@
-#include "spotify.h"
+﻿#include "spotify.h"
 #include "services.h"
 #include "logging.h"
 
@@ -48,23 +48,22 @@ void Spotify::updateConnector()
 {
     qCDebug(gmSpotify()) << "Updating spotify connector ...";
 
-    if (m_connector)
-    {
+    
+    
         delete m_connector;
-    }
+    
 
     if (SettingsManager::getSetting("serviceConnection", "default") == "local")
     {
-        m_connector = new SpotifyConnectorLocal(m_networkManager);
+        m_connector = new SpotifyConnectorLocal(m_networkManager, new O2Spotify, this);
     }
     else
     {
-        m_connector = new SpotifyConnectorServer(m_networkManager);
+        m_connector = new SpotifyConnectorServer(m_networkManager, this);
     }
 
-    // Connector signals
-    connect(m_connector, &SpotifyConnector::accessGranted, this, &Spotify::onAccessGranted);
-    connect(m_connector, &SpotifyConnector::receivedReply, this, &Spotify::onReceivedReply);
+    connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);
+    connect(m_connector, &RESTServiceConnector::receivedReply, this, &Spotify::onReceivedReply);
 
     m_connector->grantAccess();
 }
@@ -75,7 +74,7 @@ void Spotify::updateConnector()
  * @return 0: Album, 1: Playlist, 2: Track, 3: Artist, 4: episode, 5: show -1:
  * unknown
  */
-int Spotify::getUriType(QString uri)
+auto Spotify::getUriType(const QString& uri) -> int
 {
     if (uri.contains("album:")) return 0;
 
@@ -97,12 +96,38 @@ int Spotify::getUriType(QString uri)
  * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
  * @return Spotify ID like 6rqhFgbbKwnb9MLmUQDhG6
  */
-QString Spotify::getId(QString uri)
+auto Spotify::getIdFromUri(QString uri) -> QString
 {
     return uri = uri.right(uri.count() - uri.lastIndexOf(":") - 1);
 }
 
-Spotify * Spotify::getInstance()
+/**
+ * @brief Get the Spotify ID from href
+ * @param href Spotify href like
+ * https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2
+ */
+auto Spotify::getIdFromHref(const QString& href) -> QString
+{
+    auto split = href.split("/");
+    auto index = -1;
+
+    if (split.contains("albums"))
+    {
+        index = split.indexOf("albums") + 1;
+    }
+    else if (split.contains("playlists"))
+    {
+        index = split.indexOf("playlists") + 1;
+    }
+    else if (split.contains("tracks"))
+    {
+        index = split.indexOf("tracks") + 1;
+    }
+
+    return split[index];
+}
+
+auto Spotify::getInstance() -> Spotify *
 {
     if (!instanceFlag)
     {
@@ -125,7 +150,7 @@ void Spotify::setDeviceActive()
     m_requestMap["devices"] = m_connector->get(request);
 }
 
-void Spotify::onReceivedDevices(QByteArray data)
+void Spotify::onReceivedDevices(const QByteArray& data)
 {
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
 
@@ -184,7 +209,7 @@ void Spotify::startLibrespot()
     setDeviceActive();
 }
 
-QString Spotify::getLibrespotPath()
+auto Spotify::getLibrespotPath() -> QString
 {
     auto binaryName = "librespot";
 
@@ -213,7 +238,7 @@ QString Spotify::getLibrespotPath()
     return binaryName;
 }
 
-void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, QByteArray data)
+void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, const QByteArray& data)
 {
     if (error != QNetworkReply::NoError) {
         handleNetworkError(id, error, data);
@@ -227,7 +252,7 @@ void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, QByteAr
     emit receivedReply(id, error, data);
 }
 
-void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, QByteArray data)
+void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, const QByteArray& data)
 {
     switch (error)
     {

@@ -1,10 +1,12 @@
 #include "shopproject.h"
-#include <QDebug>
+#include "logging.h"
+
+#include <QJsonArray>
 
 ShopProject::ShopProject(QString name, QList<ShopCategory *>categories, QObject *parent)
     : QObject(parent), m_name(name), m_categories(categories)
 {
-    qDebug() << "Initializing new ShopProject:" << name << "...";
+    qCDebug(gmShopsShopProject()) << "Initializing new ShopProject:" << name << "...";
 
     if (categories.size() > 0) m_currentCategory = categories[0];
 }
@@ -25,6 +27,34 @@ ShopProject::ShopProject(ShopProject *other)
     }
 }
 
+ShopProject::ShopProject(QJsonObject json)
+{
+    auto categoryArray = json["categories"].toArray();
+
+    for (auto c : categoryArray)
+    {
+        auto co = c.toObject();
+
+        // Get Shops in Category
+        QList<ItemShop *> shops;
+        auto shopArray = co.value("shops").toArray();
+
+        for (auto shop : shopArray)
+        {
+            shops.append(new ItemShop(shop.toObject()));
+        }
+
+
+        ShopCategory *category = new ShopCategory(co.value("name").toString(), shops);
+        category->setCurrentShop(0);
+
+        m_categories.append(category);
+    }
+
+    m_name = json["name"].toString();
+    setCurrentCategory(0);
+}
+
 ShopProject::~ShopProject()
 {
     for (auto c : m_categories)
@@ -33,10 +63,32 @@ ShopProject::~ShopProject()
     }
 }
 
+QJsonObject ShopProject::toJson()
+{
+    QJsonObject root;
+
+    root.insert("name",    name());
+    root.insert("version", 3);
+
+    QJsonArray categoryArray;
+
+    for (auto category : categories())
+    {
+        if (category)
+        {
+            categoryArray.append(category->toJson());
+        }
+    }
+
+    root.insert("categories", categoryArray);
+
+    return root;
+}
+
 ShopCategory::ShopCategory(QString name, QList<ItemShop *>shops)
     : m_name(name), m_shops(shops)
 {
-    qDebug() << "Initializing new ShopCategory:" << name << "...";
+    qCDebug(gmShopsShopProject()) << "Initializing new ShopCategory:" << name << "...";
 }
 
 ShopCategory::ShopCategory(ShopCategory *other)
@@ -61,4 +113,24 @@ ShopCategory::~ShopCategory()
     {
         s->deleteLater();
     }
+}
+
+QJsonObject ShopCategory::toJson()
+{
+    QJsonObject root;
+
+    root.insert("name", name());
+
+    QJsonArray shopArray;
+
+    for (auto shop : shops())
+    {
+        if (shop)
+        {
+            shopArray.append(shop->toJson());
+        }
+    }
+    root.insert("shops", shopArray);
+
+    return root;
 }

@@ -1,5 +1,4 @@
 #include "namegenerator.h"
-#include "functions.h"
 #include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QDir>
@@ -22,29 +21,36 @@ void NameGenerator::updateCategories()
     m_categories.append("Generic");
     m_categoryPaths.append(":/names/Generic");
 
-    // Custom Names
-    for (QString folder : getFolders(QDir::homePath() + "/.gm-companion/names"))
-    {
-        if (!folder.contains("."))
-        {
-            m_categories.append(folder);
-            m_categoryPaths.append(QDir::homePath() + "/.gm-companion/names/" + folder);
-        }
-    }
+    //    // Custom Names
+    //    for (QString folder : getFolders(QDir::homePath() +
+    // "/.gm-companion/names"))
+    //    {
+    //        if (!folder.contains("."))
+    //        {
+    //            m_categories.append(folder);
+    //            m_categoryPaths.append(QDir::homePath() +
+    // "/.gm-companion/names/" + folder);
+    //        }
+    //    }
 
-    // Addon Names
-    for (QString path : QStringList({ QDir::homePath() + "/.gm-companion/addons", ":/addons" }))
-    {
-        for (QString addon : getFolders(path))
-        {
-            if (!addon.contains(".") && SettingsManager::getInstance()->getIsAddonEnabled(addon) && (getFolders(path + "/" + addon + "/names").size() > 0))
-            {
-                QSettings settings(path + "/" + addon + "/addon.ini", QSettings::IniFormat);
-                m_categories.append(settings.value("name", addon).toString());
-                m_categoryPaths.append(path + "/" + addon + "/names");
-            }
-        }
-    }
+    //    // Addon Names
+    //    for (QString path : QStringList({ QDir::homePath() +
+    // "/.gm-companion/addons", ":/addons" }))
+    //    {
+    //        for (QString addon : getFolders(path))
+    //        {
+    //            if (!addon.contains(".") &&
+    // SettingsManager::getInstance()->getIsAddonEnabled(addon) &&
+    // (getFolders(path + "/" + addon + "/names").size() > 0))
+    //            {
+    //                QSettings settings(path + "/" + addon + "/addon.ini",
+    // QSettings::IniFormat);
+    //                m_categories.append(settings.value("name",
+    // addon).toString());
+    //                m_categoryPaths.append(path + "/" + addon + "/names");
+    //            }
+    //        }
+    //    }
 
     emit categoriesChanged();
 }
@@ -75,18 +81,18 @@ QStringList NameGenerator::categoryNames(QString category)
 
     QStringList names;
 
-    if (index > -1)
-    {
-        QString path = m_categoryPaths.at(index);
+    //    if (index > -1)
+    //    {
+    //        QString path = m_categoryPaths.at(index);
 
-        for (QString folder : getFolders(path))
-        {
-            if (!folder.contains("."))
-            {
-                names.append(folder);
-            }
-        }
-    }
+    //        for (QString folder : getFolders(path))
+    //        {
+    //            if (!folder.contains("."))
+    //            {
+    //                names.append(folder);
+    //            }
+    //        }
+    //    }
 
     return names;
 }

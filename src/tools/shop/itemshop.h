@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+#include <QJsonObject>
 
 class Item : public QObject
 {
@@ -15,6 +16,10 @@ class Item : public QObject
 public:
     Item(QString name, QString price, QString description, QString category) : m_name(name), m_price(price), m_description(description), m_category(category) {}
     Item(Item *other) { if (other) { m_name = other->m_name; m_price = other->m_price; m_description = other->m_description; m_category = other->m_category; } }
+    Item(QJsonObject json);
+    Item(QString category, QJsonObject json);
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }
@@ -44,7 +49,10 @@ class ItemGroup : public QObject
 public:
     ItemGroup(QString name, QList<Item*> items) : m_name(name), m_items(items) {}
     ItemGroup(ItemGroup *other);
+    ItemGroup(QString groupName, QJsonObject json);
     ~ItemGroup() { for (auto i : m_items) if (i) i->deleteLater(); }
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     QList<Item*> items() const { return m_items; }
@@ -86,7 +94,10 @@ class ItemShop : public QObject
 public:
     explicit ItemShop(QString name, QString owner, QString description, QList<Item*> items = {}, QObject *parent = nullptr);
     explicit ItemShop(ItemShop *other);
+    explicit ItemShop(QJsonObject json);
     ~ItemShop();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }

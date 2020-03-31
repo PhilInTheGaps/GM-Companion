@@ -9,9 +9,10 @@
 #include <QUrlQuery>
 
 SpotifyConnectorServer::SpotifyConnectorServer
-    (QNetworkAccessManager *networkManager) :
-    SpotifyConnector(networkManager)
+    (QNetworkAccessManager *networkManager, QObject *parent) :
+    RESTServiceConnector(networkManager, gmSpotifyServer(), parent)
 {
+    m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     m_settingsStore = new O0SettingsStore("gm-companion");
 
     connect(&m_server, SIGNAL(newConnection()),                        this, SLOT(onIncomingConnection()));
@@ -41,7 +42,7 @@ void SpotifyConnectorServer::grantAccess()
     }
 }
 
-int SpotifyConnectorServer::get(QNetworkRequest request)
+auto SpotifyConnectorServer::get(QNetworkRequest request) -> int
 {
     int requestId = getUniqueRequestId();
 
@@ -53,7 +54,7 @@ void SpotifyConnectorServer::get(QNetworkRequest request, int requestId)
 {
     if (!canSendRequest())
     {
-        enqueueRequest(RequestContainer(requestId, request, 0, ""));
+        enqueueRequest(RequestContainer(requestId, request, GET, ""));
         return;
     }
 
@@ -67,26 +68,24 @@ void SpotifyConnectorServer::get(QNetworkRequest request, int requestId)
         auto data    = reply->readAll();
         auto error   = reply->error();
         auto headers = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, 0, ""), data, headers, error);
+        emit receivedReplyInternal(RequestContainer(requestId, request, GET, ""), data, headers, error);
         reply->deleteLater();
     });
 }
 
-int SpotifyConnectorServer::put(QUrl url, QString params)
+auto SpotifyConnectorServer::put(QNetworkRequest request, QByteArray data) -> int
 {
     int requestId = getUniqueRequestId();
-    QNetworkRequest request(url);
 
-    put(request, params, requestId);
-
+    put(request, data, requestId);
     return requestId;
 }
 
-void SpotifyConnectorServer::put(QNetworkRequest request, QString data, int requestId)
+void SpotifyConnectorServer::put(QNetworkRequest request, QByteArray data, int requestId)
 {
     if (!canSendRequest())
     {
-        enqueueRequest(RequestContainer(requestId, request, 1, data.toUtf8()));
+        enqueueRequest(RequestContainer(requestId, request, PUT, data));
         return;
     }
 
@@ -94,23 +93,22 @@ void SpotifyConnectorServer::put(QNetworkRequest request, QString data, int requ
 
     m_currentRequestCount++;
     request = addAuthHeader(request);
-    auto reply = m_networkManager->put(request, data.toUtf8());
+    auto reply = m_networkManager->put(request, data);
 
     connect(reply, &QNetworkReply::finished, [ = ]() {
         auto replyData = reply->readAll();
         auto error     = reply->error();
         auto headers   = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, 1, data.toUtf8()), replyData, headers, error);
+        emit receivedReplyInternal(RequestContainer(requestId, request, PUT, data), replyData, headers, error);
         reply->deleteLater();
     });
 }
 
-int SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data)
+auto SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data) -> int
 {
     int requestId = getUniqueRequestId();
 
     post(request, data, requestId);
-
     return requestId;
 }
 
@@ -118,7 +116,7 @@ void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int 
 {
     if (!canSendRequest())
     {
-        enqueueRequest(RequestContainer(requestId, request, 2, data));
+        enqueueRequest(RequestContainer(requestId, request, POST, data));
         return;
     }
 
@@ -132,7 +130,7 @@ void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int 
         auto replyData = reply->readAll();
         auto error     = reply->error();
         auto headers   = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, 2, data), replyData, headers, error);
+        emit receivedReplyInternal(RequestContainer(requestId, request, POST, data), replyData, headers, error);
         reply->deleteLater();
     });
 }
@@ -157,7 +155,7 @@ void SpotifyConnectorServer::authenticate()
     QDesktopServices::openUrl(url);
 }
 
-void SpotifyConnectorServer::requestAccessToken(QString code)
+void SpotifyConnectorServer::requestAccessToken(const QString& code)
 {
     qCDebug(gmSpotifyServer()) << "Requesting access token from server ...";
 
@@ -226,7 +224,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
             }
 
             // Network error, maybe server is unreachable?
-            else if (reply->error() != QNetworkReply::NoError)
+            if (reply->error() != QNetworkReply::NoError)
             {
                 qCCritical(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
                 return;
@@ -262,7 +260,7 @@ void SpotifyConnectorServer::updateExpireTime(int expiresIn)
     m_expireTime = QDateTime::currentDateTime().addSecs(expiresIn);
 }
 
-QString SpotifyConnectorServer::getServerUrl()
+auto SpotifyConnectorServer::getServerUrl() -> QString
 {
     auto url = SettingsManager::getServerUrl();
 
@@ -296,17 +294,17 @@ void SpotifyConnectorServer::dequeueRequests()
     }
 }
 
-QNetworkRequest SpotifyConnectorServer::addAuthHeader(QNetworkRequest request)
+auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkRequest
 {
     request.setRawHeader("Authorization", QByteArray("Bearer " + getAccessToken().toUtf8()));
     return request;
 }
 
-void SpotifyConnectorServer::handleRateLimit(RequestContainer container, QList<QPair<QByteArray, QByteArray> >headers)
+void SpotifyConnectorServer::handleRateLimit(const RequestContainer& container, const QList<QPair<QByteArray, QByteArray> >&headers)
 {
     qCDebug(gmSpotifyServer) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
 
-    for (auto header : headers)
+    for (const auto& header : headers)
     {
         if (header.first == "Retry-After")
         {
@@ -327,7 +325,7 @@ void SpotifyConnectorServer::startCooldown(int seconds)
     QTimer::singleShot(seconds * 1000, this, &SpotifyConnectorServer::onCooldownFinished);
 }
 
-bool SpotifyConnectorServer::canSendRequest()
+auto SpotifyConnectorServer::canSendRequest() -> bool
 {
     if (!m_isAccessGranted) return false;
 
@@ -340,7 +338,7 @@ bool SpotifyConnectorServer::canSendRequest()
     return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < SPOTIFY_MAX_REQUESTS;
 }
 
-void SpotifyConnectorServer::onReceivedReply(RequestContainer container, QByteArray data, QList<QPair<QByteArray, QByteArray> >headers, QNetworkReply::NetworkError error)
+void SpotifyConnectorServer::onReceivedReply(const RequestContainer& container, const QByteArray& data, const QList<QPair<QByteArray, QByteArray> >&headers, QNetworkReply::NetworkError error)
 {
     m_currentRequestCount--;
 
@@ -362,7 +360,7 @@ void SpotifyConnectorServer::onReceivedReply(RequestContainer container, QByteAr
         qCWarning(gmSpotifyServer()) << "Error:" << error << data;
     }
 
-    emit receivedReply(container.requestId, error, data);
+    emit receivedReply(container.requestId, error, data, headers);
 
     // If there are requests in queue, send next
     dequeueRequests();
@@ -388,7 +386,7 @@ void SpotifyConnectorServer::onBytesReady()
     qCDebug(gmSpotifyServer()) << "onBytesReady: Processing request";
 
     // NOTE: on first call, the timeout timer is started
-    QTcpSocket *socket = qobject_cast<QTcpSocket *>(sender());
+    auto *socket = qobject_cast<QTcpSocket *>(sender());
 
     if (!socket) {
         qCWarning(gmSpotifyServer()) << "onBytesReady: No socket available";
@@ -420,12 +418,12 @@ void SpotifyConnectorServer::onBytesReady()
             qCDebug(gmSpotifyServer()) << "onBytesReady: No query params found, waiting for more callbacks";
             ++m_tries;
             return;
-        } else {
+        } 
             m_tries = 0;
             qCWarning(gmSpotifyServer()) << "onBytesReady: No query params found, maximum callbacks received";
             closeServer(socket, false);
             return;
-        }
+        
     }
 
     qCDebug(gmSpotifyServer()) << "onBytesReady: Query params found, closing server";
@@ -434,13 +432,13 @@ void SpotifyConnectorServer::onBytesReady()
     requestAccessToken(queryParams["code"]);
 }
 
-void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool hasparameters)
+void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool  /*hasparameters*/)
 {
     qCDebug(gmSpotifyServer()) << "closeServer: Initiating";
     int port = m_server.serverPort();
 
     if (!socket && sender()) {
-        QTimer *timer = qobject_cast<QTimer *>(sender());
+        auto *timer = qobject_cast<QTimer *>(sender());
 
         if (timer) {
             qCWarning(gmSpotifyServer()) << "closeServer: Closing due to timeout";
@@ -451,7 +449,7 @@ void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool hasparameters)
     }
 
     if (socket) {
-        QTimer *timer = socket->findChild<QTimer *>("timeoutTimer");
+        auto *timer = socket->findChild<QTimer *>("timeoutTimer");
 
         if (timer) {
             qCDebug(gmSpotifyServer()) << "closeServer: Stopping socket's timeout timer";
@@ -463,7 +461,7 @@ void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool hasparameters)
     qCDebug(gmSpotifyServer()) << "closeServer: Closed, no longer listening on port" << port;
 }
 
-QMap<QString, QString>SpotifyConnectorServer::parseQueryParams(QByteArray *data)
+auto SpotifyConnectorServer::parseQueryParams(QByteArray *data) -> QMap<QString, QString>
 {
     qCDebug(gmSpotifyServer()) << "parseQueryParams";
 

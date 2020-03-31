@@ -1,6 +1,7 @@
 #ifndef RADIOPLAYER_H
 #define RADIOPLAYER_H
 
+#include <QBuffer>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 
@@ -11,29 +12,36 @@ class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit RadioPlayer(FileManager *fManager);
+    RadioPlayer(QObject *parent = nullptr);
+    ~RadioPlayer();
 
-    void play(RadioElement *element);
+    void play(AudioElement *element);
     void play();
     void pause();
     void stop();
-    void setVolume(float volume) { player->setVolume(volume); }
+    void setLogarithmicVolume(int volume) { player->setVolume(volume); }
+    void setLinearVolume(int volume) { }
+    void again() { }
+    void next() { }
+    void setIndex(int index) {}
 
 private:
     QMediaPlayer *player;
     QMediaPlaylist *playlist;
 
-    RadioElement *currentElement;
+    AudioElement *currentElement;
+    int m_fileRequestId = 0;
+
+    QByteArray m_mediaData;
+    QBuffer *m_mediaBuffer = nullptr;
 
 signals:
     void startedPlaying();
-    void metaDataChanged(QMediaPlayer *mediaPlayer, QString elementIcon);
-
-public slots:
-    void onUrlChanged(QUrl url);
+    void metaDataChanged(QMediaPlayer *mediaPlayer, QPixmap elementIcon);
 
 private slots:
     void onMetaDataChanged();
+    void onFileReceived(int id, QByteArray data);
 };
 
 #endif // RADIOPLAYER_H

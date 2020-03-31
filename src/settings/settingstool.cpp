@@ -37,12 +37,12 @@ void SettingsTool::setAddonEnabled(QString addon, bool enabled)
 
 QString SettingsTool::getPath(QString type)
 {
-    return SettingsManager::getPath(type + "Path");
+    return SettingsManager::getPath(type);
 }
 
-void SettingsTool::setPath(QString type, QString path)
+void SettingsTool::setPath(QString type, QString path, QString group)
 {
-    SettingsManager::setPath(type + "Path", path);
+    SettingsManager::setPath(type, path, group);
 
     if (type == "audio")
     {
@@ -52,7 +52,7 @@ void SettingsTool::setPath(QString type, QString path)
     {
         emit musicPathChanged();
     }
-    else if (type == "sound")
+    else if (type == "sounds")
     {
         emit soundPathChanged();
     }
@@ -72,7 +72,7 @@ void SettingsTool::setPath(QString type, QString path)
     {
         emit notesPathChanged();
     }
-    else if (type == "shop")
+    else if (type == "shops")
     {
         emit shopPathChanged();
     }

@@ -1,12 +1,11 @@
 #include "radioplayer.h"
+#include "filesystem/filemanager.h"
+#include "settings/settingsmanager.h"
+#include "logging.h"
 
-#include <QDebug>
-#include <QNetworkRequest>
-
-RadioPlayer::RadioPlayer(FileManager *fManager)
+RadioPlayer::RadioPlayer(QObject *parent) : AudioPlayer(parent)
 {
-    qDebug() << "Loading RadioPlayer ...";
-    fileManager = fManager;
+    qCDebug(gmAudioRadio()) << "Loading RadioPlayer ...";
 
     player = new QMediaPlayer;
     player->setObjectName(tr("Radio"));
@@ -16,21 +15,28 @@ RadioPlayer::RadioPlayer(FileManager *fManager)
         if (player->state() == QMediaPlayer::PlayingState) emit startedPlaying();
     });
 
-    connect(player,   QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
+    connect(player,                     QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
+    connect(FileManager::getInstance(), &FileManager::receivedFile,                      this, &RadioPlayer::onFileReceived);
 
-    connect(playlist, &QMediaPlaylist::loaded,                         [ = ]() { qDebug() << "Radio: Successfully loaded playlist."; });
-    connect(playlist, &QMediaPlaylist::loadFailed,                     [ = ]() { qDebug() << "Radio: Failed to load playlist:" << playlist->errorString(); });
+    connect(playlist,                   &QMediaPlaylist::loaded,                         [ = ]() { qCDebug(gmAudioRadio()) << "Successfully loaded playlist."; });
+    connect(playlist,                   &QMediaPlaylist::loadFailed,                     [ = ]() { qCDebug(gmAudioRadio()) << "Failed to load playlist:" << playlist->errorString(); });
+}
+
+RadioPlayer::~RadioPlayer()
+{
+    playlist->deleteLater();
+    player->deleteLater();
 }
 
 /**
  * @brief Play a radio element
  * @param element RadioElement to be played
  */
-void RadioPlayer::play(RadioElement *element)
+void RadioPlayer::play(AudioElement *element)
 {
     if (!element) return;
 
-    qDebug() << "Playing radio element:" << element->name();
+    qCDebug(gmAudioRadio()) << "Playing radio element:" << element->name();
 
     player->stop();
     player->setObjectName(tr("Radio") + ": " + element->name());
@@ -42,28 +48,16 @@ void RadioPlayer::play(RadioElement *element)
 
     if (audioFile->source() == 0)
     {
-        qDebug() << "Playing radio from local playlist:" << audioFile->url() << "...";
-        fileManager->getAudioSaveLoad()->fetchRadioPath(audioFile->url());
+        qCDebug(gmAudioRadio()) << "Playing radio from local playlist:" << audioFile->url() << "...";
+        m_fileRequestId = FileManager::getUniqueRequestId();
+        FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("radio") + "/" + audioFile->url());
     }
     else
     {
-        qDebug() << "Playing radio from url:" << audioFile->url();
+        qCDebug(gmAudioRadio()) << "Playing radio from url:" << audioFile->url();
         player->setMedia(QUrl(audioFile->url()));
         player->play();
     }
-}
-
-/**
- * @brief Load the new URL and start playing
- * @param url URL to be loaded
- */
-void RadioPlayer::onUrlChanged(QUrl url)
-{
-    qDebug() << "Radio: Received URL:" << url;
-
-    playlist->load(url);
-    player->setPlaylist(playlist);
-    player->play();
 }
 
 /**
@@ -71,7 +65,7 @@ void RadioPlayer::onUrlChanged(QUrl url)
  */
 void RadioPlayer::play()
 {
-    qDebug() << "Continue play of RadioPlayer ...";
+    qCDebug(gmAudioRadio()) << "Continue play of RadioPlayer ...";
     player->play();
 }
 
@@ -80,7 +74,7 @@ void RadioPlayer::play()
  */
 void RadioPlayer::pause()
 {
-    qDebug() << "Pausing RadioPlayer ...";
+    qCDebug(gmAudioRadio()) << "Pausing RadioPlayer ...";
     player->pause();
 }
 
@@ -89,7 +83,7 @@ void RadioPlayer::pause()
  */
 void RadioPlayer::stop()
 {
-    qDebug() << "Stopping RadioPlayer ...";
+    qCDebug(gmAudioRadio()) << "Stopping RadioPlayer ...";
 
     player->stop();
 }
@@ -99,10 +93,31 @@ void RadioPlayer::stop()
  */
 void RadioPlayer::onMetaDataChanged()
 {
-    qDebug() << "RadioPlayer: MetaData changed!";
+    qCDebug(gmAudioRadio()) << "MetaData changed!";
 
     if ((player->bufferStatus() == 100) || (player->mediaStatus() == QMediaPlayer::BufferedMedia))
     {
-        emit metaDataChanged(player, currentElement ? currentElement->icon()->background() : "");
+        emit metaDataChanged(player, currentElement ? currentElement->icon()->imageId() : QPixmap());
     }
+}
+
+void RadioPlayer::onFileReceived(int id, QByteArray data)
+{
+    if (m_fileRequestId != id) return;
+
+    player->stop();
+
+    if (data.isEmpty()) return;
+
+
+    if (m_mediaBuffer) delete m_mediaBuffer;
+
+    m_mediaData   = data;
+    m_mediaBuffer = new QBuffer(&m_mediaData);
+
+    m_mediaBuffer->open(QIODevice::ReadOnly);
+    m_mediaBuffer->seek(0);
+
+    player->setMedia(QMediaContent(), m_mediaBuffer);
+    player->play();
 }

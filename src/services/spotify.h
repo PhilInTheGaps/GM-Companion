@@ -22,13 +22,15 @@ public:
     Q_INVOKABLE void updateConnector();
 
     int get(QNetworkRequest request) { return m_connector->get(request); }
-    int get(QUrl url) { return m_connector->get(url); }
-    int put(QUrl url, QString params = "") { return m_connector->put(url, params); }
+    int get(QUrl url) { return m_connector->get(QNetworkRequest(url)); }
+    int put(QUrl url, QByteArray data = "") { return m_connector->put(QNetworkRequest(url), data); }
     int post(QNetworkRequest request, QByteArray data = "") { return m_connector->post(request, data); }
 
     int getUniqueRequestId() { return m_connector->getUniqueRequestId(); }
-    static int getUriType(QString uri);
-    static QString getId(QString uri);
+
+    static int getUriType(const QString& uri);
+    static QString getIdFromUri(QString uri);
+    static QString getIdFromHref(const QString& href);
 
     Q_INVOKABLE void startLibrespot();
 
@@ -42,14 +44,14 @@ private:
     static Spotify *single;
 
     QNetworkAccessManager *m_networkManager = nullptr;
-    SpotifyConnector *m_connector = nullptr;
+    RESTServiceConnector *m_connector = nullptr;
     QProcess m_librespotProcess;
     QMap<QString, int> m_requestMap;
 
-    void handleNetworkError(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void handleNetworkError(int id, QNetworkReply::NetworkError error, const QByteArray& data);
     void setDeviceActive();
 
-    QString getLibrespotPath();
+    static QString getLibrespotPath();
 
 signals:
     void authorized();
@@ -58,8 +60,8 @@ signals:
 
 private slots:
     void onAccessGranted();
-    void onReceivedReply(int id, QNetworkReply::NetworkError error, QByteArray data);
-    void onReceivedDevices(QByteArray data);
+    void onReceivedReply(int id, QNetworkReply::NetworkError error, const QByteArray& data);
+    void onReceivedDevices(const QByteArray& data);
 };
 
 #endif // SPOTIFY_H

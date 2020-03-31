@@ -1,127 +1,169 @@
 #include "characterimageviewer.h"
 
-#include <QDebug>
-#include <QImage>
+#include "logging.h"
+#include <QPixmap>
 #include <QBuffer>
-
-#include <poppler/qt5/poppler-qt5.h>
+#include "utils/utils.h"
 
 CharacterImageViewer::CharacterImageViewer()
 {
-    qDebug() << "Loading CharacterImageViewer ...";
+}
+
+CharacterImageViewer::~CharacterImageViewer()
+{
+    if (m_pdfDocument) delete m_pdfDocument;
 }
 
 void CharacterImageViewer::setCharacter(Character *character)
 {
+    // House cleaning
     m_categories.clear();
     m_image.clear();
     m_categoryIndex = 0;
 
-    m_currentCharacter = character;
+    disconnect(m_currentCharacter, &Character::fileListLoaded, this, &CharacterImageViewer::onCharacterFileListLoaded);
+    disconnect(m_currentCharacter, &Character::fileDataLoaded, this, &CharacterImageViewer::onCharacterFileDataLoaded);
 
-    if (m_currentCharacter)
-    {
-        updateImages();
-        setCurrentCategory(0);
-        return;
-    }
+    // Load new character
+    m_currentCharacter = character;
 
     emit categoryChanged();
     emit categoriesChanged();
+
+    if (m_currentCharacter)
+    {
+        connect(m_currentCharacter, &Character::fileListLoaded, this, &CharacterImageViewer::onCharacterFileListLoaded);
+        connect(m_currentCharacter, &Character::fileDataLoaded, this, &CharacterImageViewer::onCharacterFileDataLoaded);
+        m_currentCharacter->loadFiles();
+    }
 }
 
-void CharacterImageViewer::updateImages()
+void CharacterImageViewer::onCharacterFileListLoaded(QList<CharacterFile>files)
+{
+    qCDebug(gmCharactersImageViewer()) << "Character files list was loaded.";
+
+    for (auto file : files) m_categories.append(file.name());
+    emit categoriesChanged();
+
+    if (!m_categories.isEmpty()) setCurrentCategory(0);
+}
+
+void CharacterImageViewer::onCharacterFileDataLoaded(int index, QByteArray data)
+{
+    qCDebug(gmCharactersImageViewer()) << "File data was loaded.";
+
+    if (m_categoryIndex != index) return;
+
+
+    switch (m_currentCharacter->type())
+    {
+    case 0: // Folder with images
+        loadImage(data);
+        break;
+
+    case 1: // PDF
+        loadPDF(index, data);
+        break;
+
+    default:
+        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type() << "of character" << m_currentCharacter->name() << "not implemented.";
+    }
+}
+
+void CharacterImageViewer::loadImage(QByteArray data)
+{
+    qCDebug(gmCharactersImageViewer()) << "Loading image from data";
+
+    QPixmap pixmap;
+
+    if (!pixmap.loadFromData(data))
+    {
+        qCWarning(gmCharactersImageViewer()) << "Could not load image.";
+        return;
+    }
+
+    m_image = Utils::stringFromImage(pixmap);
+    emit categoryChanged();
+}
+
+void CharacterImageViewer::loadPDF(int index, QByteArray data)
+{
+    qCDebug(gmCharactersImageViewer()) << "Loading pdf document";
+
+    if (m_pdfDocument && (m_currentCharacter->name() == m_pdfCharacter))
+    {
+        qCDebug(gmCharactersImageViewer()) << "Document already loaded.";
+    }
+    else
+    {
+        if (m_pdfDocument) delete m_pdfDocument;
+
+        m_pdfCharacter = m_currentCharacter->name();
+        m_pdfDocument  = Poppler::Document::loadFromData(data);
+
+        if (!m_pdfDocument || m_pdfDocument->isLocked())
+        {
+            qCWarning(gmCharactersImageViewer()) << "Could not load pdf document";
+            return;
+        }
+    }
+
+    loadPDFCategories();
+    setPDFPage(index);
+}
+
+void CharacterImageViewer::loadPDFCategories()
 {
     m_categories.clear();
 
-    if (m_currentCharacter && (m_currentCharacter->files().size() > 0))
+    for (int i = 0; i < m_pdfDocument->numPages(); i++)
     {
-        // PDFs
-        if (m_currentCharacter->type() == 1)
-        {
-            Poppler::Document *doc = Poppler::Document::load(m_currentCharacter->files()[0].path());
-
-            if (!doc || doc->isLocked())
-            {
-                delete doc;
-                return;
-            }
-
-            for (int i = 0; i < doc->numPages(); i++)
-            {
-                m_categories.append(tr("Page") + " " + QString::number(i));
-            }
-
-            delete doc;
-        }
-        else
-        {
-            for (auto i : m_currentCharacter->files())
-            {
-                QString temp = i.name().right(i.name().length() - i.name().lastIndexOf('/') - 1);
-                m_categories.append(temp.left(temp.lastIndexOf('.')));
-            }
-        }
+        m_categories.append(tr("Page") + " " + QString::number(i + 1));
     }
 
     emit categoriesChanged();
 }
 
-void CharacterImageViewer::setCurrentCategory(int index)
+void CharacterImageViewer::setPDFPage(int index)
 {
-    m_image         = "";
-    m_categoryIndex = 0;
+    qCDebug(gmCharactersImageViewer()) << "Loading pdf page at index" << index;
 
-    if (m_currentCharacter)
+    if (!m_pdfDocument) return;
+
+    if (index < m_pdfDocument->numPages())
     {
-        if (m_currentCharacter->type() == 1) // PDF
-        {
-            setPDFImage(index);
-        }
-        else if ((index > -1) && (index < m_currentCharacter->files().size()))
-        {
-            // For images
-            QString p = m_currentCharacter->files()[index].path();
-            m_image         = p.startsWith("http") ? p : "file:///" + p;
-            m_categoryIndex = index;
-        }
-    }
-
-    emit categoryChanged();
-}
-
-void CharacterImageViewer::setPDFImage(int index)
-{
-    Poppler::Document *doc = Poppler::Document::load(m_currentCharacter->files()[0].path());
-
-    if (!doc || doc->isLocked())
-    {
-        emit categoryChanged();
-        delete doc;
-        return;
-    }
-
-    if (index < doc->numPages())
-    {
-        Poppler::Page *page = doc->page(index);
+        Poppler::Page *page = m_pdfDocument->page(index);
 
         if (page)
         {
-            QImage image = page->renderToImage(200, 200);
-            QByteArray bArray;
-            QBuffer    buffer(&bArray);
-            buffer.open(QIODevice::WriteOnly);
-            image.save(&buffer, "JPEG");
-            buffer.close();
-
-            m_image         = QString("data:image/jpg;base64,") + QString::fromLatin1(bArray.toBase64().data());
-            m_categoryIndex = index;
+            m_image = Utils::stringFromImage(QPixmap::fromImage(page->renderToImage(200, 200)));
         }
 
         delete page;
     }
 
-    delete doc;
+    emit categoryChanged();
+}
+
+void CharacterImageViewer::setCurrentCategory(int index)
+{
+    qCDebug(gmCharactersImageViewer()) << "Changing page:" << index;
+
+    m_image = "";
+
+    m_categoryIndex = index;
+    emit categoryChanged();
+
+    qCDebug(gmCharactersImageViewer()) << "Loading page data ...";
+
+    if ((m_currentCharacter->type() == 1) && (index > 0))
+    {
+        setPDFPage(index);
+    }
+    else
+    {
+        m_currentCharacter->loadFileData(index);
+    }
 }
 
 void CharacterImageViewer::nextImage(bool right)

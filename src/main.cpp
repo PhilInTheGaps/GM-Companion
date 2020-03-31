@@ -10,22 +10,23 @@
 #include <QQuickWindow>
 
 #include "tools/toolmanager.h"
+#include "services/spotify.h"
 
 #include "settings/settingstool.h"
 #include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
-#include "managers/filemanager.h"
 #include "platformdetails.h"
 #include "ui/colorscheme.h"
 #include "tools/project_converter/projectconverter.h"
+#include "tools/audio/audioelementimageprovider.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    app.setApplicationName("GM-Companion");
-    app.setOrganizationName("GM-Companion");
-    app.setOrganizationDomain("gm-companion.github.io");
+    QGuiApplication::setApplicationName("GM-Companion");
+    QGuiApplication::setOrganizationName("GM-Companion");
+    QGuiApplication::setOrganizationDomain("gm-companion.github.io");
 
 #if defined(Q_OS_WIN)
     app.setFont(QFont("Segoe UI"));
@@ -35,21 +36,22 @@ int main(int argc, char *argv[])
 
     qDebug().noquote() << "Starting GM-Companion ...";
 
+    // Register meta types
+    qRegisterMetaType<AudioElement *>();
+    qRegisterMetaType<QList<AudioProject *> >();
+    qRegisterMetaType<QList<QNetworkReply::RawHeaderPair> >();
+
     // Set the language and install a translator
     qDebug().noquote() << "Initializing translations ...";
-    QTranslator *translator = new QTranslator();
+    auto *translator = new QTranslator();
 
-    if (translator->load("gm-companion_" + SettingsManager::getLanguage(), ":/translations")) app.installTranslator(translator);
+    if (translator->load("gm-companion_" + SettingsManager::getLanguage(), ":/translations")) QGuiApplication::installTranslator(translator);
     else qDebug() << "Could not load translation ...";
 
     // Install fonts for FontAwesome.pri
     QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
     QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
     QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
-
-    // Create program files and remove old ones that are no longer required
-    FileManager *fileManager = new FileManager;
-    fileManager->run();
 
     // Convert Projects to newest version
     ProjectConverter projConverter;
@@ -59,11 +61,13 @@ int main(int argc, char *argv[])
     QUrl source(QStringLiteral("qrc:/main.qml"));
 
     // Set Window Icon
-    app.setWindowIcon(QIcon(":/icons/gm-companion/icon.png"));
+    QGuiApplication::setWindowIcon(QIcon(":/icons/gm-companion/icon.png"));
 
     QQmlApplicationEngine engine;
     engine.addImportPath("qrc:///");
-    ToolManager *toolManager = new ToolManager(fileManager, &engine, nullptr);
+    engine.addImageProvider("audioElementIcons", new AudioElementImageProvider);
+
+    auto *toolManager = new ToolManager(&engine, nullptr);
 
     // Load Tools
     engine.rootContext()->setContextProperty("tool_manager", toolManager);
@@ -106,12 +110,9 @@ int main(int argc, char *argv[])
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
 
-    // Cloud
-    engine.rootContext()->setContextProperty("google_drive_tool", fileManager->getGoogleDrive());
-
     engine.load(source);
 
     if (engine.rootObjects().isEmpty()) return -1;
 
-    return app.exec();
+    return QGuiApplication::exec();
 }

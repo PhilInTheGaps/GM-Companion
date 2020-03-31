@@ -7,6 +7,20 @@
 #include <QSettings>
 #include "settings.h"
 
+struct SettingRequest {
+    SettingRequest() {}
+    SettingRequest(QString identifier, QString defaultValue, QString group = DEFAULT_GROUP)
+    {
+        this->identifier = identifier;
+        this->defaultValue = defaultValue;
+        this->group = group;
+    }
+
+    QString identifier;
+    QString defaultValue;
+    QString group;
+};
+
 class SettingsManager : public QObject
 {
     Q_OBJECT
@@ -14,12 +28,13 @@ public:
     static SettingsManager* getInstance();
     ~SettingsManager();
 
-    static QString getSetting(QString setting, QString defaultValue = "", QString group = DEFAULT_GROUP);
-    static void setSetting(QString setting, QString value, QString group = DEFAULT_GROUP);
+    static QString getSetting(const QString& setting, const QString& defaultValue = "", QString group = DEFAULT_GROUP);
+    static QString getSetting(SettingRequest request) { return getSetting(request.identifier, request.defaultValue, request.group); }
+    static void setSetting(const QString& setting, const QString& value, const QString& group = DEFAULT_GROUP);
     static void setSetting(QString setting, int value, QString group = DEFAULT_GROUP);
 
-    static QString getPath(QString setting);
-    static void setPath(QString setting, QString value);
+    static QString getPath(const QString& setting, QString group = "");
+    static void setPath(QString setting, QString value, QString group);
 
     static QString getLanguage();
     static void setLanguage(QString language);
@@ -27,25 +42,25 @@ public:
     static QString getServerUrl();
     static void setServerUrl(QString url);
 
-    static QString getPassword(QString username, QString service);
-    static void setPassword(QString username, QString password, QString service);
+    static QString getPassword(const QString& username, const QString& service);
+    static void setPassword(const QString& username, const QString& password, const QString& service);
 
-    void setAddonEnabled(QString addon, bool enabled);
-    bool getIsAddonEnabled(QString addon);
+    void setAddonEnabled(const QString& addon, bool enabled);
+    bool getIsAddonEnabled(const QString& addon);
 
     QStringList getOfficialAddons();
-
-    QStringList getInactiveCharacters();
-    void setInactiveCharacters(QStringList characters);
-
-    void updateSettings();
 
 private:
     SettingsManager();
     static bool instanceFlag;
     static SettingsManager *single;
 
-    QString getDefaultPath(QString setting);
+    static QString getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP);
+    static QString getActivePathGroup();
+
+    void updateSettings();
+    void renameSetting(const QString& currentName, QString newName, const QString& group = DEFAULT_GROUP);
+    void removeSetting(const QString& setting, const QString& group);
 
     // Normal Settings
     QSettings *m_settings;

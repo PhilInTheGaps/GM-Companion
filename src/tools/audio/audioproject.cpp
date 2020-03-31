@@ -1,5 +1,6 @@
 #include "audioproject.h"
 #include <QDebug>
+#include <QJsonArray>
 
 AudioProject::AudioProject(QString name, int version, QList<AudioCategory *>categories, QObject *parent) :
     QObject(parent), m_name(name), m_version(version), m_categories(categories)
@@ -74,14 +75,147 @@ QList<AudioElement *>AudioProject::elements() const
 {
     QList<AudioElement *> list;
 
-    qDebug() << m_categories;
-
     for (auto category : m_categories)
     {
         if (category) list.append(category->elements());
     }
 
     return list;
+}
+
+AudioProject::AudioProject(QJsonObject object, QObject *parent) : QObject(parent)
+{
+    m_name    = object["name"].toString();
+    m_version = object["version"].toInt();
+
+    for (auto category : object["categories"].toArray())
+    {
+        m_categories.append(new AudioCategory(category.toObject(), m_name));
+    }
+
+    if ((m_categories.length() > 0) && m_categories[0]) m_currentCategory = m_categories[0];
+}
+
+QJsonObject AudioProject::toJson()
+{
+    QJsonObject root;
+
+    root.insert("name",    m_name);
+    root.insert("version", m_version);
+
+    // Save Categories
+    QJsonArray categoriesJson;
+
+    for (auto category : m_categories)
+    {
+        if (category) categoriesJson.append(category->toJson());
+    }
+
+    root.insert("categories", categoriesJson);
+    return root;
+}
+
+AudioCategory::AudioCategory(QJsonObject object, QString path, QObject *parent) : QObject(parent)
+{
+    m_name = object["name"].toString();
+    m_path = path + "/" + m_name;
+
+    for (auto scenario : object["scenarios"].toArray())
+    {
+        m_scenarios.append(new AudioScenario(scenario.toObject(), m_path));
+    }
+
+    if ((m_scenarios.length() > 0) && m_scenarios[0]) m_currentScenario = m_scenarios[0];
+}
+
+QJsonObject AudioCategory::toJson()
+{
+    QJsonObject object;
+
+    object.insert("name", m_name);
+
+    QJsonArray scenariosJson;
+
+    for (auto scenario : m_scenarios)
+    {
+        if (scenario) scenariosJson.append(scenario->toJson());
+    }
+
+    object.insert("scenarios", scenariosJson);
+
+    return object;
+}
+
+AudioScenario::AudioScenario(QJsonObject object, QString path, QObject *parent) : QObject(parent)
+{
+    m_name = object["name"].toString();
+    m_path = path + "/" + m_name;
+
+    for (auto element : object.value("music_elements").toArray())
+    {
+        m_musicLists.append(new AudioElement(element.toObject(), 0, m_path));
+    }
+
+    for (auto element : object.value("sound_elements").toArray())
+    {
+        m_soundLists.append(new AudioElement(element.toObject(), 1, m_path));
+    }
+
+    for (auto element : object.value("radio_elements").toArray())
+    {
+        m_radios.append(new AudioElement(element.toObject(), 2, m_path));
+    }
+
+    for (auto scenario : object.value("scenarios").toArray())
+    {
+        m_scenarios.append(new AudioScenario(scenario.toObject(), m_path));
+    }
+}
+
+QJsonObject AudioScenario::toJson()
+{
+    QJsonObject object;
+    QJsonArray  musicElementsJson;
+    QJsonArray  soundElementsJson;
+    QJsonArray  radioElementsJson;
+
+    object.insert("name", m_name);
+
+    for (auto element : elements())
+    {
+        if (!element) continue;
+
+        switch (element->type())
+        {
+        case 0:
+            musicElementsJson.append(element->toJson());
+            break;
+
+        case 1: soundElementsJson.append(element->toJson());
+            break;
+
+        case 2: radioElementsJson.append(element->toJson());
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    object.insert("music_elements", musicElementsJson);
+    object.insert("sound_elements", soundElementsJson);
+    object.insert("radio_elements", radioElementsJson);
+
+    QJsonArray scenariosJson;
+
+    for (auto scenario : m_scenarios)
+    {
+        if (scenario) scenariosJson.append(scenario->toJson());
+    }
+
+    object.insert("scenarios", scenariosJson);
+
+    return object;
 }
 
 /**
@@ -197,7 +331,7 @@ QList<AudioElement *>AudioScenario::elements(bool recursive)
  * @param element Name of the music list
  * @return Pointer to MusicElement
  */
-MusicElement * AudioScenario::musicElement(QString element)
+AudioElement * AudioScenario::musicElement(QString element)
 {
     for (auto e : m_musicLists)
     {
@@ -212,7 +346,7 @@ MusicElement * AudioScenario::musicElement(QString element)
  * @param element Name of the sound list
  * @return Pointer to SoundElement
  */
-SoundElement * AudioScenario::soundElement(QString element)
+AudioElement * AudioScenario::soundElement(QString element)
 {
     for (auto e : m_soundLists)
     {
@@ -227,7 +361,7 @@ SoundElement * AudioScenario::soundElement(QString element)
  * @param element Name of the radio
  * @return Pointer to RadioElement
  */
-RadioElement * AudioScenario::radioElement(QString element)
+AudioElement * AudioScenario::radioElement(QString element)
 {
     for (auto e : m_radios)
     {

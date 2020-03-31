@@ -142,7 +142,6 @@ Page {
                         SoundButton {
                             element: modelData.name
                             element_icon: modelData.icon
-                            has_icon: modelData.hasIcon
                             anchors.left: parent.left
                             anchors.right: parent.right
                         }
@@ -265,7 +264,6 @@ Page {
                                             element_type: modelData.type
                                             subscenario_name: subscenario_text.text
                                             icon: modelData.icon
-                                            has_icon: modelData.hasIcon
                                             width: audio_element_column.button_width
 
                                             onClicked: audio_tool.playElement(

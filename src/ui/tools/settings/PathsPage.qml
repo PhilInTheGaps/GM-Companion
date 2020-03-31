@@ -26,7 +26,7 @@ ScrollView {
 
         PathItem {
             path_type: qsTr("Sound")
-            setting: "sound"
+            setting: "sounds"
             width: parent.width
         }
 
@@ -56,7 +56,7 @@ ScrollView {
 
         PathItem {
             path_type: qsTr("Shop Projects / Item Library")
-            setting: "shop"
+            setting: "shops"
             width: parent.width
         }
 

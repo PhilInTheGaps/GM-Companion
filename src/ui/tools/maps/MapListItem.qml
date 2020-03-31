@@ -5,6 +5,7 @@ import FontAwesome 2.0
 Rectangle {
     property var name
     property var path
+    property var imageData: ""
     property var markers
     property bool hasMarkers: false
     property int mapIndex: -1
@@ -22,7 +23,7 @@ Rectangle {
 
         sourceSize.width: width
         sourceSize.height: height
-        source: path.startsWith("http") ? path : "file:///" + path
+        source: imageData
 
         asynchronous: true
     }
@@ -72,7 +73,7 @@ Rectangle {
 
         onClicked: {
             map_tool.mapIndex = mapIndex
-            image.source = path.startsWith("http") ? path : "file:///" + path
+            image.source = imageData
             image.rotation = 0
 
             if (hasMarkers) {

@@ -7,28 +7,34 @@ Button {
     id: root
     property var element
     property var element_icon
-    property bool has_icon: true
 
     height: color_scheme.toolbarHeight
     hoverEnabled: true
 
     Image {
-        id: icon
-        source: if (element_icon.background.startsWith("http")
-                        || element_icon.background.startsWith("data:")) {
-                    element_icon.background
-                } else if (has_icon) {
-                    "file:///" + element_icon.background
-                } else {
-                    "/icons/media/sound_image.png"
-                }
+        id: thumbnail
+        property bool counter: false
 
+        source: "image://audioElementIcons/" + element_icon.imageId
         anchors.fill: parent
 
-        sourceSize.width: width
-        sourceSize.height: height
+        asynchronous: true
+        cache: false
+
+        sourceSize.width: 400
+        sourceSize.height: 400
 
         fillMode: Image.PreserveAspectCrop
+
+        function reload() {
+            counter = !counter
+            source = "image://audioElementIcons/" + element_icon.imageId + "?r=" + counter
+        }
+
+        Connections {
+            target: element_icon
+            onIconChanged: thumbnail.reload()
+        }
     }
 
     Rectangle {

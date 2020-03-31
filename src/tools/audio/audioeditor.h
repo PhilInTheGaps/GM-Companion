@@ -7,10 +7,10 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include "settings/settingsmanager.h"
+#include "audiosaveload.h"
 #include "addonelementmanager.h"
 #include "audioexporter.h"
 #include "audioeditorfilebrowser.h"
-#include "managers/filemanager.h"
 #include "unsplash/unsplashparser.h"
 #include "../lib/qytlib/youtube.h"
 
@@ -35,7 +35,7 @@ class AudioEditor : public QObject
     Q_PROPERTY(int subscenario READ subscenario NOTIFY currentElementChanged)
 
 public:
-    explicit AudioEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent);
+    explicit AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSaveLoad, QObject *parent);
 
     AddonElementManager* getAddonElementManager() const { return addonElementManager; }
     AudioExporter* getAudioExporter() const { return audioExporter; }
@@ -92,7 +92,6 @@ public:
     Q_INVOKABLE void setMode(QString name, int type, int mode);
     Q_INVOKABLE void addUrl(QString name, int type, QString url, int mode, QString title = "");
     Q_INVOKABLE void addYtUrl(QString elementName, int type, QString videoUrl);
-//    Q_INVOKABLE void setId(QString element, int type, QString id);
 
     Q_INVOKABLE void findUnsplashImages(QString text) { unsplashParser->findImage(text); }
     Q_INVOKABLE void shuffleUnsplashImages() { unsplashParser->shuffle(); }
@@ -128,11 +127,11 @@ private:
     AddonElementManager *addonElementManager = nullptr;
     AudioExporter *audioExporter = nullptr;
     AudioEditorFileBrowser *fileBrowser = nullptr;
-    FileManager *fileManager = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;
     UnsplashParser *unsplashParser = nullptr;
     QNetworkAccessManager m_networkManager;
     YouTube m_youtube;
+    AudioSaveLoad *m_audioSaveLoad = nullptr;
 
     QList<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
@@ -154,6 +153,9 @@ private:
 
 private slots:
     void addFiles(QStringList files);
+    void onFoundProjects(QList<AudioProject *>list, bool isEditor);
+    void onCurrentScenarioChanged();
+    void onExportElements(QList<AudioElement *>elements, bool subscenario, int scenarioIndex);
 
 };
 

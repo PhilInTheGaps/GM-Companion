@@ -1,11 +1,12 @@
 #ifndef ITEMEDITOR_H
 #define ITEMEDITOR_H
 
+#include "tools/shop/shopproject.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QSettings>
 #include <QQmlApplicationEngine>
-#include "managers/filemanager.h"
 
 class ItemEditor : public QObject
 {
@@ -14,7 +15,9 @@ class ItemEditor : public QObject
     Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
 
 public:
-    explicit ItemEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ItemEditor(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+
+    void findItems();
 
     QStringList categories() const { return m_categories; }
 
@@ -33,7 +36,6 @@ signals:
 
 private:
     QSettings *settings;
-    FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
     ItemModel *itemModel;
 
@@ -45,9 +47,6 @@ private:
     void madeChanges();
 
     bool m_isSaved = true;
-
-private slots:
-    void receivedItems(ItemGroup *group);
 
 };
 

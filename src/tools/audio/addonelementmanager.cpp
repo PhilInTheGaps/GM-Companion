@@ -1,5 +1,4 @@
 #include "addonelementmanager.h"
-#include "functions.h"
 #include "settings/settingsmanager.h"
 #include <QDebug>
 #include <QJsonDocument>
@@ -18,19 +17,20 @@ AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
 
 void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
 {
-    QList<MusicElement *> list;
+    //    QList<MusicElement *> list;
 
-    for (auto e : m_spotifyElements)
-    {
-        if (e && e->isExport())
-        {
-            auto e2 = new MusicElement(e->name());
-            e2->setFiles(e->files());
-            list.append(e2);
-        }
-    }
+    //    for (auto e : m_spotifyElements)
+    //    {
+    //        if (e && e->isExport())
+    //        {
+    //            auto e2 = new MusicElement(e->name(), "addons/" + e->name());
+    //            e2->setFiles(e->files());
+    //            list.append(e2);
+    //        }
+    //    }
 
-    if (list.size() > 0) emit exportElements(list, subscenario, scenarioIndex);
+    //    if (list.size() > 0) emit exportElements(list, subscenario,
+    // scenarioIndex);
 }
 
 void AddonElementManager::setFolder(QString folder)
@@ -44,20 +44,23 @@ void AddonElementManager::findAddons()
 {
     QStringList paths = { QDir::homePath() + "/.gm-companion/addons", ":/addons" };
 
-    for (QString path : paths)
-    {
+    /*
+       for (QString path : paths)
+       {
         for (QString addon : getFolders(path))
         {
-            if (!addon.startsWith(".") && SettingsManager::getInstance()->getIsAddonEnabled(addon))
+            if (!addon.startsWith(".") &&
+               SettingsManager::getInstance()->getIsAddonEnabled(addon))
             {
                 m_addonPaths.append(path + "/" + addon);
                 QString spotifyFile = path + "/" + addon + "/spotify.json";
 
-                if (QFile(spotifyFile).exists()) m_spotifyFiles.append(spotifyFile);
+                if (QFile(spotifyFile).exists())
+                   m_spotifyFiles.append(spotifyFile);
             }
         }
-    }
-
+       }
+     */
     findSpotifyFolders();
 }
 
@@ -146,15 +149,18 @@ void AddonElementManager::findSpotifyPlaylists()
 
                             if (!m_spotifyNames.contains(name))
                             {
-                                auto uri     = playlist.toObject().value("uri").toString();
-                                auto element = new MusicElement(name);
-                                auto af      = new AudioFile(uri, 2);
+                                // auto uri     =
+                                // playlist.toObject().value("uri").toString();
+                                // auto element =
+                                // new MusicElement(name);
+                                // auto af      =
+                                // new AudioFile(uri, 2, "", element);
+                                // element->setFiles({
+                                // af });
 
-                                element->setFiles({ af });
-                                element->setExport(false);
-
-                                m_spotifyNames.append(name);
-                                m_spotifyElements.append(element);
+                                //                  element->setExport(false);
+                                //                  m_spotifyNames.append(name);
+                                //            m_spotifyElements.append(element);
                             }
                         }
                     }

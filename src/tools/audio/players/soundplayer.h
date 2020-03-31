@@ -1,6 +1,7 @@
 #ifndef SOUNDPLAYER_H
 #define SOUNDPLAYER_H
 
+#include <QBuffer>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 
@@ -11,29 +12,85 @@
 class SoundPlayer : public AudioPlayer
 {
     Q_OBJECT
-public:
-    explicit SoundPlayer(FileManager *fManager);
 
-    void play(SoundElement* element);
-    void stop(QString element);
-    void setVolume(float volume);
+public:
+    SoundPlayer(AudioElement *element, int volume, QObject *parent = nullptr);
+    ~SoundPlayer();
+
+    AudioElement *element() const { return m_element; }
+    void loadMedia(AudioFile *file);
+
+public slots:
+    void play();
+    void pause() { m_mediaPlayer->pause(); }
+    void stop();
+    void stopElement(QString element);
+    void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
+    void setLinearVolume(int volume) { }
+    void again() {}
+    void next();
+    void setIndex(int index) {}
 
 private:
-    QList<QMediaPlayer*> players;
-    QList<SoundElement*> elements;
+    AudioElement *m_element = nullptr;
+    QMediaPlayer *m_mediaPlayer = nullptr;
     YouTube youtube;
 
-    QMap<int, QMediaPlayer*> m_ytRequestMap;
+    QList<AudioFile*> m_playlist;
+    int m_playlistIndex = 0;
+    int m_fileRequestId = -1;
+    int m_youtubeRequestId = -1;
 
-    float m_volume;
-    bool isSoundPlaying(SoundElement* element);
-    void removeElement(QString element);
+    QByteArray m_mediaData;
+    QBuffer *m_mediaBuffer = nullptr;
+
+    void applyShuffleMode();
 
 private slots:
-    void onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int requestId);
+    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onMediaPlayerError(QMediaPlayer::Error error);
+    void onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int requestId);
+    void onFileReceived(int requestId, QByteArray data);
 
 signals:
-    void soundsChanged(QList<SoundElement*>);
+    void playerStopped(SoundPlayer *player);
+};
+
+
+class SoundPlayerController : public AudioPlayer
+{
+    Q_OBJECT
+public:
+    SoundPlayerController(QObject *parent = nullptr);
+
+    void play(AudioElement* elements);
+    void stop(QString element) { emit stopElement(element); }
+
+public slots:
+    void play() { }
+    void pause() { }
+    void stop() { emit stopAll(); }
+    void setLogarithmicVolume(int volume);
+    void setLinearVolume(int volume) {}
+    void next() { }
+    void again() { }
+    void setIndex(int index) { }
+
+private:
+    QList<SoundPlayer*> m_players;
+    int m_volume;
+
+    QList<AudioElement *> elements() const;
+    bool isSoundPlaying(AudioElement* elements);
+
+private slots:
+    void onPlayerStopped(SoundPlayer *player);
+
+signals:
+    void setVolume(int volume);
+    void stopElement(QString element);
+    void stopAll();
+    void soundsChanged(QList<AudioElement*>);
 };
 
 #endif // SOUNDPLAYER_H

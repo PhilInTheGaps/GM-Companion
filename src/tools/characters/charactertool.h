@@ -5,7 +5,6 @@
 #include <QList>
 #include <QQmlApplicationEngine>
 #include "character.h"
-#include "managers/filemanager.h"
 #include "viewers/characterimageviewer.h"
 #include "viewers/characterdsa5viewer.h"
 
@@ -19,12 +18,12 @@ class CharacterTool : public QObject
     Q_PROPERTY(int pageIndex READ pageIndex NOTIFY pageIndexChanged)
 
 public:
-    explicit CharacterTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit CharacterTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     CharacterImageViewer *getImageViewer() const { return m_imageViewer; }
     CharacterDSA5Viewer *getDSA5Viewer() const { return m_dsa5Viewer; }
 
-    QStringList characters() const { return m_characterNames; }
+    QStringList characters() const;
     QStringList categories() const { if (m_currentViewer) return m_currentViewer->categories(); else return {}; }
     int categoryIndex() const { if (m_currentViewer) return m_currentViewer->categoryIndex(); else return 0; }
     int pageIndex() const { if (m_currentViewer) return m_currentViewer->pageIndex(); else return 0; }
@@ -45,26 +44,33 @@ signals:
     void pageIndexChanged();
 
 private:
-    FileManager *fileManager = nullptr;
-
     CharacterViewer *m_currentViewer = nullptr;
     CharacterImageViewer *m_imageViewer = nullptr;
     CharacterDSA5Viewer *m_dsa5Viewer = nullptr;
 
-    QStringList m_characterNames, m_inactiveCharacters;
     QList<Character*> m_characters;
-    QList<Character*> m_visibleCharacters;
+    QStringList m_inactiveCharacters;
     Character *m_currentCharacter = nullptr;
 
     bool m_active = true;
+    int m_loadInactiveRequestId = -1;
+    int m_loadCharacterFilesRequestId = -1;
+    int m_loadCharacterFoldersRequestId = -1;
+    int m_convertFileRequestId = -1;
 
-    void loadInactiveCharacters();
+    void loadCharacters();
+    void receivedCharacterFolders(QStringList folders);
+    void receivedCharacterFiles(QStringList files);
+
+    void loadInactiveCharacters(QByteArray data);
     void saveInactiveCharacters();
     void updateCharacter();
 
+    void convertSettingsFile(QByteArray data);
+
 private slots:
-    void receivedCharacters(QList<Character*> characters);
-    void receivedFiles(int reqId, QList<CharacterFile> files);
+    void receivedFile(int id, QByteArray data);
+    void receivedFileList(int id, QStringList files);
 };
 
 

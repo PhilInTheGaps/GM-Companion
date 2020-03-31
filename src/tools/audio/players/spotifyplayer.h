@@ -5,6 +5,7 @@
 #include <QBuffer>
 #include <QTimer>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 #include "audioplayer.h"
 #include "../audioelement.h"
@@ -13,7 +14,7 @@
 struct SpotifyTrack
 {
     QString title;
-    QString id;
+    QString uri;
 };
 
 class SpotifyPlayer : public AudioPlayer
@@ -21,7 +22,7 @@ class SpotifyPlayer : public AudioPlayer
     Q_OBJECT
 
 public:
-    explicit SpotifyPlayer(FileManager *fManager, MetaDataReader *mDReader);
+    SpotifyPlayer(MetaDataReader *mDReader, QObject *parent = nullptr);
     ~SpotifyPlayer();
 
     void play(QString id, int offset = -1, bool playOnce = false);
@@ -35,9 +36,10 @@ public:
     void next();
     void again();
 
-    void setVolume(int volume);
+    void setLogarithmicVolume(int volume) { }
+    void setLinearVolume(int volume);
     bool isPlaying() const { return m_isPlaying; }
-    void getPlaylistTracks(QString id);
+    void getPlaylistTracks(QString uri);
 
 private:
     MetaDataReader *metaDataReader = nullptr;

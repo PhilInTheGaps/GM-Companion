@@ -1,57 +1,81 @@
 #include "shopeditor.h"
+#include "logging.h"
+#include "settings/settingsmanager.h"
+#include "filesystem/filemanager.h"
 
-#include <QDebug>
+#include <QJsonDocument>
 #include <QQmlContext>
 
-ShopEditor::ShopEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), fileManager(fManager), qmlEngine(engine)
+ShopEditor::ShopEditor(QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), qmlEngine(engine)
 {
-    qDebug() << "Loading Shop Editor ...";
-    itemEditor = new ItemEditor(fManager, engine);
+    qCDebug(gmShopsShopEditor()) << "Loading Shop Editor ...";
+    itemEditor = new ItemEditor(engine);
 
     itemModel  = new ItemModel;
     itemModel2 = new ItemModel;
     qmlEngine->rootContext()->setContextProperty("shopEditorItemModel", itemModel);
     qmlEngine->rootContext()->setContextProperty("shopEditorItemModel2", itemModel2);
 
-    connect(fManager->getShopFileManager(), &ShopFileManager::receivedEditorShops, this, &ShopEditor::projectsReceived);
-    connect(fManager->getShopFileManager(), &ShopFileManager::receivedItems,       this, &ShopEditor::itemsReceived);
-    connect(this,                           &ShopEditor::shopChanged,              this, &ShopEditor::onShopChanged);
-    connect(this,                           &ShopEditor::itemGroupChanged,         this, &ShopEditor::onItemsChanged);
-    connect(itemEditor,                     &ItemEditor::itemsSaved,               this, &ShopEditor::itemEditorSaved);
+    connect(this,       &ShopEditor::shopChanged,      this, &ShopEditor::onShopChanged);
+    connect(this,       &ShopEditor::itemGroupChanged, this, &ShopEditor::onItemsChanged);
+    connect(itemEditor, &ItemEditor::itemsSaved,       this, &ShopEditor::itemEditorSaved);
 
-    fManager->getShopFileManager()->findShops(fManager->getModeInt(), true);
-    fManager->getShopFileManager()->findItems(fManager->getModeInt(), false);
+    findShops();
+    findItems();
 }
 
-/**
- * @brief Received projects from ShopFileManager
- * @param projects List of ShopProjects
- */
-void ShopEditor::projectsReceived(QList<ShopProject *>projects)
+void ShopEditor::findShops()
 {
-    m_projects = projects;
+    qCDebug(gmShopsShopEditor()) << "Finding shops ...";
 
-    if (projects.size() > 0) m_currentProject = projects[0];
-    else m_currentProject = nullptr;
+    m_projects.clear();
 
-    emit projectListChanged();
-    emit projectChanged();
+    auto requestId = FileManager::getUniqueRequestId();
+    auto context   = new QObject;
+
+    connect(FileManager::getInstance(), &FileManager::receivedFiles, context, [ = ](int id, QList<QByteArray>data) {
+        if (id != requestId) return;
+
+        for (auto file : data)
+        {
+            m_projects.append(new ShopProject(QJsonDocument::fromJson(file).object()));
+        }
+
+        if (m_projects.size() > 0) m_currentProject = m_projects[0];
+        else m_currentProject = nullptr;
+
+        emit projectListChanged();
+        emit projectChanged();
+
+        delete context;
+    });
+
+    FileManager::getInstance()->getFiles(requestId, SettingsManager::getPath("shops"), "*.shop");
 }
 
-/**
- * @brief Received items from ShopFileManager
- * @param groups List of ItemGroups
- */
-void ShopEditor::itemsReceived(QList<ItemGroup *>groups)
+void ShopEditor::findItems()
 {
-    m_itemGroups = groups;
+    qCDebug(gmShopsShopEditor()) << "Finding items ...";
 
-    if (groups.size() > 0) m_currentItemGroup = groups[0];
-    else m_currentItemGroup = nullptr;
+    auto requestId = FileManager::getUniqueRequestId();
+    auto context   = new QObject;
 
-    emit itemGroupsChanged();
-    emit itemGroupChanged();
+    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
+        if (id != requestId) return;
+
+        m_itemGroups = { new ItemGroup(tr("Custom"), QJsonDocument::fromJson(data).object()) };
+
+        if (m_itemGroups.size() > 0) m_currentItemGroup = m_itemGroups[0];
+        else m_currentItemGroup = nullptr;
+
+        emit itemGroupsChanged();
+        emit itemGroupChanged();
+
+        delete context;
+    });
+
+    FileManager::getInstance()->getFile(requestId, SettingsManager::getPath("shops") + "/CustomItems.items");
 }
 
 /**
@@ -245,7 +269,7 @@ void ShopEditor::onShopChanged()
  */
 void ShopEditor::moveShop(int positions)
 {
-    qDebug() << "ShopEditor: Moving shop by" << positions << "position(s) ...";
+    qCDebug(gmShopsShopEditor()) << "ShopEditor: Moving shop by" << positions << "position(s) ...";
 
     if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop()) return;
 
@@ -313,7 +337,7 @@ void ShopEditor::addItem(int index)
 {
     if (!m_currentProject || !m_currentProject->currentCategory() || !m_currentProject->currentCategory()->currentShop() || !m_currentItemGroup) return;
 
-    qDebug() << "ShopEditor: Adding item at index" << index << "...";
+    qCDebug(gmShopsShopEditor()) << "ShopEditor: Adding item at index" << index << "...";
 
     if ((index > -1) && (index < m_items.size()))
     {
@@ -346,18 +370,21 @@ void ShopEditor::addItem(int index)
 void ShopEditor::save()
 {
     // Save to disc
-    for (auto p : m_projects)
+    auto basePath = SettingsManager::getPath("shops");
+
+    for (auto project : m_projects)
     {
-        fileManager->getShopFileManager()->saveProject(p);
+        FileManager::getInstance()->saveFile(
+            basePath + "/" + project->name() + ".shop",
+            QJsonDocument(project->toJson()).toJson());
     }
 
     // Copy all projects and send them to ShopTool
     QList<ShopProject *> copies;
 
-    for (auto p : m_projects)
+    for (auto project : m_projects)
     {
-        ShopProject *copy = new ShopProject(p);
-        copies.append(copy);
+        copies.append(new ShopProject(project));
     }
 
     emit projectsSaved(copies);

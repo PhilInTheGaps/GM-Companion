@@ -4,7 +4,6 @@
 #include <QObject>
 
 #include "itemeditor.h"
-#include "managers/filemanager.h"
 #include <QQmlApplicationEngine>
 
 class ShopEditor : public QObject
@@ -24,8 +23,11 @@ class ShopEditor : public QObject
     Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
 
 public:
-    explicit ShopEditor(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ShopEditor(QQmlApplicationEngine *engine, QObject *parent = nullptr);
     ItemEditor* getItemEditor() const { return itemEditor; }
+
+    void findShops();
+    void findItems();
 
     QStringList projectNames() const;
     QStringList categoryNames() const;
@@ -76,7 +78,6 @@ signals:
 
 private:
     ItemEditor *itemEditor;
-    FileManager *fileManager;
     QQmlApplicationEngine *qmlEngine;
     ItemModel *itemModel;
     ItemModel *itemModel2;
@@ -97,8 +98,6 @@ private:
     void createShop(QString name);
 
 private slots:
-    void projectsReceived(QList<ShopProject*> projects);
-    void itemsReceived(QList<ItemGroup*> groups);
     void onShopChanged();
     void onItemsChanged();
     void itemEditorSaved(ItemGroup *group);

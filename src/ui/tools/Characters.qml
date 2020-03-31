@@ -23,6 +23,7 @@ Page {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             padding: 10
+            spacing: 10
 
             // Active
             ToolBarIconButton {
@@ -116,11 +117,11 @@ Page {
             active: true
         }
 
-        Loader {
-            id: dsa5_page
-            source: "characters/DSA5Page.qml"
-            asynchronous: true
-            active: true
-        }
+        //        Loader {
+        //            id: dsa5_page
+        //            source: "characters/DSA5Page.qml"
+        //            asynchronous: true
+        //            active: true
+        //        }
     }
 }

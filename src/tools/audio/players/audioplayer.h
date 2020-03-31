@@ -2,27 +2,25 @@
 #define AUDIOPLAYER_H
 
 #include <QObject>
-#include "managers/filemanager.h"
 
 class AudioPlayer : public QObject
 {
     Q_OBJECT
 public:
-    AudioPlayer(FileManager *fManager, QObject *parent = nullptr) {}
+    AudioPlayer(QObject *parent = nullptr) : QObject(parent) {}
     AudioPlayer() {}
-    virtual ~AudioPlayer() {}
+    ~AudioPlayer() {}
 
-    virtual void play() {}
-    virtual void pause() {}
-    virtual void stop() {}
-    virtual void setVolume(int volume) {}
-    virtual void setVolume(float volume) {}
-    virtual void again() {}
-    virtual void next() {}
-    virtual void setIndex(int index) {}
+public slots:
+    virtual void play() = 0;
+    virtual void pause() = 0;
+    virtual void stop() = 0;
+    virtual void setLogarithmicVolume(int volume) = 0;
+    virtual void setLinearVolume(int volume) = 0;
+    virtual void again() = 0;
+    virtual void next() = 0;
+    virtual void setIndex(int index) = 0;
 
-protected:
-    FileManager *fileManager;
 };
 
 #endif // AUDIOPLAYER_H

@@ -1,5 +1,5 @@
+#include "audioicongenerator.h"
 #include "audiotool.h"
-#include "functions.h"
 #include "services/spotify.h"
 
 #include <QDebug>
@@ -13,50 +13,46 @@
 #include <QDBusObjectPath>
 #include <QDBusMetaType>
 
-AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), fileManager(fManager), qmlEngine(engine)
+AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), qmlEngine(engine)
 {
     qDebug().noquote() << "Loading AudioTool ...";
 
-    editor         = new AudioEditor(fManager, qmlEngine, this);
+    editor         = new AudioEditor(qmlEngine, &audioSaveLoad, this);
     metaDataReader = new MetaDataReader;
 
     // Spotify
-    spotifyPlayer = new SpotifyPlayer(fManager, metaDataReader);
+    spotifyPlayer = new SpotifyPlayer(metaDataReader);
     connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
-    musicPlayer = new MusicPlayer(fileManager, spotifyPlayer);
+    musicPlayer = new MusicPlayer(spotifyPlayer);
     connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
     connect(musicPlayer, &MusicPlayer::songNamesChanged,    [ = ]() { emit songsChanged(); });
     connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
 
-    musicPlayers.append(static_cast<AudioPlayer *>(musicPlayer));
+    audioPlayers.append(static_cast<AudioPlayer *>(musicPlayer));
 
     // Sound Player
-    soundPlayer = new SoundPlayer(fileManager);
-    connect(soundPlayer, &SoundPlayer::soundsChanged, this, &AudioTool::onSoundsChanged);
+    soundPlayer = new SoundPlayerController;
+    connect(soundPlayer, &SoundPlayerController::soundsChanged, this, &AudioTool::onSoundsChanged);
     soundModel = new AudioElementModel;
     qmlEngine->rootContext()->setContextProperty("soundModel", soundModel);
 
     // Radio Player
-    radioPlayer = new RadioPlayer(fileManager);
-    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::radioPathChanged, radioPlayer, &RadioPlayer::onUrlChanged);
-    connect(radioPlayer,                     &RadioPlayer::startedPlaying,     this,        &AudioTool::onStartedPlaying);
-    musicPlayers.append(radioPlayer);
+    radioPlayer = new RadioPlayer;
+    connect(radioPlayer, &RadioPlayer::startedPlaying, this, &AudioTool::onStartedPlaying);
+    audioPlayers.append(radioPlayer);
 
     elementModel = new AudioElementModelModel;
     elementModel->setElements({ new AudioElementModel });
     qmlEngine->rootContext()->setContextProperty("elementModel", elementModel);
 
-    connect(fileManager->getAudioSaveLoad(), &AudioSaveLoad::foundProjects,      [ = ](QList<AudioProject *>projects, bool isEditor) {
-        if (!isEditor) onProjectsChanged(projects);
-    });
-    connect(this,                            &AudioTool::currentScenarioChanged, this,           &AudioTool::onCurrentScenarioChanged);
+    connect(this,           &AudioTool::currentScenarioChanged, this,           &AudioTool::onCurrentScenarioChanged);
 
     // Meta Data
-    connect(musicPlayer,                     &MusicPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(radioPlayer,                     &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(metaDataReader,                  &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
+    connect(musicPlayer,    &MusicPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
+    connect(radioPlayer,    &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
+    connect(metaDataReader, &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
 
 #ifndef NO_DBUS
 
@@ -76,7 +72,8 @@ AudioTool::AudioTool(FileManager *fManager, QQmlApplicationEngine *engine, QObje
 #endif // ifdef NO_DBUS
 
     // Find and load projects
-    fileManager->getAudioSaveLoad()->findProjects(fileManager->getModeInt());
+    connect(&audioSaveLoad, &AudioSaveLoad::foundProjects, this, &AudioTool::onProjectsChanged);
+    audioSaveLoad.findProjects();
 }
 
 AudioTool::~AudioTool()
@@ -91,7 +88,6 @@ AudioTool::~AudioTool()
     if (mprisPlayerAdaptor) mprisPlayerAdaptor->deleteLater();
 
     editor->deleteLater();
-    fileManager->deleteLater();
     metaDataReader->deleteLater();
 }
 
@@ -99,8 +95,10 @@ AudioTool::~AudioTool()
     Change the project, notify UI
     @param projects List with pointers to audio projects
  */
-void AudioTool::onProjectsChanged(QList<AudioProject *>projects)
+void AudioTool::onProjectsChanged(QList<AudioProject *>projects, bool forEditor)
 {
+    if (forEditor) return;
+
     m_projects = projects;
 
     emit projectsChanged();
@@ -186,6 +184,8 @@ void AudioTool::onCurrentScenarioChanged()
 
         elementModel->append(m);
     }
+
+    AudioIconGenerator::generateIcons(m_currentProject->currentCategory()->currentScenario());
 }
 
 /**
@@ -246,18 +246,18 @@ void AudioTool::next()
  * @brief Set volume of music players (music, radio)
  * @param volume Volume, float between 0 and 1
  */
-void AudioTool::setMusicVolume(float volume)
+void AudioTool::setMusicVolume(qreal volume)
 {
     qDebug() << "AudioTool: Setting music volume ...";
 
     // Convert volume to logarithmic scale
-    float logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
-    int   linearVolume      = volume * 100;
+    int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
+    int linearVolume      = qRound(volume * 100);
 
-    for (auto a : musicPlayers)
+    for (auto a : audioPlayers)
     {
-        a->setVolume(logarithmicVolume);
-        a->setVolume(linearVolume);
+        a->setLogarithmicVolume(logarithmicVolume);
+        a->setLinearVolume(linearVolume);
     }
 
     if (mprisPlayerAdaptor) mprisPlayerAdaptor->setVolume(logarithmicVolume);
@@ -267,12 +267,12 @@ void AudioTool::setMusicVolume(float volume)
  * @brief Set volume of sound players
  * @param volume Volume, float between 0 and 1
  */
-void AudioTool::setSoundVolume(float volume)
+void AudioTool::setSoundVolume(qreal volume)
 {
     qDebug() << "AudioTool: Setting sound volume ...";
 
-    float logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
-    soundPlayer->setVolume(logarithmicVolume);
+    int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
+    soundPlayer->setLogarithmicVolume(logarithmicVolume);
 }
 
 /**
@@ -374,7 +374,7 @@ void AudioTool::setMusicIndex(int index)
  * @brief Update the list of active songs when they change
  * @param elements List of active sound elements
  */
-void AudioTool::onSoundsChanged(QList<SoundElement *>elements)
+void AudioTool::onSoundsChanged(QList<AudioElement *>elements)
 {
     qDebug() << "AudioTool: Sounds changed!";
 
@@ -421,7 +421,8 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     QMap<QString, QVariant> map;
     map.insert("mpris:trackid",     "gmcompanion:music");
     map.insert("mpris:length",      metaData.length);
-    map.insert("mpris:artUrl",      "file://" + m_metaData.elementIcon);
+
+    map.insert("mpris:artUrl",      m_metaData.cover);
     map.insert("xesam:album",       m_metaData.album.isEmpty() ? tr("Unknown Album") : m_metaData.album);
     map.insert("xesam:albumArtist", m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
     map.insert("xesam:artist",      m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));

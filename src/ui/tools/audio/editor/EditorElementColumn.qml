@@ -101,7 +101,6 @@ ScrollView {
                         element_type: modelData.type
                         subscenario_name: subscenario_text.text
                         icon: modelData.icon
-                        has_icon: modelData.hasIcon
                         small_mode: root.small_mode
 
                         anchors.left: parent.left

@@ -1,40 +1,53 @@
 #include "shoptool.h"
+#include "logging.h"
+#include "filesystem/filemanager.h"
+#include "settings/settingsmanager.h"
 
-#include <QDebug>
 #include <QSettings>
 #include <QQmlContext>
-#include "functions.h"
+#include <QJsonDocument>
 
-ShopTool::ShopTool(FileManager *fManager, QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), fileManager(fManager), qmlEngine(engine)
+ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), qmlEngine(engine)
 {
-    qDebug() << "Loading Shop Tool ...";
+    qCDebug(gmShopsTool()) << "Loading Shop Tool ...";
 
-    shopEditor = new ShopEditor(fManager, engine);
-
-    itemModel = new ItemModel;
+    shopEditor = new ShopEditor(engine);
+    itemModel  = new ItemModel;
     qmlEngine->rootContext()->setContextProperty("shopItemModel", itemModel);
 
-    connect(fManager->getShopFileManager(), &ShopFileManager::receivedShops, this, &ShopTool::projectsReceived);
-    connect(this,                           &ShopTool::currentShopChanged,   this, &ShopTool::updateItems);
-    connect(shopEditor,                     &ShopEditor::projectsSaved,      this, &ShopTool::shopEditorSaved);
+    connect(this,       &ShopTool::currentShopChanged, this, &ShopTool::updateItems);
+    connect(shopEditor, &ShopEditor::projectsSaved,    this, &ShopTool::shopEditorSaved);
 
-    fManager->getShopFileManager()->findShops(fManager->getModeInt());
+    findShops();
 }
 
-/**
- * @brief When file manager finishes initializing projects
- * @param projects List of ShopProject pointers
- */
-void ShopTool::projectsReceived(QList<ShopProject *>projects)
+void ShopTool::findShops()
 {
-    m_projects = projects;
+    qCDebug(gmShopsShopEditor()) << "Finding shops ...";
 
-    if (m_projects.size() > 0) m_currentProject = m_projects[0];
+    m_projects.clear();
 
-    else m_currentProject = nullptr;
+    auto requestId = FileManager::getUniqueRequestId();
+    auto context   = new QObject;
 
-    emit projectsChanged();
+    connect(FileManager::getInstance(), &FileManager::receivedFiles, context, [ = ](int id, QList<QByteArray>data) {
+        if (id != requestId) return;
+
+        for (auto file : data)
+        {
+            m_projects.append(new ShopProject(QJsonDocument::fromJson(file).object()));
+        }
+
+        if (m_projects.size() > 0) m_currentProject = m_projects[0];
+        else m_currentProject = nullptr;
+
+        emit projectsChanged();
+
+        delete context;
+    });
+
+    FileManager::getInstance()->getFiles(requestId, SettingsManager::getPath("shops"), "*.shop");
 }
 
 /**

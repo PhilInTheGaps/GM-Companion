@@ -5,7 +5,8 @@
 #include <QAbstractListModel>
 #include <QUrl>
 #include <QList>
-#include <QImage>
+#include <QPixmap>
+#include <QJsonObject>
 
 class AudioFile : public QObject
 {
@@ -16,8 +17,9 @@ class AudioFile : public QObject
     Q_PROPERTY(bool missing READ missing WRITE setMissing NOTIFY fileChanged)
 
 public:
-    explicit AudioFile(QString url, int source, QString title = "") :
-        m_source(source), m_url(url), m_title(title){}
+    AudioFile(QString url, int source, QString title, QObject *parent) :
+        QObject(parent), m_source(source), m_url(url), m_title(title){}
+    AudioFile(QJsonObject object, QObject *parent = nullptr);
 
     friend void swap(AudioFile & first, AudioFile & second) {
         // d_ptr swap doesn't take care of parentage
@@ -99,18 +101,18 @@ private:
 class AudioIcon : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString background READ background WRITE setBackground NOTIFY iconChanged)
+    Q_PROPERTY(QString imageId READ imageId WRITE setImageId NOTIFY iconChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY iconChanged)
     Q_PROPERTY(QString subtitle READ subtitle WRITE setSubtitle NOTIFY iconChanged)
 
 public:
-    AudioIcon(QString background, QString title, QString subtitle)
-        : m_background(background), m_title(title), m_subtitle(subtitle) {}
+    AudioIcon(QString image, QString title, QString subtitle)
+        : m_imageId(image), m_title(title), m_subtitle(subtitle) {}
+    AudioIcon(QString imageId) : m_imageId(imageId) {}
     AudioIcon() {}
-    virtual ~AudioIcon() {}
 
-    QString background() const { return m_background; }
-    void setBackground(QString background) { m_background = background; emit iconChanged(); }
+    QString imageId() const { return m_imageId; }
+    void setImageId(QString image) { m_imageId = image; emit iconChanged(); }
 
     QString title() const { return m_title; }
     void setTitle(QString title) { m_title = title; emit iconChanged(); }
@@ -118,24 +120,20 @@ public:
     QString subtitle() const { return m_subtitle; }
     void setSubtitle(QString subtitle) { m_subtitle = subtitle; emit iconChanged(); }
 
-    QList<QImage> collageIcons() const { return m_collageIcons; }
-    bool addCollageIcon(QImage icon);
-     void setCollageIcon(QImage icon, int index);
-
-    QStringList collageIconSources() const { return m_collageIconSources; }
-    void addCollageIconSource(QString source) { m_collageIconSources.append(source); }
+    QList<QPair<QString, QPixmap>> collageIcons() const { return m_collageIcons; }
+    bool addCollageIcon(const QPair<QString, QPixmap> icon);
+    void setCollageIcon(const QPair<QString, QPixmap> icon, int index);
 
     int lastFileIndex() const { return m_lastFileIndex; }
     void setLastFileIndex(int index) { m_lastFileIndex = index; }
+    void update() { emit iconChanged(); }
 
 signals:
     void iconChanged();
 
 private:
-    QString m_background;
-    QString m_title, m_subtitle;
-    QList<QImage> m_collageIcons;
-    QStringList m_collageIconSources;
+    QString m_imageId, m_title, m_subtitle;
+    QList<QPair<QString, QPixmap>> m_collageIcons;
     int m_lastFileIndex = 0;
 };
 
@@ -144,13 +142,14 @@ class AudioElement : public QObject
     Q_OBJECT
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(AudioIcon* icon READ icon NOTIFY iconChanged)
-    Q_PROPERTY(bool hasIcon READ hasIcon NOTIFY iconChanged)
     Q_PROPERTY(int type READ type NOTIFY typeChanged)
 
 public:
-    AudioElement(QString name, AudioIcon *icon);
-    AudioElement(){ m_icon = new AudioIcon; }
+    AudioElement(QString name, int type, QString path);
+    AudioElement(QJsonObject object, int type, QString path, QObject *parent = nullptr);
     ~AudioElement();
+
+    QJsonObject toJson();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }
@@ -158,9 +157,8 @@ public:
     AudioIcon *icon() const { return m_icon; }
     void setIcon(AudioIcon *icon) { m_icon = icon; emit iconChanged(); }
 
-    QString relativeIcon() const { return m_relativeIcon; }
-    void setRelativeIcon(QString icon) { m_relativeIcon = icon; }
-    bool hasIcon() const { return !m_icon->background().isEmpty(); }
+    QString relativeIconPath() const { return m_relativeIconPath; }
+    void setRelativeIcon(QString icon) { m_relativeIconPath = icon; }
 
     void setFiles(QList<AudioFile*> files) { m_files = files; }
     QList<AudioFile*> files() const { return m_files; }
@@ -171,20 +169,26 @@ public:
     void setExport(bool e) { m_export = e; }
     bool isExport() const { return m_export; }
 
-    virtual int type() const { return -1; }
+    int type() const { return m_type; }
 
-protected:
-    QString m_name, m_relativeIcon;
-    int m_mode = 0;
+    QString path() const { return m_path; }
+    void setPath(const QString &path) { m_path = path; }
+
+private:
+    QString m_name, m_relativeIconPath, m_path;
+    int m_mode = 0, m_type = -1;
     bool m_export = true;
     QList<AudioFile*> m_files;
-    AudioIcon *m_icon;
+    AudioIcon *m_icon = nullptr;
 
 signals:
     void nameChanged();
     void iconChanged();
     void typeChanged();
 };
+
+Q_DECLARE_METATYPE(AudioElement*)
+Q_DECLARE_METATYPE(QList<AudioElement*>)
 
 // Model for QML
 class AudioElementModel : public QAbstractListModel {
@@ -239,30 +243,6 @@ protected:
 
 private:
     QVector<QObject*> m_items = {};
-};
-
-// Music
-class MusicElement : public AudioElement
-{
-public:
-    MusicElement(QString name);
-    int type() const { return 0; }
-};
-
-// Sound
-class SoundElement : public AudioElement
-{
-public:
-    SoundElement(QString name);
-    int type() const { return 1; }
-};
-
-// Radio
-class RadioElement : public AudioElement
-{
-public:
-    RadioElement(QString name);
-    int type() const { return 2; }
 };
 
 #endif // AUDIOELEMENT_H

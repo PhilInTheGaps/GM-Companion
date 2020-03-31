@@ -2,31 +2,18 @@
 #define SPOTIFYCONNECTORSERVER_H
 
 #include <QObject>
-#include "spotifyconnector.h"
+#include "restserviceconnector.h"
 #include "settings/settingsmanager.h"
 
 #include <QQueue>
 #include <QTcpServer>
 #include <o0settingsstore.h>
 
-struct RequestContainer {
-    RequestContainer(
-            int id, QNetworkRequest request,
-            int requestType,QByteArray data):
-    requestId(id), request(request),
-    requestType(requestType), data(data) {}
-
-    int requestId;
-    QNetworkRequest request;
-    int requestType;
-    QByteArray data;
-};
-
-class SpotifyConnectorServer : public SpotifyConnector
+class SpotifyConnectorServer : public RESTServiceConnector
 {
     Q_OBJECT
 public:
-    SpotifyConnectorServer(QNetworkAccessManager* networkManager);
+    SpotifyConnectorServer(QNetworkAccessManager* networkManager, QObject *parent = nullptr);
     ~SpotifyConnectorServer();
 
     void grantAccess();
@@ -35,12 +22,14 @@ public:
     int get(QUrl url) { return get(QNetworkRequest(url)); }
     int get(QNetworkRequest request);
     void get(QNetworkRequest request, int requestId);
-    int put(QUrl url, QString params = "");
-    void put(QNetworkRequest request, QString data, int requestId);
+    int put(QNetworkRequest request, QByteArray data = "");
+    void put(QNetworkRequest request, QByteArray data, int requestId);
     int post(QNetworkRequest request, QByteArray data = "");
     void post(QNetworkRequest request, QByteArray data, int requestId);
+
+    void customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, int requestId) {}
+
     int getUniqueRequestId() { return ++m_requestCount; }
-    QString getConnectorType() const { return "server"; }
 
 private:
     O0SettingsStore *m_settingsStore = nullptr;
@@ -60,7 +49,7 @@ private:
 
     QString getAccessToken() const { return m_settingsStore->value("SPOTIFY_ACCESS_TOKEN"); }
     void saveAccessToken(QString token) { m_settingsStore->setValue("SPOTIFY_ACCESS_TOKEN", token); }
-    void requestAccessToken(QString code);
+    void requestAccessToken(const QString& code);
 
     QString getRefreshToken() const { return m_settingsStore->value("SPOTIFY_REFRESH_TOKEN"); }
     void saveRefreshToken(QString token) { m_settingsStore->setValue("SPOTIFY_REFRESH_TOKEN", token); }
@@ -69,7 +58,7 @@ private:
     void updateExpireTime(int expiresIn);
     bool isTokenExpired() const { return QDateTime::currentDateTime() > m_expireTime; }
 
-    QString getServerUrl();
+    static QString getServerUrl();
 
     bool canSendRequest();
     void enqueueRequest(RequestContainer container) { m_requestQueue.enqueue(container); }
@@ -77,15 +66,15 @@ private:
 
     QNetworkRequest addAuthHeader(QNetworkRequest request);
 
-    void handleRateLimit(RequestContainer container, QList<QPair<QByteArray, QByteArray> > headers);
+    void handleRateLimit(const RequestContainer& container, const QList<QPair<QByteArray, QByteArray> >& headers);
     void startCooldown(int seconds);
 
 private slots:
     void onIncomingConnection();
     void onBytesReady();
     void closeServer(QTcpSocket *socket, bool hasparameters);
-    QMap<QString, QString> parseQueryParams(QByteArray *data);
-    void onReceivedReply(RequestContainer container, QByteArray data, QList<QPair<QByteArray, QByteArray>> headers, QNetworkReply::NetworkError error);
+    static QMap<QString, QString> parseQueryParams(QByteArray *data);
+    void onReceivedReply(const RequestContainer& container, const QByteArray& data, const QList<QPair<QByteArray, QByteArray>>& headers, QNetworkReply::NetworkError error);
     void onCooldownFinished();
 
 signals:
