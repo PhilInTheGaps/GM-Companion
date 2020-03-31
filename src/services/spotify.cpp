@@ -6,10 +6,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QDebug>
-#include <QByteArray>
-#include <QUrlQuery>
-#include <QHostInfo>
 #include <QCoreApplication>
 #include <QNetworkRequest>
 #include "o0globals.h"
@@ -48,10 +44,9 @@ void Spotify::updateConnector()
 {
     qCDebug(gmSpotify()) << "Updating spotify connector ...";
 
-    
-    
-        delete m_connector;
-    
+
+    delete m_connector;
+
 
     if (SettingsManager::getSetting("serviceConnection", "default") == "local")
     {
@@ -74,7 +69,7 @@ void Spotify::updateConnector()
  * @return 0: Album, 1: Playlist, 2: Track, 3: Artist, 4: episode, 5: show -1:
  * unknown
  */
-auto Spotify::getUriType(const QString& uri) -> int
+auto Spotify::getUriType(const QString& uri)->int
 {
     if (uri.contains("album:")) return 0;
 
@@ -96,7 +91,7 @@ auto Spotify::getUriType(const QString& uri) -> int
  * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
  * @return Spotify ID like 6rqhFgbbKwnb9MLmUQDhG6
  */
-auto Spotify::getIdFromUri(QString uri) -> QString
+auto Spotify::getIdFromUri(QString uri)->QString
 {
     return uri = uri.right(uri.count() - uri.lastIndexOf(":") - 1);
 }
@@ -106,7 +101,7 @@ auto Spotify::getIdFromUri(QString uri) -> QString
  * @param href Spotify href like
  * https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2
  */
-auto Spotify::getIdFromHref(const QString& href) -> QString
+auto Spotify::getIdFromHref(const QString& href)->QString
 {
     auto split = href.split("/");
     auto index = -1;
@@ -127,7 +122,7 @@ auto Spotify::getIdFromHref(const QString& href) -> QString
     return split[index];
 }
 
-auto Spotify::getInstance() -> Spotify *
+auto Spotify::getInstance()->Spotify *
 {
     if (!instanceFlag)
     {
@@ -209,7 +204,7 @@ void Spotify::startLibrespot()
     setDeviceActive();
 }
 
-auto Spotify::getLibrespotPath() -> QString
+auto Spotify::getLibrespotPath()->QString
 {
     auto binaryName = "librespot";
 

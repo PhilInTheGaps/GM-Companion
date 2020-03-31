@@ -91,7 +91,9 @@ void FileAccessGoogleDrive::startFileDownload(int requestId, GoogleDriveFile *fi
 
     QUrl url("https://www.googleapis.com/drive/v3/files/" + file->id());
 
-    url.setQuery(QUrlQuery({ { "alt", "media" } }));
+    QUrlQuery query;
+    query.addQueryItem("alt", "media");
+    url.setQuery(query);
 
     qCDebug(gmFileAccessGoogle()) << "Found file id, starting download" << url << "...";
 
@@ -353,7 +355,9 @@ void FileAccessGoogleDrive::updateFilePart1(const QString& fileId, QByteArray da
     qCDebug(gmFileAccessGoogle()) << "Updating file" << fileId;
     QUrl url("https://www.googleapis.com/upload/drive/v3/files/" + fileId);
 
-    url.setQuery(QUrlQuery({ { "uploadType", "resumable" } }));
+    QUrlQuery query;
+    query.addQueryItem("uploadType", "resumable");
+    url.setQuery(query);
 
     m_updateFileRequests[GoogleDrive::getInstance()->customRequest(QNetworkRequest(url), "PATCH", "")] = data;
 }
@@ -384,7 +388,9 @@ void FileAccessGoogleDrive::uploadFilePart1(const QString& fileName, GoogleDrive
     qCDebug(gmFileAccessGoogle()) << "Uploading file to folder" << parentFolder;
     QUrl url("https://www.googleapis.com/upload/drive/v3/files");
 
-    url.setQuery(QUrlQuery({ { "uploadType", "resumable" } }));
+    QUrlQuery query;
+    query.addQueryItem("uploadType", "resumable");
+    url.setQuery(query);
 
     QJsonObject metaData = {
         { "name", fileName }, { "parents", QJsonArray({ parentFolder->id() }) }
@@ -617,7 +623,10 @@ void FileAccessGoogleDrive::receivedFolderIndex(const QByteArray& data, GoogleDr
     if (root.contains("nextPageToken"))
     {
         QUrl url("https://www.googleapis.com/drive/v3/files");
-        url.setQuery(QUrlQuery({ { "pageToken", root["nextPageToken"].toString() } }));
+        QUrlQuery query;
+        query.addQueryItem("pageToken", root["nextPageToken"].toString());
+        url.setQuery(query);
+
         m_folderIndexRequests[GoogleDrive::getInstance()->get(QNetworkRequest(url))] = parentFolder;
         return;
     }
@@ -663,9 +672,6 @@ void FileAccessGoogleDrive::dequeueRequests()
     case CheckIfFilesExist:
         checkIfFilesExist(request.requestId, request.files);
         break;
-
-    default:
-        qCCritical(gmFileAccessGoogle()) << "Request type not implemented!";
     }
 }
 
