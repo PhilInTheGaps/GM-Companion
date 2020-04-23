@@ -3,11 +3,14 @@
 #include <QSettings>
 #include <QDir>
 #include <QDebug>
+#include <QQmlContext>
 
-ConverterTool::ConverterTool(QObject *parent) : QObject(parent)
+ConverterTool::ConverterTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
     m_unitPaths.append({ ":/units/default.ini", QDir::homePath() + "/.gm-companion/units/custom.ini" });
     addAddonUnits();
+
+    engine->rootContext()->setContextProperty("converter_tool", this);
 
     updateUnits();
 }

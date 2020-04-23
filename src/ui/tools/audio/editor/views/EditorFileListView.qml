@@ -1,15 +1,14 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
-
+import CustomComponents 1.0
 import FontAwesome 2.0
+
 import "../../buttons"
+import "../../../../defines.js" as Defines
 
-Rectangle {
+Item {
     id: file_list_view
-
-    color: color_scheme.backgroundColor
 
     Connections {
         target: audio_editor
@@ -52,15 +51,15 @@ Rectangle {
             id: delegate_root
 
             width: parent.width
-            height: ListView.isCurrentItem ? color_scheme.toolbarHeight : delegate_label.height + 25
+            height: ListView.isCurrentItem ? Defines.TOOLBAR_HEIGHT : delegate_label.height + 25
 
             Rectangle {
                 anchors.fill: parent
                 color: modelData
-                       && modelData.missing ? "darkred" : (file_list.currentIndex == index ? color_scheme.menuColor : color_scheme.backgroundColor)
+                       && modelData.missing ? "darkred" : (file_list.currentIndex == index ? palette.alternateBase : palette.window)
             }
 
-            Text {
+            Label {
                 id: delegate_label
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -70,8 +69,7 @@ Rectangle {
                 text: modelData
                       && modelData.title !== "" ? modelData.title + "  |  "
                                                   + modelData.url : modelData.url
-                color: file_list.currentIndex
-                       == index ? color_scheme.toolbarTextColor : color_scheme.textColor
+
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
@@ -91,11 +89,12 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 spacing: 10
+                padding: 10
 
                 // Folder
-                ControlBarButton {
+                CustomToolBarButton {
                     visible: modelData && modelData.source === 0
-                    fa_icon: FontAwesome.folder
+                    iconText: FontAwesome.folder
 
                     onClicked: {
                         file_dialog.index = index
@@ -121,10 +120,9 @@ Rectangle {
                             color: "transparent"
                         }
 
-                        Text {
+                        Label {
                             text: FontAwesome.chevronUp
                             font.family: FontAwesome.familySolid
-                            color: color_scheme.toolbarTextColor
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -158,10 +156,9 @@ Rectangle {
                             color: "transparent"
                         }
 
-                        Text {
+                        Label {
                             text: FontAwesome.chevronDown
                             font.family: FontAwesome.familySolid
-                            color: color_scheme.toolbarTextColor
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -186,8 +183,8 @@ Rectangle {
                 }
 
                 // Delete
-                ControlBarButton {
-                    fa_icon: FontAwesome.trashAlt
+                CustomToolBarButton {
+                    iconText: FontAwesome.trashAlt
 
                     onClicked: {
                         delegate_root.ListView.view.last_index = index

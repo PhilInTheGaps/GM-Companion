@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/CustomComponents">
+        <file>CustomButton.qml</file>
+        <file>CustomToolBar.qml</file>
+        <file>qmldir</file>
+        <file>CustomToolBarComboBox.qml</file>
+        <file>CustomToolBarButton.qml</file>
+        <file>CustomRadioButton.qml</file>
+        <file>CustomCheckBox.qml</file>
+        <file>CustomTextField.qml</file>
+        <file>CustomScrollBar.qml</file>
+        <file>CustomTextEdit.qml</file>
+        <file>CustomComboBox.qml</file>
+    </qresource>
+</RCC>

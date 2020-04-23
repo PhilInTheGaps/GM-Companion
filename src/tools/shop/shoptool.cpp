@@ -3,7 +3,6 @@
 #include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
 
-#include <QSettings>
 #include <QQmlContext>
 #include <QJsonDocument>
 
@@ -14,7 +13,9 @@ ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
 
     shopEditor = new ShopEditor(engine);
     itemModel  = new ItemModel;
-    qmlEngine->rootContext()->setContextProperty("shopItemModel", itemModel);
+    engine->rootContext()->setContextProperty("shop_tool", this);
+    engine->rootContext()->setContextProperty("shop_editor", shopEditor);
+    engine->rootContext()->setContextProperty("shopItemModel", itemModel);
 
     connect(this,       &ShopTool::currentShopChanged, this, &ShopTool::updateItems);
     connect(shopEditor, &ShopEditor::projectsSaved,    this, &ShopTool::shopEditorSaved);
@@ -39,8 +40,14 @@ void ShopTool::findShops()
             m_projects.append(new ShopProject(QJsonDocument::fromJson(file).object()));
         }
 
-        if (m_projects.size() > 0) m_currentProject = m_projects[0];
-        else m_currentProject = nullptr;
+        if (m_projects.size() > 0)
+        {
+            m_currentProject = m_projects[0];
+        }
+        else
+        {
+            m_currentProject = nullptr;
+        }
 
         emit projectsChanged();
 
@@ -65,9 +72,14 @@ void ShopTool::shopEditorSaved(QList<ShopProject *>projects)
     // Use new ones
     m_projects = projects;
 
-    if (m_projects.size() > 0) m_currentProject = m_projects[0];
-
-    else m_currentProject = nullptr;
+    if (m_projects.size() > 0)
+    {
+        m_currentProject = m_projects[0];
+    }
+    else
+    {
+        m_currentProject = nullptr;
+    }
 
     emit projectsChanged();
     emit categoriesChanged();

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QQmlApplicationEngine>
 
 class NameGenerator : public QObject
 {
@@ -10,7 +11,7 @@ class NameGenerator : public QObject
     Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
 
 public:
-    explicit NameGenerator(QObject *parent = nullptr);
+    explicit NameGenerator(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     Q_INVOKABLE void updateCategories();
 

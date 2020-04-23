@@ -13,7 +13,7 @@ GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
     updateConnector();
 }
 
-auto GoogleDrive::getInstance() -> GoogleDrive *
+auto GoogleDrive::getInstance()->GoogleDrive *
 {
     if (!instanceFlag)
     {
@@ -40,9 +40,12 @@ void GoogleDrive::updateConnector()
 
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &GoogleDrive::onAccessGranted);
     connect(m_connector, &RESTServiceConnector::receivedReply, this, &GoogleDrive::onReceivedReply);
+    connect(m_connector, &RESTServiceConnector::statusChanged, this, &GoogleDrive::updateStatus);
+
+    grant();
 }
 
-auto GoogleDrive::customRequest(const QNetworkRequest& request, const QByteArray& verb, const QByteArray& data) -> int
+auto GoogleDrive::customRequest(const QNetworkRequest& request, const QByteArray& verb, const QByteArray& data)->int
 {
     auto requestId = getUniqueRequestId();
 
@@ -62,4 +65,10 @@ void GoogleDrive::onReceivedReply(int id, QNetworkReply::NetworkError error, con
     }
 
     emit receivedReply(id, error, data, std::move(headers));
+}
+
+void GoogleDrive::updateStatus(const QString& status)
+{
+    m_status = status;
+    emit statusChanged();
 }

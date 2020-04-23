@@ -25,7 +25,7 @@ public:
     SpotifyPlayer(MetaDataReader *mDReader, QObject *parent = nullptr);
     ~SpotifyPlayer();
 
-    void play(QString id, int offset = -1, bool playOnce = false);
+    void play(const QString& id, int offset = -1, bool playOnce = false);
     void play();
     void pause() { stop(); }
     void stop();
@@ -39,7 +39,7 @@ public:
     void setLogarithmicVolume(int volume) { }
     void setLinearVolume(int volume);
     bool isPlaying() const { return m_isPlaying; }
-    void getPlaylistTracks(QString uri);
+    void getPlaylistTracks(const QString& uri);
 
 private:
     MetaDataReader *metaDataReader = nullptr;
@@ -51,7 +51,7 @@ private:
 
     bool m_isPlaying = false;
     bool m_playOnce = false;
-    int m_volume;
+    int m_volume = 0;
     int m_currentIndex = 0;
 
     QStringList m_trackList;
@@ -68,7 +68,7 @@ signals:
     void receivedElementIcon(AudioElement *element);
 
 private slots:
-    void gotPlaylistInfo(int id, QNetworkReply::NetworkError error, QByteArray data);
+    void gotPlaylistInfo(int id, QNetworkReply::NetworkError error, const QByteArray& data);
 };
 
 

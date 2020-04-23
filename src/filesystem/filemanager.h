@@ -14,6 +14,8 @@ public:
     static int getUniqueRequestId();
 
 public slots:
+    void updateFileAccess();
+
     void getFile(int requestId, QString filePath);
     void getFiles(int requestId, QString directory, QString fileEnding = "");
     void getFileList(int requestId, QString directory, bool folders = false);
@@ -31,8 +33,6 @@ private:
     static int fileAccessCount;
 
     FileAccess *m_fileAccess = nullptr;
-
-    void setFileAccess();
 
 signals:
     void receivedFile(int id, QByteArray data);

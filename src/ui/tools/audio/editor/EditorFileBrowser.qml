@@ -1,13 +1,11 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
 import "../buttons"
 
-Rectangle {
+Item {
     id: file_browser
-    color: "transparent"
 
     Connections {
         target: audio_editor
@@ -34,7 +32,6 @@ Rectangle {
             onFolderClicked: modelData.opened = !opened
         }
 
-        ScrollBar.vertical: ScrollBar {
-        }
+        ScrollBar.vertical: ScrollBar {}
     }
 }

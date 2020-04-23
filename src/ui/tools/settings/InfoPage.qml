@@ -1,47 +1,72 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
+import FontAwesome 2.0
 
 Item {
     id: root
 
-    Column {
-        id: left_column
-        spacing: 5
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
+    Rectangle {
+        id: right_item
         anchors.top: parent.top
-        width: 200
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        width: 175
 
-        property var button_names: [qsTr("Open Wiki"), qsTr(
-                "Report a Bug"), qsTr("Download older Versions"), qsTr(
-                "View on GitHub"), qsTr("Changelog"), qsTr("About")]
-        property var button_urls: ["https://gm-companion.github.io/documentation.html", "https://github.com/PhilInTheGaps/GM-Companion/issues", "https://github.com/PhilInTheGaps/GM-Companion/releases", "https://github.com/PhilInTheGaps/GM-Companion", "https://gm-companion.github.io/documentation/changelog.html", "https://gm-companion.github.io/about.html"]
+        color: palette.dark
 
-        Repeater {
-            model: left_column.button_names
+        Column {
+            anchors.fill: parent
+            anchors.margins: 5
 
-            Button {
-                text: modelData
-                anchors.left: parent.left
-                anchors.right: parent.right
+            Repeater {
+                model: [{
+                        "name": qsTr("Open Wiki"),
+                        "icon": FontAwesome.book,
+                        "iconFont": FontAwesome.familySolid,
+                        "url": "https://gm-companion.github.io/documentation.html"
+                    }, {
+                        "name": qsTr("Report a Bug"),
+                        "icon": FontAwesome.bug,
+                        "iconFont": FontAwesome.familySolid,
+                        "url": "https://github.com/PhilInTheGaps/GM-Companion/issues"
+                    }, {
+                        "name": qsTr("Older Versions"),
+                        "icon": FontAwesome.download,
+                        "iconFont": FontAwesome.familySolid,
+                        "url": "https://github.com/PhilInTheGaps/GM-Companion/releases"
+                    }, {
+                        "name": qsTr("View on GitHub"),
+                        "icon": FontAwesome.github,
+                        "iconFont": FontAwesome.familyBrands,
+                        "url": "https://github.com/PhilInTheGaps/GM-Companion"
+                    }, {
+                        "name": qsTr("Changelog"),
+                        "icon": FontAwesome.clipboardList,
+                        "iconFont": FontAwesome.familySolid,
+                        "url": "https://gm-companion.github.io/documentation/changelog.html"
+                    }]
 
-                onClicked: Qt.openUrlExternally(left_column.button_urls[index])
+                CustomButton {
+                    buttonText: modelData.name
+                    iconText: modelData.icon
+                    iconFont: modelData.iconFont
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    onClicked: Qt.openUrlExternally(modelData.url)
+                }
             }
-        }
-
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Version: " + update_manager.getCurrentVersion()
-            color: color_scheme.textColor
         }
     }
 
     Item {
-        anchors.left: left_column.right
-        anchors.right: parent.right
+        id: mid_item
+        anchors.left: parent.left
+        anchors.right: right_item.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        anchors.leftMargin: 5
+        anchors.margins: 10
 
         Label {
             id: credits_label
@@ -49,23 +74,31 @@ Item {
             font.pointSize: 12
             anchors.top: parent.top
             anchors.left: parent.left
-            color: color_scheme.textColor
         }
 
-        ScrollView {
+        Flickable {
+            id: flickable
             anchors.top: credits_label.bottom
             anchors.bottom: parent.bottom
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.topMargin: 10
+
             contentHeight: credits_column.implicitHeight
             contentWidth: -1
+            interactive: true
             clip: true
+
+            ScrollBar.vertical: CustomScrollBar {
+                id: scroll_bar
+                visible: flickable.contentHeight > flickable.height
+            }
 
             Column {
                 id: credits_column
                 anchors.left: parent.left
                 anchors.right: parent.right
+                anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
                 spacing: 10
 
                 CreditsItem {
@@ -81,21 +114,9 @@ Item {
                 }
 
                 CreditsItem {
-                    title: qsTr("Music, Sound and Radio icons")
-                    description: qsTr("Icons by Marius Masalar, Davin Martin Jr. and Alex Blăjan from Unsplash.")
-                    links: [["Marius Masalar", "https://unsplash.com/@marius"], ["Davin Martin Jr.", "https://unsplash.com/@davidmartinjr"], ["Alex Blăjan", "https://unsplash.com/@alexb"], ["Unsplash", "https://unsplash.com"]]
-                }
-
-                CreditsItem {
-                    title: "FontAwesome"
-                    description: qsTr("A great icon library.")
-                    links: [["fontawesome.com", "https://fontawesome.com"]]
-                }
-
-                CreditsItem {
                     title: "FontAwesome.pri"
                     description: qsTr("FontAwesome QML implementation. This project uses a fork of FontAwesome.pri by Ben Lau.")
-                    links: [[qsTr("Original"), "https://github.com/benlau/fontawesome.pri"], [qsTr("Fork"), "https://github.com/PhilInTheGaps/fontawesome.pri"], ["Ben Lau", "https://github.com/benlau"]]
+                    links: [[qsTr("Original"), "https://github.com/benlau/fontawesome.pri"], [qsTr("Fork"), "https://github.com/PhilInTheGaps/fontawesome.pri"], ["Ben Lau", "https://github.com/benlau"], ["FontAwesome", "https://fontawesome.com"]]
                 }
 
                 CreditsItem {

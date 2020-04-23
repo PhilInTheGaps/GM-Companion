@@ -1,7 +1,6 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-import QtQuick.Controls.Styles 1.4
+import FontAwesome 2.0
 
 Item {
     id: dice_page
@@ -13,7 +12,7 @@ Item {
         onMixedCriticalResult: roll_result.color = "orange"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
-        onNormalResult: roll_result.color = color_scheme.textColor
+        onNormalResult: roll_result.color = palette.text
     }
 
     Rectangle {
@@ -21,7 +20,7 @@ Item {
         height: dice_row.height
         anchors.left: parent.left
         anchors.right: parent.right
-        color: color_scheme.backgroundColor
+        color: palette.alternateBase
 
         Row {
             id: dice_row
@@ -40,7 +39,7 @@ Item {
                 font.pixelSize: parent.height * 0.4
             }
 
-            Text {
+            Label {
                 text: qsTr("D")
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: parent.height * 0.5
@@ -57,7 +56,7 @@ Item {
                 font.pixelSize: parent.height * 0.4
             }
 
-            Text {
+            Label {
                 text: "+"
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: parent.height * 0.5
@@ -76,15 +75,14 @@ Item {
 
             // "Roll!"
             Button {
-                Image {
-                    source: "/icons/dice/dice_roll.png"
-                    width: parent.height * 0.9
-                    height: width
+                height: dice_type_spin_box.height
 
-                    anchors.centerIn: parent
-
-                    sourceSize.height: height
-                    sourceSize.width: width
+                contentItem: Label {
+                    text: FontAwesome.dice
+                    font.family: FontAwesome.familySolid
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 16
                 }
 
                 ToolTip.text: qsTr("Roll")
@@ -96,20 +94,20 @@ Item {
                 }
             }
 
-            Text {
+            Label {
                 text: qsTr(":")
                 anchors.verticalCenter: parent.verticalCenter
-                color: color_scheme.textColor
+                verticalAlignment: Text.AlignVCenter
                 font.pixelSize: parent.height * 0.5
                 font.bold: true
             }
 
             // Result
-            Text {
+            Label {
                 id: roll_result
                 text: "-"
-                color: color_scheme.textColor
                 anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
                 font.pixelSize: parent.height * 0.5
                 font.bold: true
             }

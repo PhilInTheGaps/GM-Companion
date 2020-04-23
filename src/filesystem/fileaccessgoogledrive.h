@@ -13,25 +13,25 @@ class FileAccessGoogleDrive : public FileAccess
 public:
     FileAccessGoogleDrive();
 
-    void getFile(int requestId, QString filePath);
-    void getFiles(int requestId, QString directory, QString fileEnding);
-    void getFileList(int requestId, QString directory, bool folders);
-    void saveFile(QString filePath, QByteArray data);
-    void saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile);
-    void deleteFile(QString filePath);
-    void checkIfFilesExist(int requestId, QStringList filePaths);
+    void getFile(const int& requestId, const QString& filePath) override;
+    void getFiles(const int& requestId, const QString& directory, const QString& fileEnding) override;
+    void getFileList(const int &requestId, const QString &directory, const bool &folders) override;
+    void saveFile(const QString &filePath, const QByteArray &data) override;
+    void saveFileDeleteOld(const QString &newFile, const QByteArray &data, const QString &oldFile) override;
+    void deleteFile(const QString &filePath) override;
+    void checkIfFilesExist(const int &requestId, QStringList filePaths) override;
 
 private:
     void getFiles(int requestId, GoogleDriveFile *folder, const QString& fileEnding);
     bool tryProcessSubrequest(int subId, const QByteArray& data);
-    static void saveFileData(GoogleDriveFile *file, QByteArray data);
+    static void saveFileData(GoogleDriveFile *file, const QByteArray& data);
 
-    void updateFilePart1(const QString& fileId, QByteArray data);
+    void updateFilePart1(const QString& fileId, const QByteArray &data);
     static void updateFilePart2(const QList<QNetworkReply::RawHeaderPair>& headers, const QByteArray& data);
 
     void uploadFilePart1(const QString& fileName, GoogleDriveFile *parentFolder, const QByteArray& data);
     void uploadFilePart2(const QList<QNetworkReply::RawHeaderPair>& headers, const QByteArray& data, GoogleDriveFile *parentFolder);
-    static void uploadFilePart3(const QByteArray& metaData, GoogleDriveFile *parentFolder, QByteArray data);
+    static void uploadFilePart3(const QByteArray& metaData, GoogleDriveFile *parentFolder, const QByteArray& data);
 
     static int createFolder(const QString& name, const QString& parentId);
     static void createdFolder(const QByteArray& data, GoogleDriveFile *parentFolder);

@@ -51,7 +51,7 @@ SpotifyPlayer::~SpotifyPlayer()
  * @param id Spotify ID of playlist or album
  * @param offset Index offset. Playback starts with song at offset index
  */
-void SpotifyPlayer::play(QString id, int offset, bool playOnce)
+void SpotifyPlayer::play(const QString& id, int offset, bool playOnce)
 {
     qCDebug(gmAudioSpotify) << "Trying to play playlist or album ...";
     m_playOnce = playOnce;
@@ -202,7 +202,7 @@ void SpotifyPlayer::getCurrentSong()
 
     int requestId = Spotify::getInstance()->get(request);
 
-    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ](int id, QNetworkReply::NetworkError error, QByteArray data)
+    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ](int id, QNetworkReply::NetworkError error, const QByteArray& data)
     {
         if (requestId != id) return;
 
@@ -222,7 +222,8 @@ void SpotifyPlayer::getCurrentSong()
 
         if (album.value("images").toArray().count() > 0)
         {
-            m.cover = album.value("images").toArray()[0].toObject().value("url").toString();
+            m.cover    = album.value("images").toArray()[0].toObject().value("url").toString();
+            m.coverUrl = m.cover;
         }
 
         int duration = item.value("duration_ms").toInt();
@@ -238,7 +239,7 @@ void SpotifyPlayer::getCurrentSong()
 /**
  * @brief Get track list of current playlist or album
  */
-void SpotifyPlayer::getPlaylistTracks(QString uri)
+void SpotifyPlayer::getPlaylistTracks(const QString& uri)
 {
     qCDebug(gmAudioSpotify) << "Getting info on current playlist or album ...";
 
@@ -275,7 +276,7 @@ void SpotifyPlayer::getPlaylistTracks(QString uri)
  * @param error Request Error
  * @param data Contains the received data in json form
  */
-void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError error, QByteArray data)
+void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError error, const QByteArray& data)
 {
     if (!(m_requestIdMap.contains("getPlaylistTracks") && (requestId == m_requestIdMap["getPlaylistTracks"]))) return;
 

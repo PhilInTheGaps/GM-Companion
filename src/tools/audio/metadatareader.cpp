@@ -1,74 +1,81 @@
 #include "metadatareader.h"
 #include "utils/utils.h"
-#include <QDebug>
 #include <QMediaMetaData>
-#include <QBuffer>
+#include <QImage>
 
-MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent)
-{
-    qDebug() << "Starting MetaDataReader ...";
-}
+MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent) {}
 
 void MetaDataReader::setMetaData(MetaData m)
 {
+    if (m.type.isEmpty()) m.type = m_metaData.type;
+
+    m_metaData = m;
     emit metaDataUpdated(m);
-}
-
-/**
- * @brief Get the cover image from meta data
- * @param mediaPlayer Pointer to QMediaPlayer with the media object
- * @return Url of album cover
- */
-QString MetaDataReader::convertCoverImage(QMediaPlayer *mediaPlayer)
-{
-    if (mediaPlayer->availableMetaData().contains("CoverArtImage"))
-    {
-        return Utils::stringFromImage(mediaPlayer->metaData(QMediaMetaData::CoverArtImage).value<QPixmap>());
-    }
-
-    // Windows somehow uses ThumbnailImage instead,
-    // the documentation says this is a photo metadata attribute but whatever.
-    // It works somehow.
-    if (mediaPlayer->availableMetaData().contains("ThumbnailImage"))
-    {
-        return Utils::stringFromImage(mediaPlayer->metaData(QMediaMetaData::ThumbnailImage).value<QPixmap>());
-    }
-    else
-    {
-        return "";
-    }
 }
 
 /**
  * @brief Read MetaData from media
  * @param mediaPlayer Pointer to QMediaPlayer with the media object
  */
-void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer, QPixmap elementIcon)
+void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
 {
-    MetaData m;
+    m_metaData.type   = mediaPlayer->objectName().isEmpty() ? m_metaData.type : mediaPlayer->objectName();
+    m_metaData.length = mediaPlayer->duration() * 1000;
 
-    m.title  = mediaPlayer->metaData(QMediaMetaData::Title).toString();
-    m.album  = mediaPlayer->metaData(QMediaMetaData::AlbumTitle).toString();
-    m.artist = mediaPlayer->metaData(QMediaMetaData::Author).toString();
-    m.type   = mediaPlayer->objectName();
-    m.length = mediaPlayer->duration() * 1000; // Milliseconds to Microseconds
+    emit metaDataUpdated(m_metaData);
+}
 
-    qDebug() << "MEDIA DURATION:" << mediaPlayer->duration();
+void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
+{
+    if (key == "Title")
+    {
+        m_metaData.title = value.toString();
+    }
+    else if ((key == "AlbumArtist") || (key == "Artist") || (key == "Composer"))
+    {
+        m_metaData.artist = value.toString();
+    }
+    else if (key == "AlbumTitle")
+    {
+        m_metaData.album = value.toString();
+    }
+    else if ((key == "CoverArtImage") || (key == "ThumbnailImage"))
+    {
+        if (m_coverFile.open())
+        {
+            if (!value.value<QImage>().save(&m_coverFile, "JPG"))
+            {
+                qWarning() << "Could not save cover art in temp file.";
+            }
 
-    if (m.artist.isEmpty()) m.artist = mediaPlayer->metaData(QMediaMetaData::AlbumArtist).toString();
+            m_coverFile.close();
+            m_metaData.cover    = Utils::stringFromImage(QPixmap::fromImage(value.value<QImage>()));
+            m_metaData.coverUrl = QUrl::fromLocalFile(m_coverFile.fileName()).toEncoded();
+        }
+    }
+    else
+    {
+        return;
+    }
 
-    if (m.artist.isEmpty()) m.artist = mediaPlayer->metaData(QMediaMetaData::Composer).toString();
+    emit metaDataUpdated(m_metaData);
+}
 
-    m.cover       = convertCoverImage(mediaPlayer);
-    m.elementIcon = Utils::stringFromImage(elementIcon);
-    m_currentImageUrl.clear();
+void MetaDataReader::updateDuration(const qint64& duration)
+{
+    m_metaData.length = duration;
+    emit metaDataUpdated(m_metaData);
+}
 
-    // Fill empty fields with "-"
-    if (m.title.isEmpty()) m.title = "-";
+void MetaDataReader::clearMetaData()
+{
+    m_metaData.artist      = "-";
+    m_metaData.album       = "-";
+    m_metaData.title       = "-";
+    m_metaData.cover       = "";
+    m_metaData.coverUrl    = "";
+    m_metaData.elementIcon = "";
+    m_metaData.length      = 0;
 
-    if (m.artist.isEmpty()) m.artist = "-";
-
-    if (m.album.isEmpty()) m.album = "-";
-
-    emit metaDataUpdated(m);
+    emit metaDataUpdated(m_metaData);
 }

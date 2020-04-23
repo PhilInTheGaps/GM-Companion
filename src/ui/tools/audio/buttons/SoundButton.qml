@@ -1,14 +1,14 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-
 import FontAwesome 2.0
+import "../../../defines.js" as Defines
 
 Button {
     id: root
     property var element
     property var element_icon
 
-    height: color_scheme.toolbarHeight
+    height: Defines.TOOLBAR_HEIGHT
     hoverEnabled: true
 
     Image {

@@ -1,5 +1,4 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 Rectangle {
@@ -21,7 +20,7 @@ Rectangle {
 
         Text {
             text: display_text
-            color: mouse_area.pressed ? "grey" : mouse_area.containsMouse ? "lightgrey" : color_scheme.toolbarTextColor
+            color: mouse_area.pressed ? "grey" : mouse_area.containsMouse ? "lightgrey" : palette.text
             font.bold: true
             font.pointSize: 12
             anchors.verticalCenter: parent.verticalCenter

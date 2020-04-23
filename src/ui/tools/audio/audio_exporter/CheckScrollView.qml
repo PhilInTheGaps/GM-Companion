@@ -13,11 +13,10 @@ Column {
     spacing: 10
     padding: 10
 
-    Text {
+    Label {
         id: text
         text: headline
         font.bold: true
-        color: color_scheme.textColor
     }
 
     ScrollView {
@@ -50,7 +49,7 @@ Column {
                             onCheckedChanged: itemChecked(index, checked)
                         }
 
-                        Text {
+                        Label {
                             text: modelData
                             anchors.verticalCenter: parent.verticalCenter
                             elide: Text.ElideRight

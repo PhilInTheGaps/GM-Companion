@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Rectangle {
     id: root
@@ -7,51 +8,52 @@ Rectangle {
     property string description: ""
     property var links: []
 
-    height: column.height
+    height: column.height + 20
     anchors.left: parent.left
     anchors.right: parent.right
 
     Column {
         id: column
-        anchors.top: parent.top
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.margins: 10
         spacing: 10
-        padding: 10
 
         Label {
             id: title_label
-
             text: root.title
             font.bold: true
-            color: color_scheme.textColor
         }
 
         Label {
             text: root.description
-            color: color_scheme.textColor
             wrapMode: Text.WordWrap
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: 10
         }
 
-        Row {
+        Flow {
             id: link_row
-            spacing: 5
+            anchors.left: parent.left
+            anchors.right: parent.right
+            spacing: 10
 
             Repeater {
                 model: root.links
 
-                Button {
-                    text: modelData[0]
+                CustomButton {
+                    buttonText: modelData[0]
                     onClicked: Qt.openUrlExternally(modelData[1])
+                    usesFixedWidth: false
+                    pointSize: 10
+                    padding: 10
                 }
             }
         }
     }
 
     color: "transparent"
-    border.color: "grey"
+    border.color: palette.button
     border.width: 1
 }

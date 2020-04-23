@@ -1,7 +1,6 @@
-import QtQuick 2.10
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
-import "../../../components"
 import "views"
 
 Item {
@@ -9,7 +8,7 @@ Item {
 
     anchors.left: parent.left
     anchors.right: parent.right
-    visible: audio_editor.name != ""
+    visible: audio_editor.name !== ""
 
     Column {
         id: column

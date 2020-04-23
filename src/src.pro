@@ -7,15 +7,16 @@ include(../lib/qytlib/qytlib.pri)
 TARGET = ../gm-companion
 TEMPLATE = app
 
-DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT=
+DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT= NO_UPDATE_CHECK
 
-CONFIG += c++14
+CONFIG += c++14 #qtquickcompiler
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += main.cpp \
     filesystem/fileaccessgoogledrive.cpp \
     filesystem/fileaccesslocal.cpp \
+    filesystem/filedialog.cpp \
     filesystem/filemanager.cpp \
     filesystem/googledrivefile.cpp \
     logging.cpp \
@@ -33,7 +34,6 @@ SOURCES += main.cpp \
     tools/audio/unsplash/unsplashparser.cpp \
     tools/maps/mapmarker.cpp \
     ui/colorscheme.cpp \
-    tools/toolmanager.cpp \
     tools/dicetool.cpp \
     tools/notestool.cpp \
     tools/convertertool.cpp \
@@ -69,39 +69,25 @@ SOURCES += main.cpp \
     tools/shop/shoptool.cpp \
     managers/updatemanager.cpp \
     managers/addonmanager.cpp \
-    settings/settingstool.cpp \
     settings/settingsmanager.cpp \
     platformdetails.cpp \
     tools/characters/viewers/characterimageviewer.cpp \
     tools/characters/viewers/characterviewer.cpp \
     tools/characters/viewers/characterdsa5viewer.cpp \
     tools/characters/viewers/dsa5/dsa5listitem.cpp \
+    utils/fileutils.cpp \
     utils/processinfo.cpp \
     utils/utils.cpp
 #    tools/addons/sifrp.cpp \
 
 lupdate_only{
-SOURCES += *.qml \
-    components/*.qml \
-    main/*.qml \
-    tools/*.qml \
-    tools/audio/*.qml \
-    tools/audio/audio_exporter/*.qml \
-    tools/audio/buttons/*.qml \
-    tools/audio/editor/*.qml \
-    tools/characters/*.qml \
-    tools/combat_tracker/*.qml \
-    tools/converter/*.qml \
-    tools/dice/*.qml \
-    tools/generators/*.qml \
-    tools/maps/*.qml \
-    tools/settings/*.qml \
-    tools/shop/*.qml \
+SOURCES += $$files(*.qml)
 }
 
 HEADERS  += filesystem/fileaccess.h \
     filesystem/fileaccessgoogledrive.h \
     filesystem/fileaccesslocal.h \
+    filesystem/filedialog.h \
     filesystem/filemanager.h \
     filesystem/googledrivefile.h \
     logging.h \
@@ -122,10 +108,10 @@ HEADERS  += filesystem/fileaccess.h \
     tools/audio/unsplash/unsplashparser.h \
     tools/maps/mapmarker.h \
     ui/colorscheme.h \
+    utils/fileutils.h \
     utils/processinfo.h \
     utils/utils.h \
     version.h \
-    tools/toolmanager.h \
     tools/dicetool.h \
     tools/notestool.h \
     tools/convertertool.h \
@@ -162,7 +148,6 @@ HEADERS  += filesystem/fileaccess.h \
     tools/shop/shopeditor.h \
     managers/updatemanager.h \
     managers/addonmanager.h \
-    settings/settingstool.h \
     settings/settingsmanager.h \
     platformdetails.h \
     tools/characters/viewers/characterimageviewer.h \
@@ -172,15 +157,14 @@ HEADERS  += filesystem/fileaccess.h \
 #    tools/addons/sifrp.h \
 
 
-QML_IMPORT_PATH += ../lib/fontawesome.pri
+RC_FILE = gm-companion.rc
 
-RC_FILE = GM-Companion.rc
-
-RESOURCES += resources/resources.qrc \
+RESOURCES += \
+    resources/resources.qrc \
+    ui/CustomComponents/components.qrc \
     ui/qml.qrc
 
-TRANSLATIONS+=  resources/translations/gm-companion_en.ts
-TRANSLATIONS+=  resources/translations/gm-companion_de.ts
+QML_IMPORT_PATH += $$PWD/ui $$PWD/../lib/fontawesome.pri
 
 !win32 {
     isEmpty(PREFIX) {
@@ -227,6 +211,9 @@ win32 {
 INSTALLS += target
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+DISTFILES += \
+    ui/qtquickcontrols2.conf
 
 
 

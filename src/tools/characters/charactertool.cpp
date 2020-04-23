@@ -15,6 +15,10 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
     m_imageViewer = new CharacterImageViewer;
     m_dsa5Viewer  = new CharacterDSA5Viewer(engine);
 
+    engine->rootContext()->setContextProperty("character_tool", this);
+    engine->rootContext()->setContextProperty("character_image_viewer", m_imageViewer);
+    engine->rootContext()->setContextProperty("character_dsa5_viewer", m_dsa5Viewer);
+
     connect(m_imageViewer, &CharacterImageViewer::categoryChanged, [ = ]() { if (m_currentViewer == m_imageViewer) emit categoryChanged(); });
 
     // connect(m_dsa5Viewer, &CharacterImageViewer::categoryChanged,    [ = ]()
@@ -32,11 +36,11 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
     FileManager::getInstance()->getFile(m_loadInactiveRequestId, SettingsManager::getPath("characters") + "/inactive.json");
 }
 
-QStringList CharacterTool::characters() const
+auto CharacterTool::characters() const -> QStringList
 {
     QStringList names;
 
-    for (auto character : m_characters)
+    for (auto *character : m_characters)
     {
         if (!m_active != !m_inactiveCharacters.contains(character->name()))
         {
@@ -69,7 +73,7 @@ void CharacterTool::setCurrentCharacter(int index)
 
     for (int i = 0; i < m_characters.length(); i++)
     {
-        auto character = m_characters[i];
+        auto *character = m_characters[i];
 
         if (character && (index >= i) && (character->name() == name))
         {
@@ -120,7 +124,7 @@ void CharacterTool::toggleCharacterActive(int index)
     emit charactersChanged();
 }
 
-void CharacterTool::receivedFile(int id, QByteArray data)
+void CharacterTool::receivedFile(int id, const QByteArray& data)
 {
     // Load inactive characters
     if (id == m_loadInactiveRequestId)
@@ -140,7 +144,7 @@ void CharacterTool::receivedFile(int id, QByteArray data)
 /**
  * @brief Load list of inactive characters from json array
  */
-void CharacterTool::loadInactiveCharacters(QByteArray data)
+void CharacterTool::loadInactiveCharacters(const QByteArray& data)
 {
     if (data.isEmpty())
     {
@@ -178,7 +182,7 @@ void CharacterTool::saveInactiveCharacters()
  * @brief Read values from old settings.ini file and save as new inactive.json
  * file
  */
-void CharacterTool::convertSettingsFile(QByteArray data)
+void CharacterTool::convertSettingsFile(const QByteArray& data)
 {
     if (!data.isEmpty())
     {
@@ -201,7 +205,7 @@ void CharacterTool::convertSettingsFile(QByteArray data)
     loadCharacters();
 }
 
-void CharacterTool::receivedFileList(int id, QStringList files)
+void CharacterTool::receivedFileList(int id, const QStringList& files)
 {
     if (id == m_loadCharacterFilesRequestId)
     {
@@ -227,15 +231,15 @@ void CharacterTool::loadCharacters()
     FileManager::getInstance()->getFileList(m_loadCharacterFoldersRequestId, SettingsManager::getPath("characters"), true);
 }
 
-void CharacterTool::receivedCharacterFolders(QStringList folders)
+void CharacterTool::receivedCharacterFolders(const QStringList& folders)
 {
     qCDebug(gmCharactersTool()) << "Received character folders";
 
     auto basePath = SettingsManager::getPath("characters");
 
-    for (auto folder : folders)
+    for (const auto& folder : folders)
     {
-        auto character = new Character(folder);
+        auto *character = new Character(folder);
         character->setFolder(basePath + "/" + folder);
         m_characters.append(character);
     }
@@ -243,15 +247,15 @@ void CharacterTool::receivedCharacterFolders(QStringList folders)
     emit charactersChanged();
 }
 
-void CharacterTool::receivedCharacterFiles(QStringList files)
+void CharacterTool::receivedCharacterFiles(const QStringList& files)
 {
     qCDebug(gmCharactersTool()) << "Received character files";
 
-    for (auto file : files)
+    for (const auto& file : files)
     {
         if (file.endsWith(".pdf"))
         {
-            auto character = new Character(file.left(file.lastIndexOf('.')));
+            auto *character = new Character(file.left(file.lastIndexOf('.')));
             character->addFile(CharacterFile(file, SettingsManager::getPath("characters") + "/" + file));
             m_characters.append(character);
         }

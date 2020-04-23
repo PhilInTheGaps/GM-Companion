@@ -2,21 +2,31 @@
 #define DICETOOL_H
 
 #include <QObject>
-#include <QSettings>
-#include <QList>
+#include <QQmlEngine>
+#include "settings/settingsmanager.h"
+
+#define DICE_SETTINGS "Dice"
+#define ENABLE_CRITICALS_SETTING "enableCriticals"
+#define SUCCESS_SETTING "success"
+#define FAILURE_SETTING "failure"
+#define USE_MIN_MAX_SETTING "useMinMax"
+#define SUCCESS_MAX_SETTING "successMax"
 
 class DiceTool : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
-    Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
-    Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
 
 public:
-    explicit DiceTool(QObject *parent = nullptr);
+    explicit DiceTool(QQmlEngine *engine, QObject *parent = nullptr);
+    explicit DiceTool() {}
 
+    Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
     int sides() const { return m_sides; }
+
+    Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
     int roll();
+
+    Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
     QString calculationString() const { return m_calculation_string; }
 
     Q_INVOKABLE void setSides(int sides);
@@ -25,11 +35,11 @@ public:
     Q_INVOKABLE void setModifier(int modifier) { m_modifier = modifier; }
 
     Q_INVOKABLE void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax);
-    Q_INVOKABLE bool getCriticalEnabled() const { return settings->value("enableCriticals", true).toBool(); }
-    Q_INVOKABLE int getSuccess() const { return settings->value("success", 20).toInt(); }
-    Q_INVOKABLE int getFailure() const { return settings->value("failure", 1).toInt(); }
-    Q_INVOKABLE bool getMinMax() const { return settings->value("useMinMax", true).toBool(); }
-    Q_INVOKABLE bool getSuccessMax() const { return settings->value("successMax", true).toBool(); }
+    Q_INVOKABLE bool getCriticalEnabled() const { return SettingsManager::getBoolSetting(ENABLE_CRITICALS_SETTING, true, DICE_SETTINGS); }
+    Q_INVOKABLE int getSuccess() const { return SettingsManager::getSetting(SUCCESS_SETTING, QString::number(20), DICE_SETTINGS).toInt(); }
+    Q_INVOKABLE int getFailure() const { return SettingsManager::getSetting(FAILURE_SETTING, QString::number(1), DICE_SETTINGS).toInt(); }
+    Q_INVOKABLE bool getMinMax() const { return SettingsManager::getBoolSetting(USE_MIN_MAX_SETTING, false, DICE_SETTINGS); }
+    Q_INVOKABLE bool getSuccessMax() const { return SettingsManager::getBoolSetting(SUCCESS_MAX_SETTING, true, DICE_SETTINGS); }
 
 signals:
     void sidesChanged();
@@ -46,8 +56,6 @@ private:
     int m_bonus_dice = 0;
     int m_modifier = 0;
     int m_amount = 1;
-
-    QSettings *settings;
 
     QString m_calculation_string;
 };

@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick 2.6
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
+import "../../../defines.js" as Defines
 
 Rectangle {
     id: root
@@ -25,9 +25,7 @@ Rectangle {
         }
     }
 
-    height: small_mode ? color_scheme.toolbarHeight : width
-
-    color: color_scheme.backgroundColor
+    height: small_mode ? Defines.TOOLBAR_HEIGHT : width
 
     Image {
         id: thumbnail

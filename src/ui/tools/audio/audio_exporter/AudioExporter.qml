@@ -23,10 +23,7 @@ Dialog {
         }
     }
 
-    contentItem: Page {
-        background: Rectangle {
-            color: "transparent"
-        }
+    contentItem: Item {
 
         Column {
             id: left_column
@@ -39,9 +36,8 @@ Dialog {
             spacing: 10
             padding: 10
 
-            Text {
+            Label {
                 text: qsTr("Settings")
-                color: color_scheme.textColor
             }
 
             TextField {
@@ -112,13 +108,8 @@ Dialog {
         }
     }
 
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
-
-    footer: Rectangle {
+    footer: Item {
         height: buttons.height
-        color: color_scheme.backgroundColor
 
         ProgressBar {
             id: progress_bar

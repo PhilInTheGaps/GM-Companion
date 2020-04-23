@@ -13,10 +13,6 @@
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
-SoundPlayerController::SoundPlayerController(QObject *parent) : AudioPlayer(parent)
-{
-}
-
 /**
  * @brief Play a sound element
  * @param element SoundElement to be played
@@ -29,7 +25,7 @@ void SoundPlayerController::play(AudioElement *element)
 
     if (!isSoundPlaying(element))
     {
-        auto player = new SoundPlayer(element, m_volume, this);
+        auto *player = new SoundPlayer(element, m_volume, this);
 
         connect(player, &SoundPlayer::playerStopped,         this,   &SoundPlayerController::onPlayerStopped);
         connect(this,   &SoundPlayerController::setVolume,   player, &SoundPlayer::setLogarithmicVolume);
@@ -48,11 +44,11 @@ void SoundPlayerController::play(AudioElement *element)
  * @param element SoundElement to be checked
  * @return True if element is playing
  */
-bool SoundPlayerController::isSoundPlaying(AudioElement *element)
+auto SoundPlayerController::isSoundPlaying(AudioElement *element) -> bool
 {
     qCDebug(gmAudioSounds()) << "Checking if sound" << element->name() << "is playing ...";
 
-    for (auto player : m_players)
+    for (auto *player : m_players)
     {
         if (player && (player->element() == element))
         {
@@ -76,11 +72,11 @@ void SoundPlayerController::setLogarithmicVolume(int volume)
 /**
  * @brief Get all active sound elements
  */
-QList<AudioElement *>SoundPlayerController::elements() const
+auto SoundPlayerController::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> elements;
 
-    for (auto player : m_players)
+    for (auto *player : m_players)
     {
         if (player) elements.append(player->element());
     }
@@ -169,11 +165,13 @@ void SoundPlayer::stop()
     emit playerStopped(this);
 }
 
-void SoundPlayer::stopElement(QString element)
+void SoundPlayer::stopElement(const QString& element)
 {
     if (m_element && (m_element->name() == element))
     {
+        qCDebug(gmAudioSounds()) << "Stopping" << element;
         m_mediaPlayer->stop();
+        emit playerStopped(this);
     }
 }
 
@@ -272,13 +270,13 @@ void SoundPlayer::onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int reque
     QUrl   tempUrl;
     qint64 tempBitrate = 0;
 
-    for (auto info : infos->audio())
+    for (auto *info : infos->audio())
     {
         auto encoding = Heuristics::audioEncodingToString(info->audioEncoding());
         qCDebug(gmAudioSounds()) << info->audioEncoding() << info->bitrate()
-                                 << m_mediaPlayer->hasSupport("audio/" + encoding, { encoding });
+                                 << QMediaPlayer::hasSupport("audio/" + encoding, { encoding });
 
-        if ((m_mediaPlayer->hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
+        if ((QMediaPlayer::hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
         {
             tempUrl     = info->url();
             tempBitrate = info->bitrate();
@@ -295,7 +293,7 @@ void SoundPlayer::onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int reque
     delete infos;
 }
 
-void SoundPlayer::onFileReceived(int requestId, QByteArray data)
+void SoundPlayer::onFileReceived(int requestId, const QByteArray& data)
 {
     if (m_fileRequestId != requestId) return;
 
@@ -307,7 +305,7 @@ void SoundPlayer::onFileReceived(int requestId, QByteArray data)
         return;
     }
 
-    if (m_mediaBuffer) delete m_mediaBuffer;
+    delete m_mediaBuffer;
 
     m_mediaData   = data;
     m_mediaBuffer = new QBuffer(&m_mediaData);

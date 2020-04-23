@@ -26,22 +26,23 @@ public:
     void setIndex(int index) {}
 
 private:
-    QMediaPlayer *player;
-    QMediaPlaylist *playlist;
+    QMediaPlayer *player = nullptr;
+    QMediaPlaylist *playlist = nullptr;
 
-    AudioElement *currentElement;
-    int m_fileRequestId = 0;
+    AudioElement *currentElement = nullptr;
+    int m_fileRequestId = -1;
 
     QByteArray m_mediaData;
     QBuffer *m_mediaBuffer = nullptr;
 
 signals:
     void startedPlaying();
-    void metaDataChanged(QMediaPlayer *mediaPlayer, QPixmap elementIcon);
+    void metaDataChanged(QMediaPlayer *mediaPlayer);
+    void metaDataChanged(const QString& key, const QVariant& value);
 
 private slots:
     void onMetaDataChanged();
-    void onFileReceived(int id, QByteArray data);
+    void onFileReceived(int id, const QByteArray& data);
 };
 
 #endif // RADIOPLAYER_H

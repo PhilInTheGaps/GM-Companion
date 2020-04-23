@@ -1,11 +1,12 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 import FontAwesome 2.0
 
 import "../buttons"
-import "../../../components"
+import "../../../defines.js" as Defines
 
-ScrollView {
+Flickable {
     id: root
 
     property bool small_mode: true
@@ -16,6 +17,10 @@ ScrollView {
     clip: true
     contentWidth: -1
     contentHeight: elements_column.implicitHeight
+
+    ScrollBar.vertical: CustomScrollBar {
+        visible: root.contentHeight > root.height
+    }
 
     Column {
         id: elements_column
@@ -39,13 +44,13 @@ ScrollView {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
                     height: subscenario_text.height + 4
-                    color: color_scheme.primaryButtonColor
+                    color: palette.button
                     visible: subscenario_text.text != ""
 
-                    Text {
+                    Label {
                         id: subscenario_text
                         text: modelData.name()
-                        color: color_scheme.buttonTextColor
+                        color: palette.buttonText
                         font.bold: true
 
                         anchors.verticalCenter: parent.verticalCenter
@@ -65,26 +70,26 @@ ScrollView {
                         anchors.rightMargin: 5
                         spacing: 5
 
-                        ToolBarIconButton {
-                            fa_icon: FontAwesome.chevronUp
+                        CustomToolBarButton {
+                            iconText: FontAwesome.chevronUp
                             anchors.margins: 0
                             onClicked: audio_editor.moveElement(
                                            modelData.name(), 4, -1)
                         }
 
-                        ToolBarIconButton {
-                            fa_icon: FontAwesome.chevronDown
+                        CustomToolBarButton {
+                            iconText: FontAwesome.chevronDown
                             anchors.margins: 0
                             onClicked: audio_editor.moveElement(
                                            modelData.name(), 4, 1)
                         }
 
-                        ToolBarIconButton {
-                            fa_icon: FontAwesome.trash
+                        CustomToolBarButton {
+                            iconText: FontAwesome.trash
                             anchors.margins: 0
                             onClicked: {
                                 delete_dialog.x = element_column.width
-                                delete_dialog.y = color_scheme.toolbarHeight
+                                delete_dialog.y = Defines.TOOLBAR_HEIGHT
                                 delete_dialog.mode = 3
                                 delete_dialog.element_name = modelData.name()
                                 delete_dialog.open()
@@ -96,16 +101,24 @@ ScrollView {
                 Repeater {
                     model: modelData
 
-                    EditorElementButton {
+                    AudioButton {
                         element_name: modelData.name
                         element_type: modelData.type
                         subscenario_name: subscenario_text.text
                         icon: modelData.icon
+
+                        overlay_enabled: false
                         small_mode: root.small_mode
 
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.rightMargin: 10
+
+                        onClicked: {
+                            audio_editor.loadElement(element_name,
+                                                     element_type,
+                                                     subscenario_name)
+                        }
                     }
                 }
             }

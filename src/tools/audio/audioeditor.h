@@ -105,7 +105,7 @@ public:
     QString id() const { return m_id; }
     int subscenario() { return getSubscenarioIndex(m_subscenario); }
     Q_INVOKABLE void loadElement(QString name, int type, QString subscenario);
-    Q_INVOKABLE QString resourcesPath() const { return SettingsManager::getPath("resourcesPath"); }
+    Q_INVOKABLE QString resourcesPath() const { return SettingsManager::getPath("resources"); }
     Q_INVOKABLE QString basePath(int type);
 
     Q_INVOKABLE void setFileIndex(int index) { m_fileIndex = index; }

@@ -2,10 +2,13 @@
 #include "logging.h"
 #include "settings/settingsmanager.h"
 #include "filesystem/filemanager.h"
+#include <QQmlContext>
 
-NotesTool::NotesTool(QObject *parent) : QObject(parent)
+NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
     qCDebug(gmNotesTool()) << "Loading Notes Tool ...";
+
+    engine->rootContext()->setContextProperty("notes_tool", this);
 
     connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &NotesTool::onReceivedFileList);
 
@@ -65,6 +68,8 @@ void NotesTool::setCurrentPage(QString page)
     m_currentPage = page;
     m_currentContent.clear();
     emit currentPageChanged();
+
+    loadPageContent();
 }
 
 void NotesTool::loadPageContent()

@@ -4,10 +4,13 @@
 #include <QDir>
 #include <QFile>
 #include <QSettings>
+#include <QQmlContext>
 
-NameGenerator::NameGenerator(QObject *parent) : QObject(parent)
+NameGenerator::NameGenerator(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
     qDebug() << "Loading Name Generator ...";
+
+    engine->rootContext()->setContextProperty("name_generator", this);
 }
 
 void NameGenerator::updateCategories()

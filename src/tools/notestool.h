@@ -5,13 +5,14 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QQmlApplicationEngine>
 
 class NotesTool : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit NotesTool(QObject *parent = nullptr);
+    explicit NotesTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     Q_PROPERTY(QStringList chapters READ chapters NOTIFY chaptersChanged)
     Q_PROPERTY(QString currentChapter READ currentChapter WRITE setCurrentChapter NOTIFY currentChapterChanged)

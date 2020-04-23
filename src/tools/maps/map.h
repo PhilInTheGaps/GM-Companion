@@ -56,9 +56,12 @@ class MapListModel : public QAbstractListModel {
 public:
     int rowCount(const QModelIndex&) const override { return m_items.size(); }
     QVariant data(const QModelIndex& index, int role) const override;
+    int size() const { return m_items.size(); }
 
     void setElements(QList<Map*> elements);
     void clear();
+
+    QList<Map*> elements() const { QList<Map*> list; for (auto i : m_items) list.append(static_cast<Map*>(i)); return list; }
 
 public slots:
     void insert(QObject* item);

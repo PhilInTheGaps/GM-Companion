@@ -14,16 +14,23 @@ enum FileRequest {
 };
 
 struct FileRequestContainer {
-    FileRequestContainer(int id, QString filePath) : requestId(id), string1(filePath), requestType(GetFile) { }
-    FileRequestContainer(int id, QString directory, QString fileEnding) : requestId(id), string1(directory), string2(fileEnding), requestType(GetFiles) { }
-    FileRequestContainer(int id, QString directory, bool folders) : requestId(id), folders(folders), string1(directory), requestType(GetFileList) { }
-    FileRequestContainer(QString filePath, QByteArray data) : string1(filePath), data(data), requestType(SaveFile) { }
-    FileRequestContainer(QString newFile, QByteArray data, QString oldFile) : string1(newFile), string2(oldFile), data(data), requestType(SaveFileDeleteOld) { }
-    FileRequestContainer(QString filePath) : string1(filePath), requestType(DeleteFile) { }
-    FileRequestContainer(int requestId, QStringList files) : requestId(requestId), files(files), requestType(CheckIfFilesExist) { }
+    FileRequestContainer(const int& id, const QString& filePath)
+        : requestId(id), string1(filePath), requestType(GetFile) { }
+    FileRequestContainer(const int& id, const QString& directory, const QString& fileEnding)
+        : requestId(id), string1(directory), string2(fileEnding), requestType(GetFiles) { }
+    FileRequestContainer(const int& id, const QString& directory, const bool& folders)
+        : requestId(id), folders(folders), string1(directory), requestType(GetFileList) { }
+    FileRequestContainer(const QString& filePath, const QByteArray& data)
+        : string1(filePath), data(data), requestType(SaveFile) { }
+    FileRequestContainer(const QString& newFile, const QByteArray& data, const QString& oldFile)
+        : string1(newFile), string2(oldFile), data(data), requestType(SaveFileDeleteOld) { }
+    FileRequestContainer(const QString& filePath)
+        : string1(filePath), requestType(DeleteFile) { }
+    FileRequestContainer(const int& requestId, const QStringList& files)
+        : requestId(requestId), files(files), requestType(CheckIfFilesExist) { }
 
     int requestId = -1;
-    bool folders;
+    bool folders = false;
     QString string1, string2;
     QByteArray data;
     QStringList files;
@@ -36,13 +43,13 @@ class FileAccess : public QObject
 public:
     explicit FileAccess(QObject *parent = nullptr) : QObject(parent) {}
 
-    virtual void getFile(int requestId, QString filePath) = 0;
-    virtual void getFiles(int requestId, QString directory, QString fileEnding) = 0;
-    virtual void getFileList(int requestId, QString directory, bool folders) = 0;
-    virtual void saveFile(QString filePath, QByteArray data) = 0;
-    virtual void saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile) = 0;
-    virtual void deleteFile(QString filePath) = 0;
-    virtual void checkIfFilesExist(int requestId, QStringList files) = 0;
+    virtual void getFile(const int& requestId, const QString& filePath) = 0;
+    virtual void getFiles(const int& requestId, const QString& directory, const QString& fileEnding) = 0;
+    virtual void getFileList(const int& requestId, const QString& directory, const bool& folders) = 0;
+    virtual void saveFile(const QString& filePath, const QByteArray& data) = 0;
+    virtual void saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile) = 0;
+    virtual void deleteFile(const QString& filePath) = 0;
+    virtual void checkIfFilesExist(const int& requestId, QStringList files) = 0;
 
 signals:
     void receivedFile(int requestId, QByteArray data);

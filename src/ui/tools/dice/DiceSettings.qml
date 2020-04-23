@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Dialog {
     id: root
@@ -10,44 +11,48 @@ Dialog {
         padding: 5
         spacing: 5
 
-        CheckBox {
+        CustomCheckBox {
             id: enable_criticals_checkbox
             text: qsTr("Enable Criticals")
             checked: dice_tool.getCriticalEnabled()
         }
 
-        RadioButton {
+        CustomRadioButton {
             id: min_max_radiobutton
             text: qsTr("Min / Max")
             checked: dice_tool.getMinMax()
+            enabled: enable_criticals_checkbox.checked
         }
 
         Column {
             padding: 10
             spacing: 5
 
-            RadioButton {
+            CustomRadioButton {
                 id: success_max_radiobutton
                 text: qsTr("Success: Maximum, Failure: Minimum")
                 checked: dice_tool.getSuccessMax()
+                enabled: enable_criticals_checkbox.checked
             }
 
-            RadioButton {
+            CustomRadioButton {
                 text: qsTr("Success: Minimum, Failure: Maximum")
                 checked: !dice_tool.getSuccessMax()
+                enabled: enable_criticals_checkbox.checked
             }
         }
 
-        RadioButton {
+        CustomRadioButton {
             text: qsTr("Fixed Values")
             checked: !dice_tool.getMinMax()
+            enabled: enable_criticals_checkbox.checked
         }
 
         Column {
             padding: 10
             spacing: 5
 
-            Text {
+            Label {
                 text: qsTr("Critical Success") + ":"
             }
 
@@ -57,9 +62,10 @@ Dialog {
                 to: 1000
                 value: dice_tool.getSuccess()
                 editable: true
+                enabled: enable_criticals_checkbox.checked
             }
 
-            Text {
+            Label {
                 text: qsTr("Critical Failure") + ":"
             }
 
@@ -69,6 +75,7 @@ Dialog {
                 to: 1000
                 value: dice_tool.getFailure()
                 editable: true
+                enabled: enable_criticals_checkbox.checked
             }
         }
     }

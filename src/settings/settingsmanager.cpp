@@ -1,12 +1,7 @@
 #include "settingsmanager.h"
 #include "logging.h"
 #include "services/services.h"
-
-#include <QTextStream>
 #include <QCoreApplication>
-#include <QDir>
-#include <QDebug>
-#include <utility>
 
 #ifdef Q_OS_WIN
 # include <keychain.h>
@@ -56,57 +51,121 @@ void SettingsManager::setSetting(const QString& setting, const QString& value, c
     getInstance()->m_settings->endGroup();
 }
 
-void SettingsManager::setSetting(QString setting, int value, QString group)
+void SettingsManager::setSetting(const QString& setting, const int& value, const QString& group)
 {
-    setSetting(std::move(setting), QString::number(value), std::move(group));
+    setSetting(setting, QString::number(value), group);
 }
 
 auto SettingsManager::getPath(const QString& setting, QString group)->QString
 {
-    if (group.isEmpty()) group = SettingsManager::getInstance()->getActivePathGroup();
-    auto value = SettingsManager::getInstance()->getSetting(setting, "", group);
+    if (group.isEmpty()) group = SettingsManager::getActivePathGroup();
+    auto value = SettingsManager::getSetting(setting, "", group);
 
-    if (value.isEmpty()) value = SettingsManager::getInstance()->getDefaultPath(setting, group);
+    if (value.isEmpty()) value = SettingsManager::getDefaultPath(setting, group);
     return value;
 }
 
-void SettingsManager::setPath(QString setting, QString value, QString group)
+void SettingsManager::setPath(const QString& setting, const QString& value, QString group)
 {
-    if (group.isEmpty()) group = SettingsManager::getInstance()->getActivePathGroup();
-    setSetting(std::move(setting), std::move(value), PATHS_GROUP);
+    if (group.isEmpty()) group = SettingsManager::getActivePathGroup();
+    setSetting(setting, value, group);
 }
 
-auto SettingsManager::getLanguage()->QString
+auto SettingsManager::getLanguage()->QLocale
 {
     auto value = SettingsManager::getSetting("language", "default");
 
-    if (value == "default")
-    {
-        value = QLocale::languageToString(QLocale::system().language());
+    // Workaround for old settings versions
+    if (value == "Deutsch") value = "de";
+    else if (value == "English") value = "en";
 
-        if (value == "German") return "Deutsch";
+    qCDebug(gmSettings()) << "Language raw:" << value << "locale:" << QLocale(value);
+
+    auto useSystemLang = value == "default" && getLanguageNames().contains(QLocale::languageToString(QLocale::system().language()));
+
+    qCDebug(gmSettings()) << "LANG NAME" << QLocale(value).name() << QLocale::system().name();
+
+    return useSystemLang ? QLocale::system() : QLocale(value);
+}
+
+auto SettingsManager::getLanguageString()->QString
+{
+    return QLocale::languageToString(getLanguage().language());
+}
+
+auto SettingsManager::getLanguageIndex()->int
+{
+    auto language  = getLanguageString();
+    auto languages = getLanguageNames();
+    auto index     = languages.indexOf(language);
+
+    qCDebug(gmSettings()) << "Index:" << index << "language:" << language;
+
+    if (index < 0) index = languages.indexOf("English");
+
+    qCDebug(gmSettings()) << " - Index:" << index << "language:" << language;
+
+    return index;
+}
+
+auto SettingsManager::getLanguages()->QStringList
+{
+    QDir dir(":/translations");
+
+    dir.setFilter(QDir::Files);
+    dir.setNameFilters({ "*.qm" });
+
+    QStringList languages;
+
+    for (auto language : dir.entryList())
+    {
+        auto temp = language.replace("gm-companion_", "").replace(".qm", "");
+        languages.append(QLocale(temp).name());
+    }
+    qCDebug(gmSettings()) << "Languages found:" << languages;
+
+    return languages;
+}
+
+auto SettingsManager::getLanguageNames()->QStringList
+{
+    QStringList strings;
+
+    for (auto language : getLanguages())
+    {
+        strings.append(QLocale::languageToString(QLocale(language).language()));
     }
 
-    return value;
+    qCDebug(gmSettings()) << "Languages names found:" << strings;
+
+    return strings;
 }
 
-void SettingsManager::setLanguage(QString language)
+void SettingsManager::setLanguage(const QString& language)
 {
-    setSetting("language", std::move(language));
+    auto languages     = getLanguages();
+    auto languageNames = getLanguageNames();
+    auto index         = languageNames.indexOf(language);
+
+    if (index > -1) setSetting("language", languages[index]);
+    else setSetting("language", "default");
 }
 
-auto SettingsManager::getServerUrl()->QString
+auto SettingsManager::getServerUrl(const QString& service)->QString
 {
-    if (SettingsManager::getSetting("serviceConnection") == "default") {
+    auto connection = SettingsManager::getSetting("connection", "default", service);
+
+    if (connection == "default")
+    {
         return DEFAULT_SERVER_URL;
     }
 
-    return SettingsManager::getSetting("serverUrl", DEFAULT_SERVER_URL);
+    return SettingsManager::getSetting("server", DEFAULT_SERVER_URL, service);
 }
 
-void SettingsManager::setServerUrl(QString url)
+void SettingsManager::setServerUrl(const QString& url, const QString& service)
 {
-    setSetting("serverUrl", std::move(url));
+    setSetting("server", url, service);
 }
 
 auto SettingsManager::getPassword(const QString& username, const QString& service)->QString
@@ -152,6 +211,25 @@ void SettingsManager::setPassword(const QString& username, const QString& passwo
     }
 }
 
+auto SettingsManager::isUpdateCheckEnabled()->bool
+{
+    auto defaultValue = true;
+
+#ifdef NO_UPDATE_CHECK
+    defaultValue = false;
+#endif // ifdef NO_UPDATE_CHECK
+
+    return getBoolSetting("checkForUpdates", defaultValue, "Updates");
+}
+
+auto SettingsManager::getBoolSetting(const QString& setting, bool defaultValue, const QString& group)->bool
+{
+    getInstance()->m_settings->beginGroup(group);
+    auto isTrue = getInstance()->m_settings->value(setting, defaultValue).toBool();
+    getInstance()->m_settings->endGroup();
+    return isTrue;
+}
+
 auto SettingsManager::getDefaultPath(const QString& setting, const QString& group)->QString
 {
     if (setting.isEmpty()) return "";
@@ -161,6 +239,10 @@ auto SettingsManager::getDefaultPath(const QString& setting, const QString& grou
     return QDir::homePath() + "/.gm-companion/" + setting;
 }
 
+/**
+ * @brief Get the ini group for the currently set cloud mode.
+ * Default value is PATHS_GROUP.
+ */
 auto SettingsManager::getActivePathGroup()->QString
 {
     auto cloudMode = getSetting("cloudMode", "local");
@@ -219,11 +301,11 @@ void SettingsManager::updateSettings()
     renameSetting("soundPath",      "sounds",     PATHS_GROUP);
 }
 
-void SettingsManager::renameSetting(const QString& currentName, QString newName, const QString& group)
+void SettingsManager::renameSetting(const QString& currentName, const QString& newName, const QString& group)
 {
     auto value = getSetting(currentName, "", group);
 
-    if (!value.isEmpty()) setSetting(std::move(newName), value, group);
+    if (!value.isEmpty()) setSetting(newName, value, group);
     removeSetting(currentName, group);
 }
 

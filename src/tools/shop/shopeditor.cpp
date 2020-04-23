@@ -14,8 +14,9 @@ ShopEditor::ShopEditor(QQmlApplicationEngine *engine, QObject *parent)
 
     itemModel  = new ItemModel;
     itemModel2 = new ItemModel;
-    qmlEngine->rootContext()->setContextProperty("shopEditorItemModel", itemModel);
-    qmlEngine->rootContext()->setContextProperty("shopEditorItemModel2", itemModel2);
+    engine->rootContext()->setContextProperty("item_editor", itemEditor);
+    engine->rootContext()->setContextProperty("shopEditorItemModel", itemModel);
+    engine->rootContext()->setContextProperty("shopEditorItemModel2", itemModel2);
 
     connect(this,       &ShopEditor::shopChanged,      this, &ShopEditor::onShopChanged);
     connect(this,       &ShopEditor::itemGroupChanged, this, &ShopEditor::onItemsChanged);

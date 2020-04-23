@@ -24,6 +24,10 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSave
     fileBrowser         = new AudioEditorFileBrowser(engine, this);
     unsplashParser      = new UnsplashParser(engine);
 
+    engine->rootContext()->setContextProperty("audio_exporter", audioExporter);
+    engine->rootContext()->setContextProperty("audio_addon_element_manager", addonElementManager);
+    engine->rootContext()->setContextProperty("audio_editor_file_browser", fileBrowser);
+
     elementModel = new AudioElementModelModel;
     elementModel->insert(new AudioElementModel);
     qmlEngine->rootContext()->setContextProperty("editorElementModel", elementModel);
@@ -851,10 +855,10 @@ void AudioEditor::addFile(QString elementName, int type, QStringList path, QStri
 
     qCDebug(gmAudioEditor) << "Adding file to element" << elementName << "of type" << type << ":" << path << filename;
 
-    auto pathString = "/" + path.join("/") + "/" + filename;
+    auto pathString = "/" + (path.isEmpty() ? "" : path.join("/") + "/") + filename;
     auto element    = getElement(elementName, type);
 
-    if (element && !path.isEmpty())
+    if (element)
     {
         auto audioFile = new AudioFile(pathString, 0, "", element);
 

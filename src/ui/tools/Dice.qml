@@ -1,16 +1,15 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-
+import CustomComponents 1.0
 import FontAwesome 2.0
-
+import "../defines.js" as Defines
 import "./dice"
 
 Page {
     id: dice_page
 
     property bool combat_tracker_mode: false
-    readonly property bool inPortrait: window.width < window.height
+    readonly property bool inPortrait: width < height
     property var diceSides: [4, 6, 8, 10, 12, 20]
     property alias diceTypeSpinBox: dice_type_spin_box
     readonly property int minimalHeight: main_column.height
@@ -23,14 +22,8 @@ Page {
         onMixedCriticalResult: roll_result.color = "orange"
         onSuccessfulCriticalResult: roll_result.color = "green"
         onFailedCriticalResult: roll_result.color = "red"
-        onNormalResult: roll_result.color = color_scheme.textColor
+        onNormalResult: roll_result.color = palette.text
     }
-
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
-
-    header: top_rect
 
     DiceSettings {
         id: dice_settings_dialog
@@ -39,10 +32,10 @@ Page {
     }
 
     // Top Bar
-    Rectangle {
+    header: Rectangle {
         id: top_rect
-        color: color_scheme.toolbarColor
-        height: color_scheme.toolbarHeight
+        color: palette.alternateBase
+        height: Defines.TOOLBAR_HEIGHT
         visible: !combat_tracker_mode
 
         Row {
@@ -96,6 +89,7 @@ Page {
         id: main_column
         spacing: 10
         padding: 10
+        topPadding: 0
         anchors.left: parent.left
         anchors.right: combat_tracker_mode
                        || inPortrait ? parent.right : undefined
@@ -109,31 +103,35 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: parent.padding
+            height: Defines.TOOLBAR_HEIGHT
 
-            Text {
+            Label {
                 id: dice_count_text
                 text: qsTr("Dice Count")
-                color: color_scheme.textColor
-                font.pixelSize: parent.width / 25
+                font.pointSize: 18
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.bottom: parent.bottom
                 width: parent.textWidth
             }
 
-            Text {
+            Label {
                 id: dice_sides_text
                 text: qsTr("Dice Sides")
-                color: color_scheme.textColor
-                font.pixelSize: parent.width / 25
+                font.pointSize: 18
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.bottom: parent.bottom
                 width: parent.textWidth
             }
 
-            Text {
+            Label {
                 id: dice_modifier_text
                 text: qsTr("Modifier")
-                color: color_scheme.textColor
-                font.pixelSize: parent.width / 25
+                font.pointSize: 18
                 horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                anchors.bottom: parent.bottom
                 width: parent.textWidth
             }
         }
@@ -184,16 +182,12 @@ Page {
             spacing: 5
 
             Button {
-                Image {
-                    source: "/icons/dice/dice_roll.png"
-                    width: parent.height * 0.9
-                    height: width
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    sourceSize.height: height
-                    sourceSize.width: width
+                contentItem: Label {
+                    text: FontAwesome.dice
+                    font.family: FontAwesome.familySolid
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pointSize: 16
                 }
 
                 height: count_spinbox.height
@@ -208,19 +202,17 @@ Page {
                 }
             }
 
-            Text {
+            Label {
                 text: qsTr("Result:")
                 font.pixelSize: value_row.width / 20
                 anchors.verticalCenter: parent.verticalCenter
-                color: color_scheme.textColor
                 font.bold: true
             }
 
-            Text {
+            Label {
                 id: roll_result
                 font.pixelSize: value_row.width / 20
                 text: "-"
-                color: color_scheme.textColor
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
             }
@@ -240,7 +232,10 @@ Page {
         TextEdit {
             id: calculation_text_edit
             readOnly: true
-            color: color_scheme.textColor
+            color: palette.text
+            selectedTextColor: palette.highlightedText
+            selectionColor: palette.highlight
+
             font.pixelSize: value_row.width / 30
         }
     }

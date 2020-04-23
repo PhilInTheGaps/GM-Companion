@@ -1,15 +1,15 @@
-import QtQuick 2.9
+import QtQuick 2.6
 import QtQuick.Controls 2.2
-
 import FontAwesome 2.0
+import "../../../../defines.js" as Defines
 
 Rectangle {
     id: root
     visible: audio_editor.type == 0 || audio_editor.type == 1
     anchors.left: parent.left
     anchors.right: parent.right
-    height: color_scheme.toolbarHeight
-    color: color_scheme.menuColor
+    height: Defines.TOOLBAR_HEIGHT
+    color: palette.alternateBase
 
     Row {
         anchors.top: parent.top
@@ -52,7 +52,7 @@ Rectangle {
                 color: audio_editor.mode == 0 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {
-                    color: color_scheme.menuColor
+                    color: palette.alternateBase
                 }
             }
 
@@ -121,7 +121,7 @@ Rectangle {
                 color: audio_editor.mode == 2 ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {
-                    color: color_scheme.menuColor
+                    color: palette.alternateBase
                 }
             }
 

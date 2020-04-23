@@ -12,7 +12,7 @@ int FileManager::fileAccessCount = 0;
 
 FileManager::FileManager(QObject *parent) : QObject(parent)
 {
-    setFileAccess();
+    updateFileAccess();
 }
 
 FileManager::~FileManager()
@@ -70,7 +70,7 @@ auto FileManager::getInstance()->FileManager *
     return single;
 }
 
-void FileManager::setFileAccess()
+void FileManager::updateFileAccess()
 {
     auto cloudMode = SettingsManager::getSetting("cloudMode", "local");
 

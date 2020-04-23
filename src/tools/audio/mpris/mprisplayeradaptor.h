@@ -5,6 +5,7 @@
 #include <QDBusAbstractAdaptor>
 #include <QDBusObjectPath>
 #include <QDBusArgument>
+#include <QTemporaryFile>
 
 class MprisPlayerAdaptor : public QDBusAbstractAdaptor
 {
@@ -42,7 +43,7 @@ public:
     void setShuffle(bool set) { /* Not Implemented */ }
 
     QMap<QString, QVariant> metadata() const { return m_Metadata; }
-    void setMetadata(QMap<QString, QVariant> data) { m_Metadata = data; emit metadataChanged(data); }
+    void setMetadata(const QMap<QString, QVariant> &data);
 
     double volume() const { return m_Volume; }
     void setVolume(double volume) {  } // emit changeVolume(volume);
@@ -61,9 +62,10 @@ public:
 private:
     QString m_PlaybackStatus = "Stopped", m_LoopStatus;
     double m_Volume;
-    bool m_Shuffle;
+    bool m_Shuffle = false;
     QMap<QString, QVariant> m_Metadata;
-    qlonglong m_Position;
+    qlonglong m_Position = 0;
+    QTemporaryFile m_tempArtFile;
 
 signals:
     void Seeked(qlonglong Position);
@@ -87,9 +89,9 @@ public slots:
     Q_NOREPLY void Play() { emit play(); }
 
     // Not actually implemented
-    Q_NOREPLY void Seek(qlonglong Offset);
-    Q_NOREPLY void SetPosition(QDBusObjectPath TrackId, qlonglong Position);
-    Q_NOREPLY void OpenUri(QString Uri);
+    Q_NOREPLY void Seek(qlonglong);
+    Q_NOREPLY void SetPosition(const QDBusObjectPath&, const qlonglong &);
+    Q_NOREPLY void OpenUri(const QString&);
 };
 
 #endif // MPRISPLAYERADAPTOR_H

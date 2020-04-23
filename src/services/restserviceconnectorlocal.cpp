@@ -21,6 +21,7 @@ RESTServiceConnectorLocal::RESTServiceConnectorLocal
     // Connect signals
     connect(m_o2, &O2::linkingSucceeded, this, &RESTServiceConnectorLocal::onLinkingSucceeded);
     connect(m_o2, &O2::openBrowser,      this, &RESTServiceConnectorLocal::onOpenBrowser);
+    connect(m_o2, &O2::refreshFinished,  this, &RESTServiceConnectorLocal::onRefreshFinished);
 }
 
 /**
@@ -51,10 +52,12 @@ void RESTServiceConnectorLocal::setConfig(const RESTServiceLocalConfig& config)
 void RESTServiceConnectorLocal::grantAccess()
 {
     qCDebug(m_loggingCategory) << "Granting access ...";
+    emit statusChanged(tr("Connecting..."));
 
     if (!m_wasConfigured)
     {
-        qCCritical(m_loggingCategory) << "Could not grant access, connector was not configured.";
+        qCWarning(m_loggingCategory) << "Could not grant access, connector was not configured.";
+        emit statusChanged(tr("Internal Error: Connector was not configured."));
         return;
     }
 
@@ -71,7 +74,16 @@ void RESTServiceConnectorLocal::grantAccess()
     }
     else
     {
-        qCCritical(m_loggingCategory) << "Client id and/or client secret not found!";
+        qCWarning(m_loggingCategory) << "Client id and/or client secret not found!";
+
+        if (id.isEmpty())
+        {
+            emit statusChanged(tr("Error: No Client ID has been set."));
+        }
+        else
+        {
+            emit statusChanged(tr("Error: No Client Secret has been set."));
+        }
     }
 }
 
@@ -80,7 +92,7 @@ void RESTServiceConnectorLocal::grantAccess()
  * @return Returns a unique request id that can be used to identify the reply
  * later
  */
-auto RESTServiceConnectorLocal::get(QNetworkRequest request) -> int
+auto RESTServiceConnectorLocal::get(QNetworkRequest request)->int
 {
     auto requestId = getUniqueRequestId();
 
@@ -116,7 +128,7 @@ void RESTServiceConnectorLocal::get(QNetworkRequest request, int requestId)
 
     auto internalId = requestor->get(request);
 
-    if (internalId == -1) qCCritical(m_loggingCategory) << "Error: could not start requestor";
+    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
 
     m_requestMap[internalId] = RequestContainer(requestId, request, GET, "");
     m_currentRequestCount++;
@@ -130,7 +142,7 @@ void RESTServiceConnectorLocal::get(QNetworkRequest request, int requestId)
  * @return Returns request id for network request or -1 if request can be sent
  * now
  */
-auto RESTServiceConnectorLocal::checkAndEnqueueRequest(const QNetworkRequest& request, int requestId, RequestType type, QByteArray data, QByteArray verb) -> int
+auto RESTServiceConnectorLocal::checkAndEnqueueRequest(const QNetworkRequest& request, int requestId, RequestType type, QByteArray data, QByteArray verb)->int
 {
     if (m_isOnCooldown)
     {
@@ -156,7 +168,7 @@ auto RESTServiceConnectorLocal::checkAndEnqueueRequest(const QNetworkRequest& re
     return requestId;
 }
 
-auto RESTServiceConnectorLocal::put(QNetworkRequest request, QByteArray data) -> int
+auto RESTServiceConnectorLocal::put(QNetworkRequest request, QByteArray data)->int
 {
     auto requestId = getUniqueRequestId();
 
@@ -183,13 +195,13 @@ void RESTServiceConnectorLocal::put(QNetworkRequest request, QByteArray data, in
 
     auto internalId = requestor->put(request, data);
 
-    if (internalId == -1) qCCritical(m_loggingCategory) << "Error: could not start requestor";
+    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
 
     m_requestMap[internalId] = RequestContainer(requestId, request, PUT, data);
     m_currentRequestCount++;
 }
 
-auto RESTServiceConnectorLocal::post(QNetworkRequest request, QByteArray data) -> int
+auto RESTServiceConnectorLocal::post(QNetworkRequest request, QByteArray data)->int
 {
     auto requestId = getUniqueRequestId();
 
@@ -215,7 +227,7 @@ void RESTServiceConnectorLocal::post(QNetworkRequest request, QByteArray data, i
             requestor, &O2Requestor::deleteLater);
     auto internalId = requestor->post(request, data);
 
-    if (internalId == -1) qCCritical(m_loggingCategory) << "Error: could not start requestor";
+    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
 
     m_requestMap[internalId] = RequestContainer(requestId, request, POST, data);
     m_currentRequestCount++;
@@ -236,7 +248,7 @@ void RESTServiceConnectorLocal::customRequest(const QNetworkRequest& request, co
 
     auto internalId = requestor->customRequest(request, verb, data);
 
-    if (internalId == -1) qCCritical(m_loggingCategory) << "Error: could not start requestor";
+    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
 
     m_requestMap[internalId] = RequestContainer(requestId, request, CUSTOM, data);
     m_currentRequestCount++;
@@ -267,6 +279,14 @@ void RESTServiceConnectorLocal::onReplyReceived(int internalId, QNetworkReply::N
 
     m_requestMap.remove(internalId);
     sender()->deleteLater();
+}
+
+void RESTServiceConnectorLocal::onRefreshFinished(const QNetworkReply::NetworkError& error)
+{
+    if (error != QNetworkReply::NoError)
+    {
+        emit statusChanged(tr("Error: Could not refresh token."));
+    }
 }
 
 void RESTServiceConnectorLocal::dequeueRequests()
@@ -325,6 +345,7 @@ void RESTServiceConnectorLocal::onLinkingSucceeded()
 {
     if (!m_o2->linked()) return;
 
+    emit statusChanged(tr("Connected."));
     emit accessGranted();
 
     dequeueRequests();

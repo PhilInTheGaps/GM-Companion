@@ -21,16 +21,9 @@ Spotify::Spotify()
     updateConnector();
 
     // Librespot signals
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::kill);
-    connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-            [ = ](int exitCode, QProcess::ExitStatus exitStatus) {
-        emit wrongPassword();
-        qCCritical(gmSpotify()) << "Librespot exited with code" << exitCode << exitStatus;
-    });
-    connect(&m_librespotProcess, &QProcess::errorOccurred, [ = ](QProcess::ProcessError error) {
-        qCCritical(gmSpotify) << "An error occurred with librespot:" << error;
-        qCCritical(gmSpotify) << m_librespotProcess.errorString();
-    });
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,                                &m_librespotProcess, &QProcess::kill);
+    connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,                &Spotify::onLibrespotFinished);
+    connect(&m_librespotProcess,          &QProcess::errorOccurred,                                      this,                &Spotify::onLibrespotError);
 }
 
 Spotify::~Spotify()
@@ -44,11 +37,9 @@ void Spotify::updateConnector()
 {
     qCDebug(gmSpotify()) << "Updating spotify connector ...";
 
-
     delete m_connector;
 
-
-    if (SettingsManager::getSetting("serviceConnection", "default") == "local")
+    if (SettingsManager::getSetting("connection", "default", "Spotify") == "local")
     {
         m_connector = new SpotifyConnectorLocal(m_networkManager, new O2Spotify, this);
     }
@@ -59,8 +50,10 @@ void Spotify::updateConnector()
 
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);
     connect(m_connector, &RESTServiceConnector::receivedReply, this, &Spotify::onReceivedReply);
+    connect(m_connector, &RESTServiceConnector::statusChanged, this, &Spotify::updateStatus);
 
-    m_connector->grantAccess();
+    stopLibrespot();
+    grant();
 }
 
 /**
@@ -145,6 +138,12 @@ void Spotify::setDeviceActive()
     m_requestMap["devices"] = m_connector->get(request);
 }
 
+void Spotify::updateStatus(const QString& status)
+{
+    m_status = status;
+    emit statusChanged();
+}
+
 void Spotify::onReceivedDevices(const QByteArray& data)
 {
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
@@ -170,11 +169,13 @@ void Spotify::onReceivedDevices(const QByteArray& data)
         }
     }
 
-    qCCritical(gmSpotify) << "Could not find spotify device" << LIBRESPOT_DEVICE_NAME;
+    qCWarning(gmSpotify) << "Could not find spotify device" << LIBRESPOT_DEVICE_NAME;
 }
 
 void Spotify::startLibrespot()
 {
+    updateStatus(tr("Starting librespot..."));
+
     ProcessInfo pi;
 
     if (pi.getProcIdByName("librespot") == -1)
@@ -185,13 +186,15 @@ void Spotify::startLibrespot()
 
         if (username.isEmpty())
         {
-            qCCritical(gmSpotify()) << "Could not start librespot, username is not set.";
+            qCWarning(gmSpotify()) << "Could not start librespot, username is not set.";
+            updateStatus(tr("Error: Username is not set."));
             return;
         }
 
         if (password.isEmpty())
         {
-            qCCritical(gmSpotify()) << "Could not start librespot, password is not set.";
+            qCWarning(gmSpotify()) << "Could not start librespot, password is not set.";
+            updateStatus(tr("Error: Password is not set."));
             return;
         }
 
@@ -200,8 +203,43 @@ void Spotify::startLibrespot()
                                                   "-p", password
                                  });
     }
+    else
+    {
+        qCWarning(gmSpotify()) << "Librespot is already running.";
+    }
 
+    updateStatus(tr("Connected."));
     setDeviceActive();
+}
+
+void Spotify::stopLibrespot()
+{
+    if (m_librespotProcess.state() != QProcess::NotRunning)
+    {
+        m_librespotProcess.terminate();
+        m_librespotProcess.waitForFinished(1000);
+    }
+}
+
+void Spotify::onLibrespotFinished(const int& exitCode, const QProcess::ExitStatus& exitStatus)
+{
+    qCWarning(gmSpotify()) << "Librespot exited with code" << exitCode << exitStatus;
+
+    switch (exitCode)
+    {
+    case 101: // BadCredentials
+        updateStatus(tr("Error: Bad Credentials!"));
+        break;
+
+    default:
+        break;
+    }
+}
+
+void Spotify::onLibrespotError(const QProcess::ProcessError& error)
+{
+    qCWarning(gmSpotify) << "An error occurred with librespot:" << error;
+    qCWarning(gmSpotify) << m_librespotProcess.errorString();
 }
 
 auto Spotify::getLibrespotPath()->QString
@@ -257,7 +295,7 @@ void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, cons
         break;
 
     default:
-        qCCritical(gmSpotify) << "A network error occurred:" << id << error << data;
+        qCWarning(gmSpotify) << "A network error occurred:" << id << error << data;
     }
 }
 

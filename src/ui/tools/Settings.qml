@@ -1,133 +1,82 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
-
+import CustomComponents 1.0
+import FontAwesome 2.0
+import "../common"
 import "./settings"
 
-Page {
+Item {
     id: settings_page
-
-    Component.onCompleted: {
-        addon_manager.updateAddonList()
-
-        if (settings_tool.getCheckForUpdates())
-            update_manager.checkForUpdates()
-    }
-
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
 
     FileDialog {
         id: file_dialog
-
-        property var text_field
-
-        selectFolder: true
-
-        onAccepted: {
-            if (platform.isWindows)
-                text_field.text = fileUrl.toString().replace("file:///", "")
-            else
-                text_field.text = fileUrl.toString().replace("file://", "")
-        }
     }
 
-    header: TabBar {
-        id: tab_bar
+    Rectangle {
+        id: page_list
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        width: 175
 
-        height: platform.isAndroid ? width / 6 : color_scheme.toolbarHeight
+        color: palette.dark
 
-        background: Rectangle {
-            color: color_scheme.toolbarColor
-        }
+        Column {
+            anchors.fill: parent
+            anchors.margins: 5
 
-        Repeater {
-            id: tab_button_repeater
+            Repeater {
+                id: page_repeater
+                model: [{
+                        "name": qsTr("General"),
+                        "icon": FontAwesome.tools,
+                        "source": "settings/GeneralPage.qml"
+                    }, {
+                        "name": qsTr("Accounts"),
+                        "icon": FontAwesome.users,
+                        "source": "settings/AccountsPage.qml"
+                    }, {
+                        "name": qsTr("Paths"),
+                        "icon": FontAwesome.folderOpen,
+                        "source": "settings/PathsPage.qml"
+                    }, {
+                        "name": qsTr("Addons"),
+                        "icon": FontAwesome.puzzlePiece,
+                        "source": "settings/AddonsPage.qml"
+                    }, {
+                        "name": qsTr("Info"),
+                        "icon": FontAwesome.infoCircle,
+                        "source": "settings/InfoPage.qml"
+                    }]
+                CustomButton {
+                    buttonText: modelData.name
+                    iconText: modelData.icon
 
-            model: [qsTr("General"), qsTr("Paths"), qsTr("Accounts"), qsTr(
-                    "Cloud Storage"), qsTr("Addons"), qsTr("Info")]
-
-            onItemAdded: tab_bar.currentIndex = 0
-
-            TabButton {
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-
-                Text {
-                    text: modelData
-                    color: color_scheme.toolbarTextColor
-                    font.pointSize: 12
-                    font.bold: true
-                    anchors.centerIn: parent
-                }
-
-                Rectangle {
-                    color: "white"
-                    height: 2
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-                    anchors.margins: 5
-                    visible: tab_bar.currentIndex === index
-                }
 
-                background: Rectangle {
-                    color: color_scheme.toolbarColor
+                    onClicked: loader.setSource(modelData.source)
                 }
             }
         }
-    }
-
-    footer: Rectangle {
-        id: footer_bar
-        height: color_scheme.toolbarHeight
-        color: color_scheme.backgroundColor
 
         Label {
-            anchors.centerIn: parent
-            text: qsTr("Most settings require a program restart!")
-            color: color_scheme.textColor
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.margins: 10
+            text: "Version: " + update_manager.getCurrentVersion()
         }
     }
 
-    contentItem: SwipeView {
-        id: swipe_view
-        anchors.left: parent.left
+    Loader {
+        id: loader
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: page_list.right
         anchors.right: parent.right
-        currentIndex: tab_bar.currentIndex
-        padding: 5
-        spacing: 5
-        interactive: false
 
-        // General Settings
-        GeneralPage {
-            id: general_page
-        }
-
-        // Paths
-        PathsPage {
-            id: paths_page
-        }
-
-        // Accounts
-        AccountsPage {
-            id: accounts_page
-        }
-
-        // Cloud Storage
-        CloudPage {
-            id: cloud_page
-        }
-
-        // Addons
-        AddonsPage {
-            id: addons_page
-        }
-
-        // Info
-        InfoPage {
-            id: info_page
-        }
+        asynchronous: true
+        source: page_repeater.model[0].source
     }
 }

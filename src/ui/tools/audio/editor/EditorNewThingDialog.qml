@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Dialog {
     id: root
@@ -15,32 +16,23 @@ Dialog {
         width: editor_root.width * 0.75
         height: editor_root.height * 0.75
         x: (editor_root.width - width) / 2
-
-        onAddAddonElements: {
-            for (; i < names.length; i++) {
-                if (checked[i]) {
-                    audio_editor.createSpotifyElement(names[i])
-                }
-            }
-        }
     }
 
     contentItem: Column {
-        spacing: 5
+        spacing: 10
 
-        Text {
+        Label {
             text: qsTr("Element Type")
         }
 
         ComboBox {
             id: combo_box
             model: [qsTr("Project"), qsTr("Category"), qsTr("Scenario"), qsTr(
-                    "Music List"), qsTr("Sound List"), qsTr("Radio"), qsTr(
-                    "Spotify Playlist")]
+                    "Music List"), qsTr("Sound List"), qsTr("Radio")]
             width: textfield.width
         }
 
-        CheckBox {
+        CustomCheckBox {
             id: subscenario_check_box
             text: (combo_box.currentIndex == 2 ? qsTr("As") : qsTr(
                                                      "In")) + " " + qsTr(
@@ -75,7 +67,7 @@ Dialog {
             onClicked: addon_dialog.open()
         }
 
-        TextField {
+        CustomTextField {
             id: textfield
             placeholderText: qsTr("Element Name")
             selectByMouse: true
@@ -109,11 +101,6 @@ Dialog {
                 break
             case 5:
                 audio_editor.createRadioElement(
-                            textfield.text, subscenario_check_box.checked,
-                            subscenario_combo_box.currentIndex)
-                break
-            case 6:
-                audio_editor.createSpotifyElement(
                             textfield.text, subscenario_check_box.checked,
                             subscenario_combo_box.currentIndex)
                 break

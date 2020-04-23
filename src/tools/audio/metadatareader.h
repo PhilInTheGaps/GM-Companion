@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QMediaPlayer>
-#include <cstdlib>
 #include <QPixmap>
+#include <QTemporaryFile>
 
 class MetaData
 {
@@ -12,8 +12,8 @@ public:
     MetaData() {}
     ~MetaData() {}
 
-    QString artist = "", album = "", title = "", cover = "", type = "", elementIcon = "";
-    qulonglong length = 0;
+    QString artist = "", album = "", title = "", cover = "", coverUrl = "", type = "", elementIcon = "";
+    qint64 length = 0;
 };
 
 class MetaDataReader : public QObject
@@ -24,14 +24,17 @@ public:
     void setMetaData(MetaData m);
 
 private:
-    QString convertCoverImage(QMediaPlayer *mediaPlayer);
-    QString m_currentImageUrl;
+    MetaData m_metaData;
+    QTemporaryFile m_coverFile;
 
 signals:
-    void metaDataUpdated(MetaData m);
+    void metaDataUpdated(const MetaData& m);
 
 public slots:
-    void updateMetaData(QMediaPlayer *mediaPlayer, QPixmap elementIcon);
+    void updateMetaData(QMediaPlayer *mediaPlayer);
+    void updateMetaData(const QString& key, const QVariant &value);
+    void updateDuration(const qint64& duration);
+    void clearMetaData();
 };
 
 #endif // METADATAREADER_H

@@ -11,7 +11,9 @@ Item {
     property int markerIndex: -1
     property bool showDelete: false
 
-    scale: 1 / image.scale
+    signal markerSelected
+
+    rotation: -parent.parent.rotation
 
     Rectangle {
         width: marker_text.width
@@ -22,15 +24,15 @@ Item {
 
         color: "transparent"
 
-        Text {
+        Label {
             id: marker_text
             font.family: FontAwesome.familySolid
             text: icon
             anchors.centerIn: parent
-            style: Text.Outline
 
             color: root.color
-            styleColor: "black"
+            style: Text.Outline
+            styleColor: palette.dark
 
             font.pointSize: 30
         }
@@ -53,13 +55,8 @@ Item {
             }
 
             onClicked: {
-                left_swipe_view.currentIndex = 2
-                marker_name.text = root.name
-                marker_description.text = root.description
-                marker_icon.text = root.icon
-                marker_icon.color = root.color
-
                 map_tool.markerIndex = root.markerIndex
+                markerSelected()
             }
 
             drag.onActiveChanged: {
@@ -76,7 +73,7 @@ Item {
             acceptedButtons: Qt.RightButton
 
             onClicked: {
-                marker_delete_rect.markerIndex = root.markerIndex
+                map_tool.markerIndex = root.markerIndex
                 marker_delete_rect.visible = true
             }
         }

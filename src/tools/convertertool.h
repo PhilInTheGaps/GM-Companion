@@ -4,40 +4,43 @@
 #include <QObject>
 #include <QStringList>
 #include <QList>
+#include <QQmlApplicationEngine>
 
 class ConverterTool : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList units READ units NOTIFY unitsChanged)
-    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    Q_PROPERTY(QString unit1 READ unit1 NOTIFY unit1Changed)
-    Q_PROPERTY(QString unit2 READ unit2 NOTIFY unit2Changed)
-    Q_PROPERTY(bool isUnit1Next READ isUnit1Next NOTIFY isUnit1NextChanged)
-    Q_PROPERTY(QString unit2ValueString READ unit2ValueString NOTIFY unit2ValueStringChanged)
 
 public:
-    explicit ConverterTool(QObject *parent = nullptr);
-
-    QStringList units() { return m_units[m_typeIndex][m_categoryIndex];}
-    QStringList categories() const { return m_categories[m_typeIndex];}
-    QString unit1() const { return m_units[m_typeIndex][m_categoryIndex][m_unitIndex1]; }
-    QString unit2() const { return m_units[m_typeIndex][m_categoryIndex][m_unitIndex2]; }
-    bool isUnit1Next() const { return m_isUnit1Next; }
-    QString unit2ValueString() const { return m_unit2ValueString; }
+    explicit ConverterTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     Q_INVOKABLE void convert();
-
     Q_INVOKABLE void updateUnits();
-    Q_INVOKABLE void addUnit(QString name, QString refUnits, QString type);
     Q_INVOKABLE QString refUnitName(QString unit);
+    Q_INVOKABLE void setCurrentType(int index);
 
+    Q_PROPERTY(QStringList units READ units NOTIFY unitsChanged)
+    QStringList units() { return m_units[m_typeIndex][m_categoryIndex];}
+    Q_INVOKABLE void setUnit(int index);
+    Q_INVOKABLE void addUnit(QString name, QString refUnits, QString type);
     Q_INVOKABLE void deleteUnit(int index);
 
-    Q_INVOKABLE void setCurrentType(int index);
+    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
+    QStringList categories() const { return m_categories[m_typeIndex];}
     Q_INVOKABLE void setCurrentCategory(int index);
-    Q_INVOKABLE void setUnit(int index);
-    Q_INVOKABLE void setIsUnit1Next(bool isNext);
+
+    Q_PROPERTY(QString unit1 READ unit1 NOTIFY unit1Changed)
+    QString unit1() const { return m_units[m_typeIndex][m_categoryIndex][m_unitIndex1]; }
     Q_INVOKABLE void setUnit1ValueString(QString value);
+
+    Q_PROPERTY(QString unit2 READ unit2 NOTIFY unit2Changed)
+    QString unit2() const { return m_units[m_typeIndex][m_categoryIndex][m_unitIndex2]; }
+
+    Q_PROPERTY(QString unit2ValueString READ unit2ValueString NOTIFY unit2ValueStringChanged)
+    QString unit2ValueString() const { return m_unit2ValueString; }
+
+    Q_PROPERTY(bool isUnit1Next READ isUnit1Next NOTIFY isUnit1NextChanged)
+    bool isUnit1Next() const { return m_isUnit1Next; }
+    Q_INVOKABLE void setIsUnit1Next(bool isNext);
 
 signals:
     void unitsChanged();
@@ -68,8 +71,8 @@ private:
     int m_unitIndex1 = 0;
     int m_unitIndex2 = 0;
     bool m_isUnit1Next = true;
-    QString m_unit2ValueString;
-    QString m_unit1ValueString;
+    QString m_unit2ValueString = "1";
+    QString m_unit1ValueString = "1";
 };
 
 #endif // CONVERTERTOOL_H

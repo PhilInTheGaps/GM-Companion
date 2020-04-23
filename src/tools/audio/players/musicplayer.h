@@ -13,8 +13,8 @@ class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    MusicPlayer(SpotifyPlayer *spotifyPlayer, QObject *parent = nullptr);
-    ~MusicPlayer();
+    explicit MusicPlayer(SpotifyPlayer *spotifyPlayer, QObject *parent = nullptr);
+    ~MusicPlayer() override;
 
     void play(AudioElement *element);
 
@@ -22,54 +22,55 @@ public:
     int index() const { return m_playlistIndex; }
 
 public slots:
-    void play();
-    void pause();
-    void stop();
-    void setLogarithmicVolume(int volume);
-    void setLinearVolume(int volume);
-    void next();
-    void again();
-    void setIndex(int index);
+    void play() override;
+    void pause() override;
+    void stop() override;
+    void setLogarithmicVolume(int volume) override;
+    void setLinearVolume(int volume) override;
+    void next() override;
+    void again() override;
+    void setIndex(int index) override;
 
 private:
-    SpotifyPlayer *spotifyPlayer;
-    QMediaPlayer *mediaPlayer;
-    AudioElement *currentElement;
+    SpotifyPlayer *spotifyPlayer = nullptr;
+    QMediaPlayer *mediaPlayer = nullptr;
+    AudioElement *currentElement = nullptr;
     YouTube youtube;
 
     QList<AudioFile*> m_playlist;
-    int m_playlistIndex;
-    int m_playerType;
-    int m_youtubeRequestId;
-    int m_fileRequestId;
+    int m_playlistIndex = 0;
+    int m_playerType = -1;
+    int m_youtubeRequestId = -1;
+    int m_fileRequestId = -1;
 
     QByteArray m_mediaData;
     QBuffer *m_mediaBuffer = nullptr;
 
     void loadMedia(AudioFile *file);
     void loadSongNames(bool initial = false, bool reloadYt = false);
-    void applyShuffleMode(bool keepIndex = false, QString url = "");
+    void applyShuffleMode(bool keepIndex = false, const QString& url = "");
     void startPlaying();
 
     QStringList m_songNames;
     int m_waitingForUrls = 0;
 
 private slots:
-    void onMetaDataChanged();
     void onMediaPlayerStateChanged();
     void onMediaPlayerBufferStatusChanged();
     void onMediaPlayerMediaStatusChanged();
     void onMediaPlayerError(QMediaPlayer::Error error);
     void onMediaPlayerMediaChanged();
-    void onFileReceived(int id, QByteArray data);
+    void onFileReceived(int id, const QByteArray& data);
     void onSpotifySongEnded();
-    void onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, QString playlistId);
+    void onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, const QString& playlistId);
     void onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int reqId);
-    void onYtReceivedVideo(Video video, int reqId);
+    void onYtReceivedVideo(const Video& video, int reqId);
 
 signals:
     void startedPlaying();
-    void metaDataChanged(QMediaPlayer *mediaPlayer, QPixmap elementIcon);
+    void clearMetaData();
+    void metaDataChanged(QMediaPlayer *mediaPlayer);
+    void metaDataChanged(const QString& key, const QVariant& value);
     void currentIndexChanged();
     void songNamesChanged();
 };

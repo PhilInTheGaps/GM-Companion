@@ -1,14 +1,10 @@
 #include "dicetool.h"
+#include "logging.h"
+#include <QQmlContext>
 
-#include <QDebug>
-#include <QDir>
-
-DiceTool::DiceTool(QObject *parent) : QObject(parent)
+DiceTool::DiceTool(QQmlEngine *engine, QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading Dice Tool ...";
-
-    settings = new QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
-    settings->beginGroup("Dice");
+    engine->rootContext()->setContextProperty("dice_tool", this);
 }
 
 void DiceTool::setSides(int sides)
@@ -19,11 +15,11 @@ void DiceTool::setSides(int sides)
 
 void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax)
 {
-    settings->setValue("enableCriticals", enableCriticals);
-    settings->setValue("success",         success);
-    settings->setValue("failure",         failure);
-    settings->setValue("useMinMax",       minMax);
-    settings->setValue("successMax",      successMax);
+    SettingsManager::setSetting(ENABLE_CRITICALS_SETTING, enableCriticals, DICE_SETTINGS);
+    SettingsManager::setSetting(SUCCESS_SETTING,          success,         DICE_SETTINGS);
+    SettingsManager::setSetting(FAILURE_SETTING,          failure,         DICE_SETTINGS);
+    SettingsManager::setSetting(USE_MIN_MAX_SETTING,      minMax,          DICE_SETTINGS);
+    SettingsManager::setSetting(SUCCESS_MAX_SETTING,      successMax,      DICE_SETTINGS);
 }
 
 int DiceTool::roll()
@@ -52,8 +48,9 @@ int DiceTool::roll()
         criticalFailure = getFailure();
     }
 
-
     m_calculation_string = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(m_sides);
+
+    qCDebug(gmDiceTool()) << m_calculation_string;
 
     if (m_modifier < 0)
     {
@@ -112,6 +109,8 @@ int DiceTool::roll()
     {
         emit normalResult();
     }
+
+    qCDebug(gmDiceTool()) << "Result:" << result;
 
     return result;
 }

@@ -1,12 +1,11 @@
 #include "audioeditorfilebrowser.h"
 #include "settings/settingsmanager.h"
-#include <QDebug>
+#include "filesystem/filemanager.h"
+#include "logging.h"
 #include <QQmlContext>
 
 AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading Audio Editor File Browser ...";
-
     m_type = -1;
 
     m_fileModel = new AudioEditorFileModel;
@@ -22,22 +21,22 @@ void AudioEditorFileBrowser::setType(int type)
 {
     if (type == m_type) return;
 
-    qDebug() << "AudioEditorFileBrowser: Changing type:" << type << "...";
+    qCDebug(gmAudioEditorFileBrowser()) << "Changing type:" << type << "...";
     m_type = type;
     emit typeChanged();
 
     switch (type)
     {
     case 0: // Music
-        m_basePath = SettingsManager::getPath("musicPath");
+        m_basePath = SettingsManager::getPath("music");
         break;
 
     case 1: // Sounds
-        m_basePath = SettingsManager::getPath("soundPath");
+        m_basePath = SettingsManager::getPath("sounds");
         break;
 
     case 2: // Radio
-        m_basePath = SettingsManager::getPath("radioPath");
+        m_basePath = SettingsManager::getPath("radio");
         break;
 
     default:
@@ -54,63 +53,46 @@ void AudioEditorFileBrowser::setType(int type)
  */
 void AudioEditorFileBrowser::updateFiles()
 {
-    QStringList tempPath;
-
-    addFolders(tempPath);
-    addFiles(tempPath);
+    addFiles({}, -1, true);
+    addFiles({}, -1, false);
 }
 
-int AudioEditorFileBrowser::addFolders(QStringList path, int index)
+void AudioEditorFileBrowser::addFiles(QStringList path, int index, bool folders)
 {
-    int count = 0;
+    qCDebug(gmAudioEditorFileBrowser()) << "Adding files:" << m_basePath << path << index << folders;
 
-    /*
-       for (QString f : getFolders(m_basePath + "/" + path.join("/")))
-       {
-        if ((f != ".") && (f != ".."))
-        {
-            auto file = new AudioEditorFile(f, path, 3);
+    auto requestId = FileManager::getUniqueRequestId();
+    auto context   = new QObject;
 
-            if (index > -1)
-            {
-                m_fileModel->insert(index + count, file);
-            }
-            else
-            {
-                m_fileModel->append(file);
-            }
+    connect(FileManager::getInstance(), &FileManager::receivedFileList, context, [ = ](int id, QStringList files) {
+        if (requestId != id) return;
 
-            count++;
-        }
-       }*/
+        qCDebug(gmAudioEditorFileBrowser()) << "Received file list:" << files;
 
-    return count;
+        addFilesToModel(files, path, folders ? 3 : m_type, index);
+        delete context;
+    });
+
+    FileManager::getInstance()->getFileList(requestId, m_basePath + "/" + path.join('/'), folders);
 }
 
-int AudioEditorFileBrowser::addFiles(QStringList path, int index)
+void AudioEditorFileBrowser::addFilesToModel(QStringList files, QStringList path, int type, int index)
 {
-    int count = 0;
+    for (auto file : files)
+    {
+        auto editorFile = new AudioEditorFile(file, path, type);
 
-    /*
-       for (QString f : getFiles(m_basePath + "/" + path.join("/")))
-       {
-        if (!f.endsWith("."))
+        if (index > -1)
         {
-            auto file = new AudioEditorFile(f, path, m_type);
-
-            if (index > -1)
-            {
-                m_fileModel->insert(index + count, file);
-            }
-            else
-            {
-                m_fileModel->append(file);
-            }
-
-            count++;
+            m_fileModel->insert(index, editorFile);
         }
-       }*/
-    return count;
+        else
+        {
+            m_fileModel->append(editorFile);
+        }
+
+        index++;
+    }
 }
 
 void AudioEditorFileBrowser::removeElement(QStringList path)
@@ -122,19 +104,12 @@ void AudioEditorFileBrowser::removeElement(QStringList path)
         if ((file->path() == path) || file->path().join("/").startsWith(path.join("/")))
         {
             m_fileModel->remove(file);
-
-            if (file) file->deleteLater();
         }
     }
 }
 
 void AudioEditorFileBrowser::clearFiles()
 {
-    for (auto e : m_fileModel->elements())
-    {
-        if (e) e->deleteLater();
-    }
-
     m_fileModel->clear();
 }
 
@@ -153,8 +128,8 @@ void AudioEditorFileBrowser::openFolder(bool open, QString folder, QStringList p
         {
             if (open)
             {
-                int count = addFolders(folderPath, index + 1) + 1;
-                count += addFiles(folderPath, index + count);
+                addFiles(folderPath, index + 1, true);
+                addFiles(folderPath, index + 1, false);
                 break;
             }
             else
@@ -167,19 +142,9 @@ void AudioEditorFileBrowser::openFolder(bool open, QString folder, QStringList p
     }
 }
 
-/**
- * @brief Add all files from current path to the current element
- */
-void AudioEditorFileBrowser::addAllFiles()
-{
-    //    emit addFiles(m_filePaths);
-}
-
 QVariant AudioEditorFileModel::data(const QModelIndex& index, int /*role*/) const
 {
-    QObject *item = m_items.at(index.row());
-
-    return QVariant::fromValue(item);
+    return QVariant::fromValue(m_items.at(index.row()));
 }
 
 void AudioEditorFileModel::insert(int index, QObject *item)
@@ -205,7 +170,7 @@ void AudioEditorFileModel::remove(QObject *item)
     for (int i = 0; i < m_items.size(); ++i) {
         if (m_items.at(i) == item) {
             beginRemoveRows(QModelIndex(), i, i);
-            m_items.remove(i);
+            m_items.takeAt(i)->deleteLater();
             endRemoveRows();
             break;
         }
@@ -228,8 +193,7 @@ void AudioEditorFileModel::clear()
 
     while (m_items.size() > 0)
     {
-        m_items[0]->deleteLater();
-        m_items.remove(0);
+        delete m_items.takeAt(0);
     }
 
     endRemoveRows();

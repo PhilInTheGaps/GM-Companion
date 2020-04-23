@@ -25,8 +25,6 @@ void ItemEditor::findItems()
     auto context   = new QObject;
 
     connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
-        qCDebug(gmShopsItemEditor()) << "Test" << requestId << id;
-
         if (id != requestId) return;
 
         qCDebug(gmShopsItemEditor()) << "Received custom items.";
@@ -47,7 +45,7 @@ void ItemEditor::findItems()
  */
 void ItemEditor::addCategory(QString name)
 {
-    qDebug() << "ItemEditor: Adding category" << name << "...";
+    qCDebug(gmShopsItemEditor()) << "Adding category" << name << "...";
 
     if (!m_categories.contains(name))
     {

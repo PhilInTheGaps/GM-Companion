@@ -10,6 +10,8 @@ CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : Q
     effectTool = new EffectTool;
 
     combatantListModel = new CombatantListModel;
+    engine->rootContext()->setContextProperty("combat_tracker", this);
+    engine->rootContext()->setContextProperty("combat_tracker_effects", effectTool);
     qmlEngine->rootContext()->setContextProperty("combatantListModel", combatantListModel);
 }
 

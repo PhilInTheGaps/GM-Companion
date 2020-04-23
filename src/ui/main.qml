@@ -1,267 +1,173 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 
 import FontAwesome 2.0
 import "./tools"
-import "./components"
 import "./main"
 
-Window {
-    id: window
+import "defines.js" as Defines
+
+ApplicationWindow {
+    id: root
+    title: qsTr("GM-Companion")
     visible: true
+
     width: 1280
     height: 720
-    title: qsTr("GM-Companion")
 
-    readonly property bool inPortrait: window.width < window.height
+    minimumWidth: 640
+    minimumHeight: 480
+
+    readonly property var tools: [{
+            "name": qsTr("Audio"),
+            "source": "tools/Audio.qml",
+            "classicIcon": "../icons/menu/audio.png",
+            "faIcon": FontAwesome.music
+        }, {
+            "name": qsTr("Maps"),
+            "source": "tools/Maps.qml",
+            "classicIcon": "../icons/menu/maps.png",
+            "faIcon": FontAwesome.mapMarkedAlt
+        }, {
+            "name": qsTr("Dice"),
+            "source": "tools/Dice.qml",
+            "classicIcon": "../icons/menu/dice.png",
+            "faIcon": FontAwesome.diceD20
+        }, {
+            "name": qsTr("Combat Tracker"),
+            "source": "tools/CombatTracker.qml",
+            "classicIcon": "../icons/menu/combat.png",
+            "faIcon": FontAwesome.bookDead
+        }, {
+            "name": qsTr("Item Shop"),
+            "source": "tools/ItemShop.qml",
+            "classicIcon": "../icons/menu/item-shop.png",
+            "faIcon": FontAwesome.shoppingCart
+        }, {
+            "name": qsTr("Characters"),
+            "source": "tools/Characters.qml",
+            "classicIcon": "../icons/menu/characters.png",
+            "faIcon": FontAwesome.addressCard
+        }, {
+            "name": qsTr("Generators"),
+            "source": "tools/Generators.qml",
+            "classicIcon": "../icons/menu/generators.png",
+            "faIcon": FontAwesome.industry
+        }, {
+            "name": qsTr("Notes"),
+            "source": "tools/Notes.qml",
+            "classicIcon": "../icons/menu/notes.png",
+            "faIcon": FontAwesome.book
+        }, {
+            "name": qsTr("Converter"),
+            "source": "tools/Converter.qml",
+            "classicIcon": "../icons/menu/converter.png",
+            "faIcon": FontAwesome.balanceScale
+        }]
 
     Component.onCompleted: {
-        if (settings_tool.getCheckForUpdates())
+        if (settings_manager.isUpdateCheckEnabled()) {
+            console.debug("Checking for updates")
             update_manager.checkForUpdates()
-    }
-
-    // Loading screen
-    LoadingScreen {
-        id: splash
-    }
-
-    Connections {
-        target: update_manager
-
-        onUpdateAvailable: {
-            update_dialog.open()
         }
     }
 
-    // Update popup
-    Dialog {
+    UpdateDialog {
         id: update_dialog
 
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
+        Connections {
+            target: update_manager
 
-        title: qsTr("Update Available!")
-
-        Button {
-            text: qsTr("Download")
-
-            onClicked: Qt.openUrlExternally(
-                           "https://github.com/PhilInTheGaps/GM-Companion/releases")
+            onUpdateAvailable: update_dialog.open()
         }
     }
 
-    // Main item
-    Page {
-        id: main_item
-        anchors.fill: parent
+    LoadingScreen {
+        id: splash
+        progress: loader.progress
+    }
 
-        // Menu
-        Drawer {
-            id: drawer
-            width: {
-                if (platform.isAndroid) {
-                    inPortrait
-                            || !settings_tool.showToolNames ? color_scheme.toolbarHeight : parent.width / 4
-                } else {
-                    inPortrait
-                            || !settings_tool.showToolNames ? color_scheme.toolbarHeight : 200
-                }
-            }
+    Drawer {
+        id: drawer
+        width: settings_manager.showToolNames ? Defines.SIDEBAR_WIDTH : Defines.TOOLBAR_WIDTH
+        height: parent.height
+        modal: false
+        interactive: false
+        visible: true
 
-            height: parent.height
-            background: Rectangle {
-                color: color_scheme.menuColor
-            }
-
-            modal: false
-            interactive: false
-            visible: true
-
-            // Contains all the menu stuff
-            ScrollView {
-                clip: true
-                contentWidth: -1
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: parent.top
-                anchors.bottom: settings_button.top
-
-                ScrollBar.vertical.visible: false
-                contentHeight: tool_column.implicitHeight
-
-                // Column with tool buttons
-                Column {
-                    id: tool_column
-                    width: drawer.width
-                    spacing: 5
-
-                    function buttonClicked(tool) {
-                        if (stack.currentItem !== tool) {
-                            stack.pop(null)
-                            tool.active = true
-                            stack.push(tool)
-                        }
-                    }
-
-                    property var toolNames: [qsTr("Audio"), qsTr("Maps"), qsTr(
-                            "Dice"), qsTr("Combat Tracker"), qsTr(
-                            "Item Shop"), qsTr("Characters"), qsTr(
-                            "Generators"), qsTr("Notes"), qsTr("Converter")]
-                    property var icons: ["../icons/menu/audio.png", "../icons/menu/maps.png", "../icons/menu/dice.png", "../icons/menu/combat.png", "../icons/menu/item-shop.png", "../icons/menu/characters.png", "../icons/menu/generators.png", "../icons/menu/notes.png", "../icons/menu/converter.png"]
-                    property var tools: [audio, maps, dice, combat, shop, characters, generators, notes, converter]
-                    property var fa_icons: [FontAwesome.music, FontAwesome.mapMarkedAlt, FontAwesome.diceD20, FontAwesome.bookDead, FontAwesome.shoppingCart, FontAwesome.addressCard, FontAwesome.industry, FontAwesome.book, FontAwesome.balanceScale]
-
-                    Repeater {
-                        model: parent.toolNames
-
-                        SideMenuButton {
-                            tool_name: modelData
-                            icon_source: parent.icons[index]
-                            fa_icon: parent.fa_icons[index]
-                            current_tool: stack.currentItem === tool_column.tools[index]
-
-                            function switchTool() {
-                                if (index == 0) {
-                                    if (stack.currentItem !== audio) {
-                                        stack.pop(null)
-                                    }
-                                } else {
-                                    tool_column.buttonClicked(
-                                                tool_column.tools[index])
-                                }
-                            }
-
-                            Shortcut {
-                                onActivated: switchTool()
-                                sequences: ["Ctrl+" + (index + 1)]
-                                context: Qt.ApplicationShortcut
-                            }
-
-                            onClicked: {
-                                switchTool()
-                            }
-                        }
-                    }
-                }
-            }
-
-            SideMenuButton {
-                id: settings_button
-                anchors.bottom: parent.bottom
-
-                tool_name: qsTr("Settings")
-                icon_source: "../icons/menu/settings.png"
-                fa_icon: FontAwesome.cog
-                current_tool: stack.currentItem == settings
-
-                onClicked: tool_column.buttonClicked(settings)
-            }
+        background: Rectangle {
+            color: palette.alternateBase
         }
 
-        // Stackview contains current tool
-        StackView {
-            id: stack
-            width: {
-                if (inPortrait || platform.isAndroid) {
-                    parent.width - drawer.width
-                } else {
-                    parent.width - drawer.width
-                }
-            }
-
+        ScrollView {
             clip: true
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+            contentWidth: -1
+            anchors.left: parent.left
             anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: settings_button.top
 
-            background: Rectangle {
-                color: color_scheme.backgroundColor
+            ScrollBar.vertical.visible: false
+            contentHeight: tool_column.implicitHeight
+
+            Column {
+                id: tool_column
+                width: drawer.width
+
+                function buttonClicked(tool) {
+                    if (stack.currentItem !== tool) {
+                        stack.pop(null)
+                        tool.active = true
+                        stack.push(tool)
+                    }
+                }
+
+                Repeater {
+                    model: root.tools
+
+                    SideMenuButton {
+                        toolName: modelData.name
+                        iconSource: modelData.classicIcon
+                        faIcon: modelData.faIcon
+
+                        Shortcut {
+                            onActivated: setTool()
+                            sequences: ["Ctrl+" + (index + 1)]
+                            context: Qt.ApplicationShortcut
+                        }
+
+                        onClicked: setTool()
+
+                        function setTool() {
+                            loader.setSource(modelData.source)
+                        }
+                    }
+                }
             }
-
-            pushEnter: Transition {
-            }
-
-            pushExit: Transition {
-            }
-
-            popEnter: Transition {
-            }
-
-            popExit: Transition {
-            }
-
-            initialItem: audio
         }
 
-        Loader {
-            id: audio
-            source: "tools/Audio.qml"
-            asynchronous: true
-            active: true
-        }
+        SideMenuButton {
+            id: settings_button
+            anchors.bottom: parent.bottom
 
-        Loader {
-            id: maps
-            source: "tools/Maps.qml"
-            asynchronous: true
-            active: false
-        }
+            toolName: qsTr("Settings")
+            iconSource: "../icons/menu/settings.png"
+            faIcon: FontAwesome.cog
 
-        Loader {
-            source: "tools/Dice.qml"
-            asynchronous: true
-            id: dice
-            active: false
+            onClicked: loader.setSource("tools/Settings.qml")
         }
+    }
 
-        Loader {
-            source: "tools/CombatTracker.qml"
-            asynchronous: true
-            id: combat
-            active: false
-        }
+    Loader {
+        id: loader
+        width: parent.width - drawer.width
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        asynchronous: true
+        source: root.tools[0].source
+        active: true
 
-        Loader {
-            source: "tools/ItemShop.qml"
-            asynchronous: true
-            id: shop
-            active: false
-        }
-
-        Loader {
-            source: "tools/Characters.qml"
-            asynchronous: true
-            id: characters
-            active: false
-        }
-
-        Loader {
-            source: "tools/Generators.qml"
-            asynchronous: true
-            id: generators
-            active: false
-        }
-
-        Loader {
-            source: "tools/Notes.qml"
-            asynchronous: true
-            id: notes
-            active: false
-        }
-
-        Loader {
-            source: "tools/Converter.qml"
-            asynchronous: true
-            id: converter
-            active: false
-        }
-        Loader {
-            source: "tools/Settings.qml"
-            asynchronous: true
-            id: settings
-            active: false
-        }
+        onLoaded: splash.close()
     }
 }

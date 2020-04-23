@@ -12,13 +12,13 @@ public:
     FileFinder() {}
 
 public slots:
-    void getFile(int requestId, const QString& filePath);
-    void getFiles(int requestId, const QString& directory, const QString& fileEnding);
-    void getFileList(int requestId, const QString& directory, bool folders);
+    void getFile(const int& requestId, const QString& filePath);
+    void getFiles(const int& requestId, const QString& directory, const QString& fileEnding);
+    void getFileList(const int& requestId, const QString& directory, const bool& folders);
     static void saveFile(const QString& filePath, const QByteArray& data);
-    void saveFileDeleteOld(QString newFile, QByteArray data, const QString& oldFile);
+    void saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile);
     static void deleteFile(const QString& filePath);
-    void checkIfFilesExist(int requestId, const QStringList& files);
+    void checkIfFilesExist(const int& requestId, const QStringList& files);
 
 private:
     static QByteArray getFileData(const QString& filePath);
@@ -37,16 +37,15 @@ class FileAccessLocal : public FileAccess
 
 public:
     FileAccessLocal(QObject *parent = nullptr);
-    ~FileAccessLocal();
+    ~FileAccessLocal() override;
 
-    void getFile(int id, QString filePath);
-    void getFiles(int id, QString directory, QString fileEnding);
-    void getFileList(int requestId, QString directory, bool folders);
-    void saveFile(QString filePath, QByteArray data);
-    void saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile);
-    void deleteFile(QString filePath);
-
-    void checkIfFilesExist(int id, QStringList files);
+    void getFile(const int& id, const QString& filePath) override;
+    void getFiles(const int& id, const QString& directory, const QString& fileEnding) override;
+    void getFileList(const int &requestId, const QString &directory, const bool &folders) override;
+    void saveFile(const QString &filePath, const QByteArray &data) override;
+    void saveFileDeleteOld(const QString &newFile, const QByteArray &data, const QString &oldFile) override;
+    void deleteFile(const QString &filePath) override;
+    void checkIfFilesExist(const int &id, QStringList files) override;
 
 signals:
     void startGettingFile(int requestId, QString filePath);

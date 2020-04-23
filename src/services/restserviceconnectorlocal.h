@@ -22,23 +22,23 @@ class RESTServiceConnectorLocal : public RESTServiceConnector
     Q_OBJECT
 public:
     RESTServiceConnectorLocal(QNetworkAccessManager* networkManager, O2 *o2, const QLoggingCategory &loggingCategory, QObject *parent);
-    virtual ~RESTServiceConnectorLocal();
+    virtual ~RESTServiceConnectorLocal() override;
 
-    void grantAccess();
-    bool isAccessGranted() const { return m_o2->linked(); }
+    void grantAccess() override;
+    bool isAccessGranted() const override { return m_o2->linked(); }
 
-    int get(QNetworkRequest request);
-    void get(QNetworkRequest request, int requestId);
+    int get(QNetworkRequest request) override;
+    void get(QNetworkRequest request, int requestId) override;
 
-    int put(QNetworkRequest request, QByteArray data = "");
-    void put(QNetworkRequest request, QByteArray data, int requestId);
+    int put(QNetworkRequest request, QByteArray data = "") override;
+    void put(QNetworkRequest request, QByteArray data, int requestId) override;
 
-    int post(QNetworkRequest request, QByteArray data = "");
-    void post(QNetworkRequest request, QByteArray data, int requestId);
+    int post(QNetworkRequest request, QByteArray data = "") override;
+    void post(QNetworkRequest request, QByteArray data, int requestId) override;
 
-    void customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data, int requestId);
+    void customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data, int requestId) override;
 
-    int getUniqueRequestId() { return ++m_requestCount; }
+    int getUniqueRequestId() override { return ++m_requestCount; }
 
 protected:
     O2 *m_o2 = nullptr;
@@ -65,6 +65,7 @@ protected slots:
 
     void onCooldownFinished();
     void onReplyReceived(int internalId, QNetworkReply::NetworkError error, const QByteArray& data, QList<QNetworkReply::RawHeaderPair> headers);
+    void onRefreshFinished(const QNetworkReply::NetworkError& error);
 };
 
 #endif // RESTSERVICECONNECTORLOCAL_H

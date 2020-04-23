@@ -16,7 +16,7 @@ Rectangle {
 
         Text {
             text: category
-            color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
+            color: mouse_area.pressed ? "black" : palette.buttonText
             width: parent.width - parent.padding * 2
             anchors.verticalCenter: parent.verticalCenter
             clip: true
@@ -24,7 +24,7 @@ Rectangle {
         }
     }
 
-    color: mouse_area.pressed ? "white" : color_scheme.menuColor
+    color: mouse_area.pressed ? "white" : palette.button
 
     MouseArea {
         anchors.fill: parent

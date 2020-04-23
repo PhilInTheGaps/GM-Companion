@@ -8,7 +8,6 @@ Item {
         id: addon_text
         width: parent.width
         text: qsTr("The following addons are available:")
-        color: color_scheme.textColor
         font.pointSize: 12
         clip: true
         wrapMode: Text.WordWrap

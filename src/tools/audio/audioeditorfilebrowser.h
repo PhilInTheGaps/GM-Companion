@@ -78,7 +78,6 @@ private:
 
 
 
-
 class AudioEditorFileBrowser : public QObject
 {
     Q_OBJECT
@@ -90,8 +89,8 @@ public:
     void setType(int type);
     int type() const { return m_type; }
 
-    Q_INVOKABLE void addAllFiles();
-    Q_INVOKABLE void openFolder(bool open, QString folder, QStringList path);
+public slots:
+    void openFolder(bool open, QString folder, QStringList path);
 
 signals:
     void typeChanged();
@@ -102,11 +101,10 @@ private:
 
     QQmlApplicationEngine *qmlEngine = nullptr;
     AudioEditorFileModel *m_fileModel = nullptr;
-//    QList<AudioEditorFile*> m_files;
 
     void updateFiles();
-    int addFolders(QStringList path, int index = -1);
-    int addFiles(QStringList path, int index = -1);
+    void addFiles(QStringList path, int index, bool folders);
+    void addFilesToModel(QStringList files, QStringList path, int type, int index);
     void removeElement(QStringList path);
     void clearFiles();
 };

@@ -1,129 +1,83 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Column {
     id: general_column
     spacing: 20
+    padding: 10
 
     // Language
     Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: 5
+        spacing: 10
 
-        Text {
+        Label {
             text: qsTr("Language")
             font.bold: true
-            color: color_scheme.textColor
         }
 
         Row {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            spacing: 10
 
-            Text {
+            Label {
                 text: qsTr("Select Language")
                 width: platform.isAndroid ? settings_page.width / 4 : language_box.width
                 anchors.verticalCenter: parent.verticalCenter
-                color: color_scheme.textColor
             }
 
-            ComboBox {
+            CustomComboBox {
                 id: language_box
+
                 property bool loaded: false
-                model: ["English", "Deutsch"]
+                property int originalIndex: -1
+
+                model: settings_manager.getLanguageNames()
                 width: settings_page.width / 6
 
                 onCurrentTextChanged: {
                     if (loaded) {
-                        settings_tool.setLanguage(currentText)
+                        settings_manager.setLanguage(currentText)
                     }
                 }
 
                 Component.onCompleted: {
-                    currentIndex = settings_tool.currentLanguageIndex
+                    currentIndex = settings_manager.getLanguageIndex()
+                    originalIndex = currentIndex
                     loaded = true
                 }
+            }
+
+            Label {
+                id: requires_restart_label
+                visible: language_box.currentIndex !== language_box.originalIndex
+                text: qsTr("Restart required!")
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
     }
 
     // UI
     Column {
-        spacing: 5
-        anchors.left: parent.left
-        anchors.right: parent.right
+        spacing: 10
 
-        Text {
+        Label {
             text: qsTr("User Interface")
             font.bold: true
-            color: color_scheme.textColor
-        }
-
-        // UI Style
-        Row {
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Text {
-                text: qsTr("Select Style")
-                width: platform.isAndroid ? settings_page.width / 4 : language_box.width
-                anchors.verticalCenter: parent.verticalCenter
-                color: color_scheme.textColor
-            }
-
-            ComboBox {
-                id: style_box
-                property bool loaded: false
-                model: ["Dark", "Bright"]
-                width: settings_page.width / 6
-
-                onCurrentTextChanged: {
-                    if (loaded) {
-                        settings_tool.setUiStyle(currentText)
-                        color_scheme.updateColors()
-                    }
-                }
-
-                Component.onCompleted: {
-                    currentIndex = settings_tool.uiStyleIndex
-                    loaded = true
-                }
-            }
         }
 
         // Show Tool Names
-        Row {
-            CheckBox {
-                checked: settings_tool.showToolNames
-
-                onCheckedChanged: {
-                    settings_tool.showToolNames = checked
-                }
-            }
-
-            Text {
-                text: qsTr("Show tool names in menu")
-                color: color_scheme.textColor
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        CustomCheckBox {
+            text: qsTr("Show tool names in menu")
+            checked: settings_manager.getBoolSetting("showToolNames", false)
+            onClicked: settings_manager.showToolNames = checked
         }
 
         // Classic Icons
-        Row {
-            CheckBox {
-                checked: settings_tool.classicIcons
-
-                onCheckedChanged: {
-                    settings_tool.classicIcons = checked
-                }
-            }
-
-            Text {
-                text: qsTr("Classic menu icons")
-                color: color_scheme.textColor
-                anchors.verticalCenter: parent.verticalCenter
-            }
+        CustomCheckBox {
+            text: qsTr("Classic menu icons")
+            checked: settings_manager.getBoolSetting("classicIcons", false)
+            onClicked: settings_manager.classicIcons = checked
         }
     }
 
@@ -147,20 +101,25 @@ Column {
     }
 
     Column {
-        spacing: 5
-        anchors.left: parent.left
-        anchors.right: parent.right
+        spacing: 10
 
-        Text {
+        Label {
             text: qsTr("Updates")
             font.bold: true
             visible: platform.isAndroid ? false : true
-            color: color_scheme.textColor
+        }
+
+        CustomCheckBox {
+            text: qsTr("Automatically check for updates")
+            checked: settings_manager.getBoolSetting("checkForUpdates", false,
+                                                     "Updates")
+
+            onCheckedChanged: settings_manager.setSetting("checkForUpdates",
+                                                          checked.toString(),
+                                                          "Updates")
         }
 
         Row {
-            anchors.left: parent.left
-            anchors.right: parent.right
             spacing: 5
 
             Button {
@@ -182,27 +141,11 @@ Column {
                 height: width
             }
 
-            Text {
+            Label {
                 id: update_text
                 anchors.verticalCenter: parent.verticalCenter
                 visible: false
                 color: "green"
-            }
-        }
-
-        Row {
-            CheckBox {
-                checked: settings_tool.getCheckForUpdates()
-
-                onCheckedChanged: {
-                    settings_tool.setCheckForUpdates(checked)
-                }
-            }
-
-            Text {
-                text: qsTr("Automatically check for updates")
-                color: color_scheme.textColor
-                anchors.verticalCenter: parent.verticalCenter
             }
         }
 

@@ -21,7 +21,7 @@ GoogleDriveFile::~GoogleDriveFile()
 {
     if (parent())
     {
-        auto parentFile = dynamic_cast<GoogleDriveFile *>(parent());
+        auto *parentFile = dynamic_cast<GoogleDriveFile *>(parent());
 
         if (parentFile)
         {
@@ -29,19 +29,21 @@ GoogleDriveFile::~GoogleDriveFile()
         }
     }
 
-    for (auto child : m_children)
+    for (auto *child : m_children)
     {
         delete child;
     }
 }
 
-auto GoogleDriveFile::getFile(const QString& path) -> GoogleDriveFileReply
+auto GoogleDriveFile::getFile(QString path)->GoogleDriveFileReply
 {
     qCDebug(gmFileAccessGoogle()) << "Looking for file or folder" << path;
+
+    if (path.endsWith("/")) path = path.left(path.length() - 1);
     return getFile(path.split("/"));
 }
 
-auto GoogleDriveFile::getFile(QStringList path) -> GoogleDriveFileReply
+auto GoogleDriveFile::getFile(QStringList path)->GoogleDriveFileReply
 {
     if (path.isEmpty())
     {
@@ -76,7 +78,7 @@ auto GoogleDriveFile::getFile(QStringList path) -> GoogleDriveFileReply
     // Find file in children
     QString wanted = path.first();
 
-    for (auto child : m_children)
+    for (auto *child : m_children)
     {
         if (!child) continue;
 
@@ -105,9 +107,9 @@ auto GoogleDriveFile::getFile(QStringList path) -> GoogleDriveFileReply
     return GoogleDriveFileReply(this, NotFound, wanted);
 }
 
-auto GoogleDriveFile::containsChild(const QString& name) -> bool
+auto GoogleDriveFile::containsChild(const QString& name)->bool
 {
-    for (auto child : m_children)
+    for (auto *child : m_children)
     {
         if (!child) continue;
 
@@ -129,7 +131,7 @@ void GoogleDriveFile::receivedIndex()
     setRefreshed();
 }
 
-auto GoogleDriveFile::isUpToDate() const -> bool
+auto GoogleDriveFile::isUpToDate() const->bool
 {
     if (!m_refreshTime.isValid()) return false;
 
@@ -152,7 +154,7 @@ void GoogleDriveFile::writeData(const QByteArray& data)
     }
 }
 
-auto GoogleDriveFile::readData() -> QByteArray
+auto GoogleDriveFile::readData()->QByteArray
 {
     if (!m_hasData) return "";
 

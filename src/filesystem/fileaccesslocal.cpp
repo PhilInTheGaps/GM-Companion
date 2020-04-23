@@ -6,7 +6,7 @@
 
 FileAccessLocal::FileAccessLocal(QObject *parent) : FileAccess(parent)
 {
-    auto finder = new FileFinder;
+    auto *finder = new FileFinder;
 
     connect(&workerThread, &QThread::finished,                          finder, &FileFinder::deleteLater);
 
@@ -36,7 +36,7 @@ FileAccessLocal::~FileAccessLocal()
 /**
  * @brief Get the content of a single file located at filePath
  */
-void FileAccessLocal::getFile(int id, QString filePath)
+void FileAccessLocal::getFile(const int& id, const QString& filePath)
 {
     emit startGettingFile(id, filePath);
 }
@@ -44,7 +44,7 @@ void FileAccessLocal::getFile(int id, QString filePath)
 /**
  * @brief Get the contents of all files in a directory
  */
-void FileAccessLocal::getFiles(int id, QString directory, QString fileEnding)
+void FileAccessLocal::getFiles(const int& id, const QString& directory, const QString& fileEnding)
 {
     emit startGettingFiles(id, directory, fileEnding);
 }
@@ -54,7 +54,7 @@ void FileAccessLocal::getFiles(int id, QString directory, QString fileEnding)
  * @param folder Find folders? If true only only folders are found, else only
  * files.
  */
-void FileAccessLocal::getFileList(int requestId, QString directory, bool folders)
+void FileAccessLocal::getFileList(const int& requestId, const QString& directory, const bool& folders)
 {
     emit startGettingFileList(requestId, directory, folders);
 }
@@ -62,12 +62,12 @@ void FileAccessLocal::getFileList(int requestId, QString directory, bool folders
 /**
  * @brief Write data into file at filePath
  */
-void FileAccessLocal::saveFile(QString filePath, QByteArray data)
+void FileAccessLocal::saveFile(const QString& filePath, const QByteArray& data)
 {
     emit startSavingFile(filePath, data);
 }
 
-void FileAccessLocal::saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile)
+void FileAccessLocal::saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile)
 {
     emit startSavingFileDeleteOld(newFile, data, oldFile);
 }
@@ -75,23 +75,23 @@ void FileAccessLocal::saveFileDeleteOld(QString newFile, QByteArray data, QStrin
 /**
  * @brief Delete the file at filePath
  */
-void FileAccessLocal::deleteFile(QString filePath)
+void FileAccessLocal::deleteFile(const QString& filePath)
 {
     emit startDeletingFile(filePath);
 }
 
-void FileAccessLocal::checkIfFilesExist(int id, QStringList files)
+void FileAccessLocal::checkIfFilesExist(const int& id, QStringList files)
 {
     emit startCheckingIfFilesExist(id, files);
 }
 
-void FileFinder::getFile(int requestId, const QString& filePath)
+void FileFinder::getFile(const int& requestId, const QString& filePath)
 {
     qCDebug(gmFileAccessLocal()) << "Getting file" << filePath;
     emit receivedFile(requestId, getFileData(filePath));
 }
 
-void FileFinder::getFiles(int requestId, const QString& directory, const QString& fileEnding)
+void FileFinder::getFiles(const int& requestId, const QString& directory, const QString& fileEnding)
 {
     qCDebug(gmFileAccessLocal()) << "Getting files in directory" << directory << "with fileEnding filter:" << fileEnding;
 
@@ -111,7 +111,7 @@ void FileFinder::getFiles(int requestId, const QString& directory, const QString
     emit receivedFiles(requestId, data);
 }
 
-void FileFinder::getFileList(int requestId, const QString& directory, bool folders)
+void FileFinder::getFileList(const int& requestId, const QString& directory, const bool& folders)
 {
     qCDebug(gmFileAccessLocal()) << "Getting a list of files in directory" << directory << "folders:" << folders;
 
@@ -137,7 +137,7 @@ void FileFinder::saveFile(const QString& filePath, const QByteArray& data)
     }
 }
 
-void FileFinder::saveFileDeleteOld(QString newFile, QByteArray data, const QString& oldFile)
+void FileFinder::saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile)
 {
     saveFile(newFile, data);
 
@@ -171,12 +171,12 @@ void FileFinder::deleteFile(const QString& filePath)
     }
 }
 
-void FileFinder::checkIfFilesExist(int requestId, const QStringList& files)
+void FileFinder::checkIfFilesExist(const int& requestId, const QStringList& files)
 {
     qCDebug(gmFileAccessLocal()) << "Started FileFinder for" << files.count() << "files";
 
     QStringList found;
-QStringList notFound;
+    QStringList notFound;
 
     for (const auto& filePath : files)
     {
@@ -196,7 +196,7 @@ QStringList notFound;
 /**
  * @brief Get the content of the file at filePath
  */
-auto FileFinder::getFileData(const QString& filePath) -> QByteArray
+auto FileFinder::getFileData(const QString& filePath)->QByteArray
 {
     QFile file(filePath);
 

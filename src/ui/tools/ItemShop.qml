@@ -1,16 +1,11 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
+import "./shop/item_editor"
+import "./shop/shop_editor"
+import "./shop/shop_page"
 
-import "./shop"
-import FontAwesome 2.0
-
-Page {
+Item {
     id: root
-
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
 
     StackView {
         id: shop_stack_view
@@ -19,6 +14,17 @@ Page {
 
         ShopPage {
             id: shop_page
+
+            onOpenEditor: {
+                if (shop_stack_view.currentItem != shop_editor_page) {
+                    item_editor_page.visible = false
+                    shop_page.visible = false
+                    shop_editor_page.visible = true
+
+                    shop_stack_view.pop(null)
+                    shop_stack_view.push(shop_editor_page)
+                }
+            }
         }
 
         ShopEditor {

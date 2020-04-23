@@ -1,6 +1,5 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-
 import FontAwesome 2.0
 
 Dialog {
@@ -91,21 +90,21 @@ Dialog {
                                        search_field.text)
                 }
 
-                Text {
+                Label {
                     id: unsplash_author
                     anchors.left: parent.left
                     anchors.right: parent.right
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
-                Text {
+                Label {
                     id: unsplash_author_id
                     anchors.left: parent.left
                     anchors.right: parent.right
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
-                Item {
+                Label {
                     height: unsplash_link_row.height
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -115,12 +114,12 @@ Dialog {
                         visible: unsplash_author_id.text != ""
                         spacing: 5
 
-                        Text {
+                        Label {
                             text: FontAwesome.externalLinkAlt
                             font.family: FontAwesome.familySolid
                         }
 
-                        Text {
+                        Label {
                             text: "Unsplash"
                         }
                     }

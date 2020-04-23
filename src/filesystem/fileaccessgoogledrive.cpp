@@ -6,7 +6,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QRegularExpression>
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+# include <QRegExp>
+#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+# include <QRegularExpression>
+#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
 /**
  * @brief Constructor
@@ -26,7 +31,7 @@ FileAccessGoogleDrive::FileAccessGoogleDrive()
 /**
  * @brief Get the content of a single file
  */
-void FileAccessGoogleDrive::getFile(int requestId, QString filePath)
+void FileAccessGoogleDrive::getFile(const int& requestId, const QString& filePath)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing getFile request" << requestId << filePath;
     auto reply = m_baseFolder->getFile(filePath);
@@ -103,7 +108,7 @@ void FileAccessGoogleDrive::startFileDownload(int requestId, GoogleDriveFile *fi
 /**
  * @brief File was received, save it in cache
  */
-void FileAccessGoogleDrive::saveFileData(GoogleDriveFile *file, QByteArray data)
+void FileAccessGoogleDrive::saveFileData(GoogleDriveFile *file, const QByteArray& data)
 {
     file->writeData(data);
 }
@@ -111,7 +116,7 @@ void FileAccessGoogleDrive::saveFileData(GoogleDriveFile *file, QByteArray data)
 /**
  * @brief Get the contents of all files matching a fileEnding in a directory
  */
-void FileAccessGoogleDrive::getFiles(int requestId, QString directory, QString fileEnding)
+void FileAccessGoogleDrive::getFiles(const int& requestId, const QString& directory, const QString& fileEnding)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing getFiles request" << requestId << directory << fileEnding;
     auto reply = m_baseFolder->getFile(directory);
@@ -159,7 +164,7 @@ void FileAccessGoogleDrive::getFiles(int requestId, QString directory, QString f
 /**
  * @brief Get a list of files in a directory
  */
-void FileAccessGoogleDrive::getFileList(int requestId, QString directory, bool folders)
+void FileAccessGoogleDrive::getFileList(const int& requestId, const QString& directory, const bool& folders)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing getFileList request" << requestId << directory << folders;
     auto reply = m_baseFolder->getFile(directory);
@@ -223,10 +228,19 @@ void FileAccessGoogleDrive::getFiles(int requestId, GoogleDriveFile *folder, con
     {
         if (!file) continue;
 
+        bool hasMatch = false;
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+        QRegExp rx(fileEnding);
+        rx.setPatternSyntax(QRegExp::Wildcard);
+        hasMatch = rx.exactMatch(file->name());
+#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
         auto re    = QRegularExpression(QRegularExpression::wildcardToRegularExpression(fileEnding));
         auto match = re.match(file->name());
+        hasMatch = match.hasMatch();
+#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
-        if (match.hasMatch())
+        if (hasMatch)
         {
             auto subId = GoogleDrive::getInstance()->getUniqueRequestId();
             m_getFilesMap[requestId].first.append(subId);
@@ -288,7 +302,7 @@ auto FileAccessGoogleDrive::tryProcessSubrequest(int subId, const QByteArray& da
  * @brief Save a file. Either update it or upload a new file if it does not
  * exist
  */
-void FileAccessGoogleDrive::saveFile(QString filePath, QByteArray data)
+void FileAccessGoogleDrive::saveFile(const QString& filePath, const QByteArray& data)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing saveFile request" << filePath;
 
@@ -350,7 +364,7 @@ void FileAccessGoogleDrive::saveFile(QString filePath, QByteArray data)
  * @brief Update a file part 1: Send a patch request, response contains a new
  * url to upload file.
  */
-void FileAccessGoogleDrive::updateFilePart1(const QString& fileId, QByteArray data)
+void FileAccessGoogleDrive::updateFilePart1(const QString& fileId, const QByteArray& data)
 {
     qCDebug(gmFileAccessGoogle()) << "Updating file" << fileId;
     QUrl url("https://www.googleapis.com/upload/drive/v3/files/" + fileId);
@@ -421,7 +435,7 @@ void FileAccessGoogleDrive::uploadFilePart2(const QList<QNetworkReply::RawHeader
  * @brief Upload a file part 3: Upload was successful, save file data in cache.
  * We needed to wait until now, because the response included the file id.
  */
-void FileAccessGoogleDrive::uploadFilePart3(const QByteArray& metaData, GoogleDriveFile *parentFolder, QByteArray data)
+void FileAccessGoogleDrive::uploadFilePart3(const QByteArray& metaData, GoogleDriveFile *parentFolder, const QByteArray& data)
 {
     auto file =  QJsonDocument::fromJson(metaData).object();
     auto name = file["name"].toString();
@@ -438,7 +452,7 @@ void FileAccessGoogleDrive::uploadFilePart3(const QByteArray& metaData, GoogleDr
  * probably simply rename the file, but it is easier to just reuse the saveFile
  * and deleteFile functions.
  */
-void FileAccessGoogleDrive::saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile)
+void FileAccessGoogleDrive::saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile)
 {
     saveFile(newFile, data);
     deleteFile(oldFile);
@@ -447,7 +461,7 @@ void FileAccessGoogleDrive::saveFileDeleteOld(QString newFile, QByteArray data, 
 /**
  * @brief Delete the file at filePath
  */
-void FileAccessGoogleDrive::deleteFile(QString filePath)
+void FileAccessGoogleDrive::deleteFile(const QString& filePath)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing deleteFile request" << filePath;
 
@@ -489,7 +503,7 @@ void FileAccessGoogleDrive::deleteFile(QString filePath)
 /**
  * @brief Find out if a list of files exist
  */
-void FileAccessGoogleDrive::checkIfFilesExist(int requestId, QStringList filePaths)
+void FileAccessGoogleDrive::checkIfFilesExist(const int& requestId, QStringList filePaths)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing checkIfFilesExist request" << requestId << filePaths;
 

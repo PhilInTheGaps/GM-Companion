@@ -1,5 +1,6 @@
-#include "audioicongenerator.h"
 #include "audiotool.h"
+#include "audioelementimageprovider.h"
+#include "audioicongenerator.h"
 #include "services/spotify.h"
 
 #include <QDebug>
@@ -19,6 +20,11 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
 
     editor         = new AudioEditor(qmlEngine, &audioSaveLoad, this);
     metaDataReader = new MetaDataReader;
+
+    // QML Engine
+    engine->rootContext()->setContextProperty("audio_tool", this);
+    engine->rootContext()->setContextProperty("audio_editor", editor);
+    engine->addImageProvider("audioElementIcons", new AudioElementImageProvider);
 
     // Spotify
     spotifyPlayer = new SpotifyPlayer(metaDataReader);
@@ -47,12 +53,17 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
     elementModel->setElements({ new AudioElementModel });
     qmlEngine->rootContext()->setContextProperty("elementModel", elementModel);
 
-    connect(this,           &AudioTool::currentScenarioChanged, this,           &AudioTool::onCurrentScenarioChanged);
+    connect(this,           &AudioTool::currentScenarioChanged,                                            this,           &AudioTool::onCurrentScenarioChanged);
 
     // Meta Data
-    connect(musicPlayer,    &MusicPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(radioPlayer,    &RadioPlayer::metaDataChanged,      metaDataReader, &MetaDataReader::updateMetaData);
-    connect(metaDataReader, &MetaDataReader::metaDataUpdated,   this,           &AudioTool::onMetaDataUpdated);
+    connect(musicPlayer,    QOverload<QMediaPlayer *>::of(&MusicPlayer::metaDataChanged),                  metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
+    connect(radioPlayer,    QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged),                  metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
+    connect(metaDataReader, &MetaDataReader::metaDataUpdated,                                              this,           &AudioTool::onMetaDataUpdated);
+    connect(musicPlayer,    &MusicPlayer::clearMetaData,                                                   metaDataReader, &MetaDataReader::clearMetaData);
+    connect(musicPlayer,    QOverload<const QString&, const QVariant&>::of(&MusicPlayer::metaDataChanged), metaDataReader,
+            QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(radioPlayer,    QOverload<const QString&, const QVariant&>::of(&RadioPlayer::metaDataChanged), metaDataReader,
+            QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
 
 #ifndef NO_DBUS
 
@@ -68,7 +79,7 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
     connect(mprisPlayerAdaptor, &MprisPlayerAdaptor::play,         [ = ]() { if (m_isPaused) playPause(); });
 
     QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
-    QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.gm-companion");
+    QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.gm_companion");
 #endif // ifdef NO_DBUS
 
     // Find and load projects
@@ -188,6 +199,18 @@ void AudioTool::onCurrentScenarioChanged()
     AudioIconGenerator::generateIcons(m_currentProject->currentCategory()->currentScenario());
 }
 
+void AudioTool::onStartedPlaying()
+{
+    m_isPaused = false;
+    emit isPausedChanged();
+
+    if (mprisAdaptor && mprisPlayerAdaptor)
+    {
+        mprisPlayerAdaptor->setPlaybackStatus(1);
+        sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
+    }
+}
+
 /**
  * @brief Start playing an element
  * @param name Name of the element
@@ -216,15 +239,18 @@ void AudioTool::playElement(QString name, int type, QString subscenario)
     case 0: // Music
         radioPlayer->stop();
         musicPlayer->play(scenario->musicElement(name));
+        setMusicVolume(m_musicVolume);
         break;
 
     case 1: // Sounds
         soundPlayer->play(scenario->soundElement(name));
+        setSoundVolume(m_soundVolume);
         break;
 
     case 2: // Radio
         musicPlayer->stop();
         radioPlayer->play(scenario->radioElement(name));
+        setMusicVolume(m_musicVolume);
         break;
     }
 }
@@ -248,11 +274,13 @@ void AudioTool::next()
  */
 void AudioTool::setMusicVolume(qreal volume)
 {
-    qDebug() << "AudioTool: Setting music volume ...";
-
     // Convert volume to logarithmic scale
     int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
     int linearVolume      = qRound(volume * 100);
+
+    m_musicVolume = volume;
+
+    qDebug() << "AudioTool: Setting music volume" << linearVolume;
 
     for (auto a : audioPlayers)
     {
@@ -272,6 +300,7 @@ void AudioTool::setSoundVolume(qreal volume)
     qDebug() << "AudioTool: Setting sound volume ...";
 
     int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
+    m_soundVolume = volume;
     soundPlayer->setLogarithmicVolume(logarithmicVolume);
 }
 
@@ -419,10 +448,9 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
 
     // Change MPRIS Metadata
     QMap<QString, QVariant> map;
-    map.insert("mpris:trackid",     "gmcompanion:music");
+    map.insert("mpris:trackid",     QDBusObjectPath("/lol/rophil/gm_companion/audio/current_track"));
     map.insert("mpris:length",      metaData.length);
-
-    map.insert("mpris:artUrl",      m_metaData.cover);
+    map.insert("mpris:artUrl",      m_metaData.coverUrl);
     map.insert("xesam:album",       m_metaData.album.isEmpty() ? tr("Unknown Album") : m_metaData.album);
     map.insert("xesam:albumArtist", m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));
     map.insert("xesam:artist",      m_metaData.artist.isEmpty() ? QStringList({ tr("Unknown Artist") }) : QStringList({ m_metaData.artist }));

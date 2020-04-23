@@ -1,4 +1,7 @@
 #include "mprisplayeradaptor.h"
+#include <QDebug>
+#include <QImage>
+#include <QUrl>
 
 void MprisPlayerAdaptor::setPlaybackStatus(int status)
 {
@@ -17,17 +20,25 @@ void MprisPlayerAdaptor::setPlaybackStatus(int status)
     emit playbackStatusChanged(m_PlaybackStatus);
 }
 
-void MprisPlayerAdaptor::Seek(qlonglong Offset)
+void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant>& data)
+{
+    qDebug() << "Updating mpris metadata ...";
+
+    m_Metadata = data;
+    emit metadataChanged(m_Metadata);
+}
+
+void MprisPlayerAdaptor::Seek(qlonglong /*Offset*/)
 {
     // Not implemented
 }
 
-void MprisPlayerAdaptor::SetPosition(QDBusObjectPath TrackId, qlonglong Position)
+void MprisPlayerAdaptor::SetPosition(const QDBusObjectPath& /*TrackId*/, const qlonglong& /*Position*/)
 {
     // Not implemented
 }
 
-void MprisPlayerAdaptor::OpenUri(QString Uri)
+void MprisPlayerAdaptor::OpenUri(const QString& /*Uri*/)
 {
     // Not implemented
 }

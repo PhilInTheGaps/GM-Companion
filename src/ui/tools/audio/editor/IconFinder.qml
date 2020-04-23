@@ -1,23 +1,23 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
-
 import FontAwesome 2.0
 
 Button {
     id: icon_button
     property var text_field
-    readonly property string resourcesPath: settings_tool.getPath("resources")
+    readonly property string resourcesPath: settings_manager.getPath(
+                                                "resources")
 
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     width: height
 
     background: Rectangle {
-        color: color_scheme.menuColor
+        color: palette.alternateBase
     }
 
-    Text {
+    Label {
         text: FontAwesome.ellipsisH
         font.family: FontAwesome.familySolid
         font.pixelSize: height
@@ -25,7 +25,6 @@ Button {
         anchors.margins: 10
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        color: color_scheme.toolbarTextColor
     }
 
     onClicked: {
@@ -40,8 +39,9 @@ Button {
         selectFolder: false
 
         onAccepted: {
-            text_field.text = fileUrl.toString().replace((platform.isWindows ? "file:///" : "file://") + resourcesPath, "")
-
+            text_field.text = fileUrl.toString().replace(
+                        (platform.isWindows ? "file:///" : "file://") + resourcesPath,
+                        "")
         }
     }
 }

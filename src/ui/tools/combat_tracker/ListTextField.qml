@@ -1,32 +1,28 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
-Item {
-    property string field_text: ""
-    property string text_color: "white"
+CustomTextField {
+    property string fieldText: ""
 
-    height: parent.height - parent.padding * 2
-    anchors.verticalCenter: parent.verticalCenter
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
 
-    TextField {
-        text: field_text
-        anchors.fill: parent
-        selectByMouse: true
-        onTextEdited: field_text = text
+    selectByMouse: true
+    font.pointSize: 12
 
-        color: text_color
-        font.pointSize: 12
-
-        background: Rectangle {
-            color: "transparent"
-        }
+    text: fieldText
+    onTextEdited: {
+        fieldText = text
     }
 
+    background: Item {}
+
     Rectangle {
-        color: color_scheme.dividerColor
+        color: palette.light
         height: 1
         anchors.left: parent.left
         anchors.right: parent.right
-        y: parent.height - 2
+        y: parent.height - 5
     }
 }

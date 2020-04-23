@@ -1,12 +1,12 @@
-import QtQuick 2.9
+import QtQuick 2.6
 import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
+import CustomComponents 1.0
 
 import FontAwesome 2.0
 import "../buttons"
 import "../audio_exporter"
-import "../../../components"
-import "views"
+import "./views"
+import "../../../defines.js" as Defines
 
 Page {
     id: editor_root
@@ -14,9 +14,7 @@ Page {
     signal backToTool
     signal projectAdded
 
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
+    header: EditorHeader {}
 
     Connections {
         target: audio_editor
@@ -35,7 +33,7 @@ Page {
 
     IconFinderUnsplash {
         id: unsplash_dialog
-        x: (parent.width - width - stack.x) / 2
+        x: (parent.width - width - audio_stack.x) / 2
         y: (parent.height - height) / 2
     }
 
@@ -77,214 +75,9 @@ Page {
         id: delete_dialog
     }
 
-    // Top Bar
-    CustomToolBar {
-        id: tool_bar
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        enable_back: true
-        enable_add: true
-        enable_save: true
-        enable_export: true
-
-        is_saved: audio_editor.isSaved
-
-        onBackClicked: backToTool()
-        onAddClicked: new_thing_dialog.open()
-        onSaveClicked: audio_editor.saveProject()
-        onExportClicked: {
-            audio_exporter.project = project_box.currentText
-            audio_exporter_dialog.open()
-        }
-
-        Row {
-            anchors.left: tool_bar.button_row.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-
-            padding: 10
-            spacing: 10
-
-            ToolBarComboBox {
-                id: project_box
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.margins: 5
-                width: 150
-
-                model: audio_editor.projectNames
-                currentIndex: audio_editor.projectIndex
-
-                onCurrentIndexChanged: audio_editor.setCurrentProject(
-                                           currentIndex)
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.pen
-                onClicked: {
-                    rename_dialog.mode = 0
-                    rename_dialog.title = qsTr("Rename Project")
-                    rename_dialog.origName = project_box.currentText
-                    rename_dialog.x = project_box.x
-                    rename_dialog.y = tool_bar.height
-                    rename_dialog.open()
-                }
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.trash
-                onClicked: {
-                    delete_dialog.x = project_box.x
-                    delete_dialog.y = tool_bar.height
-                    delete_dialog.element_name = project_box.currentText
-                    delete_dialog.mode = 0
-                    delete_dialog.open()
-                }
-            }
-
-            ToolBarComboBox {
-                id: category_box
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.margins: 5
-                width: 150
-
-                model: audio_editor.categoryNames
-                currentIndex: audio_editor.categoryIndex
-
-                onCurrentTextChanged: audio_editor.setCurrentCategory(
-                                          currentText)
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.pen
-                onClicked: {
-                    rename_dialog.mode = 1
-                    rename_dialog.title = qsTr("Rename Category")
-                    rename_dialog.origName = category_box.currentText
-                    rename_dialog.x = category_box.x
-                    rename_dialog.y = tool_bar.height
-                    rename_dialog.open()
-                }
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.trash
-                onClicked: {
-                    delete_dialog.x = category_box.x
-                    delete_dialog.y = tool_bar.height
-                    delete_dialog.element_name = category_box.currentText
-                    delete_dialog.mode = 1
-                    delete_dialog.open()
-                }
-            }
-
-            ToolBarComboBox {
-                id: scenario_box
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.margins: 5
-                width: 150
-
-                model: audio_editor.scenarioNames
-                currentIndex: audio_editor.scenarioIndex
-
-                onCurrentTextChanged: {
-                    audio_editor.setCurrentScenario(currentText)
-                }
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.pen
-                onClicked: {
-                    rename_dialog.mode = 2
-                    rename_dialog.title = qsTr("Rename Scenario")
-                    rename_dialog.origName = scenario_box.currentText
-                    rename_dialog.x = scenario_box.x
-                    rename_dialog.y = tool_bar.height
-                    rename_dialog.open()
-                }
-            }
-
-            EditorToolButton {
-                anchors.margins: 5
-                space: 0
-                labeltext: FontAwesome.trash
-                onClicked: {
-                    delete_dialog.x = scenario_box.x
-                    delete_dialog.y = tool_bar.height
-                    delete_dialog.element_name = scenario_box.currentText
-                    delete_dialog.mode = 2
-                    delete_dialog.open()
-                }
-            }
-
-            // Spacer
-            Item {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                width: 10
-            }
-
-            // Sort Elements
-            ControlBarButton {
-                fa_icon: FontAwesome.sortAlphaDown
-                onClicked: audio_editor.sortElements()
-            }
-
-            // View Mode
-            ControlBarButton {
-                fa_icon: element_column.small_mode ? FontAwesome.expand : FontAwesome.compress
-                onClicked: element_column.small_mode = !element_column.small_mode
-            }
-
-            ToolBarIconButton {
-                fa_icon: FontAwesome.fileAudio
-                icon_color: "darkred"
-
-                ToolTip.text: qsTr("Remove missing files.")
-                ToolTip.visible: hovered
-
-                Label {
-                    text: FontAwesome.trashAlt
-                    font.family: FontAwesome.familySolid
-                    font.pixelSize: height
-
-                    height: parent.height / 3
-                    width: height
-                    x: parent.width - width * 1.5
-                    y: parent.height - height * 1.5
-
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-
-                    background: Rectangle {
-                        color: color_scheme.menuColor
-                    }
-                }
-
-                onClicked: audio_editor.removeMissingFiles(audio_editor.name,
-                                                           audio_editor.type)
-            }
-        }
-    }
-
     Item {
         id: main_item
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: tool_bar.bottom
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
 
         Item {
             id: left_item
@@ -332,8 +125,8 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: color_scheme.toolbarHeight
-        color: color_scheme.menuColor
+        height: Defines.TOOLBAR_HEIGHT
+        color: palette.alternateBase
         visible: false
 
         Timer {
@@ -346,14 +139,13 @@ Page {
             }
         }
 
-        Text {
+        Label {
             id: info_text
             anchors.fill: parent
             anchors.margins: 10
             font.pixelSize: height
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: color_scheme.toolbarTextColor
         }
     }
 }

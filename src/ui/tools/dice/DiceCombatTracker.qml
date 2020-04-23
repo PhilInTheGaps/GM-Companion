@@ -3,21 +3,16 @@ import QtQuick.Controls 2.2
 
 import ".."
 import "../combat_tracker"
+import "../../defines.js" as Defines
 
 Item {
     id: root
 
     Rectangle {
-        id: spacer
-        anchors.top: parent.top
-        height: color_scheme.toolbarHeight
-    }
-
-    Rectangle {
         id: sidebar
-        color: color_scheme.toolbarColor
+        color: palette.alternateBase
 
-        width: color_scheme.toolbarHeight
+        width: Defines.TOOLBAR_WIDTH
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -26,7 +21,6 @@ Item {
             id: dice_col
             anchors.fill: parent
             anchors.margins: 5
-            anchors.topMargin: color_scheme.toolbarHeight + 5
             spacing: 10
 
             Repeater {
@@ -49,7 +43,7 @@ Item {
         combat_tracker_mode: true
         anchors.left: parent.left
         anchors.right: sidebar.left
-        anchors.top: spacer.bottom
+        anchors.top: parent.top
     }
 
     EffectPage {

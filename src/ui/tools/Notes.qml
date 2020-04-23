@@ -1,8 +1,8 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-
+import CustomComponents 1.0
 import FontAwesome 2.0
+import "../defines.js" as Defines
 
 Page {
     id: notes_page
@@ -58,10 +58,6 @@ Page {
         onCurrentPageChanged: {
             text_edit.text = notes_tool.currentPageContent
         }
-    }
-
-    background: Rectangle {
-        color: color_scheme.backgroundColor
     }
 
     header: header_rect
@@ -122,8 +118,8 @@ Page {
 
     Rectangle {
         id: header_rect
-        height: color_scheme.toolbarHeight
-        color: color_scheme.toolbarColor
+        height: Defines.TOOLBAR_HEIGHT
+        color: palette.alternateBase
 
         Row {
             anchors.fill: parent
@@ -134,39 +130,12 @@ Page {
                 spacing: 15
                 height: parent.height
 
-                ComboBox {
+                CustomToolBarComboBox {
                     id: header_combo_box
-                    height: parent.height
                     width: 200
                     model: notes_tool.chapters
 
-                    background: Rectangle {
-                        color: "transparent"
-                    }
-
-                    contentItem: Text {
-                        text: parent.displayText
-                        verticalAlignment: Text.AlignVCenter
-                        leftPadding: 5
-                        rightPadding: parent.indicator.width - 5
-
-                        elide: Text.ElideRight
-                        color: color_scheme.toolbarTextColor
-                        font.pointSize: 11
-                    }
-
-                    indicator: Text {
-                        text: FontAwesome.sort
-                        font.family: FontAwesome.familySolid
-                        font.pointSize: 15
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: color_scheme.toolbarTextColor
-                        x: parent.width - width - 5
-                    }
-
-                    onCurrentTextChanged: {
-                        setChapter(currentText)
-                    }
+                    onCurrentTextChanged: setChapter(currentText)
                 }
 
                 DelayButton {
@@ -188,7 +157,7 @@ Page {
                         text: FontAwesome.trashAlt
                         font.family: FontAwesome.familySolid
                         font.pointSize: 15
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : palette.text
                         anchors.verticalCenter: parent.verticalCenter
                     }
 
@@ -206,7 +175,7 @@ Page {
                 id: header_spacer_1
                 width: 1
                 height: parent.height - parent.padding * 2
-                color: color_scheme.dividerColor
+                color: palette.button
             }
 
             Button {
@@ -224,7 +193,7 @@ Page {
                     text: FontAwesome.plus
                     font.family: FontAwesome.familySolid
                     font.pointSize: 15
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : palette.text
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -255,8 +224,7 @@ Page {
                             anchors.centerIn: parent
                             font.pointSize: 11
 
-                            color: header_tab_bar.currentIndex
-                                   == index ? color_scheme.textColor : color_scheme.toolbarTextColor
+                            color: palette.text
                         }
 
                         height: header_tab_bar.height
@@ -265,7 +233,8 @@ Page {
                         width: tab_button_text.width + 10
 
                         background: Rectangle {
-                            color: header_tab_bar.currentIndex == index ? color_scheme.backgroundColor : color_scheme.toolbarColor
+                            color: header_tab_bar.currentIndex
+                                   == index ? palette.base : palette.alternateBase
                         }
                     }
                 }
@@ -277,132 +246,69 @@ Page {
         }
     }
 
-    ScrollView {
+    CustomTextEdit {
+        id: text_edit
         anchors.left: parent.left
         anchors.right: right_rect.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        clip: true
-        contentHeight: text_edit.implicitHeight
 
-        TextArea {
-            id: text_edit
-            selectByMouse: true
-            wrapMode: TextEdit.WordWrap
-            color: color_scheme.textColor
-            font.pointSize: 12
-            padding: 10
-
-            onTextChanged: notes_tool.saveCurrentPageContent(text)
-        }
+        //onTextChanged: notes_tool.saveCurrentPageContent(text)
     }
 
     Rectangle {
         id: right_rect
-        width: color_scheme.toolbarHeight
+        width: Defines.TOOLBAR_WIDTH
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        color: color_scheme.toolbarColor
+        color: palette.alternateBase
 
         Column {
             id: right_column
             anchors.fill: parent
-            spacing: 10
-            padding: 5
-            topPadding: 10
-            bottomPadding: 10
+            spacing: 5
+            topPadding: 5
 
-            DelayButton {
-                id: delete_page_button
-                width: parent.width - parent.padding * 2
-                height: delete_page_icon.height + 10
+            CustomToolBarButton {
+                iconText: FontAwesome.trashAlt
+                verticalMode: true
+                outline: true
+                height: width
 
-                hoverEnabled: true
-                delay: 600
-
-                ToolTip.text: qsTr("Hold to delete page")
+                ToolTip.text: qsTr("Delete page")
                 ToolTip.visible: hovered
 
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Text {
-                    id: delete_page_icon
-                    text: FontAwesome.trashAlt
-                    font.family: FontAwesome.familySolid
-                    font.pointSize: 15
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    anchors.centerIn: parent
-                }
-
-                onActivated: notes_tool.deletePage(notes_tool.currentPage)
+                onClicked: notes_tool.deletePage(notes_tool.currentPage)
+                // TODO: Confirm
             }
 
-            Button {
-                id: encrypt_button
-                width: parent.width - parent.padding * 2
-                height: delete_page_icon.height + 10
-                hoverEnabled: true
+            CustomToolBarButton {
+                iconText: FontAwesome.eye
+                verticalMode: true
+                outline: true
+                height: width
 
-                ToolTip.text: qsTr("Encrypt Page")
+                ToolTip.text: qsTr("Encrypt page (using ROT13)")
                 ToolTip.visible: hovered
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Text {
-                    id: encrypt_page_icon
-                    text: FontAwesome.eye
-                    font.family: FontAwesome.familySolid
-                    font.pointSize: 15
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    anchors.centerIn: parent
-                }
 
                 onClicked: text_edit.text = notes_tool.encrypt(text_edit.text)
             }
 
-            Button {
-                width: parent.width - parent.padding * 2
-                height: delete_page_icon.height + 10
-                hoverEnabled: true
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Text {
-                    id: larger_font_icon
-                    text: FontAwesome.searchPlus
-                    font.family: FontAwesome.familySolid
-                    font.pointSize: 15
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    anchors.centerIn: parent
-                }
+            CustomToolBarButton {
+                iconText: FontAwesome.searchPlus
+                verticalMode: true
+                outline: true
+                height: width
 
                 onClicked: text_edit.font.pointSize++
             }
 
-            Button {
-                width: parent.width - parent.padding * 2
-                height: delete_page_icon.height + 10
-                hoverEnabled: true
-
-                background: Rectangle {
-                    color: "transparent"
-                }
-
-                Text {
-                    id: smaller_font_icon
-                    text: FontAwesome.searchMinus
-                    font.family: FontAwesome.familySolid
-                    font.pointSize: 15
-                    color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
-                    anchors.centerIn: parent
-                }
+            CustomToolBarButton {
+                iconText: FontAwesome.searchMinus
+                verticalMode: true
+                outline: true
+                height: width
 
                 onClicked: text_edit.font.pointSize--
             }

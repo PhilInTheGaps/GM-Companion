@@ -14,6 +14,9 @@
 #include "mpris/mprisadaptor.h"
 #include "mpris/mprisplayeradaptor.h"
 
+#define DEFAULT_MUSIC_VOLUME 0.25
+#define DEFAULT_SOUND_VOLUME 0.25
+
 class AudioTool : public QObject
 {
     Q_OBJECT
@@ -22,6 +25,8 @@ class AudioTool : public QObject
     Q_PROPERTY(QStringList scenarioNames READ scenarioNames NOTIFY currentCategoryChanged)
 
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
+    Q_PROPERTY(qreal musicVolume READ musicVolume NOTIFY musicVolumeChanged)
+    Q_PROPERTY(qreal soundVolume READ soundVolume NOTIFY soundVolumeChanged)
 
     Q_PROPERTY(QString type READ type NOTIFY metaDataChanged)
     Q_PROPERTY(QString title READ title NOTIFY metaDataChanged)
@@ -57,9 +62,13 @@ public:
     QList<QList<AudioElement*>> elements() const;
     Q_INVOKABLE void playElement(QString name, int type, QString subscenario);
 
-    Q_INVOKABLE void next();
+    qreal musicVolume() const { return m_musicVolume; }
     Q_INVOKABLE void setMusicVolume(qreal volume);
+
+    qreal soundVolume() const { return m_soundVolume; }
     Q_INVOKABLE void setSoundVolume(qreal volume);
+
+    Q_INVOKABLE void next();
     Q_INVOKABLE void playPause();
     Q_INVOKABLE void again();
     Q_INVOKABLE void setMusicIndex(int index);
@@ -84,32 +93,19 @@ signals:
     void currentScenarioChanged();
     void isPausedChanged();
     void soundsChanged();
-
     void songsChanged();
     void metaDataChanged();
     void currentIndexChanged();
     void spotifyAuthorized();
+    void musicVolumeChanged();
+    void soundVolumeChanged();
 
 private slots:
     void onProjectsChanged(QList<AudioProject*> projects, bool forEditor);
     void onCurrentScenarioChanged();
-
-    void onStartedPlaying()
-    {
-        m_isPaused = false;
-        emit isPausedChanged();
-
-        if (mprisAdaptor && mprisPlayerAdaptor)
-        {
-            mprisPlayerAdaptor->setPlaybackStatus(1);
-            sendMprisUpdateSignal("PlaybackStatus", mprisPlayerAdaptor->playbackStatus());
-        }
-    }
-
+    void onStartedPlaying();
     void onMetaDataUpdated(MetaData metaData);
-
     void onSoundsChanged(QList<AudioElement*> elements);
-
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
 
 private:
@@ -136,6 +132,8 @@ private:
     int m_musicMode;
     bool m_isPaused = true;
     MetaData m_metaData;
+    qreal m_musicVolume = DEFAULT_MUSIC_VOLUME;
+    qreal m_soundVolume = DEFAULT_SOUND_VOLUME;
 
     // Project
     QList<AudioProject*> m_projects;

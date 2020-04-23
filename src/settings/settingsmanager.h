@@ -5,16 +5,13 @@
 #include <QStringList>
 #include <QDir>
 #include <QSettings>
+#include <QLocale>
 #include "settings.h"
 
 struct SettingRequest {
     SettingRequest() {}
-    SettingRequest(QString identifier, QString defaultValue, QString group = DEFAULT_GROUP)
-    {
-        this->identifier = identifier;
-        this->defaultValue = defaultValue;
-        this->group = group;
-    }
+    SettingRequest(const QString& identifier, const QString& defaultValue, const QString& group = DEFAULT_GROUP) :
+        identifier(identifier), defaultValue(defaultValue), group(group) {}
 
     QString identifier;
     QString defaultValue;
@@ -24,31 +21,52 @@ struct SettingRequest {
 class SettingsManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool showToolNames READ showToolNames WRITE setShowToolNames NOTIFY showToolNamesChanged)
+    Q_PROPERTY(bool classicIcons READ classicIcons WRITE setClassicIcons NOTIFY classicIconsChanged)
+
 public:
     static SettingsManager* getInstance();
     ~SettingsManager();
 
+    bool showToolNames() const { return getBoolSetting("showToolNames", false); }
+    void setShowToolNames(bool checked) { setSetting("showToolNames", QString::number(checked)); emit showToolNamesChanged(); }
+
+    bool classicIcons() const { return getBoolSetting("classicIcons", false); }
+    void setClassicIcons(bool checked) { setSetting("classicIcons", QString::number(checked)); emit classicIconsChanged(); }
+
+public slots:
     static QString getSetting(const QString& setting, const QString& defaultValue = "", QString group = DEFAULT_GROUP);
     static QString getSetting(SettingRequest request) { return getSetting(request.identifier, request.defaultValue, request.group); }
     static void setSetting(const QString& setting, const QString& value, const QString& group = DEFAULT_GROUP);
-    static void setSetting(QString setting, int value, QString group = DEFAULT_GROUP);
+    static void setSetting(const QString& setting, const int& value, const QString& group = DEFAULT_GROUP);
 
     static QString getPath(const QString& setting, QString group = "");
-    static void setPath(QString setting, QString value, QString group);
+    static void setPath(const QString& setting, const QString& value, QString group = "");
 
-    static QString getLanguage();
-    static void setLanguage(QString language);
+    static QLocale getLanguage();
+    static QString getLanguageString();
+    static int getLanguageIndex();
+    static QStringList getLanguages();
+    static QStringList getLanguageNames();
+    static void setLanguage(const QString& language);
 
-    static QString getServerUrl();
-    static void setServerUrl(QString url);
+    static QString getServerUrl(const QString &service);
+    static void setServerUrl(const QString& url, const QString& service);
 
     static QString getPassword(const QString& username, const QString& service);
     static void setPassword(const QString& username, const QString& password, const QString& service);
+
+    static bool isUpdateCheckEnabled();
+    static bool getBoolSetting(const QString& setting, bool defaultValue = true, const QString& group = "");
 
     void setAddonEnabled(const QString& addon, bool enabled);
     bool getIsAddonEnabled(const QString& addon);
 
     QStringList getOfficialAddons();
+
+signals:
+    void showToolNamesChanged();
+    void classicIconsChanged();
 
 private:
     SettingsManager();
@@ -59,7 +77,7 @@ private:
     static QString getActivePathGroup();
 
     void updateSettings();
-    void renameSetting(const QString& currentName, QString newName, const QString& group = DEFAULT_GROUP);
+    void renameSetting(const QString& currentName, const QString& newName, const QString& group = DEFAULT_GROUP);
     void removeSetting(const QString& setting, const QString& group);
 
     // Normal Settings

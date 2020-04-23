@@ -20,13 +20,13 @@ struct RequestContainer {
             int id, QNetworkRequest request,
             RequestType requestType,
             QByteArray data, QByteArray verb = ""):
-    requestId(id), request(request),
-    requestType(requestType), data(data), verb(verb) {}
+        requestId(id), request(request),
+        requestType(requestType), data(data), verb(verb) {}
     RequestContainer() {}
 
-    int requestId;
+    int requestId = -1;
     QNetworkRequest request;
-    RequestType requestType;
+    RequestType requestType = RequestType::GET;
     QByteArray data, verb;
 };
 
@@ -61,7 +61,7 @@ protected:
 signals:
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
     void accessGranted();
-
+    void statusChanged(const QString& status);
 };
 
 #endif // RESTSERVICECONNECTOR_H

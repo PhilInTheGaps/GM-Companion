@@ -1,24 +1,71 @@
 #include "settings/settingsmanager.h"
+#include "logging.h"
 
-#include <QTranslator>
-#include <QDebug>
-#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickWindow>
+#include <QTranslator>
+#include <QFontDatabase>
 #include <QIcon>
 #include <QSGRendererInterface>
-#include <QQuickWindow>
 
-#include "tools/toolmanager.h"
+#include "tools/audio/audiotool.h"
+#include "tools/maps/maptool.h"
+#include "tools/dicetool.h"
+#include "tools/combat_tracker/combattracker.h"
+#include "tools/shop/shoptool.h"
+#include "tools/characters/charactertool.h"
+#include "tools/generators/namegenerator.h"
+#include "tools/notestool.h"
+#include "tools/convertertool.h"
+#include "filesystem/filemanager.h"
+#include "filesystem/filedialog.h"
+
 #include "services/spotify.h"
+#include "services/googledrive.h"
 
-#include "settings/settingstool.h"
+#include "tools/project_converter/projectconverter.h"
+
 #include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
-#include "ui/colorscheme.h"
-#include "tools/project_converter/projectconverter.h"
-#include "tools/audio/audioelementimageprovider.h"
+
+/// Register meta types for signals and slots
+void registerMetaTypes()
+{
+    qmlRegisterType<FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
+
+    qRegisterMetaType<AudioElement *>();
+    qRegisterMetaType<QList<AudioProject *> >();
+    qRegisterMetaType<QList<QNetworkReply::RawHeaderPair> >();
+}
+
+/// Set the language and install a translator
+void initTranslations()
+{
+    qCDebug(gmMain()) << "Initializing translations ...";
+    auto *translator = new QTranslator;
+
+    if (translator->load(SettingsManager::getLanguage(), "gm-companion", "_", ":/translations"))
+    {
+        QGuiApplication::installTranslator(translator);
+
+        qCDebug(gmMain()) << "Loaded translation" << SettingsManager::getLanguage();
+    }
+    else
+    {
+        qCWarning(gmMain) << "Warning: Could not load translation";
+    }
+}
+
+/// Install fonts for FontAwesome.pri
+void installFonts()
+{
+    QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
+}
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +74,7 @@ int main(int argc, char *argv[])
     QGuiApplication::setApplicationName("GM-Companion");
     QGuiApplication::setOrganizationName("GM-Companion");
     QGuiApplication::setOrganizationDomain("gm-companion.github.io");
+    QGuiApplication::setWindowIcon(QIcon(":/icons/gm-companion/icon.png"));
 
 #if defined(Q_OS_WIN)
     app.setFont(QFont("Segoe UI"));
@@ -34,81 +82,45 @@ int main(int argc, char *argv[])
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
 #endif // if defined(Q_OS_WIN)
 
-    qDebug().noquote() << "Starting GM-Companion ...";
+    qCDebug(gmMain()) << "Starting GM-Companion ...";
 
-    // Register meta types
-    qRegisterMetaType<AudioElement *>();
-    qRegisterMetaType<QList<AudioProject *> >();
-    qRegisterMetaType<QList<QNetworkReply::RawHeaderPair> >();
-
-    // Set the language and install a translator
-    qDebug().noquote() << "Initializing translations ...";
-    auto *translator = new QTranslator();
-
-    if (translator->load("gm-companion_" + SettingsManager::getLanguage(), ":/translations")) QGuiApplication::installTranslator(translator);
-    else qDebug() << "Could not load translation ...";
-
-    // Install fonts for FontAwesome.pri
-    QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
+    registerMetaTypes();
+    initTranslations();
+    installFonts();
 
     // Convert Projects to newest version
-    ProjectConverter projConverter;
-    projConverter.convert();
+    ProjectConverter projectConverter;
+    projectConverter.convert();
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
 
-    // Set Window Icon
-    QGuiApplication::setWindowIcon(QIcon(":/icons/gm-companion/icon.png"));
-
     QQmlApplicationEngine engine;
-    engine.addImportPath("qrc:///");
-    engine.addImageProvider("audioElementIcons", new AudioElementImageProvider);
+    engine.addImportPath("qrc:/");
 
-    auto *toolManager = new ToolManager(&engine, nullptr);
-
-    // Load Tools
-    engine.rootContext()->setContextProperty("tool_manager", toolManager);
-
-    // Audio
-    engine.rootContext()->setContextProperty("audio_tool", toolManager->getAudioTool());
-    engine.rootContext()->setContextProperty("audio_editor", toolManager->getAudioTool()->getEditor());
-    engine.rootContext()->setContextProperty("audio_exporter", toolManager->getAudioTool()->getEditor()->getAudioExporter());
-    engine.rootContext()->setContextProperty("audio_addon_element_manager", toolManager->getAudioTool()->getEditor()->getAddonElementManager());
-    engine.rootContext()->setContextProperty("audio_editor_file_browser", toolManager->getAudioTool()->getEditor()->getFileBrowser());
-
-    // Combat Tracker
-    engine.rootContext()->setContextProperty("combat_tracker", toolManager->getCombatTracker());
-    engine.rootContext()->setContextProperty("combat_tracker_effects", toolManager->getCombatTracker()->getEffectTool());
-
-    // Item Shop
-    engine.rootContext()->setContextProperty("shop_tool", toolManager->getShopTool());
-    engine.rootContext()->setContextProperty("shop_editor", toolManager->getShopTool()->getShopEditor());
-    engine.rootContext()->setContextProperty("item_editor", toolManager->getShopTool()->getShopEditor()->getItemEditor());
-
-    // Characters
-    engine.rootContext()->setContextProperty("character_tool", toolManager->getCharacterTool());
-    engine.rootContext()->setContextProperty("character_image_viewer", toolManager->getCharacterTool()->getImageViewer());
-    engine.rootContext()->setContextProperty("character_dsa5_viewer", toolManager->getCharacterTool()->getDSA5Viewer());
-
-    // Other Tools
-    engine.rootContext()->setContextProperty("map_tool", toolManager->getMapTool());
-    engine.rootContext()->setContextProperty("dice_tool", toolManager->getDiceTool());
-    engine.rootContext()->setContextProperty("name_generator", toolManager->getNameGenerator());
-    engine.rootContext()->setContextProperty("notes_tool", toolManager->getNotesTool());
-    engine.rootContext()->setContextProperty("converter_tool", toolManager->getConverterTool());
-    engine.rootContext()->setContextProperty("settings_tool", toolManager->getSettingsTool());
+    // Load tools
+    AudioTool audioTool(&engine);
+    MapTool   mapTool(&engine);
+    DiceTool  diceTool(&engine);
+    CombatTracker combatTracker(&engine);
+    ShopTool shopTool(&engine);
+    CharacterTool characterTool(&engine);
+    NameGenerator nameGenerator(&engine);
+    NotesTool     notesTool(&engine);
+    ConverterTool converterTool(&engine);
 
     // Misc
+    engine.rootContext()->setContextProperty("file_manager", FileManager::getInstance());
+    engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
-    engine.rootContext()->setContextProperty("color_scheme", new ColorScheme);
-    engine.rootContext()->setContextProperty("addon_manager", new AddonManager);
+
+    //    engine.rootContext()->setContextProperty("addon_manager", new
+    // AddonManager);
 
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
+    engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
 
     engine.load(source);
 

@@ -31,7 +31,7 @@ public:
     GoogleDriveFile(QJsonObject fileObject, GoogleDriveFile *parent = nullptr);
     ~GoogleDriveFile();
 
-    GoogleDriveFileReply getFile(const QString& path);
+    GoogleDriveFileReply getFile(QString path);
     GoogleDriveFileReply getFile(QStringList path);
     bool containsChild(const QString& name);
 

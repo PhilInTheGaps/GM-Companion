@@ -24,7 +24,7 @@ public slots:
     void play();
     void pause() { m_mediaPlayer->pause(); }
     void stop();
-    void stopElement(QString element);
+    void stopElement(const QString& element);
     void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
     void setLinearVolume(int volume) { }
     void again() {}
@@ -50,7 +50,7 @@ private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerError(QMediaPlayer::Error error);
     void onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int requestId);
-    void onFileReceived(int requestId, QByteArray data);
+    void onFileReceived(int requestId, const QByteArray& data);
 
 signals:
     void playerStopped(SoundPlayer *player);
@@ -61,7 +61,7 @@ class SoundPlayerController : public AudioPlayer
 {
     Q_OBJECT
 public:
-    SoundPlayerController(QObject *parent = nullptr);
+    SoundPlayerController(QObject *parent = nullptr) : AudioPlayer(parent) {}
 
     void play(AudioElement* elements);
     void stop(QString element) { emit stopElement(element); }
@@ -78,7 +78,7 @@ public slots:
 
 private:
     QList<SoundPlayer*> m_players;
-    int m_volume;
+    int m_volume = 0;
 
     QList<AudioElement *> elements() const;
     bool isSoundPlaying(AudioElement* elements);

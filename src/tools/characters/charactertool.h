@@ -59,18 +59,18 @@ private:
     int m_convertFileRequestId = -1;
 
     void loadCharacters();
-    void receivedCharacterFolders(QStringList folders);
-    void receivedCharacterFiles(QStringList files);
+    void receivedCharacterFolders(const QStringList& folders);
+    void receivedCharacterFiles(const QStringList& files);
 
-    void loadInactiveCharacters(QByteArray data);
+    void loadInactiveCharacters(const QByteArray& data);
     void saveInactiveCharacters();
     void updateCharacter();
 
-    void convertSettingsFile(QByteArray data);
+    void convertSettingsFile(const QByteArray& data);
 
 private slots:
-    void receivedFile(int id, QByteArray data);
-    void receivedFileList(int id, QStringList files);
+    void receivedFile(int id, const QByteArray& data);
+    void receivedFileList(int id, const QStringList& files);
 };
 
 

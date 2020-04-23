@@ -1,16 +1,15 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
-
+import CustomComponents 1.0
 import FontAwesome 2.0
 
 Rectangle {
     id: character_button
-    property var character_name
+    property var characterName
     property bool active: true
 
     signal clicked(string character_name)
-    signal toggle_active_clicked
+    signal toggleActiveClicked
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -21,8 +20,8 @@ Rectangle {
         padding: 5
 
         Text {
-            text: character_name
-            color: mouse_area.pressed ? "black" : color_scheme.buttonTextColor
+            text: characterName
+            color: mouse_area.pressed ? "black" : palette.buttonText
 
             width: toggle_active_button.x - parent.padding - 5
             anchors.verticalCenter: parent.verticalCenter
@@ -31,14 +30,14 @@ Rectangle {
         }
     }
 
-    color: mouse_area.pressed ? "white" : color_scheme.primaryButtonColor
+    color: mouse_area.pressed ? "white" : palette.button
 
     MouseArea {
         anchors.fill: parent
         id: mouse_area
         hoverEnabled: true
 
-        onClicked: parent.clicked(parent.character_name)
+        onClicked: parent.clicked(parent.characterName)
     }
 
     Button {

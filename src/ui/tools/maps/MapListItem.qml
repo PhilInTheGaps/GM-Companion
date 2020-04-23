@@ -35,7 +35,6 @@ Rectangle {
         anchors.bottom: parent.bottom
 
         text: parent.name
-        color: "white"
         wrapMode: Text.WordWrap
         elide: Text.ElideRight
         padding: 5
@@ -46,16 +45,15 @@ Rectangle {
         }
     }
 
-    Text {
+    Label {
         text: FontAwesome.mapMarkerAlt
         font.family: FontAwesome.familySolid
-        color: "white"
         anchors.bottom: name_label.top
         anchors.right: parent.right
         anchors.margins: 5
 
         style: Text.Outline
-        styleColor: "black"
+        styleColor: palette.dark
 
         font.pixelSize: 25
 
@@ -73,12 +71,6 @@ Rectangle {
 
         onClicked: {
             map_tool.mapIndex = mapIndex
-            image.source = imageData
-            image.rotation = 0
-
-            if (hasMarkers) {
-                left_swipe_view.currentIndex = 1
-            }
         }
     }
 }

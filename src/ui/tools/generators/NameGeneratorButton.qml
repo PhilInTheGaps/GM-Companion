@@ -1,6 +1,5 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
 
 Rectangle {
     property var name
@@ -14,7 +13,7 @@ Rectangle {
     Text {
         id: text
         text: name
-        color: mouse_area.pressed ? "white" : color_scheme.buttonTextColor
+        color: mouse_area.pressed ? "white" : palette.buttonText
         x: 5
         y: 5
         anchors.horizontalCenter: parent.horizontalCenter
@@ -25,7 +24,7 @@ Rectangle {
         elide: Text.ElideRight
     }
 
-    color: mouse_area.pressed ? "#262f31" : color_scheme.primaryButtonColor
+    color: mouse_area.pressed ? "#262f31" : palette.button
 
     MouseArea {
         anchors.fill: parent

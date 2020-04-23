@@ -1,8 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 import FontAwesome 2.0
 import ".."
-import "../../../../components"
+import "../../../../defines.js" as Defines
 
 Rectangle {
     property string element_name: ""
@@ -52,7 +53,7 @@ Rectangle {
             id: row0
             anchors.left: parent.left
             anchors.right: parent.right
-            height: color_scheme.toolbarHeight
+            height: Defines.TOOLBAR_HEIGHT
 
             Item {
                 id: element_up_down
@@ -70,13 +71,13 @@ Rectangle {
                     height: parent.height / 2
 
                     background: Rectangle {
-                        color: color_scheme.menuColor
+                        color: palette.alternateBase
                     }
 
-                    Text {
+                    Label {
                         text: element_name_field.edit_mode ? FontAwesome.checkCircle : FontAwesome.chevronUp
                         font.family: FontAwesome.familySolid
-                        color: element_name_field.edit_mode ? "limegreen" : color_scheme.toolbarTextColor
+                        color: element_name_field.edit_mode ? "limegreen" : palette.buttonText
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -104,13 +105,13 @@ Rectangle {
                     anchors.bottom: parent.bottom
 
                     background: Rectangle {
-                        color: color_scheme.menuColor
+                        color: palette.alternateBase
                     }
 
-                    Text {
+                    Label {
                         text: element_name_field.edit_mode ? FontAwesome.timesCircle : FontAwesome.chevronDown
                         font.family: FontAwesome.familySolid
-                        color: element_name_field.edit_mode ? "red" : color_scheme.toolbarTextColor
+                        color: element_name_field.edit_mode ? "red" : palette.buttonText
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -129,7 +130,7 @@ Rectangle {
                 }
             }
 
-            TextField {
+            CustomTextField {
                 id: element_name_field
                 text: element_name
                 anchors.left: element_up_down.visible ? element_up_down.right : parent.left
@@ -156,7 +157,7 @@ Rectangle {
                         color: "transparent"
                     }
 
-                    Text {
+                    Label {
                         text: FontAwesome.pen
                         font.family: FontAwesome.familySolid
                         font.pointSize: 12
@@ -184,7 +185,7 @@ Rectangle {
                         color: "transparent"
                     }
 
-                    Text {
+                    Label {
                         text: FontAwesome.trashAlt
                         font.family: FontAwesome.familySolid
                         font.pointSize: 12
@@ -200,12 +201,11 @@ Rectangle {
                         id: element_delete_overlay
                         visible: false
                         anchors.fill: parent
-                        color: color_scheme.menuColor
+                        color: palette.alternateBase
 
-                        Text {
+                        Label {
                             text: FontAwesome.trashAlt
                             font.family: FontAwesome.familySolid
-                            color: color_scheme.toolbarTextColor
                             font.pixelSize: parent.height / 3
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
@@ -225,7 +225,7 @@ Rectangle {
                                 color: "transparent"
                             }
 
-                            Text {
+                            Label {
                                 text: FontAwesome.checkCircle
                                 font.family: FontAwesome.familySolid
                                 color: "limegreen"
@@ -252,7 +252,7 @@ Rectangle {
                                 color: "transparent"
                             }
 
-                            Text {
+                            Label {
                                 text: FontAwesome.timesCircle
                                 font.family: FontAwesome.familySolid
                                 color: "red"
@@ -275,9 +275,9 @@ Rectangle {
             id: row1
             anchors.left: parent.left
             anchors.right: parent.right
-            height: color_scheme.toolbarHeight
+            height: Defines.TOOLBAR_HEIGHT
 
-            TextField {
+            CustomTextField {
                 id: element_icon_field
                 property bool save: false
                 anchors.fill: parent
@@ -308,22 +308,22 @@ Rectangle {
             id: row2
             anchors.left: parent.left
             anchors.right: parent.right
-            height: color_scheme.toolbarHeight
+            height: Defines.TOOLBAR_HEIGHT
 
             Rectangle {
-                color: color_scheme.menuColor
+                color: palette.alternateBase
                 anchors.fill: parent
             }
 
             Rectangle {
                 id: subscenario_combo_box_rect
-                color: color_scheme.toolbarColor
+                color: palette.alternateBase
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: image_preview.visible ? image_preview.left : unsplash_finder.left
 
-                ToolBarComboBox {
+                CustomToolBarComboBox {
                     id: subscenario_combo_box
                     property bool isSetEnabled: false
 
@@ -338,15 +338,13 @@ Rectangle {
                     }
 
                     anchors.fill: parent
-                    anchors.topMargin: 5
-                    anchors.bottomMargin: 5
                 }
             }
 
             Rectangle {
                 id: image_preview
                 visible: element_icon_image.status == Image.Ready
-                color: color_scheme.menuColor
+                color: palette.alternateBase
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.right: unsplash_finder.left
@@ -391,10 +389,10 @@ Rectangle {
                 width: height
 
                 background: Rectangle {
-                    color: color_scheme.menuColor
+                    color: palette.alternateBase
                 }
 
-                Text {
+                Label {
                     text: FontAwesome.search
                     font.family: FontAwesome.familySolid
                     font.pixelSize: height
@@ -402,7 +400,6 @@ Rectangle {
                     anchors.margins: 10
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    color: color_scheme.toolbarTextColor
                 }
 
                 onClicked: {

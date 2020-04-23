@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
+import "../../defines.js" as Defines
 
 Item {
     id: root
@@ -11,14 +12,14 @@ Item {
 
     TabBar {
         id: tab_bar
-        height: color_scheme.toolbarHeight
+        height: Defines.TOOLBAR_HEIGHT
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.leftMargin: 10
 
         background: Rectangle {
-            color: color_scheme.toolbarColor
+            color: palette.alternateBase
         }
 
         Repeater {
@@ -40,7 +41,7 @@ Item {
                 onClicked: combat_tracker_effects.setCurrentAddon(modelData)
 
                 background: Rectangle {
-                    color: parent.pressed ? "black" : color_scheme.toolbarColor
+                    color: parent.pressed ? palette.dark : palette.alternateBase
                 }
             }
         }
@@ -98,8 +99,8 @@ Item {
     }
 
     Rectangle {
-        color: color_scheme.listHeaderBackgroundColor
-        height: color_scheme.toolbarHeight * 2 + 20
+        color: palette.button
+        height: Defines.TOOLBAR_HEIGHT * 2 + 20
 
         anchors.top: flow.bottom
         anchors.bottom: parent.bottom
@@ -111,7 +112,7 @@ Item {
             anchors.fill: parent
             anchors.margins: 5
 
-            color: color_scheme.backgroundColor
+            color: palette.base
 
             ScrollView {
                 anchors.fill: parent
@@ -119,12 +120,11 @@ Item {
                 clip: true
                 contentHeight: effect_text.implicitHeight
 
-                Text {
+                Label {
                     id: effect_text
                     font.pointSize: 12
                     width: parent.parent.width - 10
                     wrapMode: Text.WordWrap
-                    color: color_scheme.textColor
                 }
             }
         }

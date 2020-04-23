@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
+import CustomComponents 1.0
+import "../../defines.js" as Defines
 
 Page {
     id: page
@@ -12,10 +14,6 @@ Page {
     property var categories
     property var units
     property string category: ""
-
-    background: Rectangle {
-        color: color_scheme.backgroundColor
-    }
 
     footer: footer_rect
 
@@ -46,29 +44,11 @@ Page {
 
                     font.pointSize: 12
 
-                    Button {
-                        width: times_icon.width + 20
-                        hoverEnabled: true
-
-                        Text {
-                            id: times_icon
-                            text: FontAwesome.times
-                            font.family: FontAwesome.familySolid
-                            font.pointSize: 15
-                            anchors.centerIn: parent
-                            color: parent.pressed ? "darkgrey" : parent.hovered ? "grey" : "black"
-                            visible: parent.parent.hovered
-                                     && category == "Custom"
-                        }
-
-                        background: Rectangle {
-                            color: "transparent"
-                        }
-
-                        x: parent.width - width
-                        anchors.verticalCenter: parent.verticalCenter
-
+                    CustomToolBarButton {
+                        iconText: FontAwesome.times
+                        anchors.right: parent.right
                         onClicked: deleteUnit(index)
+                        visible: parent.hovered && category == "Custom"
                     }
 
                     onClicked: setUnit(index)
@@ -80,7 +60,7 @@ Page {
     Rectangle {
         id: footer_rect
         height: category_flow.height
-        color: color_scheme.toolbarColor
+        color: palette.alternateBase
 
         Flow {
             id: category_flow
@@ -98,7 +78,7 @@ Page {
                 onModelChanged: category = categories[0]
 
                 Button {
-                    height: color_scheme.toolbarHeight
+                    height: Defines.TOOLBAR_HEIGHT
                     width: category_text.width
                     hoverEnabled: true
 
@@ -111,7 +91,7 @@ Page {
                         text: modelData
                         font.bold: true
                         font.pointSize: 13
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : color_scheme.toolbarTextColor
+                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : palette.text
                         anchors.verticalCenter: parent.verticalCenter
                     }
 

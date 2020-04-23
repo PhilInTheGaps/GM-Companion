@@ -1,6 +1,6 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Item {
     Component.onCompleted: name_generator.updateCategories()
@@ -76,10 +76,9 @@ Item {
             height: parent.height - parent.topPadding * 2
             spacing: 5
 
-            Text {
+            Label {
                 id: names_count_text
                 text: qsTr("Generated Names")
-                color: color_scheme.textColor
             }
 
             SpinBox {
@@ -91,10 +90,9 @@ Item {
                 editable: true
             }
 
-            Text {
+            Label {
                 id: names_font_size_text
                 text: qsTr("Font Size")
-                color: color_scheme.textColor
             }
 
             SpinBox {
@@ -114,10 +112,9 @@ Item {
                 }
             }
 
-            Text {
+            Label {
                 id: names_categories_text
                 text: qsTr("Name Categories")
-                color: color_scheme.textColor
             }
 
             ScrollView {
@@ -161,22 +158,18 @@ Item {
                     height: parent.height
                     spacing: 5
 
-                    Text {
+                    Label {
                         id: male_names_text
                         text: qsTr("Male Names")
-                        color: color_scheme.textColor
                         font.pointSize: 12
                         font.bold: true
                     }
 
-                    TextArea {
+                    CustomTextEdit {
                         id: male_names_text_area
                         width: parent.width
                         height: parent.height - male_names_text.height - parent.spacing
-
-                        color: color_scheme.textColor
                         readOnly: true
-                        selectByMouse: true
                     }
                 }
 
@@ -186,22 +179,18 @@ Item {
                     height: parent.height
                     spacing: 5
 
-                    Text {
+                    Label {
                         id: female_names_text
                         text: qsTr("Female Names")
-                        color: color_scheme.textColor
                         font.pointSize: 12
                         font.bold: true
                     }
 
-                    TextArea {
+                    CustomTextEdit {
                         id: female_names_text_area
                         width: parent.width
                         height: parent.height - female_names_text.height - parent.spacing
-                        color: color_scheme.textColor
-
                         readOnly: true
-                        selectByMouse: true
                     }
                 }
             }
