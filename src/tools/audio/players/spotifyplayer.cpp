@@ -1,6 +1,6 @@
 #include "spotifyplayer.h"
 #include "logging.h"
-#include "services/spotify.h"
+#include "services/spotify/spotify.h"
 #include "o0globals.h"
 #include "utils/utils.h"
 

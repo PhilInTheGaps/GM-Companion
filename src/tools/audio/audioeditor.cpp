@@ -1323,6 +1323,8 @@ void AudioEditor::setSubscenario(QString element, int type, int index)
         scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
     }
 
+    if (!scenario) return;
+
     qCDebug(gmAudioEditor) << "Scenario1:" << scenario->name();
 
     if (index == 0)
@@ -1433,6 +1435,8 @@ AudioElement * AudioEditor::getElement(QString name, int type)
     {
         scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
     }
+
+    if (!scenario) return nullptr;
 
     switch (type)
     {

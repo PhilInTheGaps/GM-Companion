@@ -1,7 +1,7 @@
 #include "audiotool.h"
 #include "audioelementimageprovider.h"
 #include "audioicongenerator.h"
-#include "services/spotify.h"
+#include "services/spotify/spotify.h"
 
 #include <QDebug>
 #include <QSettings>

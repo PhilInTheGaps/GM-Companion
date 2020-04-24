@@ -6,7 +6,7 @@
 #include <QPixmap>
 #include <QNetworkAccessManager>
 #include "audioproject.h"
-#include "services/spotify.h"
+#include "services/spotify/spotify.h"
 #include <QReadWriteLock>
 
 class IconWorker : public QObject
