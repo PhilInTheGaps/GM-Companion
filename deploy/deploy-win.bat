@@ -4,7 +4,7 @@ mkdir release\deploy
 
 copy /y src\gm-companion.exe release\deploy
 
-windeployqt.exe --release --qmldir %QT_PATH%\qml release\deploy\gm-companion.exe
+windeployqt.exe -xml --release --qmldir %QT_PATH%\qml release\deploy\gm-companion.exe
 
 copy /y "%OPENSSL%\bin\*eay32.dll" release\deploy
 
