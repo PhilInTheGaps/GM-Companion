@@ -1,5 +1,5 @@
 ﻿#include "spotify.h"
-#include "services.h"
+#include "../services.h"
 #include "logging.h"
 
 #include <QDesktopServices>
@@ -14,7 +14,7 @@
 bool Spotify::instanceFlag = false;
 Spotify *Spotify::single   = nullptr;
 
-Spotify::Spotify()
+Spotify::Spotify(QObject *parent) : Service(parent)
 {
     m_networkManager = new QNetworkAccessManager;
 
@@ -138,12 +138,6 @@ void Spotify::setDeviceActive()
     m_requestMap["devices"] = m_connector->get(request);
 }
 
-void Spotify::updateStatus(const QString& status)
-{
-    m_status = status;
-    emit statusChanged();
-}
-
 void Spotify::onReceivedDevices(const QByteArray& data)
 {
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
@@ -174,7 +168,7 @@ void Spotify::onReceivedDevices(const QByteArray& data)
 
 void Spotify::startLibrespot()
 {
-    updateStatus(tr("Starting librespot..."));
+    updateStatus(StatusType::Info, tr("Starting librespot..."));
 
     ProcessInfo pi;
 
@@ -187,14 +181,14 @@ void Spotify::startLibrespot()
         if (username.isEmpty())
         {
             qCWarning(gmSpotify()) << "Could not start librespot, username is not set.";
-            updateStatus(tr("Error: Username is not set."));
+            updateStatus(StatusType::Error, tr("Error: Username is not set."));
             return;
         }
 
         if (password.isEmpty())
         {
             qCWarning(gmSpotify()) << "Could not start librespot, password is not set.";
-            updateStatus(tr("Error: Password is not set."));
+            updateStatus(StatusType::Error, tr("Error: Password is not set."));
             return;
         }
 
@@ -208,7 +202,7 @@ void Spotify::startLibrespot()
         qCWarning(gmSpotify()) << "Librespot is already running.";
     }
 
-    updateStatus(tr("Connected."));
+    updateStatus(StatusType::Success, tr("Connected."));
     setDeviceActive();
 }
 
@@ -228,7 +222,7 @@ void Spotify::onLibrespotFinished(const int& exitCode, const QProcess::ExitStatu
     switch (exitCode)
     {
     case 101: // BadCredentials
-        updateStatus(tr("Error: Bad Credentials!"));
+        updateStatus(StatusType::Error, tr("Error: Bad Credentials!"));
         break;
 
     default:

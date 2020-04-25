@@ -16,16 +16,19 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 SOURCES += main.cpp \
     filesystem/fileaccessgoogledrive.cpp \
     filesystem/fileaccesslocal.cpp \
+    filesystem/fileaccessnextcloud.cpp \
     filesystem/filedialog.cpp \
     filesystem/filemanager.cpp \
     filesystem/googledrivefile.cpp \
     logging.cpp \
-    services/googledrive.cpp \
-    services/googledriveconnectorlocal.cpp \
-    services/restserviceconnectorlocal.cpp \
-    services/spotify.cpp \
-    services/spotifyconnectorlocal.cpp \
-    services/spotifyconnectorserver.cpp \
+    services/google/googledrive.cpp \
+    services/google/googledriveconnectorlocal.cpp \
+    services/nextcloud/nextcloud.cpp \
+    services/rest/restserviceconnectorlocal.cpp \
+    services/service.cpp \
+    services/spotify/spotify.cpp \
+    services/spotify/spotifyconnectorlocal.cpp \
+    services/spotify/spotifyconnectorserver.cpp \
     tools/audio/audioelementimageprovider.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
@@ -33,7 +36,6 @@ SOURCES += main.cpp \
     tools/audio/unsplash/unsplashimage.cpp \
     tools/audio/unsplash/unsplashparser.cpp \
     tools/maps/mapmarker.cpp \
-    ui/colorscheme.cpp \
     tools/dicetool.cpp \
     tools/notestool.cpp \
     tools/convertertool.cpp \
@@ -76,6 +78,7 @@ SOURCES += main.cpp \
     tools/characters/viewers/characterdsa5viewer.cpp \
     tools/characters/viewers/dsa5/dsa5listitem.cpp \
     utils/fileutils.cpp \
+    utils/networkutils.cpp \
     utils/processinfo.cpp \
     utils/utils.cpp
 #    tools/addons/sifrp.cpp \
@@ -87,18 +90,21 @@ SOURCES += $$files(*.qml)
 HEADERS  += filesystem/fileaccess.h \
     filesystem/fileaccessgoogledrive.h \
     filesystem/fileaccesslocal.h \
+    filesystem/fileaccessnextcloud.h \
     filesystem/filedialog.h \
     filesystem/filemanager.h \
     filesystem/googledrivefile.h \
     logging.h \
-    services/googledrive.h \
-    services/googledriveconnectorlocal.h \
-    services/restserviceconnector.h \
-    services/restserviceconnectorlocal.h \
+    services/google/googledrive.h \
+    services/google/googledriveconnectorlocal.h \
+    services/nextcloud/nextcloud.h \
+    services/rest/restserviceconnector.h \
+    services/rest/restserviceconnectorlocal.h \
+    services/service.h \
     services/services.h \
-    services/spotify.h \
-    services/spotifyconnectorlocal.h \
-    services/spotifyconnectorserver.h \
+    services/spotify/spotify.h \
+    services/spotify/spotifyconnectorlocal.h \
+    services/spotify/spotifyconnectorserver.h \
     settings/settings.h \
     tools/audio/audioelementimageprovider.h \
     tools/audio/audioicongenerator.h \
@@ -107,8 +113,8 @@ HEADERS  += filesystem/fileaccess.h \
     tools/audio/unsplash/unsplashimage.h \
     tools/audio/unsplash/unsplashparser.h \
     tools/maps/mapmarker.h \
-    ui/colorscheme.h \
     utils/fileutils.h \
+    utils/networkutils.h \
     utils/processinfo.h \
     utils/utils.h \
     version.h \

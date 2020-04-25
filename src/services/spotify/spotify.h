@@ -9,8 +9,9 @@
 #include "spotifyconnectorlocal.h"
 #include "spotifyconnectorserver.h"
 #include "settings/settingsmanager.h"
+#include "../service.h"
 
-class Spotify : public QObject
+class Spotify : public Service
 {
     Q_OBJECT
 public:
@@ -34,14 +35,11 @@ public:
 
     Q_INVOKABLE void startLibrespot();
 
-    Q_PROPERTY(QString status READ status NOTIFY statusChanged)
-    QString status() const { return m_status; }
-
 public slots:
     void get(QNetworkRequest request, int requestId) { m_connector->get(request, requestId); }
 
 private:
-    Spotify();
+    explicit Spotify(QObject* parent = nullptr);
 
     static bool instanceFlag;
     static Spotify *single;
@@ -51,7 +49,6 @@ private:
     QProcess m_librespotProcess;
     QMap<QString, int> m_requestMap;
     bool isLibrespotRunning = false;
-    QString m_status = "";
 
     void handleNetworkError(int id, QNetworkReply::NetworkError error, const QByteArray& data);
     void setDeviceActive();
@@ -62,7 +59,6 @@ private:
 signals:
     void authorized();
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data);
-    void statusChanged();
 
 private slots:
     void onAccessGranted();
@@ -70,7 +66,6 @@ private slots:
     void onReceivedDevices(const QByteArray& data);
     void onLibrespotFinished(const int& exitCode, const QProcess::ExitStatus& exitStatus);
     void onLibrespotError(const QProcess::ProcessError& error);
-    void updateStatus(const QString& status);
 };
 
 #endif // SPOTIFY_H

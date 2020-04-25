@@ -1,5 +1,5 @@
 #include "googledriveconnectorlocal.h"
-#include "services.h"
+#include "../services.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
 

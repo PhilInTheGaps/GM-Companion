@@ -7,6 +7,7 @@
 #include <QLoggingCategory>
 
 #include "settings/settingsmanager.h"
+#include "../service.h"
 
 enum RequestType {
     GET,
@@ -61,7 +62,7 @@ protected:
 signals:
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
     void accessGranted();
-    void statusChanged(const QString& status);
+    void statusChanged(const Service::StatusType& type, const QString& message);
 };
 
 #endif // RESTSERVICECONNECTOR_H

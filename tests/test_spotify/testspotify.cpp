@@ -1,6 +1,6 @@
 #include <QtTest>
 #include "testspotify.h"
-#include "../../src/services/spotify.h"
+#include "../../src/services/spotify/spotify.h"
 
 void TestSpotify::getUriType_data()
 {

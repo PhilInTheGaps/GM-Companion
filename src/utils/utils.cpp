@@ -1,6 +1,11 @@
 #include "utils.h"
 
 #include <QBuffer>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+# include <QRegExp>
+#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+# include <QRegularExpression>
+#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
 /**
  * @brief Convert QPixmap to base64 encoded QString
@@ -52,4 +57,21 @@ auto Utils::rot13(const QString& input)->QString
     }
 
     return encrypted;
+}
+
+bool Utils::hasWildcardMatch(const QString &string, const QString &wildcard)
+{
+    bool hasMatch = false;
+
+    #if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+    QRegExp rx(wildcard);
+    rx.setPatternSyntax(QRegExp::Wildcard);
+    hasMatch = rx.exactMatch(string);
+    #else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+    auto re    = QRegularExpression(QRegularExpression::wildcardToRegularExpression(wildcard));
+    auto match = re.match(string);
+    hasMatch = match.hasMatch();
+    #endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+
+    return hasMatch;
 }

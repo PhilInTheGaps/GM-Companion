@@ -6,7 +6,7 @@
 
 #include "googledriveconnectorlocal.h"
 
-class GoogleDrive : public QObject
+class GoogleDrive : public Service
 {
     Q_OBJECT
 public:
@@ -26,9 +26,6 @@ public:
 
     int getUniqueRequestId() { return m_connector->getUniqueRequestId(); }
 
-    Q_PROPERTY(QString status READ status NOTIFY statusChanged)
-    QString status() const { return m_status; }
-
 private:
     GoogleDrive(QObject *parent = nullptr);
 
@@ -37,16 +34,13 @@ private:
 
     QNetworkAccessManager *m_networkManager = nullptr;
     RESTServiceConnector *m_connector = nullptr;
-    QString m_status = "";
 
 private slots:
     static void onAccessGranted();
     void onReceivedReply(int id, QNetworkReply::NetworkError error, const QByteArray& data, QList<QNetworkReply::RawHeaderPair> headers);
-    void updateStatus(const QString& status);
 
 signals:
     void authorized();
-    void statusChanged();
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
 };
 

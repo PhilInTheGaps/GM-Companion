@@ -2,6 +2,7 @@
 
 #include <utility>
 #include "settings/settingsmanager.h"
+#include "fileaccessnextcloud.h"
 #include "fileaccessgoogledrive.h"
 #include "fileaccesslocal.h"
 #include "logging.h"
@@ -80,7 +81,7 @@ void FileManager::updateFileAccess()
     }
     else if (cloudMode == "NextCloud")
     {
-        // TODO
+        m_fileAccess = new FileAccessNextCloud;
     }
     else
     {

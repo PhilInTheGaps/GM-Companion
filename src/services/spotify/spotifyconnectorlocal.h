@@ -1,7 +1,7 @@
 #ifndef SPOTIFYCONNECTORLOCAL_H
 #define SPOTIFYCONNECTORLOCAL_H
 
-#include "restserviceconnectorlocal.h"
+#include "../rest/restserviceconnectorlocal.h"
 #include "o2spotify.h"
 
 class SpotifyConnectorLocal : public RESTServiceConnectorLocal

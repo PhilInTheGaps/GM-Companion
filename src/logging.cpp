@@ -42,6 +42,8 @@ Q_LOGGING_CATEGORY(gmGoogleDrive,            "gm.service.google.drive")
 Q_LOGGING_CATEGORY(gmGoogleDriveLocal,       "gm.service.google.drive.local")
 Q_LOGGING_CATEGORY(gmGoogleDriveServer,      "gm.service.google.drive.server")
 
+Q_LOGGING_CATEGORY(gmNextCloud,              "gm.service.nextcloud");
+
 Q_LOGGING_CATEGORY(gmFileManager,            "gm.files.manager")
 Q_LOGGING_CATEGORY(gmFileDialog,             "gm.files.dialog")
 Q_LOGGING_CATEGORY(gmFileAccessLocal,        "gm.files.access.local")

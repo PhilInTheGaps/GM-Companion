@@ -1,6 +1,6 @@
 #include "spotifyconnectorserver.h"
 #include "logging.h"
-#include "services.h"
+#include "../services.h"
 
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -144,7 +144,7 @@ void SpotifyConnectorServer::authenticate()
         m_server.listen(QHostAddress::LocalHost, SPOTIFY_SERVER_PORT);
     }
 
-    auto url = QUrl(getServerUrl() + "/spotify/login");
+    auto url = QUrl(SettingsManager::getServerUrl("Spotify") + "/spotify/login");
 
     QUrlQuery query;
     query.addQueryItem("redirect_uri", QUrl::toPercentEncoding("http://localhost:" + QString::number(SPOTIFY_SERVER_PORT)));
@@ -159,7 +159,7 @@ void SpotifyConnectorServer::requestAccessToken(const QString& code)
 {
     qCDebug(gmSpotifyServer()) << "Requesting access token from server ...";
 
-    QUrl url(getServerUrl() + "/spotify/token");
+    QUrl url(SettingsManager::getServerUrl("Spotify") + "/spotify/token");
 
     QUrlQuery query;
     query.addQueryItem("code", code);
@@ -198,7 +198,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
     else
     {
         m_isWaitingForToken = true;
-        QUrl url(getServerUrl() + "/spotify/refresh");
+        QUrl url(SettingsManager::getServerUrl("Spotify") + "/spotify/refresh");
 
         qCDebug(gmSpotifyServer()) << url;
 
@@ -227,19 +227,19 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
             if (reply->error() != QNetworkReply::NoError)
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
-                emit statusChanged(reply->errorString());
+                emit statusChanged(Service::StatusType::Error, reply->errorString());
                 return;
             }
             else if (!params["error"].toString().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:" << params["error"].toString();
-                emit statusChanged(params["error"].toString());
+                emit statusChanged(Service::StatusType::Error, params["error"].toString());
                 return;
             }
             else if (getAccessToken().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
-                emit statusChanged("Unexpected error, access token is empty.");
+                emit statusChanged(Service::StatusType::Error, "Unexpected error, access token is empty.");
                 return;
             }
 
@@ -261,14 +261,6 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 void SpotifyConnectorServer::updateExpireTime(int expiresIn)
 {
     m_expireTime = QDateTime::currentDateTime().addSecs(expiresIn);
-}
-
-auto SpotifyConnectorServer::getServerUrl()->QString
-{
-    auto url = SettingsManager::getServerUrl("Spotify");
-
-    if (url.endsWith("/")) url.chop(1);
-    return url;
 }
 
 void SpotifyConnectorServer::dequeueRequests()
@@ -393,7 +385,7 @@ void SpotifyConnectorServer::onBytesReady()
 
     if (!socket) {
         qCWarning(gmSpotifyServer()) << "onBytesReady: No socket available";
-        emit statusChanged("Error: No socket available.");
+        emit statusChanged(Service::StatusType::Error, "Error: No socket available.");
         return;
     }
 
@@ -445,7 +437,7 @@ void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool  /*hasparamete
 
         if (timer) {
             qCWarning(gmSpotifyServer()) << "closeServer: Closing due to timeout";
-            emit statusChanged("Error: Connection timed out.");
+            emit statusChanged(Service::StatusType::Error, "Error: Connection timed out.");
             timer->stop();
             socket = qobject_cast<QTcpSocket *>(timer->parent());
             timer->deleteLater();

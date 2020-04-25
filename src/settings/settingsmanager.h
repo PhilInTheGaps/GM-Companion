@@ -50,7 +50,7 @@ public slots:
     static QStringList getLanguageNames();
     static void setLanguage(const QString& language);
 
-    static QString getServerUrl(const QString &service);
+    static QString getServerUrl(const QString &service, const bool &hasDefault = true);
     static void setServerUrl(const QString& url, const QString& service);
 
     static QString getPassword(const QString& username, const QString& service);

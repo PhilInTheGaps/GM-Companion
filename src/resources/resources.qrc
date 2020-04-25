@@ -120,5 +120,6 @@
     </qresource>
     <qresource prefix="/services">
         <file alias="auth-success.html">services/auth-success.html</file>
+        <file alias="nextcloud/getFileList.xml">services/nextcloud/getFileList.xml</file>
     </qresource>
 </RCC>

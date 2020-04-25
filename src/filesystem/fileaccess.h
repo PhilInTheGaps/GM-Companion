@@ -9,25 +9,25 @@ enum FileRequest {
     GetFileList,
     SaveFile,
     SaveFileDeleteOld,
-    DeleteFile,
+    RemoveFile,
     CheckIfFilesExist
 };
 
 struct FileRequestContainer {
     FileRequestContainer(const int& id, const QString& filePath)
-        : requestId(id), string1(filePath), requestType(GetFile) { }
+        : requestId(id), string1(filePath), requestType(FileRequest::GetFile) { }
     FileRequestContainer(const int& id, const QString& directory, const QString& fileEnding)
-        : requestId(id), string1(directory), string2(fileEnding), requestType(GetFiles) { }
+        : requestId(id), string1(directory), string2(fileEnding), requestType(FileRequest::GetFiles) { }
     FileRequestContainer(const int& id, const QString& directory, const bool& folders)
-        : requestId(id), folders(folders), string1(directory), requestType(GetFileList) { }
+        : requestId(id), folders(folders), string1(directory), requestType(FileRequest::GetFileList) { }
     FileRequestContainer(const QString& filePath, const QByteArray& data)
-        : string1(filePath), data(data), requestType(SaveFile) { }
+        : string1(filePath), data(data), requestType(FileRequest::SaveFile) { }
     FileRequestContainer(const QString& newFile, const QByteArray& data, const QString& oldFile)
-        : string1(newFile), string2(oldFile), data(data), requestType(SaveFileDeleteOld) { }
+        : string1(newFile), string2(oldFile), data(data), requestType(FileRequest::SaveFileDeleteOld) { }
     FileRequestContainer(const QString& filePath)
-        : string1(filePath), requestType(DeleteFile) { }
+        : string1(filePath), requestType(FileRequest::RemoveFile) { }
     FileRequestContainer(const int& requestId, const QStringList& files)
-        : requestId(requestId), files(files), requestType(CheckIfFilesExist) { }
+        : requestId(requestId), files(files), requestType(FileRequest::CheckIfFilesExist) { }
 
     int requestId = -1;
     bool folders = false;

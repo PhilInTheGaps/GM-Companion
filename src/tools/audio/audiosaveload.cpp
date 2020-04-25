@@ -69,7 +69,7 @@ void AudioSaveLoad::findMissingFiles(QList<AudioFile *>audioFiles, QString baseP
 
         for (auto audioFile : audioFiles)
         {
-            audioFile->setMissing(!found.contains(basePath + audioFile->url()));
+            audioFile->setMissing(audioFile->source() == 0 && !found.contains(basePath + audioFile->url()));
         }
 
         if (notFound.length() > 0)

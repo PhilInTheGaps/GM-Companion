@@ -4,7 +4,7 @@
 #include "fileaccess.h"
 #include <QObject>
 
-#include "services/googledrive.h"
+#include "services/google/googledrive.h"
 #include "filesystem/googledrivefile.h"
 
 class FileAccessGoogleDrive : public FileAccess

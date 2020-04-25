@@ -52,12 +52,12 @@ void RESTServiceConnectorLocal::setConfig(const RESTServiceLocalConfig& config)
 void RESTServiceConnectorLocal::grantAccess()
 {
     qCDebug(m_loggingCategory) << "Granting access ...";
-    emit statusChanged(tr("Connecting..."));
+    emit statusChanged(Service::StatusType::Info, tr("Connecting..."));
 
     if (!m_wasConfigured)
     {
         qCWarning(m_loggingCategory) << "Could not grant access, connector was not configured.";
-        emit statusChanged(tr("Internal Error: Connector was not configured."));
+        emit statusChanged(Service::StatusType::Error, tr("Internal Error: Connector was not configured."));
         return;
     }
 
@@ -78,11 +78,11 @@ void RESTServiceConnectorLocal::grantAccess()
 
         if (id.isEmpty())
         {
-            emit statusChanged(tr("Error: No Client ID has been set."));
+            emit statusChanged(Service::StatusType::Error, tr("Error: No Client ID has been set."));
         }
         else
         {
-            emit statusChanged(tr("Error: No Client Secret has been set."));
+            emit statusChanged(Service::StatusType::Error, tr("Error: No Client Secret has been set."));
         }
     }
 }
@@ -285,7 +285,7 @@ void RESTServiceConnectorLocal::onRefreshFinished(const QNetworkReply::NetworkEr
 {
     if (error != QNetworkReply::NoError)
     {
-        emit statusChanged(tr("Error: Could not refresh token."));
+        emit statusChanged(Service::StatusType::Error, tr("Error: Could not refresh token."));
     }
 }
 
@@ -345,7 +345,7 @@ void RESTServiceConnectorLocal::onLinkingSucceeded()
 {
     if (!m_o2->linked()) return;
 
-    emit statusChanged(tr("Connected."));
+    emit statusChanged(Service::StatusType::Success, tr("Connected."));
     emit accessGranted();
 
     dequeueRequests();

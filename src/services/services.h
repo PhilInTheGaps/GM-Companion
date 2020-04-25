@@ -21,4 +21,10 @@
 #define GOOGLE_MIMETYPE_AUDIO   "application/vnd.google-apps.audio"
 #define GOOGLE_DRIVE_CACHE_TIME 60
 
+/* --- NEXTCLOUD --- */
+#define NEXTCLOUD_AUTH_URL          "/index.php/login/v2"
+#define NEXTCLOUD_AUTH_POLL_DELAY   3000
+#define NEXTCLOUD_MAX_AUTH_POLLS    20
+#define NEXTCLOUD_DAV_ENDPOINT      "/remote.php/dav/files"
+
 #endif // SERVICES_H

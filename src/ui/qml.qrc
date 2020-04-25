@@ -115,5 +115,6 @@
         <file>common/FileDialog.qml</file>
         <file>tools/settings/accounts/GoogleDriveAccount.qml</file>
         <file>tools/settings/accounts/NextCloudAccount.qml</file>
+        <file>tools/settings/accounts/StatusBar.qml</file>
     </qresource>
 </RCC>

@@ -2,7 +2,7 @@
 #define SPOTIFYCONNECTORSERVER_H
 
 #include <QObject>
-#include "restserviceconnector.h"
+#include "../rest/restserviceconnector.h"
 #include "settings/settingsmanager.h"
 
 #include <QQueue>
@@ -13,23 +13,23 @@ class SpotifyConnectorServer : public RESTServiceConnector
 {
     Q_OBJECT
 public:
-    SpotifyConnectorServer(QNetworkAccessManager* networkManager, QObject *parent = nullptr);
-    ~SpotifyConnectorServer();
+    explicit SpotifyConnectorServer(QNetworkAccessManager* networkManager, QObject *parent = nullptr);
+    ~SpotifyConnectorServer() override;
 
-    void grantAccess();
-    bool isAccessGranted() const { return m_isAccessGranted; }
+    void grantAccess() override;
+    bool isAccessGranted() const override { return m_isAccessGranted; }
 
     int get(QUrl url) { return get(QNetworkRequest(url)); }
-    int get(QNetworkRequest request);
-    void get(QNetworkRequest request, int requestId);
-    int put(QNetworkRequest request, QByteArray data = "");
-    void put(QNetworkRequest request, QByteArray data, int requestId);
-    int post(QNetworkRequest request, QByteArray data = "");
-    void post(QNetworkRequest request, QByteArray data, int requestId);
+    int get(QNetworkRequest request) override;
+    void get(QNetworkRequest request, int requestId) override;
+    int put(QNetworkRequest request, QByteArray data = "") override;
+    void put(QNetworkRequest request, QByteArray data, int requestId) override;
+    int post(QNetworkRequest request, QByteArray data = "") override;
+    void post(QNetworkRequest request, QByteArray data, int requestId) override;
 
-    void customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, int requestId) {}
+    void customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, int requestId) override {}
 
-    int getUniqueRequestId() { return ++m_requestCount; }
+    int getUniqueRequestId() override { return ++m_requestCount; }
 
 private:
     O0SettingsStore *m_settingsStore = nullptr;
@@ -57,8 +57,6 @@ private:
 
     void updateExpireTime(int expiresIn);
     bool isTokenExpired() const { return QDateTime::currentDateTime() > m_expireTime; }
-
-    static QString getServerUrl();
 
     bool canSendRequest();
     void enqueueRequest(RequestContainer container) { m_requestQueue.enqueue(container); }

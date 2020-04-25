@@ -1,17 +1,12 @@
 #include "fileaccessgoogledrive.h"
 #include "logging.h"
+#include "utils/utils.h"
 #include "services/services.h"
 
 #include <QUrlQuery>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-# include <QRegExp>
-#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-# include <QRegularExpression>
-#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
 /**
  * @brief Constructor
@@ -228,19 +223,7 @@ void FileAccessGoogleDrive::getFiles(int requestId, GoogleDriveFile *folder, con
     {
         if (!file) continue;
 
-        bool hasMatch = false;
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-        QRegExp rx(fileEnding);
-        rx.setPatternSyntax(QRegExp::Wildcard);
-        hasMatch = rx.exactMatch(file->name());
-#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-        auto re    = QRegularExpression(QRegularExpression::wildcardToRegularExpression(fileEnding));
-        auto match = re.match(file->name());
-        hasMatch = match.hasMatch();
-#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-
-        if (hasMatch)
+        if (Utils::hasWildcardMatch(file->name(), fileEnding))
         {
             auto subId = GoogleDrive::getInstance()->getUniqueRequestId();
             m_getFilesMap[requestId].first.append(subId);
@@ -679,7 +662,7 @@ void FileAccessGoogleDrive::dequeueRequests()
         saveFileDeleteOld(request.string1, request.data, request.string2);
         break;
 
-    case DeleteFile:
+    case RemoveFile:
         deleteFile(request.string1);
         break;
 

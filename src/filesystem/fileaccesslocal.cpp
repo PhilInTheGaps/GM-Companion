@@ -133,7 +133,7 @@ void FileFinder::saveFile(const QString& filePath, const QByteArray& data)
     }
     else
     {
-        qCCritical(gmFileAccessLocal()) << "Could not save file" << filePath;
+        qCWarning(gmFileAccessLocal()) << "Could not save file" << filePath;
     }
 }
 
@@ -149,7 +149,7 @@ void FileFinder::saveFileDeleteOld(const QString& newFile, const QByteArray& dat
     {
         if (!f.remove())
         {
-            qCCritical(gmFileAccessLocal()) << "Could not delete old file" << oldFile;
+            qCWarning(gmFileAccessLocal()) << "Could not delete old file" << oldFile;
         }
     }
 }
@@ -162,12 +162,12 @@ void FileFinder::deleteFile(const QString& filePath)
     {
         if (!f.remove())
         {
-            qCCritical(gmFileAccessLocal()) << "Could not delete file" << filePath;
+            qCWarning(gmFileAccessLocal()) << "Could not delete file" << filePath;
         }
     }
     else
     {
-        qCCritical(gmFileAccessLocal()) << "Could not delete file" << filePath << ", does not exist";
+        qCWarning(gmFileAccessLocal()) << "Could not delete file" << filePath << ", does not exist";
     }
 }
 
@@ -206,6 +206,6 @@ auto FileFinder::getFileData(const QString& filePath)->QByteArray
         return data;
     }
 
-    qCCritical(gmFileAccessLocal()) << "Could not open file" << filePath << ". Error:" << file.error() << file.errorString();
+    qCWarning(gmFileAccessLocal()) << "Could not open file" << filePath << ". Error:" << file.error() << file.errorString();
     return QByteArray();
 }

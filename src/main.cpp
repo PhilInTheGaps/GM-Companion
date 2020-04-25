@@ -22,8 +22,9 @@
 #include "filesystem/filemanager.h"
 #include "filesystem/filedialog.h"
 
-#include "services/spotify.h"
-#include "services/googledrive.h"
+#include "services/spotify/spotify.h"
+#include "services/google/googledrive.h"
+#include "services/nextcloud/nextcloud.h"
 
 #include "tools/project_converter/projectconverter.h"
 
@@ -121,6 +122,9 @@ int main(int argc, char *argv[])
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
     engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
+    engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
+
+    //    NextCloud::getInstance()->grant();
 
     engine.load(source);
 

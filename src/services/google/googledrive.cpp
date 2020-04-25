@@ -7,7 +7,7 @@
 bool GoogleDrive::instanceFlag   = false;
 GoogleDrive *GoogleDrive::single = nullptr;
 
-GoogleDrive::GoogleDrive(QObject *parent) : QObject(parent)
+GoogleDrive::GoogleDrive(QObject *parent) : Service(parent)
 {
     m_networkManager = new QNetworkAccessManager;
     updateConnector();
@@ -65,10 +65,4 @@ void GoogleDrive::onReceivedReply(int id, QNetworkReply::NetworkError error, con
     }
 
     emit receivedReply(id, error, data, std::move(headers));
-}
-
-void GoogleDrive::updateStatus(const QString& status)
-{
-    m_status = status;
-    emit statusChanged();
 }

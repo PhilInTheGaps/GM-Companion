@@ -17,17 +17,13 @@ Item {
             "icon": FontAwesome.googleDrive,
             "iconFont": FontAwesome.familyBrands,
             "source": "./accounts/GoogleDriveAccount.qml"
+        }, {
+            "name": "NextCloud",
+            "icon": FontAwesome.cloud,
+            "iconFont": FontAwesome.familySolid,
+            "source": "./accounts/NextCloudAccount.qml"
         }]
 
-
-    /*
-    {
-        "name": "NextCloud",
-        "icon": FontAwesome.cloud,
-        "iconFont": FontAwesome.familySolid,
-        "source": "./accounts/NextCloudAccount.qml"
-    }
-    */
     Column {
         id: accounts_list
         anchors.top: parent.top

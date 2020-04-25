@@ -151,16 +151,21 @@ void SettingsManager::setLanguage(const QString& language)
     else setSetting("language", "default");
 }
 
-auto SettingsManager::getServerUrl(const QString& service)->QString
+auto SettingsManager::getServerUrl(const QString& service, const bool& hasDefault)->QString
 {
     auto connection = SettingsManager::getSetting("connection", "default", service);
 
-    if (connection == "default")
+    if (hasDefault && (connection == "default"))
     {
         return DEFAULT_SERVER_URL;
     }
 
-    return SettingsManager::getSetting("server", DEFAULT_SERVER_URL, service);
+    auto url = SettingsManager::getSetting("server", hasDefault ? DEFAULT_SERVER_URL : "", service);
+
+    // Remove trailing '/'
+    if (url.endsWith("/")) url.chop(1);
+
+    return url;
 }
 
 void SettingsManager::setServerUrl(const QString& url, const QString& service)
