@@ -1,7 +1,12 @@
 #include "metadatareader.h"
 #include "utils/utils.h"
+#include "logging.h"
 #include <QMediaMetaData>
 #include <QImage>
+
+#include <taglib/tbytevector.h>
+#include <taglib/tbytevectorstream.h>
+#include <taglib/fileref.h>
 
 MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent) {}
 
@@ -27,6 +32,8 @@ void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
 
 void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
 {
+    qCDebug(gmAudioMetaData()) << "Updating meta data:" << key;
+
     if (key == "Title")
     {
         m_metaData.title = value.toString();
@@ -45,7 +52,7 @@ void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
         {
             if (!value.value<QImage>().save(&m_coverFile, "JPG"))
             {
-                qWarning() << "Could not save cover art in temp file.";
+                qWarning(gmAudioMetaData()) << "Could not save cover art in temp file.";
             }
 
             m_coverFile.close();
@@ -61,6 +68,33 @@ void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
     emit metaDataUpdated(m_metaData);
 }
 
+/**
+ * @brief Use taglib to read basic meta data. Works only with taglib 1.12-beta1 or greater.
+ * This is intended to be a fallback implementation, as qmediaplayer sometimes does not recognize the tags.
+ * Also this unfortunately can not read the cover art, but it's better than nothing.
+ */
+void MetaDataReader::updateMetaData(const QByteArray &data)
+{
+    TagLib::ByteVector bvector(data.data(), data.length());
+    TagLib::ByteVectorStream bvstream(bvector);
+    TagLib::FileRef ref(&bvstream);
+    auto *tag = ref.tag();
+
+    if (!tag || tag->isEmpty()) return;
+
+    qCDebug(gmAudioMetaData()) << "Updating meta data from data ...";
+
+    auto title = tag->title();
+    auto artist = tag->artist();
+    auto album = tag->album();
+
+    if (!title.isEmpty())  m_metaData.title  = QString::fromStdString(title.to8Bit(true));
+    if (!artist.isEmpty()) m_metaData.artist = QString::fromStdString(artist.to8Bit(true));
+    if (!album.isEmpty())  m_metaData.album  = QString::fromStdString(album.to8Bit(true));
+
+    emit metaDataUpdated(m_metaData);
+}
+
 void MetaDataReader::updateDuration(const qint64& duration)
 {
     m_metaData.length = duration;
@@ -69,6 +103,8 @@ void MetaDataReader::updateDuration(const qint64& duration)
 
 void MetaDataReader::clearMetaData()
 {
+    qCDebug(gmAudioMetaData()) << "Clearing meta data ...";
+
     m_metaData.artist      = "-";
     m_metaData.album       = "-";
     m_metaData.title       = "-";

@@ -71,6 +71,7 @@ signals:
     void clearMetaData();
     void metaDataChanged(QMediaPlayer *mediaPlayer);
     void metaDataChanged(const QString& key, const QVariant& value);
+    void metaDataChanged(const QByteArray& data);
     void currentIndexChanged();
     void songNamesChanged();
 };

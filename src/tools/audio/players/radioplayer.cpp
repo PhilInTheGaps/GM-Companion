@@ -10,6 +10,7 @@ RadioPlayer::RadioPlayer(QObject *parent) : AudioPlayer(parent)
     player = new QMediaPlayer;
     player->setObjectName(tr("Radio"));
     playlist = new QMediaPlaylist;
+    m_mediaBuffer = new QBuffer(player);
 
     connect(player, &QMediaPlayer::stateChanged, [ = ]() {
         qCDebug(gmAudioRadio()) << "State changed:" << player->state();
@@ -120,20 +121,25 @@ void RadioPlayer::onFileReceived(int id, const QByteArray& data)
 {
     if (m_fileRequestId != id) return;
 
+    qCDebug(gmAudioRadio()) << "Received file ...";
+
     player->stop();
 
-    if (data.isEmpty()) return;
+    if (data.isEmpty())
+    {
+        qCWarning(gmAudioRadio()) << "Error: File is empty!";
+        return;
+    }
 
-    delete m_mediaBuffer;
+    if (m_mediaBuffer) m_mediaBuffer->close();
 
     m_mediaData   = data;
-    m_mediaBuffer = new QBuffer(&m_mediaData);
+    m_mediaBuffer->setData(m_mediaData);
     m_mediaBuffer->open(QIODevice::ReadOnly);
     m_mediaBuffer->seek(0);
 
     playlist->load(m_mediaBuffer);
 
-    // player->setMedia(QMediaContent(), m_mediaBuffer);
     player->setPlaylist(playlist);
     player->play();
 }

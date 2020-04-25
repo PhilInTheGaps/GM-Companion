@@ -33,6 +33,7 @@ signals:
 public slots:
     void updateMetaData(QMediaPlayer *mediaPlayer);
     void updateMetaData(const QString& key, const QVariant &value);
+    void updateMetaData(const QByteArray& data);
     void updateDuration(const qint64& duration);
     void clearMetaData();
 };

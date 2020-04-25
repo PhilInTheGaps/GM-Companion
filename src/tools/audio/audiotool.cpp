@@ -9,10 +9,12 @@
 #include <cstdlib>
 #include <exception>
 
+#ifndef NO_DBUS
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusObjectPath>
 #include <QDBusMetaType>
+#endif
 
 AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), qmlEngine(engine)
 {
@@ -56,6 +58,7 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
     connect(this,           &AudioTool::currentScenarioChanged,                                            this,           &AudioTool::onCurrentScenarioChanged);
 
     // Meta Data
+    connect(musicPlayer,    QOverload<const QByteArray&>::of(&MusicPlayer::metaDataChanged),               metaDataReader, QOverload<const QByteArray&>::of(&MetaDataReader::updateMetaData));
     connect(musicPlayer,    QOverload<QMediaPlayer *>::of(&MusicPlayer::metaDataChanged),                  metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
     connect(radioPlayer,    QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged),                  metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
     connect(metaDataReader, &MetaDataReader::metaDataUpdated,                                              this,           &AudioTool::onMetaDataUpdated);
@@ -65,8 +68,7 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
     connect(radioPlayer,    QOverload<const QString&, const QVariant&>::of(&RadioPlayer::metaDataChanged), metaDataReader,
             QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
 
-#ifndef NO_DBUS
-
+    #ifndef NO_DBUS
     // Connect to DBus
     mprisAdaptor       = new MprisAdaptor(this);
     mprisPlayerAdaptor = new MprisPlayerAdaptor(this);
@@ -80,7 +82,7 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
 
     QDBusConnection::sessionBus().registerObject("/org/mpris/MediaPlayer2", this);
     QDBusConnection::sessionBus().registerService("org.mpris.MediaPlayer2.gm_companion");
-#endif // ifdef NO_DBUS
+    #endif // ifdef NO_DBUS
 
     // Find and load projects
     connect(&audioSaveLoad, &AudioSaveLoad::foundProjects, this, &AudioTool::onProjectsChanged);
@@ -424,6 +426,7 @@ void AudioTool::onSoundsChanged(QList<AudioElement *>elements)
  */
 void AudioTool::sendMprisUpdateSignal(QString property, QVariant value)
 {
+    #ifndef NO_DBUS
     QDBusMessage signal = QDBusMessage::createSignal(
         "/org/mpris/MediaPlayer2",
         "org.freedesktop.DBus.Properties",
@@ -439,6 +442,7 @@ void AudioTool::sendMprisUpdateSignal(QString property, QVariant value)
     signal << invalidatedProps;
 
     QDBusConnection::sessionBus().send(signal);
+    #endif
 }
 
 void AudioTool::onMetaDataUpdated(MetaData metaData)
@@ -446,6 +450,7 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     m_metaData = metaData;
     emit metaDataChanged();
 
+    #ifndef NO_DBUS
     // Change MPRIS Metadata
     QMap<QString, QVariant> map;
     map.insert("mpris:trackid",     QVariant::fromValue(QDBusObjectPath("/lol/rophil/gm_companion/audio/current_track")));
@@ -459,6 +464,8 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
     if (mprisPlayerAdaptor) mprisPlayerAdaptor->setMetadata(map);
 
     sendMprisUpdateSignal("Metadata", map);
+    #endif
+
     emit currentIndexChanged();
 }
 

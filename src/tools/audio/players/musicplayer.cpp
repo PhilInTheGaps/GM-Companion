@@ -19,6 +19,7 @@ MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, QObject *parent) : AudioPlayer(
 
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
+    m_mediaBuffer = new QBuffer(mediaPlayer);
 
     connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
     connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
@@ -346,12 +347,15 @@ void MusicPlayer::setLinearVolume(int volume)
 
 void MusicPlayer::onMediaPlayerStateChanged()
 {
+    qCDebug(gmAudioMusic) << "Media player state changed:" << mediaPlayer->state();
+    qCDebug(gmAudioMusic) << "Is meta data available?" << mediaPlayer->isMetaDataAvailable();
+
     if (mediaPlayer->state() == QMediaPlayer::PlayingState) emit startedPlaying();
 }
 
 void MusicPlayer::onMediaPlayerBufferStatusChanged()
 {
-    qCDebug(gmAudioMusic) << "BUFFER STATUS:" << mediaPlayer->bufferStatus();
+    qCDebug(gmAudioMusic) << "Buffer status:" << mediaPlayer->bufferStatus();
 }
 
 void MusicPlayer::onMediaPlayerMediaStatusChanged()
@@ -389,24 +393,31 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
 {
     if (m_fileRequestId != id) return;
 
+    qCDebug(gmAudioMusic()) << "Received file ...";
+
     mediaPlayer->stop();
 
     if (data.isEmpty())
     {
+        qCWarning(gmAudioMusic()) << "File is empty, skipping ...";
         next();
         return;
     }
 
-    delete m_mediaBuffer;
+    if (m_mediaBuffer) m_mediaBuffer->close();
 
     m_mediaData   = data;
-    m_mediaBuffer = new QBuffer(&m_mediaData);
 
+    m_mediaBuffer->setData(m_mediaData);
     m_mediaBuffer->open(QIODevice::ReadOnly);
     m_mediaBuffer->seek(0);
 
     mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
     mediaPlayer->play();
+
+    qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
+
+    emit metaDataChanged(data);
 }
 
 void MusicPlayer::onSpotifySongEnded()
