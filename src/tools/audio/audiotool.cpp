@@ -448,7 +448,7 @@ void AudioTool::onMetaDataUpdated(MetaData metaData)
 
     // Change MPRIS Metadata
     QMap<QString, QVariant> map;
-    map.insert("mpris:trackid",     QDBusObjectPath("/lol/rophil/gm_companion/audio/current_track"));
+    map.insert("mpris:trackid",     QVariant::fromValue(QDBusObjectPath("/lol/rophil/gm_companion/audio/current_track")));
     map.insert("mpris:length",      metaData.length);
     map.insert("mpris:artUrl",      m_metaData.coverUrl);
     map.insert("xesam:album",       m_metaData.album.isEmpty() ? tr("Unknown Album") : m_metaData.album);
