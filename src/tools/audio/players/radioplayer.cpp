@@ -133,8 +133,7 @@ void RadioPlayer::onFileReceived(int id, const QByteArray& data)
 
     if (m_mediaBuffer) m_mediaBuffer->close();
 
-    m_mediaData   = data;
-    m_mediaBuffer->setData(m_mediaData);
+    m_mediaBuffer->setData(data);
     m_mediaBuffer->open(QIODevice::ReadOnly);
     m_mediaBuffer->seek(0);
 

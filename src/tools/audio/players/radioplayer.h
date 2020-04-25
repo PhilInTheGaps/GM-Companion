@@ -32,7 +32,6 @@ private:
     AudioElement *currentElement = nullptr;
     int m_fileRequestId = -1;
 
-    QByteArray m_mediaData;
     QBuffer *m_mediaBuffer = nullptr;
 
 signals:

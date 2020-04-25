@@ -19,7 +19,7 @@ MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, QObject *parent) : AudioPlayer(
 
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
-    m_mediaBuffer = new QBuffer(mediaPlayer);
+    m_mediaBuffer = new QBuffer;
 
     connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
     connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
@@ -348,7 +348,6 @@ void MusicPlayer::setLinearVolume(int volume)
 void MusicPlayer::onMediaPlayerStateChanged()
 {
     qCDebug(gmAudioMusic) << "Media player state changed:" << mediaPlayer->state();
-    qCDebug(gmAudioMusic) << "Is meta data available?" << mediaPlayer->isMetaDataAvailable();
 
     if (mediaPlayer->state() == QMediaPlayer::PlayingState) emit startedPlaying();
 }
@@ -362,6 +361,7 @@ void MusicPlayer::onMediaPlayerMediaStatusChanged()
 {
     if (mediaPlayer->mediaStatus() == QMediaPlayer::EndOfMedia)
     {
+        qCDebug(gmAudioMusic()) << "End of media was reached, starting next song ...";
         next();
     }
     else if (mediaPlayer->mediaStatus() == QMediaPlayer::BufferedMedia)
@@ -395,6 +395,17 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
 
     qCDebug(gmAudioMusic()) << "Received file ...";
 
+    // On Windows a there seems to be a weird issue with
+    // a strange clicking noise at the beginning of files.
+    // Muting the mediaPlayer and unmuting about 100ms into
+    // the song seems to be a workaround.
+    auto clickingWorkaround = false;
+
+    #ifdef Q_OS_WIN
+    clickingWorkaround = true;
+    #endif
+
+    if (clickingWorkaround) mediaPlayer->setMuted(true);
     mediaPlayer->stop();
 
     if (data.isEmpty())
@@ -404,16 +415,14 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
         return;
     }
 
-    if (m_mediaBuffer) m_mediaBuffer->close();
-
-    m_mediaData   = data;
-
-    m_mediaBuffer->setData(m_mediaData);
+    m_mediaBuffer->close();
+    m_mediaBuffer->setData(data);
     m_mediaBuffer->open(QIODevice::ReadOnly);
-    m_mediaBuffer->seek(0);
 
     mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
     mediaPlayer->play();
+
+    if (clickingWorkaround) QTimer::singleShot(100, [ = ]() { mediaPlayer->setMuted(false); });
 
     qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
 
@@ -422,6 +431,7 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
 
 void MusicPlayer::onSpotifySongEnded()
 {
+    qCDebug(gmAudioMusic()) << "Spotify song ended, starting next song ...";
     next();
 }
 

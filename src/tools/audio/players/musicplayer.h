@@ -43,7 +43,6 @@ private:
     int m_youtubeRequestId = -1;
     int m_fileRequestId = -1;
 
-    QByteArray m_mediaData;
     QBuffer *m_mediaBuffer = nullptr;
 
     void loadMedia(AudioFile *file);
