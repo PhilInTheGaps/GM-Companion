@@ -21,11 +21,15 @@ Item {
             Label {
                 text: FontAwesome.googleDrive
                 font.family: FontAwesome.familyBrands
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             Label {
                 text: "GoogleDrive"
                 font.bold: true
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
 

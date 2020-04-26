@@ -21,11 +21,15 @@ Item {
             Label {
                 text: FontAwesome.cloud
                 font.family: FontAwesome.familySolid
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             Label {
                 text: "NextCloud"
                 font.bold: true
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
 

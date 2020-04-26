@@ -20,11 +20,15 @@ Item {
             Label {
                 text: FontAwesome.spotify
                 font.family: FontAwesome.familyBrands
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             Label {
                 text: "Spotify"
                 font.bold: true
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
 

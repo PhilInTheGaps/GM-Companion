@@ -183,6 +183,8 @@ void Spotify::onLibrespotFinished(const int& exitCode, const QProcess::ExitStatu
     switch (exitCode)
     {
     case 101: // BadCredentials
+        qCWarning(gmSpotify()) << "Spotify credentials are wrong!";
+        emit setConnected(false);
         updateStatus(StatusType::Error, tr("Error: Bad Credentials!"));
         break;
 
