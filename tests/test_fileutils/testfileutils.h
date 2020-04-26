@@ -13,8 +13,20 @@ private slots:
     void dirFromFolders_data();
     void dirFromFolders();
 
+    void dirFromPath_data();
+    void dirFromPath();
+
     void foldersFromDir_data();
     void foldersFromDir();
+
+    void suffix_data();
+    void suffix();
+
+    void fileName_data();
+    void fileName();
+
+    void incrementFileName_data();
+    void incrementFileName();
 };
 
 

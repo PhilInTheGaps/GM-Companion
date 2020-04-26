@@ -2,6 +2,7 @@
 #include "logging.h"
 #include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
+#include "utils/fileutils.h"
 
 #include "youtubeutils.h"
 #include <internal/heuristics.h>
@@ -99,7 +100,7 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) :
 {
     if (!element)
     {
-        qCCritical(gmAudioSounds()) << "Error: could not initialize soundplayer, element is null";
+        qCWarning(gmAudioSounds()) << "Error: could not initialize soundplayer, element is null";
         return;
     }
 
@@ -130,6 +131,7 @@ void SoundPlayer::loadMedia(AudioFile *file)
     {
     case 0:
         m_fileRequestId = FileManager::getUniqueRequestId();
+        m_fileName = file->url();
         FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("sounds") + file->url());
         break;
 
@@ -247,6 +249,8 @@ void SoundPlayer::applyShuffleMode()
 
 void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
+    qCDebug(gmAudioSounds()) << "Status changed:" << status;
+
     if (status == QMediaPlayer::EndOfMedia)
     {
         next();
@@ -305,13 +309,38 @@ void SoundPlayer::onFileReceived(int requestId, const QByteArray& data)
         return;
     }
 
-    delete m_mediaBuffer;
+    #ifdef Q_OS_WIN
+    QFile file(m_tempDir.path() + "/" +  FileUtils::fileName(m_fileName));
 
-    m_mediaData   = data;
-    m_mediaBuffer = new QBuffer(&m_mediaData);
-    m_mediaBuffer->open(QIODevice::ReadOnly);
-    m_mediaBuffer->seek(0);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        if (file.error() == QFileDevice::OpenError)
+        {
+            file.setFileName(FileUtils::incrementFileName(file.fileName()));
+            if (!file.open(QIODevice::WriteOnly))
+            {
+                qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                return;
+            }
+        }
+        else
+        {
+            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            return;
+        }
+    }
 
-    m_mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
+    qCDebug(gmAudioSounds()) << file.fileName();
+    file.write(data);
+    file.close();
+
+    m_mediaPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
+    #else
+    m_mediaBuffer.close();
+    m_mediaBuffer.setData(data);
+    m_mediaBuffer.open(QIODevice::ReadOnly);
+    m_mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
+    #endif
+
     m_mediaPlayer->play();
 }

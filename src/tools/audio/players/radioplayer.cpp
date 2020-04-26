@@ -2,6 +2,7 @@
 #include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
 #include "logging.h"
+#include "utils/fileutils.h"
 
 RadioPlayer::RadioPlayer(QObject *parent) : AudioPlayer(parent)
 {
@@ -10,7 +11,6 @@ RadioPlayer::RadioPlayer(QObject *parent) : AudioPlayer(parent)
     player = new QMediaPlayer;
     player->setObjectName(tr("Radio"));
     playlist = new QMediaPlaylist;
-    m_mediaBuffer = new QBuffer(player);
 
     connect(player, &QMediaPlayer::stateChanged, [ = ]() {
         qCDebug(gmAudioRadio()) << "State changed:" << player->state();
@@ -61,6 +61,7 @@ void RadioPlayer::play(AudioElement *element)
     if (element->files().empty()) return;
 
     auto *audioFile = element->files()[0];
+    m_fileName = audioFile->url();
 
     if (audioFile->source() == 0)
     {
@@ -131,13 +132,38 @@ void RadioPlayer::onFileReceived(int id, const QByteArray& data)
         return;
     }
 
-    if (m_mediaBuffer) m_mediaBuffer->close();
+    #ifdef Q_OS_WIN
+    QFile file(m_tempDir.path() + "/" +  FileUtils::fileName(m_fileName));
 
-    m_mediaBuffer->setData(data);
-    m_mediaBuffer->open(QIODevice::ReadOnly);
-    m_mediaBuffer->seek(0);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        if (file.error() == QFileDevice::OpenError)
+        {
+            file.setFileName(FileUtils::incrementFileName(file.fileName()));
+            if (!file.open(QIODevice::WriteOnly))
+            {
+                qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                return;
+            }
+        }
+        else
+        {
+            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            return;
+        }
+    }
 
-    playlist->load(m_mediaBuffer);
+    qCWarning(gmAudioRadio()) << file.fileName();
+    file.write(data);
+    file.close();
+
+    playlist->load(QUrl::fromLocalFile(file.fileName()));
+    #else
+    m_mediaBuffer.close();
+    m_mediaBuffer.setData(data);
+    m_mediaBuffer.open(QIODevice::ReadOnly);
+    playlist->load(&m_mediaBuffer);
+    #endif
 
     player->setPlaylist(playlist);
     player->play();

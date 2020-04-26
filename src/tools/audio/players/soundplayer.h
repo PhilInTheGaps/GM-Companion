@@ -4,6 +4,7 @@
 #include <QBuffer>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QTemporaryDir>
 
 #include "../audioelement.h"
 #include "audioplayer.h"
@@ -41,8 +42,9 @@ private:
     int m_fileRequestId = -1;
     int m_youtubeRequestId = -1;
 
-    QByteArray m_mediaData;
-    QBuffer *m_mediaBuffer = nullptr;
+    QBuffer m_mediaBuffer;
+    QTemporaryDir m_tempDir;
+    QString m_fileName;
 
     void applyShuffleMode();
 

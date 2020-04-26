@@ -4,6 +4,7 @@
 #include <QBuffer>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QTemporaryDir>
 
 #include "../audioelement.h"
 #include "audioplayer.h"
@@ -32,7 +33,9 @@ private:
     AudioElement *currentElement = nullptr;
     int m_fileRequestId = -1;
 
-    QBuffer *m_mediaBuffer = nullptr;
+    QBuffer m_mediaBuffer;
+    QTemporaryDir m_tempDir;
+    QString m_fileName;
 
 signals:
     void startedPlaying();

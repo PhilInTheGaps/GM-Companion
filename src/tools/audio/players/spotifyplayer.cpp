@@ -1,6 +1,7 @@
 #include "spotifyplayer.h"
 #include "logging.h"
 #include "services/spotify/spotify.h"
+#include "services/spotify/spotifyutils.h"
 #include "o0globals.h"
 #include "utils/utils.h"
 
@@ -34,7 +35,6 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, QObject *parent) : AudioP
         getCurrentSong();
     });
 
-    Spotify::getInstance()->grant();
     qCDebug(gmAudioSpotify) << "Spotify player loaded.";
 }
 
@@ -81,8 +81,7 @@ void SpotifyPlayer::play(const QString& id, int offset, bool playOnce)
             jo.insert("offset", jOffset);
         }
 
-        QJsonDocument d;
-        d.setObject(jo);
+        QJsonDocument d(jo);
 
         setLogarithmicVolume(m_volume);
         QUrl url("https://api.spotify.com/v1/me/player/play");
@@ -102,7 +101,14 @@ void SpotifyPlayer::play(const QString& id, int offset, bool playOnce)
     else
     {
         qCWarning(gmSpotify) << "Tried to play element, but access has not been granted yet.";
-        Spotify::getInstance()->grant();
+        if (Spotify::getInstance()->connected())
+        {
+            Spotify::getInstance()->grant();
+        }
+        else
+        {
+            qCWarning(gmSpotify) << "Tried to play element, but spotify connection is disabled.";
+        }
     }
 }
 
@@ -244,9 +250,9 @@ void SpotifyPlayer::getPlaylistTracks(const QString& uri)
     qCDebug(gmAudioSpotify) << "Getting info on current playlist or album ...";
 
     QUrl url;
-    QString id = Spotify::getIdFromUri(uri);
+    QString id = SpotifyUtils::getIdFromUri(uri);
 
-    switch (Spotify::getUriType(uri))
+    switch (SpotifyUtils::getUriType(uri))
     {
     case 0: // Album
         url = QUrl("https://api.spotify.com/v1/albums/" + id + "/tracks");
@@ -292,7 +298,7 @@ void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError e
 
     if (href.contains("albums") || href.contains("playlists"))
     {
-        auto id = Spotify::getIdFromHref(href);
+        auto id = SpotifyUtils::getIdFromHref(href);
         QList<SpotifyTrack> trackList;
 
         for (auto track : root["items"].toArray())
@@ -317,7 +323,7 @@ void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError e
         SpotifyTrack track;
         track.title = root["name"].toString();
         track.uri   = root["uri"].toString();
-        emit receivedPlaylistTracks({ track }, Spotify::getIdFromUri(track.uri));
+        emit receivedPlaylistTracks({ track }, SpotifyUtils::getIdFromUri(track.uri));
     }
     else
     {

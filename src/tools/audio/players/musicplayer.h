@@ -3,6 +3,7 @@
 
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QTemporaryDir>
 
 #include "../audioelement.h"
 #include "audioplayer.h"
@@ -43,7 +44,9 @@ private:
     int m_youtubeRequestId = -1;
     int m_fileRequestId = -1;
 
-    QBuffer *m_mediaBuffer = nullptr;
+    QBuffer m_mediaBuffer;
+    QTemporaryDir m_tempDir;
+    QString m_fileName;
 
     void loadMedia(AudioFile *file);
     void loadSongNames(bool initial = false, bool reloadYt = false);

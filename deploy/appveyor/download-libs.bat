@@ -5,6 +5,7 @@ cd taglib
 set TAGLIB_VERSION=1.12-beta-1
 set POPPLER_VERSION=0.82.0-13
 set QT_KEYCHAIN_VERSION=v0.10.0
+set QT_VERSION=qt5-12
 
 echo "Downloading taglib ..."
 
@@ -33,16 +34,16 @@ cd poppler
 
 if "%COMPILER_NAME%" == "mingw-64" (
 
-    echo https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-w64-7.3.0-qt5-13.zip
+    echo https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-w64-7.3.0-%QT_VERSION%.zip
 
-	curl -L -o poppler.zip https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-w64-7.3.0-qt5-13.zip
+	curl -L -o poppler.zip https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-w64-7.3.0-%QT_VERSION%.zip
 	7z x poppler.zip
 	
 ) else (
     
-	echo https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-32-7.3.0-qt5-12.zip
+	echo https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-32-7.3.0-%QT_VERSION%.zip
 
-	curl -L -o poppler.zip https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-32-7.3.0-qt5-12.zip
+	curl -L -o poppler.zip https://github.com/PhilInTheGaps/poppler-bin/releases/download/%POPPLER_VERSION%/poppler-mingw-32-7.3.0-%QT_VERSION%.zip
 	7z x poppler.zip
 ) 
 
@@ -56,16 +57,16 @@ cd qt5keychain
 
 if "%COMPILER_NAME%" == "mingw-64" (
 
-    echo https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-qt5-13.zip
+    echo https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-%QT_VERSION%.zip
 
-	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-qt5-13.zip
+	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-%QT_VERSION%.zip
 	7z x qt5keychain.zip
 	
 ) else (
     
-	echo https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-qt5-12.zip
+	echo https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-%QT_VERSION%.zip
 
-	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-qt5-12.zip
+	curl -L -o qt5keychain.zip https://github.com/PhilInTheGaps/qtkeychain-bin/releases/download/%QT_KEYCHAIN_VERSION%/qt5keychain-mingw-w64-7.3.0-%QT_VERSION%.zip
 	7z x qt5keychain.zip
 ) 
 

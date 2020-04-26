@@ -2,6 +2,8 @@
 #include "logging.h"
 #include "settings/settingsmanager.h"
 #include "filesystem/filemanager.h"
+#include "utils/fileutils.h"
+
 #include "youtubeutils.h"
 #include "internal/heuristics.h"
 
@@ -19,7 +21,6 @@ MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, QObject *parent) : AudioPlayer(
 
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
-    m_mediaBuffer = new QBuffer;
 
     connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
     connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
@@ -223,6 +224,7 @@ void MusicPlayer::loadMedia(AudioFile *file)
     {
     case 0:
         m_fileRequestId = FileManager::getUniqueRequestId();
+        m_fileName = file->url();
         FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("music") + file->url());
         break;
 
@@ -415,11 +417,39 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
         return;
     }
 
-    m_mediaBuffer->close();
-    m_mediaBuffer->setData(data);
-    m_mediaBuffer->open(QIODevice::ReadOnly);
+    #ifdef Q_OS_WIN
+    QFile file(m_tempDir.path() + "/" +  FileUtils::fileName(m_fileName));
 
-    mediaPlayer->setMedia(QMediaContent(), m_mediaBuffer);
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        if (file.error() == QFileDevice::OpenError)
+        {
+            file.setFileName(FileUtils::incrementFileName(file.fileName()));
+            if (!file.open(QIODevice::WriteOnly))
+            {
+                qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                return;
+            }
+        }
+        else
+        {
+            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            return;
+        }
+    }
+
+    qCDebug(gmAudioMusic()) << file.fileName();
+    file.write(data);
+    file.close();
+
+    mediaPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
+    #else
+    m_mediaBuffer.close();
+    m_mediaBuffer.setData(data);
+    m_mediaBuffer.open(QIODevice::ReadOnly);
+    mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
+    #endif
+
     mediaPlayer->play();
 
     if (clickingWorkaround) QTimer::singleShot(100, [ = ]() { mediaPlayer->setMuted(false); });
