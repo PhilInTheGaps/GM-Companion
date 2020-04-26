@@ -17,6 +17,7 @@ public:
     ~SpotifyConnectorServer() override;
 
     void grantAccess() override;
+    void disconnectService() override;
     bool isAccessGranted() const override { return m_isAccessGranted; }
 
     int get(QUrl url) { return get(QNetworkRequest(url)); }

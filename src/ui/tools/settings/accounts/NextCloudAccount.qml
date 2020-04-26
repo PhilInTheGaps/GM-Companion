@@ -62,7 +62,7 @@ Item {
                 onClicked: {
                     settings_manager.setServerUrl(server_textfield.text,
                                                   "NextCloud")
-                    nextcloud_service.login()
+                    nextcloud_service.connectService()
                 }
             }
         }
@@ -100,7 +100,7 @@ Item {
 
             Button {
                 text: qsTr("Logout")
-                onClicked: nextcloud_service.logout()
+                onClicked: nextcloud_service.disconnectService()
             }
         }
     }

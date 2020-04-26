@@ -31,8 +31,12 @@ class Service : public QObject
 {
     Q_OBJECT
 public:
-    explicit Service(QObject *parent = nullptr);
+    explicit Service(QString name, QObject *parent = nullptr);
     ~Service();
+
+    Q_PROPERTY(bool connected READ connected WRITE setConnected NOTIFY connectedChanged)
+    bool connected() const { return m_connected; }
+    void setConnected(const bool& connected);
 
     Q_PROPERTY(ServiceStatus* status READ status NOTIFY statusChanged)
     ServiceStatus* status() const { return m_status; }
@@ -44,15 +48,25 @@ public:
         Error = 3
     };
 
+public slots:
+    virtual void connectService() = 0;
+    virtual void disconnectService() = 0;
+
 signals:
     void statusChanged();
+    void connectedChanged();
 
 protected slots:
     void updateStatus(const Service::StatusType& type, const QString& message);
 
-private:
-    ServiceStatus *m_status;
+protected:
+    bool m_connected = false;
 
+private:
+    ServiceStatus *m_status = nullptr;
+    QString m_serviceName;
+
+    void updateConnectionStatus();
 };
 
 #endif // SERVICE_H

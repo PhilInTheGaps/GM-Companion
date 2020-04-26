@@ -17,7 +17,7 @@ FileAccessGoogleDrive::FileAccessGoogleDrive()
 
     connect(GoogleDrive::getInstance(), &GoogleDrive::receivedReply, this, &FileAccessGoogleDrive::receivedInternalReply);
 
-    if (!GoogleDrive::getInstance()->isGranted())
+    if (GoogleDrive::getInstance()->connected() && !GoogleDrive::getInstance()->isGranted())
     {
         GoogleDrive::getInstance()->grant();
     }

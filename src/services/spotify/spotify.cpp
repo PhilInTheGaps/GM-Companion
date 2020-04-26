@@ -14,9 +14,10 @@
 bool Spotify::instanceFlag = false;
 Spotify *Spotify::single   = nullptr;
 
-Spotify::Spotify(QObject *parent) : Service(parent)
+Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
 {
     m_networkManager = new QNetworkAccessManager;
+    m_username = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
 
     updateConnector();
 
@@ -51,68 +52,10 @@ void Spotify::updateConnector()
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);
     connect(m_connector, &RESTServiceConnector::receivedReply, this, &Spotify::onReceivedReply);
     connect(m_connector, &RESTServiceConnector::statusChanged, this, &Spotify::updateStatus);
+    connect(m_connector, &RESTServiceConnector::isConnectedChanged, [ = ](const bool& connected) { setConnected(connected); });
 
     stopLibrespot();
-    grant();
-}
-
-/**
- * @brief Get the type of a spotify uri.
- * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
- * @return 0: Album, 1: Playlist, 2: Track, 3: Artist, 4: episode, 5: show -1:
- * unknown
- */
-auto Spotify::getUriType(const QString& uri)->int
-{
-    if (uri.contains("album:")) return 0;
-
-    if (uri.contains("playlist:")) return 1;
-
-    if (uri.contains("track:")) return 2;
-
-    if (uri.contains("artist:")) return 3;
-
-    if (uri.contains("episode:")) return 4;
-
-    if (uri.contains("show:")) return 5;
-
-    return -1;
-}
-
-/**
- * @brief Get Spotify ID from Spotify URI
- * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
- * @return Spotify ID like 6rqhFgbbKwnb9MLmUQDhG6
- */
-auto Spotify::getIdFromUri(QString uri)->QString
-{
-    return uri = uri.right(uri.count() - uri.lastIndexOf(":") - 1);
-}
-
-/**
- * @brief Get the Spotify ID from href
- * @param href Spotify href like
- * https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2
- */
-auto Spotify::getIdFromHref(const QString& href)->QString
-{
-    auto split = href.split("/");
-    auto index = -1;
-
-    if (split.contains("albums"))
-    {
-        index = split.indexOf("albums") + 1;
-    }
-    else if (split.contains("playlists"))
-    {
-        index = split.indexOf("playlists") + 1;
-    }
-    else if (split.contains("tracks"))
-    {
-        index = split.indexOf("tracks") + 1;
-    }
-
-    return split[index];
+    if (connected()) grant();
 }
 
 auto Spotify::getInstance()->Spotify *
@@ -166,13 +109,30 @@ void Spotify::onReceivedDevices(const QByteArray& data)
     qCWarning(gmSpotify) << "Could not find spotify device" << LIBRESPOT_DEVICE_NAME;
 }
 
-void Spotify::startLibrespot()
+void Spotify::connectService()
 {
+    setUsername(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
+    updateConnector();
+    grant();
+}
+
+void Spotify::disconnectService()
+{
+    setConnected(false);
+    m_connector->disconnectService();
+    SettingsManager::setPassword(m_username, "", "Spotify");
+    SettingsManager::setSetting("spotifyUsername", "", "Spotify");
+    SettingsManager::setSetting("spotifyID", "", "Spotify");
+    SettingsManager::setSetting("spotifySecret", "", "Spotify");
+    stopLibrespot();
+}
+
+auto Spotify::startLibrespot()->bool
+{
+    qCDebug(gmSpotify()) << "Starting librespot ...";
     updateStatus(StatusType::Info, tr("Starting librespot..."));
 
-    ProcessInfo pi;
-
-    if (pi.getProcIdByName("librespot") == -1)
+    if (!ProcessInfo::isProcessRunning(getLibrespotBinaryName().toStdString()))
     {
         auto username      = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
         auto password      = SettingsManager::getPassword(username, "Spotify");
@@ -182,14 +142,14 @@ void Spotify::startLibrespot()
         {
             qCWarning(gmSpotify()) << "Could not start librespot, username is not set.";
             updateStatus(StatusType::Error, tr("Error: Username is not set."));
-            return;
+            return false;
         }
 
         if (password.isEmpty())
         {
             qCWarning(gmSpotify()) << "Could not start librespot, password is not set.";
             updateStatus(StatusType::Error, tr("Error: Password is not set."));
-            return;
+            return false;
         }
 
         m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
@@ -202,14 +162,15 @@ void Spotify::startLibrespot()
         qCWarning(gmSpotify()) << "Librespot is already running.";
     }
 
-    updateStatus(StatusType::Success, tr("Connected."));
     setDeviceActive();
+    return true;
 }
 
 void Spotify::stopLibrespot()
 {
     if (m_librespotProcess.state() != QProcess::NotRunning)
     {
+        qCDebug(gmSpotify()) << "Stopping librespot ...";
         m_librespotProcess.terminate();
         m_librespotProcess.waitForFinished(1000);
     }
@@ -238,11 +199,7 @@ void Spotify::onLibrespotError(const QProcess::ProcessError& error)
 
 auto Spotify::getLibrespotPath()->QString
 {
-    auto binaryName = "librespot";
-
-    #ifdef Q_OS_WIN
-    binaryName = "librespot.exe";
-    #endif // ifdef Q_OS_WIN
+    auto binaryName = getLibrespotBinaryName();
 
     // First check next to gm-companion binary
     auto librespotPath = QCoreApplication::applicationDirPath() + "/" + binaryName;
@@ -263,6 +220,15 @@ auto Spotify::getLibrespotPath()->QString
     // Finally try to execute from PATH
     qCDebug(gmSpotify) << "Trying to use system version of librespot ...";
     return binaryName;
+}
+
+QString Spotify::getLibrespotBinaryName()
+{
+    #ifdef Q_OS_WIN
+    return "librespot.exe";
+    #endif
+
+    return "librespot";
 }
 
 void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, const QByteArray& data)
@@ -296,5 +262,5 @@ void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, cons
 void Spotify::onAccessGranted()
 {
     qCDebug(gmSpotify) << "Access has been granted!";
-    startLibrespot();
+    setConnected(startLibrespot());
 }

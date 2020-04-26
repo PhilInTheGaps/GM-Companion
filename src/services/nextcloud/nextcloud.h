@@ -14,10 +14,6 @@ public:
     static NextCloud *getInstance();
     ~NextCloud();
 
-    Q_PROPERTY(bool connected READ connected WRITE setConnected NOTIFY connectedChanged)
-    bool connected() const { return m_connected; }
-    void setConnected(const bool& connected);
-
     Q_PROPERTY(QString loginName READ loginName WRITE setLoginName NOTIFY loginNameChanged)
     QString loginName() const { return m_loginName; }
     void setLoginName(const QString& loginName) { m_loginName = loginName; emit loginNameChanged(); }
@@ -29,11 +25,10 @@ public:
     QNetworkReply *sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data);
 
 public slots:
-    void login();
-    void logout();
+    void connectService() override;
+    void disconnectService() override;
 
 signals:
-    void connectedChanged();
     void loginNameChanged();
     void serverUrlChanged();
 
@@ -46,7 +41,6 @@ private:
     QNetworkAccessManager *m_networkManager = nullptr;
     int m_authPolls = 0;
     bool m_loggingIn = false;
-    bool m_connected = false;
 
     QString m_loginName = "";
     QString m_appPassword = "";

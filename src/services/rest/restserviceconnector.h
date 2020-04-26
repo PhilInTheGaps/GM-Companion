@@ -39,6 +39,7 @@ public:
         : QObject(parent), m_networkManager(networkManager), m_loggingCategory(loggingCategory) {}
 
     virtual void grantAccess() = 0;
+    virtual void disconnectService() = 0;
     virtual bool isAccessGranted() const = 0;
 
     virtual int get(QNetworkRequest request) = 0;
@@ -63,6 +64,7 @@ signals:
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
     void accessGranted();
     void statusChanged(const Service::StatusType& type, const QString& message);
+    void isConnectedChanged(const bool& connected);
 };
 
 #endif // RESTSERVICECONNECTOR_H

@@ -42,6 +42,13 @@ void SpotifyConnectorServer::grantAccess()
     }
 }
 
+void SpotifyConnectorServer::disconnectService()
+{
+    qCDebug(gmSpotifyServer()) << "Disconnecting ...";
+    saveAccessToken("");
+    saveRefreshToken("");
+}
+
 auto SpotifyConnectorServer::get(QNetworkRequest request)->int
 {
     int requestId = getUniqueRequestId();
@@ -138,6 +145,7 @@ void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int 
 void SpotifyConnectorServer::authenticate()
 {
     qCDebug(gmSpotifyServer()) << "Authenticating ...";
+    emit statusChanged(Service::StatusType::Info, tr("Connecting ..."));
 
     if (!m_server.isListening())
     {
@@ -191,9 +199,9 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 
     if (refreshToken.isEmpty())
     {
-        qCDebug(gmSpotifyServer()) << "No refresh token found, starting auth process ...";
+        qCDebug(gmSpotifyServer()) << "No refresh token found, not connected to spotify.";
         m_isAccessGranted = false;
-        authenticate();
+        emit isConnectedChanged(false);
     }
     else
     {

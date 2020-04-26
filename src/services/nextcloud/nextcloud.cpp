@@ -12,11 +12,10 @@
 bool NextCloud::instanceFlag = false;
 NextCloud *NextCloud::single = nullptr;
 
-NextCloud::NextCloud(QObject *parent) : Service(parent)
+NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
 {
     m_networkManager = new QNetworkAccessManager;
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
-    m_connected = SettingsManager::getBoolSetting("connected", false, "NextCloud");
 
     if (m_connected)
     {
@@ -48,26 +47,9 @@ NextCloud::~NextCloud()
     m_networkManager->deleteLater();
 }
 
-void NextCloud::setConnected(const bool& connected)
-{
-    m_connected = connected;
-    SettingsManager::setSetting("connected", connected, "NextCloud");
-
-    if (m_connected)
-    {
-        updateStatus(StatusType::Success, tr("Connected"));
-    }
-    else
-    {
-        updateStatus(StatusType::Info, tr("Not connected"));
-    }
-
-    emit connectedChanged();
-}
-
 QNetworkReply * NextCloud::sendDavRequest(const QByteArray& method, const QString& path, const QByteArray& data)
 {
-    if (!m_connected) login();
+    if (!m_connected) connectService();
 
     auto url     = m_serverUrl + NEXTCLOUD_DAV_ENDPOINT + "/" + m_loginName + path;
     auto request = QNetworkRequest(QUrl(url));
@@ -79,7 +61,7 @@ QNetworkReply * NextCloud::sendDavRequest(const QByteArray& method, const QStrin
     return m_networkManager->sendCustomRequest(request, method, data);
 }
 
-void NextCloud::login()
+void NextCloud::connectService()
 {
     qCDebug(gmNextCloud()) << "Logging in ...";
 
@@ -101,7 +83,7 @@ void NextCloud::login()
     }
 }
 
-void NextCloud::logout()
+void NextCloud::disconnectService()
 {
     qCDebug(gmNextCloud()) << "Logout() ...";
     updateStatus(StatusType::Info, tr("Logging out ..."));

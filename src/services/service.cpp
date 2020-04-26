@@ -1,8 +1,12 @@
 #include "service.h"
+#include "settings/settingsmanager.h"
 
-Service::Service(QObject *parent) : QObject(parent)
+Service::Service(QString name, QObject *parent)
+    : QObject(parent), m_serviceName(name)
 {
     m_status = new ServiceStatus;
+    m_connected = SettingsManager::getBoolSetting("connected", false, m_serviceName);
+    updateConnectionStatus();
 }
 
 Service::~Service()
@@ -14,4 +18,26 @@ void Service::updateStatus(const Service::StatusType& type, const QString& messa
 {
     m_status->setType(static_cast<int>(type));
     m_status->setMessage(message);
+}
+
+void Service::updateConnectionStatus()
+{
+    if (m_connected)
+    {
+        updateStatus(StatusType::Success, tr("Connected"));
+    }
+    else
+    {
+        updateStatus(StatusType::Info, tr("Not connected"));
+    }
+}
+
+void Service::setConnected(const bool& connected)
+{
+    m_connected = connected;
+    SettingsManager::setSetting("connected", connected, m_serviceName);
+
+    updateConnectionStatus();
+
+    emit connectedChanged();
 }

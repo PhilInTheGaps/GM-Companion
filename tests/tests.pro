@@ -4,4 +4,4 @@ SUBDIRS += \
     test_utils \
     test_networkutils \
     test_fileutils \
-    test_spotify
+    test_spotifyutils

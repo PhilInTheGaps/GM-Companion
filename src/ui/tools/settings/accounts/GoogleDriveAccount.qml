@@ -30,6 +30,24 @@ Item {
         }
 
         Grid {
+            visible: googledrive_service.connected
+            columns: 2
+            spacing: 10
+            anchors.left: parent.left
+            anchors.right: parent.right
+            verticalItemAlignment: Grid.AlignVCenter
+
+            Label {
+                text: qsTr("Client ID")
+            }
+
+            Label {
+                Component.onCompleted: text = googledrive_service.clientId
+            }
+        }
+
+        Grid {
+            visible: !googledrive_service.connected
             columns: 2
             spacing: 10
             anchors.left: parent.left
@@ -62,15 +80,19 @@ Item {
         }
 
         Button {
-            text: qsTr("Save and Connect")
+            text: googledrive_service.connected ? qsTr("Disconnect") : qsTr("Connect")
             onClicked: {
-                settings_manager.setSetting("googleID",
-                                            google_id_textfield.text, "Google")
-                settings_manager.setSetting("googleSecret",
-                                            google_secret_textfield.text,
-                                            "Google")
-
-                googledrive_service.updateConnector()
+                if (googledrive_service.connected) {
+                    googledrive_service.disconnectService()
+                } else {
+                    settings_manager.setSetting("googleID",
+                                                google_id_textfield.text, "Google")
+                    settings_manager.setSetting("googleSecret",
+                                                google_secret_textfield.text,
+                                                "Google")
+                    google_secret_textfield.text = ""
+                    googledrive_service.connectService()
+                }
             }
         }
     }

@@ -32,7 +32,25 @@ Item {
             text: qsTr("(Requires Spotify Premium)")
         }
 
+        // If connected
         Grid {
+            visible: spotify_service.connected
+            columns: 2
+            spacing: 10
+            verticalItemAlignment: Grid.AlignVCenter
+
+            Label {
+                text: qsTr("Username")
+            }
+
+            Label {
+                text: spotify_service.username
+            }
+        }
+
+        // If not connected
+        Grid {
+            visible: !spotify_service.connected
             columns: 2
             spacing: 10
             verticalItemAlignment: Grid.AlignVCenter
@@ -50,7 +68,6 @@ Item {
                                            "spotifyUsername", "", "Spotify")
             }
 
-            // Password
             Label {
                 text: qsTr("Password")
             }
@@ -60,16 +77,21 @@ Item {
                 selectByMouse: true
                 width: textfieldWidth
                 echoMode: TextField.Password
-                Component.onCompleted: text = settings_manager.getPassword(
-                                           settings_manager.getSetting(
-                                               "spotifyUsername", "",
-                                               "Spotify"), "Spotify")
             }
+        }
+
+
+        Grid {
+            // Password
+            columns: 2
+            spacing: 10
+            verticalItemAlignment: Grid.AlignVCenter
 
             // Default Server
             CustomRadioButton {
                 id: default_server_radio_button
                 text: qsTr("Use default server")
+                enabled: !spotify_service.connected
                 checked: settings_manager.getSetting("connection", "default",
                                                      "Spotify") === "default"
             }
@@ -83,6 +105,7 @@ Item {
             CustomRadioButton {
                 id: custom_server_radio_button
                 text: qsTr("Use custom server")
+                enabled: !spotify_service.connected
                 checked: settings_manager.getSetting("connection", "default",
                                                      "Spotify") === "custom"
             }
@@ -93,7 +116,7 @@ Item {
             }
 
             Label {
-                visible: custom_server_radio_button.checked
+                visible: custom_server_radio_button.checked && !spotify_service.connected
                 text: qsTr("Server URL")
             }
 
@@ -101,7 +124,7 @@ Item {
                 id: custom_server_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: custom_server_radio_button.checked
+                visible: custom_server_radio_button.checked && !spotify_service.connected
 
                 Component.onCompleted: text = settings_manager.getServerUrl(
                                            "Spotify")
@@ -111,6 +134,7 @@ Item {
             CustomRadioButton {
                 id: client_id_secret_radio_button
                 text: qsTr("Client ID and Secret")
+                enabled: !spotify_service.connected
                 checked: settings_manager.getSetting("connection", "default",
                                                      "Spotify") === "local"
             }
@@ -122,63 +146,69 @@ Item {
 
             Label {
                 text: qsTr("Client ID")
-                visible: client_id_secret_radio_button.checked
+                visible: client_id_secret_radio_button.checked && !spotify_service.connected
             }
 
             CustomTextField {
                 id: spotify_id_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: client_id_secret_radio_button.checked
+                visible: client_id_secret_radio_button.checked && !spotify_service.connected
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "spotifyID", "", "Spotify")
             }
 
             Label {
                 text: qsTr("Client Secret")
-                visible: client_id_secret_radio_button.checked
+                visible: client_id_secret_radio_button.checked && !spotify_service.connected
             }
 
             CustomTextField {
                 id: spotify_secret_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: client_id_secret_radio_button.checked
+                visible: client_id_secret_radio_button.checked && !spotify_service.connected
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "spotifySecret", "", "Spotify")
             }
         }
 
         Button {
-            text: qsTr("Save and Connect")
+            text: spotify_service.connected ? qsTr("Disconnect") : qsTr("Connect")
             onClicked: {
-                settings_manager.setSetting("spotifyUsername",
-                                            username_textfield.text, "Spotify")
-                settings_manager.setPassword(username_textfield.text,
-                                             password_textfield.text, "Spotify")
+                if (spotify_service.connected)
+                {
+                    spotify_service.disconnectService()
+                }  else {
+                    settings_manager.setSetting("spotifyUsername",
+                                                username_textfield.text, "Spotify")
+                    settings_manager.setPassword(username_textfield.text,
+                                                 password_textfield.text, "Spotify")
+                    password_textfield.text = ""
 
-                settings_manager.setSetting("spotifyID",
-                                            spotify_id_textfield.text,
-                                            "Spotify")
-                settings_manager.setSetting("spotifySecret",
-                                            spotify_secret_textfield.text,
-                                            "Spotify")
-                settings_manager.setSetting("server",
-                                            custom_server_textfield.text,
-                                            "Spotify")
+                    settings_manager.setSetting("spotifyID",
+                                                spotify_id_textfield.text,
+                                                "Spotify")
+                    settings_manager.setSetting("spotifySecret",
+                                                spotify_secret_textfield.text,
+                                                "Spotify")
+                    settings_manager.setSetting("server",
+                                                custom_server_textfield.text,
+                                                "Spotify")
 
-                if (default_server_radio_button.checked) {
-                    settings_manager.setSetting("connection", "default",
-                                                "Spotify")
-                } else if (custom_server_radio_button.checked) {
-                    settings_manager.setSetting("connection", "custom",
-                                                "Spotify")
-                } else {
-                    settings_manager.setSetting("connection", "local",
-                                                "Spotify")
+                    if (default_server_radio_button.checked) {
+                        settings_manager.setSetting("connection", "default",
+                                                    "Spotify")
+                    } else if (custom_server_radio_button.checked) {
+                        settings_manager.setSetting("connection", "custom",
+                                                    "Spotify")
+                    } else {
+                        settings_manager.setSetting("connection", "local",
+                                                    "Spotify")
+                    }
+
+                    spotify_service.connectService()
                 }
-
-                spotify_service.updateConnector()
             }
         }
     }

@@ -9,7 +9,7 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS O0_EXPORT= NO_UPDATE_CHECK
 
-CONFIG += c++14 #qtquickcompiler
+CONFIG += c++14 qtquickcompiler
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
@@ -29,6 +29,7 @@ SOURCES += main.cpp \
     services/spotify/spotify.cpp \
     services/spotify/spotifyconnectorlocal.cpp \
     services/spotify/spotifyconnectorserver.cpp \
+    services/spotify/spotifyutils.cpp \
     tools/audio/audioelementimageprovider.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
@@ -105,6 +106,7 @@ HEADERS  += filesystem/fileaccess.h \
     services/spotify/spotify.h \
     services/spotify/spotifyconnectorlocal.h \
     services/spotify/spotifyconnectorserver.h \
+    services/spotify/spotifyutils.h \
     settings/settings.h \
     tools/audio/audioelementimageprovider.h \
     tools/audio/audioicongenerator.h \
@@ -201,6 +203,12 @@ QML_IMPORT_PATH += $$PWD/ui $$PWD/../lib/fontawesome.pri
 }
 
 win32 {
+    isEmpty(PREFIX) {
+        PREFIX = install
+    }
+
+    target.path = $$PREFIX/bin
+
     LIBS += -L$$PWD/../lib/taglib/lib/ -llibtag.dll
     INCLUDEPATH += $$PWD/../lib/taglib/include
     DEPENDPATH  += $$PWD/../lib/taglib/include

@@ -1,5 +1,6 @@
 #include "processinfo.h"
 #include <QtGlobal>
+#include <QString>
 
 #include <sys/types.h>
 #include <dirent.h>
@@ -11,15 +12,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <tlhelp32.h>
+#include <tchar.h>
+#endif
+
 using namespace std;
 
-// https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
-int ProcessInfo::getProcIdByName(std::string procName)
+bool ProcessInfo::isProcessRunning(std::string procName)
 {
-    int pid = -1;
+    bool isRunning = false;
 
     #ifdef Q_OS_LINUX
-
+    // https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
     // Open the /proc directory
     DIR *dp = opendir("/proc");
 
@@ -28,6 +34,7 @@ int ProcessInfo::getProcIdByName(std::string procName)
         // Enumerate all entries in directory until process found
         struct dirent *dirp;
 
+        int pid = -1;
         while (pid < 0 && (dirp = readdir(dp)))
         {
             // Skip non-numeric entries
@@ -58,11 +65,37 @@ int ProcessInfo::getProcIdByName(std::string procName)
                 }
             }
         }
+        isRunning = pid > -1;
     }
 
     closedir(dp);
 
-    #endif // ifdef Q_OS_LINUX
+    #elif defined Q_OS_WIN
+    // https://stackoverflow.com/a/57164620
 
-    return pid;
+    PROCESSENTRY32 entry;
+        entry.dwSize = sizeof(PROCESSENTRY32);
+
+        const auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+        if (!Process32First(snapshot, &entry))
+        {
+            CloseHandle(snapshot);
+            return false;
+        }
+
+        do {
+            if (!QString::compare(QString::fromWCharArray(entry.szExeFile), QString::fromStdString(procName), Qt::CaseInsensitive))
+            {
+                CloseHandle(snapshot);
+                isRunning = true;
+            }
+        } while (Process32Next(snapshot, &entry));
+
+        CloseHandle(snapshot);
+        isRunning = false;
+
+    #endif
+
+    return isRunning;
 }

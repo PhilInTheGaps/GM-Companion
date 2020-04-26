@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-class TestSpotify : public QObject
+class TestSpotifyUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestSpotify() {}
+    TestSpotifyUtils() {}
 
 private slots:
     void getUriType_data();

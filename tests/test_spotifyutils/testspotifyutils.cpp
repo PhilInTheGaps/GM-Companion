@@ -1,8 +1,8 @@
 #include <QtTest>
-#include "testspotify.h"
-#include "../../src/services/spotify/spotify.h"
+#include "testspotifyutils.h"
+#include "../../src/services/spotify/spotifyutils.h"
 
-void TestSpotify::getUriType_data()
+void TestSpotifyUtils::getUriType_data()
 {
     QTest::addColumn<QString>("uri");
     QTest::addColumn<int>(    "type");
@@ -17,15 +17,15 @@ void TestSpotify::getUriType_data()
     QTest::newRow("unknown") << "spotify:something:xxxxxxxxx" << -1;
 }
 
-void TestSpotify::getUriType()
+void TestSpotifyUtils::getUriType()
 {
     QFETCH(QString, uri);
     QFETCH(int,     type);
 
-    QCOMPARE(Spotify::getUriType(uri), type);
+    QCOMPARE(SpotifyUtils::getUriType(uri), type);
 }
 
-void TestSpotify::getIdFromUri_data()
+void TestSpotifyUtils::getIdFromUri_data()
 {
     QTest::addColumn<QString>("uri");
     QTest::addColumn<QString>("id");
@@ -40,15 +40,15 @@ void TestSpotify::getIdFromUri_data()
     QTest::newRow("unknown") << "spotify:something:xxxxxxxxx" << "xxxxxxxxx";
 }
 
-void TestSpotify::getIdFromUri()
+void TestSpotifyUtils::getIdFromUri()
 {
     QFETCH(QString, uri);
     QFETCH(QString, id);
 
-    QCOMPARE(Spotify::getIdFromUri(uri), id);
+    QCOMPARE(SpotifyUtils::getIdFromUri(uri), id);
 }
 
-void TestSpotify::getIdFromHref_data()
+void TestSpotifyUtils::getIdFromHref_data()
 {
     QTest::addColumn<QString>("href");
     QTest::addColumn<QString>("id");
@@ -58,12 +58,12 @@ void TestSpotify::getIdFromHref_data()
     QTest::newRow("track") << "https://api.spotify.com/v1/tracks/5TiMM0jscVmWgMwR42RLup" << "5TiMM0jscVmWgMwR42RLup";
 }
 
-void TestSpotify::getIdFromHref()
+void TestSpotifyUtils::getIdFromHref()
 {
     QFETCH(QString, href);
     QFETCH(QString, id);
 
-    QCOMPARE(Spotify::getIdFromHref(href), id);
+    QCOMPARE(SpotifyUtils::getIdFromHref(href), id);
 }
 
-QTEST_APPLESS_MAIN(TestSpotify)
+QTEST_APPLESS_MAIN(TestSpotifyUtils)

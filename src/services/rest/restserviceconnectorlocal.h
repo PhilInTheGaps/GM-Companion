@@ -25,6 +25,7 @@ public:
     virtual ~RESTServiceConnectorLocal() override;
 
     void grantAccess() override;
+    void disconnectService() override;
     bool isAccessGranted() const override { return m_o2->linked(); }
 
     int get(QNetworkRequest request) override;

@@ -87,6 +87,12 @@ void RESTServiceConnectorLocal::grantAccess()
     }
 }
 
+void RESTServiceConnectorLocal::disconnectService()
+{
+    qCDebug(m_loggingCategory) << "Disconnecting ...";
+    m_o2->unlink();
+}
+
 /**
  * @brief Send a GET request to the REST API
  * @return Returns a unique request id that can be used to identify the reply
@@ -343,9 +349,13 @@ void RESTServiceConnectorLocal::onCooldownFinished()
 
 void RESTServiceConnectorLocal::onLinkingSucceeded()
 {
-    if (!m_o2->linked()) return;
+    if (!m_o2->linked())
+    {
+        emit isConnectedChanged(false);
+        return;
+    }
 
-    emit statusChanged(Service::StatusType::Success, tr("Connected."));
+    emit isConnectedChanged(true);
     emit accessGranted();
 
     dequeueRequests();

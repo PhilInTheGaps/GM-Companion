@@ -4,6 +4,7 @@
 #include "settings/settingsmanager.h"
 #include "filesystem/filemanager.h"
 #include "utils/utils.h"
+#include "services/spotify/spotifyutils.h"
 
 #include <taglib/taglib.h>
 #include <taglib/fileref.h>
@@ -220,8 +221,8 @@ auto IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audioFi
     // Also add url to list for batch-retrieval later
     if (audioFile->source() == 2)
     {
-        if (AudioIconGenerator::cacheContains(Spotify::getIdFromUri(audioFile->url()))) {
-            return AudioIconGenerator::readFromCache(Spotify::getIdFromUri(audioFile->url()));
+        if (AudioIconGenerator::cacheContains(SpotifyUtils::getIdFromUri(audioFile->url()))) {
+            return AudioIconGenerator::readFromCache(SpotifyUtils::getIdFromUri(audioFile->url()));
         }
         m_spotifyIconList.append(audioFile->url());
         return getPlaceholderImage(element);
@@ -287,8 +288,8 @@ void IconWorker::getImagesFromSpotify()
     while (!m_spotifyIconList.isEmpty())
     {
         QString firstUri = m_spotifyIconList.takeFirst();
-        QString firstId  = Spotify::getIdFromUri(firstUri);
-        int     type     = Spotify::getUriType(firstUri);
+        QString firstId  = SpotifyUtils::getIdFromUri(firstUri);
+        int     type     = SpotifyUtils::getUriType(firstUri);
 
         QStringList idBatch;
         idBatch.append(firstId);
@@ -296,9 +297,9 @@ void IconWorker::getImagesFromSpotify()
 
         while (type != 1 && index < m_spotifyIconList.length() && SPOTIFY_BATCH_SIZE > idBatch.length())
         {
-            if (Spotify::getUriType(m_spotifyIconList[index]) == type)
+            if (SpotifyUtils::getUriType(m_spotifyIconList[index]) == type)
             {
-                idBatch.append(Spotify::getIdFromUri(m_spotifyIconList.takeAt(index)));
+                idBatch.append(SpotifyUtils::getIdFromUri(m_spotifyIconList.takeAt(index)));
             }
             else
             {
@@ -389,7 +390,7 @@ void IconWorker::insertImageFromUrl(const QString& imageUrl, QString uri)
             return;
         }
 
-        AudioIconGenerator::writeToCache(Spotify::getIdFromUri(uri), image);
+        AudioIconGenerator::writeToCache(SpotifyUtils::getIdFromUri(uri), image);
         AudioIconGenerator::writeToCache(imageUrl,                   image);
         insertImage(image, uri);
     });

@@ -8,7 +8,7 @@ class ProcessInfo
 public:
     ProcessInfo(){}
 
-    int getProcIdByName(std::string procName);
+    static bool isProcessRunning(std::string procName);
 };
 
 #endif // PROCESSINFO_H
