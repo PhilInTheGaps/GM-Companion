@@ -37,9 +37,9 @@ public:
     QString currentDir() const { return FileUtils::dirFromFolders(m_currentDir); }
     void setCurrentDir(const QString& dir);
 
-    Q_PROPERTY(QList<FileObject*> files READ files WRITE setFiles NOTIFY filesChanged)
-    QList<FileObject*> files() const { return m_files; }
-    void setFiles(QList<FileObject*> files) { m_files = files; emit filesChanged(); }
+    Q_PROPERTY(QList<QObject*> files READ files WRITE setFiles NOTIFY filesChanged)
+    QList<QObject*> files() const { return m_files; }
+    void setFiles(QList<QObject*> files) { m_files = files; emit filesChanged(); }
 
     Q_PROPERTY(bool canForward READ canForward NOTIFY canForwardChanged)
     bool canForward() const { return m_forwardFolders.length() > 0; }
@@ -65,7 +65,7 @@ signals:
 private:
     QStringList m_currentDir;
     QStringList m_forwardFolders;
-    QList<FileObject*> m_files;
+    QList<QObject*> m_files;
 
     int m_foldersRequestId = -1;
     int m_filesRequestId = -1;

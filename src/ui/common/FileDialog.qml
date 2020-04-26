@@ -114,6 +114,7 @@ Dialog {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     padding: 5
+                    leftPadding: 10
                     spacing: 10
 
                     Label {
@@ -121,11 +122,13 @@ Dialog {
                         font.family: FontAwesome.familySolid
                         width: height
                         verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     Label {
                         text: modelData.name
                         verticalAlignment: Text.AlignVCenter
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
 

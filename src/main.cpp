@@ -1,6 +1,7 @@
 #include "settings/settingsmanager.h"
 #include "logging.h"
 
+#include <iostream>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -31,6 +32,8 @@
 #include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
+
+QFile m_logFile;
 
 /// Register meta types for signals and slots
 void registerMetaTypes()
@@ -68,6 +71,59 @@ void installFonts()
     QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
 }
 
+void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if (!m_logFile.open(QIODevice::Append)) return;
+
+    QByteArray line = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ").toUtf8();
+
+    // By type determine to what level belongs message
+    switch (type)
+    {
+        case QtInfoMsg:     line.append("INF "); break;
+        case QtDebugMsg:    line.append("DBG "); break;
+        case QtWarningMsg:  line.append("WRN "); break;
+        case QtCriticalMsg: line.append("CRT "); break;
+        case QtFatalMsg:    line.append("FTL "); break;
+    }
+
+    // Write to the output category of the message and the message itself
+    line.append(context.category).append(": ").append(msg);
+
+    if (type == QtInfoMsg || type == QtDebugMsg)
+    {
+        std::cout << line.toStdString() << std::endl;
+    }
+    else
+    {
+        std::cerr << line.toStdString() << std::endl;
+    }
+
+    m_logFile.write(line + "\n");
+    m_logFile.close();
+}
+
+void initLogging()
+{
+    QDir dir(QDir::homePath() + "/.gm-companion");
+    if (!dir.exists())
+    {
+        QDir home(QDir::homePath());
+        home.mkdir(".gm-companion");
+    }
+
+    m_logFile.setFileName(QDir::homePath() + "/.gm-companion/log.txt");
+
+    // Clear old log
+    if (m_logFile.open(QIODevice::WriteOnly))
+    {
+        m_logFile.write("");
+        m_logFile.close();
+    }
+
+    qInstallMessageHandler(messageHandler);
+}
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -82,6 +138,8 @@ int main(int argc, char *argv[])
     QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
 #endif // if defined(Q_OS_WIN)
+
+    initLogging();
 
     qCDebug(gmMain()) << "Starting GM-Companion ...";
 

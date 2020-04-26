@@ -28,7 +28,7 @@ void FileDialog::enterFolder(int index)
 
     if ((m_files.length() > index) && (index > -1))
     {
-        auto *folder = m_files[index];
+        auto *folder = static_cast<FileObject*>(m_files[index]);
 
         if (folder->isFolder())
         {
@@ -48,7 +48,7 @@ auto FileDialog::getSelected(int index) const -> QString
 
     if ((m_files.length() > index) && (index > -1))
     {
-        selectedFolder.append(m_files[index]->name());
+        selectedFolder.append(static_cast<FileObject*>(m_files[index])->name());
     }
 
     return FileUtils::dirFromFolders(selectedFolder);
@@ -113,6 +113,8 @@ void FileDialog::onFileListReceived(const int& requestId, const QStringList& fil
     {
         m_files.append(new FileObject(file, isFolder));
     }
+
+
 
     emit filesChanged();
 }
