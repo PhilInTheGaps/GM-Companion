@@ -47,6 +47,7 @@ public:
     QStringList projectNames();
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
+    Q_INVOKABLE int getCurrentProjectIndex();
 
     // Categories
     QStringList categoryNames() const { if (m_currentProject) return m_currentProject->categoryNames(); else return {}; }

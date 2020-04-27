@@ -132,6 +132,13 @@ void AudioTool::setCurrentProject(int index)
     emit currentScenarioChanged();
 }
 
+int AudioTool::getCurrentProjectIndex()
+{
+    if (!m_currentProject) return 0;
+
+    return projectNames().indexOf(m_currentProject->name());
+}
+
 /**
     Get the names of all projects
     @return QStringList with project names

@@ -1,46 +1,40 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
 Column {
     spacing: 10
 
-    Label {
+    CustomScrollLabel {
         id: music_element_name
         anchors.left: parent.left
         anchors.right: parent.right
-
+        anchors.rightMargin: 5
         text: audio_tool.type
-        wrapMode: Text.WordWrap
         font.bold: true
     }
 
-    Label {
+    CustomScrollLabel {
         id: song_name_text
         anchors.left: parent.left
         anchors.right: parent.right
-
+        anchors.rightMargin: 5
         text: audio_tool.title
-        clip: true
-        elide: Text.ElideRight
     }
 
-    Label {
+    CustomScrollLabel {
         id: artist_text
         anchors.left: parent.left
         anchors.right: parent.right
-
+        anchors.rightMargin: 5
         text: audio_tool.artist
-        clip: true
-        elide: Text.ElideRight
     }
 
-    Label {
+    CustomScrollLabel {
         id: album_text
         anchors.left: parent.left
         anchors.right: parent.right
-
+        anchors.rightMargin: 5
         text: audio_tool.album
-        clip: true
-        elide: Text.ElideRight
     }
 }

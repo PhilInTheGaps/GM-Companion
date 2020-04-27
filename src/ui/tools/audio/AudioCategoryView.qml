@@ -26,6 +26,7 @@ Rectangle {
         // Project ComboBox
         CustomToolBarComboBox {
             id: audio_project_combo_box
+            property bool loaded: false
 
             anchors.left: parent.left
             anchors.right: editor_button.left
@@ -33,7 +34,16 @@ Rectangle {
             width: parent.width - editor_button.width - parent.spacing
             model: audio_tool.projectNames
 
-            onCurrentTextChanged: audio_tool.setCurrentProject(currentIndex)
+            onCurrentTextChanged: {
+                if (loaded) audio_tool.setCurrentProject(currentIndex)
+            }
+
+            onModelChanged: {
+                if (!loaded) {
+                    currentIndex = audio_tool.getCurrentProjectIndex()
+                    loaded = true
+                }
+            }
         }
 
         // Open Editor Button

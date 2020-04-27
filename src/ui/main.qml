@@ -8,7 +8,7 @@ import "./main"
 import "defines.js" as Defines
 
 ApplicationWindow {
-    id: root
+    id: main_window
     title: qsTr("GM-Companion")
     visible: true
 
@@ -17,6 +17,9 @@ ApplicationWindow {
 
     minimumWidth: 640
     minimumHeight: 480
+
+    signal zoomIn
+    signal zoomOut
 
     readonly property var tools: [{
             "name": qsTr("Audio"),
@@ -123,7 +126,7 @@ ApplicationWindow {
                 }
 
                 Repeater {
-                    model: root.tools
+                    model: main_window.tools
 
                     SideMenuButton {
                         toolName: modelData.name
@@ -165,9 +168,21 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         asynchronous: true
-        source: root.tools[0].source
+        source: main_window.tools[0].source
         active: true
 
         onLoaded: splash.close()
+    }
+
+    Shortcut {
+        sequences: [StandardKey.ZoomIn]
+        onActivated: zoomIn()
+        context: Qt.ApplicationShortcut
+    }
+
+    Shortcut {
+        sequences: [StandardKey.ZoomOut]
+        onActivated: zoomOut()
+        context: Qt.ApplicationShortcut
     }
 }

@@ -90,6 +90,12 @@ Item {
         }
     }
 
+    Connections {
+        target: main_window
+        onZoomIn: zoomIn()
+        onZoomOut: zoomOut()
+    }
+
     Flickable {
         id: flickable
         anchors.fill: parent
@@ -156,6 +162,13 @@ Item {
                     anchors.fill: parent
                     cursorShape: pressed
                                  || flickable.dragging ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+
+                    onWheel: {
+                        if (wheel.modifiers & Qt.ControlModifier) {
+                            if (wheel.angleDelta.y > 0) zoomIn();
+                            else zoomOut()
+                        }
+                    }
                 }
             }
         }

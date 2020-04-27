@@ -219,6 +219,7 @@ void MusicPlayer::loadMedia(AudioFile *file)
     spotifyPlayer->stop();
     m_playerType = file->source();
     emit currentIndexChanged();
+    emit clearMetaData();
 
     switch (m_playerType)
     {

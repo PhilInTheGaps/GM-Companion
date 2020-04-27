@@ -11,5 +11,6 @@
         <file>CustomScrollBar.qml</file>
         <file>CustomTextEdit.qml</file>
         <file>CustomComboBox.qml</file>
+        <file>CustomScrollLabel.qml</file>
     </qresource>
 </RCC>
