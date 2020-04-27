@@ -1,26 +1,16 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2 as OldDialogs
+import "../../../common"
 
 Dialog {
     id: dialog
     title: qsTr("Export Audio Files")
     modal: true
 
-    OldDialogs.FileDialog {
+    FileDialog {
         id: file_dialog
-
-        property var text_field
-
-        selectFolder: true
-
-        onAccepted: {
-            if (platform.isWindows)
-                path_text_field.text = fileUrl.toString().replace("file:///",
-                                                                  "")
-            else
-                path_text_field.text = fileUrl.toString().replace("file://", "")
-        }
+        foldersOnly: true
+        textField: path_text_field
     }
 
     contentItem: Item {
@@ -54,7 +44,7 @@ Dialog {
                 text: qsTr("Set Folder")
 
                 onClicked: {
-                    file_dialog.setFolder("file://" + path_text_field.text)
+                    file_dialog.folder = path_text_field.text
                     file_dialog.open()
                 }
             }

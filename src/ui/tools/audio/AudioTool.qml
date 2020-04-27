@@ -9,6 +9,8 @@ Page {
 
     footer: AudioControlBar {}
 
+    Component.onCompleted: audio_tool.loadData()
+
     AudioCategoryView {
         id: category_view
 

@@ -13,8 +13,6 @@ ItemEditor::ItemEditor(QQmlApplicationEngine *engine, QObject *parent)
 
     itemModel = new ItemModel;
     qmlEngine->rootContext()->setContextProperty("itemEditorItemModel", itemModel);
-
-    findItems();
 }
 
 void ItemEditor::findItems()

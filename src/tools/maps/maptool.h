@@ -1,13 +1,12 @@
 #ifndef MAPVIEWERTOOL_H
 #define MAPVIEWERTOOL_H
 
-#include <QObject>
 #include <QStringList>
 #include <QQmlApplicationEngine>
-
+#include "tools/abstracttool.h"
 #include "map.h"
 
-class MapTool : public QObject
+class MapTool : public AbstractTool
 {
     Q_OBJECT
 
@@ -41,6 +40,7 @@ public slots:
     void setMarkerProperties(QString name, QString description, QString icon, QString color);
     void addMarker();
     void deleteMarker(int markerIndex);
+    void loadData() override;
 
 signals:
     void currentCategoryChanged();

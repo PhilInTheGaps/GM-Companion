@@ -10,6 +10,8 @@ Item {
     readonly property int sidebarWidth: 180
     signal openEditor
 
+    Component.onCompleted: shop_tool.loadData()
+
     CategoryList {
         id: category_list
         anchors.top: parent.top

@@ -2,6 +2,7 @@
 #include "logging.h"
 
 #include <iostream>
+#include <QTextStream>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -34,6 +35,7 @@
 #include "platformdetails.h"
 
 QFile m_logFile;
+QTextStream *m_logStream;
 
 /// Register meta types for signals and slots
 void registerMetaTypes()
@@ -73,8 +75,6 @@ void installFonts()
 
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    if (!m_logFile.open(QIODevice::Append)) return;
-
     QByteArray line = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ").toUtf8();
 
     // By type determine to what level belongs message
@@ -99,8 +99,8 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
         std::cerr << line.toStdString() << std::endl;
     }
 
-    m_logFile.write(line + "\n");
-    m_logFile.close();
+    *m_logStream << line << "\n";
+    m_logStream->flush();
 }
 
 void initLogging()
@@ -120,6 +120,14 @@ void initLogging()
         m_logFile.write("");
         m_logFile.close();
     }
+
+    // Open for writing
+    if (!m_logFile.open(QIODevice::Append | QIODevice::Text))
+    {
+        qCWarning(gmMain()) << "Error: Could not open log file at" << m_logFile.fileName();
+    }
+
+    m_logStream = new QTextStream(&m_logFile);
 
     qInstallMessageHandler(messageHandler);
 }

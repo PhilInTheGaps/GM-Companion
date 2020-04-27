@@ -16,7 +16,7 @@
 #include <QDBusMetaType>
 #endif
 
-AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), qmlEngine(engine)
+AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), qmlEngine(engine)
 {
     qDebug().noquote() << "Loading AudioTool ...";
 
@@ -86,7 +86,6 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(p
 
     // Find and load projects
     connect(&audioSaveLoad, &AudioSaveLoad::foundProjects, this, &AudioTool::onProjectsChanged);
-    audioSaveLoad.findProjects();
 }
 
 AudioTool::~AudioTool()
@@ -392,6 +391,14 @@ int AudioTool::index() const
     default:
         return 0;
     }
+}
+
+void AudioTool::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    audioSaveLoad.findProjects();
 }
 
 /**

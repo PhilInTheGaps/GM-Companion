@@ -9,6 +9,8 @@ import "../defines.js" as Defines
 Page {
     id: root
 
+    Component.onCompleted: character_tool.loadData()
+
     header: Rectangle {
         id: top_rect
         height: Defines.TOOLBAR_HEIGHT

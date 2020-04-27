@@ -1,14 +1,14 @@
 #ifndef CHARACTERTOOL_H
 #define CHARACTERTOOL_H
 
-#include <QObject>
 #include <QList>
 #include <QQmlApplicationEngine>
+#include "tools/abstracttool.h"
 #include "character.h"
 #include "viewers/characterimageviewer.h"
 #include "viewers/characterdsa5viewer.h"
 
-class CharacterTool : public QObject
+class CharacterTool : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(QStringList characters READ characters NOTIFY charactersChanged)
@@ -35,6 +35,9 @@ public:
 
     Q_INVOKABLE void setCurrentCharacter(int index);
     Q_INVOKABLE void displayActiveCharacters(bool active);
+
+public slots:
+    void loadData() override;
 
 signals:
     void charactersChanged();

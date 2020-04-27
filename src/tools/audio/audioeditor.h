@@ -1,11 +1,12 @@
 #ifndef AUDIOEDITOR_H
 #define AUDIOEDITOR_H
 
-#include <QObject>
 #include <QQmlApplicationEngine>
 #include <QStringList>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+
+#include "tools/abstracttool.h"
 #include "settings/settingsmanager.h"
 #include "audiosaveload.h"
 #include "addonelementmanager.h"
@@ -14,7 +15,7 @@
 #include "unsplash/unsplashparser.h"
 #include "../lib/qytlib/youtube.h"
 
-class AudioEditor : public QObject
+class AudioEditor : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
@@ -109,6 +110,9 @@ public:
     Q_INVOKABLE QString basePath(int type);
 
     Q_INVOKABLE void setFileIndex(int index) { m_fileIndex = index; }
+
+public slots:
+    void loadData() override;
 
 signals:
     void projectsChanged();

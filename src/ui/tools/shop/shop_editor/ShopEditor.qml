@@ -10,6 +10,8 @@ Page {
     signal backToViewer
     signal switchToItemEditor
 
+    Component.onCompleted: shop_editor.loadData()
+
     Connections {
         target: shop_editor
 

@@ -7,7 +7,7 @@
 #include <QJsonDocument>
 
 ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), qmlEngine(engine)
+    : AbstractTool(parent), qmlEngine(engine)
 {
     qCDebug(gmShopsTool()) << "Loading Shop Tool ...";
 
@@ -19,8 +19,6 @@ ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
 
     connect(this,       &ShopTool::currentShopChanged, this, &ShopTool::updateItems);
     connect(shopEditor, &ShopEditor::projectsSaved,    this, &ShopTool::shopEditorSaved);
-
-    findShops();
 }
 
 void ShopTool::findShops()
@@ -184,6 +182,14 @@ void ShopTool::setCurrentShop(int index)
         m_currentProject->currentCategory()->setCurrentShop(index);
         emit currentShopChanged();
     }
+}
+
+void ShopTool::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    findShops();
 }
 
 /**

@@ -30,6 +30,7 @@ SOURCES += main.cpp \
     services/spotify/spotifyconnectorlocal.cpp \
     services/spotify/spotifyconnectorserver.cpp \
     services/spotify/spotifyutils.cpp \
+    tools/abstracttool.cpp \
     tools/audio/audioelementimageprovider.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
@@ -108,6 +109,7 @@ HEADERS  += filesystem/fileaccess.h \
     services/spotify/spotifyconnectorserver.h \
     services/spotify/spotifyutils.h \
     settings/settings.h \
+    tools/abstracttool.h \
     tools/audio/audioelementimageprovider.h \
     tools/audio/audioicongenerator.h \
     tools/audio/audiosaveload.h \

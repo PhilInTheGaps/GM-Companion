@@ -7,7 +7,7 @@
 #include <QQmlContext>
 
 ShopEditor::ShopEditor(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), qmlEngine(engine)
+    : AbstractTool(parent), qmlEngine(engine)
 {
     qCDebug(gmShopsShopEditor()) << "Loading Shop Editor ...";
     itemEditor = new ItemEditor(engine);
@@ -21,9 +21,6 @@ ShopEditor::ShopEditor(QQmlApplicationEngine *engine, QObject *parent)
     connect(this,       &ShopEditor::shopChanged,      this, &ShopEditor::onShopChanged);
     connect(this,       &ShopEditor::itemGroupChanged, this, &ShopEditor::onItemsChanged);
     connect(itemEditor, &ItemEditor::itemsSaved,       this, &ShopEditor::itemEditorSaved);
-
-    findShops();
-    findItems();
 }
 
 void ShopEditor::findShops()
@@ -605,6 +602,16 @@ void ShopEditor::setItemCategoryEnabled(QString category, bool b)
     }
 
     emit itemGroupChanged();
+}
+
+void ShopEditor::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    findShops();
+    findItems();
+    itemEditor->findItems();
 }
 
 /**

@@ -8,7 +8,7 @@
 #include <QJsonArray>
 
 CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent)
+    : AbstractTool(parent)
 {
     qDebug() << "Loading Character Tool ...";
 
@@ -31,9 +31,6 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
 
     connect(FileManager::getInstance(), &FileManager::receivedFile,     this, &CharacterTool::receivedFile);
     connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &CharacterTool::receivedFileList);
-
-    m_loadInactiveRequestId = FileManager::getUniqueRequestId();
-    FileManager::getInstance()->getFile(m_loadInactiveRequestId, SettingsManager::getPath("characters") + "/inactive.json");
 }
 
 auto CharacterTool::characters() const -> QStringList
@@ -97,6 +94,15 @@ void CharacterTool::displayActiveCharacters(bool active)
 {
     m_active = active;
     emit charactersChanged();
+}
+
+void CharacterTool::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    m_loadInactiveRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->getFile(m_loadInactiveRequestId, SettingsManager::getPath("characters") + "/inactive.json");
 }
 
 void CharacterTool::setCurrentCategory(int index)

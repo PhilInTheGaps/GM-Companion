@@ -4,6 +4,7 @@
 #include <QStringList>
 #include <QQmlApplicationEngine>
 
+#include "tools/abstracttool.h"
 #include "audioeditor.h"
 #include "players/spotifyplayer.h"
 #include "players/musicplayer.h"
@@ -17,7 +18,7 @@
 #define DEFAULT_MUSIC_VOLUME 0.25
 #define DEFAULT_SOUND_VOLUME 0.25
 
-class AudioTool : public QObject
+class AudioTool : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
@@ -86,6 +87,9 @@ public:
     QString cover() const { return m_metaData.cover; }
     QStringList songs() const;
     int index() const;
+
+public slots:
+    void loadData() override;
 
 signals:
     void projectsChanged();

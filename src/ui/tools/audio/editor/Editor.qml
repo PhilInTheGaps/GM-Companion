@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
 
@@ -13,6 +13,8 @@ Page {
 
     signal backToTool
     signal projectAdded
+
+    Component.onCompleted: audio_editor.loadData()
 
     header: EditorHeader {}
 

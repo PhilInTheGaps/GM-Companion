@@ -15,7 +15,7 @@
 #include <QMediaPlayer>
 
 AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSaveLoad, QObject *parent) :
-    QObject(parent), qmlEngine(engine), m_audioSaveLoad(audioSaveLoad)
+    AbstractTool(parent), qmlEngine(engine), m_audioSaveLoad(audioSaveLoad)
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
 
@@ -38,8 +38,6 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSave
     connect(m_audioSaveLoad,     &AudioSaveLoad::foundProjects,        this, &AudioEditor::onFoundProjects);
     connect(this,                &AudioEditor::currentScenarioChanged, this, &AudioEditor::onCurrentScenarioChanged);
     connect(addonElementManager, &AddonElementManager::exportElements, this, &AudioEditor::onExportElements);
-
-    audioSaveLoad->findProjects(true);
 }
 
 /**
@@ -1412,6 +1410,14 @@ QString AudioEditor::basePath(int type)
 
     default: return "";
     }
+}
+
+void AudioEditor::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    m_audioSaveLoad->findProjects(true);
 }
 
 /**

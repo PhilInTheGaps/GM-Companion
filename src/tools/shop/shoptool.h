@@ -1,14 +1,13 @@
 #ifndef SHOPTOOL_H
 #define SHOPTOOL_H
 
-#include <QObject>
 #include <QStringList>
-
+#include "tools/abstracttool.h"
 #include "shopeditor.h"
 #include "shopproject.h"
 #include <QQmlApplicationEngine>
 
-class ShopTool : public QObject
+class ShopTool : public AbstractTool
 {
     Q_OBJECT
 
@@ -39,6 +38,9 @@ public:
 
     Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
     QString shopDescription() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->description(); else return ""; }
+
+public slots:
+    void loadData() override;
 
 signals:
     void projectsChanged();

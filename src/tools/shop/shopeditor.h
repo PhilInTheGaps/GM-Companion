@@ -1,12 +1,11 @@
 #ifndef SHOPEDITOR_H
 #define SHOPEDITOR_H
 
-#include <QObject>
-
+#include "tools/abstracttool.h"
 #include "itemeditor.h"
 #include <QQmlApplicationEngine>
 
-class ShopEditor : public QObject
+class ShopEditor : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectListChanged)
@@ -24,7 +23,6 @@ class ShopEditor : public QObject
 
 public:
     explicit ShopEditor(QQmlApplicationEngine *engine, QObject *parent = nullptr);
-    ItemEditor* getItemEditor() const { return itemEditor; }
 
     void findShops();
     void findItems();
@@ -63,6 +61,9 @@ public:
 
     bool isSaved() const { return m_isSaved; }
 
+public slots:
+    void loadData() override;
+
 signals:
     void projectListChanged();
     void projectChanged();
@@ -77,10 +78,10 @@ signals:
     void projectsSaved(QList<ShopProject*> projects);
 
 private:
-    ItemEditor *itemEditor;
-    QQmlApplicationEngine *qmlEngine;
-    ItemModel *itemModel;
-    ItemModel *itemModel2;
+    ItemEditor *itemEditor = nullptr;
+    QQmlApplicationEngine *qmlEngine = nullptr;
+    ItemModel *itemModel = nullptr;
+    ItemModel *itemModel2 = nullptr;
 
     QList<ShopProject*> m_projects;
     ShopProject *m_currentProject = nullptr;

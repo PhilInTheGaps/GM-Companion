@@ -91,7 +91,7 @@ void MusicPlayer::play()
 
 void MusicPlayer::startPlaying()
 {
-    qCDebug(gmAudioMusic) << "startPlaying() was called.";
+    qCDebug(gmAudioMusic) << "startPlaying()";
 
     if (currentElement && (m_playlist.length() > 0))
     {
@@ -109,8 +109,7 @@ void MusicPlayer::startPlaying()
 
 void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
 {
-    auto wasWaiting = m_waitingForUrls > 0;
-
+    qCDebug(gmAudioMusic()) << "loadSongNames()" << initial << reloadYt;
     m_songNames.clear();
 
     for (auto *s : m_playlist)
@@ -144,7 +143,7 @@ void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
 
     emit songNamesChanged();
 
-    if ((initial && !wasWaiting) || (wasWaiting && !m_waitingForUrls)) startPlaying();
+    if (initial && !m_waitingForUrls) startPlaying();
 }
 
 void MusicPlayer::applyShuffleMode(bool keepIndex, const QString& url)
@@ -495,7 +494,7 @@ void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, con
             {
                 m_waitingForUrls--;
 
-                if (m_waitingForUrls == 0) startPlaying();
+                if (!m_waitingForUrls) startPlaying();
             }
 
             return;

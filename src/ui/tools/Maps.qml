@@ -8,6 +8,8 @@ import "./maps"
 Item {
     id: maps_page
 
+    Component.onCompleted: map_tool.loadData()
+
     Connections {
         target: map_tool
 

@@ -10,7 +10,7 @@
 #include "settings/settingsmanager.h"
 #include "filesystem/filemanager.h"
 
-MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent), qmlEngine(engine)
+MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), qmlEngine(engine)
 {
     qDebug() << "Loading Map Tool ...";
 
@@ -23,8 +23,6 @@ MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent) : QObject(paren
 
     mapMarkerModel = new MapMarkerModel;
     qmlEngine->rootContext()->setContextProperty("mapMarkerModel", mapMarkerModel);
-
-    findCategories();
 }
 
 MapTool::~MapTool()
@@ -167,6 +165,14 @@ void MapTool::deleteMarker(int markerIndex)
     }
 
     qCCritical(gmMapsTool()) << "Error: Could not delete marker" << markerIndex;
+}
+
+void MapTool::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    m_isDataLoaded = true;
+    findCategories();
 }
 
 void MapTool::findCategories()
