@@ -51,6 +51,8 @@ private:
     QString m_username;
 
     void handleNetworkError(int id, QNetworkReply::NetworkError error, const QByteArray& data);
+    void handleAccessDenied(const QByteArray& data);
+
     void setDeviceActive();
     void stopLibrespot();
 

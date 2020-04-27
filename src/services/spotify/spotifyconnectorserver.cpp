@@ -32,7 +32,7 @@ void SpotifyConnectorServer::grantAccess()
 {
     if (getRefreshToken().isEmpty())
     {
-        qCDebug(gmSpotifyServer()) << "No refresh token found, initializing auth procedure ...";
+        qCInfo(gmSpotifyServer()) << "No refresh token found, initializing auth procedure ...";
         authenticate();
     }
     else
@@ -199,7 +199,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 
     if (refreshToken.isEmpty())
     {
-        qCDebug(gmSpotifyServer()) << "No refresh token found, not connected to spotify.";
+        qCInfo(gmSpotifyServer()) << "No refresh token found, not connected to spotify.";
         m_isAccessGranted = false;
         emit isConnectedChanged(false);
     }

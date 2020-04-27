@@ -212,7 +212,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, const QString& url)
 
 void MusicPlayer::loadMedia(AudioFile *file)
 {
-    qCDebug(gmAudioMusic) << "Loading media (" << file->url() << ") ...";
+    qCInfo(gmAudioMusic) << "Loading media (" << file->url() << ") ...";
 
     mediaPlayer->stop();
     spotifyPlayer->stop();

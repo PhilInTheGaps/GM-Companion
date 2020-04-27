@@ -111,9 +111,7 @@
         <file alias="names/Westeros/male.txt">addons/sifrp/names/Westeros/male.txt</file>
         <file alias="names/Westeros/surname.txt">addons/sifrp/names/Westeros/surname.txt</file>
     </qresource>
-    <qresource prefix="/ui">
-        <file>styles.ini</file>
-    </qresource>
+    <qresource prefix="/ui"/>
     <qresource prefix="/addons/audio">
         <file alias="addon.ini">addons/audio/addon.ini</file>
         <file alias="spotify.json">addons/audio/spotify.json</file>

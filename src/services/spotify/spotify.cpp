@@ -252,12 +252,35 @@ void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, cons
     switch (error)
     {
     case QNetworkReply::ContentNotFoundError:
-        qCWarning(gmSpotify) << "No active spotify device set. Will try to set the current machine.";
+        qCInfo(gmSpotify) << "No active spotify device set. Will try to set the current machine.";
         setDeviceActive();
+        break;
+
+    case QNetworkReply::ContentAccessDenied:
+        handleAccessDenied(data);
         break;
 
     default:
         qCWarning(gmSpotify) << "A network error occurred:" << id << error << data;
+    }
+}
+
+void Spotify::handleAccessDenied(const QByteArray &data)
+{
+    auto error = QJsonDocument::fromJson(data).object()["error"].toObject();
+    auto message = error["message"].toString();
+    auto reason = error["reason"].toString();
+
+    qCWarning(gmSpotify) << "Content Access Denied!" << message << reason;
+
+    if (reason == "PREMIUM_REQUIRED")
+    {
+        setConnected(false);
+        updateStatus(StatusType::Error, tr("Error: Spotify premium is required!"));
+    }
+    else
+    {
+        updateStatus(StatusType::Error, message);
     }
 }
 
