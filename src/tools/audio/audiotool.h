@@ -125,6 +125,7 @@ private:
     void sendMprisUpdateSignal(QString property, QVariant value);
 
     // Players
+    DiscordPlayer *discordPlayer = nullptr;
     MusicPlayer *musicPlayer = nullptr;
     SoundPlayerController *soundPlayer = nullptr;
     RadioPlayer *radioPlayer = nullptr;

@@ -27,4 +27,7 @@
 #define NEXTCLOUD_MAX_AUTH_POLLS    20
 #define NEXTCLOUD_DAV_ENDPOINT      "/remote.php/dav/files"
 
+/* --- DISCORD --- */
+#define DISCORD_API_ENDPOINT    "/discord"
+
 #endif // SERVICES_H

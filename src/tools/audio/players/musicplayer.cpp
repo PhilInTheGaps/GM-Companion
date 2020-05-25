@@ -15,10 +15,9 @@
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
-MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, QObject *parent) : AudioPlayer(parent)
+MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, QObject *parent)
+    : AudioPlayer(parent), spotifyPlayer(spotify), discordPlayer(discordPlayer)
 {
-    this->spotifyPlayer = spotify;
-
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
 
@@ -220,6 +219,8 @@ void MusicPlayer::loadMedia(AudioFile *file)
     emit currentIndexChanged();
     emit clearMetaData();
 
+    auto useDiscord = Discord::getInstance()->enabled();
+
     switch (m_playerType)
     {
     case 0:
@@ -231,6 +232,8 @@ void MusicPlayer::loadMedia(AudioFile *file)
     case 1:
         mediaPlayer->setMedia(QUrl(file->url()));
         mediaPlayer->play();
+        mediaPlayer->setMuted(useDiscord);
+        if (useDiscord) discordPlayer->playMusic(file->url());
         break;
 
     case 2:
@@ -240,7 +243,9 @@ void MusicPlayer::loadMedia(AudioFile *file)
 
     case 3:
         qCDebug(gmAudioMusic) << "Media is a youtube video ...";
-        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
+//        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
+        mediaPlayer->setMuted(useDiscord);
+        if (useDiscord) discordPlayer->playMusic(file->url());
         break;
 
     default:
@@ -450,9 +455,14 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
     mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
     #endif
 
+    auto useDiscord = Discord::getInstance()->enabled();
+
+    mediaPlayer->setMuted(useDiscord);
+    if (useDiscord) discordPlayer->playMusic(data);
+
     mediaPlayer->play();
 
-    if (clickingWorkaround) QTimer::singleShot(100, [ = ]() { mediaPlayer->setMuted(false); });
+    if (clickingWorkaround && !useDiscord) QTimer::singleShot(100, [ = ]() { mediaPlayer->setMuted(false); });
 
     qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
 

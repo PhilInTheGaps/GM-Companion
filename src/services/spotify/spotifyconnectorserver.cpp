@@ -131,6 +131,8 @@ void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int 
 
     m_currentRequestCount++;
     request = addAuthHeader(request);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
     auto reply = m_networkManager->post(request, data);
 
     connect(reply, &QNetworkReply::finished, [ = ]() {

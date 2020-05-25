@@ -8,6 +8,7 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
+#include "discordplayer.h"
 #include "youtube.h"
 
 class SoundPlayer : public AudioPlayer
@@ -15,11 +16,12 @@ class SoundPlayer : public AudioPlayer
     Q_OBJECT
 
 public:
-    SoundPlayer(AudioElement *element, int volume, QObject *parent = nullptr);
+    SoundPlayer(AudioElement *element, int volume, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
     ~SoundPlayer();
 
     AudioElement *element() const { return m_element; }
     void loadMedia(AudioFile *file);
+    QString fileName() const { return m_fileName; }
 
 public slots:
     void play();
@@ -35,6 +37,7 @@ public slots:
 private:
     AudioElement *m_element = nullptr;
     QMediaPlayer *m_mediaPlayer = nullptr;
+    DiscordPlayer *m_discordPlayer = nullptr;
     YouTube youtube;
 
     QList<AudioFile*> m_playlist;
@@ -63,10 +66,11 @@ class SoundPlayerController : public AudioPlayer
 {
     Q_OBJECT
 public:
-    SoundPlayerController(QObject *parent = nullptr) : AudioPlayer(parent) {}
+    SoundPlayerController(DiscordPlayer *discordPlayer, QObject *parent = nullptr)
+        : AudioPlayer(parent), m_discordPlayer(discordPlayer) {}
 
     void play(AudioElement* elements);
-    void stop(QString element) { emit stopElement(element); }
+    void stop(QString element);
 
 public slots:
     void play() { }
@@ -79,6 +83,7 @@ public slots:
     void setIndex(int index) { }
 
 private:
+    DiscordPlayer *m_discordPlayer = nullptr;
     QList<SoundPlayer*> m_players;
     int m_volume = 0;
 

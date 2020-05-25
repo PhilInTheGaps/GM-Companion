@@ -1,6 +1,6 @@
 #include "logging.h"
 
-Q_LOGGING_CATEGORY(gmMain,                   "gm.main");
+Q_LOGGING_CATEGORY(gmMain,                   "gm.main")
 
 Q_LOGGING_CATEGORY(gmAudioTool,              "gm.audio.tool")
 Q_LOGGING_CATEGORY(gmAudioEditor,            "gm.audio.editor")
@@ -12,6 +12,7 @@ Q_LOGGING_CATEGORY(gmAudioSounds,            "gm.audio.sounds")
 Q_LOGGING_CATEGORY(gmAudioIconGenerator,     "gm.audio.icon-generator")
 Q_LOGGING_CATEGORY(gmAudioSaveLoad,          "gm.audio.saveload")
 Q_LOGGING_CATEGORY(gmAudioMetaData,          "gm.audio.metadata")
+Q_LOGGING_CATEGORY(gmAudioDiscord,           "gm.audio.discord")
 
 Q_LOGGING_CATEGORY(gmMapsTool,               "gm.maps.tool")
 Q_LOGGING_CATEGORY(gmMapsMarker,             "gm.maps.marker")
@@ -43,7 +44,9 @@ Q_LOGGING_CATEGORY(gmGoogleDrive,            "gm.service.google.drive")
 Q_LOGGING_CATEGORY(gmGoogleDriveLocal,       "gm.service.google.drive.local")
 Q_LOGGING_CATEGORY(gmGoogleDriveServer,      "gm.service.google.drive.server")
 
-Q_LOGGING_CATEGORY(gmNextCloud,              "gm.service.nextcloud");
+Q_LOGGING_CATEGORY(gmNextCloud,              "gm.service.nextcloud")
+
+Q_LOGGING_CATEGORY(gmDiscord,                "gm.service.discord")
 
 Q_LOGGING_CATEGORY(gmFileManager,            "gm.files.manager")
 Q_LOGGING_CATEGORY(gmFileDialog,             "gm.files.dialog")
