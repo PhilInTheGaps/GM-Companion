@@ -8,13 +8,14 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "spotifyplayer.h"
+#include "discordplayer.h"
 #include "youtube.h"
 
 class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(SpotifyPlayer *spotifyPlayer, QObject *parent = nullptr);
+    explicit MusicPlayer(SpotifyPlayer *spotifyPlayer, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
     ~MusicPlayer() override;
 
     void play(AudioElement *element);
@@ -36,6 +37,7 @@ private:
     SpotifyPlayer *spotifyPlayer = nullptr;
     QMediaPlayer *mediaPlayer = nullptr;
     AudioElement *currentElement = nullptr;
+    DiscordPlayer *discordPlayer = nullptr;
     YouTube youtube;
 
     QList<AudioFile*> m_playlist;

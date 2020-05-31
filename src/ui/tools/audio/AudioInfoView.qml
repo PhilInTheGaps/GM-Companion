@@ -5,33 +5,44 @@ import CustomComponents 1.0
 Item {
     id: audio_info_frame
 
-    // Meta Data
-    MetaDataDisplay {
-        id: meta_data_display
+    Column {
+        id: top_item
         anchors.topMargin: 15
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-    }
 
-    Label {
-        id: playlist_menu_text
-        anchors.top: meta_data_display.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.topMargin: 15
+        // Meta Data
+        MetaDataDisplay {
+            id: meta_data_display
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
 
-        text: qsTr("Playlist")
-        wrapMode: Text.WordWrap
-        font.bold: true
-        visible: playlist_view.count > 0
+        // Spacer
+        Item {
+            width: 5
+            height: 15
+        }
+
+        // "Playlist" label
+        Label {
+            id: playlist_menu_text
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            text: qsTr("Playlist")
+            wrapMode: Text.WordWrap
+            font.bold: true
+            visible: playlist_view.count > 0
+        }
     }
 
     // Playlist
     ListView {
         id: playlist_view
-        anchors.top: playlist_menu_text.bottom
-        anchors.bottom: volume_item.visible ? volume_item.top : parent.bottom
+        anchors.top: top_item.bottom
+        anchors.bottom: bottom_item.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.topMargin: 5
@@ -84,16 +95,29 @@ Item {
         }
     }
 
-    // Volume Dialog
-    VolumeItem {
-        id: volume_item
-        anchors.bottom: parent.bottom
+    Column {
+        id: bottom_item
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
-        visible: true
+        // Discord indicator panel
+        DiscordPanel {
+            id: discord_panel
+            anchors.left: parent.left
+            anchors.right: parent.right
+        }
 
-        initialMusicVolume: audio_tool.musicVolume
-        initialSoundVolume: audio_tool.soundVolume
+        // Volume Dialog
+        VolumeItem {
+            id: volume_item
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            visible: true
+
+            initialMusicVolume: audio_tool.musicVolume
+            initialSoundVolume: audio_tool.soundVolume
+        }
     }
 }

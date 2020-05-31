@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 
 #include "audioplayer.h"
+#include "discordplayer.h"
 #include "../audioelement.h"
 #include "../metadatareader.h"
 
@@ -22,7 +23,7 @@ class SpotifyPlayer : public AudioPlayer
     Q_OBJECT
 
 public:
-    SpotifyPlayer(MetaDataReader *mDReader, QObject *parent = nullptr);
+    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
     ~SpotifyPlayer();
 
     void play(const QString& id, int offset = -1, bool playOnce = false);
@@ -44,6 +45,7 @@ public:
 private:
     MetaDataReader *metaDataReader = nullptr;
     QNetworkAccessManager *m_networkManager = nullptr;
+    DiscordPlayer *m_discordPlayer = nullptr;
     QTimer *m_timer;
     QTimer *m_periodicTimer;
 

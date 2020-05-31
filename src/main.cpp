@@ -27,6 +27,7 @@
 #include "services/spotify/spotify.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
+#include "services/discord/discord.h"
 
 #include "tools/project_converter/projectconverter.h"
 
@@ -185,6 +186,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
     engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
     engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
+    engine.rootContext()->setContextProperty("discord_service", Discord::getInstance());
 
     engine.load(source);
 

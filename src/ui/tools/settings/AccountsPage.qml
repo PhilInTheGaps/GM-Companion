@@ -22,6 +22,11 @@ Item {
             "icon": FontAwesome.cloud,
             "iconFont": FontAwesome.familySolid,
             "source": "./accounts/NextCloudAccount.qml"
+        }, {
+            "name": "Discord",
+            "icon": FontAwesome.discord,
+            "iconFont": FontAwesome.familyBrands,
+            "source": "./accounts/DiscordAccount.qml"
         }]
 
     Column {

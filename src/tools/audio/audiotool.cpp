@@ -28,12 +28,15 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
     engine->rootContext()->setContextProperty("audio_editor", editor);
     engine->addImageProvider("audioElementIcons", new AudioElementImageProvider);
 
+    // Discord
+    discordPlayer = new DiscordPlayer(this);
+
     // Spotify
-    spotifyPlayer = new SpotifyPlayer(metaDataReader);
+    spotifyPlayer = new SpotifyPlayer(metaDataReader, discordPlayer, this);
     connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
-    musicPlayer = new MusicPlayer(spotifyPlayer);
+    musicPlayer = new MusicPlayer(spotifyPlayer, discordPlayer, this);
     connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
     connect(musicPlayer, &MusicPlayer::songNamesChanged,    [ = ]() { emit songsChanged(); });
     connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
@@ -41,13 +44,13 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
     audioPlayers.append(static_cast<AudioPlayer *>(musicPlayer));
 
     // Sound Player
-    soundPlayer = new SoundPlayerController;
+    soundPlayer = new SoundPlayerController(discordPlayer, this);
     connect(soundPlayer, &SoundPlayerController::soundsChanged, this, &AudioTool::onSoundsChanged);
     soundModel = new AudioElementModel;
     qmlEngine->rootContext()->setContextProperty("soundModel", soundModel);
 
     // Radio Player
-    radioPlayer = new RadioPlayer;
+    radioPlayer = new RadioPlayer(discordPlayer, this);
     connect(radioPlayer, &RadioPlayer::startedPlaying, this, &AudioTool::onStartedPlaying);
     audioPlayers.append(radioPlayer);
 
@@ -296,6 +299,8 @@ void AudioTool::setMusicVolume(qreal volume)
         a->setLinearVolume(linearVolume);
     }
 
+    discordPlayer->setMusicVolume(logarithmicVolume);
+
     if (mprisPlayerAdaptor) mprisPlayerAdaptor->setVolume(logarithmicVolume);
 }
 
@@ -309,7 +314,9 @@ void AudioTool::setSoundVolume(qreal volume)
 
     int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
     m_soundVolume = volume;
+
     soundPlayer->setLogarithmicVolume(logarithmicVolume);
+    discordPlayer->setSoundsVolume(logarithmicVolume);
 }
 
 /**
@@ -327,6 +334,8 @@ void AudioTool::playPause()
 
         default: break;
         }
+
+        discordPlayer->play();
     }
     else
     {
@@ -338,6 +347,8 @@ void AudioTool::playPause()
 
         default: break;
         }
+
+        discordPlayer->pause();
 
         m_isPaused = true;
         emit isPausedChanged();

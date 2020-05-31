@@ -8,29 +8,31 @@
 
 #include "../audioelement.h"
 #include "audioplayer.h"
+#include "discordplayer.h"
 
 class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    RadioPlayer(QObject *parent = nullptr);
+    RadioPlayer(DiscordPlayer *m_discordPlayer, QObject *parent = nullptr);
     ~RadioPlayer();
 
     void play(AudioElement *element);
     void play();
     void pause();
     void stop();
-    void setLogarithmicVolume(int volume) { player->setVolume(volume); }
+    void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
     void setLinearVolume(int volume) { }
     void again() { }
     void next() { }
     void setIndex(int index) {}
 
 private:
-    QMediaPlayer *player = nullptr;
-    QMediaPlaylist *playlist = nullptr;
+    QMediaPlayer *m_mediaPlayer = nullptr;
+    QMediaPlaylist *m_playlist = nullptr;
+    DiscordPlayer *m_discordPlayer = nullptr;
 
-    AudioElement *currentElement = nullptr;
+    AudioElement *m_currentElement = nullptr;
     int m_fileRequestId = -1;
 
     QBuffer m_mediaBuffer;

@@ -22,6 +22,7 @@ SOURCES += main.cpp \
     filesystem/filemanager.cpp \
     filesystem/googledrivefile.cpp \
     logging.cpp \
+    services/discord/discord.cpp \
     services/google/googledrive.cpp \
     services/google/googledriveconnectorlocal.cpp \
     services/nextcloud/nextcloud.cpp \
@@ -35,6 +36,7 @@ SOURCES += main.cpp \
     tools/audio/audioelementimageprovider.cpp \
     tools/audio/audioicongenerator.cpp \
     tools/audio/audiosaveload.cpp \
+    tools/audio/players/discordplayer.cpp \
     tools/audio/players/spotifyplayer.cpp \
     tools/audio/unsplash/unsplashimage.cpp \
     tools/audio/unsplash/unsplashparser.cpp \
@@ -106,6 +108,7 @@ HEADERS  += filesystem/fileaccess.h \
     filesystem/filemanager.h \
     filesystem/googledrivefile.h \
     logging.h \
+    services/discord/discord.h \
     services/google/googledrive.h \
     services/google/googledriveconnectorlocal.h \
     services/nextcloud/nextcloud.h \
@@ -122,6 +125,7 @@ HEADERS  += filesystem/fileaccess.h \
     tools/audio/audioelementimageprovider.h \
     tools/audio/audioicongenerator.h \
     tools/audio/audiosaveload.h \
+    tools/audio/players/discordplayer.h \
     tools/audio/players/spotifyplayer.h \
     tools/audio/unsplash/unsplashimage.h \
     tools/audio/unsplash/unsplashparser.h \

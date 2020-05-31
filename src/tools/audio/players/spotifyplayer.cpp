@@ -4,16 +4,17 @@
 #include "services/spotify/spotifyutils.h"
 #include "o0globals.h"
 #include "utils/utils.h"
+#include "settings/settingsmanager.h"
 
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 
-SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, QObject *parent) : AudioPlayer(parent)
+SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent)
+    : AudioPlayer(parent), metaDataReader(mDReader), m_discordPlayer(discordPlayer)
 {
     qDebug() << "Loading Spotify Tool ...";
 
-    metaDataReader   = mDReader;
     m_networkManager = new QNetworkAccessManager;
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
@@ -83,7 +84,12 @@ void SpotifyPlayer::play(const QString& id, int offset, bool playOnce)
 
         QJsonDocument d(jo);
 
-        setLogarithmicVolume(m_volume);
+        // Is discord mode enabled?
+        if (Discord::getInstance()->enabled())
+        {
+            m_discordPlayer->playMusic(id);
+        }
+
         QUrl url("https://api.spotify.com/v1/me/player/play");
         Spotify::getInstance()->put(url, d.toJson(QJsonDocument::JsonFormat::Compact));
 
@@ -191,8 +197,11 @@ void SpotifyPlayer::again()
 void SpotifyPlayer::setLinearVolume(int volume)
 {
     qCDebug(gmAudioSpotify) << "Setting volume:" << volume;
-    Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" +
-                                     QString::number(volume)));
+
+    auto useDiscod = Discord::getInstance()->enabled();
+
+    Spotify::getInstance()->put(QUrl("https://api.spotify.com/v1/me/player/volume?volume_percent=" + QString::number(useDiscod ? 0: volume)));
+
     m_volume = volume;
 }
 
