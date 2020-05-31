@@ -116,5 +116,12 @@
         <file>tools/settings/accounts/GoogleDriveAccount.qml</file>
         <file>tools/settings/accounts/NextCloudAccount.qml</file>
         <file>tools/settings/accounts/StatusBar.qml</file>
+        <file>tools/notes/NotesControlView.qml</file>
+        <file>tools/notes/NotesControlBar.qml</file>
+        <file>tools/notes/NotesPage.qml</file>
+        <file>common/TreeView.qml</file>
+        <file>common/TreeViewItem.qml</file>
+        <file>tools/notes/SavePageDialog.qml</file>
+        <file>tools/notes/InsertHeaderDialog.qml</file>
     </qresource>
 </RCC>

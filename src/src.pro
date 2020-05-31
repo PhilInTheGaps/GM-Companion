@@ -1,4 +1,4 @@
-QT       += core multimedia network quick qml dbus
+QT       += core gui multimedia network quick qml dbus
 
 include(../lib/fontawesome.pri/fontawesome.pri)
 include(../lib/o2/src/src.pri)
@@ -14,6 +14,7 @@ CONFIG += c++14 qtquickcompiler
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 SOURCES += main.cpp \
+    models/treeitem.cpp \
     filesystem/fileaccessgoogledrive.cpp \
     filesystem/fileaccesslocal.cpp \
     filesystem/fileaccessnextcloud.cpp \
@@ -39,7 +40,13 @@ SOURCES += main.cpp \
     tools/audio/unsplash/unsplashparser.cpp \
     tools/maps/mapmarker.cpp \
     tools/dicetool.cpp \
-    tools/notestool.cpp \
+    tools/notes/htmlgenerator.cpp \
+    tools/notes/markdownhighlighter.cpp \
+    tools/notes/notebook.cpp \
+    tools/notes/notebookchapter.cpp \
+    tools/notes/notebookpage.cpp \
+    tools/notes/notessaveload.cpp \
+    tools/notes/notestool.cpp \
     tools/convertertool.cpp \
     tools/generators/namegenerator.cpp \
     tools/project_converter/projectconverter.cpp \
@@ -80,6 +87,7 @@ SOURCES += main.cpp \
     tools/characters/viewers/characterdsa5viewer.cpp \
     tools/characters/viewers/dsa5/dsa5listitem.cpp \
     utils/fileutils.cpp \
+    utils/markdownutils.cpp \
     utils/networkutils.cpp \
     utils/processinfo.cpp \
     utils/utils.cpp
@@ -90,6 +98,7 @@ SOURCES += $$files(*.qml)
 }
 
 HEADERS  += filesystem/fileaccess.h \
+    models/treeitem.h \
     filesystem/fileaccessgoogledrive.h \
     filesystem/fileaccesslocal.h \
     filesystem/fileaccessnextcloud.h \
@@ -117,13 +126,20 @@ HEADERS  += filesystem/fileaccess.h \
     tools/audio/unsplash/unsplashimage.h \
     tools/audio/unsplash/unsplashparser.h \
     tools/maps/mapmarker.h \
+    tools/notes/htmlgenerator.h \
+    tools/notes/markdownhighlighter.h \
+    tools/notes/notebook.h \
+    tools/notes/notebookchapter.h \
+    tools/notes/notebookpage.h \
+    tools/notes/notessaveload.h \
+    tools/notes/notestool.h \
     utils/fileutils.h \
+    utils/markdownutils.h \
     utils/networkutils.h \
     utils/processinfo.h \
     utils/utils.h \
     version.h \
     tools/dicetool.h \
-    tools/notestool.h \
     tools/convertertool.h \
     tools/project_converter/projectconverter.h \
     tools/audio/audiotool.h \
@@ -166,6 +182,8 @@ HEADERS  += filesystem/fileaccess.h \
     tools/characters/viewers/dsa5/dsa5listitem.h
 #    tools/addons/sifrp.h \
 
+INCLUDEPATH += $$PWD/../lib/discount
+DEPENDPATH  += $$PWD/../lib/discount
 
 RC_FILE = gm-companion.rc
 
@@ -200,7 +218,7 @@ QML_IMPORT_PATH += $$PWD/ui $$PWD/../lib/fontawesome.pri
     INSTALLS += icons
     INSTALLS += appdata
 
-    LIBS += -L/usr/local/lib -ltag -lqt5keychain -lpoppler-qt5
+    LIBS += -L/usr/local/lib -ltag -lqt5keychain -lpoppler-qt5 -lcmark-gfm -lcmark-gfm-extensions
     INCLUDEPATH += /usr/local/include
 }
 

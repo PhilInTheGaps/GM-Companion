@@ -10,3 +10,4 @@ CustomToolBar           1.0 CustomToolBar.qml
 CustomToolBarComboBox   1.0 CustomToolBarComboBox.qml
 CustomToolBarButton     1.0 CustomToolBarButton.qml
 CustomScrollLabel       1.0 CustomScrollLabel.qml
+CustomMenuItem          1.0 CustomMenuItem.qml

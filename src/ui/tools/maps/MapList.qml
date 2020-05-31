@@ -7,14 +7,21 @@ Rectangle {
 
     color: palette.dark
 
-    ScrollView {
-        id: scroll_view
+    Flickable {
+        id: flickable
         anchors.fill: parent
         anchors.margins: 5
         clip: true
+        contentHeight: flickable_column.height
         contentWidth: -1
 
+        ScrollBar.vertical: CustomScrollBar {
+            anchors.right: parent.right
+            visible: flickable.contentHeight > flickable.height
+        }
+
         Column {
+            id: flickable_column
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -35,7 +42,6 @@ Rectangle {
 
                         onClicked: {
                             map_tool.setCurrentCategory(index)
-                            //                            column.visible = !column.visible
                         }
                     }
 

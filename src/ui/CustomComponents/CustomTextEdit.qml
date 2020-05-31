@@ -7,12 +7,19 @@ Item {
     width: 300
     height: 200
 
+    property alias edit: edit
     property alias text: edit.text
     property alias placeholderText: edit.placeholderText
     property alias font: edit.font
     property alias readOnly: edit.readOnly
+    property alias background: background
+    property alias textDocument: edit.textDocument
+
+    signal cursorPositionChanged(int position)
+    signal linkClicked(string link)
 
     Rectangle {
+        id: background
         anchors.fill: flick
         color: palette.dark
         border.color: root.enabled ? palette.button : palette.dark
@@ -50,11 +57,20 @@ Item {
             focus: true
             wrapMode: TextEdit.Wrap
             selectByMouse: true
+            hoverEnabled: true
             padding: 5
 
             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
+            onCursorPositionChanged: root.cursorPositionChanged(cursorPosition)
+            onLinkActivated: root.linkClicked(link)
 
             background: Item {}
+
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                cursorShape: edit.readOnly ? (edit.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor) : Qt.IBeamCursor
+            }
         }
     }
 }

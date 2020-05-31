@@ -29,7 +29,7 @@ GoogleDriveFile::~GoogleDriveFile()
         }
     }
 
-    for (auto *child : m_children)
+    for (auto *child : qAsConst(m_children))
     {
         delete child;
     }
@@ -78,7 +78,7 @@ auto GoogleDriveFile::getFile(QStringList path)->GoogleDriveFileReply
     // Find file in children
     QString wanted = path.first();
 
-    for (auto *child : m_children)
+    for (auto *child : qAsConst(m_children))
     {
         if (!child) continue;
 
@@ -109,7 +109,7 @@ auto GoogleDriveFile::getFile(QStringList path)->GoogleDriveFileReply
 
 auto GoogleDriveFile::containsChild(const QString& name)->bool
 {
-    for (auto *child : m_children)
+    for (auto *child : qAsConst(m_children))
     {
         if (!child) continue;
 

@@ -55,7 +55,7 @@ void FileAccessNextCloud::getFiles(int requestId, const QString& directory, cons
 
         auto *fileRequests = new QMap<int, QString>;
 
-        for (auto fileName : fileNames)
+        for (const auto &fileName : fileNames)
         {
             if (!Utils::hasWildcardMatch(fileName, fileEnding)) continue;
 
@@ -234,7 +234,7 @@ void FileAccessNextCloud::checkIfFilesExist(int requestId, QStringList files)
     auto *missing     = new QStringList;
     auto *filesLeft   = new QStringList(files);
 
-    for (auto file : files)
+    for (const auto &file : qAsConst(files))
     {
         auto *reply = NextCloud::getInstance()->sendDavRequest("PROPFIND", file, "");
         connect(reply, &QNetworkReply::finished, [=](){

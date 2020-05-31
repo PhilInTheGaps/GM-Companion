@@ -120,4 +120,7 @@
         <file alias="auth-success.html">services/auth-success.html</file>
         <file alias="nextcloud/getFileList.xml">services/nextcloud/getFileList.xml</file>
     </qresource>
+    <qresource prefix="/notes">
+        <file alias="style.css">notes/style.css</file>
+    </qresource>
 </RCC>

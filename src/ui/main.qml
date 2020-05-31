@@ -20,6 +20,7 @@ ApplicationWindow {
 
     signal zoomIn
     signal zoomOut
+    signal save
 
     readonly property var tools: [{
             "name": qsTr("Audio"),
@@ -157,7 +158,9 @@ ApplicationWindow {
             iconSource: "../icons/menu/settings.png"
             faIcon: FontAwesome.cog
 
-            onClicked: loader.setSource("tools/Settings.qml")
+            onClicked: {
+                loader.setSource("tools/Settings.qml")
+            }
         }
     }
 
@@ -174,6 +177,10 @@ ApplicationWindow {
         onLoaded: splash.close()
     }
 
+
+    /**
+     * Keyboard Shortcuts
+     */
     Shortcut {
         sequences: [StandardKey.ZoomIn]
         onActivated: zoomIn()
@@ -183,6 +190,12 @@ ApplicationWindow {
     Shortcut {
         sequences: [StandardKey.ZoomOut]
         onActivated: zoomOut()
+        context: Qt.ApplicationShortcut
+    }
+
+    Shortcut {
+        sequences: [StandardKey.Save]
+        onActivated: save()
         context: Qt.ApplicationShortcut
     }
 }

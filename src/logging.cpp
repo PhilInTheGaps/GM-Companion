@@ -30,6 +30,7 @@ Q_LOGGING_CATEGORY(gmShopsShopEditor,        "gm.shops.editor")
 Q_LOGGING_CATEGORY(gmShopsShopProject,       "gm.shops.project")
 
 Q_LOGGING_CATEGORY(gmNotesTool,              "gm.notes.tool")
+Q_LOGGING_CATEGORY(gmNotesSaveLoad,          "gm.notes.saveload")
 
 Q_LOGGING_CATEGORY(gmRESTService,            "gm.service.rest")
 Q_LOGGING_CATEGORY(gmRESTServiceLocal,       "gm.service.rest.local")

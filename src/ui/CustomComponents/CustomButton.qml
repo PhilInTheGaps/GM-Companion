@@ -9,20 +9,28 @@ Control {
     property alias mainRow: main_row
     property alias textItem: text_item
     property alias iconItem: icon_item
+    property alias mouseArea: mouse_area
 
+    // Content
     property string buttonText: ""
     property string iconText: ""
+    property string toolTipText: ""
     property var iconFont: FontAwesome.familySolid
+
+    // Visual options
     property int pointSize: 12
     readonly property var textColor: mouse_area.pressed ? palette.mid : (mouse_area.containsMouse ? palette.light : palette.buttonText)
     property var iconColor: undefined
-    property var backgroundColor: undefined
+    property var backgroundColor: palette.dark
+    property bool transparentBackground: false
+
+    // Layout
     property bool usesFixedWidth: true
     property bool enableBold: true
     property bool centering: false
-    property bool transparentBackground: false
 
     signal clicked(string info)
+    signal rightClicked(string info)
 
     padding: 5
     height: Defines.TOOLBAR_HEIGHT
@@ -42,7 +50,7 @@ Control {
 
         Label {
             id: icon_item
-            visible: text !== ""
+            visible: text.length
             text: root.iconText
             color: iconColor ? iconColor : root.textColor
 
@@ -58,7 +66,7 @@ Control {
 
         Label {
             id: text_item
-            visible: text !== ""
+            visible: text.length
             text: root.buttonText
             color: root.textColor
 
@@ -77,15 +85,27 @@ Control {
 
     background: Rectangle {
         visible: !transparentBackground
-        color: root.backgroundColor ? root.backgroundColor : palette.dark
+        color: root.backgroundColor
         border.color: palette.button
         border.width: mouse_area.containsMouse ? 1 : 0
     }
+
+    ToolTip.text: root.toolTipText
+    ToolTip.visible: root.toolTipText.length && mouse_area.containsMouse
 
     MouseArea {
         id: mouse_area
         anchors.fill: parent
         hoverEnabled: true
-        onClicked: root.clicked(parent.text)
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+        onClicked: {
+            if (mouse.button === Qt.LeftButton) {
+                root.clicked(root.buttonText)
+            } else if (mouse.button === Qt.RightButton) {
+                root.rightClicked(root.buttonText)
+            }
+        }
     }
 }

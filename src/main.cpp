@@ -19,7 +19,7 @@
 #include "tools/shop/shoptool.h"
 #include "tools/characters/charactertool.h"
 #include "tools/generators/namegenerator.h"
-#include "tools/notestool.h"
+#include "tools/notes/notestool.h"
 #include "tools/convertertool.h"
 #include "filesystem/filemanager.h"
 #include "filesystem/filedialog.h"
@@ -30,7 +30,6 @@
 
 #include "tools/project_converter/projectconverter.h"
 
-#include "managers/addonmanager.h"
 #include "managers/updatemanager.h"
 #include "platformdetails.h"
 
@@ -170,7 +169,7 @@ int main(int argc, char *argv[])
     MapTool   mapTool(&engine);
     DiceTool  diceTool(&engine);
     CombatTracker combatTracker(&engine);
-    ShopTool shopTool(&engine);
+    ShopTool      shopTool(&engine);
     CharacterTool characterTool(&engine);
     NameGenerator nameGenerator(&engine);
     NotesTool     notesTool(&engine);
@@ -182,15 +181,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
 
-    //    engine.rootContext()->setContextProperty("addon_manager", new
-    // AddonManager);
-
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
     engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
     engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
-
-    //    NextCloud::getInstance()->grant();
 
     engine.load(source);
 
