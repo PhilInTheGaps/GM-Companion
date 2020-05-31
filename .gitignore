@@ -5,6 +5,7 @@
 qpm.json
 
 *.snap
+*.vscode
 
 # C++ objects and libs
 

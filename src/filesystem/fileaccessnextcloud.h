@@ -12,13 +12,16 @@ class FileAccessNextCloud : public FileAccess
 public:
     explicit FileAccessNextCloud(QObject *parent = nullptr);
 
-    void getFile(const int& requestId, const QString& filePath) override;
-    void getFiles(const int& requestId, const QString& directory, const QString& fileEnding) override;
-    void getFileList(const int& requestId, const QString& directory, const bool& folders) override;
-    void saveFile(const QString& filePath, const QByteArray& data) override;
-    void saveFileDeleteOld(const QString& newFile, const QByteArray& data, const QString& oldFile) override;
-    void deleteFile(const QString& filePath) override;
-    void checkIfFilesExist(const int& requestId, QStringList files) override;
+    void getFile(int requestId, const QString &filePath) override;
+    void getFiles(int requestId, const QString &directory, const QString &fileEnding) override;
+    void getFileList(int requestId, const QString &directory, bool folders) override;
+
+    void saveFile(const QString &filePath, const QByteArray &data) override;
+    void renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data) override;
+    void renameFolder(const QString &newFolder, const QString &oldFolder) override;
+    void deleteFile(const QString &filePath) override;
+    void checkIfFilesExist(int requestId, QStringList files) override;
+    void createFolder(const QString &folderPath) override;
 
 private:
     static QString fileNameFromHref(QString href);

@@ -6,22 +6,7 @@
 #include <QDateTime>
 #include <QTemporaryFile>
 
-enum GoogleDriveFileStatus {
-    Valid,
-    Invalid,
-    NotFound,
-    OtherError,
-    Refreshing
-};
-
-class GoogleDriveFile;
-
-struct GoogleDriveFileReply {
-    GoogleDriveFileReply(GoogleDriveFile *file, GoogleDriveFileStatus status, QString nextFile = "") : file(file), status(status), nextFile(nextFile) {}
-    GoogleDriveFile *file;
-    GoogleDriveFileStatus status;
-    QString nextFile;
-};
+struct GoogleDriveFileReply;
 
 class GoogleDriveFile : public QObject
 {
@@ -57,12 +42,29 @@ public:
     void writeData(const QByteArray& data);
     QByteArray readData();
 
+    enum GoogleDriveFileStatus {
+        Valid,
+        Invalid,
+        NotFound,
+        OtherError,
+        Refreshing
+    };
+
 private:
     QString m_name, m_id;
     bool m_isFolder = false, m_isRefreshing = false, m_hasData = false;
     QList<GoogleDriveFile*> m_children;
     QDateTime m_refreshTime;
     QTemporaryFile m_file;
+};
+
+struct GoogleDriveFileReply {
+    GoogleDriveFileReply(GoogleDriveFile *file, GoogleDriveFile::GoogleDriveFileStatus status,
+                         QString nextFile = "") : file(file), status(status), nextFile(nextFile) {}
+
+    GoogleDriveFile *file;
+    GoogleDriveFile::GoogleDriveFileStatus status;
+    QString nextFile;
 };
 
 #endif // GOOGLEDRIVEFILE_H

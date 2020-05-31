@@ -22,7 +22,10 @@ public:
     QString serverUrl() const { return m_serverUrl; }
     void setServerUrl(const QString& url) { m_serverUrl = url; emit serverUrlChanged(); }
 
-    QNetworkReply *sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data);
+    QNetworkReply *sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data,
+                                  QList<QPair<QByteArray, QByteArray> > headers = {});
+
+    QString getPathUrl(const QString &path);
 
 public slots:
     void connectService() override;

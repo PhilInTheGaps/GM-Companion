@@ -47,18 +47,34 @@ NextCloud::~NextCloud()
     m_networkManager->deleteLater();
 }
 
-QNetworkReply * NextCloud::sendDavRequest(const QByteArray& method, const QString& path, const QByteArray& data)
+QNetworkReply * NextCloud::sendDavRequest(const QByteArray& method, const QString& path,
+                                          const QByteArray& data, QList<QPair<QByteArray, QByteArray>> headers)
 {
     if (!m_connected) connectService();
 
-    auto url     = m_serverUrl + NEXTCLOUD_DAV_ENDPOINT + "/" + m_loginName + path;
+    auto url     = getPathUrl(path);
     auto request = QNetworkRequest(QUrl(url));
 
     qCDebug(gmNextCloud()) << "Sending DAV request (" << method << ") to" << url;
 
     request.setRawHeader("Authorization", NetworkUtils::basicAuthHeader(m_loginName, m_appPassword));
 
+    if (!headers.isEmpty())
+    {
+        for (const auto &pair : headers)
+        {
+            request.setRawHeader(pair.first, pair.second);
+        }
+    }
+
+//    qCDebug(gmNextCloud()) << request;
+
     return m_networkManager->sendCustomRequest(request, method, data);
+}
+
+QString NextCloud::getPathUrl(const QString &path)
+{
+    return m_serverUrl + NEXTCLOUD_DAV_ENDPOINT + "/" + m_loginName + path;
 }
 
 void NextCloud::connectService()

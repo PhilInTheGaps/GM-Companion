@@ -252,11 +252,13 @@ void RESTServiceConnectorLocal::customRequest(const QNetworkRequest& request, co
     connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             requestor, &O2Requestor::deleteLater);
 
+    qCDebug(m_loggingCategory) << "Sending custom request:" << verb, request.url();
+
     auto internalId = requestor->customRequest(request, verb, data);
 
     if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
 
-    m_requestMap[internalId] = RequestContainer(requestId, request, CUSTOM, data);
+    m_requestMap[internalId] = RequestContainer(requestId, request, CUSTOM, data, verb);
     m_currentRequestCount++;
 }
 

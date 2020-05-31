@@ -109,7 +109,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
     {
         project->setWasRenamed(false);
         auto filePathOld = SettingsManager::getPath("audio") + "/" + project->oldName() + ".audio";
-        FileManager::getInstance()->saveFileDeleteOld(filePath, data, filePathOld);
+        FileManager::getInstance()->renameFile(filePath, filePathOld, data);
     }
 
     // Save file

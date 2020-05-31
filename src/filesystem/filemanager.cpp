@@ -1,6 +1,4 @@
 #include "filemanager.h"
-
-#include <utility>
 #include "settings/settingsmanager.h"
 #include "fileaccessnextcloud.h"
 #include "fileaccessgoogledrive.h"
@@ -21,39 +19,49 @@ FileManager::~FileManager()
     instanceFlag = false;
 }
 
-void FileManager::getFile(int requestId, QString filePath)
+void FileManager::getFile(int requestId, const QString &filePath)
 {
-    m_fileAccess->getFile(requestId, std::move(filePath));
+    m_fileAccess->getFile(requestId, filePath);
 }
 
-void FileManager::getFiles(int requestId, QString directory, QString fileEnding)
+void FileManager::getFiles(int requestId, const QString &directory, const QString &fileEnding)
 {
-    m_fileAccess->getFiles(requestId, std::move(directory), std::move(fileEnding));
+    m_fileAccess->getFiles(requestId, directory, fileEnding);
 }
 
-void FileManager::getFileList(int requestId, QString directory, bool folders)
+void FileManager::getFileList(int requestId, const QString &directory, bool folders)
 {
     m_fileAccess->getFileList(requestId, std::move(directory), folders);
 }
 
-void FileManager::saveFile(QString filePath, QByteArray data)
+void FileManager::saveFile(const QString filePath, const QByteArray &data)
 {
-    m_fileAccess->saveFile(std::move(filePath), std::move(data));
+    m_fileAccess->saveFile(filePath, data);
 }
 
-void FileManager::saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile)
+void FileManager::renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data)
 {
-    m_fileAccess->saveFileDeleteOld(std::move(newFile), std::move(data), std::move(oldFile));
+    m_fileAccess->renameFile(newFile, oldFile, data);
 }
 
-void FileManager::deleteFile(QString filePath)
+void FileManager::renameFolder(const QString &newFolder, const QString &oldFolder)
 {
-    m_fileAccess->deleteFile(std::move(filePath));
+    m_fileAccess->renameFolder(newFolder, oldFolder);
 }
 
-void FileManager::checkIfFilesExist(int requestId, QStringList files)
+void FileManager::deleteFile(const QString &filePath)
 {
-    m_fileAccess->checkIfFilesExist(requestId, std::move(files));
+    m_fileAccess->deleteFile(filePath);
+}
+
+void FileManager::checkIfFilesExist(int requestId, const QStringList &files)
+{
+    m_fileAccess->checkIfFilesExist(requestId, files);
+}
+
+void FileManager::createFolder(const QString &folderPath)
+{
+    m_fileAccess->createFolder(folderPath);
 }
 
 auto FileManager::getUniqueRequestId()->int

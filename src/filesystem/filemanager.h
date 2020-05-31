@@ -16,14 +16,16 @@ public:
 public slots:
     void updateFileAccess();
 
-    void getFile(int requestId, QString filePath);
-    void getFiles(int requestId, QString directory, QString fileEnding = "");
-    void getFileList(int requestId, QString directory, bool folders = false);
+    void getFile(int requestId, const QString &filePath);
+    void getFiles(int requestId, const QString &directory, const QString &fileEnding = "");
+    void getFileList(int requestId, const QString &directory, bool folders = false);
 
-    void saveFile(QString filePath, QByteArray data);
-    void saveFileDeleteOld(QString newFile, QByteArray data, QString oldFile);
-    void deleteFile(QString filePath);
-    void checkIfFilesExist(int requestId, QStringList files);
+    void saveFile(QString filePath, const QByteArray &data);
+    void renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data = "");
+    void renameFolder(const QString& newFolder, const QString& oldFolder);
+    void deleteFile(const QString &filePath);
+    void checkIfFilesExist(int requestId, const QStringList &files);
+    void createFolder(const QString &folderPath);
 
 private:
     explicit FileManager(QObject *parent = nullptr);
