@@ -2,8 +2,6 @@
 #define FILEACCESSGOOGLEDRIVE_H
 
 #include "fileaccess.h"
-#include <QObject>
-
 #include "services/google/googledrive.h"
 #include "filesystem/googledrivefile.h"
 

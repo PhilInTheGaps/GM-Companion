@@ -1,6 +1,7 @@
 #ifndef FILEACCESS_H
 #define FILEACCESS_H
 
+#include <QQmlContext>
 #include <QObject>
 
 class FileAccess : public QObject

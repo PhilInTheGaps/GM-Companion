@@ -1,7 +1,6 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
-#include <QObject>
 #include "fileaccess.h"
 
 class FileManager : public QObject

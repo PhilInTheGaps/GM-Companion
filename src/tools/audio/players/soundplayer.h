@@ -9,14 +9,15 @@
 #include "../audioelement.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
-#include "youtube.h"
+#include <qytlib/videos/videoclient.h>
 
 class SoundPlayer : public AudioPlayer
 {
     Q_OBJECT
 
 public:
-    SoundPlayer(AudioElement *element, int volume, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
+    SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager,
+                DiscordPlayer *discordPlayer, QObject *parent = nullptr);
     ~SoundPlayer();
 
     AudioElement *element() const { return m_element; }
@@ -38,7 +39,8 @@ private:
     AudioElement *m_element = nullptr;
     QMediaPlayer *m_mediaPlayer = nullptr;
     DiscordPlayer *m_discordPlayer = nullptr;
-    YouTube youtube;
+    YouTube::Videos::VideoClient *m_videoClient = nullptr;
+    YouTube::Videos::Streams::StreamManifest *m_streamManifest = nullptr;
 
     QList<AudioFile*> m_playlist;
     int m_playlistIndex = 0;
@@ -54,8 +56,8 @@ private:
 private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerError(QMediaPlayer::Error error);
-    void onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int requestId);
     void onFileReceived(int requestId, const QByteArray& data);
+    void onStreamManifestReceived();
 
 signals:
     void playerStopped(SoundPlayer *player);
@@ -67,7 +69,11 @@ class SoundPlayerController : public AudioPlayer
     Q_OBJECT
 public:
     SoundPlayerController(DiscordPlayer *discordPlayer, QObject *parent = nullptr)
-        : AudioPlayer(parent), m_discordPlayer(discordPlayer) {}
+        : AudioPlayer(parent), m_discordPlayer(discordPlayer),
+          m_networkManager(new QNetworkAccessManager(this))
+    {
+        m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    }
 
     void play(AudioElement* elements);
     void stop(QString element);
@@ -84,6 +90,7 @@ public slots:
 
 private:
     DiscordPlayer *m_discordPlayer = nullptr;
+    QNetworkAccessManager *m_networkManager = nullptr;
     QList<SoundPlayer*> m_players;
     int m_volume = 0;
 

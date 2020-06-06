@@ -4,8 +4,6 @@
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
 
-#include "youtubeutils.h"
-#include <internal/heuristics.h>
 #include <algorithm>
 #include <random>
 #include <cstdlib>
@@ -13,6 +11,8 @@
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+
+using namespace YouTube::Videos;
 
 /**
  * @brief Play a sound element
@@ -26,7 +26,7 @@ void SoundPlayerController::play(AudioElement *element)
 
     if (!isSoundPlaying(element))
     {
-        auto *player = new SoundPlayer(element, m_volume, m_discordPlayer, this);
+        auto *player = new SoundPlayer(element, m_volume, m_networkManager, m_discordPlayer, this);
 
         connect(player, &SoundPlayer::playerStopped,         this,   &SoundPlayerController::onPlayerStopped);
         connect(this,   &SoundPlayerController::setVolume,   player, &SoundPlayer::setLogarithmicVolume);
@@ -112,7 +112,7 @@ void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
     emit soundsChanged(elements());
 }
 
-SoundPlayer::SoundPlayer(AudioElement *element, int volume, DiscordPlayer *discordPlayer, QObject *parent) :
+SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager, DiscordPlayer *discordPlayer, QObject *parent) :
     AudioPlayer(parent), m_element(element), m_discordPlayer(discordPlayer)
 {
     if (!element)
@@ -124,10 +124,10 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, DiscordPlayer *disco
     m_mediaPlayer = new QMediaPlayer;
     m_mediaPlayer->setObjectName(element->name());
     m_mediaPlayer->setVolume(volume);
+    m_videoClient = new YouTube::Videos::VideoClient(networkManager, this);
 
     connect(m_mediaPlayer,              &QMediaPlayer::mediaStatusChanged,                        this, &SoundPlayer::onMediaStatusChanged);
     connect(m_mediaPlayer,              QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &SoundPlayer::onMediaPlayerError);
-    connect(&youtube,                   &YouTube::receivedVideoMediaStreamInfos,                  this, &SoundPlayer::onReceivedAudioStreamInfo);
     connect(FileManager::getInstance(), &FileManager::receivedFile,                               this, &SoundPlayer::onFileReceived);
 
     m_playlist = element->files();
@@ -149,25 +149,32 @@ void SoundPlayer::loadMedia(AudioFile *file)
     switch (file->source())
     {
     case 0:
+    {
         m_fileRequestId = FileManager::getUniqueRequestId();
         m_fileName = file->url();
         FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("sounds") + file->url());
         break;
+    }
 
     case 1:
+    {
         m_mediaPlayer->setMedia(QUrl(file->url()));
         m_mediaPlayer->play();
         m_mediaPlayer->setMuted(useDiscord);
         m_fileName = file->url();
         if (useDiscord) m_discordPlayer->playSound(file->url());
         break;
+    }
 
     case 3:
-//        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
+    {
+        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
+        connect(m_streamManifest, &Streams::StreamManifest::ready, this, &SoundPlayer::onStreamManifestReceived);
         m_mediaPlayer->setMuted(useDiscord);
         m_fileName = file->url();
         if (useDiscord) m_discordPlayer->playSound(file->url());
         break;
+    }
 
     default:
         qCWarning(gmAudioSounds()) << "Media type" << file->source() << "is currently not supported.";
@@ -292,36 +299,6 @@ void SoundPlayer::onMediaPlayerError(QMediaPlayer::Error error)
     }
 }
 
-void SoundPlayer::onReceivedAudioStreamInfo(MediaStreamInfoSet *infos, int requestId)
-{
-    if (m_youtubeRequestId != requestId) return;
-
-    QUrl   tempUrl;
-    qint64 tempBitrate = 0;
-
-    for (auto *info : infos->audio())
-    {
-        auto encoding = Heuristics::audioEncodingToString(info->audioEncoding());
-        qCDebug(gmAudioSounds()) << info->audioEncoding() << info->bitrate()
-                                 << QMediaPlayer::hasSupport("audio/" + encoding, { encoding });
-
-        if ((QMediaPlayer::hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
-        {
-            tempUrl     = info->url();
-            tempBitrate = info->bitrate();
-        }
-    }
-
-    m_mediaPlayer->setMedia(tempUrl);
-
-    if (m_mediaPlayer->state() != QMediaPlayer::PlayingState)
-    {
-        m_mediaPlayer->play();
-    }
-
-    delete infos;
-}
-
 void SoundPlayer::onFileReceived(int requestId, const QByteArray& data)
 {
     if (m_fileRequestId != requestId) return;
@@ -373,4 +350,37 @@ void SoundPlayer::onFileReceived(int requestId, const QByteArray& data)
     if (useDiscord) m_discordPlayer->playSound(m_fileName, data);
 
     m_mediaPlayer->play();
+}
+
+void SoundPlayer::onStreamManifestReceived()
+{
+    auto *manifest = qobject_cast<Streams::StreamManifest*>(sender());
+    if (!manifest || manifest != m_streamManifest) return;
+
+    qCDebug(gmAudioSounds()) << "Received youtube media streams:" << manifest->audio().length();
+
+    // Find best audio stream that qmediaplayer supports
+    auto audioStreams = manifest->audio();
+
+    do
+    {
+        auto *stream = Streams::AudioOnlyStreamInfo::withHighestBitrate(audioStreams);
+
+        if (stream && QMediaPlayer::hasSupport("audio/" + stream->audioCodec(),
+            { stream->audioCodec() }, QMediaPlayer::StreamPlayback) > 1)
+        {
+            m_mediaPlayer->setMedia(QUrl(stream->url()));
+            if (m_mediaPlayer->state() != QMediaPlayer::PlayingState)
+                m_mediaPlayer->play();
+
+            break;
+        }
+        else
+        {
+            audioStreams.removeOne(stream);
+        }
+    }
+    while (!audioStreams.isEmpty());
+
+    manifest->deleteLater();
 }

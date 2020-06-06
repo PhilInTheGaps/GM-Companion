@@ -1,6 +1,5 @@
 #include "audioeditor.h"
 #include "audioicongenerator.h"
-#include "youtubeutils.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
 
@@ -821,23 +820,20 @@ void AudioEditor::addYtUrl(QString elementName, int type, QString videoUrl)
 {
     qCDebug(gmAudioEditor) << "Adding YouTube URL:" << videoUrl;
 
-    auto videoId = YouTubeUtils::parseVideoId(videoUrl);
     auto element = getElement(elementName, type);
+    if (!element) return;
 
-    if (element && YouTubeUtils::validateVideoId(videoId))
-    {
-        auto audioFile = new AudioFile(videoUrl, 3, "", element);
+    auto audioFile = new AudioFile(videoUrl, 3, "", element);
+    auto files = element->files();
 
-        auto files = element->files();
-        files.append(audioFile);
-        element->setFiles(files);
-        fileModel->append(audioFile);
+    files.append(audioFile);
+    element->setFiles(files);
+    fileModel->append(audioFile);
 
-        emit currentElementChanged();
-        emit fileIndexChanged(m_fileIndex);
+    emit currentElementChanged();
+    emit fileIndexChanged(m_fileIndex);
 
-        madeChanges();
-    }
+    madeChanges();
 }
 
 /**

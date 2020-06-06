@@ -1,6 +1,7 @@
 #ifndef FILEDIALOG_H
 #define FILEDIALOG_H
 
+#include <QQmlContext>
 #include <QObject>
 #include "utils/fileutils.h"
 

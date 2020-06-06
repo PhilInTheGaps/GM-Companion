@@ -1,9 +1,5 @@
 language: cpp
 
-env:
-  global:
-  - secure: bQjC874BXKl4UBazEfwWHabdkOM2qqqqyweVPZdCwLNi8FxPl3kg2rEtJKvEvmksK3RdyNxocU5DIof4sbnlcUtGlxfELTcMeZzKgL8NFN4SGofguxMMq1xwLR01Gimp9773Bt+GmBR3DuPA9LLaYF+8P4x2I6ZtRGho5O2UgGTafwE5C6NGeqcDv1YjoGSq5+1uE8tfxovS8tWSIR+88B8PaEOlyzlA9/65ZfWDh7NEyFeK8PGP6YD7zg57Vhr5p9rr6gr0dbXCJsSHaklNiMu4HApzQDRWlDUqz9poWr8oiOIqa4DDfgr4OZb63u1k9zIIIockSl/QkuMBLZk0q2yDPIXxAV9DN6giz3rs65MpVq2EYuZyAzAR4S9/S/KSUi7FTlCw8e2PWZykNSx5WDwpkNtqSV2mWDfRs8boSCsV1tIdapHGYBLmQcBfC28oo5DMKEmao7ogF36Gxro3XDab/rIevHWIOOGIeA9FGLfKiXC19WOstjS20GdwroKXTjXr2WDosCEhDG7X67jKes0R07y2mySeKEcHPl3TJJtWXF/yspu/n6o143InGsps5lWyZjzvmWbckGuFe+nXSNnRTKjlJIhBJLZ9dBDP3Qy1gOeT5Hou17XBWmWTh4D8HtWSGTZSQYhOXtMPg/hRdai+E7bTp5PgOC4YF1D3EGc=
-
 jobs:
   include:
   - os: linux
@@ -12,52 +8,54 @@ jobs:
     - source /opt/qt512/bin/qt512-env.sh
     - cargo install librespot
     script:
-    - if [[ "${COVERITY_SCAN_BRANCH}" == 1 ]]; then echo "Don't build on coverity_scan branch."; exit 0; fi
-    - qmake CONFIG+=release PREFIX=/usr
-    - make -j$(nproc)
-    - make check
-    - "./deploy/travis/build-appimage.sh"
-    - "./deploy/travis/deploy-appimage.sh"
+    - mkdir build
+    - cd build
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr || travis_terminate 1;
+    - make -j$(nproc) || travis_terminate 1;
+    - make test || travis_terminate 1;
+    - make install || travis_terminate 1;
+    - make clean || travis_terminate 1;
+    - "../deploy/travis/build-appimage.sh"
+    - "../deploy/travis/deploy-appimage.sh"
   - os: osx
     before_install:
     - brew link qt --force
     script:
-    - qmake CONFIG+=release PREFIX=/usr
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release || travis_terminate 1;
     - make -j$(sysctl -n hw.physicalcpu)
-    - make check
+    - make test
 
 before_script:
-- qmake -version
+- cmake -version
 
 addons:
   apt:
     update: true
     sources:
-    - sourceline: 'ppa:beineri/opt-qt-5.12.7-xenial'
+    - sourceline: 'ppa:beineri/opt-qt-5.12.8-xenial'
     packages:
     - appstream/xenial-backports
+    - cargo
+    - binutils
+    - curl
+    - openssl
     - qt512base
     - qt512declarative
     - qt512graphicaleffects
     - qt512imageformats
     - qt512multimedia
-    - qt512networkauth-no-lgpl
     - qt512quickcontrols
     - qt512quickcontrols2
     - qt512script
     - qt512tools
     - qt512translations
-    - qt512webengine
-    - binutils
-    - libpulse-dev
+    - mesa-utils
     - libegl1-mesa-dev
     - libgl1-mesa-dev
     - libglu1-mesa-dev
-    - mesa-utils
-    - libpoppler-qt5-1
     - libpoppler-qt5-dev
-    - curl
-    - openssl
+    - libpulse-dev
+    - libasound2-dev
     - gstreamer1.0-tools
     - gstreamer1.0-plugins-base
     - gstreamer1.0-plugins-good
@@ -65,8 +63,7 @@ addons:
     - gstreamer1.0-plugins-ugly
     - libtag1-dev
     - qt5keychain-dev
-    - cargo
-    - libasound2-dev
+    - libtinyxml2-dev
   homebrew:
     update: true
     packages:
@@ -74,14 +71,7 @@ addons:
     - taglib
     - poppler
     - qtkeychain
-  coverity_scan:
-    project:
-      name: PhilInTheGaps/GM-Companion
-      description: A tool for rpg gamemasters.
-    notification_email: phil.hoffmann@zoho.eu
-    build_command_prepend: qmake
-    build_command: make
-    branch_pattern: coverity_scan
+    - tinyxml2
 
 notifications:
   email:

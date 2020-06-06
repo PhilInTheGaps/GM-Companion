@@ -4,9 +4,6 @@
 #include "filesystem/filemanager.h"
 #include "utils/fileutils.h"
 
-#include "youtubeutils.h"
-#include "internal/heuristics.h"
-
 #include <algorithm>
 #include <random>
 #include <cstdlib>
@@ -15,11 +12,17 @@
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
+using namespace YouTube::Videos;
+
 MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, QObject *parent)
     : AudioPlayer(parent), spotifyPlayer(spotify), discordPlayer(discordPlayer)
 {
     mediaPlayer = new QMediaPlayer;
     mediaPlayer->setObjectName(tr("Music"));
+
+    auto *networkManager = new QNetworkAccessManager(this);
+    networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    videoClient = new VideoClient(networkManager, this);
 
     connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
     connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
@@ -33,9 +36,6 @@ MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, Q
 
     connect(spotify,                    &SpotifyPlayer::songEnded,               this, &MusicPlayer::onSpotifySongEnded);
     connect(spotify,                    &SpotifyPlayer::receivedPlaylistTracks,  this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
-
-    connect(&youtube,                   &YouTube::receivedVideoMediaStreamInfos, this, &MusicPlayer::onYtReceivedVideoMediaStreamInfos);
-    connect(&youtube,                   &YouTube::receivedVideo,                 this, &MusicPlayer::onYtReceivedVideo);
 }
 
 MusicPlayer::~MusicPlayer()
@@ -130,7 +130,11 @@ void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
         case 3: // Youtube
             m_songNames.append(s->title().isEmpty() ? s->url() : s->title());
 
-            if ((initial || reloadYt) && s->title().isEmpty()) youtube.getVideo(YouTubeUtils::parseVideoId(s->url()));
+            if ((initial || reloadYt) && s->title().isEmpty())
+            {
+                auto *video = videoClient->getVideo(s->url());
+                connect(video, &Video::ready, this, &MusicPlayer::onVideoMetadataReceived);
+            }
             break;
 
         default:
@@ -223,29 +227,42 @@ void MusicPlayer::loadMedia(AudioFile *file)
     switch (m_playerType)
     {
     case 0:
+    {
         m_fileRequestId = FileManager::getUniqueRequestId();
         m_fileName = file->url();
         FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("music") + file->url());
         break;
+    }
 
     case 1:
+    {
         mediaPlayer->setMedia(QUrl(file->url()));
         mediaPlayer->play();
         mediaPlayer->setMuted(useDiscord);
         if (useDiscord) discordPlayer->playMusic(file->url());
         break;
+    }
 
     case 2:
+    {
         spotifyPlayer->play(file->url(), 0, true);
         emit startedPlaying();
         break;
+    }
 
     case 3:
+    {
         qCDebug(gmAudioMusic) << "Media is a youtube video ...";
-//        m_youtubeRequestId = youtube.getVideoAudioStreamInfo(YouTubeUtils::parseVideoId(file->url()));
+        m_streamManifest = videoClient->streams()->getManifest(file->url());
+        connect(m_streamManifest, &Streams::StreamManifest::ready, this, &MusicPlayer::onStreamManifestReceived);
+
+        auto *video = videoClient->getVideo(file->url());
+        connect(video, &Video::ready, this, &MusicPlayer::onVideoMetadataReceived);
+
         mediaPlayer->setMuted(useDiscord);
         if (useDiscord) discordPlayer->playMusic(file->url());
         break;
+    }
 
     default:
         next();
@@ -511,46 +528,60 @@ void MusicPlayer::onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, con
     }
 }
 
-void MusicPlayer::onYtReceivedVideoMediaStreamInfos(MediaStreamInfoSet *infos, int reqId)
+void MusicPlayer::onVideoMetadataReceived()
 {
-    if (reqId != m_youtubeRequestId) return;
+    auto *video = qobject_cast<YouTube::Videos::Video*>(sender());
+    if (!video) return;
 
-    qCDebug(gmAudioMusic) << "Received youtube media stream infos ..." << infos->audio().length();
-
-    QUrl   tempUrl;
-    qint64 tempBitrate = 0;
-
-    for (auto *info : infos->audio())
-    {
-        qCDebug(gmAudioMusic) << info->toString();
-
-        auto encoding = Heuristics::audioEncodingToString(info->audioEncoding());
-        qCDebug(gmAudioMusic) << info->audioEncoding() << info->bitrate()
-                              << QMediaPlayer::hasSupport("audio/" + encoding, { encoding });
-
-        if ((QMediaPlayer::hasSupport("audio/" + encoding, { encoding }) > 1) && (info->bitrate() > tempBitrate))
-        {
-            tempUrl     = info->url();
-            tempBitrate = info->bitrate();
-        }
-    }
-
-    mediaPlayer->setMedia(tempUrl);
-    mediaPlayer->play();
-    loadSongNames(false, true);
-
-    delete infos;
-}
-
-void MusicPlayer::onYtReceivedVideo(const Video& video, int reqId)
-{
     for (int i = 0; i < m_playlist.count(); i++)
     {
-        if ((m_playlist[i]->source() == 3) && (YouTubeUtils::parseVideoId(m_playlist[i]->url()) == video.id()))
+        if ((m_playlist[i]->source() == 3) && (VideoId::normalize(m_playlist[i]->url()) == VideoId::normalize(video->id())))
         {
-            m_playlist[i]->setTitle(video.title());
+            m_playlist[i]->setTitle(video->title());
+
+            if (i == m_playlistIndex)
+            {
+                emit metaDataChanged("Title", video->title());
+                emit metaDataChanged("Artist", video->author());
+            }
+
             loadSongNames();
+            video->deleteLater();
             return;
         }
     }
+
+    video->deleteLater();
+}
+
+void MusicPlayer::onStreamManifestReceived()
+{
+    auto *manifest = qobject_cast<Streams::StreamManifest*>(sender());
+    if (!manifest || manifest != m_streamManifest) return;
+
+    qCDebug(gmAudioMusic) << "Received youtube media streams:" << manifest->audio().length();
+
+    // Find best audio stream that qmediaplayer supports
+    auto audioStreams = manifest->audio();
+
+    do
+    {
+        auto *stream = Streams::AudioOnlyStreamInfo::withHighestBitrate(audioStreams);
+
+        if (stream && QMediaPlayer::hasSupport("audio/" + stream->audioCodec(),
+            { stream->audioCodec() }, QMediaPlayer::StreamPlayback) > 1)
+        {
+            mediaPlayer->setMedia(QUrl(stream->url()));
+            mediaPlayer->play();
+            loadSongNames(false, true);
+            break;
+        }
+        else
+        {
+            audioStreams.removeOne(stream);
+        }
+    }
+    while (!audioStreams.isEmpty());
+
+    manifest->deleteLater();
 }

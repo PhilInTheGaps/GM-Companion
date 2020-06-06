@@ -13,7 +13,6 @@
 #include "audioexporter.h"
 #include "audioeditorfilebrowser.h"
 #include "unsplash/unsplashparser.h"
-#include "../lib/qytlib/youtube.h"
 
 class AudioEditor : public AbstractTool
 {
@@ -134,7 +133,6 @@ private:
     QQmlApplicationEngine *qmlEngine = nullptr;
     UnsplashParser *unsplashParser = nullptr;
     QNetworkAccessManager m_networkManager;
-    YouTube m_youtube;
     AudioSaveLoad *m_audioSaveLoad = nullptr;
 
     QList<AudioProject*> m_projects;
