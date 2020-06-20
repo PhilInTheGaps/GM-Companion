@@ -4,6 +4,13 @@ project(gm-companion)
 
 include(GNUInstallDirs)
 
+set(CGET_TOOLCHAIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/cget/cget/cget.cmake)
+
+if (EXISTS ${CGET_TOOLCHAIN_FILE})
+  include(${CGET_TOOLCHAIN_FILE})
+  message(STATUS "Found CGet toolchain file: ${CGET_TOOLCHAIN_FILE}")
+endif()
+
 # find includes in the build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -17,6 +24,8 @@ set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/thirdparty)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+
+message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
 enable_testing(true)
 

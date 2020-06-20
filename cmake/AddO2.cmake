@@ -43,9 +43,6 @@ set(o2_HEADERS
   ${EXTERNAL_LIB_DIR}/o2/src/o2spotify.h
 )
 
-# try to find qtkeychain
-find_package(QtKeychain REQUIRED)
-
 if(QTKEYCHAIN_FOUND)
   list(APPEND LINK_TARGETS ${QTKEYCHAIN_LIBRARY})
   include_directories(${QTKEYCHAIN_INCLUDE_DIR})
@@ -58,7 +55,7 @@ if(QTKEYCHAIN_FOUND)
     ${EXTERNAL_LIB_DIR}/o2/src/o0keychainstore.h
   )
 else()
-  message("Qt5Keychain or QtKeychain is required")
+  message(FATAL_ERROR "Qt5Keychain or QtKeychain is required")
 endif()
 
 add_library(o2 STATIC ${o2_SOURCES} ${o2_HEADERS})

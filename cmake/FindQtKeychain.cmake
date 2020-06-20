@@ -32,6 +32,7 @@
 
 # CHANGES:
 # Was modified to find qtkeychain even if it is called qt5keychain.
+# Also, build the qtkeychain if no system lib can be found.
 
 if (Qt5Core_DIR)
   find_path(QTKEYCHAIN_INCLUDE_DIR
@@ -78,9 +79,12 @@ else()
 endif()
 
 include(FindPackageHandleStandardArgs)
-
-  # handle the QUIETLY and REQUIRED arguments and set QTKEYCHAIN_FOUND to TRUE
-  # if all listed variables are TRUE
-  find_package_handle_standard_args(QtKeychain DEFAULT_MSG QTKEYCHAIN_LIBRARY QTKEYCHAIN_INCLUDE_DIR)
+find_package_handle_standard_args(QtKeychain DEFAULT_MSG QTKEYCHAIN_LIBRARY QTKEYCHAIN_INCLUDE_DIR)
 
 mark_as_advanced(QTKEYCHAIN_INCLUDE_DIR QTKEYCHAIN_LIBRARY)
+
+if (NOT QTKEYCHAIN_LIBRARY)
+  message(FATAL_ERROR "Could NOT find QTKEYCHAIN")
+else()
+  message(STATUS "Found QTKEYCHAIN: ${QTKEYCHAIN_LIBRARY}")
+endif()

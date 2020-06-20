@@ -563,25 +563,34 @@ void MusicPlayer::onStreamManifestReceived()
 
     // Find best audio stream that qmediaplayer supports
     auto audioStreams = manifest->audio();
+    bool foundGoodStream = false;
 
     do
     {
         auto *stream = Streams::AudioOnlyStreamInfo::withHighestBitrate(audioStreams);
 
         if (stream && QMediaPlayer::hasSupport("audio/" + stream->audioCodec(),
-            { stream->audioCodec() }, QMediaPlayer::StreamPlayback) > 1)
+            { stream->audioCodec() }, QMediaPlayer::StreamPlayback) > 0)
         {
             mediaPlayer->setMedia(QUrl(stream->url()));
             mediaPlayer->play();
             loadSongNames(false, true);
+            foundGoodStream = true;
             break;
         }
         else
         {
+            if (stream) qCDebug(gmAudioMusic()) << "Audio codec" << stream->audioCodec() << "is not supported on this device.";
+
             audioStreams.removeOne(stream);
         }
     }
     while (!audioStreams.isEmpty());
+
+    if (!foundGoodStream)
+    {
+        qCWarning(gmAudioMusic()) << "Error: Could not find an audio stream that is supported on your device.";
+    }
 
     manifest->deleteLater();
 }

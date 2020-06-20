@@ -85,7 +85,7 @@ bool ProcessInfo::isProcessRunning(std::string procName)
         }
 
         do {
-            if (!QString::compare(QString::fromWCharArray(entry.szExeFile), QString::fromStdString(procName), Qt::CaseInsensitive))
+            if (!QString::compare(QString::fromStdString(entry.szExeFile), QString::fromStdString(procName), Qt::CaseInsensitive))
             {
                 CloseHandle(snapshot);
                 isRunning = true;

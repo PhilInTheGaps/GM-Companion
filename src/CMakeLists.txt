@@ -13,19 +13,18 @@ if (${CMAKE_VERSION} VERSION_GREATER 3.11)
   add_compile_definitions(QT_DEPRECATED_WARNINGS)
 endif()
 
-# submodule libraries
-include(AddO2)
-include(AddQYTLIB)
-
 # qt modules
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
 
 # external libraries
-find_library(TAGLIB_DIR tag)
-find_library(POPPLER_QT5_DIR poppler-qt5)
-find_library(CMARK_GFM_DIR cmark-gfm)
-find_library(CMARK_GFM_EXTENSIONS_DIR cmark-gfm-extensions)
-find_package(QtKeychain REQUIRED)
+find_package(QtKeychain)
+
+# submodule libraries
+include(AddO2)
+include(AddQYTLIB)
+include(AddPoppler)
+include(AddTagLib)
+include(AddCmarkGfm)
 
 # source files
 set(SOURCES
@@ -221,10 +220,10 @@ target_link_libraries(
   Qt5::DBus
   o2
   qytlib
-  tag
-  poppler-qt5
-  cmark-gfm
-  cmark-gfm-extensions
+  ${TAG_LIBRARY}
+  ${POPPLER_QT5_LIBRARY}
+  ${CMARK_GFM_LIBRARY}
+  ${CMARK_GFM_EXTENSIONS_LIBRARY}
   ${QTKEYCHAIN_LIBRARY}
 )
 

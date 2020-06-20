@@ -33,16 +33,16 @@ configuration:
 
 before_build:
   - git submodule update --init --recursive
-  - cmd: cd deploy\appveyor
-  - cmd: call download-libs.bat
+  - pip install cget
+  - choco install yasm pkgconfig-lite
 
 build_script:
   - cmd: cd deploy\appveyor
   - cmd: call %BUILD_SCRIPT%
 
 after_build:
-  - cmd: cd deploy
-  - cmd: call deploy-win.bat
+  - cmd: cd deploy\appveyor
+  - cmd: call deploy.bat
   - cmd: cd deploy\installer
   - cmd: call generate-repository-v3-1-x64.bat
   - cmd: call build-offline-v3-1-x64.bat
@@ -64,5 +64,5 @@ artifacts:
   - path: deploy\installer\gm-companion-online-installer-x64.exe
     name: gm-companion-online-installer-x64.exe
 
-on_failure:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+#on_failure:
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

@@ -47,7 +47,7 @@ qt5_create_translation(TRANSLATIONS
   resources/translations/gm-companion_en_US.ts
 )
 
-add_executable(gm-companion ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES})
+add_executable(gm-companion WIN32 ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES})
 
 message(${CMAKE_SOURCE_DIR}/src)
 

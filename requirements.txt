@@ -1,0 +1,47 @@
+
+# zlib, required for basically everything
+https://www.zlib.net/zlib-1.2.11.tar.gz
+
+# qtkeychain
+frankosterfeld/qtkeychain@v0.10.0
+
+# taglib
+taglib/taglib@v1.11.1
+
+# cmark-gfm
+github/cmark-gfm@0.29.0.gfm.0
+
+### requirements for poppler ###
+
+# libpng
+https://download.sourceforge.net/libpng/libpng-1.6.37.tar.xz
+
+# bzip2
+https://github.com/sergiud/bzip2/archive/cmake.zip
+
+# curl
+https://curl.haxx.se/download/curl-7.70.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+
+# brotli (optional)
+google/brotli@v1.0.7
+
+# freetype
+https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
+
+# libjpeg-turbo
+libjpeg-turbo/libjpeg-turbo@2.0.4
+
+# libtiff
+http://download.osgeo.org/libtiff/tiff-4.1.0.tar.gz
+
+# openjpeg
+uclouvain/openjpeg@v2.3.1
+
+# pixman
+##https://github.com/suVrik/pixman/archive/cmake.zip
+
+# cairo
+#https://github.com/nie-game/cairo/archive/8fa90d4fded2c30e4f29494394fbbb8709587862.zip
+
+# poppler
+https://poppler.freedesktop.org/poppler-0.89.0.tar.xz -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF
