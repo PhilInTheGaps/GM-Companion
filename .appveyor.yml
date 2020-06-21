@@ -27,13 +27,15 @@ environment:
 init:
   - cmd: set PATH=%MINGW_PATH%\bin;%PATH%
   - cmd: set PATH=%QT_PATH%\bin;%PATH%
+  - cmd: set PATH=%PATH:C:\Python27;=%
+  - cmd: set PATH=C:\Python38-x64;%PATH%
 
 configuration:
   - Release
 
 before_build:
   - git submodule update --init --recursive
-  - pip install cget backports.lzma # lzma is required for python 2
+  - pip install cget
   - choco install yasm
 
 build_script:
