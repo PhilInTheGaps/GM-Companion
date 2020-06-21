@@ -33,7 +33,7 @@ configuration:
 
 before_build:
   - git submodule update --init --recursive
-  - pip install cget
+  - pip install cget backports.lzma # lzma is required for python 2
   - choco install yasm
 
 build_script:
