@@ -28,6 +28,7 @@ init:
   - set PATH=%MINGW_PATH%\bin;%PATH%
   - set PATH=%QT_PATH%\bin;%PATH%
   - set PATH=C:\Python38-x64;%PATH%
+  - set PATH=C:\Python38-x64\Scripts;%PATH%
 
 configuration:
   - Release
