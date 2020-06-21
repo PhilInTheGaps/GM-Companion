@@ -42,20 +42,20 @@ before_build:
   - choco install yasm
 
 build_script:
-  - cd deploy\appveyor
+  - cd %APPVEYOR_BUILD_FOLDER%\deploy\appveyor
   - call %BUILD_SCRIPT%
 
 after_build:
-  - cd deploy\appveyor
+  - cd %APPVEYOR_BUILD_FOLDER%\deploy\appveyor
   - call deploy.bat
-  - cd deploy\installer
+  - cd %APPVEYOR_BUILD_FOLDER%\deploy\installer
   - call generate-repository-v3-1-x64.bat
   - call build-offline-v3-1-x64.bat
   - call build-online-v3-1-x64.bat
   - dir
 
 artifacts:
-  - path: release\deploy
+  - path: %APPVEYOR_BUILD_FOLDER%\build\install\bin
     name: gm-companion-%COMPILER_NAME%
     type: zip
     
