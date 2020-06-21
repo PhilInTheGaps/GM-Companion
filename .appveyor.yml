@@ -55,7 +55,7 @@ after_build:
   - dir
 
 artifacts:
-  - path: %APPVEYOR_BUILD_FOLDER%\build\install\bin
+  - path: build\install\bin
     name: gm-companion-%COMPILER_NAME%
     type: zip
     
