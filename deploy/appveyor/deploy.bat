@@ -1,4 +1,4 @@
-cd ..\build
+cd ..\..\build
 
 mingw32-make install
 
