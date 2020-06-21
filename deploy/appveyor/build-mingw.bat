@@ -3,7 +3,9 @@ cd ..\..
 mkdir build
 cd build
 
-set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%
+echo "Removing sh.exe from PATH ..."
+set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+echo %PATH%
 
 cget init --shared -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 cget install pfultz2/pkgconfig
