@@ -34,7 +34,7 @@ configuration:
 before_build:
   - git submodule update --init --recursive
   - pip install cget
-  - choco install yasm pkgconfiglite
+  - choco install yasm
 
 build_script:
   - cmd: cd deploy\appveyor
