@@ -44,4 +44,4 @@ uclouvain/openjpeg@v2.3.1
 #https://github.com/nie-game/cairo/archive/8fa90d4fded2c30e4f29494394fbbb8709587862.zip
 
 # poppler
-https://poppler.freedesktop.org/poppler-0.89.0.tar.xz -DCMAKE_SH="CMAKE_SH-NOTFOUND" -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF
+https://poppler.freedesktop.org/poppler-0.89.0.tar.xz -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF
