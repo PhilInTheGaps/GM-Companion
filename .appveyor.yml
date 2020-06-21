@@ -25,31 +25,33 @@ environment:
 #    BUILD_SCRIPT: build-mingw.bat
 
 init:
-  - cmd: set PATH=%MINGW_PATH%\bin;%PATH%
-  - cmd: set PATH=%QT_PATH%\bin;%PATH%
-  - cmd: set PATH=%PATH:C:\Python27;=%
-  - cmd: set PATH=C:\Python38-x64;%PATH%
+  - set PATH=%MINGW_PATH%\bin;%PATH%
+  - set PATH=%QT_PATH%\bin;%PATH%
+  - set PATH=C:\Python38-x64;%PATH%
 
 configuration:
   - Release
 
 before_build:
   - git submodule update --init --recursive
+  - python -m pip install --upgrade pip
+  - python --version
+  - pip --version
   - pip install cget
   - choco install yasm
 
 build_script:
-  - cmd: cd deploy\appveyor
-  - cmd: call %BUILD_SCRIPT%
+  - cd deploy\appveyor
+  - call %BUILD_SCRIPT%
 
 after_build:
-  - cmd: cd deploy\appveyor
-  - cmd: call deploy.bat
-  - cmd: cd deploy\installer
-  - cmd: call generate-repository-v3-1-x64.bat
-  - cmd: call build-offline-v3-1-x64.bat
-  - cmd: call build-online-v3-1-x64.bat
-  - cmd: dir
+  - cd deploy\appveyor
+  - call deploy.bat
+  - cd deploy\installer
+  - call generate-repository-v3-1-x64.bat
+  - call build-offline-v3-1-x64.bat
+  - call build-online-v3-1-x64.bat
+  - dir
 
 artifacts:
   - path: release\deploy
