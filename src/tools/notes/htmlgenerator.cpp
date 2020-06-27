@@ -1,6 +1,5 @@
 #include "htmlgenerator.h"
 #include "utils/markdownutils.h"
-#include <QDebug>
 
 HtmlGenerator::HtmlGenerator(QObject *parent) : QObject(parent)
 {

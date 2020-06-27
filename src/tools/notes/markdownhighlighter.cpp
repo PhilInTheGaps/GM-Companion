@@ -19,8 +19,8 @@
 #define MD_LIST_PLUS_REGEX R"(^\s*\+\s)"
 #define MD_LIST_DIGIT_REGEX R"(^\s*\d+\.\s)"
 
-MarkdownHighlighter::MarkdownHighlighter(QTextDocument *document)
-    : QSyntaxHighlighter(document)
+MarkdownHighlighter::MarkdownHighlighter(QObject *parent)
+    : QSyntaxHighlighter(parent)
 {
 
 }

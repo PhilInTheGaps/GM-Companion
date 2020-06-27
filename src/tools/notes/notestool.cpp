@@ -1,6 +1,5 @@
 #include "notestool.h"
 #include "logging.h"
-#include "markdownhighlighter.h"
 #include "utils/utils.h"
 
 #include <QQmlContext>
@@ -11,6 +10,7 @@ NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
 {
     m_saveLoad = new NotesSaveLoad(this);
     m_htmlGenerator =  new HtmlGenerator(this);
+    m_markdownHighlighter = new MarkdownHighlighter(this);
 
     engine->rootContext()->setContextProperty("notes_tool", this);
 
@@ -37,7 +37,7 @@ void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
 
     connect(m_qmlTextDoc->textDocument(), &QTextDocument::contentsChanged, this, &NotesTool::onDocumentEdited);
 
-    new MarkdownHighlighter(m_qmlTextDoc->textDocument());
+    m_markdownHighlighter->setDocument(m_qmlTextDoc->textDocument());
 
     if (m_currentPage) displayPageContent();
 }
@@ -242,7 +242,7 @@ void NotesTool::onPageHtmlLoaded()
         if (!m_currentPage->content().isEmpty())
         {
             auto *doc = m_qmlTextDoc->textDocument();
-            doc->setDefaultFont(QFont("helvetica"));
+            doc->setDefaultFont(QFont("sans serif"));
             doc->setHtml(m_currentPage->html());
         }
     }

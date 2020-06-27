@@ -13,7 +13,8 @@ QString MarkdownUtils::markdownToHtml(const QString &markdown)
     addMarkdownExtension(parser, "autolink");
     addMarkdownExtension(parser, "tasklist");
 
-    cmark_parser_feed(parser, markdown.toUtf8(), markdown.length());
+    auto utf8 = markdown.toUtf8();
+    cmark_parser_feed(parser, utf8, utf8.length());
     auto *doc = cmark_parser_finish(parser);
     cmark_parser_free(parser);
 

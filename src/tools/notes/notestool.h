@@ -4,6 +4,7 @@
 #include "tools/abstracttool.h"
 #include "notessaveload.h"
 #include "htmlgenerator.h"
+#include "markdownhighlighter.h"
 #include <QQmlApplicationEngine>
 #include <QQuickTextDocument>
 
@@ -53,6 +54,7 @@ private:
     NoteBookPage *m_currentPage = nullptr;
     QQuickTextDocument *m_qmlTextDoc = nullptr;
     HtmlGenerator *m_htmlGenerator = nullptr;
+    MarkdownHighlighter *m_markdownHighlighter = nullptr;
 
     QObject* m_notesModel = nullptr;
     QList<QObject*> m_openedPages;

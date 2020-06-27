@@ -8,7 +8,7 @@ class MarkdownHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    explicit MarkdownHighlighter(QTextDocument *document);
+    explicit MarkdownHighlighter(QObject *parent = nullptr);
 
 protected:
     void highlightBlock(const QString &text) override;
