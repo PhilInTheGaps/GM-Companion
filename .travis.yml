@@ -12,7 +12,7 @@ jobs:
     script:
     - mkdir build
     - cd build
-    - cget init --static
+    - cget init --shared
     - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate 1;
     - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
