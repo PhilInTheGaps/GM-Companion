@@ -43,6 +43,7 @@ addons:
     - cargo
     - binutils
     - curl
+    - python3-setuptools
     - python3-pip
     - openssl
     - libssl-dev
