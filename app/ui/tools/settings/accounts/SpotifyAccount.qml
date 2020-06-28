@@ -84,7 +84,6 @@ Item {
             }
         }
 
-
         Grid {
             // Password
             columns: 2
@@ -120,7 +119,8 @@ Item {
             }
 
             Label {
-                visible: custom_server_radio_button.checked && !spotify_service.connected
+                visible: custom_server_radio_button.checked
+                         && !spotify_service.connected
                 text: qsTr("Server URL")
             }
 
@@ -128,7 +128,8 @@ Item {
                 id: custom_server_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: custom_server_radio_button.checked && !spotify_service.connected
+                visible: custom_server_radio_button.checked
+                         && !spotify_service.connected
 
                 Component.onCompleted: text = settings_manager.getServerUrl(
                                            "Spotify")
@@ -150,45 +151,50 @@ Item {
 
             Label {
                 text: qsTr("Client ID")
-                visible: client_id_secret_radio_button.checked && !spotify_service.connected
+                visible: client_id_secret_radio_button.checked
+                         && !spotify_service.connected
             }
 
             CustomTextField {
                 id: spotify_id_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: client_id_secret_radio_button.checked && !spotify_service.connected
+                visible: client_id_secret_radio_button.checked
+                         && !spotify_service.connected
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "spotifyID", "", "Spotify")
             }
 
             Label {
                 text: qsTr("Client Secret")
-                visible: client_id_secret_radio_button.checked && !spotify_service.connected
+                visible: client_id_secret_radio_button.checked
+                         && !spotify_service.connected
             }
 
             CustomTextField {
                 id: spotify_secret_textfield
                 selectByMouse: true
                 width: textfieldWidth
-                visible: client_id_secret_radio_button.checked && !spotify_service.connected
+                visible: client_id_secret_radio_button.checked
+                         && !spotify_service.connected
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "spotifySecret", "", "Spotify")
             }
         }
 
         Button {
-            text: spotify_service.connected ? qsTr("Disconnect") : qsTr("Connect")
+            text: spotify_service.connected ? qsTr("Disconnect") : qsTr(
+                                                  "Connect")
             onClicked: {
-                if (spotify_service.connected)
-                {
+                if (spotify_service.connected) {
                     spotify_service.disconnectService()
-                }  else {
+                } else {
                     settings_manager.setSetting("spotifyUsername",
-                                                username_textfield.text, "Spotify")
+                                                username_textfield.text,
+                                                "Spotify")
                     settings_manager.setPassword(username_textfield.text,
-                                                 password_textfield.text, "Spotify")
-                    password_textfield.text = ""
+                                                 password_textfield.text,
+                                                 "Spotify")
 
                     settings_manager.setSetting("spotifyID",
                                                 spotify_id_textfield.text,

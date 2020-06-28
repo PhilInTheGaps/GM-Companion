@@ -3,13 +3,18 @@ language: cpp
 jobs:
   include:
   - os: linux
+    dist: bionic
     compiler: gcc  
     before_install:
     - source /opt/qt512/bin/qt512-env.sh
     - cargo install librespot
+    - pip3 install cget
+    - export PATH=$PATH:~/.local/bin
     script:
     - mkdir build
     - cd build
+    - cget init --static
+    - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate 1;
     - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
     - make test || travis_terminate 1;
@@ -21,6 +26,8 @@ jobs:
     before_install:
     - brew link qt --force
     script:
+    - mkdir build
+    - cd build
     - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release || travis_terminate 1;
     - make -j$(sysctl -n hw.physicalcpu)
     - make test
@@ -32,13 +39,21 @@ addons:
   apt:
     update: true
     sources:
-    - sourceline: 'ppa:beineri/opt-qt-5.12.8-xenial'
+    - sourceline: 'ppa:beineri/opt-qt-5.12.8-bionic'
     packages:
-    - appstream/xenial-backports
     - cargo
     - binutils
     - curl
+    - python3-pip
     - openssl
+    - libssl-dev
+    - libfontconfig1-dev
+    - libbrotli-dev
+    - libtiff-dev
+    - libcairo2-dev
+    - libopenjp2-7-dev
+    - libsecret-1-dev
+    - zlib1g-dev
     - qt512base
     - qt512declarative
     - qt512graphicaleffects
@@ -47,13 +62,17 @@ addons:
     - qt512quickcontrols
     - qt512quickcontrols2
     - qt512script
+    - qt512scxml
+    - qt512svg
     - qt512tools
     - qt512translations
+    - qt512x11extras
+    - qt512xmlpatterns
     - mesa-utils
+    - mesa-common-dev
     - libegl1-mesa-dev
     - libgl1-mesa-dev
     - libglu1-mesa-dev
-    - libpoppler-qt5-dev
     - libpulse-dev
     - libasound2-dev
     - gstreamer1.0-tools
@@ -61,9 +80,6 @@ addons:
     - gstreamer1.0-plugins-good
     - gstreamer1.0-plugins-bad
     - gstreamer1.0-plugins-ugly
-    - libtag1-dev
-    - qt5keychain-dev
-    - libtinyxml2-dev
   homebrew:
     update: true
     packages:

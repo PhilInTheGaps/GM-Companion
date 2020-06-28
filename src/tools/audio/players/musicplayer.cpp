@@ -174,7 +174,7 @@ void MusicPlayer::applyShuffleMode(bool keepIndex, const QString& url)
         #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         std::random_device rd;
         std::mt19937 gen(rd());
-        QList<AudioFile> temp;
+        QList<AudioFile*> temp;
 
         while (!m_playlist.isEmpty())
         {

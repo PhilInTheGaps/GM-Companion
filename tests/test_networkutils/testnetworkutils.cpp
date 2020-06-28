@@ -17,7 +17,7 @@ void TestNetworkUtils::basicAuthHeader()
     QFETCH(QString, password);
     QFETCH(QString, header);
 
-    QCOMPARE(NetworkUtils::basicAuthHeader(username, password), header);
+    QCOMPARE(QString(NetworkUtils::basicAuthHeader(username, password)), header);
 }
 
 QTEST_APPLESS_MAIN(TestNetworkUtils)

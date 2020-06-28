@@ -19,7 +19,7 @@
 		<category>Qt</category>
 	</categories>
 	<url type="homepage">https://gm-companion.github.io/</url>
-	<url type="help">https://gm-companion.github.io/docs/en/getting-started.html</url>
+	<!-- <url type="help">https://gm-companion.github.io/docs/en/getting-started.html</url> -->
 	<x-launchable type="desktop-id">lol.rophil.gm_companion.desktop</x-launchable>
 	<releases>
 ​  		<release version="1.1.0" date="2019-03-28" />

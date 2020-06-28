@@ -2,7 +2,7 @@ cd ..\..\build
 
 mingw32-make install
 
-move cget\*\*.dll install\bin\
+move cget\bin\*.dll install\bin\
 copy /y "%OPENSSL%\bin\*eay32.dll" install\bin
 copy /y "%OPENSSL%\bin\lib*.dll" install\bin
 

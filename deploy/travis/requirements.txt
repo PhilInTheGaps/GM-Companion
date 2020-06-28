@@ -1,0 +1,11 @@
+# qtkeychain
+frankosterfeld/qtkeychain@v0.10.0 -DBUILD_TRANSLATIONS=OFF
+
+# taglib
+taglib/taglib@v1.11.1
+
+# cmark-gfm
+github/cmark-gfm@0.29.0.gfm.0
+
+# poppler
+https://poppler.freedesktop.org/poppler-0.89.0.tar.xz -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF

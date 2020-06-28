@@ -72,3 +72,23 @@ install(
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/../misc/lol.rophil.gm_companion.desktop
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/
+)
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/../misc/gm-companion.png
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/pixmaps/
+)
+
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../misc/icons/hicolor
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/
+)
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/../misc/lol.rophil.gm_companion.appdata.xml
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
+)

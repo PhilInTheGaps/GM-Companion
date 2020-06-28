@@ -11,6 +11,11 @@ if (EXISTS ${CGET_TOOLCHAIN_FILE})
   message(STATUS "Found CGet toolchain file: ${CGET_TOOLCHAIN_FILE}")
 endif()
 
+# set c++ version
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # find includes in the build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
