@@ -7,7 +7,6 @@ jobs:
     compiler: gcc  
     before_install:
     - source /opt/qt512/bin/qt512-env.sh
-    - cargo install librespot
     - pip3 install cget
     - export PATH=$PATH:~/.local/bin
     script:
