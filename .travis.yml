@@ -7,13 +7,12 @@ jobs:
     compiler: gcc  
     before_install:
     - source /opt/qt512/bin/qt512-env.sh
-    - cargo install librespot
     - pip3 install cget
     - export PATH=$PATH:~/.local/bin
     script:
     - mkdir build
     - cd build
-    - cget init --static
+    - cget init --shared
     - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate 1;
     - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
@@ -44,6 +43,7 @@ addons:
     - cargo
     - binutils
     - curl
+    - python3-setuptools
     - python3-pip
     - openssl
     - libssl-dev

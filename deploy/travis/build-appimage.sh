@@ -43,9 +43,6 @@ export EXTRA_QT_PLUGINS=audio,imageformats,mediaservice,playlistformats,gui
 export QML_MODULES_PATHS=/opt/qt512/qml/
 export QML_SOURCES_PATHS=../app/ui/
 
-# Copy librespot
-cp $HOME/.cargo/bin/librespot AppDir/usr/bin/ || travis_terminate 1;
-
 # Build AppImage
 ./linuxdeploy-x86_64.AppImage \
   --appdir AppDir \
