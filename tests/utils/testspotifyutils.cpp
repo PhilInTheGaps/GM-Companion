@@ -1,6 +1,23 @@
 #include <QtTest>
-#include "testspotifyutils.h"
+#include <QObject>
 #include "../../src/services/spotify/spotifyutils.h"
+
+class TestSpotifyUtils : public QObject
+{
+    Q_OBJECT
+public:
+    TestSpotifyUtils() {}
+
+private slots:
+    void getUriType_data();
+    void getUriType();
+
+    void getIdFromUri_data();
+    void getIdFromUri();
+
+    void getIdFromHref_data();
+    void getIdFromHref();
+};
 
 void TestSpotifyUtils::getUriType_data()
 {
@@ -67,3 +84,4 @@ void TestSpotifyUtils::getIdFromHref()
 }
 
 QTEST_APPLESS_MAIN(TestSpotifyUtils)
+#include "testspotifyutils.moc"

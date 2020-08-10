@@ -1,6 +1,32 @@
 #include <QtTest>
-#include "testfileutils.h"
+#include <QObject>
 #include "../../src/utils/fileutils.h"
+
+class TestFileUtils : public QObject
+{
+    Q_OBJECT
+public:
+    TestFileUtils() {}
+
+private slots:
+    void dirFromFolders_data();
+    void dirFromFolders();
+
+    void dirFromPath_data();
+    void dirFromPath();
+
+    void foldersFromDir_data();
+    void foldersFromDir();
+
+    void suffix_data();
+    void suffix();
+
+    void fileName_data();
+    void fileName();
+
+    void incrementFileName_data();
+    void incrementFileName();
+};
 
 void TestFileUtils::dirFromFolders_data()
 {
@@ -118,3 +144,4 @@ void TestFileUtils::incrementFileName()
 }
 
 QTEST_APPLESS_MAIN(TestFileUtils)
+#include "testfileutils.moc"

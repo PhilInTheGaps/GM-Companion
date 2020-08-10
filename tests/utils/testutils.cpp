@@ -1,6 +1,21 @@
 #include <QtTest>
-#include "testutils.h"
+#include <QObject>
 #include "../../src/utils/utils.h"
+
+class TestUtils : public QObject
+{
+    Q_OBJECT
+public:
+    TestUtils() {}
+
+private slots:
+    void rot13_data();
+    void rot13();
+
+    void hasWildcardMatch_data();
+    void hasWildcardMatch();
+};
+
 
 void TestUtils::rot13_data()
 {
@@ -58,3 +73,4 @@ void TestUtils::hasWildcardMatch()
 }
 
 QTEST_APPLESS_MAIN(TestUtils)
+#include "testutils.moc"

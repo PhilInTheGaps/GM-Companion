@@ -11,8 +11,8 @@ UpdateManager::UpdateManager()
     // GitHub Release feed
     m_feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
-    networkManager = new QNetworkAccessManager;
-    connect(networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_networkManager_finished(QNetworkReply*)));
+    networkManager = new QNetworkAccessManager(this);
+    connect(networkManager, &QNetworkAccessManager::finished, this, &UpdateManager::onNetworkManagerFinished);
 
     // Check if openSSL is installed, required for network access to work
     qDebug().noquote() << "Checking SSL installation...";
@@ -46,25 +46,36 @@ void UpdateManager::checkForUpdates()
  */
 bool UpdateManager::compareVersions(QString v1, QString v2)
 {
-    QStringList v1_l = v1.split('.');
-    QStringList v2_l = v2.split('.');
+    QStringList split1 = v1.split('.');
+    QStringList split2 = v2.split('.');
 
-    for (int i = 0; i < v1_l.size(); i++)
+    for (int i = 0; i < split1.length(); i++)
     {
-        if (i < v2_l.size())
+        auto split11 = split1[i].split('-');
+        auto num1 = split11[0].toInt();
+        auto dev1 = split11.length() > 1 ? split11[1] : "";
+
+        // 1.2.1 vs 1.2
+        if (split2.length() <= i) return true;
+
+        auto split21 = split2[i].split('-');
+        auto num2 = split21[0].toInt();
+        auto dev2 = split21.length() > 1 ? split21[1] : "";
+
+        // Is version newer?
+        if (num1 > num2) return true;
+
+        // Are versions same but have different dev tags?
+        if (num1 == num2)
         {
-            if (v1_l[i].toInt() > v2_l[i].toInt())
+            if (dev1.isEmpty() && !dev2.isEmpty()) return true;
+
+            if (!dev1.isEmpty() && dev2.isEmpty()) return false;
+
+            if (!dev1.isEmpty() && !dev2.isEmpty())
             {
-                return true;
+                return QString::compare(dev1, dev2, Qt::CaseInsensitive) > 0;
             }
-            else if (v1_l[i].toInt() < v2_l[i].toInt())
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -75,14 +86,14 @@ bool UpdateManager::compareVersions(QString v1, QString v2)
  * @brief Evaluate the received release feed
  * @param reply NetworkReply with data from the feed
  */
-void UpdateManager::on_networkManager_finished(QNetworkReply *reply)
+void UpdateManager::onNetworkManagerFinished(QNetworkReply *reply)
 {
     qDebug().noquote() << "Finished getting update feed ...";
 
     QString replyString = reply->readAll();
     QXmlStreamReader reader(replyString);
 
-    QString newestVersionTitle; // Beta 3.2         Title of the Version
+    QString newestVersionTitle; // Title of the Version: Beta 3.2
     m_newestVersion = "0.0.0";
 
     // Release feed is XML, so here is a XML reader

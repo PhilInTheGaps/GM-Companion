@@ -1,6 +1,17 @@
 #include <QtTest>
-#include "testnetworkutils.h"
+#include <QObject>
 #include "../../src/utils/networkutils.h"
+
+class TestNetworkUtils : public QObject
+{
+    Q_OBJECT
+public:
+    TestNetworkUtils() {}
+
+private slots:
+    void basicAuthHeader_data();
+    void basicAuthHeader();
+};
 
 void TestNetworkUtils::basicAuthHeader_data()
 {
@@ -21,3 +32,4 @@ void TestNetworkUtils::basicAuthHeader()
 }
 
 QTEST_APPLESS_MAIN(TestNetworkUtils)
+#include "testnetworkutils.moc"

@@ -16,7 +16,7 @@ public:
     Q_INVOKABLE QString getCurrentVersion() const { return m_currentVersion; }
 
 private slots:
-    void on_networkManager_finished(QNetworkReply*reply);
+    void onNetworkManagerFinished(QNetworkReply*reply);
 
 private:
     QNetworkAccessManager *networkManager;
@@ -25,7 +25,8 @@ private:
     QString m_newestVersion;
     QString m_currentVersion;
 
-    bool compareVersions(QString v1, QString v2);
+protected:
+    static bool compareVersions(QString v1, QString v2);
 
 signals:
     void updateAvailable();
