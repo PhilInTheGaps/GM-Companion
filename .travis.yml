@@ -27,7 +27,7 @@ jobs:
     script:
     - mkdir build
     - cd build
-    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release || travis_terminate 1;
+    - cmake .. -G "Unix Makefiles" -DQt5_DIR=$(brew --prefix qt)/lib/cmake/Qt5 || travis_terminate 1;
     - make -j$(sysctl -n hw.physicalcpu)
     - make test
 
