@@ -88,6 +88,7 @@ addons:
     - poppler
     - qtkeychain
     - tinyxml2
+    - cmark-gfm
 
 notifications:
   email:
