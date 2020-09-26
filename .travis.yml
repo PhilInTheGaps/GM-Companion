@@ -53,6 +53,7 @@ addons:
     - libcairo2-dev
     - libopenjp2-7-dev
     - libsecret-1-dev
+    - libtinyxml2-dev
     - zlib1g-dev
     - qt512base
     - qt512declarative
