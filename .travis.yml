@@ -1,10 +1,9 @@
 language: cpp
-
 jobs:
   include:
   - os: linux
     dist: bionic
-    compiler: gcc  
+    compiler: gcc
     before_install:
     - source /opt/qt512/bin/qt512-env.sh
     - pip3 install cget
@@ -13,32 +12,32 @@ jobs:
     - mkdir build
     - cd build
     - cget init --shared
-    - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate 1;
-    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr || travis_terminate 1;
+    - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate
+      1;
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr
+      || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
     - make test || travis_terminate 1;
     - make install || travis_terminate 1;
     - make clean || travis_terminate 1;
     - "../deploy/travis/build-appimage.sh"
-    - "../deploy/travis/deploy-appimage.sh"
   - os: osx
     before_install:
     - brew link qt --force
     script:
     - mkdir build
     - cd build
-    - cmake .. -G "Unix Makefiles" -DQt5_DIR=$(brew --prefix qt)/lib/cmake/Qt5 || travis_terminate 1;
+    - cmake .. -G "Unix Makefiles" -DQt5_DIR=$(brew --prefix qt)/lib/cmake/Qt5 ||
+      travis_terminate 1;
     - make -j$(sysctl -n hw.physicalcpu)
     - make test
-
 before_script:
 - cmake -version
-
 addons:
   apt:
     update: true
     sources:
-    - sourceline: 'ppa:beineri/opt-qt-5.12.9-bionic'
+    - sourceline: ppa:beineri/opt-qt-5.12.9-bionic
     packages:
     - cargo
     - binutils
@@ -90,10 +89,18 @@ addons:
     - qtkeychain
     - tinyxml2
     - cmark-gfm
-
 notifications:
   email:
     recipients:
-      - phil.hoffmann@zoho.eu
+    - phil.hoffmann@zoho.eu
     on_success: never
     on_failure: always
+deploy:
+  provider: bintray
+  user: "philinthegaps"
+  file: "deploy/travis/bintray.json"
+  skip_cleanup: true
+  on:
+    all_branches: true
+  key:
+    secure: gEYP119vI3sk7G4DJouaD8mAywi0BqbLuieuDBQhkYf+4b9axQt7effiyxSAd0i3WSWVD6VpjUNF5vqvHMJmereGDMQWeIkMOJbx/Mu1q/IwG9HxIxdb5AmuIaX+PeL38b3H9tYVuVru0goMsIy1AlzFQoQBoKiH7RHWQdPFNtMIgqzK18WW99mvmIAvtKdW1gpnlE83Yo0GdF7SORckRhTe6CHFVEcx1BLRwpfDHtUpNfVo+9CC/J+b50OOMSrImMYy4PtNbFUHIHswIe8rAMb5zgNkPyyD0lQpngzohRHhtXg2I6YYwP0RcWqlFTni+Z0AgecTGGp3MlfgrNrFOgINRQVIkZAiCkigSmRCP9P+tcDcYVDLKNg/vaQ3fbv+cI/g86rRcus0zBA5gton5xF3utvRF/hnYfkjC8eJdeB4CBSlsSWvHlYm8QYLLW90dXe9/axwpFQ0R6+Fkx/EyulUnt/l3KYIQiqrooMwOYtOJvL7toKgSFrCLsH4dh/KYa5hnVa6VvNBX289P7MeQ3u8Z9+slS6/TFdypsHLP8Dy5TOBukvrIDSW7jDgff4t5E4Qdb6RO4fJCmxS9fRp6Qlk1fJzX970U57qCkmEcEMg+PEHLgSHUIY54AMMovT4UqiAGrlOG9uWTpaqgCB9pAVo2AO02ZoqXtfCrDRlXos=
