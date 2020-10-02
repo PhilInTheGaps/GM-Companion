@@ -1,4 +1,4 @@
-find_library(TAG_LIBRARY tag)
+find_library(TAG_LIBRARY NAMES libtag.so tag)
 
 if (NOT TAG_LIBRARY)
   message(FATAL_ERROR "Could NOT find TAGLIB")

@@ -42,6 +42,7 @@ fi
 export EXTRA_QT_PLUGINS=audio,imageformats,mediaservice,playlistformats,gui
 export QML_MODULES_PATHS=/opt/qt512/qml/
 export QML_SOURCES_PATHS=../app/ui/
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH;cget/lib;cget/lib/x86_64-linux-gnu"
 
 # Build AppImage
 ./linuxdeploy-x86_64.AppImage \

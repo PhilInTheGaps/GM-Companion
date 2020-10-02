@@ -38,7 +38,7 @@ addons:
   apt:
     update: true
     sources:
-    - sourceline: 'ppa:beineri/opt-qt-5.12.8-bionic'
+    - sourceline: 'ppa:beineri/opt-qt-5.12.9-bionic'
     packages:
     - cargo
     - binutils

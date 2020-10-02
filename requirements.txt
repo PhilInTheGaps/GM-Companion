@@ -3,7 +3,7 @@
 https://www.zlib.net/zlib-1.2.11.tar.gz
 
 # qtkeychain
-frankosterfeld/qtkeychain@v0.10.0
+frankosterfeld/qtkeychain@v0.11.1
 
 # taglib
 taglib/taglib@v1.11.1
@@ -20,16 +20,16 @@ https://download.sourceforge.net/libpng/libpng-1.6.37.tar.xz
 https://github.com/sergiud/bzip2/archive/cmake.zip
 
 # curl
-https://curl.haxx.se/download/curl-7.70.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+https://curl.haxx.se/download/curl-7.72.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
 # brotli (optional)
-google/brotli@v1.0.7
+google/brotli@v1.0.9
 
 # freetype
 https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.xz
 
 # libjpeg-turbo
-libjpeg-turbo/libjpeg-turbo@2.0.4
+libjpeg-turbo/libjpeg-turbo@2.0.5
 
 # libtiff
 http://download.osgeo.org/libtiff/tiff-4.1.0.tar.gz
@@ -44,4 +44,4 @@ uclouvain/openjpeg@v2.3.1
 #https://github.com/nie-game/cairo/archive/8fa90d4fded2c30e4f29494394fbbb8709587862.zip
 
 # poppler
-https://poppler.freedesktop.org/poppler-0.89.0.tar.xz -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF
+https://poppler.freedesktop.org/poppler-20.10.0.tar.xz -DENABLE_CPP=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF
