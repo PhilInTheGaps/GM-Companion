@@ -98,9 +98,11 @@ notifications:
 deploy:
   provider: bintray
   user: "philinthegaps"
-  file: "deploy/travis/bintray.json"
-  skip_cleanup: true
+  file: "/home/travis/build/PhilInTheGaps/GM-Companion/deploy/travis/bintray.json"
+  edge: true
+  cleanup: false
   on:
     all_branches: true
+    condition: $TRAVIS_OS_NAME = linux
   key:
     secure: gEYP119vI3sk7G4DJouaD8mAywi0BqbLuieuDBQhkYf+4b9axQt7effiyxSAd0i3WSWVD6VpjUNF5vqvHMJmereGDMQWeIkMOJbx/Mu1q/IwG9HxIxdb5AmuIaX+PeL38b3H9tYVuVru0goMsIy1AlzFQoQBoKiH7RHWQdPFNtMIgqzK18WW99mvmIAvtKdW1gpnlE83Yo0GdF7SORckRhTe6CHFVEcx1BLRwpfDHtUpNfVo+9CC/J+b50OOMSrImMYy4PtNbFUHIHswIe8rAMb5zgNkPyyD0lQpngzohRHhtXg2I6YYwP0RcWqlFTni+Z0AgecTGGp3MlfgrNrFOgINRQVIkZAiCkigSmRCP9P+tcDcYVDLKNg/vaQ3fbv+cI/g86rRcus0zBA5gton5xF3utvRF/hnYfkjC8eJdeB4CBSlsSWvHlYm8QYLLW90dXe9/axwpFQ0R6+Fkx/EyulUnt/l3KYIQiqrooMwOYtOJvL7toKgSFrCLsH4dh/KYa5hnVa6VvNBX289P7MeQ3u8Z9+slS6/TFdypsHLP8Dy5TOBukvrIDSW7jDgff4t5E4Qdb6RO4fJCmxS9fRp6Qlk1fJzX970U57qCkmEcEMg+PEHLgSHUIY54AMMovT4UqiAGrlOG9uWTpaqgCB9pAVo2AO02ZoqXtfCrDRlXos=
