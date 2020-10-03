@@ -217,37 +217,44 @@ void SpotifyPlayer::getCurrentSong()
 
     int requestId = Spotify::getInstance()->get(request);
 
-    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ](int id, QNetworkReply::NetworkError error, const QByteArray& data)
+    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ]
+            (int id, QNetworkReply::NetworkError error, const QByteArray& data)
     {
+        if (error != QNetworkReply::NoError)
+        {
+            qCWarning(gmAudioSpotify()) << "Error:" << error;
+            return;
+        }
+
         if (requestId != id) return;
 
         const auto root = QJsonDocument::fromJson(data).object();
         const auto item = root.value("item").toObject();
 
-        MetaData m;
-        m.title          = item.value("name").toString();
+        auto *metadata = new AudioMetaData(metaDataReader);
+        metadata->setTitle(item.value("name").toString());
         const auto album = item.value("album").toObject();
-        m.album          = album.value("name").toString();
-
+        metadata->setAlbum(album.value("name").toString());
 
         if (item.value("artists").toArray().count() > 0)
         {
-            m.artist = item.value("artists").toArray()[0].toObject().value("name").toString();
+            metadata->setArtist(item.value("artists").toArray()[0]
+                    .toObject().value("name").toString());
         }
 
         if (album.value("images").toArray().count() > 0)
         {
-            m.cover    = album.value("images").toArray()[0].toObject().value("url").toString();
-            m.coverUrl = m.cover;
+            metadata->setCover(album.value("images").toArray()[0]
+                    .toObject().value("url").toString());
         }
 
         int duration = item.value("duration_ms").toInt();
         int progress = root.value("progress_ms").toInt();
 
         startTimer(duration - progress);
-        m_currentIndex = m_trackList.indexOf(m.title);
+        m_currentIndex = m_trackList.indexOf(metadata->title());
 
-        metaDataReader->setMetaData(m);
+        metaDataReader->setMetaData(metadata);
     });
 }
 

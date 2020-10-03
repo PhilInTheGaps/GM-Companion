@@ -70,13 +70,13 @@ auto IconWorker::getPlaceholderImage(AudioElement *element)->QPixmap
     return img;
 }
 
-QPixmap AudioIconGenerator::getPlaceholderImage(int type)
+QPixmap AudioIconGenerator::getPlaceholderImage(AudioElement::Type type)
 {
     switch (type)
     {
-    case 0: return QPixmap(":/icons/media/music_image.png");
+    case AudioElement::Type::Music: return QPixmap(":/icons/media/music_image.png");
 
-    case 1: return QPixmap(":/icons/media/sound_image.png");
+    case AudioElement::Type::Sound: return QPixmap(":/icons/media/sound_image.png");
 
     default: break;
     }
@@ -110,7 +110,7 @@ void IconWorker::generateThumbnail(AudioElement *element)
 
 
     // Can not make collage
-    if (element->type() == 2) return;
+    if (element->type() == AudioElement::Type::Radio) return;
 
     // If no icon was specified, generate collage
     makeCollage(element);
@@ -232,7 +232,7 @@ auto IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audioFi
     if (audioFile->source() != 0) return getPlaceholderImage(element);
 
     // Resolve relative path
-    QString path = element->type() == 0 ? m_musicPath + audioFile->url() : m_soundsPath + audioFile->url();
+    QString path = element->type() == AudioElement::Type::Music ? m_musicPath + audioFile->url() : m_soundsPath + audioFile->url();
 
     // Check if icon cache contains image already
     if (AudioIconGenerator::cacheContains(QUrl(path)))

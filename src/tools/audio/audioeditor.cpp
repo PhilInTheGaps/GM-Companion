@@ -459,23 +459,23 @@ void AudioEditor::loadElement(QString name, int type, QString subscenario)
     switch (type)
     {
     case 0: // Music
-        element  = scenario->musicElement(name);
+        element  = scenario->element(name, AudioElement::Type::Music);
         basePath = SettingsManager::getPath("music");
         break;
 
     case 1: // Sounds
-        element  = scenario->soundElement(name);
+        element  = scenario->element(name, AudioElement::Type::Sound);
         basePath = SettingsManager::getPath("sounds");
         break;
 
     case 2: // Radio
-        element  = scenario->radioElement(name);
+        element  = scenario->element(name, AudioElement::Type::Radio);
         basePath = SettingsManager::getPath("radio");
         break;
 
     case 4: // Subscenario
         m_name = name;
-        m_type = type;
+//        m_type = type;
         emit currentElementChanged();
         return;
 
@@ -503,7 +503,6 @@ void AudioEditor::clearCurrentElement()
     m_id.clear();
     fileModel->clear();
     m_mode = 0;
-    m_type = -1;
 
     emit currentElementChanged();
 }
@@ -542,19 +541,19 @@ void AudioEditor::createMusicElement(QString name, bool subscenario, int scenari
     qCDebug(gmAudioEditor) << "Creating music element" << name << "...";
 
     // In Subscenario
-    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->musicElementNames().contains(name))
+    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->elementNames(AudioElement::Type::Music).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 0, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
-        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addMusicElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Music, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
+        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addElement(element);
         emit currentScenarioChanged();
         madeChanges();
     }
 
     // Default
-    else if (!m_currentProject->currentCategory()->currentScenario()->musicElementNames().contains(name))
+    else if (!m_currentProject->currentCategory()->currentScenario()->elementNames(AudioElement::Type::Music).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 0, m_currentProject->currentCategory()->currentScenario()->path());
-        m_currentProject->currentCategory()->currentScenario()->addMusicElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Music, m_currentProject->currentCategory()->currentScenario()->path());
+        m_currentProject->currentCategory()->currentScenario()->addElement(element);
         emit currentScenarioChanged();
         madeChanges();
     }
@@ -571,17 +570,17 @@ void AudioEditor::createSoundElement(QString name, bool subscenario, int scenari
 
     qCDebug(gmAudioEditor) << "Creating sound element" << name << "...";
 
-    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->soundElementNames().contains(name))
+    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->elementNames(AudioElement::Type::Sound).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 1, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
-        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addSoundElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Sound, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
+        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addElement(element);
         emit currentScenarioChanged();
         madeChanges();
     }
-    else if (!m_currentProject->currentCategory()->currentScenario()->soundElementNames().contains(name))
+    else if (!m_currentProject->currentCategory()->currentScenario()->elementNames(AudioElement::Type::Sound).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 1, m_currentProject->currentCategory()->currentScenario()->path());
-        m_currentProject->currentCategory()->currentScenario()->addSoundElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Sound, m_currentProject->currentCategory()->currentScenario()->path());
+        m_currentProject->currentCategory()->currentScenario()->addElement(element);
         emit currentScenarioChanged();
 
         madeChanges();
@@ -599,17 +598,17 @@ void AudioEditor::createRadioElement(QString name, bool subscenario, int scenari
 
     qCDebug(gmAudioEditor) << "Creating radio" << name << "...";
 
-    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->radioElementNames().contains(name))
+    if (subscenario && (scenarioIndex > 0) && !m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->elementNames(AudioElement::Type::Radio).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 2, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
-        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addRadioElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Radio, m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->path());
+        m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex - 1]->addElement(element);
         emit currentScenarioChanged();
         madeChanges();
     }
-    else if (!m_currentProject->currentCategory()->currentScenario()->radioElementNames().contains(name))
+    else if (!m_currentProject->currentCategory()->currentScenario()->elementNames(AudioElement::Type::Radio).contains(name))
     {
-        AudioElement *element = new AudioElement(name, 2, m_currentProject->currentCategory()->currentScenario()->path());
-        m_currentProject->currentCategory()->currentScenario()->addRadioElement(element);
+        AudioElement *element = new AudioElement(name, AudioElement::Type::Radio, m_currentProject->currentCategory()->currentScenario()->path());
+        m_currentProject->currentCategory()->currentScenario()->addElement(element);
         emit currentScenarioChanged();
 
         madeChanges();
@@ -644,50 +643,50 @@ void AudioEditor::sortElements()
  * @param type Music: 0, Sounds: 1, Radio: 2
  * @param positions Amount of positions to move element by
  */
-void AudioEditor::moveElement(QString element, int type, int positions)
+void AudioEditor::moveElement(const QString &element, const AudioElement::Type &type, int positions)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Moving element" << element << "of type" << type << "by" << positions << "steps ...";
+//    qCDebug(gmAudioEditor) << "Moving element" << element << "of type" << type << "by" << positions << "steps ...";
 
-    AudioScenario *scenario;
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
+//    scenario->moveElement(element, positions, type);
 
-    switch (type) {
-    case 0: // Music
-        scenario->moveMusicElement(element, positions);
-        break;
+//    switch (type) {
+//    case 0: // Music
+//        scenario->moveMusicElement(element, positions);
+//        break;
 
-    case 1: // Sound
-        scenario->moveSoundElement(element, positions);
-        break;
+//    case 1: // Sound
+//        scenario->moveSoundElement(element, positions);
+//        break;
 
-    case 2: // Radio
-        scenario->moveRadioElement(element, positions);
-        break;
+//    case 2: // Radio
+//        scenario->moveRadioElement(element, positions);
+//        break;
 
-    case 4: // Subscenario
-        scenario->moveScenario(element, positions);
-        emit subscenariosChanged();
-        break;
+//    case 4: // Subscenario
+//        scenario->moveScenario(element, positions);
+//        emit subscenariosChanged();
+//        break;
 
-    default:
-        break;
-    }
+//    default:
+//        break;
+//    }
 
-    updateElementModel();
-
-    madeChanges();
+//    updateElementModel();
+//    madeChanges();
 }
 
 /**
@@ -697,47 +696,47 @@ void AudioEditor::moveElement(QString element, int type, int positions)
  */
 void AudioEditor::deleteElement(QString element, int type)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Deleting element" << element << "of type" << type << "...";
+//    qCDebug(gmAudioEditor) << "Deleting element" << element << "of type" << type << "...";
 
-    AudioScenario *scenario;
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
-    switch (type) {
-    case 0: // Music
-        scenario->removeMusicElement(element);
-        break;
+//    switch (type) {
+//    case 0: // Music
+//        scenario->removeMusicElement(element);
+//        break;
 
-    case 1: // Music
-        scenario->removeSoundElement(element);
-        break;
+//    case 1: // Music
+//        scenario->removeSoundElement(element);
+//        break;
 
-    case 2: // Music
-        scenario->removeRadioElement(element);
-        break;
+//    case 2: // Music
+//        scenario->removeRadioElement(element);
+//        break;
 
-    case 4: // Subscenario
-        scenario->removeScenario(element);
-        emit subscenariosChanged();
-        break;
+//    case 4: // Subscenario
+//        scenario->removeScenario(element);
+//        emit subscenariosChanged();
+//        break;
 
-    default:
-        break;
-    }
+//    default:
+//        break;
+//    }
 
-    updateElementModel();
+//    updateElementModel();
 
-    madeChanges();
+//    madeChanges();
 }
 
 /**
@@ -767,7 +766,7 @@ void AudioEditor::madeChanges()
 {
     if (!m_currentProject) return;
 
-    m_currentProject->setSaved(false);
+    m_currentProject->setIsSaved(false);
     m_isSaved = false;
     emit isSavedChanged();
 }
@@ -781,59 +780,59 @@ void AudioEditor::madeChanges()
  */
 void AudioEditor::addUrl(QString elementName, int type, QString url, int mode, QString title)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Adding URL to element" << elementName << ":" << url << "( Mode:" << mode << ") ...";
+//    qCDebug(gmAudioEditor) << "Adding URL to element" << elementName << ":" << url << "( Mode:" << mode << ") ...";
 
-    auto element = getElement(elementName, type);
+//    auto element = getElement(elementName, type);
 
-    if (element && !url.isEmpty())
-    {
-        int source = 1;
+//    if (element && !url.isEmpty())
+//    {
+//        int source = 1;
 
-        if (mode == 1) source = 2;
+//        if (mode == 1) source = 2;
 
-        auto audioFile = new AudioFile(url, source, title, element);
+//        auto audioFile = new AudioFile(url, source, title, element);
 
-        if (type == 2) // Radio
-        {
-            element->setFiles({ audioFile });
-            fileModel->setElements({ audioFile });
-        }
-        else
-        {
-            auto files = element->files();
-            files.append(audioFile);
-            element->setFiles(files);
-            fileModel->append(audioFile);
-        }
+//        if (type == 2) // Radio
+//        {
+//            element->setFiles({ audioFile });
+//            fileModel->setElements({ audioFile });
+//        }
+//        else
+//        {
+//            auto files = element->files();
+//            files.append(audioFile);
+//            element->setFiles(files);
+//            fileModel->append(audioFile);
+//        }
 
-        emit currentElementChanged();
-        emit fileIndexChanged(m_fileIndex);
+//        emit currentElementChanged();
+//        emit fileIndexChanged(m_fileIndex);
 
-        madeChanges();
-    }
+//        madeChanges();
+//    }
 }
 
 void AudioEditor::addYtUrl(QString elementName, int type, QString videoUrl)
 {
-    qCDebug(gmAudioEditor) << "Adding YouTube URL:" << videoUrl;
+//    qCDebug(gmAudioEditor) << "Adding YouTube URL:" << videoUrl;
 
-    auto element = getElement(elementName, type);
-    if (!element) return;
+//    auto element = getElement(elementName, type);
+//    if (!element) return;
 
-    auto audioFile = new AudioFile(videoUrl, 3, "", element);
-    auto files = element->files();
+//    auto audioFile = new AudioFile(videoUrl, 3, "", element);
+//    auto files = element->files();
 
-    files.append(audioFile);
-    element->setFiles(files);
-    fileModel->append(audioFile);
+//    files.append(audioFile);
+//    element->setFiles(files);
+//    fileModel->append(audioFile);
 
-    emit currentElementChanged();
-    emit fileIndexChanged(m_fileIndex);
+//    emit currentElementChanged();
+//    emit fileIndexChanged(m_fileIndex);
 
-    madeChanges();
+//    madeChanges();
 }
 
 /**
@@ -844,36 +843,36 @@ void AudioEditor::addYtUrl(QString elementName, int type, QString videoUrl)
  */
 void AudioEditor::addFile(QString elementName, int type, QStringList path, QString filename)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Adding file to element" << elementName << "of type" << type << ":" << path << filename;
+//    qCDebug(gmAudioEditor) << "Adding file to element" << elementName << "of type" << type << ":" << path << filename;
 
-    auto pathString = "/" + (path.isEmpty() ? "" : path.join("/") + "/") + filename;
-    auto element    = getElement(elementName, type);
+//    auto pathString = "/" + (path.isEmpty() ? "" : path.join("/") + "/") + filename;
+//    auto element    = getElement(elementName, type);
 
-    if (element)
-    {
-        auto audioFile = new AudioFile(pathString, 0, "", element);
+//    if (element)
+//    {
+//        auto audioFile = new AudioFile(pathString, 0, "", element);
 
-        if (type == 2) // Radio
-        {
-            element->setFiles({ audioFile });
-            fileModel->setElements({ audioFile });
-        }
-        else
-        {
-            auto files = element->files();
-            files.append(audioFile);
-            element->setFiles(files);
-            fileModel->append(audioFile);
-        }
+//        if (type == 2) // Radio
+//        {
+//            element->setFiles({ audioFile });
+//            fileModel->setElements({ audioFile });
+//        }
+//        else
+//        {
+//            auto files = element->files();
+//            files.append(audioFile);
+//            element->setFiles(files);
+//            fileModel->append(audioFile);
+//        }
 
-        emit currentElementChanged();
-        emit fileIndexChanged(m_fileIndex);
+//        emit currentElementChanged();
+//        emit fileIndexChanged(m_fileIndex);
 
-        madeChanges();
-    }
+//        madeChanges();
+//    }
 }
 
 /**
@@ -882,42 +881,42 @@ void AudioEditor::addFile(QString elementName, int type, QStringList path, QStri
  */
 void AudioEditor::addFiles(QStringList files)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Adding a list of files:";
+//    qCDebug(gmAudioEditor) << "Adding a list of files:";
 
-    auto element = getElement(m_name, m_type);
+//    auto element = getElement(m_name, m_type);
 
-    if (element)
-    {
-        fileModel->setElements(element->files());
+//    if (element)
+//    {
+//        fileModel->setElements(element->files());
 
-        for (auto file : files)
-        {
-            if (!file.isEmpty())
-            {
-                qCDebug(gmAudioEditor) << "   " << file;
-                fileModel->append(new AudioFile(file, 0, "", element));
-            }
-        }
+//        for (auto file : files)
+//        {
+//            if (!file.isEmpty())
+//            {
+//                qCDebug(gmAudioEditor) << "   " << file;
+//                fileModel->append(new AudioFile(file, 0, "", element));
+//            }
+//        }
 
-        if (!files.isEmpty())
-        {
-            QList<AudioFile *> elementFiles;
+//        if (!files.isEmpty())
+//        {
+//            QList<AudioFile *> elementFiles;
 
-            for (auto file : fileModel->elements())
-            {
-                elementFiles.append(static_cast<AudioFile *>(file));
-            }
-            element->setFiles(elementFiles);
+//            for (auto file : fileModel->elements())
+//            {
+//                elementFiles.append(static_cast<AudioFile *>(file));
+//            }
+//            element->setFiles(elementFiles);
 
-            emit currentElementChanged();
-            emit fileIndexChanged(m_fileIndex);
+//            emit currentElementChanged();
+//            emit fileIndexChanged(m_fileIndex);
 
-            madeChanges();
-        }
-    }
+//            madeChanges();
+//        }
+//    }
 }
 
 void AudioEditor::onFoundProjects(QList<AudioProject *>list, bool isEditor)
@@ -950,32 +949,32 @@ void AudioEditor::onCurrentScenarioChanged()
 
 void AudioEditor::onExportElements(QList<AudioElement *>elements, bool subscenario, int scenarioIndex)
 {
-    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentScenario())
-    {
-        if (subscenario && (scenarioIndex >= 0) && (scenarioIndex < m_currentProject->currentCategory()->currentScenario()->scenarios().length()))
-        {
-            for (auto e : elements)
-            {
-                if (e)
-                {
-                    m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex]->addMusicElement(e);
-                }
-            }
-        }
-        else
-        {
-            for (auto e : elements)
-            {
-                if (e)
-                {
-                    m_currentProject->currentCategory()->currentScenario()->addMusicElement(e);
-                }
-            }
-        }
+//    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentScenario())
+//    {
+//        if (subscenario && (scenarioIndex >= 0) && (scenarioIndex < m_currentProject->currentCategory()->currentScenario()->scenarios().length()))
+//        {
+//            for (auto e : elements)
+//            {
+//                if (e)
+//                {
+//                    m_currentProject->currentCategory()->currentScenario()->scenarios()[scenarioIndex]->addMusicElement(e);
+//                }
+//            }
+//        }
+//        else
+//        {
+//            for (auto e : elements)
+//            {
+//                if (e)
+//                {
+//                    m_currentProject->currentCategory()->currentScenario()->addMusicElement(e);
+//                }
+//            }
+//        }
 
-        madeChanges();
-        updateElementModel();
-    }
+//        madeChanges();
+//        updateElementModel();
+//    }
 }
 
 /**
@@ -987,65 +986,65 @@ void AudioEditor::onExportElements(QList<AudioElement *>elements, bool subscenar
  */
 void AudioEditor::removeFile(QString name, int type, int index, bool findMissing)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Deleting file in element" << name << "of type" << type << "at index" << index << "...";
+//    qCDebug(gmAudioEditor) << "Deleting file in element" << name << "of type" << type << "at index" << index << "...";
 
-    // Get scenario
-    AudioScenario *scenario;
+//    // Get scenario
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
-    AudioElement *element = nullptr;
-    QString basePath;
-    QList<AudioFile *> files;
+//    AudioElement *element = nullptr;
+//    QString basePath;
+//    QList<AudioFile *> files;
 
-    // Set basePath and find element
-    switch (type)
-    {
-    case 0: // Music
-        element  = scenario->musicElement(name);
-        basePath = SettingsManager::getPath("music");
-        break;
+//    // Set basePath and find element
+//    switch (type)
+//    {
+//    case 0: // Music
+//        element  = scenario->musicElement(name);
+//        basePath = SettingsManager::getPath("music");
+//        break;
 
-    case 1: // Sounds
-        element  = scenario->soundElement(name);
-        basePath = SettingsManager::getPath("sound");
-        break;
+//    case 1: // Sounds
+//        element  = scenario->soundElement(name);
+//        basePath = SettingsManager::getPath("sound");
+//        break;
 
-    default: return;
-    }
+//    default: return;
+//    }
 
-    // Remove file from list
-    if (element)
-    {
-        files = element->files();
+//    // Remove file from list
+//    if (element)
+//    {
+//        files = element->files();
 
-        if ((index < files.size()) && (index > -1))
-        {
-            files.removeAt(index);
-            fileModel->remove(fileModel->elements()[index]);
+//        if ((index < files.size()) && (index > -1))
+//        {
+//            files.removeAt(index);
+//            fileModel->remove(fileModel->elements()[index]);
 
-            element->setFiles(files);
-            emit currentElementChanged();
+//            element->setFiles(files);
+//            emit currentElementChanged();
 
-            madeChanges();
+//            madeChanges();
 
-            if (findMissing)
-            {
-                // Tell AudioSaveLoad to find out if files are missing
-                m_audioSaveLoad->findMissingFiles(files, basePath);
-            }
-        }
-    }
+//            if (findMissing)
+//            {
+//                // Tell AudioSaveLoad to find out if files are missing
+//                m_audioSaveLoad->findMissingFiles(files, basePath);
+//            }
+//        }
+//    }
 }
 
 /**
@@ -1055,55 +1054,55 @@ void AudioEditor::removeFile(QString name, int type, int index, bool findMissing
  */
 void AudioEditor::removeMissingFiles(QString name, int type)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Removing missing files in element" << name << "of type" << type << "...";
+//    qCDebug(gmAudioEditor) << "Removing missing files in element" << name << "of type" << type << "...";
 
-    AudioScenario *scenario;
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
-    AudioElement *element = nullptr;
-    QString basePath;
-    QList<AudioFile> list;
+//    AudioElement *element = nullptr;
+//    QString basePath;
+//    QList<AudioFile> list;
 
-    switch (type)
-    {
-    case 0: // Music
-        element  = scenario->musicElement(name);
-        basePath = SettingsManager::getPath("music");
-        break;
+//    switch (type)
+//    {
+//    case 0: // Music
+//        element  = scenario->musicElement(name);
+//        basePath = SettingsManager::getPath("music");
+//        break;
 
-    case 1: // Sounds
-        element  = scenario->soundElement(name);
-        basePath = SettingsManager::getPath("sound");
-        break;
+//    case 1: // Sounds
+//        element  = scenario->soundElement(name);
+//        basePath = SettingsManager::getPath("sound");
+//        break;
 
-    default: return;
-    }
+//    default: return;
+//    }
 
-    if (element)
-    {
-        for (int i = 0; i < fileModel->elements().count(); i++)
-        {
-            if (static_cast<AudioFile *>(fileModel->elements()[i])->missing() && (i < element->files().count()))
-            {
-                removeFile(name, type, i, false);
-            }
-        }
+//    if (element)
+//    {
+//        for (int i = 0; i < fileModel->elements().count(); i++)
+//        {
+//            if (static_cast<AudioFile *>(fileModel->elements()[i])->missing() && (i < element->files().count()))
+//            {
+//                removeFile(name, type, i, false);
+//            }
+//        }
 
-        // fileManager->getAudioSaveLoad()->findMissingFiles(m_files, basePath);
+//        // fileManager->getAudioSaveLoad()->findMissingFiles(m_files, basePath);
 
-        madeChanges();
-    }
+//        madeChanges();
+//    }
 }
 
 /**
@@ -1115,50 +1114,50 @@ void AudioEditor::removeMissingFiles(QString name, int type)
  */
 void AudioEditor::moveFile(QString name, int type, int index, int positions)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Moving file in element" << name << "of type" << type << "at index" << index << "by" << positions << "positions ...";
+//    qCDebug(gmAudioEditor) << "Moving file in element" << name << "of type" << type << "at index" << index << "by" << positions << "positions ...";
 
-    AudioScenario *scenario;
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
-    AudioElement *element = nullptr;
-    QList<AudioFile *> files;
+//    AudioElement *element = nullptr;
+//    QList<AudioFile *> files;
 
-    switch (type)
-    {
-    case 0: // Music
-        element = scenario->musicElement(name);
-        files   = element->files();
-        break;
+//    switch (type)
+//    {
+//    case 0: // Music
+//        element = scenario->musicElement(name);
+//        files   = element->files();
+//        break;
 
-    case 1: // Sounds
-        element = scenario->soundElement(name);
-        files   = element->files();
-        break;
+//    case 1: // Sounds
+//        element = scenario->soundElement(name);
+//        files   = element->files();
+//        break;
 
-    default: return;
-    }
+//    default: return;
+//    }
 
-    if (element && (index + positions < files.size()) && (index + positions > -1))
-    {
-        files.move(index, index + positions);
-        fileModel->moveRow(QModelIndex(), index, QModelIndex(), index + positions);
-        element->setFiles(files);
+//    if (element && (index + positions < files.size()) && (index + positions > -1))
+//    {
+//        files.move(index, index + positions);
+//        fileModel->moveRow(QModelIndex(), index, QModelIndex(), index + positions);
+//        element->setFiles(files);
 
-        emit currentElementChanged();
+//        emit currentElementChanged();
 
-        madeChanges();
-    }
+//        madeChanges();
+//    }
 }
 
 /**
@@ -1170,69 +1169,69 @@ void AudioEditor::moveFile(QString name, int type, int index, int positions)
  */
 void AudioEditor::replaceFileFolder(QString name, int type, int index, QString folder)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Replacing path of element" << name << "of type" << type << "at index" << index << "with" << folder << "...";
+//    qCDebug(gmAudioEditor) << "Replacing path of element" << name << "of type" << type << "at index" << index << "with" << folder << "...";
 
-    AudioScenario *scenario;
+//    AudioScenario *scenario;
 
-    if (m_subscenario.isEmpty())
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario();
-    }
-    else
-    {
-        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
-    }
+//    if (m_subscenario.isEmpty())
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario();
+//    }
+//    else
+//    {
+//        scenario = m_currentProject->currentCategory()->currentScenario()->scenario(m_subscenario);
+//    }
 
-    AudioElement *element = nullptr;
+//    AudioElement *element = nullptr;
 
-    switch (type)
-    {
-    case 0: // Music
-        element = scenario->musicElement(name);
-        break;
+//    switch (type)
+//    {
+//    case 0: // Music
+//        element = scenario->musicElement(name);
+//        break;
 
-    case 1: // Sounds
-        element = scenario->soundElement(name);
-        break;
+//    case 1: // Sounds
+//        element = scenario->soundElement(name);
+//        break;
 
-    default: return;
-    }
+//    default: return;
+//    }
 
-    if (element)
-    {
-        if (index < fileModel->elements().count())
-        {
-            QString path          = static_cast<AudioFile *>(fileModel->elements()[index])->url();
-            QString folderPath    = path.left(path.lastIndexOf('/'));
-            QString newFolderPath = folder.right(folder.length() - folder.indexOf(basePath(element->type())));
-            newFolderPath = newFolderPath.replace(basePath(element->type()), "");
+//    if (element)
+//    {
+//        if (index < fileModel->elements().count())
+//        {
+//            QString path          = static_cast<AudioFile *>(fileModel->elements()[index])->url();
+//            QString folderPath    = path.left(path.lastIndexOf('/'));
+//            QString newFolderPath = folder.right(folder.length() - folder.indexOf(basePath(element->type())));
+//            newFolderPath = newFolderPath.replace(basePath(element->type()), "");
 
-            QList<AudioFile *> audioFiles;
-            auto elementFiles = element->files();
+//            QList<AudioFile *> audioFiles;
+//            auto elementFiles = element->files();
 
-            for (int i = 0; i < fileModel->elements().size(); i++)
-            {
-                auto file = static_cast<AudioFile *>(fileModel->elements()[i]);
+//            for (int i = 0; i < fileModel->elements().size(); i++)
+//            {
+//                auto file = static_cast<AudioFile *>(fileModel->elements()[i]);
 
-                if (file->missing() && file->url().contains(folderPath) && (i < element->files().count()))
-                {
-                    file->setUrl(file->url().replace(folderPath, newFolderPath));
-                    elementFiles[i] = file;
-                }
+//                if (file->missing() && file->url().contains(folderPath) && (i < element->files().count()))
+//                {
+//                    file->setUrl(file->url().replace(folderPath, newFolderPath));
+//                    elementFiles[i] = file;
+//                }
 
-                audioFiles.append(file);
-            }
+//                audioFiles.append(file);
+//            }
 
-            element->setFiles(elementFiles);
-            emit currentElementChanged();
+//            element->setFiles(elementFiles);
+//            emit currentElementChanged();
 
-            m_audioSaveLoad->findMissingFiles(audioFiles, basePath(element->type()));
-            madeChanges();
-        }
-    }
+//            m_audioSaveLoad->findMissingFiles(audioFiles, basePath(element->type()));
+//            madeChanges();
+//        }
+//    }
 }
 
 /**
@@ -1243,18 +1242,18 @@ void AudioEditor::replaceFileFolder(QString name, int type, int index, QString f
  */
 void AudioEditor::setIcon(QString element, int type, QString path)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) return;
 
-    qCDebug(gmAudioEditor) << "Setting icon of" << element << "of type" << type << ":" << path << "...";
+//    qCDebug(gmAudioEditor) << "Setting icon of" << element << "of type" << type << ":" << path << "...";
 
-    AudioElement *e = getElement(element, type);
+//    AudioElement *e = getElement(element, type);
 
-    if (!e) return;
+//    if (!e) return;
 
-    e->setRelativeIcon(path);
-    AudioIconGenerator::generateIcon(e);
-    madeChanges();
+//    e->setRelativeIcon(path);
+//    AudioIconGenerator::generateIcon(e);
+//    madeChanges();
 }
 
 /**
@@ -1263,41 +1262,41 @@ void AudioEditor::setIcon(QString element, int type, QString path)
  * @param type Music: 0, Sounds: 1, Radio: 2
  * @param name New name
  */
-void AudioEditor::setName(QString element, int type, QString name)
+void AudioEditor::setName(const QString &element, int type, const QString &name)
 {
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario() || name.isEmpty()) return;
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario() || name.isEmpty()) return;
 
-    qCDebug(gmAudioEditor) << "Changing name of" << element << "of type" << type << ":" << name << "...";
+//    qCDebug(gmAudioEditor) << "Changing name of" << element << "of type" << type << ":" << name << "...";
 
-    // Subscenario
-    if (type == 4)
-    {
-        for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
-        {
-            if (s && (s->name() == element))
-            {
-                s->setName(name);
-                madeChanges();
-                emit currentScenarioChanged();
-                return;
-            }
-        }
-    }
+//    // Subscenario
+//    if (type == 4)
+//    {
+//        for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+//        {
+//            if (s && (s->name() == element))
+//            {
+//                s->setName(name);
+//                madeChanges();
+//                emit currentScenarioChanged();
+//                return;
+//            }
+//        }
+//    }
 
-    // Audio Element
-    AudioElement *e = getElement(element, type);
+//    // Audio Element
+//    AudioElement *e = getElement(element, type);
 
-    if (e)
-    {
-        m_name = name;
-        e->setName(name);
+//    if (e)
+//    {
+//        m_name = name;
+//        e->setName(name);
 
-        madeChanges();
-    }
+//        madeChanges();
+//    }
 }
 
-void AudioEditor::setSubscenario(QString element, int type, int index)
+void AudioEditor::setSubscenario(const QString &element, const AudioElement::Type &type, int index)
 {
     if (!m_currentProject || !m_currentProject->currentCategory() ||
         !m_currentProject->currentCategory()->currentScenario() || (index < 0) ||
@@ -1336,25 +1335,8 @@ void AudioEditor::setSubscenario(QString element, int type, int index)
 
     if (e && scenario && scenario2)
     {
-        switch (type)
-        {
-        case 0: // Music
-            scenario2->addMusicElement(e);
-            scenario->removeMusicElement(e->name(), false);
-            break;
-
-        case 1: // Sound
-            scenario2->addSoundElement(e);
-            scenario->removeSoundElement(e->name(), false);
-            break;
-
-        case 2: // Radio
-            scenario2->addRadioElement(e);
-            scenario->removeRadioElement(e->name(), false);
-            break;
-
-        default: return;
-        }
+        scenario2->addElement(e);
+        scenario->removeElement(e->name(), type, false);
 
         updateElementModel();
         madeChanges();
@@ -1364,10 +1346,9 @@ void AudioEditor::setSubscenario(QString element, int type, int index)
 /**
  * @brief Set the mode of an element
  * @param element Name of the element
- * @param type Music: 0, Sounds: 1, Radio: 2
  * @param mode New mode, depends on the element
  */
-void AudioEditor::setMode(QString element, int type, int mode)
+void AudioEditor::setMode(const QString &element, const AudioElement::Type &type, int mode)
 {
     if (!m_currentProject || !m_currentProject->currentCategory() ||
         !m_currentProject->currentCategory()->currentScenario()) return;
@@ -1388,20 +1369,19 @@ void AudioEditor::setMode(QString element, int type, int mode)
 
 /**
  * @brief Get the base path where files are located in
- * @param type Music: 0, Sounds: 1, Radio: 2
  * @return Path to the files
  */
-QString AudioEditor::basePath(int type)
+QString AudioEditor::basePath(const AudioElement::Type &type)
 {
     switch (type)
     {
-    case 0: // Music
+    case AudioElement::Type::Music:
         return SettingsManager::getPath("music");
 
-    case 1: // Sounds
+    case AudioElement::Type::Sound:
         return SettingsManager::getPath("sound");
 
-    case 2: // Radio
+    case AudioElement::Type::Radio:
         return SettingsManager::getPath("radio");
 
     default: return "";
@@ -1419,10 +1399,9 @@ void AudioEditor::loadData()
 /**
  * @brief Get an element by name and type
  * @param name Name of the element
- * @param type Music: 0, Sounds: 1, Radio: 2
  * @return Pointer to the requested element, nullptr if element is not found
  */
-AudioElement * AudioEditor::getElement(QString name, int type)
+AudioElement * AudioEditor::getElement(const QString &name, const AudioElement::Type &type)
 {
     if (!m_currentProject || !m_currentProject->currentCategory() ||
         !m_currentProject->currentCategory()->currentScenario()) return nullptr;
@@ -1440,17 +1419,5 @@ AudioElement * AudioEditor::getElement(QString name, int type)
 
     if (!scenario) return nullptr;
 
-    switch (type)
-    {
-    case 0: // Music
-        return scenario->musicElement(name);
-
-    case 1: // Sound
-        return scenario->soundElement(name);
-
-    case 2: // Radio
-        return scenario->radioElement(name);
-
-    default: return nullptr;
-    }
+    return scenario->element(name, type);
 }

@@ -6,7 +6,7 @@
 #include <QMediaPlaylist>
 #include <QTemporaryDir>
 
-#include "../audioelement.h"
+#include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
 #include <qytlib/videos/videoclient.h>

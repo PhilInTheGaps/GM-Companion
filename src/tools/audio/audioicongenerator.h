@@ -5,7 +5,7 @@
 #include <QThread>
 #include <QPixmap>
 #include <QNetworkAccessManager>
-#include "audioproject.h"
+#include "project/audioproject.h"
 #include "services/spotify/spotify.h"
 #include <QReadWriteLock>
 
@@ -73,7 +73,7 @@ public:
     static bool cacheContains(QUrl url);
     static bool tryLoadFromCache(QUrl url, AudioElement *element);
 
-    static QPixmap getPlaceholderImage(int type);
+    static QPixmap getPlaceholderImage(AudioElement::Type type);
 
 private:
     explicit AudioIconGenerator();

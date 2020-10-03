@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/audioproject/project.audio</file>
+    </qresource>
+</RCC>

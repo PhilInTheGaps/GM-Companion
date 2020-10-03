@@ -5,7 +5,7 @@
 #include <QMediaPlaylist>
 #include <QTemporaryDir>
 
-#include "../audioelement.h"
+#include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "spotifyplayer.h"
 #include "discordplayer.h"
@@ -15,8 +15,8 @@ class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(SpotifyPlayer *spotifyPlayer, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
-    ~MusicPlayer() override;
+    explicit MusicPlayer(MetaDataReader *metaDataReader, SpotifyPlayer *spotifyPlayer,
+                         DiscordPlayer *discordPlayer, QObject *parent = nullptr);
 
     void play(AudioElement *element);
 

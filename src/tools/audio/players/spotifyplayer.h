@@ -9,8 +9,8 @@
 
 #include "audioplayer.h"
 #include "discordplayer.h"
-#include "../audioelement.h"
-#include "../metadatareader.h"
+#include "../project/audioelement.h"
+#include "../metadata/metadatareader.h"
 
 struct SpotifyTrack
 {

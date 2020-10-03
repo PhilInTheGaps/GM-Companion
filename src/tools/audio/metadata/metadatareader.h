@@ -5,30 +5,23 @@
 #include <QMediaPlayer>
 #include <QPixmap>
 #include <QTemporaryFile>
-
-class MetaData
-{
-public:
-    MetaData() {}
-    ~MetaData() {}
-
-    QString artist = "", album = "", title = "", cover = "", coverUrl = "", type = "", elementIcon = "";
-    qint64 length = 0;
-};
+#include "audiometadata.h"
 
 class MetaDataReader : public QObject
 {
     Q_OBJECT
 public:
     explicit MetaDataReader(QObject *parent = nullptr);
-    void setMetaData(MetaData m);
+
+    AudioMetaData* metaData() const { return m_metaData; }
+    void setMetaData(AudioMetaData *metaData);
 
 private:
-    MetaData m_metaData;
-    QTemporaryFile m_coverFile;
+    AudioMetaData *m_metaData = nullptr;
+    QTemporaryFile *m_coverFile = nullptr;
 
 signals:
-    void metaDataUpdated(const MetaData& m);
+    void metaDataChanged();
 
 public slots:
     void updateMetaData(QMediaPlayer *mediaPlayer);

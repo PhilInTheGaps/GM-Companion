@@ -61,7 +61,7 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
     }
 
     // Write to the output category of the message and the message itself
-    line.append(context.category).append(": ").append(msg);
+    line.append(context.category).append(": ").append(msg.toUtf8());
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {

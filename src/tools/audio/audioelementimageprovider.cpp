@@ -19,7 +19,7 @@ QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size,
 
     if (pixmap.isNull())
     {
-        pixmap = AudioIconGenerator::getPlaceholderImage(getElementType(tempId));
+//        pixmap = AudioIconGenerator::getPlaceholderImage();
     }
 
     if (size) *size = pixmap.size();
@@ -32,28 +32,31 @@ QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size,
     return pixmap;
 }
 
-int AudioElementImageProvider::getElementType(const QString& id)
-{
-    auto path = id.split("/");
+//int AudioElementImageProvider::getElementType(const QString& id)
+//{
+//    auto path = id.split("/");
 
-    // [0] = project, [1] = category, [2] = scenario, [3] = type or scenario,
-    // [4] = type again if [3] was scenario or element name if not
-    if (path.length() > 3)
-    {
-        bool ok   = false;
-        int  type = path[3].toInt(&ok);
+//    // [0] = project, [1] = category, [2] = scenario, [3] = type or scenario,
+//    // [4] = type again if [3] was scenario or element name if not
+//    if (path.length() > 3)
+//    {
+//        auto type = path[3];
+//        if (type == "Project")
 
-        if (ok)
-        {
-            return type;
-        }
-        else
-        {
-            type = path[4].toInt(&ok);
+//        bool ok   = false;
+//        int  type = path[3].toInt(&ok);
 
-            if (ok) return type;
-        }
-    }
+//        if (ok)
+//        {
+//            return type;
+//        }
+//        else
+//        {
+//            type = path[4].toInt(&ok);
 
-    return -1;
-}
+//            if (ok) return type;
+//        }
+//    }
+
+//    return -1;
+//}

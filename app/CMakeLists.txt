@@ -11,7 +11,12 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 include(AddFontAwesome)
-set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${FONT_AWESOME_DIR}" CACHE STRING "Qt Creator qml import paths")
+
+# set QML import path
+list(APPEND QML_IMPORT_PATH ${FONT_AWESOME_DIR})
+list(APPEND QML_IMPORT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ui")
+list(REMOVE_DUPLICATES QML_IMPORT_PATH)
+set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml LinguistTools)
 find_library(GM-COMPANION-LIB_DIR gm-companion-lib)

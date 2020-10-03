@@ -118,7 +118,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
         FileManager::getInstance()->saveFile(filePath, data);
     }
 
-    project->setSaved(true);
+    project->setIsSaved(true);
 }
 
 void AudioSaveLoad::deleteProject(AudioProject *project)

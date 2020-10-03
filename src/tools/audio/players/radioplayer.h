@@ -6,7 +6,8 @@
 #include <QMediaPlaylist>
 #include <QTemporaryDir>
 
-#include "../audioelement.h"
+#include "../metadata/metadatareader.h"
+#include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
 
@@ -14,8 +15,8 @@ class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    RadioPlayer(DiscordPlayer *m_discordPlayer, QObject *parent = nullptr);
-    ~RadioPlayer();
+    RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *m_discordPlayer,
+                QObject *parent = nullptr);
 
     void play(AudioElement *element);
     void play();
@@ -42,7 +43,6 @@ private:
 signals:
     void startedPlaying();
     void metaDataChanged(QMediaPlayer *mediaPlayer);
-    void metaDataChanged(const QString& key, const QVariant& value);
 
 private slots:
     void onMetaDataChanged();

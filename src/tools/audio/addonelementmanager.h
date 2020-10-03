@@ -2,7 +2,7 @@
 #define ADDONELEMENTMANAGER_H
 
 #include <QObject>
-#include "audioelement.h"
+#include "project/audioproject.h"
 
 class AddonElementManager : public QObject
 {

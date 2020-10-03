@@ -35,7 +35,9 @@ Rectangle {
             model: audio_tool.projectNames
 
             onCurrentTextChanged: {
-                if (loaded) audio_tool.setCurrentProject(currentIndex)
+                if (loaded) {
+                    audio_tool.setCurrentProject(currentIndex)
+                }
             }
 
             onModelChanged: {
@@ -80,17 +82,17 @@ Rectangle {
             Repeater {
                 id: category_repeater
 
-                model: audio_tool.categoryNames
-
-                onModelChanged: console.debug(model)
+                model: audio_tool.currentProject ? audio_tool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData
+                    buttonText: modelData.name
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    onClicked: audio_tool.setCurrentCategory(buttonText)
+                    onClicked: {
+                        audio_tool.currentProject.setCurrentCategory(buttonText)
+                    }
                 }
             }
         }
@@ -125,6 +127,6 @@ Rectangle {
 
         visible: source != ""
         sourceSize.width: width
-        source: audio_tool.cover
+        source: audio_tool.metaData.cover
     }
 }

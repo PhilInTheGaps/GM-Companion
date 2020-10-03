@@ -19,14 +19,20 @@ Item {
         Repeater {
             id: scenario_repeater
 
-            model: audio_tool.scenarioNames
+            model: audio_tool.currentProject
+                   && audio_tool.currentProject.currentCategory ? audio_tool.currentProject.currentCategory.scenarios : []
 
             CustomButton {
-                buttonText: modelData
+                buttonText: modelData.name
                 padding: 10
-                onClicked: audio_tool.setCurrentScenario(buttonText)
                 backgroundColor: "transparent"
                 usesFixedWidth: false
+                onClicked: {
+                    var project = audio_tool.currentProject
+                    if (project && project.currentCategory) {
+                        project.currentCategory.setCurrentScenario(buttonText)
+                    }
+                }
             }
         }
     }
@@ -76,7 +82,7 @@ Item {
 
                     Label {
                         id: subscenario_text
-                        text: modelData.name()
+                        text: modelData.name
                         visible: text != ""
                         font.bold: true
                         font.pointSize: 15
@@ -100,9 +106,7 @@ Item {
                                 icon: modelData.icon
                                 width: audio_element_column.button_width
 
-                                onClicked: audio_tool.playElement(
-                                               modelData.name, modelData.type,
-                                               subscenario_name)
+                                onClicked: audio_tool.play(modelData)
                             }
                         }
                     }

@@ -13,6 +13,7 @@ Q_LOGGING_CATEGORY(gmAudioIconGenerator,     "gm.audio.icon-generator")
 Q_LOGGING_CATEGORY(gmAudioSaveLoad,          "gm.audio.saveload")
 Q_LOGGING_CATEGORY(gmAudioMetaData,          "gm.audio.metadata")
 Q_LOGGING_CATEGORY(gmAudioDiscord,           "gm.audio.discord")
+Q_LOGGING_CATEGORY(gmAudioElementModelManager, "gm.audio.elementmodel.manager")
 
 Q_LOGGING_CATEGORY(gmMapsTool,               "gm.maps.tool")
 Q_LOGGING_CATEGORY(gmMapsMarker,             "gm.maps.marker")

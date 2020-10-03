@@ -4,12 +4,12 @@
 #include "logging.h"
 #include "utils/fileutils.h"
 
-RadioPlayer::RadioPlayer(DiscordPlayer *discordPlayer, QObject *parent)
+RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent)
     : AudioPlayer(parent), m_discordPlayer(discordPlayer)
 {
     qCDebug(gmAudioRadio()) << "Loading RadioPlayer ...";
 
-    m_mediaPlayer = new QMediaPlayer;
+    m_mediaPlayer = new QMediaPlayer(this);
     m_mediaPlayer->setObjectName(tr("Radio"));
 
     connect(m_mediaPlayer, &QMediaPlayer::stateChanged, [ = ]() {
@@ -27,16 +27,16 @@ RadioPlayer::RadioPlayer(DiscordPlayer *discordPlayer, QObject *parent)
     connect(m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), [ = ](QMediaPlayer::Error error) {
         qCDebug(gmAudioRadio()) << "Error:" << error << m_mediaPlayer->errorString();
     });
-    connect(m_mediaPlayer,                     QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
-    connect(m_mediaPlayer,                     QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
-            this, QOverload<const QString&, const QVariant&>::of(&RadioPlayer::metaDataChanged));
-    connect(FileManager::getInstance(), &FileManager::receivedFile,                      this, &RadioPlayer::onFileReceived);
-}
 
-RadioPlayer::~RadioPlayer()
-{
-    if (m_playlist) m_playlist->deleteLater();
-    m_mediaPlayer->deleteLater();
+    // MetaData
+    connect(m_mediaPlayer,  QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
+    connect(m_mediaPlayer,  QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
+            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged),
+            metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
+
+    // Files
+    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &RadioPlayer::onFileReceived);
 }
 
 /**
@@ -134,7 +134,7 @@ void RadioPlayer::onFileReceived(int id, const QByteArray& data)
 
     if (m_playlist) m_playlist->deleteLater();
 
-    m_playlist = new QMediaPlaylist;
+    m_playlist = new QMediaPlaylist(this);
     connect(m_playlist,                   &QMediaPlaylist::loaded,                         [ = ]() { qCDebug(gmAudioRadio()) << "Successfully loaded playlist."; });
     connect(m_playlist,                   &QMediaPlaylist::loadFailed,                     [ = ]() {
         qCDebug(gmAudioRadio()) << "Failed to load playlist:" << m_playlist->errorString();

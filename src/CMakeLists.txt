@@ -75,12 +75,19 @@ set(SOURCES
   tools/audio/addonelementmanager.cpp 
   tools/audio/players/musicplayer.cpp 
   tools/audio/players/soundplayer.cpp 
-  tools/audio/players/radioplayer.cpp 
-  tools/audio/metadatareader.cpp 
-  tools/audio/audioproject.cpp 
-  tools/audio/audioelement.cpp 
-  tools/audio/mpris/mprisadaptor.cpp 
-  tools/audio/mpris/mprisplayeradaptor.cpp 
+  tools/audio/players/radioplayer.cpp
+  tools/audio/project/audioproject.cpp
+  tools/audio/project/audiocategory.cpp
+  tools/audio/project/audioscenario.cpp
+  tools/audio/project/audioelement.cpp
+  tools/audio/project/audioelementmodel.cpp
+  tools/audio/project/audioelementmodelmanager.cpp
+  tools/audio/project/audiofilemodel.cpp
+  tools/audio/project/audioicon.cpp
+  tools/audio/mpris/mprisadaptor.cpp
+  tools/audio/mpris/mprisplayeradaptor.cpp
+  tools/audio/mpris/mprismanager.cpp
+  tools/audio/metadata/metadatareader.cpp
   tools/maps/maptool.cpp 
   tools/maps/map.cpp 
   tools/combat_tracker/effecttool.cpp 
@@ -134,6 +141,7 @@ set(HEADERS
   services/spotify/spotifyutils.h 
   settings/settings.h 
   tools/abstracttool.h 
+  tools/audio/audiotool.h
   tools/audio/audioelementimageprovider.h 
   tools/audio/audioicongenerator.h 
   tools/audio/audiosaveload.h 
@@ -141,6 +149,28 @@ set(HEADERS
   tools/audio/players/spotifyplayer.h 
   tools/audio/unsplash/unsplashimage.h 
   tools/audio/unsplash/unsplashparser.h 
+  tools/audio/project/audioproject.h
+  tools/audio/project/audiocategory.h
+  tools/audio/project/audioscenario.h
+  tools/audio/project/audioelement.h
+  tools/audio/project/audioelementmodel.h
+  tools/audio/project/audioelementmodelmanager.h
+  tools/audio/project/audiofile.h
+  tools/audio/project/audiofilemodel.h
+  tools/audio/project/audioicon.h
+  tools/audio/audioeditor.h
+  tools/audio/audioeditorfilebrowser.h
+  tools/audio/audioexporter.h
+  tools/audio/addonelementmanager.h
+  tools/audio/players/musicplayer.h
+  tools/audio/players/soundplayer.h
+  tools/audio/players/radioplayer.h
+  tools/audio/metadata/metadatareader.h
+  tools/audio/metadata/audiometadata.h
+  tools/audio/players/audioplayer.h
+  tools/audio/mpris/mprisadaptor.h
+  tools/audio/mpris/mprisplayeradaptor.h
+  tools/audio/mpris/mprismanager.h
   tools/maps/mapmarker.h 
   tools/notes/htmlgenerator.h
   tools/notes/markdownhighlighter.h 
@@ -157,21 +187,7 @@ set(HEADERS
   tools/dicetool.h 
   tools/convertertool.h 
   tools/project_converter/projectconverter.h 
-  tools/audio/audiotool.h 
   tools/project_converter/audioconverter.h 
-  tools/audio/audioeditor.h 
-  tools/audio/audioeditorfilebrowser.h 
-  tools/audio/audioexporter.h 
-  tools/audio/addonelementmanager.h 
-  tools/audio/players/musicplayer.h 
-  tools/audio/players/soundplayer.h 
-  tools/audio/players/radioplayer.h 
-  tools/audio/metadatareader.h 
-  tools/audio/audioproject.h 
-  tools/audio/audioelement.h 
-  tools/audio/players/audioplayer.h 
-  tools/audio/mpris/mprisadaptor.h 
-  tools/audio/mpris/mprisplayeradaptor.h 
   tools/maps/map.h 
   tools/maps/maptool.h 
   tools/combat_tracker/combattracker.h 

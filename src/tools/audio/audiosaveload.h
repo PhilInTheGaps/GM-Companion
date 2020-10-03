@@ -9,7 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include "tools/audio/audioproject.h"
+#include "tools/audio/project/audioproject.h"
 
 class AudioSaveLoad : public QObject
 {

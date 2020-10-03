@@ -65,7 +65,7 @@ Item {
         highlightMoveVelocity: -1
 
         delegate: Item {
-            width: parent.width
+            width: playlist_view.width
             height: playlist_text.height + 10
 
             Text {

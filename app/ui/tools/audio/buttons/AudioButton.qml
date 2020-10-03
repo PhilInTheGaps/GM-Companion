@@ -48,7 +48,9 @@ Rectangle {
 
         Connections {
             target: icon
-            onIconChanged: thumbnail.reload()
+            function onIconChanged() {
+                thumbnail.reload()
+            }
         }
     }
 

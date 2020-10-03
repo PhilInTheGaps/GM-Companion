@@ -46,7 +46,7 @@ void AudioExporter::updateScenarios()
 
     m_scenarioNames.clear();
 
-    if (m_category && m_category->isExport())
+    if (m_category && m_category->isMarkedForExport())
     {
         m_scenarioNames = m_category->scenarioNames();
 
@@ -75,17 +75,17 @@ void AudioExporter::updateElements()
 {
     m_elementNames.clear();
 
-    if (m_scenario && m_scenario->isExport())
+    if (m_scenario && m_scenario->isMarkedForExport())
     {
-        m_elementNames += m_scenario->musicElementNames();
-        m_elementNames += m_scenario->soundElementNames();
-        m_elementNames += m_scenario->radioElementNames();
+        m_elementNames += m_scenario->elementNames(AudioElement::Type::Music);
+        m_elementNames += m_scenario->elementNames(AudioElement::Type::Sound);
+        m_elementNames += m_scenario->elementNames(AudioElement::Type::Radio);
 
-        for (auto s : m_scenario->scenarios())
+        for (auto subscenario : m_scenario->scenarios())
         {
-            m_elementNames += s->musicElementNames();
-            m_elementNames += s->soundElementNames();
-            m_elementNames += s->radioElementNames();
+            m_elementNames += subscenario->elementNames(AudioElement::Type::Music);
+            m_elementNames += subscenario->elementNames(AudioElement::Type::Sound);
+            m_elementNames += subscenario->elementNames(AudioElement::Type::Radio);
         }
     }
 
@@ -120,7 +120,7 @@ void AudioExporter::setCategoryEnabled(int index, bool enabled)
 {
     if (m_project && (index < m_project->categories().size()))
     {
-        m_project->categories()[index]->setExport(enabled);
+        m_project->categories()[index]->setIsMarkedForExport(enabled);
 
         if (m_project->categories()[index] == m_category) updateScenarios();
     }
@@ -135,7 +135,7 @@ bool AudioExporter::isCategoryEnabled(int index) const
 {
     if (m_project && (index < m_project->categories().size()))
     {
-        return m_project->categories()[index]->isExport();
+        return m_project->categories()[index]->isMarkedForExport();
     }
     else
     {
@@ -171,7 +171,7 @@ void AudioExporter::setScenarioEnabled(int index, bool enabled)
 {
     if (m_project && m_category && (index < m_category->scenarios().size()))
     {
-        m_category->scenarios()[index]->setExport(enabled);
+        m_category->scenarios()[index]->setIsMarkedForExport(enabled);
 
         if (m_category->scenarios()[index] == m_scenario) updateElements();
     }
@@ -186,7 +186,7 @@ bool AudioExporter::isScenarioEnabled(int index) const
 {
     if (m_project && m_category && (index < m_category->scenarios().size()))
     {
-        return m_category->scenarios()[index]->isExport();
+        return m_category->scenarios()[index]->isMarkedForExport();
     }
     else
     {
@@ -277,12 +277,12 @@ void Worker::copyFiles()
     // Categories
     for (auto c : m_project->categories())
     {
-        if (c && c->isExport())
+        if (c && c->isMarkedForExport())
         {
             // Scenarios
             for (auto s : c->scenarios())
             {
-                if (s && s->isExport())
+                if (s && s->isMarkedForExport())
                 {
                     copyElements(s);
 
@@ -360,7 +360,7 @@ void Worker::copyFiles()
 void Worker::copyElements(AudioScenario *scenario)
 {
     // Music Elements
-    for (auto e : scenario->musicElements())
+    for (auto e : scenario->elements(AudioElement::Type::Music))
     {
         if (e && e->isExport())
         {
@@ -372,7 +372,7 @@ void Worker::copyElements(AudioScenario *scenario)
     }
 
     // Sound Elements
-    for (auto e : scenario->soundElements())
+    for (auto e : scenario->elements(AudioElement::Type::Sound))
     {
         if (e && e->isExport())
         {
@@ -384,7 +384,7 @@ void Worker::copyElements(AudioScenario *scenario)
     }
 
     // Radio Elements
-    for (auto e : scenario->radioElements())
+    for (auto e : scenario->elements(AudioElement::Type::Radio))
     {
         //        if (e && e->isExport() && e->local())
         //        {
