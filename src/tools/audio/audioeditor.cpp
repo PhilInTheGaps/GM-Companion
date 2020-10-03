@@ -20,16 +20,12 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSave
 
     addonElementManager = new AddonElementManager;
     audioExporter       = new AudioExporter;
-    fileBrowser         = new AudioEditorFileBrowser(engine, this);
+    fileBrowser         = new AudioEditorFileBrowser(engine);
     unsplashParser      = new UnsplashParser(engine);
 
     engine->rootContext()->setContextProperty("audio_exporter", audioExporter);
     engine->rootContext()->setContextProperty("audio_addon_element_manager", addonElementManager);
     engine->rootContext()->setContextProperty("audio_editor_file_browser", fileBrowser);
-
-    elementModel = new AudioElementModelModel;
-    elementModel->insert(new AudioElementModel);
-    qmlEngine->rootContext()->setContextProperty("editorElementModel", elementModel);
 
     fileModel = new AudioFileModel;
     qmlEngine->rootContext()->setContextProperty("editorFileModel", fileModel);
@@ -414,20 +410,21 @@ void AudioEditor::deleteSubScenario(QString name)
 void AudioEditor::updateElementModel()
 {
     qCDebug(gmAudioEditor) << "Updating element model ...";
+    qCWarning(gmAudioEditor()) << "NOT IMPLEMENTED";
 
-    if (!m_currentProject || !m_currentProject->currentCategory() ||
-        !m_currentProject->currentCategory()->currentScenario()) elementModel->setElements({});
+//    if (!m_currentProject || !m_currentProject->currentCategory() ||
+//        !m_currentProject->currentCategory()->currentScenario()) elementModel->setElements({});
 
-    elementModel->clear();
-    elementModel->element(0)->setElements(m_currentProject->currentCategory()->currentScenario()->elements());
+//    elementModel->clear();
+//    elementModel->element(0)->setElements(m_currentProject->currentCategory()->currentScenario()->elements());
 
-    for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
-    {
-        auto model = new AudioElementModel;
-        model->setName(s->name());
-        model->setElements(s->elements());
-        elementModel->append(model);
-    }
+//    for (auto s : m_currentProject->currentCategory()->currentScenario()->scenarios())
+//    {
+//        auto model = new AudioElementModel;
+//        model->setName(s->name());
+//        model->setElements(s->elements());
+//        elementModel->append(model);
+//    }
 }
 
 /**
@@ -934,13 +931,13 @@ void AudioEditor::onFoundProjects(QList<AudioProject *>list, bool isEditor)
 
 void AudioEditor::onCurrentScenarioChanged()
 {
-    if (!m_currentProject || !m_currentProject->currentCategory()
-        || !m_currentProject->currentCategory()->currentScenario())
-    {
-        elementModel->element(0)->setElements({});
-        elementModel->clear();
-        return;
-    }
+//    if (!m_currentProject || !m_currentProject->currentCategory()
+//        || !m_currentProject->currentCategory()->currentScenario())
+//    {
+//        elementModel->element(0)->setElements({});
+//        elementModel->clear();
+//        return;
+//    }
 
     AudioIconGenerator::generateIcons(m_currentProject->currentCategory()->currentScenario());
     updateElementModel();

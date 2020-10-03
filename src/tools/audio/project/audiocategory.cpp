@@ -105,6 +105,21 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
 }
 
 /**
+ * @brief Get a list of the current scenario and all subscenarios as QObjects.
+ */
+QList<QObject *> AudioCategory::currentScenarioModel() const
+{
+    QList<QObject*> list = { qobject_cast<QObject*>(currentScenario()) };
+
+    for (auto scenario : currentScenario()->scenarios())
+    {
+        list.push_back(qobject_cast<QObject*>(scenario));
+    }
+
+    return list;
+}
+
+/**
  * @brief Add a scenario to the category.
  * Returns false if the operation failed.
  */

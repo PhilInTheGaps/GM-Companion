@@ -11,6 +11,8 @@ class AudioCategory : public QObject
     Q_PROPERTY(bool isMarkedForExport READ isMarkedForExport WRITE setIsMarkedForExport NOTIFY isMarkedForExportChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QList<QObject*> scenarios READ scenarioObjects NOTIFY scenariosChanged)
+    Q_PROPERTY(QObject* currentScenario READ currentScenarioObject NOTIFY currentScenarioChanged)
+    Q_PROPERTY(QList<QObject*> currentScenarioModel READ currentScenarioModel NOTIFY currentScenarioChanged)
 public:
     AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, QObject *parent = nullptr);
     AudioCategory(QJsonObject object, const QString& path, QObject *parent = nullptr);
@@ -29,10 +31,13 @@ public:
     QList<QObject*> scenarioObjects() const { return Utils::toQObjectList<AudioScenario*>(m_scenarios); }
     int scenarioIndex() const { return m_scenarios.indexOf(m_currentScenario); }
     QStringList scenarioNames() const;
+    void refreshElements() { if (m_currentScenario) m_currentScenario->refreshElements(); }
 
     Q_INVOKABLE bool setCurrentScenario(const QString& name);
     bool setCurrentScenario(AudioScenario *scenario);
     AudioScenario* currentScenario() const { return m_currentScenario; }
+    QObject* currentScenarioObject() const { return qobject_cast<QObject*>(currentScenario()); }
+    QList<QObject*> currentScenarioModel() const;
 
     bool addScenario(AudioScenario *scenario);
     bool deleteScenario(AudioScenario *scenario);

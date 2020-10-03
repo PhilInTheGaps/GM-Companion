@@ -11,7 +11,6 @@
 #include "players/soundplayer.h"
 #include "players/radioplayer.h"
 #include "metadata/metadatareader.h"
-#include "project/audioelementmodelmanager.h"
 #include "audioelementimageprovider.h"
 #include "mpris/mprismanager.h"
 
@@ -23,6 +22,8 @@ class AudioTool : public AbstractTool
     Q_OBJECT
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
+
+    Q_PROPERTY(QObject* soundController READ soundController CONSTANT)
 
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
     Q_PROPERTY(qreal musicVolume READ musicVolume NOTIFY musicVolumeChanged)
@@ -45,12 +46,16 @@ public:
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();
 
+    QObject* soundController() const { return qobject_cast<QObject*>(soundPlayerController); }
+
+    // Volume
     qreal musicVolume() const { return m_musicVolume; }
     Q_INVOKABLE void setMusicVolume(qreal volume);
 
     qreal soundVolume() const { return m_soundVolume; }
     Q_INVOKABLE void setSoundVolume(qreal volume);
 
+    // Playback control
     Q_INVOKABLE void play(AudioElement *element);
     Q_INVOKABLE void next();
     Q_INVOKABLE void playPause();
@@ -85,6 +90,7 @@ signals:
 
 private slots:
     void onProjectsChanged(QList<AudioProject*> projects, bool forEditor);
+    void onCurrentScenarioChanged();
     void onStartedPlaying();
     void onMetaDataUpdated();
     void onSpotifyAuthorized() { emit spotifyAuthorized(); }
@@ -93,7 +99,6 @@ private:
     AudioEditor *editor = nullptr;
     QQmlApplicationEngine *qmlEngine = nullptr;
     MetaDataReader *metaDataReader = nullptr;
-    AudioElementModelManager *modelManager = nullptr;
     MprisManager *mprisManager = nullptr;
     AudioSaveLoad audioSaveLoad;
     AudioElementImageProvider audioElementImageProvider;

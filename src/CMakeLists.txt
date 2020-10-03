@@ -80,8 +80,6 @@ set(SOURCES
   tools/audio/project/audiocategory.cpp
   tools/audio/project/audioscenario.cpp
   tools/audio/project/audioelement.cpp
-  tools/audio/project/audioelementmodel.cpp
-  tools/audio/project/audioelementmodelmanager.cpp
   tools/audio/project/audiofilemodel.cpp
   tools/audio/project/audioicon.cpp
   tools/audio/mpris/mprisadaptor.cpp
@@ -153,8 +151,6 @@ set(HEADERS
   tools/audio/project/audiocategory.h
   tools/audio/project/audioscenario.h
   tools/audio/project/audioelement.h
-  tools/audio/project/audioelementmodel.h
-  tools/audio/project/audioelementmodelmanager.h
   tools/audio/project/audiofile.h
   tools/audio/project/audiofilemodel.h
   tools/audio/project/audioicon.h

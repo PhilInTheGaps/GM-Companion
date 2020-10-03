@@ -7,6 +7,7 @@
 #include <QTemporaryDir>
 
 #include "../project/audioelement.h"
+#include "../../../utils/utils.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
 #include <qytlib/videos/videoclient.h>
@@ -30,10 +31,10 @@ public slots:
     void stop();
     void stopElement(const QString& element);
     void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
-    void setLinearVolume(int volume) { }
+    void setLinearVolume(int volume) { Q_UNUSED(volume); }
     void again() {}
     void next();
-    void setIndex(int index) {}
+    void setIndex(int index) { Q_UNUSED(index); }
 
 private:
     AudioElement *m_element = nullptr;
@@ -67,6 +68,8 @@ signals:
 class SoundPlayerController : public AudioPlayer
 {
     Q_OBJECT
+    Q_PROPERTY(QList<QObject*> activeElements READ activeElements NOTIFY soundsChanged)
+
 public:
     SoundPlayerController(DiscordPlayer *discordPlayer, QObject *parent = nullptr)
         : AudioPlayer(parent), m_discordPlayer(discordPlayer),
@@ -78,15 +81,17 @@ public:
     void play(AudioElement* elements);
     void stop(QString element);
 
+    QList<QObject*> activeElements() const;
+
 public slots:
     void play() { }
     void pause() { }
     void stop() { emit stopAll(); }
     void setLogarithmicVolume(int volume);
-    void setLinearVolume(int volume) {}
+    void setLinearVolume(int volume) { Q_UNUSED(volume); }
     void next() { }
     void again() { }
-    void setIndex(int index) { }
+    void setIndex(int index) { Q_UNUSED(index); }
 
 private:
     DiscordPlayer *m_discordPlayer = nullptr;

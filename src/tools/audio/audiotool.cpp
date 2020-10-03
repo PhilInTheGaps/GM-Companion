@@ -22,7 +22,6 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
     audioPlayers   = { musicPlayer, radioPlayer };
 
     soundPlayerController = new SoundPlayerController(discordPlayer, this);
-    modelManager   = new AudioElementModelManager(qmlEngine, soundPlayerController, this);
 
     // QML Engine
     engine->rootContext()->setContextProperty("audio_tool", this);
@@ -77,6 +76,14 @@ void AudioTool::onProjectsChanged(QList<AudioProject *>projects, bool forEditor)
     emit projectsChanged();
 }
 
+void AudioTool::onCurrentScenarioChanged()
+{
+    if (m_currentProject && m_currentProject->currentCategory())
+    {
+        AudioIconGenerator::generateIcons(m_currentProject->currentCategory()->currentScenario());
+    }
+}
+
 /**
     Set the current project, notify UI
     @param project Name of the project
@@ -87,8 +94,20 @@ void AudioTool::setCurrentProject(int index)
 
     qCDebug(gmAudioTool) << "Setting current project:" << index << m_projects[index]->name();
 
+    if (m_currentProject)
+    {
+        disconnect(m_currentProject, &AudioProject::currentScenarioChanged,
+                   this, &AudioTool::onCurrentScenarioChanged);
+    }
+
     m_currentProject = m_projects[index];
-    modelManager->setProject(m_currentProject);
+    onCurrentScenarioChanged();
+
+    if (m_currentProject)
+    {
+        connect(m_currentProject, &AudioProject::currentScenarioChanged,
+                this, &AudioTool::onCurrentScenarioChanged);
+    }
 
     emit currentProjectChanged();
 }
@@ -148,6 +167,8 @@ void AudioTool::play(AudioElement *element)
         setMusicVolume(m_musicVolume);
         break;
     }
+
+    metaDataReader->updateMetaData("Type", element->name());
 }
 
 void AudioTool::onStartedPlaying()
@@ -331,5 +352,10 @@ void AudioTool::onMetaDataUpdated()
 
 void AudioTool::findElement(const QString& term)
 {
-    modelManager->findElement(term);
+    AudioScenario::setFilterString(term);
+
+    if (m_currentProject && m_currentProject->currentCategory())
+    {
+        m_currentProject->currentCategory()->refreshElements();
+    }
 }

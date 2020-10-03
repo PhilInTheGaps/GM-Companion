@@ -57,6 +57,21 @@ void SoundPlayerController::stop(QString element)
     emit stopElement(element);
 }
 
+QList<QObject *> SoundPlayerController::activeElements() const
+{
+    QList<QObject*> list;
+
+    for (auto player : m_players)
+    {
+        if (player)
+        {
+            list.append(player->element());
+        }
+    }
+
+    return list;
+}
+
 /**
  * @brief Check if a sound element is currently playing
  * @param element SoundElement to be checked
@@ -121,7 +136,7 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
         return;
     }
 
-    m_mediaPlayer = new QMediaPlayer;
+    m_mediaPlayer = new QMediaPlayer(this);
     m_mediaPlayer->setObjectName(element->name());
     m_mediaPlayer->setVolume(volume);
     m_videoClient = new YouTube::Videos::VideoClient(networkManager, this);
@@ -137,7 +152,6 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
 SoundPlayer::~SoundPlayer()
 {
     m_mediaPlayer->stop();
-    m_mediaPlayer->deleteLater();
 }
 
 void SoundPlayer::loadMedia(AudioFile *file)

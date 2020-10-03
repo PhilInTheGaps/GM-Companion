@@ -30,7 +30,6 @@ void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
 {
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    m_metaData->setType(mediaPlayer->objectName());
     updateDuration(mediaPlayer->duration() * 1000);
 }
 
@@ -68,6 +67,10 @@ void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
             m_metaData->setCover(QUrl::fromLocalFile(m_coverFile->fileName()).toEncoded());
             m_coverFile->close();
         }
+    }
+    else if (key == "Type")
+    {
+        m_metaData->setType(value.toString());
     }
     else
     {

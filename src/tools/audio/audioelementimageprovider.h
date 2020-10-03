@@ -11,7 +11,7 @@ public:
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) override;
 
 private:
-    static int getElementType(const QString &id);
+    QPixmap getDefaultImage(const QString& type) const;
 };
 
 #endif // AUDIOELEMENTIMAGEPROVER_H

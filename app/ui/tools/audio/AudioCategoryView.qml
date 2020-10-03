@@ -108,7 +108,7 @@ Rectangle {
 
         Repeater {
             id: sound_repeater
-            model: soundModel
+            model: audio_tool.soundController.activeElements
 
             SoundButton {
                 element: modelData.name

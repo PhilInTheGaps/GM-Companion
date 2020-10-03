@@ -1,7 +1,8 @@
 #include "audioscenario.h"
 
 #include <QJsonArray>
-#include <utility>
+
+QString AudioScenario::filterString = QStringLiteral("");
 
 AudioScenario::AudioScenario(const QString &name, const QString &path, QList<AudioElement*> musicLists,
                              QList<AudioElement*> soundLists, QList<AudioElement*> radios,
@@ -104,9 +105,25 @@ auto AudioScenario::elements(bool recursive) const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    list.append(m_musicLists);
-    list.append(m_soundLists);
-    list.append(m_radios);
+    if (filterString.isEmpty())
+    {
+        list.append(m_musicLists);
+        list.append(m_soundLists);
+        list.append(m_radios);
+    }
+    else
+    {
+        for (auto elementList : { m_musicLists, m_soundLists, m_radios })
+        {
+            for (auto element : elementList)
+            {
+                if (element->name().contains(filterString, Qt::CaseInsensitive))
+                {
+                    list.push_back(element);
+                }
+            }
+        }
+    }
 
     if (recursive)
     {
@@ -183,6 +200,7 @@ auto AudioScenario::moveElement(const QString &name, int steps, const AudioEleme
     if ((index + steps < m_musicLists.size()) && (index + steps > -1))
     {
         m_musicLists.move(index, index + steps);
+        emit elementsChanged();
         return true;
     }
 
@@ -198,6 +216,7 @@ auto AudioScenario::addElement(AudioElement *element) -> bool
 
     element->setParent(this);
     getElementList(element->type()).append(element);
+    emit elementsChanged();
 
     return true;
 }
@@ -213,11 +232,13 @@ auto AudioScenario::removeElement(const QString &name, const AudioElement::Type 
         {
             if (!m_musicLists.removeOne(element))
             {
+                emit elementsChanged();
                 return false;
             }
 
             if (deleteElement) element->deleteLater();
 
+            emit elementsChanged();
             return true;
         }
     }
@@ -234,7 +255,18 @@ void AudioScenario::sortElements()
     std::sort(m_musicLists.begin(), m_musicLists.end(), AudioElement::compare);
     std::sort(m_soundLists.begin(), m_soundLists.end(), AudioElement::compare);
     std::sort(m_radios.begin(),     m_radios.end(),     AudioElement::compare);
+    emit elementsChanged();
     qDebug() << "Done.";
+}
+
+void AudioScenario::refreshElements()
+{
+    emit elementsChanged();
+
+    for (auto scenario : m_scenarios)
+    {
+        scenario->refreshElements();
+    }
 }
 
 /**

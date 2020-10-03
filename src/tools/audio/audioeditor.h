@@ -13,7 +13,6 @@
 #include "audioeditorfilebrowser.h"
 #include "unsplash/unsplashparser.h"
 
-#include "project/audioelementmodel.h"
 #include "project/audiofilemodel.h"
 
 class AudioEditor : public AbstractTool
@@ -141,7 +140,6 @@ private:
     AudioProject *m_currentProject = nullptr;
     bool m_isSaved = true;
 
-    AudioElementModelModel *elementModel = nullptr;
     AudioFileModel *fileModel = nullptr;
 
     // Elements

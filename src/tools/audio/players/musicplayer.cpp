@@ -70,6 +70,7 @@ void MusicPlayer::play(AudioElement *element)
     m_playlist = element->files();
 
     emit metaDataChanged(mediaPlayer);
+
     loadSongNames(true);
 }
 

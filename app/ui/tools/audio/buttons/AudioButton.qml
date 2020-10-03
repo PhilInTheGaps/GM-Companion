@@ -6,9 +6,9 @@ import "../../../defines.js" as Defines
 
 Rectangle {
     id: root
-    property var element_name
+    property string element_name
     property var icon
-    property var element_type
+    property int element_type
     property bool overlay_enabled: true
     property bool small_mode: false
     property string subscenario_name: ""
@@ -48,6 +48,7 @@ Rectangle {
 
         Connections {
             target: icon
+
             function onIconChanged() {
                 thumbnail.reload()
             }
