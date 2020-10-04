@@ -10,7 +10,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool.metaData.type
+        text: audio_tool ? audio_tool.metaData.type : ""
         font.bold: true
     }
 
@@ -19,7 +19,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool.metaData.title
+        text: audio_tool ? audio_tool.metaData.title : ""
     }
 
     CustomScrollLabel {
@@ -27,7 +27,7 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool.metaData.artist
+        text: audio_tool ? audio_tool.metaData.artist : ""
     }
 
     CustomScrollLabel {
@@ -35,6 +35,6 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 5
-        text: audio_tool.metaData.album
+        text: audio_tool ? audio_tool.metaData.album : ""
     }
 }

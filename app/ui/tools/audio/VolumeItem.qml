@@ -35,7 +35,11 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onValueChanged: audio_tool.setMusicVolume(value)
+            onValueChanged: {
+                if (audio_tool) {
+                    audio_tool.setMusicVolume(value)
+                }
+            }
         }
 
         VolumeSlider {
@@ -45,7 +49,11 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            onValueChanged: audio_tool.setSoundVolume(value)
+            onValueChanged: {
+                if (audio_tool) {
+                    audio_tool.setSoundVolume(value)
+                }
+            }
         }
     }
 }

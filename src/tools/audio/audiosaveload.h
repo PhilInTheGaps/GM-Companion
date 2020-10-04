@@ -16,6 +16,8 @@ class AudioSaveLoad : public QObject
     Q_OBJECT
 
 public:
+    AudioSaveLoad(QObject *parent = nullptr) : QObject(parent) {}
+
     void findProjects(bool forEditor = false);
 
     void findIconPaths(QList<AudioProject*> projects, bool forEditor);

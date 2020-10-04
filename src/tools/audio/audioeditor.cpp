@@ -18,16 +18,16 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSave
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
 
-    addonElementManager = new AddonElementManager;
-    audioExporter       = new AudioExporter;
-    fileBrowser         = new AudioEditorFileBrowser(engine);
-    unsplashParser      = new UnsplashParser(engine);
+    addonElementManager = new AddonElementManager(this);
+    audioExporter       = new AudioExporter(this);
+    fileBrowser         = new AudioEditorFileBrowser(engine, this);
+    unsplashParser      = new UnsplashParser(engine, this);
 
     engine->rootContext()->setContextProperty("audio_exporter", audioExporter);
     engine->rootContext()->setContextProperty("audio_addon_element_manager", addonElementManager);
     engine->rootContext()->setContextProperty("audio_editor_file_browser", fileBrowser);
 
-    fileModel = new AudioFileModel;
+    fileModel = new AudioFileModel(this);
     qmlEngine->rootContext()->setContextProperty("editorFileModel", fileModel);
 
     connect(m_audioSaveLoad,     &AudioSaveLoad::foundProjects,        this, &AudioEditor::onFoundProjects);

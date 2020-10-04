@@ -19,7 +19,7 @@ Item {
         Repeater {
             id: scenario_repeater
 
-            model: audio_tool.currentProject
+            model: audio_tool && audio_tool.currentProject
                    && audio_tool.currentProject.currentCategory ? audio_tool.currentProject.currentCategory.scenarios : []
 
             CustomButton {
@@ -54,7 +54,7 @@ Item {
         spacing: 10
 
         clip: true
-        model: (audio_tool.currentProject
+        model: (audio_tool && audio_tool.currentProject
                 && audio_tool.currentProject.currentCategory) ? audio_tool.currentProject.currentCategory.currentScenarioModel : []
 
         ScrollBar.vertical: CustomScrollBar {

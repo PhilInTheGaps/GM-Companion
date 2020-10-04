@@ -15,15 +15,15 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPla
 {
     qDebug() << "Loading Spotify Tool ...";
 
-    m_networkManager = new QNetworkAccessManager;
+    m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
     // Signals
     connect(Spotify::getInstance(), &Spotify::receivedReply, this, &SpotifyPlayer::gotPlaylistInfo);
 
     // Timer for "current song" updates
-    m_timer         = new QTimer;
-    m_periodicTimer = new QTimer;
+    m_timer         = new QTimer(this);
+    m_periodicTimer = new QTimer(this);
 
     connect(m_timer, &QTimer::timeout, [ = ]()
     {
@@ -42,9 +42,6 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPla
 SpotifyPlayer::~SpotifyPlayer()
 {
     stop();
-    m_timer->deleteLater();
-    m_periodicTimer->deleteLater();
-    m_networkManager->deleteLater();
 }
 
 /**

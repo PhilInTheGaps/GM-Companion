@@ -11,7 +11,6 @@
 #include "players/soundplayer.h"
 #include "players/radioplayer.h"
 #include "metadata/metadatareader.h"
-#include "audioelementimageprovider.h"
 #include "mpris/mprismanager.h"
 
 #define DEFAULT_MUSIC_VOLUME 0.25
@@ -40,7 +39,7 @@ public:
 
     // Project
     QObject* currentProject() const { return m_currentProject; }
-    void updateProjectList() { audioSaveLoad.findProjects(false); }
+    void updateProjectList() { audioSaveLoad->findProjects(false); }
     QStringList projectNames();
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
@@ -100,8 +99,7 @@ private:
     QQmlApplicationEngine *qmlEngine = nullptr;
     MetaDataReader *metaDataReader = nullptr;
     MprisManager *mprisManager = nullptr;
-    AudioSaveLoad audioSaveLoad;
-    AudioElementImageProvider audioElementImageProvider;
+    AudioSaveLoad *audioSaveLoad = nullptr;
 
     // Players
     DiscordPlayer *discordPlayer = nullptr;

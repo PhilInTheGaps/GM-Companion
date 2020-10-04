@@ -12,7 +12,8 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 
-    editor         = new AudioEditor(qmlEngine, &audioSaveLoad, this);
+    audioSaveLoad  = new AudioSaveLoad(this);
+    editor         = new AudioEditor(qmlEngine, audioSaveLoad, this);
     metaDataReader = new MetaDataReader(this);
     mprisManager   = new MprisManager(this);
     discordPlayer  = new DiscordPlayer(this);
@@ -26,7 +27,6 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
     // QML Engine
     engine->rootContext()->setContextProperty("audio_tool", this);
     engine->rootContext()->setContextProperty("audio_editor", editor);
-    engine->addImageProvider("audioElementIcons", &audioElementImageProvider);
 
     // Spotify
     connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
@@ -59,9 +59,9 @@ void AudioTool::loadData()
     m_isDataLoaded = true;
 
     // Find and load projects
-    connect(&audioSaveLoad, &AudioSaveLoad::foundProjects,
+    connect(audioSaveLoad, &AudioSaveLoad::foundProjects,
             this,           &AudioTool::onProjectsChanged);
-    audioSaveLoad.findProjects();
+    audioSaveLoad->findProjects();
 }
 
 /**

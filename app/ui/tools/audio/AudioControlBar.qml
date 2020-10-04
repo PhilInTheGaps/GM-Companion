@@ -44,7 +44,8 @@ ToolBar {
         // Play Pause
         CustomToolBarButton {
             anchors.margins: 0
-            iconText: audio_tool.isPaused ? FontAwesome.playCircle : FontAwesome.pauseCircle
+            iconText: !audio_tool
+                      || audio_tool.isPaused ? FontAwesome.playCircle : FontAwesome.pauseCircle
             onClicked: audio_tool.playPause()
             pointSize: 24
         }

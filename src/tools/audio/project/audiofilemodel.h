@@ -9,6 +9,8 @@ class AudioFileModel : public QAbstractListModel {
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 public:
+    AudioFileModel(QObject *parent) : QAbstractListModel(parent) {}
+
     int rowCount(const QModelIndex&) const override { return m_items.size(); }
     QVariant data(const QModelIndex& index, int role) const override;
 

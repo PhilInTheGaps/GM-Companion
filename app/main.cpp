@@ -108,6 +108,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
+    engine.addImageProvider("audioElementIcons", new AudioElementImageProvider);
 
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
