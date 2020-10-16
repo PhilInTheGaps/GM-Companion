@@ -24,7 +24,13 @@ include(AddO2)
 include(AddQYTLIB)
 include(AddPoppler)
 include(AddTagLib)
-include(AddCmarkGfm)
+include(AddMarkdownLib)
+
+# configure markdown lib
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h
+  @ONLY)
 
 # source files
 set(SOURCES
@@ -222,8 +228,7 @@ target_link_libraries(
   qytlib
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}
-  ${CMARK_GFM_LIBRARY}
-  ${CMARK_GFM_EXTENSIONS_LIBRARY}
+  ${MARKDOWN_LIBRARY}
   ${QTKEYCHAIN_LIBRARY}
 )
 

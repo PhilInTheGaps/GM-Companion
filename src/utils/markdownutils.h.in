@@ -1,0 +1,33 @@
+#ifndef MARKDOWNUTILS_H
+#define MARKDOWNUTILS_H
+
+#define MARKDOWN_CMARK_GFM 0
+#define MARKDOWN_DISCOUNT  1
+#cmakedefine MARKDOWN_LIBRARY @MARKDOWN_LIBRARY_NAME@
+
+#if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
+    #include <cmark-gfm.h>
+    #include <cmark-gfm-core-extensions.h>
+#elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
+    extern "C" {
+    #include <mkdio.h>
+    }
+#endif
+
+#include <QString>
+
+class MarkdownUtils
+{
+public:
+    static QString markdownToHtml(const QString &markdown);
+
+private:
+    #if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
+    static QString markdownToHtmlCMark(const QString &markdown);
+    static void addMarkdownExtension(cmark_parser *parser, const QString &extension);
+    #elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
+    static QString markdownToHtmlDiscount(const QString &markdown);
+    #endif
+};
+
+#endif // MARKDOWNUTILS_H
