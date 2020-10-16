@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QtQuickControls2/QQuickStyle>
 #include <QTranslator>
 #include <QFontDatabase>
 #include <QIcon>
@@ -88,6 +89,8 @@ int main(int argc, char *argv[])
 
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
+
+    QQuickStyle::setStyle(":/style");
 
     QQmlApplicationEngine engine;
     engine.addImportPath("qrc:/");

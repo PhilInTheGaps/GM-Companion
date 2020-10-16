@@ -34,7 +34,7 @@ Dialog {
                     onClicked: {
                         root.accept()
 
-                        let hashes = ""
+                        var hashes = ""
 
                         for (var i = 0; i < modelData + 1; i++) {
                             hashes += "#"

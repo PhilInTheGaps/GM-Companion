@@ -125,5 +125,17 @@
         <file>common/TreeViewItem.qml</file>
         <file>tools/notes/SavePageDialog.qml</file>
         <file>tools/notes/InsertHeaderDialog.qml</file>
+        <file>style/Label.qml</file>
+        <file>style/colors.js</file>
+        <file>style/ApplicationWindow.qml</file>
+        <file>style/Button.qml</file>
+        <file>style/ToolTip.qml</file>
+        <file>style/Page.qml</file>
+        <file>style/TextArea.qml</file>
+        <file>style/Control.qml</file>
+        <file>style/Dialog.qml</file>
+        <file>style/DialogButtonBox.qml</file>
+        <file>style/ScrollBar.qml</file>
+        <file>style/TextField.qml</file>
     </qresource>
 </RCC>

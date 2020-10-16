@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 include(AddFontAwesome)
 set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${FONT_AWESOME_DIR}" CACHE STRING "Qt Creator qml import paths")
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml LinguistTools)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Qml LinguistTools)
 find_library(GM-COMPANION-LIB_DIR gm-companion-lib)
 
 # sources
@@ -61,6 +61,7 @@ target_link_libraries(
   Qt5::Core
   Qt5::Gui
   Qt5::Quick
+  Qt5::QuickControls2
   Qt5::Qml
   fontawesome
 )

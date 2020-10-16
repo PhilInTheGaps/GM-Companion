@@ -9,8 +9,8 @@ MenuItem {
     hoverEnabled: true
 
     contentItem: Text {
-        leftPadding: root.indicator.width
-        rightPadding: root.arrow.width
+        leftPadding: root.indicator ? root.indicator.width : 0
+        rightPadding: root.arrow ? root.arrow.width : 0
         text: root.text
         font: root.font
         opacity: enabled ? 1.0 : 0.3
