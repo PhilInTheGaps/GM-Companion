@@ -72,12 +72,6 @@ void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
     {
         m_metaData->setType(value.toString());
     }
-    else
-    {
-        return;
-    }
-
-    emit metaDataChanged();
 }
 
 /**

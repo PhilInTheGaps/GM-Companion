@@ -5,7 +5,7 @@
 #include <QQmlApplicationEngine>
 
 #include "tools/abstracttool.h"
-#include "audioeditor.h"
+#include "editor/audioeditor.h"
 #include "players/spotifyplayer.h"
 #include "players/musicplayer.h"
 #include "players/soundplayer.h"
@@ -20,7 +20,7 @@ class AudioTool : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
-    Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectsChanged)
+    Q_PROPERTY(QList<QObject*> projects READ projects NOTIFY projectsChanged)
 
     Q_PROPERTY(QObject* soundController READ soundController CONSTANT)
 
@@ -38,9 +38,9 @@ public:
     AudioEditor* getEditor() const { return editor; }
 
     // Project
+    QList<QObject*> projects() const { return Utils::toQObjectList(m_projects); }
     QObject* currentProject() const { return m_currentProject; }
     void updateProjectList() { audioSaveLoad->findProjects(false); }
-    QStringList projectNames();
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();

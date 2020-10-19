@@ -35,6 +35,8 @@ private:
 
     FileAccess *m_fileAccess = nullptr;
 
+    static QString cleanPath(const QString &path);
+
 signals:
     void receivedFile(int id, QByteArray data);
     void receivedFiles(int id, QList<QByteArray> data);

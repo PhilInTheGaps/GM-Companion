@@ -30,7 +30,7 @@ Item {
                 onClicked: {
                     var project = audio_tool.currentProject
                     if (project && project.currentCategory) {
-                        project.currentCategory.setCurrentScenario(buttonText)
+                        project.currentCategory.setCurrentScenario(modelData)
                     }
                 }
             }
@@ -55,7 +55,7 @@ Item {
 
         clip: true
         model: (audio_tool && audio_tool.currentProject
-                && audio_tool.currentProject.currentCategory) ? audio_tool.currentProject.currentCategory.currentScenarioModel : []
+                && audio_tool.currentProject.currentScenario) ? audio_tool.currentProject.currentScenario.model : []
 
         ScrollBar.vertical: CustomScrollBar {
             id: verticalScrollBar

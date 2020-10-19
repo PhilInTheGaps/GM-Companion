@@ -14,7 +14,7 @@ class UnsplashParser : public QObject
 public:
     explicit UnsplashParser(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    void findImage(QString text);
+    void findImage(const QString& text);
     void shuffle();
 
 private:

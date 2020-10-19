@@ -9,6 +9,7 @@ ComboBox {
     hoverEnabled: true
     height: Defines.TOOLBAR_HEIGHT
 
+    property string emptyString: ""
     property alias textItem: text_item
 
     indicator: Label {
@@ -18,6 +19,7 @@ ComboBox {
         text: FontAwesome.caretDown
         font.family: FontAwesome.familySolid
         font.pixelSize: parent.height - 28
+        opacity: control.model && control.model.length > 0 ? 1 : 0.7
     }
 
     contentItem: Label {
@@ -40,7 +42,7 @@ ComboBox {
         anchors.right: parent.right
 
         contentItem: Label {
-            text: modelData
+            text: modelData.name ? modelData.name : modelData
             color: pressed ? palette.mid : (hovered ? palette.light : palette.buttonText)
 
             font.pointSize: 12
@@ -76,7 +78,7 @@ ComboBox {
         }
 
         background: Rectangle {
-            color: palette.base
+            color: palette.dark
             border.color: palette.alternateBase
             border.width: 1
         }
@@ -86,5 +88,16 @@ ComboBox {
         color: palette.dark
         border.color: palette.button
         border.width: 1
+    }
+
+    Label {
+        text: control.emptyString
+        anchors.fill: parent
+        visible: !control.model || control.model.length < 1
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: text_item.font.pixelSize
+        opacity: 0.7
+        color: palette.buttonText
     }
 }

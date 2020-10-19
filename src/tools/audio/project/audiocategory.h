@@ -12,15 +12,16 @@ class AudioCategory : public QObject
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QList<QObject*> scenarios READ scenarioObjects NOTIFY scenariosChanged)
     Q_PROPERTY(QObject* currentScenario READ currentScenarioObject NOTIFY currentScenarioChanged)
-    Q_PROPERTY(QList<QObject*> currentScenarioModel READ currentScenarioModel NOTIFY currentScenarioChanged)
+    Q_PROPERTY(int scenarioIndex READ scenarioIndex NOTIFY currentScenarioChanged)
+
 public:
-    AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, QObject *parent = nullptr);
-    AudioCategory(QJsonObject object, const QString& path, QObject *parent = nullptr);
+    AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, QObject *parent);
+    AudioCategory(const QJsonObject &object, const QString& path, QObject *parent);
 
     QJsonObject toJson() const;
 
     QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; emit nameChanged(); }
+    void setName(const QString& name) { m_name = name; emit nameChanged(); }
 
     bool isMarkedForExport() const { return m_export; }
     void setIsMarkedForExport(bool e) { m_export = e; emit isMarkedForExportChanged(); }
@@ -33,13 +34,11 @@ public:
     QStringList scenarioNames() const;
     void refreshElements() { if (m_currentScenario) m_currentScenario->refreshElements(); }
 
-    Q_INVOKABLE bool setCurrentScenario(const QString& name);
-    bool setCurrentScenario(AudioScenario *scenario);
+    Q_INVOKABLE bool setCurrentScenario(AudioScenario *scenario);
     AudioScenario* currentScenario() const { return m_currentScenario; }
     QObject* currentScenarioObject() const { return qobject_cast<QObject*>(currentScenario()); }
-    QList<QObject*> currentScenarioModel() const;
 
-    bool addScenario(AudioScenario *scenario);
+    bool addScenario(AudioScenario *scenario, bool setAsCurrent = false);
     bool deleteScenario(AudioScenario *scenario);
 
     QList<AudioElement *> elements() const;
@@ -50,12 +49,15 @@ signals:
     void pathChanged();
     void scenariosChanged();
     void currentScenarioChanged();
+    void wasEdited();
 
 private:
     QString m_name, m_path;
     bool m_export = true;
     QList<AudioScenario*> m_scenarios;
     AudioScenario *m_currentScenario = nullptr;
+
+    void prepareScenario(AudioScenario *scenario);
 };
 
 #endif

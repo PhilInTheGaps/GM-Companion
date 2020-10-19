@@ -8,6 +8,7 @@
 #include <QNetworkReply>
 #include <QDebug>
 #include <algorithm>
+#include <random>
 
 UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent)
     : QObject(parent)
@@ -64,7 +65,7 @@ void UnsplashParser::parse()
     });
 }
 
-void UnsplashParser::findImage(QString text)
+void UnsplashParser::findImage(const QString& text)
 {
     qDebug() << "Searching for" << text;
 
@@ -78,11 +79,11 @@ void UnsplashParser::findImage(QString text)
 
     for (auto i : m_images)
     {
-        for (auto term : terms)
+        for (const auto& term : terms)
         {
             if (images.contains(i)) break;
 
-            for (auto tag : i->tags())
+            for (const auto& tag : i->tags())
             {
                 if (images.contains(i)) break;
 
@@ -102,7 +103,7 @@ void UnsplashParser::shuffle()
 {
     auto images = m_images;
 
-    std::random_shuffle(images.begin(), images.end());
+    std::shuffle(images.begin(), images.end(), std::mt19937(std::random_device()()));
 
     m_imageModel->setElements(images);
 }

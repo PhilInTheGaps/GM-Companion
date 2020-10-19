@@ -4,7 +4,7 @@
  * @brief Get a path string from a list of folders.
  * Example: { "some", "folder" } becomes "/some/folder"
  */
-QString FileUtils::dirFromFolders(const QStringList& folders)
+auto FileUtils::dirFromFolders(const QStringList& folders) -> QString
 {
     auto dirString = folders.join("/");
 
@@ -17,7 +17,7 @@ QString FileUtils::dirFromFolders(const QStringList& folders)
  * @brief Get the path to a folder a file is located in.
  * Example: "some/file.mp3" becomes "some"
  */
-QString FileUtils::dirFromPath(const QString &path)
+auto FileUtils::dirFromPath(const QString &path) -> QString
 {
     auto index = path.lastIndexOf('/');
 
@@ -28,13 +28,11 @@ QString FileUtils::dirFromPath(const QString &path)
     return path.left(index);
 }
 
-
-
 /**
  * @brief Get a list of folders from a path string.
  * Example: "/some/folder" becomes { "some", "folder" }
  */
-QStringList FileUtils::foldersFromDir(const QString& dir)
+auto FileUtils::foldersFromDir(const QString& dir) -> QStringList
 {
     return dir.split('/');
 }
@@ -43,7 +41,7 @@ QStringList FileUtils::foldersFromDir(const QString& dir)
  * @brief Get the suffix from a filename (or path)
  * Example: "/some/file.mp3" becomes "mp3"
  */
-QString FileUtils::suffix(const QString &fileName)
+auto FileUtils::suffix(const QString &fileName) -> QString
 {
     auto index = fileName.lastIndexOf('.');
 
@@ -54,7 +52,7 @@ QString FileUtils::suffix(const QString &fileName)
  * @brief Get the filename (with suffix) from a path.
  * Example: path "/some/file.mp3" becomes "file.mp3"
  */
-QString FileUtils::fileName(const QString &path)
+auto FileUtils::fileName(const QString &path) -> QString
 {
     auto index = path.lastIndexOf('/');
 
@@ -70,7 +68,7 @@ QString FileUtils::fileName(const QString &path)
  * @brief Increment a filename by adding (or incrementing) a number.
  * Example: "file.mp3" becomes "file_0.mp3", which would become "file_1.mp3"
  */
-QString FileUtils::incrementFileName(const QString &fileName)
+auto FileUtils::incrementFileName(const QString &fileName) -> QString
 {
     if (fileName.isEmpty()) return "";
 
@@ -86,7 +84,7 @@ QString FileUtils::incrementFileName(const QString &fileName)
 
     if (list.length() > 1)
     {
-        bool ok;
+        bool ok = 0;
         auto temp = list.takeLast().toInt(&ok);
 
         if (ok) number = temp + 1;

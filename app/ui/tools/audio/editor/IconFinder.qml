@@ -1,47 +1,31 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
 import FontAwesome 2.0
+import CustomComponents 1.0
 
-Button {
+import "../../../common"
+
+CustomToolBarButton {
     id: icon_button
     property var text_field
-    readonly property string resourcesPath: settings_manager.getPath(
-                                                "resources")
 
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
     width: height
+    anchors.margins: 0
+    centering: true
 
-    background: Rectangle {
-        color: palette.alternateBase
-    }
-
-    Label {
-        text: FontAwesome.ellipsisH
-        font.family: FontAwesome.familySolid
-        font.pixelSize: height
-        anchors.fill: parent
-        anchors.margins: 10
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-    }
+    iconText: FontAwesome.ellipsisH
+    iconFont: FontAwesome.familySolid
+    toolTipText: qsTr("Select icon from files")
+    pointSize: 12
 
     onClicked: {
-        file_dialog.folder = (platform.isWindows ? "file:///" : "file://") + resourcesPath
-        file_dialog.open()
-    }
+        audio_editor_file_dialog.title = qsTr("Set Icon")
 
-    FileDialog {
-        id: file_dialog
-        title: qsTr("Set Icon")
-
-        selectFolder: false
-
-        onAccepted: {
-            text_field.text = fileUrl.toString().replace(
-                        (platform.isWindows ? "file:///" : "file://") + resourcesPath,
-                        "")
-        }
+        audio_editor_file_dialog.foldersOnly = false
+        audio_editor_file_dialog.textField = text_field
+        audio_editor_file_dialog.folder = settings_manager.getPath("resources")
+        audio_editor_file_dialog.replacePath = settings_manager.getPath(
+                    "resources")
+        audio_editor_file_dialog.open()
     }
 }

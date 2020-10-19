@@ -8,6 +8,7 @@ class AudioFileModel : public QAbstractListModel {
     Q_OBJECT
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+
 public:
     AudioFileModel(QObject *parent) : QAbstractListModel(parent) {}
 
@@ -25,6 +26,7 @@ public:
 
     void insert(int index, QObject* item);
     void remove(QObject* item);
+    void remove(int index);
     void append(QObject* item);
     bool moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent, int destinationChild);
 

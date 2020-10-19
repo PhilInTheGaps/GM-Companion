@@ -65,6 +65,21 @@ auto SettingsManager::getPath(const QString& setting, QString group)->QString
     return value;
 }
 
+QString SettingsManager::getPath(AudioElement::Type type)
+{
+    switch (type) {
+    case AudioElement::Type::Music:
+        return getPath("music");
+    case AudioElement::Type::Sound:
+        return getPath("sounds");
+    case AudioElement::Type::Radio:
+        return getPath("radio");
+    default:
+        qCWarning(gmSettings()) << "Error: getPath() was called with illegal element type:" << AudioElement::typeToString(type);
+        return "";
+    }
+}
+
 void SettingsManager::setPath(const QString& setting, const QString& value, QString group)
 {
     if (group.isEmpty()) group = SettingsManager::getActivePathGroup();

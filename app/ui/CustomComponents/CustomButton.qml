@@ -23,6 +23,7 @@ Control {
     property var iconColor: undefined
     property var backgroundColor: palette.dark
     property bool transparentBackground: false
+    property int borderWidth: 1
 
     // Layout
     property bool usesFixedWidth: true
@@ -53,6 +54,7 @@ Control {
             visible: text.length
             text: root.iconText
             color: iconColor ? iconColor : root.textColor
+            opacity: root.enabled ? 1 : 0.7
 
             font.family: root.iconFont
             font.bold: enableBold && mouse_area.containsMouse
@@ -69,6 +71,7 @@ Control {
             visible: text.length
             text: root.buttonText
             color: root.textColor
+            opacity: root.enabled ? 1 : 0.7
 
             font.bold: enableBold && mouse_area.containsMouse
 
@@ -87,7 +90,7 @@ Control {
         visible: !transparentBackground
         color: root.backgroundColor
         border.color: palette.button
-        border.width: mouse_area.containsMouse ? 1 : 0
+        border.width: mouse_area.containsMouse ? root.borderWidth : 0
     }
 
     ToolTip.text: root.toolTipText

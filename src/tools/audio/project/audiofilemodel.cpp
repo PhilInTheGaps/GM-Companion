@@ -27,25 +27,32 @@ void AudioFileModel::append(QObject *item)
 
 auto AudioFileModel::moveRow(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) -> bool
 {
-    if (beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, (destinationChild > sourceRow) ? destinationChild + 1 : destinationChild))
+    int destination = destinationChild > sourceRow ? destinationChild + 1 : destinationChild;
+    if (beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, destination))
     {
         m_items.move(sourceRow, destinationChild);
         endMoveRows();
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 void AudioFileModel::remove(QObject *item)
 {
     for (int i = 0; i < m_items.size(); ++i) {
         if (m_items.at(i) == item) {
-            beginRemoveRows(QModelIndex(), i, i);
-            m_items.remove(i);
-            endRemoveRows();
+            remove(i);
             break;
         }
     }
+}
+
+void AudioFileModel::remove(int index)
+{
+    beginRemoveRows(QModelIndex(), index, index);
+    m_items.remove(index);
+    endRemoveRows();
 
     emit isEmptyChanged();
 }

@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-
+import CustomComponents 1.0
 import FontAwesome 2.0
 import "../buttons"
 
@@ -10,8 +10,9 @@ Item {
     Connections {
         target: audio_editor
 
-        onCurrentElementChanged: {
-            audio_editor_file_browser.type = audio_editor.type
+        function onCurrentElementChanged() {
+            audio_editor_file_browser.type
+                    = audio_editor.currentElement ? audio_editor.currentElement.type : 0
         }
     }
 

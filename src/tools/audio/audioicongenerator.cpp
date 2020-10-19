@@ -5,6 +5,7 @@
 #include "filesystem/filemanager.h"
 #include "utils/utils.h"
 #include "services/spotify/spotifyutils.h"
+#include "project/audioicon.h"
 
 #include <taglib/taglib.h>
 #include <taglib/fileref.h>
@@ -27,8 +28,8 @@ bool AudioIconGenerator::instanceFlag          = false;
 AudioIconGenerator *AudioIconGenerator::single = nullptr;
 QReadWriteLock AudioIconGenerator::cacheLock;
 
-IconWorker::IconWorker(QString resourcesPath, QString musicPath, QString soundsPath) :
-    m_resourcesPath(resourcesPath), m_musicPath(musicPath), m_soundsPath(soundsPath)
+IconWorker::IconWorker(QString resourcesPath, QString musicPath, QString soundsPath)
+    : m_musicPath(musicPath), m_soundsPath(soundsPath)
 {
     connect(Spotify::getInstance(), &Spotify::authorized,           this,                       &IconWorker::onSpotifyAuthorized);
     connect(Spotify::getInstance(), &Spotify::receivedReply,        this,                       &IconWorker::onReceivedSpotifyReply);
@@ -43,6 +44,8 @@ IconWorker::~IconWorker()
 
 void IconWorker::generateThumbnails(AudioScenario *scenario)
 {
+    if (!scenario) return;
+
     if (!m_networkManager) m_networkManager = new QNetworkAccessManager;
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
@@ -89,25 +92,26 @@ QPixmap AudioIconGenerator::getPlaceholderImage(AudioElement::Type type)
 void IconWorker::generateThumbnail(AudioElement *element)
 {
     // Paranoid check
-    if (!element) return;
+    if (!element || !element->icon()) return;
 
     qCDebug(gmAudioIconGenerator()) << "Generating thumbnail for element" << element->name();
 
-    auto iconPath = element->relativeIconPath();
+    auto iconPath = element->icon()->absoluteUrl();
 
-
-    if (iconPath.startsWith("http:") ||
-        iconPath.startsWith("https:"))
+    // Is web url?
+    if (iconPath.startsWith("http://") ||
+        iconPath.startsWith("https://"))
     {
         loadImageFromWeb(element, iconPath);
         return;
     }
-    else if (!iconPath.isEmpty())
+
+    // Is empty?
+    if (!iconPath.isEmpty())
     {
         loadImageFromPath(element, iconPath);
         return;
     }
-
 
     // Can not make collage
     if (element->type() == AudioElement::Type::Radio) return;
@@ -209,7 +213,7 @@ void IconWorker::loadImageFromPath(AudioElement *element, const QString& filePat
         delete context;
     });
 
-    emit getFile(requestId, m_resourcesPath + filePath);
+    emit getFile(requestId, filePath);
 }
 
 auto IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audioFile)->QPixmap

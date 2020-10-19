@@ -1,8 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
+import CustomComponents 1.0
 
-AbstractButton {
+CustomButton {
     id: file_browser_button
 
     property string file
@@ -13,59 +14,32 @@ AbstractButton {
 
     signal folderClicked
 
-    anchors.left: parent.left
-    anchors.right: parent.right
+    anchors.left: parent ? parent.left : undefined
+    anchors.right: parent ? parent.right : undefined
     anchors.leftMargin: 5 + depth * 10
     anchors.rightMargin: 5
-    height: 35
+    height: 30
 
-    Row {
-        id: row
-        anchors.fill: parent
-
-        padding: 5
-        spacing: 5
-
-        Label {
-            id: icon
-            font.pixelSize: (parent.height - parent.padding * 2) * 0.8
-            font.family: FontAwesome.familySolid
-            anchors.verticalCenter: parent.verticalCenter
-
-            Component.onCompleted: {
-                switch (type) {
-                case 0:
-                    text = FontAwesome.music
-                    break
-                case 1:
-                    text = FontAwesome.drum
-                    break
-                case 2:
-                    text = FontAwesome.broadcastTower
-                    break
-                case 3:
-                    text = FontAwesome.folder
-                    break
-                }
-            }
-        }
-
-        Label {
-            text: file
-            width: parent.width - parent.spacing - parent.padding * 2 - icon.width
-            clip: true
-            elide: Text.ElideRight
-            anchors.verticalCenter: parent.verticalCenter
+    pointSize: 10
+    buttonText: file
+    iconText: {
+        switch (type) {
+        case 0:
+            FontAwesome.music
+            break
+        case 1:
+            FontAwesome.drum
+            break
+        case 2:
+            FontAwesome.broadcastTower
+            break
+        case 3:
+            opened ? FontAwesome.folderOpen : FontAwesome.folder
+            break
         }
     }
 
-    hoverEnabled: true
-
-    ToolTip {
-        id: tool_tip
-        text: type === 3 ? file : qsTr("Add: ") + file
-        visible: hovered
-    }
+    toolTipText: type === 3 ? file : qsTr("Add: ") + file
 
     onClicked: {
         if (type === 3) {
@@ -73,8 +47,7 @@ AbstractButton {
             audio_editor_file_browser.openFolder(!opened, file, path)
             folderClicked()
         } else {
-            audio_editor.addFile(audio_editor.name, audio_editor.type,
-                                 path, file)
+            audio_editor.addFile(path, file)
         }
     }
 }

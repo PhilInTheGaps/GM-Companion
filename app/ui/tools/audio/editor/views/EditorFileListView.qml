@@ -1,64 +1,65 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Dialogs 1.2
 import CustomComponents 1.0
 import FontAwesome 2.0
 
 import "../../buttons"
 import "../../../../defines.js" as Defines
+import "../../../../common"
 
 Item {
     id: file_list_view
 
-    Connections {
-        target: audio_editor
-        onFileIndexChanged: file_list.currentIndex = index
-        onCurrentElementChanged: console.log("Element changed!")
-    }
-
     FileDialog {
         id: file_dialog
-        title: qsTr("Set Folder")
+
         property int index: 0
 
-        folder: (platform.isWindows ? "file:///" : "file://") + audio_editor.basePath(
-                    audio_editor.type)
-
-        selectFolder: true
-
+        foldersOnly: true
         onAccepted: {
-            audio_editor.replaceFileFolder(audio_editor.name,
-                                           audio_editor.type, index,
-                                           fileUrl.toString())
+            audio_editor.replaceFileFolder(index, selectedPath)
         }
     }
 
     ListView {
         id: file_list
         anchors.fill: parent
-        anchors.rightMargin: 5
+        anchors.margins: 5
+        anchors.rightMargin: 0
 
-        model: editorFileModel
+        model: audio_editor_file_model
         interactive: true
         clip: true
         focus: true
         keyNavigationEnabled: true
         highlightFollowsCurrentItem: false
 
-        property int last_index: 0
+        property int lastIndex: 0
+
+        ScrollBar.vertical: CustomScrollBar {
+            id: scroll_bar
+            visible: file_list.contentHeight > file_list.height
+        }
 
         delegate: Item {
             id: delegate_root
 
-            width: parent.width
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
+            anchors.rightMargin: scroll_bar.visible ? 10 : 5
+
             height: ListView.isCurrentItem ? Defines.TOOLBAR_HEIGHT : delegate_label.height + 25
 
+            // Background
             Rectangle {
                 anchors.fill: parent
                 color: modelData
-                       && modelData.missing ? "darkred" : (file_list.currentIndex == index ? palette.alternateBase : palette.window)
+                       && modelData.missing ? "darkred" : palette.window
+                border.color: parent.ListView.isCurrentItem ? palette.alternateBase : palette.dark
+                border.width: parent.ListView.isCurrentItem ? 2 : mouse_area.containsMouse ? 1 : 0
             }
 
+            // File path label
             Label {
                 id: delegate_label
                 anchors.verticalCenter: parent.verticalCenter
@@ -66,20 +67,21 @@ Item {
                 anchors.right: parent.ListView.isCurrentItem ? delegate_row.left : parent.right
                 anchors.margins: 5
 
-                text: modelData
-                      && modelData.title !== "" ? modelData.title + "  |  "
-                                                  + modelData.url : modelData.url
+                text: modelData ? modelData.printableUrl : ""
 
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
 
+            // Mouse area for index selection
             MouseArea {
                 id: mouse_area
                 anchors.fill: parent
+                hoverEnabled: true
                 onClicked: file_list.currentIndex = index
             }
 
+            // Buttons on the right
             Row {
                 id: delegate_row
 
@@ -93,11 +95,14 @@ Item {
 
                 // Folder
                 CustomToolBarButton {
-                    visible: modelData && modelData.source === 0
+                    visible: modelData && modelData.missing
+                             && modelData.source === 0
                     iconText: FontAwesome.folder
+                    toolTipText: qsTr("Select folder for file")
 
                     onClicked: {
                         file_dialog.index = index
+                        file_dialog.folder = audio_editor.basePath()
                         file_dialog.open()
                     }
                 }
@@ -129,15 +134,14 @@ Item {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.last_index
+                            delegate_root.ListView.view.lastIndex
                                     = delegate_root.ListView.view.currentIndex
 
-                            audio_editor.moveFile(audio_editor.name,
-                                                  audio_editor.type, index, -1)
+                            audio_editor.moveFile(index, -1)
 
-                            if (delegate_root.ListView.view.last_index > 0)
+                            if (delegate_root.ListView.view.lastIndex > 0)
                                 delegate_root.ListView.view.currentIndex
-                                        = delegate_root.ListView.view.last_index - 1
+                                        = delegate_root.ListView.view.lastIndex - 1
 
                             delegate_root.ListView.view.positionViewAtIndex(
                                         delegate_root.ListView.view.currentIndex,
@@ -165,14 +169,13 @@ Item {
                         }
 
                         onClicked: {
-                            delegate_root.ListView.view.last_index = index
-                            audio_editor.moveFile(audio_editor.name,
-                                                  audio_editor.type, index, 1)
+                            delegate_root.ListView.view.lastIndex = index
+                            audio_editor.moveFile(index, 1)
 
                             if (delegate_root.ListView.view.currentIndex
                                     < delegate_root.ListView.view.lastIndex) {
                                 delegate_root.ListView.view.currentIndex
-                                        = delegate_root.ListView.view.last_index + 1
+                                        = delegate_root.ListView.view.lastIndex + 1
                             }
 
                             delegate_root.ListView.view.positionViewAtIndex(
@@ -185,25 +188,22 @@ Item {
                 // Delete
                 CustomToolBarButton {
                     iconText: FontAwesome.trashAlt
+                    toolTipText: qsTr("Remove file from list")
 
                     onClicked: {
-                        delegate_root.ListView.view.last_index = index
-                        audio_editor.removeFile(audio_editor.name,
-                                                audio_editor.type, index, false)
-                        delegate_root.ListView.view.currentIndex
-                                = delegate_root.ListView.view.last_index
+                        var modelLength = audio_editor_file_model.rowCount()
+                        var lastIndex = index < (modelLength - 1) ? index : (modelLength - 2)
+
+                        console.log(index, lastIndex, modelLength)
+
+                        delegate_root.ListView.view.lastIndex = lastIndex
+                        audio_editor.removeFile(index, false)
+                        delegate_root.ListView.view.currentIndex = lastIndex
                         delegate_root.ListView.view.positionViewAtIndex(
-                                    delegate_root.ListView.view.currentIndex,
-                                    ListView.Center)
+                                    lastIndex, ListView.Contain)
                     }
                 }
             }
         }
-
-        highlight: Rectangle {
-            color: "lightsteelblue"
-        }
-
-        ScrollBar.vertical: ScrollBar {}
     }
 }

@@ -47,13 +47,6 @@ set(SOURCES
   services/spotify/spotifyconnectorserver.cpp 
   services/spotify/spotifyutils.cpp 
   tools/abstracttool.cpp 
-  tools/audio/audioelementimageprovider.cpp 
-  tools/audio/audioicongenerator.cpp 
-  tools/audio/audiosaveload.cpp 
-  tools/audio/players/discordplayer.cpp 
-  tools/audio/players/spotifyplayer.cpp 
-  tools/audio/unsplash/unsplashimage.cpp 
-  tools/audio/unsplash/unsplashparser.cpp 
   tools/maps/mapmarker.cpp 
   tools/dicetool.cpp 
   tools/notes/htmlgenerator.cpp 
@@ -67,12 +60,19 @@ set(SOURCES
   tools/generators/namegenerator.cpp 
   tools/project_converter/projectconverter.cpp 
   tools/project_converter/shopconverter.cpp 
+  tools/project_converter/audioconverter.cpp
   tools/audio/audiotool.cpp 
-  tools/project_converter/audioconverter.cpp 
-  tools/audio/audioeditor.cpp 
-  tools/audio/audioeditorfilebrowser.cpp 
-  tools/audio/audioexporter.cpp 
-  tools/audio/addonelementmanager.cpp 
+  tools/audio/audioelementimageprovider.cpp
+  tools/audio/audioicongenerator.cpp
+  tools/audio/audiosaveload.cpp
+  tools/audio/players/discordplayer.cpp
+  tools/audio/players/spotifyplayer.cpp
+  tools/audio/editor/audioeditor.cpp
+  tools/audio/editor/audioeditorfilebrowser.cpp
+  tools/audio/editor/audioexporter.cpp
+  tools/audio/editor/addonelementmanager.cpp
+  tools/audio/editor/unsplash/unsplashimage.cpp
+  tools/audio/editor/unsplash/unsplashparser.cpp
   tools/audio/players/musicplayer.cpp 
   tools/audio/players/soundplayer.cpp 
   tools/audio/players/radioplayer.cpp
@@ -145,8 +145,6 @@ set(HEADERS
   tools/audio/audiosaveload.h 
   tools/audio/players/discordplayer.h 
   tools/audio/players/spotifyplayer.h 
-  tools/audio/unsplash/unsplashimage.h 
-  tools/audio/unsplash/unsplashparser.h 
   tools/audio/project/audioproject.h
   tools/audio/project/audiocategory.h
   tools/audio/project/audioscenario.h
@@ -154,10 +152,12 @@ set(HEADERS
   tools/audio/project/audiofile.h
   tools/audio/project/audiofilemodel.h
   tools/audio/project/audioicon.h
-  tools/audio/audioeditor.h
-  tools/audio/audioeditorfilebrowser.h
-  tools/audio/audioexporter.h
-  tools/audio/addonelementmanager.h
+  tools/audio/editor/audioeditor.h
+  tools/audio/editor/audioeditorfilebrowser.h
+  tools/audio/editor/audioexporter.h
+  tools/audio/editor/addonelementmanager.h
+  tools/audio/editor/unsplash/unsplashimage.h
+  tools/audio/editor/unsplash/unsplashparser.h
   tools/audio/players/musicplayer.h
   tools/audio/players/soundplayer.h
   tools/audio/players/radioplayer.h
@@ -184,6 +184,7 @@ set(HEADERS
   tools/convertertool.h 
   tools/project_converter/projectconverter.h 
   tools/project_converter/audioconverter.h 
+  tools/project_converter/shopconverter.h
   tools/maps/map.h 
   tools/maps/maptool.h 
   tools/combat_tracker/combattracker.h 
@@ -195,7 +196,6 @@ set(HEADERS
   tools/characters/charactertool.h 
   tools/characters/character.h 
   tools/generators/namegenerator.h
-  tools/project_converter/shopconverter.h 
   tools/shop/shoptool.h 
   tools/shop/itemeditor.h 
   tools/shop/shopeditor.h 

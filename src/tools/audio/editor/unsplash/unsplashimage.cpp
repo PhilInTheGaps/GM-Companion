@@ -4,7 +4,7 @@ UnsplashImage::UnsplashImage(QObject *parent) : QObject(parent)
 {
 }
 
-QVariant ImageListModel::data(const QModelIndex& index, int /*role*/) const
+auto ImageListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
 {
     QObject *item = m_items.at(index.row());
 
@@ -30,7 +30,7 @@ void ImageListModel::remove(QObject *item)
     }
 }
 
-QHash<int, QByteArray>ImageListModel::roleNames() const
+auto ImageListModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -40,7 +40,7 @@ QHash<int, QByteArray>ImageListModel::roleNames() const
 
 void ImageListModel::clear()
 {
-    while (m_items.size() > 0)
+    while (!m_items.empty())
     {
         remove(m_items[0]);
     }

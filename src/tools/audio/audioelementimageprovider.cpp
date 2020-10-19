@@ -23,8 +23,6 @@ QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size,
         type = match.captured(2);
     }
 
-    qDebug() << id << _id << type;
-
     QPixmap pixmap;
 
     if (AudioIconGenerator::cacheContains(_id))

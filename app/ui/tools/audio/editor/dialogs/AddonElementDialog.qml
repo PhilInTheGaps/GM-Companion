@@ -7,6 +7,7 @@ Dialog {
     signal addAddonElements(var names, var uris, var checked)
 
     title: qsTr("Add Element from Addon")
+    modal: true
 
     Connections {
         target: audio_addon_element_manager

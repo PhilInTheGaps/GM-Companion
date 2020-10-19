@@ -21,7 +21,7 @@ public:
     void findProjects(bool forEditor = false);
 
     void findIconPaths(QList<AudioProject*> projects, bool forEditor);
-    void findMissingFiles(QList<AudioFile *> files, QString basePath);
+    void findMissingFiles(const QList<AudioFile *>& files, const QString& basePath);
 
     void saveProject(AudioProject *project);
     void deleteProject(AudioProject *project);

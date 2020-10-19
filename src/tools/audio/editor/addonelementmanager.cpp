@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QDir>
+#include <utility>
 
 AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
 {
@@ -12,7 +13,7 @@ AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
 
     findAddons();
 
-    if (m_spotifyFolders.size() > 0) setFolder(m_spotifyFolders[m_spotifyFolders.size() - 1]);
+    if (!m_spotifyFolders.empty()) setFolder(m_spotifyFolders[m_spotifyFolders.size() - 1]);
 }
 
 void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
@@ -35,7 +36,7 @@ void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
 
 void AddonElementManager::setFolder(QString folder)
 {
-    m_currentSpotifyFolder = folder;
+    m_currentSpotifyFolder = std::move(folder);
     findSpotifyPlaylists();
 }
 
@@ -67,7 +68,7 @@ void AddonElementManager::findAddons()
 // Read all Spotify files and get folders
 void AddonElementManager::findSpotifyFolders()
 {
-    for (QString file : m_spotifyFiles)
+    for (const QString& file : m_spotifyFiles)
     {
         QFile f(file);
         f.open(QIODevice::ReadOnly);
@@ -123,7 +124,7 @@ void AddonElementManager::findSpotifyPlaylists()
 
     if (!m_currentSpotifyFolder.isEmpty())
     {
-        for (QString file : m_spotifyFiles)
+        for (const QString& file : m_spotifyFiles)
         {
             QFile f(file);
             f.open(QIODevice::ReadOnly);

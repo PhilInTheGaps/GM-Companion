@@ -7,16 +7,17 @@
 class AudioFile : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int source READ source WRITE setSource NOTIFY fileChanged)
     Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY fileChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY fileChanged)
+    Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY fileChanged)
+    Q_PROPERTY(int source READ source WRITE setSource NOTIFY fileChanged)
     Q_PROPERTY(bool missing READ missing WRITE setMissing NOTIFY fileChanged)
 
 public:
-    AudioFile(QString url, int source, QString title, QObject *parent) :
+    AudioFile(const QString &url, int source, const QString &title, QObject *parent) :
         QObject(parent), m_source(source), m_url(url), m_title(title){}
 
-    AudioFile(QJsonObject object, QObject *parent = nullptr) : QObject(parent)
+    AudioFile(const QJsonObject &object, QObject *parent = nullptr) : QObject(parent)
     {
         m_url    = object["url"].toString();
         m_source = object["source"].toInt();
@@ -28,22 +29,6 @@ public:
         m_title = other.m_title;
     }
 
-    friend void swap(AudioFile & first, AudioFile & second) {
-        // d_ptr swap doesn't take care of parentage
-        QObject * firstParent = first.parent();
-        QObject * secondParent = second.parent();
-        first.setParent(nullptr);
-        second.setParent(nullptr);
-        first.d_ptr.swap(second.d_ptr);
-        second.setParent(firstParent);
-        first.setParent(secondParent);
-    }
-
-    AudioFile & operator=(AudioFile other) {
-        swap(*this, other);
-        return *this;
-    }
-
     int source() const { return m_source; }
     void setSource(int source) { m_source = source; emit fileChanged(); }
 
@@ -52,6 +37,8 @@ public:
 
     QString title() const { return m_title; }
     void setTitle(QString title) { m_title = title; emit fileChanged(); }
+
+    QString printableUrl() const { return title().isEmpty() ? url() : QString("%1 | %2").arg(title(), url()); }
 
     bool missing() const { return m_missing; }
     void setMissing(bool missing) { m_missing = missing; emit fileChanged(); }
@@ -71,6 +58,7 @@ private:
 
 signals:
     void fileChanged();
+
 };
 
 #endif // AUDIOFILE_H

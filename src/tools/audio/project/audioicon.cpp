@@ -1,5 +1,27 @@
 #include "audioicon.h"
+#include "audioicon.h"
 #include "logging.h"
+#include "settings/settingsmanager.h"
+
+auto AudioIcon::absoluteUrl() const -> QString
+{
+    if (m_relativeUrl.isEmpty()) return QStringLiteral("");
+
+    // Is web url?
+    if (m_relativeUrl.startsWith("http://") ||
+        m_relativeUrl.startsWith("https://"))
+    {
+        return m_relativeUrl;
+    }
+
+    return QUrl::fromLocalFile(SettingsManager::getPath("resources") + m_relativeUrl).toString(QUrl::None);
+}
+
+void AudioIcon::setRelativeUrl(const QString &url)
+{
+    m_relativeUrl = url;
+    emit urlChanged();
+}
 
 auto AudioIcon::addCollageIcon(const QPair<QString, QPixmap> &icon) -> bool
 {

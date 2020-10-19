@@ -79,7 +79,7 @@ public:
     }
 
     void play(AudioElement* elements);
-    void stop(QString element);
+    void stop(const QString& element);
 
     QList<QObject*> activeElements() const;
 

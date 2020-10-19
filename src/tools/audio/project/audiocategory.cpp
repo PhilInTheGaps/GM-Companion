@@ -8,20 +8,22 @@ AudioCategory::AudioCategory(const QString& name, const QString& path, QList<Aud
 {
     for (auto scenario : m_scenarios)
     {
-        scenario->setParent(this);
+        prepareScenario(scenario);
     }
 
     if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
 }
 
-AudioCategory::AudioCategory(QJsonObject object, const QString& path, QObject *parent) : QObject(parent)
+AudioCategory::AudioCategory(const QJsonObject &object, const QString& path, QObject *parent) : QObject(parent)
 {
     m_name = object["name"].toString();
     m_path = path + "/" + m_name;
 
     for (auto scenario : object["scenarios"].toArray())
     {
-        m_scenarios.append(new AudioScenario(scenario.toObject(), m_path, this));
+        auto *object = new AudioScenario(scenario.toObject(), m_path, this);
+        prepareScenario(object);
+        m_scenarios.append(object);
     }
 
     if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
@@ -40,7 +42,10 @@ auto AudioCategory::toJson() const -> QJsonObject
 
     for (auto scenario : m_scenarios)
     {
-        if (scenario) scenariosJson.append(scenario->toJson());
+        if (scenario)
+        {
+            scenariosJson.append(scenario->toJson());
+        }
     }
 
     object.insert("scenarios", scenariosJson);
@@ -55,33 +60,12 @@ auto AudioCategory::scenarioNames() const -> QStringList
 {
     QStringList names;
 
-    for (auto *s : m_scenarios)
+    for (auto *scenario : m_scenarios)
     {
-        names.append(s->name());
+        names.append(scenario->name());
     }
 
     return names;
-}
-
-/**
- * @brief Set the current scenario.
- * Returns false if scenario with name could not be found.
- * @param name Name of the scenario
- */
-auto AudioCategory::setCurrentScenario(const QString& name) -> bool
-{
-    qDebug() << "AudioCategory: Setting current scenario:" << name << "...";
-
-    for (auto scenario : m_scenarios)
-    {
-        if (scenario && scenario->name() == name)
-        {
-            setCurrentScenario(scenario);
-            return true;
-        }
-    }
-
-    return false;
 }
 
 /**
@@ -105,31 +89,22 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
 }
 
 /**
- * @brief Get a list of the current scenario and all subscenarios as QObjects.
- */
-QList<QObject *> AudioCategory::currentScenarioModel() const
-{
-    QList<QObject*> list = { qobject_cast<QObject*>(currentScenario()) };
-
-    for (auto scenario : currentScenario()->scenarios())
-    {
-        list.push_back(qobject_cast<QObject*>(scenario));
-    }
-
-    return list;
-}
-
-/**
  * @brief Add a scenario to the category.
  * Returns false if the operation failed.
  */
-auto AudioCategory::addScenario(AudioScenario *scenario) -> bool
+auto AudioCategory::addScenario(AudioScenario *scenario, bool setAsCurrent) -> bool
 {
     if (!scenario) return false;
 
-    scenario->setParent(this);
+    prepareScenario(scenario);
     m_scenarios.append(scenario);
     emit scenariosChanged();
+
+    if (setAsCurrent)
+    {
+        return setCurrentScenario(scenario);
+    }
+
     return true;
 }
 
@@ -151,9 +126,9 @@ auto AudioCategory::deleteScenario(AudioScenario *scenario) -> bool
 /**
  * @brief Get a list of all elements in the category.
  */
-auto AudioCategory::elements() const -> QList<AudioElement *>
+auto AudioCategory::elements() const -> QList<AudioElement*>
 {
-    QList<AudioElement *> list;
+    QList<AudioElement*> list;
 
     for (auto scenario : m_scenarios)
     {
@@ -161,4 +136,15 @@ auto AudioCategory::elements() const -> QList<AudioElement *>
     }
 
     return list;
+}
+
+auto AudioCategory::prepareScenario(AudioScenario *scenario) -> void
+{
+    if (!scenario) return;
+    scenario->setParent(this);
+
+    connect(scenario, &AudioScenario::wasEdited, this, &AudioCategory::wasEdited);
+    connect(scenario, &AudioScenario::nameChanged, this, &AudioCategory::wasEdited);
+    connect(scenario, &AudioScenario::elementsChanged, this, &AudioCategory::wasEdited);
+    connect(scenario, &AudioScenario::scenariosChanged, this, &AudioCategory::wasEdited);
 }

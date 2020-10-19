@@ -585,12 +585,10 @@ void MusicPlayer::onStreamManifestReceived()
             foundGoodStream = true;
             break;
         }
-        else
-        {
-            if (stream) qCDebug(gmAudioMusic()) << "Audio codec" << stream->audioCodec() << "is not supported on this device.";
+        
+        if (stream) qCDebug(gmAudioMusic()) << "Audio codec" << stream->audioCodec() << "is not supported on this device.";
 
-            audioStreams.removeOne(stream);
-        }
+        audioStreams.removeOne(stream);
     }
     while (!audioStreams.isEmpty());
 

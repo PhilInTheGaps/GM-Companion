@@ -14,6 +14,13 @@ FileManager::FileManager(QObject *parent) : QObject(parent)
     updateFileAccess();
 }
 
+QString FileManager::cleanPath(const QString &path)
+{
+    auto result = path;
+    result = result.replace("file://", "");
+    return result;
+}
+
 FileManager::~FileManager()
 {
     instanceFlag = false;
@@ -21,37 +28,37 @@ FileManager::~FileManager()
 
 void FileManager::getFile(int requestId, const QString &filePath)
 {
-    m_fileAccess->getFile(requestId, filePath);
+    m_fileAccess->getFile(requestId, cleanPath(filePath));
 }
 
 void FileManager::getFiles(int requestId, const QString &directory, const QString &fileEnding)
 {
-    m_fileAccess->getFiles(requestId, directory, fileEnding);
+    m_fileAccess->getFiles(requestId, cleanPath(directory), fileEnding);
 }
 
 void FileManager::getFileList(int requestId, const QString &directory, bool folders)
 {
-    m_fileAccess->getFileList(requestId, std::move(directory), folders);
+    m_fileAccess->getFileList(requestId, cleanPath(directory), folders);
 }
 
 void FileManager::saveFile(const QString filePath, const QByteArray &data)
 {
-    m_fileAccess->saveFile(filePath, data);
+    m_fileAccess->saveFile(cleanPath(filePath), data);
 }
 
 void FileManager::renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data)
 {
-    m_fileAccess->renameFile(newFile, oldFile, data);
+    m_fileAccess->renameFile(cleanPath(newFile), cleanPath(oldFile), data);
 }
 
 void FileManager::renameFolder(const QString &newFolder, const QString &oldFolder)
 {
-    m_fileAccess->renameFolder(newFolder, oldFolder);
+    m_fileAccess->renameFolder(cleanPath(newFolder), cleanPath(oldFolder));
 }
 
 void FileManager::deleteFile(const QString &filePath)
 {
-    m_fileAccess->deleteFile(filePath);
+    m_fileAccess->deleteFile(cleanPath(filePath));
 }
 
 void FileManager::checkIfFilesExist(int requestId, const QStringList &files)
@@ -61,7 +68,7 @@ void FileManager::checkIfFilesExist(int requestId, const QStringList &files)
 
 void FileManager::createFolder(const QString &folderPath)
 {
-    m_fileAccess->createFolder(folderPath);
+    m_fileAccess->createFolder(cleanPath(folderPath));
 }
 
 auto FileManager::getUniqueRequestId()->int

@@ -6,6 +6,7 @@
 
 QFile Logger::m_logFile;
 QTextStream *Logger::m_logStream = nullptr;
+QMutex *Logger::m_logMutex = nullptr;
 
 Logger::Logger()
 {
@@ -32,6 +33,7 @@ Logger::Logger()
     }
 
     m_logStream = new QTextStream(&m_logFile);
+    m_logMutex = new QMutex();
 
     qInstallMessageHandler(messageHandler);
 }
@@ -44,6 +46,7 @@ Logger::~Logger()
     }
 
     delete m_logStream;
+    delete m_logMutex;
 }
 
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -62,6 +65,8 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     // Write to the output category of the message and the message itself
     line.append(context.category).append(": ").append(msg.toUtf8());
+
+    QMutexLocker locker(m_logMutex);
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {

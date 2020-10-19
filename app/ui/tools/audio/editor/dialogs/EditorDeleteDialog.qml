@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 Dialog {
     id: root
     property int mode: -1
-    property string element_name: ""
+    property var element
 
     property string modeString: {
         switch (mode) {
@@ -25,16 +25,17 @@ Dialog {
         }
     }
 
+    modal: true
     margins: 0
     title: ""
 
     contentItem: Column {
-        Text {
-            text: qsTr(
-                      "Delete " + modeString + (element_name != "" ? " " + element_name : "") + "?")
+        Label {
+            text: qsTr("Delete" + " " + modeString + " "
+                       + (element ? element.name : "UNKNOWN") + "?")
         }
 
-        Text {
+        Label {
             text: qsTr("(This can not be undone!)")
         }
     }
@@ -42,7 +43,7 @@ Dialog {
     standardButtons: Dialog.Yes | Dialog.No
 
     onAccepted: {
-        switch (root.mode) {
+        switch (mode) {
         case 0:
             audio_editor.deleteProject()
             break
@@ -53,13 +54,11 @@ Dialog {
             audio_editor.deleteScenario()
             break
         case 3:
-            audio_editor.deleteSubScenario(element_name)
+            audio_editor.deleteSubScenario(element)
             break
-        default:
-            console.log("Error: Delete dialog in undefined mode")
         }
 
-        element_name = ""
+        element = undefined
         mode = -1
     }
 }

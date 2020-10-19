@@ -1,10 +1,17 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
+import CustomComponents 1.0
 
 Dialog {
     id: unsplash_dialog
     title: qsTr("Find icon from unsplash.com")
+
+    x: parent.width / 2 - width / 2
+    y: parent.height / 2 - height / 2
+
+    width: parent.width * 0.8
+    height: parent.height * 0.8
 
     modal: true
 
@@ -12,83 +19,111 @@ Dialog {
 
     property string imageSource
 
-    contentItem: Row {
-        spacing: 10
+    contentItem: Item {
+        Item {
+            id: header_item
+            height: search_field.height
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-        ScrollView {
-            width: 850
-            height: 500
-
-            contentWidth: -1
-            clip: true
-
-            Flow {
+            CustomTextField {
+                id: search_field
                 anchors.left: parent.left
+                anchors.right: shuffle_button.left
+                selectByMouse: true
+                placeholderText: qsTr("Type to search ...")
+
+                onTextChanged: audio_editor.findUnsplashImages(
+                                   search_field.text)
+            }
+
+            Button {
+                id: shuffle_button
+                text: qsTr("Shuffle")
                 anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
-                spacing: 10
-
-                Repeater {
-                    model: unsplashImageListModel
-
-                    Rectangle {
-                        color: "grey"
-                        width: (parent.width - parent.spacing * 3) / 4
-                        height: width
-
-                        Image {
-                            id: image
-                            source: "https://source.unsplash.com/" + modelData.id + "/500x500"
-                            sourceSize.width: width
-                            sourceSize.height: height
-                            anchors.fill: parent
-
-                            visible: status == Image.Ready
-                        }
-
-                        Rectangle {
-                            anchors.fill: parent
-                            border.color: "black"
-                            border.width: 2
-                            color: "transparent"
-                            visible: image_mouse_area.containsMouse
-                        }
-
-                        MouseArea {
-                            id: image_mouse_area
-                            anchors.fill: parent
-                            hoverEnabled: true
-
-                            onClicked: {
-                                unsplash_author.text = modelData.author
-                                unsplash_author_id.text = "@" + modelData.authorId
-                                imageSource = image.source
-                            }
-                        }
-                    }
-                }
+                onClicked: audio_editor.shuffleUnsplashImages()
             }
         }
 
         Item {
-            width: 150
-
-            anchors.top: parent.top
+            id: main_item
+            anchors.top: header_item.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.bottom: parent.bottom
+            anchors.topMargin: 5
+
+            GridView {
+                id: grid
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: detail_item.left
+                anchors.bottom: parent.bottom
+                anchors.rightMargin: 5
+
+                clip: true
+                model: unsplashImageListModel
+                cellWidth: width / 5
+                cellHeight: cellWidth
+
+                ScrollBar.vertical: CustomScrollBar {
+                    id: scroll_bar
+                }
+
+                delegate: Rectangle {
+                    width: grid.cellWidth - 10
+                    height: grid.cellHeight - 10
+                    color: "grey"
+
+                    Image {
+                        id: image
+                        source: "https://source.unsplash.com/" + modelData.id + "/500x500"
+                        sourceSize.width: width
+                        sourceSize.height: height
+                        anchors.fill: parent
+
+                        visible: status == Image.Ready
+                    }
+
+                    BusyIndicator {
+                        id: busy
+                        anchors.centerIn: parent
+                        visible: !image.visible
+                    }
+
+                    Rectangle {
+                        anchors.fill: parent
+                        border.color: "black"
+                        border.width: 2
+                        color: "transparent"
+                        visible: image_mouse_area.containsMouse
+                    }
+
+                    MouseArea {
+                        id: image_mouse_area
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onClicked: {
+                            unsplash_author.text = modelData.author
+                            unsplash_author_id.text = "@" + modelData.authorId
+                            imageSource = image.source
+                        }
+                    }
+                }
+            }
 
             Column {
-                anchors.fill: parent
+                id: detail_item
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 150
                 spacing: 10
-
-                TextField {
-                    id: search_field
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    selectByMouse: true
-
-                    onTextChanged: audio_editor.findUnsplashImages(
-                                       search_field.text)
-                }
 
                 Label {
                     id: unsplash_author
@@ -130,15 +165,6 @@ Dialog {
                                        "https://unsplash.com/" + unsplash_author_id.text)
                     }
                 }
-            }
-
-            Button {
-                text: qsTr("Shuffle")
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-
-                onClicked: audio_editor.shuffleUnsplashImages()
             }
         }
     }

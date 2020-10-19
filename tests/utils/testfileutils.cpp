@@ -6,7 +6,7 @@ class TestFileUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestFileUtils() {}
+    TestFileUtils() = default;
 
 private slots:
     void dirFromFolders_data();

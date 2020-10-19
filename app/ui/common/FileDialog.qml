@@ -16,9 +16,11 @@ Dialog {
 
     modal: true
 
+    property alias selectedPath: selection_text_field.text
     property alias folder: backend.currentDir
     property alias foldersOnly: backend.folderMode
     property var textField: undefined
+    property var replacePath: undefined
 
     FileDialogBackend {
         id: backend
@@ -29,8 +31,16 @@ Dialog {
     }
 
     onAccepted: {
-        textField.text = selection_text_field.text
-        textField.savePath()
+        if (textField) {
+            if (replacePath) {
+                textField.text = selection_text_field.text.replace(replacePath,
+                                                                   "")
+            } else {
+                textField.text = selection_text_field.text
+            }
+
+            textField.savePath()
+        }
     }
 
     header: Rectangle {

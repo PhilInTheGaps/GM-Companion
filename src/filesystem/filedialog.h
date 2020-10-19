@@ -9,7 +9,7 @@ class FileObject : public QObject
 {
     Q_OBJECT
 public:
-    FileObject(QString name, bool isFolder, QObject *parent = nullptr);
+    FileObject(const QString &name, bool isFolder, QObject *parent = nullptr);
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     QString name() const { return m_name; }

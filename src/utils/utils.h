@@ -20,6 +20,11 @@ public:
         }
         return list;
     }
+
+    template<typename T> static bool isInBounds(const QList<T> &list, int index)
+    {
+        return index > -1 && index < list.length();
+    }
 };
 
 #endif // UTILS_H

@@ -6,7 +6,7 @@ class TestSpotifyUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestSpotifyUtils() {}
+    TestSpotifyUtils() = default;
 
 private slots:
     void getUriType_data();

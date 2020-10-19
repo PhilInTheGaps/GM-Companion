@@ -14,8 +14,10 @@ AudioProject::AudioProject(const QString& name, int version, QList<AudioCategory
 
     for (auto *category : m_categories)
     {
-        category->setParent(this);
+        prepareCategory(category);
     }
+
+    connectSignals();
 }
 
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
@@ -26,10 +28,13 @@ AudioProject::AudioProject(QJsonObject object, QObject *parent)
 
     for (auto category : object["categories"].toArray())
     {
-        m_categories.append(new AudioCategory(category.toObject(), m_name, this));
+        auto *object = new AudioCategory(category.toObject(), m_name, this);
+        prepareCategory(object);
+        m_categories.append(object);
     }
 
     if (!m_categories.isEmpty()) setCurrentCategory(m_categories.first());
+    connectSignals();
 }
 
 /**
@@ -87,26 +92,6 @@ auto AudioProject::deleteCategory(AudioCategory *category) -> bool
 
 /**
  * @brief Set the current category
- * @param name Name of the category
- */
-auto AudioProject::setCurrentCategory(const QString &name) -> bool
-{
-    qDebug() << "AudioProject: Setting current category:" << name << "...";
-
-    for (auto *category : m_categories)
-    {
-        if (category && category->name() == name)
-        {
-            setCurrentCategory(category);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * @brief Set the current category
  */
 auto AudioProject::setCurrentCategory(AudioCategory *category) -> bool
 {
@@ -132,19 +117,32 @@ auto AudioProject::setCurrentCategory(AudioCategory *category) -> bool
     return false;
 }
 
-auto AudioProject::addCategory(AudioCategory *category) -> bool
+/**
+ * @brief Add a new category to the project
+ * @param category The category to be added.
+ * @param setAsCurrent Set to true if the category should be set as the current category.
+ * @return
+ */
+auto AudioProject::addCategory(AudioCategory *category, bool setAsCurrent) -> bool
 {
     if (!category) return false;
 
+    prepareCategory(category);
     m_categories.append(category);
     emit categoriesChanged();
+
+    if (setAsCurrent)
+    {
+        return setCurrentCategory(category);
+    }
+
     return true;
 }
 
 /**
  * @brief Get the current scenario of the current category
  */
-AudioScenario *AudioProject::currentScenario() const
+auto AudioProject::currentScenario() const -> AudioScenario *
 {
     if (!currentCategory()) return nullptr;
 
@@ -164,4 +162,25 @@ auto AudioProject::elements() const -> QList<AudioElement *>
     }
 
     return list;
+}
+
+auto AudioProject::connectSignals() -> void
+{
+    connect(this, &AudioProject::nameChanged, this, &AudioProject::onWasEdited);
+    connect(this, &AudioProject::categoriesChanged, this, &AudioProject::onWasEdited);
+}
+
+auto AudioProject::prepareCategory(AudioCategory *category) -> void
+{
+    if (!category) return;
+    category->setParent(this);
+
+    connect(category, &AudioCategory::wasEdited, this, &AudioProject::onWasEdited);
+    connect(category, &AudioCategory::nameChanged, this, &AudioProject::onWasEdited);
+    connect(category, &AudioCategory::scenariosChanged, this, &AudioProject::onWasEdited);
+}
+
+auto AudioProject::onWasEdited() -> void
+{
+    setIsSaved(false);
 }

@@ -49,7 +49,7 @@ void FileAccessNextCloud::getFiles(int requestId, const QString& directory, cons
     qCDebug(gmFileAccessNextCloud()) << "Getting files in directory" << directory << "with fileEnding filter:" << fileEnding;
 
     auto internalRequestId = FileManager::getUniqueRequestId();
-    auto *context = new QObject;
+    auto *context = new QObject(this);
     connect(this, &FileAccessNextCloud::receivedFileList, context, [ = ](int filesRequestId, QStringList fileNames) {
         if (filesRequestId != internalRequestId) return;
 
@@ -63,8 +63,17 @@ void FileAccessNextCloud::getFiles(int requestId, const QString& directory, cons
             fileRequests->insert(FileManager::getUniqueRequestId(), filePath);
         }
 
-        downloadFiles(requestId, fileRequests);
-        delete context;
+        if (fileRequests->isEmpty())
+        {
+            emit receivedFiles(requestId, QList<QByteArray>());
+            delete fileRequests;
+        }
+        else
+        {
+            downloadFiles(requestId, fileRequests);
+        }
+
+        context->deleteLater();
     });
 
     getFileList(internalRequestId, directory, false);
@@ -79,7 +88,7 @@ void FileAccessNextCloud::downloadFiles(const int& requestId, QMap<int, QString>
 
     for (auto id : requests->keys())
     {
-        auto *context = new QObject;
+        auto *context = new QObject(this);
         connect(this, &FileAccessNextCloud::receivedFile, context, [ = ](int fileRequestId, QByteArray data) {
             if (fileRequestId != id) return;
 
@@ -96,7 +105,7 @@ void FileAccessNextCloud::downloadFiles(const int& requestId, QMap<int, QString>
                 delete dataList;
             }
 
-            delete context;
+            context->deleteLater();
         });
 
         getFile(id, requests->value(id));

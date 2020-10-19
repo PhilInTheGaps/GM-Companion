@@ -23,7 +23,8 @@ class SpotifyPlayer : public AudioPlayer
     Q_OBJECT
 
 public:
-    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
+    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer,
+                  QNetworkAccessManager *networkManager, QObject *parent = nullptr);
     ~SpotifyPlayer();
 
     void play(const QString& id, int offset = -1, bool playOnce = false);

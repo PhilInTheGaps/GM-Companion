@@ -90,7 +90,7 @@ public:
     int type() const { return m_type; }
 
 public slots:
-    void openFolder(bool open, QString folder, QStringList path);
+    void openFolder(bool open, const QString& folder, const QStringList& path);
 
 signals:
     void typeChanged();
@@ -103,9 +103,9 @@ private:
     AudioEditorFileModel *m_fileModel = nullptr;
 
     void updateFiles();
-    void addFiles(QStringList path, int index, bool folders);
-    void addFilesToModel(QStringList files, QStringList path, int type, int index);
-    void removeElement(QStringList path);
+    void addFiles(const QStringList& path, int index, bool folders);
+    void addFilesToModel(const QStringList& files, const QStringList& path, int type, int index);
+    void removeElement(const QStringList& path);
     void clearFiles();
 };
 

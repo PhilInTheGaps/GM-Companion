@@ -24,7 +24,7 @@ public slots:
 private:
     QList<AudioScenario*> m_scenarios;
     QNetworkAccessManager *m_networkManager = nullptr;
-    QString m_resourcesPath, m_musicPath, m_soundsPath;
+    QString m_musicPath, m_soundsPath;
 
     QPixmap getPlaceholderImage(AudioElement *element);
 

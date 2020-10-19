@@ -9,7 +9,7 @@
 #include <QJsonArray>
 #include <QDir>
 
-#include "project/audioproject.h"
+#include "../project/audioproject.h"
 
 class Worker : public QObject
 {

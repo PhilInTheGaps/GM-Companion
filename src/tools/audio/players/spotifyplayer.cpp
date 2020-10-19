@@ -10,13 +10,12 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent)
-    : AudioPlayer(parent), metaDataReader(mDReader), m_discordPlayer(discordPlayer)
+SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer,
+                             QNetworkAccessManager *networkManager, QObject *parent)
+    : AudioPlayer(parent), metaDataReader(mDReader), m_networkManager(networkManager),
+      m_discordPlayer(discordPlayer)
 {
     qDebug() << "Loading Spotify Tool ...";
-
-    m_networkManager = new QNetworkAccessManager(this);
-    m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
     // Signals
     connect(Spotify::getInstance(), &Spotify::receivedReply, this, &SpotifyPlayer::gotPlaylistInfo);

@@ -40,7 +40,7 @@ void SoundPlayerController::play(AudioElement *element)
     }
 }
 
-void SoundPlayerController::stop(QString element)
+void SoundPlayerController::stop(const QString& element)
 {
     if (Discord::getInstance()->enabled())
     {
@@ -57,7 +57,7 @@ void SoundPlayerController::stop(QString element)
     emit stopElement(element);
 }
 
-QList<QObject *> SoundPlayerController::activeElements() const
+auto SoundPlayerController::activeElements() const -> QList<QObject *>
 {
     QList<QObject*> list;
 
@@ -389,10 +389,9 @@ void SoundPlayer::onStreamManifestReceived()
 
             break;
         }
-        else
-        {
-            audioStreams.removeOne(stream);
-        }
+        
+        audioStreams.removeOne(stream);
+
     }
     while (!audioStreams.isEmpty());
 

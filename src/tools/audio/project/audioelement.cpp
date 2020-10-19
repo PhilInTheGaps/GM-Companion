@@ -1,6 +1,9 @@
 #include "audioelement.h"
 #include "logging.h"
+#include "audioicon.h"
+#include "utils/utils.h"
 #include <QJsonArray>
+#include <utility>
 
 AudioElement::AudioElement(const QString& name, Type type, const QString& path, QObject *parent)
     : QObject(parent), m_name(name), m_type(type)
@@ -9,15 +12,16 @@ AudioElement::AudioElement(const QString& name, Type type, const QString& path, 
     m_icon = new AudioIcon(path, this);
 }
 
-AudioElement::AudioElement(QJsonObject object, Type type, const QString& path, QObject *parent)
+AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& path, QObject *parent)
     : QObject(parent)
 {
     m_name             = object["name"].toString();
-    m_relativeIconPath = object["icon"].toString();
     m_mode             = object["mode"].toInt();
     m_path             = path + "/" + typeToString(type) + "/" + m_name;
     m_icon             = new AudioIcon(m_path, this);
     m_type             = type;
+
+    m_icon->setRelativeUrl(object["icon"].toString());
 
     for (auto file : object.value("files").toArray())
     {
@@ -32,7 +36,7 @@ auto AudioElement::toJson() const -> QJsonObject
 {
     QJsonObject object;
     object.insert("name", m_name);
-    object.insert("icon", m_relativeIconPath);
+    object.insert("icon", icon()->relativeUrl());
     object.insert("mode", m_mode);
 
     // Files
@@ -43,6 +47,72 @@ auto AudioElement::toJson() const -> QJsonObject
     }
     object.insert("files", files);
     return object;
+}
+
+auto AudioElement::iconObject() const -> QObject *
+{
+    return qobject_cast<QObject*>(icon());
+}
+
+/**
+ * @brief Replace the file list of the element.
+ * All previous files are deleted!
+ */
+void AudioElement::setFiles(QList<AudioFile *> files)
+{
+    for (auto *file : m_files)
+    {
+        if (file) file->deleteLater();
+    }
+
+    m_files = std::move(files);
+    emit filesChanged();
+}
+
+/**
+ * @brief Add an AudioFile to the filelist
+ */
+auto AudioElement::addFile(AudioFile *file) -> bool
+{
+    if (!file) return false;
+
+    file->setParent(this);
+    m_files.append(file);
+    emit filesChanged();
+    return true;
+}
+
+/**
+ * @brief Try to remove the file at index
+ */
+auto AudioElement::removeFile(int index) -> bool
+{
+    if (Utils::isInBounds(m_files, index))
+    {
+        auto *file = m_files.takeAt(index);
+        file->deleteLater();
+        emit filesChanged();
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief Move a file to a new position in the list
+ */
+auto AudioElement::moveFile(int from, int steps) -> bool
+{
+    int to = from + steps;
+
+    if (Utils::isInBounds(m_files, to))
+    {
+        m_files.move(from, to);
+        emit filesChanged();
+        return true;
+    }
+
+    return false;
 }
 
 auto AudioElement::typeToString(AudioElement::Type type) -> QString

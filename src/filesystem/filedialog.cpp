@@ -1,8 +1,11 @@
 #include "filedialog.h"
 #include "logging.h"
 #include "filemanager.h"
+#include "utils/utils.h"
+#include <utility>
 
-FileObject::FileObject(QString name, bool isFolder, QObject *parent)
+
+FileObject::FileObject(const QString& name, bool isFolder, QObject *parent)
     : QObject(parent), m_name(name), m_isFolder(isFolder)
 {
 }
@@ -12,7 +15,7 @@ FileDialog::FileDialog(QObject *parent) : QObject(parent)
     connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &FileDialog::onFileListReceived);
 }
 
-void FileDialog::setCurrentDir(const QString& dir)
+auto FileDialog::setCurrentDir(const QString& dir) -> void
 {
     qCDebug(gmFileDialog()) << "Setting current dir:" << dir;
     m_currentDir = dir.split('/');
@@ -22,13 +25,13 @@ void FileDialog::setCurrentDir(const QString& dir)
     updateFileList();
 }
 
-void FileDialog::enterFolder(int index)
+auto FileDialog::enterFolder(int index) -> void
 {
     qCDebug(gmFileDialog()) << "Entering folder" << index;
 
     if ((m_files.length() > index) && (index > -1))
     {
-        auto *folder = static_cast<FileObject*>(m_files[index]);
+        auto *folder = qobject_cast<FileObject*>(m_files[index]);
 
         if (folder->isFolder())
         {
@@ -46,15 +49,15 @@ auto FileDialog::getSelected(int index) const -> QString
 {
     auto selectedFolder = m_currentDir;
 
-    if ((m_files.length() > index) && (index > -1))
+    if (Utils::isInBounds(m_files, index))
     {
-        selectedFolder.append(static_cast<FileObject*>(m_files[index])->name());
+        selectedFolder.append(qobject_cast<FileObject*>(m_files[index])->name());
     }
 
     return FileUtils::dirFromFolders(selectedFolder);
 }
 
-void FileDialog::forward()
+auto FileDialog::forward() -> void
 {
     qCDebug(gmFileDialog()) << "forward()";
 
@@ -67,13 +70,13 @@ void FileDialog::forward()
     }
 }
 
-void FileDialog::clearForward()
+auto FileDialog::clearForward() -> void
 {
     m_forwardFolders.clear();
     emit canForwardChanged();
 }
 
-void FileDialog::back()
+auto FileDialog::back() -> void
 {
     qCDebug(gmFileDialog()) << "back()";
 
@@ -86,7 +89,7 @@ void FileDialog::back()
     }
 }
 
-void FileDialog::updateFileList()
+auto FileDialog::updateFileList() -> void
 {
     qCDebug(gmFileDialog()) << "updateFileList()";
 
@@ -103,7 +106,7 @@ void FileDialog::updateFileList()
     }
 }
 
-void FileDialog::onFileListReceived(const int& requestId, const QStringList& files)
+auto FileDialog::onFileListReceived(const int& requestId, const QStringList& files) -> void
 {
     if (!((requestId == m_foldersRequestId) || (requestId == m_filesRequestId))) return;
 

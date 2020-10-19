@@ -6,6 +6,7 @@ Dialog {
     property string origName: ""
     property int mode: -1
 
+    modal: true
     margins: 0
     title: ""
 

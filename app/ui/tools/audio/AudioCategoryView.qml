@@ -26,24 +26,27 @@ Rectangle {
         // Project ComboBox
         CustomToolBarComboBox {
             id: audio_project_combo_box
-            property bool loaded: false
+            property int loaded: 0
 
             anchors.left: parent.left
             anchors.right: editor_button.left
 
             width: parent.width - editor_button.width - parent.spacing
-            model: audio_tool ? audio_tool.projectNames : []
+            model: audio_tool ? audio_tool.projects : []
+            textRole: "name"
+            emptyString: loaded > 0 ? qsTr("No Projects") : qsTr("Loading ...")
 
             onCurrentTextChanged: {
-                if (loaded && audio_tool) {
+                if (audio_tool) {
                     audio_tool.setCurrentProject(currentIndex)
                 }
             }
 
-            onModelChanged: {
-                if (!loaded && audio_tool) {
-                    currentIndex = audio_tool.getCurrentProjectIndex()
-                    loaded = true
+            Connections {
+                target: audio_tool
+
+                function onProjectsChanged() {
+                    audio_project_combo_box.loaded += 1
                 }
             }
         }
@@ -92,7 +95,7 @@ Rectangle {
                     anchors.right: parent.right
 
                     onClicked: {
-                        audio_tool.currentProject.setCurrentCategory(buttonText)
+                        audio_tool.currentProject.setCurrentCategory(modelData)
                     }
                 }
             }

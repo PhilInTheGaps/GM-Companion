@@ -12,12 +12,15 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractT
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 
+    auto *networkManager = new QNetworkAccessManager(this);
+    networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+
     audioSaveLoad  = new AudioSaveLoad(this);
-    editor         = new AudioEditor(qmlEngine, audioSaveLoad, this);
+    editor         = new AudioEditor(qmlEngine, audioSaveLoad, networkManager, this);
     metaDataReader = new MetaDataReader(this);
     mprisManager   = new MprisManager(this);
     discordPlayer  = new DiscordPlayer(this);
-    spotifyPlayer  = new SpotifyPlayer(metaDataReader, discordPlayer, this);
+    spotifyPlayer  = new SpotifyPlayer(metaDataReader, discordPlayer, networkManager, this);
     musicPlayer    = new MusicPlayer(metaDataReader, spotifyPlayer, discordPlayer, this);
     radioPlayer    = new RadioPlayer(metaDataReader, discordPlayer, this);
     audioPlayers   = { musicPlayer, radioPlayer };
@@ -60,7 +63,7 @@ void AudioTool::loadData()
 
     // Find and load projects
     connect(audioSaveLoad, &AudioSaveLoad::foundProjects,
-            this,           &AudioTool::onProjectsChanged);
+            this,          &AudioTool::onProjectsChanged);
     audioSaveLoad->findProjects();
 }
 
@@ -116,23 +119,7 @@ auto AudioTool::getCurrentProjectIndex() -> int
 {
     if (!m_currentProject) return 0;
 
-    return projectNames().indexOf(m_currentProject->name());
-}
-
-/**
-    Get the names of all projects
-    @return QStringList with project names
- */
-auto AudioTool::projectNames() -> QStringList
-{
-    if (m_projects.isEmpty()) return {};
-
-    QStringList list;
-    for (auto *project : qAsConst(m_projects))
-    {
-        list.append(project->name());
-    }
-    return list;
+    return m_projects.indexOf(m_currentProject);
 }
 
 /**
