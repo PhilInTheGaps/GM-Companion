@@ -1,4 +1,5 @@
 #include "audioscenario.h"
+#include "logging.h"
 #include <QJsonArray>
 
 QString AudioScenario::filterString = QStringLiteral("");

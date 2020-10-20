@@ -1,4 +1,5 @@
 #include "audiocategory.h"
+#include "logging.h"
 
 #include <QJsonArray>
 #include <utility>

@@ -15,14 +15,19 @@ T.ProgressBar {
                         background ? background.implicitHeight : 0,
                         contentItem.implicitHeight + topPadding + bottomPadding)
 
-    contentItem: ProgressBarImpl {
+    contentItem: Item {
         implicitHeight: Sizes.progressBarHeight
         implicitWidth: 116
-        scale: control.mirrored ? -1 : 1
-        progress: control.position
-        indeterminate: control.visible && control.indeterminate
 
-        color: Colors.alternateBase
+        Rectangle {
+            scale: control.mirrored ? -1 : 1
+
+            width: control.visualPosition * parent.width
+            height: parent.height
+
+            radius: 2
+            color: Colors.alternateBase
+        }
     }
 
     background: Rectangle {
