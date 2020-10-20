@@ -1,12 +1,15 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-
 import FontAwesome 2.0
-import "../buttons"
+
 import "../audio_exporter"
+import "./dialogs"
 import "./views"
+import "./views/main"
+import "./views/element_properties"
 import "../../../defines.js" as Defines
+import "../../../common"
 
 Page {
     id: editor_root
@@ -21,7 +24,7 @@ Page {
     Connections {
         target: audio_editor
 
-        onShowInfoBar: {
+        function onShowInfoBar(message) {
             info_text.text = message
             info_bar.visible = true
             info_bar_timer.start()
@@ -55,13 +58,8 @@ Page {
         y: (parent.height - height) / 2
 
         contentItem: Image {
-            source: if (audio_editor.icon.startsWith("http")
-                            || audio_editor.icon.startsWith("data:")) {
-                        audio_editor.icon
-                    } else {
-                        (platform.isWindows ? "file:///" : "file://") + audio_editor.resourcesPath(
-                                    ) + audio_editor.icon
-                    }
+            source: audio_editor
+                    && audio_editor.currentElement ? audio_editor.currentElement.icon.absoluteUrl : ""
 
             fillMode: Image.PreserveAspectFit
         }
@@ -77,49 +75,13 @@ Page {
         id: delete_dialog
     }
 
-    Item {
-        id: main_item
+    FileDialog {
+        id: audio_editor_file_dialog
+    }
+
+    EditorMainView {
+        id: main_view
         anchors.fill: parent
-
-        Item {
-            id: left_item
-            width: 220
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-
-            EditorElementColumn {
-                id: element_column
-            }
-        }
-
-        EditorFileListView {
-            id: mid_item
-
-            anchors.left: left_item.right
-            anchors.right: right_item.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-
-            anchors.topMargin: 5
-            anchors.bottomMargin: 5
-        }
-
-        Item {
-            id: right_item
-            width: 250
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.bottomMargin: 5
-
-            EditorRightColumn {
-                id: right_column
-                anchors.fill: parent
-            }
-        }
     }
 
     Rectangle {

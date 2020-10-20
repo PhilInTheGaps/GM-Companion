@@ -41,11 +41,10 @@ Rectangle {
             name_field.clear()
         }
 
-        contentItem: CustomTextField {
+        contentItem: TextField {
             id: name_field
 
             placeholderText: qsTr("Notebook")
-            backgroundColor: palette.dark
 
             onAccepted: {
                 new_notebook_dialog.accept()

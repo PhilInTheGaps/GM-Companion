@@ -13,7 +13,7 @@ ListView {
     model: combatantListModel
     currentIndex: combat_tracker.currentIndex
 
-    ScrollBar.vertical: CustomScrollBar {
+    ScrollBar.vertical: ScrollBar {
         visible: list_view.contentHeight > list_view.height
     }
 

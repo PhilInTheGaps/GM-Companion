@@ -1,7 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import CustomComponents 1.0
 
-Column {
+Item {
     id: root
     property string headline
     property var repModel
@@ -10,59 +11,61 @@ Column {
     signal itemChecked(int index, bool checked)
     signal itemClicked(int index, bool checked)
 
-    spacing: 10
-    padding: 10
-
     Label {
         id: text
         text: headline
         font.bold: true
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        anchors.leftMargin: 5
+        anchors.rightMargin: 5
+
+        elide: Text.ElideRight
     }
 
-    ScrollView {
-        id: scroll
-        width: parent.width - parent.padding * 2
-        height: parent.height - text.height - parent.padding * 2
+    ListView {
+        id: list
+
+        anchors.top: text.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 5
+
         clip: true
-        contentHeight: col.implicitHeight
+        model: repModel
 
-        Column {
-            id: col
+        ScrollBar.vertical: ScrollBar {
+            id: scroll_bar
+        }
 
-            width: root.width - root.padding * 2
-            spacing: 5
+        delegate: CustomButton {
+            id: button
 
-            Repeater {
-                model: repModel
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
+            height: 40
 
-                Button {
-                    id: button
-                    width: col.width
+            CheckBox {
+                id: button_checkbox
 
-                    Row {
-                        spacing: 5
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
 
-                        CheckBox {
-                            id: button_checkbox
-                            checked: checkedFunc(index)
+                checked: checkedFunc(index)
 
-                            onCheckedChanged: itemChecked(index, checked)
-                        }
+                onCheckedChanged: itemChecked(index, checked)
+            }
 
-                        Label {
-                            text: modelData
-                            anchors.verticalCenter: parent.verticalCenter
-                            elide: Text.ElideRight
-                            width: button.width - x
-                        }
+            leftPadding: button_checkbox.width
+            buttonText: modelData
 
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    onClicked: {
-                        itemClicked(index, button_checkbox.checked)
-                    }
-                }
+            onClicked: {
+                itemClicked(index, button_checkbox.checked)
             }
         }
     }

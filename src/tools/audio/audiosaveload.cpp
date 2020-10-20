@@ -3,7 +3,6 @@
 #include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
 
-#include <QDebug>
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QFileInfo>
@@ -21,27 +20,27 @@ void AudioSaveLoad::findProjects(bool forEditor)
 
     qCDebug(gmAudioSaveLoad()) << "Finding audio projects ... forEditor:" << forEditor << "request id:" << requestId;
 
-    auto *context = new QObject;
-    connect(FileManager::getInstance(), &FileManager::receivedFiles, context, [ = ](int id, QList<QByteArray>data) {
+    auto *context = new QObject(this);
+    connect(FileManager::getInstance(), &FileManager::receivedFiles, context, [ = ](int id, const QList<QByteArray>&data) {
         if (id != requestId) return;
 
         qCDebug(gmAudioSaveLoad()) << "Found audio projects. forEditor:" << forEditor << "request id:" << requestId;
 
         QList<AudioProject *>projects;
 
-        for (auto fileContent : data)
+        for (const auto& fileContent : data)
         {
             projects.append(new AudioProject(QJsonDocument::fromJson(fileContent).object()));
         }
 
         emit foundProjects(projects, forEditor);
-        delete context;
+        context->deleteLater();
     });
 
     FileManager::getInstance()->getFiles(requestId, SettingsManager::getPath("audio"), "*.audio");
 }
 
-void AudioSaveLoad::findMissingFiles(QList<AudioFile *>audioFiles, QString basePath)
+void AudioSaveLoad::findMissingFiles(const QList<AudioFile *>&audioFiles, const QString& basePath)
 {
     qCDebug(gmAudioSaveLoad()) << "Finding missing files ...";
 
@@ -63,8 +62,8 @@ void AudioSaveLoad::findMissingFiles(QList<AudioFile *>audioFiles, QString baseP
 
     auto requestId = FileManager::getUniqueRequestId();
 
-    auto *context = new QObject;
-    connect(FileManager::getInstance(), &FileManager::checkedIfFilesExist, context, [ = ](int id, QStringList found, QStringList notFound) {
+    auto *context = new QObject(this);
+    connect(FileManager::getInstance(), &FileManager::checkedIfFilesExist, context, [ = ](int id, const QStringList& found, const QStringList& notFound) {
         if (requestId != id) return;
 
         for (auto audioFile : audioFiles)
@@ -77,7 +76,7 @@ void AudioSaveLoad::findMissingFiles(QList<AudioFile *>audioFiles, QString baseP
             qCDebug(gmAudioSaveLoad()) << "Did not find" << notFound.length() << "files:" << notFound;
         }
 
-        delete context;
+        context->deleteLater();
     });
 
     FileManager::getInstance()->checkIfFilesExist(requestId, filePaths);
@@ -118,7 +117,7 @@ void AudioSaveLoad::saveProject(AudioProject *project)
         FileManager::getInstance()->saveFile(filePath, data);
     }
 
-    project->setSaved(true);
+    project->setIsSaved(true);
 }
 
 void AudioSaveLoad::deleteProject(AudioProject *project)

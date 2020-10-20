@@ -7,6 +7,8 @@
 # include <QRegularExpression>
 #endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
+constexpr int ROT13_PLACES = 13;
+
 /**
  * @brief Convert QPixmap to base64 encoded QString
  */
@@ -43,12 +45,12 @@ auto Utils::rot13(const QString& input)->QString
         if (lowCaps.contains(character))
         {
             int index = lowCaps.indexOf(character);
-            encrypted.append(lowCaps.at(index + 13));
+            encrypted.append(lowCaps.at(index + ROT13_PLACES));
         }
         else if (upperCaps.contains(character))
         {
             int index = upperCaps.indexOf(character);
-            encrypted.append(upperCaps.at(index + 13));
+            encrypted.append(upperCaps.at(index + ROT13_PLACES));
         }
         else
         {
@@ -59,7 +61,7 @@ auto Utils::rot13(const QString& input)->QString
     return encrypted;
 }
 
-bool Utils::hasWildcardMatch(const QString &string, const QString &wildcard)
+auto Utils::hasWildcardMatch(const QString &string, const QString &wildcard) -> bool
 {
     bool hasMatch = false;
 

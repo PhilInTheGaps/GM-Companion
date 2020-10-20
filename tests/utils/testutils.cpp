@@ -6,7 +6,7 @@ class TestUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestUtils() {}
+    TestUtils() = default;
 
 private slots:
     void rot13_data();
@@ -14,6 +14,8 @@ private slots:
 
     void hasWildcardMatch_data();
     void hasWildcardMatch();
+
+    void isInBounds();
 };
 
 
@@ -70,6 +72,24 @@ void TestUtils::hasWildcardMatch()
     QFETCH(bool, output);
 
     QCOMPARE(Utils::hasWildcardMatch(string, wildcard), output);
+}
+
+void TestUtils::isInBounds()
+{
+    QList<QObject*> list;
+
+    QVERIFY(!Utils::isInBounds(list, 0));
+    QVERIFY(!Utils::isInBounds(list, 1));
+    QVERIFY(!Utils::isInBounds(list, -1));
+    QVERIFY(!Utils::isInBounds(list, -5));
+
+    list.push_back(new QObject(this));
+    list.push_back(new QObject(this));
+
+    QVERIFY(Utils::isInBounds(list, 0));
+    QVERIFY(Utils::isInBounds(list, 1));
+    QVERIFY(!Utils::isInBounds(list, 2));
+    QVERIFY(!Utils::isInBounds(list, -1));
 }
 
 QTEST_APPLESS_MAIN(TestUtils)

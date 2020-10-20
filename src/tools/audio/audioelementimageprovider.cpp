@@ -1,6 +1,10 @@
 #include "audioelementimageprovider.h"
 #include "audioicongenerator.h"
 
+#include <QRegularExpression>
+
+#define IMAGE_ID_REGEX "(.+\\/(.+)\\/.+)(\\?r=)"
+
 AudioElementImageProvider::AudioElementImageProvider() :
     QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
@@ -8,18 +12,27 @@ AudioElementImageProvider::AudioElementImageProvider() :
 
 QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size, const QSize& requestedSize)
 {
-    QString tempId = id.contains("?r=") ? id.left(id.lastIndexOf("?r=")) : id;
+    auto _id = id;
+    auto type = QStringLiteral("Music");
+    auto regex = QRegularExpression(IMAGE_ID_REGEX);
+    auto match = regex.match(id);
+
+    if (match.hasMatch())
+    {
+        _id = match.captured(1);
+        type = match.captured(2);
+    }
 
     QPixmap pixmap;
 
-    if (AudioIconGenerator::cacheContains(tempId))
+    if (AudioIconGenerator::cacheContains(_id))
     {
-        pixmap = AudioIconGenerator::readFromCache(tempId);
+        pixmap = AudioIconGenerator::readFromCache(_id);
     }
 
     if (pixmap.isNull())
     {
-        pixmap = AudioIconGenerator::getPlaceholderImage(getElementType(tempId));
+        pixmap = getDefaultImage(type);
     }
 
     if (size) *size = pixmap.size();
@@ -32,28 +45,17 @@ QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size,
     return pixmap;
 }
 
-int AudioElementImageProvider::getElementType(const QString& id)
+QPixmap AudioElementImageProvider::getDefaultImage(const QString &type) const
 {
-    auto path = id.split("/");
-
-    // [0] = project, [1] = category, [2] = scenario, [3] = type or scenario,
-    // [4] = type again if [3] was scenario or element name if not
-    if (path.length() > 3)
+    if (type == "Sound")
     {
-        bool ok   = false;
-        int  type = path[3].toInt(&ok);
-
-        if (ok)
-        {
-            return type;
-        }
-        else
-        {
-            type = path[4].toInt(&ok);
-
-            if (ok) return type;
-        }
+        return QPixmap(":/icons/media/sound_image.png");
     }
 
-    return -1;
+    if (type == "Radio")
+    {
+        return QPixmap(":/icons/media/radio_image.png");
+    }
+
+    return QPixmap(":/icons/media/music_image.png");
 }

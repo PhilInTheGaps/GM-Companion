@@ -25,7 +25,7 @@ Column {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            CustomComboBox {
+            ComboBox {
                 id: language_box
 
                 property bool loaded: false
@@ -67,14 +67,14 @@ Column {
         }
 
         // Show Tool Names
-        CustomCheckBox {
+        CheckBox {
             text: qsTr("Show tool names in menu")
             checked: settings_manager.getBoolSetting("showToolNames", false)
             onClicked: settings_manager.showToolNames = checked
         }
 
         // Classic Icons
-        CustomCheckBox {
+        CheckBox {
             text: qsTr("Classic menu icons")
             checked: settings_manager.getBoolSetting("classicIcons", false)
             onClicked: settings_manager.classicIcons = checked
@@ -85,7 +85,7 @@ Column {
     Connections {
         target: update_manager
 
-        onUpdateAvailable: {
+        function onUpdateAvailable() {
             update_text.text = qsTr(
                         "Found new Version: ") + update_manager.newestVersion
             update_text.visible = true
@@ -93,7 +93,7 @@ Column {
             update_busy_indicator.visible = false
         }
 
-        onNoUpdateAvailable: {
+        function onNoUpdateAvailable() {
             update_text.text = qsTr("No newer version found")
             update_text.visible = true
             update_busy_indicator.visible = false
@@ -109,7 +109,7 @@ Column {
             visible: platform.isAndroid ? false : true
         }
 
-        CustomCheckBox {
+        CheckBox {
             text: qsTr("Automatically check for updates")
             checked: settings_manager.getBoolSetting("checkForUpdates", false,
                                                      "Updates")

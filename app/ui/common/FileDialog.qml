@@ -16,9 +16,11 @@ Dialog {
 
     modal: true
 
+    property alias selectedPath: selection_text_field.text
     property alias folder: backend.currentDir
     property alias foldersOnly: backend.folderMode
     property var textField: undefined
+    property var replacePath: undefined
 
     FileDialogBackend {
         id: backend
@@ -29,14 +31,19 @@ Dialog {
     }
 
     onAccepted: {
-        textField.text = selection_text_field.text
-        textField.savePath()
+        if (textField) {
+            if (replacePath) {
+                textField.text = selection_text_field.text.replace(replacePath,
+                                                                   "")
+            } else {
+                textField.text = selection_text_field.text
+            }
+
+            textField.savePath()
+        }
     }
 
-    header: Rectangle {
-        height: Defines.TOOLBAR_HEIGHT
-        color: palette.alternateBase
-
+    header: ToolBar {
         Row {
             id: header_row_left
             anchors.top: parent.top
@@ -56,7 +63,7 @@ Dialog {
             }
         }
 
-        CustomTextField {
+        TextField {
             id: header_text_field
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -91,7 +98,7 @@ Dialog {
             highlightMoveVelocity: -1
             interactive: true
 
-            ScrollBar.vertical: CustomScrollBar {
+            ScrollBar.vertical: ScrollBar {
                 id: scroll_bar
                 visible: main_list_view.contentHeight > main_list_view.height
             }
@@ -151,7 +158,7 @@ Dialog {
         height: Defines.TOOLBAR_HEIGHT
         color: palette.dark
 
-        CustomTextField {
+        TextField {
             id: selection_text_field
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -168,14 +175,13 @@ Dialog {
             anchors.margins: 5
             spacing: 5
 
-            CustomButton {
+            Button {
                 id: open_button
-                buttonText: qsTr("Open")
-                usesFixedWidth: false
+                text: qsTr("Open")
+
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
-                textItem.horizontalAlignment: Text.AlignHCenter
                 width: Math.max(open_button.implicitWidth,
                                 cancel_button.implicitWidth)
 
@@ -184,13 +190,12 @@ Dialog {
                 }
             }
 
-            CustomButton {
+            Button {
                 id: cancel_button
-                buttonText: qsTr("Cancel")
-                usesFixedWidth: false
+                text: qsTr("Cancel")
+
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                textItem.horizontalAlignment: Text.AlignHCenter
                 width: Math.max(open_button.implicitWidth,
                                 cancel_button.implicitWidth)
 

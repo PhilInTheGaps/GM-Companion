@@ -1,6 +1,5 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import CustomComponents 1.0
 
 Dialog {
     id: root
@@ -11,13 +10,13 @@ Dialog {
         padding: 5
         spacing: 5
 
-        CustomCheckBox {
+        CheckBox {
             id: enable_criticals_checkbox
             text: qsTr("Enable Criticals")
             checked: dice_tool.getCriticalEnabled()
         }
 
-        CustomRadioButton {
+        RadioButton {
             id: min_max_radiobutton
             text: qsTr("Min / Max")
             checked: dice_tool.getMinMax()
@@ -28,21 +27,21 @@ Dialog {
             padding: 10
             spacing: 5
 
-            CustomRadioButton {
+            RadioButton {
                 id: success_max_radiobutton
                 text: qsTr("Success: Maximum, Failure: Minimum")
                 checked: dice_tool.getSuccessMax()
                 enabled: enable_criticals_checkbox.checked
             }
 
-            CustomRadioButton {
+            RadioButton {
                 text: qsTr("Success: Minimum, Failure: Maximum")
                 checked: !dice_tool.getSuccessMax()
                 enabled: enable_criticals_checkbox.checked
             }
         }
 
-        CustomRadioButton {
+        RadioButton {
             text: qsTr("Fixed Values")
             checked: !dice_tool.getMinMax()
             enabled: enable_criticals_checkbox.checked

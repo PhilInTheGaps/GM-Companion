@@ -8,7 +8,7 @@ Item {
     Connections {
         target: name_generator
 
-        onCategoriesChanged: {
+        function onCategoriesChanged() {
             loadCategories()
         }
     }

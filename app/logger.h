@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QMessageLogContext>
 #include <QTextStream>
+#include <QMutexLocker>
 
 class Logger
 {
@@ -18,6 +19,7 @@ public:
 private:
     static QFile m_logFile;
     static QTextStream *m_logStream;
+    static QMutex *m_logMutex;
 };
 
 #endif // LOGGER_H

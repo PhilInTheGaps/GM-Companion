@@ -26,7 +26,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: editor_button.left
             width: parent.width - editor_button.width - parent.spacing
-            textItem.leftPadding: 0
+            leftPadding: 0
             model: shop_tool.projects
 
             onCurrentTextChanged: shop_tool.setCurrentProject(currentIndex)

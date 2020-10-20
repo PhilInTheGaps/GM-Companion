@@ -6,8 +6,6 @@ MenuItem {
 
     property string textColor: palette.text
 
-    hoverEnabled: true
-
     contentItem: Text {
         leftPadding: root.indicator ? root.indicator.width : 0
         rightPadding: root.arrow ? root.arrow.width : 0
@@ -18,14 +16,5 @@ MenuItem {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-    }
-
-    background: Rectangle {
-        implicitWidth: 200
-        implicitHeight: 25
-        opacity: enabled ? 1 : 0.3
-        color: "transparent"
-        border.color: palette.button
-        border.width: root.hovered ? 1 : 0
     }
 }

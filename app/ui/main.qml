@@ -101,7 +101,9 @@ ApplicationWindow {
         Connections {
             target: update_manager
 
-            onUpdateAvailable: update_dialog.open()
+            function onUpdateAvailable() {
+                update_dialog.open()
+            }
         }
     }
 

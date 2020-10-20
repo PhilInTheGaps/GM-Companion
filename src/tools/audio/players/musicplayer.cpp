@@ -14,33 +14,39 @@
 
 using namespace YouTube::Videos;
 
-MusicPlayer::MusicPlayer(SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, QObject *parent)
+MusicPlayer::MusicPlayer(MetaDataReader *metaDataReader, SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, QObject *parent)
     : AudioPlayer(parent), spotifyPlayer(spotify), discordPlayer(discordPlayer)
 {
-    mediaPlayer = new QMediaPlayer;
+    mediaPlayer = new QMediaPlayer(this);
     mediaPlayer->setObjectName(tr("Music"));
 
     auto *networkManager = new QNetworkAccessManager(this);
     networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     videoClient = new VideoClient(networkManager, this);
 
-    connect(mediaPlayer,                &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
-    connect(mediaPlayer,                &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
-    connect(mediaPlayer,                &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
-    connect(mediaPlayer,                QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
-    connect(mediaPlayer,                &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
-    connect(mediaPlayer,                QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
-            this, QOverload<const QString&, const QVariant&>::of(&MusicPlayer::metaDataChanged));
+    connect(mediaPlayer, &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
+    connect(mediaPlayer, &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
+    connect(mediaPlayer, &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
+    connect(mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
+    connect(mediaPlayer, &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
 
-    connect(FileManager::getInstance(), &FileManager::receivedFile,              this, &MusicPlayer::onFileReceived);
+    // MetaData
+    connect(mediaPlayer,    QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
+            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<const QString&, const QVariant&>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<const QByteArray&>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<const QByteArray&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<QMediaPlayer *>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
+    connect(this,           &MusicPlayer::clearMetaData, metaDataReader, &MetaDataReader::clearMetaData);
 
-    connect(spotify,                    &SpotifyPlayer::songEnded,               this, &MusicPlayer::onSpotifySongEnded);
-    connect(spotify,                    &SpotifyPlayer::receivedPlaylistTracks,  this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
-}
+    // Files
+    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &MusicPlayer::onFileReceived);
 
-MusicPlayer::~MusicPlayer()
-{
-    mediaPlayer->deleteLater();
+    // Spotify
+    connect(spotify, &SpotifyPlayer::songEnded,               this, &MusicPlayer::onSpotifySongEnded);
+    connect(spotify, &SpotifyPlayer::receivedPlaylistTracks,  this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
 }
 
 /**
@@ -64,6 +70,7 @@ void MusicPlayer::play(AudioElement *element)
     m_playlist = element->files();
 
     emit metaDataChanged(mediaPlayer);
+
     loadSongNames(true);
 }
 
@@ -578,12 +585,10 @@ void MusicPlayer::onStreamManifestReceived()
             foundGoodStream = true;
             break;
         }
-        else
-        {
-            if (stream) qCDebug(gmAudioMusic()) << "Audio codec" << stream->audioCodec() << "is not supported on this device.";
+        
+        if (stream) qCDebug(gmAudioMusic()) << "Audio codec" << stream->audioCodec() << "is not supported on this device.";
 
-            audioStreams.removeOne(stream);
-        }
+        audioStreams.removeOne(stream);
     }
     while (!audioStreams.isEmpty());
 

@@ -44,7 +44,7 @@ Page {
         currentIndex: 0
         onModelChanged: currentIndex = 0
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: scroll_bar
             visible: item_list_table.contentHeight > item_list_table.height
         }

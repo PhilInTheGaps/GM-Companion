@@ -6,7 +6,7 @@ class TestNetworkUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestNetworkUtils() {}
+    TestNetworkUtils() = default;
 
 private slots:
     void basicAuthHeader_data();

@@ -6,119 +6,116 @@ import FontAwesome 2.0
 import "../buttons"
 import "../../../defines.js" as Defines
 
-Flickable {
+Pane {
     id: root
 
-    property bool small_mode: true
-
     anchors.fill: parent
-    anchors.margins: 5
 
-    clip: true
-    contentWidth: -1
-    contentHeight: elements_column.implicitHeight
+    ListView {
+        id: list
 
-    ScrollBar.vertical: CustomScrollBar {
-        visible: root.contentHeight > root.height
-    }
+        property bool small_mode: true
 
-    Column {
-        id: elements_column
+        anchors.fill: parent
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        clip: true
         spacing: 10
+        model: (audio_editor && audio_editor.currentProject
+                && audio_editor.currentProject.currentScenario) ? audio_editor.currentProject.currentScenario.model : []
 
-        Repeater {
-            id: repeater
-            model: editorElementModel
+        ScrollBar.vertical: ScrollBar {
+            id: scroll_bar
+            visible: list.contentHeight > list.height
+        }
 
-            Column {
+        delegate: Column {
+            id: elements_column
+
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
+            anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
+            spacing: 5
+
+            Rectangle {
+                id: subscenario_rect
                 anchors.left: parent.left
                 anchors.right: parent.right
-                spacing: 5
+                height: subscenario_text.height + 4
+                visible: modelData.isSubscenario
+                color: palette.button
 
-                Rectangle {
-                    id: subscenario_rect
+                Label {
+                    id: subscenario_text
+                    text: modelData.name
+                    color: palette.buttonText
+                    font.bold: true
+
+                    anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
+                    anchors.right: subscenario_button_row.left
+                    anchors.margins: 2
+                    elide: Text.ElideRight
+                }
+
+                Row {
+                    id: subscenario_button_row
+
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
                     anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    height: subscenario_text.height + 4
-                    color: palette.button
-                    visible: subscenario_text.text != ""
+                    anchors.leftMargin: 5
+                    anchors.rightMargin: 2
+                    spacing: 2
 
-                    Label {
-                        id: subscenario_text
-                        text: modelData.name()
-                        color: palette.buttonText
-                        font.bold: true
-
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.right: subscenario_button_row.left
-                        anchors.margins: 2
-                        elide: Text.ElideRight
+                    CustomToolBarButton {
+                        iconText: FontAwesome.chevronUp
+                        anchors.margins: 0
+                        pointSize: 12
+                        padding: 2
+                        onClicked: audio_editor.moveSubscenario(modelData, -1)
                     }
 
-                    Row {
-                        id: subscenario_button_row
+                    CustomToolBarButton {
+                        iconText: FontAwesome.chevronDown
+                        anchors.margins: 0
+                        pointSize: 12
+                        padding: 2
+                        onClicked: audio_editor.moveSubscenario(modelData, 1)
+                    }
 
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.leftMargin: 5
-                        anchors.rightMargin: 5
-                        spacing: 5
-
-                        CustomToolBarButton {
-                            iconText: FontAwesome.chevronUp
-                            anchors.margins: 0
-                            onClicked: audio_editor.moveElement(
-                                           modelData.name(), 4, -1)
-                        }
-
-                        CustomToolBarButton {
-                            iconText: FontAwesome.chevronDown
-                            anchors.margins: 0
-                            onClicked: audio_editor.moveElement(
-                                           modelData.name(), 4, 1)
-                        }
-
-                        CustomToolBarButton {
-                            iconText: FontAwesome.trash
-                            anchors.margins: 0
-                            onClicked: {
-                                delete_dialog.x = element_column.width
-                                delete_dialog.y = Defines.TOOLBAR_HEIGHT
-                                delete_dialog.mode = 3
-                                delete_dialog.element_name = modelData.name()
-                                delete_dialog.open()
-                            }
+                    CustomToolBarButton {
+                        iconText: FontAwesome.trash
+                        anchors.margins: 0
+                        pointSize: 10
+                        onClicked: {
+                            delete_dialog.x = element_column.width
+                            delete_dialog.y = Defines.TOOLBAR_HEIGHT
+                            delete_dialog.mode = 3
+                            delete_dialog.element = modelData
+                            delete_dialog.open()
                         }
                     }
                 }
+            }
 
-                Repeater {
-                    model: modelData
+            Repeater {
+                id: repeater
+                model: modelData.elements
 
-                    AudioButton {
-                        element_name: modelData.name
-                        element_type: modelData.type
-                        subscenario_name: subscenario_text.text
-                        icon: modelData.icon
+                AudioButton {
+                    element_name: modelData.name
+                    element_type: modelData.type
+                    subscenario_name: subscenario_text.text
+                    icon: modelData.icon
 
-                        overlay_enabled: false
-                        small_mode: root.small_mode
+                    overlay_enabled: false
+                    small_mode: list.small_mode
 
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-                        onClicked: {
-                            audio_editor.loadElement(element_name,
-                                                     element_type,
-                                                     subscenario_name)
-                        }
+                    onClicked: {
+                        audio_editor.loadElement(modelData)
                     }
                 }
             }

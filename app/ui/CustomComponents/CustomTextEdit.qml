@@ -33,7 +33,7 @@ Item {
         contentHeight: edit.paintedHeight
         clip: true
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: scroll_bar
             visible: flick.contentHeight > flick.height
         }

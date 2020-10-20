@@ -12,7 +12,7 @@ Rectangle {
 
         clip: true
         contentHeight: shop_column.implicitHeight
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: scroll_bar
             visible: shop_flickable.contentHeight > shop_flickable.height
         }

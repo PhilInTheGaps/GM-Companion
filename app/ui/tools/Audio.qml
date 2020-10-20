@@ -29,18 +29,10 @@ Item {
         source: "audio/editor/Editor.qml"
     }
 
-    LoadingScreen {
-        id: splash
-        showImage: false
-        progress: audio_editor_page.progress
-        visible: audio_stack.currentItem === audio_editor_page
-                 && audio_editor_page.status === Loader.Loading
-    }
-
     Connections {
         target: audio_editor_page.item
 
-        onBackToTool: {
+        function onBackToTool() {
             audio_stack.pop()
             audio_editor_page.active = false
         }

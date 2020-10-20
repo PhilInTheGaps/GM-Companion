@@ -94,7 +94,7 @@ Item {
         contentWidth: -1
         contentHeight: main_column.implicitHeight
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: scroll_bar
             visible: flickable.contentHeight > flickable.height
         }
@@ -124,7 +124,7 @@ Item {
                         anchors.right: parent.right
                         height: path_text_field.height
 
-                        CustomTextField {
+                        TextField {
                             id: path_text_field
                             anchors.left: parent.left
                             anchors.right: dots_button.left
@@ -146,7 +146,9 @@ Item {
                             Connections {
                                 target: root
 
-                                onFileModeChanged: path_text_field.loadPath()
+                                function onFileModeChanged() {
+                                    path_text_field.loadPath()
+                                }
                             }
                         }
 

@@ -86,7 +86,7 @@ Column {
         }
 
         // Name of shop
-        CustomTextField {
+        TextField {
             id: shop_name_field
             text: shop_editor.name
             anchors.left: shop_up_down.right
@@ -223,7 +223,7 @@ Column {
         spacing: 5
 
         // Owner
-        CustomTextField {
+        TextField {
             id: shop_owner_textfield
             width: parent.width / 4
             placeholderText: qsTr("Shop Owner")
@@ -234,7 +234,7 @@ Column {
         }
 
         // Description
-        CustomTextField {
+        TextField {
             id: shop_description_textfield
             width: parent.width - parent.spacing - shop_owner_textfield.width
             placeholderText: qsTr("Shop Description")
@@ -305,7 +305,7 @@ Column {
         currentIndex: 0
         onModelChanged: currentIndex = 0
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: scroll_bar
             visible: shop_items_table.contentHeight > shop_items_table.height
         }

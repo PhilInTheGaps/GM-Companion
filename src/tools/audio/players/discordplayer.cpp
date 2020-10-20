@@ -117,7 +117,7 @@ void DiscordPlayer::sendData(const QString &url, const QByteArray &data)
     auto *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     QHttpPart dataPart;
-    dataPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"data\"; filename=\"audio\""));
+    dataPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(R"(form-data; name="data"; filename="audio")"));
     dataPart.setBody(data);
     multiPart->append(dataPart);
 

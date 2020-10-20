@@ -21,6 +21,14 @@ Rectangle {
     height: Defines.TOOLBAR_HEIGHT
     color: palette.alternateBase
 
+    Rectangle {
+        color: palette.dark
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 1
+    }
+
     Row {
         id: row
         anchors.left: parent.left
@@ -31,6 +39,7 @@ Rectangle {
         CustomToolBarButton {
             visible: enableBack
             iconText: FontAwesome.arrowAltCircleLeft
+            toolTipText: qsTr("Back")
             onClicked: backClicked()
             pointSize: 18
         }
@@ -39,6 +48,7 @@ Rectangle {
         CustomToolBarButton {
             visible: enableAdd
             iconText: FontAwesome.fileMedical
+            toolTipText: qsTr("Add")
             onClicked: addClicked()
             pointSize: 18
         }
@@ -47,6 +57,7 @@ Rectangle {
         CustomToolBarButton {
             visible: enableSave
             iconText: FontAwesome.fileDownload
+            toolTipText: qsTr("Save")
             onClicked: saveClicked()
             pointSize: 18
 
@@ -64,6 +75,7 @@ Rectangle {
         CustomToolBarButton {
             visible: enableExport
             iconText: FontAwesome.fileExport
+            toolTipText: qsTr("Export")
             onClicked: exportClicked()
             pointSize: 18
         }

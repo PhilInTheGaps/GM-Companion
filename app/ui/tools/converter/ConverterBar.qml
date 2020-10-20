@@ -13,7 +13,7 @@ Item {
         padding: 10
         spacing: 10
 
-        CustomTextField {
+        TextField {
             id: left_value_text_field
             width: 150
             height: root.height * 2 / 3
@@ -53,7 +53,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        CustomTextField {
+        TextField {
             id: right_value_text_field
             width: 150
             height: root.height * 2 / 3

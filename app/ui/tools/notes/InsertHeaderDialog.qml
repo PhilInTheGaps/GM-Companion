@@ -8,6 +8,8 @@ Dialog {
 
     signal insert(string text)
 
+    modal: true
+
     contentItem: Item {
         implicitWidth: 200
         implicitHeight: column.height

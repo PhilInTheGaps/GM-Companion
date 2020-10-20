@@ -11,7 +11,7 @@ CustomToolBar {
     enableSave: true
     enableExport: true
 
-    isSaved: audio_editor.isSaved
+    isSaved: audio_editor ? audio_editor.isSaved : true
 
     onBackClicked: backToTool()
     onAddClicked: new_thing_dialog.open()
@@ -31,25 +31,49 @@ CustomToolBar {
 
         CustomToolBarComboBox {
             id: project_box
+            property int loaded: 0
+
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: 150
+            textRole: "name"
+            emptyString: loaded > 0 ? qsTr("No Projects") : qsTr("Loading ...")
 
-            model: audio_editor.projectNames
-            currentIndex: audio_editor.projectIndex
+            model: audio_editor ? audio_editor.projects : []
 
-            onCurrentIndexChanged: audio_editor.setCurrentProject(currentIndex)
+            onCurrentTextChanged: {
+                if (audio_editor) {
+                    audio_editor.setCurrentProject(currentIndex)
+                }
+            }
+
+            Connections {
+                target: audio_editor
+
+                function onProjectsChanged() {
+                    project_box.loaded += 1
+                }
+
+                function onCurrentProjectChanged() {
+                    var project = audio_editor.currentProject
+                    if (project && project.name !== project_box.currentText) {
+                        project_box.currentIndex = audio_editor.projectIndex
+                    }
+                }
+            }
         }
 
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.pen
+            toolTipText: qsTr("Rename Project")
+            enabled: project_box.model.length > 0
             onClicked: {
                 rename_dialog.mode = 0
                 rename_dialog.title = qsTr("Rename Project")
                 rename_dialog.origName = project_box.currentText
                 rename_dialog.x = project_box.x
-                rename_dialog.y = tool_bar.height
+                rename_dialog.y = 0
                 rename_dialog.open()
             }
         }
@@ -57,10 +81,12 @@ CustomToolBar {
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.trash
+            toolTipText: qsTr("Delete Project")
+            enabled: project_box.model.length > 0
             onClicked: {
                 delete_dialog.x = project_box.x
-                delete_dialog.y = tool_bar.height
-                delete_dialog.element_name = project_box.currentText
+                delete_dialog.y = 0
+                delete_dialog.element = audio_editor.currentProject
                 delete_dialog.mode = 0
                 delete_dialog.open()
             }
@@ -71,22 +97,40 @@ CustomToolBar {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: 150
+            textRole: "name"
+            emptyString: qsTr("No Categories")
 
-            model: audio_editor.categoryNames
-            currentIndex: audio_editor.categoryIndex
+            model: {
+                audio_editor
+                        && audio_editor.currentProject ? audio_editor.currentProject.categories : []
+            }
 
-            onCurrentTextChanged: audio_editor.setCurrentCategory(currentText)
+            currentIndex: {
+                audio_editor
+                        && audio_editor.currentProject ? audio_editor.currentProject.categoryIndex : -1
+            }
+
+            onCurrentTextChanged: {
+                if (audio_editor && audio_editor.currentProject
+                        && audio_editor.currentProject.currentCategory
+                        && audio_editor.currentProject.currentCategory.name
+                        !== category_box.currentText) {
+                    audio_editor.setCurrentCategory(currentIndex)
+                }
+            }
         }
 
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.pen
+            toolTipText: qsTr("Rename Category")
+            enabled: category_box.model.length > 0
             onClicked: {
                 rename_dialog.mode = 1
                 rename_dialog.title = qsTr("Rename Category")
                 rename_dialog.origName = category_box.currentText
                 rename_dialog.x = category_box.x
-                rename_dialog.y = tool_bar.height
+                rename_dialog.y = 0
                 rename_dialog.open()
             }
         }
@@ -94,10 +138,12 @@ CustomToolBar {
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.trash
+            toolTipText: qsTr("Delete Category")
+            enabled: category_box.model.length > 0
             onClicked: {
                 delete_dialog.x = category_box.x
-                delete_dialog.y = tool_bar.height
-                delete_dialog.element_name = category_box.currentText
+                delete_dialog.y = 0
+                delete_dialog.element = audio_editor.currentProject.currentCategory
                 delete_dialog.mode = 1
                 delete_dialog.open()
             }
@@ -108,24 +154,37 @@ CustomToolBar {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: 150
+            emptyString: qsTr("No Scenarios")
+            textRole: "name"
 
-            model: audio_editor.scenarioNames
-            currentIndex: audio_editor.scenarioIndex
+            model: {
+                audio_editor && audio_editor.currentProject
+                        && audio_editor.currentProject.currentCategory ? audio_editor.currentProject.currentCategory.scenarios : []
+            }
+
+            currentIndex: {
+                audio_editor && audio_editor.currentProject
+                        && audio_editor.currentProject.currentCategory ? audio_editor.currentProject.currentCategory.scenarioIndex : -1
+            }
 
             onCurrentTextChanged: {
-                audio_editor.setCurrentScenario(currentText)
+                if (audio_editor) {
+                    audio_editor.setCurrentScenario(currentIndex)
+                }
             }
         }
 
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.pen
+            toolTipText: qsTr("Rename Scenario")
+            enabled: scenario_box.model.length > 0
             onClicked: {
                 rename_dialog.mode = 2
                 rename_dialog.title = qsTr("Rename Scenario")
                 rename_dialog.origName = scenario_box.currentText
                 rename_dialog.x = scenario_box.x
-                rename_dialog.y = tool_bar.height
+                rename_dialog.y = 0
                 rename_dialog.open()
             }
         }
@@ -133,10 +192,12 @@ CustomToolBar {
         CustomToolBarButton {
             anchors.margins: 10
             iconText: FontAwesome.trash
+            toolTipText: qsTr("Delete Scenario")
+            enabled: scenario_box.model.length > 0
             onClicked: {
                 delete_dialog.x = scenario_box.x
-                delete_dialog.y = tool_bar.height
-                delete_dialog.element_name = scenario_box.currentText
+                delete_dialog.y = 0
+                delete_dialog.element = audio_editor.currentProject.currentScenario
                 delete_dialog.mode = 2
                 delete_dialog.open()
             }
@@ -152,21 +213,15 @@ CustomToolBar {
         // Sort Elements
         CustomToolBarButton {
             iconText: FontAwesome.sortAlphaDown
+            toolTipText: qsTr("Sort elements alphabetically")
             onClicked: audio_editor.sortElements()
-        }
-
-        // View Mode
-        CustomToolBarButton {
-            iconText: element_column.small_mode ? FontAwesome.expand : FontAwesome.compress
-            onClicked: element_column.small_mode = !element_column.small_mode
         }
 
         CustomToolBarButton {
             iconText: FontAwesome.fileAudio
             iconColor: "darkred"
 
-            ToolTip.text: qsTr("Remove missing files.")
-            ToolTip.visible: hovered
+            toolTipText: qsTr("Remove missing files")
 
             Label {
                 text: FontAwesome.trashAlt

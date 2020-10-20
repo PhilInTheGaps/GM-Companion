@@ -9,8 +9,8 @@
 
 #include "audioplayer.h"
 #include "discordplayer.h"
-#include "../audioelement.h"
-#include "../metadatareader.h"
+#include "../project/audioelement.h"
+#include "../metadata/metadatareader.h"
 
 struct SpotifyTrack
 {
@@ -23,7 +23,8 @@ class SpotifyPlayer : public AudioPlayer
     Q_OBJECT
 
 public:
-    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
+    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer,
+                  QNetworkAccessManager *networkManager, QObject *parent = nullptr);
     ~SpotifyPlayer();
 
     void play(const QString& id, int offset = -1, bool playOnce = false);

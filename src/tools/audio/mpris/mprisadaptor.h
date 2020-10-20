@@ -8,13 +8,13 @@ class MprisAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.mpris.MediaPlayer2")
-    Q_PROPERTY(bool CanQuit READ canQuit)
-    Q_PROPERTY(bool CanRaise READ canRaise)
-    Q_PROPERTY(bool HasTrackList READ hasTrackList)
-    Q_PROPERTY(QString Identity READ identity)
-    Q_PROPERTY(QString DesktopEntry READ desktopEntry)
-    Q_PROPERTY(QStringList SupportedUriSchemes READ supportedUriSchemes)
-    Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes)
+    Q_PROPERTY(bool CanQuit READ canQuit CONSTANT)
+    Q_PROPERTY(bool CanRaise READ canRaise CONSTANT)
+    Q_PROPERTY(bool HasTrackList READ hasTrackList CONSTANT)
+    Q_PROPERTY(QString Identity READ identity CONSTANT)
+    Q_PROPERTY(QString DesktopEntry READ desktopEntry CONSTANT)
+    Q_PROPERTY(QStringList SupportedUriSchemes READ supportedUriSchemes CONSTANT)
+    Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes CONSTANT)
 
 public:
     MprisAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj) {}

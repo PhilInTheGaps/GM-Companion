@@ -19,91 +19,92 @@ Item {
         Repeater {
             id: scenario_repeater
 
-            model: audio_tool.scenarioNames
+            model: audio_tool && audio_tool.currentProject
+                   && audio_tool.currentProject.currentCategory ? audio_tool.currentProject.currentCategory.scenarios : []
 
             CustomButton {
-                buttonText: modelData
+                buttonText: modelData.name
                 padding: 10
-                onClicked: audio_tool.setCurrentScenario(buttonText)
                 backgroundColor: "transparent"
                 usesFixedWidth: false
+                onClicked: {
+                    var project = audio_tool.currentProject
+                    if (project && project.currentCategory) {
+                        project.currentCategory.setCurrentScenario(modelData)
+                    }
+                }
             }
         }
     }
 
     // Elements
-    Flickable {
-        id: flickable
+    ListView {
+        id: list
+
+        readonly property int min_width: 170
+        readonly property int count_per_row: parent ? Math.floor(
+                                                          width / min_width) : 1
+        readonly property int button_width: (verticalScrollBar.visible ? (width - verticalScrollBar.width) : width) / count_per_row
+
         anchors.top: scenario_flow.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-
-        anchors.topMargin: 5
+        anchors.margins: 5
+        spacing: 10
 
         clip: true
+        model: (audio_tool && audio_tool.currentProject
+                && audio_tool.currentProject.currentScenario) ? audio_tool.currentProject.currentScenario.model : []
 
-        contentWidth: -1
-        contentHeight: audio_element_column.implicitHeight
-
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             id: verticalScrollBar
-            parent: flickable.parent
-            anchors.top: flickable.top
-            anchors.right: flickable.right
-            anchors.bottom: flickable.bottom
-            visible: flickable.contentHeight > flickable.height
+            anchors.top: list.top
+            anchors.right: list.right
+            anchors.bottom: list.bottom
+            visible: list.contentHeight > list.height
+
+            interactive: list.model.length < 2
         }
 
-        Column {
-            id: audio_element_column
-            anchors.margins: 5
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 10
+        delegate: Column {
+            spacing: 5
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
 
-            readonly property int min_width: 170
-            readonly property int count_per_row: parent ? Math.floor(
-                                                              parent.width / min_width) : 1
-            readonly property int button_width: (width - 5 * (count_per_row - 1)) / count_per_row
+            Label {
+                id: subscenario_text
+                text: modelData.name
+                font.pointSize: 12
+                verticalAlignment: Text.AlignVCenter
+                visible: index > 0
 
-            Repeater {
-                model: elementModel
+                anchors.right: parent.right
+                anchors.left: parent.left
+                elide: Text.ElideRight
+            }
 
-                Column {
-                    width: audio_element_column.width
-                    spacing: 10
+            Flow {
+                anchors.left: parent.left
+                anchors.right: parent.right
 
-                    Label {
-                        id: subscenario_text
-                        text: modelData.name()
-                        visible: text != ""
-                        font.bold: true
-                        font.pointSize: 15
-                    }
+                Repeater {
+                    model: modelData.elements
 
-                    Flow {
-                        id: audio_scroll_flow
+                    Item {
+                        width: list.button_width
+                        height: width
 
-                        spacing: 5
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        AudioButton {
+                            id: element_button
+                            element_name: modelData.name
+                            element_type: modelData.type
+                            subscenario_name: subscenario_text.text
+                            icon: modelData.icon
+                            width: parent.width - 4
+                            anchors.centerIn: parent
 
-                        Repeater {
-                            id: element_repeater
-                            model: modelData
-
-                            AudioButton {
-                                element_name: modelData.name
-                                element_type: modelData.type
-                                subscenario_name: subscenario_text.text
-                                icon: modelData.icon
-                                width: audio_element_column.button_width
-
-                                onClicked: audio_tool.playElement(
-                                               modelData.name, modelData.type,
-                                               subscenario_name)
-                            }
+                            onClicked: audio_tool.play(modelData)
                         }
                     }
                 }
@@ -159,6 +160,18 @@ Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             visible: false
+
+            placeholderText: qsTr("Search ...")
+
+            scale: visible ? 1.0 : 0.1
+            transformOrigin: Item.Right
+
+            Behavior on scale {
+                NumberAnimation {
+                    duration: 100
+                    easing.type: Easing.Linear
+                }
+            }
 
             onTextChanged: audio_tool.findElement(text)
 

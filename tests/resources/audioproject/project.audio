@@ -1,0 +1,482 @@
+{
+    "categories": [
+        {
+            "name": "Category 0",
+            "scenarios": [
+                {
+                    "music_elements": [
+                        {
+                            "files": [
+                                {
+                                    "source": 3,
+                                    "url": "https://www.youtube.com/watch?v=cV3HfIWKAU0"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSK/Katzenmusik/01 Katzenaubade.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSK/Katzenmusik/02 Große Mutter.mp3"
+                                },
+                                {
+                                    "source": 2,
+                                    "url": "spotify:playlist:2Tegyx2csiWbOhS6lPqRrm"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSK/Katzenmusik/03 Rohajas Fest .mp3"
+                                },
+                                {
+                                    "source": 1,
+                                    "url": "https://tabletopaudio.com/download.php?downld_file=185_Gravity.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_6024.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 1,
+                                    "url": "https://tabletopaudio.com/download.php?downld_file=157_Field_of_Heroes.mp3"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "Music"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 3,
+                                    "url": "https://www.youtube.com/watch?v=OyYA8FlfBd0"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "YouTube"
+                        }
+                    ],
+                    "name": "Scenario 5",
+                    "radio_elements": [
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/seeburg_1000.pls"
+                                }
+                            ],
+                            "icon": "/Icons/Brin.jpg",
+                            "mode": 0,
+                            "name": "Radio 1"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/test.m3u"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "Test M3U"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/test.pls"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "Test PLS"
+                        }
+                    ],
+                    "scenarios": [
+                        {
+                            "music_elements": [
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "1"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Castlevania_(Netflix)_Season_1/Alley Fight - Castlevania Netflix Series OST.mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "2"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Castlevania_(Netflix)_Season_1/Alley Fight - Castlevania Netflix Series OST.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Dark Souls/dark-souls-prepare-to-die-edition 01-souls-of-fire.mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "3"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Castlevania_(Netflix)_Season_1/Alley Fight - Castlevania Netflix Series OST.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Dark Souls/dark-souls-prepare-to-die-edition 01-souls-of-fire.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Doom 2016/DOOM OST - 01 I. Dogma.mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "4"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Castlevania_(Netflix)_Season_1/Alucard Rises - Castlevania Netflix Series OST.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Dark Souls/dark-souls-prepare-to-die-edition 01-souls-of-fire.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Doom 2016/DOOM OST - 02 Rip & Tear.mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/Eragon/01 - Eragon.mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "5"
+                                }
+                            ],
+                            "name": "Auto Thumbnails",
+                            "radio_elements": [
+                            ],
+                            "scenarios": [
+                            ],
+                            "sound_elements": [
+                            ]
+                        },
+                        {
+                            "music_elements": [
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/Character Themes/Frank Lightspeed/Duke_Nukem_Jam_HD.mp3"
+                                        },
+                                        {
+                                            "source": 3,
+                                            "url": "https://www.youtube.com/watch?v=iD4RyLt_FbE"
+                                        },
+                                        {
+                                            "source": 1,
+                                            "url": "https://tabletopaudio.com/download.php?downld_file=186_Haunted.mp3"
+                                        },
+                                        {
+                                            "source": 3,
+                                            "url": "https://www.youtube.com/watch?v=2P5ZvHGKuMI"
+                                        },
+                                        {
+                                            "source": 3,
+                                            "url": "https://www.youtube.com/watch?v=xqW-Hfk0FN0"
+                                        },
+                                        {
+                                            "source": 3,
+                                            "url": "https://www.youtube.com/watch?v=FcF6Xq8Rosg"
+                                        }
+                                    ],
+                                    "icon": "https://source.unsplash.com/nqVDLh2WLus/500x500",
+                                    "mode": 0,
+                                    "name": "ASD"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/07 - Theme From A Fistful Of Dollars - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/01 - Titoli (from A Fistful Of Dollars) - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/02 - Almost Dead - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        },
+                                        {
+                                            "source": 0,
+                                            "url": "/OSTs/A Fistful of Dollars/08 - A Fistful Of Dollars Suite - A Fistful of Dollars (Original Soundtrack).mp3"
+                                        }
+                                    ],
+                                    "icon": "",
+                                    "mode": 0,
+                                    "name": "Music 2"
+                                },
+                                {
+                                    "files": [
+                                        {
+                                            "source": 2,
+                                            "url": "spotify:playlist:2Tegyx2csiWbOhS6lPqRrm"
+                                        }
+                                    ],
+                                    "icon": "https://source.unsplash.com/4XegmBYC7fQ/500x500",
+                                    "mode": 0,
+                                    "name": "Spotify 1"
+                                }
+                            ],
+                            "name": "Sub 1",
+                            "radio_elements": [
+                                {
+                                    "files": [
+                                        {
+                                            "source": 1,
+                                            "url": "https://tabletopaudio.com/download.php?downld_file=157_Field_of_Heroes.mp3"
+                                        }
+                                    ],
+                                    "icon": "https://source.unsplash.com/RnCPiXixooY/500x500",
+                                    "mode": 0,
+                                    "name": "Radio 2"
+                                }
+                            ],
+                            "scenarios": [
+                            ],
+                            "sound_elements": [
+                                {
+                                    "files": [
+                                    ],
+                                    "icon": "https://source.unsplash.com/mOZId9nwf_E/500x500",
+                                    "mode": 0,
+                                    "name": "Sound 2"
+                                }
+                            ]
+                        }
+                    ],
+                    "sound_elements": [
+                        {
+                            "files": [
+                                {
+                                    "source": 1,
+                                    "url": "https://tabletopaudio.com/download.php?downld_file=157_Field_of_Heroes.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/Ambience/Bluezone-BC0212-ambience-053.wav"
+                                },
+                                {
+                                    "source": 1,
+                                    "url": "https://tabletopaudio.com/download.php?downld_file=146_Floating_Ice_Castle.mp3"
+                                },
+                                {
+                                    "source": 3,
+                                    "url": "https://www.youtube.com/watch?v=L-bV7f7GC1I"
+                                }
+                            ],
+                            "icon": "https://source.unsplash.com/wlgbfvhJprY/500x500",
+                            "mode": 0,
+                            "name": "Sound 1"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 3,
+                                    "url": "https://www.youtube.com/watch?v=L-bV7f7GC1I"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "YT"
+                        }
+                    ]
+                },
+                {
+                    "music_elements": [
+                    ],
+                    "name": "A",
+                    "radio_elements": [
+                    ],
+                    "scenarios": [
+                    ],
+                    "sound_elements": [
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Category 1",
+            "scenarios": [
+                {
+                    "music_elements": [
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Angbar-Mortis_Soundtrack_Ralf-Kurtsiefer_feaa.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_6024.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_92e1.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Uthuria_Master_0da9.mp3"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 0,
+                            "name": "Shuffle"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Angbar-Mortis_Soundtrack_Ralf-Kurtsiefer_feaa.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_6024.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_92e1.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Uthuria_Master_0da9.mp3"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 1,
+                            "name": "Random"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Angbar-Mortis_Soundtrack_Ralf-Kurtsiefer_feaa.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_6024.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_92e1.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Uthuria_Master_0da9.mp3"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 2,
+                            "name": "Loop"
+                        },
+                        {
+                            "files": [
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Angbar-Mortis_Soundtrack_Ralf-Kurtsiefer_feaa.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_6024.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Herr-der-Legionen_Herrin-des-Schwarms_Soundtrack_Ralf-Kurtsiefer_92e1.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Riva-Mortis_Soundtrack_Ralf-Kurtsiefer_e322.mp3"
+                                },
+                                {
+                                    "source": 0,
+                                    "url": "/DSA/Uthuria_Master_0da9.mp3"
+                                }
+                            ],
+                            "icon": "",
+                            "mode": 3,
+                            "name": "Sequential"
+                        }
+                    ],
+                    "name": "A",
+                    "radio_elements": [
+                    ],
+                    "scenarios": [
+                    ],
+                    "sound_elements": [
+                    ]
+                }
+            ]
+        }
+    ],
+    "name": "Project",
+    "version": 4
+}

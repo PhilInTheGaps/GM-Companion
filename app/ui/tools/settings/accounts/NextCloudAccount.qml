@@ -51,7 +51,7 @@ Item {
                     text: qsTr("Server URL")
                 }
 
-                CustomTextField {
+                TextField {
                     id: server_textfield
                     selectByMouse: true
                     width: root.width / 2

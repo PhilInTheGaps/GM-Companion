@@ -17,12 +17,25 @@ Page {
     Connections {
         target: dice_tool
 
-        onCalculationStringChanged: calculation_text_edit.text = dice_tool.calculationString
+        function onCalculationStringChanged() {
+            calculation_text_edit.text = dice_tool.calculationString
+        }
 
-        onMixedCriticalResult: roll_result.color = "orange"
-        onSuccessfulCriticalResult: roll_result.color = "green"
-        onFailedCriticalResult: roll_result.color = "red"
-        onNormalResult: roll_result.color = palette.text
+        function onMixedCriticalResult() {
+            roll_result.color = "orange"
+        }
+
+        function onSuccessfulCriticalResult() {
+            roll_result.color = "green"
+        }
+
+        function onFailedCriticalResult() {
+            roll_result.color = "red"
+        }
+
+        function onNormalResult() {
+            roll_result.color = palette.text
+        }
     }
 
     DiceSettings {
@@ -32,10 +45,8 @@ Page {
     }
 
     // Top Bar
-    header: Rectangle {
+    header: ToolBar {
         id: top_rect
-        color: palette.alternateBase
-        height: Defines.TOOLBAR_HEIGHT
         visible: !combat_tracker_mode
 
         Row {
@@ -59,26 +70,14 @@ Page {
             }
         }
 
-        Button {
+        CustomToolBarButton {
             id: dice_settings_button
             width: height
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.margins: 10
             hoverEnabled: true
 
-            background: Rectangle {
-                color: "transparent"
-            }
-
-            Text {
-                text: FontAwesome.cog
-                font.family: FontAwesome.familySolid
-                font.pointSize: 15
-                anchors.centerIn: parent
-                color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"
-            }
+            iconText: FontAwesome.cog
 
             onClicked: dice_settings_dialog.open()
         }

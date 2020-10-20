@@ -1,7 +1,7 @@
 import QtQuick 2.0
-import QtQuick.Templates 2.2
-import "colors.js" as Colors
+import QtQuick.Templates 2.2 as T
+import "../colors.js" as Colors
 
-Label {
+T.Label {
     color: Colors.text
 }

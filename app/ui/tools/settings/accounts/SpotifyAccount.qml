@@ -64,7 +64,7 @@ Item {
                 text: qsTr("Username")
             }
 
-            CustomTextField {
+            TextField {
                 id: username_textfield
                 selectByMouse: true
                 width: textfieldWidth
@@ -76,7 +76,7 @@ Item {
                 text: qsTr("Password")
             }
 
-            CustomTextField {
+            TextField {
                 id: password_textfield
                 selectByMouse: true
                 width: textfieldWidth
@@ -91,7 +91,7 @@ Item {
             verticalItemAlignment: Grid.AlignVCenter
 
             // Default Server
-            CustomRadioButton {
+            RadioButton {
                 id: default_server_radio_button
                 text: qsTr("Use default server")
                 enabled: !spotify_service.connected
@@ -105,7 +105,7 @@ Item {
             }
 
             // Custom Server
-            CustomRadioButton {
+            RadioButton {
                 id: custom_server_radio_button
                 text: qsTr("Use custom server")
                 enabled: !spotify_service.connected
@@ -124,7 +124,7 @@ Item {
                 text: qsTr("Server URL")
             }
 
-            CustomTextField {
+            TextField {
                 id: custom_server_textfield
                 selectByMouse: true
                 width: textfieldWidth
@@ -136,7 +136,7 @@ Item {
             }
 
             // Local
-            CustomRadioButton {
+            RadioButton {
                 id: client_id_secret_radio_button
                 text: qsTr("Client ID and Secret")
                 enabled: !spotify_service.connected
@@ -155,7 +155,7 @@ Item {
                          && !spotify_service.connected
             }
 
-            CustomTextField {
+            TextField {
                 id: spotify_id_textfield
                 selectByMouse: true
                 width: textfieldWidth
@@ -171,7 +171,7 @@ Item {
                          && !spotify_service.connected
             }
 
-            CustomTextField {
+            TextField {
                 id: spotify_secret_textfield
                 selectByMouse: true
                 width: textfieldWidth

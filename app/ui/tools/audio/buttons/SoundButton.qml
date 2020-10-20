@@ -33,7 +33,9 @@ Button {
 
         Connections {
             target: element_icon
-            onIconChanged: thumbnail.reload()
+            function onIconChanged() {
+                thumbnail.reload()
+            }
         }
     }
 

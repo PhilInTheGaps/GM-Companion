@@ -50,7 +50,7 @@ Item {
 
         Connections {
             target: main_window
-            onSave: {
+            function onSave() {
                 if (notes_tool.currentPage) {
                     if (notes_tool.editMode) {
                         // Trim whitespace
@@ -72,7 +72,7 @@ Item {
 
         Connections {
             target: notes_tool
-            onSetCursorPosition: {
+            function onSetCursorPosition() {
                 textedit.justChangedCursor = true
                 textedit.tempCursorPosition = position
                 textedit.edit.cursorPosition = position

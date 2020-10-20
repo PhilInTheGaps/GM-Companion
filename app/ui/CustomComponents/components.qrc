@@ -6,9 +6,6 @@
         <file>CustomToolBarComboBox.qml</file>
         <file>CustomToolBarButton.qml</file>
         <file>CustomRadioButton.qml</file>
-        <file>CustomCheckBox.qml</file>
-        <file>CustomTextField.qml</file>
-        <file>CustomScrollBar.qml</file>
         <file>CustomTextEdit.qml</file>
         <file>CustomComboBox.qml</file>
         <file>CustomScrollLabel.qml</file>

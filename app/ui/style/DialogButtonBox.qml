@@ -1,22 +1,22 @@
 import QtQuick 2.9
 import QtQuick.Templates 2.2 as T
-import "colors.js" as Colors
+import "../colors.js" as Colors
 
 T.DialogButtonBox {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(
+                       background ? background.implicitWidth : 0,
+                       contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(
+                        background ? background.implicitHeight : 0,
+                        contentItem.implicitHeight + topPadding + bottomPadding)
 
-    spacing: 1
+    spacing: 2
     padding: 12
-    alignment: count === 1 ? Qt.AlignRight : undefined
+    alignment: Qt.AlignRight
 
-    delegate: Button {
-        width: control.count === 1 ? control.availableWidth / 2 : undefined
-    }
+    delegate: Button {}
 
     contentItem: ListView {
         implicitWidth: contentWidth
@@ -31,7 +31,8 @@ T.DialogButtonBox {
 
     background: Rectangle {
         implicitHeight: 40
-        x: 1; y: 1
+        x: 1
+        y: 1
         width: parent.width - 2
         height: parent.height - 2
 

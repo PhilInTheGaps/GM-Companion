@@ -5,7 +5,7 @@
 #include <QThread>
 #include <QPixmap>
 #include <QNetworkAccessManager>
-#include "audioproject.h"
+#include "project/audioproject.h"
 #include "services/spotify/spotify.h"
 #include <QReadWriteLock>
 
@@ -24,7 +24,7 @@ public slots:
 private:
     QList<AudioScenario*> m_scenarios;
     QNetworkAccessManager *m_networkManager = nullptr;
-    QString m_resourcesPath, m_musicPath, m_soundsPath;
+    QString m_musicPath, m_soundsPath;
 
     QPixmap getPlaceholderImage(AudioElement *element);
 
@@ -73,7 +73,7 @@ public:
     static bool cacheContains(QUrl url);
     static bool tryLoadFromCache(QUrl url, AudioElement *element);
 
-    static QPixmap getPlaceholderImage(int type);
+    static QPixmap getPlaceholderImage(AudioElement::Type type);
 
 private:
     explicit AudioIconGenerator();

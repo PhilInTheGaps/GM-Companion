@@ -2,22 +2,25 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.impl 2.2
 import QtQuick.Templates 2.2 as T
-import "colors.js" as Colors
+import "../colors.js" as Colors
+import "../sizes.js" as Sizes
 
 T.TextField {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
-                            || contentWidth + leftPadding + rightPadding
-    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
-                             background ? background.implicitHeight : 0,
-                             placeholder.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(
+                       background ? background.implicitWidth : 0,
+                       placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
+                   || contentWidth + leftPadding + rightPadding
+    implicitHeight: Math.max(
+                        contentHeight + topPadding + bottomPadding,
+                        background ? background.implicitHeight : 0,
+                        placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
     leftPadding: padding + 4
 
-    color: enabled ? Colors.text : Colors.mid
+    color: enabled ? Colors.text : Colors.textDisabled
     selectionColor: Colors.highlight
     selectedTextColor: Colors.highlightedText
     verticalAlignment: TextInput.AlignVCenter
@@ -31,18 +34,20 @@ T.TextField {
 
         text: control.placeholderText
         font: control.font
-        color: enabled ? Colors.text : Colors.mid
+        color: enabled ? Colors.text : Colors.textDisabled
         opacity: 0.7
         verticalAlignment: control.verticalAlignment
-        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+        visible: !control.length && !control.preeditText
+                 && (!control.activeFocus
+                     || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
     }
 
     background: Rectangle {
         implicitWidth: 200
-        implicitHeight: 40
+        implicitHeight: Sizes.textFieldHeight
         border.width: control.activeFocus ? 2 : 1
         color: Colors.window
-        border.color: control.activeFocus || control.enabled ? Colors.button : Colors.dark
+        border.color: control.activeFocus ? Colors.borderFocus : (control.enabled ? Colors.border : Colors.dark)
     }
 }

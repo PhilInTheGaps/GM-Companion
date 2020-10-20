@@ -55,17 +55,17 @@ Item {
             color: palette.highlight
         }
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             anchors.right: playlist_view.right
             visible: playlist_view.contentHeight > playlist_view.height
         }
 
-        model: audio_tool.songs
-        currentIndex: audio_tool.index
+        model: audio_tool ? audio_tool.songs : []
+        currentIndex: audio_tool ? audio_tool.index : -1
         highlightMoveVelocity: -1
 
         delegate: Item {
-            width: parent.width
+            width: playlist_view.width
             height: playlist_text.height + 10
 
             Text {
@@ -116,8 +116,8 @@ Item {
 
             visible: true
 
-            initialMusicVolume: audio_tool.musicVolume
-            initialSoundVolume: audio_tool.soundVolume
+            initialMusicVolume: audio_tool ? audio_tool.musicVolume : 0
+            initialSoundVolume: audio_tool ? audio_tool.soundVolume : 0
         }
     }
 }

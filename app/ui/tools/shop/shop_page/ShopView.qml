@@ -98,7 +98,7 @@ Page {
             clip: true
             spacing: 0
 
-            ScrollBar.vertical: CustomScrollBar {
+            ScrollBar.vertical: ScrollBar {
                 visible: list_view.contentHeight > list_view.height
             }
 

@@ -12,10 +12,6 @@ Popup {
 
     visible: true
 
-    background: Rectangle {
-        color: palette.dark
-    }
-
     Column {
         anchors.centerIn: parent
         spacing: 10

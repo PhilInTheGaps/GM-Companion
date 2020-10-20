@@ -1,7 +1,8 @@
-import QtQuick 2.6
+import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
-import "../defines.js" as Defines
+import "../sizes.js" as Sizes
+import "../colors.js" as Colors
 
 Control {
     id: root
@@ -19,10 +20,11 @@ Control {
 
     // Visual options
     property int pointSize: 12
-    readonly property var textColor: mouse_area.pressed ? palette.mid : (mouse_area.containsMouse ? palette.light : palette.buttonText)
+    readonly property var textColor: mouse_area.pressed ? Colors.mid : (mouse_area.containsMouse ? Colors.focus : Colors.text)
     property var iconColor: undefined
-    property var backgroundColor: palette.dark
+    property var backgroundColor: Colors.dark
     property bool transparentBackground: false
+    property int borderWidth: 1
 
     // Layout
     property bool usesFixedWidth: true
@@ -33,7 +35,7 @@ Control {
     signal rightClicked(string info)
 
     padding: 5
-    height: Defines.TOOLBAR_HEIGHT
+    height: Sizes.customButtonHeight
     anchors.left: undefined
     hoverEnabled: true
 
@@ -53,6 +55,7 @@ Control {
             visible: text.length
             text: root.iconText
             color: iconColor ? iconColor : root.textColor
+            opacity: root.enabled ? 1 : 0.7
 
             font.family: root.iconFont
             font.bold: enableBold && mouse_area.containsMouse
@@ -69,6 +72,7 @@ Control {
             visible: text.length
             text: root.buttonText
             color: root.textColor
+            opacity: root.enabled ? 1 : 0.7
 
             font.bold: enableBold && mouse_area.containsMouse
 
@@ -86,12 +90,13 @@ Control {
     background: Rectangle {
         visible: !transparentBackground
         color: root.backgroundColor
-        border.color: palette.button
-        border.width: mouse_area.containsMouse ? 1 : 0
+        border.color: Colors.button
+        border.width: mouse_area.containsMouse ? root.borderWidth : 0
     }
 
     ToolTip.text: root.toolTipText
     ToolTip.visible: root.toolTipText.length && mouse_area.containsMouse
+    ToolTip.delay: 500
 
     MouseArea {
         id: mouse_area

@@ -89,7 +89,7 @@ Item {
             interactive: true
             clip: true
 
-            ScrollBar.vertical: CustomScrollBar {
+            ScrollBar.vertical: ScrollBar {
                 id: scroll_bar
                 visible: flickable.contentHeight > flickable.height
             }

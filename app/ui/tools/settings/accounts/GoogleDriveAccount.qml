@@ -62,7 +62,7 @@ Item {
                 text: qsTr("Client ID")
             }
 
-            CustomTextField {
+            TextField {
                 id: google_id_textfield
                 selectByMouse: true
                 width: root.width / 2
@@ -74,7 +74,7 @@ Item {
                 text: qsTr("Client Secret")
             }
 
-            CustomTextField {
+            TextField {
                 id: google_secret_textfield
                 selectByMouse: true
                 width: root.width / 2
@@ -84,13 +84,15 @@ Item {
         }
 
         Button {
-            text: googledrive_service.connected ? qsTr("Disconnect") : qsTr("Connect")
+            text: googledrive_service.connected ? qsTr("Disconnect") : qsTr(
+                                                      "Connect")
             onClicked: {
                 if (googledrive_service.connected) {
                     googledrive_service.disconnectService()
                 } else {
                     settings_manager.setSetting("googleID",
-                                                google_id_textfield.text, "Google")
+                                                google_id_textfield.text,
+                                                "Google")
                     settings_manager.setSetting("googleSecret",
                                                 google_secret_textfield.text,
                                                 "Google")

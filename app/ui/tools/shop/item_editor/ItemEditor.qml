@@ -12,7 +12,7 @@ Page {
     Connections {
         target: item_editor
 
-        onShowInfoBar: {
+        function onShowInfoBar() {
             info_text.text = message
             info_bar.visible = true
             info_bar_timer.start()

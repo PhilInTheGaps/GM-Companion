@@ -36,7 +36,7 @@ Control {
         columns: 4
         rows: 1
 
-        CustomTextField {
+        TextField {
             id: name_textfield
             width: parent.width / 5
             selectByMouse: true
@@ -67,7 +67,7 @@ Control {
             editable: true
         }
 
-        CustomTextField {
+        TextField {
             id: notes_textfield
             width: parent.width - x - add_button.width - main_item.spacing
 

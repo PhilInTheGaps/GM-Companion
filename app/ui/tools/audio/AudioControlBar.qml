@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import CustomComponents 1.0
 import FontAwesome 2.0
 
-import "./buttons"
 import "../../defines.js" as Defines
 
 ToolBar {
@@ -13,10 +12,6 @@ ToolBar {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
-
-    background: Rectangle {
-        color: palette.alternateBase
-    }
 
     // Playlist Button
     CustomToolBarButton {
@@ -44,7 +39,8 @@ ToolBar {
         // Play Pause
         CustomToolBarButton {
             anchors.margins: 0
-            iconText: audio_tool.isPaused ? FontAwesome.playCircle : FontAwesome.pauseCircle
+            iconText: !audio_tool
+                      || audio_tool.isPaused ? FontAwesome.playCircle : FontAwesome.pauseCircle
             onClicked: audio_tool.playPause()
             pointSize: 24
         }

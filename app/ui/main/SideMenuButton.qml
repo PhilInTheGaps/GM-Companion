@@ -19,6 +19,8 @@ Button {
 
     background: Item {}
 
+    font.bold: false
+
     Row {
         anchors.fill: parent
         padding: 5
@@ -37,6 +39,7 @@ Button {
             width: height
             source: iconSource
             visible: settings_manager.classicIcons
+            asynchronous: true
 
             ColorOverlay {
                 anchors.fill: parent

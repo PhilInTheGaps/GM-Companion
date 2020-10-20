@@ -34,12 +34,12 @@ Dialog {
                 text: qsTr("Meters")
             }
 
-            CustomTextField {
+            TextField {
                 id: unit_name
                 selectByMouse: true
             }
 
-            CustomTextField {
+            TextField {
                 id: unit_value
                 selectByMouse: true
             }

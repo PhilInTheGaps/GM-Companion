@@ -108,7 +108,8 @@ Dialog {
             anchors.right: buttons.left
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 15
+            anchors.margins: buttons.padding
+            anchors.rightMargin: 0
         }
 
         DialogButtonBox {

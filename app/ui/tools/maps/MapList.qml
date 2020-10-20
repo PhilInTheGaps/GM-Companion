@@ -15,7 +15,7 @@ Rectangle {
         contentHeight: flickable_column.height
         contentWidth: -1
 
-        ScrollBar.vertical: CustomScrollBar {
+        ScrollBar.vertical: ScrollBar {
             anchors.right: parent.right
             visible: flickable.contentHeight > flickable.height
         }

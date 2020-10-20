@@ -13,9 +13,7 @@ Button {
     height: parent.height - parent.padding * 2
     width: height
 
-    background: Rectangle {
-        color: "transparent"
-    }
+    background: Item {}
 
     Image {
         id: image

@@ -10,5 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-add_subdirectory(utils)
 add_subdirectory(managers)
+add_subdirectory(tools)
+add_subdirectory(utils)
+

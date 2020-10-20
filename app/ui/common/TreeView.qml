@@ -10,7 +10,7 @@ ListView {
     property bool useTypeIcons: true
     property string itemIcon: ""
 
-    ScrollBar.vertical: CustomScrollBar {
+    ScrollBar.vertical: ScrollBar {
         id: scrollbar
         anchors.right: root.right
         visible: root.contentHeight > root.height

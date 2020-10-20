@@ -40,7 +40,7 @@ void SoundPlayerController::play(AudioElement *element)
     }
 }
 
-void SoundPlayerController::stop(QString element)
+void SoundPlayerController::stop(const QString& element)
 {
     if (Discord::getInstance()->enabled())
     {
@@ -55,6 +55,21 @@ void SoundPlayerController::stop(QString element)
     }
 
     emit stopElement(element);
+}
+
+auto SoundPlayerController::activeElements() const -> QList<QObject *>
+{
+    QList<QObject*> list;
+
+    for (auto player : m_players)
+    {
+        if (player)
+        {
+            list.append(player->element());
+        }
+    }
+
+    return list;
 }
 
 /**
@@ -121,7 +136,7 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
         return;
     }
 
-    m_mediaPlayer = new QMediaPlayer;
+    m_mediaPlayer = new QMediaPlayer(this);
     m_mediaPlayer->setObjectName(element->name());
     m_mediaPlayer->setVolume(volume);
     m_videoClient = new YouTube::Videos::VideoClient(networkManager, this);
@@ -137,7 +152,6 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
 SoundPlayer::~SoundPlayer()
 {
     m_mediaPlayer->stop();
-    m_mediaPlayer->deleteLater();
 }
 
 void SoundPlayer::loadMedia(AudioFile *file)
@@ -375,10 +389,9 @@ void SoundPlayer::onStreamManifestReceived()
 
             break;
         }
-        else
-        {
-            audioStreams.removeOne(stream);
-        }
+        
+        audioStreams.removeOne(stream);
+
     }
     while (!audioStreams.isEmpty());
 

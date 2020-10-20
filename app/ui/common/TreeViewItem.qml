@@ -46,11 +46,10 @@ CustomButton {
             modelData.rename(rename_field.text)
         }
 
-        contentItem: CustomTextField {
+        contentItem: TextField {
             id: rename_field
 
             text: root.buttonText
-            backgroundColor: palette.dark
             padding: 0
 
             onAccepted: {
@@ -77,11 +76,10 @@ CustomButton {
             modelData.create(new_thing_dialog.type, name_field.text)
         }
 
-        contentItem: CustomTextField {
+        contentItem: TextField {
             id: name_field
 
             placeholderText: qsTr("Name")
-            backgroundColor: palette.dark
 
             onAccepted: {
                 new_thing_dialog.accept()
@@ -103,13 +101,11 @@ CustomButton {
         }
 
         contentItem: Item {
-            implicitHeight: Defines.TOOLBAR_HEIGHT
+            implicitHeight: 40
 
-            CustomButton {
+            Button {
                 id: yes_button
-                buttonText: qsTr("Yes")
-                usesFixedWidth: false
-                centering: true
+                text: qsTr("Yes")
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
@@ -121,11 +117,9 @@ CustomButton {
                 }
             }
 
-            CustomButton {
+            Button {
                 id: no_button
-                buttonText: qsTr("No")
-                usesFixedWidth: false
-                centering: true
+                text: qsTr("No")
 
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom

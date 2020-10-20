@@ -33,7 +33,7 @@ Item {
             }
         }
 
-        CustomCheckBox {
+        CheckBox {
             id: use_discord_checkbox
             text: qsTr("Use Discord Bot")
             checked: discord_service.enabled
@@ -56,7 +56,7 @@ Item {
                 text: qsTr("Channel ID")
             }
 
-            CustomTextField {
+            TextField {
                 id: discord_channel_textfield
                 width: root.width / 2
                 placeholderText: "xxxxxxxxxxxxxxxxxx"
@@ -69,7 +69,7 @@ Item {
                 Component.onCompleted: text = discord_service.channel
             }
 
-            CustomRadioButton {
+            RadioButton {
                 id: default_server_radio_button
                 text: qsTr("Use default server")
                 checked: settings_manager.getSetting("connection", "default",
@@ -84,7 +84,7 @@ Item {
                 height: 5
             }
 
-            CustomRadioButton {
+            RadioButton {
                 id: custom_server_radio_button
                 text: qsTr("Use custom server")
                 checked: settings_manager.getSetting("connection", "default",
@@ -94,7 +94,7 @@ Item {
                                                        "Discord")
             }
 
-            CustomTextField {
+            TextField {
                 id: custom_server_textfield
                 width: root.width / 2
                 placeholderText: "https://"

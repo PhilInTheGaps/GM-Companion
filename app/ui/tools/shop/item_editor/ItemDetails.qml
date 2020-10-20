@@ -12,7 +12,7 @@ Rectangle {
         anchors.margins: 5
         spacing: 5
 
-        CustomTextField {
+        TextField {
             id: category_name_field
             anchors.left: parent.left
             anchors.right: parent.right
@@ -33,7 +33,7 @@ Rectangle {
             }
         }
 
-        CustomTextField {
+        TextField {
             id: item_name_field
             anchors.left: parent.left
             anchors.right: parent.right
@@ -42,7 +42,7 @@ Rectangle {
             enabled: category_combobox.currentText != ""
         }
 
-        CustomTextField {
+        TextField {
             id: item_price_field
             anchors.left: parent.left
             anchors.right: parent.right
@@ -51,7 +51,7 @@ Rectangle {
             enabled: category_combobox.currentText != ""
         }
 
-        CustomComboBox {
+        ComboBox {
             id: category_combobox
             anchors.left: parent.left
             anchors.right: parent.right

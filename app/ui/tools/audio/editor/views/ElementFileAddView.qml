@@ -4,74 +4,90 @@ import CustomComponents 1.0
 import FontAwesome 2.0
 
 import ".."
-import "../../../../defines.js" as Defines
+import "../../../../sizes.js" as Sizes
+import "../../../../colors.js" as Colors
 
 Rectangle {
     id: root
 
     property int mode: 0
-
-    anchors.left: parent.left
-    anchors.right: parent.right
     color: "transparent"
+
+    function setMode(mode) {
+        if (root.mode !== mode) {
+            url_text_field.clear()
+        }
+
+        root.mode = mode
+    }
 
     Connections {
         target: audio_editor
-        onCurrentElementChanged: {
-            if (audio_editor.type > 0 && root.mode == 1) {
-                root.mode = 0
-            }
+
+        function onCurrentElementChanged() {
+            setMode(0)
         }
     }
 
-    Rectangle {
+    ToolBar {
         id: control
         anchors.left: parent.left
         anchors.right: parent.right
-        color: palette.alternateBase
-        height: Defines.TOOLBAR_HEIGHT
 
         Row {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 5
+            property var itemWidth: (width) / (spotify_button.visible ? 3 : 2)
+            anchors.fill: parent
 
-            CustomToolBarButton {
+            CustomButton {
                 id: folder_button
                 iconText: FontAwesome.folder
                 buttonText: qsTr("Files")
-                onClicked: root.mode = 0
+
+                usesFixedWidth: true
+                width: parent.itemWidth
+                padding: 0
+
                 pointSize: 12
-                usesFixedWidth: false
+                centering: true
+                transparentBackground: true
+
+                onClicked: setMode(0)
             }
 
-            CustomToolBarButton {
+            CustomButton {
                 id: spotify_button
-                visible: audio_editor.type === 0
+                visible: audio_editor && audio_editor.currentElement
+                         && audio_editor.currentElement.type === 0
+
                 iconText: FontAwesome.spotify
                 iconFont: FontAwesome.familyBrands
                 buttonText: qsTr("Spotify")
+
+                usesFixedWidth: true
+                width: parent.itemWidth
+                padding: 0
+
                 pointSize: 12
-                usesFixedWidth: false
-                onClicked: {
-                    if (root.mode != 1)
-                        url_text_field.clear()
-                    root.mode = 1
-                }
+                centering: true
+                transparentBackground: true
+
+                onClicked: setMode(1)
             }
 
-            CustomToolBarButton {
+            CustomButton {
                 id: web_button
                 iconText: FontAwesome.globe
                 buttonText: qsTr("Web")
+
+                usesFixedWidth: true
+                width: parent.itemWidth
+                padding: 0
+
                 pointSize: 12
-                usesFixedWidth: false
-                onClicked: {
-                    if (root.mode != 2)
-                        url_text_field.clear()
-                    root.mode = 2
-                }
+                centering: true
+                transparentBackground: true
+
+                onClicked: setMode(2)
             }
         }
     }
@@ -94,8 +110,8 @@ Rectangle {
         anchors.right: parent.right
         anchors.left: parent.left
 
-        height: Defines.TOOLBAR_HEIGHT
-        color: palette.alternateBase
+        height: Sizes.toolbarHeight
+        color: Colors.alternateBase
 
         CustomToolBarButton {
             id: url_adder_icon
@@ -128,22 +144,22 @@ Rectangle {
             iconText: FontAwesome.plus
 
             onClicked: {
-                audio_editor.addUrl(audio_editor.name, audio_editor.type,
-                                    url_text_field.text, root.mode)
+                audio_editor.addUrl(url_text_field.text, root.mode)
             }
         }
     }
 
     Rectangle {
         id: youtube_adder
-        visible: root.mode > 1 && audio_editor.type < 2
+        visible: root.mode > 1 && audio_editor && audio_editor.currentElement
+                 && audio_editor.currentElement.type < 2
         anchors.topMargin: 5
         anchors.top: url_adder.bottom
         anchors.right: parent.right
         anchors.left: parent.left
 
-        height: Defines.TOOLBAR_HEIGHT
-        color: palette.alternateBase
+        height: Sizes.toolbarHeight
+        color: Colors.alternateBase
 
         CustomToolBarButton {
             id: youtube_adder_icon
@@ -176,8 +192,7 @@ Rectangle {
             iconText: FontAwesome.plus
 
             onClicked: {
-                audio_editor.addYtUrl(audio_editor.name, audio_editor.type,
-                                      youtube_text_field.text)
+                audio_editor.addYtUrl(youtube_text_field.text)
             }
         }
     }

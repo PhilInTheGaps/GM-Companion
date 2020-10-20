@@ -6,7 +6,7 @@ class TestMarkdownUtils : public QObject
 {
     Q_OBJECT
 public:
-    TestMarkdownUtils() {}
+    TestMarkdownUtils() = default;
 
 private slots:
     void markdownToHtml();

@@ -33,20 +33,4 @@ Slider {
             color: palette.alternateBase
         }
     }
-
-    background: Rectangle {
-        x: slider.leftPadding
-        y: slider.topPadding + slider.availableHeight / 2 - height / 2
-        implicitWidth: 200
-        implicitHeight: 6
-        width: slider.availableWidth
-        height: implicitHeight
-        color: palette.midlight
-
-        Rectangle {
-            width: slider.visualPosition * parent.width
-            height: parent.height
-            color: palette.alternateBase
-        }
-    }
 }

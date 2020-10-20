@@ -11,10 +11,8 @@ Page {
 
     Component.onCompleted: character_tool.loadData()
 
-    header: Rectangle {
+    header: ToolBar {
         id: top_rect
-        height: Defines.TOOLBAR_HEIGHT
-        color: palette.alternateBase
 
         Row {
             id: top_left_row
@@ -24,7 +22,7 @@ Page {
             padding: 10
             spacing: 10
 
-            CustomCheckBox {
+            CheckBox {
                 text: qsTr("Active Characters")
                 onClicked: character_tool.displayActiveCharacters(checked)
                 anchors.verticalCenter: parent.verticalCenter

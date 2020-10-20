@@ -57,10 +57,9 @@ Page {
         }
     }
 
-    Rectangle {
+    ToolBar {
         id: footer_rect
         height: category_flow.height
-        color: palette.alternateBase
 
         Flow {
             id: category_flow

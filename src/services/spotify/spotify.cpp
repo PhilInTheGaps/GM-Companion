@@ -16,7 +16,7 @@ Spotify *Spotify::single   = nullptr;
 
 Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
 {
-    m_networkManager = new QNetworkAccessManager;
+    m_networkManager = new QNetworkAccessManager(this);
     m_username = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
 
     updateConnector();
@@ -30,8 +30,6 @@ Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
 Spotify::~Spotify()
 {
     instanceFlag = false;
-    m_connector->deleteLater();
-    m_networkManager->deleteLater();
 }
 
 void Spotify::updateConnector()

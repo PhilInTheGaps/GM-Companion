@@ -35,11 +35,9 @@
         <file>tools/dice/DiceButton.qml</file>
         <file>tools/dice/DiceCombatTracker.qml</file>
         <file>tools/combat_tracker/EffectPage.qml</file>
-        <file>tools/audio/editor/AddonElementDialog.qml</file>
         <file>tools/audio/editor/IconFinder.qml</file>
         <file>main/LoadingScreen.qml</file>
         <file>tools/audio/AudioControlBar.qml</file>
-        <file>tools/audio/editor/EditorNewThingDialog.qml</file>
         <file>tools/audio/MetaDataDisplay.qml</file>
         <file>tools/settings/GeneralPage.qml</file>
         <file>tools/settings/PathsPage.qml</file>
@@ -59,17 +57,13 @@
         <file>tools/characters/dsa5/AbilitiesLiturgies.qml</file>
         <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
         <file>tools/settings/CreditsItem.qml</file>
-        <file>tools/audio/editor/EditorRenameDialog.qml</file>
         <file>tools/maps/MapMarker.qml</file>
         <file>tools/maps/MapMarkerEditor.qml</file>
         <file>tools/audio/editor/IconFinderUnsplash.qml</file>
         <file>tools/audio/VolumeItem.qml</file>
         <file>tools/audio/editor/EditorRightColumn.qml</file>
-        <file>tools/audio/editor/views/ElementPropertiesView.qml</file>
         <file>tools/audio/editor/views/ElementFileAddView.qml</file>
         <file>tools/audio/editor/views/EditorFileListView.qml</file>
-        <file>tools/audio/editor/views/PlaybackModeView.qml</file>
-        <file>tools/audio/editor/EditorDeleteDialog.qml</file>
         <file>tools/settings/AccountsPage.qml</file>
         <file>tools/settings/accounts/SpotifyAccount.qml</file>
         <file>main/UpdateDialog.qml</file>
@@ -126,7 +120,6 @@
         <file>tools/notes/SavePageDialog.qml</file>
         <file>tools/notes/InsertHeaderDialog.qml</file>
         <file>style/Label.qml</file>
-        <file>style/colors.js</file>
         <file>style/ApplicationWindow.qml</file>
         <file>style/Button.qml</file>
         <file>style/ToolTip.qml</file>
@@ -137,5 +130,39 @@
         <file>style/DialogButtonBox.qml</file>
         <file>style/ScrollBar.qml</file>
         <file>style/TextField.qml</file>
+        <file>tools/audio/editor/views/main/EditorMainView.qml</file>
+        <file>tools/audio/editor/views/main/EditorMainViewFallback.qml</file>
+        <file>tools/audio/editor/views/main/EditorMainViewDefault.qml</file>
+        <file>tools/audio/editor/dialogs/EditorRenameDialog.qml</file>
+        <file>tools/audio/editor/dialogs/AddonElementDialog.qml</file>
+        <file>tools/audio/editor/dialogs/EditorDeleteDialog.qml</file>
+        <file>tools/audio/editor/dialogs/EditorNewThingDialog.qml</file>
+        <file>tools/audio/editor/views/element_properties/ElementIconView.qml</file>
+        <file>tools/audio/editor/views/element_properties/ElementPropertiesView.qml</file>
+        <file>tools/audio/editor/views/element_properties/ElementNameView.qml</file>
+        <file>tools/audio/editor/views/element_properties/PlaybackModeView.qml</file>
+        <file>style/ToolBar.qml</file>
+        <file>style/ComboBox.qml</file>
+        <file>style/ItemDelegate.qml</file>
+        <file>style/Popup.qml</file>
+        <file>style/CheckBox.qml</file>
+        <file>style/RadioButton.qml</file>
+        <file>style/SpinBox.qml</file>
+        <file>style/Slider.qml</file>
+        <file>colors.js</file>
+        <file>sizes.js</file>
+        <file>style/Menu.qml</file>
+        <file>style/MenuItem.qml</file>
+        <file>style/CheckIndicator.qml</file>
+        <file>style/CheckDelegate.qml</file>
+        <file>style/RadioIndicator.qml</file>
+        <file>style/Frame.qml</file>
+        <file>style/MenuSeparator.qml</file>
+        <file>style/PageIndicator.qml</file>
+        <file>style/Pane.qml</file>
+        <file>style/SplitView.qml</file>
+        <file>style/ProgressBar.qml</file>
+        <file>style/ScrollIndicator.qml</file>
+        <file>style/StackView.qml</file>
     </qresource>
 </RCC>

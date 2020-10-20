@@ -36,3 +36,8 @@ add_test(NAME test_networkutils COMMAND test_networkutils)
 add_executable(test_markdownutils testmarkdownutils.cpp)
 target_link_libraries(test_markdownutils gm-companion-lib Qt5::Test)
 add_test(NAME test_markdownutils COMMAND test_markdownutils)
+
+# Process Info
+add_executable(test_processinfo testprocessinfo.cpp)
+target_link_libraries(test_processinfo gm-companion-lib Qt5::Test)
+add_test(NAME test_processinfo COMMAND test_processinfo)

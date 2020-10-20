@@ -13,11 +13,11 @@ Item {
     Connections {
         target: map_tool
 
-        onMapIndexChanged: {
+        function onMapIndexChanged() {
             marker_menu.visible = map_tool.currentMap ? map_tool.currentMap.hasMarkers : false
         }
 
-        onMarkerIndexChanged: {
+        function onMarkerIndexChanged() {
             if (map_tool.markerIndex > -1) {
                 marker_menu.openMarkerDetails()
             } else {

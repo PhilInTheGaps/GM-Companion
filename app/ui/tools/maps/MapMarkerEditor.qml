@@ -39,7 +39,7 @@ Dialog {
             spacing: 10
             width: 400
 
-            CustomTextField {
+            TextField {
                 id: marker_name_field
                 text: root.markerName
                 font.pointSize: 14
@@ -123,13 +123,14 @@ Dialog {
                 text: qsTr("Color")
             }
 
-            CustomTextField {
+            TextField {
                 id: color_field
                 text: root.markerColor
                 font.pointSize: 12
                 anchors.left: parent.left
                 anchors.right: parent.right
                 selectByMouse: true
+                placeholderText: qsTr("Enter marker description ...")
             }
 
             Grid {

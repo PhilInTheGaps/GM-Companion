@@ -13,16 +13,13 @@ Page {
     property bool dice_enabled: false
 
     // Top Bar
-    header: Rectangle {
+    header: ToolBar {
         id: top_bar
-        height: Defines.TOOLBAR_HEIGHT
-        color: palette.alternateBase
 
         Row {
             id: top_row
             anchors.fill: parent
 
-            padding: 10
             spacing: 10
 
             CustomToolBarButton {
@@ -102,9 +99,17 @@ Page {
             anchors.fill: right_item
             asynchronous: true
         }
+
+        Rectangle {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            color: palette.dark
+            width: 1
+        }
     }
 
-    footer: Rectangle {
+    footer: ToolBar {
         id: bottom_bar
         height: bottom_column.height
 
@@ -125,12 +130,11 @@ Page {
                 asynchronous: true
             }
 
-            Rectangle {
+            Item {
                 id: bottom_rect
                 height: Defines.TOOLBAR_HEIGHT
                 anchors.left: parent.left
                 anchors.right: parent.right
-                color: palette.alternateBase
 
                 Row {
                     id: bottom_row

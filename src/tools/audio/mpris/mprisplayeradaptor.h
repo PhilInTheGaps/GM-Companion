@@ -25,7 +25,7 @@ class MprisPlayerAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(bool CanPlay READ canPlay)
     Q_PROPERTY(bool CanPause READ canPause)
     Q_PROPERTY(bool CanSeek READ canSeek)
-    Q_PROPERTY(bool CanControl READ canControl)
+    Q_PROPERTY(bool CanControl READ canControl CONSTANT)
 
 public:
     MprisPlayerAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj) {}
@@ -34,19 +34,19 @@ public:
     void setPlaybackStatus(int status);
 
     QString loopStatus() const { return m_LoopStatus; }
-    void setLoopStatus(QString status) { /* Not Implemented */ }
+    void setLoopStatus(QString /*status*/) { /* Not Implemented */ }
 
     double rate() const { return 1.0; }
-    void setRate(double rate) { /* Not Implemented */ }
+    void setRate(double /*rate*/) { /* Not Implemented */ }
 
     bool shuffle() const { return m_Shuffle; }
-    void setShuffle(bool set) { /* Not Implemented */ }
+    void setShuffle(bool /*set*/) { /* Not Implemented */ }
 
     QMap<QString, QVariant> metadata() const { return m_Metadata; }
     void setMetadata(const QMap<QString, QVariant> &data);
 
     double volume() const { return m_Volume; }
-    void setVolume(double volume) {  } // emit changeVolume(volume);
+    void setVolume(double /*volume*/) {  } // emit changeVolume(volume);
 
     qlonglong position() const { return m_Position; }
     double minimumRate() const { return 1.0; }

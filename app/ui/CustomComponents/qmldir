@@ -2,8 +2,6 @@ module CustomComponents
 CustomButton            1.0 CustomButton.qml
 CustomComboBox          1.0 CustomComboBox.qml
 CustomRadioButton       1.0 CustomRadioButton.qml
-CustomCheckBox          1.0 CustomCheckBox.qml
-CustomTextField         1.0 CustomTextField.qml
 CustomScrollBar         1.0 CustomScrollBar.qml
 CustomTextEdit          1.0 CustomTextEdit.qml
 CustomToolBar           1.0 CustomToolBar.qml

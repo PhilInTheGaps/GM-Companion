@@ -48,7 +48,7 @@ Page {
     Connections {
         target: character_tool
 
-        onCategoryIndexChanged: {
+        function onCategoryIndexChanged() {
             switch (character_tool.categoryIndex) {
             case 0:
                 page_stack.replace(profile_page)
@@ -77,11 +77,9 @@ Page {
         initialItem: profile_page
         clip: true
 
-        replaceEnter: Transition {
-        }
+        replaceEnter: Transition {}
 
-        replaceExit: Transition {
-        }
+        replaceExit: Transition {}
 
         StackView {
             id: profile_page
@@ -89,15 +87,13 @@ Page {
             initialItem: profile_overview
             visible: page_stack.currentItem === this
 
-            replaceEnter: Transition {
-            }
+            replaceEnter: Transition {}
 
-            replaceExit: Transition {
-            }
+            replaceExit: Transition {}
 
             Connections {
                 target: character_dsa5_viewer
-                onSubCategoryIndexChanged: {
+                function onSubCategoryIndexChanged() {
                     if (character_tool.categoryIndex == 0) {
                         switch (character_dsa5_viewer.subCategoryIndex) {
                         case 0:
@@ -141,15 +137,13 @@ Page {
             initialItem: talents_page
             visible: page_stack.currentItem === this
 
-            replaceEnter: Transition {
-            }
+            replaceEnter: Transition {}
 
-            replaceExit: Transition {
-            }
+            replaceExit: Transition {}
 
             Connections {
                 target: character_dsa5_viewer
-                onSubCategoryIndexChanged: {
+                function onSubCategoryIndexChanged() {
                     if (character_tool.categoryIndex == 3) {
                         switch (character_dsa5_viewer.subCategoryIndex) {
                         case 0:
@@ -205,11 +199,9 @@ Page {
             initialItem: items_page
             visible: page_stack.currentItem === this
 
-            replaceEnter: Transition {
-            }
+            replaceEnter: Transition {}
 
-            replaceExit: Transition {
-            }
+            replaceExit: Transition {}
 
             BelongingsItems {
                 id: items_page

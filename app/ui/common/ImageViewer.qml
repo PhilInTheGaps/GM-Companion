@@ -92,8 +92,14 @@ Item {
 
     Connections {
         target: main_window
-        onZoomIn: zoomIn()
-        onZoomOut: zoomOut()
+
+        function onZoomIn() {
+            zoomIn()
+        }
+
+        function onZoomOut() {
+            zoomOut()
+        }
     }
 
     Flickable {
@@ -165,8 +171,10 @@ Item {
 
                     onWheel: {
                         if (wheel.modifiers & Qt.ControlModifier) {
-                            if (wheel.angleDelta.y > 0) zoomIn();
-                            else zoomOut()
+                            if (wheel.angleDelta.y > 0)
+                                zoomIn()
+                            else
+                                zoomOut()
                         }
                     }
                 }

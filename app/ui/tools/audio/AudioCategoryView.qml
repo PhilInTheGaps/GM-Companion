@@ -26,22 +26,27 @@ Rectangle {
         // Project ComboBox
         CustomToolBarComboBox {
             id: audio_project_combo_box
-            property bool loaded: false
+            property int loaded: 0
 
             anchors.left: parent.left
             anchors.right: editor_button.left
 
             width: parent.width - editor_button.width - parent.spacing
-            model: audio_tool.projectNames
+            model: audio_tool ? audio_tool.projects : []
+            textRole: "name"
+            emptyString: loaded > 0 ? qsTr("No Projects") : qsTr("Loading ...")
 
             onCurrentTextChanged: {
-                if (loaded) audio_tool.setCurrentProject(currentIndex)
+                if (audio_tool) {
+                    audio_tool.setCurrentProject(currentIndex)
+                }
             }
 
-            onModelChanged: {
-                if (!loaded) {
-                    currentIndex = audio_tool.getCurrentProjectIndex()
-                    loaded = true
+            Connections {
+                target: audio_tool
+
+                function onProjectsChanged() {
+                    audio_project_combo_box.loaded += 1
                 }
             }
         }
@@ -80,17 +85,18 @@ Rectangle {
             Repeater {
                 id: category_repeater
 
-                model: audio_tool.categoryNames
-
-                onModelChanged: console.debug(model)
+                model: audio_tool
+                       && audio_tool.currentProject ? audio_tool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData
+                    buttonText: modelData.name
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    onClicked: audio_tool.setCurrentCategory(buttonText)
+                    onClicked: {
+                        audio_tool.currentProject.setCurrentCategory(modelData)
+                    }
                 }
             }
         }
@@ -106,7 +112,7 @@ Rectangle {
 
         Repeater {
             id: sound_repeater
-            model: soundModel
+            model: audio_tool ? audio_tool.soundController.activeElements : []
 
             SoundButton {
                 element: modelData.name
@@ -125,6 +131,6 @@ Rectangle {
 
         visible: source != ""
         sourceSize.width: width
-        source: audio_tool.cover
+        source: audio_tool ? audio_tool.metaData.cover : ""
     }
 }
