@@ -14,7 +14,7 @@ jobs:
     - cget init --shared
     - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate
       1;
-    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr -DBUILD_SHARED_LIBS=OFF
       || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
     - make test || travis_terminate 1;
