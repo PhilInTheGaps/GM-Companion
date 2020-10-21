@@ -28,7 +28,7 @@ bool ProcessInfo::isProcessRunning(std::string procName)
 {
     #ifdef Q_OS_MACOS
 
-    return isProcessRunningMax(procName);
+    return isProcessRunningMac(procName);
 
     #elif defined Q_OS_UNIX
 
