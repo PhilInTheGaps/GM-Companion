@@ -244,7 +244,6 @@ target_link_libraries(
   ${QTKEYCHAIN_LIBRARY}
 )
 
-# install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(
   TARGETS gm-companion-lib
   EXPORT gm-companion-lib
