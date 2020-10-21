@@ -1,12 +1,10 @@
 #include "processinfo.h"
 #include <QtGlobal>
-#include <QString>
 
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
 #include <vector>
-#include <string>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -16,6 +14,7 @@
 #include <windows.h>
 #include <tlhelp32.h>
 #include <tchar.h>
+#include <QStringList>
 #endif
 
 using namespace std;
@@ -73,29 +72,39 @@ bool ProcessInfo::isProcessRunning(std::string procName)
     #elif defined Q_OS_WIN
     // https://stackoverflow.com/a/57164620
 
-    PROCESSENTRY32 entry;
-        entry.dwSize = sizeof(PROCESSENTRY32);
-
-        const auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-
-        if (!Process32First(snapshot, &entry))
-        {
-            CloseHandle(snapshot);
-            return false;
-        }
-
-        do {
-            if (!QString::compare(QString::fromStdString(entry.szExeFile), QString::fromStdString(procName), Qt::CaseInsensitive))
-            {
-                CloseHandle(snapshot);
-                isRunning = true;
-            }
-        } while (Process32Next(snapshot, &entry));
-
-        CloseHandle(snapshot);
-        isRunning = false;
+    for (const auto &name : { QString::fromStdString(procName), QString("%1%2").arg(QString::fromStdString(procName), ".exe") })
+    {
+        if (isProcessRunningWin(name)) return true;
+    }
 
     #endif
 
     return isRunning;
 }
+
+#ifdef Q_OS_WIN
+auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool
+{
+    PROCESSENTRY32 entry;
+    entry.dwSize = sizeof(PROCESSENTRY32);
+
+    const auto snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+    if (!Process32First(snapshot, &entry))
+    {
+        CloseHandle(snapshot);
+        return false;
+    }
+
+    do {
+        if (!QString::compare(QString::fromStdString(entry.szExeFile), name, Qt::CaseInsensitive))
+        {
+            CloseHandle(snapshot);
+            return true;
+        }
+    } while (Process32Next(snapshot, &entry));
+
+    CloseHandle(snapshot);
+    return false;
+}
+#endif
