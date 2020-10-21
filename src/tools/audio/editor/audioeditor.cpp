@@ -34,6 +34,7 @@ void AudioEditor::loadData()
 {
     if (m_isDataLoaded) return;
 
+    setIsLoading(true);
     m_isDataLoaded = true;
     audioSaveLoad->findProjects(true);
 }
@@ -58,6 +59,8 @@ void AudioEditor::onFoundProjects(QList<AudioProject *>list, bool isEditor)
 
     emit projectsChanged();
     setCurrentProject(0);
+
+    setIsLoading(false);
 }
 
 /**

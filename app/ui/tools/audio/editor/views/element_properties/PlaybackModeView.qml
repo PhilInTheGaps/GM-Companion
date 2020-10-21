@@ -39,7 +39,8 @@ Rectangle {
                 x: parent.width - width * 1.5
                 y: parent.height - height * 1.5
 
-                color: audio_editor && audio_editor.currentElement.mode
+                color: audio_editor && audio_editor.currentElement
+                       && audio_editor.currentElement.mode
                        === parent.modeNum ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {

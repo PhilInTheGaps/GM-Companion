@@ -9,7 +9,7 @@
 class AudioIcon : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString imageId READ imageId WRITE setImageId NOTIFY iconChanged)
+    Q_PROPERTY(QString imageId READ imageIdForReload WRITE setImageId NOTIFY iconChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY iconChanged)
     Q_PROPERTY(QString subtitle READ subtitle WRITE setSubtitle NOTIFY iconChanged)
     Q_PROPERTY(QString absoluteUrl READ absoluteUrl NOTIFY urlChanged)
@@ -22,6 +22,7 @@ public:
         : QObject(parent), element(parent), m_imageId(imageId) {}
 
     QString imageId() const { return m_imageId; }
+    QString imageIdForReload();
     void setImageId(const QString& image) { m_imageId = image; emit iconChanged(); }
 
     QString title() const { return m_title; }
@@ -51,6 +52,7 @@ private:
     QString m_imageId, m_title, m_subtitle, m_relativeUrl;
     QList<QPair<QString, QPixmap>> m_collageIcons;
     int m_lastFileIndex = 0;
+    bool m_imageIdCounter = false;
 };
 
 #endif // AUDIOICON_H

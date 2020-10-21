@@ -26,7 +26,6 @@ Rectangle {
         // Project ComboBox
         CustomToolBarComboBox {
             id: audio_project_combo_box
-            property int loaded: 0
 
             anchors.left: parent.left
             anchors.right: editor_button.left
@@ -34,19 +33,13 @@ Rectangle {
             width: parent.width - editor_button.width - parent.spacing
             model: audio_tool ? audio_tool.projects : []
             textRole: "name"
-            emptyString: loaded > 0 ? qsTr("No Projects") : qsTr("Loading ...")
+            emptyString: audio_tool
+                         && audio_tool.isLoading ? qsTr("Loading ...") : qsTr(
+                                                       "No Projects")
 
             onCurrentTextChanged: {
                 if (audio_tool) {
                     audio_tool.setCurrentProject(currentIndex)
-                }
-            }
-
-            Connections {
-                target: audio_tool
-
-                function onProjectsChanged() {
-                    audio_project_combo_box.loaded += 1
                 }
             }
         }

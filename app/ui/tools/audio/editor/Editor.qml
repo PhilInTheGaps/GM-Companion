@@ -14,7 +14,6 @@ import "../../../common"
 Page {
     id: editor_root
 
-    signal backToTool
     signal projectAdded
 
     Component.onCompleted: audio_editor.loadData()

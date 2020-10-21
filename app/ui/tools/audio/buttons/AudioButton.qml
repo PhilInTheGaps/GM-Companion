@@ -29,7 +29,6 @@ Rectangle {
 
     Image {
         id: thumbnail
-        property bool counter: false
 
         source: "image://audioElementIcons/" + icon.imageId
         anchors.fill: parent
@@ -40,19 +39,6 @@ Rectangle {
 
         sourceSize.width: 400
         sourceSize.height: 400
-
-        function reload() {
-            counter = !counter
-            source = "image://audioElementIcons/" + icon.imageId + "?r=" + counter
-        }
-
-        Connections {
-            target: icon
-
-            function onIconChanged() {
-                thumbnail.reload()
-            }
-        }
     }
 
     BusyIndicator {

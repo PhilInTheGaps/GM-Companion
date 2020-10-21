@@ -59,6 +59,7 @@ void AudioTool::loadData()
 {
     if (m_isDataLoaded) return;
 
+    setIsLoading(true);
     m_isDataLoaded = true;
 
     // Find and load projects
@@ -77,6 +78,7 @@ void AudioTool::onProjectsChanged(QList<AudioProject *>projects, bool forEditor)
 
     m_projects = std::move(projects);
     emit projectsChanged();
+    setIsLoading(false);
 }
 
 void AudioTool::onCurrentScenarioChanged()

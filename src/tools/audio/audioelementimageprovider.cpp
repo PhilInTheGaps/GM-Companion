@@ -10,7 +10,7 @@ AudioElementImageProvider::AudioElementImageProvider() :
 {
 }
 
-QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size, const QSize& requestedSize)
+auto AudioElementImageProvider::requestPixmap(const QString& id, QSize *size, const QSize& requestedSize) -> QPixmap
 {
     auto _id = id;
     auto type = QStringLiteral("Music");
@@ -45,7 +45,7 @@ QPixmap AudioElementImageProvider::requestPixmap(const QString& id, QSize *size,
     return pixmap;
 }
 
-QPixmap AudioElementImageProvider::getDefaultImage(const QString &type) const
+auto AudioElementImageProvider::getDefaultImage(const QString &type) const -> QPixmap
 {
     if (type == "Sound")
     {

@@ -21,6 +21,7 @@ class AudioTool : public AbstractTool
     Q_OBJECT
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(QList<QObject*> projects READ projects NOTIFY projectsChanged)
+    Q_PROPERTY(bool isLoading READ isLoading NOTIFY isLoadingChanged)
 
     Q_PROPERTY(QObject* soundController READ soundController CONSTANT)
 
@@ -44,6 +45,7 @@ public:
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();
+    bool isLoading() const { return m_isLoading; }
 
     QObject* soundController() const { return qobject_cast<QObject*>(soundPlayerController); }
 
@@ -86,6 +88,7 @@ signals:
     void spotifyAuthorized();
     void musicVolumeChanged();
     void soundVolumeChanged();
+    void isLoadingChanged();
 
 private slots:
     void onProjectsChanged(QList<AudioProject*> projects, bool forEditor);
@@ -111,6 +114,9 @@ private:
 
     AudioElement::Type m_elementType = AudioElement::Type::Music;
     bool m_isPaused = true;
+
+    void setIsLoading(bool isLoading) { m_isLoading = isLoading; emit isLoadingChanged(); }
+    bool m_isLoading = true;
 
     qreal m_musicVolume = DEFAULT_MUSIC_VOLUME;
     qreal m_soundVolume = DEFAULT_SOUND_VOLUME;

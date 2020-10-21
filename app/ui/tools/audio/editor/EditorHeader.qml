@@ -13,7 +13,11 @@ CustomToolBar {
 
     isSaved: audio_editor ? audio_editor.isSaved : true
 
-    onBackClicked: backToTool()
+    onBackClicked: {
+        stack.pop()
+        loader.active = false
+    }
+
     onAddClicked: new_thing_dialog.open()
     onSaveClicked: audio_editor.saveProject()
     onExportClicked: {
@@ -31,13 +35,16 @@ CustomToolBar {
 
         CustomToolBarComboBox {
             id: project_box
-            property int loaded: 0
+
+            property int projectIndex: audio_editor ? audio_editor.projectIndex : -1
 
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             width: 150
             textRole: "name"
-            emptyString: loaded > 0 ? qsTr("No Projects") : qsTr("Loading ...")
+            emptyString: audio_editor
+                         && audio_editor.isLoading ? qsTr("Loading ...") : qsTr(
+                                                         "No Projects")
 
             model: audio_editor ? audio_editor.projects : []
 
@@ -47,18 +54,15 @@ CustomToolBar {
                 }
             }
 
-            Connections {
-                target: audio_editor
-
-                function onProjectsChanged() {
-                    project_box.loaded += 1
-                }
-
-                function onCurrentProjectChanged() {
-                    var project = audio_editor.currentProject
-                    if (project && project.name !== project_box.currentText) {
-                        project_box.currentIndex = audio_editor.projectIndex
-                    }
+            // If a project is created and set as the current project,
+            // change the current index accordingly.
+            // Previously this was done by listening to the currentProjectChanged
+            // signal of the audio_editor, but the syntax for Connections changed
+            // and the old one is deprecated, but we want to still support Qt 5.9
+            onProjectIndexChanged: {
+                var project = audio_editor.currentProject
+                if (project && project.name !== project_box.currentText) {
+                    project_box.currentIndex = audio_editor.projectIndex
                 }
             }
         }

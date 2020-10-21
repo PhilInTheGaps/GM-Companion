@@ -25,6 +25,7 @@ class AudioEditor : public AbstractTool
     Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
     Q_PROPERTY(QObject* currentElement READ currentElement NOTIFY currentElementChanged)
     Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
+    Q_PROPERTY(bool isLoading READ isLoading NOTIFY isLoadingChanged)
 
 public:
     explicit AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSaveLoad, QNetworkAccessManager *networkManager, QObject *parent);
@@ -87,6 +88,8 @@ public:
 
     Q_INVOKABLE void setFileIndex(int index) { m_fileIndex = index; }
 
+    bool isLoading() const { return m_isLoading; }
+
 public slots:
     void loadData() override;
 
@@ -96,6 +99,7 @@ signals:
     void currentCategoryChanged();
     void currentScenarioChanged();
     void isSavedChanged();
+    void isLoadingChanged();
 
     void currentElementChanged();
     void fileIndexChanged(int index);
@@ -124,6 +128,9 @@ private:
     bool m_isSaved = true;
     void madeChanges();
     bool addAudioFile(AudioFile *audioFile);
+
+    void setIsLoading(bool isLoading) { m_isLoading = isLoading; emit isLoadingChanged(); }
+    bool m_isLoading = true;
 
     // Helper function
     bool categoryExists() const;

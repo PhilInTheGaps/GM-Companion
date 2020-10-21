@@ -24,17 +24,12 @@ Item {
 
     Loader {
         id: audio_editor_page
+
+        property alias stack: audio_stack
+        property alias loader: audio_editor_page
+
         active: false
         asynchronous: true
         source: "audio/editor/Editor.qml"
-    }
-
-    Connections {
-        target: audio_editor_page.item
-
-        function onBackToTool() {
-            audio_stack.pop()
-            audio_editor_page.active = false
-        }
     }
 }

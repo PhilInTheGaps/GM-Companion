@@ -3,6 +3,12 @@
 #include "logging.h"
 #include "settings/settingsmanager.h"
 
+auto AudioIcon::imageIdForReload() -> QString
+{
+    m_imageIdCounter = !m_imageIdCounter;
+    return QString("%1?r=%2").arg(m_imageId, QString::number(m_imageIdCounter));
+}
+
 auto AudioIcon::absoluteUrl() const -> QString
 {
     if (m_relativeUrl.isEmpty()) return QStringLiteral("");
