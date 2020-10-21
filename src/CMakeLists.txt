@@ -237,7 +237,7 @@ target_link_libraries(
   Qt5::Network
   Qt5::DBus
   o2
-  qytlib
+  qyt
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}
   ${MARKDOWN_LIBRARY}

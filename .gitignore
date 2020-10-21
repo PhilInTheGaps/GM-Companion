@@ -8,6 +8,11 @@ qpm.json
 *.vscode
 build/
 
+# CMake
+
+/*_autogen/
+/CMakeFiles/
+
 # C++ objects and libs
 
 *.slo
