@@ -1,5 +1,6 @@
 #include "processinfo.h"
 #include <QtGlobal>
+#include <QDebug>
 
 #include <sys/types.h>
 #include <dirent.h>
@@ -9,6 +10,10 @@
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
+
+#ifdef Q_OS_MACOS
+#include <libproc.h>
+#endif
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -21,12 +26,61 @@ using namespace std;
 
 bool ProcessInfo::isProcessRunning(std::string procName)
 {
-    bool isRunning = false;
+    #ifdef Q_OS_MACOS
 
-    #ifdef Q_OS_LINUX
+    return isProcessRunningMax(procName);
+
+    #elif defined Q_OS_UNIX
+
+    return isProcessRunningUnix(procName);
+
+    #elif defined Q_OS_WIN
+    // https://stackoverflow.com/a/57164620
+
+    for (const auto &name : { QString::fromStdString(procName), QString("%1%2").arg(QString::fromStdString(procName), ".exe") })
+    {
+        if (isProcessRunningWin(name)) return true;
+    }
+
+    #endif
+
+    qWarning() << "Error: Method isProcessRunning() is not defined for this operating system!";
+
+    return false;
+}
+
+#ifdef Q_OS_MACOS
+auto ProcessInfo::isProcessRunningMac(std::string procName) -> bool
+{
+    // https://stackoverflow.com/questions/49506579/how-to-find-the-pid-of-any-process-in-mac-osx-c
+
+    pid_t pids[2048];
+    int bytes = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
+    int n_proc = bytes / sizeof(pids[0]);
+
+    for (int i = 0; i < n_proc; i++)
+    {
+        struct proc_bsdinfo proc;
+        int st = proc_pidinfo(pids[i], PROC_PIDTBSDINFO, 0, &proc, PROC_PIDTBSDINFO_SIZE);
+
+        if (st == PROC_PIDTBSDINFO_SIZE)
+        {
+            if (strcmp(procName, proc.pbi_name) == 0)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+#elif defined Q_OS_UNIX
+auto ProcessInfo::isProcessRunningUnix(std::string procName) -> bool
+{
     // https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
     // Open the /proc directory
     DIR *dp = opendir("/proc");
+    bool isRunning = false;
 
     if (dp != nullptr)
     {
@@ -68,21 +122,9 @@ bool ProcessInfo::isProcessRunning(std::string procName)
     }
 
     closedir(dp);
-
-    #elif defined Q_OS_WIN
-    // https://stackoverflow.com/a/57164620
-
-    for (const auto &name : { QString::fromStdString(procName), QString("%1%2").arg(QString::fromStdString(procName), ".exe") })
-    {
-        if (isProcessRunningWin(name)) return true;
-    }
-
-    #endif
-
     return isRunning;
 }
-
-#ifdef Q_OS_WIN
+#elif defined Q_OS_WIN
 auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool
 {
     PROCESSENTRY32 entry;
