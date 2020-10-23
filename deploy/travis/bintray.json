@@ -20,7 +20,7 @@
 
   "files": [
     {
-      "includePattern": "build/GM-Companion*.AppImage",
+      "includePattern": "build/GM-Companion(.*)\\.AppImage",
       "uploadPattern": "bin"
     }
   ],

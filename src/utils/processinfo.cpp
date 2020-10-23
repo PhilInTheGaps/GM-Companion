@@ -24,20 +24,20 @@
 
 using namespace std;
 
-bool ProcessInfo::isProcessRunning(std::string procName)
+bool ProcessInfo::isProcessRunning(const QString &procName)
 {
     #ifdef Q_OS_MACOS
 
-    return isProcessRunningMac(procName);
+    return isProcessRunningMac(procName.toUtf8());
 
     #elif defined Q_OS_UNIX
 
-    return isProcessRunningUnix(procName);
+    return isProcessRunningUnix(procName.toStdString());
 
     #elif defined Q_OS_WIN
     // https://stackoverflow.com/a/57164620
 
-    for (const auto &name : { QString::fromStdString(procName), QString("%1%2").arg(QString::fromStdString(procName), ".exe") })
+    for (const auto &name : { procName, QString("%1%2").arg(procName, ".exe") })
     {
         if (isProcessRunningWin(name)) return true;
     }
@@ -50,7 +50,7 @@ bool ProcessInfo::isProcessRunning(std::string procName)
 }
 
 #ifdef Q_OS_MACOS
-auto ProcessInfo::isProcessRunningMac(std::string procName) -> bool
+auto ProcessInfo::isProcessRunningMac(const char *procName) -> bool
 {
     // https://stackoverflow.com/questions/49506579/how-to-find-the-pid-of-any-process-in-mac-osx-c
 

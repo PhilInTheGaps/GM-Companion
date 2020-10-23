@@ -1,4 +1,5 @@
 language: cpp
+
 jobs:
   include:
   - os: linux
@@ -11,98 +12,125 @@ jobs:
     script:
     - mkdir build
     - cd build
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr -DBUILD_SHARED_LIBS=OFF || travis_terminate 1;
+    - make -j$(nproc) || travis_terminate 1;
+    - make test || travis_terminate 1;
+    addons:
+      apt:
+        update: true
+        packages:
+        - qt5keychain-dev
+        - libtinyxml2-dev
+        - libpoppler-qt5-dev
+        - libtag1-dev
+        - libmarkdown2-dev
+        - qtquickcontrols2-5-dev
+        - qtdeclarative5-dev
+        - qtmultimedia5-dev
+        - qttools5-dev
+  - os: linux
+    dist: bionic
+    compiler: gcc
+    before_install:
+    - source /opt/qt512/bin/qt512-env.sh
+    - pip3 install cget
+    - export PATH=$PATH:~/.local/bin
+    script:
+    - mkdir build
+    - cd build
     - cget init --shared
-    - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate
-      1;
-    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr -DBUILD_SHARED_LIBS=OFF
-      || travis_terminate 1;
+    - cget install -G "Unix Makefiles" -f ../deploy/travis/requirements.txt || travis_terminate 1;
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=AppDir/usr -DBUILD_SHARED_LIBS=OFF || travis_terminate 1;
     - make -j$(nproc) || travis_terminate 1;
     - make test || travis_terminate 1;
     - make install || travis_terminate 1;
     - make clean || travis_terminate 1;
     - "../deploy/travis/build-appimage.sh"
+    addons:
+      apt:
+        update: true
+        sources:
+        - sourceline: ppa:beineri/opt-qt-5.12.9-bionic
+        packages:
+        - cargo
+        - binutils
+        - curl
+        - python3-setuptools
+        - python3-pip
+        - openssl
+        - libssl-dev
+        - libfontconfig1-dev
+        - libbrotli-dev
+        - libtiff-dev
+        - libcairo2-dev
+        - libopenjp2-7-dev
+        - libsecret-1-dev
+        - libtinyxml2-dev
+        - zlib1g-dev
+        - qt512base
+        - qt512declarative
+        - qt512graphicaleffects
+        - qt512imageformats
+        - qt512multimedia
+        - qt512quickcontrols
+        - qt512quickcontrols2
+        - qt512script
+        - qt512scxml
+        - qt512svg
+        - qt512tools
+        - qt512translations
+        - qt512x11extras
+        - qt512xmlpatterns
+        - mesa-utils
+        - mesa-common-dev
+        - libegl1-mesa-dev
+        - libgl1-mesa-dev
+        - libglu1-mesa-dev
+        - libpulse-dev
+        - libasound2-dev
+        - gstreamer1.0-tools
+        - gstreamer1.0-plugins-base
+        - gstreamer1.0-plugins-good
+        - gstreamer1.0-plugins-bad
+        - gstreamer1.0-plugins-ugly
+    deploy:
+      provider: bintray
+      user: "philinthegaps"
+      file: "/home/travis/build/PhilInTheGaps/GM-Companion/deploy/travis/bintray.json"
+      edge: true
+      cleanup: false
+      on:
+        all_branches: true
+        condition: $TRAVIS_OS_NAME = linux
+      key:
+        secure: gEYP119vI3sk7G4DJouaD8mAywi0BqbLuieuDBQhkYf+4b9axQt7effiyxSAd0i3WSWVD6VpjUNF5vqvHMJmereGDMQWeIkMOJbx/Mu1q/IwG9HxIxdb5AmuIaX+PeL38b3H9tYVuVru0goMsIy1AlzFQoQBoKiH7RHWQdPFNtMIgqzK18WW99mvmIAvtKdW1gpnlE83Yo0GdF7SORckRhTe6CHFVEcx1BLRwpfDHtUpNfVo+9CC/J+b50OOMSrImMYy4PtNbFUHIHswIe8rAMb5zgNkPyyD0lQpngzohRHhtXg2I6YYwP0RcWqlFTni+Z0AgecTGGp3MlfgrNrFOgINRQVIkZAiCkigSmRCP9P+tcDcYVDLKNg/vaQ3fbv+cI/g86rRcus0zBA5gton5xF3utvRF/hnYfkjC8eJdeB4CBSlsSWvHlYm8QYLLW90dXe9/axwpFQ0R6+Fkx/EyulUnt/l3KYIQiqrooMwOYtOJvL7toKgSFrCLsH4dh/KYa5hnVa6VvNBX289P7MeQ3u8Z9+slS6/TFdypsHLP8Dy5TOBukvrIDSW7jDgff4t5E4Qdb6RO4fJCmxS9fRp6Qlk1fJzX970U57qCkmEcEMg+PEHLgSHUIY54AMMovT4UqiAGrlOG9uWTpaqgCB9pAVo2AO02ZoqXtfCrDRlXos=
+
   - os: osx
     before_install:
     - brew link qt --force
     script:
     - mkdir build
     - cd build
-    - cmake .. -G "Unix Makefiles" -DQt5_DIR=$(brew --prefix qt)/lib/cmake/Qt5 ||
-      travis_terminate 1;
+    - cmake .. -G "Unix Makefiles" -DQt5_DIR=$(brew --prefix qt)/lib/cmake/Qt5 || travis_terminate 1;
     - make -j$(sysctl -n hw.physicalcpu)
     - make test
+    addons:
+      homebrew:
+        update: true
+        packages:
+        - qt
+        - taglib
+        - poppler
+        - qtkeychain
+        - tinyxml2
+        - cmark-gfm
+
 before_script:
 - cmake -version
-addons:
-  apt:
-    update: true
-    sources:
-    - sourceline: ppa:beineri/opt-qt-5.12.9-bionic
-    packages:
-    - cargo
-    - binutils
-    - curl
-    - python3-setuptools
-    - python3-pip
-    - openssl
-    - libssl-dev
-    - libfontconfig1-dev
-    - libbrotli-dev
-    - libtiff-dev
-    - libcairo2-dev
-    - libopenjp2-7-dev
-    - libsecret-1-dev
-    - libtinyxml2-dev
-    - zlib1g-dev
-    - qt512base
-    - qt512declarative
-    - qt512graphicaleffects
-    - qt512imageformats
-    - qt512multimedia
-    - qt512quickcontrols
-    - qt512quickcontrols2
-    - qt512script
-    - qt512scxml
-    - qt512svg
-    - qt512tools
-    - qt512translations
-    - qt512x11extras
-    - qt512xmlpatterns
-    - mesa-utils
-    - mesa-common-dev
-    - libegl1-mesa-dev
-    - libgl1-mesa-dev
-    - libglu1-mesa-dev
-    - libpulse-dev
-    - libasound2-dev
-    - gstreamer1.0-tools
-    - gstreamer1.0-plugins-base
-    - gstreamer1.0-plugins-good
-    - gstreamer1.0-plugins-bad
-    - gstreamer1.0-plugins-ugly
-  homebrew:
-    update: true
-    packages:
-    - qt
-    - taglib
-    - poppler
-    - qtkeychain
-    - tinyxml2
-    - cmark-gfm
+
 notifications:
   email:
     recipients:
     - phil.hoffmann@zoho.eu
     on_success: never
     on_failure: always
-deploy:
-  provider: bintray
-  user: "philinthegaps"
-  file: "/home/travis/build/PhilInTheGaps/GM-Companion/deploy/travis/bintray.json"
-  edge: true
-  cleanup: false
-  on:
-    all_branches: true
-    condition: $TRAVIS_OS_NAME = linux
-  key:
-    secure: gEYP119vI3sk7G4DJouaD8mAywi0BqbLuieuDBQhkYf+4b9axQt7effiyxSAd0i3WSWVD6VpjUNF5vqvHMJmereGDMQWeIkMOJbx/Mu1q/IwG9HxIxdb5AmuIaX+PeL38b3H9tYVuVru0goMsIy1AlzFQoQBoKiH7RHWQdPFNtMIgqzK18WW99mvmIAvtKdW1gpnlE83Yo0GdF7SORckRhTe6CHFVEcx1BLRwpfDHtUpNfVo+9CC/J+b50OOMSrImMYy4PtNbFUHIHswIe8rAMb5zgNkPyyD0lQpngzohRHhtXg2I6YYwP0RcWqlFTni+Z0AgecTGGp3MlfgrNrFOgINRQVIkZAiCkigSmRCP9P+tcDcYVDLKNg/vaQ3fbv+cI/g86rRcus0zBA5gton5xF3utvRF/hnYfkjC8eJdeB4CBSlsSWvHlYm8QYLLW90dXe9/axwpFQ0R6+Fkx/EyulUnt/l3KYIQiqrooMwOYtOJvL7toKgSFrCLsH4dh/KYa5hnVa6VvNBX289P7MeQ3u8Z9+slS6/TFdypsHLP8Dy5TOBukvrIDSW7jDgff4t5E4Qdb6RO4fJCmxS9fRp6Qlk1fJzX970U57qCkmEcEMg+PEHLgSHUIY54AMMovT4UqiAGrlOG9uWTpaqgCB9pAVo2AO02ZoqXtfCrDRlXos=

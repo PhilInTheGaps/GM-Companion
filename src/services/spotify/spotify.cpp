@@ -130,7 +130,7 @@ auto Spotify::startLibrespot()->bool
     qCDebug(gmSpotify()) << "Starting librespot ...";
     updateStatus(StatusType::Info, tr("Starting librespot..."));
 
-    if (!ProcessInfo::isProcessRunning(getLibrespotBinaryName().toStdString()))
+    if (!ProcessInfo::isProcessRunning(getLibrespotBinaryName()))
     {
         auto username      = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
         auto password      = SettingsManager::getPassword(username, "Spotify");
