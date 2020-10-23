@@ -15,4 +15,3 @@ cmake .. -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=install || EXIT /B 1
 
 mingw32-make -j%NUMBER_OF_PROCESSORS% || EXIT /B 1
 
-ctest || EXIT /B 1
