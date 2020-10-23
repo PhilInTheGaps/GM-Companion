@@ -12,12 +12,6 @@ Item {
     signal valueEdited(string new_value)
     signal valueIncreased(int steps)
 
-    onEdit_modeChanged: {
-        if (!edit_mode) {
-            valueEdited(textfield.text)
-        }
-    }
-
     Label {
         id: label
         text: root.value
@@ -29,10 +23,22 @@ Item {
         horizontalAlignment: Text.AlignVCenter
     }
 
-    Item {
+    Dialog {
         id: input_item
         visible: edit_mode
-        anchors.fill: parent
+
+        width: parent.width
+        height: parent.height
+        modal: true
+        padding: 0
+
+        onClosed: {
+            edit_mode = false
+        }
+
+        onAccepted: {
+            root.valueEdited(textfield.text)
+        }
 
         TextField {
             id: textfield
@@ -43,12 +49,12 @@ Item {
 
             validator: IntValidator {
                 top: 99999
-                bottom: -100
+                bottom: -99999
             }
 
             horizontalAlignment: Text.AlignHCenter
 
-            onAccepted: edit_mode = false
+            onAccepted: input_item.accept()
         }
 
         Text {
@@ -64,7 +70,7 @@ Item {
 
         MouseArea {
             id: edit_mouse_area
-            onClicked: edit_mode = false
+            onClicked: input_item.accept()
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom

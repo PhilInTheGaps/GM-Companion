@@ -22,7 +22,7 @@ public:
     Q_INVOKABLE void setCurrentAddon(QString addon) { m_currentAddon = m_addons[m_addonNames.indexOf(addon)]; loadEffects(); }
 
     Q_INVOKABLE QString getIcon(int index);
-    Q_INVOKABLE QString randomEffect(QString effectType);
+    Q_INVOKABLE QString randomEffect(const QString& effectType);
 
 private:
     QStringList m_addons;

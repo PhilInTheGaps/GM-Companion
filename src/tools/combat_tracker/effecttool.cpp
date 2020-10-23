@@ -40,7 +40,7 @@ void EffectTool::loadAddons()
 
     emit addonsChanged();
 
-    if (m_addons.size() > 0)
+    if (!m_addons.empty())
     {
         m_currentAddon = m_addons[0];
         loadEffects();
@@ -62,7 +62,7 @@ void EffectTool::loadEffects()
         s.setIniCodec("UTF-8");
         QStringList types = s.value("types").toStringList();
 
-        for (QString type : types)
+        for (const QString& type : types)
         {
             qDebug() << type;
 
@@ -76,8 +76,8 @@ void EffectTool::loadEffects()
 
             s.endGroup();
 
-            Effect *e = new Effect(type, dice, sides, mod, effects, icon);
-            m_effectList.append(e);
+            auto *effect = new Effect(type, dice, sides, mod, effects, icon, this);
+            m_effectList.append(effect);
             m_effectTypes.append(type);
         }
     }
@@ -87,7 +87,7 @@ void EffectTool::loadEffects()
     emit effectTypesChanged();
 }
 
-QString EffectTool::getIcon(int index)
+auto EffectTool::getIcon(int index) -> QString
 {
     int addonIndex = m_addons.indexOf(m_currentAddon);
     QString path   = m_addonPaths[addonIndex] + "/";
@@ -111,7 +111,7 @@ QString EffectTool::getIcon(int index)
     return path + icon;
 }
 
-QString EffectTool::randomEffect(QString effectType)
+auto EffectTool::randomEffect(const QString& effectType) -> QString
 {
     return m_effectList[m_effectTypes.indexOf(effectType)]->getEffect();
 }

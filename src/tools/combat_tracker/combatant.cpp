@@ -1,37 +1,36 @@
 #include "combatant.h"
 
-Combatant::Combatant(QString name, QString notes, int ini, int health, QObject *parent)
-    : QObject(parent), m_name(name), m_notes(notes), m_ini(ini), m_health(health)
+#include <utility>
+
+Combatant::Combatant(QString name, QString notes, int ini, int health, int priority, QObject *parent)
+    : QObject(parent), m_name(std::move(name)), m_notes(std::move(notes)), m_ini(ini), m_health(health), m_priority(priority)
 {
 }
 
-QVariant CombatantListModel::data(const QModelIndex& index, int /*role*/) const
+auto CombatantListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
 {
-    QObject *item = m_items.at(index.row());
-
+    auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
 }
 
-void CombatantListModel::insert(QObject *item)
+auto CombatantListModel::insert(QObject *item) -> void
 {
     beginInsertRows(QModelIndex(), 0, 0);
     m_items.push_front(item);
     endInsertRows();
 }
 
-void CombatantListModel::remove(QObject *item)
+auto CombatantListModel::remove(QObject *item) -> void
 {
-    for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items.at(i) == item) {
-            beginRemoveRows(QModelIndex(), i, i);
-            m_items.remove(i);
-            endRemoveRows();
-            break;
-        }
-    }
+    auto index = m_items.indexOf(item);
+    if (Q_UNLIKELY(index < 0)) return;
+
+    beginRemoveRows(QModelIndex(), index, index);
+    m_items.remove(index);
+    endRemoveRows();
 }
 
-QHash<int, QByteArray>CombatantListModel::roleNames() const
+auto CombatantListModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -39,15 +38,15 @@ QHash<int, QByteArray>CombatantListModel::roleNames() const
     return roles;
 }
 
-void CombatantListModel::clear()
+auto CombatantListModel::clear() -> void
 {
-    while (m_items.size() > 0)
+    while (!m_items.empty())
     {
-        remove(m_items[0]);
+        remove(m_items.first());
     }
 }
 
-void CombatantListModel::setElements(QList<Combatant *>elements)
+auto CombatantListModel::setElements(QList<Combatant *>elements) -> void
 {
     clear();
 

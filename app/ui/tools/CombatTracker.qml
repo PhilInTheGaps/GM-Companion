@@ -67,9 +67,8 @@ Page {
         AddCharacterDialog {
             id: add_rect
             visible: false
-            anchors.top: list_header.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
+            y: list_header.height
+            width: list_header.width
         }
 
         // Combatant List
@@ -77,9 +76,17 @@ Page {
             id: list_view
 
             anchors.left: parent.left
-            anchors.top: add_rect.visible ? add_rect.bottom : list_header.bottom
+            anchors.top: list_header.bottom
+            anchors.topMargin: add_rect.visible ? add_rect.height + 5 : 5
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+
+            Behavior on anchors.topMargin {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutQuint
+                }
+            }
         }
     }
 

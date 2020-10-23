@@ -17,40 +17,43 @@ class CombatTracker : public QObject
 public:
     explicit CombatTracker(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    EffectTool* getEffectTool() const { return effectTool; }
-
     int currentRound() const { return m_currentRound; }
     int currentIndex() const { return m_currentIndex; }
 
     Q_INVOKABLE void next();
-    Q_INVOKABLE void add(QString name, int ini, int health, QString notes, bool sort = true);
+    Q_INVOKABLE bool add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort = true);
     Q_INVOKABLE void clear();
     Q_INVOKABLE void resetRounds();
-    Q_INVOKABLE void remove(int index);
+    Q_INVOKABLE bool remove(int index);
 
-    Q_INVOKABLE void setIni(int index, int ini);
-    Q_INVOKABLE void modifyIni(int index, int steps = 1);
-    Q_INVOKABLE void setHealth(int index, int health);
-    Q_INVOKABLE void modifyHealth(int index, int steps = 1);
-    Q_INVOKABLE void setNotes(int index, QString notes);
+    Q_INVOKABLE bool setIni(int index, int ini);
+    Q_INVOKABLE bool modifyIni(int index, int steps = 1);
+
+    Q_INVOKABLE bool setHealth(int index, int health);
+    Q_INVOKABLE bool modifyHealth(int index, int steps = 1);
+
+    Q_INVOKABLE bool setPriority(int index, int priority);
+    Q_INVOKABLE bool modifyPriority(int index, int steps = 1);
+
+    Q_INVOKABLE bool setNotes(int index, const QString &notes);
     Q_INVOKABLE void sortByIni(bool keepDelay = false);
-
-    Q_INVOKABLE void delayTurn(int index);
+    Q_INVOKABLE bool delayTurn(int index);
 
 signals:
     void currentRoundChanged();
     void currentIndexChanged();
     void combatantsChanged();
 
+protected:
+    Combatant *getCombatant(int index);
+
 private:
-    QQmlApplicationEngine *qmlEngine;
-    CombatantListModel *combatantListModel;
-    EffectTool *effectTool;
+    CombatantListModel *combatantListModel = nullptr;
+    EffectTool *effectTool = nullptr;
     QList<Combatant*> m_combatants;
 
     int m_currentIndex = 0;
-    int m_currentRound = 0;
-
+    int m_currentRound = 1;
 };
 
 #endif // COMBATTRACKER_H

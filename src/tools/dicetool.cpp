@@ -48,17 +48,17 @@ int DiceTool::roll()
         criticalFailure = getFailure();
     }
 
-    m_calculation_string = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(m_sides);
+    m_calculationString = tr("Roll:\n") + QString::number(m_amount) + "x " + tr("D") + QString::number(m_sides);
 
-    qCDebug(gmDiceTool()) << m_calculation_string;
+    qCDebug(gmDiceTool()) << m_calculationString;
 
     if (m_modifier < 0)
     {
-        m_calculation_string.append(" " + QString::number(m_modifier) + "\n\n");
+        m_calculationString.append(" " + QString::number(m_modifier) + "\n\n");
     }
     else
     {
-        m_calculation_string.append(" + " + QString::number(m_modifier) + "\n\n");
+        m_calculationString.append(" + " + QString::number(m_modifier) + "\n\n");
     }
 
     for (int i = 0; i < m_amount; i++)
@@ -75,24 +75,24 @@ int DiceTool::roll()
         result += temp;
 
         // Add roll to calculation string
-        m_calculation_string.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
+        m_calculationString.append(tr("Roll ") + QString::number(i + 1) + ":\t" + QString::number(temp) + "\n");
     }
 
-    m_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+    m_calculationString.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
 
     // Remove bonus dice from calculation
-    if (m_bonus_dice > 0)
+    if (m_bonusDice > 0)
     {
-        m_calculation_string.append(tr("Bonus Dice:\n"));
+        m_calculationString.append(tr("Bonus Dice:\n"));
 
         // TODO for later, is currently not important
 
-        m_calculation_string.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
+        m_calculationString.append(tr("\nTemporary Result: ") + QString::number(result) + "\n\n");
     }
 
     // Add modifier
     result += m_modifier;
-    m_calculation_string.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") + QString::number(result));
+    m_calculationString.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") + QString::number(result));
 
     emit rollChanged();
     emit calculationStringChanged();

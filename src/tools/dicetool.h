@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QQmlEngine>
-#include "settings/settingsmanager.h"
+#include "../settings/settingsmanager.h"
 
 #define DICE_SETTINGS "Dice"
 #define ENABLE_CRITICALS_SETTING "enableCriticals"
@@ -15,22 +15,21 @@
 class DiceTool : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
+    Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
+    Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
 
 public:
     explicit DiceTool(QQmlEngine *engine, QObject *parent = nullptr);
-    explicit DiceTool() {}
+    explicit DiceTool(QObject *parent) : QObject(parent) {}
 
-    Q_PROPERTY(int sides READ sides NOTIFY sidesChanged)
     int sides() const { return m_sides; }
-
-    Q_PROPERTY(int roll READ roll NOTIFY rollChanged)
     int roll();
 
-    Q_PROPERTY(QString calculationString READ calculationString NOTIFY calculationStringChanged)
-    QString calculationString() const { return m_calculation_string; }
+    QString calculationString() const { return m_calculationString; }
 
     Q_INVOKABLE void setSides(int sides);
-    Q_INVOKABLE void setBonusDice(int count) { m_bonus_dice = count; }
+    Q_INVOKABLE void setBonusDice(int count) { m_bonusDice = count; }
     Q_INVOKABLE void setAmount(int amount) { m_amount = amount; }
     Q_INVOKABLE void setModifier(int modifier) { m_modifier = modifier; }
 
@@ -53,11 +52,11 @@ signals:
 
 private:
     int m_sides = 20;
-    int m_bonus_dice = 0;
+    int m_bonusDice = 0;
     int m_modifier = 0;
     int m_amount = 1;
 
-    QString m_calculation_string;
+    QString m_calculationString;
 };
 
 #endif // DICETOOL_H

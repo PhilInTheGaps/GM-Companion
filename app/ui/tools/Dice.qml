@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
 import FontAwesome 2.0
-import "../defines.js" as Defines
+import "../sizes.js" as Sizes
 import "./dice"
 
 Page {
@@ -78,6 +78,7 @@ Page {
             hoverEnabled: true
 
             iconText: FontAwesome.cog
+            toolTipText: qsTr("Dice Settings")
 
             onClicked: dice_settings_dialog.open()
         }
@@ -102,12 +103,12 @@ Page {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: parent.padding
-            height: Defines.TOOLBAR_HEIGHT
+            height: Sizes.toolbarHeight - 5
 
             Label {
                 id: dice_count_text
                 text: qsTr("Dice Count")
-                font.pointSize: 18
+                font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -117,7 +118,7 @@ Page {
             Label {
                 id: dice_sides_text
                 text: qsTr("Dice Sides")
-                font.pointSize: 18
+                font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -127,7 +128,7 @@ Page {
             Label {
                 id: dice_modifier_text
                 text: qsTr("Modifier")
-                font.pointSize: 18
+                font.pointSize: 16
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 anchors.bottom: parent.bottom
@@ -178,7 +179,7 @@ Page {
             id: result_row
             anchors.horizontalCenter: parent.horizontalCenter
             width: value_row.width
-            spacing: 5
+            spacing: 10
 
             Button {
                 contentItem: Label {

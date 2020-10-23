@@ -11,7 +11,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
 
-        columns: 4
+        columns: 5
         rows: 1
         verticalItemAlignment: Grid.AlignVCenter
         padding: 10
@@ -41,6 +41,10 @@ Rectangle {
             "alignment": "center"
         }, {
             "text": qsTr("Health"),
+            "divisor": 6,
+            "alignment": "center"
+        }, {
+            "text": qsTr("Priority"),
             "divisor": 6,
             "alignment": "center"
         }, {

@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import CustomComponents 1.0
+import "../../colors.js" as Colors
 
 TextField {
     property string fieldText: ""
@@ -19,10 +19,11 @@ TextField {
     background: Item {}
 
     Rectangle {
-        color: palette.light
+        color: Colors.border
         height: 1
         anchors.left: parent.left
         anchors.right: parent.right
-        y: parent.height - 5
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 6
     }
 }

@@ -4,13 +4,16 @@ import CustomComponents 1.0
 import FontAwesome 2.0
 import "../../defines.js" as Defines
 
-Control {
-    id: add_rect
+Dialog {
+    id: add_dialog
+
+    modal: true
 
     function addCombatants() {
         if (name_textfield.text != "") {
             combat_tracker.add(name_textfield.text, ini_spinbox.value,
-                               health_spinbox.value, notes_textfield.text)
+                               health_spinbox.value, priority_spinbox.value,
+                               notes_textfield.text)
         }
     }
 
@@ -18,6 +21,7 @@ Control {
         name_textfield.clear()
         ini_spinbox.value = 0
         health_spinbox.value = 0
+        priority_spinbox.value = 0
         notes_textfield.clear()
     }
 
@@ -27,14 +31,22 @@ Control {
         }
     }
 
+    padding: 0
+
     contentItem: Grid {
         id: main_item
         height: Defines.TOOLBAR_HEIGHT
 
         spacing: 10
         padding: 10
-        columns: 4
+        columns: 6
         rows: 1
+
+        function addCombatant() {
+            add_dialog.addCombatants()
+            add_dialog.clearAddFields()
+            name_textfield.forceActiveFocus()
+        }
 
         TextField {
             id: name_textfield
@@ -44,8 +56,7 @@ Control {
             placeholderText: qsTr("Name")
 
             onAccepted: {
-                add_rect.addCombatants()
-                add_rect.clearAddFields()
+                main_item.addCombatant()
             }
         }
 
@@ -53,7 +64,7 @@ Control {
             id: ini_spinbox
             height: name_textfield.height
             width: list_view.width / 6
-            from: 0
+            from: -99999
             to: 99999
             editable: true
         }
@@ -62,42 +73,44 @@ Control {
             id: health_spinbox
             height: name_textfield.height
             width: list_view.width / 6
-            from: 0
+            from: -99999
+            to: 99999
+            editable: true
+        }
+
+        SpinBox {
+            id: priority_spinbox
+            height: name_textfield.height
+            width: list_view.width / 6
+            from: -99999
             to: 99999
             editable: true
         }
 
         TextField {
             id: notes_textfield
-            width: parent.width - x - add_button.width - main_item.spacing
+            width: parent.width - x - add_button.width - main_item.spacing - main_item.padding
 
             onAccepted: {
-                add_rect.addCombatants()
-                add_rect.clearAddFields()
-                name_textfield.forceActiveFocus()
+                main_item.addCombatant()
             }
         }
-    }
 
-    CustomToolBarButton {
-        id: add_button
-        iconText: FontAwesome.plus
-        transparentBackground: true
+        Button {
+            id: add_button
+            text: FontAwesome.plus
+            font.family: FontAwesome.familySolid
 
-        anchors.top: main_item.top
-        anchors.bottom: main_item.bottom
-        anchors.right: main_item.right
-        anchors.margins: 10
-        anchors.rightMargin: 0
+            height: name_textfield.height
+            width: height
 
-        width: height
-        centering: true
-        pointSize: 18
+            font.pointSize: 16
 
-        onClicked: {
-            add_rect.addCombatants()
-            add_rect.clearAddFields()
-            add_rect.visible = false
+            onClicked: {
+                add_dialog.addCombatants()
+                add_dialog.clearAddFields()
+                add_dialog.visible = false
+            }
         }
     }
 }

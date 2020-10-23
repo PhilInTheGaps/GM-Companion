@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../../src/tools/audio/project/audioproject.h"
+#include "../../src/tools/audio/project/audioproject.h"
 
 class TestAudioProject : public QObject
 {
@@ -137,4 +137,4 @@ void TestAudioProject::testModifications()
 }
 
 QTEST_APPLESS_MAIN(TestAudioProject)
-#include "testproject.moc"
+#include "testaudioproject.moc"

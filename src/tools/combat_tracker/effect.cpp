@@ -1,25 +1,20 @@
 #include "effect.h"
-#include <QDebug>
 
-Effect::Effect(QString name, int dice, int sides, int mod, QStringList effects, QString icon)
-    : m_name(name), m_dice(dice), m_sides(sides), m_mod(mod), m_effects(effects), m_icon(icon)
+#include <utility>
+
+Effect::Effect(QString name, int dice, int sides, int mod,
+               QStringList effects, QString icon, QObject *parent)
+    : QObject(parent), m_name(std::move(name)), m_dice(dice), m_sides(sides),
+      m_mod(mod), m_effects(std::move(effects)), m_icon(std::move(icon))
 {
-    diceTool = new DiceTool;
+    diceTool = new DiceTool(this);
     diceTool->setAmount(m_dice);
     diceTool->setSides(m_sides);
     diceTool->setModifier(m_mod);
 }
 
-Effect::~Effect()
+auto Effect::getEffect() const -> QString
 {
-    delete diceTool;
-}
-
-QString Effect::getEffect()
-{
-    int roll = diceTool->roll();
-
-    roll = roll - m_dice;
-
-    return tr("Dice Result: ") + QString::number(roll + 2) + "\n" + m_effects[roll];
+    int roll = diceTool->roll() - m_dice;
+    return QString("%1: %2\n%3").arg(tr("Dice Result"), QString::number(roll + 2), m_effects[roll]);
 }

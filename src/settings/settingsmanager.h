@@ -7,7 +7,7 @@
 #include <QSettings>
 #include <QLocale>
 #include "settings.h"
-#include "tools/audio/project/audioelement.h"
+#include "../tools/audio/project/audioelement.h"
 
 struct SettingRequest {
     SettingRequest() {}

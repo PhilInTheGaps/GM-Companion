@@ -3,13 +3,15 @@
 
 #include <QObject>
 #include <QStringList>
-#include "tools/dicetool.h"
+#include "../dicetool.h"
 
 class Effect : QObject
 {
+    Q_OBJECT
+
 public:
-    Effect(QString name, int dice, int sides, int mod, QStringList effects, QString icon = "");
-    ~Effect();
+    Effect(QString name, int dice, int sides, int mod,
+           QStringList effects, QString icon, QObject *parent);
 
     QString name() const { return m_name; }
     int dice() const { return m_dice; }
@@ -17,7 +19,7 @@ public:
     int mod() const { return m_mod; }
     QString icon() const { return m_icon; }
 
-    QString getEffect();
+    QString getEffect() const;
 
 private:
     QString m_name;
@@ -25,7 +27,7 @@ private:
     QStringList m_effects;
     QString m_icon;
 
-    DiceTool* diceTool;
+    DiceTool *diceTool = nullptr;
 };
 
 #endif // EFFECT_H

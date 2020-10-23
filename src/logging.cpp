@@ -21,6 +21,9 @@ Q_LOGGING_CATEGORY(gmMapsMap,                "gm.maps.map")
 
 Q_LOGGING_CATEGORY(gmDiceTool,               "gm.dice.tool")
 
+Q_LOGGING_CATEGORY(gmCombatTracker,          "gm.combat.tracker")
+Q_LOGGING_CATEGORY(gmCombatEffect,           "gm.combat.effect")
+
 Q_LOGGING_CATEGORY(gmCharactersTool,         "gm.characters.tool")
 Q_LOGGING_CATEGORY(gmCharactersCharacter,    "gm.characters.character")
 Q_LOGGING_CATEGORY(gmCharactersImageViewer,  "gm.characters.viewer.images")
