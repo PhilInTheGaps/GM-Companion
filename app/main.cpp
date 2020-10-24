@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 
     Logger logger;
 
-    qCDebug(gmMain()) << "Starting GM-Companion ...";
+    qCDebug(gmMain()).noquote() << "Starting GM-Companion" << CURRENT_VERSION << "...";
 
     registerMetaTypes();
     initTranslations();
@@ -90,10 +90,10 @@ int main(int argc, char *argv[])
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
 
-    QQuickStyle::setStyle(":/style");
+    QQuickStyle::setStyle(QStringLiteral(":/style"));
 
     QQmlApplicationEngine engine;
-    engine.addImportPath("qrc:/");
+    engine.addImportPath(QStringLiteral("qrc:/"));
 
     // Load tools
     AudioTool audioTool(&engine);

@@ -3,6 +3,9 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QString>
+
+#include "version.h"
 
 class UpdateManager : public QObject
 {
@@ -13,20 +16,19 @@ public:
     UpdateManager();
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE QString getNewestVersion() const { return m_newestVersion; }
-    Q_INVOKABLE QString getCurrentVersion() const { return m_currentVersion; }
+    Q_INVOKABLE QString getCurrentVersion() const { return CURRENT_VERSION; }
 
 private slots:
     void onNetworkManagerFinished(QNetworkReply*reply);
 
 private:
-    QNetworkAccessManager *networkManager;
+    QNetworkAccessManager *networkManager = nullptr;
 
     QString m_feedURL;
     QString m_newestVersion;
-    QString m_currentVersion;
 
 protected:
-    static bool compareVersions(QString v1, QString v2);
+    static bool compareVersions(const QString &v1, const QString &v2);
 
 signals:
     void updateAvailable();

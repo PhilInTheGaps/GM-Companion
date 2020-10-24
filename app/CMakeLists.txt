@@ -29,6 +29,7 @@ set(SOURCES
 
 set(HEADERS
   version.h
+  version.h.in
   logger.h
   tools.h
 )

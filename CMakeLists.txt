@@ -30,6 +30,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# set version number
+include(SetVersionNumber)
+
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
 enable_testing(true)

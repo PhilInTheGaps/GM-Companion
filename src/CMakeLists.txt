@@ -182,7 +182,8 @@ set(HEADERS
   tools/notes/notessaveload.h 
   tools/notes/notestool.h 
   utils/fileutils.h 
-  utils/markdownutils.h 
+  utils/markdownutils.h
+  utils/markdownutils.h.in
   utils/networkutils.h 
   utils/processinfo.h 
   utils/utils.h 
@@ -205,7 +206,9 @@ set(HEADERS
   tools/shop/shoptool.h 
   tools/shop/itemeditor.h 
   tools/shop/shopeditor.h 
-  managers/updatemanager.h 
+  managers/updatemanager.h
+  managers/version.h.in
+  managers/version.h
   managers/addonmanager.h 
   settings/settingsmanager.h 
   platformdetails.h 

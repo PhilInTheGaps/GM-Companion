@@ -2,7 +2,6 @@
 
 #include <QXmlStreamReader>
 #include <QDebug>
-#include <QSettings>
 
 UpdateManager::UpdateManager()
 {
@@ -17,12 +16,8 @@ UpdateManager::UpdateManager()
     // Check if openSSL is installed, required for network access to work
     qDebug().noquote() << "Checking SSL installation...";
 
-    if (!QSslSocket::supportsSsl()) qWarning().noquote() << "Please install openSSL";
-    else qDebug().noquote() << "SSL is installed.";
-
-    // Get current release version
-    QSettings s(":/release.ini", QSettings::IniFormat);
-    m_currentVersion = s.value("version", "0.0.0").toString();
+    if (!QSslSocket::supportsSsl()) qWarning().noquote() << "Please install OpenSSL" << QSslSocket::sslLibraryBuildVersionString();
+    else qDebug().noquote() << "SSL version" << QSslSocket::sslLibraryVersionString() << "is installed.";
 }
 
 /**
@@ -31,7 +26,7 @@ UpdateManager::UpdateManager()
 void UpdateManager::checkForUpdates()
 {
     qDebug().noquote() << "Checking for updates ...";
-    qDebug().noquote() << "Current version:" << m_currentVersion;
+    qDebug().noquote() << "Current version:" << CURRENT_VERSION;
     qDebug().noquote() << "Releases feed URL:" << m_feedURL;
 
     // Get the release feed to check for a new version
@@ -44,7 +39,7 @@ void UpdateManager::checkForUpdates()
  * @param v2 Version 2
  * @return True if v1 is newer than v2
  */
-bool UpdateManager::compareVersions(QString v1, QString v2)
+auto UpdateManager::compareVersions(const QString& v1, const QString& v2) -> bool
 {
     QStringList split1 = v1.split('.');
     QStringList split2 = v2.split('.');
@@ -145,7 +140,7 @@ void UpdateManager::onNetworkManagerFinished(QNetworkReply *reply)
     qDebug() << "Newest version:" << m_newestVersion;
 
     // Decide if a newer version is available than the one installed
-    if (compareVersions(m_currentVersion, m_newestVersion))
+    if (compareVersions(CURRENT_VERSION, m_newestVersion))
     {
         qDebug().noquote() << "Your version is the newest one.";
         emit noUpdateAvailable();
