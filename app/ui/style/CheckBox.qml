@@ -11,9 +11,10 @@ T.CheckBox {
                        background ? background.implicitWidth : 0,
                        contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(
-                        background ? background.implicitHeight : 0, Math.max(
-                            contentItem.implicitHeight,
-                            indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+                        background ? background.implicitHeight : 0,
+                        Math.max(contentItem.implicitHeight, indicator
+                                 && !anchors.top ? indicator.implicitHeight : 0)
+                        + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 6

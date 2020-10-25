@@ -39,7 +39,9 @@ Dialog {
                 textField.text = selection_text_field.text
             }
 
-            textField.savePath()
+            if (textField.savePath) {
+                textField.savePath()
+            }
         }
     }
 
@@ -111,8 +113,8 @@ Dialog {
 
             delegate: Item {
                 id: delegate_item
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.left: parent ? parent.left : undefined
+                anchors.right: parent ? parent.right : undefined
                 anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
                 height: delegate_row.height
 

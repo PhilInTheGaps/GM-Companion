@@ -1,395 +1,204 @@
 #include "audioexporter.h"
 #include "settings/settingsmanager.h"
-#include <QDebug>
-#include <QDir>
+#include "filesystem/filemanager.h"
+#include "logging.h"
+
 #include <QFile>
-#include <QSettings>
-
-AudioExporter::AudioExporter(QObject *parent) : QObject(parent)
-{
-    qDebug() << "Loading Audio Exporter ...";
-}
-
-/**
- * @brief Find all categories
- */
-void AudioExporter::updateCategories()
-{
-    qDebug() << "AudioExporter: Updating Categories ...";
-
-    m_categoryNames.clear();
-    emit categoriesChanged(); // To clear the qml list
-
-    if (!m_project) return;
-
-    m_categoryNames = m_project->categoryNames();
-
-    if (m_project->categories().size() > 0)
-    {
-        m_category = m_project->categories()[0];
-    }
-    else
-    {
-        m_category = nullptr;
-    }
-
-    updateScenarios();
-    emit categoriesChanged();
-}
-
-/**
- * @brief Find all scenarios in current category
- */
-void AudioExporter::updateScenarios()
-{
-    qDebug() << "AudioExporter: Finding Scenarios ...";
-
-    m_scenarioNames.clear();
-
-    if (m_category && m_category->isMarkedForExport())
-    {
-        m_scenarioNames = m_category->scenarioNames();
-
-        if (m_category->scenarios().size() > 0)
-        {
-            m_scenario = m_category->scenarios()[0];
-        }
-        else
-        {
-            m_scenario = nullptr;
-        }
-    }
-    else
-    {
-        m_scenario = nullptr;
-    }
-
-    updateElements();
-    emit scenariosChanged();
-}
-
-/**
- * @brief Find all elements in current scenario
- */
-void AudioExporter::updateElements()
-{
-    m_elementNames.clear();
-
-    if (m_scenario && m_scenario->isMarkedForExport())
-    {
-        m_elementNames += m_scenario->elementNames(AudioElement::Type::Music);
-        m_elementNames += m_scenario->elementNames(AudioElement::Type::Sound);
-        m_elementNames += m_scenario->elementNames(AudioElement::Type::Radio);
-
-        for (auto subscenario : m_scenario->scenarios())
-        {
-            m_elementNames += subscenario->elementNames(AudioElement::Type::Music);
-            m_elementNames += subscenario->elementNames(AudioElement::Type::Sound);
-            m_elementNames += subscenario->elementNames(AudioElement::Type::Radio);
-        }
-    }
-
-    emit elementsChanged();
-}
-
-/**
- * @brief The the current category
- * @param index The index of the category
- */
-void AudioExporter::setCategory(int index)
-{
-    if (m_project && (index < m_project->categories().size()))
-    {
-        m_category = m_project->categories()[index];
-    }
-    else
-    {
-        m_category = nullptr;
-        qWarning() << "AudioExporter: Could not set category, index out of range.";
-    }
-
-    updateScenarios();
-}
-
-/**
- * @brief Set if a category is enabled for exporting
- * @param index Index of the category
- * @param enabled True if a category should be exported
- */
-void AudioExporter::setCategoryEnabled(int index, bool enabled)
-{
-    if (m_project && (index < m_project->categories().size()))
-    {
-        m_project->categories()[index]->setIsMarkedForExport(enabled);
-
-        if (m_project->categories()[index] == m_category) updateScenarios();
-    }
-}
-
-/**
- * @brief Get if a category is enabled for export
- * @param index Index of the category
- * @return True if a category will be exported
- */
-bool AudioExporter::isCategoryEnabled(int index) const
-{
-    if (m_project && (index < m_project->categories().size()))
-    {
-        return m_project->categories()[index]->isMarkedForExport();
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/**
- * @brief Set the current scenario
- * @param index Index of the scenario
- */
-void AudioExporter::setScenario(int index)
-{
-    if (m_project && m_category && (index < m_category->scenarios().size()))
-    {
-        m_scenario = m_category->scenarios()[index];
-    }
-    else
-    {
-        m_scenario = nullptr;
-        qWarning() << "AudioExporter: Could not set scenario, index out of range.";
-    }
-
-    updateElements();
-}
-
-/**
- * @brief Set if a scenario will be exported
- * @param index Index of the scenario
- * @param enabled True if scenario will be exported
- */
-void AudioExporter::setScenarioEnabled(int index, bool enabled)
-{
-    if (m_project && m_category && (index < m_category->scenarios().size()))
-    {
-        m_category->scenarios()[index]->setIsMarkedForExport(enabled);
-
-        if (m_category->scenarios()[index] == m_scenario) updateElements();
-    }
-}
-
-/**
- * @brief Get if a scenario will be exported
- * @param index Index of the scenario
- * @return True if scenario will be exported
- */
-bool AudioExporter::isScenarioEnabled(int index) const
-{
-    if (m_project && m_category && (index < m_category->scenarios().size()))
-    {
-        return m_category->scenarios()[index]->isMarkedForExport();
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/**
- * @brief Set if an element will be exported
- * @param index Index of the element
- * @param enabled True if element will be exported
- */
-void AudioExporter::setElementEnabled(int index, bool enabled)
-{
-    if (m_project && m_category && m_scenario && (index < m_scenario->elements().size()))
-    {
-        m_scenario->elements()[index]->setExport(enabled);
-    }
-}
-
-/**
- * @brief Get if an element will be exported
- * @param index Index of the element
- * @return True if element will be exported
- */
-bool AudioExporter::isElementEnabled(int index) const
-{
-    if (m_project && m_category && m_scenario)
-    {
-        if (index < m_scenario->elements().size())
-        {
-            return m_scenario->elements()[index]->isExport();
-        }
-
-        int count = m_scenario->elements().size();
-
-        for (auto s : m_scenario->scenarios())
-        {
-            if (s->elements().size() > index - count)
-            {
-                return s->elements()[index - count]->isExport();
-            }
-
-            count += s->elements().size();
-        }
-    }
-
-    return false;
-}
 
 /**
  * @brief Export all files in project that are marked as enabled
  */
+void AudioExporter::setProject(AudioProject *project)
+{
+    m_project = project;
+    m_project->setIsOpen(true);
+    m_model = m_project;
+    emit modelChanged();
+}
+
 void AudioExporter::exportFiles()
 {
-    QString path   = m_path == "" ? getDefaultPath() : m_path;
-    Worker *worker = new Worker(path, m_project);
+    if (m_path.isEmpty())
+    {
+        qCWarning(gmAudioExporter()) << "Error: No export path selected!";
+        return;
+    }
+
+    Worker *worker = new Worker(m_path, m_project);
 
     worker->moveToThread(&workerThread);
     connect(worker, &Worker::copiedFiles,         [ = ]() { delete worker; });
     connect(worker, &Worker::progressChanged,     this,   &AudioExporter::updateProgress);
-    connect(this,   &AudioExporter::startCopying, worker, &Worker::copyFiles);
+    connect(this,   &AudioExporter::startCopying, worker, &Worker::startCopying);
     workerThread.start();
     emit startCopying();
 }
 
-/**
- * @brief Copy all files in project to their new locations
- */
-void Worker::copyFiles()
+void AudioExporter::updateProgress(float progress)
+{
+    m_progress = progress;
+    if (m_progress >= 1) m_progress = 0;
+    emit progressChanged();
+}
+
+Worker::Worker(const QString &path, AudioProject *project)
+    : m_path(path), m_project(project)
+{
+    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &Worker::receivedFile);
+    connect(FileManager::getInstance(), &FileManager::savedFile,    this, &Worker::savedFile);
+}
+
+void Worker::startCopying()
 {
     if (!m_project)
     {
         emit progressChanged(1);
-        qDebug() << "AudioExporter: No project selected!";
+        qCWarning(gmAudioExporter()) << "Error: No project selected!";
     }
 
-    // Create path if it does not exist
-    if (!QDir(m_path).exists())
-    {
-        QDir d = QDir(m_path);
-        d.mkpath(m_path);
-    }
-
-    qDebug() << "AudioExporter: Exporting files to:" << m_path << "...";
+    qCDebug(gmAudioExporter()) << "Exporting files to:" << m_path << "...";
 
     // Find all files to export
-    // Categories
-    for (auto c : m_project->categories())
+    collectFilesToExport();
+
+    // Copy all the files
+    qCDebug(gmAudioExporter()) << "Copying files ...";
+    m_fileCount = m_musicFiles.size() + m_soundFiles.size() + m_radioFiles.size();
+
+    if (!copyNext())
     {
-        if (c && c->isMarkedForExport())
+        qCWarning(gmAudioExporter()) << "Error: Could not copy any files.";
+    }
+}
+
+/**
+ * Find all files in the project that should be exported
+ * and save them in queues.
+ */
+void Worker::collectFilesToExport()
+{
+    if (Q_UNLIKELY(!m_project)) return;
+
+    // Categories
+    for (auto *category : m_project->categories())
+    {
+        if (category && category->isChecked() > 0)
         {
             // Scenarios
-            for (auto s : c->scenarios())
+            for (auto scenario : category->scenarios())
             {
-                if (s && s->isMarkedForExport())
+                if (scenario && scenario->isChecked() > 0)
                 {
-                    copyElements(s);
-
-                    for (auto s2 : s->scenarios()) copyElements(s2);
+                    copyElements(scenario);
                 }
             }
         }
     }
+}
 
-    // Copy all the files
-    qDebug() << "Copying ...";
-    int fileCount = musicFiles.size() + soundFiles.size() + radioFiles.size();
-
-    for (int i = 0; i < fileCount; i++)
+auto Worker::copyNext() -> bool
+{
+    if (m_fileCount > 0)
     {
-        qDebug() << "   Progress:" << i + 1 << "/" << fileCount;
-        emit progressChanged(static_cast<float>(i + 1) / fileCount);
+        float percent = static_cast<float>(m_exportCount++) / m_fileCount;
+        emit progressChanged(percent);
+        qCDebug(gmAudioExporter()) << "   Progress:" << m_exportCount << "/" << m_fileCount << "(" << percent * 100 << "%)";
 
-        QString file;
-        QString base;
-        QString expBase;
+        if (copyNextMusic()) return true;
 
-        if (i < musicFiles.size())
-        {
-            file    = musicFiles[i];
-            base    = SettingsManager::getPath("musicPath");
-            expBase = m_path + "/music";
-        }
-        else if (i < musicFiles.size() + soundFiles.size())
-        {
-            file    = soundFiles[i - musicFiles.size()];
-            base    = SettingsManager::getPath("soundPath");
-            expBase = m_path + "/sounds";
-        }
-        else
-        {
-            file    = radioFiles[i - musicFiles.size() - soundFiles.size()];
-            base    = SettingsManager::getPath("radioPath");
-            expBase = m_path + "/radio";
-        }
+        if (copyNextSound()) return true;
 
-        QFile   f(base + file);
-        QString folder = file.left(file.lastIndexOf('/'));
+        if (copyNextRadio()) return true;
 
-        if (f.exists())
-        {
-            if (!QDir(expBase + folder).exists())
-            {
-                QDir d;
-                d.mkpath(expBase + folder);
-            }
-
-            qDebug() << "       " << base + file;
-            qDebug() << "       " << expBase + file;
-
-            if (!QFile(expBase + file).exists())
-            {
-                f.copy(expBase + file);
-            }
-            else
-            {
-                qDebug() << "File already exists!";
-            }
-        }
-        else
-        {
-            qDebug() << "File" << f.fileName() << "not found!";
-        }
+        qCDebug(gmAudioExporter()) << "No more files to export.";
     }
 
     emit progressChanged(1);
-    qDebug() << "Done ...";
+    emit copiedFiles();
+    return false;
+}
+
+bool Worker::copyNextMusic()
+{
+    if (m_musicFiles.isEmpty()) return false;
+
+    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::Music), "music");
+}
+
+bool Worker::copyNextSound()
+{
+    if (m_soundFiles.isEmpty()) return false;
+
+    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::Sound), "sounds");
+}
+
+bool Worker::copyNextRadio()
+{
+    if (m_radioFiles.isEmpty()) return false;
+
+    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::Radio), "radios");
+}
+
+bool Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder)
+{
+    if (filePath.isEmpty() || subfolder.isEmpty()) return false;
+
+    auto oldPath = QString("%1%2").arg(base, filePath);
+    m_newFilePath = QString("%1/%2%3").arg(m_path, subfolder, filePath);
+
+    m_currentRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->getFile(m_currentRequestId, oldPath);
+
+    return true;
+}
+
+/**
+ * @brief File has been received, now save it under new path
+ */
+void Worker::receivedFile(int requestId, const QByteArray &data)
+{
+    if (requestId != m_currentRequestId) return;
+
+    m_currentRequestId = FileManager::getUniqueRequestId();
+    FileManager::getInstance()->saveFile(m_currentRequestId, m_newFilePath, data);
+}
+
+/**
+ * @brief File was saved, start next operation
+ */
+void Worker::savedFile(int requestId)
+{
+    if (requestId != m_currentRequestId) return;
+
+    copyNext();
 }
 
 void Worker::copyElements(AudioScenario *scenario)
 {
-    // Music Elements
-    for (auto e : scenario->elements(AudioElement::Type::Music))
+    if (Q_UNLIKELY(!scenario)) return;
+
+    for (auto *element : scenario->elements(true))
     {
-        if (e && e->isExport())
+        if (element && element->isChecked() > 0)
         {
-            for (auto f : e->files())
+            for (auto *file : element->files())
             {
-                if (!musicFiles.contains(f->url())) musicFiles.append(f->url());
+                // Only export local files
+                if (file->source() != 0) continue;
+
+                switch (element->type())
+                {
+                case AudioElement::Music:
+                    if (!m_musicFiles.contains(file->url())) m_musicFiles.enqueue(file->url());
+                    break;
+                case AudioElement::Sound:
+                    if (!m_soundFiles.contains(file->url())) m_soundFiles.enqueue(file->url());
+                    break;
+                case AudioElement::Radio:
+                    if (!m_radioFiles.contains(file->url())) m_radioFiles.enqueue(file->url());
+                    break;
+                }
             }
         }
-    }
-
-    // Sound Elements
-    for (auto e : scenario->elements(AudioElement::Type::Sound))
-    {
-        if (e && e->isExport())
-        {
-            for (auto f : e->files())
-            {
-                if (!soundFiles.contains(f->url())) soundFiles.append(f->url());
-            }
-        }
-    }
-
-    // Radio Elements
-    for (auto e : scenario->elements(AudioElement::Type::Radio))
-    {
-        //        if (e && e->isExport() && e->local())
-        //        {
-        //            if (!radioFiles.contains(e->url().toString()))
-        // radioFiles.append(e->url().toString());
-        //        }
     }
 }

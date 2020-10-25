@@ -12,7 +12,7 @@ T.DialogButtonBox {
                         background ? background.implicitHeight : 0,
                         contentItem.implicitHeight + topPadding + bottomPadding)
 
-    spacing: 2
+    spacing: 5
     padding: 12
     alignment: Qt.AlignRight
 

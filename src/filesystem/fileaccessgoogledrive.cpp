@@ -11,7 +11,7 @@
 /**
  * @brief Constructor
  */
-FileAccessGoogleDrive::FileAccessGoogleDrive()
+FileAccessGoogleDrive::FileAccessGoogleDrive(QObject *parent) : FileAccess(parent)
 {
     m_baseFolder = new GoogleDriveFile("", "root", true);
 
@@ -54,7 +54,7 @@ void FileAccessGoogleDrive::getFile(int requestId, const QString &filePath)
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(requestId, filePath));
+        m_requestList.push_back(FileRequestContainer::getFile(requestId, filePath));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -64,7 +64,7 @@ void FileAccessGoogleDrive::getFile(int requestId, const QString &filePath)
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a file / directory in cache, but it is loading, waiting ...";
-        m_requestList.push_back(FileRequestContainer(requestId, filePath));
+        m_requestList.push_back(FileRequestContainer::getFile(requestId, filePath));
         return;
     }
 
@@ -129,7 +129,7 @@ void FileAccessGoogleDrive::getFiles(int requestId, const QString &directory, co
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(requestId, directory, fileEnding));
+        m_requestList.push_back(FileRequestContainer::getFiles(requestId, directory, fileEnding));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -139,7 +139,7 @@ void FileAccessGoogleDrive::getFiles(int requestId, const QString &directory, co
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(requestId, directory, fileEnding));
+        m_requestList.push_back(FileRequestContainer::getFiles(requestId, directory, fileEnding));
         return;
     }
 
@@ -187,7 +187,7 @@ void FileAccessGoogleDrive::getFileList(int requestId, const QString &directory,
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(requestId, directory, folders));
+        m_requestList.push_back(FileRequestContainer::getFileList(requestId, directory, folders));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -197,7 +197,7 @@ void FileAccessGoogleDrive::getFileList(int requestId, const QString &directory,
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(requestId, directory, folders));
+        m_requestList.push_back(FileRequestContainer::getFileList(requestId, directory, folders));
         return;
     }
 
@@ -285,7 +285,7 @@ auto FileAccessGoogleDrive::tryProcessSubrequest(int subId, const QByteArray &da
  * @brief Save a file. Either update it or upload a new file if it does not
  * exist
  */
-void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &data)
+void FileAccessGoogleDrive::saveFile(int requestId, const QString &filePath, const QByteArray &data)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing saveFile request" << filePath;
 
@@ -296,7 +296,7 @@ void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &
     {
         qCDebug(gmFileAccessGoogle()) << "Found file, saving ...";
         reply.file->writeData(data);
-        updateFilePart1(reply.file->id(), data);
+        updateFilePart1(requestId, reply.file->id(), data);
         return;
     }
 
@@ -304,7 +304,7 @@ void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(filePath, data));
+        m_requestList.push_back(FileRequestContainer::saveFile(requestId, filePath, data));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -314,7 +314,7 @@ void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(filePath, data));
+        m_requestList.push_back(FileRequestContainer::saveFile(requestId, filePath, data));
         return;
     }
 
@@ -326,15 +326,15 @@ void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &
         // Do all folders exist only the file does not?
         if (reply.nextFile == fileName)
         {
-            uploadFilePart1(fileName, reply.file, data);
+            uploadFilePart1(requestId, fileName, reply.file, data);
         }
 
         // A folder in the path does not exist, create it
         else
         {
             reply.file->setRefreshing();
-            m_createFolderRequests[createFolder(reply.nextFile, reply.file->id())] = reply.file;
-            m_requestList.push_back(FileRequestContainer(filePath, data));
+            m_createFolderRequests[createFolder(requestId, reply.nextFile, reply.file->id())] = reply.file;
+            m_requestList.push_back(FileRequestContainer::saveFile(requestId, filePath, data));
         }
 
         return;
@@ -347,7 +347,7 @@ void FileAccessGoogleDrive::saveFile(const QString &filePath, const QByteArray &
  * @brief Update a file part 1: Send a patch request, response contains a new
  * url to upload file.
  */
-void FileAccessGoogleDrive::updateFilePart1(const QString &fileId, const QByteArray &data)
+void FileAccessGoogleDrive::updateFilePart1(int requestId, const QString &fileId, const QByteArray &data)
 {
     qCDebug(gmFileAccessGoogle()) << "Updating file" << fileId;
     QUrl url("https://www.googleapis.com/upload/drive/v3/files/" + fileId);
@@ -357,6 +357,9 @@ void FileAccessGoogleDrive::updateFilePart1(const QString &fileId, const QByteAr
     url.setQuery(query);
 
     m_updateFileRequests[GoogleDrive::getInstance()->customRequest(QNetworkRequest(url), "PATCH", "")] = data;
+
+    // Note: Actually this should be sent when updateFilePart2 is finished, will fix later
+    emit savedFile(requestId);
 }
 
 /**
@@ -380,7 +383,7 @@ void FileAccessGoogleDrive::updateFilePart2(const QList<QNetworkReply::RawHeader
  * @brief Upload a file part 1: Send post request to receive a url to upload to.
  * Also send file metadata.
  */
-void FileAccessGoogleDrive::uploadFilePart1(const QString &fileName, GoogleDriveFile *parentFolder, const QByteArray &data)
+void FileAccessGoogleDrive::uploadFilePart1(int requestId, const QString &fileName, GoogleDriveFile *parentFolder, const QByteArray &data)
 {
     qCDebug(gmFileAccessGoogle()) << "Uploading file to folder" << parentFolder;
 
@@ -397,6 +400,9 @@ void FileAccessGoogleDrive::uploadFilePart1(const QString &fileName, GoogleDrive
     };
 
     m_uploadFileRequests[GoogleDrive::getInstance()->post(QNetworkRequest(url), QJsonDocument(metaData).toJson(QJsonDocument::Compact))] = { data, parentFolder };
+
+    // Note: Actually this should be sent when uploadFilePart3 is finished, will fix later
+    emit savedFile(requestId);
 }
 
 /**
@@ -441,17 +447,17 @@ void FileAccessGoogleDrive::uploadFilePart3(const QByteArray &metaData, GoogleDr
  * probably simply rename the file, but it is easier to just reuse the saveFile
  * and deleteFile functions.
  */
-void FileAccessGoogleDrive::renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data)
+void FileAccessGoogleDrive::renameFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data)
 {
-    saveFile(newFile, data);
-    deleteFile(oldFile);
+    saveFile(requestId, newFile, data);
+    deleteFile(requestId, oldFile);
 }
 
 /**
  * Rename the folder, we have to actually send a PATCH request, as reuploading everything
  * would just be too much.
  */
-void FileAccessGoogleDrive::renameFolder(const QString &newFolder, const QString &oldFolder)
+void FileAccessGoogleDrive::renameFolder(int requestId, const QString &newFolder, const QString &oldFolder)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing renameFolder request" << newFolder << oldFolder;
     auto reply = m_baseFolder->getFile(oldFolder);
@@ -470,6 +476,10 @@ void FileAccessGoogleDrive::renameFolder(const QString &newFolder, const QString
 
         GoogleDrive::getInstance()->customRequest(request, "PATCH", data);
         dequeueRequests();
+
+        // Note: This should be actually be emitted when the request is finished,
+        // will fix later.
+        emit renamedFolder(requestId);
         return;
     }
 
@@ -477,7 +487,7 @@ void FileAccessGoogleDrive::renameFolder(const QString &newFolder, const QString
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(newFolder, oldFolder));
+        m_requestList.push_back(FileRequestContainer::renameFolder(requestId, newFolder, oldFolder));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -487,7 +497,7 @@ void FileAccessGoogleDrive::renameFolder(const QString &newFolder, const QString
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(newFolder, oldFolder));
+        m_requestList.push_back(FileRequestContainer::renameFolder(requestId, newFolder, oldFolder));
         return;
     }
 
@@ -507,7 +517,7 @@ void FileAccessGoogleDrive::renameFolder(const QString &newFolder, const QString
 /**
  * @brief Delete the file at filePath
  */
-void FileAccessGoogleDrive::deleteFile(const QString &filePath)
+void FileAccessGoogleDrive::deleteFile(int requestId, const QString &filePath)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing deleteFile request" << filePath;
 
@@ -521,6 +531,10 @@ void FileAccessGoogleDrive::deleteFile(const QString &filePath)
         GoogleDrive::getInstance()->customRequest(QNetworkRequest(url), "DELETE", "");
         delete reply.file;
         dequeueRequests();
+
+        // Note: This should be actually be emitted when the request is finished,
+        // will fix later.
+        emit deletedFile(requestId);
         return;
     }
 
@@ -528,7 +542,7 @@ void FileAccessGoogleDrive::deleteFile(const QString &filePath)
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(filePath, FileRequest::RemoveFile));
+        m_requestList.push_back(FileRequestContainer::removeFile(requestId, filePath));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -538,7 +552,7 @@ void FileAccessGoogleDrive::deleteFile(const QString &filePath)
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(filePath, FileRequest::RemoveFile));
+        m_requestList.push_back(FileRequestContainer::removeFile(requestId, filePath));
         return;
     }
 
@@ -571,7 +585,7 @@ void FileAccessGoogleDrive::checkIfFilesExist(int requestId, QStringList filePat
         if (reply.status == GoogleDriveFile::Invalid)
         {
             qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-            m_requestList.push_back(FileRequestContainer(requestId, filePaths));
+            m_requestList.push_back(FileRequestContainer::checkIfFilesExist(requestId, filePaths));
             reply.file->setRefreshing();
             m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
             return;
@@ -581,7 +595,7 @@ void FileAccessGoogleDrive::checkIfFilesExist(int requestId, QStringList filePat
         if (reply.status == GoogleDriveFile::Refreshing)
         {
             qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-            m_requestList.push_back(FileRequestContainer(requestId, filePaths));
+            m_requestList.push_back(FileRequestContainer::checkIfFilesExist(requestId, filePaths));
             return;
         }
 
@@ -610,7 +624,7 @@ void FileAccessGoogleDrive::checkIfFilesExist(int requestId, QStringList filePat
     dequeueRequests();
 }
 
-void FileAccessGoogleDrive::createFolder(const QString &folderPath)
+void FileAccessGoogleDrive::createFolder(int requestId, const QString &folderPath)
 {
     qCDebug(gmFileAccessGoogle()) << "Processing createFolder request" << folderPath;
 
@@ -622,7 +636,7 @@ void FileAccessGoogleDrive::createFolder(const QString &folderPath)
     if (reply.status == GoogleDriveFile::Valid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found directory, creating folder ...";
-        m_createFolderRequests[createFolder(folderName, reply.file->id())] = reply.file;
+        m_createFolderRequests[createFolder(requestId, folderName, reply.file->id())] = reply.file;
         dequeueRequests();
         return;
     }
@@ -631,7 +645,7 @@ void FileAccessGoogleDrive::createFolder(const QString &folderPath)
     if (reply.status == GoogleDriveFile::Invalid)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, it is not valid, refreshing ...";
-        m_requestList.push_back(FileRequestContainer(folderPath, FileRequest::CreateFolder));
+        m_requestList.push_back(FileRequestContainer::createFolder(requestId, folderPath));
         reply.file->setRefreshing();
         m_folderIndexRequests[getFilesInFolder(reply.file->id())] = reply.file;
         return;
@@ -641,7 +655,7 @@ void FileAccessGoogleDrive::createFolder(const QString &folderPath)
     if (reply.status == GoogleDriveFile::Refreshing)
     {
         qCDebug(gmFileAccessGoogle()) << "Found a directory in cache, but it is refreshing, waiting ...";
-        m_requestList.push_back(FileRequestContainer(folderPath, FileRequest::CreateFolder));
+        m_requestList.push_back(FileRequestContainer::createFolder(requestId, folderPath));
         return;
     }
 
@@ -661,7 +675,7 @@ void FileAccessGoogleDrive::createFolder(const QString &folderPath)
 /**
  * @brief Send a request to create a folder
  */
-auto FileAccessGoogleDrive::createFolder(const QString& name, const QString& parentId)->int
+auto FileAccessGoogleDrive::createFolder(int requestId, const QString& name, const QString& parentId)->int
 {
     QUrl url("https://www.googleapis.com/drive/v3/files");
     QJsonObject root;
@@ -670,10 +684,15 @@ auto FileAccessGoogleDrive::createFolder(const QString& name, const QString& par
     root.insert("mimeType", GOOGLE_MIMETYPE_FOLDER);
     root.insert("parents",  QJsonArray({ parentId }));
 
-    return GoogleDrive::getInstance()->post(QNetworkRequest(url), QJsonDocument(root).toJson(QJsonDocument::Compact));
+    auto id =  GoogleDrive::getInstance()->post(QNetworkRequest(url), QJsonDocument(root).toJson(QJsonDocument::Compact));
+
+    // Note: This should be actually be emitted when the request is finished,
+    // will fix later.
+    emit createdFolder(requestId);
+    return id;
 }
 
-void FileAccessGoogleDrive::createdFolder(const QByteArray& data, GoogleDriveFile *parentFolder)
+void FileAccessGoogleDrive::onCreatedFolder(const QByteArray& data, GoogleDriveFile *parentFolder)
 {
     auto file = QJsonDocument::fromJson(data).object();
 
@@ -766,19 +785,19 @@ void FileAccessGoogleDrive::dequeueRequests()
         break;
 
     case SaveFile:
-        saveFile(request.string1, request.data);
+        saveFile(request.requestId, request.string1, request.data);
         break;
 
     case RenameFile:
-        renameFile(request.string1, request.string2, request.data);
+        renameFile(request.requestId, request.string1, request.string2, request.data);
         break;
 
     case RenameFolder:
-        renameFolder(request.string1, request.string2);
+        renameFolder(request.requestId, request.string1, request.string2);
         break;
 
     case RemoveFile:
-        deleteFile(request.string1);
+        deleteFile(request.requestId, request.string1);
         break;
 
     case CheckIfFilesExist:
@@ -786,7 +805,7 @@ void FileAccessGoogleDrive::dequeueRequests()
         break;
 
     case CreateFolder:
-        createFolder(request.string1);
+        createFolder(request.requestId, request.string1);
         break;
     }
 }
@@ -808,7 +827,7 @@ void FileAccessGoogleDrive::receivedInternalReply(int internalId, QNetworkReply:
 
     if (m_createFolderRequests.contains(internalId))
     {
-        createdFolder(data, m_createFolderRequests[internalId]);
+        onCreatedFolder(data, m_createFolderRequests[internalId]);
         m_createFolderRequests.remove(internalId);
         dequeueRequests();
         return;

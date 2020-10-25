@@ -6,22 +6,16 @@
 class PlatformDetails : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool isAndroid READ isAndroid NOTIFY isAndroidChanged)
-    Q_PROPERTY(bool isWindows READ isWindows NOTIFY isWindowsChanged)
-    Q_PROPERTY(bool isMacOS READ isMacOS NOTIFY isMacOSChanged)
+    Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
+    Q_PROPERTY(bool isWindows READ isWindows CONSTANT)
+    Q_PROPERTY(bool isMacOS   READ isMacOS   CONSTANT)
 
 public:
-    explicit PlatformDetails(QObject *parent = nullptr);
+    explicit PlatformDetails(QObject *parent = nullptr) : QObject(parent) {}
 
-    bool isAndroid();
-    bool isWindows();
-    bool isMacOS();
-
-signals:
-    void isAndroidChanged();
-    void isWindowsChanged();
-    void isMacOSChanged();
-
+    static bool isAndroid();
+    static bool isWindows();
+    static bool isMacOS();
 };
 
 #endif // PLATFORMDETAILS_H

@@ -4,7 +4,8 @@ import CustomComponents 1.0
 import FontAwesome 2.0
 
 import "../buttons"
-import "../../../defines.js" as Defines
+import "../../../sizes.js" as Sizes
+import "../../../colors.js" as Colors
 
 Pane {
     id: root
@@ -42,12 +43,12 @@ Pane {
                 anchors.right: parent.right
                 height: subscenario_text.height + 4
                 visible: modelData.isSubscenario
-                color: palette.button
+                color: Colors.button
 
                 Label {
                     id: subscenario_text
                     text: modelData.name
-                    color: palette.buttonText
+                    color: Colors.buttonText
                     font.bold: true
 
                     anchors.verticalCenter: parent.verticalCenter
@@ -89,7 +90,7 @@ Pane {
                         pointSize: 10
                         onClicked: {
                             delete_dialog.x = element_column.width
-                            delete_dialog.y = Defines.TOOLBAR_HEIGHT
+                            delete_dialog.y = Sizes.toolbarHeight
                             delete_dialog.mode = 3
                             delete_dialog.element = modelData
                             delete_dialog.open()

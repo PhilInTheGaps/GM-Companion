@@ -4,11 +4,9 @@
 #include "audioscenario.h"
 #include "../../../utils/utils.h"
 
-class AudioCategory : public QObject
+class AudioCategory : public TreeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(bool isMarkedForExport READ isMarkedForExport WRITE setIsMarkedForExport NOTIFY isMarkedForExportChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QList<QObject*> scenarios READ scenarioObjects NOTIFY scenariosChanged)
     Q_PROPERTY(QObject* currentScenario READ currentScenarioObject NOTIFY currentScenarioChanged)
@@ -20,13 +18,9 @@ public:
 
     QJsonObject toJson() const;
 
-    QString name() const { return m_name; }
-    void setName(const QString& name) { m_name = name; emit nameChanged(); }
+    bool isCheckable() const override { return true; }
 
-    bool isMarkedForExport() const { return m_export; }
-    void setIsMarkedForExport(bool e) { m_export = e; emit isMarkedForExportChanged(); }
-
-    QString path() const { return m_path; }
+    QString path() const override { return m_path; }
 
     QList<AudioScenario*> scenarios() const { return m_scenarios; }
     QList<QObject*> scenarioObjects() const { return Utils::toQObjectList<AudioScenario*>(m_scenarios); }
@@ -44,16 +38,13 @@ public:
     QList<AudioElement *> elements() const;
 
 signals:
-    void nameChanged();
-    void isMarkedForExportChanged();
     void pathChanged();
     void scenariosChanged();
     void currentScenarioChanged();
     void wasEdited();
 
 private:
-    QString m_name, m_path;
-    bool m_export = true;
+    QString m_path;
     QList<AudioScenario*> m_scenarios;
     AudioScenario *m_currentScenario = nullptr;
 

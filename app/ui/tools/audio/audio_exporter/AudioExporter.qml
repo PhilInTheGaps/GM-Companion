@@ -1,6 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import FontAwesome 2.0
 import "../../../common"
+import "../../../colors.js" as Colors
 
 Dialog {
     id: dialog
@@ -14,119 +16,127 @@ Dialog {
     }
 
     contentItem: Item {
-
-        Column {
-            id: left_column
-
-            width: parent.width / 4
+        Rectangle {
+            id: left_item
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.bottom: parent.bottom
+            width: parent.width / 4
 
-            spacing: 10
-            padding: 10
+            color: Colors.dark
+            border.color: Colors.border
+            border.width: 1
 
-            Label {
-                text: qsTr("Settings")
+            TreeView {
+                id: tree_view
+
+                anchors.fill: parent
+                anchors.margins: 5
+
+                model: audio_exporter ? audio_exporter.model.childItems : []
+                itemIcon: FontAwesome.bars
             }
+        }
 
-            TextField {
-                id: path_text_field
+        Item {
+            id: right_item
+            anchors.top: parent.top
+            anchors.left: left_item.right
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 10
 
-                width: parent.width - parent.padding * 2
-                selectByMouse: true
-                text: audio_exporter.getDefaultPath()
+            Column {
+                id: settings_column
 
-                onTextChanged: audio_exporter.setPath(text)
-            }
+                anchors.fill: parent
+                spacing: 10
 
-            Button {
-                text: qsTr("Set Folder")
+                Label {
+                    text: qsTr("Settings")
+                }
 
-                onClicked: {
-                    file_dialog.folder = path_text_field.text
-                    file_dialog.open()
+                TextField {
+                    id: path_text_field
+
+                    enabled: !progress_bar.inProgress
+
+                    width: parent.width - parent.padding * 2
+                    selectByMouse: true
+                    placeholderText: qsTr("Export Folder")
+
+                    onTextChanged: audio_exporter.setPath(text)
+                }
+
+                Button {
+                    text: qsTr("Set Folder")
+
+                    enabled: !progress_bar.inProgress
+
+                    onClicked: {
+                        file_dialog.folder = path_text_field.text
+                        file_dialog.open()
+                    }
                 }
             }
-        }
 
-        CheckScrollView {
-            id: cat_scroll
+            Item {
+                height: buttons.height
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: left_column.right
-            width: (parent.width - left_column.width) / 3
+                ProgressBar {
+                    id: progress_bar
 
-            headline: qsTr("Categories to Export")
-            repModel: audio_exporter.categories
-            checkedFunc: audio_exporter.isCategoryEnabled
+                    property bool inProgress: Math.abs(
+                                                  progress_bar.value - 0) >= Number.EPSILON
 
-            onItemChecked: audio_exporter.setCategoryEnabled(index, checked)
-            onItemClicked: audio_exporter.setCategory(index)
-        }
+                    value: audio_exporter.progress
+                    anchors.left: parent.left
+                    anchors.right: buttons.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: 5
+                }
 
-        CheckScrollView {
-            id: scen_scroll
+                Row {
+                    anchors.right: progress_bar.right
+                    anchors.verticalCenter: progress_bar.verticalCenter
+                    padding: 5
+                    spacing: 5
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: cat_scroll.right
-            width: (parent.width - left_column.width) / 3
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: Math.round(progress_bar.value * 100)
+                    }
 
-            headline: qsTr("Scenarios to Export")
-            repModel: audio_exporter.scenarios
-            checkedFunc: audio_exporter.isScenarioEnabled
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "%"
+                    }
+                }
 
-            onItemChecked: audio_exporter.setScenarioEnabled(index, checked)
-            onItemClicked: audio_exporter.setScenario(index)
-        }
+                DialogButtonBox {
+                    id: buttons
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    padding: 0
 
-        CheckScrollView {
-            id: ele_scroll
+                    Button {
+                        text: qsTr("Export")
+                        enabled: !progress_bar.inProgress
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: scen_scroll.right
-            anchors.right: parent.right
+                        DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
+                        onClicked: audio_exporter.exportFiles()
+                    }
 
-            headline: qsTr("Elements to Export")
-            repModel: audio_exporter.elements
-            checkedFunc: audio_exporter.isElementEnabled
+                    standardButtons: Dialog.Close
 
-            onItemChecked: audio_exporter.setElementEnabled(index, checked)
-        }
-    }
-
-    footer: Item {
-        height: buttons.height
-
-        ProgressBar {
-            id: progress_bar
-            value: audio_exporter.progress
-            anchors.left: parent.left
-            anchors.right: buttons.left
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.margins: buttons.padding
-            anchors.rightMargin: 0
-        }
-
-        DialogButtonBox {
-            id: buttons
-            anchors.right: parent.right
-            anchors.top: parent.top
-
-            Button {
-                text: qsTr("Export")
-                DialogButtonBox.buttonRole: DialogButtonBox.ApplyRole
-                onClicked: audio_exporter.exportFiles()
-            }
-
-            standardButtons: Dialog.Close
-
-            onRejected: {
-                dialog.close()
+                    onRejected: {
+                        dialog.close()
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 #include "fileaccesslocal.h"
 #include "logging.h"
+#include "utils/fileutils.h"
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
@@ -23,6 +24,11 @@ FileAccessLocal::FileAccessLocal(QObject *parent) : FileAccess(parent)
     connect(finder,        &FileFinder::receivedFile,                   this,   &FileAccessLocal::receivedFile);
     connect(finder,        &FileFinder::receivedFiles,                  this,   &FileAccessLocal::receivedFiles);
     connect(finder,        &FileFinder::receivedFileList,               this,   &FileAccessLocal::receivedFileList);
+    connect(finder,        &FileFinder::savedFile,                      this,   &FileAccessLocal::savedFile);
+    connect(finder,        &FileFinder::renamedFile,                    this,   &FileAccessLocal::renamedFile);
+    connect(finder,        &FileFinder::renamedFolder,                  this,   &FileAccessLocal::renamedFolder);
+    connect(finder,        &FileFinder::deletedFile,                    this,   &FileAccessLocal::deletedFile);
+    connect(finder,        &FileFinder::createdFolder,                  this,   &FileAccessLocal::createdFolder);
     connect(finder,        &FileFinder::checkedIfFilesExist,            this,   &FileAccessLocal::checkedIfFilesExist);
 
     finder->moveToThread(&workerThread);
@@ -38,17 +44,17 @@ FileAccessLocal::~FileAccessLocal()
 /**
  * @brief Get the content of a single file located at filePath
  */
-void FileAccessLocal::getFile(int id, const QString& filePath)
+void FileAccessLocal::getFile(int requestId, const QString& filePath)
 {
-    emit startGettingFile(id, filePath);
+    emit startGettingFile(requestId, filePath);
 }
 
 /**
  * @brief Get the contents of all files in a directory
  */
-void FileAccessLocal::getFiles(int id, const QString& directory, const QString& fileEnding)
+void FileAccessLocal::getFiles(int requestId, const QString& directory, const QString& fileEnding)
 {
-    emit startGettingFiles(id, directory, fileEnding);
+    emit startGettingFiles(requestId, directory, fileEnding);
 }
 
 /**
@@ -64,37 +70,37 @@ void FileAccessLocal::getFileList(int requestId, const QString& directory, bool 
 /**
  * @brief Write data into file at filePath
  */
-void FileAccessLocal::saveFile(const QString& filePath, const QByteArray& data)
+void FileAccessLocal::saveFile(int requestId, const QString& filePath, const QByteArray& data)
 {
-    emit startSavingFile(filePath, data);
+    emit startSavingFile(requestId, filePath, data);
 }
 
-void FileAccessLocal::renameFile(const QString& newFile, const QString& oldFile, const QByteArray& data)
+void FileAccessLocal::renameFile(int requestId, const QString& newFile, const QString& oldFile, const QByteArray& data)
 {
-    emit startRenamingFile(newFile, oldFile, data);
+    emit startRenamingFile(requestId, newFile, oldFile, data);
 }
 
-void FileAccessLocal::renameFolder(const QString &newFolder, const QString &oldFolder)
+void FileAccessLocal::renameFolder(int requestId, const QString &newFolder, const QString &oldFolder)
 {
-    emit startRenamingFolder(newFolder, oldFolder);
+    emit startRenamingFolder(requestId, newFolder, oldFolder);
 }
 
 /**
  * @brief Delete the file at filePath
  */
-void FileAccessLocal::deleteFile(const QString& filePath)
+void FileAccessLocal::deleteFile(int requestId, const QString& filePath)
 {
-    emit startDeletingFile(filePath);
+    emit startDeletingFile(requestId, filePath);
 }
 
-void FileAccessLocal::checkIfFilesExist(int id, QStringList files)
+void FileAccessLocal::checkIfFilesExist(int requestId, QStringList files)
 {
-    emit startCheckingIfFilesExist(id, files);
+    emit startCheckingIfFilesExist(requestId, files);
 }
 
-void FileAccessLocal::createFolder(const QString &folderPath)
+void FileAccessLocal::createFolder(int requestId, const QString &folderPath)
 {
-    emit startCreatingFolder(folderPath);
+    emit startCreatingFolder(requestId, folderPath);
 }
 
 void FileFinder::getFile(int requestId, const QString& filePath)
@@ -134,8 +140,17 @@ void FileFinder::getFileList(int requestId, const QString& directory, const bool
     emit receivedFileList(requestId, dir.entryList());
 }
 
-void FileFinder::saveFile(const QString& filePath, const QByteArray& data)
+void FileFinder::saveFile(int requestId, const QString& filePath, const QByteArray& data)
 {
+    // Check if the directory exists and if not, create it
+    auto folder = FileUtils::dirFromPath(filePath);
+    QDir dir(folder);
+
+    if (!dir.exists())
+    {
+        dir.mkpath(folder);
+    }
+
     QFile f(filePath);
 
     if (f.open(QIODevice::WriteOnly))
@@ -147,9 +162,11 @@ void FileFinder::saveFile(const QString& filePath, const QByteArray& data)
     {
         qCWarning(gmFileAccessLocal()) << "Could not save file" << filePath;
     }
+
+    emit savedFile(requestId);
 }
 
-void FileFinder::renameFile(const QString& newFile, const QString& oldFile, const QByteArray& data)
+void FileFinder::renameFile(int requestId, const QString& newFile, const QString& oldFile, const QByteArray& data)
 {
     // If no data is provided, simply rename the file,
     // else create a new file and delete the old
@@ -161,16 +178,16 @@ void FileFinder::renameFile(const QString& newFile, const QString& oldFile, cons
         {
             qCDebug(gmFileAccessLocal()) << "Could not rename file, trying to save and delete ...";
 
-            FileFinder::saveFileDeleteOld(newFile, oldFile, getFileData(oldFile));
+            saveFileDeleteOld(requestId, newFile, oldFile, getFileData(oldFile));
         }
     }
     else
     {
-        FileFinder::saveFileDeleteOld(newFile, oldFile, data);
+        saveFileDeleteOld(requestId, newFile, oldFile, data);
     }
 }
 
-void FileFinder::renameFolder(const QString &newFolder, const QString &oldFolder)
+void FileFinder::renameFolder(int requestId, const QString &newFolder, const QString &oldFolder)
 {
     QDir d(oldFolder);
 
@@ -178,15 +195,17 @@ void FileFinder::renameFolder(const QString &newFolder, const QString &oldFolder
     {
         qCWarning(gmFileAccessLocal()) << "Error: Could not rename" << oldFolder << "to" << newFolder;
     }
+
+    emit renamedFolder(requestId);
 }
 
-void FileFinder::saveFileDeleteOld(const QString &newFile, const QString &oldFile, const QByteArray &data)
+void FileFinder::saveFileDeleteOld(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data)
 {
-    FileFinder::saveFile(newFile, data);
-    FileFinder::deleteFile(oldFile);
+    FileFinder::saveFile(requestId, newFile, data);
+    FileFinder::deleteFile(requestId, oldFile);
 }
 
-void FileFinder::deleteFile(const QString& filePath)
+void FileFinder::deleteFile(int requestId, const QString& filePath)
 {
     qCDebug(gmFileAccessLocal()) << "Deleting" << filePath;
 
@@ -200,7 +219,7 @@ void FileFinder::deleteFile(const QString& filePath)
 
         for (const auto &fileName : dir.entryList(QDir::NoDotAndDotDot | QDir::AllEntries))
         {
-            deleteFile(filePath + "/" + fileName);
+            deleteFile(-1, filePath + "/" + fileName);
         }
 
         if (!dir.rmdir(filePath))
@@ -227,12 +246,16 @@ void FileFinder::deleteFile(const QString& filePath)
     {
         qCWarning(gmFileAccessLocal()) << "Could not delete file" << filePath << ", does not exist";
     }
+
+    if (requestId > -1) emit deletedFile(requestId);
 }
 
-void FileFinder::createFolder(const QString &folderPath)
+void FileFinder::createFolder(int requestId, const QString &folderPath)
 {
     QDir d(folderPath);
     d.mkpath(folderPath);
+
+    emit createdFolder(requestId);
 }
 
 void FileFinder::checkIfFilesExist(int requestId, const QStringList& files)

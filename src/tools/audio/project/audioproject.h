@@ -4,15 +4,13 @@
 #include "audiocategory.h"
 #include "../../../utils/utils.h"
 
-class AudioProject : public QObject
+class AudioProject : public TreeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString oldName READ oldName WRITE setOldName NOTIFY oldNameChanged)
     Q_PROPERTY(bool wasRenamed READ wasRenamed WRITE setWasRenamed NOTIFY wasRenamedChanged)
     Q_PROPERTY(int version READ version CONSTANT)
     Q_PROPERTY(bool isSaved READ isSaved WRITE setIsSaved NOTIFY isSavedChanged)
-    Q_PROPERTY(bool isMarkedForExport READ isMarkedForExport WRITE setIsMarkedForExport NOTIFY isMarkedForExportChanged)
     Q_PROPERTY(QObject* currentCategory READ currentCategory NOTIFY currentCategoryChanged)
     Q_PROPERTY(QList<QObject*> categories READ categoryObjects NOTIFY categoriesChanged)
     Q_PROPERTY(int categoryIndex READ categoryIndex NOTIFY currentCategoryChanged)
@@ -24,9 +22,6 @@ public:
 
     QJsonObject toJson() const;
 
-    QString name() const { return m_name; }
-    void setName(const QString &name) { m_name = name; emit nameChanged(); }
-
     QString oldName() const { return m_oldName; }
     void setOldName(const QString &name) { m_oldName = name; emit oldNameChanged(); }
 
@@ -37,8 +32,7 @@ public:
     bool isSaved() const { return m_isSaved; }
     void setIsSaved(bool saved) { m_isSaved = saved; emit isSavedChanged(); }
 
-    bool isMarkedForExport() const { return m_export; }
-    void setIsMarkedForExport(bool markForExport) { m_export = markForExport; emit isMarkedForExportChanged(); }
+    bool isCheckable() const override { return true; }
 
     QList<AudioCategory*> categories() const { return m_categories; }
     QList<QObject*> categoryObjects() const { return Utils::toQObjectList<AudioCategory*>(categories()); }
@@ -54,20 +48,18 @@ public:
     QList<AudioElement *> elements() const;
 
 signals:
-    void nameChanged();
     void oldNameChanged();
     void wasRenamedChanged();
     void isSavedChanged();
-    void isMarkedForExportChanged();
     void categoriesChanged();
 
     void currentCategoryChanged();
     void currentScenarioChanged();
 
 private:
-    QString m_name, m_oldName;
+    QString m_oldName;
     int m_version;
-    bool m_isSaved = true, m_wasRenamed = false, m_export = true;
+    bool m_isSaved = true, m_wasRenamed = false;
 
     QList<AudioCategory*> m_categories;
     AudioCategory *m_currentCategory = nullptr;

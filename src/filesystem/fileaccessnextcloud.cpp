@@ -50,7 +50,7 @@ void FileAccessNextCloud::getFiles(int requestId, const QString& directory, cons
 
     auto internalRequestId = FileManager::getUniqueRequestId();
     auto *context = new QObject(this);
-    connect(this, &FileAccessNextCloud::receivedFileList, context, [ = ](int filesRequestId, QStringList fileNames) {
+    connect(this, &FileAccessNextCloud::receivedFileList, context, [ = ](int filesRequestId, const QStringList& fileNames) {
         if (filesRequestId != internalRequestId) return;
 
         auto *fileRequests = new QMap<int, QString>;
@@ -89,7 +89,7 @@ void FileAccessNextCloud::downloadFiles(const int& requestId, QMap<int, QString>
     for (auto id : requests->keys())
     {
         auto *context = new QObject(this);
-        connect(this, &FileAccessNextCloud::receivedFile, context, [ = ](int fileRequestId, QByteArray data) {
+        connect(this, &FileAccessNextCloud::receivedFile, context, [ = ](int fileRequestId, const QByteArray& data) {
             if (fileRequestId != id) return;
 
             dataList->append(data);
@@ -121,7 +121,9 @@ void FileAccessNextCloud::getFileList(int requestId, const QString& directory, b
         QXmlStreamReader xml(reply->readAll());
 
         QStringList fileNames;
-        QString tempHref, tempContentType, tempStatus;
+        QString tempHref;
+        QString tempContentType;
+        QString tempStatus;
 
         while (!xml.atEnd())
         {
@@ -162,7 +164,7 @@ void FileAccessNextCloud::getFileList(int requestId, const QString& directory, b
     });
 }
 
-void FileAccessNextCloud::saveFile(const QString& filePath, const QByteArray& data)
+void FileAccessNextCloud::saveFile(int requestId, const QString& filePath, const QByteArray& data)
 {
     qCDebug(gmFileAccessNextCloud()) << "Saving file" << filePath;
 
@@ -175,6 +177,8 @@ void FileAccessNextCloud::saveFile(const QString& filePath, const QByteArray& da
             qCWarning(gmFileAccessNextCloud()) << "Error: Could not save file" << filePath;
             qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
         }
+
+        emit savedFile(requestId);
         reply->deleteLater();
     });
 }
@@ -182,7 +186,7 @@ void FileAccessNextCloud::saveFile(const QString& filePath, const QByteArray& da
 /**
  * If data is empty, rename, else reupload data under a new filename and delete the old file.
  */
-void FileAccessNextCloud::renameFile(const QString& newFile, const QString& oldFile, const QByteArray& data)
+void FileAccessNextCloud::renameFile(int requestId, const QString& newFile, const QString& oldFile, const QByteArray& data)
 {
     if (data.isEmpty())
     {
@@ -200,6 +204,8 @@ void FileAccessNextCloud::renameFile(const QString& newFile, const QString& oldF
                 qCWarning(gmFileAccessNextCloud()) << "Error: Could not rename file" << oldFile;
                 qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
             }
+
+            emit renamedFile(requestId);
             reply->deleteLater();
         });
     }
@@ -207,20 +213,21 @@ void FileAccessNextCloud::renameFile(const QString& newFile, const QString& oldF
     {
         qCDebug(gmFileAccessNextCloud()) << "Saving file under new name and deleting old" << newFile << oldFile;
 
-        saveFile(newFile, data);
-        deleteFile(oldFile);
+        saveFile(requestId, newFile, data);
+        deleteFile(requestId, oldFile);
+        emit renamedFile(requestId);
     }
 }
 
 /**
  * Rename a folder, same as renameFile with empty data.
  */
-void FileAccessNextCloud::renameFolder(const QString &newFolder, const QString &oldFolder)
+void FileAccessNextCloud::renameFolder(int requestId, const QString &newFolder, const QString &oldFolder)
 {
-    renameFile(newFolder, oldFolder, "");
+    renameFile(requestId, newFolder, oldFolder, "");
 }
 
-void FileAccessNextCloud::deleteFile(const QString& filePath)
+void FileAccessNextCloud::deleteFile(int requestId, const QString& filePath)
 {
     qCDebug(gmFileAccessNextCloud()) << "Deleting file" << filePath;
 
@@ -231,6 +238,8 @@ void FileAccessNextCloud::deleteFile(const QString& filePath)
             qCWarning(gmFileAccessNextCloud()) << "Error: Could not delete file" << filePath;
             qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
         }
+
+        emit deletedFile(requestId);
         reply->deleteLater();
     });
 }
@@ -265,7 +274,7 @@ void FileAccessNextCloud::checkIfFilesExist(int requestId, QStringList files)
     }
 }
 
-void FileAccessNextCloud::createFolder(const QString &folderPath)
+void FileAccessNextCloud::createFolder(int requestId, const QString &folderPath)
 {
     qCDebug(gmFileAccessNextCloud()) << "Creating folder" << folderPath;
 
@@ -276,6 +285,8 @@ void FileAccessNextCloud::createFolder(const QString &folderPath)
             qCWarning(gmFileAccessNextCloud()) << "Error: Could not create folder" << folderPath;
             qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
         }
+
+        emit createdFolder(requestId);
         reply->deleteLater();
     });
 }
@@ -289,7 +300,7 @@ auto FileAccessNextCloud::fileNameFromHref(QString href)->QString
     return QUrl::fromPercentEncoding(href.toUtf8());
 }
 
-bool FileAccessNextCloud::tryGetFileFromCache(const QString &filePath, QByteArray *data)
+auto FileAccessNextCloud::tryGetFileFromCache(const QString &filePath, QByteArray *data) -> bool
 {
     if (!m_fileCache.contains(filePath)) return false;
 
@@ -334,7 +345,7 @@ void FileAccessNextCloud::removeFileFromCache(const QString &filePath)
     delete file;
 }
 
-auto FileAccessNextCloud::getXml(QString filepath) const->QByteArray
+auto FileAccessNextCloud::getXml(const QString& filepath) const->QByteArray
 {
     QFile f(filepath);
     QByteArray data;

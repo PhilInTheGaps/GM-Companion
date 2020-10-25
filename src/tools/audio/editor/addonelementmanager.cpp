@@ -96,7 +96,7 @@ void AddonElementManager::setAddElement(int index, bool add)
 
         if (e)
         {
-            e->setExport(add);
+            e->setIsChecked(add);
         }
     }
 }
@@ -107,7 +107,7 @@ void AddonElementManager::resetChecked()
     {
         if (e)
         {
-            e->setExport(false);
+            e->setIsChecked(false);
         }
     }
 

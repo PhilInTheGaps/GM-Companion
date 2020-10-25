@@ -2,17 +2,17 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
 import FontAwesome 2.0
-import "../defines.js" as Defines
+import "../sizes.js" as Sizes
 
 CustomButton {
     id: root
 
     property string itemIcon: ""
 
-    height: Defines.TOOLBAR_HEIGHT / 2
+    height: Sizes.toolbarHeight / 2
 
-    anchors.right: parent.right
-    anchors.left: parent.left
+    anchors.right: parent ? parent.right : undefined
+    anchors.left: parent ? parent.left : undefined
     anchors.leftMargin: modelData.depth() * 5 + (!modelData.canToggle
                                                  && itemIcon === "" ? 22 : 0)
 
@@ -20,12 +20,53 @@ CustomButton {
 
     textItem.font.pointSize: 10
     buttonText: modelData.name
+    mainRow.spacing: checkbox.visible ? checkbox.width + 10 : 10
 
-    onClicked: modelData.toggle()
+    onClicked: {
+        if (modelData.canToggle) {
+            modelData.toggle()
+        }
+    }
 
     onRightClicked: {
         if (contextMenu) {
             contextMenu.open()
+        }
+    }
+
+    CheckBox {
+        id: checkbox
+        visible: modelData.isCheckable
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: 2
+        width: height
+        x: root.iconItem.width + 10
+
+        tristate: true
+        checkState: {
+            switch (modelData.isChecked) {
+            case 0:
+                Qt.Unchecked
+                break
+            case 1:
+                Qt.PartiallyChecked
+                break
+            case 2:
+                Qt.Checked
+                break
+            }
+        }
+
+        padding: 0
+        spacing: 0
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                modelData.isChecked = modelData.isChecked < 2 ? 2 : 0
+            }
         }
     }
 

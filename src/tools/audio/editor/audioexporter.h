@@ -2,12 +2,9 @@
 #define AUDIOEXPORTER_H
 
 #include <QObject>
-#include <QStringList>
+#include <QQueue>
 #include <QThread>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QDir>
+#include <QPointer>
 
 #include "../project/audioproject.h"
 
@@ -15,94 +12,81 @@ class Worker : public QObject
 {
     Q_OBJECT
 public:
-    Worker(QString path, AudioProject* project):
-        m_path(path), m_project(project) {}
-    virtual ~Worker() {}
-
-private:
-    QString m_path;
-    AudioProject* m_project;
-
-    QStringList musicFiles;
-    QStringList soundFiles;
-    QStringList radioFiles;
-
-    void copyElements(AudioScenario* scenario);
+    Worker(const QString &path, AudioProject* project);
 
 public slots:
-    void copyFiles();
+    void startCopying();
 
 signals:
     void copiedFiles();
     void progressChanged(float progress);
+
+private:
+    QString m_path;
+    QString m_newFilePath;
+    QPointer<AudioProject> m_project;
+
+    QQueue<QString> m_musicFiles;
+    QQueue<QString> m_soundFiles;
+    QQueue<QString> m_radioFiles;
+
+    int m_fileCount = 0;
+    int m_exportCount = 0;
+    int m_currentRequestId = -1;
+
+    void copyElements(AudioScenario* scenario);
+    void collectFilesToExport();
+
+    bool copyNext();
+    bool copyNextMusic();
+    bool copyNextSound();
+    bool copyNextRadio();
+    bool copyFile(const QString &filePath, const QString &base, const QString &subfolder);
+
+private slots:
+    void receivedFile(int requestId, const QByteArray &data);
+    void savedFile(int requestId);
+
 };
 
 class AudioExporter : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    Q_PROPERTY(QStringList scenarios READ scenarios NOTIFY scenariosChanged)
-    Q_PROPERTY(QStringList elements READ elements NOTIFY elementsChanged)
 
+    Q_PROPERTY(QObject* model READ model NOTIFY modelChanged)
     Q_PROPERTY(float progress READ progress NOTIFY progressChanged)
 
     QThread workerThread;
 
 public:
-    explicit AudioExporter(QObject *parent = nullptr);
+    explicit AudioExporter(QObject *parent = nullptr) : QObject(parent) {}
     ~AudioExporter() {
         workerThread.quit();
         workerThread.wait();
     }
 
-    QStringList categories() const { return m_categoryNames; }
-    QStringList scenarios() const { return m_scenarioNames; }
-    QStringList elements() const { return m_elementNames; }
+    QObject* model() const { return m_model; }
+    void setProject(AudioProject *project);
 
-    void setProject(AudioProject *project) { m_project = project; updateCategories(); }
-
-    Q_INVOKABLE void setCategory(int index);
-    Q_INVOKABLE void setScenario(int index);
-
-    Q_INVOKABLE void setCategoryEnabled(int index, bool enabled = true);
-    Q_INVOKABLE void setScenarioEnabled(int index, bool enabled = true);
-    Q_INVOKABLE void setElementEnabled(int index, bool enabled = true);
-
-    Q_INVOKABLE bool isCategoryEnabled(int index) const;
-    Q_INVOKABLE bool isScenarioEnabled(int index) const;
-    Q_INVOKABLE bool isElementEnabled(int index) const;
-
-    Q_INVOKABLE QString getDefaultPath() const { return QString(QDir::homePath() + "/.gm-companion/export"); }
     Q_INVOKABLE void setPath(QString path) { m_path = path; }
     Q_INVOKABLE void exportFiles();
 
     float progress() const { return m_progress; }
 
 signals:
-    void categoriesChanged();
-    void scenariosChanged();
-    void elementsChanged();
+    void modelChanged();
     void progressChanged();
     void startCopying();
 
 private:
     AudioProject* m_project = nullptr;
-    AudioCategory* m_category = nullptr;
-    AudioScenario* m_scenario = nullptr;
-
-    QStringList m_categoryNames;
-    QStringList m_scenarioNames;
-    QStringList m_elementNames;
+    QPointer<QObject> m_model = nullptr;
 
     float m_progress = 0;
     QString m_path = "";
 
-    void updateCategories();
-    void updateScenarios();
-    void updateElements();
-
 public slots:
-    void updateProgress(float progress) { m_progress = progress; if (m_progress >= 1) m_progress = 0; emit progressChanged(); }
+    void updateProgress(float progress);
 };
 
 #endif // AUDIOEXPORTER_H

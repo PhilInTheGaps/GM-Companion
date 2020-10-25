@@ -124,6 +124,7 @@ set(SOURCES
 set(HEADERS
   logging.h 
   models/treeitem.h 
+  filesystem/filerequestcontainer.h
   filesystem/fileaccess.h
   filesystem/fileaccessgoogledrive.h 
   filesystem/fileaccesslocal.h 

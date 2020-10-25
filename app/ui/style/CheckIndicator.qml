@@ -9,7 +9,7 @@ Label {
 
     property Item control
 
-    font.pixelSize: 26
+    font.pixelSize: control.height > 26 ? 26 : control.height
     x: control.text ? (control.mirrored ? control.width - width - control.rightPadding : control.leftPadding) : control.leftPadding
                       + (control.availableWidth - width) / 2
     y: parent.height / 2 - height / 2
@@ -22,11 +22,11 @@ Label {
     opacity: enabled ? 1 : 0.3
 
     Label {
-        text: FontAwesome.check
+        text: control.checkState === Qt.Checked ? FontAwesome.check : FontAwesome.square
         anchors.centerIn: parent
         color: control.down ? Colors.focus : control.enabled ? Colors.text : Colors.textDisabled
-        visible: control.checkState === Qt.Checked
-        font.pixelSize: 14
+        visible: control.checkState !== Qt.Unchecked
+        font.pixelSize: indicator.font.pixelSize / 2
         font.family: FontAwesome.familySolid
 
         verticalAlignment: Text.AlignVCenter

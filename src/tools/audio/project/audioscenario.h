@@ -4,12 +4,10 @@
 #include "audioelement.h"
 #include "../../../utils/utils.h"
 
-class AudioScenario : public QObject
+class AudioScenario : public TreeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool isSubscenario READ isSubscenario NOTIFY isSubscenarioChanged)
-    Q_PROPERTY(bool isMarkedForExport READ isMarkedForExport WRITE setIsMarkedForExport NOTIFY isMarkedForExportChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QList<QObject*> elements READ elementObjects NOTIFY elementsChanged)
     Q_PROPERTY(QList<QObject*> scenarios READ scenarioObjects NOTIFY scenariosChanged)
@@ -23,15 +21,10 @@ public:
 
     QJsonObject toJson() const;
 
-    QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; }
-
-    bool isMarkedForExport() const { return m_export; }
-    void setIsMarkedForExport(bool e) { m_export = e; emit isMarkedForExportChanged(); }
-
+    bool isCheckable() const override { return true; }
     bool isSubscenario() const { return m_isSubscenario; }
 
-    QString path() const { return m_path; }
+    QString path() const override { return m_path; }
 
     AudioElement *element(const QString &name, const AudioElement::Type &type);
     QList<AudioElement*> elements(bool recursive = false) const;
@@ -57,8 +50,6 @@ public:
     static void setFilterString(const QString& filter) { filterString = filter; }
 
 signals:
-    void nameChanged();
-    void isMarkedForExportChanged();
     void pathChanged();
     void elementsChanged();
     void scenariosChanged();
@@ -68,9 +59,7 @@ signals:
 private:
     static QString filterString;
 
-    bool m_export = true;
     bool m_isSubscenario = false;
-    QString m_name;
     QString m_path;
 
     QList<AudioElement*> m_musicLists;

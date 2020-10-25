@@ -7,9 +7,11 @@ QString AudioScenario::filterString = QStringLiteral("");
 AudioScenario::AudioScenario(const QString &name, const QString &path, QList<AudioElement*> musicLists,
                              QList<AudioElement*> soundLists, QList<AudioElement*> radios,
                              QList<AudioScenario*> scenarios, QObject *parent)
-    : QObject(parent), m_name(name), m_path(path + "/" + name), m_musicLists(std::move(musicLists)),
+    : TreeItem(name, path.split("/").length() - 1, true, parent), m_path(path + "/" + name), m_musicLists(std::move(musicLists)),
       m_soundLists(std::move(soundLists)), m_radios(std::move(radios)), m_scenarios(std::move(scenarios))
 {
+    setName(name);
+
     for (auto *element : m_musicLists) prepareElement(element);
 
     for (auto *element : m_soundLists) prepareElement(element);
@@ -22,10 +24,10 @@ AudioScenario::AudioScenario(const QString &name, const QString &path, QList<Aud
 }
 
 AudioScenario::AudioScenario(const QJsonObject& object, const QString& path, QObject *parent)
-    : QObject(parent)
+    : TreeItem("", path.split("/").length() - 1, true, parent)
 {
-    m_name = object["name"].toString();
-    m_path = path + "/" + m_name;
+    setName(object["name"].toString());
+    m_path = path + "/" + name();
 
     for (auto element : object.value("music_elements").toArray())
     {
@@ -68,7 +70,7 @@ auto AudioScenario::toJson() const -> QJsonObject
     QJsonArray  soundElementsJson;
     QJsonArray  radioElementsJson;
 
-    object.insert("name", m_name);
+    object.insert("name", name());
 
     for (auto element : elements())
     {

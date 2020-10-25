@@ -6,20 +6,21 @@
 #include <utility>
 
 AudioElement::AudioElement(const QString& name, Type type, const QString& path, QObject *parent)
-    : QObject(parent), m_name(name), m_type(type)
+    : TreeItem(name, path.split("/").length() - 1, false, parent), m_type(type)
 {
+    setName(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
     m_icon = new AudioIcon(path, this);
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& path, QObject *parent)
-    : QObject(parent)
+    : TreeItem("", path.split("/").length() - 1, false, parent)
 {
-    m_name             = object["name"].toString();
-    m_mode             = object["mode"].toInt();
-    m_path             = path + "/" + typeToString(type) + "/" + m_name;
-    m_icon             = new AudioIcon(m_path, this);
-    m_type             = type;
+    setName(object["name"].toString());
+    m_mode = object["mode"].toInt();
+    m_path = path + "/" + typeToString(type) + "/" + name();
+    m_icon = new AudioIcon(m_path, this);
+    m_type = type;
 
     m_icon->setRelativeUrl(object["icon"].toString());
 
@@ -35,9 +36,9 @@ AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& 
 auto AudioElement::toJson() const -> QJsonObject
 {
     QJsonObject object;
-    object.insert("name", m_name);
+    object.insert("name", name());
     object.insert("icon", icon()->relativeUrl());
-    object.insert("mode", m_mode);
+    object.insert("mode", mode());
 
     // Files
     QJsonArray files;

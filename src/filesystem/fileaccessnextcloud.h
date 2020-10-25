@@ -16,12 +16,12 @@ public:
     void getFiles(int requestId, const QString &directory, const QString &fileEnding) override;
     void getFileList(int requestId, const QString &directory, bool folders) override;
 
-    void saveFile(const QString &filePath, const QByteArray &data) override;
-    void renameFile(const QString &newFile, const QString &oldFile, const QByteArray &data) override;
-    void renameFolder(const QString &newFolder, const QString &oldFolder) override;
-    void deleteFile(const QString &filePath) override;
+    void saveFile(int requestId, const QString &filePath, const QByteArray &data) override;
+    void renameFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data) override;
+    void renameFolder(int requestId, const QString &newFolder, const QString &oldFolder) override;
+    void deleteFile(int requestId, const QString &filePath) override;
     void checkIfFilesExist(int requestId, QStringList files) override;
-    void createFolder(const QString &folderPath) override;
+    void createFolder(int requestId, const QString &folderPath) override;
 
 private:
     static QString fileNameFromHref(QString href);
@@ -33,7 +33,7 @@ private:
 
     void downloadFiles(const int &requestId, QMap<int, QString> *requests);
 
-    QByteArray getXml(QString filepath) const;
+    QByteArray getXml(const QString& filepath) const;
     QByteArray getFileListXml() const;
 
 };

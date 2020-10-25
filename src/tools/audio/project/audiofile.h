@@ -23,12 +23,7 @@ public:
         m_source = object["source"].toInt();
     }
 
-    AudioFile(const AudioFile &other) : QObject(other.parent()) {
-        m_url = other.m_url;
-        m_source = other.m_source;
-        m_title = other.m_title;
-    }
-
+    /// 0: file, 1: url, 2: spotify, 3: youtube
     int source() const { return m_source; }
     void setSource(int source) { m_source = source; emit fileChanged(); }
 

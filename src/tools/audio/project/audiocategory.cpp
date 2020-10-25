@@ -5,8 +5,10 @@
 #include <utility>
 
 AudioCategory::AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, QObject *parent)
-    : QObject(parent), m_name(name), m_path(path + "/" + name), m_scenarios(std::move(scenarios))
+    : TreeItem(name, 0, true, parent), m_path(path + "/" + name), m_scenarios(std::move(scenarios))
 {
+    setName(name);
+
     for (auto scenario : m_scenarios)
     {
         prepareScenario(scenario);
@@ -15,10 +17,11 @@ AudioCategory::AudioCategory(const QString& name, const QString& path, QList<Aud
     if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
 }
 
-AudioCategory::AudioCategory(const QJsonObject &object, const QString& path, QObject *parent) : QObject(parent)
+AudioCategory::AudioCategory(const QJsonObject &object, const QString& path, QObject *parent)
+    : TreeItem("", 0, true, parent)
 {
-    m_name = object["name"].toString();
-    m_path = path + "/" + m_name;
+    setName(object["name"].toString());
+    m_path = path + "/" + name();
 
     for (auto scenario : object["scenarios"].toArray())
     {
@@ -37,7 +40,7 @@ auto AudioCategory::toJson() const -> QJsonObject
 {
     QJsonObject object;
 
-    object.insert("name", m_name);
+    object.insert("name", name());
 
     QJsonArray scenariosJson;
 

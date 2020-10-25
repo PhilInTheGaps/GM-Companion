@@ -20,8 +20,8 @@ ListView {
     clip: true
 
     delegate: Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.left: parent ? parent.left : undefined
+        anchors.right: parent ? parent.right : undefined
         anchors.rightMargin: scrollbar.visible ? scrollbar.width : anchors.margins
 
         TreeViewItem {

@@ -12,6 +12,8 @@ AudioElementImageProvider::AudioElementImageProvider() :
 
 auto AudioElementImageProvider::requestPixmap(const QString& id, QSize *size, const QSize& requestedSize) -> QPixmap
 {
+    qDebug() << id;
+
     auto _id = id;
     auto type = QStringLiteral("Music");
     auto regex = QRegularExpression(IMAGE_ID_REGEX);
