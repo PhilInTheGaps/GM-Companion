@@ -3,7 +3,7 @@
 #include "services/services.h"
 #include "settings/settingsmanager.h"
 #include "filesystem/filemanager.h"
-#include "utils/utils.h"
+#include "common/utils/utils.h"
 #include "services/spotify/spotifyutils.h"
 #include "project/audioicon.h"
 

@@ -891,7 +891,7 @@ auto AudioEditor::basePath() const -> QString
 {
     if (!m_currentElement) return "";
 
-    return SettingsManager::getPath(m_currentElement->type());
+    return SettingsManager::getPath(AudioElement::typeToSettings(m_currentElement->type()));
 }
 
 /**

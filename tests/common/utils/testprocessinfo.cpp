@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/utils/processinfo.h"
+#include "utils/processinfo.h"
 
 class TestProcessInfo : public QObject
 {

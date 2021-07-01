@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/utils/fileutils.h"
+#include "utils/fileutils.h"
 
 class TestFileUtils : public QObject
 {

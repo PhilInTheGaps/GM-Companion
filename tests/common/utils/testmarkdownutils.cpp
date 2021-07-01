@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/utils/markdownutils.h"
+#include "utils/markdownutils.h"
 
 class TestMarkdownUtils : public QObject
 {

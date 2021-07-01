@@ -13,8 +13,8 @@ configure_file(
 
 # UpdateManager
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/version.h.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/managers/version.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/common/updates/version.h.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/common/updates/version.h
   @ONLY
 )
 

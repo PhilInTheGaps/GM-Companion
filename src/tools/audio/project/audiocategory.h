@@ -2,7 +2,7 @@
 #define AUDIOCATEGORY_H
 
 #include "audioscenario.h"
-#include "../../../utils/utils.h"
+#include "utils/utils.h"
 
 class AudioCategory : public TreeItem
 {

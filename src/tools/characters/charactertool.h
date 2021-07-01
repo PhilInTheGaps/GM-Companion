@@ -3,7 +3,7 @@
 
 #include <QList>
 #include <QQmlApplicationEngine>
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "character.h"
 #include "viewers/characterimageviewer.h"
 #include "viewers/characterdsa5viewer.h"

@@ -1,7 +1,7 @@
 #ifndef SHOPEDITOR_H
 #define SHOPEDITOR_H
 
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "itemeditor.h"
 #include <QQmlApplicationEngine>
 

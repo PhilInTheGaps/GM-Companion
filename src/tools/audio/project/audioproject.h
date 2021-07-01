@@ -2,7 +2,7 @@
 #define AUDIOPROJECT_H
 
 #include "audiocategory.h"
-#include "../../../utils/utils.h"
+#include "utils/utils.h"
 
 class AudioProject : public TreeItem
 {

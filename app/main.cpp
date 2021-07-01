@@ -19,7 +19,7 @@
 #include "services/nextcloud/nextcloud.h"
 #include "services/discord/discord.h"
 
-#include "managers/updatemanager.h"
+#include "updates/updatemanager.h"
 #include "platformdetails.h"
 
 /// Register meta types for signals and slots

@@ -121,6 +121,21 @@ auto AudioElement::typeToString(AudioElement::Type type) -> QString
     return QVariant::fromValue(type).toString();
 }
 
+auto AudioElement::typeToSettings(AudioElement::Type type) -> QString
+{
+    switch (type) {
+    case AudioElement::Type::Music:
+        return QStringLiteral("music");
+    case AudioElement::Type::Sound:
+        return QStringLiteral("sounds");
+    case AudioElement::Type::Radio:
+        return QStringLiteral("radio");
+    default:
+        qCWarning(gmSettings()) << "Error: getPath() was called with illegal element type:" << AudioElement::typeToString(type);
+        return "";
+    }
+}
+
 /**
  * @brief Compare two audio elements, true if e1 comes alphabetically before e2.
  */

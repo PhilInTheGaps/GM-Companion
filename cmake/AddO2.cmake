@@ -13,6 +13,7 @@ endif()
 
 # find qt5 packages
 find_package(Qt5 REQUIRED COMPONENTS Core Network)
+find_package(QtKeychain)
 
 # o2 lib
 set(o2_SOURCES
@@ -60,6 +61,7 @@ endif()
 
 add_library(o2 STATIC ${o2_SOURCES} ${o2_HEADERS})
 target_link_libraries(o2 Qt5::Core Qt5::Network ${LINK_TARGETS})
+target_include_directories(o2 PUBLIC ${EXTERNAL_LIB_DIR}/o2/src)
 
 # needed for statically linked o2 in shared libs on x86_64
 set_target_properties(o2

@@ -4,7 +4,7 @@
 #include <QStringList>
 #include <QQmlApplicationEngine>
 
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "editor/audioeditor.h"
 #include "players/spotifyplayer.h"
 #include "players/musicplayer.h"

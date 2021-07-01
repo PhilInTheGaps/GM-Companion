@@ -122,21 +122,21 @@ bool Worker::copyNextMusic()
 {
     if (m_musicFiles.isEmpty()) return false;
 
-    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::Music), "music");
+    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Music)), "music");
 }
 
 bool Worker::copyNextSound()
 {
     if (m_soundFiles.isEmpty()) return false;
 
-    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::Sound), "sounds");
+    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Sound)), "sounds");
 }
 
 bool Worker::copyNextRadio()
 {
     if (m_radioFiles.isEmpty()) return false;
 
-    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::Radio), "radios");
+    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Radio)), "radios");
 }
 
 bool Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder)

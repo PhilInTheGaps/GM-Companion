@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QQmlEngine>
-#include "../settings/settingsmanager.h"
+#include "settings/settingsmanager.h"
 
 #define DICE_SETTINGS "Dice"
 #define ENABLE_CRITICALS_SETTING "enableCriticals"

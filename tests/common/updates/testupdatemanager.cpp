@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/managers/updatemanager.h"
+#include "updates/updatemanager.h"
 
 class TestUpdateManager : public UpdateManager
 {

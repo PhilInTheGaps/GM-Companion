@@ -16,32 +16,22 @@ endif()
 # qt modules
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
 
-# external libraries
-find_package(QtKeychain)
-
 # submodule libraries
-include(AddO2)
 include(AddQYTLIB)
 include(AddPoppler)
 include(AddTagLib)
-include(AddMarkdownLib)
+include(AddO2)
 
-# configure markdown lib
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h
-  @ONLY)
+add_subdirectory(common)
 
 # source files
 set(SOURCES
-  models/treeitem.cpp 
   filesystem/fileaccessgoogledrive.cpp 
   filesystem/fileaccesslocal.cpp 
   filesystem/fileaccessnextcloud.cpp 
   filesystem/filedialog.cpp 
   filesystem/filemanager.cpp 
-  filesystem/googledrivefile.cpp 
-  logging.cpp 
+  filesystem/googledrivefile.cpp
   services/discord/discord.cpp 
   services/google/googledrive.cpp 
   services/google/googledriveconnectorlocal.cpp 
@@ -51,8 +41,7 @@ set(SOURCES
   services/spotify/spotify.cpp 
   services/spotify/spotifyconnectorlocal.cpp 
   services/spotify/spotifyconnectorserver.cpp 
-  services/spotify/spotifyutils.cpp 
-  tools/abstracttool.cpp 
+  services/spotify/spotifyutils.cpp
   tools/maps/mapmarker.cpp 
   tools/dicetool.cpp 
   tools/notes/htmlgenerator.cpp 
@@ -105,25 +94,15 @@ set(SOURCES
   tools/shop/itemeditor.cpp 
   tools/shop/shopeditor.cpp 
   tools/shop/shoptool.cpp
-  managers/updatemanager.cpp 
-  managers/addonmanager.cpp 
-  settings/settingsmanager.cpp 
-  platformdetails.cpp 
+  managers/addonmanager.cpp
   tools/characters/viewers/characterimageviewer.cpp 
   tools/characters/viewers/characterviewer.cpp 
   tools/characters/viewers/characterdsa5viewer.cpp 
-  tools/characters/viewers/dsa5/dsa5listitem.cpp 
-  utils/fileutils.cpp 
-  utils/markdownutils.cpp 
-  utils/networkutils.cpp 
-  utils/processinfo.cpp 
-  utils/utils.cpp
+  tools/characters/viewers/dsa5/dsa5listitem.cpp
 )
 
 # header files
 set(HEADERS
-  logging.h 
-  models/treeitem.h 
   filesystem/filerequestcontainer.h
   filesystem/fileaccess.h
   filesystem/fileaccessgoogledrive.h 
@@ -143,9 +122,7 @@ set(HEADERS
   services/spotify/spotify.h 
   services/spotify/spotifyconnectorlocal.h 
   services/spotify/spotifyconnectorserver.h 
-  services/spotify/spotifyutils.h 
-  settings/settings.h 
-  tools/abstracttool.h 
+  services/spotify/spotifyutils.h
   tools/audio/audiotool.h
   tools/audio/audioelementimageprovider.h 
   tools/audio/audioicongenerator.h 
@@ -181,13 +158,7 @@ set(HEADERS
   tools/notes/notebookchapter.h 
   tools/notes/notebookpage.h 
   tools/notes/notessaveload.h 
-  tools/notes/notestool.h 
-  utils/fileutils.h 
-  utils/markdownutils.h
-  utils/markdownutils.h.in
-  utils/networkutils.h 
-  utils/processinfo.h 
-  utils/utils.h 
+  tools/notes/notestool.h
   tools/dicetool.h 
   tools/convertertool.h 
   tools/project_converter/projectconverter.h 
@@ -206,13 +177,8 @@ set(HEADERS
   tools/generators/namegenerator.h
   tools/shop/shoptool.h 
   tools/shop/itemeditor.h 
-  tools/shop/shopeditor.h 
-  managers/updatemanager.h
-  managers/version.h.in
-  managers/version.h
-  managers/addonmanager.h 
-  settings/settingsmanager.h 
-  platformdetails.h 
+  tools/shop/shopeditor.h
+  managers/addonmanager.h
   tools/characters/viewers/characterimageviewer.h 
   tools/characters/viewers/characterviewer.h
   tools/characters/viewers/characterdsa5viewer.h 
@@ -227,16 +193,13 @@ set(RESOURCES
 # target executable
 add_library(gm-companion-lib STATIC ${SOURCES} ${HEADERS} ${RESOURCES})
 
-target_include_directories(gm-companion-lib PUBLIC
-  ${EXTERNAL_LIB_DIR}
-  ${EXTERNAL_LIB_DIR}/o2/src
-)
-
 target_link_libraries(
   gm-companion-lib
+  common
   Qt5::Core
   Qt5::Gui
   Qt5::Quick
+  Qt5::Qml
   Qt5::Multimedia
   Qt5::Network
   Qt5::DBus
@@ -244,8 +207,6 @@ target_link_libraries(
   qyt
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}
-  ${MARKDOWN_LIBRARY}
-  ${QTKEYCHAIN_LIBRARY}
 )
 
 install(

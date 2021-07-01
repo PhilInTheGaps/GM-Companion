@@ -1,9 +1,9 @@
 #ifndef UPDATEMANAGER_H
 #define UPDATEMANAGER_H
 
-#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QString>
+#include <QNetworkAccessManager>
 
 #include "version.h"
 

@@ -2,7 +2,7 @@
 #define SHOPTOOL_H
 
 #include <QStringList>
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "shopeditor.h"
 #include "shopproject.h"
 #include <QQmlApplicationEngine>

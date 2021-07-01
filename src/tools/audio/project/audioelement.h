@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QJsonObject>
 #include "audiofile.h"
-#include "../../../models/treeitem.h"
+#include "models/treeitem.h"
 
 class AudioIcon;
 
@@ -46,6 +46,7 @@ public:
 
     Type type() const { return m_type; }
     static QString typeToString(Type type);
+    static QString typeToSettings(AudioElement::Type type);
 
     QString path() const override { return m_path; }
     void setPath(const QString &path) { m_path = path; }

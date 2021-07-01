@@ -2,7 +2,7 @@
 #define AUDIOSCENARIO_H
 
 #include "audioelement.h"
-#include "../../../utils/utils.h"
+#include "utils/utils.h"
 
 class AudioScenario : public TreeItem
 {

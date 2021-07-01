@@ -7,7 +7,7 @@
 #include <QTemporaryDir>
 
 #include "../project/audioelement.h"
-#include "../../../utils/utils.h"
+#include "common/utils/utils.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
 #include <qytlib/videos/videoclient.h>

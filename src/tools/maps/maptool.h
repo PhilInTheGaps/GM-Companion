@@ -3,7 +3,7 @@
 
 #include <QStringList>
 #include <QQmlApplicationEngine>
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "map.h"
 
 class MapTool : public AbstractTool

@@ -10,7 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Gui Test)
+find_package(Qt5 REQUIRED COMPONENTS Gui Quick Test)
 
 # resources
 set(RESOURCES
@@ -19,10 +19,10 @@ set(RESOURCES
 
 # Audio Project
 add_executable(test_audioproject testaudioproject.cpp ${RESOURCES})
-target_link_libraries(test_audioproject gm-companion-lib Qt5::Gui Qt5::Test)
+target_link_libraries(test_audioproject gm-companion-lib common Qt5::Gui Qt5::Test)
 add_test(NAME test_audioproject COMMAND test_audioproject)
 
 # Combat Tracker
 add_executable(test_combattracker testcombattracker.cpp ${RESOURCES})
-target_link_libraries(test_combattracker gm-companion-lib Qt5::Gui Qt5::Test)
+target_link_libraries(test_combattracker gm-companion-lib common Qt5::Gui Qt5::Quick Qt5::Test)
 add_test(NAME test_combattracker COMMAND test_combattracker)

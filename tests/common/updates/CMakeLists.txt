@@ -10,9 +10,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Gui Test)
+find_package(Qt5 REQUIRED COMPONENTS Gui Network Test)
 
 # UpdateManager
 add_executable(test_updatemanager testupdatemanager.cpp)
-target_link_libraries(test_updatemanager gm-companion-lib Qt5::Gui Qt5::Test)
+target_link_libraries(test_updatemanager common Qt5::Gui Qt5::Network Qt5::Test)
 add_test(NAME test_updatemanager COMMAND test_updatemanager)

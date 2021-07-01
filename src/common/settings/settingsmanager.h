@@ -7,7 +7,6 @@
 #include <QSettings>
 #include <QLocale>
 #include "settings.h"
-#include "../tools/audio/project/audioelement.h"
 
 struct SettingRequest {
     SettingRequest() {}
@@ -42,7 +41,6 @@ public slots:
     static void setSetting(const QString& setting, const int& value, const QString& group = DEFAULT_GROUP);
 
     static QString getPath(const QString& setting, QString group = "");
-    static QString getPath(AudioElement::Type type);
     static void setPath(const QString& setting, const QString& value, QString group = "");
 
     static QLocale getLanguage();
@@ -77,6 +75,8 @@ private:
 
     static QString getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP);
     static QString getActivePathGroup();
+
+    static QString defaultServerUrl() { return QStringLiteral("https://gm-companion.rophil.lol"); }
 
     void updateSettings();
     void renameSetting(const QString& currentName, const QString& newName, const QString& group = DEFAULT_GROUP);

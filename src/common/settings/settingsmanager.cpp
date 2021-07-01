@@ -1,6 +1,5 @@
 #include "settingsmanager.h"
 #include "logging.h"
-#include "services/services.h"
 #include <QCoreApplication>
 
 #ifdef Q_OS_WIN
@@ -63,21 +62,6 @@ auto SettingsManager::getPath(const QString& setting, QString group)->QString
 
     if (value.isEmpty()) value = SettingsManager::getDefaultPath(setting, group);
     return value;
-}
-
-QString SettingsManager::getPath(AudioElement::Type type)
-{
-    switch (type) {
-    case AudioElement::Type::Music:
-        return getPath("music");
-    case AudioElement::Type::Sound:
-        return getPath("sounds");
-    case AudioElement::Type::Radio:
-        return getPath("radio");
-    default:
-        qCWarning(gmSettings()) << "Error: getPath() was called with illegal element type:" << AudioElement::typeToString(type);
-        return "";
-    }
 }
 
 void SettingsManager::setPath(const QString& setting, const QString& value, QString group)
@@ -172,10 +156,10 @@ auto SettingsManager::getServerUrl(const QString& service, const bool& hasDefaul
 
     if (hasDefault && (connection == "default"))
     {
-        return DEFAULT_SERVER_URL;
+        return defaultServerUrl();
     }
 
-    auto url = SettingsManager::getSetting("server", hasDefault ? DEFAULT_SERVER_URL : "", service);
+    auto url = SettingsManager::getSetting("server", hasDefault ? defaultServerUrl() : "", service);
 
     // Remove trailing '/'
     if (url.endsWith("/")) url.chop(1);

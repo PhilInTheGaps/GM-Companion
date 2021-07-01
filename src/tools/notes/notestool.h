@@ -1,7 +1,7 @@
 #ifndef NOTESTOOL_H
 #define NOTESTOOL_H
 
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "notessaveload.h"
 #include "htmlgenerator.h"
 #include "markdownhighlighter.h"

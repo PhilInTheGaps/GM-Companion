@@ -8,7 +8,7 @@
 
 #include <qytlib/videos/videoclient.h>
 
-#include "tools/abstracttool.h"
+#include "common/abstracttool.h"
 #include "settings/settingsmanager.h"
 #include "addonelementmanager.h"
 #include "audioexporter.h"

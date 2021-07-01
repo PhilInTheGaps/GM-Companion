@@ -1,6 +1,6 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/utils/networkutils.h"
+#include "utils/networkutils.h"
 
 class TestNetworkUtils : public QObject
 {
