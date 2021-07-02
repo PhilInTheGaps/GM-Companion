@@ -1,6 +1,6 @@
 #include "discord.h"
 #include "logging.h"
-#include "services/services.h"
+#include "services.h"
 #include "settings/settingsmanager.h"
 
 #include <QJsonDocument>

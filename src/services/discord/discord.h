@@ -1,7 +1,7 @@
 #ifndef DISCORD_H
 #define DISCORD_H
 
-#include "../service.h"
+#include "service.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>

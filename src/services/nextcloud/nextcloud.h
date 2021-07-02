@@ -5,7 +5,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include "../service.h"
+#include "service.h"
 
 class NextCloud : public Service
 {

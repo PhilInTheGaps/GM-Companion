@@ -7,7 +7,7 @@
 #include <QLoggingCategory>
 
 #include "settings/settingsmanager.h"
-#include "../service.h"
+#include "service.h"
 
 enum RequestType {
     GET,

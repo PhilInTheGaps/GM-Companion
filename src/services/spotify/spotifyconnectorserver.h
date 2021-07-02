@@ -2,7 +2,7 @@
 #define SPOTIFYCONNECTORSERVER_H
 
 #include <QObject>
-#include "../rest/restserviceconnector.h"
+#include "rest/restserviceconnector.h"
 #include "settings/settingsmanager.h"
 
 #include <QQueue>

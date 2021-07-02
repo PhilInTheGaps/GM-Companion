@@ -9,7 +9,7 @@
 #include "spotifyconnectorlocal.h"
 #include "spotifyconnectorserver.h"
 #include "settings/settingsmanager.h"
-#include "../service.h"
+#include "service.h"
 
 class Spotify : public Service
 {

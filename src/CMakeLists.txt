@@ -20,9 +20,9 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
 include(AddQYTLIB)
 include(AddPoppler)
 include(AddTagLib)
-include(AddO2)
 
 add_subdirectory(common)
+add_subdirectory(services)
 
 # source files
 set(SOURCES
@@ -32,16 +32,6 @@ set(SOURCES
   filesystem/filedialog.cpp 
   filesystem/filemanager.cpp 
   filesystem/googledrivefile.cpp
-  services/discord/discord.cpp 
-  services/google/googledrive.cpp 
-  services/google/googledriveconnectorlocal.cpp 
-  services/nextcloud/nextcloud.cpp 
-  services/rest/restserviceconnectorlocal.cpp 
-  services/service.cpp 
-  services/spotify/spotify.cpp 
-  services/spotify/spotifyconnectorlocal.cpp 
-  services/spotify/spotifyconnectorserver.cpp 
-  services/spotify/spotifyutils.cpp
   tools/maps/mapmarker.cpp 
   tools/dicetool.cpp 
   tools/notes/htmlgenerator.cpp 
@@ -111,18 +101,6 @@ set(HEADERS
   filesystem/filedialog.h 
   filesystem/filemanager.h 
   filesystem/googledrivefile.h 
-  services/discord/discord.h 
-  services/google/googledrive.h 
-  services/google/googledriveconnectorlocal.h 
-  services/nextcloud/nextcloud.h 
-  services/rest/restserviceconnector.h 
-  services/rest/restserviceconnectorlocal.h 
-  services/service.h 
-  services/services.h 
-  services/spotify/spotify.h 
-  services/spotify/spotifyconnectorlocal.h 
-  services/spotify/spotifyconnectorserver.h 
-  services/spotify/spotifyutils.h
   tools/audio/audiotool.h
   tools/audio/audioelementimageprovider.h 
   tools/audio/audioicongenerator.h 
@@ -196,6 +174,7 @@ add_library(gm-companion-lib STATIC ${SOURCES} ${HEADERS} ${RESOURCES})
 target_link_libraries(
   gm-companion-lib
   common
+  services
   Qt5::Core
   Qt5::Gui
   Qt5::Quick
@@ -203,7 +182,6 @@ target_link_libraries(
   Qt5::Multimedia
   Qt5::Network
   Qt5::DBus
-  o2
   qyt
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}

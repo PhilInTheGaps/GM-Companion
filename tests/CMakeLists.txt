@@ -11,5 +11,5 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 add_subdirectory(common)
+add_subdirectory(services)
 add_subdirectory(tools)
-

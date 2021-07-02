@@ -17,11 +17,6 @@ add_executable(test_utils testutils.cpp)
 target_link_libraries(test_utils common Qt5::Gui Qt5::Test)
 add_test(NAME test_utils COMMAND test_utils)
 
-# Spotify Utils
-add_executable(test_spotifyutils testspotifyutils.cpp)
-target_link_libraries(test_spotifyutils gm-companion-lib Qt5::Test)
-add_test(NAME test_spotifyutils COMMAND test_spotifyutils)
-
 # File Utils
 add_executable(test_fileutils testfileutils.cpp)
 target_link_libraries(test_fileutils common Qt5::Test)

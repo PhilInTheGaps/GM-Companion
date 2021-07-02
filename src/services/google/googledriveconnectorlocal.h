@@ -1,7 +1,7 @@
 #ifndef GOOGLEDRIVECONNECTORLOCAL_H
 #define GOOGLEDRIVECONNECTORLOCAL_H
 
-#include "../rest/restserviceconnectorlocal.h"
+#include "rest/restserviceconnectorlocal.h"
 #include "o2google.h"
 
 class GoogleDriveConnectorLocal : public RESTServiceConnectorLocal
