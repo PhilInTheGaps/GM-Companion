@@ -59,7 +59,7 @@ target_link_libraries(common
     PRIVATE
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY}
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
-    Qt${QT_VERSION_MAJOR}::Network
+    Qt5::Core
+    Qt5::Gui
+    Qt5::Network
 )
