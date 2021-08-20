@@ -1,5 +1,4 @@
-#ifndef SPOTIFYCONNECTORSERVER_H
-#define SPOTIFYCONNECTORSERVER_H
+#pragma once
 
 #include <QObject>
 #include "rest/restserviceconnector.h"
@@ -79,5 +78,3 @@ private slots:
 signals:
     void receivedReplyInternal(RequestContainer container, QByteArray data, QList<QPair<QByteArray, QByteArray>> headers, QNetworkReply::NetworkError error);
 };
-
-#endif // SPOTIFYCONNECTORSERVER_H

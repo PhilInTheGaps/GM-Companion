@@ -14,7 +14,7 @@ Service::~Service()
     m_status->deleteLater();
 }
 
-void Service::updateStatus(const Service::StatusType& type, const QString& message)
+void Service::updateStatus(const ServiceStatus::Type& type, const QString& message)
 {
     m_status->setType(static_cast<int>(type));
     m_status->setMessage(message);
@@ -24,11 +24,11 @@ void Service::updateConnectionStatus()
 {
     if (m_connected)
     {
-        updateStatus(StatusType::Success, tr("Connected"));
+        updateStatus(ServiceStatus::Type::Success, tr("Connected"));
     }
     else
     {
-        updateStatus(StatusType::Info, tr("Not connected"));
+        updateStatus(ServiceStatus::Type::Info, tr("Not connected"));
     }
 }
 

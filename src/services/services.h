@@ -1,5 +1,4 @@
-#ifndef SERVICES_H
-#define SERVICES_H
+#pragma once
 
 /* --- GENERAL --- */
 #define DEFAULT_SERVER_URL      "https://gm-companion.rophil.lol"
@@ -29,5 +28,3 @@
 
 /* --- DISCORD --- */
 #define DISCORD_API_ENDPOINT    "/discord"
-
-#endif // SERVICES_H

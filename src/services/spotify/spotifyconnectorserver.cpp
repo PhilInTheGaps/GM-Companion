@@ -147,7 +147,7 @@ void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int 
 void SpotifyConnectorServer::authenticate()
 {
     qCDebug(gmSpotifyServer()) << "Authenticating ...";
-    emit statusChanged(Service::StatusType::Info, tr("Connecting ..."));
+    emit statusChanged(ServiceStatus::Type::Info, tr("Connecting ..."));
 
     if (!m_server.isListening())
     {
@@ -237,19 +237,19 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
             if (reply->error() != QNetworkReply::NoError)
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
-                emit statusChanged(Service::StatusType::Error, reply->errorString());
+                emit statusChanged(ServiceStatus::Type::Error, reply->errorString());
                 return;
             }
             else if (!params["error"].toString().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:" << params["error"].toString();
-                emit statusChanged(Service::StatusType::Error, params["error"].toString());
+                emit statusChanged(ServiceStatus::Type::Error, params["error"].toString());
                 return;
             }
             else if (getAccessToken().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
-                emit statusChanged(Service::StatusType::Error, "Unexpected error, access token is empty.");
+                emit statusChanged(ServiceStatus::Type::Error, "Unexpected error, access token is empty.");
                 return;
             }
 
@@ -395,7 +395,7 @@ void SpotifyConnectorServer::onBytesReady()
 
     if (!socket) {
         qCWarning(gmSpotifyServer()) << "onBytesReady: No socket available";
-        emit statusChanged(Service::StatusType::Error, "Error: No socket available.");
+        emit statusChanged(ServiceStatus::Type::Error, "Error: No socket available.");
         return;
     }
 
@@ -447,7 +447,7 @@ void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool  /*hasparamete
 
         if (timer) {
             qCWarning(gmSpotifyServer()) << "closeServer: Closing due to timeout";
-            emit statusChanged(Service::StatusType::Error, "Error: Connection timed out.");
+            emit statusChanged(ServiceStatus::Type::Error, "Error: Connection timed out.");
             timer->stop();
             socket = qobject_cast<QTcpSocket *>(timer->parent());
             timer->deleteLater();

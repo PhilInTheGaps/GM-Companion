@@ -1,5 +1,4 @@
-#ifndef NEXTCLOUD_H
-#define NEXTCLOUD_H
+#pragma once
 
 #include <QObject>
 #include <QNetworkAccessManager>
@@ -23,7 +22,7 @@ public:
     void setServerUrl(const QString& url) { m_serverUrl = url; emit serverUrlChanged(); }
 
     QNetworkReply *sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data,
-                                  QList<QPair<QByteArray, QByteArray> > headers = {});
+                                  const QList<QPair<QByteArray, QByteArray> >& headers = {});
 
     QString getPathUrl(const QString &path);
 
@@ -53,5 +52,3 @@ private:
     void pollAuthPoint(const QUrl& url, const QString& token);
 
 };
-
-#endif // NEXTCLOUD_H

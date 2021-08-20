@@ -1,5 +1,4 @@
-#ifndef RESTSERVICECONNECTOR_H
-#define RESTSERVICECONNECTOR_H
+#pragma once
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -63,8 +62,6 @@ protected:
 signals:
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
     void accessGranted();
-    void statusChanged(const Service::StatusType& type, const QString& message);
+    void statusChanged(const ServiceStatus::Type& type, const QString& message);
     void isConnectedChanged(const bool& connected);
 };
-
-#endif // RESTSERVICECONNECTOR_H

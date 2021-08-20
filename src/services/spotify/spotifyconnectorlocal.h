@@ -1,5 +1,4 @@
-#ifndef SPOTIFYCONNECTORLOCAL_H
-#define SPOTIFYCONNECTORLOCAL_H
+#pragma once
 
 #include "rest/restserviceconnectorlocal.h"
 #include "o2spotify.h"
@@ -12,4 +11,3 @@ public:
     (QNetworkAccessManager* networkManager, O2Spotify *o2Spotify, QObject *parent = nullptr);
 };
 
-#endif // SPOTIFYCONNECTORLOCAL_H

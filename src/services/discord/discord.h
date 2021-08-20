@@ -1,5 +1,4 @@
-#ifndef DISCORD_H
-#define DISCORD_H
+#pragma once
 
 #include "service.h"
 #include <QNetworkAccessManager>
@@ -48,5 +47,3 @@ private:
 
     QString serverUrl() const; 
 };
-
-#endif // DISCORD_H

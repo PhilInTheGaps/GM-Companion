@@ -2,8 +2,7 @@
 #include "logging.h"
 #include "filemanager.h"
 #include "utils/utils.h"
-#include <utility>
-
+//#include <utility>
 
 FileObject::FileObject(const QString& name, bool isFolder, QObject *parent)
     : QObject(parent), m_name(name), m_isFolder(isFolder)
@@ -12,7 +11,6 @@ FileObject::FileObject(const QString& name, bool isFolder, QObject *parent)
 
 FileDialog::FileDialog(QObject *parent) : QObject(parent)
 {
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &FileDialog::onFileListReceived);
 }
 
 auto FileDialog::setCurrentDir(const QString& dir) -> void

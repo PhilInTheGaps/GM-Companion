@@ -12,7 +12,7 @@ if (EXISTS ${CGET_TOOLCHAIN_FILE})
 endif()
 
 # set c++ version
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -36,6 +36,9 @@ include(SetVersionNumber)
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
 enable_testing(true)
+
+include(AddAsyncFuture)
+include(AddPropertyHelper)
 
 add_subdirectory(src)
 add_subdirectory(tests)

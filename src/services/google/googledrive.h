@@ -1,5 +1,4 @@
-#ifndef GOOGLEDRIVE_H
-#define GOOGLEDRIVE_H
+#pragma once
 
 #include <QObject>
 #include <QNetworkAccessManager>
@@ -52,5 +51,3 @@ signals:
     void receivedReply(int id, QNetworkReply::NetworkError error, QByteArray data, QList<QNetworkReply::RawHeaderPair> headers);
     void clientIdChanged();
 };
-
-#endif // GOOGLEDRIVE_H

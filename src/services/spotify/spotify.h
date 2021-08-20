@@ -1,5 +1,4 @@
-﻿#ifndef SPOTIFY_H
-#define SPOTIFY_H
+﻿#pragma once
 
 #include <QObject>
 #include <QNetworkReply>
@@ -74,5 +73,3 @@ private slots:
     void onLibrespotFinished(const int& exitCode, const QProcess::ExitStatus& exitStatus);
     void onLibrespotError(const QProcess::ProcessError& error);
 };
-
-#endif // SPOTIFY_H

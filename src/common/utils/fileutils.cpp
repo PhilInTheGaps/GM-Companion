@@ -54,14 +54,36 @@ auto FileUtils::suffix(const QString &fileName) -> QString
  */
 auto FileUtils::fileName(const QString &path) -> QString
 {
-    auto index = path.lastIndexOf('/');
+    auto endsWithSlash = path.endsWith('/');
+    auto from = endsWithSlash ? -2 : -1;
+    auto index = path.lastIndexOf('/', from);
 
     if (index > -1)
     {
-        return path.right(path.length() - index - 1);
+        auto result = path.right(path.length() - index - 1);
+        return endsWithSlash ? result.left(result.length() -1) : result;
     }
 
-    return path;
+    return endsWithSlash ? path.left(path.length() -1) : path;
+}
+
+/**
+ * @brief Get the filename (with suffix) from a path.
+ * Example: path "/some/file.mp3" becomes "file.mp3"
+ */
+auto FileUtils::fileName(const QStringRef &path) -> QString
+{
+    auto endsWithSlash = path.endsWith('/');
+    auto from = endsWithSlash ? -2 : -1;
+    auto index = path.lastIndexOf('/', from);
+
+    if (index > -1)
+    {
+        auto result = path.right(path.length() - index - 1).toString();
+        return endsWithSlash ? result.left(result.length() -1) : result;
+    }
+
+    return endsWithSlash ? path.left(path.length() -1).toString() : path.toString();
 }
 
 /**

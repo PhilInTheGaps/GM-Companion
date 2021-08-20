@@ -5,6 +5,8 @@
 #include <QObject>
 #include "utils/fileutils.h"
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+
 class FileObject : public QObject
 {
     Q_OBJECT
@@ -33,6 +35,8 @@ class FileDialog : public QObject
     Q_OBJECT
 public:
     explicit FileDialog(QObject *parent = nullptr);
+
+    AUTO_PROPERTY(QString, test)
 
     Q_PROPERTY(QString currentDir READ currentDir WRITE setCurrentDir NOTIFY currentDirChanged)
     QString currentDir() const { return FileUtils::dirFromFolders(m_currentDir); }

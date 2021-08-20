@@ -23,14 +23,15 @@ include(AddTagLib)
 
 add_subdirectory(common)
 add_subdirectory(services)
+add_subdirectory(filesystem_new)
 
 # source files
 set(SOURCES
-  filesystem/fileaccessgoogledrive.cpp 
-  filesystem/fileaccesslocal.cpp 
-  filesystem/fileaccessnextcloud.cpp 
-  filesystem/filedialog.cpp 
-  filesystem/filemanager.cpp 
+  filesystem/fileaccessgoogledrive.cpp
+  filesystem/fileaccesslocal.cpp
+  filesystem/fileaccessnextcloud.cpp
+  filesystem/filedialog.cpp
+  filesystem/filemanager.cpp
   filesystem/googledrivefile.cpp
   tools/maps/mapmarker.cpp 
   tools/dicetool.cpp 
@@ -95,12 +96,12 @@ set(SOURCES
 set(HEADERS
   filesystem/filerequestcontainer.h
   filesystem/fileaccess.h
-  filesystem/fileaccessgoogledrive.h 
-  filesystem/fileaccesslocal.h 
-  filesystem/fileaccessnextcloud.h 
-  filesystem/filedialog.h 
-  filesystem/filemanager.h 
-  filesystem/googledrivefile.h 
+  filesystem/fileaccessgoogledrive.h
+  filesystem/fileaccesslocal.h
+  filesystem/fileaccessnextcloud.h
+  filesystem/filedialog.h
+  filesystem/filemanager.h
+  filesystem/googledrivefile.h
   tools/audio/audiotool.h
   tools/audio/audioelementimageprovider.h 
   tools/audio/audioicongenerator.h 
@@ -175,6 +176,8 @@ target_link_libraries(
   gm-companion-lib
   common
   services
+#  filesystem
+  propertyhelper
   Qt5::Core
   Qt5::Gui
   Qt5::Quick

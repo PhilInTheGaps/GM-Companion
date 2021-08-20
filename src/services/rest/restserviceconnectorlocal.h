@@ -1,5 +1,4 @@
-#ifndef RESTSERVICECONNECTORLOCAL_H
-#define RESTSERVICECONNECTORLOCAL_H
+#pragma once
 
 #include <QQueue>
 
@@ -68,5 +67,3 @@ protected slots:
     void onReplyReceived(int internalId, QNetworkReply::NetworkError error, const QByteArray& data, QList<QNetworkReply::RawHeaderPair> headers);
     void onRefreshFinished(const QNetworkReply::NetworkError& error);
 };
-
-#endif // RESTSERVICECONNECTORLOCAL_H

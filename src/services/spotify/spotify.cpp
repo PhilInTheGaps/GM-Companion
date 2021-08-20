@@ -128,7 +128,7 @@ void Spotify::disconnectService()
 auto Spotify::startLibrespot()->bool
 {
     qCDebug(gmSpotify()) << "Starting librespot ...";
-    updateStatus(StatusType::Info, tr("Starting librespot..."));
+    updateStatus(ServiceStatus::Type::Info, tr("Starting librespot..."));
 
     if (!ProcessInfo::isProcessRunning(getLibrespotBinaryName()))
     {
@@ -139,14 +139,14 @@ auto Spotify::startLibrespot()->bool
         if (username.isEmpty())
         {
             qCWarning(gmSpotify()) << "Could not start librespot, username is not set.";
-            updateStatus(StatusType::Error, tr("Error: Username is not set."));
+            updateStatus(ServiceStatus::Type::Error, tr("Error: Username is not set."));
             return false;
         }
 
         if (password.isEmpty())
         {
             qCWarning(gmSpotify()) << "Could not start librespot, password is not set.";
-            updateStatus(StatusType::Error, tr("Error: Password is not set."));
+            updateStatus(ServiceStatus::Type::Error, tr("Error: Password is not set."));
             return false;
         }
 
@@ -183,7 +183,7 @@ void Spotify::onLibrespotFinished(const int& exitCode, const QProcess::ExitStatu
     case 101: // BadCredentials
         qCWarning(gmSpotify()) << "Spotify credentials are wrong!";
         emit setConnected(false);
-        updateStatus(StatusType::Error, tr("Error: Bad Credentials!"));
+        updateStatus(ServiceStatus::Type::Error, tr("Error: Bad Credentials!"));
         break;
 
     default:
@@ -274,11 +274,11 @@ void Spotify::handleAccessDenied(const QByteArray &data)
     if (reason == "PREMIUM_REQUIRED")
     {
         setConnected(false);
-        updateStatus(StatusType::Error, tr("Error: Spotify premium is required!"));
+        updateStatus(ServiceStatus::Type::Error, tr("Error: Spotify premium is required!"));
     }
     else
     {
-        updateStatus(StatusType::Error, message);
+        updateStatus(ServiceStatus::Type::Error, message);
     }
 }
 

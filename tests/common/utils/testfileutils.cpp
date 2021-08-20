@@ -112,6 +112,7 @@ void TestFileUtils::fileName_data()
     QTest::newRow("only file name") << "file.doc" << "file.doc";
     QTest::newRow("empty") << "" << "";
     QTest::newRow("multiple dots") << "some/path/file.jpeg.json" << "file.jpeg.json";
+    QTest::newRow("folder with /") << "some/path/" << "path";
 }
 
 void TestFileUtils::fileName()
@@ -120,6 +121,7 @@ void TestFileUtils::fileName()
     QFETCH(QString, output);
 
     QCOMPARE(FileUtils::fileName(input), output);
+    QCOMPARE(FileUtils::fileName(QStringRef(&input)), output);
 }
 
 void TestFileUtils::incrementFileName_data()

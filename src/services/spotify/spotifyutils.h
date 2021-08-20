@@ -1,5 +1,4 @@
-#ifndef SPOTIFYUTILS_H
-#define SPOTIFYUTILS_H
+#pragma once
 
 #include <QString>
 
@@ -10,5 +9,3 @@ public:
     static QString getIdFromUri(QString uri);
     static QString getIdFromHref(const QString& href);
 };
-
-#endif // SPOTIFYUTILS_H

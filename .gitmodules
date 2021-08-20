@@ -9,3 +9,9 @@
 [submodule "lib/qytlib"]
 	path = thirdparty/qytlib
 	url = https://github.com/PhilInTheGaps/qytlib
+[submodule "thirdparty/asyncfuture"]
+	path = thirdparty/asyncfuture
+	url = https://github.com/benlau/asyncfuture
+[submodule "thirdparty/propertyhelper"]
+	path = thirdparty/propertyhelper
+	url = https://github.com/tackelua/Qt-PropertyHelper

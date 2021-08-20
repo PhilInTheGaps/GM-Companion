@@ -12,6 +12,7 @@ public:
     static QStringList foldersFromDir(const QString& dir);
     static QString suffix(const QString& fileName);
     static QString fileName(const QString& path);
+    static QString fileName(const QStringRef& path);
     static QString incrementFileName(const QString& fileName);
 };
 

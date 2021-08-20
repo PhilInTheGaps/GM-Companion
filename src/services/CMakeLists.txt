@@ -16,6 +16,7 @@ include(AddO2)
 set(HEADERS
     service.h
     services.h
+    servicestatus.h
     rest/restserviceconnector.h
     rest/restserviceconnectorlocal.h
     spotify/spotify.h
