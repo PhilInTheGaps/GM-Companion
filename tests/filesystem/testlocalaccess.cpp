@@ -17,14 +17,8 @@ protected:
 
     void createTestFile(const QString &path, const QByteArray &data) override;
 
-    auto getFilePath(const QString& filename = "") const -> QString override;
-
-private:
-    QTemporaryDir dir;
-
 private slots:
     void initTestCase();
-    void cleanupTestCase();
 };
 
 void TestLocalAccess::createTestDir()
@@ -41,20 +35,10 @@ void TestLocalAccess::createTestFile(const QString& path, const QByteArray& data
     f1.close();
 }
 
-auto TestLocalAccess::getFilePath(const QString& filename) const -> QString
-{
-    return filename.isEmpty() ? dir.path() : dir.filePath(filename);
-}
-
 void TestLocalAccess::initTestCase()
 {
     fileAccess = new FileAccessLocal(this);
     createTestFiles();
-}
-
-void TestLocalAccess::cleanupTestCase()
-{
-    dir.remove();
 }
 
 QTEST_GUILESS_MAIN(TestLocalAccess)

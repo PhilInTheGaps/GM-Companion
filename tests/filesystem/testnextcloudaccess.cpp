@@ -36,7 +36,7 @@ void TestNextcloudAccess::createTestDir()
 
 void TestNextcloudAccess::removeTestDir()
 {
-    ignoreWarning();
+    expectWarning();
     removeFileAndVerify(getFilePath());
 }
 

@@ -1,6 +1,8 @@
 #include "abstractaccesstest.h"
 #include "file.h"
+#include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QtTest>
 
 using namespace Files;
 using namespace AsyncFuture;
@@ -16,38 +18,6 @@ void AbstractAccessTest::createTestFiles()
     createTestFile(QStringLiteral("test7"), "To be copied.");
 }
 
-void AbstractAccessTest::ignoreWarning()
-{
-    QTest::ignoreMessage(QtWarningMsg, QRegularExpression(".*"));
-}
-
-template<typename T>
-void AbstractAccessTest::testFuture(const QFuture<T>& future, const QString &funcName, const std::function<void()>& testFunc, bool cached)
-{
-    QFutureWatcher<T> watcher;
-    QSignalSpy spy(&watcher, &QFutureWatcher<T>::finished);
-
-    watcher.setFuture(future);
-    QVERIFY2(!future.isCanceled(), QString("The QFuture object returned by %1 has been canceled.").arg(funcName).toUtf8());
-
-    auto waitTime = cached ? WAIT_TIME_IN_MS_CACHED : WAIT_TIME_IN_MS;
-    auto isReady = spy.wait(waitTime);
-    QVERIFY2(isReady, QString("%1 took longer than %2 ms to respond.").arg(funcName, QString::number(waitTime)).toUtf8());
-
-    testFunc();
-}
-
-void AbstractAccessTest::verifyFileContent(const QString &path, const QByteArray &content, bool cached = false)
-{
-    const auto future = File::getDataAsync(path, cached, fileAccess);
-    testFuture(future, QStringLiteral("File::getDataAsync"), [future, content](){
-        auto *result = future.result();
-        QVERIFY2(result->success(), "File::getDataAsync did not return a valid result.");
-        QCOMPARE(result->data(), content);
-        result->deleteLater();
-    }, cached);
-}
-
 /// Read data from file(s)
 void AbstractAccessTest::getDataAsync()
 {
@@ -58,7 +28,7 @@ void AbstractAccessTest::getDataAsync()
     verifyFileContent(getFilePath(QStringLiteral("test1")), QByteArray("This is test 1."), true);
 
     // File that does not exist
-    ignoreWarning();
+    expectWarning();
     const auto future2 = File::getDataAsync(getFilePath(QStringLiteral("missing-file")), false, fileAccess);
     testFuture(future2, QStringLiteral("File::getDataAsync"), [future2](){
         auto *result = future2.result();
@@ -142,7 +112,7 @@ void AbstractAccessTest::moveAsync()
     });
 
     // Move nonexisting file
-    ignoreWarning();
+    expectWarning();
     auto future3 = File::moveAsync(getFilePath(QStringLiteral("test5")), getFilePath(QStringLiteral("test5-moved")), fileAccess);
     testFuture(future3, QStringLiteral("File::moveAsync"), [future3](){
         QVERIFY2(!future3.result()->success(), "Could move file but it should not exist.");
@@ -150,7 +120,7 @@ void AbstractAccessTest::moveAsync()
     });
 
     // Try to move file to a location already taken
-    ignoreWarning();
+    expectWarning();
     auto future4 = File::moveAsync(getFilePath(QStringLiteral("test5-moved")), getFilePath(QStringLiteral("test1")), fileAccess);
     testFuture(future4, QStringLiteral("File::moveAsync"), [future4](){
         QVERIFY2(!future4.result()->success(), "Could move file but the location already exists.");
@@ -175,7 +145,7 @@ void AbstractAccessTest::deleteAsync()
     removeFileAndVerify(getFilePath(QStringLiteral("test6")));
 
     // Try to delete nonexisting file
-    ignoreWarning();
+    expectWarning();
     auto future = File::deleteAsync(getFilePath(QStringLiteral("test6-missing")), fileAccess);
     testFuture(future, QStringLiteral("File::deleteAsync"), [future](){
         QVERIFY2(!future.result()->success(), "Could delete file but it does not exist.");
@@ -201,7 +171,7 @@ void AbstractAccessTest::copyAsync()
     copyFileAndVerify(getFilePath(QStringLiteral("test7")), getFilePath(QStringLiteral("test7-copy")));
 
     // Copy nonexisting file
-    ignoreWarning();
+    expectWarning();
     auto future2 = File::copyAsync(getFilePath(QStringLiteral("test7-missing")), getFilePath(QStringLiteral("test7-copy2")), fileAccess);
     testFuture(future2, QStringLiteral("File::copyAsync"), [future2](){
         QVERIFY2(!future2.result()->success(), "Could copy file but it does not exist.");
@@ -209,7 +179,7 @@ void AbstractAccessTest::copyAsync()
     });
 
     // Try to copy file to exising location
-    ignoreWarning();
+    expectWarning();
     auto future3 = File::copyAsync(getFilePath(QStringLiteral("test7-copy")), getFilePath(QStringLiteral("test1")), fileAccess);
     testFuture(future3, QStringLiteral("File::copyAsync"), [future3](){
         QVERIFY2(!future3.result()->success(), "Could copy file but the location already exists.");
@@ -236,13 +206,19 @@ void AbstractAccessTest::listAsync()
 
     // List files and folders in folder
     auto future2 = File::listAsync(getFilePath(), true, true, fileAccess);
-    testFuture(future2, QStringLiteral("File::listAsync"), [future2](){
+    testFuture(future2, QStringLiteral("File::listAsync"), [this, future2](){
         QVERIFY2(future2.result()->files().length() > 2, "Could not list files and folders.");
         QVERIFY2(future2.result()->files().contains("test1"), "List does not include test file 1.");
         QVERIFY2(future2.result()->files().contains("test2"), "List does not include test file 2.");
         QVERIFY2(future2.result()->folders().contains("copies"), "List does not include folders.");
         QVERIFY2(!future2.result()->files().contains("copies"), "File list contains folders.");
         QVERIFY2(!future2.result()->folders().contains("test1"), "Folder list contains files.");
+
+        for (const auto &file : future2.result()->filesFull())
+        {
+            QVERIFY(FileUtils::dirFromPath(file) == getFilePath());
+        }
+
         future2.result()->deleteLater();
     });
 
@@ -277,21 +253,10 @@ void AbstractAccessTest::createDirAsync()
     createDirAndVerify(getFilePath(QStringLiteral("created_dir")));
 
     // Try to create dir that already exists
-    ignoreWarning();
+    expectWarning();
     auto future = File::createDirAsync(getFilePath(QStringLiteral("created_dir")), fileAccess);
     testFuture(future, QStringLiteral("File::createDirAsync"), [future](){
         QVERIFY2(!future.result()->success(), "Apparently a directory that already existed could be created.");
-        future.result()->deleteLater();
-    });
-}
-
-void AbstractAccessTest::verifyThatFileExists(const QString &path, bool shouldExist)
-{
-    auto future = File::checkAsync(path, false, fileAccess);
-    testFuture(future, QStringLiteral("File::checkAsync"), [future, path, shouldExist](){
-        QVERIFY2(shouldExist == future.result()->exists(),
-                 QString("Apparently the file %1 does%2 exist when it should%3.")
-                 .arg(path, shouldExist ? " not" : "", shouldExist ? "" : " not").toUtf8());
         future.result()->deleteLater();
     });
 }
