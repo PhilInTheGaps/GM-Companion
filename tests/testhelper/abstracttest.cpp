@@ -2,6 +2,7 @@
 #include "file.h"
 #include "fileaccesslocal.h"
 #include <QtTest>
+#include <QDebug>
 
 using namespace Files;
 
@@ -26,6 +27,8 @@ void AbstractTest::verifyFileContent(const QString &path, const QByteArray &cont
 void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
 {
     checkOrCreateFileAccess();
+
+    qDebug() << "Verifying that file" << path << (shouldExist ? "exists" : "does not exist") << "...";
 
     auto future = File::checkAsync(path, false, fileAccess);
     testFuture(future, QStringLiteral("File::checkAsync"), [future, path, shouldExist](){

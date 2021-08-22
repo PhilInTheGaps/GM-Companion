@@ -3,12 +3,15 @@
 #include "../audioicongenerator.h"
 #include "utils/utils.h"
 #include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QQmlContext>
 #include <utility>
 
-AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSaveLoad, QNetworkAccessManager *networkManager, QObject *parent) :
-    AbstractTool(parent), qmlEngine(engine), networkManager(networkManager), audioSaveLoad(audioSaveLoad)
+using namespace AsyncFuture;
+
+AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QNetworkAccessManager *networkManager, QObject *parent) :
+    AbstractTool(parent), qmlEngine(engine), networkManager(networkManager)
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
 
@@ -25,7 +28,6 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSave
     fileModel = new AudioFileModel(this);
     qmlEngine->rootContext()->setContextProperty("audio_editor_file_model", fileModel);
 
-    connect(audioSaveLoad,     &AudioSaveLoad::foundProjects,        this, &AudioEditor::onFoundProjects);
     connect(this,                &AudioEditor::currentScenarioChanged, this, &AudioEditor::onCurrentScenarioChanged);
 //    connect(addonElementManager, &AddonElementManager::exportElements, this, &AudioEditor::onExportElements);
 }
@@ -36,15 +38,14 @@ void AudioEditor::loadData()
 
     setIsLoading(true);
     m_isDataLoaded = true;
-    audioSaveLoad->findProjects(true);
+
+    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject*> projects) {
+        onFoundProjects(projects);
+    });
 }
 
-void AudioEditor::onFoundProjects(QList<AudioProject *>list, bool isEditor)
+void AudioEditor::onFoundProjects(QVector<AudioProject *>list)
 {
-    qCDebug(gmAudioEditor()) << "Found audio projects:" << isEditor;
-
-    if (!isEditor) return;
-
     qCDebug(gmAudioEditor) << "Projects changed!";
     m_projects = std::move(list);
 
@@ -120,7 +121,7 @@ void AudioEditor::createProject(const QString& name)
     qCDebug(gmAudioEditor) << "Creating project" << name << "...";
 
     auto *project = new AudioProject(name, 4, {}, this);
-    project->setIsSaved(false);
+    project->isSaved(false);
     m_projects.append(project);
     emit projectsChanged();
 
@@ -142,8 +143,8 @@ void AudioEditor::renameProject(const QString& name)
 
     if (!m_currentProject->wasRenamed())
     {
-        m_currentProject->setWasRenamed(true);
-        m_currentProject->setOldName(m_currentProject->name());
+        m_currentProject->wasRenamed(true);
+        m_currentProject->oldName(m_currentProject->name());
     }
 
     m_currentProject->setName(name);
@@ -169,7 +170,7 @@ void AudioEditor::deleteProject()
     m_projects.removeOne(project);
     setCurrentProject(0);
 
-    audioSaveLoad->deleteProject(project);
+    AudioSaveLoad::deleteProject(project);
     emit projectsChanged();
 }
 
@@ -491,7 +492,7 @@ void AudioEditor::loadElement(QObject* element)
     }
 
     // Tell AudioSaveLoad to find out if files are missing
-    audioSaveLoad->findMissingFiles(m_currentElement->files(), basePath());
+    AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
 }
 
 /**
@@ -622,19 +623,30 @@ void AudioEditor::moveElement(AudioElement *element, int positions)
  */
 void AudioEditor::saveProject()
 {
-    qCDebug(gmAudioEditor) << "Saving project ...";
+    qCDebug(gmAudioEditor) << "Saving projects ...";
 
     if (!m_projects.empty())
     {
         for (auto p : m_projects)
         {
-            audioSaveLoad->saveProject(p);
+            if (p == m_currentProject)
+            {
+                emit showInfoBar(tr("Saving ..."));
+
+                observe(AudioSaveLoad::saveProject(p)).subscribe([this]() {
+                    emit showInfoBar(tr("Saved!"));
+                }, [this]() {
+                    emit showInfoBar(tr("Error: Could not save project!"));
+                });
+            }
+            else
+            {
+                AudioSaveLoad::saveProject(p);
+            }
         }
     }
 
-    m_isSaved = true;
-    emit isSavedChanged();
-    emit showInfoBar(tr("Saved!"));
+    isSaved(true);
 }
 
 /**
@@ -642,8 +654,7 @@ void AudioEditor::saveProject()
  */
 void AudioEditor::madeChanges()
 {
-    m_isSaved = false;
-    emit isSavedChanged();
+    isSaved(false);
 }
 
 /**
@@ -760,7 +771,7 @@ void AudioEditor::removeFile(int index, bool findMissing)
         if (findMissing)
         {
             // Tell AudioSaveLoad to find out if files are missing
-            audioSaveLoad->findMissingFiles(m_currentElement->files(), basePath());
+            AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
         }
     }
 }
@@ -841,7 +852,7 @@ void AudioEditor::replaceFileFolder(int index, const QString& folder)
             }
         }
 
-        audioSaveLoad->findMissingFiles(missingFiles, basePath());
+        AudioSaveLoad::findMissingFilesAsync(missingFiles, basePath());
     }
 }
 

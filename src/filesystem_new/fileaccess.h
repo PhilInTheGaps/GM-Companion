@@ -29,6 +29,7 @@ public:
     virtual QFuture<FileMultiCheckResult*> checkAsync(const QStringList& paths, bool allowCache) = 0;
 
     static FileAccess *getInstance() { return instance; }
+
     static void setInstance(FileAccess* fileAccess)
     {
         if (instance) instance->deleteLater();

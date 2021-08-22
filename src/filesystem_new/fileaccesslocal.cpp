@@ -231,6 +231,7 @@ auto FileAccessLocal::listAsync(const QString &path, bool files, bool folders) -
     return QtConcurrent::run([path, files, folders]() {
         QDir dir(path);
         return new FileListResult(
+                    path,
                     dir.entryList(getDirFilter(false, folders)),
                     dir.entryList(getDirFilter(files, false)));
     });

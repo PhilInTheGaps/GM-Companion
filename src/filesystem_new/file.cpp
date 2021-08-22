@@ -1,6 +1,8 @@
 #include "file.h"
 #include "fileaccesslocal.h"
+#include "fileaccessnextcloud.h"
 #include "logging.h"
+#include "settings/settingsmanager.h"
 
 using namespace Files;
 
@@ -84,13 +86,31 @@ auto File::checkAsync(const QStringList &paths, bool allowCache, FileAccess *fil
                 QFuture<FileMultiCheckResult*>();
 }
 
+void File::updateFileAccess()
+{
+    auto cloudMode = SettingsManager::getSetting("cloudMode", "local");
+
+    if (cloudMode == "NextCloud")
+    {
+        FileAccess::setInstance(new FileAccessNextcloud(nullptr));
+    }
+//    else if (cloudMode == "GoogleDrive")
+//    {
+//        FileAccess::setInstance(new FileAccessGoogleDrive(nullptr));
+//    }
+    else
+    {
+        FileAccess::setInstance(new FileAccessLocal(nullptr));
+    }
+}
+
 auto File::getFileAccess(FileAccess *fileAccess) -> FileAccess*
 {
     if (fileAccess) return fileAccess;
 
     if (!FileAccess::getInstance())
     {
-        qCWarning(gmFileManager()) << "Error: No FileAccess instance available!";
+        updateFileAccess();
     }
 
     return FileAccess::getInstance();

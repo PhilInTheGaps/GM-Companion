@@ -31,6 +31,8 @@ public:
 
     static QFuture<FileMultiCheckResult*> checkAsync(const QStringList& paths, bool allowCache = true, FileAccess *fileAccess = nullptr);
 
+    static void updateFileAccess();
+
 private:
     static FileAccess *getFileAccess(FileAccess* fileAccess);
 

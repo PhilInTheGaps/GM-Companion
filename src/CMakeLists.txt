@@ -176,7 +176,7 @@ target_link_libraries(
   gm-companion-lib
   common
   services
-#  filesystem
+  filesystem
   propertyhelper
   Qt5::Core
   Qt5::Gui

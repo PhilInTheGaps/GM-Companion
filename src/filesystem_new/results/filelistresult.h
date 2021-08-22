@@ -13,14 +13,33 @@ class FileListResult : public FileResult
     Q_OBJECT
 
 public:
-    explicit FileListResult(const QString& errorMessage, QObject *parent = nullptr)
-        : FileResult(errorMessage, parent) {}
+    explicit FileListResult(const QString& path, const QString& errorMessage, QObject *parent = nullptr)
+        : FileResult(errorMessage, parent), a_path(path) {}
 
-    explicit FileListResult(const QStringList& folders, const QStringList& files, QObject *parent = nullptr)
-        : FileResult(true, QByteArray(), parent), a_folders(folders), a_files(files) {}
+    explicit FileListResult(const QString& path, const QStringList& folders, const QStringList& files, QObject *parent = nullptr)
+        : FileResult(true, QByteArray(), parent), a_folders(folders), a_files(files), a_path(path) {}
+
+    const QStringList filesFull() const {
+        QStringList results;
+        for (const auto &file : files())
+        {
+            results.append(path() + "/" + file);
+        }
+        return results;
+    }
+
+    const QStringList foldersFull() const {
+        QStringList results;
+        for (const auto &file : folders())
+        {
+            results.append(path() + "/" + file);
+        }
+        return results;
+    }
 
     READONLY_PROPERTY(QStringList, folders)
     READONLY_PROPERTY(QStringList, files)
+    READONLY_PROPERTY(QString, path)
 };
 
 }

@@ -43,7 +43,7 @@ private:
     QFuture<FileResult*> createDirThenContinue(const QString& dir, const T1 &arg1, const T2 &arg2,
                              const std::function<QFuture<FileResult*>(const T1&, const T2&)>& func);
 
-    FileListResult* parseListResponse(const QByteArray& data, bool files, bool folders);
+    FileListResult* parseListResponse(const QByteArray& data, const QString& path, bool files, bool folders);
 
     QFuture<QVector<FileDataResult*>> getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache);
     QFuture<FileMultiCheckResult*> checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache);

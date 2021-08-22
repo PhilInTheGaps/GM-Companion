@@ -26,7 +26,6 @@ class SettingsManager : public QObject
 
 public:
     static SettingsManager* getInstance();
-    ~SettingsManager();
 
     bool showToolNames() const { return getBoolSetting("showToolNames", false); }
     void setShowToolNames(bool checked) { setSetting("showToolNames", QString::number(checked)); emit showToolNamesChanged(); }
@@ -70,8 +69,7 @@ signals:
 
 private:
     SettingsManager();
-    static bool instanceFlag;
-    static SettingsManager *single;
+    inline static SettingsManager *m_instance = nullptr;
 
     static QString getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP);
     static QString getActivePathGroup();

@@ -94,29 +94,63 @@ auto FileUtils::incrementFileName(const QString &fileName) -> QString
 {
     if (fileName.isEmpty()) return "";
 
-    auto suffix = FileUtils::suffix(fileName);
+    auto nameAndSuffix = splitFileNameAndSuffix(fileName);
+    auto incrementedName = incrementName(nameAndSuffix.first);
 
-    auto pathWithoutSuffix = fileName;
-    pathWithoutSuffix.replace(suffix, "").chop(1);
+    return incrementedName + '.' + nameAndSuffix.second;
+}
 
-    auto name = FileUtils::fileName(pathWithoutSuffix);
+auto FileUtils::incrementName(const QString &name) -> QString
+{
+    if (name.isEmpty()) return "";
+
     auto list = name.split('_');
-
-    auto number = 0;
-
-    if (list.length() > 1)
-    {
-        bool ok = 0;
-        auto temp = list.takeLast().toInt(&ok);
-
-        if (ok) number = temp + 1;
-    }
-
-    auto dir = FileUtils::dirFromPath(fileName);
-    if (!dir.isEmpty() && !dir.endsWith('/')) dir.append('/');
+    auto number = list.length() == 1 ? 0 : incrementNumString(list.takeLast());
 
     auto joined = list.join('_');
     if (!joined.endsWith('_')) joined.append('_');
 
-    return dir + joined + QString::number(number) + '.' + suffix;
+    return joined + QString::number(number);
+}
+
+auto FileUtils::fileInDir(const QString &fileName, const QString &dir) -> QString
+{
+    if (dir.isEmpty()) return fileName;
+
+    if (dir.endsWith('/') || dir.endsWith('\\'))
+    {
+        return dir + fileName;
+    }
+
+    if (dir.lastIndexOf('\\') > -1)
+    {
+        return dir + '\\' + fileName;
+    }
+
+    return dir + '/' + fileName;
+}
+
+auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> QPair<QString, QString>
+{
+    auto suffix = FileUtils::suffix(fileName);
+    auto pathWithoutSuffix = fileName;
+    pathWithoutSuffix.replace(suffix, "").chop(1);
+
+    return { pathWithoutSuffix, suffix };
+}
+
+auto FileUtils::incrementNumString(const QString &num) -> int
+{
+    if (!num.isEmpty())
+    {
+        bool ok = false;
+        auto temp = num.toInt(&ok);
+
+        if (ok)
+        {
+            return temp + 1;
+        }
+    }
+
+    return 0;
 }

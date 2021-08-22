@@ -13,7 +13,6 @@ public:
     FileMultiCheckResult(const QVector<FileCheckResult*> &results, QObject *parent = nullptr)
         : FileResult(true, parent), m_results(results) {}
 
-
     FileMultiCheckResult(bool success, const QString& errorMessage, QObject *parent = nullptr)
         : FileResult(success, errorMessage, parent) {}
 

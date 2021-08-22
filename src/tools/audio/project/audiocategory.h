@@ -23,7 +23,7 @@ public:
     QString path() const override { return m_path; }
 
     QList<AudioScenario*> scenarios() const { return m_scenarios; }
-    QList<QObject*> scenarioObjects() const { return Utils::toQObjectList<AudioScenario*>(m_scenarios); }
+    QList<QObject*> scenarioObjects() const { return Utils::toQObjectList(m_scenarios); }
     int scenarioIndex() const { return m_scenarios.indexOf(m_currentScenario); }
     QStringList scenarioNames() const;
     void refreshElements() { if (m_currentScenario) m_currentScenario->refreshElements(); }

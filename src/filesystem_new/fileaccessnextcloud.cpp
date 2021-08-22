@@ -202,20 +202,20 @@ auto FileAccessNextcloud::listAsync(const QString &path, bool files, bool folder
         if (replyHasError(reply))
         {
             const auto errorMessage = makeAndPrintError(QString("Could not list content of folder %1").arg(path), reply);
-            return deleteReplyAndReturn(new FileListResult(errorMessage, this), reply);
+            return deleteReplyAndReturn(new FileListResult(path, errorMessage, this), reply);
         }
 
         qCDebug(gmFileAccessNextCloud()) << "Successfully received content of" << path;
-        return deleteReplyAndReturn(parseListResponse(reply->readAll(), files, folders), reply);
+        return deleteReplyAndReturn(parseListResponse(reply->readAll(), path, files, folders), reply);
     }).future();
 }
 
-auto FileAccessNextcloud::parseListResponse(const QByteArray& data, bool files, bool folders) -> FileListResult*
+auto FileAccessNextcloud::parseListResponse(const QByteArray& data, const QString& path, bool files, bool folders) -> FileListResult*
 {
     QXmlStreamReader xml(data);
     QStringList fileList;
     QStringList folderList;
-    QString path;
+    QString element;
 
     while (!xml.atEnd())
     {
@@ -225,16 +225,16 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray& data, bool files, 
         {
             if (xml.name() == "href")
             {
-                path = FileUtils::fileName(xml.readElementText());
+                element = FileUtils::fileName(xml.readElementText());
             }
             else if (folders && xml.name() == "collection")
             {
-                if (!path.isEmpty() && path != "/") folderList << path;
+                if (!element.isEmpty() && element != "/") folderList << element;
             }
             else if (files && xml.name() == "getcontenttype" &&
                      !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty())
             {
-                if (!path.isEmpty()) fileList << path;
+                if (!element.isEmpty()) fileList << element;
             }
         }
     }
@@ -242,10 +242,10 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray& data, bool files, 
     if (xml.hasError())
     {
         qCWarning(gmFileAccessNextCloud()) << "Error during parsing of PROPFIND response:" << xml.error() << xml.errorString();
-        return new FileListResult(xml.errorString(), this);
+        return new FileListResult(path, xml.errorString(), this);
     }
 
-    return new FileListResult(folderList, fileList, this);
+    return new FileListResult(path, folderList, fileList, this);
 }
 
 auto FileAccessNextcloud::createDirAsync(const QString &path) -> QFuture<FileResult*>

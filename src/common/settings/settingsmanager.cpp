@@ -8,29 +8,19 @@
 # include <qt5keychain/keychain.h>
 #endif // ifdef Q_OS_WIN
 
-bool SettingsManager::instanceFlag       = false;
-SettingsManager *SettingsManager::single = nullptr;
-
 SettingsManager::SettingsManager()
 {
-    m_settings = new QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
+    m_settings = new QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat, this);
 }
 
-auto SettingsManager::getInstance()->SettingsManager *
+auto SettingsManager::getInstance() -> SettingsManager*
 {
-    if (!instanceFlag)
+    if (!m_instance)
     {
-        single       = new SettingsManager;
-        instanceFlag = true;
-        single->updateSettings();
+        m_instance = new SettingsManager;
+        m_instance->updateSettings();
     }
-    return single;
-}
-
-SettingsManager::~SettingsManager()
-{
-    instanceFlag = false;
-    m_settings->deleteLater();
+    return m_instance;
 }
 
 auto SettingsManager::getSetting(const QString& setting, const QString& defaultValue, QString group)->QString
@@ -130,7 +120,7 @@ auto SettingsManager::getLanguageNames()->QStringList
 {
     QStringList strings;
 
-    for (auto language : getLanguages())
+    for (const auto& language : getLanguages())
     {
         strings.append(QLocale::languageToString(QLocale(language).language()));
     }
