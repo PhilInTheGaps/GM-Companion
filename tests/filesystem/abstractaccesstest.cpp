@@ -219,6 +219,19 @@ void AbstractAccessTest::listAsync()
             QVERIFY(FileUtils::dirFromPath(file) == getFilePath());
         }
 
+        for (const auto &folder : future2.result()->foldersFull())
+        {
+            QVERIFY(FileUtils::dirFromPath(folder) == getFilePath());
+        }
+
+        const auto &filesWithWildcard = future2.result()->filesFull("*1");
+        QCOMPARE(filesWithWildcard.length(), 1);
+
+        for (const auto &file : filesWithWildcard)
+        {
+            QVERIFY(file.endsWith("1"));
+        }
+
         future2.result()->deleteLater();
     });
 

@@ -19,27 +19,16 @@ public:
     explicit FileListResult(const QString& path, const QStringList& folders, const QStringList& files, QObject *parent = nullptr)
         : FileResult(true, QByteArray(), parent), a_folders(folders), a_files(files), a_path(path) {}
 
-    const QStringList filesFull() const {
-        QStringList results;
-        for (const auto &file : files())
-        {
-            results.append(path() + "/" + file);
-        }
-        return results;
-    }
-
-    const QStringList foldersFull() const {
-        QStringList results;
-        for (const auto &file : folders())
-        {
-            results.append(path() + "/" + file);
-        }
-        return results;
-    }
+    QStringList filesFull(const QString &wildcard = "") const;
+    QStringList foldersFull(const QString &wildcard = "") const;
 
     READONLY_PROPERTY(QStringList, folders)
     READONLY_PROPERTY(QStringList, files)
     READONLY_PROPERTY(QString, path)
+
+private:
+    QStringList getFullyQualified(const QStringList &list) const;
+    static QStringList getMatchingEntries(const QStringList &list, const QString &wildcard);
 };
 
 }

@@ -1,10 +1,13 @@
 #include "shoptool.h"
 #include "logging.h"
-#include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
 
 #include <QQmlContext>
 #include <QJsonDocument>
+
+using namespace AsyncFuture;
 
 ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), qmlEngine(engine)
@@ -27,18 +30,25 @@ void ShopTool::findShops()
 
     m_projects.clear();
 
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
+    observe(Files::File::listAsync(SettingsManager::getPath("shops"), true, false)).
+            subscribe([this](Files::FileListResult *result) { onShopFilesFound(result); });
+}
 
-    connect(FileManager::getInstance(), &FileManager::receivedFiles, context, [ = ](int id, QList<QByteArray>data) {
-        if (id != requestId) return;
+void ShopTool::onShopFilesFound(Files::FileListResult *result)
+{
+    if (!result) return;
 
-        for (auto file : data)
+    const auto &files = result->filesFull(PROJECT_FILE_GLOB);
+    result->deleteLater();
+
+    observe(Files::File::getDataAsync(files)).subscribe([this](const QVector<Files::FileDataResult*> &results) {
+        for (auto *result : results)
         {
-            m_projects.append(new ShopProject(QJsonDocument::fromJson(file).object()));
+            m_projects.append(new ShopProject(QJsonDocument::fromJson(result->data()).object()));
+            result->deleteLater();
         }
 
-        if (m_projects.size() > 0)
+        if (!m_projects.isEmpty())
         {
             m_currentProject = m_projects[0];
         }
@@ -48,29 +58,25 @@ void ShopTool::findShops()
         }
 
         emit projectsChanged();
-
-        delete context;
     });
-
-    FileManager::getInstance()->getFiles(requestId, SettingsManager::getPath("shops"), "*.shop");
 }
 
 /**
  * @brief The shop editor has sent new updated projects
  * @param projects List of projects
  */
-void ShopTool::shopEditorSaved(QList<ShopProject *>projects)
+void ShopTool::shopEditorSaved(const QList<ShopProject *> &projects)
 {
     // Delete old projects
-    for (auto p : m_projects)
+    for (auto *project : m_projects)
     {
-        if (p) p->deleteLater();
+        if (project) project->deleteLater();
     }
 
     // Use new ones
     m_projects = projects;
 
-    if (m_projects.size() > 0)
+    if (!m_projects.isEmpty())
     {
         m_currentProject = m_projects[0];
     }
@@ -89,7 +95,7 @@ void ShopTool::shopEditorSaved(QList<ShopProject *>projects)
  * @brief Get a list of project names
  * @return Project names
  */
-QStringList ShopTool::projects()
+auto ShopTool::projects() -> QStringList
 {
     QStringList names;
 
@@ -125,7 +131,7 @@ void ShopTool::setCurrentProject(int index)
  * @brief Get a list of category names
  * @return Category names
  */
-QStringList ShopTool::categories()
+auto ShopTool::categories() -> QStringList
 {
     if (!m_currentProject) return {};
 
@@ -157,7 +163,7 @@ void ShopTool::setCurrentCategory(int index)
  * @brief Get the names of all shops in current category
  * @return Shop names
  */
-QStringList ShopTool::shops()
+auto ShopTool::shops() -> QStringList
 {
     if (!m_currentProject || !m_currentProject->currentCategory()) return {};
 
@@ -177,11 +183,49 @@ QStringList ShopTool::shops()
  */
 void ShopTool::setCurrentShop(int index)
 {
-    if ((index > -1) && m_currentProject && m_currentProject->currentCategory() && (index < m_currentProject->currentCategory()->shops().size()))
+    if (index > -1 && m_currentProject && m_currentProject->currentCategory()
+            && (index < m_currentProject->currentCategory()->shops().size()))
     {
         m_currentProject->currentCategory()->setCurrentShop(index);
         emit currentShopChanged();
     }
+}
+
+auto ShopTool::shopName() const -> QString
+{
+    if (isCurrentShopValid())
+    {
+        return m_currentProject->currentCategory()->currentShop()->name();
+    }
+
+    return "";
+}
+
+auto ShopTool::shopOwner() const -> QString
+{
+    if (isCurrentShopValid())
+    {
+        return m_currentProject->currentCategory()->currentShop()->owner();
+    }
+
+    return "";
+}
+
+auto ShopTool::shopDescription() const -> QString
+{
+    if (isCurrentShopValid())
+    {
+        return m_currentProject->currentCategory()->currentShop()->description();
+    }
+
+    return "";
+}
+
+auto ShopTool::isCurrentShopValid() const -> bool
+{
+    return m_currentProject
+            && m_currentProject->currentCategory()
+            && m_currentProject->currentCategory()->currentShop();
 }
 
 void ShopTool::loadData()
@@ -197,7 +241,7 @@ void ShopTool::loadData()
  */
 void ShopTool::updateItems()
 {
-    if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop())
+    if (isCurrentShopValid())
     {
         itemModel->setElements(m_currentProject->currentCategory()->currentShop()->items());
     }

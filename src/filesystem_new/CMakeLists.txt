@@ -35,6 +35,7 @@ set(SOURCES
     cache/filecache.cpp
     cache/filecacheentry.cpp
     filedialog/filedialog.cpp
+    results/filelistresult.cpp
 )
 
 add_library(filesystem STATIC ${HEADERS} ${SOURCES})

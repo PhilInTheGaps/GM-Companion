@@ -2,10 +2,12 @@
 #define SHOPTOOL_H
 
 #include <QStringList>
+#include <QQmlApplicationEngine>
+
 #include "common/abstracttool.h"
 #include "shopeditor.h"
 #include "shopproject.h"
-#include <QQmlApplicationEngine>
+#include "filesystem_new/file.h"
 
 class ShopTool : public AbstractTool
 {
@@ -31,13 +33,13 @@ public:
     Q_INVOKABLE void setCurrentShop(int index);
 
     Q_PROPERTY(QString shopName READ shopName NOTIFY currentShopChanged)
-    QString shopName() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->name(); else return ""; }
+    QString shopName() const;
 
     Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY currentShopChanged)
-    QString shopOwner() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->owner(); else return ""; }
+    QString shopOwner() const;
 
     Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
-    QString shopDescription() const { if (m_currentProject && m_currentProject->currentCategory() && m_currentProject->currentCategory()->currentShop()) return m_currentProject->currentCategory()->currentShop()->description(); else return ""; }
+    QString shopDescription() const;
 
 public slots:
     void loadData() override;
@@ -60,9 +62,14 @@ private:
     QList<ShopProject*> m_projects;
     ShopProject *m_currentProject = nullptr;
 
+    bool isCurrentShopValid() const;
+
+    static constexpr const char* PROJECT_FILE_GLOB = "*.shop";
+
 private slots:
+    void onShopFilesFound(Files::FileListResult *result);
     void updateItems();
-    void shopEditorSaved(QList<ShopProject*> projects);
+    void shopEditorSaved(const QList<ShopProject *> &projects);
 };
 
 #endif // SHOPTOOL_H
