@@ -10,6 +10,7 @@
 #include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
+#include "filesystem_new/file.h"
 
 class RadioPlayer : public AudioPlayer
 {
@@ -32,9 +33,9 @@ private:
     QMediaPlayer *m_mediaPlayer = nullptr;
     QMediaPlaylist *m_playlist = nullptr;
     DiscordPlayer *m_discordPlayer = nullptr;
+    QObject *m_fileRequestContext = nullptr;
 
     AudioElement *m_currentElement = nullptr;
-    int m_fileRequestId = -1;
 
     QBuffer m_mediaBuffer;
     QTemporaryDir m_tempDir;
@@ -46,7 +47,7 @@ signals:
 
 private slots:
     void onMetaDataChanged();
-    void onFileReceived(int id, const QByteArray& data);
+    void onFileReceived(Files::FileDataResult *result);
 };
 
 #endif // RADIOPLAYER_H

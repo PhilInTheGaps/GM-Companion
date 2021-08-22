@@ -1,8 +1,8 @@
 #include "musicplayer.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
 #include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <algorithm>
 #include <random>
@@ -13,6 +13,7 @@
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
 using namespace YouTube::Videos;
+using namespace AsyncFuture;
 
 MusicPlayer::MusicPlayer(MetaDataReader *metaDataReader, SpotifyPlayer *spotify, DiscordPlayer *discordPlayer, QObject *parent)
     : AudioPlayer(parent), spotifyPlayer(spotify), discordPlayer(discordPlayer)
@@ -24,29 +25,9 @@ MusicPlayer::MusicPlayer(MetaDataReader *metaDataReader, SpotifyPlayer *spotify,
     networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     videoClient = new VideoClient(networkManager, this);
 
-    connect(mediaPlayer, &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
-    connect(mediaPlayer, &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
-    connect(mediaPlayer, &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
-    connect(mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
-    connect(mediaPlayer, &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
-
-    // MetaData
-    connect(mediaPlayer,    QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
-            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
-    connect(this,           QOverload<const QString&, const QVariant&>::of(&MusicPlayer::metaDataChanged),
-            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
-    connect(this,           QOverload<const QByteArray&>::of(&MusicPlayer::metaDataChanged),
-            metaDataReader, QOverload<const QByteArray&>::of(&MetaDataReader::updateMetaData));
-    connect(this,           QOverload<QMediaPlayer *>::of(&MusicPlayer::metaDataChanged),
-            metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
-    connect(this,           &MusicPlayer::clearMetaData, metaDataReader, &MetaDataReader::clearMetaData);
-
-    // Files
-    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &MusicPlayer::onFileReceived);
-
-    // Spotify
-    connect(spotify, &SpotifyPlayer::songEnded,               this, &MusicPlayer::onSpotifySongEnded);
-    connect(spotify, &SpotifyPlayer::receivedPlaylistTracks,  this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
+    connectPlaybackStateSignals();
+    connectMetaDataSignals(metaDataReader);
+    connectSpotifySignals();
 }
 
 /**
@@ -110,6 +91,34 @@ void MusicPlayer::startPlaying()
 
         loadMedia(m_playlist.first());
     }
+}
+
+void MusicPlayer::connectPlaybackStateSignals()
+{
+    connect(mediaPlayer, &QMediaPlayer::stateChanged,                              this, &MusicPlayer::onMediaPlayerStateChanged);
+    connect(mediaPlayer, &QMediaPlayer::bufferStatusChanged,                       this, &MusicPlayer::onMediaPlayerBufferStatusChanged);
+    connect(mediaPlayer, &QMediaPlayer::mediaStatusChanged,                        this, &MusicPlayer::onMediaPlayerMediaStatusChanged);
+    connect(mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &MusicPlayer::onMediaPlayerError);
+    connect(mediaPlayer, &QMediaPlayer::mediaChanged,                              this, &MusicPlayer::onMediaPlayerMediaChanged);
+}
+
+void MusicPlayer::connectMetaDataSignals(MetaDataReader *metaDataReader)
+{
+    connect(mediaPlayer,    QOverload<const QString&, const QVariant&>::of(&QMediaObject::metaDataChanged),
+            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<const QString&, const QVariant&>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<const QByteArray&>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<const QByteArray&>::of(&MetaDataReader::updateMetaData));
+    connect(this,           QOverload<QMediaPlayer *>::of(&MusicPlayer::metaDataChanged),
+            metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
+    connect(this,           &MusicPlayer::clearMetaData, metaDataReader, &MetaDataReader::clearMetaData);
+}
+
+void MusicPlayer::connectSpotifySignals()
+{
+    connect(spotifyPlayer, &SpotifyPlayer::songEnded,               this, &MusicPlayer::onSpotifySongEnded);
+    connect(spotifyPlayer, &SpotifyPlayer::receivedPlaylistTracks,  this, &MusicPlayer::onSpotifyReceivedPlaylistTracks);
 }
 
 void MusicPlayer::loadSongNames(bool initial, bool reloadYt)
@@ -235,9 +244,12 @@ void MusicPlayer::loadMedia(AudioFile *file)
     {
     case 0:
     {
-        m_fileRequestId = FileManager::getUniqueRequestId();
+        if (m_fileRequestContext) m_fileRequestContext->deleteLater();
+        m_fileRequestContext = new QObject(this);
+
         m_fileName = file->url();
-        FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("music") + file->url());
+        observe(Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath("music"))))
+                .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
         break;
     }
 
@@ -419,9 +431,9 @@ void MusicPlayer::onMediaPlayerMediaChanged()
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 }
 
-void MusicPlayer::onFileReceived(int id, const QByteArray& data)
+void MusicPlayer::onFileReceived(Files::FileDataResult *result)
 {
-    if (m_fileRequestId != id) return;
+    if (!result) return;
 
     qCDebug(gmAudioMusic()) << "Received file ...";
 
@@ -438,10 +450,11 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
     if (clickingWorkaround) mediaPlayer->setMuted(true);
     mediaPlayer->stop();
 
-    if (data.isEmpty())
+    if (result->data().isEmpty())
     {
         qCWarning(gmAudioMusic()) << "File is empty, skipping ...";
         next();
+        result->deleteLater();
         return;
     }
 
@@ -456,24 +469,26 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
             if (!file.open(QIODevice::WriteOnly))
             {
                 qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                result->deleteLater();
                 return;
             }
         }
         else
         {
             qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            result->deleteLater();
             return;
         }
     }
 
     qCDebug(gmAudioMusic()) << file.fileName();
-    file.write(data);
+    file.write(result->data());
     file.close();
 
     mediaPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
     #else
     m_mediaBuffer.close();
-    m_mediaBuffer.setData(data);
+    m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
     mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
     #endif
@@ -481,7 +496,7 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
     auto useDiscord = Discord::getInstance()->enabled();
 
     mediaPlayer->setMuted(useDiscord);
-    if (useDiscord) discordPlayer->playMusic(data);
+    if (useDiscord) discordPlayer->playMusic(result->data());
 
     mediaPlayer->play();
 
@@ -489,7 +504,8 @@ void MusicPlayer::onFileReceived(int id, const QByteArray& data)
 
     qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
 
-    emit metaDataChanged(data);
+    emit metaDataChanged(result->data());
+    result->deleteLater();
 }
 
 void MusicPlayer::onSpotifySongEnded()
