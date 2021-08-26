@@ -54,6 +54,8 @@ void TestAudioSaveLoad::initTestCase()
     m_project = new AudioProject(QJsonDocument::fromJson(projectFile.readAll()).object(), this);
     projectFile.close();
 
+    QVERIFY(m_project->isSaved());
+
     // Verify that no saved projects exist
     auto future = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {

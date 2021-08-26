@@ -11,7 +11,7 @@
 using namespace AsyncFuture;
 
 AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QNetworkAccessManager *networkManager, QObject *parent) :
-    AbstractTool(parent), qmlEngine(engine), networkManager(networkManager)
+    AbstractTool(parent), a_isSaved(true), qmlEngine(engine), networkManager(networkManager)
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
 

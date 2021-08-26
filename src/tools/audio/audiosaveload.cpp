@@ -60,7 +60,7 @@ auto AudioSaveLoad::findMissingFilesAsync(const QList<AudioFile *>&audioFiles, c
     const auto filePaths = getFilePathsToCheck(audioFiles, basePath);
 
     auto futureCheckResult = File::checkAsync(filePaths, true);
-    return observe(futureCheckResult).subscribe([&audioFiles, basePath](FileMultiCheckResult *multiResult) {
+    return observe(futureCheckResult).subscribe([audioFiles, basePath](FileMultiCheckResult *multiResult) {
         const auto foundPaths = multiResult->existing();
 
         for (auto *audioFile : audioFiles)
