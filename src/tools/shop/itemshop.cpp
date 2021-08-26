@@ -2,55 +2,54 @@
 #include <QDebug>
 #include <QJsonArray>
 
-ItemShop::ItemShop(QString name, QString owner, QString description, QList<Item *>items, QObject *parent)
-    : QObject(parent), m_name(name), m_owner(owner), m_description(description), m_items(items)
+ItemShop::ItemShop(const QString& name, const QString &owner, const QString &description, const QList<Item*> &items, QObject *parent)
+    : QObject(parent), a_name(name), a_owner(owner), a_description(description), a_items(items)
 {
     qDebug() << "Initializing new ItemShop" << name << "...";
 }
 
 ItemShop::ItemShop(ItemShop *other)
 {
-    if (other)
-    {
-        m_name        = other->m_name;
-        m_owner       = other->m_owner;
-        m_description = other->m_description;
+    if (!other) return;
 
-        for (auto i : other->m_items)
+    name(other->name());
+    owner(other->owner());
+    description(other->description());
+
+    for (auto *item : other->items())
+    {
+        if (item)
         {
-            if (i)
-            {
-                auto copy = new Item(i);
-                m_items.append(copy);
-            }
+            auto *copy = new Item(item);
+            a_items.append(copy);
         }
     }
 }
 
-ItemShop::ItemShop(QJsonObject json)
+ItemShop::ItemShop(const QJsonObject &json)
 {
     // Get Items in Shop
     auto itemArray = json["items"].toArray();
 
-    for (auto item : itemArray)
+    for (const auto &item : itemArray)
     {
-        m_items.append(new Item(item.toObject()));
+        a_items.append(new Item(item.toObject()));
     }
 
-    m_name        = json["name"].toString();
-    m_owner       = json["owner"].toString();
-    m_description = json["description"].toString();
+    name(json["name"].toString());
+    owner(json["owner"].toString());
+    description(json["description"].toString());
 }
 
 ItemShop::~ItemShop()
 {
-    for (auto i : m_items)
+    for (auto *item : items())
     {
-        if (i) i->deleteLater();
+        if (item) item->deleteLater();
     }
 }
 
-QJsonObject ItemShop::toJson()
+auto ItemShop::toJson() -> QJsonObject
 {
     QJsonObject root;
 
@@ -74,18 +73,18 @@ QJsonObject ItemShop::toJson()
 
 ItemGroup::ItemGroup(ItemGroup *other)
 {
-    m_name = other->m_name;
+    a_name = other->name();
 
-    for (auto item : other->m_items)
+    for (auto *item : other->items())
     {
         if (item)
         {
-            m_items.append(new Item(item));
+            a_items.append(new Item(item));
         }
     }
 }
 
-ItemGroup::ItemGroup(QString groupName, QJsonObject json)
+ItemGroup::ItemGroup(const QString &groupName, const QJsonObject &json)
 {
     auto categories = json["categories"].toArray();
 
@@ -95,14 +94,14 @@ ItemGroup::ItemGroup(QString groupName, QJsonObject json)
 
         for (auto item : category.toObject()["items"].toArray())
         {
-            m_items.append(new Item(categoryName, item.toObject()));
+            a_items.append(new Item(categoryName, item.toObject()));
         }
     }
 
-    m_name = groupName;
+    a_name = groupName;
 }
 
-QJsonObject ItemGroup::toJson()
+auto ItemGroup::toJson() -> QJsonObject
 {
     QJsonObject root;
 
@@ -120,7 +119,7 @@ QJsonObject ItemGroup::toJson()
         }
     }
 
-    for (auto category : categories)
+    for (const auto& category : categories)
     {
         QJsonObject categoryObject;
         categoryObject.insert("name", category);
@@ -143,7 +142,7 @@ QJsonObject ItemGroup::toJson()
     return root;
 }
 
-QVariant ItemModel::data(const QModelIndex& index, int /*role*/) const
+auto ItemModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
 {
     QObject *item = m_items.at(index.row());
 
@@ -169,7 +168,7 @@ void ItemModel::remove(QObject *item)
     }
 }
 
-QHash<int, QByteArray>ItemModel::roleNames() const
+auto ItemModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -179,7 +178,7 @@ QHash<int, QByteArray>ItemModel::roleNames() const
 
 void ItemModel::clear()
 {
-    while (m_items.size() > 0)
+    while (!m_items.isEmpty())
     {
         remove(m_items[0]);
     }
@@ -195,23 +194,33 @@ void ItemModel::setElements(QList<Item *>elements)
     }
 }
 
-Item::Item(QJsonObject json)
+Item::Item(Item *other)
 {
-    m_name        = json["name"].toString();
-    m_price       = json["price"].toString();
-    m_description = json["description"].toString();
-    m_category    = json["category"].toString();
+    if (!other) return;
+
+    name(other->name());
+    price(other->price());
+    description(other->description());
+    category(other->category());
 }
 
-Item::Item(QString category, QJsonObject json)
+Item::Item(const QJsonObject &json)
 {
-    m_name        = json["name"].toString();
-    m_price       = json["price"].toString();
-    m_description = json["description"].toString();
-    m_category    = category;
+    name(json["name"].toString());
+    price(json["price"].toString());
+    description(json["description"].toString());
+    category(json["category"].toString());
 }
 
-QJsonObject Item::toJson()
+Item::Item(const QString &category, const QJsonObject &json)
+{
+    name(json["name"].toString());
+    price(json["price"].toString());
+    description(json["description"].toString());
+    this->category(category);
+}
+
+auto Item::toJson() -> QJsonObject
 {
     QJsonObject root;
 

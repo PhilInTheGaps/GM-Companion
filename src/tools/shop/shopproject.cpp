@@ -1,33 +1,33 @@
 #include "shopproject.h"
 #include "logging.h"
+#include "utils/utils.h"
 
 #include <QJsonArray>
 
-ShopProject::ShopProject(QString name, QList<ShopCategory *>categories, QObject *parent)
+ShopProject::ShopProject(const QString &name, const QList<ShopCategory*> &categories, QObject *parent)
     : QObject(parent), m_name(name), m_categories(categories)
 {
     qCDebug(gmShopsShopProject()) << "Initializing new ShopProject:" << name << "...";
 
-    if (categories.size() > 0) m_currentCategory = categories[0];
+    if (!categories.isEmpty()) m_currentCategory = categories[0];
 }
 
 ShopProject::ShopProject(ShopProject *other)
 {
-    if (other)
+    if (!other) return;
+
+    m_name = other->m_name;
+
+    for (auto *category : other->m_categories)
     {
-        m_name = other->m_name;
-
-        for (auto c : other->m_categories)
-        {
-            auto copy = new ShopCategory(c);
-            m_categories.append(copy);
-        }
-
-        if (m_categories.size() > 0) m_currentCategory = m_categories[0];
+        auto *copy = new ShopCategory(category);
+        m_categories.append(copy);
     }
+
+    if (!m_categories.isEmpty()) m_currentCategory = m_categories[0];
 }
 
-ShopProject::ShopProject(QJsonObject json)
+ShopProject::ShopProject(const QJsonObject &json)
 {
     auto categoryArray = json["categories"].toArray();
 
@@ -45,7 +45,7 @@ ShopProject::ShopProject(QJsonObject json)
         }
 
 
-        ShopCategory *category = new ShopCategory(co.value("name").toString(), shops);
+        auto *category = new ShopCategory(co.value("name").toString(), shops);
         category->setCurrentShop(0);
 
         m_categories.append(category);
@@ -57,13 +57,13 @@ ShopProject::ShopProject(QJsonObject json)
 
 ShopProject::~ShopProject()
 {
-    for (auto c : m_categories)
+    for (auto *category : m_categories)
     {
-        c->deleteLater();
+        category->deleteLater();
     }
 }
 
-QJsonObject ShopProject::toJson()
+auto ShopProject::toJson() -> QJsonObject
 {
     QJsonObject root;
 
@@ -85,37 +85,37 @@ QJsonObject ShopProject::toJson()
     return root;
 }
 
-ShopCategory::ShopCategory(QString name, QList<ItemShop *>shops)
-    : m_name(name), m_shops(shops)
+ShopCategory::ShopCategory(const QString &name, const QList<ItemShop*> &shops)
+    : a_name(name), m_shops(shops)
 {
     qCDebug(gmShopsShopProject()) << "Initializing new ShopCategory:" << name << "...";
 }
 
 ShopCategory::ShopCategory(ShopCategory *other)
 {
-    m_name = other->m_name;
+    name(other->name());
 
-    for (auto s : other->shops())
+    for (auto *shop : other->shops())
     {
-        if (s)
+        if (shop)
         {
-            auto copy = new ItemShop(s);
+            auto *copy = new ItemShop(shop);
             m_shops.append(copy);
         }
     }
 
-    if (m_shops.size() > 0) m_currentShop = m_shops[0];
+    if (!m_shops.isEmpty()) m_currentShop = m_shops[0];
 }
 
 ShopCategory::~ShopCategory()
 {
-    for (auto s : m_shops)
+    for (auto *shop : m_shops)
     {
-        s->deleteLater();
+        shop->deleteLater();
     }
 }
 
-QJsonObject ShopCategory::toJson()
+auto ShopCategory::toJson() -> QJsonObject
 {
     QJsonObject root;
 
@@ -123,7 +123,7 @@ QJsonObject ShopCategory::toJson()
 
     QJsonArray shopArray;
 
-    for (auto shop : shops())
+    for (auto *shop : shops())
     {
         if (shop)
         {
@@ -133,4 +133,21 @@ QJsonObject ShopCategory::toJson()
     root.insert("shops", shopArray);
 
     return root;
+}
+
+void ShopCategory::setShops(const QList<ItemShop *> &shops)
+{
+    m_shops = shops;
+    if (!m_shops.isEmpty()) m_currentShop = shops[0];
+}
+
+void ShopCategory::setCurrentShop(int index)
+{
+    if (Utils::isInBounds(m_shops, index))
+    {
+        m_currentShop = m_shops[index];
+        return;
+    }
+
+    m_currentShop = nullptr;
 }

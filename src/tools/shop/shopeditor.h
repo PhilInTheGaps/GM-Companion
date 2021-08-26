@@ -3,7 +3,9 @@
 
 #include "common/abstracttool.h"
 #include "itemeditor.h"
+#include "filesystem_new/file.h"
 #include <QQmlApplicationEngine>
+#include <QVector>
 
 class ShopEditor : public AbstractTool
 {
@@ -36,18 +38,18 @@ public:
     Q_INVOKABLE void setCurrentShop(int index);
 
     QString name() const;
-    void setName(QString name);
+    void setName(const QString &name);
 
     QString owner() const;
-    Q_INVOKABLE void setOwner(QString owner);
+    Q_INVOKABLE void setOwner(const QString &owner);
 
     QString description() const;
-    Q_INVOKABLE void setDescription(QString description);
+    Q_INVOKABLE void setDescription(const QString &description);
 
     Q_INVOKABLE void moveShop(int positions);
     Q_INVOKABLE void deleteShop();
     Q_INVOKABLE void deleteItem(int index);
-    Q_INVOKABLE void createThing(QString name, int index);
+    Q_INVOKABLE void createThing(const QString &name, int index);
     Q_INVOKABLE void addItem(int index);
     Q_INVOKABLE void save();
 
@@ -56,8 +58,8 @@ public:
 
     Q_INVOKABLE void setCurrentItemGroup(int index);
     Q_INVOKABLE void enableAllItemCategories(bool b = true);
-    Q_INVOKABLE void setItemCategoryEnabled(QString category, bool b = true);
-    Q_INVOKABLE bool isItemCategoryEnabled(QString category) const { return !m_disabledItemCategories.contains(category); }
+    Q_INVOKABLE void setItemCategoryEnabled(const QString &category, bool b = true);
+    Q_INVOKABLE bool isItemCategoryEnabled(const QString &category) const { return !m_disabledItemCategories.contains(category); }
 
     bool isSaved() const { return m_isSaved; }
 
@@ -74,7 +76,7 @@ signals:
     void itemGroupsChanged();
 
     void isSavedChanged();
-    void showInfoBar(QString message);
+    void showInfoBar(const QString &message);
     void projectsSaved(QList<ShopProject*> projects);
 
 private:
@@ -94,14 +96,21 @@ private:
     bool m_isSaved = true;
     void madeChanges();
 
-    void createProject(QString name);
-    void createCategory(QString name);
-    void createShop(QString name);
+    void createProject(const QString &name);
+    void createCategory(const QString &name);
+    void createShop(const QString &name);
+
+    bool isCurrentShopValid() const;
+    ItemShop* currentShop() const;
+
+    static constexpr const char* PROJECT_FILE_GLOB = "*.shop";
 
 private slots:
     void onShopChanged();
     void onItemsChanged();
     void itemEditorSaved(ItemGroup *group);
+    void onShopFilesFound(Files::FileListResult *result);
+    void onShopFileDataReceived(const QVector<Files::FileDataResult*> &results);
 };
 
 #endif // SHOPEDITOR_H

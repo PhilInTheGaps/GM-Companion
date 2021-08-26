@@ -4,63 +4,39 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include <QJsonObject>
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class Item : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString price READ price WRITE setPrice NOTIFY priceChanged)
-    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
+    AUTO_PROPERTY(QString, name)
+    AUTO_PROPERTY(QString, price)
+    AUTO_PROPERTY(QString, description)
+    AUTO_PROPERTY(QString, category)
 
 public:
-    Item(QString name, QString price, QString description, QString category) : m_name(name), m_price(price), m_description(description), m_category(category) {}
-    Item(Item *other) { if (other) { m_name = other->m_name; m_price = other->m_price; m_description = other->m_description; m_category = other->m_category; } }
-    Item(QJsonObject json);
-    Item(QString category, QJsonObject json);
+    Item(const QString &name, const QString &price, const QString &description, const QString &category)
+        : a_name(name), a_price(price), a_description(description), a_category(category) {}
+    Item(Item *other);
+    Item(const QJsonObject &json);
+    Item(const QString &category, const QJsonObject &json);
 
     QJsonObject toJson();
-
-    QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; emit nameChanged(); }
-
-    QString price() const { return m_price; }
-    void setPrice(QString price) { m_price = price; emit priceChanged(); }
-
-    QString description() const { return m_description; }
-    void setDescription(QString description) { m_description = description; emit descriptionChanged(); }
-
-    QString category() const { return m_category; }
-    void setCategory(QString category) { m_category = category; emit categoryChanged(); }
-
-signals:
-    void nameChanged();
-    void priceChanged();
-    void descriptionChanged();
-    void categoryChanged();
-
-private:
-    QString m_name, m_price, m_description, m_category;
 };
 
 class ItemGroup : public QObject
 {
     Q_OBJECT
+    READONLY_PROPERTY(QString, name)
+    AUTO_PROPERTY(QList<Item*>, items)
+
 public:
-    ItemGroup(QString name, QList<Item*> items) : m_name(name), m_items(items) {}
+    ItemGroup(const QString &name, const QList<Item*> &items) : a_name(name), a_items(items) {}
     ItemGroup(ItemGroup *other);
-    ItemGroup(QString groupName, QJsonObject json);
-    ~ItemGroup() { for (auto i : m_items) if (i) i->deleteLater(); }
+    ItemGroup(const QString &groupName, const QJsonObject &json);
+    ~ItemGroup() { for (auto *i : items()) if (i) i->deleteLater(); }
 
     QJsonObject toJson();
-
-    QString name() const { return m_name; }
-    QList<Item*> items() const { return m_items; }
-    void setItems(QList<Item*> items) { m_items = items; }
-
-private:
-    QString m_name;
-    QList<Item*> m_items;
 };
 
 class ItemModel : public QAbstractListModel {
@@ -86,41 +62,20 @@ private:
 class ItemShop : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString owner READ owner WRITE setOwner NOTIFY ownerChanged)
-    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(QList<Item*> items READ items WRITE setItems NOTIFY itemsChanged)
+    AUTO_PROPERTY(QString, name)
+    AUTO_PROPERTY(QString, owner)
+    AUTO_PROPERTY(QString, description)
+    AUTO_PROPERTY(QList<Item*>, items)
 
 public:
-    explicit ItemShop(QString name, QString owner, QString description, QList<Item*> items = {}, QObject *parent = nullptr);
+    explicit ItemShop(const QString& name, const QString &owner,
+                      const QString &description, const QList<Item *> &items = {},
+                      QObject *parent = nullptr);
     explicit ItemShop(ItemShop *other);
-    explicit ItemShop(QJsonObject json);
+    explicit ItemShop(const QJsonObject &json);
     ~ItemShop();
 
-    QJsonObject toJson();
-
-    QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; emit nameChanged(); }
-
-    QString owner() const { return m_owner; }
-    void setOwner(QString owner) { m_owner = owner; emit ownerChanged(); }
-
-    QString description() const { return m_description; }
-    void setDescription(QString description) { m_description = description; emit descriptionChanged(); }
-
-    QList<Item*> items() const { return m_items; }
-    void setItems(QList<Item*> items) { m_items = items; emit itemsChanged(); }
-
-signals:
-    void nameChanged();
-    void ownerChanged();
-    void descriptionChanged();
-    void itemsChanged();
-
-private:
-    QString m_name, m_owner, m_description;
-    QList<Item*> m_items;
-
+    QJsonObject toJson();;
 };
 
 #endif // ITEMSHOP_H

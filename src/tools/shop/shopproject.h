@@ -6,28 +6,27 @@
 #include <QJsonObject>
 
 #include "itemshop.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class ShopCategory : public QObject
 {
     Q_OBJECT
+    AUTO_PROPERTY(QString, name)
+
 public:
-    ShopCategory(QString name, QList<ItemShop*> shops);
+    ShopCategory(const QString &name, const QList<ItemShop *> &shops);
     ShopCategory(ShopCategory *other);
     ~ShopCategory();
 
     QJsonObject toJson();
 
-    QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; }
-
     QList<ItemShop*> shops() const { return m_shops; }
-    void setShops(QList<ItemShop*> shops) { m_shops = shops; if (m_shops.size() > 0) m_currentShop = shops[0]; }
+    void setShops(const QList<ItemShop*> &shops);
 
     ItemShop *currentShop() const { return m_currentShop; }
-    void setCurrentShop(int index) { if (index > -1 && index < m_shops.size()) m_currentShop = m_shops[index]; else m_currentShop = nullptr; }
+    void setCurrentShop(int index);
 
 private:
-    QString m_name;
     QList<ItemShop*> m_shops;
     ItemShop *m_currentShop = nullptr;
 };
@@ -36,9 +35,9 @@ class ShopProject : public QObject
 {
     Q_OBJECT
 public:
-    explicit ShopProject(QString name, QList<ShopCategory*> categories, QObject *parent = nullptr);
+    explicit ShopProject(const QString &name, const QList<ShopCategory*> &categories, QObject *parent = nullptr);
     explicit ShopProject(ShopProject *other);
-    explicit ShopProject(QJsonObject json);
+    explicit ShopProject(const QJsonObject &json);
     ~ShopProject();
 
     QJsonObject toJson();

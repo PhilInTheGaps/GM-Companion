@@ -38,7 +38,7 @@ public:
     Q_PROPERTY(QString shopOwner READ shopOwner NOTIFY currentShopChanged)
     QString shopOwner() const;
 
-    Q_PROPERTY(QString shopDescription READ shopDescription  NOTIFY currentShopChanged)
+    Q_PROPERTY(QString shopDescription READ shopDescription NOTIFY currentShopChanged)
     QString shopDescription() const;
 
 public slots:
@@ -63,11 +63,13 @@ private:
     ShopProject *m_currentProject = nullptr;
 
     bool isCurrentShopValid() const;
+    ItemShop* currentShop() const;
 
     static constexpr const char* PROJECT_FILE_GLOB = "*.shop";
 
 private slots:
     void onShopFilesFound(Files::FileListResult *result);
+    void onShopFileDataReceived(const QVector<Files::FileDataResult*> &results);
     void updateItems();
     void shopEditorSaved(const QList<ShopProject *> &projects);
 };

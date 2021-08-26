@@ -12,7 +12,7 @@ Page {
     Connections {
         target: item_editor
 
-        function onShowInfoBar() {
+        function onShowInfoBar(message) {
             info_text.text = message
             info_bar.visible = true
             info_bar_timer.start()
@@ -114,8 +114,8 @@ Page {
 
             delegate: Rectangle {
                 height: delegate_row.height
-                anchors.left: parent.left
-                anchors.right: parent.right
+                anchors.left: parent ? parent.left : undefined
+                anchors.right: parent ? parent.right : undefined
                 color: "transparent"
 
                 MouseArea {

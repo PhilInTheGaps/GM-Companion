@@ -15,7 +15,7 @@ Page {
     Connections {
         target: shop_editor
 
-        function onShowInfoBar() {
+        function onShowInfoBar(message) {
             info_text.text = message
             info_bar.visible = true
             info_bar_timer.start()

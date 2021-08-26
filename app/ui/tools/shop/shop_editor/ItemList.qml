@@ -57,8 +57,8 @@ Page {
                     == index ? Math.max(
                                    item_delegate_text_column.height,
                                    Defines.TOOLBAR_HEIGHT) : item_delegate_text_column.height
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
             color: item_list_table.currentIndex == index ? palette.button : "transparent"
 
