@@ -5,13 +5,14 @@
 #include <QBuffer>
 #include "utils/utils.h"
 
-CharacterImageViewer::CharacterImageViewer()
+CharacterImageViewer::CharacterImageViewer(QObject *parent)
+    : CharacterViewer(parent)
 {
 }
 
 CharacterImageViewer::~CharacterImageViewer()
 {
-    if (m_pdfDocument) delete m_pdfDocument;
+    delete m_pdfDocument;
 }
 
 void CharacterImageViewer::setCharacter(Character *character)
@@ -21,8 +22,11 @@ void CharacterImageViewer::setCharacter(Character *character)
     m_image.clear();
     m_categoryIndex = 0;
 
-    disconnect(m_currentCharacter, &Character::fileListLoaded, this, &CharacterImageViewer::onCharacterFileListLoaded);
-    disconnect(m_currentCharacter, &Character::fileDataLoaded, this, &CharacterImageViewer::onCharacterFileDataLoaded);
+    if (m_currentCharacter)
+    {
+        disconnect(m_currentCharacter, &Character::fileListLoaded, this, &CharacterImageViewer::onCharacterFileListLoaded);
+        disconnect(m_currentCharacter, &Character::fileDataLoaded, this, &CharacterImageViewer::onCharacterFileDataLoaded);
+    }
 
     // Load new character
     m_currentCharacter = character;
@@ -38,22 +42,21 @@ void CharacterImageViewer::setCharacter(Character *character)
     }
 }
 
-void CharacterImageViewer::onCharacterFileListLoaded(QList<CharacterFile>files)
+void CharacterImageViewer::onCharacterFileListLoaded(const QList<CharacterFile*> &files)
 {
     qCDebug(gmCharactersImageViewer()) << "Character files list was loaded.";
 
-    for (auto file : files) m_categories.append(file.name());
+    for (auto *file : files) m_categories.append(file->name());
     emit categoriesChanged();
 
     if (!m_categories.isEmpty()) setCurrentCategory(0);
 }
 
-void CharacterImageViewer::onCharacterFileDataLoaded(int index, QByteArray data)
+void CharacterImageViewer::onCharacterFileDataLoaded(int index, const QByteArray &data)
 {
     qCDebug(gmCharactersImageViewer()) << "File data was loaded.";
 
     if (m_categoryIndex != index) return;
-
 
     switch (m_currentCharacter->type())
     {
@@ -66,11 +69,13 @@ void CharacterImageViewer::onCharacterFileDataLoaded(int index, QByteArray data)
         break;
 
     default:
-        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type() << "of character" << m_currentCharacter->name() << "not implemented.";
+        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type()
+                                              << "of character" << m_currentCharacter->name()
+                                              << "not implemented.";
     }
 }
 
-void CharacterImageViewer::loadImage(QByteArray data)
+void CharacterImageViewer::loadImage(const QByteArray &data)
 {
     qCDebug(gmCharactersImageViewer()) << "Loading image from data";
 
@@ -86,7 +91,7 @@ void CharacterImageViewer::loadImage(QByteArray data)
     emit categoryChanged();
 }
 
-void CharacterImageViewer::loadPDF(int index, QByteArray data)
+void CharacterImageViewer::loadPDF(int index, const QByteArray &data)
 {
     qCDebug(gmCharactersImageViewer()) << "Loading pdf document";
 
@@ -96,7 +101,7 @@ void CharacterImageViewer::loadPDF(int index, QByteArray data)
     }
     else
     {
-        if (m_pdfDocument) delete m_pdfDocument;
+        delete m_pdfDocument;
 
         m_pdfCharacter = m_currentCharacter->name();
         m_pdfDocument  = Poppler::Document::loadFromData(data);
@@ -132,11 +137,11 @@ void CharacterImageViewer::setPDFPage(int index)
 
     if (index < m_pdfDocument->numPages())
     {
-        Poppler::Page *page = m_pdfDocument->page(index);
+        auto *page = m_pdfDocument->page(index);
 
         if (page)
         {
-            m_image = Utils::stringFromImage(QPixmap::fromImage(page->renderToImage(200, 200)));
+            m_image = Utils::stringFromImage(QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
         }
 
         delete page;
@@ -149,7 +154,7 @@ void CharacterImageViewer::setCurrentCategory(int index)
 {
     qCDebug(gmCharactersImageViewer()) << "Changing page:" << index;
 
-    m_image = "";
+    m_image.clear();
 
     m_categoryIndex = index;
     emit categoryChanged();

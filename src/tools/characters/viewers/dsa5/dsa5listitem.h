@@ -3,40 +3,30 @@
 
 #include <QObject>
 #include <QAbstractListModel>
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class DSA5ListItem : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString group READ group NOTIFY groupChanged)
-    Q_PROPERTY(QList<int> values READ values NOTIFY valuesChanged)
+    READONLY_PROPERTY(QString, name)
+    READONLY_PROPERTY(QString, group)
+    READONLY_PROPERTY(QList<int>, values)
 
 public:
-    explicit DSA5ListItem(QString name, QString group, QList<int> values, QObject *parent = nullptr);
-
-    QString name() const { return m_name; }
-    QString group() const { return m_group; }
-    QList<int> values() const { return m_values; }
-
-signals:
-    void nameChanged();
-    void groupChanged();
-    void valuesChanged();
-
-private:
-    QString m_name, m_group;
-    QList<int> m_values;
-
+    explicit DSA5ListItem(const QString &name, const QString &group,
+                          const QList<int> &values, QObject *parent);
 };
 
 // Model for QML
 class DSA5ListModel : public QAbstractListModel {
     Q_OBJECT
 public:
+    DSA5ListModel(QObject *parent) : QAbstractListModel(parent) {}
+
     int rowCount(const QModelIndex&) const override { return m_items.size(); }
     QVariant data(const QModelIndex& index, int role) const override;
 
-    void setElements(QList<DSA5ListItem*> elements);
+    void setElements(const QList<DSA5ListItem *> &elements);
     void clear();
 
 public slots:

@@ -82,14 +82,13 @@ set(SOURCES
   tools/shop/itemshop.cpp 
   tools/characters/charactertool.cpp 
   tools/characters/character.cpp 
-  tools/shop/itemeditor.cpp 
-  tools/shop/shopeditor.cpp 
-  tools/shop/shoptool.cpp
-  managers/addonmanager.cpp
-  tools/characters/viewers/characterimageviewer.cpp 
-  tools/characters/viewers/characterviewer.cpp 
+  tools/characters/viewers/characterimageviewer.cpp
   tools/characters/viewers/characterdsa5viewer.cpp 
   tools/characters/viewers/dsa5/dsa5listitem.cpp
+  tools/shop/itemeditor.cpp
+  tools/shop/shopeditor.cpp
+  tools/shop/shoptool.cpp
+  managers/addonmanager.cpp
 )
 
 # header files
@@ -150,18 +149,18 @@ set(HEADERS
   tools/combat_tracker/effect.h 
   tools/combat_tracker/combatant.h 
   tools/shop/shopproject.h 
-  tools/shop/itemshop.h 
+  tools/shop/itemshop.h
+  tools/shop/shoptool.h
+  tools/shop/itemeditor.h
+  tools/shop/shopeditor.h
   tools/characters/charactertool.h 
   tools/characters/character.h 
-  tools/generators/namegenerator.h
-  tools/shop/shoptool.h 
-  tools/shop/itemeditor.h 
-  tools/shop/shopeditor.h
-  managers/addonmanager.h
   tools/characters/viewers/characterimageviewer.h 
   tools/characters/viewers/characterviewer.h
   tools/characters/viewers/characterdsa5viewer.h 
   tools/characters/viewers/dsa5/dsa5listitem.h
+  tools/generators/namegenerator.h
+  managers/addonmanager.h
 )
 
 # resources

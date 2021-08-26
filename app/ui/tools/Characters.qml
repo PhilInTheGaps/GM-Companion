@@ -24,6 +24,7 @@ Page {
 
             CheckBox {
                 text: qsTr("Active Characters")
+                checked: true
                 onClicked: character_tool.displayActiveCharacters(checked)
                 anchors.verticalCenter: parent.verticalCenter
             }

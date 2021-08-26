@@ -56,10 +56,6 @@ private:
     Character *m_currentCharacter = nullptr;
 
     bool m_active = true;
-    int m_loadInactiveRequestId = -1;
-    int m_loadCharacterFilesRequestId = -1;
-    int m_loadCharacterFoldersRequestId = -1;
-    int m_convertFileRequestId = -1;
 
     void loadCharacters();
     void receivedCharacterFolders(const QStringList& folders);
@@ -70,10 +66,6 @@ private:
     void updateCharacter();
 
     void convertSettingsFile(const QByteArray& data);
-
-private slots:
-    void receivedFile(int id, const QByteArray& data);
-    void receivedFileList(int id, const QStringList& files);
 };
 
 

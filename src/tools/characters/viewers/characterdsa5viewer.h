@@ -26,7 +26,7 @@ class CharacterDSA5Viewer : public CharacterViewer
     Q_PROPERTY(QStringList special READ special NOTIFY characterChanged)
 
 public:
-    explicit CharacterDSA5Viewer(QQmlApplicationEngine *engine);
+    explicit CharacterDSA5Viewer(QQmlApplicationEngine *engine, QObject *parent);
 
     void setCharacter(Character* character);
     void setCurrentCategory(int index);
@@ -74,8 +74,8 @@ private:
     void loadItems();
 
     void loadReferenceObject();
-    QString jsonString(QString key);
-    QString jsonMapString(QString key, bool shiftIndex = true);
+    QString jsonString(const QString &key);
+    QString jsonMapString(const QString &key, bool shiftIndex = true);
 };
 
 #endif // CHARACTERDSA5VIEWER_H
