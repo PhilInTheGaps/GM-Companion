@@ -23,7 +23,6 @@ signals:
 
 private:
     QString m_path;
-    QString m_newFilePath;
     QPointer<AudioProject> m_project;
 
     QQueue<QString> m_musicFiles;
@@ -32,7 +31,6 @@ private:
 
     int m_fileCount = 0;
     int m_exportCount = 0;
-    int m_currentRequestId = -1;
 
     void copyElements(AudioScenario* scenario);
     void collectFilesToExport();
@@ -42,11 +40,6 @@ private:
     bool copyNextSound();
     bool copyNextRadio();
     bool copyFile(const QString &filePath, const QString &base, const QString &subfolder);
-
-private slots:
-    void receivedFile(int requestId, const QByteArray &data);
-    void savedFile(int requestId);
-
 };
 
 class AudioExporter : public QObject

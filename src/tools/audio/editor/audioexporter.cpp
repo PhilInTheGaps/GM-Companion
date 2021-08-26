@@ -1,9 +1,11 @@
 #include "audioexporter.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
+#include "filesystem_new/file.h"
 #include "logging.h"
+#include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
-#include <QFile>
+using namespace AsyncFuture;
 
 /**
  * @brief Export all files in project that are marked as enabled
@@ -24,7 +26,7 @@ void AudioExporter::exportFiles()
         return;
     }
 
-    Worker *worker = new Worker(m_path, m_project);
+    auto *worker = new Worker(m_path, m_project);
 
     worker->moveToThread(&workerThread);
     connect(worker, &Worker::copiedFiles,         [ = ]() { delete worker; });
@@ -44,8 +46,7 @@ void AudioExporter::updateProgress(float progress)
 Worker::Worker(const QString &path, AudioProject *project)
     : m_path(path), m_project(project)
 {
-    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &Worker::receivedFile);
-    connect(FileManager::getInstance(), &FileManager::savedFile,    this, &Worker::savedFile);
+
 }
 
 void Worker::startCopying()
@@ -85,7 +86,7 @@ void Worker::collectFilesToExport()
         if (category && category->isChecked() > 0)
         {
             // Scenarios
-            for (auto scenario : category->scenarios())
+            for (auto *scenario : category->scenarios())
             {
                 if (scenario && scenario->isChecked() > 0)
                 {
@@ -118,59 +119,40 @@ auto Worker::copyNext() -> bool
     return false;
 }
 
-bool Worker::copyNextMusic()
+auto Worker::copyNextMusic() -> bool
 {
     if (m_musicFiles.isEmpty()) return false;
 
     return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Music)), "music");
 }
 
-bool Worker::copyNextSound()
+auto Worker::copyNextSound() -> bool
 {
     if (m_soundFiles.isEmpty()) return false;
 
     return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Sound)), "sounds");
 }
 
-bool Worker::copyNextRadio()
+auto Worker::copyNextRadio() -> bool
 {
     if (m_radioFiles.isEmpty()) return false;
 
     return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Radio)), "radios");
 }
 
-bool Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder)
+auto Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder) -> bool
 {
     if (filePath.isEmpty() || subfolder.isEmpty()) return false;
 
-    auto oldPath = QString("%1%2").arg(base, filePath);
-    m_newFilePath = QString("%1/%2%3").arg(m_path, subfolder, filePath);
+    const auto oldPath = FileUtils::fileInDir(filePath, base);
+    const auto newPath = FileUtils::fileInDir(FileUtils::fileInDir(filePath, subfolder), m_path);
 
-    m_currentRequestId = FileManager::getUniqueRequestId();
-    FileManager::getInstance()->getFile(m_currentRequestId, oldPath);
-
+    observe(Files::File::copyAsync(oldPath, newPath)).subscribe([this]() {
+        copyNext();
+    }, [this]() {
+        copyNext();
+    });
     return true;
-}
-
-/**
- * @brief File has been received, now save it under new path
- */
-void Worker::receivedFile(int requestId, const QByteArray &data)
-{
-    if (requestId != m_currentRequestId) return;
-
-    m_currentRequestId = FileManager::getUniqueRequestId();
-    FileManager::getInstance()->saveFile(m_currentRequestId, m_newFilePath, data);
-}
-
-/**
- * @brief File was saved, start next operation
- */
-void Worker::savedFile(int requestId)
-{
-    if (requestId != m_currentRequestId) return;
-
-    copyNext();
 }
 
 void Worker::copyElements(AudioScenario *scenario)
