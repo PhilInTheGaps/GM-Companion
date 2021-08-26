@@ -162,7 +162,7 @@ void NotesTool::displayPageContent()
 /**
  * Find out if a book already exists
  */
-bool NotesTool::doesBookExist(const QString &name)
+auto NotesTool::doesBookExist(const QString &name) -> bool
 {
     for (auto *object : m_notesModel->children())
     {
@@ -210,7 +210,7 @@ void NotesTool::onClosePage()
 
             auto *newPage = qobject_cast<NoteBookPage*>(m_openedPages[i]);
 
-            if (!newPage) newPage->toggle();
+            if (newPage) newPage->toggle();
 
             break;
         }
