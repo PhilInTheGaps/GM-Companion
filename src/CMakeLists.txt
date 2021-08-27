@@ -23,7 +23,7 @@ include(AddTagLib)
 
 add_subdirectory(common)
 add_subdirectory(services)
-add_subdirectory(filesystem_new)
+add_subdirectory(filesystem)
 
 # source files
 set(SOURCES

@@ -1,7 +1,7 @@
 #include "maptool.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include "utils/utils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 

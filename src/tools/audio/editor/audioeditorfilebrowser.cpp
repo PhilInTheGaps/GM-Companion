@@ -1,6 +1,6 @@
 #include "audioeditorfilebrowser.h"
 #include "settings/settingsmanager.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include "utils/fileutils.h"
 #include "logging.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"

@@ -3,7 +3,7 @@
 
 #include "common/abstracttool.h"
 #include "itemeditor.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include <QQmlApplicationEngine>
 #include <QVector>
 

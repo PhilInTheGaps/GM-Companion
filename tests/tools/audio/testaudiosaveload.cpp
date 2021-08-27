@@ -4,8 +4,8 @@
 #include <QJsonDocument>
 #include "src/tools/audio/project/audioproject.h"
 #include "src/tools/audio/audiosaveload.h"
-#include "src/filesystem_new/file.h"
-#include "src/filesystem_new/fileaccesslocal.h"
+#include "src/filesystem/file.h"
+#include "src/filesystem/fileaccesslocal.h"
 #include "utils/fileutils.h"
 
 #include "tests/testhelper/abstracttest.h"

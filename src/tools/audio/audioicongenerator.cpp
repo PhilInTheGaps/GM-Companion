@@ -2,7 +2,7 @@
 #include "logging.h"
 #include "services/services.h"
 #include "settings/settingsmanager.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include "common/utils/utils.h"
 #include "services/spotify/spotifyutils.h"
 #include "project/audioicon.h"

@@ -7,7 +7,7 @@
 #include "common/abstracttool.h"
 #include "shopeditor.h"
 #include "shopproject.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 
 class ShopTool : public AbstractTool
 {

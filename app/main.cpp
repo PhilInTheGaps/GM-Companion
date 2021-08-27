@@ -11,7 +11,7 @@
 #include "settings/settingsmanager.h"
 #include "logger.h"
 #include "tools.h"
-#include "filesystem_new/filedialog/filedialog.h"
+#include "filesystem/filedialog/filedialog.h"
 
 #include "services/spotify/spotify.h"
 #include "services/google/googledrive.h"

@@ -9,7 +9,7 @@
 #include "audioplayer.h"
 #include "spotifyplayer.h"
 #include "discordplayer.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include <qytlib/videos/videoclient.h>
 
 class MusicPlayer : public AudioPlayer

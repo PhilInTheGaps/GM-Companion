@@ -2,7 +2,7 @@
 #define ITEMEDITOR_H
 
 #include "tools/shop/shopproject.h"
-#include "filesystem_new/file.h"
+#include "filesystem/file.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
 #include <QObject>
