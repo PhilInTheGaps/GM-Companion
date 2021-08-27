@@ -27,12 +27,6 @@ add_subdirectory(filesystem_new)
 
 # source files
 set(SOURCES
-  filesystem/fileaccessgoogledrive.cpp
-  filesystem/fileaccesslocal.cpp
-  filesystem/fileaccessnextcloud.cpp
-  filesystem/filedialog.cpp
-  filesystem/filemanager.cpp
-  filesystem/googledrivefile.cpp
   tools/maps/mapmarker.cpp 
   tools/dicetool.cpp 
   tools/notes/htmlgenerator.cpp 
@@ -93,14 +87,6 @@ set(SOURCES
 
 # header files
 set(HEADERS
-  filesystem/filerequestcontainer.h
-  filesystem/fileaccess.h
-  filesystem/fileaccessgoogledrive.h
-  filesystem/fileaccesslocal.h
-  filesystem/fileaccessnextcloud.h
-  filesystem/filedialog.h
-  filesystem/filemanager.h
-  filesystem/googledrivefile.h
   tools/audio/audiotool.h
   tools/audio/audioelementimageprovider.h 
   tools/audio/audioicongenerator.h 

@@ -11,8 +11,7 @@
 #include "settings/settingsmanager.h"
 #include "logger.h"
 #include "tools.h"
-#include "filesystem/filemanager.h"
-#include "filesystem/filedialog.h"
+#include "filesystem_new/filedialog/filedialog.h"
 
 #include "services/spotify/spotify.h"
 #include "services/google/googledrive.h"
@@ -25,7 +24,7 @@
 /// Register meta types for signals and slots
 void registerMetaTypes()
 {
-    qmlRegisterType<FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
+    qmlRegisterType<Files::FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
 
     qRegisterMetaType<AudioElement *>();
     qRegisterMetaType<QList<AudioProject *> >();
@@ -107,7 +106,6 @@ int main(int argc, char *argv[])
     ConverterTool converterTool(&engine);
 
     // Misc
-    engine.rootContext()->setContextProperty("file_manager", FileManager::getInstance());
     engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);

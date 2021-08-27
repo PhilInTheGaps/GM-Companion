@@ -12,6 +12,9 @@ namespace Files {
 class FileDialog : public QObject
 {
     Q_OBJECT
+    AUTO_PROPERTY(QList<QObject*>, entries)
+    AUTO_PROPERTY(bool, folderMode)
+    AUTO_PROPERTY(bool, isLoading)
 public:
     explicit FileDialog(QObject *parent = nullptr);
 
@@ -24,10 +27,6 @@ public:
 
     Q_PROPERTY(bool canGoBack READ canGoBack NOTIFY canGoBackChanged)
     bool canGoBack() const { return m_currentDir.length() > 1; }
-
-    AUTO_PROPERTY(QList<QObject*>, entries)
-    AUTO_PROPERTY(bool, folderMode)
-    AUTO_PROPERTY(bool, isLoading)
 
     Q_INVOKABLE QString getSelected(int index) const;
 
