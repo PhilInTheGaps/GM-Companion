@@ -22,7 +22,7 @@ AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& 
     m_icon = new AudioIcon(m_path, this);
     m_type = type;
 
-    m_icon->setRelativeUrl(object["icon"].toString());
+    m_icon->relativeUrl(object["icon"].toString());
 
     for (auto file : object.value("files").toArray())
     {

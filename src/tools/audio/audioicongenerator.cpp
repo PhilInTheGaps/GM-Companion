@@ -2,10 +2,11 @@
 #include "logging.h"
 #include "services/services.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
+#include "filesystem_new/file.h"
 #include "common/utils/utils.h"
 #include "services/spotify/spotifyutils.h"
 #include "project/audioicon.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <taglib/taglib.h>
 #include <taglib/fileref.h>
@@ -22,19 +23,19 @@
 #include <QTemporaryFile>
 
 using namespace TagLib;
+using namespace AsyncFuture;
 
 QMap<QUrl, QPixmap> AudioIconGenerator::iconCache;
 bool AudioIconGenerator::instanceFlag          = false;
 AudioIconGenerator *AudioIconGenerator::single = nullptr;
 QReadWriteLock AudioIconGenerator::cacheLock;
 
-IconWorker::IconWorker(QString resourcesPath, QString musicPath, QString soundsPath)
+IconWorker::IconWorker(const QString &musicPath, const QString &soundsPath)
     : m_musicPath(musicPath), m_soundsPath(soundsPath)
 {
     connect(Spotify::getInstance(), &Spotify::authorized,           this,                       &IconWorker::onSpotifyAuthorized);
     connect(Spotify::getInstance(), &Spotify::receivedReply,        this,                       &IconWorker::onReceivedSpotifyReply);
     connect(this,                   &IconWorker::getSpotifyRequest, Spotify::getInstance(),     qOverload<QNetworkRequest, int>(&Spotify::get));
-    connect(this,                   &IconWorker::getFile,           FileManager::getInstance(), &FileManager::getFile);
 }
 
 IconWorker::~IconWorker()
@@ -73,7 +74,7 @@ auto IconWorker::getPlaceholderImage(AudioElement *element)->QPixmap
     return img;
 }
 
-QPixmap AudioIconGenerator::getPlaceholderImage(AudioElement::Type type)
+auto AudioIconGenerator::getPlaceholderImage(AudioElement::Type type) -> QPixmap
 {
     switch (type)
     {
@@ -199,21 +200,15 @@ void IconWorker::loadImageFromPath(AudioElement *element, const QString& filePat
     // Try to load from cache
     if (AudioIconGenerator::tryLoadFromCache(filePath, element)) return;
 
-    auto requestId = FileManager::getUniqueRequestId();
-
-    auto *context = new QObject;
-    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
-        if (requestId != id) return;
-
+    observe(Files::File::getDataAsync(filePath)).subscribe([element, filePath](Files::FileDataResult *result) {
         QPixmap image;
-        image.loadFromData(data);
+        image.loadFromData(result->data());
+
         AudioIconGenerator::writeToCache(filePath,                   image);
         AudioIconGenerator::writeToCache(element->icon()->imageId(), image);
         element->icon()->update();
-        delete context;
+        result->deleteLater();
     });
-
-    emit getFile(requestId, filePath);
 }
 
 auto IconWorker::getImageFromAudioFile(AudioElement *element, AudioFile *audioFile)->QPixmap
@@ -475,11 +470,11 @@ void IconWorker::generateCollageImage(AudioElement *element)
 
     QList<QPixmap> images;
 
-    for (auto image : icon->collageIcons())
+    for (const auto& image : icon->collageIcons())
     {
         bool doesExist = false;
 
-        for (auto image2 : images)
+        for (const auto& image2 : images)
         {
             if (image.second.toImage() == image2.toImage())
             {
@@ -539,7 +534,6 @@ void IconWorker::onSpotifyAuthorized()
 AudioIconGenerator::AudioIconGenerator()
 {
     auto *worker = new IconWorker(
-        SettingsManager::getPath("resources"),
         SettingsManager::getPath("music"),
         SettingsManager::getPath("sounds")
         );
@@ -585,7 +579,7 @@ void AudioIconGenerator::generateIcon(AudioElement *element)
     getInstance()->_generateIcon(element);
 }
 
-void AudioIconGenerator::writeToCache(QUrl url, QPixmap pixmap)
+void AudioIconGenerator::writeToCache(const QUrl &url, const QPixmap& pixmap)
 {
     if (cacheContains(url))
     {
@@ -601,7 +595,7 @@ void AudioIconGenerator::writeToCache(QUrl url, QPixmap pixmap)
     }
 }
 
-QPixmap AudioIconGenerator::readFromCache(QUrl url)
+auto AudioIconGenerator::readFromCache(const QUrl& url) -> QPixmap
 {
     cacheLock.lockForRead();
     auto pixmap = iconCache[url];
@@ -609,7 +603,7 @@ QPixmap AudioIconGenerator::readFromCache(QUrl url)
     return pixmap;
 }
 
-bool AudioIconGenerator::cacheContains(QUrl url)
+auto AudioIconGenerator::cacheContains(const QUrl& url) -> bool
 {
     cacheLock.lockForRead();
     auto contains = iconCache.contains(url);
@@ -617,7 +611,7 @@ bool AudioIconGenerator::cacheContains(QUrl url)
     return contains;
 }
 
-bool AudioIconGenerator::tryLoadFromCache(QUrl url, AudioElement *element)
+auto AudioIconGenerator::tryLoadFromCache(const QUrl& url, AudioElement *element) -> bool
 {
     if (cacheContains(url))
     {

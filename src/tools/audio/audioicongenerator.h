@@ -14,7 +14,7 @@ class IconWorker : public QObject
     Q_OBJECT
 
 public:
-    IconWorker(QString resourcesPath, QString musicPath, QString soundsPath);
+    IconWorker(const QString &musicPath, const QString &soundsPath);
     ~IconWorker();
 
 public slots:
@@ -54,7 +54,6 @@ private slots:
 
 signals:
     void getSpotifyRequest(QNetworkRequest request, int requestId);
-    void getFile(int requestId, QString filePath);
 };
 
 class AudioIconGenerator : public QObject
@@ -68,10 +67,10 @@ public:
     static void generateIcons(AudioScenario *scenario);
     static void generateIcon(AudioElement *element);
 
-    static void writeToCache(QUrl url, QPixmap pixmap);
-    static QPixmap readFromCache(QUrl url);
-    static bool cacheContains(QUrl url);
-    static bool tryLoadFromCache(QUrl url, AudioElement *element);
+    static void writeToCache(const QUrl &url, const QPixmap& pixmap);
+    static QPixmap readFromCache(const QUrl& url);
+    static bool cacheContains(const QUrl& url);
+    static bool tryLoadFromCache(const QUrl& url, AudioElement *element);
 
     static QPixmap getPlaceholderImage(AudioElement::Type type);
 
