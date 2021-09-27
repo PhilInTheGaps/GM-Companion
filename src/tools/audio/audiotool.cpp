@@ -135,11 +135,10 @@ void AudioTool::play(AudioElement *element)
         return;
     }
 
-    m_elementType = element->type();
-
     switch (element->type())
     {
     case AudioElement::Type::Music:
+        m_musicElementType = element->type();
         radioPlayer->stop();
         musicPlayer->play(element);
         setMusicVolume(m_musicVolume);
@@ -151,6 +150,7 @@ void AudioTool::play(AudioElement *element)
         break;
 
     case AudioElement::Type::Radio:
+        m_musicElementType = element->type();
         musicPlayer->stop();
         radioPlayer->play(element);
         setMusicVolume(m_musicVolume);
@@ -172,7 +172,7 @@ void AudioTool::onStartedPlaying()
  */
 void AudioTool::next()
 {
-    switch (m_elementType)
+    switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
         musicPlayer->next();
@@ -188,7 +188,7 @@ void AudioTool::playPause()
 {
     if (m_isPaused)
     {
-        switch (m_elementType)
+        switch (m_musicElementType)
         {
         case AudioElement::Type::Music:
             musicPlayer->play();
@@ -203,7 +203,7 @@ void AudioTool::playPause()
     }
     else
     {
-        switch (m_elementType)
+        switch (m_musicElementType)
         {
         case AudioElement::Type::Music:
             musicPlayer->pause();
@@ -240,7 +240,7 @@ void AudioTool::stop()
  */
 void AudioTool::again()
 {
-    switch (m_elementType)
+    switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
         musicPlayer->again();
@@ -294,7 +294,7 @@ void AudioTool::setSoundVolume(qreal volume)
  */
 auto AudioTool::songs() const -> QStringList
 {
-    switch (m_elementType)
+    switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
         return musicPlayer->songNames();
@@ -308,7 +308,7 @@ auto AudioTool::songs() const -> QStringList
  */
 auto AudioTool::index() const -> int
 {
-    switch (m_elementType)
+    switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
         return musicPlayer->index();
@@ -323,7 +323,7 @@ auto AudioTool::index() const -> int
  */
 void AudioTool::setMusicIndex(int index)
 {
-    switch (m_elementType)
+    switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
         musicPlayer->setIndex(index);

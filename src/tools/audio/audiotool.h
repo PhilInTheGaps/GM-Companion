@@ -112,7 +112,7 @@ private:
     SpotifyPlayer *spotifyPlayer = nullptr;
     QList<AudioPlayer*> audioPlayers;
 
-    AudioElement::Type m_elementType = AudioElement::Type::Music;
+    AudioElement::Type m_musicElementType = AudioElement::Type::Music;
     bool m_isPaused = true;
 
     void setIsLoading(bool isLoading) { m_isLoading = isLoading; emit isLoadingChanged(); }
