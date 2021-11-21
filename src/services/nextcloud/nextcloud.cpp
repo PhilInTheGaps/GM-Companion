@@ -9,58 +9,49 @@
 #include <QTimer>
 #include <QDesktopServices>
 
-bool NextCloud::instanceFlag = false;
-NextCloud *NextCloud::single = nullptr;
-
 NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
 {
     m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    if (m_connected)
+    if (connected())
     {
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
-        setLoginName(SettingsManager::getSetting("loginName", "", "NextCloud"));
-        setServerUrl(SettingsManager::getServerUrl("NextCloud", false));
-        m_appPassword = SettingsManager::getPassword(m_loginName, "NextCloud");
+        loginName(SettingsManager::getSetting("loginName", "", "NextCloud"));
+        serverUrl(SettingsManager::getServerUrl("NextCloud", false));
+        m_appPassword = SettingsManager::getPassword(loginName(), "NextCloud");
 
-        if (m_loginName.isEmpty() || m_appPassword.isEmpty() || m_serverUrl.isEmpty())
+        if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
         {
-            setConnected(false);
+            connected(false);
         }
         else
         {
-            qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << m_loginName << "on server" << m_serverUrl;
+            qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
         }
     }
 }
 
 auto NextCloud::getInstance() -> NextCloud *
 {
-    if (!instanceFlag)
+    if (!single)
     {
-        single       = new NextCloud;
-        instanceFlag = true;
+        single = new NextCloud(nullptr);
     }
     return single;
-}
-
-NextCloud::~NextCloud()
-{
-    instanceFlag = false;
 }
 
 auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, const QByteArray& data,
                                const QList<QPair<QByteArray, QByteArray>>& headers) -> QNetworkReply *
 {
-    if (!m_connected) connectService();
+    if (!connected()) connectService();
 
     auto url     = getPathUrl(path);
     auto request = QNetworkRequest(QUrl(url));
 
     qCDebug(gmNextCloud()) << "Sending DAV request (" << method << ") to" << url;
 
-    request.setRawHeader("Authorization", NetworkUtils::basicAuthHeader(m_loginName, m_appPassword));
+    request.setRawHeader("Authorization", NetworkUtils::basicAuthHeader(loginName(), m_appPassword));
 
     if (!headers.isEmpty())
     {
@@ -84,7 +75,7 @@ auto NextCloud::getPathUrl(const QString &path) -> QString
 {
     auto seperator = path.startsWith('/') ? QChar() : '/';
 
-    return m_serverUrl + NEXTCLOUD_DAV_ENDPOINT + "/" + m_loginName + seperator + path;
+    return serverUrl() + NEXTCLOUD_DAV_ENDPOINT + "/" + loginName() + seperator + path;
 }
 
 void NextCloud::connectService()
@@ -98,7 +89,7 @@ void NextCloud::connectService()
         return;
     }
 
-    if (m_connected)
+    if (connected())
     {
         qCDebug(gmNextCloud()) << "Already connected to a nextcloud instance.";
     }
@@ -116,7 +107,7 @@ void NextCloud::disconnectService()
 
     // TODO
 
-    setConnected(false);
+    connected(false);
 }
 
 /**
@@ -127,9 +118,9 @@ void NextCloud::startLoginFlow()
 {
     qCDebug(gmNextCloud()) << "Starting login flow v2 ...";
 
-    setServerUrl(SettingsManager::getServerUrl("NextCloud", false));
+    serverUrl(SettingsManager::getServerUrl("NextCloud", false));
 
-    if (m_serverUrl.isEmpty())
+    if (serverUrl().isEmpty())
     {
         updateStatus(ServiceStatus::Type::Error, tr("Error: Server URL is empty."));
         m_loggingIn = false;
@@ -137,9 +128,9 @@ void NextCloud::startLoginFlow()
     }
 
     updateStatus(ServiceStatus::Type::Info, tr("Connecting ..."));
-    auto authUrl = m_serverUrl + NEXTCLOUD_AUTH_URL;
+    auto authUrl = serverUrl() + NEXTCLOUD_AUTH_URL;
 
-    qCDebug(gmNextCloud()) << "Server URL:" << m_serverUrl;
+    qCDebug(gmNextCloud()) << "Server URL:" << serverUrl();
     qCDebug(gmNextCloud()) << "Auth URL:" << authUrl;
 
     auto request = QNetworkRequest(QUrl(authUrl));
@@ -210,16 +201,16 @@ void NextCloud::pollAuthPoint(const QUrl& url, const QString& token)
         else
         {
             auto content = QJsonDocument::fromJson(reply->readAll()).object();
-            setLoginName(content["loginName"].toString());
+            loginName(content["loginName"].toString());
             m_appPassword = content["appPassword"].toString();
 
             qCDebug(gmNextCloud()) << "Logged in successfully!";
-            qCDebug(gmNextCloud()) << "LoginName:" << m_loginName;
+            qCDebug(gmNextCloud()) << "LoginName:" << loginName();
             qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
 
-            SettingsManager::setSetting("loginName", m_loginName, "NextCloud");
-            SettingsManager::setPassword(m_loginName, m_appPassword, "NextCloud");
-            setConnected(true);
+            SettingsManager::setSetting("loginName", loginName(), "NextCloud");
+            SettingsManager::setPassword(loginName(), m_appPassword, "NextCloud");
+            connected(true);
             m_loggingIn = false;
         }
 

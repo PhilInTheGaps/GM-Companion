@@ -2,6 +2,8 @@
 
 #include "fileresult.h"
 
+class RestNetworkReply;
+
 namespace Files {
 
 class FileCheckResult : public FileResult
@@ -14,6 +16,8 @@ public:
 
     explicit FileCheckResult(const QString& path, bool exists, QObject *parent = nullptr)
         : FileResult(true, QByteArray(), parent), m_path(path), m_exists(exists) {}
+
+    static FileCheckResult* fromNetworkReply(RestNetworkReply *reply, const QString &path, QObject *parent);
 
     QString path() const { return m_path; }
     bool exists() const { return m_exists; }

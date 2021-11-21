@@ -3,7 +3,6 @@
 #include <QNetworkReply>
 #include <QObject>
 #include "fileaccess.h"
-#include "multigethelper.h"
 #include "cache/filecache.h"
 
 namespace Files
@@ -44,9 +43,6 @@ private:
                              const std::function<QFuture<FileResult*>(const T1&, const T2&)>& func);
 
     FileListResult* parseListResponse(const QByteArray& data, const QString& path, bool files, bool folders);
-
-    QFuture<QVector<FileDataResult*>> getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache);
-    QFuture<FileMultiCheckResult*> checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache);
 };
 
 }

@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "tools.h"
 #include "filesystem/filedialog/filedialog.h"
+#include "filesystem/fileaccessswitcher.h"
 
 #include "services/spotify/spotify.h"
 #include "services/google/googledrive.h"
@@ -25,6 +26,8 @@
 void registerMetaTypes()
 {
     qmlRegisterType<Files::FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
+    qmlRegisterSingletonType<Files::FileAccessSwitcher>("lol.rophil.gmcompanion.fileaccessswitcher", 1, 0,
+                                                        "FileAccessSwitcher", Files::FileAccessSwitcher::QmlSingletonProvider);
 
     qRegisterMetaType<AudioElement *>();
     qRegisterMetaType<QList<AudioProject *> >();

@@ -1,6 +1,7 @@
 #include "file.h"
 #include "fileaccesslocal.h"
 #include "fileaccessnextcloud.h"
+#include "fileaccessgoogledrive.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
 
@@ -88,16 +89,16 @@ auto File::checkAsync(const QStringList &paths, bool allowCache, FileAccess *fil
 
 void File::updateFileAccess()
 {
-    auto cloudMode = SettingsManager::getSetting("cloudMode", "local");
+    const auto cloudMode = SettingsManager::getSetting("cloudMode", "local");
 
     if (cloudMode == "NextCloud")
     {
         FileAccess::setInstance(new FileAccessNextcloud(nullptr));
     }
-//    else if (cloudMode == "GoogleDrive")
-//    {
-//        FileAccess::setInstance(new FileAccessGoogleDrive(nullptr));
-//    }
+    else if (cloudMode == "GoogleDrive")
+    {
+        FileAccess::setInstance(new FileAccessGoogleDrive(nullptr));
+    }
     else
     {
         FileAccess::setInstance(new FileAccessLocal(nullptr));

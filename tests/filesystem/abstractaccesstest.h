@@ -10,10 +10,10 @@ class AbstractAccessTest : public AbstractTest
     Q_OBJECT
 
 protected:
-    virtual void createTestDir() = 0;
-    virtual void removeTestDir() = 0;
+    virtual void createTestDir();
+    virtual void removeTestDir();
 
-    virtual void createTestFile(const QString &path, const QByteArray &data) = 0;
+    virtual void createTestFile(const QString &path, const QByteArray &data);
     void createTestFiles();
 
     void runAllTests();

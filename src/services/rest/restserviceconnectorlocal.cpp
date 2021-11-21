@@ -12,10 +12,12 @@
  * @brief Constructor
  */
 RESTServiceConnectorLocal::RESTServiceConnectorLocal
-    (QNetworkAccessManager *networkManager, O2 *o2, const QLoggingCategory& loggingCategory, QObject *parent = nullptr) :
+    (QNetworkAccessManager *networkManager, O2 *o2,
+     const QLoggingCategory& loggingCategory, QObject *parent = nullptr) :
     RESTServiceConnector(networkManager, loggingCategory, parent), m_o2(o2)
 {
-    m_settingsStore = new O0SettingsStore("gm-companion");
+    m_settingsStore = new O0SettingsStore("gm-companion", this);
+    m_o2->setParent(this);
     m_o2->setStore(m_settingsStore);
 
     // Connect signals
@@ -30,8 +32,6 @@ RESTServiceConnectorLocal::RESTServiceConnectorLocal
 RESTServiceConnectorLocal::~RESTServiceConnectorLocal()
 {
     disconnect();
-    m_o2->deleteLater();
-    m_settingsStore->deleteLater();
 }
 
 /**
@@ -51,13 +51,11 @@ void RESTServiceConnectorLocal::setConfig(const RESTServiceLocalConfig& config)
  */
 void RESTServiceConnectorLocal::grantAccess()
 {
-    qCDebug(m_loggingCategory) << "Granting access ...";
-    emit statusChanged(ServiceStatus::Type::Info, tr("Connecting..."));
+    setStatus(ServiceStatus::Type::Info, tr("Connecting..."));
 
     if (!m_wasConfigured)
     {
-        qCWarning(m_loggingCategory) << "Could not grant access, connector was not configured.";
-        emit statusChanged(ServiceStatus::Type::Error, tr("Internal Error: Connector was not configured."));
+        setStatus(ServiceStatus::Type::Error, tr("Internal Error: Connector was not configured."));
         return;
     }
 
@@ -74,15 +72,13 @@ void RESTServiceConnectorLocal::grantAccess()
     }
     else
     {
-        qCWarning(m_loggingCategory) << "Client id and/or client secret not found!";
-
         if (id.isEmpty())
         {
-            emit statusChanged(ServiceStatus::Type::Error, tr("Error: No Client ID has been set."));
+            setStatus(ServiceStatus::Type::Error, tr("Error: No Client ID has been set."));
         }
         else
         {
-            emit statusChanged(ServiceStatus::Type::Error, tr("Error: No Client Secret has been set."));
+            setStatus(ServiceStatus::Type::Error, tr("Error: No Client Secret has been set."));
         }
     }
 }
@@ -93,199 +89,177 @@ void RESTServiceConnectorLocal::disconnectService()
     m_o2->unlink();
 }
 
-/**
- * @brief Send a GET request to the REST API
- * @return Returns a unique request id that can be used to identify the reply
- * later
- */
-auto RESTServiceConnectorLocal::get(QNetworkRequest request)->int
-{
-    auto requestId = getUniqueRequestId();
-
-    get(request, requestId);
-    return requestId;
-}
-
-/**
- * @brief Send a GET request to the REST API but with a specified request id
- */
-void RESTServiceConnectorLocal::get(QNetworkRequest request, int requestId)
+void RESTServiceConnectorLocal::sendRequest(RequestContainer *container, AsyncFuture::Deferred<RestNetworkReply *> deferred)
 {
     // If amount of concurrent requests is too high, enqueue request
-    auto wasEnqueued = checkAndEnqueueRequest(request, requestId, GET, "");
+    if (checkAndEnqueueRequest(container, deferred)) return;
 
-    if (wasEnqueued > -1) return;
+    auto *requestor = makeRequestor();
+    auto request = container->request();
+    int id = -1;
 
-    qCDebug(m_loggingCategory) << "Sending GET Request (" << requestId << ") to URL" << request.url();
-
-    auto requestor = new O2Requestor(m_networkManager, m_o2, this);
-
-    // Workaround for google drive requests
-    if (!m_config.authHeaderFormat.isEmpty())
+    switch (container->requestType())
     {
-        requestor->setAddAccessTokenInQuery(false);
-        requestor->setAccessTokenInAuthenticationHTTPHeaderFormat(m_config.authHeaderFormat);
+    case GET:
+        qCDebug(m_loggingCategory) << "Sending GET Request to URL" << container->request().url();
+
+        // Workaround for google drive requests
+        if (!m_config.authHeaderFormat.isEmpty())
+        {
+            requestor->setAddAccessTokenInQuery(false);
+            requestor->setAccessTokenInAuthenticationHTTPHeaderFormat(m_config.authHeaderFormat);
+        }
+
+        id = requestor->get(request);
+        break;
+
+    case PUT:
+        qCDebug(m_loggingCategory) << "Sending PUT Request to URL" << request.url() << "with data" << container->data();
+        //request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
+        id = requestor->put(request, container->data());
+        break;
+
+    case POST:
+        qCDebug(m_loggingCategory) << "Sending POST Request to URL" << request.url() << "with data" << container->data();
+        //request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
+        id = requestor->post(request, container->data());
+        qCDebug(m_loggingCategory) << "Sent POST request:" << id;
+        break;
+
+    case CUSTOM:
+        qCDebug(m_loggingCategory) << "Sending HTTP request:" << container->verb(), request.url();
+        id = requestor->customRequest(request, container->verb(), container->data());
+        break;
     }
 
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray, QList<QNetworkReply::RawHeaderPair> >::of(&O2Requestor::finished), this,
-            &RESTServiceConnectorLocal::onReplyReceived);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
-            requestor, &O2Requestor::deleteLater);
-
-    auto internalId = requestor->get(request);
-
-    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
-
-    m_requestMap[internalId] = RequestContainer(requestId, request, GET, "");
-    m_currentRequestCount++;
-}
-
-/**
- * @brief Check if request can be sent or if requests are blocked. If they are
- * blocked, put request in queue.
- * @param request The network request
- * @param requestId Request id, if left at -1 will generate a new id
- * @return Returns request id for network request or -1 if request can be sent
- * now
- */
-auto RESTServiceConnectorLocal::checkAndEnqueueRequest(const QNetworkRequest& request, int requestId, RequestType type, QByteArray data, QByteArray verb)->int
-{
-    if (m_isOnCooldown)
+    if (id == -1)
     {
-        qCDebug(m_loggingCategory).noquote() << "Connector is on cooldown, putting request (" << requestId << ") in queue ...";
-    }
-    else if (!isAccessGranted())
-    {
-        qCDebug(m_loggingCategory) << "Access has not been granted, putting request (" << requestId << ") in queue ...";
-    }
-    else if (m_currentRequestCount >= m_config.maxConcurrentRequests)
-    {
-        qCDebug(m_loggingCategory).noquote() << "Current request count (" << m_currentRequestCount << ") too high ("
-                                             << m_config.maxConcurrentRequests << "are allowed ), putting request ("
-                                             << requestId << ") in queue ...";
+        qCWarning(m_loggingCategory) << "Error: could not start requestor!";
+        deferred.cancel();
+        container->deleteLater();
     }
     else
     {
-        return -1;
+        m_activeRequests[id] = { deferred, container };
+    }
+}
+
+/**
+ * @brief Send a GET request to the REST API
+ */
+auto RESTServiceConnectorLocal::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
+{
+    auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    auto *container = new RequestContainer(request, GET, "", this);
+
+    sendRequest(container, deferred);
+    return deferred.future();
+}
+
+auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    auto *container = new RequestContainer(request, PUT, data, this);
+
+    sendRequest(container, deferred);
+    return deferred.future();
+}
+
+auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    auto *container = new RequestContainer(request, POST, data, this);
+
+    sendRequest(container, deferred);
+    return deferred.future();
+}
+
+auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest& request, const QByteArray& verb, const QByteArray& data) -> QFuture<RestNetworkReply *>
+{
+    auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    auto *container = new RequestContainer(request, CUSTOM, data, verb, this);
+
+    sendRequest(container, deferred);
+    return deferred.future();
+}
+
+/**
+ * @brief Check if request can be sent or if requests are blocked.
+ * If they are blocked, put request in queue.
+ * @return Returns true if the request has been enqueued
+ */
+auto RESTServiceConnectorLocal::checkAndEnqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*> &deferred) -> bool
+{
+    if (m_isOnCooldown)
+    {
+        qCDebug(m_loggingCategory).noquote() << "Connector is on cooldown, putting request in queue ...";
+    }
+    else if (!isAccessGranted())
+    {
+        qCDebug(m_loggingCategory) << "Access has not been granted, putting request in queue ...";
+    }
+    else if (activeRequestCount() >= m_config.maxConcurrentRequests)
+    {
+        qCDebug(m_loggingCategory).noquote() << "Current request count (" << activeRequestCount() << ") too high ("
+                                             << m_config.maxConcurrentRequests << "are allowed ), putting request in queue ...";
+    }
+    else
+    {
+        return false;
     }
 
-    if (requestId < 0) requestId = getUniqueRequestId();
-    m_requestQueue.enqueue(RequestContainer(requestId, request, type, std::move(data), std::move(verb)));
-    return requestId;
+    container->id(getQueueId());
+    m_requestQueue.enqueue(QPair(deferred, container));
+
+    return true;
 }
 
-auto RESTServiceConnectorLocal::put(QNetworkRequest request, QByteArray data)->int
+auto RESTServiceConnectorLocal::makeRequestor() -> O2Requestor*
 {
-    auto requestId = getUniqueRequestId();
+    auto *requestor = new O2Requestor(m_networkManager, m_o2, this);
 
-    put(request, data, requestId);
-    return requestId;
-}
-
-void RESTServiceConnectorLocal::put(QNetworkRequest request, QByteArray data, int requestId)
-{
-    // If amount of concurrent requests is too high, enqueue request
-    auto wasEnqueued = checkAndEnqueueRequest(request, requestId, PUT, data);
-
-    if (wasEnqueued > -1) return;
-
-    qCDebug(m_loggingCategory) << "Sending PUT Request (" << requestId << ") to URL" << request.url() << "and data:" << data;
-
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_XFORM);
-
-    auto requestor = new O2Requestor(m_networkManager, m_o2, this);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray, QList<QNetworkReply::RawHeaderPair> >::of(&O2Requestor::finished), this,
-            &RESTServiceConnectorLocal::onReplyReceived);
+    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QString, QByteArray, QList<QNetworkReply::RawHeaderPair> >::of(&O2Requestor::finished),
+            this, &RESTServiceConnectorLocal::onReplyReceived);
     connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
             requestor, &O2Requestor::deleteLater);
 
-    auto internalId = requestor->put(request, data);
-
-    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
-
-    m_requestMap[internalId] = RequestContainer(requestId, request, PUT, data);
-    m_currentRequestCount++;
+    return requestor;
 }
 
-auto RESTServiceConnectorLocal::post(QNetworkRequest request, QByteArray data)->int
+void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkError error, const QString &errorText,
+                                                const QByteArray& data, const QList<QNetworkReply::RawHeaderPair>&headers)
 {
-    auto requestId = getUniqueRequestId();
-
-    post(request, data, requestId);
-    return requestId;
-}
-
-void RESTServiceConnectorLocal::post(QNetworkRequest request, QByteArray data, int requestId)
-{
-    // If amount of concurrent requests is too high, enqueue request
-    auto wasEnqueued = checkAndEnqueueRequest(request, requestId, POST, data);
-
-    if (wasEnqueued > -1) return;
-
-    qCDebug(m_loggingCategory) << "Sending POST Request (" << requestId << ") to URL" << request.url() << "with data" << data;
-
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
-
-    auto requestor = new O2Requestor(m_networkManager, m_o2, this);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray, QList<QNetworkReply::RawHeaderPair> >::of(&O2Requestor::finished), this,
-            &RESTServiceConnectorLocal::onReplyReceived);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
-            requestor, &O2Requestor::deleteLater);
-    auto internalId = requestor->post(request, data);
-
-    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
-
-    m_requestMap[internalId] = RequestContainer(requestId, request, POST, data);
-    m_currentRequestCount++;
-}
-
-void RESTServiceConnectorLocal::customRequest(const QNetworkRequest& request, const QByteArray& verb, const QByteArray& data, int requestId)
-{
-    // If amount of concurrent requests is too high, enqueue request
-    auto wasEnqueued = checkAndEnqueueRequest(request, requestId, CUSTOM, data, verb);
-
-    if (wasEnqueued > -1) return;
-
-    auto requestor = new O2Requestor(m_networkManager, m_o2, this);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray, QList<QNetworkReply::RawHeaderPair> >::of(&O2Requestor::finished), this,
-            &RESTServiceConnectorLocal::onReplyReceived);
-    connect(requestor, QOverload<int, QNetworkReply::NetworkError, QByteArray>::of(&O2Requestor::finished),
-            requestor, &O2Requestor::deleteLater);
-
-    qCDebug(m_loggingCategory) << "Sending custom request:" << verb, request.url();
-
-    auto internalId = requestor->customRequest(request, verb, data);
-
-    if (internalId == -1) qCWarning(m_loggingCategory) << "Error: could not start requestor";
-
-    m_requestMap[internalId] = RequestContainer(requestId, request, CUSTOM, data, verb);
-    m_currentRequestCount++;
-}
-
-void RESTServiceConnectorLocal::onReplyReceived(int internalId, QNetworkReply::NetworkError error, const QByteArray& data, QList<QNetworkReply::RawHeaderPair>headers)
-{
-    qCDebug(m_loggingCategory) << "Received reply with internal id" << internalId;
-    m_currentRequestCount--;
+    qCDebug(m_loggingCategory) << "Received reply with internal id" << id;
 
     // Check if rate limit was exceeded
-    if (error == QNetworkReply::UnknownContentError) {
+    if (error == QNetworkReply::UnknownContentError)
+    {
         auto status = QJsonDocument::fromJson(data).object()["error"].toObject()["status"].toInt();
 
         // HTTP 429 == Rate limit exceeded
-        if (status == 429) {
-            handleRateLimit(m_requestMap[internalId]);
+        if (status == 429)
+        {
+            handleRateLimit(m_activeRequests[id]);
             return;
         }
     }
+    else if (error != QNetworkReply::NoError)
+    {
+        qCWarning(m_loggingCategory) << error << errorText << data << headers;
+    }
 
-    // Emit signal with non-internal request id
-    auto externalId = m_requestMap[internalId].requestId;
-    emit receivedReply(externalId, error, data, std::move(headers));
+    // Finish
+    auto *result = new RestNetworkReply(error, errorText, data, headers, this);
+    const auto pair = m_activeRequests.take(id);
+    auto *container = pair.second;
+    auto deferred = pair.first;
+    deferred.complete(result);
 
     // If there are requests in queue, send next
     dequeueRequests();
 
-    m_requestMap.remove(internalId);
+    // Delete O2Requestor and Container
+    container->deleteLater();
     sender()->deleteLater();
 }
 
@@ -293,7 +267,7 @@ void RESTServiceConnectorLocal::onRefreshFinished(const QNetworkReply::NetworkEr
 {
     if (error != QNetworkReply::NoError)
     {
-        emit statusChanged(ServiceStatus::Type::Error, tr("Error: Could not refresh token."));
+        setStatus(ServiceStatus::Type::Error, tr("Error: Could not refresh token."));
     }
 }
 
@@ -301,39 +275,36 @@ void RESTServiceConnectorLocal::dequeueRequests()
 {
     qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueue.count();
 
-    QQueue<RequestContainer> tempQueue;
+    QQueue<QPair<AsyncFuture::Deferred<RestNetworkReply*>, RequestContainer*>> tempQueue;
 
-    while (tempQueue.length() < m_config.maxConcurrentRequests - m_currentRequestCount && !m_requestQueue.empty())
+    while (tempQueue.length() < m_config.maxConcurrentRequests - activeRequestCount() && !m_requestQueue.empty())
     {
         tempQueue.enqueue(m_requestQueue.dequeue());
     }
 
     while (!tempQueue.isEmpty())
     {
-        auto container = tempQueue.dequeue();
+        auto pair = tempQueue.dequeue();
 
-        switch (container.requestType)
-        {
-        case GET: get(container.request, container.requestId);
-            break;
-
-        case PUT: put(container.request, container.data, container.requestId);
-            break;
-
-        case POST: post(container.request, container.data, container.requestId);
-            break;
-
-        case CUSTOM: customRequest(container.request, container.verb, container.data, container.requestId);
-            break;
-        }
+        sendRequest(pair.second, std::move(pair.first));
     }
 }
 
-void RESTServiceConnectorLocal::handleRateLimit(const RequestContainer& container)
+auto RESTServiceConnectorLocal::getQueueId() -> int
+{
+    if (m_nextQueueId == 0)
+    {
+        m_nextQueueId++;
+    }
+
+    return m_nextQueueId++;
+}
+
+void RESTServiceConnectorLocal::handleRateLimit(const QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair)
 {
     qCDebug(m_loggingCategory) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
     startCooldown(2);
-    m_requestQueue.enqueue(container);
+    m_requestQueue.enqueue(pair);
 }
 
 void RESTServiceConnectorLocal::startCooldown(int seconds)

@@ -2,6 +2,8 @@
 
 #include <QObject>
 
+class RestNetworkReply;
+
 namespace Files {
 
 class FileResult : public QObject
@@ -17,6 +19,8 @@ public:
 
     explicit FileResult(const QString& errorMessage, QObject *parent = nullptr)
         : FileResult(false, errorMessage, parent) {}
+
+    static FileResult* fromNetworkReply(RestNetworkReply *reply, QObject *parent);
 
     bool success() const { return m_success; }
     QString errorMessage() const { return m_errorMessage; }

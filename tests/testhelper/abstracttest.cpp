@@ -15,8 +15,12 @@ void AbstractTest::verifyFileContent(const QString &path, const QByteArray &cont
 {
     checkOrCreateFileAccess();
 
+    qDebug() << "Verifying content of file" << path << "(cached:" << cached << ")";
+
     const auto future = File::getDataAsync(path, cached, fileAccess);
     testFuture(future, QStringLiteral("File::getDataAsync"), [future, content](){
+        QVERIFY2(!future.isCanceled(), "QFuture is canceled!");
+
         auto *result = future.result();
         QVERIFY2(result->success(), "File::getDataAsync did not return a valid result.");
         QCOMPARE(result->data(), content);
@@ -32,6 +36,7 @@ void AbstractTest::verifyThatFileExists(const QString &path, bool shouldExist)
 
     auto future = File::checkAsync(path, false, fileAccess);
     testFuture(future, QStringLiteral("File::checkAsync"), [future, path, shouldExist](){
+        QVERIFY2(!future.isCanceled(), "QFuture is canceled!");
         QVERIFY2(shouldExist == future.result()->exists(),
                  QString("Apparently the file %1 does%2 exist when it should%3.")
                  .arg(path, shouldExist ? " not" : "", shouldExist ? "" : " not").toUtf8());

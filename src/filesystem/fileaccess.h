@@ -3,6 +3,8 @@
 #include <QObject>
 #include <QFuture>
 
+#include "multigethelper.h"
+
 #include "results/filedataresult.h"
 #include "results/filelistresult.h"
 #include "results/filecheckresult.h"
@@ -35,6 +37,10 @@ public:
         if (instance) instance->deleteLater();
         instance = fileAccess;
     }
+
+protected:
+    QFuture<QVector<FileDataResult*>> getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache);
+    QFuture<FileMultiCheckResult*> checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache);
 
 private:
     inline static FileAccess *instance = nullptr;

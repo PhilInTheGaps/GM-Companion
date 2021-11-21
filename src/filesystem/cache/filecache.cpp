@@ -1,4 +1,5 @@
 #include "filecache.h"
+#include <QDebug>
 
 FileCache::FileCache(QObject *parent) : QObject(parent)
 {
@@ -84,4 +85,19 @@ auto FileCache::copyEntry(const QString &path, const QString &copy) -> bool
 auto FileCache::checkEntry(const QString &path) -> bool
 {
     return m_entries.contains(path) && m_entries[path]->isFresh();
+}
+
+void FileCache::printEntries() const
+{
+    qDebug() << "FileCache:";
+
+    for (const auto &key : m_entries.keys())
+    {
+        auto *value = m_entries[key];
+
+        QByteArray data;
+        value->tryGetData(data);
+
+        qDebug() << "\t" << "key:" << key << "\tvalue:" << data << "\tisFresh:" << value->isFresh();
+    }
 }

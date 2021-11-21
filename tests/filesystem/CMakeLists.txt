@@ -20,14 +20,19 @@ add_executable(test_localaccess ${BASE_FILES} testlocalaccess.cpp)
 target_link_libraries(test_localaccess testhelper filesystem Qt5::Core Qt5::Test)
 add_test(NAME test_localaccess COMMAND test_localaccess)
 
-# Nextcloud
-if (ENABLE_EXTRA_TESTS)
-    add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp)
-    target_link_libraries(test_nextcloudaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
-    add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
-endif()
-
 # File Dialog
 add_executable(test_filedialog testfiledialog.cpp)
 target_link_libraries(test_filedialog testhelper filesystem Qt5::Core Qt5::Test)
 add_test(NAME test_filedialog COMMAND test_filedialog)
+
+if (ENABLE_EXTRA_TESTS)
+    # Nextcloud
+    add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp)
+    target_link_libraries(test_nextcloudaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
+    add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
+
+    # GoogleDrive
+    add_executable(test_googledriveaccess ${BASE_FILES} testgoogledriveaccess.cpp)
+    target_link_libraries(test_googledriveaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
+    add_test(NAME test_googledriveaccess COMMAND test_googledriveaccess)
+endif()

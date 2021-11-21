@@ -16,6 +16,8 @@ public:
     explicit FileDataResult(const QByteArray& data, QObject *parent = nullptr)
         : FileResult(true, QByteArray(), parent), m_data(data) {}
 
+    static FileDataResult* fromNetworkReply(RestNetworkReply *reply, QObject *parent);
+
     QByteArray data() const { return m_data; }
 
 private:

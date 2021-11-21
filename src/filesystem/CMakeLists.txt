@@ -9,13 +9,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Qml REQUIRED)
 
 set(HEADERS
     file.h
     fileaccess.h
     fileaccesslocal.h
     fileaccessnextcloud.h
+    fileaccessgoogledrive.h
+    fileaccessswitcher.h
     multigethelper.h
     results/fileresult.h
     results/filedataresult.h
@@ -30,12 +32,17 @@ set(HEADERS
 
 set(SOURCES
     file.cpp
+    fileaccess.cpp
     fileaccesslocal.cpp
     fileaccessnextcloud.cpp
+    fileaccessgoogledrive.cpp
     cache/filecache.cpp
     cache/filecacheentry.cpp
     filedialog/filedialog.cpp
+    results/fileresult.cpp
     results/filelistresult.cpp
+    results/filecheckresult.cpp
+    results/filedataresult.cpp
 )
 
 add_library(filesystem STATIC ${HEADERS} ${SOURCES})
@@ -50,4 +57,6 @@ target_link_libraries(filesystem
     PRIVATE
     services
     Qt5::Core
+    Qt5::Quick
+    Qt5::Qml
 )

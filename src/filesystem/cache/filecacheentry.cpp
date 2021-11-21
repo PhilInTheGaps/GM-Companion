@@ -35,7 +35,7 @@ auto FileCacheEntry::update(const QByteArray &data) -> bool
 
 auto FileCacheEntry::isFresh() const -> bool
 {
-    auto now = QTime::currentTime();
-    return now > m_lastModified && m_lastModified.msecsTo(now) < EXPIRATION_TIME_MS;
+    const auto now = QTime::currentTime();
+    return now >= m_lastModified && m_lastModified.msecsTo(now) < EXPIRATION_TIME_MS;
 }
 

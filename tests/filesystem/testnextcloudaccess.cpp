@@ -1,6 +1,5 @@
 #include <QtTest>
 #include <QObject>
-#include <QTemporaryDir>
 #include <QUuid>
 
 #include "file.h"
@@ -14,9 +13,6 @@ class TestNextcloudAccess : public AbstractAccessTest
     Q_OBJECT
 
 protected:
-    void createTestDir() override;
-    void removeTestDir() override;
-
     void createTestFile(const QString &path, const QByteArray &data) override;
 
     [[nodiscard]] auto getFilePath(const QString& filename = "") const -> QString override;
@@ -28,17 +24,6 @@ private slots:
 private:
     QString testPath;
 };
-
-void TestNextcloudAccess::createTestDir()
-{
-    createDirAndVerify(getFilePath());
-}
-
-void TestNextcloudAccess::removeTestDir()
-{
-    expectWarning();
-    removeFileAndVerify(getFilePath());
-}
 
 void TestNextcloudAccess::createTestFile(const QString& path, const QByteArray& data)
 {

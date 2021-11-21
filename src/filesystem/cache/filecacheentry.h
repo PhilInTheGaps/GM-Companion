@@ -22,6 +22,5 @@ private:
     QTemporaryFile m_tempFile;
 
     static constexpr int EXPIRATION_TIME_MS = 30000;
-
 };
 

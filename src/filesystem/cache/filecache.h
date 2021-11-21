@@ -17,6 +17,8 @@ public:
     bool copyEntry(const QString& path, const QString& copy);
     bool checkEntry(const QString& path);
 
+    void printEntries() const;
+
 private:
     QMap<QString, FileCacheEntry*> m_entries;
 };

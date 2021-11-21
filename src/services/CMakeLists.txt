@@ -19,6 +19,8 @@ set(HEADERS
     servicestatus.h
     rest/restserviceconnector.h
     rest/restserviceconnectorlocal.h
+    rest/restnetworkreply.h
+    rest/requestcontainer.h
     spotify/spotify.h
     spotify/spotifyutils.h
     spotify/spotifyconnectorlocal.h
@@ -26,12 +28,14 @@ set(HEADERS
     nextcloud/nextcloud.h
     google/googledrive.h
     google/googledriveconnectorlocal.h
+    google/googledrivereply.h
     discord/discord.h
 )
 
 set(SOURCES
     service.cpp
     rest/restserviceconnectorlocal.cpp
+    rest/restnetworkreply.cpp
     spotify/spotify.cpp
     spotify/spotifyutils.cpp
     spotify/spotifyconnectorlocal.cpp
@@ -49,6 +53,7 @@ target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(services
     common
     o2
+    qtasyncfuture
     Qt5::Core
     Qt5::Gui
     Qt5::Network

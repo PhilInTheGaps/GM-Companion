@@ -39,23 +39,7 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> 
 
 auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult*>>
 {
-    return getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
-}
-
-auto FileAccessNextcloud::getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache) -> QFuture<QVector<FileDataResult*>>
-{
-    if (helper->isDone())
-    {
-        auto results = helper->getResults();
-        helper->deleteLater();
-        return completed(results);
-    }
-
-    auto next = getDataAsync(helper->getNextPath(), allowCache);
-    return observe(next).subscribe([this, helper, allowCache](FileDataResult *result){
-        helper->addResult(result);
-        return getDataAsync(helper, allowCache);
-    }).future();
+    return FileAccess::getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
 }
 
 template<typename T1, typename T2>
@@ -147,10 +131,7 @@ auto FileAccessNextcloud::deleteAsync(const QString &path) -> QFuture<FileResult
             return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
         }
 
-        if (!m_cache.removeEntry(path))
-        {
-            qCWarning(gmFileAccessNextCloud()) << "Error: Could not remove file" << path << "from cache";
-        }
+        m_cache.removeEntry(path);
 
         qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
         return deleteReplyAndReturn(completed(new FileResult(true, this)), reply);
@@ -294,26 +275,8 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
 
 auto FileAccessNextcloud::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult*>
 {
-    return checkAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
+    return FileAccess::checkAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
 }
-
-auto FileAccessNextcloud::checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache) -> QFuture<FileMultiCheckResult*>
-{
-    if (helper->isDone())
-    {
-        auto results = helper->getResults();
-        helper->deleteLater();
-        return completed(new FileMultiCheckResult(results, this));
-    }
-
-    auto next = checkAsync(helper->getNextPath(), allowCache);
-
-    return observe(next).subscribe([this, helper, allowCache](FileCheckResult *result){
-        helper->addResult(result);
-        return checkAsync(helper, allowCache);
-    }).future();
-}
-
 
 auto FileAccessNextcloud::encodePath(const QString &data) -> QByteArray
 {
