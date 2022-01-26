@@ -7,8 +7,8 @@ class ServiceStatus : public QObject
 {
     Q_OBJECT
 public:
-    ServiceStatus(QObject *parent) : QObject(parent) {}
-    virtual ~ServiceStatus() {}
+    ServiceStatus(QObject *parent) : QObject(parent), a_type(Type::Info) {}
+    ~ServiceStatus() override = default;
 
     enum Type {
         Info = 0,

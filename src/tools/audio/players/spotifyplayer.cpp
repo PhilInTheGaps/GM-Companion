@@ -5,6 +5,7 @@
 #include "o0globals.h"
 #include "utils/utils.h"
 #include "settings/settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QDateTime>
 #include <QJsonArray>
@@ -16,9 +17,6 @@ SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPla
       m_discordPlayer(discordPlayer)
 {
     qDebug() << "Loading Spotify Tool ...";
-
-    // Signals
-    connect(Spotify::getInstance(), &Spotify::receivedReply, this, &SpotifyPlayer::gotPlaylistInfo);
 
     // Timer for "current song" updates
     m_timer         = new QTimer(this);
@@ -211,20 +209,17 @@ void SpotifyPlayer::getCurrentSong()
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/currently-playing"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
 
-    int requestId = Spotify::getInstance()->get(request);
-
-    connect(Spotify::getInstance(), &Spotify::receivedReply, [ = ]
-            (int id, QNetworkReply::NetworkError error, const QByteArray& data)
+    AsyncFuture::observe(Spotify::getInstance()->get(request))
+            .subscribe([this](RestNetworkReply *reply)
     {
-        if (error != QNetworkReply::NoError)
+        if (reply->error() != QNetworkReply::NoError)
         {
-            qCWarning(gmAudioSpotify()) << "Error:" << error;
+            qCWarning(gmAudioSpotify()) << "Error:" << reply->errorText();
+            reply->deleteLater();
             return;
         }
 
-        if (requestId != id) return;
-
-        const auto root = QJsonDocument::fromJson(data).object();
+        const auto root = QJsonDocument::fromJson(reply->data()).object();
         const auto item = root.value("item").toObject();
 
         auto *metadata = new AudioMetaData(metaDataReader);
@@ -251,6 +246,7 @@ void SpotifyPlayer::getCurrentSong()
         m_currentIndex = m_trackList.indexOf(metadata->title());
 
         metaDataReader->setMetaData(metadata);
+        reply->deleteLater();
     });
 }
 
@@ -285,7 +281,10 @@ void SpotifyPlayer::getPlaylistTracks(const QString& uri)
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
-    m_requestIdMap["getPlaylistTracks"] = Spotify::getInstance()->get(request);
+
+    AsyncFuture::observe(Spotify::getInstance()->get(request)).subscribe([this](RestNetworkReply *reply) {
+        gotPlaylistInfo(reply);
+    });
 }
 
 /**
@@ -294,15 +293,16 @@ void SpotifyPlayer::getPlaylistTracks(const QString& uri)
  * @param error Request Error
  * @param data Contains the received data in json form
  */
-void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError error, const QByteArray& data)
+void SpotifyPlayer::gotPlaylistInfo(RestNetworkReply *reply)
 {
-    if (!(m_requestIdMap.contains("getPlaylistTracks") && (requestId == m_requestIdMap["getPlaylistTracks"]))) return;
+    qCDebug(gmAudioSpotify) << "Got playlist info.";
 
-    qCDebug(gmAudioSpotify) << "Got playlist info." << requestId;
+    if (reply->error() != QNetworkReply::NoError)
+    {
+        qCWarning(gmAudioSpotify()) << "    Error:" << reply->errorText();
+    }
 
-    if (error != QNetworkReply::NoError) qCWarning(gmAudioSpotify()) << "    Error:" << error;
-
-    const auto root = QJsonDocument::fromJson(data).object();
+    const auto root = QJsonDocument::fromJson(reply->data()).object();
     const auto href = root["href"].toString();
 
     m_trackList.clear();
@@ -339,7 +339,7 @@ void SpotifyPlayer::gotPlaylistInfo(int requestId, QNetworkReply::NetworkError e
     }
     else
     {
-        qCCritical(gmAudioSpotify()) << "Received unknown track info" << data;
+        qCCritical(gmAudioSpotify()) << "Received unknown track info" << reply->data();
         return;
     }
 }

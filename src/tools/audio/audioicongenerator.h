@@ -5,9 +5,9 @@
 #include <QThread>
 #include <QPixmap>
 #include <QNetworkAccessManager>
+#include <QReadWriteLock>
 #include "project/audioproject.h"
 #include "services/spotify/spotify.h"
-#include <QReadWriteLock>
 
 class IconWorker : public QObject
 {
@@ -20,6 +20,10 @@ public:
 public slots:
     void generateThumbnails(AudioScenario *scenario);
     void generateThumbnail(AudioElement *element);
+    void onReceivedSpotifyReply(RestNetworkReply *reply);
+
+signals:
+    void sendSpotifyRequest(const QUrl &url);
 
 private:
     QList<AudioScenario*> m_scenarios;
@@ -29,7 +33,6 @@ private:
     QPixmap getPlaceholderImage(AudioElement *element);
 
     QStringList m_spotifyIconList;
-    QList<int> m_spotifyRequestList;
 
     void makeCollage(AudioElement *element);
     void loadImageFromWeb(AudioElement *element, const QString& url);
@@ -50,10 +53,6 @@ private:
 
 private slots:
     void onSpotifyAuthorized();
-    void onReceivedSpotifyReply(int id, QNetworkReply::NetworkError error, const QByteArray& data);
-
-signals:
-    void getSpotifyRequest(QNetworkRequest request, int requestId);
 };
 
 class AudioIconGenerator : public QObject
@@ -75,11 +74,10 @@ public:
     static QPixmap getPlaceholderImage(AudioElement::Type type);
 
 private:
-    explicit AudioIconGenerator();
-    static bool instanceFlag;
-    static AudioIconGenerator *single;
+    explicit AudioIconGenerator(QObject* parent = nullptr);
+    inline static AudioIconGenerator *single = nullptr;
     static QReadWriteLock cacheLock;
-    static QMap<QUrl, QPixmap> iconCache;
+    inline static QMap<QUrl, QPixmap> iconCache;
 
     void _generateIcons(AudioScenario *scenario);
     void _generateIcon(AudioElement *element);
@@ -88,7 +86,8 @@ private:
 
 signals:
     void startGeneratingAll(AudioScenario *scenario);
-    void startGeneratingOne(AudioElement* element);
+    void startGeneratingOne(AudioElement *element);
+    void receivedSpotifyReply(RestNetworkReply *reply);
 };
 
 #endif // AUDIOICONGENERATOR_H

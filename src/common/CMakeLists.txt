@@ -36,6 +36,7 @@ set(HEADERS
     updates/updatemanager.h
     updates/version.h.in
     updates/version.h
+    exceptions/notimplementedexception.h
 )
 
 set(SOURCES

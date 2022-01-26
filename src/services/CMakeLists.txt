@@ -25,6 +25,7 @@ set(HEADERS
     spotify/spotifyutils.h
     spotify/spotifyconnectorlocal.h
     spotify/spotifyconnectorserver.h
+    spotify/spotifynetworkerror.h
     nextcloud/nextcloud.h
     google/googledrive.h
     google/googledriveconnectorlocal.h
@@ -40,6 +41,7 @@ set(SOURCES
     spotify/spotifyutils.cpp
     spotify/spotifyconnectorlocal.cpp
     spotify/spotifyconnectorserver.cpp
+    spotify/spotifynetworkerror.cpp
     nextcloud/nextcloud.cpp
     google/googledrive.cpp
     google/googledriveconnectorlocal.cpp
@@ -54,6 +56,7 @@ target_link_libraries(services
     common
     o2
     qtasyncfuture
+    http-status-codes
     Qt5::Core
     Qt5::Gui
     Qt5::Network

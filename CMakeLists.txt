@@ -39,6 +39,7 @@ enable_testing(true)
 
 include(AddAsyncFuture)
 include(AddPropertyHelper)
+include(AddHttpStatusCodes)
 
 add_subdirectory(src)
 add_subdirectory(tests)

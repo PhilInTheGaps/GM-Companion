@@ -10,14 +10,12 @@
 #include <QNetworkRequest>
 #include "o0globals.h"
 #include "utils/processinfo.h"
-
-bool Spotify::instanceFlag = false;
-Spotify *Spotify::single   = nullptr;
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
 {
     m_networkManager = new QNetworkAccessManager(this);
-    m_username = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
+    username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
 
     updateConnector();
 
@@ -25,11 +23,6 @@ Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,                                &m_librespotProcess, &QProcess::kill);
     connect(&m_librespotProcess,          QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,                &Spotify::onLibrespotFinished);
     connect(&m_librespotProcess,          &QProcess::errorOccurred,                                      this,                &Spotify::onLibrespotError);
-}
-
-Spotify::~Spotify()
-{
-    instanceFlag = false;
 }
 
 void Spotify::updateConnector()
@@ -48,23 +41,82 @@ void Spotify::updateConnector()
     }
 
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);
-    connect(m_connector, &RESTServiceConnector::receivedReply, this, &Spotify::onReceivedReply);
     connect(m_connector, &RESTServiceConnector::statusChanged, this, &Spotify::updateStatus);
-    connect(m_connector, &RESTServiceConnector::isConnectedChanged, [ = ](const bool& connected) { setConnected(connected); });
+    connect(m_connector, &RESTServiceConnector::isConnectedChanged, [ = ](const bool& connected) { this->connected(connected); });
 
     stopLibrespot();
     if (connected()) grant();
 }
 
-auto Spotify::getInstance()->Spotify *
+auto Spotify::getInstance() -> Spotify *
 {
-    if (!instanceFlag)
+    if (!single)
     {
-        single       = new Spotify;
-        instanceFlag = true;
+        single = new Spotify(nullptr);
     }
     return single;
 }
+
+auto Spotify::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
+{
+    if (connected())
+    {
+        return AsyncFuture::observe(m_connector->get(request))
+                .subscribe([this](RestNetworkReply *reply)
+        {
+            handleNetworkError(reply);
+            return reply;
+        }).future();
+    }
+
+    return {};
+}
+
+auto Spotify::get(const QUrl &url) -> QFuture<RestNetworkReply *>
+{
+    if (connected())
+    {
+        return AsyncFuture::observe(m_connector->get(QNetworkRequest(url)))
+                .subscribe([this](RestNetworkReply *reply)
+        {
+            handleNetworkError(reply);
+            return reply;
+        }).future();
+    }
+
+    return {};
+}
+
+auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    if (connected())
+    {
+        return AsyncFuture::observe(m_connector->put(QNetworkRequest(url), data))
+                .subscribe([this](RestNetworkReply *reply)
+        {
+            handleNetworkError(reply);
+            return reply;
+        }).future();
+    }
+
+    return {};
+}
+
+auto Spotify::post(const QNetworkRequest& request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    if (connected())
+    {
+        return AsyncFuture::observe(m_connector->post(request, data))
+                .subscribe([this](RestNetworkReply *reply)
+        {
+            handleNetworkError(reply);
+            return reply;
+        }).future();
+    }
+
+    return {};
+}
+
 
 void Spotify::setDeviceActive()
 {
@@ -74,58 +126,85 @@ void Spotify::setDeviceActive()
     // Only the device name is not enough, we need the device id.
 
     QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/devices"));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, static_cast<const char*>(O2_MIME_TYPE_JSON));
 
-    m_requestMap["devices"] = m_connector->get(request);
+    AsyncFuture::observe(m_connector->get(request))
+            .subscribe([this](RestNetworkReply *reply) mutable { onReceivedDevices(reply); });
 }
 
-void Spotify::onReceivedDevices(const QByteArray& data)
+void Spotify::onReceivedDevices(const RestNetworkReply *reply)
 {
+    const auto data = reply->data();
     const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
 
     qCDebug(gmSpotify) << "Devices:" << devices;
 
     for (auto device : devices)
     {
-        if ((device.toObject().value("name") == LIBRESPOT_DEVICE_NAME) &&
-            !device.toObject().value("is_active").toBool())
+        if (device.toObject().value("name") == LIBRESPOT_DEVICE_NAME)
         {
-            // If current device was found and it is not active, make it active.
-            QJsonObject parameters
+            if (!device.toObject().value("is_active").toBool())
             {
-                { "device_ids", QJsonArray { device.toObject().value("id") } },
-                { "play", false }
-            };
+                // If current device was found and it is not active, make it active.
+                QJsonObject parameters
+                {
+                    { "device_ids", QJsonArray { device.toObject().value("id") } },
+                    { "play", false }
+                };
 
-            put(QUrl("https://api.spotify.com/v1/me/player"),
-                QJsonDocument(parameters).toJson(QJsonDocument::JsonFormat::Compact));
+                qCDebug(gmSpotify()) << "Found librespot instance \"" << LIBRESPOT_DEVICE_NAME <<
+                                        "\" but it is inactive, setting as active device ...";
+
+                auto future = put(QUrl("https://api.spotify.com/v1/me/player"),
+                                  QJsonDocument(parameters).toJson(QJsonDocument::JsonFormat::Compact));
+
+                AsyncFuture::observe(future).subscribe([this](RestNetworkReply *reply) {
+                    if (reply->hasError())
+                    {
+                        updateStatus(ServiceStatus::Error, reply->errorText());
+                    }
+                    else
+                    {
+                        updateStatus(ServiceStatus::Success, tr("Connected."));
+                    }
+                    reply->deleteLater();
+                }, [this]() {
+                    updateStatus(ServiceStatus::Error, tr("Error: Could not start librespot."));
+                });
+            }
+            else
+            {
+                qCDebug(gmSpotify()) << "Found librespot instance \"" << LIBRESPOT_DEVICE_NAME << "\", it is already set as the active device.";
+            }
 
             return;
         }
     }
 
-    qCWarning(gmSpotify) << "Could not find spotify device" << LIBRESPOT_DEVICE_NAME;
+    qCWarning(gmSpotify) << "Could not find spotify device \"" << LIBRESPOT_DEVICE_NAME << "\". Trying again in a few seconds.";
+
+    QTimer::singleShot(3000, this, &Spotify::setDeviceActive);
 }
 
 void Spotify::connectService()
 {
-    setUsername(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
+    username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
     updateConnector();
     grant();
 }
 
 void Spotify::disconnectService()
 {
-    setConnected(false);
+    connected(false);
     m_connector->disconnectService();
-    SettingsManager::setPassword(m_username, "", "Spotify");
+    SettingsManager::setPassword(username(), "", "Spotify");
     SettingsManager::setSetting("spotifyUsername", "", "Spotify");
     SettingsManager::setSetting("spotifyID", "", "Spotify");
     SettingsManager::setSetting("spotifySecret", "", "Spotify");
     stopLibrespot();
 }
 
-auto Spotify::startLibrespot()->bool
+auto Spotify::startLibrespot() -> bool
 {
     qCDebug(gmSpotify()) << "Starting librespot ...";
     updateStatus(ServiceStatus::Type::Info, tr("Starting librespot..."));
@@ -150,14 +229,30 @@ auto Spotify::startLibrespot()->bool
             return false;
         }
 
-        m_librespotProcess.start(librespotPath, { "-n", "GM-Companion",
-                                                  "-u", username,
-                                                  "-p", password
-                                 });
+        connect(&m_librespotProcess, &QProcess::readyReadStandardError, this, [this]() {
+            const auto output = m_librespotProcess.readAllStandardError();
+
+            if (output.contains("WARN"))
+            {
+                qCWarning(gmSpotify()) << "LIBRESPOT:" << output;
+                updateStatus(ServiceStatus::Warning, output);
+            }
+
+            if (output.contains("Connection failed:"))
+            {
+                updateStatus(ServiceStatus::Error, output);
+                stopLibrespot();
+            }
+        });
+
+        QStringList args;
+        args << "-n" << "GM-Companion" << "-u" << username << "-p" << password;
+        m_librespotProcess.start(librespotPath, args);
     }
     else
     {
         qCWarning(gmSpotify()) << "Librespot is already running.";
+        updateStatus(ServiceStatus::Type::Warning, tr("Librespot process is already running."));
     }
 
     setDeviceActive();
@@ -182,7 +277,7 @@ void Spotify::onLibrespotFinished(const int& exitCode, const QProcess::ExitStatu
     {
     case 101: // BadCredentials
         qCWarning(gmSpotify()) << "Spotify credentials are wrong!";
-        emit setConnected(false);
+        connected(false);
         updateStatus(ServiceStatus::Type::Error, tr("Error: Bad Credentials!"));
         break;
 
@@ -197,7 +292,7 @@ void Spotify::onLibrespotError(const QProcess::ProcessError& error)
     qCWarning(gmSpotify) << m_librespotProcess.errorString();
 }
 
-auto Spotify::getLibrespotPath()->QString
+auto Spotify::getLibrespotPath() -> QString
 {
     auto binaryName = getLibrespotBinaryName();
 
@@ -222,68 +317,59 @@ auto Spotify::getLibrespotPath()->QString
     return binaryName;
 }
 
-QString Spotify::getLibrespotBinaryName()
+constexpr auto Spotify::getLibrespotBinaryName() -> const char*
 {
     #ifdef Q_OS_WIN
     return "librespot.exe";
-    #endif
-
+    #else
     return "librespot";
+    #endif
 }
 
-void Spotify::onReceivedReply(int id, QNetworkReply::NetworkError error, const QByteArray& data)
+void Spotify::handleNetworkError(const RestNetworkReply *reply)
 {
-    if (error != QNetworkReply::NoError) {
-        handleNetworkError(id, error, data);
-    }
-
-    if (m_requestMap["devices"] == id) {
-        onReceivedDevices(data);
+    if (!reply)
+    {
+        qCCritical(gmSpotify()) << "Error: trying to handle network error, but reply is null!";
         return;
     }
 
-    emit receivedReply(id, error, data);
-}
-
-void Spotify::handleNetworkError(int id, QNetworkReply::NetworkError error, const QByteArray& data)
-{
-    switch (error)
+    switch (reply->error())
     {
+    case QNetworkReply::NoError:
+        return;
+
     case QNetworkReply::ContentNotFoundError:
         qCInfo(gmSpotify) << "No active spotify device set. Will try to set the current machine.";
         setDeviceActive();
         break;
 
     case QNetworkReply::ContentAccessDenied:
-        handleAccessDenied(data);
+        handleAccessDenied(SpotifyNetworkError(reply->data()));
         break;
 
     default:
-        qCWarning(gmSpotify) << "A network error occurred:" << id << error << data;
+        qCWarning(gmSpotify) << "A network error occurred:" << reply->error() << reply->data();
     }
 }
 
-void Spotify::handleAccessDenied(const QByteArray &data)
+void Spotify::handleAccessDenied(const SpotifyNetworkError &error)
 {
-    auto error = QJsonDocument::fromJson(data).object()["error"].toObject();
-    auto message = error["message"].toString();
-    auto reason = error["reason"].toString();
+    qCWarning(gmSpotify) << "Content Access Denied!" << error;
 
-    qCWarning(gmSpotify) << "Content Access Denied!" << message << reason;
-
-    if (reason == "PREMIUM_REQUIRED")
+    if (error.reason() == "PREMIUM_REQUIRED")
     {
-        setConnected(false);
+        connected(false);
         updateStatus(ServiceStatus::Type::Error, tr("Error: Spotify premium is required!"));
     }
     else
     {
-        updateStatus(ServiceStatus::Type::Error, message);
+        updateStatus(ServiceStatus::Type::Error, error.message());
     }
 }
 
 void Spotify::onAccessGranted()
 {
     qCDebug(gmSpotify) << "Access has been granted!";
-    setConnected(startLibrespot());
+    connected(startLibrespot());
 }

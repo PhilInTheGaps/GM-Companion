@@ -10,5 +10,10 @@ auto RestNetworkReply::getHeader(const QByteArray &name) const -> QByteArray
         }
     }
 
-    return QByteArray();
+    return {};
+}
+
+auto RestNetworkReply::hasError() const -> bool
+{
+    return error() != QNetworkReply::NoError;
 }

@@ -15,3 +15,6 @@
 [submodule "thirdparty/propertyhelper"]
 	path = thirdparty/propertyhelper
 	url = https://github.com/tackelua/Qt-PropertyHelper
+[submodule "thirdparty/http-status-codes"]
+	path = thirdparty/http-status-codes
+	url = https://github.com/j-ulrich/http-status-codes-cpp

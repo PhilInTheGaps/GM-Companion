@@ -19,7 +19,9 @@ public:
           a_data(data),
           a_headers(headers) {}
 
-    QByteArray getHeader(const QByteArray &name) const;
+    [[nodiscard]] auto getHeader(const QByteArray &name) const -> QByteArray;
+
+    [[nodiscard]] auto hasError() const -> bool;
 
     READONLY_PROPERTY(QNetworkReply::NetworkError, error)
     READONLY_PROPERTY(QString, errorText)

@@ -25,17 +25,12 @@
 using namespace TagLib;
 using namespace AsyncFuture;
 
-QMap<QUrl, QPixmap> AudioIconGenerator::iconCache;
-bool AudioIconGenerator::instanceFlag          = false;
-AudioIconGenerator *AudioIconGenerator::single = nullptr;
 QReadWriteLock AudioIconGenerator::cacheLock;
 
 IconWorker::IconWorker(const QString &musicPath, const QString &soundsPath)
     : m_musicPath(musicPath), m_soundsPath(soundsPath)
 {
-    connect(Spotify::getInstance(), &Spotify::authorized,           this,                       &IconWorker::onSpotifyAuthorized);
-    connect(Spotify::getInstance(), &Spotify::receivedReply,        this,                       &IconWorker::onReceivedSpotifyReply);
-    connect(this,                   &IconWorker::getSpotifyRequest, Spotify::getInstance(),     qOverload<QNetworkRequest, int>(&Spotify::get));
+    connect(Spotify::getInstance(), &Spotify::authorized, this, &IconWorker::onSpotifyAuthorized);
 }
 
 IconWorker::~IconWorker()
@@ -176,7 +171,6 @@ void IconWorker::loadImageFromWeb(AudioElement *element, const QString& url)
             qCCritical(gmAudioIconGenerator()) << reply->error() << reply->errorString() << "Could not load image from" << url;
             reply->deleteLater();
         }
-
 
         QPixmap image;
 
@@ -332,9 +326,7 @@ void IconWorker::getImagesFromSpotify()
             url.setQuery(query);
         }
 
-        auto requestId = Spotify::getInstance()->getUniqueRequestId();
-        m_spotifyRequestList.append(requestId);
-        emit getSpotifyRequest(QNetworkRequest(url), requestId);
+        emit sendSpotifyRequest(url);
     }
 }
 
@@ -422,19 +414,19 @@ void IconWorker::insertImageFromSpotifyTrack(QJsonObject track)
     insertImageFromUrl(imageUrl, id);
 }
 
-void IconWorker::onReceivedSpotifyReply(int id, QNetworkReply::NetworkError error, const QByteArray& data)
+void IconWorker::onReceivedSpotifyReply(RestNetworkReply *reply)
 {
-    if (!m_spotifyRequestList.contains(id)) return;
+    if (!reply) return;
 
-    qCDebug(gmAudioIconGenerator) << "Received reply from spotify:" << id;
+    qCDebug(gmAudioIconGenerator) << "Received reply from spotify";
 
-    if (error != QNetworkReply::NoError) {
-        qCCritical(gmAudioIconGenerator) << "Error reply" << id << error << data;
+    if (reply->hasError()) {
+        qCCritical(gmAudioIconGenerator) << "Error reply" << reply->errorText() << reply->data();
+        reply->deleteLater();
+        return;
     }
 
-    m_spotifyRequestList.removeOne(id);
-
-    const auto doc = QJsonDocument::fromJson(data);
+    const auto doc = QJsonDocument::fromJson(reply->data());
 
     if (doc.object().contains("followers"))
     {
@@ -454,6 +446,8 @@ void IconWorker::onReceivedSpotifyReply(int id, QNetworkReply::NetworkError erro
             insertImageFromSpotifyTrack(track.toObject());
         }
     }
+
+    reply->deleteLater();
 }
 
 void IconWorker::generateCollageImage(AudioElement *element)
@@ -531,7 +525,7 @@ void IconWorker::onSpotifyAuthorized()
     getImagesFromSpotify();
 }
 
-AudioIconGenerator::AudioIconGenerator()
+AudioIconGenerator::AudioIconGenerator(QObject *parent) : QObject(parent)
 {
     auto *worker = new IconWorker(
         SettingsManager::getPath("music"),
@@ -540,19 +534,27 @@ AudioIconGenerator::AudioIconGenerator()
 
     worker->moveToThread(&workerThread);
 
-    connect(&workerThread, &QThread::finished,                      worker, &QObject::deleteLater);
-    connect(this,          &AudioIconGenerator::startGeneratingAll, worker, &IconWorker::generateThumbnails);
-    connect(this,          &AudioIconGenerator::startGeneratingOne, worker, &IconWorker::generateThumbnail);
+    connect(&workerThread, &QThread::finished,                        worker, &QObject::deleteLater);
+    connect(this,          &AudioIconGenerator::startGeneratingAll,   worker, &IconWorker::generateThumbnails);
+    connect(this,          &AudioIconGenerator::startGeneratingOne,   worker, &IconWorker::generateThumbnail);
+    connect(this,          &AudioIconGenerator::receivedSpotifyReply, worker, &IconWorker::onReceivedSpotifyReply);
+
+    // Send get request from main thread
+    connect(worker, &IconWorker::sendSpotifyRequest, this, [this](const QUrl &url) {
+        auto future = Spotify::getInstance()->get(url);
+        AsyncFuture::observe(future).subscribe([this](RestNetworkReply *reply) {
+            emit receivedSpotifyReply(reply);
+        });
+    });
 
     workerThread.start();
 }
 
 auto AudioIconGenerator::getInstance()->AudioIconGenerator *
 {
-    if (!instanceFlag)
+    if (!single)
     {
-        single       = new AudioIconGenerator;
-        instanceFlag = true;
+        single = new AudioIconGenerator;
     }
     return single;
 }
@@ -561,7 +563,7 @@ AudioIconGenerator::~AudioIconGenerator()
 {
     workerThread.quit();
     workerThread.wait();
-    instanceFlag = false;
+    single = nullptr;
 }
 
 void AudioIconGenerator::generateIcons(AudioScenario *scenario)
