@@ -4,56 +4,40 @@
 #include <QObject>
 #include <QAbstractListModel>
 #include <QQmlApplicationEngine>
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AudioEditorFile : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY fileChanged)
-    Q_PROPERTY(QStringList path READ path WRITE setPath NOTIFY fileChanged)
-    Q_PROPERTY(int type READ type WRITE setType NOTIFY fileChanged)
-    Q_PROPERTY(int depth READ depth NOTIFY fileChanged)
-    Q_PROPERTY(bool opened READ opened WRITE setOpened NOTIFY openedChanged)
+
+    AUTO_PROPERTY(QString, name)
+    AUTO_PROPERTY(QStringList, path)
+    AUTO_PROPERTY(int, type)
+    AUTO_PROPERTY(bool, opened)
+
+    Q_PROPERTY(int depth READ depth NOTIFY pathChanged)
 
 public:
-    AudioEditorFile(QString name, QStringList path, int type)
-        : m_name(name), m_path(path), m_type(type) {}
+    AudioEditorFile(QString name, QStringList path, int type, QObject *parent)
+        : QObject(parent), a_name(name), a_path(path), a_type(type) {}
 
-    QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; emit fileChanged(); }
-
-    QStringList path() const { return m_path; }
-    void setPath(QStringList path) { m_path = path; emit fileChanged(); }
-
-    int type() const { return m_type; }
-    void setType(int type) { m_type = type; emit fileChanged(); }
-
-    int depth() const { return m_path.count(); }
-
-    bool opened() const { return m_opened; }
-    void setOpened(bool opened) { m_opened = opened; emit openedChanged(); }
-
-signals:
-    void fileChanged();
-    void openedChanged();
-
-private:
-    QString m_name;
-    QStringList m_path;
-    int m_type;
-    bool m_opened = false;
+    int depth() const { return path().count(); }
 };
 
 
 
-class AudioEditorFileModel : public QAbstractListModel {
+class AudioEditorFileModel : public QAbstractListModel
+{
     Q_OBJECT
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
 public:
+    explicit AudioEditorFileModel(QObject *parent) : QAbstractListModel(parent) {}
+
     int rowCount(const QModelIndex&) const override { return m_items.size(); }
     QVariant data(const QModelIndex& index, int role) const override;
 
     QVector<QObject*> elements() const { return m_items; }
-    void setElements(QList<AudioEditorFile*> elements);
+    void setElements(const QList<AudioEditorFile *> &elements);
 
     void clear();
     bool isEmpty() const { return m_items.isEmpty(); }
@@ -84,7 +68,7 @@ class AudioEditorFileBrowser : public QObject
     Q_PROPERTY(int type READ type WRITE setType NOTIFY typeChanged)
 
 public:
-    explicit AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent);
 
     void setType(int type);
     int type() const { return m_type; }

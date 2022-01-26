@@ -18,7 +18,7 @@ Discord::Discord(QObject *parent) : Service("Discord", parent)
     setChannel(SettingsManager::getSetting("channel", "", "Discord"));
     setEnabled(SettingsManager::getBoolSetting("enabled", false, "Discord"));
 
-    updateStatus(Service::Info, "");
+    updateStatus(ServiceStatus::Type::Info, "");
 }
 
 Discord *Discord::getInstance()
@@ -84,7 +84,7 @@ void Discord::disconnectService()
 
 void Discord::testConnection()
 {
-    updateStatus(Service::Info, tr("Testing connection ..."));
+    updateStatus(ServiceStatus::Type::Info, tr("Testing connection ..."));
 
     auto url = serverUrl() + DISCORD_API_ENDPOINT + "/status";
     auto *reply = m_networkManager->get(QNetworkRequest(url));
@@ -92,7 +92,7 @@ void Discord::testConnection()
     connect(reply, &QNetworkReply::finished, this, [=]() {
         if (reply->error() != QNetworkReply::NoError)
         {
-            updateStatus(Service::Error, reply->errorString());
+            updateStatus(ServiceStatus::Type::Error, reply->errorString());
         }
         else
         {
@@ -101,9 +101,9 @@ void Discord::testConnection()
             auto status = root["status"].toString();
 
             if (status == "connected")
-                updateStatus(Service::Success, tr("Connected."));
+                updateStatus(ServiceStatus::Type::Success, tr("Connected."));
             else
-                updateStatus(Service::Error, tr("Bot is not connected."));
+                updateStatus(ServiceStatus::Type::Error, tr("Bot is not connected."));
         }
 
         reply->deleteLater();

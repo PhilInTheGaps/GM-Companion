@@ -1,9 +1,9 @@
-#ifndef SPOTIFYCONNECTORSERVER_H
-#define SPOTIFYCONNECTORSERVER_H
+#pragma once
 
 #include <QObject>
 #include "rest/restserviceconnector.h"
 #include "settings/settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QQueue>
 #include <QTcpServer>
@@ -20,17 +20,13 @@ public:
     void disconnectService() override;
     bool isAccessGranted() const override { return m_isAccessGranted; }
 
-    int get(QUrl url) { return get(QNetworkRequest(url)); }
-    int get(QNetworkRequest request) override;
-    void get(QNetworkRequest request, int requestId) override;
-    int put(QNetworkRequest request, QByteArray data = "") override;
-    void put(QNetworkRequest request, QByteArray data, int requestId) override;
-    int post(QNetworkRequest request, QByteArray data = "") override;
-    void post(QNetworkRequest request, QByteArray data, int requestId) override;
+    QFuture<RestNetworkReply*> get(const QUrl &url);
+    QFuture<RestNetworkReply*> get(const QNetworkRequest &request) override;
+    QFuture<RestNetworkReply*> put(QNetworkRequest request, const QByteArray &data = "") override;
+    QFuture<RestNetworkReply*> post(QNetworkRequest request, const QByteArray &data = "") override;
 
-    void customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data, int requestId) override {}
-
-    int getUniqueRequestId() override { return ++m_requestCount; }
+    QFuture<RestNetworkReply*> customRequest(const QNetworkRequest &request, const QByteArray &verb,
+                                             const QByteArray &data) override;
 
 private:
     O0SettingsStore *m_settingsStore = nullptr;
@@ -44,7 +40,7 @@ private:
     bool m_isOnCooldown = false;
     int m_requestCount = 0;
     int m_currentRequestCount = 0;
-    QQueue<RequestContainer> m_requestQueue;
+    QQueue<QPair<RequestContainer*, AsyncFuture::Deferred<RestNetworkReply*>>> m_requestQueue;
 
     void authenticate();
 
@@ -60,12 +56,15 @@ private:
     bool isTokenExpired() const { return QDateTime::currentDateTime() > m_expireTime; }
 
     bool canSendRequest();
-    void enqueueRequest(RequestContainer container) { m_requestQueue.enqueue(container); }
+    void enqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
     void dequeueRequests();
+
+    void sendRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*>& deferred);
 
     QNetworkRequest addAuthHeader(QNetworkRequest request);
 
-    void handleRateLimit(const RequestContainer& container, const QList<QPair<QByteArray, QByteArray> >& headers);
+    void handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
+                         const QList<QPair<QByteArray, QByteArray> >& headers);
     void startCooldown(int seconds);
 
 private slots:
@@ -73,11 +72,6 @@ private slots:
     void onBytesReady();
     void closeServer(QTcpSocket *socket, bool hasparameters);
     static QMap<QString, QString> parseQueryParams(QByteArray *data);
-    void onReceivedReply(const RequestContainer& container, const QByteArray& data, const QList<QPair<QByteArray, QByteArray>>& headers, QNetworkReply::NetworkError error);
+    void onReceivedReply(QNetworkReply *reply, RequestContainer *container, AsyncFuture::Deferred<RestNetworkReply *> deferred);
     void onCooldownFinished();
-
-signals:
-    void receivedReplyInternal(RequestContainer container, QByteArray data, QList<QPair<QByteArray, QByteArray>> headers, QNetworkReply::NetworkError error);
 };
-
-#endif // SPOTIFYCONNECTORSERVER_H

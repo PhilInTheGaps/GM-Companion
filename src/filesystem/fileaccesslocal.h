@@ -1,73 +1,36 @@
-#ifndef FILEACCESSLOCAL_H
-#define FILEACCESSLOCAL_H
+#pragma once
 
+#include <QDir>
 #include "fileaccess.h"
 
-#include <QThread>
-
-class FileFinder : public QObject
-{
-    Q_OBJECT
-public:
-    FileFinder() {}
-
-public slots:
-    void getFile(int requestId, const QString& filePath);
-    void getFiles(int requestId, const QString& directory, const QString& fileEnding);
-    void getFileList(int requestId, const QString& directory, const bool& folders);
-    void checkIfFilesExist(int requestId, const QStringList& files);
-
-    void saveFile(int requestId, const QString &filePath, const QByteArray& data);
-    void renameFile(int requestId, const QString &newFile, const QString& oldFile, const QByteArray& data = "");
-    void renameFolder(int requestId, const QString &newFolder, const QString &oldFolder);
-    void deleteFile(int requestId, const QString &filePath);
-    void createFolder(int requestId, const QString &folderPath);
-
-private:
-    static QByteArray getFileData(const QString& filePath);
-    void saveFileDeleteOld(int requestId, const QString& newFile, const QString& oldFile, const QByteArray& data);
-
-signals:
-    void receivedFile(int requestId, const QByteArray &data);
-    void receivedFiles(int requestId, QList<QByteArray> data);
-    void receivedFileList(int requestId, QStringList fileNames);
-    void savedFile(int requestId);
-    void renamedFile(int requestId);
-    void renamedFolder(int requestId);
-    void deletedFile(int requestId);
-    void createdFolder(int requestId);
-    void checkedIfFilesExist(int id, QStringList found, QStringList notFound);
-};
+namespace Files {
 
 class FileAccessLocal : public FileAccess
 {
     Q_OBJECT
-    QThread workerThread;
-
 public:
-    FileAccessLocal(QObject *parent = nullptr);
-    ~FileAccessLocal() override;
+    explicit FileAccessLocal(QObject *parent) : FileAccess(parent) {}
 
-    void getFile(int requestId, const QString &filePath) override;
-    void getFiles(int requestId, const QString &directory, const QString &fileEnding) override;
-    void getFileList(int requestId, const QString &directory, bool folders) override;
-    void saveFile(int requestId, const QString &filePath, const QByteArray &data) override;
-    void renameFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data) override;
-    void renameFolder(int requestId, const QString &newFolder, const QString &oldFolder) override;
-    void deleteFile(int requestId, const QString &filePath) override;
-    void checkIfFilesExist(int requestId, QStringList files) override;
-    void createFolder(int requestId, const QString &folderPath) override;
+    QFuture<FileDataResult*> getDataAsync(const QString &path, bool allowCache) override;
+    QFuture<QVector<FileDataResult*>> getDataAsync(const QStringList& paths, bool allowCache) override;
+    QFuture<FileResult*> saveAsync(const QString& path, const QByteArray& data) override;
+    QFuture<FileResult*> moveAsync(const QString& oldPath, const QString& newPath) override;
+    QFuture<FileResult*> deleteAsync(const QString& path) override;
+    QFuture<FileResult*> copyAsync(const QString& path, const QString& copy) override;
+    QFuture<FileListResult*> listAsync(const QString& path, bool files, bool folders) override;
+    QFuture<FileResult*> createDirAsync(const QString& path) override;
+    QFuture<FileCheckResult*> checkAsync(const QString& path, bool allowCache) override;
+    QFuture<FileMultiCheckResult*> checkAsync(const QStringList& paths, bool allowCache) override;
 
-signals:
-    void startGettingFile(int requestId, const QString &filePath);
-    void startGettingFiles(int requestId, const QString &directory, const QString &fileEnding);
-    void startGettingFileList(int requestId, QString directory, bool folders);
-    void startSavingFile(int requestId, const QString &filePath, const QByteArray &data);
-    void startRenamingFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data);
-    void startRenamingFolder(int requestId, const QString &newFolder, const QString& oldFolder);
-    void startDeletingFile(int requestId, const QString &filePath);
-    void startCheckingIfFilesExist(int requestId, const QStringList &files);
-    void startCreatingFolder(int requestId, const QString &folderPath);
+private:
+    static FileDataResult* getData(const QString& path, bool allowCache);
+    static FileResult* createDir(const QDir& dir);
+    static FileResult* save(const QString& path, const QByteArray& data);
+    static FileResult* move(const QString& oldPath, const QString& newPath);
+    static FileResult* copy(const QString &path, const QString &copy);
+    static QFlags<QDir::Filter> getDirFilter(bool files, bool folders);
+    static FileCheckResult* check(const QString& path, bool allowCache);
+
 };
 
-#endif // FILEACCESSLOCAL_H
+}

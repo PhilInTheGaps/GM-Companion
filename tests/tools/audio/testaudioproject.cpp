@@ -1,8 +1,9 @@
 #include <QtTest>
 #include <QObject>
-#include "../../src/tools/audio/project/audioproject.h"
+#include "src/tools/audio/project/audioproject.h"
+#include "tests/testhelper/abstracttest.h"
 
-class TestAudioProject : public QObject
+class TestAudioProject : public AbstractTest
 {
     Q_OBJECT
 
@@ -10,6 +11,7 @@ private:
     AudioProject *project = nullptr;
     QByteArray projectJson;
 
+private slots:
     void initTestCase();
     void saveToJson();
     void checkProjectContents();
@@ -78,9 +80,9 @@ void TestAudioProject::checkProjectContents()
 void TestAudioProject::testModifications()
 {
     // Name
-    project->setOldName(project->name());
+    project->oldName(project->name());
     project->setName("Modified Name");
-    project->setWasRenamed(true);
+    project->wasRenamed(true);
     QCOMPARE(project->name(), QStringLiteral("Modified Name"));
     QCOMPARE(project->oldName(), QStringLiteral("Project"));
     QVERIFY(project->wasRenamed());

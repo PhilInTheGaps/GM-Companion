@@ -1,5 +1,4 @@
-#ifndef RESTSERVICECONNECTORLOCAL_H
-#define RESTSERVICECONNECTORLOCAL_H
+#pragma once
 
 #include <QQueue>
 
@@ -7,8 +6,10 @@
 #include "o2.h"
 #include "o2requestor.h"
 #include "o0settingsstore.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
-struct RESTServiceLocalConfig {
+struct RESTServiceLocalConfig
+{
     QString scope;
     int port;
     int maxConcurrentRequests;
@@ -28,18 +29,10 @@ public:
     void disconnectService() override;
     bool isAccessGranted() const override { return m_o2->linked(); }
 
-    int get(QNetworkRequest request) override;
-    void get(QNetworkRequest request, int requestId) override;
-
-    int put(QNetworkRequest request, QByteArray data = "") override;
-    void put(QNetworkRequest request, QByteArray data, int requestId) override;
-
-    int post(QNetworkRequest request, QByteArray data = "") override;
-    void post(QNetworkRequest request, QByteArray data, int requestId) override;
-
-    void customRequest(const QNetworkRequest &request, const QByteArray &verb, const QByteArray &data, int requestId) override;
-
-    int getUniqueRequestId() override { return ++m_requestCount; }
+    QFuture<RestNetworkReply*> get(const QNetworkRequest &request) override;
+    QFuture<RestNetworkReply*> put(QNetworkRequest request, const QByteArray &data) override;
+    QFuture<RestNetworkReply*> post(QNetworkRequest request, const QByteArray &data) override;
+    QFuture<RestNetworkReply*> customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data) override;
 
 protected:
     O2 *m_o2 = nullptr;
@@ -47,26 +40,32 @@ protected:
     RESTServiceLocalConfig m_config;
 
     void setConfig(const RESTServiceLocalConfig& config);
-    void handleRateLimit(const RequestContainer& container);
+    void handleRateLimit(const QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer*> &pair);
     void startCooldown(int seconds);
     void dequeueRequests();
 
     bool m_isOnCooldown = false;
-    int m_requestCount = 0;
-    int m_currentRequestCount = 0;
-    QMap<int, RequestContainer> m_requestMap;
-    QQueue<RequestContainer> m_requestQueue;
+
+    QMap<int, QPair<AsyncFuture::Deferred<RestNetworkReply*>, RequestContainer*>> m_activeRequests;
+    QQueue<QPair<AsyncFuture::Deferred<RestNetworkReply*>, RequestContainer*>> m_requestQueue;
+
+    int activeRequestCount() const { return m_activeRequests.count(); };
+    int getQueueId();
 
 private:
-    int checkAndEnqueueRequest(const QNetworkRequest& request, int requestId, RequestType type, QByteArray data, QByteArray verb = "");
+    bool checkAndEnqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
+    O2Requestor* makeRequestor();
+
+    void sendRequest(RequestContainer *container, AsyncFuture::Deferred<RestNetworkReply *> deferred);
+
+    int m_nextQueueId = 1;
 
 protected slots:
     void onLinkingSucceeded();
     static void onOpenBrowser(const QUrl& url);
 
     void onCooldownFinished();
-    void onReplyReceived(int internalId, QNetworkReply::NetworkError error, const QByteArray& data, QList<QNetworkReply::RawHeaderPair> headers);
+    void onReplyReceived(int id, QNetworkReply::NetworkError error, const QString &errorText,
+                         const QByteArray& data, const QList<QNetworkReply::RawHeaderPair>& headers);
     void onRefreshFinished(const QNetworkReply::NetworkError& error);
 };
-
-#endif // RESTSERVICECONNECTORLOCAL_H

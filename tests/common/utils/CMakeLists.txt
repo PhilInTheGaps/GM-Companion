@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(test_utils)
-
 # Find includes in the build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

@@ -1,8 +1,10 @@
 #include "radioplayer.h"
-#include "filesystem/filemanager.h"
 #include "settings/settingsmanager.h"
 #include "logging.h"
 #include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
+
+using namespace AsyncFuture;
 
 RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent)
     : AudioPlayer(parent), m_discordPlayer(discordPlayer)
@@ -34,9 +36,6 @@ RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordP
             metaDataReader, QOverload<const QString&, const QVariant&>::of(&MetaDataReader::updateMetaData));
     connect(this,           QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged),
             metaDataReader, QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
-
-    // Files
-    connect(FileManager::getInstance(), &FileManager::receivedFile, this, &RadioPlayer::onFileReceived);
 }
 
 /**
@@ -61,8 +60,13 @@ void RadioPlayer::play(AudioElement *element)
     if (audioFile->source() == 0)
     {
         qCDebug(gmAudioRadio()) << "Playing radio from local playlist:" << audioFile->url() << "...";
-        m_fileRequestId = FileManager::getUniqueRequestId();
-        FileManager::getInstance()->getFile(m_fileRequestId, SettingsManager::getPath("radio") + audioFile->url());
+
+        if (m_fileRequestContext) m_fileRequestContext->deleteLater();
+        m_fileRequestContext = new QObject(this);
+
+        m_fileName = audioFile->url();
+        observe(Files::File::getDataAsync(FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath("music"))))
+                .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
     }
     else
     {
@@ -118,17 +122,18 @@ void RadioPlayer::onMetaDataChanged()
     }
 }
 
-void RadioPlayer::onFileReceived(int id, const QByteArray& data)
+void RadioPlayer::onFileReceived(Files::FileDataResult *result)
 {
-    if (m_fileRequestId != id) return;
+    if (!result) return;
 
     qCDebug(gmAudioRadio()) << "Received file ...";
 
     m_mediaPlayer->stop();
 
-    if (data.isEmpty())
+    if (result->data().isEmpty())
     {
         qCWarning(gmAudioRadio()) << "Error: File is empty!";
+        result->deleteLater();
         return;
     }
 
@@ -151,32 +156,36 @@ void RadioPlayer::onFileReceived(int id, const QByteArray& data)
             if (!file.open(QIODevice::WriteOnly))
             {
                 qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                result->deleteLater();
                 return;
             }
         }
         else
         {
             qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            result->deleteLater();
             return;
         }
     }
 
     qCWarning(gmAudioRadio()) << file.fileName();
-    file.write(data);
+    file.write(result->data());
     file.close();
 
     m_playlist->load(QUrl::fromLocalFile(file.fileName()));
     #else
     m_mediaBuffer.close();
-    m_mediaBuffer.setData(data);
+    m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
     m_playlist->load(&m_mediaBuffer);
     #endif
 
     auto useDiscord = Discord::getInstance()->enabled();
     m_mediaPlayer->setMuted(useDiscord);
-    if (useDiscord) m_discordPlayer->playRadioPlaylist(data);
+    if (useDiscord) m_discordPlayer->playRadioPlaylist(result->data());
 
     m_mediaPlayer->setPlaylist(m_playlist);
     m_mediaPlayer->play();
+
+    result->deleteLater();
 }

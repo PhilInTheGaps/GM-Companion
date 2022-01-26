@@ -1,14 +1,14 @@
 #include "dsa5listitem.h"
 
-DSA5ListItem::DSA5ListItem(QString name, QString group, QList<int>values, QObject *parent)
-    : QObject(parent), m_name(name), m_group(group), m_values(values)
+DSA5ListItem::DSA5ListItem(const QString &name, const QString &group,
+                           const QList<int> &values, QObject *parent)
+    : QObject(parent), a_name(name), a_group(group), a_values(values)
 {
 }
 
-QVariant DSA5ListModel::data(const QModelIndex& index, int /*role*/) const
+auto DSA5ListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
 {
-    QObject *item = m_items.at(index.row());
-
+    auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
 }
 
@@ -31,7 +31,7 @@ void DSA5ListModel::remove(QObject *item)
     }
 }
 
-QHash<int, QByteArray>DSA5ListModel::roleNames() const
+auto DSA5ListModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -41,14 +41,14 @@ QHash<int, QByteArray>DSA5ListModel::roleNames() const
 
 void DSA5ListModel::clear()
 {
-    while (m_items.size() > 0)
+    while (!m_items.isEmpty())
     {
-        auto i = m_items.takeAt(0);
-        i->deleteLater();
+        auto *item = m_items.takeAt(0);
+        item->deleteLater();
     }
 }
 
-void DSA5ListModel::setElements(QList<DSA5ListItem *>elements)
+void DSA5ListModel::setElements(const QList<DSA5ListItem *> &elements)
 {
     clear();
 

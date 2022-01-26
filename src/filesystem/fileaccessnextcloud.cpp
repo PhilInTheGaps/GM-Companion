@@ -1,365 +1,328 @@
 #include "fileaccessnextcloud.h"
-#include "../services/nextcloud/nextcloud.h"
 #include "logging.h"
-#include "utils/utils.h"
-
+#include "nextcloud/nextcloud.h"
+#include "utils/fileutils.h"
+#include <QQueue>
 #include <QXmlStreamReader>
-#include <QXmlStreamWriter>
-#include <QFile>
-#include <QUrl>
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
-FileAccessNextCloud::FileAccessNextCloud(QObject *parent) : FileAccess(parent)
+using namespace AsyncFuture;
+using namespace Files;
+
+auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult*>
 {
-}
+    qCDebug(gmFileAccessNextCloud()) << "Getting data from file" << path;
 
-void FileAccessNextCloud::getFile(int requestId, const QString& filePath)
-{
-    qCDebug(gmFileAccessNextCloud()) << "Getting file" << filePath;
-
-    QByteArray data;
-
-    if (tryGetFileFromCache(filePath, &data))
+    // Try to get from cache first
+    if (allowCache)
     {
-        emit receivedFile(requestId, data);
-        return;
+        QByteArray data;
+        if (m_cache.tryGetData(path, data))
+        {
+            return completed(new FileDataResult(data, this));
+        }
     }
 
-    auto *reply = NextCloud::getInstance()->sendDavRequest("GET", QUrl::toPercentEncoding(filePath, "/"), "");
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        auto data = reply->readAll();
-
-        if (reply->error() != QNetworkReply::NoError)
+    // Fetch from web
+    auto *reply = NextCloud::getInstance()->sendDavRequest("GET", encodePath(path), "");
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, reply]() {
+        if (replyHasError(reply))
         {
-            qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
-        }
-        else
-        {
-            qCDebug(gmFileAccessNextCloud()) << "Received file" << filePath << "id:" << requestId;
-
-            saveFileInCache(filePath, data);
-            emit receivedFile(requestId, data);
+            const auto errorMessage = makeAndPrintError(QString("Could not get data from %1").arg(path), reply);
+            return deleteReplyAndReturn(new FileDataResult(errorMessage, this), reply);
         }
 
-        reply->deleteLater();
-    });
+        qCDebug(gmFileAccessNextCloud()) << "Received data from file" << path;
+        return deleteReplyAndReturn(new FileDataResult(reply->readAll(), this), reply);
+    }).future();
 }
 
-void FileAccessNextCloud::getFiles(int requestId, const QString& directory, const QString& fileEnding)
+auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult*>>
 {
-    qCDebug(gmFileAccessNextCloud()) << "Getting files in directory" << directory << "with fileEnding filter:" << fileEnding;
-
-    auto internalRequestId = FileManager::getUniqueRequestId();
-    auto *context = new QObject(this);
-    connect(this, &FileAccessNextCloud::receivedFileList, context, [ = ](int filesRequestId, const QStringList& fileNames) {
-        if (filesRequestId != internalRequestId) return;
-
-        auto *fileRequests = new QMap<int, QString>;
-
-        for (const auto &fileName : fileNames)
-        {
-            if (!Utils::hasWildcardMatch(fileName, fileEnding)) continue;
-
-            auto filePath = directory + (directory.endsWith('/') ? "" : "/") + fileName;
-            fileRequests->insert(FileManager::getUniqueRequestId(), filePath);
-        }
-
-        if (fileRequests->isEmpty())
-        {
-            emit receivedFiles(requestId, QList<QByteArray>());
-            delete fileRequests;
-        }
-        else
-        {
-            downloadFiles(requestId, fileRequests);
-        }
-
-        context->deleteLater();
-    });
-
-    getFileList(internalRequestId, directory, false);
+    return FileAccess::getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
 }
 
-/**
- * @brief Stage 2 of getFiles, get all files found in folder
- */
-void FileAccessNextCloud::downloadFiles(const int& requestId, QMap<int, QString> *requests)
+template<typename T1, typename T2>
+auto FileAccessNextcloud::createDirThenContinue(const QString& dir, const T1 &arg1, const T2 &arg2,
+                                                const std::function<QFuture<FileResult*>(const T1&, const T2&)>& func)
+                                                -> QFuture<FileResult*>
 {
-    auto dataList = new QList<QByteArray>;
+    return observe(createDirAsync(dir)).subscribe([arg1, arg2, func](FileResult *result) {
+        if (!result->success()) return completed(result);
 
-    for (auto id : requests->keys())
+        result->deleteLater();
+        return func(arg1, arg2);
+    }).future();
+}
+
+auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult*>
+{
+    qCDebug(gmFileAccessNextCloud()) << "Saving file" << path;
+
+    auto *reply = NextCloud::getInstance()->sendDavRequest("PUT", encodePath(path), data);
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, data, reply]() {
+        if (replyHasError(reply))
+        {
+            const auto isDirMissing = reply->error() == QNetworkReply::ContentNotFoundError;
+            if (isDirMissing)
+            {
+                return deleteReplyAndReturn(createDirThenContinue<QString, QByteArray>(
+                    FileUtils::dirFromPath(path), path, data,
+                    [this](const QString& path, const QByteArray& data){
+                        return saveAsync(path, data);
+                }), reply);
+            }
+
+            const auto errorMessage = makeAndPrintError(QString("Could not save file %1").arg(path), reply);
+            return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
+        }
+
+        if (!m_cache.createOrUpdateEntry(path, data))
+        {
+            qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << path << "in cache";
+        }
+
+        qCDebug(gmFileAccessNextCloud()) << "Successfully saved file" << path;
+        return deleteReplyAndReturn(completed(new FileResult(true, this)), reply);
+    }).future();
+}
+
+auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<FileResult*>
+{
+    qCDebug(gmFileAccessNextCloud()) << "Moving file" << oldPath << "to" << newPath;
+
+    auto *reply = NextCloud::getInstance()->sendDavRequest("MOVE", encodePath(oldPath), QByteArray(), makeMoveHeaders(newPath));
+    return observe(reply, &QNetworkReply::finished).context(this, [this, oldPath, newPath, reply]() {
+        if (replyHasError(reply))
+        {
+            const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
+            if (isDirMissing)
+            {
+                return deleteReplyAndReturn(createDirThenContinue<QString, QString>(
+                    FileUtils::dirFromPath(newPath), oldPath, newPath,
+                    [this](const QString& oldPath, const QString& newPath){
+                        return moveAsync(oldPath, newPath);
+                }), reply);
+            }
+
+            const auto errorMessage = makeAndPrintError(QString("Could not move file %1 to %2").arg(oldPath, newPath), reply);
+            return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
+        }
+
+        if (!m_cache.moveEntry(oldPath, newPath))
+        {
+            qCWarning(gmFileAccessNextCloud()) << "Error: Could not update file" << oldPath << "in cache";
+        }
+
+        qCDebug(gmFileAccessNextCloud()) << "Successfully moved file" << oldPath << "to" << newPath;
+        return deleteReplyAndReturn(completed(new FileResult(true, this)), reply);
+    }).future();
+}
+
+auto FileAccessNextcloud::deleteAsync(const QString &path) -> QFuture<FileResult*>
+{
+    qCDebug(gmFileAccessNextCloud()) << "Deleting file" << path << "...";
+
+    auto *reply = NextCloud::getInstance()->sendDavRequest("DELETE", encodePath(path), QByteArray());
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, reply]() {
+        if (replyHasError(reply))
+        {
+            const auto errorMessage = makeAndPrintError(QString("Could not delete file/folder %1").arg(path), reply);
+            return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
+        }
+
+        m_cache.removeEntry(path);
+
+        qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
+        return deleteReplyAndReturn(completed(new FileResult(true, this)), reply);
+    }).future();
+}
+
+auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) -> QFuture<FileResult*>
+{
+    qCDebug(gmFileAccessNextCloud()) << "Copying file" << path << "to" << copy;
+
+    auto destinationHeader = QPair(QByteArray("Destination"), copy.toUtf8());
+    auto overwriteHeader  = QPair(QByteArray("Overwrite"), QByteArray("F"));
+
+    auto *reply = NextCloud::getInstance()->sendDavRequest("COPY", encodePath(path), QByteArray(), {destinationHeader, overwriteHeader});
+
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, copy, reply]() {
+        if (replyHasError(reply))
+        {
+            const auto isDirMissing = reply->error() == QNetworkReply::ContentConflictError;
+            if (isDirMissing)
+            {
+                return deleteReplyAndReturn(createDirThenContinue<QString, QString>(
+                    FileUtils::dirFromPath(copy), path, copy,
+                    [this](const QString& path, const QString& copy){
+                        return copyAsync(path, copy);
+                }), reply);
+            }
+
+            const auto errorMessage = makeAndPrintError(QString("Could not copy %1 to %2: %3 %4").arg(path), reply);
+            return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
+        }
+
+        if (!m_cache.copyEntry(path, copy))
+        {
+            qCDebug(gmFileAccessNextCloud()) << "Could not copy file" << path << "to" << copy << "in cache. (local version of file is probably too old)";
+        }
+
+        qCDebug(gmFileAccessNextCloud()) << "Successfully deleted file" << path;
+        return deleteReplyAndReturn(completed(new FileResult(true, this)), reply);
+    }).future();
+}
+
+auto FileAccessNextcloud::listAsync(const QString &path, bool files, bool folders) -> QFuture<FileListResult*>
+{
+    qCDebug(gmFileAccessNextCloud()) << "Getting list of" << (folders ? (files ? "files and folders" : "folders") : "files") << "in path" << path << "...";
+
+    auto *reply = NextCloud::getInstance()->sendDavRequest("PROPFIND", encodePath(path), QByteArray());
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, files, folders, reply]() {
+        if (replyHasError(reply))
+        {
+            const auto errorMessage = makeAndPrintError(QString("Could not list content of folder %1").arg(path), reply);
+            return deleteReplyAndReturn(new FileListResult(path, errorMessage, this), reply);
+        }
+
+        qCDebug(gmFileAccessNextCloud()) << "Successfully received content of" << path;
+        return deleteReplyAndReturn(parseListResponse(reply->readAll(), path, files, folders), reply);
+    }).future();
+}
+
+auto FileAccessNextcloud::parseListResponse(const QByteArray& data, const QString& path, bool files, bool folders) -> FileListResult*
+{
+    QXmlStreamReader xml(data);
+    QStringList fileList;
+    QStringList folderList;
+    QString element;
+    bool foundFirstFolder = false;
+
+    while (!xml.atEnd())
     {
-        auto *context = new QObject(this);
-        connect(this, &FileAccessNextCloud::receivedFile, context, [ = ](int fileRequestId, const QByteArray& data) {
-            if (fileRequestId != id) return;
+        const auto tokenType = xml.readNext();
 
-            dataList->append(data);
-            requests->remove(fileRequestId);
-
-            qCDebug(gmFileAccessNextCloud()) << "Received file for subrequest" << id;
-            qCDebug(gmFileAccessNextCloud()) << requests->size() << "files to go";
-
-            if (requests->isEmpty())
-            {
-                emit receivedFiles(requestId, *dataList);
-                delete requests;
-                delete dataList;
-            }
-
-            context->deleteLater();
-        });
-
-        getFile(id, requests->value(id));
-    }
-}
-
-void FileAccessNextCloud::getFileList(int requestId, const QString& directory, bool folders)
-{
-    qCDebug(gmFileAccessNextCloud()) << "Getting a list of files in directory" << directory << "folders:" << folders;
-    auto *reply = NextCloud::getInstance()->sendDavRequest("PROPFIND", QUrl::toPercentEncoding(directory, "/"), getFileListXml());
-
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        QXmlStreamReader xml(reply->readAll());
-
-        QStringList fileNames;
-        QString tempHref;
-        QString tempContentType;
-        QString tempStatus;
-
-        while (!xml.atEnd())
+        if (tokenType == QXmlStreamReader::StartElement)
         {
-            auto tokenType = xml.readNext();
-
-            if (tokenType == QXmlStreamReader::StartElement)
+            if (xml.name() == "href")
             {
-                if (xml.name() == "response")
-                {
-                    tempHref.clear();
-                    tempContentType.clear();
-                    tempStatus.clear();
-                }
-                else if (xml.name() == "href") tempHref = xml.readElementText();
-                else if (xml.name() == "getcontenttype") tempContentType = xml.readElementText();
-                else if (xml.name() == "status") tempStatus = xml.readElementText();
+                const auto rawElement = xml.readElementText();
+                const auto decoded = QByteArray::fromPercentEncoding(rawElement.toUtf8());
+                element = FileUtils::fileName(decoded);
             }
-            else if ((tokenType == QXmlStreamReader::EndElement) && (xml.name() == "response"))
+            else if (folders && xml.name() == "collection")
             {
-                // If content type is empty -> element is folder
-                if ((folders && tempContentType.isEmpty()) || (!folders && !tempContentType.isEmpty()))
+                if (!element.isEmpty())
                 {
-                    // Folders always return 404, but elements should exists and have 200, safety check
-                    if (folders || tempStatus.contains("200"))
+                    if (foundFirstFolder)
                     {
-                        fileNames.append(FileAccessNextCloud::fileNameFromHref(tempHref));
+                        folderList << element;
+                    }
+                    else
+                    {
+                        foundFirstFolder = true;
                     }
                 }
             }
-        }
-
-        // Chop first folder as it is "."
-        if (folders && !fileNames.isEmpty()) fileNames.removeFirst();
-
-        qCDebug(gmFileAccessNextCloud()) << fileNames;
-        emit receivedFileList(requestId, fileNames);
-        reply->deleteLater();
-    });
-}
-
-void FileAccessNextCloud::saveFile(int requestId, const QString& filePath, const QByteArray& data)
-{
-    qCDebug(gmFileAccessNextCloud()) << "Saving file" << filePath;
-
-    saveFileInCache(filePath, data);
-
-    auto *reply = NextCloud::getInstance()->sendDavRequest("PUT", QUrl::toPercentEncoding(filePath, "/"), data);
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qCWarning(gmFileAccessNextCloud()) << "Error: Could not save file" << filePath;
-            qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
-        }
-
-        emit savedFile(requestId);
-        reply->deleteLater();
-    });
-}
-
-/**
- * If data is empty, rename, else reupload data under a new filename and delete the old file.
- */
-void FileAccessNextCloud::renameFile(int requestId, const QString& newFile, const QString& oldFile, const QByteArray& data)
-{
-    if (data.isEmpty())
-    {
-        qCDebug(gmFileAccessNextCloud()) << "Renaming file" << oldFile << "to" << newFile;
-
-        QPair<QByteArray, QByteArray> destinationHeader = { "Destination",  NextCloud::getInstance()->getPathUrl(newFile).toUtf8() };
-        QPair<QByteArray, QByteArray> overwriteHeader = { "Overwrite",  "F" };
-
-        auto *reply = NextCloud::getInstance()->sendDavRequest(
-                    "MOVE", QUrl::toPercentEncoding(oldFile, "/"), "", { destinationHeader, overwriteHeader });
-
-        connect(reply, &QNetworkReply::finished, [ = ]() {
-            if (reply->error() != QNetworkReply::NoError)
+            else if (files && xml.name() == "getcontenttype" &&
+                     !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty())
             {
-                qCWarning(gmFileAccessNextCloud()) << "Error: Could not rename file" << oldFile;
-                qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
+                if (!element.isEmpty()) fileList << element;
             }
-
-            emit renamedFile(requestId);
-            reply->deleteLater();
-        });
+        }
     }
-    else
+
+    if (xml.hasError())
     {
-        qCDebug(gmFileAccessNextCloud()) << "Saving file under new name and deleting old" << newFile << oldFile;
-
-        saveFile(requestId, newFile, data);
-        deleteFile(requestId, oldFile);
-        emit renamedFile(requestId);
+        qCWarning(gmFileAccessNextCloud()) << "Error during parsing of PROPFIND response:" << xml.error() << xml.errorString();
+        return new FileListResult(path, xml.errorString(), this);
     }
+
+    return new FileListResult(path, folderList, fileList, this);
 }
 
-/**
- * Rename a folder, same as renameFile with empty data.
- */
-void FileAccessNextCloud::renameFolder(int requestId, const QString &newFolder, const QString &oldFolder)
+auto FileAccessNextcloud::createDirAsync(const QString &path) -> QFuture<FileResult*>
 {
-    renameFile(requestId, newFolder, oldFolder, "");
-}
+    qCDebug(gmFileAccessNextCloud()) << "Creating dir" << path << "...";
 
-void FileAccessNextCloud::deleteFile(int requestId, const QString& filePath)
-{
-    qCDebug(gmFileAccessNextCloud()) << "Deleting file" << filePath;
-
-    auto *reply = NextCloud::getInstance()->sendDavRequest("DELETE", QUrl::toPercentEncoding(filePath, "/"), "");
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        if (reply->error() != QNetworkReply::NoError)
+    auto *reply = NextCloud::getInstance()->sendDavRequest("MKCOL", encodePath(path), QByteArray());
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, reply]() {
+        if (replyHasError(reply))
         {
-            qCWarning(gmFileAccessNextCloud()) << "Error: Could not delete file" << filePath;
-            qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
+            const auto errorMessage = makeAndPrintError(QString("Could not create directory %1").arg(path), reply);
+            return deleteReplyAndReturn(new FileResult(errorMessage, this), reply);
         }
 
-        emit deletedFile(requestId);
-        reply->deleteLater();
-    });
+        qCDebug(gmFileAccessNextCloud()) << "Successfully created directory" << path;
+        return deleteReplyAndReturn(new FileResult(true, this), reply);
+    }).future();
 }
 
-void FileAccessNextCloud::checkIfFilesExist(int requestId, QStringList files)
+auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QFuture<FileCheckResult*>
 {
-    qCDebug(gmFileAccessNextCloud()) << "Checking if files exist:" << files;
+    qCDebug(gmFileAccessNextCloud()) << "Checking if file" << path << "exists ...";
 
-    auto *found       = new QStringList;
-    auto *missing     = new QStringList;
-    auto *filesLeft   = new QStringList(files);
-
-    for (const auto &file : qAsConst(files))
+    // Check cache first
+    if (allowCache && m_cache.checkEntry(path))
     {
-        auto *reply = NextCloud::getInstance()->sendDavRequest("PROPFIND", file, "");
-        connect(reply, &QNetworkReply::finished, [=](){
-            if (reply->error() != QNetworkReply::NoError) missing->append(file);
-            else found->append(file);
-
-            filesLeft->removeOne(file);
-            reply->deleteLater();
-
-            // Received the last reply
-            if (filesLeft->isEmpty())
-            {
-                emit checkedIfFilesExist(requestId, *found, *missing);
-                delete found;
-                delete missing;
-                delete filesLeft;
-            }
-        });
+        return completed(new FileCheckResult(path, true, this));
     }
-}
 
-void FileAccessNextCloud::createFolder(int requestId, const QString &folderPath)
-{
-    qCDebug(gmFileAccessNextCloud()) << "Creating folder" << folderPath;
+    // If file is not in cache or cache is outdated, fetch from web
+    auto *reply = NextCloud::getInstance()->sendDavRequest("PROPFIND", encodePath(path), QByteArray());
+    return observe(reply, &QNetworkReply::finished).context(this, [this, path, reply]() {
+        const auto doesExist = reply->error() != QNetworkReply::ContentNotFoundError;
+        const auto hasError = replyHasError(reply) && doesExist;
 
-    auto *reply = NextCloud::getInstance()->sendDavRequest("MKCOL", QUrl::toPercentEncoding(folderPath, "/"), "");
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        if (reply->error() != QNetworkReply::NoError)
+        if (hasError)
         {
-            qCWarning(gmFileAccessNextCloud()) << "Error: Could not create folder" << folderPath;
-            qCWarning(gmFileAccessNextCloud()) << reply->error() << reply->errorString();
+            const auto errorMessage = makeAndPrintError(QString("Could not check if file %1 exists").arg(path), reply);
+            return deleteReplyAndReturn(new FileCheckResult(path, errorMessage, this), reply);
         }
 
-        emit createdFolder(requestId);
-        reply->deleteLater();
-    });
+        qCDebug(gmFileAccessNextCloud()) << "Successfully checked if file" << path << "exists:" << doesExist;
+        return deleteReplyAndReturn(new FileCheckResult(path, doesExist, this), reply);
+    }).future();
 }
 
-auto FileAccessNextCloud::fileNameFromHref(QString href)->QString
+auto FileAccessNextcloud::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult*>
 {
-    if (href.endsWith('/')) href.chop(1);
-
-    auto index = href.lastIndexOf('/');
-    href = href.right(href.length() - index - 1);
-    return QUrl::fromPercentEncoding(href.toUtf8());
+    return FileAccess::checkAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
 }
 
-auto FileAccessNextCloud::tryGetFileFromCache(const QString &filePath, QByteArray *data) -> bool
+auto FileAccessNextcloud::encodePath(const QString &data) -> QByteArray
 {
-    if (!m_fileCache.contains(filePath)) return false;
-
-    auto file = m_fileCache[filePath];
-
-    if (!file->open()) return false;
-
-    *data = file->readAll();
-    file->close();
-
-    qCDebug(gmFileAccessNextCloud()) << "Cache hit!" << filePath;
-
-    return true;
+    return QUrl::toPercentEncoding(data, "/");
 }
 
-void FileAccessNextCloud::saveFileInCache(const QString &filePath, const QByteArray &data)
+auto FileAccessNextcloud::replyHasError(QNetworkReply *reply) -> bool
 {
-    QTemporaryFile *file = nullptr;
-
-    if (m_fileCache.contains(filePath))
-    {
-        file = m_fileCache[filePath];
-    }
-    else
-    {
-        file = new QTemporaryFile;
-        m_fileCache.insert(filePath, file);
-    }
-
-    if (file && file->open())
-    {
-        file->write(data);
-        file->close();
-    }
+    return reply->error() != QNetworkReply::NoError;
 }
 
-void FileAccessNextCloud::removeFileFromCache(const QString &filePath)
+auto FileAccessNextcloud::makeAndPrintError(const QString &errorMessage, const QNetworkReply *reply) -> QString
 {
-    if (!m_fileCache.contains(filePath)) return;
-
-    auto file = m_fileCache.take(filePath);
-    delete file;
+    auto result = QString("%1: %2").arg(errorMessage, replyErrorToString(reply));
+    qCWarning(gmFileAccessNextCloud()) << "Warning:" << result;
+    return result;
 }
 
-auto FileAccessNextCloud::getXml(const QString& filepath) const->QByteArray
+auto FileAccessNextcloud::replyErrorToString(const QNetworkReply *reply) -> QString
 {
-    QFile f(filepath);
-    QByteArray data;
-
-    if (f.open(QIODevice::ReadOnly))
-    {
-        data = f.readAll();
-        f.close();
-    }
-
-    return data;
+    return QString("%1 (%2)").arg(QString(reply->error()), reply->errorString());
 }
 
-auto FileAccessNextCloud::getFileListXml() const->QByteArray
+auto FileAccessNextcloud::makeMoveHeaders(const QString& newPath) -> QList<QPair<QByteArray, QByteArray>>
 {
-    return getXml(":/services/nextcloud/getFileList.xml");
+    auto destinationHeader = QPair(QByteArray("Destination"), newPath.toUtf8());
+    auto overwriteHeader  = QPair(QByteArray("Overwrite"), QByteArray("F"));
+    return { destinationHeader, overwriteHeader };
+}
+
+template<typename T>
+auto FileAccessNextcloud::deleteReplyAndReturn(const T &value, QNetworkReply *reply) -> T
+{
+    if (reply) reply->deleteLater();
+    return value;
 }

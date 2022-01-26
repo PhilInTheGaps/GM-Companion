@@ -2,6 +2,7 @@
 #define ADDONMANAGER_H
 
 #include <QObject>
+#include <QQmlContext>
 
 class AddonManager : public QObject
 {

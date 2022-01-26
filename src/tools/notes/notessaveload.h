@@ -2,7 +2,6 @@
 #define NOTESSAVELOAD_H
 
 #include <QObject>
-#include <QMap>
 #include <QTextDocument>
 #include "notebook.h"
 
@@ -22,11 +21,6 @@ signals:
     void pagesLoaded(const QList<NoteBookPage*> &pages);
 
 private:
-    int m_booksRequestId = -1;
-    QMap<int, NoteBook*> m_chapterRequests;
-    QMap<int, NoteBookChapter*> m_pageRequests;
-    QMap<int, NoteBookPage*> m_contentRequests;
-
     void buildBooks(const QStringList& folders, TreeItem *root);
     void buildChapters(const QStringList& folders, NoteBook *book);
     void buildPages(const QStringList& files, NoteBookChapter *chapter);
@@ -48,10 +42,6 @@ private slots:
 
     void deleteChapter();
     void deletePage();
-
-    void onReceivedFileList(int requestId, const QStringList &files);
-    void onReceivedFile(int requestId, const QByteArray &data);
-
 };
 
 #endif // NOTESSAVELOAD_H

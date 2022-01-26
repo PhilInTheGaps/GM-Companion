@@ -1,9 +1,14 @@
 #include "character.h"
 #include "logging.h"
-#include "filesystem/filemanager.h"
+#include "filesystem/file.h"
+#include "utils/utils.h"
+#include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
-Character::Character(QString name, QObject *parent)
-    : QObject(parent), m_name(name)
+using namespace AsyncFuture;
+
+Character::Character(const QString &name, QObject *parent)
+    : QObject(parent), a_name(name)
 {
     qCDebug(gmCharactersCharacter()) << "Initializing new character:" << name << "...";
 }
@@ -12,18 +17,18 @@ int Character::type() const
 {
     if (m_files.size() < 1) return -1;
 
-    if (m_files[0].name().endsWith("pdf")) return 1;
+    if (m_files[0]->name().endsWith("pdf")) return 1;
 
-    if (m_files[0].name().endsWith("json")) return 2;
+    if (m_files[0]->name().endsWith("json")) return 2;
 
     return 0;
 }
 
 void Character::loadFiles()
 {
-    if (m_wasLoaded || m_folder.isEmpty() || !m_files.isEmpty())
+    if (m_wasLoaded || folder().isEmpty() || !files().isEmpty())
     {
-        emit fileListLoaded(m_files);
+        emit fileListLoaded(files());
         return;
     }
 
@@ -35,47 +40,37 @@ void Character::loadFiles()
 
 void Character::loadFileList()
 {
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
+    observe(Files::File::listAsync(folder(), true, false)).subscribe([this](Files::FileListResult *result) {
+        if (!result) return;
 
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, context, [ = ](int id, QStringList fileNames) {
-        if (requestId != id) return;
-
-        for (auto fileName : fileNames)
+        for (const auto &fileName : result->files())
         {
-            m_files.append(CharacterFile(fileName, m_folder + "/" + fileName));
+            m_files.append(new CharacterFile(fileName, FileUtils::fileInDir(fileName, folder()), this));
         }
 
         emit fileListLoaded(m_files);
-
-        delete context;
+        result->deleteLater();
     });
-
-    FileManager::getInstance()->getFileList(requestId, m_folder, false);
 }
 
 void Character::loadFileData(int index)
 {
-    if ((index < 0) || (index > m_files.length() - 1)) return;
+    if (!Utils::isInBounds(files(), index)) return;
 
-    if (!m_files[index].data().isEmpty())
+    if (!m_files[index]->data().isEmpty())
     {
         qCDebug(gmCharactersImageViewer()) << "File data already loaded.";
-        emit fileDataLoaded(index, m_files[index].data());
+        emit fileDataLoaded(index, m_files[index]->data());
         return;
     }
 
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
+    observe(Files::File::getDataAsync(m_files[index]->path()))
+            .subscribe([this, index](Files::FileDataResult *result) {
+        if (!result) return;
 
-    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
-        if (requestId != id) return;
+        m_files[index]->data(result->data());
+        emit fileDataLoaded(index, result->data());
 
-        m_files[index].setData(data);
-        emit fileDataLoaded(index, data);
-
-        delete context;
+        result->deleteLater();
     });
-
-    FileManager::getInstance()->getFile(requestId, m_files[index].path());
 }

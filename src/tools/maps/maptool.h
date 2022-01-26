@@ -5,17 +5,19 @@
 #include <QQmlApplicationEngine>
 #include "common/abstracttool.h"
 #include "map.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class MapTool : public AbstractTool
 {
     Q_OBJECT
+    AUTO_PROPERTY(int, markerIndex)
 
 public:
     explicit MapTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
     ~MapTool();
 
     Q_PROPERTY(QStringList categories READ categories NOTIFY categoriesChanged)
-    QStringList categories();
+    QStringList categories() const;
 
     Q_PROPERTY(int currentCategory READ currentCategory WRITE setCurrentCategory NOTIFY currentCategoryChanged)
     int currentCategory() const { return m_currentCategoryIndex; }
@@ -27,17 +29,14 @@ public:
     int mapIndex() const { return m_mapIndex; }
     void setMapIndex(int index);
 
-    Q_PROPERTY(int markerIndex READ markerIndex WRITE setMarkerIndex NOTIFY markerIndexChanged)
-    int markerIndex() const { return m_markerIndex; }
-    void setMarkerIndex(int index) { m_markerIndex = index; emit markerIndexChanged(); }
-
     Q_PROPERTY(MapMarker* currentMarker READ currentMarker NOTIFY markerIndexChanged)
     MapMarker *currentMarker() const;
 
 public slots:
     void setCurrentCategory(int index);
     void setMarkerPosition(int markerIndex, qreal x, qreal y);
-    void setMarkerProperties(QString name, QString description, QString icon, QString color);
+    void setMarkerProperties(const QString &name, const QString &description,
+                             const QString &icon, const QString &color);
     void addMarker();
     void deleteMarker(int markerIndex);
     void loadData() override;
@@ -46,7 +45,6 @@ signals:
     void currentCategoryChanged();
     void categoriesChanged();
     void mapIndexChanged();
-    void markerIndexChanged();
 
 private:
     QQmlApplicationEngine *qmlEngine;
@@ -59,15 +57,15 @@ private:
     MapMarkerModel *mapMarkerModel = nullptr;
 
     int m_mapIndex = -1;
-    int m_markerIndex = -1;
-    int m_getCategoriesRequestId = -1;
 
     void findCategories();
-    void receivedCategories(QStringList folders);
+    void receivedCategories(const QStringList &folders);
+
+    static constexpr const char* DEFAULT_COLOR = "red";
+    static constexpr const char* DEFAULT_ICON = "\uf3c5";
 
 private slots:
-    void onMapsLoaded(QString category);
-    void onFileListReceived(int id, QStringList files);
+    void onMapsLoaded(const QString &category);
 };
 
 #endif // MAPVIEWERTOOL_H

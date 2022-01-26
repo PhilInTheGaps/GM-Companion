@@ -17,6 +17,8 @@
 #include "../audiosaveload.h"
 #include "../project/audiofilemodel.h"
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+
 class AudioEditor : public AbstractTool
 {
     Q_OBJECT
@@ -24,11 +26,12 @@ class AudioEditor : public AbstractTool
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
     Q_PROPERTY(QObject* currentElement READ currentElement NOTIFY currentElementChanged)
-    Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
     Q_PROPERTY(bool isLoading READ isLoading NOTIFY isLoadingChanged)
 
+    AUTO_PROPERTY(bool, isSaved)
+
 public:
-    explicit AudioEditor(QQmlApplicationEngine *engine, AudioSaveLoad *audioSaveLoad, QNetworkAccessManager *networkManager, QObject *parent);
+    explicit AudioEditor(QQmlApplicationEngine *engine, QNetworkAccessManager *networkManager, QObject *parent);
 
     // Project
     Q_INVOKABLE void setCurrentProject(int index);
@@ -40,7 +43,6 @@ public:
     QObject* currentProject() const { return qobject_cast<QObject*>(m_currentProject); }
     void setCurrentProject(AudioProject* project);
     int projectIndex() const;
-    bool isSaved() const { return m_isSaved; }
 
     // Categories
     Q_INVOKABLE void setCurrentCategory(int index);
@@ -112,11 +114,10 @@ private:
     QQmlApplicationEngine *qmlEngine = nullptr;
     UnsplashParser *unsplashParser = nullptr;
     QNetworkAccessManager *networkManager = nullptr;
-    AudioSaveLoad *audioSaveLoad = nullptr;
 
     YouTube::Videos::VideoClient *ytClient = nullptr;
 
-    QList<AudioProject*> m_projects;
+    QVector<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
 
     AudioFileModel *fileModel = nullptr;
@@ -125,7 +126,6 @@ private:
     void clearCurrentElement();
     int m_fileIndex{};
 
-    bool m_isSaved = true;
     void madeChanges();
     bool addAudioFile(AudioFile *audioFile);
 
@@ -138,7 +138,7 @@ private:
 
 private slots:
     void addFiles(const QStringList &files);
-    void onFoundProjects(QList<AudioProject *>list, bool isEditor);
+    void onFoundProjects(QVector<AudioProject *>list);
     void onCurrentScenarioChanged();
     void onProjectSavedChanged();
 

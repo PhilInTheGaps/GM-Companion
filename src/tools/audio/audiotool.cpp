@@ -2,21 +2,24 @@
 #include "audioicongenerator.h"
 #include "services/spotify/spotify.h"
 #include "logging.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QSettings>
 #include <QQmlContext>
 #include <cstdlib>
 #include <exception>
 
-AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), qmlEngine(engine)
+using namespace AsyncFuture;
+
+AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
+    : AbstractTool(parent), a_isLoading(false), qmlEngine(engine)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 
     auto *networkManager = new QNetworkAccessManager(this);
     networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    audioSaveLoad  = new AudioSaveLoad(this);
-    editor         = new AudioEditor(qmlEngine, audioSaveLoad, networkManager, this);
+    editor         = new AudioEditor(qmlEngine, networkManager, this);
     metaDataReader = new MetaDataReader(this);
     mprisManager   = new MprisManager(this);
     discordPlayer  = new DiscordPlayer(this);
@@ -59,26 +62,34 @@ void AudioTool::loadData()
 {
     if (m_isDataLoaded) return;
 
-    setIsLoading(true);
+    isLoading(true);
     m_isDataLoaded = true;
 
-    // Find and load projects
-    connect(audioSaveLoad, &AudioSaveLoad::foundProjects,
-            this,          &AudioTool::onProjectsChanged);
-    audioSaveLoad->findProjects();
+    updateProjectList();
+}
+
+void AudioTool::updateProjectList()
+{
+    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject*> projects) {
+        onProjectsChanged(projects);
+    });
 }
 
 /**
     Change the project, notify UI
     @param projects List with pointers to audio projects
  */
-void AudioTool::onProjectsChanged(QList<AudioProject *>projects, bool forEditor)
+void AudioTool::onProjectsChanged(QVector<AudioProject *>projects)
 {
-    if (forEditor) return;
-
     m_projects = std::move(projects);
+
+    for (auto *project : m_projects)
+    {
+        project->setParent(this);
+    }
+
     emit projectsChanged();
-    setIsLoading(false);
+    isLoading(false);
 }
 
 void AudioTool::onCurrentScenarioChanged()
@@ -259,9 +270,8 @@ void AudioTool::setMusicVolume(qreal volume)
     int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
     int linearVolume      = qRound(volume * 100);
 
+    qCDebug(gmAudioTool()) << "Setting music volume:" << linearVolume;
     m_musicVolume = volume;
-
-    qCDebug(gmAudioTool()) << "Setting music volume" << linearVolume;
 
     for (auto a : qAsConst(audioPlayers))
     {
@@ -279,7 +289,7 @@ void AudioTool::setMusicVolume(qreal volume)
  */
 void AudioTool::setSoundVolume(qreal volume)
 {
-    qCDebug(gmAudioTool()) << "Setting sound volume ...";
+    qCDebug(gmAudioTool()) << "Setting sound volume:" << (volume * 100);
 
     int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
     m_soundVolume = volume;

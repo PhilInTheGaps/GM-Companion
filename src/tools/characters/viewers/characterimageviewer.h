@@ -14,7 +14,7 @@ class CharacterImageViewer : public CharacterViewer
     Q_PROPERTY(QStringList images READ categories NOTIFY categoriesChanged)
 
 public:
-    explicit CharacterImageViewer();
+    explicit CharacterImageViewer(QObject *parent);
     ~CharacterImageViewer();
 
     void setCharacter(Character* character);
@@ -33,14 +33,16 @@ private:
     QString m_pdfCharacter;
     QString m_image;
 
-    void loadImage(QByteArray data);
-    void loadPDF(int index, QByteArray data);
+    void loadImage(const QByteArray &data);
+    void loadPDF(int index, const QByteArray &data);
     void loadPDFCategories();
     void setPDFPage(int index);
 
+    static constexpr double IMAGE_RESOLUTION = 200.0;
+
 private slots:
-    void onCharacterFileListLoaded(QList<CharacterFile> files);
-    void onCharacterFileDataLoaded(int index, QByteArray data);
+    void onCharacterFileListLoaded(const QList<CharacterFile *> &files);
+    void onCharacterFileDataLoaded(int index, const QByteArray &data);
 };
 
 #endif // CHARACTERIMAGEVIEWER_H

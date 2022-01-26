@@ -5,35 +5,30 @@
 #include <QPixmap>
 #include <QUrl>
 #include "audioelement.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AudioIcon : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString imageId READ imageIdForReload WRITE setImageId NOTIFY iconChanged)
-    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY iconChanged)
-    Q_PROPERTY(QString subtitle READ subtitle WRITE setSubtitle NOTIFY iconChanged)
-    Q_PROPERTY(QString absoluteUrl READ absoluteUrl NOTIFY urlChanged)
-    Q_PROPERTY(QString relativeUrl READ relativeUrl WRITE setRelativeUrl NOTIFY urlChanged)
+
+    Q_PROPERTY(QString imageId READ imageIdForReload WRITE setImageId NOTIFY imageIdChanged)
+    Q_PROPERTY(QString absoluteUrl READ absoluteUrl NOTIFY relativeUrlChanged)
+
+    AUTO_PROPERTY(QString, title)
+    AUTO_PROPERTY(QString, subtitle)
+    AUTO_PROPERTY(QString, relativeUrl)
 
 public:
     AudioIcon(const QString& image, const QString& title, const QString& subtitle, AudioElement *parent)
-        : QObject(parent), element(parent), m_imageId(image), m_title(title), m_subtitle(subtitle) {}
+        : QObject(parent), element(parent), m_imageId(image), a_title(title), a_subtitle(subtitle) {}
     AudioIcon(const QString& imageId, AudioElement *parent)
         : QObject(parent), element(parent), m_imageId(imageId) {}
 
     QString imageId() const { return m_imageId; }
     QString imageIdForReload();
-    void setImageId(const QString& image) { m_imageId = image; emit iconChanged(); }
-
-    QString title() const { return m_title; }
-    void setTitle(const QString& title) { m_title = title; emit iconChanged(); }
-
-    QString subtitle() const { return m_subtitle; }
-    void setSubtitle(const QString& subtitle) { m_subtitle = subtitle; emit iconChanged(); }
+    void setImageId(const QString &id) { m_imageId = id; emit imageIdChanged(); }
 
     QString absoluteUrl() const;
-    QString relativeUrl() const { return m_relativeUrl; }
-    void setRelativeUrl(const QString& url);
 
     QList<QPair<QString, QPixmap>> collageIcons() const { return m_collageIcons; }
     bool addCollageIcon(const QPair<QString, QPixmap> &icon);
@@ -41,15 +36,14 @@ public:
 
     int lastFileIndex() const { return m_lastFileIndex; }
     void setLastFileIndex(int index) { m_lastFileIndex = index; }
-    void update() { emit iconChanged(); }
+    void update() { emit imageIdChanged(); }
 
 signals:
-    void iconChanged();
-    void urlChanged();
+    void imageIdChanged();
 
 private:
     AudioElement *element = nullptr;
-    QString m_imageId, m_title, m_subtitle, m_relativeUrl;
+    QString m_imageId;
     QList<QPair<QString, QPixmap>> m_collageIcons;
     int m_lastFileIndex = 0;
     bool m_imageIdCounter = false;

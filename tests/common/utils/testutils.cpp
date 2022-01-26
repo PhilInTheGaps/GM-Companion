@@ -8,6 +8,10 @@ class TestUtils : public QObject
 public:
     TestUtils() = default;
 
+private:
+    template<typename T>
+    void isInBoundsHelper(T &list);
+
 private slots:
     void rot13_data();
     void rot13();
@@ -74,10 +78,9 @@ void TestUtils::hasWildcardMatch()
     QCOMPARE(Utils::hasWildcardMatch(string, wildcard), output);
 }
 
-void TestUtils::isInBounds()
+template<typename T>
+void TestUtils::isInBoundsHelper(T &list)
 {
-    QList<QObject*> list;
-
     QVERIFY(!Utils::isInBounds(list, 0));
     QVERIFY(!Utils::isInBounds(list, 1));
     QVERIFY(!Utils::isInBounds(list, -1));
@@ -90,6 +93,15 @@ void TestUtils::isInBounds()
     QVERIFY(Utils::isInBounds(list, 1));
     QVERIFY(!Utils::isInBounds(list, 2));
     QVERIFY(!Utils::isInBounds(list, -1));
+}
+
+void TestUtils::isInBounds()
+{
+    QList<QObject*> list;
+    isInBoundsHelper(list);
+
+    QVector<QObject*> vector;
+    isInBoundsHelper(vector);
 }
 
 QTEST_APPLESS_MAIN(TestUtils)

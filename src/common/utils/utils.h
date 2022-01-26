@@ -10,7 +10,8 @@ public:
     static QString rot13(const QString &input);
     static bool hasWildcardMatch(const QString &string, const QString &wildcard);
 
-    template<typename T> static QList<QObject*> toQObjectList(QList<T> from)
+    template<typename T>
+    static QList<QObject*> toQObjectList(const T &from)
     {
         QList<QObject*> list;
         for (auto entry : from)
@@ -21,7 +22,14 @@ public:
         return list;
     }
 
-    template<typename T> static bool isInBounds(const QList<T> &list, int index)
+    template<typename T>
+    static bool isInBounds(const QList<T> &list, int index)
+    {
+        return index > -1 && index < list.length();
+    }
+
+    template<typename T>
+    static bool isInBounds(const QVector<T> &list, int index)
     {
         return index > -1 && index < list.length();
     }

@@ -1,14 +1,40 @@
 #include "mapmarker.h"
+#include "utils/utils.h"
 
-MapMarker::MapMarker(QString name, QString description, qreal x, qreal y, QString icon, QString color, QObject *parent)
-    : QObject(parent), m_name(name), m_description(description), m_color(color), m_icon(icon), m_x(x), m_y(y)
+MapMarker::MapMarker(const QString &name, const QString &description,
+                     qreal x, qreal y, const QString &icon,
+                     const QString &color, QObject *parent)
+    : QObject(parent), a_name(name), a_description(description),
+      a_color(color), a_icon(icon), m_x(x), m_y(y)
 {
 }
 
-QVariant MapMarkerModel::data(const QModelIndex& index, int /*role*/) const
+MapMarker::MapMarker(const QJsonObject &json, QObject *parent) : QObject(parent)
 {
-    QObject *item = m_items.at(index.row());
+    name(json["title"].toString());
+    description(json["description"].toString());
+    color(json["color"].toString());
+    icon(json["icon"].toString());
 
+    setPosition(json["x"].toDouble(), json["y"].toDouble());
+}
+
+auto MapMarker::toJson() const -> QJsonObject
+{
+    QJsonObject json;
+    json["title"] = name();
+    json["description"] = description();
+    json["icon"] = icon();
+    json["color"] = color();
+    json["x"] = x();
+    json["y"] = y();
+
+    return json;
+}
+
+auto MapMarkerModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
+{
+    auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
 }
 
@@ -31,7 +57,7 @@ void MapMarkerModel::remove(QObject *item)
     }
 }
 
-QHash<int, QByteArray>MapMarkerModel::roleNames() const
+auto MapMarkerModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -41,13 +67,13 @@ QHash<int, QByteArray>MapMarkerModel::roleNames() const
 
 void MapMarkerModel::clear()
 {
-    while (m_items.size() > 0)
+    while (!m_items.isEmpty())
     {
         remove(m_items[0]);
     }
 }
 
-void MapMarkerModel::setElements(QList<MapMarker *>elements)
+void MapMarkerModel::setElements(const QList<MapMarker *> &elements)
 {
     clear();
 
@@ -59,8 +85,20 @@ void MapMarkerModel::setElements(QList<MapMarker *>elements)
 
 void MapMarkerModel::removeAt(int index)
 {
-    if ((index > -1) && (index < m_items.size()))
+    if (Utils::isInBounds(m_items, index))
     {
         m_items.removeAt(index);
     }
+}
+
+auto MapMarkerModel::elements() const -> QList<MapMarker *>
+{
+    QList<MapMarker*> list;
+
+    for (auto *item : m_items)
+    {
+        list.append(qobject_cast<MapMarker*>(item));
+    }
+
+    return list;
 }

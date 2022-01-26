@@ -1,5 +1,9 @@
 #include "maptool.h"
 #include "logging.h"
+#include "settings/settingsmanager.h"
+#include "filesystem/file.h"
+#include "utils/utils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QQmlContext>
 #include <QJsonDocument>
@@ -7,39 +11,37 @@
 #include <QJsonArray>
 #include <QImage>
 
-#include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
+using namespace AsyncFuture;
 
-MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), qmlEngine(engine)
+MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent)
+    : AbstractTool(parent), a_markerIndex(-1), qmlEngine(engine)
 {
     qDebug() << "Loading Map Tool ...";
 
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &MapTool::onFileListReceived);
-
     qmlEngine->rootContext()->setContextProperty("map_tool", this);
 
-    mapListModel = new MapListModel;
+    mapListModel = new MapListModel(this);
     qmlEngine->rootContext()->setContextProperty("mapListModel", mapListModel);
 
-    mapMarkerModel = new MapMarkerModel;
+    mapMarkerModel = new MapMarkerModel(this);
     qmlEngine->rootContext()->setContextProperty("mapMarkerModel", mapMarkerModel);
 }
 
 MapTool::~MapTool()
 {
-    for (auto category : m_categories)
+    for (auto *category : m_categories)
     {
         if (category) category->deleteLater();
     }
 }
 
-QStringList MapTool::categories()
+auto MapTool::categories() const -> QStringList
 {
     QStringList list;
 
-    for (auto c : m_categories)
+    for (const auto *category : m_categories)
     {
-        if (c) list.append(c->name());
+        if (category) list.append(category->name());
     }
 
     return list;
@@ -87,16 +89,16 @@ void MapTool::setMarkerPosition(int markerIndex, qreal x, qreal y)
     qCCritical(gmMapsTool()) << "Error: Could not save marker position" << markerIndex << x << y;
 }
 
-void MapTool::setMarkerProperties(QString name, QString description, QString icon, QString color)
+void MapTool::setMarkerProperties(const QString &name, const QString &description, const QString &icon, const QString &color)
 {
-    if (m_currentMap && (m_markerIndex > -1) && (m_markerIndex < m_currentMap->markers()->size()))
+    if (m_currentMap &&  (markerIndex() > -1) && (markerIndex() < m_currentMap->markers()->size()))
     {
-        auto marker = m_currentMap->markers()->marker(m_markerIndex);
+        auto *marker = m_currentMap->markers()->marker(markerIndex());
 
-        marker->setName(name);
-        marker->setDescription(description);
-        marker->setIcon(icon);
-        marker->setColor(color);
+        marker->name(name);
+        marker->description(description);
+        marker->icon(icon);
+        marker->color(color);
         m_currentMap->saveMarkers();
         mapMarkerModel->setElements(m_currentMap->markers()->elements());
         return;
@@ -109,12 +111,12 @@ void MapTool::addMarker()
 {
     if (m_currentMap)
     {
-        auto data  = QByteArray::fromBase64(m_currentMap->data().replace("data:image/jpg;base64,", "").toLatin1());
+        auto data  = QByteArray::fromBase64(m_currentMap->imageData().replace("data:image/jpg;base64,", "").toLatin1());
         auto image = QImage::fromData(data);
         auto x     = image.width() / 2.0;
         auto y     = image.height() / 2.0;
 
-        m_currentMap->addMarker(new MapMarker(tr("New Marker"), "", x, y, "\uf3c5"));
+        m_currentMap->addMarker(new MapMarker(tr("New Marker"), "", x, y, DEFAULT_ICON, DEFAULT_COLOR, this));
         m_currentMap->saveMarkers();
         mapMarkerModel->setElements(m_currentMap->markers()->elements());
         mapListModel->setElements(m_currentCategory->maps());
@@ -128,26 +130,31 @@ void MapTool::setMapIndex(int index)
 {
     m_mapIndex = index;
 
-    if (m_currentCategory && (index > -1) && (index < m_currentCategory->maps().size()))
+    if (m_currentCategory && Utils::isInBounds(m_currentCategory->maps(), index))
     {
         m_currentMap = m_currentCategory->maps()[m_mapIndex];
 
-        if (m_currentMap) mapMarkerModel->setElements(m_currentMap->markers()->elements());
+        if (m_currentMap)
+        {
+            mapMarkerModel->setElements(m_currentMap->markers()->elements());
+        }
     }
-    else {
+    else
+    {
         m_mapIndex   = -1;
         m_currentMap = nullptr;
     }
 
-    setMarkerIndex(-1);
+    markerIndex(-1);
     emit mapIndexChanged();
 }
 
-MapMarker * MapTool::currentMarker() const
+auto MapTool::currentMarker() const -> MapMarker*
 {
-    if ((m_markerIndex > -1) && (mapMarkerModel->size() > m_markerIndex))
+    const auto &elements = mapMarkerModel->elements();
+    if (Utils::isInBounds(elements, markerIndex()))
     {
-        return mapMarkerModel->elements()[m_markerIndex];
+        return mapMarkerModel->elements()[markerIndex()];
     }
 
     return nullptr;
@@ -179,34 +186,29 @@ void MapTool::findCategories()
 {
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
-    m_getCategoriesRequestId = FileManager::getUniqueRequestId();
-    FileManager::getInstance()->getFileList(m_getCategoriesRequestId, SettingsManager::getPath("maps"), true);
+    const auto dir = SettingsManager::getPath("maps");
+    observe(Files::File::listAsync(dir, false, true)).subscribe([this](Files::FileListResult *result) {
+        receivedCategories(result->folders());
+        result->deleteLater();
+    });
 }
 
-void MapTool::receivedCategories(QStringList folders)
+void MapTool::receivedCategories(const QStringList &folders)
 {
     qCDebug(gmMapsTool()) << "Received map categories.";
 
-    for (auto folder : folders)
+    for (const auto &folder : folders)
     {
-        m_categories.append(new MapCategory(folder, {}));
+        m_categories.append(new MapCategory(folder, {}, this));
     }
 
     emit categoriesChanged();
 }
 
-void MapTool::onMapsLoaded(QString category)
+void MapTool::onMapsLoaded(const QString &category)
 {
     if (m_currentCategory && (category == m_currentCategory->name()))
     {
         mapListModel->setElements(m_currentCategory->maps());
-    }
-}
-
-void MapTool::onFileListReceived(int id, QStringList files)
-{
-    if (id == m_getCategoriesRequestId)
-    {
-        receivedCategories(files);
     }
 }

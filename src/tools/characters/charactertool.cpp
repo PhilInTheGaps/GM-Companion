@@ -1,19 +1,24 @@
 #include "charactertool.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
+#include "filesystem/file.h"
+#include "utils/utils.h"
+#include "utils/fileutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QJsonArray>
+
+using namespace AsyncFuture;
 
 CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent)
 {
     qDebug() << "Loading Character Tool ...";
 
-    m_imageViewer = new CharacterImageViewer;
-    m_dsa5Viewer  = new CharacterDSA5Viewer(engine);
+    m_imageViewer = new CharacterImageViewer(this);
+    m_dsa5Viewer  = new CharacterDSA5Viewer(engine, this);
 
     engine->rootContext()->setContextProperty("character_tool", this);
     engine->rootContext()->setContextProperty("character_image_viewer", m_imageViewer);
@@ -28,9 +33,6 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent)
 
     // connect(m_dsa5Viewer, &CharacterDSA5Viewer::categoriesChanged, [ = ]()
     // { if (m_currentViewer == m_dsa5Viewer) emit categoriesChanged(); });
-
-    connect(FileManager::getInstance(), &FileManager::receivedFile,     this, &CharacterTool::receivedFile);
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, this, &CharacterTool::receivedFileList);
 }
 
 auto CharacterTool::characters() const -> QStringList
@@ -63,7 +65,7 @@ void CharacterTool::setCurrentCharacter(int index)
 {
     auto characterNames = characters();
 
-    if ((index < 0) || (index > characterNames.length() - 1)) return;
+    if (!Utils::isInBounds(characterNames, index)) return;
 
     auto name = characterNames[index];
     m_currentCharacter = nullptr;
@@ -101,8 +103,12 @@ void CharacterTool::loadData()
     if (m_isDataLoaded) return;
 
     m_isDataLoaded = true;
-    m_loadInactiveRequestId = FileManager::getUniqueRequestId();
-    FileManager::getInstance()->getFile(m_loadInactiveRequestId, SettingsManager::getPath("characters") + "/inactive.json");
+
+    const auto filePath = FileUtils::fileInDir("inactive.json", SettingsManager::getPath("characters"));
+    observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+        loadInactiveCharacters(result->data());
+        result->deleteLater();
+    });
 }
 
 void CharacterTool::setCurrentCategory(int index)
@@ -116,7 +122,7 @@ void CharacterTool::toggleCharacterActive(int index)
 {
     auto characterNames = characters();
 
-    if ((index < 0) || (index > characterNames.length() - 1)) return;
+    if (!Utils::isInBounds(characterNames, index)) return;
 
     auto name = characterNames[index];
 
@@ -130,23 +136,6 @@ void CharacterTool::toggleCharacterActive(int index)
     emit charactersChanged();
 }
 
-void CharacterTool::receivedFile(int id, const QByteArray& data)
-{
-    // Load inactive characters
-    if (id == m_loadInactiveRequestId)
-    {
-        loadInactiveCharacters(data);
-        return;
-    }
-
-    // Convert old .ini file to json
-    if (id == m_convertFileRequestId)
-    {
-        convertSettingsFile(data);
-        return;
-    }
-}
-
 /**
  * @brief Load list of inactive characters from json array
  */
@@ -155,8 +144,12 @@ void CharacterTool::loadInactiveCharacters(const QByteArray& data)
     if (data.isEmpty())
     {
         qCDebug(gmCharactersTool()) << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
-        m_convertFileRequestId = FileManager::getUniqueRequestId();
-        FileManager::getInstance()->getFile(m_convertFileRequestId, SettingsManager::getPath("characters") + "/settings.ini");
+
+        const auto filePath = FileUtils::fileInDir("settings.ini", SettingsManager::getPath("characters"));
+        observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+            convertSettingsFile(result->data());
+            result->deleteLater();
+        });
         return;
     }
 
@@ -164,9 +157,12 @@ void CharacterTool::loadInactiveCharacters(const QByteArray& data)
 
     m_inactiveCharacters.clear();
 
-    auto array = QJsonDocument::fromJson(data).array();
+    const auto array = QJsonDocument::fromJson(data).array();
 
-    for (auto entry : array) m_inactiveCharacters.append(entry.toString());
+    for (const auto &entry : array)
+    {
+        m_inactiveCharacters.append(entry.toString());
+    }
 
     loadCharacters();
 }
@@ -178,10 +174,10 @@ void CharacterTool::saveInactiveCharacters()
 {
     qCDebug(gmCharactersTool()) << "Saving inactive characters ...";
 
-    auto filePath = SettingsManager::getPath("characters") + "/inactive.json";
-    auto array    = QJsonArray::fromStringList(m_inactiveCharacters);
+    const auto filePath = FileUtils::fileInDir("inactive.json", SettingsManager::getPath("characters"));
+    const auto data     = QJsonDocument(QJsonArray::fromStringList(m_inactiveCharacters)).toJson();
 
-    FileManager::getInstance()->saveFile(filePath, QJsonDocument(array).toJson());
+    Files::File::saveAsync(filePath, data);
 }
 
 /**
@@ -192,7 +188,7 @@ void CharacterTool::convertSettingsFile(const QByteArray& data)
 {
     if (!data.isEmpty())
     {
-        auto filePath = SettingsManager::getPath("characters") + "/settings.ini";
+        const auto filePath = FileUtils::fileInDir("settings.ini", SettingsManager::getPath("characters"));
         qCDebug(gmCharactersTool()) << "Converting old .ini file at" << filePath;
 
         QTemporaryFile file;
@@ -205,48 +201,34 @@ void CharacterTool::convertSettingsFile(const QByteArray& data)
         saveInactiveCharacters();
 
         qCDebug(gmCharactersTool()) << "Deleting old .ini file.";
-        FileManager::getInstance()->deleteFile(filePath);
+        Files::File::deleteAsync(filePath);
     }
 
     loadCharacters();
-}
-
-void CharacterTool::receivedFileList(int id, const QStringList& files)
-{
-    if (id == m_loadCharacterFilesRequestId)
-    {
-        receivedCharacterFiles(files);
-        return;
-    }
-
-    if (id == m_loadCharacterFoldersRequestId)
-    {
-        receivedCharacterFolders(files);
-        return;
-    }
 }
 
 void CharacterTool::loadCharacters()
 {
     qCDebug(gmCharactersTool()) << "Loaded inactive character list, now loading character files and folders ...";
 
-    m_loadCharacterFilesRequestId   = FileManager::getUniqueRequestId();
-    m_loadCharacterFoldersRequestId = FileManager::getUniqueRequestId();
-
-    FileManager::getInstance()->getFileList(m_loadCharacterFilesRequestId, SettingsManager::getPath("characters"), false);
-    FileManager::getInstance()->getFileList(m_loadCharacterFoldersRequestId, SettingsManager::getPath("characters"), true);
+    const auto dir = SettingsManager::getPath("characters");
+    observe(Files::File::listAsync(dir, true, true)).subscribe([this](Files::FileListResult *result) {
+        receivedCharacterFiles(result->files());
+        receivedCharacterFolders(result->folders());
+        result->deleteLater();
+    });
 }
 
 void CharacterTool::receivedCharacterFolders(const QStringList& folders)
 {
     qCDebug(gmCharactersTool()) << "Received character folders";
 
-    auto basePath = SettingsManager::getPath("characters");
+    const auto basePath = SettingsManager::getPath("characters");
 
     for (const auto& folder : folders)
     {
-        auto *character = new Character(folder);
-        character->setFolder(basePath + "/" + folder);
+        auto *character = new Character(folder, this);
+        character->folder(FileUtils::fileInDir(folder, basePath));
         m_characters.append(character);
     }
 
@@ -261,8 +243,9 @@ void CharacterTool::receivedCharacterFiles(const QStringList& files)
     {
         if (file.endsWith(".pdf"))
         {
-            auto *character = new Character(file.left(file.lastIndexOf('.')));
-            character->addFile(CharacterFile(file, SettingsManager::getPath("characters") + "/" + file));
+            const auto filePath = FileUtils::fileInDir(file, SettingsManager::getPath("characters"));
+            auto *character = new Character(file.left(file.lastIndexOf('.')), this);
+            character->addFile(new CharacterFile(file, filePath, this));
             m_characters.append(character);
         }
     }

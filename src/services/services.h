@@ -1,8 +1,4 @@
-#ifndef SERVICES_H
-#define SERVICES_H
-
-/* --- GENERAL --- */
-#define DEFAULT_SERVER_URL      "https://gm-companion.rophil.lol"
+#pragma once
 
 /* --- SPOTIFY --- */
 #define LIBRESPOT_DEVICE_NAME   "GM-Companion"
@@ -16,10 +12,6 @@
 #define GOOGLE_LOCAL_PORT       59993
 #define GOOGLE_MAX_REQUESTS     5
 #define GOOGLE_SCOPE            "https://www.googleapis.com/auth/drive"
-#define GOOGLE_MIMETYPE_FOLDER  "application/vnd.google-apps.folder"
-#define GOOGLE_MIMETYPE_FILE    "application/vnd.google-apps.file"
-#define GOOGLE_MIMETYPE_AUDIO   "application/vnd.google-apps.audio"
-#define GOOGLE_DRIVE_CACHE_TIME 60
 
 /* --- NEXTCLOUD --- */
 #define NEXTCLOUD_AUTH_URL          "/index.php/login/v2"
@@ -29,5 +21,3 @@
 
 /* --- DISCORD --- */
 #define DISCORD_API_ENDPOINT    "/discord"
-
-#endif // SERVICES_H

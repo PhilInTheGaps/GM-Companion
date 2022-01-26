@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(test_tools)
-
 # Find includes in the build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -12,15 +10,8 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Gui Quick Test)
 
-# resources
-set(RESOURCES
-  ../tests.qrc
-)
-
-# Audio Project
-add_executable(test_audioproject testaudioproject.cpp ${RESOURCES})
-target_link_libraries(test_audioproject gm-companion-lib common Qt5::Gui Qt5::Test)
-add_test(NAME test_audioproject COMMAND test_audioproject)
+# Audio Tool
+add_subdirectory(audio)
 
 # Combat Tracker
 add_executable(test_combattracker testcombattracker.cpp ${RESOURCES})

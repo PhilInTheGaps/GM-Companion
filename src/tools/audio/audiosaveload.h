@@ -1,45 +1,41 @@
 #ifndef AUDIOSAVELOAD_H
 #define AUDIOSAVELOAD_H
 
-#include <QObject>
 #include <QList>
 #include <QUrl>
+#include <QFuture>
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
+class AudioProject;
+class AudioFile;
 
-#include "tools/audio/project/audioproject.h"
+namespace Files {
+class FileListResult;
+}
 
-class AudioSaveLoad : public QObject
+class AudioSaveLoad
 {
-    Q_OBJECT
-
 public:
-    AudioSaveLoad(QObject *parent = nullptr) : QObject(parent) {}
+    AudioSaveLoad() = delete;
 
-    void findProjects(bool forEditor = false);
+    static QFuture<QVector<AudioProject*>> findProjectsAsync(const QString &folder = "");
 
-    void findIconPaths(QList<AudioProject*> projects, bool forEditor);
-    void findMissingFiles(const QList<AudioFile *>& files, const QString& basePath);
+    static QFuture<bool> findMissingFilesAsync(const QList<AudioFile *>& audioFiles, const QString& basePath);
 
-    void saveProject(AudioProject *project);
-    void deleteProject(AudioProject *project);
+    static QFuture<bool> saveProject(AudioProject *project, const QString &folder = "");
+
+    static QFuture<bool> deleteProject(AudioProject *project, const QString &folder = "");
 
 private:
-    int m_radioRequestID;
-    QString m_relativeRadioPath;
+    static constexpr const char* PROJECT_FILE_SUFFIX = ".audio";
 
-    int m_projectsRequestID;
-    QList<int> m_projectFileRequestIDs;
+    static QFuture<QVector<AudioProject*>> loadProjects(Files::FileListResult *files);
+    static QStringList getFilePathsToCheck(const QList<AudioFile *>& audioFiles, const QString& basePath);
 
-signals:
-    void foundProjects(QList<AudioProject*> projects, bool forEditor);
-    void songPathsChanged(QList<QUrl>);
-    void soundPathsChanged(QList<QUrl>, QStringList);
-    void radioPathChanged(QUrl url);
-    void startFindingMissingFiles();
-    void missingFilesFound(QList<bool> missingFiles);
+    static QFuture<bool> saveProject(AudioProject *project, const QString &filePath, const QByteArray &data);
+    static QFuture<bool> saveRenamedProject(AudioProject *project, const QString &filePath,
+                                            const QByteArray &data, const QString &folder);
+
+    static QString getProjectFolder(const QString &preferredFolder);
 };
 
 #endif // AUDIOSAVELOAD_H

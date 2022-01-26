@@ -4,17 +4,17 @@
 #include <QFile>
 #include <QtMath>
 
-CharacterDSA5Viewer::CharacterDSA5Viewer(QQmlApplicationEngine *engine)
-    : qmlEngine(engine)
+CharacterDSA5Viewer::CharacterDSA5Viewer(QQmlApplicationEngine *engine, QObject *parent)
+    : CharacterViewer(parent), qmlEngine(engine)
 {
     qDebug() << "Loading CharacterDSA5Viewer ...";
 
-    talentsModel   = new DSA5ListModel;
-    combatModel    = new DSA5ListModel;
-    specialModel   = new DSA5ListModel;
-    liturgiesModel = new DSA5ListModel;
-    spellsModel    = new DSA5ListModel;
-    itemsModel     = new DSA5ListModel;
+    talentsModel   = new DSA5ListModel(this);
+    combatModel    = new DSA5ListModel(this);
+    specialModel   = new DSA5ListModel(this);
+    liturgiesModel = new DSA5ListModel(this);
+    spellsModel    = new DSA5ListModel(this);
+    itemsModel     = new DSA5ListModel(this);
 
     qmlEngine->rootContext()->setContextProperty("dsa5TalentsModel", talentsModel);
     qmlEngine->rootContext()->setContextProperty("dsa5CombatModel", combatModel);
@@ -67,9 +67,9 @@ void CharacterDSA5Viewer::loadCharacterData()
     m_image.clear();
     m_profileOverview.clear();
 
-    if (!m_currentCharacter || (m_currentCharacter->files().size() == 0)) return;
+    if (!m_currentCharacter || (m_currentCharacter->files().isEmpty())) return;
 
-    QFile f(m_currentCharacter->files()[0].path());
+    QFile f(m_currentCharacter->files()[0]->path());
 
     if (f.open(QIODevice::ReadOnly))
     {
@@ -102,7 +102,7 @@ void CharacterDSA5Viewer::loadProfile()
 
     // Race + (Race variant)
     QString rTemp  = m_jsonObject.value("r").toString();
-    int     rIndex = rTemp.right(rTemp.length() - rTemp.lastIndexOf('_') - 1).toInt() - 1;
+    int     rIndex = rTemp.rightRef(rTemp.length() - rTemp.lastIndexOf('_') - 1).toInt() - 1;
     m_race = m_referenceObject.value("R").toArray()[rIndex].toObject();
     m_profileOverview.append(m_race.value("name").toString() + " (" + jsonMapString(jsonString("rv")) + ")");
 
@@ -244,9 +244,9 @@ void CharacterDSA5Viewer::loadTalents()
 
     for (int i = 0; i < 59; i++) talentValues.append(0);
 
-    for (auto t : charTalents.keys())
+    for (const auto& t : charTalents.keys())
     {
-        int index = t.right(t.length() - t.lastIndexOf("_") - 1).toInt() - 1;
+        int index = t.rightRef(t.length() - t.lastIndexOf("_") - 1).toInt() - 1;
         int value = charTalents.value(t).toInt();
         talentValues.replace(index, value);
     }
@@ -258,7 +258,7 @@ void CharacterDSA5Viewer::loadTalents()
 
         for (auto v : t.value("attributes").toArray()) values.append(m_attributes[v.toInt()].toInt());
 
-        items.append(new DSA5ListItem(t.value("name").toString(), t.value("group").toString(), values));
+        items.append(new DSA5ListItem(t.value("name").toString(), t.value("group").toString(), values, this));
     }
 
     talentsModel->setElements(items);
@@ -272,9 +272,9 @@ void CharacterDSA5Viewer::loadAdvantages()
     auto charActivatable = m_jsonObject.value("activatable").toObject();
     QList<int> indices;
 
-    for (auto a : charActivatable.keys())
+    for (const auto& a : charActivatable.keys())
     {
-        if (a.startsWith("ADV_")) indices.append(a.right(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
+        if (a.startsWith("ADV_")) indices.append(a.rightRef(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
     }
 
     for (int i : indices)
@@ -291,9 +291,9 @@ void CharacterDSA5Viewer::loadDisadvantages()
     auto charActivatable  = m_jsonObject.value("activatable").toObject();
     QList<int> indices;
 
-    for (auto a : charActivatable.keys())
+    for (const auto& a : charActivatable.keys())
     {
-        if (a.startsWith("DISADV_")) indices.append(a.right(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
+        if (a.startsWith("DISADV_")) indices.append(a.rightRef(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
     }
 
     for (int i : indices)
@@ -314,9 +314,9 @@ void CharacterDSA5Viewer::loadCombat()
 
     for (int i = 0; i < 17; i++) talentValues.append(6);
 
-    for (auto t : charCombat.keys())
+    for (const auto& t : charCombat.keys())
     {
-        int index = t.right(t.length() - t.lastIndexOf("_") - 1).toInt() - 1;
+        int index = t.rightRef(t.length() - t.lastIndexOf("_") - 1).toInt() - 1;
         int value = charCombat.value(t).toInt();
         talentValues.replace(index, value);
     }
@@ -338,7 +338,7 @@ void CharacterDSA5Viewer::loadCombat()
             values.append(0);
         }
 
-        items.append(new DSA5ListItem(t.value("name").toString(), t.value("group").toString(), values));
+        items.append(new DSA5ListItem(t.value("name").toString(), t.value("group").toString(), values, this));
     }
 
     combatModel->setElements(items);
@@ -352,9 +352,9 @@ void CharacterDSA5Viewer::loadSpecial()
     auto charActivatable = m_jsonObject.value("activatable").toObject();
     QList<int> indices;
 
-    for (auto a : charActivatable.keys())
+    for (const auto& a : charActivatable.keys())
     {
-        if (a.startsWith("SA_")) indices.append(a.right(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
+        if (a.startsWith("SA_")) indices.append(a.rightRef(a.length() - a.lastIndexOf('_') - 1).toInt() - 1);
     }
 
     for (int i : indices)
@@ -369,7 +369,7 @@ void CharacterDSA5Viewer::loadItems()
     auto itemObject = m_jsonObject.value("belongings").toObject().value("items").toObject();
     QList<DSA5ListItem *> items;
 
-    for (auto i : itemObject.keys())
+    for (const auto& i : itemObject.keys())
     {
         QString name   = itemObject.value(i).toObject().value("name").toString();
         QString note   = itemObject.value(i).toObject().value("note").toString();
@@ -378,7 +378,7 @@ void CharacterDSA5Viewer::loadItems()
 
         if (!note.isEmpty()) name.append(" (" + note + ")");
 
-        items.append(new DSA5ListItem(name, where, { amount }));
+        items.append(new DSA5ListItem(name, where, { amount }, this));
     }
 
     itemsModel->setElements(items);
@@ -395,17 +395,17 @@ void CharacterDSA5Viewer::loadReferenceObject()
     }
 }
 
-QString CharacterDSA5Viewer::jsonString(QString key)
+auto CharacterDSA5Viewer::jsonString(const QString &key) -> QString
 {
     return m_jsonObject.value(key).toString();
 }
 
-QString CharacterDSA5Viewer::jsonMapString(QString key, bool shiftIndex)
+auto CharacterDSA5Viewer::jsonMapString(const QString &key, bool shiftIndex) -> QString
 {
     if (key.isEmpty()) return "";
 
     QString arrayName = key.left(key.lastIndexOf("_"));
-    int     index     = key.right(key.length() - key.lastIndexOf("_") - 1).toInt();
+    int     index     = key.rightRef(key.length() - key.lastIndexOf("_") - 1).toInt();
 
     if (shiftIndex) index -= 1;
 

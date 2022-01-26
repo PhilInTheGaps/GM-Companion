@@ -1,6 +1,8 @@
 #include "spotifyconnectorserver.h"
 #include "logging.h"
 #include "../services.h"
+#include "exceptions/notimplementedexception.h"
+#include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -13,10 +15,9 @@ SpotifyConnectorServer::SpotifyConnectorServer
     RESTServiceConnector(networkManager, gmSpotifyServer(), parent)
 {
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
-    m_settingsStore = new O0SettingsStore("gm-companion");
+    m_settingsStore = new O0SettingsStore("gm-companion", this);
 
-    connect(&m_server, SIGNAL(newConnection()),                        this, SLOT(onIncomingConnection()));
-    connect(this,      &SpotifyConnectorServer::receivedReplyInternal, this, &SpotifyConnectorServer::onReceivedReply);
+    connect(&m_server, &QTcpServer::newConnection, this, &SpotifyConnectorServer::onIncomingConnection);
 }
 
 SpotifyConnectorServer::~SpotifyConnectorServer()
@@ -25,7 +26,6 @@ SpotifyConnectorServer::~SpotifyConnectorServer()
     disconnect();
 
     if (m_server.isListening()) m_server.close();
-    m_settingsStore->deleteLater();
 }
 
 void SpotifyConnectorServer::grantAccess()
@@ -49,105 +49,87 @@ void SpotifyConnectorServer::disconnectService()
     saveRefreshToken("");
 }
 
-auto SpotifyConnectorServer::get(QNetworkRequest request)->int
-{
-    int requestId = getUniqueRequestId();
-
-    get(request, requestId);
-    return requestId;
-}
-
-void SpotifyConnectorServer::get(QNetworkRequest request, int requestId)
+void SpotifyConnectorServer::sendRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*>& deferred)
 {
     if (!canSendRequest())
     {
-        enqueueRequest(RequestContainer(requestId, request, GET, ""));
+        enqueueRequest(container, deferred);
         return;
     }
 
-    qCDebug(gmSpotifyServer) << "Sending GET Request to URL" << request.url();
-
     m_currentRequestCount++;
-    request = addAuthHeader(request);
-    auto reply = m_networkManager->get(request);
+    auto request = addAuthHeader(container->request());
+    QNetworkReply *reply = nullptr;
 
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        auto data    = reply->readAll();
-        auto error   = reply->error();
-        auto headers = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, GET, ""), data, headers, error);
-        reply->deleteLater();
-    });
-}
-
-auto SpotifyConnectorServer::put(QNetworkRequest request, QByteArray data)->int
-{
-    int requestId = getUniqueRequestId();
-
-    put(request, data, requestId);
-    return requestId;
-}
-
-void SpotifyConnectorServer::put(QNetworkRequest request, QByteArray data, int requestId)
-{
-    if (!canSendRequest())
+    switch (container->requestType())
     {
-        enqueueRequest(RequestContainer(requestId, request, PUT, data));
-        return;
+    case GET:
+        qCDebug(gmSpotifyServer) << "Sending GET Request to URL" << request.url();
+        reply = m_networkManager->get(request);
+        break;
+    case PUT:
+        qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << container->data();
+        reply = m_networkManager->put(request, container->data());
+        break;
+    case POST:
+        qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url() << "Data:" << container->data();
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        reply = m_networkManager->post(request, container->data());
+        break;
+    default:
+        throw NotImplementedException();
     }
 
-    qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << data;
-
-    m_currentRequestCount++;
-    request = addAuthHeader(request);
-    auto reply = m_networkManager->put(request, data);
-
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        auto replyData = reply->readAll();
-        auto error     = reply->error();
-        auto headers   = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, PUT, data), replyData, headers, error);
-        reply->deleteLater();
+    connect(reply, &QNetworkReply::finished, [this, reply, container, deferred]() mutable {
+        onReceivedReply(reply, container, deferred);
     });
 }
 
-auto SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data)->int
+auto SpotifyConnectorServer::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
 {
-    int requestId = getUniqueRequestId();
+    const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    const auto container = new RequestContainer(request, GET, "", this);
 
-    post(request, data, requestId);
-    return requestId;
+    sendRequest(container, deferred);
+    return deferred.future();
 }
 
-void SpotifyConnectorServer::post(QNetworkRequest request, QByteArray data, int requestId)
+auto SpotifyConnectorServer::get(const QUrl &url) -> QFuture<RestNetworkReply *>
 {
-    if (!canSendRequest())
-    {
-        enqueueRequest(RequestContainer(requestId, request, POST, data));
-        return;
-    }
+    return get(QNetworkRequest(url));
+}
 
-    qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url();
+auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    const auto container = new RequestContainer(request, PUT, data, this);
 
-    m_currentRequestCount++;
-    request = addAuthHeader(request);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    sendRequest(container, deferred);
+    return deferred.future();
+}
 
-    auto reply = m_networkManager->post(request, data);
+auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
+    const auto container = new RequestContainer(request, POST, data, this);
 
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        auto replyData = reply->readAll();
-        auto error     = reply->error();
-        auto headers   = reply->rawHeaderPairs();
-        emit receivedReplyInternal(RequestContainer(requestId, request, POST, data), replyData, headers, error);
-        reply->deleteLater();
-    });
+    sendRequest(container, deferred);
+    return deferred.future();
+}
+
+auto SpotifyConnectorServer::customRequest(const QNetworkRequest &request, const QByteArray &verb,
+                                           const QByteArray &data) -> QFuture<RestNetworkReply *>
+{
+    Q_UNUSED(request)
+    Q_UNUSED(verb)
+    Q_UNUSED(data)
+    throw NotImplementedException();
 }
 
 void SpotifyConnectorServer::authenticate()
 {
     qCDebug(gmSpotifyServer()) << "Authenticating ...";
-    emit statusChanged(Service::StatusType::Info, tr("Connecting ..."));
+    emit statusChanged(ServiceStatus::Type::Info, tr("Connecting ..."));
 
     if (!m_server.isListening())
     {
@@ -161,7 +143,6 @@ void SpotifyConnectorServer::authenticate()
     url.setQuery(query);
 
     qCDebug(gmSpotifyServer()) << "Started server, opening browser ...";
-
     QDesktopServices::openUrl(url);
 }
 
@@ -237,19 +218,19 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
             if (reply->error() != QNetworkReply::NoError)
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token:" << reply->error() << reply->errorString();
-                emit statusChanged(Service::StatusType::Error, reply->errorString());
+                emit statusChanged(ServiceStatus::Type::Error, reply->errorString());
                 return;
             }
             else if (!params["error"].toString().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:" << params["error"].toString();
-                emit statusChanged(Service::StatusType::Error, params["error"].toString());
+                emit statusChanged(ServiceStatus::Type::Error, params["error"].toString());
                 return;
             }
             else if (getAccessToken().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
-                emit statusChanged(Service::StatusType::Error, "Unexpected error, access token is empty.");
+                emit statusChanged(ServiceStatus::Type::Error, "Unexpected error, access token is empty.");
                 return;
             }
 
@@ -273,39 +254,14 @@ void SpotifyConnectorServer::updateExpireTime(int expiresIn)
     m_expireTime = QDateTime::currentDateTime().addSecs(expiresIn);
 }
 
-void SpotifyConnectorServer::dequeueRequests()
-{
-    while (!m_requestQueue.isEmpty() && m_currentRequestCount < SPOTIFY_MAX_REQUESTS)
-    {
-        auto element = m_requestQueue.dequeue();
-
-        switch (element.requestType)
-        {
-        case 0:
-            get(element.request, element.requestId);
-            break;
-
-        case 1:
-            put(element.request, element.data, element.requestId);
-            break;
-
-        case 2:
-            post(element.request, element.data, element.requestId);
-            break;
-
-        default:
-            qCWarning(gmSpotifyServer()) << "Unknown request type" << element.requestType;
-        }
-    }
-}
-
-auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request)->QNetworkRequest
+auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkRequest
 {
     request.setRawHeader("Authorization", QByteArray("Bearer " + getAccessToken().toUtf8()));
     return request;
 }
 
-void SpotifyConnectorServer::handleRateLimit(const RequestContainer& container, const QList<QPair<QByteArray, QByteArray> >& headers)
+void SpotifyConnectorServer::handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*> &deferred,
+                                             const QList<QPair<QByteArray, QByteArray>>& headers)
 {
     qCDebug(gmSpotifyServer) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
 
@@ -316,7 +272,7 @@ void SpotifyConnectorServer::handleRateLimit(const RequestContainer& container, 
             qCDebug(gmSpotifyServer()) << header;
             int seconds = header.second.toInt();
             startCooldown(seconds);
-            enqueueRequest(container);
+            enqueueRequest(container, deferred);
             return;
         }
     }
@@ -330,7 +286,7 @@ void SpotifyConnectorServer::startCooldown(int seconds)
     QTimer::singleShot(seconds * 1000, this, &SpotifyConnectorServer::onCooldownFinished);
 }
 
-auto SpotifyConnectorServer::canSendRequest()->bool
+auto SpotifyConnectorServer::canSendRequest() -> bool
 {
     if (!m_isAccessGranted) return false;
 
@@ -343,29 +299,61 @@ auto SpotifyConnectorServer::canSendRequest()->bool
     return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < SPOTIFY_MAX_REQUESTS;
 }
 
-void SpotifyConnectorServer::onReceivedReply(const RequestContainer& container, const QByteArray& data, const QList<QPair<QByteArray, QByteArray> >& headers, QNetworkReply::NetworkError error)
+void SpotifyConnectorServer::enqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*> &deferred)
+{
+    m_requestQueue.enqueue(QPair(container, deferred));
+}
+
+void SpotifyConnectorServer::dequeueRequests()
+{
+    while (!m_requestQueue.isEmpty() && m_currentRequestCount < SPOTIFY_MAX_REQUESTS)
+    {
+        const auto pair = m_requestQueue.dequeue();
+        const auto container = pair.first;
+        const auto deferred = pair.second;
+
+        sendRequest(container, deferred);
+    }
+}
+
+void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContainer *container,
+                                             AsyncFuture::Deferred<RestNetworkReply*> deferred)
 {
     m_currentRequestCount--;
 
-    // Check if rate limit was exceeded
-    if (error == QNetworkReply::UnknownContentError)
+    if (!reply)
     {
-        auto status = QJsonDocument::fromJson(data).object().value("error").toObject().value("status").toInt();
+        qCCritical(gmSpotifyServer()) << "Error: QNetworkReply is null!";
+        return;
+    }
 
-        // HTTP 429 == Rate limit exceeded
-        if (status == 429)
+    auto *result = new RestNetworkReply(
+                reply->error(),
+                reply->errorString(),
+                reply->readAll(),
+                reply->rawHeaderPairs(),
+                this);
+
+    // Check if rate limit was exceeded
+    if (reply->error() == QNetworkReply::UnknownContentError)
+    {
+        auto status = QJsonDocument::fromJson(result->data()).object().value("error").toObject().value("status").toInt();
+
+        if (status == HttpStatus::TooManyRequests)
         {
-            handleRateLimit(container, headers);
+            handleRateLimit(container, deferred, result->headers());
             return;
         }
     }
 
-    if (error != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
-        qCWarning(gmSpotifyServer()) << "Error:" << error << data;
+        qCWarning(gmSpotifyServer()) << "Error:" << result->errorText() << result->data();
     }
 
-    emit receivedReply(container.requestId, error, data, headers);
+
+    deferred.complete(result);
+    reply->deleteLater();
 
     // If there are requests in queue, send next
     dequeueRequests();
@@ -395,7 +383,7 @@ void SpotifyConnectorServer::onBytesReady()
 
     if (!socket) {
         qCWarning(gmSpotifyServer()) << "onBytesReady: No socket available";
-        emit statusChanged(Service::StatusType::Error, "Error: No socket available.");
+        emit statusChanged(ServiceStatus::Type::Error, "Error: No socket available.");
         return;
     }
 
@@ -447,7 +435,7 @@ void SpotifyConnectorServer::closeServer(QTcpSocket *socket, bool  /*hasparamete
 
         if (timer) {
             qCWarning(gmSpotifyServer()) << "closeServer: Closing due to timeout";
-            emit statusChanged(Service::StatusType::Error, "Error: Connection timed out.");
+            emit statusChanged(ServiceStatus::Type::Error, "Error: Connection timed out.");
             timer->stop();
             socket = qobject_cast<QTcpSocket *>(timer->parent());
             timer->deleteLater();

@@ -1,14 +1,18 @@
 #include "audioeditorfilebrowser.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/filemanager.h"
+#include "filesystem/file.h"
+#include "utils/fileutils.h"
 #include "logging.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
+
 #include <QQmlContext>
 
-AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
-{
-    m_type = -1;
+using namespace AsyncFuture;
 
-    m_fileModel = new AudioEditorFileModel;
+AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent)
+    : QObject(parent), m_type(-1)
+{
+    m_fileModel = new AudioEditorFileModel(this);
     qmlEngine   = engine;
     qmlEngine->rootContext()->setContextProperty("audioEditorFileBrowserModel", m_fileModel);
 }
@@ -61,26 +65,22 @@ void AudioEditorFileBrowser::addFiles(const QStringList& path, int index, bool f
 {
     qCDebug(gmAudioEditorFileBrowser()) << "Adding files:" << m_basePath << path << index << folders;
 
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
+    const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
+    observe(Files::File::listAsync(dir, !folders, folders)).subscribe([this, path, folders, index](Files::FileListResult *result) {
+        if (!result) return;
 
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, context, [ = ](int id, const QStringList& files) {
-        if (requestId != id) return;
+        qCDebug(gmAudioEditorFileBrowser()) << "Received file list:" << result;
+        addFilesToModel(folders ? result->folders() : result->files(), path, folders ? 3 : m_type, index);
 
-        qCDebug(gmAudioEditorFileBrowser()) << "Received file list:" << files;
-
-        addFilesToModel(files, path, folders ? 3 : m_type, index);
-        delete context;
+        result->deleteLater();
     });
-
-    FileManager::getInstance()->getFileList(requestId, m_basePath + "/" + path.join('/'), folders);
 }
 
 void AudioEditorFileBrowser::addFilesToModel(const QStringList& files, const QStringList& path, int type, int index)
 {
     for (const auto& file : files)
     {
-        auto editorFile = new AudioEditorFile(file, path, type);
+        auto *editorFile = new AudioEditorFile(file, path, type, this);
 
         if (index > -1)
         {
@@ -97,11 +97,12 @@ void AudioEditorFileBrowser::addFilesToModel(const QStringList& files, const QSt
 
 void AudioEditorFileBrowser::removeElement(const QStringList& path)
 {
-    for (auto e : m_fileModel->elements())
+    for (auto *element : m_fileModel->elements())
     {
-        auto file = dynamic_cast<AudioEditorFile *>(e);
+        auto *file = qobject_cast<AudioEditorFile*>(element);
 
-        if ((file->path() == path) || file->path().join("/").startsWith(path.join("/")))
+        if ((file->path() == path) || FileUtils::dirFromFolders(file->path())
+                .startsWith(FileUtils::dirFromFolders(path)))
         {
             m_fileModel->remove(file);
         }
@@ -115,14 +116,14 @@ void AudioEditorFileBrowser::clearFiles()
 
 void AudioEditorFileBrowser::openFolder(bool open, const QString& folder, const QStringList& path)
 {
-    int index              = 0;
-    QStringList folderPath = path;
+    int index = 0;
 
+    auto folderPath = path;
     folderPath.append(folder);
 
-    for (auto e : m_fileModel->elements())
+    for (auto *element : m_fileModel->elements())
     {
-        auto file = dynamic_cast<AudioEditorFile *>(e);
+        auto *file = qobject_cast<AudioEditorFile *>(element);
 
         if ((file->name() == folder) && (file->path() == path))
         {
@@ -133,8 +134,7 @@ void AudioEditorFileBrowser::openFolder(bool open, const QString& folder, const 
                 break;
             }
             
-                            removeElement(folderPath);
-
+            removeElement(folderPath);
         }
 
         index++;
@@ -192,7 +192,7 @@ void AudioEditorFileModel::clear()
 
     while (!m_items.empty())
     {
-        delete m_items.takeAt(0);
+        m_items.takeAt(0)->deleteLater();
     }
 
     endRemoveRows();
@@ -200,7 +200,7 @@ void AudioEditorFileModel::clear()
     emit isEmptyChanged();
 }
 
-void AudioEditorFileModel::setElements(QList<AudioEditorFile *>elements)
+void AudioEditorFileModel::setElements(const QList<AudioEditorFile*> &elements)
 {
     clear();
 

@@ -1,41 +1,49 @@
-#ifndef FILEACCESSNEXTCLOUD_H
-#define FILEACCESSNEXTCLOUD_H
+#pragma once
 
+#include <QNetworkReply>
+#include <QObject>
 #include "fileaccess.h"
-#include "filemanager.h"
-#include <QMap>
-#include <QTemporaryFile>
+#include "cache/filecache.h"
 
-class FileAccessNextCloud : public FileAccess
+namespace Files
+{
+
+class FileAccessNextcloud : public FileAccess
 {
     Q_OBJECT
+
 public:
-    explicit FileAccessNextCloud(QObject *parent = nullptr);
+    explicit FileAccessNextcloud(QObject *parent) : FileAccess(parent) {}
 
-    void getFile(int requestId, const QString &filePath) override;
-    void getFiles(int requestId, const QString &directory, const QString &fileEnding) override;
-    void getFileList(int requestId, const QString &directory, bool folders) override;
-
-    void saveFile(int requestId, const QString &filePath, const QByteArray &data) override;
-    void renameFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data) override;
-    void renameFolder(int requestId, const QString &newFolder, const QString &oldFolder) override;
-    void deleteFile(int requestId, const QString &filePath) override;
-    void checkIfFilesExist(int requestId, QStringList files) override;
-    void createFolder(int requestId, const QString &folderPath) override;
+    QFuture<FileDataResult*> getDataAsync(const QString &path, bool allowCache) override;
+    QFuture<QVector<FileDataResult*>> getDataAsync(const QStringList& paths, bool allowCache) override;
+    QFuture<FileResult*> saveAsync(const QString& path, const QByteArray& data) override;
+    QFuture<FileResult*> moveAsync(const QString& oldPath, const QString& newPath) override;
+    QFuture<FileResult*> deleteAsync(const QString& path) override;
+    QFuture<FileResult*> copyAsync(const QString& path, const QString& copy) override;
+    QFuture<FileListResult*> listAsync(const QString& path, bool files, bool folders) override;
+    QFuture<FileResult*> createDirAsync(const QString& path) override;
+    QFuture<FileCheckResult*> checkAsync(const QString& path, bool allowCache) override;
+    QFuture<FileMultiCheckResult*> checkAsync(const QStringList& paths, bool allowCache) override;
 
 private:
-    static QString fileNameFromHref(QString href);
+    FileCache m_cache;
 
-    QMap<QString, QTemporaryFile*> m_fileCache;
-    bool tryGetFileFromCache(const QString& filePath, QByteArray *data);
-    void saveFileInCache(const QString& filePath, const QByteArray& data);
-    void removeFileFromCache(const QString& filePath);
+    static QByteArray encodePath(const QString& data);
+    static inline bool replyHasError(QNetworkReply *reply);
+    static QString makeAndPrintError(const QString& errorMessage, const QNetworkReply *reply);
+    static QString replyErrorToString(const QNetworkReply *reply);
+    static QList<QPair<QByteArray, QByteArray>> makeMoveHeaders(const QString &newPath);
 
-    void downloadFiles(const int &requestId, QMap<int, QString> *requests);
+    template<typename T>
+    static T deleteReplyAndReturn(const T& value, QNetworkReply *reply);
 
-    QByteArray getXml(const QString& filepath) const;
-    QByteArray getFileListXml() const;
+    template<typename T1, typename T2>
+    QFuture<FileResult*> createDirThenContinue(const QString& dir, const T1 &arg1, const T2 &arg2,
+                             const std::function<QFuture<FileResult*>(const T1&, const T2&)>& func);
 
+    FileListResult* parseListResponse(const QByteArray& data, const QString& path, bool files, bool folders);
 };
 
-#endif // FILEACCESSNEXTCLOUD_H
+}
+

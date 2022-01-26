@@ -13,6 +13,8 @@
 #include "metadata/metadatareader.h"
 #include "mpris/mprismanager.h"
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+
 #define DEFAULT_MUSIC_VOLUME 0.25
 #define DEFAULT_SOUND_VOLUME 0.25
 
@@ -21,7 +23,6 @@ class AudioTool : public AbstractTool
     Q_OBJECT
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(QList<QObject*> projects READ projects NOTIFY projectsChanged)
-    Q_PROPERTY(bool isLoading READ isLoading NOTIFY isLoadingChanged)
 
     Q_PROPERTY(QObject* soundController READ soundController CONSTANT)
 
@@ -33,6 +34,8 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
     Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
 
+    AUTO_PROPERTY(bool, isLoading)
+
 public:
     explicit AudioTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
@@ -41,11 +44,10 @@ public:
     // Project
     QList<QObject*> projects() const { return Utils::toQObjectList(m_projects); }
     QObject* currentProject() const { return m_currentProject; }
-    void updateProjectList() { audioSaveLoad->findProjects(false); }
+    void updateProjectList();
     QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();
-    bool isLoading() const { return m_isLoading; }
 
     QObject* soundController() const { return qobject_cast<QObject*>(soundPlayerController); }
 
@@ -91,7 +93,7 @@ signals:
     void isLoadingChanged();
 
 private slots:
-    void onProjectsChanged(QList<AudioProject*> projects, bool forEditor);
+    void onProjectsChanged(QVector<AudioProject *> projects);
     void onCurrentScenarioChanged();
     void onStartedPlaying();
     void onMetaDataUpdated();
@@ -102,7 +104,6 @@ private:
     QQmlApplicationEngine *qmlEngine = nullptr;
     MetaDataReader *metaDataReader = nullptr;
     MprisManager *mprisManager = nullptr;
-    AudioSaveLoad *audioSaveLoad = nullptr;
 
     // Players
     DiscordPlayer *discordPlayer = nullptr;
@@ -115,14 +116,11 @@ private:
     AudioElement::Type m_musicElementType = AudioElement::Type::Music;
     bool m_isPaused = true;
 
-    void setIsLoading(bool isLoading) { m_isLoading = isLoading; emit isLoadingChanged(); }
-    bool m_isLoading = true;
-
     qreal m_musicVolume = DEFAULT_MUSIC_VOLUME;
     qreal m_soundVolume = DEFAULT_SOUND_VOLUME;
 
     // Project
-    QList<AudioProject*> m_projects;
+    QVector<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
 };
 

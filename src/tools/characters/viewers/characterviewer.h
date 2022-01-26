@@ -8,7 +8,7 @@ class CharacterViewer : public QObject
 {
     Q_OBJECT
 public:
-    explicit CharacterViewer();
+    explicit CharacterViewer(QObject *parent) : QObject(parent) {}
 
     virtual void setCharacter(Character* character) { m_currentCharacter = character; }
     virtual int pageIndex() const { return 0; }

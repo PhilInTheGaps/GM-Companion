@@ -7,6 +7,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
+#include "rest/restnetworkreply.h"
 #include "audioplayer.h"
 #include "discordplayer.h"
 #include "../project/audioelement.h"
@@ -50,8 +51,6 @@ private:
     QTimer *m_timer;
     QTimer *m_periodicTimer;
 
-    QMap<QString, int> m_requestIdMap;
-
     bool m_isPlaying = false;
     bool m_playOnce = false;
     int m_volume = 0;
@@ -63,6 +62,8 @@ private:
     void getCurrentSong();
     void startTimer(int interval = -1);
 
+    void gotPlaylistInfo(RestNetworkReply *reply);
+
 signals:
     void songNamesChanged();
     void startedPlaying();
@@ -70,8 +71,6 @@ signals:
     void receivedPlaylistTracks(QList<SpotifyTrack> tracks, QString id);
     void receivedElementIcon(AudioElement *element);
 
-private slots:
-    void gotPlaylistInfo(int id, QNetworkReply::NetworkError error, const QByteArray& data);
 };
 
 

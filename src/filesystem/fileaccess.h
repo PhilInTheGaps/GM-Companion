@@ -1,46 +1,49 @@
-#ifndef FILEACCESS_H
-#define FILEACCESS_H
+#pragma once
 
 #include <QObject>
+#include <QFuture>
+
+#include "multigethelper.h"
+
+#include "results/filedataresult.h"
+#include "results/filelistresult.h"
+#include "results/filecheckresult.h"
+#include "results/filemulticheckresult.h"
+
+namespace Files {
 
 class FileAccess : public QObject
 {
     Q_OBJECT
+
 public:
     explicit FileAccess(QObject *parent = nullptr) : QObject(parent) {}
 
-    virtual void getFile(int requestId, const QString &filePath) = 0;
-    virtual void getFiles(int requestId, const QString &directory, const QString &fileEnding) = 0;
-    virtual void getFileList(int requestId, const QString &directory, bool folders) = 0;
-    virtual void saveFile(int requestId, const QString &filePath, const QByteArray &data) = 0;
-    virtual void renameFile(int requestId, const QString &newFile, const QString &oldFile, const QByteArray &data = "") = 0;
-    virtual void renameFolder(int requestId, const QString &newFolder, const QString& oldFolder) = 0;
-    virtual void deleteFile(int requestId, const QString &filePath) = 0;
-    virtual void checkIfFilesExist(int requestId, QStringList files) = 0;
-    virtual void createFolder(int requestId, const QString &folderPath) = 0;
+    virtual QFuture<FileDataResult*> getDataAsync(const QString& path, bool allowCache) = 0;
+    virtual QFuture<QVector<FileDataResult*>> getDataAsync(const QStringList& paths, bool allowCache) = 0;
+    virtual QFuture<FileResult*> saveAsync(const QString& path, const QByteArray& data) = 0;
+    virtual QFuture<FileResult*> moveAsync(const QString& oldPath, const QString& newPath) = 0;
+    virtual QFuture<FileResult*> deleteAsync(const QString& path) = 0;
+    virtual QFuture<FileResult*> copyAsync(const QString& path, const QString& copy) = 0;
+    virtual QFuture<FileListResult*> listAsync(const QString& path, bool files, bool folders) = 0;
+    virtual QFuture<FileResult*> createDirAsync(const QString& path) = 0;
+    virtual QFuture<FileCheckResult*> checkAsync(const QString& path, bool allowCache) = 0;
+    virtual QFuture<FileMultiCheckResult*> checkAsync(const QStringList& paths, bool allowCache) = 0;
 
-    enum FileRequest {
-        GetFile,
-        GetFiles,
-        GetFileList,
-        SaveFile,
-        RenameFile,
-        RenameFolder,
-        RemoveFile,
-        CheckIfFilesExist,
-        CreateFolder
-    };
+    static FileAccess *getInstance() { return instance; }
 
-signals:
-    void receivedFile(int requestId, const QByteArray &data);
-    void receivedFiles(int requestId, QList<QByteArray> data);
-    void receivedFileList(int requestId, QStringList fileNames);
-    void savedFile(int requestId);
-    void renamedFile(int requestId);
-    void renamedFolder(int requestId);
-    void deletedFile(int requestId);
-    void createdFolder(int requestId);
-    void checkedIfFilesExist(int requestId, QStringList found, QStringList notFound);
+    static void setInstance(FileAccess* fileAccess)
+    {
+        if (instance) instance->deleteLater();
+        instance = fileAccess;
+    }
+
+protected:
+    QFuture<QVector<FileDataResult*>> getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache);
+    QFuture<FileMultiCheckResult*> checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache);
+
+private:
+    inline static FileAccess *instance = nullptr;
 };
 
-#endif // FILEACCESS_H
+}

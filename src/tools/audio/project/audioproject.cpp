@@ -4,7 +4,7 @@
 #include <utility>
 
 AudioProject::AudioProject(const QString& name, int version, QList<AudioCategory *>categories, QObject *parent)
-    : TreeItem(name, 0, true, parent), m_version(version), m_categories(std::move(categories))
+    : TreeItem(name, 0, true, parent), a_isSaved(true), a_version(version), a_wasRenamed(false), m_categories(std::move(categories))
 {
     qDebug() << "Initializing AudioProject:" << name << "...";
     qDebug() << "   Project version:" << version;
@@ -23,10 +23,9 @@ AudioProject::AudioProject(const QString& name, int version, QList<AudioCategory
 }
 
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
-    : TreeItem("", 0, true, parent)
+    : TreeItem("", 0, true, parent), a_isSaved(true), a_version(object["version"].toInt()), a_wasRenamed(false)
 {
     setName(object["name"].toString());
-    m_version = object["version"].toInt();
 
     for (auto category : object["categories"].toArray())
     {
@@ -47,7 +46,7 @@ auto AudioProject::toJson() const -> QJsonObject
     QJsonObject root;
 
     root.insert("name",    name());
-    root.insert("version", m_version);
+    root.insert("version", version());
 
     // Save Categories
     QJsonArray categoriesJson;
@@ -184,5 +183,5 @@ auto AudioProject::prepareCategory(AudioCategory *category) -> void
 
 auto AudioProject::onWasEdited() -> void
 {
-    setIsSaved(false);
+    isSaved(false);
 }

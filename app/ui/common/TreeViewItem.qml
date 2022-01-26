@@ -23,9 +23,7 @@ CustomButton {
     mainRow.spacing: checkbox.visible ? checkbox.width + 10 : 10
 
     onClicked: {
-        if (modelData.canToggle) {
-            modelData.toggle()
-        }
+        modelData.toggle()
     }
 
     onRightClicked: {

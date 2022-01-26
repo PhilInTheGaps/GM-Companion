@@ -26,10 +26,6 @@ Dialog {
         id: backend
     }
 
-    onOpened: {
-        backend.clearForward()
-    }
-
     onAccepted: {
         if (textField) {
             if (replacePath) {
@@ -56,12 +52,13 @@ Dialog {
             CustomToolBarButton {
                 iconText: FontAwesome.chevronLeft
                 onClicked: backend.back()
+                enabled: backend.canGoBack
             }
 
             CustomToolBarButton {
                 iconText: FontAwesome.chevronRight
                 onClicked: backend.forward()
-                enabled: backend.canForward
+                enabled: backend.canGoForward
             }
         }
 
@@ -109,7 +106,7 @@ Dialog {
                 selection_text_field.text = backend.getSelected(currentIndex)
             }
 
-            model: backend.files
+            model: backend.entries
 
             delegate: Item {
                 id: delegate_item

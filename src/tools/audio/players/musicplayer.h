@@ -9,6 +9,7 @@
 #include "audioplayer.h"
 #include "spotifyplayer.h"
 #include "discordplayer.h"
+#include "filesystem/file.h"
 #include <qytlib/videos/videoclient.h>
 
 class MusicPlayer : public AudioPlayer
@@ -40,11 +41,11 @@ private:
     DiscordPlayer *discordPlayer = nullptr;
     YouTube::Videos::VideoClient *videoClient = nullptr;
     YouTube::Videos::Streams::StreamManifest *m_streamManifest = nullptr;
+    QObject *m_fileRequestContext = nullptr;
 
     QList<AudioFile*> m_playlist;
     int m_playlistIndex = 0;
     int m_playerType = -1;
-    int m_fileRequestId = -1;
 
     QBuffer m_mediaBuffer;
     QTemporaryDir m_tempDir;
@@ -58,13 +59,17 @@ private:
     QStringList m_songNames;
     int m_waitingForUrls = 0;
 
+    void connectPlaybackStateSignals();
+    void connectMetaDataSignals(MetaDataReader *metaDataReader);
+    void connectSpotifySignals();
+
 private slots:
     void onMediaPlayerStateChanged();
     void onMediaPlayerBufferStatusChanged();
     void onMediaPlayerMediaStatusChanged();
     void onMediaPlayerError(QMediaPlayer::Error error);
     void onMediaPlayerMediaChanged();
-    void onFileReceived(int id, const QByteArray& data);
+    void onFileReceived(Files::FileDataResult *result);
     void onSpotifySongEnded();
     void onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, const QString& playlistId);
     void onVideoMetadataReceived();

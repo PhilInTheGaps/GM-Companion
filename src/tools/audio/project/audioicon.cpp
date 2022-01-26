@@ -2,31 +2,26 @@
 #include "audioicon.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
+#include "common/utils/fileutils.h"
 
 auto AudioIcon::imageIdForReload() -> QString
 {
     m_imageIdCounter = !m_imageIdCounter;
-    return QString("%1?r=%2").arg(m_imageId, QString::number(m_imageIdCounter));
+    return QString("%1?r=%2").arg(imageId(), QString::number(m_imageIdCounter));
 }
 
 auto AudioIcon::absoluteUrl() const -> QString
 {
-    if (m_relativeUrl.isEmpty()) return QStringLiteral("");
+    if (relativeUrl().isEmpty()) return QLatin1String();
 
     // Is web url?
-    if (m_relativeUrl.startsWith("http://") ||
-        m_relativeUrl.startsWith("https://"))
+    if (relativeUrl().startsWith("http://") ||
+        relativeUrl().startsWith("https://"))
     {
-        return m_relativeUrl;
+        return relativeUrl();
     }
 
-    return QUrl::fromLocalFile(SettingsManager::getPath("resources") + m_relativeUrl).toString(QUrl::None);
-}
-
-void AudioIcon::setRelativeUrl(const QString &url)
-{
-    m_relativeUrl = url;
-    emit urlChanged();
+    return FileUtils::fileInDir(relativeUrl(), SettingsManager::getPath("resources"));
 }
 
 auto AudioIcon::addCollageIcon(const QPair<QString, QPixmap> &icon) -> bool

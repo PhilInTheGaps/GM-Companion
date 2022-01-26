@@ -1,110 +1,93 @@
 #include "map.h"
 #include "logging.h"
 #include "utils/utils.h"
-#include "filesystem/filemanager.h"
+#include "utils/fileutils.h"
+#include "filesystem/file.h"
 #include "settings/settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QPixmap>
 
-Map::Map(QString name, QString path, QObject *parent)
-    : QObject(parent), m_name(name), m_path(path)
+using namespace AsyncFuture;
+
+Map::Map(const QString &name, const QString &path, QObject *parent)
+    : QObject(parent), a_name(name), a_path(path)
 {
-    m_markers = new MapMarkerModel;
+    m_markers = new MapMarkerModel(this);
 
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
-
-    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
-        if (id != requestId) return;
+    observe(Files::File::getDataAsync(path)).subscribe([this](Files::FileDataResult *result) {
+        if (!result) return;
 
         QPixmap pixmap;
-        pixmap.loadFromData(data);
-
-        m_data = Utils::stringFromImage(pixmap);
-        emit dataChanged();
+        pixmap.loadFromData(result->data());
+        imageData(Utils::stringFromImage(pixmap));
 
         loadMarkers();
-
-        delete context;
+        result->deleteLater();
     });
-
-    FileManager::getInstance()->getFile(requestId, path);
-}
-
-Map::~Map()
-{
-    m_markers->deleteLater();
 }
 
 void Map::saveMarkers()
 {
     QJsonArray markerArray;
 
-    for (auto marker : m_markers->elements())
+    for (auto *marker : m_markers->elements())
     {
-        QJsonObject markerObject;
-        markerObject.insert("title",       marker->name());
-        markerObject.insert("description", marker->description());
-        markerObject.insert("icon",        marker->icon());
-        markerObject.insert("color",       marker->color());
-        markerObject.insert("x",           marker->x());
-        markerObject.insert("y",           marker->y());
-        markerArray.append(markerObject);
+        markerArray.append(marker->toJson());
     }
 
     QJsonObject root({ { "markers", markerArray } });
 
-    FileManager::getInstance()->saveFile(m_path + ".json", QJsonDocument(root).toJson());
+    Files::File::saveAsync(path() + ".json", QJsonDocument(root).toJson());
 }
 
 void Map::loadMarkers()
 {
-    auto requestId = FileManager::getUniqueRequestId();
-    auto context   = new QObject;
+    const auto filePath = path() + ".json";
+    observe(Files::File::checkAsync(filePath)).subscribe([this, filePath](Files::FileCheckResult *result) {
+        if (!result) return;
 
-    connect(FileManager::getInstance(), &FileManager::receivedFile, context, [ = ](int id, QByteArray data) {
-        if (id != requestId) return;
-
-        auto markers = QJsonDocument::fromJson(data).object()["markers"].toArray();
-
-        for (auto marker : markers)
+        if (result->exists())
         {
-            QString title       = marker.toObject()["title"].toString();
-            qreal   x           = marker.toObject()["x"].toDouble();
-            qreal   y           = marker.toObject()["y"].toDouble();
-            QString description = marker.toObject()["description"].toString();
-            QString color       = marker.toObject()["color"].toString();
-            QString icon        = marker.toObject()["icon"].toString();
-            addMarker(new MapMarker(title, description, x, y, icon, color));
-        }
-        emit markersChanged();
-        delete context;
-    });
+            observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+                if (!result) return;
 
-    FileManager::getInstance()->getFile(requestId, m_path + ".json");
+                auto markers = QJsonDocument::fromJson(result->data()).object()["markers"].toArray();
+
+                for (const auto &marker : markers)
+                {
+                    addMarker(new MapMarker(marker.toObject(), this));
+                }
+                emit markersChanged();
+                result->deleteLater();
+            });
+        }
+
+        result->deleteLater();
+    });
 }
 
 void Map::deleteMarker(int index)
 {
-    if ((index > -1) && (index < m_markers->elements().size()))
+    if (Utils::isInBounds(m_markers->elements(), index))
     {
         m_markers->removeAt(index);
     }
 }
 
-MapCategory::MapCategory(QString name, QList<Map *>maps, QObject *parent)
-    : QObject(parent), m_name(name), m_maps(maps)
+MapCategory::MapCategory(const QString &name, const QList<Map*> &maps, QObject *parent)
+    : QObject(parent), a_name(name), a_maps(maps)
 {
 }
 
 MapCategory::~MapCategory()
 {
-    for (auto m : m_maps)
+    for (auto *map : maps())
     {
-        if (m) m->deleteLater();
+        if (map) map->deleteLater();
     }
 }
 
@@ -112,57 +95,47 @@ void MapCategory::addMap(Map *map)
 {
     if (!map) return;
 
-    if (!m_maps.contains(map))
+    if (!a_maps.contains(map))
     {
-        m_maps.append(map);
+        a_maps.append(map);
+        emit mapsChanged(maps());
     }
 }
 
 void MapCategory::loadMaps()
 {
-    qCDebug(gmMapsMap()) << "Loading maps for category" << m_name;
+    qCDebug(gmMapsMap()) << "Loading maps for category" << name();
 
     if (m_wasLoaded)
     {
-        emit loadedMaps(m_name);
+        emit loadedMaps(name());
         return;
     }
 
     m_wasLoaded = true;
 
-    m_getFileListRequestId = FileManager::getUniqueRequestId();
-    auto path = SettingsManager::getPath("maps") + "/" + m_name;
+    const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath("maps"));
 
-    auto context = new QObject;
-    connect(FileManager::getInstance(), &FileManager::receivedFileList, context, [ = ](int id, QStringList files) {
-        if (id != m_getFileListRequestId) return;
+    observe(Files::File::listAsync(path, true, false)).subscribe([this, path](Files::FileListResult *result) {
+        if (!result) return;
 
-        QStringList markerFiles;
-
-        for (auto file : files)
+        for (const auto &file : result->files())
         {
-            if (file.endsWith(".json"))
+            if (!file.endsWith(".json"))
             {
-                markerFiles.append(file);
-            }
-            else
-            {
-                addMap(new Map(file, path + "/" + file));
+                addMap(new Map(file, FileUtils::fileInDir(file, path), this));
             }
         }
 
-        emit loadedMaps(m_name);
+        emit loadedMaps(name());
 
-        delete context;
+        result->deleteLater();
     });
-
-    FileManager::getInstance()->getFileList(m_getFileListRequestId, path, false);
 }
 
-QVariant MapListModel::data(const QModelIndex& index, int /*role*/) const
+auto MapListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
 {
-    QObject *item = m_items.at(index.row());
-
+    auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
 }
 
@@ -185,7 +158,7 @@ void MapListModel::remove(QObject *item)
     }
 }
 
-QHash<int, QByteArray>MapListModel::roleNames() const
+auto MapListModel::roleNames() const -> QHash<int, QByteArray>
 {
     QHash<int, QByteArray> roles;
 
@@ -195,7 +168,7 @@ QHash<int, QByteArray>MapListModel::roleNames() const
 
 void MapListModel::clear()
 {
-    while (m_items.size() > 0)
+    while (!m_items.isEmpty())
     {
         remove(m_items[0]);
     }

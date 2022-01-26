@@ -1,5 +1,4 @@
-#ifndef GOOGLEDRIVECONNECTORLOCAL_H
-#define GOOGLEDRIVECONNECTORLOCAL_H
+#pragma once
 
 #include "rest/restserviceconnectorlocal.h"
 #include "o2google.h"
@@ -11,5 +10,3 @@ public:
     GoogleDriveConnectorLocal
     (QNetworkAccessManager *networkManager, O2Google *o2Google, QObject *parent = nullptr);
 };
-
-#endif // GOOGLEDRIVECONNECTORLOCAL_H
