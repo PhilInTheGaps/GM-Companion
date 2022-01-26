@@ -90,6 +90,7 @@ auto File::checkAsync(const QStringList &paths, bool allowCache, FileAccess *fil
 void File::updateFileAccess()
 {
     const auto cloudMode = SettingsManager::getSetting("cloudMode", "local");
+    qCDebug(gmFileManager()) << "Setting file access to" << cloudMode;
 
     if (cloudMode == "NextCloud")
     {

@@ -11,7 +11,7 @@ class FileAccessSwitcher : public QObject
 {
     Q_OBJECT
 public:
-    static FileAccessSwitcher *instance()
+    static auto instance() -> FileAccessSwitcher*
     {
         if (!single)
         {
@@ -20,7 +20,7 @@ public:
         return single;
     }
 
-    static QObject *QmlSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+    static auto QmlSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject *
     {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)

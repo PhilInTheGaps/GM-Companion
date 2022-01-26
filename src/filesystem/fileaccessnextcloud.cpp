@@ -197,6 +197,7 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray& data, const QStrin
     QStringList fileList;
     QStringList folderList;
     QString element;
+    bool foundFirstFolder = false;
 
     while (!xml.atEnd())
     {
@@ -206,11 +207,23 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray& data, const QStrin
         {
             if (xml.name() == "href")
             {
-                element = FileUtils::fileName(xml.readElementText());
+                const auto rawElement = xml.readElementText();
+                const auto decoded = QByteArray::fromPercentEncoding(rawElement.toUtf8());
+                element = FileUtils::fileName(decoded);
             }
             else if (folders && xml.name() == "collection")
             {
-                if (!element.isEmpty() && element != "/") folderList << element;
+                if (!element.isEmpty())
+                {
+                    if (foundFirstFolder)
+                    {
+                        folderList << element;
+                    }
+                    else
+                    {
+                        foundFirstFolder = true;
+                    }
+                }
             }
             else if (files && xml.name() == "getcontenttype" &&
                      !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty())

@@ -31,6 +31,7 @@ void AbstractAccessTest::createTestFiles()
     createTestFile(QStringLiteral("test5"), "To be moved.");
     createTestFile(QStringLiteral("test6"), "To be deleted.");
     createTestFile(QStringLiteral("test7"), "To be copied.");
+    createTestFile(QStringLiteral("file&with\"special characters"), "file&with\"special characters");
 }
 
 /// Read data from file(s)
@@ -41,6 +42,9 @@ void AbstractAccessTest::getDataAsync()
 
     // Test file one again, this time it should be in cache
     verifyFileContent(getFilePath(QStringLiteral("test1")), QByteArray("This is test 1."), true);
+
+    // File with special characters in name and content
+    verifyFileContent(getFilePath(QStringLiteral("file&with\"special characters")), QByteArray("file&with\"special characters"), false);
 
     // File that does not exist
     expectWarning();
@@ -227,6 +231,7 @@ void AbstractAccessTest::listAsync()
         QVERIFY2(future.result()->files().length() > 2, "Could not list files.");
         QVERIFY2(future.result()->files().contains("test1"), "List does not include test file 1.");
         QVERIFY2(future.result()->files().contains("test2"), "List does not include test file 2.");
+        QVERIFY2(future.result()->files().contains("file&with\"special characters"), "List does not include file with special characters in it's name.");
         QVERIFY2(!future.result()->files().contains("copies"), "File list includes folders.");
         QVERIFY2(future.result()->folders().isEmpty(), "List includes folders when it should not.");
         future.result()->deleteLater();
@@ -270,6 +275,7 @@ void AbstractAccessTest::listAsync()
     testFuture(future3, QStringLiteral("File::listAsync"), [future3](){
         QVERIFY2(!future3.isCanceled(), "QFuture is canceled!");
         QVERIFY2(future3.result()->folders().length() > 1, "Could not list folders.");
+        QCOMPARE(future3.result()->folders().length(), 3); // saves, moves, copies
         QVERIFY2(future3.result()->files().isEmpty(), "Result contains files when it should only contain folders.");
         QVERIFY2(future3.result()->folders().contains("copies"), "List does not include folder \"copies\".");
         QVERIFY2(!future3.result()->folders().contains("test1"), "List does include files when it should only contain folders.");
