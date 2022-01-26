@@ -73,8 +73,7 @@ auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, co
 
 auto NextCloud::getPathUrl(const QString &path) -> QString
 {
-    auto seperator = path.startsWith('/') ? QChar() : '/';
-
+    auto seperator = path.startsWith('/') ? "" : "/";
     return serverUrl() + NEXTCLOUD_DAV_ENDPOINT + "/" + loginName() + seperator + path;
 }
 
