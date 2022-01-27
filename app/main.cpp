@@ -8,6 +8,7 @@
 #include <QIcon>
 #include <QSGRendererInterface>
 
+#include "messages/messagemanager.h"
 #include "settings/settingsmanager.h"
 #include "logger.h"
 #include "tools.h"
@@ -112,6 +113,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
+    engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
     engine.addImageProvider("audioElementIcons", new AudioElementImageProvider);
 
     // Services

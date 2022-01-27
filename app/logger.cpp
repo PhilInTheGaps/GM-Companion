@@ -1,30 +1,18 @@
 #include "logger.h"
+#include "messages/messagemanager.h"
+#include "common/utils/fileutils.h"
 
 #include <QDateTime>
 #include <QDir>
 #include <iostream>
 
-QFile Logger::m_logFile;
-QTextStream *Logger::m_logStream = nullptr;
-QMutex *Logger::m_logMutex = nullptr;
-
 Logger::Logger()
 {
-    QDir dir(QDir::homePath() + "/.gm-companion");
-    if (!dir.exists())
-    {
-        QDir home(QDir::homePath());
-        home.mkdir(".gm-companion");
-    }
+    const auto fullFilePath = FileUtils::fileInDir(RELATIVE_LOGFILE_PATH, QDir::homePath());
+    m_logFile.setFileName(fullFilePath);
 
-    m_logFile.setFileName(QDir::homePath() + "/.gm-companion/log.txt");
-
-    // Clear old log
-    if (m_logFile.open(QIODevice::WriteOnly))
-    {
-        m_logFile.write("");
-        m_logFile.close();
-    }
+    createLogFileDir(fullFilePath);
+    clearOldLog();
 
     // Open for writing
     if (!m_logFile.open(QIODevice::Append | QIODevice::Text))
@@ -51,7 +39,8 @@ Logger::~Logger()
 
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QByteArray line = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ").toUtf8();
+    auto timestamp = QDateTime::currentDateTime();
+    auto line = timestamp.toString("yyyy-MM-dd hh:mm:ss.zzz ").toUtf8();
 
     // By type determine to what level belongs message
     switch (type)
@@ -77,6 +66,36 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
         std::cerr << line.toStdString() << std::endl;
     }
 
+    if (type != QtDebugMsg)
+    {
+        MessageManager::instance()->addMessage(timestamp, type, msg);
+    }
+
     *m_logStream << line << "\n";
     m_logStream->flush();
+}
+
+/// If it does not exist yet, create the folder that will contain the log file
+void Logger::createLogFileDir(const QString &filePath)
+{
+    const auto fileDir = FileUtils::dirFromPath(filePath);
+    QDir dir(fileDir);
+
+    if (!dir.exists())
+    {
+        if (!dir.mkpath(dir.path()))
+        {
+            qCWarning(gmMain()) << "Error: Create dir for log file:" << fileDir;
+        }
+    }
+}
+
+/// Remove everything from the log file
+void Logger::clearOldLog()
+{
+    if (m_logFile.open(QIODevice::WriteOnly))
+    {
+        m_logFile.write("");
+        m_logFile.close();
+    }
 }

@@ -107,6 +107,12 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+        id: message_dialog
+        width: main_window.width - 100
+        height: main_window.height - 100
+    }
+
     LoadingScreen {
         id: splash
         progress: loader.progress
@@ -172,6 +178,28 @@ ApplicationWindow {
         }
 
         SideMenuButton {
+            id: message_button
+            anchors.bottom: settings_button.top
+
+            toolName: qsTr("Messages")
+            faIcon: FontAwesome.exclamationCircle
+            altColor: "orange"
+            useAltColor: message_manager.hasNewErrors
+
+            visible: message_manager.messages.length > 0
+
+            onClicked: {
+
+                if (message_dialog.opened) {
+                    message_dialog.close()
+                } else {
+                    message_dialog.open()
+                    message_manager.markAllAsRead()
+                }
+            }
+        }
+
+        SideMenuButton {
             id: settings_button
             anchors.bottom: parent.bottom
 
@@ -180,6 +208,7 @@ ApplicationWindow {
             faIcon: FontAwesome.cog
 
             onClicked: {
+
                 loader.setSource("tools/Settings.qml")
             }
         }

@@ -25,6 +25,7 @@ find_library(GM-COMPANION-LIB_DIR gm-companion-lib)
 set(SOURCES
   main.cpp
   logger.cpp
+  messages/messagemanager.cpp
 )
 
 set(HEADERS
@@ -32,6 +33,8 @@ set(HEADERS
   version.h.in
   logger.h
   tools.h
+  messages/messagemanager.h
+  messages/message.h
 )
 
 # resources

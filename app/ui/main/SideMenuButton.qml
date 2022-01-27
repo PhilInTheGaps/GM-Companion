@@ -10,7 +10,9 @@ Button {
     property string toolName
     property string iconSource
     property string faIcon
+    property string altColor
     property bool currentTool: false
+    property bool useAltColor: false
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -66,7 +68,7 @@ Button {
             font.family: FontAwesome.familySolid
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: button.down ? "grey" : button.hovered ? "darkgrey" : palette.text
+            color: button.down ? "grey" : button.hovered ? "darkgrey" : button.useAltColor ? button.altColor : palette.text
             font.pixelSize: height - 10
             anchors.verticalCenter: parent.verticalCenter
         }

@@ -164,5 +164,6 @@
         <file>style/ProgressBar.qml</file>
         <file>style/ScrollIndicator.qml</file>
         <file>style/StackView.qml</file>
+        <file>main/MessageDialog.qml</file>
     </qresource>
 </RCC>
