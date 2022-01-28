@@ -26,6 +26,7 @@ set(SOURCES
   main.cpp
   logger.cpp
   messages/messagemanager.cpp
+  messages/messagedispatcher.cpp
 )
 
 set(HEADERS
@@ -34,6 +35,7 @@ set(HEADERS
   logger.h
   tools.h
   messages/messagemanager.h
+  messages/messagedispatcher.h
   messages/message.h
 )
 

@@ -24,6 +24,8 @@ void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, cons
 
 void MessageManager::addMessage(Message *message)
 {
+    makeMessageReadyForAdding(message);
+
     a_messages.prepend(message);
 
     // filter errors
@@ -33,6 +35,24 @@ void MessageManager::addMessage(Message *message)
     }
 
     emit messagesChanged(messages());
+}
+
+void MessageManager::makeMessageReadyForAdding(Message *message)
+{
+    if (message->thread() != this->thread())
+    {
+        if (message->parent() != nullptr)
+        {
+            message->setParent(nullptr);
+        }
+
+        message->moveToThread(this->thread());
+    }
+
+    if (message->parent() != this)
+    {
+        message->setParent(this);
+    }
 }
 
 void MessageManager::markAllAsRead()

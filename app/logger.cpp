@@ -1,5 +1,6 @@
 #include "logger.h"
 #include "messages/messagemanager.h"
+#include "messages/messagedispatcher.h"
 #include "common/utils/fileutils.h"
 
 #include <QDateTime>
@@ -68,7 +69,8 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     if (type != QtDebugMsg)
     {
-        MessageManager::instance()->addMessage(timestamp, type, msg);
+        auto *dispatcher = new MessageDispatcher(timestamp, type, msg);
+//        MessageManager::instance()->addMessage(timestamp, type, msg);
     }
 
     *m_logStream << line << "\n";
