@@ -124,7 +124,8 @@ auto SoundPlayerController::elements() const -> QList<AudioElement *>
 void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
 {
     m_players.removeOne(player);
-    delete player;
+    player->deleteLater();
+
     emit soundsChanged(elements());
 }
 
@@ -250,7 +251,7 @@ void SoundPlayer::next()
     }
 
     // choose next in line (mode 0, 2, 3)
-    if (m_playlistIndex < m_playlist.length() - 1)
+    if (m_playlistIndex + 1 < m_playlist.length())
     {
         loadMedia(m_playlist[++m_playlistIndex]);
     }
