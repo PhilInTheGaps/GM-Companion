@@ -29,7 +29,7 @@ set(HEADERS
     utils/markdownutils.h
     utils/markdownutils.h.in
     utils/networkutils.h 
-    utils/processinfo.h 
+    utils/processinfo.h
     models/treeitem.h
     settings/settings.h
     settings/settingsmanager.h 

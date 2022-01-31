@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/audioproject/project.audio</file>
+        <file>resources/audiofiles/test.mp3</file>
+        <file>resources/audiofiles/test.ogg</file>
+        <file>resources/audiofiles/test.wav</file>
+        <file>resources/images/test.png</file>
+        <file>resources/images/test.jpg</file>
+        <file>resources/images/test.tif</file>
+        <file>resources/images/test.gif</file>
     </qresource>
 </RCC>

@@ -109,7 +109,7 @@ Rectangle {
 
             SoundButton {
                 element: modelData.name
-                element_icon: modelData.icon
+                element_icon: modelData.thumbnail
                 anchors.left: parent.left
                 anchors.right: parent.right
             }

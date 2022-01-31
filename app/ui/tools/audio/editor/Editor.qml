@@ -58,7 +58,7 @@ Page {
 
         contentItem: Image {
             source: audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.icon.absoluteUrl : ""
+                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.absoluteUrl : ""
 
             fillMode: Image.PreserveAspectFit
         }

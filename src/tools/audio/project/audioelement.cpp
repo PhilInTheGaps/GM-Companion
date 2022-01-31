@@ -1,28 +1,27 @@
 #include "audioelement.h"
 #include "logging.h"
-#include "audioicon.h"
+#include "../thumbnails/audiothumbnail.h"
 #include "utils/utils.h"
 #include <QJsonArray>
 #include <utility>
 
 AudioElement::AudioElement(const QString& name, Type type, const QString& path, QObject *parent)
-    : TreeItem(name, path.split("/").length() - 1, false, parent), m_type(type)
+    : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
 {
     setName(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
-    m_icon = new AudioIcon(path, this);
+    m_thumbnail = new AudioThumbnail(m_path, this);
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& path, QObject *parent)
-    : TreeItem("", path.split("/").length() - 1, false, parent)
+    : TreeItem("", path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
 {
     setName(object["name"].toString());
-    m_mode = object["mode"].toInt();
+    mode(object["mode"].toInt());
     m_path = path + "/" + typeToString(type) + "/" + name();
-    m_icon = new AudioIcon(m_path, this);
-    m_type = type;
+    m_thumbnail = new AudioThumbnail(m_path, this);
 
-    m_icon->relativeUrl(object["icon"].toString());
+    m_thumbnail->setRelativeUrl(object["icon"].toString());
 
     for (auto file : object.value("files").toArray())
     {
@@ -37,7 +36,7 @@ auto AudioElement::toJson() const -> QJsonObject
 {
     QJsonObject object;
     object.insert("name", name());
-    object.insert("icon", icon()->relativeUrl());
+    object.insert("icon", thumbnail()->relativeUrl());
     object.insert("mode", mode());
 
     // Files
@@ -50,9 +49,9 @@ auto AudioElement::toJson() const -> QJsonObject
     return object;
 }
 
-auto AudioElement::iconObject() const -> QObject *
+auto AudioElement::thumnailObject() const -> QObject *
 {
-    return qobject_cast<QObject*>(icon());
+    return qobject_cast<QObject*>(thumbnail());
 }
 
 /**

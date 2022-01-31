@@ -560,7 +560,7 @@ void MusicPlayer::onVideoMetadataReceived()
     {
         if ((m_playlist[i]->source() == 3) && (VideoId::normalize(m_playlist[i]->url()) == VideoId::normalize(video->id())))
         {
-            m_playlist[i]->setTitle(video->title());
+            m_playlist[i]->title(video->title());
 
             if (i == m_playlistIndex)
             {

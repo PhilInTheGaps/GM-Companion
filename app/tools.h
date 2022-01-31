@@ -2,7 +2,7 @@
 #define TOOLS_H
 
 #include "tools/audio/audiotool.h"
-#include "tools/audio/audioelementimageprovider.h"
+#include "tools/audio/thumbnails/audiothumbnailprovider.h"
 #include "tools/maps/maptool.h"
 #include "tools/dicetool.h"
 #include "tools/combat_tracker/combattracker.h"

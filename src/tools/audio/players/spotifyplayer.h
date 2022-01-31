@@ -64,6 +64,8 @@ private:
 
     void gotPlaylistInfo(RestNetworkReply *reply);
 
+    static auto getTrackEndpoint(const QString &uri) -> QUrl;
+
 signals:
     void songNamesChanged();
     void startedPlaying();

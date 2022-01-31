@@ -130,6 +130,19 @@ auto FileUtils::fileInDir(const QString &fileName, const QString &dir) -> QStrin
     return dir + '/' + fileName;
 }
 
+/// Get the mimetype of a file, based on the file extension
+auto FileUtils::getMimeType(const QString &filename) -> FileUtils::MimeType
+{
+    const auto extension = FileUtils::suffix(filename);
+
+    if (extensionToMimeType.contains(extension))
+    {
+        return extensionToMimeType[extension];
+    }
+
+    return MimeType::Unknown;
+}
+
 auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> QPair<QString, QString>
 {
     auto suffix = FileUtils::suffix(fileName);

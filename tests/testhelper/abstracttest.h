@@ -4,6 +4,7 @@
 #include <QFuture>
 #include <QtTest>
 #include <QTemporaryDir>
+#include <QTemporaryFile>
 #include "fileaccess.h"
 
 class AbstractTest : public QObject
@@ -11,7 +12,7 @@ class AbstractTest : public QObject
     Q_OBJECT
 public:
     AbstractTest();
-    virtual ~AbstractTest() {}
+    ~AbstractTest() override = default;
 
 protected:
     Files::FileAccess* fileAccess = nullptr;
@@ -42,9 +43,11 @@ protected:
     void verifyFileContent(const QString& path, const QByteArray& content, bool cached = false);
     void verifyThatFileExists(const QString& path, bool shouldExist = true);
 
-    virtual QString getFilePath(const QString& filename = "") const;
+    [[nodiscard]] virtual auto getFilePath(const QString& filename = "") const -> QString;
 
     static void expectWarning();
+
+    auto copyResourceToTempFile(const QString &resource) -> QTemporaryFile*;
 
 private:
     void checkOrCreateFileAccess();

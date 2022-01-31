@@ -9,7 +9,7 @@
 #include "settings.h"
 
 struct SettingRequest {
-    SettingRequest() {}
+    SettingRequest() = default;
     SettingRequest(const QString& identifier, const QString& defaultValue, const QString& group = DEFAULT_GROUP) :
         identifier(identifier), defaultValue(defaultValue), group(group) {}
 
@@ -71,10 +71,10 @@ private:
     SettingsManager();
     inline static SettingsManager *m_instance = nullptr;
 
-    static QString getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP);
-    static QString getActivePathGroup();
+    static auto getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP) -> QString;
+    static auto getActivePathGroup() -> QString;
 
-    static QString defaultServerUrl() { return QStringLiteral("https://gm-companion.rophil.lol"); }
+    static auto defaultServerUrl() -> QString { return QStringLiteral("https://gm-companion.rophil.lol"); }
 
     void updateSettings();
     void renameSetting(const QString& currentName, const QString& newName, const QString& group = DEFAULT_GROUP);

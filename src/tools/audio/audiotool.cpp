@@ -1,5 +1,5 @@
 #include "audiotool.h"
-#include "audioicongenerator.h"
+#include "thumbnails/audiothumbnailgenerator.h"
 #include "services/spotify/spotify.h"
 #include "logging.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
@@ -96,7 +96,7 @@ void AudioTool::onCurrentScenarioChanged()
 {
     if (m_currentProject && m_currentProject->currentCategory())
     {
-        AudioIconGenerator::generateIcons(m_currentProject->currentCategory()->currentScenario());
+        AudioThumbnailGenerator::generateThumbnails(m_currentProject->currentCategory()->currentScenario());
     }
 }
 

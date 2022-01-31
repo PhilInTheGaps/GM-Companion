@@ -65,7 +65,7 @@ auto AudioSaveLoad::findMissingFilesAsync(const QList<AudioFile *>&audioFiles, c
 
         for (auto *audioFile : audioFiles)
         {
-            audioFile->setMissing(audioFile->source() == 0 &&
+            audioFile->missing(audioFile->source() == 0 &&
                                   !foundPaths.contains(FileUtils::fileInDir(audioFile->url(), basePath)));
         }
 
@@ -92,7 +92,7 @@ auto AudioSaveLoad::getFilePathsToCheck(const QList<AudioFile *> &audioFiles, co
 
         if (audioFile->source() != 0)
         {
-            audioFile->setMissing(false);
+            audioFile->missing(false);
         }
         else
         {

@@ -18,7 +18,7 @@ Item {
 
         function onCurrentElementChanged() {
             element_icon_field.text = audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.icon.relativeUrl : ""
+                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
         }
     }
 
@@ -44,7 +44,7 @@ Item {
             anchors.fill: parent
             anchors.margins: 1
             source: audio_editor
-                    && audio_editor.currentElement ? audio_editor.currentElement.icon.absoluteUrl : ""
+                    && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.absoluteUrl : ""
         }
 
         Text {
@@ -81,11 +81,11 @@ Item {
         }
 
         text: audio_editor
-              && audio_editor.currentElement ? audio_editor.currentElement.icon.relativeUrl : ""
+              && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
 
         onTextChanged: {
             if (save && audio_editor && audio_editor.currentElement) {
-                audio_editor.currentElement.icon.relativeUrl = text
+                audio_editor.currentElement.thumbnail.relativeUrl = text
             }
         }
 
@@ -94,7 +94,7 @@ Item {
             function onCurrentElementChanged() {
                 element_icon_field.save = false
                 element_icon_field.text = audio_editor
-                        && audio_editor.currentElement ? audio_editor.currentElement.icon.relativeUrl : ""
+                        && audio_editor.currentElement ? audio_editor.currentElement.thumbnail.relativeUrl : ""
                 element_icon_field.save = true
             }
         }

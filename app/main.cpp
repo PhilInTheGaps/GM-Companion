@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
     engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
-    engine.addImageProvider("audioElementIcons", new AudioElementImageProvider);
+    engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);
 
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());

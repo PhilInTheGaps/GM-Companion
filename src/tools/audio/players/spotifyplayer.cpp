@@ -257,27 +257,8 @@ void SpotifyPlayer::getPlaylistTracks(const QString& uri)
 {
     qCDebug(gmAudioSpotify) << "Getting info on current playlist or album ...";
 
-    QUrl url;
-    QString id = SpotifyUtils::getIdFromUri(uri);
-
-    switch (SpotifyUtils::getUriType(uri))
-    {
-    case 0: // Album
-        url = QUrl("https://api.spotify.com/v1/albums/" + id + "/tracks");
-        break;
-
-    case 1: // Playlist
-        url = QUrl("https://api.spotify.com/v1/playlists/" + id + "/tracks");
-        break;
-
-    case 2: // Track
-        url = QUrl("https://api.spotify.com/v1/tracks/" + id);
-        break;
-
-    default:
-        qCCritical(gmAudioSpotify()) << "Could not get tracks, unknown uri type" << uri;
-        return;
-    }
+    const auto url = getTrackEndpoint(uri);
+    if (!url.isValid()) return;
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, O2_MIME_TYPE_JSON);
@@ -285,6 +266,30 @@ void SpotifyPlayer::getPlaylistTracks(const QString& uri)
     AsyncFuture::observe(Spotify::getInstance()->get(request)).subscribe([this](RestNetworkReply *reply) {
         gotPlaylistInfo(reply);
     });
+}
+
+auto SpotifyPlayer::getTrackEndpoint(const QString &uri) -> QUrl
+{
+    const auto id = SpotifyUtils::getIdFromUri(uri);
+
+    switch (SpotifyUtils::getUriType(uri))
+    {
+    case SpotifyUtils::Album:
+        return QUrl("https://api.spotify.com/v1/albums/" + id + "/tracks");
+        break;
+
+    case SpotifyUtils::Playlist:
+        return QUrl("https://api.spotify.com/v1/playlists/" + id + "/tracks");
+        break;
+
+    case SpotifyUtils::Track:
+        return QUrl("https://api.spotify.com/v1/tracks/" + id);
+        break;
+
+    default:
+        qCCritical(gmAudioSpotify()) << "Could not get tracks, unknown uri type" << uri;
+        return {};
+    }
 }
 
 /**

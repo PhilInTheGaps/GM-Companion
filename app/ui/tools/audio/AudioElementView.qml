@@ -44,7 +44,7 @@ Item {
         readonly property int min_width: 170
         readonly property int count_per_row: parent ? Math.floor(
                                                           width / min_width) : 1
-        readonly property int button_width: (verticalScrollBar.visible ? (width - verticalScrollBar.width) : width) / count_per_row
+        readonly property int button_width: (width - verticalScrollBar.width) / count_per_row
 
         anchors.top: scenario_flow.bottom
         anchors.bottom: parent.bottom
@@ -100,7 +100,7 @@ Item {
                             element_name: modelData.name
                             element_type: modelData.type
                             subscenario_name: subscenario_text.text
-                            icon: modelData.icon
+                            thumbnail: modelData.thumbnail
                             width: parent.width - 4
                             anchors.centerIn: parent
 

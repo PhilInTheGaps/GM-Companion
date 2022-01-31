@@ -41,9 +41,7 @@ set(SOURCES
   tools/project_converter/projectconverter.cpp 
   tools/project_converter/shopconverter.cpp 
   tools/project_converter/audioconverter.cpp
-  tools/audio/audiotool.cpp 
-  tools/audio/audioelementimageprovider.cpp
-  tools/audio/audioicongenerator.cpp
+  tools/audio/audiotool.cpp
   tools/audio/audiosaveload.cpp
   tools/audio/players/discordplayer.cpp
   tools/audio/players/spotifyplayer.cpp
@@ -61,11 +59,19 @@ set(SOURCES
   tools/audio/project/audioscenario.cpp
   tools/audio/project/audioelement.cpp
   tools/audio/project/audiofilemodel.cpp
-  tools/audio/project/audioicon.cpp
   tools/audio/mpris/mprisadaptor.cpp
   tools/audio/mpris/mprisplayeradaptor.cpp
   tools/audio/mpris/mprismanager.cpp
   tools/audio/metadata/metadatareader.cpp
+  tools/audio/thumbnails/audiothumbnail.cpp
+  tools/audio/thumbnails/audiothumbnailcache.cpp
+  tools/audio/thumbnails/audiothumbnailcollagegenerator.cpp
+  tools/audio/thumbnails/audiothumbnailgenerator.cpp
+  tools/audio/thumbnails/audiothumbnailprovider.cpp
+  tools/audio/thumbnails/loaders/fileimageloader.cpp
+  tools/audio/thumbnails/loaders/spotifyimageloader.cpp
+  tools/audio/thumbnails/loaders/tagimageloader.cpp
+  tools/audio/thumbnails/loaders/webimageloader.cpp
   tools/maps/maptool.cpp 
   tools/maps/map.cpp 
   tools/combat_tracker/effecttool.cpp 
@@ -88,8 +94,6 @@ set(SOURCES
 # header files
 set(HEADERS
   tools/audio/audiotool.h
-  tools/audio/audioelementimageprovider.h 
-  tools/audio/audioicongenerator.h 
   tools/audio/audiosaveload.h 
   tools/audio/players/discordplayer.h 
   tools/audio/players/spotifyplayer.h 
@@ -99,7 +103,6 @@ set(HEADERS
   tools/audio/project/audioelement.h
   tools/audio/project/audiofile.h
   tools/audio/project/audiofilemodel.h
-  tools/audio/project/audioicon.h
   tools/audio/editor/audioeditor.h
   tools/audio/editor/audioeditorfilebrowser.h
   tools/audio/editor/audioexporter.h
@@ -115,6 +118,15 @@ set(HEADERS
   tools/audio/mpris/mprisadaptor.h
   tools/audio/mpris/mprisplayeradaptor.h
   tools/audio/mpris/mprismanager.h
+  tools/audio/thumbnails/audiothumbnail.h
+  tools/audio/thumbnails/audiothumbnailcache.h
+  tools/audio/thumbnails/audiothumbnailcollagegenerator.h
+  tools/audio/thumbnails/audiothumbnailgenerator.h
+  tools/audio/thumbnails/audiothumbnailprovider.h
+  tools/audio/thumbnails/loaders/fileimageloader.h
+  tools/audio/thumbnails/loaders/spotifyimageloader.h
+  tools/audio/thumbnails/loaders/tagimageloader.h
+  tools/audio/thumbnails/loaders/webimageloader.h
   tools/maps/mapmarker.h 
   tools/notes/htmlgenerator.h
   tools/notes/markdownhighlighter.h 

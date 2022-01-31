@@ -7,7 +7,7 @@ import "../../../defines.js" as Defines
 Rectangle {
     id: root
     property string element_name
-    property var icon
+    property var thumbnail
     property int element_type
     property bool overlay_enabled: true
     property bool small_mode: false
@@ -25,12 +25,14 @@ Rectangle {
         }
     }
 
+    color: palette.dark
+
     height: small_mode ? Defines.TOOLBAR_HEIGHT : width
 
     Image {
-        id: thumbnail
+        id: thumbnail_image
 
-        source: "image://audioElementIcons/" + icon.imageId
+        source: "image://audioElementIcons/" + thumbnail.imageId
         anchors.fill: parent
         asynchronous: true
         cache: false
@@ -42,9 +44,9 @@ Rectangle {
     }
 
     BusyIndicator {
-        visible: thumbnail.status == Image.Loading
-        anchors.verticalCenter: thumbnail.verticalCenter
-        anchors.horizontalCenter: thumbnail.horizontalCenter
+        visible: thumbnail_image.status == Image.Loading
+        anchors.verticalCenter: thumbnail_image.verticalCenter
+        anchors.horizontalCenter: thumbnail_image.horizontalCenter
     }
 
     Rectangle {

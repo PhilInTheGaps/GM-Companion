@@ -1,6 +1,6 @@
 #include "audioeditor.h"
 #include "logging.h"
-#include "../audioicongenerator.h"
+#include "../thumbnails/audiothumbnailgenerator.h"
 #include "utils/utils.h"
 #include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
@@ -328,7 +328,7 @@ void AudioEditor::setCurrentScenario(AudioScenario *scenario)
  */
 void AudioEditor::onCurrentScenarioChanged()
 {
-    AudioIconGenerator::generateIcons(m_currentProject->currentScenario());
+    AudioThumbnailGenerator::generateThumbnails(m_currentProject->currentScenario());
 }
 
 /**
@@ -485,7 +485,7 @@ void AudioEditor::loadElement(QObject* element)
         {
             auto *video = ytClient->getVideo(file->url());
             connect(video, &YouTube::Videos::Video::ready, file, [file, video]() {
-                file->setTitle(video->title());
+                file->title(video->title());
                 video->deleteLater();
             });
         }
@@ -714,7 +714,7 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
 
     auto *video = ytClient->getVideo(videoUrl);
     connect(video, &YouTube::Videos::Video::ready, audioFile, [audioFile, video]() {
-        audioFile->setTitle(video->title());
+        audioFile->title(video->title());
         video->deleteLater();
     });
 
@@ -847,7 +847,7 @@ void AudioEditor::replaceFileFolder(int index, const QString& folder)
         {
             if (file && file->missing() && file->url().contains(folderPath))
             {
-                file->setUrl(file->url().replace(folderPath, newFolderPath));
+                file->url(file->url().replace(folderPath, newFolderPath));
                 missingFiles.append(file);
             }
         }

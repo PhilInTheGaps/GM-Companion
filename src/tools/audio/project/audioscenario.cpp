@@ -459,8 +459,7 @@ auto AudioScenario::prepareElement(AudioElement *element) -> void
     element->setParent(this);
 
     connect(element, &AudioElement::nameChanged,  this, &AudioScenario::wasEdited);
-    connect(element, &AudioElement::iconChanged,  this, &AudioScenario::wasEdited);
-    connect(element, &AudioElement::typeChanged,  this, &AudioScenario::wasEdited);
+    connect(element, &AudioElement::thumbnailChanged,  this, &AudioScenario::wasEdited);
     connect(element, &AudioElement::modeChanged,  this, &AudioScenario::wasEdited);
     connect(element, &AudioElement::filesChanged, this, &AudioScenario::wasEdited);
 }
@@ -470,8 +469,7 @@ void AudioScenario::releaseElement(AudioElement *element)
     if (!element || element->parent() != this) return;
 
     disconnect(element, &AudioElement::nameChanged,  this, &AudioScenario::wasEdited);
-    disconnect(element, &AudioElement::iconChanged,  this, &AudioScenario::wasEdited);
-    disconnect(element, &AudioElement::typeChanged,  this, &AudioScenario::wasEdited);
+    disconnect(element, &AudioElement::thumbnailChanged,  this, &AudioScenario::wasEdited);
     disconnect(element, &AudioElement::modeChanged,  this, &AudioScenario::wasEdited);
     disconnect(element, &AudioElement::filesChanged, this, &AudioScenario::wasEdited);
 }

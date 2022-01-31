@@ -107,7 +107,7 @@ Pane {
                     element_name: modelData.name
                     element_type: modelData.type
                     subscenario_name: subscenario_text.text
-                    icon: modelData.icon
+                    thumbnail: modelData.thumbnail
 
                     overlay_enabled: false
                     small_mode: list.small_mode

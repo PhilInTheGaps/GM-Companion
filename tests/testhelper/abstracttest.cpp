@@ -1,6 +1,7 @@
 #include "abstracttest.h"
 #include "file.h"
 #include "fileaccesslocal.h"
+#include "utils/fileutils.h"
 #include <QtTest>
 #include <QDebug>
 
@@ -62,4 +63,24 @@ void AbstractTest::checkOrCreateFileAccess()
 void AbstractTest::expectWarning()
 {
     QTest::ignoreMessage(QtWarningMsg, QRegularExpression(".*"));
+}
+
+auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QTemporaryFile*
+{
+    QFile resourceFile(resource);
+
+    Q_ASSERT(resourceFile.open(QIODevice::ReadOnly));
+
+    const auto fileName = FileUtils::fileName(resource);
+    auto *tempFile = new QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
+    tempFile->setAutoRemove(false);
+
+    if (tempFile->open())
+    {
+        tempFile->write(resourceFile.readAll());
+        tempFile->close();
+    }
+
+    resourceFile.close();
+    return tempFile;
 }

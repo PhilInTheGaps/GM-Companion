@@ -10,6 +10,8 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Gui Quick Test)
 
+add_subdirectory(thumbnails)
+
 # Audio Project
 add_executable(test_audioproject testaudioproject.cpp)
 target_link_libraries(test_audioproject gm-companion-lib common testhelper Qt5::Gui Qt5::Test)
