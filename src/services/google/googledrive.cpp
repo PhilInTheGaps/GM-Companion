@@ -93,5 +93,6 @@ void GoogleDrive::disconnectService()
 void GoogleDrive::onAccessGranted()
 {
     qCDebug(gmGoogleDrive()) << "Access has been granted.";
+    updateStatus(ServiceStatus::Type::Success, tr("Connected"));
     connected(true);
 }
