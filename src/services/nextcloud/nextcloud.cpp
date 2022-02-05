@@ -3,11 +3,14 @@
 #include "services.h"
 #include "settings/settingsmanager.h"
 #include "utils/networkutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTimer>
 #include <QDesktopServices>
+
+using namespace AsyncFuture;
 
 NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
 {
@@ -19,16 +22,24 @@ NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
         loginName(SettingsManager::getSetting("loginName", "", "NextCloud"));
         serverUrl(SettingsManager::getServerUrl("NextCloud", false));
-        m_appPassword = SettingsManager::getPassword(loginName(), "NextCloud");
 
-        if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
-        {
+        const auto future = SettingsManager::getPassword(loginName(), "NextCloud");
+
+        observe(future).subscribe([this](const QString &password) {
+            m_appPassword = password;
+
+            if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
+            {
+                connected(false);
+            }
+            else
+            {
+                qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
+            }
+        }, [this]() {
+            qCCritical(gmNextCloud()) << "Error during reading of password";
             connected(false);
-        }
-        else
-        {
-            qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
-        }
+        });
     }
 }
 

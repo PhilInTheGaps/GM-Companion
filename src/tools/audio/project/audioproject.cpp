@@ -1,14 +1,16 @@
 #include "audioproject.h"
-#include <QDebug>
 #include <QJsonArray>
+#include <QLoggingCategory>
 #include <utility>
+
+Q_LOGGING_CATEGORY(gmAudioProject, "gm.audio.project")
 
 AudioProject::AudioProject(const QString& name, int version, QList<AudioCategory *>categories, QObject *parent)
     : TreeItem(name, 0, true, parent), a_isSaved(true), a_version(version), a_wasRenamed(false), m_categories(std::move(categories))
 {
-    qDebug() << "Initializing AudioProject:" << name << "...";
-    qDebug() << "   Project version:" << version;
-    qDebug() << "   Categories:" << m_categories.size();
+    qCDebug(gmAudioProject()) << "Initializing AudioProject:" << name
+                              << "[Version:" << version
+                              << "Categories:" << m_categories.size() << "]";
 
     setName(name);
 
@@ -66,7 +68,7 @@ auto AudioProject::toJson() const -> QJsonObject
  */
 auto AudioProject::categoryNames() const -> QStringList
 {
-    qDebug() << "AudioProject: Getting category names of project" << name() << "...";
+    qCDebug(gmAudioProject()) << "Getting category names of project" << name() << "...";
     QStringList names;
 
     for (auto *category : m_categories)
@@ -157,7 +159,7 @@ auto AudioProject::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    for (auto category : m_categories)
+    for (const auto *category : m_categories)
     {
         if (category) list.append(category->elements());
     }

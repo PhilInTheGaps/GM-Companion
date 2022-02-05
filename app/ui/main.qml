@@ -89,7 +89,7 @@ ApplicationWindow {
         }]
 
     Component.onCompleted: {
-        if (settings_manager.isUpdateCheckEnabled()) {
+        if (settings_manager.isUpdateCheckEnabled) {
             console.debug("Checking for updates")
             update_manager.checkForUpdates()
         }

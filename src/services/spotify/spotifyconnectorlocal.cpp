@@ -1,6 +1,9 @@
 #include "spotifyconnectorlocal.h"
-#include "logging.h"
-#include "../services.h"
+#include "config.h"
+
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmSpotifyLocal, "gm.service.spotify.local")
 
 SpotifyConnectorLocal::SpotifyConnectorLocal
     (QNetworkAccessManager *networkManager, O2Spotify *o2Spotify, QObject *parent) :
@@ -8,9 +11,9 @@ SpotifyConnectorLocal::SpotifyConnectorLocal
 {
     RESTServiceLocalConfig config;
 
-    config.scope                 = SPOTIFY_SCOPE;
-    config.port                  = SPOTIFY_LOCAL_PORT;
-    config.maxConcurrentRequests = SPOTIFY_MAX_REQUESTS;
+    config.scope                 = SCOPE;
+    config.port                  = LOCAL_PORT;
+    config.maxConcurrentRequests = MAX_REQUESTS;
     config.idRequest             = SettingRequest("spotifyID", "", "Spotify");
     config.secretRequest         = SettingRequest("spotifySecret", "", "Spotify");
 

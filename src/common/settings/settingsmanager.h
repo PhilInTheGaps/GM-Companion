@@ -1,11 +1,13 @@
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
+#include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QDir>
 #include <QSettings>
 #include <QLocale>
+#include <QFuture>
 #include "settings.h"
 
 struct SettingRequest {
@@ -25,17 +27,17 @@ class SettingsManager : public QObject
     Q_PROPERTY(bool classicIcons READ classicIcons WRITE setClassicIcons NOTIFY classicIconsChanged)
 
 public:
-    static SettingsManager* getInstance();
+    static auto getInstance() -> SettingsManager*;
 
-    bool showToolNames() const { return getBoolSetting("showToolNames", false); }
-    void setShowToolNames(bool checked) { setSetting("showToolNames", QString::number(checked)); emit showToolNamesChanged(); }
+    [[nodiscard]] auto showToolNames() const -> bool;
+    void setShowToolNames(bool checked);
 
-    bool classicIcons() const { return getBoolSetting("classicIcons", false); }
-    void setClassicIcons(bool checked) { setSetting("classicIcons", QString::number(checked)); emit classicIconsChanged(); }
+    [[nodiscard]] auto classicIcons() const -> bool;
+    void setClassicIcons(bool checked);
 
 public slots:
     static QString getSetting(const QString& setting, const QString& defaultValue = "", QString group = DEFAULT_GROUP);
-    static QString getSetting(SettingRequest request) { return getSetting(request.identifier, request.defaultValue, request.group); }
+    static QString getSetting(const SettingRequest &request);
     static void setSetting(const QString& setting, const QString& value, const QString& group = DEFAULT_GROUP);
     static void setSetting(const QString& setting, const int& value, const QString& group = DEFAULT_GROUP);
 
@@ -52,7 +54,7 @@ public slots:
     static QString getServerUrl(const QString &service, const bool &hasDefault = true);
     static void setServerUrl(const QString& url, const QString& service);
 
-    static QString getPassword(const QString& username, const QString& service);
+    static QFuture<QString> getPassword(const QString& username, const QString& service);
     static void setPassword(const QString& username, const QString& password, const QString& service);
 
     static bool isUpdateCheckEnabled();
@@ -74,7 +76,7 @@ private:
     static auto getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP) -> QString;
     static auto getActivePathGroup() -> QString;
 
-    static auto defaultServerUrl() -> QString { return QStringLiteral("https://gm-companion.rophil.lol"); }
+    static auto defaultServerUrl() -> QString;
 
     void updateSettings();
     void renameSetting(const QString& currentName, const QString& newName, const QString& group = DEFAULT_GROUP);
@@ -87,7 +89,7 @@ private:
     // Addon Settings
     QSettings m_addonSettings;
 
-    QStringList m_officialAddons = {
+    const QStringList m_officialAddons = {
         "DSA5",
         "SIFRP",
         "HowToBeAHero",

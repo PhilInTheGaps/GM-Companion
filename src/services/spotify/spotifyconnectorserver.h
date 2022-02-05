@@ -44,24 +44,24 @@ private:
 
     void authenticate();
 
-    QString getAccessToken() const { return m_settingsStore->value("SPOTIFY_ACCESS_TOKEN"); }
-    void saveAccessToken(QString token) { m_settingsStore->setValue("SPOTIFY_ACCESS_TOKEN", token); }
+    [[nodiscard]] auto getAccessToken() const -> QString { return m_settingsStore->value("SPOTIFY_ACCESS_TOKEN"); }
+    void saveAccessToken(const QString &token) { m_settingsStore->setValue("SPOTIFY_ACCESS_TOKEN", token); }
     void requestAccessToken(const QString& code);
 
-    QString getRefreshToken() const { return m_settingsStore->value("SPOTIFY_REFRESH_TOKEN"); }
-    void saveRefreshToken(QString token) { m_settingsStore->setValue("SPOTIFY_REFRESH_TOKEN", token); }
+    [[nodiscard]] auto getRefreshToken() const -> QString { return m_settingsStore->value("SPOTIFY_REFRESH_TOKEN"); }
+    void saveRefreshToken(const QString &token) { m_settingsStore->setValue("SPOTIFY_REFRESH_TOKEN", token); }
     void refreshAccessToken(bool updateAuthentication = false);
 
     void updateExpireTime(int expiresIn);
-    bool isTokenExpired() const { return QDateTime::currentDateTime() > m_expireTime; }
+    [[nodiscard]] bool isTokenExpired() const { return QDateTime::currentDateTime() > m_expireTime; }
 
-    bool canSendRequest();
+    auto canSendRequest() -> bool;
     void enqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
     void dequeueRequests();
 
     void sendRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*>& deferred);
 
-    QNetworkRequest addAuthHeader(QNetworkRequest request);
+    auto addAuthHeader(QNetworkRequest request) -> QNetworkRequest;
 
     void handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
                          const QList<QPair<QByteArray, QByteArray> >& headers);

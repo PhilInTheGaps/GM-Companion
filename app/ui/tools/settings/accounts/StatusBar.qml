@@ -7,33 +7,9 @@ Rectangle {
     id: root
     height: Defines.TOOLBAR_HEIGHT
 
-    property string text: ""
-    property int type: -1
+    property var status: undefined
 
-    visible: text !== ""
-
-    onTypeChanged: {
-        switch (root.type) {
-        case 0:
-            icon_label.text = FontAwesome.infoCircle
-            icon_label.color = "deepskyblue"
-            break
-        case 1:
-            icon_label.text = FontAwesome.checkCircle
-            icon_label.color = "green"
-            break
-        case 2:
-            icon_label.text = FontAwesome.exclamationTriangle
-            icon_label.color = "orange"
-            break
-        case 3:
-            icon_label.text = FontAwesome.exclamationCircle
-            icon_label.color = "red"
-            break
-        default:
-            break
-        }
-    }
+    visible: status.message !== ""
 
     Row {
         anchors.left: parent.left
@@ -48,11 +24,43 @@ Rectangle {
             font.pointSize: 12
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
+
+            text: {
+                switch (root.status.type) {
+                case 1:
+                    FontAwesome.checkCircle
+                    break
+                case 2:
+                    FontAwesome.exclamationTriangle
+                    break
+                case 3:
+                    FontAwesome.exclamationCircle
+                    break
+                default:
+                    FontAwesome.infoCircle
+                }
+            }
+
+            color: {
+                switch (root.status.type) {
+                case 1:
+                    "green"
+                    break
+                case 2:
+                    "orange"
+                    break
+                case 3:
+                    "red"
+                    break
+                default:
+                    "deepskyblue"
+                }
+            }
         }
 
         Label {
             id: text_label
-            text: root.text
+            text: root.status.message
             font.pointSize: 12
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -60,7 +68,7 @@ Rectangle {
     }
 
     border.color: {
-        switch (root.type) {
+        switch (root.status.type) {
         case 2:
             "orange"
             break

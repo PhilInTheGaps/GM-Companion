@@ -1,37 +1,19 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.1
 import CustomComponents 1.0
 import FontAwesome 2.0
 
-Item {
+BaseAccountPage {
     id: root
-    anchors.left: parent.left
-    anchors.right: parent.right
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: status_label.visible ? status_label.top : parent.bottom
+    name: "Discord"
+    icon: FontAwesome.discord
+    iconFamily: FontAwesome.familyBrands
+    status: [discord_service.status]
+
+    leftPanel: Column {
         spacing: 10
-
-        Row {
-            spacing: 5
-
-            Label {
-                text: FontAwesome.discord
-                font.family: FontAwesome.familyBrands
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-                text: "Discord"
-                font.bold: true
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
 
         CheckBox {
             id: use_discord_checkbox
@@ -44,21 +26,22 @@ Item {
             }
         }
 
-        Grid {
+        GridLayout {
             columns: 2
-            spacing: 10
+            columnSpacing: 10
+            rowSpacing: 10
             anchors.left: parent.left
             anchors.right: parent.right
-            verticalItemAlignment: Grid.AlignVCenter
             enabled: use_discord_checkbox.checked
 
             Label {
                 text: qsTr("Channel ID")
+                Layout.alignment: Qt.AlignVCenter
             }
 
             TextField {
                 id: discord_channel_textfield
-                width: root.width / 2
+                Layout.fillWidth: true
                 placeholderText: "xxxxxxxxxxxxxxxxxx"
 
                 onTextEdited: {
@@ -72,6 +55,8 @@ Item {
             RadioButton {
                 id: default_server_radio_button
                 text: qsTr("Use default server")
+                Layout.alignment: Qt.AlignVCenter
+
                 checked: settings_manager.getSetting("connection", "default",
                                                      "Discord") === "default"
 
@@ -80,13 +65,14 @@ Item {
             }
 
             Item {
-                width: 5
-                height: 5
+                Layout.fillWidth: true
             }
 
             RadioButton {
                 id: custom_server_radio_button
                 text: qsTr("Use custom server")
+                Layout.alignment: Qt.AlignVCenter
+
                 checked: settings_manager.getSetting("connection", "default",
                                                      "Discord") === "custom"
 
@@ -96,7 +82,7 @@ Item {
 
             TextField {
                 id: custom_server_textfield
-                width: root.width / 2
+                Layout.fillWidth: true
                 placeholderText: "https://"
                 visible: custom_server_radio_button.checked
 
@@ -124,14 +110,5 @@ Item {
                 }
             }
         }
-    }
-
-    StatusBar {
-        id: status_label
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        type: discord_service.status.type
-        text: discord_service.status.message
     }
 }

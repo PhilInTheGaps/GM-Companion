@@ -1,12 +1,15 @@
 #include "settingsmanager.h"
-#include "logging.h"
-#include <QCoreApplication>
+#include <QLoggingCategory>
 
 #ifdef Q_OS_WIN
 # include <keychain.h>
 #else // ifdef Q_OS_WIN
 # include <qt5keychain/keychain.h>
 #endif // ifdef Q_OS_WIN
+
+#include "thirdparty/asyncfuture/asyncfuture.h"
+
+Q_LOGGING_CATEGORY(gmSettings, "gm.settings")
 
 SettingsManager::SettingsManager()
 {
@@ -23,6 +26,27 @@ auto SettingsManager::getInstance() -> SettingsManager*
     return m_instance;
 }
 
+bool SettingsManager::showToolNames() const
+{
+    return getBoolSetting("showToolNames", false);
+}
+
+void SettingsManager::setShowToolNames(bool checked)
+{
+    setSetting("showToolNames", QString::number(checked));
+    emit showToolNamesChanged();
+}
+
+bool SettingsManager::classicIcons() const
+{
+    return getBoolSetting("classicIcons", false);
+}
+
+void SettingsManager::setClassicIcons(bool checked)
+{
+    setSetting("classicIcons", QString::number(checked)); emit classicIconsChanged();
+}
+
 auto SettingsManager::getSetting(const QString& setting, const QString& defaultValue, QString group)->QString
 {
     if (group.isEmpty()) group = DEFAULT_GROUP;
@@ -31,6 +55,11 @@ auto SettingsManager::getSetting(const QString& setting, const QString& defaultV
     auto value = getInstance()->m_settings->value(setting, defaultValue).toString();
     getInstance()->m_settings->endGroup();
     return value;
+}
+
+auto SettingsManager::getSetting(const SettingRequest &request) -> QString
+{
+    return getSetting(request.identifier, request.defaultValue, request.group);
 }
 
 void SettingsManager::setSetting(const QString& setting, const QString& value, const QString& group)
@@ -162,47 +191,54 @@ void SettingsManager::setServerUrl(const QString& url, const QString& service)
     setSetting("server", url, service);
 }
 
-auto SettingsManager::getPassword(const QString& username, const QString& service)->QString
+auto SettingsManager::getPassword(const QString& username, const QString& service) -> QFuture<QString>
 {
-    QKeychain::ReadPasswordJob passwordJob("gm-companion." + service);
+    auto *passwordJob = new QKeychain::ReadPasswordJob("gm-companion." + service);
+    passwordJob->setAutoDelete(false);
+    passwordJob->setKey(username);
 
-    passwordJob.setAutoDelete(false);
-    passwordJob.setKey(username);
-    QEventLoop passwordLoop;
-    QEventLoop::connect(&passwordJob, SIGNAL(finished(QKeychain::Job*)),
-                        &passwordLoop, SLOT(quit()));
-    passwordJob.start();
-    passwordLoop.exec();
+    const auto callback = [passwordJob](QKeychain::Job*) -> QString {
+        if (passwordJob->error())
+        {
+            qCCritical(gmSettings) << "Could not read password:" << passwordJob->error() << passwordJob->errorString();
+            passwordJob->deleteLater();
+            return QLatin1String();
+        }
 
-    if (passwordJob.error()) {
-        qCCritical(gmSettings) << "Could not read password:" << passwordJob.error() << passwordJob.errorString();
-        return "";
-    }
+        qCDebug(gmSettings) << "Successfully read password.";
+        const auto password = passwordJob->textData();
+        passwordJob->deleteLater();
 
-    qCDebug(gmSettings) << "Successfully read password.";
-    return passwordJob.textData();
+        return password;
+    };
+
+    const auto future = AsyncFuture::observe(passwordJob, &QKeychain::Job::finished).subscribe(callback).future();
+    passwordJob->start();
+
+    return future;
 }
 
 void SettingsManager::setPassword(const QString& username, const QString& password, const QString& service)
 {
-    QKeychain::WritePasswordJob passwordJob("gm-companion." + service);
+    auto *passwordJob = new QKeychain::WritePasswordJob("gm-companion." + service);
+    passwordJob->setAutoDelete(false);
+    passwordJob->setKey(username);
+    passwordJob->setTextData(password);
 
-    passwordJob.setAutoDelete(false);
-    passwordJob.setKey(username);
-    passwordJob.setTextData(password);
-    QEventLoop passwordLoop;
-    QEventLoop::connect(&passwordJob, SIGNAL(finished(QKeychain::Job*)),
-                        &passwordLoop, SLOT(quit()));
-    passwordJob.start();
-    passwordLoop.exec();
+    const auto callback = [passwordJob](QKeychain::Job*) {
+        if (passwordJob->error()) {
+            qCCritical(gmSettings) << "Unable to save password:" << passwordJob->error() << passwordJob->errorString();
+        }
+        else
+        {
+            qCDebug(gmSettings) << "Successfully saved password.";
+        }
 
-    if (passwordJob.error()) {
-        qCCritical(gmSettings) << "Unable to save password:" << passwordJob.error() << passwordJob.errorString();
-    }
-    else
-    {
-        qCDebug(gmSettings) << "Successfully saved password.";
-    }
+        passwordJob->deleteLater();
+    };
+
+    AsyncFuture::observe(passwordJob, &QKeychain::Job::finished).subscribe(callback);
+    passwordJob->start();
 }
 
 auto SettingsManager::isUpdateCheckEnabled()->bool
@@ -246,6 +282,11 @@ auto SettingsManager::getActivePathGroup()->QString
     if (cloudMode == "NextCloud") return "NextCloud";
 
     return PATHS_GROUP;
+}
+
+auto SettingsManager::defaultServerUrl() -> QString
+{
+    return QStringLiteral("https://gm-companion.rophil.lol");
 }
 
 // Set addon disabled or enabled

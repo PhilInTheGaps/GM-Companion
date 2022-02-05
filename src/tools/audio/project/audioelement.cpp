@@ -1,9 +1,11 @@
 #include "audioelement.h"
-#include "logging.h"
 #include "../thumbnails/audiothumbnail.h"
 #include "utils/utils.h"
 #include <QJsonArray>
+#include <QLoggingCategory>
 #include <utility>
+
+Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
 AudioElement::AudioElement(const QString& name, Type type, const QString& path, QObject *parent)
     : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
@@ -130,7 +132,7 @@ auto AudioElement::typeToSettings(AudioElement::Type type) -> QString
     case AudioElement::Type::Radio:
         return QStringLiteral("radio");
     default:
-        qCWarning(gmSettings()) << "Error: getPath() was called with illegal element type:" << AudioElement::typeToString(type);
+        qCWarning(gmAudioElement()) << "Error: getPath() was called with illegal element type:" << AudioElement::typeToString(type);
         return "";
     }
 }

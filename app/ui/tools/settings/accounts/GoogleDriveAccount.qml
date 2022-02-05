@@ -1,83 +1,70 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.1
 import CustomComponents 1.0
 import FontAwesome 2.0
 
-Item {
+BaseAccountPage {
     id: root
-    anchors.left: parent.left
-    anchors.right: parent.right
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: status_label.visible ? status_label.top : parent.bottom
+    name: "GoogleDrive"
+    icon: FontAwesome.googleDrive
+    iconFamily: FontAwesome.familyBrands
+    status: [googledrive_service.status]
+
+    leftPanel: Column {
         spacing: 10
 
-        Row {
-            spacing: 5
-
-            Label {
-                text: FontAwesome.googleDrive
-                font.family: FontAwesome.familyBrands
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-                text: "GoogleDrive"
-                font.bold: true
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Grid {
+        // Connected
+        GridLayout {
             visible: googledrive_service.connected
             columns: 2
-            spacing: 10
+            columnSpacing: 10
             anchors.left: parent.left
             anchors.right: parent.right
-            verticalItemAlignment: Grid.AlignVCenter
 
             Label {
-                text: qsTr("Client ID")
+                text: qsTr("Client ID:")
+                Layout.alignment: Qt.AlignTop
             }
 
             Label {
                 Component.onCompleted: text = googledrive_service.clientId
+                wrapMode: Label.WrapAnywhere
+                Layout.fillWidth: true
             }
         }
 
-        Grid {
+        // Not connected
+        GridLayout {
             visible: !googledrive_service.connected
             columns: 2
-            spacing: 10
+            columnSpacing: 10
             anchors.left: parent.left
             anchors.right: parent.right
-            verticalItemAlignment: Grid.AlignVCenter
 
             Label {
                 text: qsTr("Client ID")
+                Layout.alignment: Qt.AlignVCenter
             }
 
             TextField {
                 id: google_id_textfield
                 selectByMouse: true
-                width: root.width / 2
+                Layout.fillWidth: true
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "googleID", "", "Google")
             }
 
             Label {
                 text: qsTr("Client Secret")
+                Layout.alignment: Qt.AlignVCenter
             }
 
             TextField {
                 id: google_secret_textfield
                 selectByMouse: true
-                width: root.width / 2
+                Layout.fillWidth: true
                 Component.onCompleted: text = settings_manager.getSetting(
                                            "googleSecret", "", "Google")
             }
@@ -101,14 +88,5 @@ Item {
                 }
             }
         }
-    }
-
-    StatusBar {
-        id: status_label
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        type: googledrive_service.status.type
-        text: googledrive_service.status.message
     }
 }

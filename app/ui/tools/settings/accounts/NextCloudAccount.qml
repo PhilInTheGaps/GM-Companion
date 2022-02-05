@@ -1,37 +1,19 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.1
 import CustomComponents 1.0
 import FontAwesome 2.0
 
-Item {
+BaseAccountPage {
     id: root
-    anchors.left: parent.left
-    anchors.right: parent.right
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: status_label.visible ? status_label.top : parent.bottom
+    name: "NextCloud"
+    icon: FontAwesome.cloud
+    iconFamily: FontAwesome.familySolid
+    status: [nextcloud_service.status]
+
+    leftPanel: Column {
         spacing: 10
-
-        Row {
-            spacing: 5
-
-            Label {
-                text: FontAwesome.cloud
-                font.family: FontAwesome.familySolid
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            Label {
-                text: "NextCloud"
-                font.bold: true
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
 
         // Login to new server
         Column {
@@ -40,21 +22,21 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            Grid {
+            GridLayout {
                 columns: 2
-                spacing: 10
+                columnSpacing: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
-                verticalItemAlignment: Grid.AlignVCenter
 
                 Label {
                     text: qsTr("Server URL")
+                    Layout.alignment: Qt.AlignVCenter
                 }
 
                 TextField {
                     id: server_textfield
                     selectByMouse: true
-                    width: root.width / 2
+                    Layout.fillWidth: true
                     placeholderText: "https://"
                     Component.onCompleted: text = settings_manager.getServerUrl(
                                                "NextCloud", false)
@@ -78,27 +60,35 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            Grid {
+            GridLayout {
                 columns: 2
-                spacing: 10
+                columnSpacing: 10
+                rowSpacing: 10
                 anchors.left: parent.left
                 anchors.right: parent.right
-                verticalItemAlignment: Grid.AlignVCenter
 
                 Label {
                     text: qsTr("Login Name:")
+                    Layout.alignment: Qt.AlignTop
                 }
 
                 Label {
                     text: nextcloud_service.loginName
+                    Layout.alignment: Qt.AlignTop
+                    Layout.fillWidth: true
+                    wrapMode: Label.WrapAnywhere
                 }
 
                 Label {
                     text: qsTr("Server URL:")
+                    Layout.alignment: Qt.AlignTop
                 }
 
                 Label {
                     text: nextcloud_service.serverUrl
+                    Layout.alignment: Qt.AlignTop
+                    Layout.fillWidth: true
+                    wrapMode: Label.WrapAnywhere
                 }
             }
 
@@ -107,14 +97,5 @@ Item {
                 onClicked: nextcloud_service.disconnectService()
             }
         }
-    }
-
-    StatusBar {
-        id: status_label
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        type: nextcloud_service.status.type
-        text: nextcloud_service.status.message
     }
 }

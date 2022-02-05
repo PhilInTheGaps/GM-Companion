@@ -10,6 +10,9 @@
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
 
 SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer,
                              QNetworkAccessManager *networkManager, QObject *parent)
@@ -100,14 +103,14 @@ void SpotifyPlayer::play(const QString& id, int offset, bool playOnce)
     }
     else
     {
-        qCWarning(gmSpotify) << "Tried to play element, but access has not been granted yet.";
+        qCWarning(gmAudioSpotify) << "Tried to play element, but access has not been granted yet.";
         if (Spotify::getInstance()->connected())
         {
             Spotify::getInstance()->grant();
         }
         else
         {
-            qCWarning(gmSpotify) << "Tried to play element, but spotify connection is disabled.";
+            qCWarning(gmAudioSpotify) << "Tried to play element, but spotify connection is disabled.";
         }
     }
 }

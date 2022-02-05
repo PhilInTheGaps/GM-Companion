@@ -58,6 +58,7 @@ target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(common
     PRIVATE
+    qtasyncfuture
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY}
     Qt5::Core

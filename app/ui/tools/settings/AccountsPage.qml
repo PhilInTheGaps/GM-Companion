@@ -61,7 +61,7 @@ Item {
         anchors.left: accounts_list.right
         anchors.right: parent.right
         anchors.margins: 10
-        anchors.topMargin: 20
+        anchors.topMargin: 5
         asynchronous: true
 
         source: root.accounts[0].source

@@ -3,5 +3,5 @@ import QtQuick.Templates 2.2 as T
 import "../colors.js" as Colors
 
 T.Label {
-    color: Colors.text
+    color: enabled ? Colors.text : Colors.textDisabled
 }

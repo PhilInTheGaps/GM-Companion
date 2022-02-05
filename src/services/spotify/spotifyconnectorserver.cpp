@@ -1,6 +1,5 @@
 #include "spotifyconnectorserver.h"
-#include "logging.h"
-#include "../services.h"
+#include "config.h"
 #include "exceptions/notimplementedexception.h"
 #include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 
@@ -9,6 +8,9 @@
 #include <QJsonObject>
 #include <QTimer>
 #include <QUrlQuery>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmSpotifyServer, "gm.service.spotify.server")
 
 SpotifyConnectorServer::SpotifyConnectorServer
     (QNetworkAccessManager *networkManager, QObject *parent) :
@@ -32,7 +34,7 @@ void SpotifyConnectorServer::grantAccess()
 {
     if (getRefreshToken().isEmpty())
     {
-        qCInfo(gmSpotifyServer()) << "No refresh token found, initializing auth procedure ...";
+        qCDebug(gmSpotifyServer()) << "No refresh token found, initializing auth procedure ...";
         authenticate();
     }
     else
@@ -88,7 +90,7 @@ void SpotifyConnectorServer::sendRequest(RequestContainer *container, const Asyn
 auto SpotifyConnectorServer::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
 {
     const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
-    const auto container = new RequestContainer(request, GET, "", this);
+    auto *container = new RequestContainer(request, GET, "", this);
 
     sendRequest(container, deferred);
     return deferred.future();
@@ -102,7 +104,7 @@ auto SpotifyConnectorServer::get(const QUrl &url) -> QFuture<RestNetworkReply *>
 auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
     const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
-    const auto container = new RequestContainer(request, PUT, data, this);
+    auto *container = new RequestContainer(request, PUT, data, this);
 
     sendRequest(container, deferred);
     return deferred.future();
@@ -111,7 +113,7 @@ auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data
 auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
     const auto deferred = AsyncFuture::deferred<RestNetworkReply*>();
-    const auto container = new RequestContainer(request, POST, data, this);
+    auto *container = new RequestContainer(request, POST, data, this);
 
     sendRequest(container, deferred);
     return deferred.future();
@@ -133,13 +135,13 @@ void SpotifyConnectorServer::authenticate()
 
     if (!m_server.isListening())
     {
-        m_server.listen(QHostAddress::LocalHost, SPOTIFY_SERVER_PORT);
+        m_server.listen(QHostAddress::LocalHost, SERVER_PORT);
     }
 
     auto url = QUrl(SettingsManager::getServerUrl("Spotify") + "/spotify/login");
 
     QUrlQuery query;
-    query.addQueryItem("redirect_uri", QUrl::toPercentEncoding("http://localhost:" + QString::number(SPOTIFY_SERVER_PORT)));
+    query.addQueryItem("redirect_uri", QUrl::toPercentEncoding("http://localhost:" + QString::number(SERVER_PORT)));
     url.setQuery(query);
 
     qCDebug(gmSpotifyServer()) << "Started server, opening browser ...";
@@ -182,7 +184,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 
     if (refreshToken.isEmpty())
     {
-        qCInfo(gmSpotifyServer()) << "No refresh token found, not connected to spotify.";
+        qCDebug(gmSpotifyServer()) << "No refresh token found, not connected to spotify.";
         m_isAccessGranted = false;
         emit isConnectedChanged(false);
     }
@@ -197,7 +199,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
         query.addQueryItem("refresh_token", refreshToken);
         url.setQuery(query);
 
-        auto reply = m_networkManager->get(QNetworkRequest(url));
+        auto *reply = m_networkManager->get(QNetworkRequest(url));
         connect(reply, &QNetworkReply::finished, [ = ]() {
             auto params = QJsonDocument::fromJson(reply->readAll()).object();
             reply->deleteLater();
@@ -296,7 +298,7 @@ auto SpotifyConnectorServer::canSendRequest() -> bool
         return false;
     }
 
-    return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < SPOTIFY_MAX_REQUESTS;
+    return !m_isWaitingForToken && !m_isOnCooldown && m_currentRequestCount < MAX_REQUESTS;
 }
 
 void SpotifyConnectorServer::enqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*> &deferred)
@@ -306,10 +308,10 @@ void SpotifyConnectorServer::enqueueRequest(RequestContainer *container, const A
 
 void SpotifyConnectorServer::dequeueRequests()
 {
-    while (!m_requestQueue.isEmpty() && m_currentRequestCount < SPOTIFY_MAX_REQUESTS)
+    while (!m_requestQueue.isEmpty() && m_currentRequestCount < MAX_REQUESTS)
     {
         const auto pair = m_requestQueue.dequeue();
-        const auto container = pair.first;
+        auto *container = pair.first;
         const auto deferred = pair.second;
 
         sendRequest(container, deferred);
@@ -335,9 +337,10 @@ void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContai
                 this);
 
     // Check if rate limit was exceeded
-    if (reply->error() == QNetworkReply::UnknownContentError)
+    if (result->error() == QNetworkReply::UnknownContentError)
     {
-        auto status = QJsonDocument::fromJson(result->data()).object().value("error").toObject().value("status").toInt();
+        const auto status = QJsonDocument::fromJson(result->data())
+                .object()["error"].toObject()["status"].toInt();
 
         if (status == HttpStatus::TooManyRequests)
         {
@@ -346,11 +349,19 @@ void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContai
         }
     }
 
-    if (reply->error() != QNetworkReply::NoError)
+    if (result->hasError())
     {
-        qCWarning(gmSpotifyServer()) << "Error:" << result->errorText() << result->data();
+        // The "No active device found" should not be logged as a warning
+        // because we can recover from that by setting an active device and trying again.
+        if (result->data().contains("No active device found"))
+        {
+            qCDebug(gmSpotifyServer) << result->errorText() << result->data();
+        }
+        else
+        {
+            qCWarning(gmSpotifyServer()) << "Error:" << result->errorText() << result->data();
+        }
     }
-
 
     deferred.complete(result);
     reply->deleteLater();

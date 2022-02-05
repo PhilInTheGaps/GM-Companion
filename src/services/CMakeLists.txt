@@ -21,11 +21,15 @@ set(HEADERS
     rest/restserviceconnectorlocal.h
     rest/restnetworkreply.h
     rest/requestcontainer.h
+    spotify/config.h
     spotify/spotify.h
     spotify/spotifyutils.h
     spotify/spotifyconnectorlocal.h
     spotify/spotifyconnectorserver.h
     spotify/spotifynetworkerror.h
+    spotify/clients/abstractspotifyclientcontroller.h
+    spotify/clients/librespotcontroller.h
+    spotify/data/spotifydevice.h
     nextcloud/nextcloud.h
     google/googledrive.h
     google/googledriveconnectorlocal.h
@@ -42,6 +46,9 @@ set(SOURCES
     spotify/spotifyconnectorlocal.cpp
     spotify/spotifyconnectorserver.cpp
     spotify/spotifynetworkerror.cpp
+    spotify/clients/abstractspotifyclientcontroller.cpp
+    spotify/clients/librespotcontroller.cpp
+    spotify/data/spotifydevice.cpp
     nextcloud/nextcloud.cpp
     google/googledrive.cpp
     google/googledriveconnectorlocal.cpp
