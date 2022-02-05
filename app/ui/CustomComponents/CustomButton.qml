@@ -16,13 +16,13 @@ Control {
     property string buttonText: ""
     property string iconText: ""
     property string toolTipText: ""
-    property var iconFont: FontAwesome.familySolid
+    property string iconFont: FontAwesome.familySolid
 
     // Visual options
     property int pointSize: 12
     readonly property var textColor: mouse_area.pressed ? Colors.mid : (mouse_area.containsMouse ? Colors.focus : Colors.text)
     property var iconColor: undefined
-    property var backgroundColor: Colors.dark
+    property string backgroundColor: Colors.dark
     property bool transparentBackground: false
     property int borderWidth: 1
 

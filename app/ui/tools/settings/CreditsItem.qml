@@ -1,20 +1,22 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
+import FontAwesome 2.0
 
 Rectangle {
     id: root
     property string title: ""
     property string description: ""
+    property var license: []
     property var links: []
 
-    height: column.height + 20
+    height: Math.max(column.height + 20, licens_column.height)
     anchors.left: parent.left
     anchors.right: parent.right
 
     Column {
         id: column
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 10
@@ -42,13 +44,32 @@ Rectangle {
             Repeater {
                 model: root.links
 
-                CustomButton {
-                    buttonText: modelData[0]
+                Button {
+                    text: modelData[0]
                     onClicked: Qt.openUrlExternally(modelData[1])
-                    usesFixedWidth: false
-                    pointSize: 10
-                    padding: 10
                 }
+            }
+        }
+    }
+
+    Column {
+        id: licens_column
+        anchors.right: parent.right
+
+        Repeater {
+            model: license
+
+            CustomButton {
+                buttonText: modelData[0]
+                onClicked: Qt.openUrlExternally(modelData[1])
+                iconText: FontAwesome.balanceScale
+                iconFont: FontAwesome.familySolid
+                usesFixedWidth: false
+                backgroundColor: "transparent"
+
+                height: 30
+                pointSize: 10
+                mainRow.padding: 5
             }
         }
     }
