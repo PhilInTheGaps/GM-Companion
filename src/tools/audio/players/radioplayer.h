@@ -19,15 +19,14 @@ public:
     RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *m_discordPlayer,
                 QObject *parent = nullptr);
 
+public slots:
     void play(AudioElement *element);
-    void play();
-    void pause();
-    void stop();
-    void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
-    void setLinearVolume(int volume) { }
-    void again() { }
-    void next() { }
-    void setIndex(int index) {}
+    void play() override;
+    void pause() override;
+    void stop() override;
+    void setVolume(int linear, int logarithmic) override;
+    void again() override { }
+    void next() override { }
 
 private:
     QMediaPlayer *m_mediaPlayer = nullptr;

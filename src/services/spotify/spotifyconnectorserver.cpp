@@ -158,7 +158,7 @@ void SpotifyConnectorServer::requestAccessToken(const QString& code)
     query.addQueryItem("code", code);
     url.setQuery(query);
 
-    auto reply = m_networkManager->get(QNetworkRequest(url));
+    auto *reply = m_networkManager->get(QNetworkRequest(url));
 
     connect(reply, &QNetworkReply::finished, [ = ]() {
         qCDebug(gmSpotifyServer()) << "Received access token and refresh token ...";
@@ -223,13 +223,15 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
                 emit statusChanged(ServiceStatus::Type::Error, reply->errorString());
                 return;
             }
-            else if (!params["error"].toString().isEmpty())
+
+            if (!params["error"].toString().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:" << params["error"].toString();
                 emit statusChanged(ServiceStatus::Type::Error, params["error"].toString());
                 return;
             }
-            else if (getAccessToken().isEmpty())
+
+            if (getAccessToken().isEmpty())
             {
                 qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
                 emit statusChanged(ServiceStatus::Type::Error, "Unexpected error, access token is empty.");
@@ -265,6 +267,8 @@ auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkR
 void SpotifyConnectorServer::handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply*> &deferred,
                                              const QList<QPair<QByteArray, QByteArray>>& headers)
 {
+    using namespace std;
+
     qCDebug(gmSpotifyServer) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
 
     for (const auto& header : headers)
@@ -272,20 +276,20 @@ void SpotifyConnectorServer::handleRateLimit(RequestContainer *container, const 
         if (header.first == "Retry-After")
         {
             qCDebug(gmSpotifyServer()) << header;
-            int seconds = header.second.toInt();
+            const auto seconds = chrono::seconds(header.second.toInt());
             startCooldown(seconds);
             enqueueRequest(container, deferred);
             return;
         }
     }
 
-    startCooldown(2);
+    startCooldown(2s);
 }
 
-void SpotifyConnectorServer::startCooldown(int seconds)
+void SpotifyConnectorServer::startCooldown(std::chrono::seconds seconds)
 {
     m_isOnCooldown = true;
-    QTimer::singleShot(seconds * 1000, this, &SpotifyConnectorServer::onCooldownFinished);
+    QTimer::singleShot(seconds, this, &SpotifyConnectorServer::onCooldownFinished);
 }
 
 auto SpotifyConnectorServer::canSendRequest() -> bool

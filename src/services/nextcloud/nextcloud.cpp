@@ -1,6 +1,5 @@
 #include "nextcloud.h"
 #include "logging.h"
-#include "services.h"
 #include "settings/settingsmanager.h"
 #include "utils/networkutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
@@ -84,8 +83,8 @@ auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, co
 
 auto NextCloud::getPathUrl(const QString &path) -> QString
 {
-    auto seperator = path.startsWith('/') ? "" : "/";
-    return serverUrl() + NEXTCLOUD_DAV_ENDPOINT + "/" + loginName() + seperator + path;
+    const auto seperator = path.startsWith('/') ? QLatin1String() : QStringLiteral("/");
+    return QStringLiteral("%1%2/%3%4%5").arg(serverUrl(), DAV_ENDPOINT, loginName(), seperator, path);
 }
 
 void NextCloud::connectService()
@@ -138,7 +137,7 @@ void NextCloud::startLoginFlow()
     }
 
     updateStatus(ServiceStatus::Type::Info, tr("Connecting ..."));
-    auto authUrl = serverUrl() + NEXTCLOUD_AUTH_URL;
+    auto authUrl = serverUrl() + AUTH_URL;
 
     qCDebug(gmNextCloud()) << "Server URL:" << serverUrl();
     qCDebug(gmNextCloud()) << "Auth URL:" << authUrl;
@@ -193,17 +192,17 @@ void NextCloud::pollAuthPoint(const QUrl& url, const QString& token)
         // Polling endpoint returns 404 until authentication is done
         if (reply->error() == QNetworkReply::ContentNotFoundError)
         {
-            if ((m_authPolls < NEXTCLOUD_MAX_AUTH_POLLS) && m_loggingIn)
+            if ((m_authPolls < MAX_AUTH_POLLS) && m_loggingIn)
             {
                 qCDebug(gmNextCloud()) << "Finished poll" << m_authPolls << "/"
-                                       << NEXTCLOUD_MAX_AUTH_POLLS
+                                       << MAX_AUTH_POLLS
                                        << "waiting and polling again ...";
 
-                QTimer::singleShot(NEXTCLOUD_AUTH_POLL_DELAY, [ = ]() { pollAuthPoint(url, token); });
+                QTimer::singleShot(AUTH_POLL_DELAY, [ = ]() { pollAuthPoint(url, token); });
             }
             else
             {
-                qCWarning(gmNextCloud()) << "Timeout: Max polls (" << NEXTCLOUD_MAX_AUTH_POLLS << ") reached!";
+                qCWarning(gmNextCloud()) << "Timeout: Max polls (" << MAX_AUTH_POLLS << ") reached!";
                 updateStatus(ServiceStatus::Type::Error, tr("Login timed out, please try again."));
                 m_loggingIn = false;
             }

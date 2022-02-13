@@ -24,17 +24,13 @@ public:
 protected:
     explicit AbstractSpotifyClientController(QObject *parent, const QLoggingCategory &loggingCategory);
 
-    [[nodiscard]] auto getDevice(const QString &name) -> QFuture<SpotifyDevice>;
-    [[nodiscard]] static auto getDeviceNameList(const QJsonArray &devices) -> QStringList;
-
-    [[nodiscard]] auto deviceNames() const -> QStringList;
+    [[nodiscard]] static auto getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>;
 
     void updateStatus(const ServiceStatus::Type& type, const QString& message);
 
     void setActiveDevice(const SpotifyDevice &device);
 
 private:
-    QStringList m_deviceNames;
     QString m_deviceName;
     const QLoggingCategory &m_loggingCategory;
 

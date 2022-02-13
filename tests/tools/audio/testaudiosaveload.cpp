@@ -141,18 +141,18 @@ void TestAudioSaveLoad::findMissingFiles()
     for (int i = 0; i < 5; i++)
     {
         files.append(new AudioFile(
-                         QUuid::createUuid().toString() + ".mp3", 0,
+                         QUuid::createUuid().toString() + ".mp3", AudioFile::File,
                          QString("Test File %1").arg(i), this));
     }
 
     files.append(new AudioFile(
-                     QUuid::createUuid().toString() + ".mp3", 1,
+                     QUuid::createUuid().toString() + ".mp3", AudioFile::Web,
                      QString("Test File (URL)"), this));
     files.append(new AudioFile(
-                     QUuid::createUuid().toString(), 2,
+                     QUuid::createUuid().toString(), AudioFile::Spotify,
                      QString("Test File (Spotify))"), this));
     files.append(new AudioFile(
-                     QUuid::createUuid().toString() + ".mp3", 3,
+                     QUuid::createUuid().toString() + ".mp3", AudioFile::Youtube,
                      QString("Test File (Youtube)"), this));
 
     auto future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());

@@ -3,77 +3,89 @@
 
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QPointer>
+#include <gsl/gsl>
+
+#ifdef Q_OS_WIN
 #include <QTemporaryDir>
+#endif
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "spotifyplayer.h"
 #include "discordplayer.h"
 #include "filesystem/file.h"
-#include <qytlib/videos/videoclient.h>
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(MetaDataReader *metaDataReader, SpotifyPlayer *spotifyPlayer,
-                         DiscordPlayer *discordPlayer, QObject *parent = nullptr);
+    explicit MusicPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
 
     void play(AudioElement *element);
+    void setIndex(int index);
 
-    QStringList songNames() const { return m_songNames; }
-    int index() const { return m_playlistIndex; }
+    AUTO_PROPERTY(QStringList, songNames)
+    AUTO_PROPERTY(int, playlistIndex);
 
 public slots:
     void play() override;
     void pause() override;
     void stop() override;
-    void setLogarithmicVolume(int volume) override;
-    void setLinearVolume(int volume) override;
+    void setVolume(int linear, int logarithmic) override;
     void next() override;
     void again() override;
-    void setIndex(int index) override;
 
 private:
-    SpotifyPlayer *spotifyPlayer = nullptr;
-    QMediaPlayer *mediaPlayer = nullptr;
-    AudioElement *currentElement = nullptr;
-    DiscordPlayer *discordPlayer = nullptr;
-    YouTube::Videos::VideoClient *videoClient = nullptr;
-    YouTube::Videos::Streams::StreamManifest *m_streamManifest = nullptr;
+    SpotifyPlayer *m_spotifyPlayer = nullptr;
+    QMediaPlayer *m_mediaPlayer = nullptr;
+    AudioElement *m_currentElement = nullptr;
+    DiscordPlayer *m_discordPlayer = nullptr;
+    MetaDataReader* m_metaDataReader = nullptr;
+
+    /// Context object to easily stop file data requests by deleting the object
     QObject *m_fileRequestContext = nullptr;
+    QObject *m_playlistLoadingContext = nullptr;
 
     QList<AudioFile*> m_playlist;
-    int m_playlistIndex = 0;
-    int m_playerType = -1;
+    AudioFile::AudioFileSource m_currentFileSource = AudioFile::Unknown;
 
     QBuffer m_mediaBuffer;
-    QTemporaryDir m_tempDir;
     QString m_fileName;
 
-    void loadMedia(AudioFile *file);
-    void loadSongNames(bool initial = false, bool reloadYt = false);
-    void applyShuffleMode(bool keepIndex = false, const QString& url = "");
-    void startPlaying();
+#ifdef Q_OS_WIN
+    QTemporaryDir m_tempDir;
+#endif
 
-    QStringList m_songNames;
-    int m_waitingForUrls = 0;
+    void loadMedia(AudioFile *file);
+    void loadLocalFile(AudioFile *file);
+    void loadWebFile(AudioFile *file);
+    void loadSpotifyFile(AudioFile *file);
+    void loadYoutubeFile(AudioFile *file);
+
+    auto loadPlaylist() -> QFuture<void>;
+    void clearPlaylist();
+    void loadTrackNames();
+
+    auto loadPlaylistRecursive(int index = 0) -> QFuture<void>;
+    auto loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) -> QFuture<void>;
+    void applyShuffleMode();
+    void startPlaying();
 
     void connectPlaybackStateSignals();
     void connectMetaDataSignals(MetaDataReader *metaDataReader);
-    void connectSpotifySignals();
+    void initSpotifyPlayer();
+
+    void printPlaylist() const;
 
 private slots:
     void onMediaPlayerStateChanged();
-    void onMediaPlayerBufferStatusChanged();
     void onMediaPlayerMediaStatusChanged();
     void onMediaPlayerError(QMediaPlayer::Error error);
     void onMediaPlayerMediaChanged();
     void onFileReceived(Files::FileDataResult *result);
     void onSpotifySongEnded();
-    void onSpotifyReceivedPlaylistTracks(QList<SpotifyTrack>tracks, const QString& playlistId);
-    void onVideoMetadataReceived();
-    void onStreamManifestReceived();
 
 signals:
     void startedPlaying();
@@ -82,7 +94,6 @@ signals:
     void metaDataChanged(const QString& key, const QVariant& value);
     void metaDataChanged(const QByteArray& data);
     void currentIndexChanged();
-    void songNamesChanged();
 };
 
 #endif // MUSICPLAYER_H

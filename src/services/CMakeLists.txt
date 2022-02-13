@@ -12,10 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Core Gui Network REQUIRED)
 
 include(AddO2)
+include(AddGSL)
 
 set(HEADERS
     service.h
-    services.h
     servicestatus.h
     rest/restserviceconnector.h
     rest/restserviceconnectorlocal.h
@@ -29,7 +29,20 @@ set(HEADERS
     spotify/spotifynetworkerror.h
     spotify/clients/abstractspotifyclientcontroller.h
     spotify/clients/librespotcontroller.h
+    spotify/data/basespotifyelement.h
+    spotify/data/spotifyalbum.h
+    spotify/data/spotifyalbuminfo.h
+    spotify/data/spotifyartist.h
     spotify/data/spotifydevice.h
+    spotify/data/spotifyplaylist.h
+    spotify/data/spotifytrack.h
+    spotify/data/spotifytracklist.h
+    spotify/data/spotifycurrenttrack.h
+    spotify/data/spotifyimage.h
+    spotify/data/spotifyplaybackstate.h
+    spotify/api/albumapi.h
+    spotify/api/playerapi.h
+    spotify/api/playlistsapi.h
     nextcloud/nextcloud.h
     google/googledrive.h
     google/googledriveconnectorlocal.h
@@ -48,7 +61,19 @@ set(SOURCES
     spotify/spotifynetworkerror.cpp
     spotify/clients/abstractspotifyclientcontroller.cpp
     spotify/clients/librespotcontroller.cpp
+    spotify/data/spotifyalbum.cpp
+    spotify/data/spotifyalbuminfo.cpp
+    spotify/data/spotifyartist.cpp
     spotify/data/spotifydevice.cpp
+    spotify/data/spotifyplaylist.cpp
+    spotify/data/spotifytrack.cpp
+    spotify/data/spotifytracklist.cpp
+    spotify/data/spotifycurrenttrack.cpp
+    spotify/data/spotifyimage.cpp
+    spotify/data/spotifyplaybackstate.cpp
+    spotify/api/albumapi.cpp
+    spotify/api/playerapi.cpp
+    spotify/api/playlistsapi.cpp
     nextcloud/nextcloud.cpp
     google/googledrive.cpp
     google/googledriveconnectorlocal.cpp
@@ -64,6 +89,7 @@ target_link_libraries(services
     o2
     qtasyncfuture
     http-status-codes
+    GSL
     Qt5::Core
     Qt5::Gui
     Qt5::Network

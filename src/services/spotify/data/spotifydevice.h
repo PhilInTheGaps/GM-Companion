@@ -1,11 +1,19 @@
 #pragma once
 
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QString>
+
+struct SpotifyDevice;
+struct SpotifyDeviceList
+{
+    QVector<QSharedPointer<SpotifyDevice>> devices;
+};
 
 struct SpotifyDevice
 {
-    static auto fromJson(const QJsonObject &json) -> SpotifyDevice;
+    static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyDevice>;
+    static auto fromJson(const QJsonArray &json) -> QSharedPointer<SpotifyDeviceList>;
 
     /// The device ID.
     QString id;
@@ -29,4 +37,3 @@ struct SpotifyDevice
     /// The current volume in percent. Between 0 and 100 (inclusive).
     int volumePercent;
 };
-

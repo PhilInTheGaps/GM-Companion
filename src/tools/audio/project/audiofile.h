@@ -9,33 +9,30 @@
 class AudioFile : public QObject
 {
     Q_OBJECT
-    AUTO_PROPERTY(QString, url)
-    AUTO_PROPERTY(QString, title)
-    AUTO_PROPERTY(int, source) // 0: file, 1: url, 2: spotify, 3: youtube
-    AUTO_PROPERTY(bool, missing)
-    Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY urlChanged)
 
 public:
-    AudioFile(const QString &url, int source, const QString &title, QObject *parent) :
-        QObject(parent), a_url(url), a_title(title), a_source(source) {}
+    enum AudioFileSource {
+        Unknown = -1,
+        File = 0,
+        Web = 1,
+        Spotify = 2,
+        Youtube = 3
+    };
+    Q_ENUM(AudioFileSource)
 
-    AudioFile(const QJsonObject &object, QObject *parent = nullptr) : QObject(parent)
-    {
-        url(object["url"].toString());
-        source(object["source"].toInt());
-    }
+    AudioFile(const QString &url, AudioFileSource source, const QString &title, QObject *parent);
+    AudioFile(const QJsonObject &object, QObject *parent = nullptr);
 
-    [[nodiscard]] auto printableUrl() const -> QString {
-        return title().isEmpty() ? url() : QString("%1 | %2").arg(title(), url());
-    }
+    [[nodiscard]] auto printableUrl() const -> QString;
+    [[nodiscard]] auto toJson() const -> QJsonObject;
 
-    [[nodiscard]] auto toJson() const -> QJsonObject
-    {
-        return QJsonObject {
-            { "url", url() },
-            { "source", source() }
-        };
-    }
+    AUTO_PROPERTY(QString, url)
+    AUTO_PROPERTY(QString, title)
+    AUTO_PROPERTY(AudioFileSource, source)
+    AUTO_PROPERTY(bool, missing)
+    Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY urlChanged)
 };
+
+Q_DECLARE_METATYPE(AudioFile)
 
 #endif // AUDIOFILE_H

@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 REQUIRED COMPONENTS Gui Test)
+find_package(Qt5 REQUIRED COMPONENTS Gui Network Test)
 
 # Utils
 add_executable(test_utils testutils.cpp)
@@ -22,7 +22,7 @@ add_test(NAME test_fileutils COMMAND test_fileutils)
 
 # Network Utils
 add_executable(test_networkutils testnetworkutils.cpp)
-target_link_libraries(test_networkutils common Qt5::Test)
+target_link_libraries(test_networkutils common Qt5::Test Qt5::Network)
 add_test(NAME test_networkutils COMMAND test_networkutils)
 
 # Markdown Utils

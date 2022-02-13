@@ -3,6 +3,7 @@
 #include "../thumbnails/audiothumbnailgenerator.h"
 #include "utils/utils.h"
 #include "utils/fileutils.h"
+#include "spotify/spotifyutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 
 #include <QQmlContext>
@@ -691,7 +692,18 @@ auto AudioEditor::addUrl(const QString &url, int mode, const QString &title) -> 
 
     qCDebug(gmAudioEditor) << "Adding URL to element" << QString(*m_currentElement) << ":" << url << "( Mode:" << mode << ") ...";
 
-    auto *audioFile = new AudioFile(url, mode == 1 ? 2 : 1, title, m_currentElement);
+    AudioFile *audioFile = nullptr;
+
+    const auto isSpotify = mode == 1;
+
+    if (isSpotify)
+    {
+        audioFile = new AudioFile(SpotifyUtils::makeUri(url), AudioFile::Spotify, title, m_currentElement);
+    }
+    else
+    {
+        audioFile = new AudioFile(url, AudioFile::Web, title, m_currentElement);
+    }
 
     if (!addAudioFile(audioFile)) return false;
 
@@ -709,7 +721,7 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
 
     qCDebug(gmAudioEditor) << "Adding YouTube URL to element" << QString(*m_currentElement) << ":" << videoUrl;
 
-    auto *audioFile = new AudioFile(videoUrl, 3, "", m_currentElement);
+    auto *audioFile = new AudioFile(videoUrl, AudioFile::Youtube, "", m_currentElement);
     if (!addAudioFile(audioFile)) return false;
 
     auto *video = ytClient->getVideo(videoUrl);
@@ -733,7 +745,7 @@ auto AudioEditor::addFile(QStringList path, const QString &filename) -> bool
 
     path.append(filename);
     auto pathString = "/" + FileUtils::dirFromFolders(path);
-    return addAudioFile(new AudioFile(pathString, 0, "", m_currentElement));
+    return addAudioFile(new AudioFile(pathString, AudioFile::File, "", m_currentElement));
 }
 
 /**
@@ -748,7 +760,7 @@ void AudioEditor::addFiles(const QStringList &files)
 
     for (const auto &file : files)
     {
-        addAudioFile(new AudioFile(file, 0, "", m_currentElement));
+        addAudioFile(new AudioFile(file, AudioFile::File, "", m_currentElement));
     }
 }
 

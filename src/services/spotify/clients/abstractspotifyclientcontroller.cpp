@@ -1,7 +1,7 @@
 #include "abstractspotifyclientcontroller.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thirdparty/o2/src/o0globals.h"
-#include "../spotify.h"
+#include "spotify/spotify.h"
 #include "../config.h"
 
 #include <QNetworkRequest>
@@ -20,48 +20,18 @@ AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent
     generateDeviceName();
 }
 
-auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<SpotifyDevice>
+auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>
 {
-    QNetworkRequest request(QUrl("https://api.spotify.com/v1/me/player/devices"));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, static_cast<const char*>(O2_MIME_TYPE_JSON));
-
-    const auto callback = [this, name](RestNetworkReply *reply) {
-        const auto data = reply->data();
-        const auto devices = QJsonDocument::fromJson(data).object().value("devices").toArray();
-        reply->deleteLater();
-
-        m_deviceNames = getDeviceNameList(devices);
-        qCDebug(gmSpotifyClientController()) << "Found the following active spotify devices:" << m_deviceNames;
-
-        for (const auto &device : devices)
+    const auto callback = [name](QSharedPointer<SpotifyDeviceList> deviceList) {
+        for (const auto &device : deviceList->devices)
         {
-            if (device.toObject()["name"].toString() == name)
-            {
-                return SpotifyDevice::fromJson(device.toObject());
-            }
+            if (device->name == name) return device;
         }
 
-        return SpotifyDevice();
+        return QSharedPointer<SpotifyDevice>();
     };
 
-    return observe(Spotify::getInstance()->get(request)).subscribe(callback).future();
-}
-
-auto AbstractSpotifyClientController::getDeviceNameList(const QJsonArray &devices) -> QStringList
-{
-    QStringList names;
-
-    for (const auto &device : devices)
-    {
-        names << device.toObject()["name"].toString();
-    }
-
-    return names;
-}
-
-auto AbstractSpotifyClientController::deviceNames() const -> QStringList
-{
-    return m_deviceNames;
+    return observe(Spotify::instance()->player->devices()).subscribe(callback).future();
 }
 
 void AbstractSpotifyClientController::updateStatus(const ServiceStatus::Type &type, const QString &message)
@@ -74,19 +44,9 @@ void AbstractSpotifyClientController::updateStatus(const ServiceStatus::Type &ty
 
 void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &device)
 {
-    // Make it active.
-    QJsonObject parameters
-    {
-        { "device_ids", QJsonArray { device.id } },
-        { "play", false }
-    };
-
     qCDebug(m_loggingCategory) << "Found librespot instance" << deviceName() << "but it is inactive, setting as active device ...";
 
-    const auto url = QUrl("https://api.spotify.com/v1/me/player");
-    const auto payload = QJsonDocument(parameters).toJson(QJsonDocument::JsonFormat::Compact);
-    const auto future = Spotify::getInstance()->put(url, payload);
-
+    const auto future = Spotify::instance()->player->transfer({ device.id });
     const auto onReply = [this](RestNetworkReply *reply)
     {
         if (reply->hasError()) updateStatus(ServiceStatus::Error, reply->errorText());

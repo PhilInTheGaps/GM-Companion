@@ -1,27 +1,57 @@
 #include "spotifyutils.h"
 #include <QStringList>
 #include <QRegularExpression>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmSpotifyUtils, "gm.service.spotify.utils")
 
 /**
  * @brief Get the type of a spotify uri.
  * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
- * @return 0: Album, 1: Playlist, 2: Track, 3: Artist, 4: episode, 5: show -1:
- * unknown
  */
 auto SpotifyUtils::getUriType(const QString& uri) -> SpotifyType
 {
-    if (uri.contains("album:") || uri.contains("album/")) return Album;
+    if (uri.contains(QStringLiteral(":album:"))
+            || uri.contains(QStringLiteral("/album/"))
+            || uri.contains(QStringLiteral("/albums/"))) return Album;
 
-    if (uri.contains("playlist:") || uri.contains("playlist/")) return Playlist;
+    if (uri.contains(QStringLiteral(":playlist:"))
+            || uri.contains(QStringLiteral("/playlist/"))
+            || uri.contains(QStringLiteral("/playlists/"))) return Playlist;
 
-    if (uri.contains("track:") || uri.contains("track/")) return Track;
+    if (uri.contains(QStringLiteral(":track:"))
+            || uri.contains(QStringLiteral("/track/"))
+            || uri.contains(QStringLiteral("/tracks/"))) return Track;
 
-    if (uri.contains("artist:") || uri.contains("artist/")) return Artist;
+    if (uri.contains(QStringLiteral(":artist:"))
+            || uri.contains(QStringLiteral("/artist/"))
+            || uri.contains(QStringLiteral("/artists/"))) return Artist;
 
-    if (uri.contains("episode:") || uri.contains("episode/")) return Episode;
+    if (uri.contains(QStringLiteral(":episode:"))
+            || uri.contains(QStringLiteral("/episode/"))
+            || uri.contains(QStringLiteral("/episodes/"))) return Episode;
 
-    if (uri.contains("show:") || uri.contains("show/")) return Show;
+    if (uri.contains(QStringLiteral(":show:"))
+            || uri.contains(QStringLiteral("/show/"))
+            || uri.contains(QStringLiteral("/shows/"))) return Show;
 
+    if (uri.contains(QStringLiteral(":local:"))
+            || uri.contains(QStringLiteral("/local/"))) return Local;
+
+    return Unknown;
+}
+
+auto SpotifyUtils::typeFromString(const QString &str) -> SpotifyUtils::SpotifyType
+{
+    if (str == QStringLiteral("album")) return Album;
+    if (str == QStringLiteral("playlist")) return Playlist;
+    if (str == QStringLiteral("track")) return Track;
+    if (str == QStringLiteral("artist")) return Artist;
+    if (str == QStringLiteral("episode")) return Episode;
+    if (str == QStringLiteral("show")) return Show;
+    if (str == QStringLiteral("local")) return Local;
+
+    qCCritical(gmSpotifyUtils()) << "Unknown type:" << str;
     return Unknown;
 }
 
@@ -38,7 +68,7 @@ auto SpotifyUtils::getIdFromUri(const QString &uri)->QString
 
     if (match.isValid() && match.hasMatch())
     {
-        return match.captured(2);
+        return match.captured(QStringLiteral("id"));
     }
 
     return {};
@@ -56,8 +86,47 @@ auto SpotifyUtils::getIdFromHref(const QString& href)->QString
 
     if (match.isValid() && match.hasMatch())
     {
-        return match.captured(2);
+        return match.captured(QStringLiteral("id"));
     }
 
     return {};
+}
+
+auto SpotifyUtils::makeUri(const QString &input) -> QString
+{
+    if (isUri(input)) return input;
+
+    const auto regex = QRegularExpression(ID_FROM_HREF);
+    const auto match = regex.match(input);
+
+    auto type = match.captured(QStringLiteral("type"));
+    if (type.endsWith('s')) type.chop(1); // if make singular, albums -> album
+
+    const auto id = match.captured(QStringLiteral("id"));
+
+    return QStringLiteral("spotify:%1:%2").arg(type, id);
+}
+
+auto SpotifyUtils::isUri(const QString &input) -> bool
+{
+    const auto regex = QRegularExpression(IS_URI);
+    const auto match = regex.match(input);
+    return match.isValid() && match.hasMatch();
+}
+
+auto SpotifyUtils::isContainerType(SpotifyType type) -> bool
+{
+    switch (type)
+    {
+    case Album:
+    case Playlist:
+    case Show:
+        return true;
+    case Track:
+    case Episode:
+        return false;
+    default:
+        qCCritical(gmSpotifyUtils()) << "isContainerType(): unhandled type" << type;
+        return false;
+    }
 }

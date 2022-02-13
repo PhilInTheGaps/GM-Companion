@@ -23,8 +23,7 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     metaDataReader = new MetaDataReader(this);
     mprisManager   = new MprisManager(this);
     discordPlayer  = new DiscordPlayer(this);
-    spotifyPlayer  = new SpotifyPlayer(metaDataReader, discordPlayer, networkManager, this);
-    musicPlayer    = new MusicPlayer(metaDataReader, spotifyPlayer, discordPlayer, this);
+    musicPlayer    = new MusicPlayer(metaDataReader, discordPlayer, this);
     radioPlayer    = new RadioPlayer(metaDataReader, discordPlayer, this);
     audioPlayers   = { musicPlayer, radioPlayer };
 
@@ -35,11 +34,11 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     engine->rootContext()->setContextProperty("audio_editor", editor);
 
     // Spotify
-    connect(Spotify::getInstance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
+    connect(Spotify::instance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
     connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
-    connect(musicPlayer, &MusicPlayer::songNamesChanged,    this, [ = ]() { emit songsChanged(); });
+    connect(musicPlayer, &MusicPlayer::songNamesChanged,    this, [ = ](const QStringList &names) { Q_UNUSED(names); emit songsChanged(); });
     connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
 
     // Radio Player
@@ -267,16 +266,15 @@ void AudioTool::again()
 void AudioTool::setMusicVolume(qreal volume)
 {
     // Convert volume to logarithmic scale
-    int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
-    int linearVolume      = qRound(volume * 100);
+    auto logarithmicVolume = makeLogarithmicVolume(volume);
+    auto linearVolume = makeLinearVolume(volume);
 
     qCDebug(gmAudioTool()) << "Setting music volume:" << linearVolume;
     m_musicVolume = volume;
 
-    for (auto a : qAsConst(audioPlayers))
+    for (auto *player : qAsConst(audioPlayers))
     {
-        a->setLogarithmicVolume(logarithmicVolume);
-        a->setLinearVolume(linearVolume);
+        player->setVolume(linearVolume, logarithmicVolume);
     }
 
     discordPlayer->setMusicVolume(logarithmicVolume);
@@ -289,13 +287,22 @@ void AudioTool::setMusicVolume(qreal volume)
  */
 void AudioTool::setSoundVolume(qreal volume)
 {
-    qCDebug(gmAudioTool()) << "Setting sound volume:" << (volume * 100);
-
-    int logarithmicVolume = qRound(QAudio::convertVolume(volume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * 100);
+    auto linearVolume = makeLinearVolume(volume);
+    auto logarithmicVolume = makeLogarithmicVolume(volume);
     m_soundVolume = volume;
 
-    soundPlayerController->setLogarithmicVolume(logarithmicVolume);
+    soundPlayerController->setVolume(linearVolume, logarithmicVolume);
     discordPlayer->setSoundsVolume(logarithmicVolume);
+}
+
+auto AudioTool::makeLinearVolume(qreal linearVolume) -> int
+{
+    return qRound(linearVolume * VOLUME_FACTOR);
+}
+
+auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
+{
+    return qRound(QAudio::convertVolume(linearVolume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * VOLUME_FACTOR);
 }
 
 /**
@@ -321,7 +328,7 @@ auto AudioTool::index() const -> int
     switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
-        return musicPlayer->index();
+        return musicPlayer->playlistIndex();
     default:
         return 0;
     }

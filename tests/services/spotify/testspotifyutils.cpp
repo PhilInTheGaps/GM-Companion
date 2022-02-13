@@ -9,14 +9,20 @@ public:
     TestSpotifyUtils() = default;
 
 private slots:
-    void getUriType_data();
-    void getUriType();
+    static void getUriType_data();
+    static void getUriType();
 
-    void getIdFromUri_data();
-    void getIdFromUri();
+    static void getIdFromUri_data();
+    static void getIdFromUri();
 
-    void getIdFromHref_data();
-    void getIdFromHref();
+    static void getIdFromHref_data();
+    static void getIdFromHref();
+
+    static void isUri_data();
+    static void isUri();
+
+    static void makeUri_data();
+    static void makeUri();
 };
 
 void TestSpotifyUtils::getUriType_data()
@@ -39,9 +45,12 @@ void TestSpotifyUtils::getUriType_data()
 
     QTest::newRow("episode") << "spotify:episode:0Q86acNRm6V9GYx55SXKwf" << SpotifyUtils::Episode;
     QTest::newRow("episode") << "https://open.spotify.com/episode/4K9wijPGBjwXjnSiEIkRLy?si=71701a1d55c14e82" << SpotifyUtils::Episode;
+    QTest::newRow("episode") << "https://api.spotify.com/v1/episodes/5Xt5DXGzch68nYYamXrNxZ" << SpotifyUtils::Episode;
 
     QTest::newRow("show") << "spotify:show:5CnDmMUG0S5bSSw612fs8C" << SpotifyUtils::Show;
     QTest::newRow("show") << "https://open.spotify.com/show/6qABy0MzyKURDbwLKZkeK6?si=79e98224367048ef" << SpotifyUtils::Show;
+
+    QTest::newRow("local") << "spotify:local:Jeremy+Soule+%2F+Julian+Soule:Guild+Wars+2+Original+Game+Soundtrack:The+Seraph:193" << SpotifyUtils::Local;
 
     QTest::newRow("unknown") << "spotify:something:xxxxxxxxx" << SpotifyUtils::Unknown;
 }
@@ -51,6 +60,7 @@ void TestSpotifyUtils::getUriType()
     QFETCH(QString, uri);
     QFETCH(SpotifyUtils::SpotifyType, type);
 
+    qDebug() << SpotifyUtils::getUriType(uri) << type;
     QCOMPARE(SpotifyUtils::getUriType(uri), type);
 }
 
@@ -100,7 +110,6 @@ void TestSpotifyUtils::getIdFromHref_data()
     QTest::newRow("artist") << "https://api.spotify.com/v1/artists/2d0hyoQ5ynDBnkvAbJKORj" << "2d0hyoQ5ynDBnkvAbJKORj";
     QTest::newRow("episode") << "https://api.spotify.com/v1/episodes/4K9wijPGBjwXjnSiEIkRLy" << "4K9wijPGBjwXjnSiEIkRLy";
     QTest::newRow("episode") << "https://api.spotify.com/v1/shows/6qABy0MzyKURDbwLKZkeK6" << "6qABy0MzyKURDbwLKZkeK6";
-
 }
 
 void TestSpotifyUtils::getIdFromHref()
@@ -109,6 +118,45 @@ void TestSpotifyUtils::getIdFromHref()
     QFETCH(QString, id);
 
     QCOMPARE(SpotifyUtils::getIdFromHref(href), id);
+}
+
+void TestSpotifyUtils::isUri_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<bool>("result");
+
+    QTest::newRow("uri") << "spotify:track:59WN2psjkt1tyaxjspN8fp" << true;
+    QTest::newRow("uri") << "spotify:playlist:37i9dQZF1DX4tMcImWolDJ" << true;
+    QTest::newRow("uri") << "spotify:album:4Io5vWtmV1rFj4yirKb4y4" << true;
+    QTest::newRow("uri") << "spotify:artist:2d0hyoQ5ynDBnkvAbJKORj" << true;
+    QTest::newRow("href") << "https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2" << false;
+    QTest::newRow("href") << "https://open.spotify.com/track/0W35nxtHtFlseSojmygEsf" << false;
+}
+
+void TestSpotifyUtils::isUri()
+{
+    QFETCH(QString, input);
+    QFETCH(bool, result);
+
+    QCOMPARE(SpotifyUtils::isUri(input), result);
+}
+
+void TestSpotifyUtils::makeUri_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("result");
+
+    QTest::newRow("uri") << "spotify:track:59WN2psjkt1tyaxjspN8fp" << "spotify:track:59WN2psjkt1tyaxjspN8fp";
+    QTest::newRow("href") << "https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2" << "spotify:album:6akEvsycLGftJxYudPjmqK";
+    QTest::newRow("href") << "https://open.spotify.com/track/0W35nxtHtFlseSojmygEsf?si=43b918d258c540ad" << "spotify:track:0W35nxtHtFlseSojmygEsf";
+}
+
+void TestSpotifyUtils::makeUri()
+{
+    QFETCH(QString, input);
+    QFETCH(QString, result);
+
+    QCOMPARE(SpotifyUtils::makeUri(input), result);
 }
 
 QTEST_APPLESS_MAIN(TestSpotifyUtils)

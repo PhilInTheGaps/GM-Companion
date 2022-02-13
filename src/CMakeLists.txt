@@ -20,6 +20,7 @@ find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
 include(AddQYTLIB)
 include(AddPoppler)
 include(AddTagLib)
+include(AddGSL)
 
 add_subdirectory(common)
 add_subdirectory(services)
@@ -59,6 +60,7 @@ set(SOURCES
   tools/audio/project/audioscenario.cpp
   tools/audio/project/audioelement.cpp
   tools/audio/project/audiofilemodel.cpp
+  tools/audio/project/audiofile.cpp
   tools/audio/mpris/mprisadaptor.cpp
   tools/audio/mpris/mprisplayeradaptor.cpp
   tools/audio/mpris/mprismanager.cpp

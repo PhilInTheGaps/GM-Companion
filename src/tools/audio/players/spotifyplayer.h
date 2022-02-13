@@ -4,8 +4,11 @@
 #include <QQueue>
 #include <QBuffer>
 #include <QTimer>
+#include <QPointer>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <gsl/gsl>
+#include <chrono>
 
 #include "rest/restnetworkreply.h"
 #include "audioplayer.h"
@@ -13,66 +16,48 @@
 #include "../project/audioelement.h"
 #include "../metadata/metadatareader.h"
 
-struct SpotifyTrack
-{
-    QString title;
-    QString uri;
-};
-
 class SpotifyPlayer : public AudioPlayer
 {
     Q_OBJECT
 
 public:
-    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer,
-                  QNetworkAccessManager *networkManager, QObject *parent = nullptr);
-    ~SpotifyPlayer();
+    SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
 
-    void play(const QString& id, int offset = -1, bool playOnce = false);
-    void play();
-    void pause() { stop(); }
-    void stop();
+public slots:
+    void play(const QString& uri);
+    void play() override;
+    void pause() override { stop(); }
+    void stop() override;
     void pausePlay();
-
-    void setIndex(int index) { /*play(m_currentId, index);*/ }
-    int index() const { return m_currentIndex; }
-    void next();
-    void again();
-
-    void setLogarithmicVolume(int volume) { }
-    void setLinearVolume(int volume);
-    bool isPlaying() const { return m_isPlaying; }
-    void getPlaylistTracks(const QString& uri);
+    void next() override;
+    void again() override;
+    void setVolume(int linear, int logarithmic) override;
 
 private:
-    MetaDataReader *metaDataReader = nullptr;
-    QNetworkAccessManager *m_networkManager = nullptr;
-    DiscordPlayer *m_discordPlayer = nullptr;
-    QTimer *m_timer;
-    QTimer *m_periodicTimer;
+    QPointer<MetaDataReader> metaDataReader = nullptr;
+    QPointer<DiscordPlayer> m_discordPlayer = nullptr;
+    gsl::owner<QTimer*> m_songDurationTimer = nullptr;
+    gsl::owner<QTimer*> m_metaDataTimer = nullptr;
 
     bool m_isPlaying = false;
-    bool m_playOnce = false;
     int m_volume = 0;
-    int m_currentIndex = 0;
-
-    QStringList m_trackList;
-    QStringList m_trackIdList;
+    QString m_currentUri;
 
     void getCurrentSong();
-    void startTimer(int interval = -1);
+    void startDurationTimer(std::chrono::milliseconds interval);
+    void startMetaDataTimer();
 
-    void gotPlaylistInfo(RestNetworkReply *reply);
+    static auto isSpotifyAvailable() -> bool;
 
-    static auto getTrackEndpoint(const QString &uri) -> QUrl;
+private slots:
+    void onDurationTimerTimeout();
+    void onMetaDataTimerTimeout();
 
 signals:
     void songNamesChanged();
     void startedPlaying();
     void songEnded();
-    void receivedPlaylistTracks(QList<SpotifyTrack> tracks, QString id);
     void receivedElementIcon(AudioElement *element);
-
 };
 
 

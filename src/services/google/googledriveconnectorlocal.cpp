@@ -1,5 +1,4 @@
 #include "googledriveconnectorlocal.h"
-#include "../services.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
 
@@ -13,12 +12,12 @@ GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(
 {
     RESTServiceLocalConfig config;
 
-    config.scope                 = GOOGLE_SCOPE;
-    config.port                  = GOOGLE_LOCAL_PORT;
-    config.maxConcurrentRequests = GOOGLE_MAX_REQUESTS;
-    config.authHeaderFormat      = "Bearer %1";
-    config.idRequest             = SettingRequest("googleID", "", "Google");
-    config.secretRequest         = SettingRequest("googleSecret", "", "Google");
+    config.scope                 = SCOPE;
+    config.port                  = LOCAL_PORT;
+    config.maxConcurrentRequests = MAX_CONCURRENT_REQUESTS;
+    config.authHeaderFormat      = QStringLiteral("Bearer %1");
+    config.idRequest             = SettingRequest(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google"));
+    config.secretRequest         = SettingRequest(QStringLiteral("googleSecret"), QLatin1String(), QStringLiteral("Google"));
 
     setConfig(config);
 

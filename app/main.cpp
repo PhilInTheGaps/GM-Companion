@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);
 
     // Services
-    engine.rootContext()->setContextProperty("spotify_service", Spotify::getInstance());
+    engine.rootContext()->setContextProperty("spotify_service", Spotify::instance());
     engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
     engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
     engine.rootContext()->setContextProperty("discord_service", Discord::getInstance());

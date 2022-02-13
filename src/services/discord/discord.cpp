@@ -1,44 +1,36 @@
 #include "discord.h"
-#include "logging.h"
-#include "services.h"
 #include "settings/settingsmanager.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDesktopServices>
+#include <QLoggingCategory>
 
-bool Discord::instanceFlag = false;
-Discord *Discord::single = nullptr;
+Q_LOGGING_CATEGORY(gmDiscord, "gm.service.discord")
 
-Discord::Discord(QObject *parent) : Service("Discord", parent)
+Discord::Discord(QObject *parent) : Service("Discord", parent), a_enabled(false)
 {
     m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    setChannel(SettingsManager::getSetting("channel", "", "Discord"));
-    setEnabled(SettingsManager::getBoolSetting("enabled", false, "Discord"));
+    channel(SettingsManager::getSetting("channel", "", "Discord"));
+    enabled(SettingsManager::getBoolSetting("enabled", false, "Discord"));
 
     updateStatus(ServiceStatus::Type::Info, "");
 }
 
-Discord *Discord::getInstance()
+auto Discord::getInstance() -> Discord*
 {
-    if (!instanceFlag)
+    if (!single)
     {
-        single       = new Discord;
-        instanceFlag = true;
+        single = new Discord(nullptr);
     }
     return single;
 }
 
-Discord::~Discord()
-{
-    instanceFlag = false;
-}
-
 void Discord::post(const QString &endpoint, const QByteArray& data)
 {
-    auto url = serverUrl() + DISCORD_API_ENDPOINT + endpoint;
+    const auto url = serverUrl() + API_ENDPOINT + endpoint;
 
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -57,7 +49,7 @@ void Discord::post(const QString &endpoint, const QByteArray& data)
 
 void Discord::post(const QString &endpoint, QHttpMultiPart *multipart)
 {
-    auto url = serverUrl() + DISCORD_API_ENDPOINT + endpoint;
+    auto url = serverUrl() + API_ENDPOINT + endpoint;
     auto *reply = m_networkManager->post(QNetworkRequest(url), multipart);
 
     multipart->setParent(reply);
@@ -86,7 +78,7 @@ void Discord::testConnection()
 {
     updateStatus(ServiceStatus::Type::Info, tr("Testing connection ..."));
 
-    auto url = serverUrl() + DISCORD_API_ENDPOINT + "/status";
+    const auto url = serverUrl() + API_ENDPOINT + "/status";
     auto *reply = m_networkManager->get(QNetworkRequest(url));
 
     connect(reply, &QNetworkReply::finished, this, [=]() {
@@ -112,10 +104,10 @@ void Discord::testConnection()
 
 void Discord::invite()
 {
-    QDesktopServices::openUrl(serverUrl() + DISCORD_API_ENDPOINT + "/invite");
+    QDesktopServices::openUrl(serverUrl() + API_ENDPOINT + "/invite");
 }
 
-QString Discord::serverUrl() const
+auto Discord::serverUrl() -> QString
 {
     return SettingsManager::getServerUrl("Discord");
 }

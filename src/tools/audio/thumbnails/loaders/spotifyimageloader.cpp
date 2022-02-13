@@ -68,27 +68,13 @@ void SpotifyImageLoader::enqueueRequest(const QString &id, SpotifyUtils::Spotify
 
 auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QPixmap>
 {
-    const auto url = getEndpoint(SpotifyUtils::Playlist).arg(id);
+    const auto callback = [id](QSharedPointer<SpotifyPlaylist> playlist) {
+        if (playlist.isNull()) return QFuture<QPixmap>();
 
-    const auto future = Spotify::getInstance()->get(url);
+        const auto url = playlist->images.first()->url;
+        const auto future = Spotify::instance()->get(url);
 
-    const auto callback = [id](RestNetworkReply *reply) {
-        if (reply->hasError())
-        {
-            qCWarning(gmAudioSpotifyImageLoader()) << reply->errorText();
-            reply->deleteLater();
-            return completed(QPixmap());
-        }
-
-        const auto json = QJsonDocument::fromJson(reply->data()).array();
-        const auto image = json.first().toObject();
-        const auto url = image["url"].toString();
-        reply->deleteLater();
-
-        const auto request = QNetworkRequest(url);
-        const auto future = Spotify::getInstance()->get(request);
-
-        const auto callback = [id, url](RestNetworkReply *reply) {
+        const auto callback = [id, url](gsl::owner<RestNetworkReply*> reply) {
             QPixmap image;
 
             if (image.loadFromData(reply->data()))
@@ -97,12 +83,14 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
                 AudioThumbnailCache::instance()->insertImage(id, image);
             }
 
+            reply->deleteLater();
             return image;
         };
 
         return observe(future).subscribe(callback).future();
     };
 
+    const auto future = Spotify::instance()->playlists->getPlaylist(id);
     return observe(future).subscribe(callback).future();
 }
 
@@ -117,7 +105,7 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
 
     qCDebug(gmAudioSpotifyImageLoader()) << "Sending batch request:" << url;
 
-    const auto future = Spotify::getInstance()->get(url);
+    const auto future = Spotify::instance()->get(url);
     observe(future).subscribe([type](RestNetworkReply *reply) { receivedRequest(reply, type); });
 
     // Start timer again if there still are ids in the queue
@@ -165,7 +153,7 @@ void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::
         }
 
         const auto request = QNetworkRequest(url);
-        const auto future = Spotify::getInstance()->get(request);
+        const auto future = Spotify::instance()->get(request);
 
         const auto callback = [id, url](RestNetworkReply *reply) {
             QPixmap image;

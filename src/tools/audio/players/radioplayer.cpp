@@ -109,6 +109,12 @@ void RadioPlayer::stop()
     m_mediaPlayer->stop();
 }
 
+void RadioPlayer::setVolume(int linear, int logarithmic)
+{
+    Q_UNUSED(linear)
+    m_mediaPlayer->setVolume(logarithmic);
+}
+
 /**
  * @brief Tell MetaDataReader that there is new MetaData available
  */

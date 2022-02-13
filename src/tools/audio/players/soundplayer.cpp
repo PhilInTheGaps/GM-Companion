@@ -29,10 +29,10 @@ void SoundPlayerController::play(AudioElement *element)
     {
         auto *player = new SoundPlayer(element, m_volume, m_networkManager, m_discordPlayer, this);
 
-        connect(player, &SoundPlayer::playerStopped,         this,   &SoundPlayerController::onPlayerStopped);
-        connect(this,   &SoundPlayerController::setVolume,   player, &SoundPlayer::setLogarithmicVolume);
-        connect(this,   &SoundPlayerController::stopAll,     player, &SoundPlayer::stop);
-        connect(this,   &SoundPlayerController::stopElement, player, &SoundPlayer::stopElement);
+        connect(player, &SoundPlayer::playerStopped, this, &SoundPlayerController::onPlayerStopped);
+        connect(this, &SoundPlayerController::setPlayerVolume, player, &SoundPlayer::setVolume);
+        connect(this, &SoundPlayerController::stopAll, player, &SoundPlayer::stop);
+        connect(this, &SoundPlayerController::stopElement, player, &SoundPlayer::stopElement);
 
         m_players.append(player);
         player->play();
@@ -78,7 +78,7 @@ auto SoundPlayerController::activeElements() const -> QList<QObject *>
  * @param element SoundElement to be checked
  * @return True if element is playing
  */
-auto SoundPlayerController::isSoundPlaying(AudioElement *element) -> bool
+auto SoundPlayerController::isSoundPlaying(AudioElement *element) const -> bool
 {
     qCDebug(gmAudioSounds()) << "Checking if sound" << element->name() << "is playing ...";
 
@@ -97,10 +97,10 @@ auto SoundPlayerController::isSoundPlaying(AudioElement *element) -> bool
  * @brief Set the volume for all active sound elements
  * @param volume Volume value
  */
-void SoundPlayerController::setLogarithmicVolume(int volume)
+void SoundPlayerController::setVolume(int linear, int logarithmic)
 {
-    m_volume = volume;
-    emit setVolume(volume);
+    m_volume = logarithmic;
+    emit setPlayerVolume(linear, logarithmic);
 }
 
 /**
@@ -225,6 +225,12 @@ void SoundPlayer::stopElement(const QString& element)
         m_mediaPlayer->stop();
         emit playerStopped(this);
     }
+}
+
+void SoundPlayer::setVolume(int linear, int logarithmic)
+{
+    Q_UNUSED(linear)
+    m_mediaPlayer->setVolume(logarithmic);
 }
 
 void SoundPlayer::next()

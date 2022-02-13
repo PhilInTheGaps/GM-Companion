@@ -15,7 +15,11 @@ using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
-Spotify::Spotify(QObject *parent) : Service("Spotify", parent)
+Spotify::Spotify(QObject *parent)
+    : Service("Spotify", parent),
+      albums(new AlbumAPI(this)),
+      player(new PlayerAPI(this)),
+      playlists(new PlaylistsAPI(this))
 {
     m_networkManager = new QNetworkAccessManager(this);
     username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
@@ -64,13 +68,14 @@ auto Spotify::startClient() -> QFuture<bool>
     return m_librespotController.start();
 }
 
-auto Spotify::getInstance() -> Spotify *
+auto Spotify::instance() -> Spotify*
 {
-    if (!single)
+    if (!m_instance)
     {
-        single = new Spotify(nullptr);
+        m_instance = new Spotify(nullptr);
     }
-    return single;
+
+    return m_instance;
 }
 
 void Spotify::grant()
@@ -95,7 +100,7 @@ auto Spotify::isGranted() const -> bool
     return m_connector->isAccessGranted();
 }
 
-auto Spotify::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply*>
+auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetworkReply*>>
 {
     if (!connected() || !m_connector) return {};
 
@@ -107,12 +112,12 @@ auto Spotify::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply*>
     return observe(m_connector->get(request)).subscribe(callback).future();
 }
 
-auto Spotify::get(const QUrl &url) -> QFuture<RestNetworkReply *>
+auto Spotify::get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply*>>
 {
     return get(QNetworkRequest(url));
 }
 
-auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
 {
     if (!connected() || !m_connector) return {};
 
@@ -121,10 +126,15 @@ auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<RestNetwor
         return reply;
     };
 
-    return observe(m_connector->put(QNetworkRequest(url), data)).subscribe(callback).future();
+    return observe(m_connector->put(request, data)).subscribe(callback).future();
 }
 
-auto Spotify::post(const QNetworkRequest& request, const QByteArray &data) -> QFuture<RestNetworkReply *>
+auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
+{
+    return put(QNetworkRequest(url), data);
+}
+
+auto Spotify::post(const QNetworkRequest& request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
 {
     if (!connected() || !m_connector) return {};
 

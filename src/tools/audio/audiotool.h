@@ -6,7 +6,6 @@
 
 #include "common/abstracttool.h"
 #include "editor/audioeditor.h"
-#include "players/spotifyplayer.h"
 #include "players/musicplayer.h"
 #include "players/soundplayer.h"
 #include "players/radioplayer.h"
@@ -14,9 +13,6 @@
 #include "mpris/mprismanager.h"
 
 #include "thirdparty/propertyhelper/PropertyHelper.h"
-
-#define DEFAULT_MUSIC_VOLUME 0.25
-#define DEFAULT_SOUND_VOLUME 0.25
 
 class AudioTool : public AbstractTool
 {
@@ -110,14 +106,21 @@ private:
     MusicPlayer *musicPlayer = nullptr;
     SoundPlayerController *soundPlayerController = nullptr;
     RadioPlayer *radioPlayer = nullptr;
-    SpotifyPlayer *spotifyPlayer = nullptr;
     QList<AudioPlayer*> audioPlayers;
 
     AudioElement::Type m_musicElementType = AudioElement::Type::Music;
     bool m_isPaused = true;
 
+    // Volume
+    static constexpr qreal DEFAULT_MUSIC_VOLUME = 0.25;
+    static constexpr qreal DEFAULT_SOUND_VOLUME = 0.25;
+    static constexpr int VOLUME_FACTOR = 100;
+
     qreal m_musicVolume = DEFAULT_MUSIC_VOLUME;
     qreal m_soundVolume = DEFAULT_SOUND_VOLUME;
+
+    static auto makeLinearVolume(qreal linearVolume) -> int;
+    static auto makeLogarithmicVolume(qreal linearVolume) -> int;
 
     // Project
     QVector<AudioProject*> m_projects;

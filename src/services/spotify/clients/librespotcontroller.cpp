@@ -114,8 +114,8 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](const SpotifyDevice &device) {
-        if (device.id.isEmpty())
+    const auto callback = [this](QSharedPointer<SpotifyDevice> device) {
+        if (device->id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
             {
@@ -131,13 +131,13 @@ void LibrespotController::setAsActiveDevice()
             return false;
         }
 
-        if (device.isActive)
+        if (device->isActive)
         {
             qCDebug(gmLibrespotController()) << "Found librespot instance" << deviceName() << "-> it is already set as the active device.";
             return true;
         }
 
-        setActiveDevice(device);
+        setActiveDevice(*device);
         return true;
     };
 

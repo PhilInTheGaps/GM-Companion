@@ -20,22 +20,20 @@ class SoundPlayer : public AudioPlayer
 public:
     SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager,
                 DiscordPlayer *discordPlayer, QObject *parent = nullptr);
-    ~SoundPlayer();
+    ~SoundPlayer() override;
 
-    AudioElement *element() const { return m_element; }
+    [[nodiscard]] auto element() const -> AudioElement* { return m_element; }
+    [[nodiscard]] auto fileName() const -> QString { return m_fileName; }
     void loadMedia(AudioFile *file);
-    QString fileName() const { return m_fileName; }
 
 public slots:
-    void play();
-    void pause() { m_mediaPlayer->pause(); }
-    void stop();
+    void play() override;
+    void pause() override { m_mediaPlayer->pause(); }
+    void stop() override;
     void stopElement(const QString& element);
-    void setLogarithmicVolume(int volume) { m_mediaPlayer->setVolume(volume); }
-    void setLinearVolume(int volume) { Q_UNUSED(volume); }
-    void again() {}
-    void next();
-    void setIndex(int index) { Q_UNUSED(index); }
+    void setVolume(int linear, int logarithmic) override;
+    void again() override {}
+    void next() override;
 
 private:
     AudioElement *m_element = nullptr;
@@ -82,17 +80,15 @@ public:
     void play(AudioElement* elements);
     void stop(const QString& element);
 
-    QList<QObject*> activeElements() const;
+    [[nodiscard]] auto activeElements() const -> QList<QObject*>;
 
 public slots:
-    void play() { }
-    void pause() { }
-    void stop() { emit stopAll(); }
-    void setLogarithmicVolume(int volume);
-    void setLinearVolume(int volume) { Q_UNUSED(volume); }
-    void next() { }
-    void again() { }
-    void setIndex(int index) { Q_UNUSED(index); }
+    void play() override { }
+    void pause() override { }
+    void stop() override { emit stopAll(); }
+    void setVolume(int linear, int logarithmic) override;
+    void next() override { }
+    void again() override { }
 
 private:
     DiscordPlayer *m_discordPlayer = nullptr;
@@ -100,14 +96,14 @@ private:
     QList<SoundPlayer*> m_players;
     int m_volume = 0;
 
-    QList<AudioElement *> elements() const;
-    bool isSoundPlaying(AudioElement* elements);
+    [[nodiscard]] auto elements() const -> QList<AudioElement *>;
+    [[nodiscard]] auto isSoundPlaying(AudioElement* elements) const -> bool;
 
 private slots:
     void onPlayerStopped(SoundPlayer *player);
 
 signals:
-    void setVolume(int volume);
+    void setPlayerVolume(int linear, int logarithmic);
     void stopElement(QString element);
     void stopAll();
     void soundsChanged(QList<AudioElement*>);

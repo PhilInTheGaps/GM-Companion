@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <chrono>
 #include "rest/restserviceconnector.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
@@ -65,7 +66,7 @@ private:
 
     void handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
                          const QList<QPair<QByteArray, QByteArray> >& headers);
-    void startCooldown(int seconds);
+    void startCooldown(std::chrono::seconds seconds);
 
 private slots:
     void onIncomingConnection();
