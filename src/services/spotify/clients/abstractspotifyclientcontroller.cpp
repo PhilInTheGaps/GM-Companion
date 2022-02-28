@@ -17,7 +17,7 @@ using namespace AsyncFuture;
 AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent, const QLoggingCategory &loggingCategory)
     : QObject{parent}, a_status(new ServiceStatus(this)), m_loggingCategory(loggingCategory)
 {
-    generateDeviceName();
+    generateDeviceName(false);
 }
 
 auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>
@@ -61,10 +61,17 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
     AsyncFuture::observe(future).subscribe(onReply, onCancellation);
 }
 
-void AbstractSpotifyClientController::generateDeviceName()
+void AbstractSpotifyClientController::generateDeviceName(bool makeUnique)
 {
-    const auto id = QString(QByteArray::number(QRandomGenerator::system()->generate()).toBase64(QByteArray::OmitTrailingEquals));
-    m_deviceName = QString(DEVICE_NAME_TEMPLATE).arg(id);
+    if (makeUnique)
+    {
+        const auto id = QString(QByteArray::number(QRandomGenerator::system()->generate()).toBase64(QByteArray::OmitTrailingEquals));
+        m_deviceName = QString(DEVICE_NAME_TEMPLATE).arg(id);
+    }
+    else
+    {
+        m_deviceName = DEVICE_NAME;
+    }
 
     qCDebug(gmSpotifyClientController()) << "Device Name:" << deviceName();
 }

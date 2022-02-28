@@ -25,7 +25,13 @@ LibrespotController::LibrespotController(QObject *parent)
 auto LibrespotController::start() -> QFuture<bool>
 {
     updateStatus(ServiceStatus::Info, "Starting librespot client ...");
-    warnIfOtherProcessIsRunning();
+
+    if (isOtherProcessIsRunning())
+    {
+        generateDeviceName(true);
+        qCWarning(gmLibrespotController()) << "At second librespot process is already running, this might lead to unexpected behavior.";
+    }
+
     m_isExitExpected = false;
 
     const auto username = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
@@ -145,12 +151,9 @@ void LibrespotController::setAsActiveDevice()
     observe(future).subscribe(callback);
 }
 
-void LibrespotController::warnIfOtherProcessIsRunning()
+auto LibrespotController::isOtherProcessIsRunning() -> bool
 {
-    if (ProcessInfo::isProcessRunning(getLibrespotBinaryName()))
-    {
-        qCWarning(gmLibrespotController()) << "At second librespot process is already running, this might lead to unexpected behavior.";
-    }
+    return ProcessInfo::isProcessRunning(getLibrespotBinaryName());
 }
 
 auto LibrespotController::getLibrespotPath() -> QString

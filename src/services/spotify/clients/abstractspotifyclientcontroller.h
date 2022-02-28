@@ -30,10 +30,10 @@ protected:
 
     void setActiveDevice(const SpotifyDevice &device);
 
+    void generateDeviceName(bool makeUnique);
+
 private:
     QString m_deviceName;
     const QLoggingCategory &m_loggingCategory;
-
-    void generateDeviceName();
 };
 

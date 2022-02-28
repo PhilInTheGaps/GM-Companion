@@ -26,7 +26,7 @@ private:
     static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
 
     void initProcess();
-    static void warnIfOtherProcessIsRunning();
+    static auto isOtherProcessIsRunning() -> bool;
 
     static auto getLibrespotPath() -> QString;
     static constexpr auto getLibrespotBinaryName() -> const char*;
