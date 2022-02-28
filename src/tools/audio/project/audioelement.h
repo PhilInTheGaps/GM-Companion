@@ -8,6 +8,7 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AudioThumbnail;
+class AudioScenario;
 
 class AudioElement : public TreeItem
 {
@@ -22,8 +23,8 @@ public:
     };
     Q_ENUM(Type)
 
-    AudioElement(const QString& name, Type type, const QString& path, QObject *parent);
-    AudioElement(const QJsonObject &object, Type type, const QString& path, QObject *parent);
+    AudioElement(const QString& name, Type type, const QString& path, AudioScenario *parent);
+    AudioElement(const QJsonObject &object, Type type, const QString& path, AudioScenario *parent);
 
     [[nodiscard]] auto toJson() const -> QJsonObject;
 

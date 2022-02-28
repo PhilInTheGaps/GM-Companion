@@ -22,7 +22,7 @@
 class AudioEditor : public AbstractTool
 {
     Q_OBJECT
-    Q_PROPERTY(QList<QObject*> projects READ projects NOTIFY projectsChanged)
+    Q_PROPERTY(QList<AudioProject*> projects READ projects NOTIFY projectsChanged)
     Q_PROPERTY(QObject* currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(int projectIndex READ projectIndex NOTIFY currentProjectChanged)
     Q_PROPERTY(QObject* currentElement READ currentElement NOTIFY currentElementChanged)
@@ -39,7 +39,7 @@ public:
     Q_INVOKABLE void renameProject(const QString &name);
     Q_INVOKABLE void deleteProject();
     Q_INVOKABLE void saveProject();
-    QList<QObject*> projects() const { return Utils::toQObjectList(m_projects); }
+    QList<AudioProject*> projects() const { return m_projects; }
     QObject* currentProject() const { return qobject_cast<QObject*>(m_currentProject); }
     void setCurrentProject(AudioProject* project);
     int projectIndex() const;
@@ -117,7 +117,7 @@ private:
 
     YouTube::Videos::VideoClient *ytClient = nullptr;
 
-    QVector<AudioProject*> m_projects;
+    QList<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;
 
     AudioFileModel *fileModel = nullptr;
@@ -138,7 +138,7 @@ private:
 
 private slots:
     void addFiles(const QStringList &files);
-    void onFoundProjects(QVector<AudioProject *>list);
+    void onFoundProjects(const QVector<AudioProject *> &list);
     void onCurrentScenarioChanged();
     void onProjectSavedChanged();
 

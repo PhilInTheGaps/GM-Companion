@@ -10,7 +10,9 @@
 struct SpotifyTrack : public BaseSpotifyElement
 {
     [[nodiscard]] static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTrack>;
-    [[nodiscard]] static auto fromJson(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>;
+    [[nodiscard]] static auto fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTrack>;
+    [[nodiscard]] static auto fromJsonArray(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>;
+    [[nodiscard]] static auto fromJsonArray(const QByteArray &data) -> QVector<QSharedPointer<SpotifyTrack>>;
 
     int durationMs;
     bool isPlayable;

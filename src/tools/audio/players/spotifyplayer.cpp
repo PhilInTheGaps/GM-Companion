@@ -215,6 +215,7 @@ void SpotifyPlayer::getCurrentSong()
     {
         if (track->track->uri != m_currentUri)
         {
+            qCDebug(gmAudioSpotify()) << "Found track" << track->track->uri << "is not the expected track" << m_currentUri;
             startMetaDataTimer();
             return;
         }

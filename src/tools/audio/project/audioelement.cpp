@@ -1,4 +1,5 @@
 #include "audioelement.h"
+#include "audioscenario.h"
 #include "../thumbnails/audiothumbnail.h"
 #include "utils/utils.h"
 #include <QJsonArray>
@@ -7,7 +8,7 @@
 
 Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
-AudioElement::AudioElement(const QString& name, Type type, const QString& path, QObject *parent)
+AudioElement::AudioElement(const QString& name, Type type, const QString& path, AudioScenario *parent)
     : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
 {
     setName(name);
@@ -15,7 +16,7 @@ AudioElement::AudioElement(const QString& name, Type type, const QString& path, 
     m_thumbnail = new AudioThumbnail(m_path, this);
 }
 
-AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& path, QObject *parent)
+AudioElement::AudioElement(const QJsonObject &object, Type type, const QString& path, AudioScenario *parent)
     : TreeItem("", path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
 {
     setName(object["name"].toString());

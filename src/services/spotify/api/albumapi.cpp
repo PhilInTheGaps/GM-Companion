@@ -35,7 +35,7 @@ auto AlbumAPI::getAlbum(const QString &id) -> QFuture<QSharedPointer<SpotifyAlbu
             return QFuture<QSharedPointer<SpotifyAlbum>>();
         }
 
-        const auto data =  reply->data();
+        const auto data = reply->data();
         reply->deleteLater();
 
         auto album = SpotifyAlbum::fromJson(data);

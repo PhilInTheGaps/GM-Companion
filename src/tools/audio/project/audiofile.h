@@ -26,13 +26,14 @@ public:
     [[nodiscard]] auto printableUrl() const -> QString;
     [[nodiscard]] auto toJson() const -> QJsonObject;
 
+    Q_PROPERTY(QString displayName READ displayName NOTIFY titleChanged)
+    [[nodiscard]] auto displayName() const -> QString;
+
     AUTO_PROPERTY(QString, url)
     AUTO_PROPERTY(QString, title)
     AUTO_PROPERTY(AudioFileSource, source)
     AUTO_PROPERTY(bool, missing)
     Q_PROPERTY(QString printableUrl READ printableUrl NOTIFY urlChanged)
 };
-
-Q_DECLARE_METATYPE(AudioFile)
 
 #endif // AUDIOFILE_H

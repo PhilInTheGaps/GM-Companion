@@ -38,7 +38,7 @@ void MusicPlayer::play(AudioElement *element)
     playlistIndex(0);
 
     m_currentElement = element;
-    m_playlist = element->files();
+    a_playlist = element->files();
 
     emit metaDataChanged(m_mediaPlayer);
 
@@ -71,7 +71,7 @@ void MusicPlayer::startPlaying()
 {
     qCDebug(gmAudioMusic) << "startPlaying()";
 
-    if (m_currentElement && (m_playlist.length() > 0))
+    if (m_currentElement && !playlist().isEmpty())
     {
         if (m_currentElement->mode() == 1)
         {
@@ -79,13 +79,13 @@ void MusicPlayer::startPlaying()
             return;
         }
 
-        loadMedia(m_playlist.first());
+        loadMedia(playlist().first());
     }
 }
 
 void MusicPlayer::printPlaylist() const
 {
-    for (const auto *audioFile : m_playlist)
+    for (const auto *audioFile : playlist())
     {
         qCDebug(gmAudioMusic) << audioFile->url();
     }
@@ -96,7 +96,6 @@ auto MusicPlayer::loadPlaylist() -> QFuture<void>
     qCDebug(gmAudioMusic()) << "loadPlaylist()";
 
     clearPlaylist();
-    a_songNames.clear();
 
     if (m_playlistLoadingContext) m_playlistLoadingContext->deleteLater();
     m_playlistLoadingContext = new QObject(this);
@@ -106,35 +105,63 @@ auto MusicPlayer::loadPlaylist() -> QFuture<void>
 
 void MusicPlayer::clearPlaylist()
 {
-    for (auto *entry : m_playlist)
+    for (auto *entry : playlist())
     {
         if (entry->parent() == this) entry->deleteLater();
     }
 
-    m_playlist.clear();
+    a_playlist.clear();
+    emit playlistChanged(a_playlist);
 }
 
-void MusicPlayer::loadTrackNames()
+void MusicPlayer::loadTrackNamesAsync()
 {
-    a_songNames.clear();
+    QList<AudioFile*> spotifyTracks;
 
-    for (const auto *track : m_playlist)
+    for (auto *track : playlist())
     {
-        switch (track->source())
+        if (track->title().isEmpty())
         {
-        case AudioFile::File:
-            a_songNames << (track->title().isEmpty() ? FileUtils::fileName(track->url()) : track->title());
-            break;
-        case AudioFile::Youtube:
-            qCWarning(gmAudioMusic()) << "Youtube integration is currently broken";
-            break;
-        default:
-            a_songNames << (track->title().isEmpty() ? track->url() : track->title());
-            break;
+            switch (track->source())
+            {
+            case AudioFile::Spotify:
+                if (SpotifyUtils::getUriType(track->url()) == SpotifyUtils::Track)
+                    spotifyTracks << track;
+                break;
+            case AudioFile::Youtube:
+                track->title(tr("[BROKEN] %1").arg(track->url()));
+                qCWarning(gmAudioMusic()) << "Youtube integration is currently broken!";
+                break;
+            default:
+                break;
+            }
         }
     }
 
-    emit songNamesChanged(songNames());
+    loadSpotifyTrackNamesAsync(spotifyTracks);
+}
+
+void MusicPlayer::loadSpotifyTrackNamesAsync(const QList<AudioFile *> &files)
+{
+    if (files.isEmpty()) return;
+
+    QStringList trackIds;
+    trackIds.reserve(files.length());
+
+    for (const auto *track : files)
+    {
+        trackIds << SpotifyUtils::getIdFromUri(track->url());
+    }
+
+    const auto callback = [files](const QVector<QSharedPointer<SpotifyTrack>> &tracks)
+    {
+        for (auto i = 0; i < tracks.length(); i++)
+        {
+            files[i]->title(tracks[i]->name);
+        }
+    };
+
+    observe(Spotify::instance()->tracks->getTracks(trackIds)).subscribe(callback);
 }
 
 /// Load all entries of a playlist by "expanding" entries like spotify playlists and albums
@@ -143,7 +170,8 @@ auto MusicPlayer::loadPlaylistRecursive(int index) -> QFuture<void>
     if (index >= m_currentElement->files().length())
     {
         applyShuffleMode();
-        loadTrackNames();
+        loadTrackNamesAsync();
+        emit playlistChanged(a_playlist);
         return completed();
     }
 
@@ -157,7 +185,7 @@ auto MusicPlayer::loadPlaylistRecursive(int index) -> QFuture<void>
         qCWarning(gmAudioMusic()) << "Youtube integration is currently broken";
         break;
     default:
-        m_playlist.append(audioFile);
+        a_playlist.append(audioFile);
         break;
     }
 
@@ -185,7 +213,7 @@ auto MusicPlayer::loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) 
                 {
                 case SpotifyUtils::Track:
                 case SpotifyUtils::Episode:
-                    m_playlist << new AudioFile(track->uri, AudioFile::Spotify, track->name, this);
+                    a_playlist << new AudioFile(track->uri, AudioFile::Spotify, track->name, this);
                 default:
                     break;
                 }
@@ -205,7 +233,7 @@ auto MusicPlayer::loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) 
         }
     }
 
-    m_playlist << audioFile;
+    a_playlist << audioFile;
     return loadPlaylistRecursive(index + 1);
 }
 
@@ -220,11 +248,11 @@ void MusicPlayer::applyShuffleMode()
 
     QList<AudioFile *> temp;
 
-    while (!m_playlist.isEmpty())
+    while (!a_playlist.isEmpty())
     {
-        temp.append(m_playlist.takeAt(QRandomGenerator::global()->bounded(m_playlist.size())));
+        temp.append(a_playlist.takeAt(QRandomGenerator::global()->bounded(a_playlist.size())));
     }
-    m_playlist = temp;
+    a_playlist = temp;
 
     qCDebug(gmAudioMusic) << "Shuffled playlist:";
     printPlaylist();
@@ -329,24 +357,24 @@ void MusicPlayer::stop()
     m_spotifyPlayer->stop();
     m_mediaPlayer->stop();
 
-    songNames({});
+    clearPlaylist();
 }
 
 void MusicPlayer::next()
 {
     emit clearMetaData();
 
-    if (!m_currentElement || (m_playlist.length() < 1)) return;
+    if (!m_currentElement || a_playlist.isEmpty()) return;
 
     // Complete random
     if (m_currentElement->mode() == 1)
     {
-        playlistIndex(QRandomGenerator::system()->bounded(m_playlist.length()));
+        playlistIndex(QRandomGenerator::system()->bounded(a_playlist.length()));
     }
     else
     {
         // choose next in line (mode 0, 2, 3)
-        if (playlistIndex() < m_playlist.length() - 1)
+        if (playlistIndex() < a_playlist.length() - 1)
         {
             playlistIndex(playlistIndex() + 1);
         }
@@ -358,7 +386,7 @@ void MusicPlayer::next()
         }
     }
 
-    loadMedia(m_playlist[playlistIndex()]);
+    loadMedia(a_playlist[playlistIndex()]);
 }
 
 void MusicPlayer::again()
@@ -378,7 +406,7 @@ void MusicPlayer::again()
 void MusicPlayer::setIndex(int index)
 {
     playlistIndex(index);
-    loadMedia(m_playlist[index]);
+    loadMedia(playlist()[index]);
 }
 
 void MusicPlayer::setVolume(int linear, int logarithmic)
@@ -410,7 +438,7 @@ void MusicPlayer::onMediaPlayerError(QMediaPlayer::Error error)
 {
     qCWarning(gmAudioMusic()) << error;
 
-    if (error == QMediaPlayer::FormatError)
+    if (error != QMediaPlayer::NoError)
     {
         next();
     }

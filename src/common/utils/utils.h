@@ -6,14 +6,16 @@
 class Utils
 {
 public:
-    static QString stringFromImage(const QPixmap &image);
-    static QString rot13(const QString &input);
-    static bool hasWildcardMatch(const QString &string, const QString &wildcard);
+    static auto stringFromImage(const QPixmap &image) -> QString;
+    static auto rot13(const QString &input) -> QString;
+    static auto hasWildcardMatch(const QString &string, const QString &wildcard) -> bool;
+    static auto isInHierarchy(const QObject &object, const QObject *root) -> bool;
 
     template<typename T>
-    static QList<QObject*> toQObjectList(const T &from)
+    static auto toQObjectList(const T &from) -> QList<QObject*>
     {
         QList<QObject*> list;
+        list.reserve(from.count());
         for (auto entry : from)
         {
             auto *object = qobject_cast<QObject*>(entry);
@@ -23,13 +25,13 @@ public:
     }
 
     template<typename T>
-    static bool isInBounds(const QList<T> &list, int index)
+    static auto isInBounds(const QList<T> &list, int index) -> bool
     {
         return index > -1 && index < list.length();
     }
 
     template<typename T>
-    static bool isInBounds(const QVector<T> &list, int index)
+    static auto isInBounds(const QVector<T> &list, int index) -> bool
     {
         return index > -1 && index < list.length();
     }

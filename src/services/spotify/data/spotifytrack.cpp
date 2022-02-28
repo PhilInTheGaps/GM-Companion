@@ -1,6 +1,7 @@
 #include "spotifytrack.h"
 
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
 
 Q_LOGGING_CATEGORY(gmSpotifyTrack, "gm.services.spotify.data.track")
@@ -13,11 +14,13 @@ auto SpotifyTrack::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTr
         return SpotifyTrack::fromJson(json[QStringLiteral("track")].toObject());
     }
 
+    const auto isLinked = json.contains(QStringLiteral("linked_from"));
+
     auto *track = new SpotifyTrack {
         {
-            json[QStringLiteral("href")].toString(),
-            json[QStringLiteral("uri")].toString(),
-            json[QStringLiteral("id")].toString(),
+            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("href")].toString() : json[QStringLiteral("href")].toString(),
+            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("uri")].toString() : json[QStringLiteral("uri")].toString(),
+            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("id")].toString() : json[QStringLiteral("id")].toString(),
             json[QStringLiteral("name")].toString()
         },
         json[QStringLiteral("duration_ms")].toInt(),
@@ -29,7 +32,13 @@ auto SpotifyTrack::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTr
     return QSharedPointer<SpotifyTrack>(track);
 }
 
-auto SpotifyTrack::fromJson(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>
+auto SpotifyTrack::fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTrack>
+{
+    const auto json = QJsonDocument::fromJson(data).object();
+    return SpotifyTrack::fromJson(json);
+}
+
+auto SpotifyTrack::fromJsonArray(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>
 {
     QVector<QSharedPointer<SpotifyTrack>> tracks;
     tracks.reserve(json.count());
@@ -40,6 +49,12 @@ auto SpotifyTrack::fromJson(const QJsonArray &json) -> QVector<QSharedPointer<Sp
     }
 
     return tracks;
+}
+
+auto SpotifyTrack::fromJsonArray(const QByteArray &data) -> QVector<QSharedPointer<SpotifyTrack>>
+{
+    const auto json = QJsonDocument::fromJson(data).object();
+    return SpotifyTrack::fromJsonArray(json[QStringLiteral("tracks")].toArray());
 }
 
 auto SpotifyTrack::artistString() const -> QString

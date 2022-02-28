@@ -45,10 +45,10 @@ void AudioEditor::loadData()
     });
 }
 
-void AudioEditor::onFoundProjects(QVector<AudioProject *>list)
+void AudioEditor::onFoundProjects(const QVector<AudioProject*> &vector)
 {
     qCDebug(gmAudioEditor) << "Projects changed!";
-    m_projects = std::move(list);
+    m_projects = QList<AudioProject*>::fromVector(vector);
 
     for (auto *project : m_projects)
     {
@@ -162,7 +162,7 @@ void AudioEditor::deleteProject()
     qCDebug(gmAudioEditor) << "Deleting current project:" << m_currentProject->name() << "...";
 
     // If the current element is a child of the project unload it first.
-    if (m_currentProject && m_currentProject->currentScenario()->getScenario(m_currentElement))
+    if (m_currentProject && m_currentElement && Utils::isInHierarchy(*m_currentElement, m_currentProject))
     {
         clearCurrentElement();
     }
@@ -225,7 +225,7 @@ void AudioEditor::createCategory(const QString& name)
 
     qCDebug(gmAudioEditor) << "Creating category" << name << "...";
 
-    if (!m_currentProject->categoryNames().contains(name))
+    if (!m_currentProject->containsCategory(name))
     {
         auto *category = new AudioCategory(name, m_currentProject->name(), {}, m_currentProject);
 
@@ -266,7 +266,7 @@ void AudioEditor::deleteCategory()
     qCDebug(gmAudioEditor) << "Deleting current category:" << category->name() << "...";
 
     // If the current element is a child of the current scenario or a subscenario, unload it first.
-    if (scenario && scenario->getScenario(m_currentElement))
+    if (scenario && m_currentElement && Utils::isInHierarchy(*m_currentElement, scenario))
     {
         clearCurrentElement();
     }
@@ -358,9 +358,9 @@ void AudioEditor::createScenario(const QString& name, bool isSubscenario)
 
     if (isSubscenario)
     {
-        if (!category->currentScenario()->scenarioNames().contains(name))
+        if (!category->currentScenario()->containsScenario(name))
         {
-            auto *scenario = new AudioScenario(name, category->currentScenario()->path(), {}, {}, {}, {}, category->currentScenario());
+            auto *scenario = new AudioScenario(name, category->currentScenario()->path(), {}, category->currentScenario());
 
             if (!category->currentScenario()->addScenario(scenario))
             {
@@ -368,9 +368,9 @@ void AudioEditor::createScenario(const QString& name, bool isSubscenario)
             }
         }
     }
-    else if (!category->scenarioNames().contains(name))
+    else if (!category->containsScenario(name))
     {
-        auto *scenario = new AudioScenario(name, category->path(), {}, {}, {}, {}, category);
+        auto *scenario = new AudioScenario(name, category->path(), {}, category);
 
         if (!category->addScenario(scenario, true))
         {
@@ -406,7 +406,7 @@ void AudioEditor::deleteScenario()
     qCDebug(gmAudioEditor) << "Deleting current scenario:" << scenario->name() << "...";
 
     // If the current element is a child of the scenario or a subscenario, unload it first.
-    if (scenario->getScenario(m_currentElement))
+    if (m_currentElement && Utils::isInHierarchy(*m_currentElement, scenario))
     {
         clearCurrentElement();
     }
@@ -577,7 +577,7 @@ void AudioEditor::deleteCurrentElement()
 
     if (scenarioExists())
     {
-        auto *scenario = m_currentProject->currentScenario()->getScenario(m_currentElement);
+        auto *scenario = qobject_cast<AudioScenario*>(m_currentElement->parent());
 
         if (scenario)
         {
@@ -878,7 +878,7 @@ void AudioEditor::setSubscenario(int index)
     qCDebug(gmAudioEditor) << "Setting subscenario of" << QString(*m_currentElement) << ":" << index << "...";
 
     auto *currentScenario = m_currentProject->currentScenario();
-    auto *origSubScenario = currentScenario->getScenario(m_currentElement);
+    auto *origSubScenario = qobject_cast<AudioScenario*>(m_currentElement->parent());
     auto subScenarios = currentScenario->scenarios();
 
     AudioScenario *newScenario = nullptr;

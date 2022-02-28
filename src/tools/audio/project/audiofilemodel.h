@@ -19,9 +19,9 @@ public:
     void setElements(const QList<AudioFile*>& elements);
 
     void clear();
-    bool isEmpty() const { return m_items.isEmpty(); }
+    auto isEmpty() const -> bool { return m_items.isEmpty(); }
 
-    QString name() const { return m_name; }
+    auto name() const -> QString { return m_name; }
     void setName(QString name) { m_name = name; emit nameChanged(); }
 
     void insert(int index, QObject* item);

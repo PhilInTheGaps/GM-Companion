@@ -60,7 +60,7 @@ Item {
             visible: playlist_view.contentHeight > playlist_view.height
         }
 
-        model: audio_tool ? audio_tool.songs : []
+        model: audio_tool ? audio_tool.playlist : []
         currentIndex: audio_tool ? audio_tool.index : -1
         highlightMoveVelocity: -1
 
@@ -72,7 +72,7 @@ Item {
                 id: playlist_text
                 clip: true
                 elide: Text.ElideRight
-                text: modelData
+                text: modelData.displayName
                 color: playlist_view.currentIndex === index ? palette.highlightedText : palette.text
                 font.pointSize: 10
                 anchors.centerIn: parent
@@ -81,7 +81,7 @@ Item {
 
             ToolTip {
                 id: playlist_tooltip
-                text: modelData
+                text: playlist_text.text + " [" + modelData.url + "]"
             }
 
             MouseArea {

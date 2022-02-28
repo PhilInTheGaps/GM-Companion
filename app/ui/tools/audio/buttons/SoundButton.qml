@@ -33,7 +33,7 @@ Button {
 
         Connections {
             target: element_icon
-            function onIconChanged() {
+            function onThumbnailChanged() {
                 thumbnail.reload()
             }
         }

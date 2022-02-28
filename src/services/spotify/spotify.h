@@ -15,6 +15,7 @@
 #include "api/albumapi.h"
 #include "api/playerapi.h"
 #include "api/playlistsapi.h"
+#include "api/tracksapi.h"
 
 class Spotify : public Service
 {
@@ -38,6 +39,7 @@ public:
     const AlbumAPI *albums;
     const PlayerAPI *player;
     const PlaylistsAPI *playlists;
+    const TracksAPI *tracks;
 
     AUTO_PROPERTY(QString, username);
 

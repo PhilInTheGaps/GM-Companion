@@ -26,8 +26,8 @@ public:
     void play(AudioElement *element);
     void setIndex(int index);
 
-    AUTO_PROPERTY(QStringList, songNames)
     AUTO_PROPERTY(int, playlistIndex);
+    READ_PROPERTY(QList<AudioFile*>, playlist)
 
 public slots:
     void play() override;
@@ -48,7 +48,7 @@ private:
     QObject *m_fileRequestContext = nullptr;
     QObject *m_playlistLoadingContext = nullptr;
 
-    QList<AudioFile*> m_playlist;
+    //QList<AudioFile*> m_playlist;
     AudioFile::AudioFileSource m_currentFileSource = AudioFile::Unknown;
 
     QBuffer m_mediaBuffer;
@@ -66,7 +66,8 @@ private:
 
     auto loadPlaylist() -> QFuture<void>;
     void clearPlaylist();
-    void loadTrackNames();
+    void loadTrackNamesAsync();
+    static void loadSpotifyTrackNamesAsync(const QList<AudioFile*> &tracks);
 
     auto loadPlaylistRecursive(int index = 0) -> QFuture<void>;
     auto loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) -> QFuture<void>;

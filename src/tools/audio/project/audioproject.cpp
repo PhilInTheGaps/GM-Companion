@@ -63,23 +63,6 @@ auto AudioProject::toJson() const -> QJsonObject
 }
 
 /**
-    Get the names of all categories in project
-    @return QStringList with category names
- */
-auto AudioProject::categoryNames() const -> QStringList
-{
-    qCDebug(gmAudioProject()) << "Getting category names of project" << name() << "...";
-    QStringList names;
-
-    for (auto *category : m_categories)
-    {
-        names.append(category->name());
-    }
-
-    return names;
-}
-
-/**
  * @brief Remove (and delete) a category from the project
  */
 auto AudioProject::deleteCategory(AudioCategory *category) -> bool
@@ -140,6 +123,16 @@ auto AudioProject::addCategory(AudioCategory *category, bool setAsCurrent) -> bo
     }
 
     return true;
+}
+
+auto AudioProject::containsCategory(const QString &name) const -> bool
+{
+    for (auto *category : m_categories)
+    {
+        if (category && category->name() == name) return true;
+    }
+
+    return false;
 }
 
 /**

@@ -43,6 +43,7 @@ set(HEADERS
     spotify/api/albumapi.h
     spotify/api/playerapi.h
     spotify/api/playlistsapi.h
+    spotify/api/tracksapi.h
     nextcloud/nextcloud.h
     google/googledrive.h
     google/googledriveconnectorlocal.h
@@ -74,6 +75,7 @@ set(SOURCES
     spotify/api/albumapi.cpp
     spotify/api/playerapi.cpp
     spotify/api/playlistsapi.cpp
+    spotify/api/tracksapi.cpp
     nextcloud/nextcloud.cpp
     google/googledrive.cpp
     google/googledriveconnectorlocal.cpp

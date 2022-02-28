@@ -27,7 +27,7 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(qreal soundVolume READ soundVolume NOTIFY soundVolumeChanged)
 
     Q_PROPERTY(QObject* metaData READ metaData NOTIFY metaDataChanged)
-    Q_PROPERTY(QStringList songs READ songs NOTIFY songsChanged)
+    Q_PROPERTY(QList<AudioFile*> playlist READ playlist NOTIFY playlistChanged)
     Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
 
     AUTO_PROPERTY(bool, isLoading)
@@ -35,23 +35,23 @@ class AudioTool : public AbstractTool
 public:
     explicit AudioTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    AudioEditor* getEditor() const { return editor; }
+    [[nodiscard]] auto getEditor() const -> AudioEditor* { return editor; }
 
     // Project
-    QList<QObject*> projects() const { return Utils::toQObjectList(m_projects); }
-    QObject* currentProject() const { return m_currentProject; }
+    [[nodiscard]] auto projects() const -> QList<QObject*> { return Utils::toQObjectList(m_projects); }
+    [[nodiscard]] auto currentProject() const -> QObject* { return m_currentProject; }
     void updateProjectList();
-    QString currentProjectName() const { if (m_currentProject) return m_currentProject->name(); else return nullptr; }
+    [[nodiscard]] auto currentProjectName() const -> QString;
     Q_INVOKABLE void setCurrentProject(int index);
-    Q_INVOKABLE int getCurrentProjectIndex();
+    Q_INVOKABLE auto getCurrentProjectIndex() -> int;
 
-    QObject* soundController() const { return qobject_cast<QObject*>(soundPlayerController); }
+    [[nodiscard]] auto soundController() const -> QObject* { return qobject_cast<QObject*>(soundPlayerController); }
 
     // Volume
-    qreal musicVolume() const { return m_musicVolume; }
+    [[nodiscard]] auto musicVolume() const -> qreal { return m_musicVolume; }
     Q_INVOKABLE void setMusicVolume(qreal volume);
 
-    qreal soundVolume() const { return m_soundVolume; }
+    [[nodiscard]] auto soundVolume() const -> qreal { return m_soundVolume; }
     Q_INVOKABLE void setSoundVolume(qreal volume);
 
     // Playback control
@@ -61,15 +61,15 @@ public:
     Q_INVOKABLE void again();
     Q_INVOKABLE void setMusicIndex(int index);
     Q_INVOKABLE void stopSound(const QString &sound) { soundPlayerController->stop(sound); }
-    bool isPaused() const { return m_isPaused; }
+    [[nodiscard]] auto isPaused() const -> bool { return m_isPaused; }
     void stop();
 
     Q_INVOKABLE void findElement(const QString& term);
 
     // Meta Data
-    QObject* metaData() const { return metaDataReader->metaData(); }
-    QStringList songs() const;
-    int index() const;
+    [[nodiscard]] auto metaData() const -> QObject* { return metaDataReader->metaData(); }
+    [[nodiscard]] auto index() const -> int;
+    [[nodiscard]] auto playlist() const -> QList<AudioFile*>;
 
 public slots:
     void loadData() override;
@@ -80,7 +80,7 @@ signals:
 
     void isPausedChanged();
     void soundsChanged();
-    void songsChanged();
+    void playlistChanged();
     void metaDataChanged();
     void currentIndexChanged();
     void spotifyAuthorized();

@@ -10,7 +10,7 @@ class TestAudioThumbnail : public AbstractTest
     Q_OBJECT
 
 private:
-    AudioElement *m_element = nullptr;
+    QSharedPointer<AudioElement> m_element = nullptr;
     QPixmap image0;
     QPixmap image1;
     QPixmap image2;
@@ -38,7 +38,7 @@ auto TestAudioThumbnail::loadImage(const QString &resource) -> QPixmap
 
 void TestAudioThumbnail::initTestCase()
 {
-    m_element = new AudioElement(QStringLiteral("test"), AudioElement::Music, QLatin1String(), this);
+    m_element = QSharedPointer<AudioElement>(new AudioElement(QStringLiteral("test"), AudioElement::Music, QLatin1String(), nullptr));
 
     image0 = loadImage(":/resources/images/test.png");
     image1 = loadImage(":/resources/images/test.jpg");

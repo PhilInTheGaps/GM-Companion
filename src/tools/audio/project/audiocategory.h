@@ -2,40 +2,38 @@
 #define AUDIOCATEGORY_H
 
 #include "audioscenario.h"
-#include "utils/utils.h"
+
+class AudioProject;
 
 class AudioCategory : public TreeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
-    Q_PROPERTY(QList<QObject*> scenarios READ scenarioObjects NOTIFY scenariosChanged)
-    Q_PROPERTY(QObject* currentScenario READ currentScenarioObject NOTIFY currentScenarioChanged)
-    Q_PROPERTY(int scenarioIndex READ scenarioIndex NOTIFY currentScenarioChanged)
-
 public:
-    AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, QObject *parent);
-    AudioCategory(const QJsonObject &object, const QString& path, QObject *parent);
+    AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, AudioProject *parent);
+    AudioCategory(const QJsonObject &object, const QString& path, AudioProject *parent);
 
-    QJsonObject toJson() const;
+    [[nodiscard]] auto toJson() const -> QJsonObject;
+    [[nodiscard]] auto isCheckable() const -> bool override { return true; }
 
-    bool isCheckable() const override { return true; }
+    Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+    [[nodiscard]] auto path() const -> QString override { return m_path; }
 
-    QString path() const override { return m_path; }
+    Q_PROPERTY(QList<AudioScenario*> scenarios READ scenarios NOTIFY scenariosChanged)
+    [[nodiscard]] auto scenarios() const -> QList<AudioScenario*> { return m_scenarios; }
 
-    QList<AudioScenario*> scenarios() const { return m_scenarios; }
-    QList<QObject*> scenarioObjects() const { return Utils::toQObjectList(m_scenarios); }
-    int scenarioIndex() const { return m_scenarios.indexOf(m_currentScenario); }
-    QStringList scenarioNames() const;
+    Q_PROPERTY(AudioScenario* currentScenario READ currentScenario WRITE setCurrentScenario NOTIFY currentScenarioChanged)
+    [[nodiscard]] auto currentScenario() const -> AudioScenario* { return m_currentScenario; }
+    auto setCurrentScenario(AudioScenario *scenario) -> bool;
+
+    Q_PROPERTY(int scenarioIndex READ scenarioIndex NOTIFY currentScenarioChanged)
+    [[nodiscard]] auto scenarioIndex() const -> int { return m_scenarios.indexOf(m_currentScenario); }
+    [[nodiscard]] auto containsScenario(const QString &name) const -> bool;
+
+    auto addScenario(AudioScenario *scenario, bool setAsCurrent = false) -> bool;
+    auto deleteScenario(AudioScenario *scenario) -> bool;
+
+    [[nodiscard]] auto elements() const -> QList<AudioElement *>;
     void refreshElements() { if (m_currentScenario) m_currentScenario->refreshElements(); }
-
-    Q_INVOKABLE bool setCurrentScenario(AudioScenario *scenario);
-    AudioScenario* currentScenario() const { return m_currentScenario; }
-    QObject* currentScenarioObject() const { return qobject_cast<QObject*>(currentScenario()); }
-
-    bool addScenario(AudioScenario *scenario, bool setAsCurrent = false);
-    bool deleteScenario(AudioScenario *scenario);
-
-    QList<AudioElement *> elements() const;
 
 signals:
     void pathChanged();

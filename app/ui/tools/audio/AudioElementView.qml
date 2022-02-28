@@ -30,7 +30,7 @@ Item {
                 onClicked: {
                     var project = audio_tool.currentProject
                     if (project && project.currentCategory) {
-                        project.currentCategory.setCurrentScenario(modelData)
+                        project.currentCategory.currentScenario = modelData
                     }
                 }
             }

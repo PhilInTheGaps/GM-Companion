@@ -19,7 +19,8 @@ Spotify::Spotify(QObject *parent)
     : Service("Spotify", parent),
       albums(new AlbumAPI(this)),
       player(new PlayerAPI(this)),
-      playlists(new PlaylistsAPI(this))
+      playlists(new PlaylistsAPI(this)),
+      tracks(new TracksAPI(this))
 {
     m_networkManager = new QNetworkAccessManager(this);
     username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));

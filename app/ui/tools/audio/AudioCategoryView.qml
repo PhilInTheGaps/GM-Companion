@@ -88,7 +88,7 @@ Rectangle {
                     anchors.right: parent.right
 
                     onClicked: {
-                        audio_tool.currentProject.setCurrentCategory(modelData)
+                        audio_tool.currentProject.currentCategory = modelData
                     }
                 }
             }

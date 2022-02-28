@@ -38,7 +38,8 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
 
     // Music Player
     connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
-    connect(musicPlayer, &MusicPlayer::songNamesChanged,    this, [ = ](const QStringList &names) { Q_UNUSED(names); emit songsChanged(); });
+    connect(musicPlayer, &MusicPlayer::playlistChanged,     this, [this](const QList<AudioFile*> &files) { Q_UNUSED(files); emit playlistChanged(); });
+    connect(musicPlayer, &MusicPlayer::playlistChanged,     this, [](const QList<AudioFile*> &files) { qCDebug(gmAudioTool()) << "Playlist Changed!" << files.length(); });
     connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
 
     // Radio Player
@@ -72,6 +73,16 @@ void AudioTool::updateProjectList()
     observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject*> projects) {
         onProjectsChanged(projects);
     });
+}
+
+auto AudioTool::currentProjectName() const -> QString
+{
+    if (m_currentProject)
+    {
+        return m_currentProject->name();
+    }
+
+    return QLatin1String();
 }
 
 /**
@@ -305,16 +316,12 @@ auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
     return qRound(QAudio::convertVolume(linearVolume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * VOLUME_FACTOR);
 }
 
-/**
- * @brief Get list of song names depending on mode
- * @return QStringList of song names
- */
-auto AudioTool::songs() const -> QStringList
+auto AudioTool::playlist() const -> QList<AudioFile *>
 {
     switch (m_musicElementType)
     {
     case AudioElement::Type::Music:
-        return musicPlayer->songNames();
+        return musicPlayer->playlist();
     default: return {};
     }
 }
