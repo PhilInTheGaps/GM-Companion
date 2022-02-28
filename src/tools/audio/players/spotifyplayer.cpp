@@ -10,7 +10,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
-#include <string>
 
 Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
 
@@ -90,7 +89,6 @@ void SpotifyPlayer::play(const QString& uri)
         reply->deleteLater();
 
         metaDataReader->clearMetaData();
-        startDurationTimer({});
         startMetaDataTimer();
     };
 
@@ -112,7 +110,6 @@ void SpotifyPlayer::play()
     observe(Spotify::instance()->player->play()).subscribe([this](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
 
-        startDurationTimer({});
         startMetaDataTimer();
     });
 
@@ -173,11 +170,11 @@ void SpotifyPlayer::next()
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
-    observe(Spotify::instance()->player->next()).subscribe([](RestNetworkReply *reply) {
+    observe(Spotify::instance()->player->next()).subscribe([this](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
-    });
 
-    startDurationTimer({});
+        startMetaDataTimer();
+    });
 }
 
 /**
