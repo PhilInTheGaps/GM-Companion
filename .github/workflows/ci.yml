@@ -70,7 +70,7 @@ jobs:
         run: cd build && mingw32-make -j2
 
       - name: Copy dlls to test folder
-        run: cp build/cget/bin/*.dll build/test/
+        run: cp .\build\cget\bin\*.dll .\build\tests\
 
       - name: Tests
         run: cd build && ctest --output-on-failure 
