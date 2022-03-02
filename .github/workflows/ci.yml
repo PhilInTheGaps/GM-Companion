@@ -21,6 +21,7 @@ jobs:
           host: 'windows'
           arch: 'win64_mingw81'
           tools: 'tools_openssl_x64'
+          aqtversion: '>=2.0.0'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       - name: Install Dependencies with Chocolatey
