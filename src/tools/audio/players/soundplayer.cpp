@@ -12,7 +12,6 @@
 # include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
-using namespace YouTube::Videos;
 using namespace AsyncFuture;
 
 /**
@@ -141,7 +140,6 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
     m_mediaPlayer = new QMediaPlayer(this);
     m_mediaPlayer->setObjectName(element->name());
     m_mediaPlayer->setVolume(volume);
-    m_videoClient = new YouTube::Videos::VideoClient(networkManager, this);
 
     connect(m_mediaPlayer,              &QMediaPlayer::mediaStatusChanged,                        this, &SoundPlayer::onMediaStatusChanged);
     connect(m_mediaPlayer,              QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &SoundPlayer::onMediaPlayerError);
@@ -186,11 +184,11 @@ void SoundPlayer::loadMedia(AudioFile *file)
 
     case 3:
     {
-        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
-        connect(m_streamManifest, &Streams::StreamManifest::ready, this, &SoundPlayer::onStreamManifestReceived);
-        m_mediaPlayer->setMuted(useDiscord);
-        m_fileName = file->url();
-        if (useDiscord) m_discordPlayer->playSound(file->url());
+//        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
+//        connect(m_streamManifest, &Streams::StreamManifest::ready, this, &SoundPlayer::onStreamManifestReceived);
+//        m_mediaPlayer->setMuted(useDiscord);
+//        m_fileName = file->url();
+//        if (useDiscord) m_discordPlayer->playSound(file->url());
         break;
     }
 
@@ -380,34 +378,3 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     result->deleteLater();
 }
 
-void SoundPlayer::onStreamManifestReceived()
-{
-    auto *manifest = qobject_cast<Streams::StreamManifest*>(sender());
-    if (!manifest || manifest != m_streamManifest) return;
-
-    qCDebug(gmAudioSounds()) << "Received youtube media streams:" << manifest->audio().length();
-
-    // Find best audio stream that qmediaplayer supports
-    auto audioStreams = manifest->audio();
-
-    do
-    {
-        auto *stream = Streams::AudioOnlyStreamInfo::withHighestBitrate(audioStreams);
-
-        if (stream && QMediaPlayer::hasSupport("audio/" + stream->audioCodec(),
-            { stream->audioCodec() }, QMediaPlayer::StreamPlayback) > 1)
-        {
-            m_mediaPlayer->setMedia(QUrl(stream->url()));
-            if (m_mediaPlayer->state() != QMediaPlayer::PlayingState)
-                m_mediaPlayer->play();
-
-            break;
-        }
-        
-        audioStreams.removeOne(stream);
-
-    }
-    while (!audioStreams.isEmpty());
-
-    manifest->deleteLater();
-}

@@ -11,7 +11,6 @@
 #include "audioplayer.h"
 #include "discordplayer.h"
 #include "filesystem/file.h"
-#include <qytlib/videos/videoclient.h>
 
 class SoundPlayer : public AudioPlayer
 {
@@ -39,8 +38,6 @@ private:
     AudioElement *m_element = nullptr;
     QMediaPlayer *m_mediaPlayer = nullptr;
     DiscordPlayer *m_discordPlayer = nullptr;
-    YouTube::Videos::VideoClient *m_videoClient = nullptr;
-    YouTube::Videos::Streams::StreamManifest *m_streamManifest = nullptr;
     QObject *m_fileRequestContext = nullptr;
 
     QList<AudioFile*> m_playlist;
@@ -57,7 +54,6 @@ private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
     void onMediaPlayerError(QMediaPlayer::Error error);
     void onFileReceived(Files::FileDataResult *result);
-    void onStreamManifestReceived();
 
 signals:
     void playerStopped(SoundPlayer *player);

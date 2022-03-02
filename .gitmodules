@@ -6,9 +6,6 @@
 	path = thirdparty/o2
 	url = https://github.com/pipacs/o2
 	
-[submodule "lib/qytlib"]
-	path = thirdparty/qytlib
-	url = https://github.com/PhilInTheGaps/qytlib
 [submodule "thirdparty/asyncfuture"]
 	path = thirdparty/asyncfuture
 	url = https://github.com/benlau/asyncfuture

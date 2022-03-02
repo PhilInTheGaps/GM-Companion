@@ -6,8 +6,6 @@
 #include <QNetworkReply>
 #include <QPointer>
 
-#include <qytlib/videos/videoclient.h>
-
 #include "common/abstracttool.h"
 #include "settings/settingsmanager.h"
 #include "addonelementmanager.h"
@@ -114,8 +112,6 @@ private:
     QQmlApplicationEngine *qmlEngine = nullptr;
     UnsplashParser *unsplashParser = nullptr;
     QNetworkAccessManager *networkManager = nullptr;
-
-    YouTube::Videos::VideoClient *ytClient = nullptr;
 
     QList<AudioProject*> m_projects;
     AudioProject *m_currentProject = nullptr;

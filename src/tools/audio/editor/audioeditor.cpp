@@ -20,7 +20,6 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QNetworkAccessManager *n
     audioExporter       = new AudioExporter(this);
     fileBrowser         = new AudioEditorFileBrowser(engine, this);
     unsplashParser      = new UnsplashParser(engine, this);
-    ytClient            = new YouTube::Videos::VideoClient(networkManager, this);
 
     engine->rootContext()->setContextProperty("audio_exporter", audioExporter);
     engine->rootContext()->setContextProperty("audio_addon_element_manager", addonElementManager);
@@ -484,11 +483,7 @@ void AudioEditor::loadElement(QObject* element)
         // Fetch video info
         if (file->source() == 3 && file->title().isEmpty())
         {
-            auto *video = ytClient->getVideo(file->url());
-            connect(video, &YouTube::Videos::Video::ready, file, [file, video]() {
-                file->title(video->title());
-                video->deleteLater();
-            });
+            qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
         }
     }
 
@@ -724,11 +719,13 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
     auto *audioFile = new AudioFile(videoUrl, AudioFile::Youtube, "", m_currentElement);
     if (!addAudioFile(audioFile)) return false;
 
-    auto *video = ytClient->getVideo(videoUrl);
-    connect(video, &YouTube::Videos::Video::ready, audioFile, [audioFile, video]() {
-        audioFile->title(video->title());
-        video->deleteLater();
-    });
+    qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
+
+//    auto *video = ytClient->getVideo(videoUrl);
+//    connect(video, &YouTube::Videos::Video::ready, audioFile, [audioFile, video]() {
+//        audioFile->title(video->title());
+//        video->deleteLater();
+//    });
 
     return true;
 }

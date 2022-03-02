@@ -17,7 +17,6 @@ endif()
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
 
 # submodule libraries
-include(AddQYTLIB)
 include(AddPoppler)
 include(AddTagLib)
 include(AddGSL)
@@ -184,7 +183,6 @@ target_link_libraries(
   Qt5::Multimedia
   Qt5::Network
   Qt5::DBus
-  qyt
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}
 )
