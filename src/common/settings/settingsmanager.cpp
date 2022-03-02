@@ -1,12 +1,6 @@
 #include "settingsmanager.h"
 #include <QLoggingCategory>
-
-#ifdef Q_OS_WIN
-# include <keychain.h>
-#else // ifdef Q_OS_WIN
-# include <qt5keychain/keychain.h>
-#endif // ifdef Q_OS_WIN
-
+#include <qt5keychain/keychain.h>
 #include "thirdparty/asyncfuture/asyncfuture.h"
 
 Q_LOGGING_CATEGORY(gmSettings, "gm.settings")

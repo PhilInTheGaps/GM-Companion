@@ -98,7 +98,7 @@ auto TagImageLoader::loadFromLocalFile(const QString &path) -> QFuture<QPixmap>
 
 auto TagImageLoader::loadFromLocalMpeg(const QString &path) -> QFuture<QPixmap>
 {
-    FileRef f(path.toUtf8());
+    FileRef f(path.toUtf8().constData());
     auto *mpeg = dynamic_cast<TagLib::MPEG::File *>(f.file());
 
     if (!mpeg)
@@ -177,7 +177,7 @@ auto TagImageLoader::pixmapFromId3v2Frames(const TagLib::ID3v2::FrameList &frame
 auto TagImageLoader::loadFromOga(const QString &path) -> QFuture<QPixmap>
 {
     // Can be of type FLAC or Vorbis, check FLAC first
-    auto *flac = new TagLib::Ogg::FLAC::File(path.toUtf8());
+    auto *flac = new TagLib::Ogg::FLAC::File(path.toUtf8().constData());
     if (flac && flac->isValid())
     {
         return loadFromFlac(flac, path);
@@ -191,7 +191,7 @@ auto TagImageLoader::loadFromOga(const QString &path) -> QFuture<QPixmap>
 
 auto TagImageLoader::loadFromVorbis(const QString &path) -> QFuture<QPixmap>
 {
-    auto *file = new TagLib::Ogg::Vorbis::File(path.toUtf8());
+    auto *file = new TagLib::Ogg::Vorbis::File(path.toUtf8().constData());
     if (!file)
     {
         qCWarning(gmAudioTagImageLoader) << "Could not read tags from vorbis (ogg) file" << path;
@@ -208,14 +208,14 @@ auto TagImageLoader::loadFromVorbis(const QString &path) -> QFuture<QPixmap>
 
 auto TagImageLoader::loadFromFlac(const QString &path) -> QFuture<QPixmap>
 {
-    auto *flac = new TagLib::FLAC::File(path.toUtf8());
+    auto *flac = new TagLib::FLAC::File(path.toUtf8().constData());
     if (flac && flac->isValid())
     {
         return loadFromFlac(flac, path);
     }
     delete flac;
 
-    auto *oggflac = new TagLib::Ogg::FLAC::File(path.toUtf8());
+    auto *oggflac = new TagLib::Ogg::FLAC::File(path.toUtf8().constData());
     if (oggflac && oggflac->isValid())
     {
         return loadFromFlac(oggflac, path);
@@ -294,7 +294,7 @@ auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QS
 
 auto TagImageLoader::loadFromWav(const QString &path) -> QFuture<QPixmap>
 {
-    auto *file = new TagLib::RIFF::WAV::File(path.toUtf8());
+    auto *file = new TagLib::RIFF::WAV::File(path.toUtf8().constData());
 
     if (!file)
     {
