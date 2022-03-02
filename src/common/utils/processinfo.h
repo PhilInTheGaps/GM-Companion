@@ -7,15 +7,15 @@
 class ProcessInfo
 {
 public:
-    static bool isProcessRunning(const QString &procName);
+    static auto isProcessRunning(const QString &procName) -> bool;
 
 private:
     #ifdef Q_OS_MACOS
-    static bool isProcessRunningMac(const char *procName);
+    static auto isProcessRunningMac(const QString &procName) -> bool;
     #elif defined Q_OS_UNIX
-    static bool isProcessRunningUnix(std::string procName);
+    static auto isProcessRunningUnix(const QString &procName) -> bool;
     #elif defined Q_OS_WIN
-    static bool isProcessRunningWin(const QString &name);
+    static auto isProcessRunningWin(const QString &name) -> bool;
     #endif
 };
 

@@ -1,15 +1,17 @@
 #include "processinfo.h"
 #include <QtGlobal>
-#include <QDebug>
+#include <QLoggingCategory>
 
 #include <sys/types.h>
 #include <dirent.h>
-#include <errno.h>
+#include <cerrno>
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
+
+Q_LOGGING_CATEGORY(gmProcessInfo, "gm.utils.processinfo")
 
 #ifdef Q_OS_MACOS
 #include <libproc.h>
@@ -24,7 +26,7 @@
 
 using namespace std;
 
-bool ProcessInfo::isProcessRunning(const QString &procName)
+auto ProcessInfo::isProcessRunning(const QString &procName) -> bool
 {
     #ifdef Q_OS_MACOS
 
@@ -32,7 +34,7 @@ bool ProcessInfo::isProcessRunning(const QString &procName)
 
     #elif defined Q_OS_UNIX
 
-    return isProcessRunningUnix(procName.toStdString());
+    return isProcessRunningUnix(procName);
 
     #elif defined Q_OS_WIN
     // https://stackoverflow.com/a/57164620
@@ -41,22 +43,25 @@ bool ProcessInfo::isProcessRunning(const QString &procName)
     {
         if (isProcessRunningWin(name)) return true;
     }
+    return false;
 
-    #endif
+    #else
 
-    qWarning() << "Error: Method isProcessRunning() is not defined for this operating system!";
+    qCWarning(gmProcessInfo) << "Error: Method isProcessRunning() is not defined for this operating system!";
 
     return false;
+    #endif
 }
 
 #ifdef Q_OS_MACOS
-auto ProcessInfo::isProcessRunningMac(const char *procName) -> bool
+auto ProcessInfo::isProcessRunningMac(const QString &procName) -> bool
 {
     // https://stackoverflow.com/questions/49506579/how-to-find-the-pid-of-any-process-in-mac-osx-c
 
     pid_t pids[2048];
     int bytes = proc_listpids(PROC_ALL_PIDS, 0, pids, sizeof(pids));
     int n_proc = bytes / sizeof(pids[0]);
+    const auto procNameC = procName.toUtf8().constData();
 
     for (int i = 0; i < n_proc; i++)
     {
@@ -65,7 +70,7 @@ auto ProcessInfo::isProcessRunningMac(const char *procName) -> bool
 
         if (st == PROC_PIDTBSDINFO_SIZE)
         {
-            if (strcmp(procName, proc.pbi_name) == 0)
+            if (strcmp(procNameC, proc.pbi_name) == 0)
             {
                 return true;
             }
@@ -75,12 +80,13 @@ auto ProcessInfo::isProcessRunningMac(const char *procName) -> bool
     return false;
 }
 #elif defined Q_OS_UNIX
-auto ProcessInfo::isProcessRunningUnix(std::string procName) -> bool
+auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
 {
     // https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
     // Open the /proc directory
     DIR *dp = opendir("/proc");
     bool isRunning = false;
+    const auto procNameStd = procName.toStdString();
 
     if (dp != nullptr)
     {
@@ -114,7 +120,7 @@ auto ProcessInfo::isProcessRunningUnix(std::string procName) -> bool
                     if (pos != string::npos) cmdLine = cmdLine.substr(pos + 1);
 
                     // Compare against requested process name
-                    if (procName == cmdLine) pid = id;
+                    if (procNameStd == cmdLine) pid = id;
                 }
             }
         }
