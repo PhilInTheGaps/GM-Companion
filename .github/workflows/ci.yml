@@ -20,7 +20,7 @@ jobs:
           version: ${{ matrix.qt-version }}
           host: 'windows'
           arch: 'win64_mingw81'
-          tools: 'tools_openssl_x64'
+          tools: 'tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64'
           aqtversion: '>=2.0.0'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
