@@ -1,0 +1,50 @@
+name: CI
+on: [push]
+jobs:
+  windows:
+  runs-on: windows-latest
+  steps:
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'
+        host: 'windows'
+        arch: 'win64_mingw81'
+        tools: 'tools_openssl_x64,qt.tools.win64_mingw810'
+
+    - name: Install Dependencies with Chocolatey
+      uses: crazy-max/ghaction-chocolatey@v1
+      with:
+        args: 'install cmake yasm'
+
+    - name: Install cget
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+      run: pip install cget
+
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Setup build directory
+      run: mkdir build
+
+    - name: Init cget
+      run: cd build && cget init --shared -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+
+    - name: Install pkgconfig
+      run: cd build && cget install pfultz2/pkgconfig
+
+    - name: Install dependencies from requirements.txt
+      run: cd build && cget install -G "MinGW Makefiles" --release -DCMAKE_C_FLAGS="-fno-asynchronous-unwind-tables" -f ../requirements.txt
+
+    - name: Run cmake
+      run: cd build && cmake .. -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=install
+
+    - name: Make
+      run: cd build && mingw32-make -j2
+    
+    - name: Tests
+      run: cd build && mingw32-make test 

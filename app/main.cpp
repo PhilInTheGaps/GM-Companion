@@ -74,8 +74,6 @@ int main(int argc, char *argv[])
 
 #if defined(Q_OS_WIN)
     app.setFont(QFont("Segoe UI"));
-    QQuickWindow::setTextRenderType(QQuickWindow::NativeTextRendering);
-    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::OpenGL);
 #endif // if defined(Q_OS_WIN)
 
     Logger logger;
