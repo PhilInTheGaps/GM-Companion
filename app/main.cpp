@@ -98,17 +98,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.addImportPath(QStringLiteral("qrc:/"));
 
-    // Load tools
-    AudioTool audioTool(&engine);
-    MapTool   mapTool(&engine);
-    DiceTool  diceTool(&engine);
-    CombatTracker combatTracker(&engine);
-    ShopTool      shopTool(&engine);
-    CharacterTool characterTool(&engine);
-    NameGenerator nameGenerator(&engine);
-    NotesTool     notesTool(&engine);
-    ConverterTool converterTool(&engine);
-
     // Misc
     engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
@@ -121,6 +110,17 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
     engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
     engine.rootContext()->setContextProperty("discord_service", Discord::getInstance());
+
+    // Load tools
+    AudioTool audioTool(&engine);
+    MapTool   mapTool(&engine);
+    DiceTool  diceTool(&engine);
+    CombatTracker combatTracker(&engine);
+    ShopTool      shopTool(&engine);
+    CharacterTool characterTool(&engine);
+    NameGenerator nameGenerator(&engine);
+    NotesTool     notesTool(&engine);
+    ConverterTool converterTool(&engine);
 
     engine.load(source);
 
