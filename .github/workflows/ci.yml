@@ -3,14 +3,25 @@ on: [push]
 jobs:
   windows:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        qt-version: ['5.15.2']
     steps:
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
         with:
-          version: '5.15.2'
+          path: ../Qt
+          key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.14.0
+        with:
+          version: ${{ matrix.qt-version }}
           host: 'windows'
           arch: 'win64_mingw81'
-          tools: 'tools_openssl_x64,qt.tools.win64_mingw810'
+          tools: 'tools_openssl_x64'
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
@@ -20,7 +31,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
         with:
-            python-version: '3.10'
+          python-version: '3.10'
         
       - name: Install cget
         run: pip install cget
@@ -33,14 +44,23 @@ jobs:
       - name: Setup build directory
         run: mkdir build
 
+      - name: Cache cget dependencies
+        id: cache-cget
+        uses: actions/cache@v2
+        with:
+          path: build/cget
+          key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}-cget-${{ matrix.qt-version }}
+
       - name: Init cget
         run: cd build && cget init --shared -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
       - name: Install pkgconfig
         run: cd build && cget install pfultz2/pkgconfig
+        if: steps.cache-cget.outputs.cache-hit != 'true'
 
       - name: Install dependencies from requirements.txt
         run: cd build && cget install -G "MinGW Makefiles" --release -DCMAKE_C_FLAGS="-fno-asynchronous-unwind-tables" -f ../requirements.txt
+        if: steps.cache-cget.outputs.cache-hit != 'true'
 
       - name: Run cmake
         run: cd build && cmake .. -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=install
@@ -48,5 +68,8 @@ jobs:
       - name: Make
         run: cd build && mingw32-make -j2
 
+      - name: Copy dlls to test folder
+        run: cp build/cget/bin/*.dll build/test/
+
       - name: Tests
-        run: cd build && mingw32-make test 
+        run: cd build && ctest --output-on-failure 
