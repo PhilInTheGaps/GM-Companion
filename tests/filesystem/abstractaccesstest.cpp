@@ -31,7 +31,11 @@ void AbstractAccessTest::createTestFiles()
     createTestFile(QStringLiteral("test5"), "To be moved.");
     createTestFile(QStringLiteral("test6"), "To be deleted.");
     createTestFile(QStringLiteral("test7"), "To be copied.");
+
+#ifndef Q_OS_WIN
+    // windows can't handle filenames with special characters
     createTestFile(QStringLiteral("file&with\"special characters"), "file&with\"special characters");
+#endif
 }
 
 /// Read data from file(s)
@@ -43,8 +47,10 @@ void AbstractAccessTest::getDataAsync()
     // Test file one again, this time it should be in cache
     verifyFileContent(getFilePath(QStringLiteral("test1")), QByteArray("This is test 1."), true);
 
+#ifndef Q_OS_WIN
     // File with special characters in name and content
     verifyFileContent(getFilePath(QStringLiteral("file&with\"special characters")), QByteArray("file&with\"special characters"), false);
+#endif
 
     // File that does not exist
     expectWarning();
@@ -231,7 +237,9 @@ void AbstractAccessTest::listAsync()
         QVERIFY2(future.result()->files().length() > 2, "Could not list files.");
         QVERIFY2(future.result()->files().contains("test1"), "List does not include test file 1.");
         QVERIFY2(future.result()->files().contains("test2"), "List does not include test file 2.");
+#ifndef Q_OS_WIN
         QVERIFY2(future.result()->files().contains("file&with\"special characters"), "List does not include file with special characters in it's name.");
+#endif
         QVERIFY2(!future.result()->files().contains("copies"), "File list includes folders.");
         QVERIFY2(future.result()->folders().isEmpty(), "List includes folders when it should not.");
         future.result()->deleteLater();

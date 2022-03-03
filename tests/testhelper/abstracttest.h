@@ -47,7 +47,7 @@ protected:
 
     static void expectWarning();
 
-    auto copyResourceToTempFile(const QString &resource) -> QTemporaryFile*;
+    auto copyResourceToTempFile(const QString &resource) -> QFile*;
 
 private:
     void checkOrCreateFileAccess();

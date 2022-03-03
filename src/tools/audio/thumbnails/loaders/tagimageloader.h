@@ -27,8 +27,8 @@ private:
     static auto loadFromOga(const QString &path) -> QFuture<QPixmap>;
     static auto loadFromVorbis(const QString &path) -> QFuture<QPixmap>;
     static auto loadFromFlac(const QString &path) -> QFuture<QPixmap>;
-    static auto loadFromFlac(TagLib::Ogg::FLAC::File *file, const QString &path) -> QFuture<QPixmap>;
-    static auto loadFromFlac(TagLib::FLAC::File *file, const QString &path) -> QFuture<QPixmap>;
+    static auto loadFromFlac(const TagLib::Ogg::FLAC::File &file, const QString &path) -> QFuture<QPixmap>;
+    static auto loadFromFlac(TagLib::FLAC::File &file, const QString &path) -> QFuture<QPixmap>;
     static auto loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QString &path) -> QFuture<QPixmap>;
 
     static auto loadFromWav(const QString &path) -> QFuture<QPixmap>;

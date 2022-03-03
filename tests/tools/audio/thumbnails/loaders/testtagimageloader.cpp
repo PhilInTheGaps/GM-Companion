@@ -33,7 +33,6 @@ void TestTagImageLoader::loadFromFile()
     testFuture(future, "loadFromFile", [future, tempFile]() {
         tempFile->remove();
         tempFile->deleteLater();
-
         const auto pixmap = future.result();
         QVERIFY(!pixmap.isNull());
     });

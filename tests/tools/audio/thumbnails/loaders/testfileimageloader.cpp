@@ -2,6 +2,7 @@
 #include <QObject>
 #include "src/tools/audio/thumbnails/loaders/fileimageloader.h"
 #include "src/common/utils/fileutils.h"
+#include "src/filesystem/fileaccesslocal.h"
 #include "tests/testhelper/abstracttest.h"
 
 class TestFileImageLoader : public AbstractTest
@@ -9,9 +10,17 @@ class TestFileImageLoader : public AbstractTest
     Q_OBJECT
 
 private slots:
+    void initTestCase();
+
     void loadImageAsync_data();
     void loadImageAsync();
 };
+
+void TestFileImageLoader::initTestCase()
+{
+    fileAccess = new Files::FileAccessLocal(this);
+    Files::FileAccess::setInstance(fileAccess);
+}
 
 void TestFileImageLoader::loadImageAsync_data()
 {

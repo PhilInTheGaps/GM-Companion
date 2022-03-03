@@ -65,21 +65,25 @@ void AbstractTest::expectWarning()
     QTest::ignoreMessage(QtWarningMsg, QRegularExpression(".*"));
 }
 
-auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QTemporaryFile*
+auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QFile*
 {
     QFile resourceFile(resource);
 
-    Q_ASSERT(resourceFile.open(QIODevice::ReadOnly));
+    if (!resourceFile.open(QIODevice::ReadOnly)) return nullptr;
 
-    const auto fileName = FileUtils::fileName(resource);
+    auto fileName = FileUtils::fileName(resource);
+
+#ifdef Q_OS_WIN
+    fileName.push_front(QUuid::createUuid().toString(QUuid::Id128));
+    auto *tempFile = new QFile(FileUtils::fileInDir(fileName, QDir::tempPath()));
+    tempFile->open(QIODevice::WriteOnly);
+#else
     auto *tempFile = new QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
-    tempFile->setAutoRemove(false);
+    tempFile->open()
+#endif
 
-    if (tempFile->open())
-    {
-        tempFile->write(resourceFile.readAll());
-        tempFile->close();
-    }
+    tempFile->write(resourceFile.readAll());
+    tempFile->close();
 
     resourceFile.close();
     return tempFile;
