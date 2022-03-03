@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: 'install cmake yasm'
+          args: 'install cmake yasm curl'
 
       - name: Install Python
         uses: actions/setup-python@v2
@@ -73,4 +73,23 @@ jobs:
         run: cp .\build\cget\bin\*.dll .\build\tests\
 
       - name: Tests
-        run: cd build && ctest --output-on-failure 
+        run: cd build && ctest --output-on-failure
+        
+      - name: Make Install
+        run: mingw32-make install -j2
+        
+      - name: Copy DLLs to install folder
+        run: cp .\build\cget\bin\*.dll .\build\install\bin\ && cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
+      
+      - name: WindeployQt
+        run: windeployqt.exe --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
+
+      - name: Download librespot
+        run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: .\build\install\bin
+          if-no-files-found: error
