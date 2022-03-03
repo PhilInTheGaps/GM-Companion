@@ -110,7 +110,12 @@ auto LibrespotController::hasStarted() const -> bool
 
 void LibrespotController::initProcess()
 {
+#ifdef Q_OS_WINDOWS
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::kill);
+#else
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::terminate);
+#endif
+
     connect(&m_librespotProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &LibrespotController::onLibrespotFinished);
     connect(&m_librespotProcess, &QProcess::errorOccurred, this, &LibrespotController::onLibrespotError);
     connect(&m_librespotProcess, &QProcess::readyReadStandardError, this, &LibrespotController::onLibrespotOutputReady);
