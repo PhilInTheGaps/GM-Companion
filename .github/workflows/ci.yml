@@ -76,7 +76,7 @@ jobs:
         run: cd build && ctest --output-on-failure
         
       - name: Make Install
-        run: mingw32-make install -j2
+        run: cd build && mingw32-make install -j2
         
       - name: Copy DLLs to install folder
         run: cp .\build\cget\bin\*.dll .\build\install\bin\ && cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
