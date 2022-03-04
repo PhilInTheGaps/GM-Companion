@@ -91,7 +91,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
       
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -b build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
         #run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
 
       - name: Upload Build
