@@ -7,10 +7,6 @@ jobs:
       matrix:
         qt-version: ['5.15.2']
     steps:
-      - name: Get number of CPU cores
-        id: cpu-count
-        uses: SimenB/github-actions-cpu-cores@v1
-        
       - name: Cache Qt
         id: cache-qt
         uses: actions/cache@v1
@@ -71,7 +67,7 @@ jobs:
         run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install
 
       - name: Make
-        run: cd build && mingw32-make -j${{ steps.cpu-cores.outputs.count }}
+        run: cd build && mingw32-make -j2
 
       - name: Copy dlls to test folder
         run: cp .\build\cget\bin\*.dll .\build\tests\
@@ -80,7 +76,7 @@ jobs:
         run: cd build && ctest --output-on-failure
         
       - name: Make Install
-        run: cd build && mingw32-make install -j${{ steps.cpu-cores.outputs.count }}
+        run: cd build && mingw32-make install -j2
         
       - name: Download CQtDeployer Installer
         run: curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.5.4.13/CQtDeployer_1.5.4.13_Installer_Win_x86_64.exe
@@ -95,7 +91,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
       
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.5\bin\cqtdeployer.exe -b build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -b build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
         #run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
 
       - name: Upload Build
