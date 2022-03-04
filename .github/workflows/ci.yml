@@ -29,6 +29,12 @@ jobs:
         with:
           args: 'install yasm curl'
 
+      - name: Download CQtDeployer Installer
+        run: curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.5.4.13/CQtDeployer_1.5.4.13_Installer_Win_x86_64.exe
+        
+      - name: Install CQtDeployer
+        run: .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
+
       - name: Install Python
         uses: actions/setup-python@v2
         with:
@@ -53,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Init cget
-        run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND" -D CMAKE_C_COMPILER=D:/a/GM-Companion/Qt/Tools/mingw810_64/bin/gcc.exe -D CMAKE_CXX_COMPILER=D:/a/GM-Companion/Qt/Tools/mingw810_64/bin/g++.exe
+        run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND"
 
       - name: Install pkgconfig
         run: cd build && cget install pfultz2/pkgconfig
@@ -64,7 +70,7 @@ jobs:
         if: steps.cache-cget.outputs.cache-hit != 'true'
 
       - name: Run cmake
-        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_C_COMPILER=D:/a/GM-Companion/Qt/Tools/mingw810_64/bin/gcc.exe -D CMAKE_CXX_COMPILER=D:/a/GM-Companion/Qt/Tools/mingw810_64/bin/g++.exe
+        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install
 
       - name: Make
         run: cd build && mingw32-make -j2
@@ -78,14 +84,15 @@ jobs:
       - name: Make Install
         run: cd build && mingw32-make install -j2
         
-      - name: Copy DLLs to install folder
-        run: cp .\build\cget\bin\*.dll .\build\install\bin\ && cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
-      
-      - name: WindeployQt
-        run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
-
       - name: Download librespot
         run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
+        
+      - name: Copy OpenSSL DLLs to install folder
+        run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
+      
+      - name: Deploy
+        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -b build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
+        #run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
