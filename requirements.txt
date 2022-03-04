@@ -26,7 +26,7 @@ https://curl.haxx.se/download/curl-7.81.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 google/brotli@v1.0.9
 
 # freetype
-https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz
+https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.xz -DFT_DISABLE_HARFBUZZ=TRUE
 
 # libjpeg-turbo
 libjpeg-turbo/libjpeg-turbo@2.1.3
