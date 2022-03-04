@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: 'install cmake yasm curl'
+          args: 'install yasm curl'
 
       - name: Install Python
         uses: actions/setup-python@v2
@@ -64,7 +64,7 @@ jobs:
         if: steps.cache-cget.outputs.cache-hit != 'true'
 
       - name: Run cmake
-        run: cd build && cmake .. -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=install
+        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_C_COMPILER="%IQTA_TOOLS%/mingw810_64/gcc.exe" -D CMAKE_CXX_COMPILER="%IQTA_TOOLS%/mingw810_64/g++.exe"
 
       - name: Make
         run: cd build && mingw32-make -j2
@@ -82,7 +82,7 @@ jobs:
         run: cp .\build\cget\bin\*.dll .\build\install\bin\ && cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
       
       - name: WindeployQt
-        run: windeployqt.exe --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
+        run: windeployqt.exe --release --compiler-runtime --qmldir "%QML2_IMPORT_PATH%" .\build\install\bin\gm-companion.exe
 
       - name: Download librespot
         run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
@@ -90,6 +90,6 @@ jobs:
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
-          name: build
+          name: gm-companion_${{ runner.os }}
           path: .\build\install\bin
           if-no-files-found: error
