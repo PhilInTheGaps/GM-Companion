@@ -53,7 +53,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Init cget
-        run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND" -D CMAKE_C_COMPILER="$IQTA_TOOLS/mingw810_64/gcc.exe" -D CMAKE_CXX_COMPILER="$IQTA_TOOLS/mingw810_64/g++.exe"
+        run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND" -D CMAKE_C_COMPILER=../Qt/Tools/mingw810_64/bin/gcc.exe -D CMAKE_CXX_COMPILER=../Qt/Tools/mingw810_64/bin/g++.exe
 
       - name: Install pkgconfig
         run: cd build && cget install pfultz2/pkgconfig
@@ -64,7 +64,7 @@ jobs:
         if: steps.cache-cget.outputs.cache-hit != 'true'
 
       - name: Run cmake
-        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_C_COMPILER="$IQTA_TOOLS/mingw810_64/gcc.exe" -D CMAKE_CXX_COMPILER="$IQTA_TOOLS/mingw810_64/g++.exe"
+        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_C_COMPILER=../Qt/Tools/mingw810_64/bin/gcc.exe -D CMAKE_CXX_COMPILER=../Qt/Tools/mingw810_64/bin/g++.exe
 
       - name: Make
         run: cd build && mingw32-make -j2
@@ -82,7 +82,7 @@ jobs:
         run: cp .\build\cget\bin\*.dll .\build\install\bin\ && cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
       
       - name: WindeployQt
-        run: windeployqt.exe --release --compiler-runtime --qmldir "%QML2_IMPORT_PATH%" .\build\install\bin\gm-companion.exe
+        run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
 
       - name: Download librespot
         run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
