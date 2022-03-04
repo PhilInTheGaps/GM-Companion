@@ -8,6 +8,7 @@ jobs:
         qt-version: ['5.15.2']
     steps:
       - name: Get number of CPU cores
+        id: cpu-count
         uses: SimenB/github-actions-cpu-cores@v1
         
       - name: Cache Qt
