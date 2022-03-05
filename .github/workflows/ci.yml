@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        qt-version: ['5.15.2']
+        qt-version: ["5.15.2"]
     steps:
       - name: Cache Qt
         id: cache-qt
@@ -18,29 +18,29 @@ jobs:
         uses: jurplel/install-qt-action@v2.14.0
         with:
           version: ${{ matrix.qt-version }}
-          host: 'windows'
-          arch: 'win64_mingw81'
-          tools: 'tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64'
-          aqtversion: '>=2.0.0'
+          host: "windows"
+          arch: "win64_mingw81"
+          tools: "tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64"
+          aqtversion: ">=2.0.0"
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: 'install yasm curl'
+          args: "install yasm curl"
 
       - name: Install Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'
-        
+          python-version: "3.10"
+
       - name: Install cget
         run: pip install cget
 
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
 
       - name: Setup build directory
         run: mkdir build
@@ -50,49 +50,46 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build/cget
-          key: ${{ runner.os }}-${{ hashFiles('requirements.txt') }}-cget-${{ matrix.qt-version }}
+          key: ${{ runner.os }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Init cget
         run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND"
 
-      - name: Install pkgconfig
-        run: cd build && cget install pfultz2/pkgconfig
-        if: steps.cache-cget.outputs.cache-hit != 'true'
-
       - name: Install dependencies from requirements.txt
-        run: cd build && cget install -G "MinGW Makefiles" --release -DCMAKE_C_FLAGS="-fno-asynchronous-unwind-tables" -f ../requirements.txt
         if: steps.cache-cget.outputs.cache-hit != 'true'
-
-      - name: Run cmake
-        run: cd build && cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install
+        run: |
+          cd build
+          cget install pfultz2/pkgconfig
+          cget install -G "MinGW Makefiles" --release -DCMAKE_C_FLAGS="-fno-asynchronous-unwind-tables" -f ../requirements.windows.txt
 
       - name: Make
-        run: cd build && mingw32-make -j2
-
-      - name: Copy dlls to test folder
-        run: cp .\build\cget\bin\*.dll .\build\tests\
+        run: |
+          cd build
+          cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=Release 
+          cmake --build . --config Release -j2
 
       - name: Tests
-        run: cd build && ctest --output-on-failure
-        
+        run: |
+          cp .\build\cget\bin\*.dll .\build\tests\
+          cd build
+          ctest --output-on-failure
+
       - name: Make Install
         run: cd build && mingw32-make install -j2
-        
-      - name: Download CQtDeployer Installer
-        run: curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.5.4.13/CQtDeployer_1.5.4.13_Installer_Win_x86_64.exe
-        
+
       - name: Install CQtDeployer
-        run: .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
-        
+        run: |
+          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.5.4.13/CQtDeployer_1.5.4.13_Installer_Win_x86_64.exe
+          .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
+
       - name: Download librespot
         run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
-        
+
       - name: Copy OpenSSL DLLs to install folder
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
-      
+
       - name: Deploy
         run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
-        #run: windeployqt.exe --release --compiler-runtime --qmldir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml .\build\install\bin\gm-companion.exe
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
@@ -100,3 +97,51 @@ jobs:
           name: gm-companion_${{ runner.os }}
           path: .\build\install\bin
           if-no-files-found: error
+  ubuntu:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        qt-version: ["5.15.2"]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+
+      - name: Install Dependencies
+        run: |
+          sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-bionic
+          sudo apt update
+          sudo apt install -y mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools
+
+      - name: Install cget
+        run: pip3 install cget
+
+      - name: Setup build directory
+        run: mkdir build
+
+      - name: Cache cget dependencies
+        id: cache-cget
+        uses: actions/cache@v2
+        with:
+          path: build/cget
+          key: ${{ runner.os }}-${{ hashFiles('requirements.ubuntu.txt') }}-cget-${{ matrix.qt-version }}
+
+      - name: Build cget dependencies
+        if: steps.cache-cget.outputs.cache-hit != 'true'
+        run: |
+          cd build
+          cget init --shared
+          cget install --release -f ../requirements.ubuntu.txt
+
+      - name: Make
+        run: |
+          cd build
+          cmake .. -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=AppDir/usr
+          cmake --build . --config Release -j2
+
+      - name: Tests
+        run: cd build && ctest --output-on-failure
+
+      - name: Make Install
+        run: cd build && cmake --install .
