@@ -120,6 +120,12 @@ jobs:
           cat qt515.conf
           sudo cp qt515.conf /usr/share/qtchooser/qt515.conf
           sudo ln -snf /usr/share/qtchooser/qt515.conf /usr/lib/x86_64-linux-gnu/qtchooser/default.conf
+          
+          export QT_BASE_DIR=/opt/qt515
+          export QTDIR=$QT_BASE_DIR
+          export PATH=$QT_BASE_DIR/bin:$PATH
+          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
+          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
       - name: Install cget
         run: sudo pip3 install wheel cget
@@ -137,12 +143,14 @@ jobs:
       - name: Build cget dependencies
         if: steps.cache-cget.outputs.cache-hit != 'true'
         run: |
+          echo $PATH
           cd build
           cget init --shared
           cget install --release -f ../requirements.ubuntu.txt
 
       - name: Make
         run: |
+          echo $PATH
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=AppDir/usr
           cmake --build . --config Release -j2
