@@ -79,7 +79,7 @@ auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QFile*
     tempFile->open(QIODevice::WriteOnly);
 #else
     auto *tempFile = new QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
-    tempFile->open()
+    tempFile->open();
 #endif
 
     tempFile->write(resourceFile.readAll());
