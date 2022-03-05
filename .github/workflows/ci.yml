@@ -116,7 +116,9 @@ jobs:
           sudo apt install -qq qtchooser mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools python3-setuptools
           
           echo "Configuring Qt ..."
-          sudo echo -e '/opt/qt515/bin\n/opt/qt515/lib' > /usr/share/qtchooser/qt515.conf
+          echo -e '/opt/qt515/bin\n/opt/qt515/lib' > qt515.conf
+          cat qt515.conf
+          sudo cp qt515.conf /usr/share/qtchooser/qt515.conf
           sudo ln -snf /usr/share/qtchooser/qt515.conf /usr/lib/x86_64-linux-gnu/qtchooser/default.conf
 
       - name: Install cget
