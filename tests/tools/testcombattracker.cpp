@@ -11,18 +11,14 @@ public:
 
 private slots:
     void testNormalUse();
+    void testSaveLoad();
+
+private:
+    void createTestData();
 };
 
-void TestCombatTracker::testNormalUse()
+void TestCombatTracker::createTestData()
 {
-    // No combatant added, so we should not be able to modify one
-    QVERIFY(!setIni(0, 5));
-    QVERIFY(!setHealth(0, -5));
-    QVERIFY(!setPriority(0, 3));
-    QVERIFY(!setNotes(0, QStringLiteral("This is a test")));
-    QVERIFY(!delayTurn(0));
-
-    // Add some combatants
     QVERIFY(!add(QString(), 1, 2, 3, QStringLiteral("Test")));
     QVERIFY(add(QStringLiteral("Frank"), 1, 0, 1, "Test 1", true));
     QVERIFY(add(QStringLiteral("Paul"), 1, 0, 2, "Test 2", true));
@@ -38,6 +34,21 @@ void TestCombatTracker::testNormalUse()
     QCOMPARE(getCombatant(2)->name(), QStringLiteral("Jazz"));
     QCOMPARE(getCombatant(3)->name(), QStringLiteral("Paul"));
     QCOMPARE(getCombatant(4)->name(), QStringLiteral("Frank"));
+}
+
+void TestCombatTracker::testNormalUse()
+{
+    clear();
+
+    // No combatant added, so we should not be able to modify one
+    QVERIFY(!setIni(0, 5));
+    QVERIFY(!setHealth(0, -5));
+    QVERIFY(!setPriority(0, 3));
+    QVERIFY(!setNotes(0, QStringLiteral("This is a test")));
+    QVERIFY(!delayTurn(0));
+
+    // Add some combatants
+    createTestData();
 
     // Check rounds and current index
     next();
@@ -49,7 +60,7 @@ void TestCombatTracker::testNormalUse()
     next();
     QCOMPARE(currentIndex(), 0);
     QCOMPARE(currentRound(), 2);
-    resetRounds();
+    reset();
     QCOMPARE(currentIndex(), 0);
     QCOMPARE(currentRound(), 1);
 
@@ -60,7 +71,7 @@ void TestCombatTracker::testNormalUse()
     QCOMPARE(getCombatant(0)->name(), QStringLiteral("Orc 2"));
 
     // Modify combatant
-    setIni(2, 20);
+    setIni(2, 20); // should move to position 0
     setHealth(0, 25);
     setPriority(0, 10);
     setNotes(0, QStringLiteral("Modified"));
@@ -68,6 +79,44 @@ void TestCombatTracker::testNormalUse()
     QCOMPARE(getCombatant(0)->health(), 25);
     QCOMPARE(getCombatant(0)->priority(), 10);
     QCOMPARE(getCombatant(0)->notes(), QStringLiteral("Modified"));
+}
+
+void TestCombatTracker::testSaveLoad()
+{
+    clear();
+    createTestData();
+
+    const auto index = currentIndex();
+    const auto round = currentRound();
+
+    const auto *combatant = getCombatant(0);
+    const auto name = combatant->name();
+    const auto notes = combatant->notes();
+    const auto ini = combatant->ini();
+    const auto health = combatant->health();
+    const auto priority = combatant->priority();
+    const auto delay = combatant->delay();
+
+    saveToDisk();
+    clear(false);
+
+    QCOMPARE(currentIndex(), 0);
+    QCOMPARE(currentRound(), 1);
+    QCOMPARE(combatants().length(), 0);
+
+    m_isDataLoaded = false;
+    loadData();
+
+    QCOMPARE(currentIndex(), index);
+    QCOMPARE(currentRound(), round);
+
+    const auto *loadedCombatant = getCombatant(0);
+    QCOMPARE(loadedCombatant->name(), name);
+    QCOMPARE(loadedCombatant->notes(), notes);
+    QCOMPARE(loadedCombatant->ini(), ini);
+    QCOMPARE(loadedCombatant->health(), health);
+    QCOMPARE(loadedCombatant->priority(), priority);
+    QCOMPARE(loadedCombatant->delay(), delay);
 }
 
 QTEST_APPLESS_MAIN(TestCombatTracker)

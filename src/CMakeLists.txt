@@ -78,6 +78,7 @@ set(SOURCES
   tools/combat_tracker/effecttool.cpp 
   tools/combat_tracker/effect.cpp 
   tools/combat_tracker/combattracker.cpp 
+  tools/combat_tracker/combattrackerstate.cpp
   tools/combat_tracker/combatant.cpp 
   tools/shop/shopproject.cpp 
   tools/shop/itemshop.cpp 
@@ -144,6 +145,7 @@ set(HEADERS
   tools/maps/map.h 
   tools/maps/maptool.h 
   tools/combat_tracker/combattracker.h 
+  tools/combat_tracker/combattrackerstate.h
   tools/combat_tracker/effecttool.h 
   tools/combat_tracker/effect.h 
   tools/combat_tracker/combatant.h 

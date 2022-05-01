@@ -1,58 +1,51 @@
 #include "combattracker.h"
-#include "logging.h"
 #include "utils/utils.h"
+#include "utils/fileutils.h"
 #include <algorithm>
+#include <QLoggingCategory>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFile>
+#include <QDir>
+
+Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
 CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent)
+    : AbstractTool(parent), effectTool(new EffectTool(this))
 {
-    effectTool = new EffectTool(this);
-    combatantListModel = new CombatantListModel(this);
-
     if (engine)
     {
-        engine->rootContext()->setContextProperty("combat_tracker", this);
-        engine->rootContext()->setContextProperty("combat_tracker_effects", effectTool);
-        engine->rootContext()->setContextProperty("combatantListModel", combatantListModel);
+        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker"), this);
+        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker_effects"), effectTool);
+        engine->rootContext()->setContextProperty(QStringLiteral("combatantListModel"), &m_state.model());
     }
+
+    connect(&m_state, &CombatTrackerState::currentIndexChanged, this, &CombatTracker::currentIndexChanged);
+    connect(&m_state, &CombatTrackerState::currentRoundChanged, this, &CombatTracker::currentRoundChanged);
 }
 
 /**
  * @brief Reset the rounds and the current index
  */
-void CombatTracker::resetRounds()
+void CombatTracker::reset()
 {
     sortByIni(false);
-
-    m_currentRound = 1;
-    m_currentIndex = 0;
-
-    emit currentRoundChanged();
-    emit currentIndexChanged();
+    m_state.reset();
+    saveToDisk();
 }
 
 /**
- * @brief Delete all combatants
+ * @brief Delete all combatants, reset index and round
  */
-void CombatTracker::clear()
+void CombatTracker::clear(bool saveAfterClear)
 {
-    combatantListModel->clear();
+    m_state.clear();
 
-    for (auto combatant : m_combatants)
+    if (saveAfterClear)
     {
-        if (Q_LIKELY(combatant))
-        {
-            combatant->deleteLater();
-        }
+        saveToDisk();
     }
-
-    m_combatants.clear();
-    m_currentIndex = 0;
-    m_currentRound = 0;
-
-    emit combatantsChanged();
-    emit currentRoundChanged();
-    emit currentIndexChanged();
 }
 
 /**
@@ -60,21 +53,18 @@ void CombatTracker::clear()
  */
 void CombatTracker::next()
 {
-    if (m_currentIndex + 1 < m_combatants.size())
+    if (m_state.currentIndex() + 1 < combatants().size())
     {
-        m_currentIndex++;
+        m_state.moveToNextCombatant();
     }
     else
     {
         sortByIni();
-        m_currentIndex = 0;
-        m_currentRound++;
-        emit currentRoundChanged();
+        m_state.startNewRound();
     }
 
-    qCDebug(gmCombatTracker()) << "New index:" << m_currentIndex;
-
-    emit currentIndexChanged();
+    qCDebug(gmCombatTracker()) << "New index:" << currentIndex();
+    saveToDisk();
 }
 
 /**
@@ -84,28 +74,30 @@ void CombatTracker::next()
  * @param health Health of combatant
  * @param sort If combatant list should be sorted after adding
  */
-bool CombatTracker::add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort)
+auto CombatTracker::add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort) -> bool
 {
     if (!name.isEmpty() && (ini > -1))
     {
-        auto combatant = new Combatant(name, notes, ini, health, priority, this);
-        m_combatants.append(combatant);
-        combatantListModel->setElements(m_combatants);
+        auto *combatant = new Combatant(name, notes, ini, health, priority, this);
+        m_state.addCombatant(combatant);
 
-        if ((m_currentRound == 1) && sort)
+        if ((currentRound() == 1) && sort)
         {
             sortByIni();
-            m_currentIndex = 0;
-            emit currentRoundChanged();
+            qCDebug(gmCombatTracker()) << "Setting currentIndex to 0!";
+            m_state.currentIndex(0);
         }
 
+        saveToDisk();
         return true;
     }
-    else if (sort)
+
+    if (sort)
     {
         sortByIni();
     }
 
+    saveToDisk();
     return false;
 }
 
@@ -113,31 +105,12 @@ bool CombatTracker::add(const QString& name, int ini, int health, int priority, 
  * @brief Remove combatant from list
  * @param index Index of the combatant
  */
-bool CombatTracker::remove(int index)
+auto CombatTracker::remove(int index) -> bool
 {
-    if (Q_UNLIKELY(!Utils::isInBounds(m_combatants, index)))
-    {
-        return false;
-    }
+    if (Q_UNLIKELY(!Utils::isInBounds(combatants(), index))) return false;
 
-    auto *combatant = m_combatants.takeAt(index);
-    combatant->deleteLater();
-
-    if ((m_currentIndex == index) && (m_currentIndex > 0))
-    {
-        if (m_currentIndex == m_combatants.size())
-        {
-            m_currentIndex--;
-        }
-        else if (m_currentIndex < m_combatants.size() - 1)
-        {
-            m_currentIndex++;
-        }
-    }
-
-    combatantListModel->setElements(m_combatants);
-    emit combatantsChanged();
-    emit currentIndexChanged();
+    m_state.removeCombatant(index);
+    saveToDisk();
     return true;
 }
 
@@ -148,42 +121,28 @@ void CombatTracker::sortByIni(bool keepDelay)
 {
     qCDebug(gmCombatTracker()) << "Sorting combatants ...";
 
-    // Reset delay
-    if (!keepDelay)
+    if (!keepDelay) resetDelayForAll();
+
+    auto *combatant = getCombatant(currentIndex());
+
+    m_state.sortCombatants(true);
+
+    if (combatant)
     {
-        for (auto combatant : m_combatants)
-        {
-            if (Q_LIKELY(combatant)) combatant->setDelay(false);
-        }
+        m_state.currentIndex(combatants().indexOf(combatant));
     }
+}
 
-    // Get current combatant to find current index later
-    Combatant *combatant = getCombatant(m_currentIndex);
+auto CombatTracker::setIni(Combatant *combatant, int ini) -> bool
+{
+    qCDebug(gmCombatTracker()) << "Setting INI ...";
+    if (Q_UNLIKELY(!combatant)) return false;
 
-    // Sort
-    std::sort(m_combatants.begin(), m_combatants.end(), [keepDelay](Combatant *a, Combatant *b) {
-        if (keepDelay && a->delay() && !b->delay()) return false;
+    combatant->ini(ini);
+    sortByIni(true);
 
-        if (keepDelay && !a->delay() && b->delay()) return true;
-
-        if (a->ini() == b->ini())
-        {
-            return a->priority() > b->priority();
-        }
-
-        return a->ini() > b->ini();
-    });
-
-    combatantListModel->setElements(m_combatants);
-
-    // Find current index
-    if (combatant && (m_currentRound > 0))
-    {
-        m_currentIndex = m_combatants.indexOf(combatant);
-    }
-
-    emit combatantsChanged();
-    emit currentIndexChanged();
+    saveToDisk();
+    return true;
 }
 
 /**
@@ -191,16 +150,9 @@ void CombatTracker::sortByIni(bool keepDelay)
  * @param index Index of combatant
  * @param ini New initiative of combatant
  */
-bool CombatTracker::setIni(int index, int ini)
+auto CombatTracker::setIni(int index, int ini) -> bool
 {
-    qCDebug(gmCombatTracker()) << "Setting INI  ...";
-
-    auto *combatant = getCombatant(index);
-    if (Q_UNLIKELY(!combatant)) return false;
-
-    combatant->setIni(ini);
-    sortByIni(true);
-    return true;
+    return setIni(getCombatant(index), ini);
 }
 
 /**
@@ -208,17 +160,13 @@ bool CombatTracker::setIni(int index, int ini)
  * @param index Index of Combatant
  * @param steps Steps to increase INI by. Default: +1
  */
-bool CombatTracker::modifyIni(int index, int steps)
+auto CombatTracker::modifyIni(int index, int steps) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
     auto ini = combatant->ini();
-    ini += steps;
-
-    combatant->setIni(ini);
-    sortByIni(true);
-    return true;
+    return setIni(combatant, ini + steps);
 }
 
 /**
@@ -226,12 +174,13 @@ bool CombatTracker::modifyIni(int index, int steps)
  * @param index Index of combatant
  * @param ini New health of combatant
  */
-bool CombatTracker::setHealth(int index, int health)
+auto CombatTracker::setHealth(int index, int health) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
-    combatant->setHealth(health);
+    combatant->health(health);
+    saveToDisk();
     return true;
 }
 
@@ -240,31 +189,36 @@ bool CombatTracker::setHealth(int index, int health)
  * @param index Index of Combatant
  * @param steps Steps to increase INI by. Default: +1
  */
-bool CombatTracker::modifyHealth(int index, int steps)
+auto CombatTracker::modifyHealth(int index, int steps) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
     auto health = combatant->health();
     health += steps;
-
-    combatant->setHealth(health);
+    combatant->health(health);
+    saveToDisk();
     return true;
 }
 
-bool CombatTracker::setPriority(int index, int priority)
+auto CombatTracker::setPriority(Combatant *combatant, int priority) -> bool
 {
-    auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
     qCDebug(gmCombatTracker()) << "Setting priority of" << QString(*combatant) << "to" << priority << "...";
 
-    combatant->setPriority(priority);
+    combatant->priority(priority);
     sortByIni(true);
+    saveToDisk();
     return true;
 }
 
-bool CombatTracker::modifyPriority(int index, int steps)
+auto CombatTracker::setPriority(int index, int priority) -> bool
+{
+    return setPriority(getCombatant(index), priority);
+}
+
+auto CombatTracker::modifyPriority(int index, int steps) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
@@ -272,11 +226,7 @@ bool CombatTracker::modifyPriority(int index, int steps)
     qCDebug(gmCombatTracker()) << "Modifying priority of" << QString(*combatant) << "by" << steps << "...";
 
     auto priority = combatant->priority();
-    priority += steps;
-
-    combatant->setPriority(priority);
-    sortByIni(true);
-    return true;
+    return setPriority(combatant, priority + steps);
 }
 
 /**
@@ -284,36 +234,86 @@ bool CombatTracker::modifyPriority(int index, int steps)
  * @param index Index of combatant
  * @param ini New notes on combatant
  */
-bool CombatTracker::setNotes(int index, const QString &notes)
+auto CombatTracker::setNotes(int index, const QString &notes) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
-    combatant->setNotes(notes);
+    combatant->notes(notes);
+    saveToDisk();
     return true;
 }
 
-bool CombatTracker::delayTurn(int index)
+auto CombatTracker::delayTurn(int index) -> bool
 {
     auto *combatant = getCombatant(index);
     if (Q_UNLIKELY(!combatant)) return false;
 
-    combatant->setDelay(true);
+    combatant->delay(true);
 
-    m_combatants.move(m_combatants.indexOf(combatant), m_combatants.size() - 1);
-    combatantListModel->setElements(m_combatants);
-
-    emit combatantsChanged();
-    emit currentIndexChanged();
+    m_state.moveCombatantToBack(index);
+    saveToDisk();
     return true;
+}
+
+auto CombatTracker::combatants() const -> QList<Combatant*>
+{
+    return m_state.combatants();
 }
 
 auto CombatTracker::getCombatant(int index) -> Combatant *
 {
-    if (Q_LIKELY(Utils::isInBounds(m_combatants, index)))
+    if (Q_LIKELY(Utils::isInBounds(combatants(), index)))
     {
-        return m_combatants[index];
+        return combatants()[index];
     }
 
     return nullptr;
+}
+
+void CombatTracker::resetDelayForAll()
+{
+    for (auto *combatant : combatants())
+    {
+        if (Q_LIKELY(combatant)) combatant->delay(false);
+    }
+
+    saveToDisk();
+}
+
+void CombatTracker::loadData()
+{
+    if (m_isDataLoaded) return;
+
+    auto tempFile = getCacheFile();
+
+    if (tempFile.exists() && tempFile.open(QIODevice::ReadOnly))
+    {
+        const auto data = tempFile.readAll();
+        tempFile.close();
+
+        const auto json = QJsonDocument::fromJson(data);
+        m_state.load(json);
+    }
+
+    m_isDataLoaded = true;
+}
+
+void CombatTracker::saveToDisk()
+{
+    auto json = m_state.serialize();
+    auto tempFile = getCacheFile();
+
+    if (tempFile.open(QIODevice::WriteOnly))
+    {
+        tempFile.write(json.toJson());
+        tempFile.close();
+    }
+}
+
+auto CombatTracker::getCacheFile() -> QFile
+{
+    const auto filePath = FileUtils::fileInDir("combat-tracker-state.json", QDir::tempPath());
+
+    return {filePath};
 }

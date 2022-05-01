@@ -1,10 +1,38 @@
 #include "combatant.h"
-
 #include <utility>
+#include <QDebug>
 
-Combatant::Combatant(QString name, QString notes, int ini, int health, int priority, QObject *parent)
-    : QObject(parent), m_name(std::move(name)), m_notes(std::move(notes)), m_ini(ini), m_health(health), m_priority(priority)
+Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, QObject *parent)
+    : Combatant(name, notes, ini, health, priority, false, parent)
 {
+}
+
+Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, bool delay, QObject *parent)
+    : QObject(parent), a_name(name), a_notes(notes), a_ini(ini), a_health(health), a_priority(priority), a_delay(delay)
+{
+
+}
+
+auto Combatant::toJson() const -> QJsonObject
+{
+    return QJsonObject({{"name", name()},
+                        {"notes", notes()},
+                        {"ini", ini()},
+                        {"health", health()},
+                        {"priority", priority()},
+                        {"delay", delay()}});
+}
+
+auto Combatant::fromJson(const QJsonObject &json, QObject *parent) -> Combatant*
+{
+    return new Combatant(
+                json["name"].toString(),
+                json["notes"].toString(),
+                json["ini"].toInt(),
+                json["health"].toInt(),
+                json["priority"].toInt(),
+                json["delay"].toBool(),
+                parent);
 }
 
 auto CombatantListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
@@ -13,21 +41,26 @@ auto CombatantListModel::data(const QModelIndex& index, int /*role*/) const -> Q
     return QVariant::fromValue(item);
 }
 
-auto CombatantListModel::insert(QObject *item) -> void
+auto CombatantListModel::append(QObject *item) -> void
 {
-    beginInsertRows(QModelIndex(), 0, 0);
-    m_items.push_front(item);
+    beginInsertRows(QModelIndex(), m_items.length(), m_items.length());
+    m_items.push_back(item);
     endInsertRows();
 }
 
-auto CombatantListModel::remove(QObject *item) -> void
+auto CombatantListModel::remove(int index) -> void
 {
-    auto index = m_items.indexOf(item);
     if (Q_UNLIKELY(index < 0)) return;
 
     beginRemoveRows(QModelIndex(), index, index);
     m_items.remove(index);
     endRemoveRows();
+}
+
+auto CombatantListModel::remove(QObject *item) -> void
+{
+    const auto index = m_items.indexOf(item);
+    remove(index);
 }
 
 auto CombatantListModel::roleNames() const -> QHash<int, QByteArray>
@@ -46,12 +79,19 @@ auto CombatantListModel::clear() -> void
     }
 }
 
-auto CombatantListModel::setElements(QList<Combatant *>elements) -> void
+void CombatantListModel::move(int from, int to)
+{
+    beginMoveRows(QModelIndex(), from, from, QModelIndex(), to + 1);
+    m_items.move(from, to);
+    endMoveRows();
+}
+
+auto CombatantListModel::setElements(const QList<Combatant *>&elements) -> void
 {
     clear();
 
-    for (int i = elements.size() - 1; i > -1; i--)
+    for (auto *element : elements)
     {
-        insert(elements[i]);
+        append(element);
     }
 }

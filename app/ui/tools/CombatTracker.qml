@@ -12,6 +12,8 @@ Page {
     readonly property bool inPortrait: width < height || width < 1200
     property bool dice_enabled: false
 
+    Component.onCompleted: combat_tracker.loadData()
+
     // Top Bar
     header: ToolBar {
         id: top_bar
@@ -177,7 +179,7 @@ Page {
                         iconText: FontAwesome.undo
                         buttonText: qsTr("Reset")
                         usesFixedWidth: false
-                        onClicked: combat_tracker.resetRounds()
+                        onClicked: combat_tracker.reset()
                     }
 
                     CustomToolBarButton {

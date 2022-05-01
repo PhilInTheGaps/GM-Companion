@@ -14,6 +14,8 @@ ListView {
     model: combatantListModel
     currentIndex: combat_tracker.currentIndex
 
+    onCurrentIndexChanged: console.log(currentIndex)
+
     ScrollBar.vertical: ScrollBar {
         id: scroll_bar
         visible: list_view.contentHeight > list_view.height

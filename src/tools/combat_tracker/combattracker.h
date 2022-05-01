@@ -6,9 +6,11 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "combatant.h"
+#include "combattrackerstate.h"
 #include "effecttool.h"
+#include "abstracttool.h"
 
-class CombatTracker : public QObject
+class CombatTracker : public AbstractTool
 {
     Q_OBJECT
     Q_PROPERTY(int currentRound READ currentRound NOTIFY currentRoundChanged)
@@ -17,21 +19,23 @@ class CombatTracker : public QObject
 public:
     explicit CombatTracker(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    int currentRound() const { return m_currentRound; }
-    int currentIndex() const { return m_currentIndex; }
+    [[nodiscard]] int currentRound() const { return m_state.currentRound(); }
+    [[nodiscard]] int currentIndex() const { return m_state.currentIndex(); }
 
     Q_INVOKABLE void next();
     Q_INVOKABLE bool add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort = true);
-    Q_INVOKABLE void clear();
-    Q_INVOKABLE void resetRounds();
+    Q_INVOKABLE void clear(bool saveAfterClear = true);
+    Q_INVOKABLE void reset();
     Q_INVOKABLE bool remove(int index);
 
+    bool setIni(Combatant *combatant, int ini);
     Q_INVOKABLE bool setIni(int index, int ini);
     Q_INVOKABLE bool modifyIni(int index, int steps = 1);
 
     Q_INVOKABLE bool setHealth(int index, int health);
     Q_INVOKABLE bool modifyHealth(int index, int steps = 1);
 
+    bool setPriority(Combatant *combatant, int priority);
     Q_INVOKABLE bool setPriority(int index, int priority);
     Q_INVOKABLE bool modifyPriority(int index, int steps = 1);
 
@@ -39,21 +43,26 @@ public:
     Q_INVOKABLE void sortByIni(bool keepDelay = false);
     Q_INVOKABLE bool delayTurn(int index);
 
+public slots:
+    void loadData() override;
+
 signals:
     void currentRoundChanged();
     void currentIndexChanged();
-    void combatantsChanged();
 
 protected:
+    QList<Combatant*> combatants() const;
     Combatant *getCombatant(int index);
 
-private:
-    CombatantListModel *combatantListModel = nullptr;
-    EffectTool *effectTool = nullptr;
-    QList<Combatant*> m_combatants;
+    void resetDelayForAll();
+    void saveToDisk();
 
-    int m_currentIndex = 0;
-    int m_currentRound = 1;
+    static QFile getCacheFile();
+
+private:
+    EffectTool *effectTool = nullptr;
+
+    CombatTrackerState m_state;
 };
 
 #endif // COMBATTRACKER_H
