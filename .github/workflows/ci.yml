@@ -6,20 +6,21 @@ jobs:
     strategy:
       matrix:
         qt-version: ["5.15.2"]
+        compiler: ["msvc2019_64"]
     steps:
       - name: Cache Qt
         id: cache-qt
         uses: actions/cache@v1
         with:
           path: ../Qt
-          key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}
+          key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-${{ matrix.compiler }}
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.14.0
         with:
           version: ${{ matrix.qt-version }}
           host: "windows"
-          arch: "win64_msvc2019_64"
+          arch: "win64_${{ matrix.compiler }}"
           tools: "tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64"
           aqtversion: ">=2.0.0"
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
