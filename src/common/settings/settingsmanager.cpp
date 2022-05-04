@@ -301,6 +301,16 @@ auto SettingsManager::getIsAddonEnabled(const QString& addon)->bool
     return enabled;
 }
 
+/// Has setting been set?
+auto SettingsManager::hasSetting(const QString &setting, const QString &group) -> bool
+{
+    getInstance()->m_settings->beginGroup(group);
+    auto result = getInstance()->m_settings->contains(setting);
+    getInstance()->m_settings->endGroup();
+
+    return result;
+}
+
 // Returns Official Addons
 auto SettingsManager::getOfficialAddons()->QStringList
 {

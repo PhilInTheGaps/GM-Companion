@@ -41,6 +41,8 @@ include(AddAsyncFuture)
 include(AddPropertyHelper)
 include(AddHttpStatusCodes)
 
+add_subdirectory(thirdparty/sentry-native)
+
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(app)

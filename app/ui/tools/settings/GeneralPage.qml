@@ -81,6 +81,34 @@ Column {
         }
     }
 
+    // Telemetry
+    Column {
+        spacing: 10
+
+        Label {
+            text: qsTr("Telemetry")
+            font.bold: true
+        }
+
+        // Crash Reports
+        CheckBox {
+            text: qsTr("Automated crash reports")
+            checked: settings_manager.getBoolSetting("crashReports", false,
+                                                     "Telemetry")
+            onClicked: settings_manager.setSetting("crashReports",
+                                                   checked ? 1 : 0, "Telemetry")
+        }
+
+        // Session Tracking
+        CheckBox {
+            text: qsTr("Session tracking")
+            checked: settings_manager.getBoolSetting("sessionTracking", false,
+                                                     "Telemetry")
+            onClicked: settings_manager.setSetting("sessionTracking",
+                                                   checked ? 1 : 0, "Telemetry")
+        }
+    }
+
     // Updates
     Connections {
         target: update_manager

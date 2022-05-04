@@ -15,3 +15,6 @@
 [submodule "thirdparty/http-status-codes"]
 	path = thirdparty/http-status-codes
 	url = https://github.com/j-ulrich/http-status-codes-cpp
+[submodule "thirdparty/sentry-native"]
+	path = thirdparty/sentry-native
+	url = https://github.com/getsentry/sentry-native

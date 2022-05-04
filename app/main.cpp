@@ -7,6 +7,9 @@
 #include <QFontDatabase>
 #include <QIcon>
 #include <QSGRendererInterface>
+#include <QScopeGuard>
+
+#include <sentry.h>
 
 #include "messages/messagemanager.h"
 #include "settings/settingsmanager.h"
@@ -63,10 +66,9 @@ void initResources()
     QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
 }
 
-int main(int argc, char *argv[])
+auto main(int argc, char *argv[]) -> int
 {
     QGuiApplication app(argc, argv);
-
     QGuiApplication::setApplicationName("GM-Companion");
     QGuiApplication::setOrganizationName("GM-Companion");
     QGuiApplication::setOrganizationDomain("gm-companion.github.io");
@@ -83,6 +85,26 @@ int main(int argc, char *argv[])
     registerMetaTypes();
     initTranslations();
     initResources();
+
+    // Sentry.io crash reporting
+    // Crash reports and session tracking are opt-in settings
+    if (SettingsManager::getBoolSetting(QStringLiteral("crashReports"), false, "Telemetry"))
+    {
+        qCDebug(gmMain()) << "Crash reports are enabled!";
+        auto *sentryOptions = sentry_options_new();
+        sentry_options_set_dsn(sentryOptions, "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
+        sentry_options_set_release(sentryOptions, QStringLiteral("gm-companion@%1").arg(CURRENT_VERSION).toUtf8().data());
+
+        auto isSessionTrackingEnabled = SettingsManager::getBoolSetting(QStringLiteral("sessionTracking"), false, "Telemetry");
+        sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
+        if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
+
+        sentry_set_tag("qt", qVersion());
+
+        sentry_init(sentryOptions);
+    }
+
+    auto sentryClose = qScopeGuard([] { sentry_close(); });
 
     // Convert Projects to newest version
     ProjectConverter projectConverter;

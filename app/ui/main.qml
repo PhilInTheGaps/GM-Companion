@@ -93,6 +93,11 @@ ApplicationWindow {
             console.debug("Checking for updates")
             update_manager.checkForUpdates()
         }
+
+        if (!settings_manager.hasSetting("crashReports", "Telemetry")) {
+            console.debug("CrashReports preference has not been set.")
+            new_settings_dialog.open()
+        }
     }
 
     UpdateDialog {
@@ -105,6 +110,10 @@ ApplicationWindow {
                 update_dialog.open()
             }
         }
+    }
+
+    NewSettingsDialog {
+        id: new_settings_dialog
     }
 
     MessageDialog {

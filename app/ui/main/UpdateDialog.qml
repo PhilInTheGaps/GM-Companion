@@ -9,14 +9,10 @@ Dialog {
     x: parent.width / 2 - width / 2
     y: parent.height / 2 - height / 2
 
-    background: Rectangle {
-        color: palette.base
-        border.color: palette.button
-        border.width: 1
-    }
+    modal: true
 
     Column {
-        spacing: 5
+        spacing: 10
 
         Label {
             text: qsTr("New Version:")
@@ -27,7 +23,7 @@ Dialog {
         }
 
         Row {
-            spacing: 5
+            spacing: 10
 
             Button {
                 text: qsTr("Download")

@@ -58,7 +58,9 @@ public slots:
     static void setPassword(const QString& username, const QString& password, const QString& service);
 
     static bool isUpdateCheckEnabled();
-    static bool getBoolSetting(const QString& setting, bool defaultValue = true, const QString& group = "");
+    static bool getBoolSetting(const QString& setting, bool defaultValue = true, const QString& group = DEFAULT_GROUP);
+
+    static bool hasSetting(const QString &setting, const QString &group = DEFAULT_GROUP);
 
     void setAddonEnabled(const QString& addon, bool enabled);
     bool getIsAddonEnabled(const QString& addon);

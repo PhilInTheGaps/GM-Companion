@@ -75,6 +75,7 @@ target_link_libraries(
   Qt5::QuickControls2
   Qt5::Qml
   fontawesome
+  sentry
 )
 
 install(

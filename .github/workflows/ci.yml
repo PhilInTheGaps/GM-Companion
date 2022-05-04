@@ -19,7 +19,7 @@ jobs:
         with:
           version: ${{ matrix.qt-version }}
           host: "windows"
-          arch: "win64_mingw81"
+          arch: "win64_msvc2019_64"
           tools: "tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64"
           aqtversion: ">=2.0.0"
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
@@ -33,6 +33,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
+
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@1.2.0
+        with:
+          token: ${{ SECRETS.SENTRY_TOKEN }}
+          organization: rophil
+          project: gm-companion
 
       - name: Install cget
         run: pip install cget
@@ -53,20 +60,19 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Init cget
-        run: cd build && cget init --shared -D CMAKE_SH="CMAKE_SH-NOTFOUND"
+        run: cd build && cget init --shared
 
       - name: Install dependencies from requirements.txt
         if: steps.cache-cget.outputs.cache-hit != 'true'
         run: |
           cd build
-          cget install pfultz2/pkgconfig
-          cget install -G "MinGW Makefiles" --release -DCMAKE_C_FLAGS="-fno-asynchronous-unwind-tables" -f ../requirements.windows.txt
+          cget install --release -f ../requirements.windows.txt -DCMAKE_BUILD_PARALLEL_LEVEL=2 -DBUILD_TESTING=OFF
 
       - name: Make
         run: |
           cd build
-          cmake .. -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=Release 
-          cmake --build . --config Release -j2
+          cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake --build . --config RelWithDebInfo --parallel 2
 
       - name: Tests
         run: |
@@ -74,8 +80,15 @@ jobs:
           cd build
           ctest --output-on-failure
 
+      - name: Upload debug symbols
+        run: |
+          cd build
+          sentry-cli upload-dif --org rophil --project gm-companion --include-sources app/
+
       - name: Make Install
-        run: cd build && mingw32-make install -j2
+        run: |
+          cd build
+          cmake --install . --config RelWithDebInfo
 
       - name: Install CQtDeployer
         run: |
@@ -89,7 +102,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
 
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\mingw81_64\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\msvc2019_64\qml -targetDir build\install\bin
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
@@ -127,6 +140,13 @@ jobs:
           export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
 
+      - name: Setup Sentry CLI
+        uses: mathieu-bour/setup-sentry-cli@1.2.0
+        with:
+          token: ${{ SECRETS.SENTRY_TOKEN }}
+          organization: rophil
+          project: gm-companion
+
       - name: Install cget
         run: sudo pip3 install wheel cget
 
@@ -162,8 +182,8 @@ jobs:
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
           
           cd build
-          cmake .. -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=AppDir/usr
-          cmake --build . --config Release -j2
+          cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr
+          cmake --build . -j2
 
       - name: Tests
         run: |
@@ -176,3 +196,10 @@ jobs:
         run: |
           cd build
           cmake --install .
+
+      - name: Strip and upload debug symbols
+        run: |
+          cd build
+          ../deploy/debug/generate-debug-info.sh AppDir/usr/bin/gm-companion
+          sentry-cli upload-dif --org rophil --project gm-companion --include-sources AppDir/usr/bin/.debug/
+          rm -rf AppDir/usr/bin/.debug

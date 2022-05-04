@@ -166,5 +166,6 @@
         <file>style/StackView.qml</file>
         <file>main/MessageDialog.qml</file>
         <file>tools/settings/accounts/BaseAccountPage.qml</file>
+        <file>main/NewSettingsDialog.qml</file>
     </qresource>
 </RCC>
