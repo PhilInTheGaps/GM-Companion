@@ -28,7 +28,7 @@ jobs:
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: "install yasm curl"
+          args: "install nasm curl"
 
       - name: Install Python
         uses: actions/setup-python@v2
