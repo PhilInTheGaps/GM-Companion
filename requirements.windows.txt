@@ -11,7 +11,7 @@ frankosterfeld/qtkeychain@v0.13.2
 taglib/taglib@v1.12
 
 # cmark-gfm
-github/cmark-gfm@0.29.0.gfm.3
+ryantm/cmark-gfm@fix-include
 
 ### requirements for poppler ###
 
