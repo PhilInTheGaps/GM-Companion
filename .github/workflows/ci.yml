@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build/cget
-          key: ${{ runner.os }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}
+          key: ${{ runner.os }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}-${{ matrix.compiler }}
 
       - name: Init cget
         run: cd build && cget init --shared
@@ -77,9 +77,10 @@ jobs:
 
       - name: Tests
         run: |
-          cp .\build\cget\bin\*.dll .\build\tests\
+          cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\tests\RelWithDebInfo\
+          cp .\build\cget\bin\*.dll .\build\tests\RelWithDebInfo\
           cd build
-          ctest --output-on-failure
+          ctest -C RelWithDebInfo --output-on-failure
 
       - name: Upload debug symbols
         run: |
@@ -103,7 +104,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
 
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\msvc2019_64\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\${{ matrix.compiler }}\qml -targetDir build\install\bin
 
       - name: Upload Build
         uses: actions/upload-artifact@v2
