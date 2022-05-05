@@ -11,7 +11,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 # Enable extra tests?
-set(ENABLE_EXTRA_TESTS OFF CACHE BOOL "Enable extra tests that can not run in a CI environment")
+set(ENABLE_EXTRA_TESTS OFF CACHE BOOL "Enable extra tests that require special setup and can not be run on every machine")
+set(IS_RUNNING_IN_CI OFF CACHE BOOL "Variable used to en- and disable stuff when running CI environments")
 set(TEST_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(testhelper)

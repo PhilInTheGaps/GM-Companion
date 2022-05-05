@@ -72,25 +72,17 @@ jobs:
       - name: Make
         run: |
           cd build
-          cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo -DIS_RUNNING_IN_CI=ON
           cmake --build . --config RelWithDebInfo --parallel 2
-          cp ..\..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
-          cp .\cget\bin\*.dll .\tests\RelWithDebInfo\
-
-      - name: Upload Tests (DEBUG)
-        uses: actions/upload-artifact@v2
-        with:
-          name: gm-companion_${{ runner.os }}_tests
-          path: .\build\tests\RelWithDebInfo
-          if-no-files-found: error
 
       - name: Tests
         run: |
           cd build
+          cp ..\..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
+          cp .\cget\bin\*.dll .\tests\RelWithDebInfo\
           ls tests
           ls tests\RelWithDebInfo
           ctest -C RelWithDebInfo --verbose
-          ctest -C RelWithDebInfo --rerun-failed --output-on-failure
 
       - name: Upload debug symbols
         run: |
@@ -194,7 +186,7 @@ jobs:
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
           
           cd build
-          cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr
+          cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON
           cmake --build . -j2
 
       - name: Tests
@@ -309,7 +301,7 @@ jobs:
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
           
           cd build
-          cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DENABLE_CODE_COVERAGE=ON
+          cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DENABLE_CODE_COVERAGE=ON
           build-wrapper-linux-x86-64 --out-dir bw-output cmake --build . -j2
 
       - name: Tests
@@ -320,7 +312,10 @@ jobs:
           ctest --output-on-failure
 
       - name: Generate GCOV Report
-        run: gcovr --verbose --keep --object-directory build --print-summary --sonarqube coverage.xml
+        run: |
+          cd build
+          gcovr --keep --print-summary
+          cp /tmp/**/*.gcov .
           
       - name: Cache sonar analysis
         id: cache-sonar-analysis
