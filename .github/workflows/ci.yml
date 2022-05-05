@@ -74,11 +74,18 @@ jobs:
           cd build
           cmake .. -D CMAKE_INSTALL_PREFIX=install -D CMAKE_BUILD_TYPE=RelWithDebInfo
           cmake --build . --config RelWithDebInfo --parallel 2
+          cp ..\..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
+          cp .\cget\bin\*.dll .\tests\RelWithDebInfo\
+
+      - name: Upload Tests (DEBUG)
+        uses: actions/upload-artifact@v2
+        with:
+          name: gm-companion_${{ runner.os }}_tests
+          path: .\build\tests\RelWithDebInfo
+          if-no-files-found: error
 
       - name: Tests
         run: |
-          cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\tests\RelWithDebInfo\
-          cp .\build\cget\bin\*.dll .\build\tests\RelWithDebInfo\
           cd build
           ls tests
           ls tests\RelWithDebInfo
@@ -313,11 +320,8 @@ jobs:
           ctest --output-on-failure
 
       - name: Generate GCOV Report
-        run: |
-          cd build
-          gcovr --version
-          gcovr --verbose --keep --print-summary --sonarqube coverage.xml
-
+        run: gcovr --verbose --keep --object-directory build --print-summary --sonarqube coverage.xml
+          
       - name: Cache sonar analysis
         id: cache-sonar-analysis
         uses: actions/cache@v2
