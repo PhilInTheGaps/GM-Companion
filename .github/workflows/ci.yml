@@ -316,7 +316,7 @@ jobs:
         run: |
           cd build
           gcovr --version
-          gcovr --keep --sonarqube coverage.xml
+          gcovr --verbose --keep --print-summary --sonarqube coverage.xml
 
       - name: Cache sonar analysis
         id: cache-sonar-analysis
