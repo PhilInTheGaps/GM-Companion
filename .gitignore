@@ -61,3 +61,6 @@ target_wrapper.*
 # QtCtreator CMake
 CMakeLists.txt.user*
 PKGBUILD
+
+# sonar-scanner
+sonar-cache/

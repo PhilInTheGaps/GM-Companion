@@ -43,6 +43,17 @@ include(AddHttpStatusCodes)
 
 add_subdirectory(thirdparty/sentry-native)
 
+# Code Coverage
+if (ENABLE_CODE_COVERAGE)
+  include(CodeCoverage)
+
+  # turn off optimization for non-skewed coverage reports
+  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O0")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0")
+
+  append_coverage_compiler_flags()
+endif()
+
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(app)
