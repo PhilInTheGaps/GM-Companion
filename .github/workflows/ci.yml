@@ -81,7 +81,9 @@ jobs:
           cp .\build\cget\bin\*.dll .\build\tests\RelWithDebInfo\
           cd build
           ls tests
+          ls tests\RelWithDebInfo
           ctest -C RelWithDebInfo --verbose
+          ctest -C RelWithDebInfo --rerun-failed --output-on-failure
 
       - name: Upload debug symbols
         run: |
@@ -313,7 +315,8 @@ jobs:
       - name: Generate GCOV Report
         run: |
           cd build
-          gcovr -k
+          gcovr --version
+          gcovr --keep --sonarqube coverage.xml
 
       - name: Cache sonar analysis
         id: cache-sonar-analysis
