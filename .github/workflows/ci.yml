@@ -208,7 +208,7 @@ jobs:
           sentry-cli upload-dif --org rophil --project gm-companion --include-sources AppDir/usr/bin/.debug/
           rm -rf AppDir/usr/bin/.debug
   static-analysis:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         qt-version: ["5.15.2"]
@@ -224,7 +224,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-bionic
+          sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-focal
           sudo apt-get update -q
           sudo apt-get upgrade -q
           sudo apt install -qq qtchooser mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools python3-setuptools
@@ -315,7 +315,6 @@ jobs:
         run: |
           cd build
           gcovr --keep --print-summary
-          cp /tmp/**/*.gcov .
           
       - name: Cache sonar analysis
         id: cache-sonar-analysis
