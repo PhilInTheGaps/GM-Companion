@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import "../../common"
 
 Rectangle {
     id: list_header
@@ -20,13 +21,38 @@ Rectangle {
         Repeater {
             model: labels
 
-            Label {
-                text: modelData.text
-                font.pointSize: 12
+            Item {
                 width: parent.width / modelData.divisor
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: modelData.alignment
-                                     === "left" ? Text.AlignLeft : Text.AlignHCenter
+                height: 10
+
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.fill: modelData.alignment === "left" ? parent : undefined
+                    spacing: help.visible > 0 ? 5 : 0
+
+                    Item {
+                        id: spacer
+                        width: help.width
+                        height: width
+                        visible: help.visible
+                    }
+
+                    Label {
+                        text: modelData.text
+                        font.pointSize: 12
+                        anchors.verticalCenter: parent.verticalCenter
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                    }
+
+                    HelpAnnotation {
+                        id: help
+                        helpText: modelData.helpText
+                        visible: helpText.length > 0
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
             }
         }
     }
@@ -34,22 +60,27 @@ Rectangle {
     readonly property var labels: [{
             "text": qsTr("Name"),
             "divisor": 5,
-            "alignment": "left"
+            "alignment": "left",
+            "helpText": ""
         }, {
             "text": qsTr("Initiative"),
             "divisor": 6,
-            "alignment": "center"
+            "alignment": "center",
+            "helpText": ""
         }, {
             "text": qsTr("Health"),
             "divisor": 6,
-            "alignment": "center"
+            "alignment": "center",
+            "helpText": ""
         }, {
             "text": qsTr("Priority"),
             "divisor": 6,
-            "alignment": "center"
+            "alignment": "center",
+            "helpText": qsTr("Characters with the same initiative value will be ordered by their priority.")
         }, {
             "text": qsTr("Notes"),
             "divisor": 6,
-            "alignment": "left"
+            "alignment": "left",
+            "helpText": ""
         }]
 }

@@ -4,6 +4,7 @@ import CustomComponents 1.0
 import FontAwesome 2.0
 import "../sizes.js" as Sizes
 import "./dice"
+import "../common"
 
 Page {
     id: dice_page
@@ -23,18 +24,28 @@ Page {
 
         function onMixedCriticalResult() {
             roll_result.color = "orange"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained both critical failures and successes")
         }
 
         function onSuccessfulCriticalResult() {
             roll_result.color = "green"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained at least one critical success")
         }
 
         function onFailedCriticalResult() {
             roll_result.color = "red"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained at least one critical failure")
         }
 
         function onNormalResult() {
             roll_result.color = palette.text
+            roll_result_help.visible = false
         }
     }
 
@@ -215,6 +226,12 @@ Page {
                 text: "-"
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
+            }
+
+            HelpAnnotation {
+                id: roll_result_help
+                visible: false
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }

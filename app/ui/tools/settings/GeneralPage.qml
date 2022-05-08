@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
+import "../../common"
 
 Column {
     id: general_column
@@ -91,21 +92,37 @@ Column {
         }
 
         // Crash Reports
-        CheckBox {
-            text: qsTr("Automated crash reports")
-            checked: settings_manager.getBoolSetting("crashReports", false,
-                                                     "Telemetry")
-            onClicked: settings_manager.setSetting("crashReports",
-                                                   checked ? 1 : 0, "Telemetry")
+        Row {
+            CheckBox {
+                text: qsTr("Automated crash reports")
+                checked: settings_manager.getBoolSetting("crashReports", false,
+                                                         "Telemetry")
+                onClicked: settings_manager.setSetting("crashReports",
+                                                       checked ? 1 : 0,
+                                                       "Telemetry")
+            }
+
+            HelpAnnotation {
+                anchors.verticalCenter: parent.verticalCenter
+                helpText: qsTr("When the application crashes, a report will be uploaded to sentry.io \nso that the issue can be fixed in a future release.")
+            }
         }
 
         // Session Tracking
-        CheckBox {
-            text: qsTr("Session tracking")
-            checked: settings_manager.getBoolSetting("sessionTracking", false,
-                                                     "Telemetry")
-            onClicked: settings_manager.setSetting("sessionTracking",
-                                                   checked ? 1 : 0, "Telemetry")
+        Row {
+            CheckBox {
+                text: qsTr("Session tracking")
+                checked: settings_manager.getBoolSetting("sessionTracking",
+                                                         false, "Telemetry")
+                onClicked: settings_manager.setSetting("sessionTracking",
+                                                       checked ? 1 : 0,
+                                                       "Telemetry")
+            }
+
+            HelpAnnotation {
+                anchors.verticalCenter: parent.verticalCenter
+                helpText: qsTr("The application will keep track of how long it is used and if any errors occured. \nIt will then sent an anonymous report to sentry.io so that we know how stable the application is.")
+            }
         }
     }
 
@@ -137,14 +154,21 @@ Column {
             visible: platform.isAndroid ? false : true
         }
 
-        CheckBox {
-            text: qsTr("Automatically check for updates")
-            checked: settings_manager.getBoolSetting("checkForUpdates", false,
-                                                     "Updates")
+        Row {
+            CheckBox {
+                text: qsTr("Automatically check for updates")
+                checked: settings_manager.getBoolSetting("checkForUpdates",
+                                                         false, "Updates")
 
-            onCheckedChanged: settings_manager.setSetting("checkForUpdates",
-                                                          checked.toString(),
-                                                          "Updates")
+                onCheckedChanged: settings_manager.setSetting(
+                                      "checkForUpdates", checked.toString(),
+                                      "Updates")
+            }
+
+            HelpAnnotation {
+                anchors.verticalCenter: parent.verticalCenter
+                helpText: qsTr("If enabled, the application will automatically check if there are any updates available and notify you if that is the case.\nThis is disabled by default if you installed the application through a package manager.")
+            }
         }
 
         Row {

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import FontAwesome 2.0
+import "../common"
 
 Item {
     id: dice_page
@@ -11,18 +12,28 @@ Item {
 
         function onMixedCriticalResult() {
             roll_result.color = "orange"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained both critical failures and successes")
         }
 
         function onSuccessfulCriticalResult() {
             roll_result.color = "green"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained at least one critical success")
         }
 
         function onFailedCriticalResult() {
             roll_result.color = "red"
+            roll_result_help.visible = true
+            roll_result_help.helpText = qsTr(
+                        "Result contained at least one critical failure")
         }
 
         function onNormalResult() {
             roll_result.color = palette.text
+            roll_result_help.visible = false
         }
     }
 
@@ -121,6 +132,12 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: parent.height * 0.5
                 font.bold: true
+            }
+
+            HelpAnnotation {
+                id: roll_result_help
+                visible: false
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }

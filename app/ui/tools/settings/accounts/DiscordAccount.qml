@@ -11,6 +11,7 @@ BaseAccountPage {
     icon: FontAwesome.discord
     iconFamily: FontAwesome.familyBrands
     status: [discord_service.status]
+    isExperimental: true
 
     leftPanel: Column {
         spacing: 10

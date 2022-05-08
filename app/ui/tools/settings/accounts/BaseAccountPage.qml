@@ -11,6 +11,7 @@ Item {
     property string name: "Unknown Account"
     property string icon: FontAwesome.users
     property string iconFamily: FontAwesome.familySolid
+    property bool isExperimental: false
 
     property alias leftPanel: left_loader.sourceComponent
     property alias rightPanel: right_loader.sourceComponent
@@ -43,6 +44,17 @@ Item {
             font.pointSize: 12
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
+        }
+
+        Label {
+            id: header_additional_infolabel
+            text: qsTr("[Experimental Feature]")
+            font.bold: false
+            font.pointSize: 10
+            anchors.verticalCenter: parent.verticalCenter
+            verticalAlignment: Text.AlignVCenter
+            visible: root.isExperimental
+            color: "orange"
         }
     }
 

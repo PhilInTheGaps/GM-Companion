@@ -41,7 +41,7 @@ Item {
 
             CustomToolBarButton {
                 iconText: FontAwesome.lock
-                toolTipText: qsTr("En-/Decrypt using ROT13")
+                toolTipText: qsTr("En-/Decrypt using ROT13.\nNote: This is not secure encryption and only intended to prevent others from accidentally reading your notes.")
                 onClicked: notes_tool.encrypt()
             }
 

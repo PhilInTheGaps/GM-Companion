@@ -180,6 +180,8 @@ Page {
                         buttonText: qsTr("Reset")
                         usesFixedWidth: false
                         onClicked: combat_tracker.reset()
+
+                        toolTipText: qsTr("Start again at round 1 but keep all entries.")
                     }
 
                     CustomToolBarButton {
@@ -188,6 +190,8 @@ Page {
                         buttonText: qsTr("Clear")
                         usesFixedWidth: false
                         onClicked: combat_tracker.clear()
+
+                        toolTipText: qsTr("Remove all entries and reset counter to 1.")
                     }
                 }
             }
