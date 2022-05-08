@@ -34,6 +34,7 @@ public slots:
     void enterFolder(int index);
     void forward();
     void back();
+    void createFolder(const QString &folderName);
 
 signals:
     void currentDirChanged(const QString& dir);

@@ -28,7 +28,7 @@ void FileDialog::enterFolder(int index)
 {
     if (Utils::isInBounds(entries(), index))
     {
-        auto *folder = qobject_cast<FileObject*>(entries()[index]);
+        const auto *folder = qobject_cast<FileObject*>(entries()[index]);
 
         if (folder->isFolder())
         {
@@ -85,6 +85,27 @@ auto FileDialog::back() -> void
     }
 
     emit currentDirChanged(currentDir());
+}
+
+void FileDialog::createFolder(const QString &folderName)
+{
+    const auto path = FileUtils::fileInDir(folderName, currentDir());
+
+    observe(FileAccess::getInstance()->createDirAsync(path)).subscribe([this](FileResult *result) {
+        if (!result)
+        {
+            qCWarning(gmFileDialog()) << "Error: createDirAsync returned a null result!";
+            return;
+        }
+
+        if (!result->success())
+        {
+            qCWarning(gmFileDialog()) << result->errorMessage();
+        }
+
+        result->deleteLater();
+        updateFileList();
+    });
 }
 
 void FileDialog::updateFileList()

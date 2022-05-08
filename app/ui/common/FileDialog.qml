@@ -82,6 +82,10 @@ Dialog {
 
             CustomToolBarButton {
                 iconText: FontAwesome.folderPlus
+
+                onClicked: {
+                    new_folder_form.visible = !new_folder_form.visible
+                }
             }
         }
     }
@@ -89,9 +93,51 @@ Dialog {
     contentItem: Item {
         id: main
 
+        Item {
+            id: new_folder_form
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: new_folder_form_row_icon.height + 10
+            visible: false
+
+            Label {
+                id: new_folder_form_row_icon
+                text: FontAwesome.folder
+                font.family: FontAwesome.familySolid
+                width: height
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+            }
+
+            TextField {
+                placeholderText: qsTr("New Folder")
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: new_folder_form_row_icon.right
+                anchors.leftMargin: 5
+
+                onEditingFinished: {
+                    if (text.length > 0) {
+                        backend.createFolder(text)
+                    }
+
+                    new_folder_form.visible = false
+                    clear()
+                }
+            }
+        }
+
         ListView {
             id: main_list_view
-            anchors.fill: parent
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.top: new_folder_form.visible ? new_folder_form.bottom : parent.top
+            anchors.topMargin: new_folder_form.visible ? 5 : 0
 
             clip: true
             highlightMoveVelocity: -1
