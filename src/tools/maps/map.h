@@ -73,7 +73,6 @@ class MapCategory : public QObject
     AUTO_PROPERTY(QList<Map*>, maps)
 public:
     MapCategory(const QString &name, const QList<Map *> &maps, QObject *parent);
-    virtual ~MapCategory();
 
     void addMap(Map* map);
     void loadMaps();

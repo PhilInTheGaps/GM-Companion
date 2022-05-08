@@ -35,7 +35,7 @@ QString MarkdownUtils::markdownToHtmlCMark(const QString &markdown)
     auto *doc = cmark_parser_finish(parser);
     cmark_parser_free(parser);
 
-    auto html = QString::fromUtf8(cmark_render_html(doc, options, NULL));
+    auto html = QString::fromUtf8(cmark_render_html(doc, options, nullptr));
     cmark_node_free(doc);
 
     return html;

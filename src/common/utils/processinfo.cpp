@@ -10,6 +10,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstdio>
+#include <QDir>
 
 Q_LOGGING_CATEGORY(gmProcessInfo, "gm.utils.processinfo")
 
@@ -80,55 +81,45 @@ auto ProcessInfo::isProcessRunningMac(const QString &procName) -> bool
     return false;
 }
 #elif defined Q_OS_UNIX
+#include <QDebug>
+// Based on https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
+// but implemented using Qt classes
 auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
 {
-    // https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
-    // Open the /proc directory
-    DIR *dp = opendir("/proc");
-    bool isRunning = false;
-    const auto procNameStd = procName.toStdString();
+    QDir procDir(QStringLiteral("/proc"));
+    auto entries = procDir.entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Readable);
 
-    if (dp != nullptr)
+    bool isNumeric = false;
+
+    for (const auto& entry : entries)
     {
-        // Enumerate all entries in directory until process found
-        struct dirent *dirp;
+        entry.toInt(&isNumeric);
 
-        int pid = -1;
-        while (pid < 0 && (dirp = readdir(dp)))
+        if (!isNumeric) continue;
+
+        // Read contents of virtual /proc/{pid}/cmdline file
+        auto cmdPath = QStringLiteral("/proc/%1/cmdline").arg(entry);
+        auto cmdFile = QFile(cmdPath);
+
+        if (cmdFile.open(QIODevice::ReadOnly))
         {
-            // Skip non-numeric entries
-            int id = atoi(dirp->d_name);
+            auto content = cmdFile.readAll();
+            cmdFile.close();
 
-            if (id > 0)
+            if (!content.isEmpty())
             {
-                // Read contents of virtual /proc/{pid}/cmdline file
-                string   cmdPath = string("/proc/") + dirp->d_name + "/cmdline";
-                ifstream cmdFile(cmdPath.c_str());
-                string   cmdLine;
-                getline(cmdFile, cmdLine);
+                // Get program path
+                content = content.left(content.indexOf('\0'));
 
-                if (!cmdLine.empty())
-                {
-                    // Keep first cmdline item which contains the program path
-                    size_t pos = cmdLine.find('\0');
+                // Keep program name only, removing the path
+                content = content.right(content.length() - content.lastIndexOf('/') - 1);
 
-                    if (pos != string::npos) cmdLine = cmdLine.substr(0, pos);
-
-                    // Keep program name only, removing the path
-                    pos = cmdLine.rfind('/');
-
-                    if (pos != string::npos) cmdLine = cmdLine.substr(pos + 1);
-
-                    // Compare against requested process name
-                    if (procNameStd == cmdLine) pid = id;
-                }
+                if (procName == content) return true;
             }
         }
-        isRunning = pid > -1;
     }
 
-    closedir(dp);
-    return isRunning;
+    return false;
 }
 #elif defined Q_OS_WIN
 auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool

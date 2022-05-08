@@ -31,7 +31,7 @@ if (ENABLE_EXTRA_TESTS)
     # Nextcloud
     add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp)
     target_link_libraries(test_nextcloudaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
-    set_target_properties(test_nectcloudaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+    set_target_properties(test_nextcloudaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
     add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
 
     # GoogleDrive

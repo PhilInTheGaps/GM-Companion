@@ -83,14 +83,6 @@ MapCategory::MapCategory(const QString &name, const QList<Map*> &maps, QObject *
 {
 }
 
-MapCategory::~MapCategory()
-{
-    for (auto *map : maps())
-    {
-        if (map) map->deleteLater();
-    }
-}
-
 void MapCategory::addMap(Map *map)
 {
     if (!map) return;

@@ -445,7 +445,7 @@ auto FileAccessGoogleDrive::listAsync(const QString &path, const QString &q, con
                 },[]() { return QFuture<FileListResult*>(); }).future();
             }
 
-            return AsyncFuture::completed(new FileListResult(path, folders, files));
+            return AsyncFuture::completed(new FileListResult(path, folders, files, this));
         }
 
         const auto error = reply->errorText();

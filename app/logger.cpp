@@ -5,6 +5,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QDebug>
 #include <iostream>
 
 Logger::Logger()
@@ -21,8 +22,7 @@ Logger::Logger()
         qCWarning(gmMain()) << "Error: Could not open log file at" << m_logFile.fileName();
     }
 
-    m_logStream = new QTextStream(&m_logFile);
-    m_logMutex = new QMutex();
+    m_logStream.setDevice(&m_logFile);
 
     qInstallMessageHandler(messageHandler);
 }
@@ -33,9 +33,6 @@ Logger::~Logger()
     {
         m_logFile.close();
     }
-
-    delete m_logStream;
-    delete m_logMutex;
 }
 
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -46,17 +43,18 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
     // By type determine to what level belongs message
     switch (type)
     {
-        case QtInfoMsg:     line.append("INF "); break;
-        case QtDebugMsg:    line.append("DBG "); break;
-        case QtWarningMsg:  line.append("WRN "); break;
-        case QtCriticalMsg: line.append("CRT "); break;
-        case QtFatalMsg:    line.append("FTL "); break;
+    case QtInfoMsg:     line.append("INF "); break;
+    case QtDebugMsg:    line.append("DBG "); break;
+    case QtWarningMsg:  line.append("WRN "); break;
+    case QtCriticalMsg: line.append("CRT "); break;
+    case QtFatalMsg:    line.append("FTL "); break;
+    default: qCritical() << "Error: Unexpected log message type" << type;
     }
 
     // Write to the output category of the message and the message itself
     line.append(context.category).append(": ").append(msg.toUtf8());
 
-    QMutexLocker locker(m_logMutex);
+    QMutexLocker locker(&m_logMutex);
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {
@@ -69,26 +67,22 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     if (type != QtDebugMsg)
     {
-        auto *dispatcher = new MessageDispatcher(timestamp, type, msg);
-//        MessageManager::instance()->addMessage(timestamp, type, msg);
+        MessageDispatcher::dispatch(timestamp, type, msg);
     }
 
-    *m_logStream << line << "\n";
-    m_logStream->flush();
+    m_logStream << line << "\n";
+    m_logStream.flush();
 }
 
 /// If it does not exist yet, create the folder that will contain the log file
 void Logger::createLogFileDir(const QString &filePath)
 {
     const auto fileDir = FileUtils::dirFromPath(filePath);
-    QDir dir(fileDir);
+    const QDir dir(fileDir);
 
-    if (!dir.exists())
+    if (!dir.exists() || !dir.mkpath(dir.path()))
     {
-        if (!dir.mkpath(dir.path()))
-        {
-            qCWarning(gmMain()) << "Error: Create dir for log file:" << fileDir;
-        }
+        qCWarning(gmMain()) << "Error: Create dir for log file:" << fileDir;
     }
 }
 

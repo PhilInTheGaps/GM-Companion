@@ -7,15 +7,22 @@ auto FileDataResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) 
 {
     bool success = true;
     QString errorMessage;
-    const auto data = reply->data();
 
-    if (!reply || reply->error() != QNetworkReply::NoError)
+    if (!reply)
+    {
+        success = false;
+        errorMessage = "RestNetworkReply is null! (this is probably caused by a prior error)";
+        return new FileDataResult(errorMessage, parent);
+    }
+
+    if (reply->error() != QNetworkReply::NoError)
     {
         success = false;
         errorMessage = reply->errorText();
     }
 
-    if (reply) reply->deleteLater();
+    const auto data = reply->data();
+    reply->deleteLater();
 
     if (success)
     {
