@@ -2,10 +2,12 @@
 #include "logging.h"
 #include "settings/settingsmanager.h"
 #include "o0globals.h"
+#include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <utility>
 
 /**
@@ -234,16 +236,35 @@ void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkEr
     // Check if rate limit was exceeded
     if (error == QNetworkReply::UnknownContentError)
     {
-        auto status = QJsonDocument::fromJson(data).object()["error"].toObject()["status"].toInt();
+        const auto status = QJsonDocument::fromJson(data).object()["error"].toObject()["status"].toInt();
 
-        // HTTP 429 == Rate limit exceeded
-        if (status == 429)
+        if (status == HttpStatus::TooManyRequests)
         {
             handleRateLimit(m_activeRequests[id]);
             return;
         }
     }
-    else if (error != QNetworkReply::NoError)
+    // Sometimes services (like google drive) hide rate limit errors in 403s
+    else if (error == QNetworkReply::ContentAccessDenied)
+    {
+        const auto error = QJsonDocument::fromJson(data).object()["error"].toObject();
+
+        if (error.contains("errors"))
+        {
+            const auto errors = error["errors"].toArray();
+
+            for (const auto &entry : errors)
+            {
+                if (entry["reason"].toString() == "userRateLimitExceeded")
+                {
+                    handleRateLimit(m_activeRequests[id]);
+                    return;
+                }
+            }
+        }
+    }
+
+    if (error != QNetworkReply::NoError)
     {
         qCWarning(m_loggingCategory) << error << errorText << data << headers;
     }

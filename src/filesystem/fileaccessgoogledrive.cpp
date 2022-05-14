@@ -28,7 +28,7 @@ auto FileAccessGoogleDrive::getDataAsync(const QString &path, bool allowCache) -
 
     auto errorCallback = [this, deferred](const QString &error) mutable
     {
-        qCWarning(gmFileAccessGoogle()) << "Error: Could not download file!";
+        qCWarning(gmFileAccessGoogle()) << "Error: Could not download file!" << error;
         deferred.complete(new FileDataResult(error, this));
     };
 

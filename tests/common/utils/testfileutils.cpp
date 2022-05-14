@@ -158,7 +158,12 @@ void TestFileUtils::fileInDir_data()
     QTest::addColumn<QString>("output");
 
     QTest::newRow("with seperator") << "some/path/" << "test" << "some/path/test";
-    QTest::newRow("withot seperator") << "some/path" << "test" << "some/path/test";
+    QTest::newRow("with double seperator") << "some/path/" << "/test" << "some/path/test";
+    QTest::newRow("with double seperator and starting seperator") << "/some/path/" << "/test" << "/some/path/test";
+    QTest::newRow("with seperator and leading seperator in file") << "some/path" << "/test" << "some/path/test";
+    QTest::newRow("with seperator and trailing seperator in file") << "some/path/" << "test/" << "some/path/test/";
+    QTest::newRow("with double seperator and trailing seperator in file") << "some/path/" << "/test/" << "some/path/test/";
+    QTest::newRow("without seperator") << "some/path" << "test" << "some/path/test";
     QTest::newRow("empty") << "" << "" << "";
     QTest::newRow("empty dir") << "" << "test" << "test";
     QTest::newRow("top level") << "/" << "home" << "/home";

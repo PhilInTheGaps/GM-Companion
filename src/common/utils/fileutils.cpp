@@ -119,12 +119,22 @@ auto FileUtils::fileInDir(const QString &fileName, const QString &dir) -> QStrin
 
     if (dir.endsWith('/') || dir.endsWith('\\'))
     {
+        if (fileName.startsWith('/'))
+        {
+            return dir + fileName.right(fileName.length() - 1);
+        }
+
         return dir + fileName;
     }
 
     if (dir.lastIndexOf('\\') > -1)
     {
         return dir + '\\' + fileName;
+    }
+
+    if (fileName.startsWith('/'))
+    {
+        return dir + fileName;
     }
 
     return dir + '/' + fileName;
