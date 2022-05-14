@@ -4,6 +4,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QFuture>
 #include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
@@ -13,7 +14,7 @@ class NextCloud : public Service
 public:
     static NextCloud *getInstance();
 
-    QNetworkReply *sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data,
+    QFuture<QNetworkReply*> sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data,
                                   const QList<QPair<QByteArray, QByteArray> >& headers = {});
 
     QString getPathUrl(const QString &path);
@@ -24,6 +25,9 @@ public:
 public slots:
     void connectService() override;
     void disconnectService() override;
+
+signals:
+    void loggedIn();
 
 private:
     explicit NextCloud(QObject *parent = nullptr);

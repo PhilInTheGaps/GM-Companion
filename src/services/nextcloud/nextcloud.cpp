@@ -21,6 +21,7 @@ NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
         loginName(SettingsManager::getSetting("loginName", "", "NextCloud"));
         serverUrl(SettingsManager::getServerUrl("NextCloud", false));
+        m_loggingIn = true;
 
         const auto future = SettingsManager::getPassword(loginName(), "NextCloud");
 
@@ -35,8 +36,12 @@ NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
             {
                 qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
             }
+
+            m_loggingIn = false;
+            emit loggedIn();
         }, [this]() {
             qCCritical(gmNextCloud()) << "Error during reading of password";
+            m_loggingIn = false;
             connected(false);
         });
     }
@@ -52,9 +57,19 @@ auto NextCloud::getInstance() -> NextCloud *
 }
 
 auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, const QByteArray& data,
-                               const QList<QPair<QByteArray, QByteArray>>& headers) -> QNetworkReply *
+                               const QList<QPair<QByteArray, QByteArray>>& headers) -> QFuture<QNetworkReply*>
 {
     if (!connected()) connectService();
+
+    // In case we are still logging in, delay this request
+    if (m_loggingIn)
+    {
+        qCDebug(gmNextCloud()) << "Delaying DAV request, because we are waiting for authentication ...";
+
+        return observe(this, &NextCloud::loggedIn).subscribe([this, method, path, data]() {
+            return sendDavRequest(method, path, data);
+        }).future();
+    }
 
     auto url     = getPathUrl(path);
     auto request = QNetworkRequest(QUrl(url));
@@ -78,7 +93,7 @@ auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, co
         }
     }
 
-    return m_networkManager->sendCustomRequest(request, method, data);
+    return AsyncFuture::completed(m_networkManager->sendCustomRequest(request, method, data));
 }
 
 auto NextCloud::getPathUrl(const QString &path) -> QString

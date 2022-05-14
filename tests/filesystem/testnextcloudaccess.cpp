@@ -41,6 +41,8 @@ void TestNextcloudAccess::initTestCase()
 {
     fileAccess = new FileAccessNextcloud(this);
     testPath = QStringLiteral("gm-companion-test_") + QUuid::createUuid().toString();
+
+    waitForAuthentication = true;
     createTestDir();
     createTestFiles();
 }

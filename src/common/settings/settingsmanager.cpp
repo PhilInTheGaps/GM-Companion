@@ -187,28 +187,32 @@ void SettingsManager::setServerUrl(const QString& url, const QString& service)
 
 auto SettingsManager::getPassword(const QString& username, const QString& service) -> QFuture<QString>
 {
-    auto *passwordJob = new QKeychain::ReadPasswordJob("gm-companion." + service);
-    passwordJob->setAutoDelete(false);
-    passwordJob->setKey(username);
+    auto *job = new QKeychain::ReadPasswordJob(QStringLiteral("gm-companion.%1").arg(service), SettingsManager::getInstance());
+    job->setAutoDelete(false);
+    job->setKey(username);
 
-    const auto callback = [passwordJob](QKeychain::Job*) -> QString {
-        if (passwordJob->error())
+    const auto callback = [job, service](QKeychain::Job*) -> QString {
+        if (job->error())
         {
-            qCCritical(gmSettings) << "Could not read password:" << passwordJob->error() << passwordJob->errorString();
-            passwordJob->deleteLater();
+            qCCritical(gmSettings) << "Could not read password:" << job->error() << job->errorString();
+            job->deleteLater();
             return QLatin1String();
         }
 
-        qCDebug(gmSettings) << "Successfully read password.";
-        const auto password = passwordJob->textData();
-        passwordJob->deleteLater();
+        qCDebug(gmSettings) << "Successfully read password for service" << service;
+        const auto pw = job->textData();
+        job->deleteLater();
 
-        return password;
+        return pw;
     };
 
-    const auto future = AsyncFuture::observe(passwordJob, &QKeychain::Job::finished).subscribe(callback).future();
-    passwordJob->start();
+    const auto future = AsyncFuture::observe(job, &QKeychain::ReadPasswordJob::finished).subscribe(callback, [job, service](){
+        qCCritical(gmSettings) << "Password job cancelled for service" << service;
+        job->deleteLater();
+        return QLatin1String();
+    }).future();
 
+    job->start();
     return future;
 }
 

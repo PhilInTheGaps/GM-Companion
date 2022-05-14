@@ -37,6 +37,8 @@ protected:
         auto isReady = spy.wait(waitTime);
         QVERIFY2(isReady, QString("%1 took longer than %2 ms to respond.").arg(funcName, QString::number(waitTime)).toUtf8());
 
+        waitForAuthentication = false;
+
         testFunc();
     }
 
