@@ -16,9 +16,9 @@ auto MessageManager::instance() -> MessageManager*
     return single;
 }
 
-void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &body)
+void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body)
 {
-    auto *message = new Message(this, timestamp, type, body);
+    auto *message = new Message(this, timestamp, type, category, body);
     addMessage(message);
 }
 

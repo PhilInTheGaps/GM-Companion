@@ -10,7 +10,7 @@ class MessageDispatcher : public QObject
 {
     Q_OBJECT
 public:
-    static void dispatch(const QDateTime &timestamp, QtMsgType type, const QString &body);
+    static void dispatch(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
 
 private:
     MessageDispatcher();

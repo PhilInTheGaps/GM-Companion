@@ -17,7 +17,7 @@ public:
     AUTO_PROPERTY(QList<Message*>, messages)
 
 public slots:
-    void addMessage(const QDateTime &timestamp, QtMsgType type, const QString &body);
+    void addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
     void addMessage(Message *message);
 
 private:

@@ -67,7 +67,7 @@ void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, c
 
     if (type != QtDebugMsg)
     {
-        MessageDispatcher::dispatch(timestamp, type, msg);
+        MessageDispatcher::dispatch(timestamp, type, context.category, msg);
     }
 
     m_logStream << line << "\n";

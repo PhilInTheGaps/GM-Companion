@@ -76,37 +76,52 @@ Dialog {
                         anchors.top: parent.top
                         anchors.margins: parent.border.width
 
-                        height: icon_label.height + 10
+                        height: 25
 
                         color: palette.dark
 
-                        Label {
-                            id: icon_label
-                            font.family: FontAwesome.familySolid
-                            font.pointSize: 12
-                            verticalAlignment: Text.AlignVCenter
-                            text: modelData.type
-                                  === 4 ? FontAwesome.infoCircle : FontAwesome.exclamationTriangle
-
-                            anchors.left: parent.left
-                            anchors.top: parent.top
+                        Row {
+                            anchors.fill: parent
                             anchors.margins: 5
                             anchors.leftMargin: 10
-                        }
+                            anchors.rightMargin: 10
+                            spacing: 10
 
-                        Label {
-                            id: timestamp_label
-                            anchors.top: parent.top
-                            anchors.left: icon_label.right
-                            anchors.right: parent.right
-                            anchors.margins: 5
-                            anchors.leftMargin: 10
+                            Label {
+                                id: icon_label
+                                font.family: FontAwesome.familySolid
+                                font.pointSize: 12
+                                verticalAlignment: Text.AlignVCenter
+                                text: modelData.type === 4 ? FontAwesome.infoCircle : FontAwesome.exclamationTriangle
 
-                            text: modelData.timestamp.toLocaleString(
-                                      Qt.locale("en_US"), Locale.ShortFormat)
-                            font.pointSize: 10
-                            wrapMode: Label.NoWrap
-                            verticalAlignment: Text.AlignVCenter
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                            }
+
+                            Label {
+                                id: timestamp_label
+
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+
+                                text: modelData.timestamp.toLocaleString(
+                                          Qt.locale("en_US"),
+                                          Locale.ShortFormat)
+                                font.pointSize: 10
+                                wrapMode: Label.NoWrap
+                                verticalAlignment: Text.AlignVCenter
+                            }
+
+                            Label {
+                                id: category_label
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+
+                                text: modelData.category
+                                font.pointSize: 10
+                                wrapMode: Label.NoWrap
+                                verticalAlignment: Text.AlignVCenter
+                            }
                         }
                     }
 
