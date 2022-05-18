@@ -41,6 +41,8 @@ include(AddAsyncFuture)
 include(AddPropertyHelper)
 include(AddHttpStatusCodes)
 
+set(SENTRY_ENABLE_INSTALL ON)
+find_package(Qt5 COMPONENTS Core)
 add_subdirectory(thirdparty/sentry-native)
 
 # Code Coverage

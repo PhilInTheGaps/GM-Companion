@@ -108,6 +108,9 @@ jobs:
       - name: Deploy
         run: ${{ github.workspace }}\cqtdeployer\1.5\cqtdeployer.bat -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\${{ matrix.compiler }}\qml -targetDir build\install\bin
 
+      - name: Remove debug info from install folder
+        run: rm .\build\install\**\*.pdb
+
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
