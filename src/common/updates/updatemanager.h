@@ -18,6 +18,8 @@ public:
     Q_INVOKABLE QString getNewestVersion() const { return m_newestVersion; }
     Q_INVOKABLE QString getCurrentVersion() const { return CURRENT_VERSION; }
 
+    static bool compareVersions(const QString &v1, const QString &v2);
+
 private slots:
     void onNetworkManagerFinished(QNetworkReply*reply);
 
@@ -26,9 +28,6 @@ private:
 
     QString m_feedURL;
     QString m_newestVersion;
-
-protected:
-    static bool compareVersions(const QString &v1, const QString &v2);
 
 signals:
     void updateAvailable();

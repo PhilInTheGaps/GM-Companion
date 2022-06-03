@@ -3,6 +3,7 @@
 #include "../spotify.h"
 #include "utils/processinfo.h"
 #include "utils/fileutils.h"
+#include "updates/updatemanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thirdparty/o2/src/o0globals.h"
 
@@ -66,10 +67,26 @@ auto LibrespotController::start() -> QFuture<bool>
         m_hasAuthenticated = deferred<bool>();
 
         const auto args = getLibrespotArgs(username);
-        m_librespotProcess.start(getLibrespotPath(), args);
-        m_librespotProcess.write(QStringLiteral("%1\n").arg(password).toUtf8()); // pass password via stdin
+        const auto librespotPath = getLibrespotPath();
 
-        qCDebug(gmLibrespotController()) << getLibrespotPath() << args;
+        qCDebug(gmLibrespotController()) << librespotPath << args;
+
+        // In librespot versions > 0.3.1 passing the password via stdin is broken
+        // but older versions don't support passing the pw via env variables
+        if (UpdateManager::compareVersions(info.version, QStringLiteral("0.3.1")))
+        {
+            auto env = QProcessEnvironment::systemEnvironment();
+            env.insert(QStringLiteral("LIBRESPOT_PASSWORD"), password);
+            m_librespotProcess.setProcessEnvironment(env);
+
+            m_librespotProcess.start(librespotPath, args);
+        }
+        else
+        {
+            m_librespotProcess.start(librespotPath, args);
+            m_librespotProcess.write(QStringLiteral("%1").arg(password).toUtf8()); // pass password via stdin
+        }
+
         return m_hasAuthenticated.future();
     };
 
@@ -204,6 +221,7 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
     args << "-n" << deviceName();
     args << "-u" << username;
     args << "-b" << SettingsManager::getSetting("bitrate", "160", "Spotify");
+    args << "--volume-ctrl" << "linear";
 
     if (!SettingsManager::getBoolSetting("enableCache", true, "Spotify"))
     {
@@ -262,6 +280,15 @@ void LibrespotController::onLibrespotOutputReady()
         {
             qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
             updateStatus(ServiceStatus::Warning, line);
+        }
+        else if (line.contains("ERROR"))
+        {
+            qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
+            updateStatus(ServiceStatus::Error, line);
+        }
+        else
+        {
+            qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
         }
 
         if (line.contains("Authenticated as"))
