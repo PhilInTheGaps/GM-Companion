@@ -84,7 +84,7 @@ auto LibrespotController::start() -> QFuture<bool>
         else
         {
             m_librespotProcess.start(librespotPath, args);
-            m_librespotProcess.write(QStringLiteral("%1").arg(password).toUtf8()); // pass password via stdin
+            m_librespotProcess.write(QStringLiteral("%1\n").arg(password).toUtf8()); // pass password via stdin
         }
 
         return m_hasAuthenticated.future();
