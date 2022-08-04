@@ -104,10 +104,17 @@ Item {
                 spacing: 10
 
                 CreditsItem {
-                    title: "Qt Project"
-                    description: qsTr("A C++ toolkit for cross-platform application development.")
-                    license: [["GPL v3", "https://www.gnu.org/licenses/gpl-3.0.en.html"]]
-                    links: [["qt.io", "https://qt.io"]]
+                    title: "AsyncFuture"
+                    description: qsTr("Use QFuture like a Promise object")
+                    license: [["Apache 2.0", "https://github.com/benlau/asyncfuture/blob/master/LICENSE"]]
+                    links: [["benlau/asyncfuture", "https://github.com/benlau/asyncfuture"]]
+                }
+
+                CreditsItem {
+                    title: "CMake Modules"
+                    description: qsTr("Additional CMake functionality")
+                    license: [["BSL-1.0", "https://github.com/bilke/cmake-modules/blob/master/LICENSE_1_0.txt"], ["BSD", "https://github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake"], ["MIT", "https://github.com/bilke/cmake-modules/blob/master/cotire-license"]]
+                    links: [["bilke/cmake-modules", "https://github.com/bilke/cmake-modules"]]
                 }
 
                 CreditsItem {
@@ -125,8 +132,15 @@ Item {
                 }
 
                 CreditsItem {
+                    title: "http-status-codes-cpp"
+                    description: qsTr("HTTP Status Codes and Reason Phrases for C, C++ and Qt")
+                    license: [["CC0 1.0 Universal", "https://github.com/j-ulrich/http-status-codes-cpp/blob/main/LICENSE"]]
+                    links: [["j-ulrich/http-status-codes-cpp", "https://github.com/j-ulrich/http-status-codes-cpp"]]
+                }
+
+                CreditsItem {
                     title: "Librespot"
-                    description: "Open Source Spotify client library"
+                    description: qsTr("Open Source Spotify client library")
                     license: [["MIT", "https://github.com/librespot-org/librespot/blob/dev/LICENSE"]]
                     links: [["librespot-org/librespot", "https://github.com/librespot-org/librespot"]]
                 }
@@ -139,29 +153,29 @@ Item {
                 }
 
                 CreditsItem {
-                    title: "Spotify Playlists"
-                    description: qsTr("Awesome playlists by Brian Davis (Bezoing) and gentilpuck.")
-                    links: [["Brian Davis", "https://open.spotify.com/user/bezoing?si=acN6RQebQTS2iZEUWDKRKA"], ["gentilpuck", "https://open.spotify.com/user/gentilpuck?si=nZpk5I8wTBuWdcBrrix_qg"]]
-                }
-
-                CreditsItem {
-                    title: "AsyncFuture"
-                    description: "Use QFuture like a Promise object"
-                    license: [["Apache 2.0", "https://github.com/benlau/asyncfuture/blob/master/LICENSE"]]
-                    links: [["benlau/asyncfuture", "https://github.com/benlau/asyncfuture"]]
-                }
-
-                CreditsItem {
-                    title: "http-status-codes-cpp"
-                    description: "HTTP Status Codes and Reason Phrases for C, C++ and Qt"
-                    license: [["CC0 1.0 Universal", "https://github.com/j-ulrich/http-status-codes-cpp/blob/main/LICENSE"]]
-                    links: [["j-ulrich/http-status-codes-cpp", "https://github.com/j-ulrich/http-status-codes-cpp"]]
+                    title: "Qt Project"
+                    description: qsTr("A C++ toolkit for cross-platform application development.")
+                    license: [["GPL v3", "https://www.gnu.org/licenses/gpl-3.0.en.html"]]
+                    links: [["qt.io", "https://qt.io"]]
                 }
 
                 CreditsItem {
                     title: "Qt-PropertyHelper"
-                    description: "Makros for reducing boilerplate code related to Qt properties"
+                    description: qsTr("Makros for reducing boilerplate code related to Qt properties")
                     links: [["tackelua/Qt-PropertyHelper", "https://github.com/tackelua/Qt-PropertyHelper"], ["Original Gist", "https://gist.github.com/Rolias/48d453a0490d36090193"]]
+                }
+
+                CreditsItem {
+                    title: "Sentry Native SDK"
+                    description: qsTr("Crash report SDK")
+                    license: [["MIT", "https://github.com/getsentry/sentry-native/blob/master/LICENSE"]]
+                    links: [["getsentry/sentry-native", "https://github.com/getsentry/sentry-native"]]
+                }
+
+                CreditsItem {
+                    title: "Spotify Playlists"
+                    description: qsTr("Awesome playlists by Brian Davis (Bezoing) and gentilpuck.")
+                    links: [["Brian Davis", "https://open.spotify.com/user/bezoing?si=acN6RQebQTS2iZEUWDKRKA"], ["gentilpuck", "https://open.spotify.com/user/gentilpuck?si=nZpk5I8wTBuWdcBrrix_qg"]]
                 }
             }
         }
