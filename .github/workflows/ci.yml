@@ -100,7 +100,7 @@ jobs:
           .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
 
       - name: Download librespot
-        run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.3.1/librespot-x86_64.exe
+        run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.4.2/librespot-x86_64.exe
 
       - name: Copy OpenSSL DLLs to install folder
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
