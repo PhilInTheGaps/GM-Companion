@@ -121,7 +121,7 @@ Column {
 
             HelpAnnotation {
                 anchors.verticalCenter: parent.verticalCenter
-                helpText: qsTr("The application will keep track of how long it is used and if any errors occured. \nIt will then sent an anonymous report to sentry.io so that we know how stable the application is.")
+                helpText: qsTr("The application will keep track of how long it is used and if any errors occured. \nIt will then send an anonymous report to sentry.io so that we know how stable the application is.")
             }
         }
     }

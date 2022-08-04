@@ -43,7 +43,7 @@ public:
     void updateProjectList();
     [[nodiscard]] auto currentProjectName() const -> QString;
     Q_INVOKABLE void setCurrentProject(int index);
-    Q_INVOKABLE auto getCurrentProjectIndex() -> int;
+    Q_INVOKABLE int getCurrentProjectIndex();
 
     [[nodiscard]] auto soundController() const -> QObject* { return qobject_cast<QObject*>(soundPlayerController); }
 
