@@ -143,7 +143,7 @@ void LibrespotController::setAsActiveDevice()
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
     const auto callback = [this](QSharedPointer<SpotifyDevice> device) {
-        if (device->id.isEmpty())
+        if (device.isNull() || device->id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
             {
@@ -278,6 +278,14 @@ void LibrespotController::onLibrespotOutputReady()
 
         if (line.contains("WARN"))
         {
+            // for some reason "ignoring blacklisted access point ..."
+            // messages are categorized as warnings, so we want to handle them as debug info
+            if (line.contains("Ignoring"))
+            {
+                qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
+                continue;
+            }
+
             qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
             updateStatus(ServiceStatus::Warning, line);
         }
