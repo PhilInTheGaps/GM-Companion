@@ -641,9 +641,10 @@ void ShopEditor::setItemCategoryEnabled(const QString &category, bool b)
 
 void ShopEditor::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
+
     findShops();
     findItems();
     itemEditor->findItems();

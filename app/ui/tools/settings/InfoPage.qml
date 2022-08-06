@@ -146,6 +146,13 @@ Item {
                 }
 
                 CreditsItem {
+                    title: "Names"
+                    description: qsTr("Various resources used for the name generator")
+                    license: [["CC BY 4.0", "https://github.com/fivethirtyeight/data/blob/master/LICENSE"], ["MIT", "https://github.com/faker-ruby/faker/blob/master/License.txt"]]
+                    links: [["Unisex Names", "https://github.com/fivethirtyeight/data/tree/master/unisex-names"], ["Faker", "https://github.com/faker-ruby/faker"]]
+                }
+
+                CreditsItem {
                     title: "O2 OAuth2 Library"
                     description: qsTr("A library for OAuth2 authentication by pipacs.")
                     license: [["BSD 2-Clause", "https://github.com/pipacs/o2/blob/master/LICENSE"]]

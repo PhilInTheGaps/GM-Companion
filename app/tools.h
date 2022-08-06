@@ -8,7 +8,7 @@
 #include "tools/combat_tracker/combattracker.h"
 #include "tools/shop/shoptool.h"
 #include "tools/characters/charactertool.h"
-#include "tools/generators/namegenerator.h"
+#include "tools/generators/names/namegenerator.h"
 #include "tools/notes/notestool.h"
 #include "tools/convertertool.h"
 

@@ -283,7 +283,7 @@ void CombatTracker::resetDelayForAll()
 
 void CombatTracker::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
     auto tempFile = getCacheFile();
 
@@ -296,7 +296,7 @@ void CombatTracker::loadData()
         m_state.load(json);
     }
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
 }
 
 void CombatTracker::saveToDisk()

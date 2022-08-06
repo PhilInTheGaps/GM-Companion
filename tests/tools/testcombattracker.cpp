@@ -104,7 +104,7 @@ void TestCombatTracker::testSaveLoad()
     QCOMPARE(currentRound(), 1);
     QCOMPARE(combatants().length(), 0);
 
-    m_isDataLoaded = false;
+    setIsDataLoaded(false);
     loadData();
 
     QCOMPARE(currentIndex(), index);

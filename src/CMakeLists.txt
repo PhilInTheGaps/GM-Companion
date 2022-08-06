@@ -37,7 +37,10 @@ set(SOURCES
   tools/notes/notessaveload.cpp 
   tools/notes/notestool.cpp 
   tools/convertertool.cpp 
-  tools/generators/namegenerator.cpp 
+  tools/generators/names/namegenerator.cpp
+  tools/generators/names/abstractnamegenerator.cpp
+  tools/generators/names/listnamegenerator.cpp
+  tools/generators/names/namegeneratorfactory.cpp
   tools/project_converter/projectconverter.cpp 
   tools/project_converter/shopconverter.cpp 
   tools/project_converter/audioconverter.cpp
@@ -160,7 +163,10 @@ set(HEADERS
   tools/characters/viewers/characterviewer.h
   tools/characters/viewers/characterdsa5viewer.h 
   tools/characters/viewers/dsa5/dsa5listitem.h
-  tools/generators/namegenerator.h
+  tools/generators/names/namegenerator.h
+  tools/generators/names/abstractnamegenerator.h
+  tools/generators/names/listnamegenerator.h
+  tools/generators/names/namegeneratorfactory.h
   managers/addonmanager.h
 )
 

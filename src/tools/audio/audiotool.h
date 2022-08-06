@@ -12,8 +12,6 @@
 #include "metadata/metadatareader.h"
 #include "mpris/mprismanager.h"
 
-#include "thirdparty/propertyhelper/PropertyHelper.h"
-
 class AudioTool : public AbstractTool
 {
     Q_OBJECT
@@ -29,8 +27,6 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(QObject* metaData READ metaData NOTIFY metaDataChanged)
     Q_PROPERTY(QList<AudioFile*> playlist READ playlist NOTIFY playlistChanged)
     Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
-
-    AUTO_PROPERTY(bool, isLoading)
 
 public:
     explicit AudioTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);

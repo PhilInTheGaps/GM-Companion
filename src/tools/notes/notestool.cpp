@@ -78,9 +78,9 @@ void NotesTool::setEditMode(bool editMode)
 
 void NotesTool::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
     emit loadBooks();
 }
 

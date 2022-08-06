@@ -13,8 +13,6 @@
         <file>tools/Settings.qml</file>
         <file>tools/maps/MapListItem.qml</file>
         <file>tools/generators/NameGenerator.qml</file>
-        <file>tools/generators/NameGeneratorButton.qml</file>
-        <file>tools/generators/NameGeneratorCategoryButton.qml</file>
         <file>tools/characters/CharacterButton.qml</file>
         <file>tools/settings/AddonItem.qml</file>
         <file>tools/characters/PageButton.qml</file>

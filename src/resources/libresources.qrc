@@ -1,14 +1,5 @@
 <RCC>
     <qresource prefix="/"/>
-    <qresource prefix="/names/Generic">
-        <file alias="Elves/female.txt">names/Generic/Elves/female.txt</file>
-        <file alias="Elves/male.txt">names/Generic/Elves/male.txt</file>
-        <file alias="Humans/female.txt">names/Generic/Humans/female.txt</file>
-        <file alias="Humans/male.txt">names/Generic/Humans/male.txt</file>
-        <file alias="Humans/surname.txt">names/Generic/Humans/surname.txt</file>
-        <file alias="Orcs/female.txt">names/Generic/Orcs/female.txt</file>
-        <file alias="Orcs/male.txt">names/Generic/Orcs/male.txt</file>
-    </qresource>
     <qresource prefix="/icons/gm-companion"/>
     <qresource prefix="/icons/media">
         <file alias="music_image.png">icons/media/music_image.png</file>
@@ -103,5 +94,8 @@
     </qresource>
     <qresource prefix="/notes">
         <file alias="style.css">notes/style.css</file>
+    </qresource>
+    <qresource prefix="/names">
+        <file alias="generic.json">names/generic.json</file>
     </qresource>
 </RCC>

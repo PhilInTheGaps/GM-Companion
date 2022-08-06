@@ -34,10 +34,10 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QNetworkAccessManager *n
 
 void AudioEditor::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
     setIsLoading(true);
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
 
     observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject*> projects) {
         onFoundProjects(projects);

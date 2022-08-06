@@ -27,9 +27,9 @@ ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent)
 
 void ShopTool::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
     findShops();
 }
 

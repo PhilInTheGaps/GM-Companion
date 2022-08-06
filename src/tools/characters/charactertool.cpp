@@ -100,9 +100,9 @@ void CharacterTool::displayActiveCharacters(bool active)
 
 void CharacterTool::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
 
     const auto filePath = FileUtils::fileInDir("inactive.json", SettingsManager::getPath("characters"));
     observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {

@@ -176,9 +176,9 @@ void MapTool::deleteMarker(int markerIndex)
 
 void MapTool::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
     findCategories();
 }
 

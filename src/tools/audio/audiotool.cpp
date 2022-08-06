@@ -12,7 +12,7 @@
 using namespace AsyncFuture;
 
 AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), a_isLoading(false), qmlEngine(engine)
+    : AbstractTool(parent), qmlEngine(engine)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 
@@ -60,10 +60,10 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
 
 void AudioTool::loadData()
 {
-    if (m_isDataLoaded) return;
+    if (isDataLoaded()) return;
 
     isLoading(true);
-    m_isDataLoaded = true;
+    setIsDataLoaded(true);
 
     updateProjectList();
 }

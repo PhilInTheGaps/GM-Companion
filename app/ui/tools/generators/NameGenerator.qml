@@ -1,196 +1,310 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
 import CustomComponents 1.0
+import FontAwesome 2.0
+import "../../defines.js" as Defines
 
-Item {
-    Component.onCompleted: name_generator.updateCategories()
+Page {
+    id: root
 
-    Connections {
-        target: name_generator
+    Component.onCompleted: name_generator.loadData()
 
-        function onCategoriesChanged() {
-            loadCategories()
-        }
-    }
+    Rectangle {
+        id: left_column
 
-    function loadCategories() {
-        names_categories_column.children = []
+        color: palette.dark
+        width: Defines.SIDEBAR_WIDTH
 
-        for (var i = 0; i < name_generator.categories.length; i++) {
-            var component = Qt.createComponent(
-                        "NameGeneratorCategoryButton.qml")
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
-            var button = component.createObject(names_categories_column, {
-                                                    "category": name_generator.categories[i],
-                                                    "max_width": left_column.width
-                                                })
+        CustomComboBox {
+            id: left_combo_box
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 5
 
-            button.clicked.connect(loadNames)
-        }
-    }
+            model: name_generator ? name_generator.categories : []
+            emptyString: name_generator
+                         && name_generator.isLoading ? qsTr("Loading ...") : qsTr(
+                                                           "No Names")
 
-    function loadNames(category) {
-        names_flow.children = []
-
-        var names = name_generator.categoryNames(category)
-
-        for (var i = 0; i < names.length; i++) {
-            var component = Qt.createComponent("NameGeneratorButton.qml")
-
-            var button = component.createObject(names_flow, {
-                                                    "name": names[i],
-                                                    "category": category,
-                                                    "path": name_generator.categoryPath(
-                                                                category) + "/" + names[i]
-                                                })
-
-            button.clicked.connect(displayGeneratedNames)
-        }
-    }
-
-    function displayGeneratedNames(category, name) {
-        male_names_text_area.cursorPosition = 0
-        female_names_text_area.cursorPosition = 0
-
-        male_names_text_area.text = ""
-        female_names_text_area.text = ""
-
-        var count = names_count_spinbox.value
-        var male_names = name_generator.maleNames(category, name, count)
-        var female_names = name_generator.femaleNames(category, name, count)
-
-        for (var i = 0; i < count; i++) {
-            male_names_text_area.append(male_names[i])
-            female_names_text_area.append(female_names[i])
-        }
-    }
-
-    Row {
-        anchors.fill: parent
-        spacing: 5
-        padding: 5
-
-        Column {
-            id: left_column
-            width: platform.isAndroid ? parent.width / 5 : 175
-            height: parent.height - parent.topPadding * 2
-            spacing: 5
-
-            Label {
-                id: names_count_text
-                text: qsTr("Generated Names")
-            }
-
-            SpinBox {
-                id: names_count_spinbox
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                value: 15
-                from: 1
-                editable: true
-            }
-
-            Label {
-                id: names_font_size_text
-                text: qsTr("Font Size")
-            }
-
-            SpinBox {
-                id: names_font_size_spinbox
-                width: parent.width
-                height: platform.isAndroid ? width / 6 : 40
-                value: 20
-                from: 1
-                editable: true
-
-                onValueChanged: setPointSize()
-                Component.onCompleted: setPointSize()
-
-                function setPointSize() {
-                    male_names_text_area.font.pointSize = value
-                    female_names_text_area.font.pointSize = value
-                }
-            }
-
-            Label {
-                id: names_categories_text
-                text: qsTr("Name Categories")
-            }
-
-            ScrollView {
-                id: names_scroll_view
-                width: parent.width
-                height: parent.height - names_count_text.height - names_count_spinbox.height
-                        - names_font_size_text.height - names_font_size_spinbox.height
-                        - names_categories_text.height - parent.spacing * 5
-
-                clip: true
-                contentHeight: names_categories_column.implicitHeight
-
-                Column {
-                    id: names_categories_column
-                    width: parent.parent.width
-                    spacing: 5
+            onCurrentIndexChanged: {
+                if (name_generator) {
+                    name_generator.loadCategory(currentIndex)
                 }
             }
         }
 
-        Column {
-            id: mid_column
-            width: (parent.width - left_column.width - parent.leftPadding * 2 - parent.spacing)
-            height: parent.height - parent.topPadding * 2
-            spacing: 5
+        ScrollView {
+            id: category_view
 
-            Flow {
-                id: names_flow
-                width: parent.width
-                spacing: 5
+            anchors.top: left_combo_box.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 5
+
+            clip: true
+            contentWidth: -1
+            contentHeight: generators_structure.implicitHeight
+
+            Column {
+                id: generators_structure
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Repeater {
+                    id: generators_repeater
+
+                    model: name_generator ? name_generator.generators : []
+
+                    CustomButton {
+                        buttonText: modelData.name
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+
+                        onClicked: {
+                            if (name_generator) {
+                                if (name_generator.loadGenerator(index)) {
+                                    name_generator.currentGenerator.generate(
+                                                count_spinbox.value)
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        }
+    }
 
-            Row {
-                width: parent.width
-                height: parent.height - names_flow.height - parent.spacing
-                spacing: 5
+    Item {
+        id: mid
 
-                Column {
-                    id: male_names_column
-                    width: (parent.width - parent.spacing) / 2
-                    height: parent.height
-                    spacing: 5
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: left_column.right
+        anchors.right: right_column.left
+        anchors.margins: 10
+
+        RowLayout {
+            anchors.fill: parent
+            spacing: 10
+
+            Repeater {
+                id: mid_repeater
+                model: name_generator
+                       && name_generator.currentGenerator ? name_generator.currentGenerator.categories : []
+
+                Item {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    visible: text_area.text.length > 0
 
                     Label {
-                        id: male_names_text
-                        text: qsTr("Male Names")
+                        id: header
+                        text: modelData
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
                         font.pointSize: 12
-                        font.bold: true
                     }
 
-                    CustomTextEdit {
-                        id: male_names_text_area
-                        width: parent.width
-                        height: parent.height - male_names_text.height - parent.spacing
-                        readOnly: true
+                    TextArea {
+                        id: text_area
+                        anchors.top: header.bottom
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.topMargin: 10
+
+                        selectByMouse: true
+                        padding: 0
+                        font.pointSize: 12
+                        wrapMode: TextArea.WrapAtWordBoundaryOrAnywhere
+
+                        text: name_generator
+                              && name_generator.currentGenerator ? name_generator.currentGenerator.generatedNames[index].join(
+                                                                       "\n") : ""
                     }
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: right_column
+
+        color: palette.dark
+        width: Defines.SIDEBAR_WIDTH
+
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        Column {
+            anchors.fill: parent
+            anchors.margins: 5
+            spacing: 20
+
+            CustomButton {
+                iconText: FontAwesome.sync
+                buttonText: qsTr("Refresh")
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                onClicked: {
+                    if (name_generator && name_generator.currentGenerator) {
+                        name_generator.currentGenerator.generate(
+                                    count_spinbox.value)
+                    }
+                }
+            }
+
+            Column {
+                spacing: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Label {
+                    text: qsTr("Count")
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+
+                SpinBox {
+                    id: count_spinbox
+                    from: 1
+                    value: 15
+                    editable: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                }
+            }
+
+            Column {
+                spacing: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Label {
+                    text: qsTr("Categories")
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    visible: generator_categories_repeater.count > 0
                 }
 
                 Column {
-                    id: female_names_column
-                    width: (parent.width - parent.spacing) / 2
-                    height: parent.height
-                    spacing: 5
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    spacing: 10
 
-                    Label {
-                        id: female_names_text
-                        text: qsTr("Female Names")
-                        font.pointSize: 12
-                        font.bold: true
+                    Repeater {
+                        id: generator_categories_repeater
+                        model: name_generator
+                               && name_generator.currentGenerator ? name_generator.currentGenerator.categories : []
+
+                        CheckBox {
+                            text: modelData
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            checked: name_generator
+                                     && name_generator.currentGenerator ? name_generator.currentGenerator.enabledCategories[index] : true
+
+                            onClicked: {
+                                if (name_generator
+                                        && name_generator.currentGenerator) {
+                                    name_generator.currentGenerator.setCategoryEnabled(
+                                                index, checked)
+                                }
+                            }
+                        }
                     }
+                }
+            }
 
-                    CustomTextEdit {
-                        id: female_names_text_area
-                        width: parent.width
-                        height: parent.height - female_names_text.height - parent.spacing
-                        readOnly: true
+            Column {
+                spacing: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Label {
+                    text: qsTr("Prefixes")
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    visible: generator_prefixes_repeater.count > 0
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Repeater {
+                        id: generator_prefixes_repeater
+                        model: name_generator
+                               && name_generator.currentGenerator ? name_generator.currentGenerator.prefixes : []
+
+                        RadioButton {
+                            text: modelData
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            checked: name_generator
+                                     && name_generator.currentGenerator ? name_generator.currentGenerator.activePrefix === index : false
+
+                            onClicked: {
+                                if (name_generator
+                                        && name_generator.currentGenerator) {
+                                    name_generator.currentGenerator.activePrefix = index
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Column {
+                spacing: 10
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                Label {
+                    text: qsTr("Suffixes")
+                    font.bold: true
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    visible: generator_suffixes_repeater.count > 0
+                }
+
+                Column {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Repeater {
+                        id: generator_suffixes_repeater
+                        model: name_generator
+                               && name_generator.currentGenerator ? name_generator.currentGenerator.suffixes : []
+
+                        RadioButton {
+                            text: modelData
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            checked: name_generator
+                                     && name_generator.currentGenerator ? name_generator.currentGenerator.activeSuffix === index : false
+
+                            onClicked: {
+                                if (name_generator
+                                        && name_generator.currentGenerator) {
+                                    name_generator.currentGenerator.activeSuffix = index
+                                }
+                            }
+                        }
                     }
                 }
             }
