@@ -16,7 +16,7 @@ class NameGenerator : public AbstractTool
     AUTO_PROPERTY(QList<AbstractNameGenerator*>, generators)
 
 public:
-    explicit NameGenerator(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit NameGenerator(const QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
     Q_INVOKABLE bool loadCategory(int index);
     Q_INVOKABLE bool loadGenerator(int index);

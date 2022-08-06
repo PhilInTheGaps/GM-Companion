@@ -24,7 +24,7 @@ public:
     AUTO_PROPERTY(int, activeSuffix)
 
 private:
-    auto buildEmptyNameList() -> QList<QStringList>;
-    auto buildInitialEnabledCategoryList() -> QList<bool>;
+    auto buildEmptyNameList() const -> QList<QStringList>;
+    auto buildInitialEnabledCategoryList() const -> QList<bool>;
 };
 

@@ -9,7 +9,7 @@
 
 Q_LOGGING_CATEGORY(gmNameGenerator, "gm.generators.names")
 
-NameGenerator::NameGenerator(QQmlApplicationEngine *engine, QObject *parent)
+NameGenerator::NameGenerator(const QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), a_currentGenerator(nullptr)
 {
     qCDebug(gmNameGenerator()) << "Loading ...";

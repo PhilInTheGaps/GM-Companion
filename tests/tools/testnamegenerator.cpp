@@ -1,5 +1,6 @@
 #include <QtTest>
 #include <QObject>
+#include <limits>
 #include "src/tools/generators/names/namegenerator.h"
 
 class TestNameGenerator : public NameGenerator
@@ -12,6 +13,7 @@ public:
 private slots:
     void initTestCase();
     void testNormalUse();
+    void cannotLoadInvalidGenerators();
 };
 
 void TestNameGenerator::initTestCase()
@@ -54,6 +56,22 @@ void TestNameGenerator::testNormalUse()
     QVERIFY(currentGenerator()->generate(1));
     QCOMPARE(currentGenerator()->generatedNames()[0][0].split(" ").length(), 4); // Should be like "Prof. Name Something III"
 }
+
+void TestNameGenerator::cannotLoadInvalidGenerators()
+{
+    const auto maxInt = std::numeric_limits<int>::max();
+
+    QVERIFY(!loadCategory(-1));
+    QVERIFY(!loadCategory(maxInt));
+    QVERIFY(loadCategory(0));
+
+    QVERIFY(!loadGenerator(-1));
+    QVERIFY(!loadGenerator(maxInt));
+    QVERIFY(loadGenerator(0));
+
+    QVERIFY(!currentGenerator()->generate(-1));
+}
+
 
 QTEST_APPLESS_MAIN(TestNameGenerator)
 #include "testnamegenerator.moc"

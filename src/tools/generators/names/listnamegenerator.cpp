@@ -12,6 +12,8 @@ ListNameGenerator::ListNameGenerator(QObject *parent, QJsonObject json)
 
 auto ListNameGenerator::generate(int count) -> bool
 {
+    if (count < 0) return false;
+
     QList<QStringList> list;
 
     for (int i = 0; i < categories().length(); i++)

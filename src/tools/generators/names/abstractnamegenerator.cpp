@@ -27,7 +27,7 @@ auto AbstractNameGenerator::setCategoryEnabled(int index, bool value) -> bool
     return true;
 }
 
-auto AbstractNameGenerator::buildEmptyNameList() -> QList<QStringList>
+auto AbstractNameGenerator::buildEmptyNameList() const -> QList<QStringList>
 {
     QList<QStringList> list;
     list.reserve(categories().length());
@@ -40,7 +40,7 @@ auto AbstractNameGenerator::buildEmptyNameList() -> QList<QStringList>
     return list;
 }
 
-auto AbstractNameGenerator::buildInitialEnabledCategoryList() -> QList<bool>
+auto AbstractNameGenerator::buildInitialEnabledCategoryList() const -> QList<bool>
 {
     QList<bool> list;
     list.reserve(categories().length());
