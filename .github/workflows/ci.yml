@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build/cget
-          key: ${{ runner.os }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}-${{ matrix.compiler }}
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('requirements.windows.txt') }}-cget-${{ matrix.qt-version }}-${{ matrix.compiler }}
 
       - name: Init cget
         run: cd build && cget init --shared
@@ -128,6 +128,9 @@ jobs:
         with:
           submodules: "recursive"
 
+      - uses: kenchan0130/actions-system-info@master
+        id: system-info
+
       - name: Install Dependencies
         run: |
           sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-bionic
@@ -165,7 +168,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build/cget
-          key: ${{ runner.os }}-${{ hashFiles('requirements.ubuntu.txt') }}-cget-${{ matrix.qt-version }}
+          key: ${{ runner.os }}-${{ steps.system-info.outputs.release }}-${{ runner.arch }}-${{ hashFiles('requirements.ubuntu.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Build cget dependencies
         if: steps.cache-cget.outputs.cache-hit != 'true'
@@ -224,6 +227,9 @@ jobs:
         with:
           submodules: "recursive"
           fetch-depth: 0
+      
+      - uses: kenchan0130/actions-system-info@master
+        id: system-info
 
       - name: Install Dependencies
         run: |
@@ -280,7 +286,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: build/cget
-          key: ${{ runner.os }}-${{ hashFiles('requirements.ubuntu.txt') }}-cget-${{ matrix.qt-version }}
+          key: ${{ runner.os }}-${{ steps.system-info.outputs.release }}-${{ runner.arch }}-${{ hashFiles('requirements.ubuntu.txt') }}-cget-${{ matrix.qt-version }}
 
       - name: Build cget dependencies
         if: steps.cache-cget.outputs.cache-hit != 'true'
