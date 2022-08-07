@@ -8,6 +8,7 @@
 #include <QIcon>
 #include <QSGRendererInterface>
 #include <QScopeGuard>
+#include <QLoggingCategory>
 
 #include <sentry.h>
 
@@ -23,8 +24,11 @@
 #include "services/nextcloud/nextcloud.h"
 #include "services/discord/discord.h"
 
+#include "addons/addonmanager.h"
 #include "updates/updatemanager.h"
 #include "platformdetails.h"
+
+Q_LOGGING_CATEGORY(gmMain, "gm.main")
 
 /// Register meta types for signals and slots
 void registerMetaTypes()
@@ -121,6 +125,7 @@ auto main(int argc, char *argv[]) -> int
     // Misc
     engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
+    engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
     engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
     engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);

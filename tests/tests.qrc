@@ -9,4 +9,8 @@
         <file>resources/images/test.tif</file>
         <file>resources/images/test.gif</file>
     </qresource>
+    <qresource prefix="/addons"/>
+    <qresource prefix="/addons/test">
+        <file alias="addon.json">resources/addons/test/addon.json</file>
+    </qresource>
 </RCC>

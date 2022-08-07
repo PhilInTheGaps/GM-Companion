@@ -1,63 +1,101 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
+import "../../colors.js" as Colors
 
-Row {
-    id: addon_row
-    property string addon: "Placeholder Addon"
-    property string description: "Placeholder Description, for what is probably a really awesome addon!"
-    property string folder: "test"
-    property bool addon_enabled: true
+Rectangle {
+    id: root
+    property var addon: undefined
+    property int addon_index: -1
 
-    anchors.left: parent ? parent.left : 0
-    anchors.right: parent ? parent.right : 0
+    color: Colors.base
+    border.color: Colors.border
+    border.width: 1
 
-    padding: 5
-    spacing: 5
+    height: Math.max(left_column.height, right_column.height) + 20
 
-    Row {
-        spacing: 5
+    Column {
+        id: left_column
+        anchors.left: parent.left
+        anchors.right: right_column.left
         anchors.top: parent.top
+        anchors.margins: 10
+        spacing: 10
 
-        CheckBox {
-            id: checkbox
-            checked: addon_enabled
-            padding: 0
+        Row {
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-            onClicked: {
-                settings_tool.setAddonEnabled(folder, checked)
+            spacing: 10
+
+            Label {
+                text: addon ? addon.name : "ERROR: COULD NOT LOAD ADDON"
+                font.pointSize: 12
+                font.bold: true
+            }
+
+            Label {
+                text: addon
+                      && addon.shortName.length > 0 ? "(" + addon.shortName + ")" : ""
+                font.pointSize: 12
+            }
+
+            Rectangle {
+                width: 1
+                height: parent.height
+                color: Colors.menuSeparator
+            }
+
+            Label {
+                text: addon ? addon.author : ""
+                font.pointSize: 12
             }
         }
 
-        Text {
-            id: name_text
-            text: addon
-            width: (addon_row.width - addon_row.spacing * 2 - addon_row.padding * 2) / 4
+        Label {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            text: addon ? addon.description : ""
+
             clip: true
-            elide: Text.ElideRight
-            color: color_scheme.textColor
-            anchors.verticalCenter: parent.verticalCenter
-            font.pointSize: 12
+            wrapMode: "WordWrap"
+        }
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: 1
+
+            color: Colors.border
+        }
+
+        Label {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            text: addon ? addon.path : ""
         }
     }
 
-    Rectangle {
-        id: spacer
-        width: 5
-        height: parent.height - parent.padding * 2
-        color: color_scheme.dividerColor
-    }
+    Column {
+        id: right_column
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 10
+        spacing: 10
 
-    TextArea {
-        width: parent.width - parent.spacing * 2 - parent.padding * 2
-               - spacer.width - name_text.width
-        text: description
-        padding: 0
-        color: color_scheme.textColor
-        anchors.verticalCenter: parent.verticalCenter
+        Button {
+            text: addon && addon.enabled ? qsTr("Disable") : qsTr("Enable")
+            anchors.horizontalCenter: parent.horizontalCenter
 
-        readOnly: true
-        clip: true
-        wrapMode: "WordWrap"
+            onClicked: {
+                addon_manager.setAddonEnabled(addon_index, !addon.enabled)
+            }
+        }
+
+        Label {
+            text: addon ? "[ " + addon.version + " ]" : ""
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
 }

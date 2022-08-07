@@ -5,11 +5,6 @@
 
 Q_LOGGING_CATEGORY(gmSettings, "gm.settings")
 
-SettingsManager::SettingsManager()
-{
-    m_settings = new QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat, this);
-}
-
 auto SettingsManager::getInstance() -> SettingsManager*
 {
     if (!m_instance)
@@ -20,20 +15,20 @@ auto SettingsManager::getInstance() -> SettingsManager*
     return m_instance;
 }
 
-bool SettingsManager::showToolNames() const
+auto SettingsManager::showToolNames() const -> bool
 {
-    return getBoolSetting("showToolNames", false);
+    return getBoolSetting(QStringLiteral("showToolNames"), false);
 }
 
 void SettingsManager::setShowToolNames(bool checked)
 {
-    setSetting("showToolNames", QString::number(checked));
+    setSetting(QStringLiteral("showToolNames"), QString::number(checked));
     emit showToolNamesChanged();
 }
 
-bool SettingsManager::classicIcons() const
+auto SettingsManager::classicIcons() const -> bool
 {
-    return getBoolSetting("classicIcons", false);
+    return getBoolSetting(QStringLiteral("classicIcons"), false);
 }
 
 void SettingsManager::setClassicIcons(bool checked)
@@ -45,9 +40,9 @@ auto SettingsManager::getSetting(const QString& setting, const QString& defaultV
 {
     if (group.isEmpty()) group = DEFAULT_GROUP;
 
-    getInstance()->m_settings->beginGroup(group);
-    auto value = getInstance()->m_settings->value(setting, defaultValue).toString();
-    getInstance()->m_settings->endGroup();
+    getInstance()->m_settings.beginGroup(group);
+    auto value = getInstance()->m_settings.value(setting, defaultValue).toString();
+    getInstance()->m_settings.endGroup();
     return value;
 }
 
@@ -58,12 +53,12 @@ auto SettingsManager::getSetting(const SettingRequest &request) -> QString
 
 void SettingsManager::setSetting(const QString& setting, const QString& value, const QString& group)
 {
-    getInstance()->m_settings->beginGroup(group);
-    getInstance()->m_settings->setValue(setting, value);
-    getInstance()->m_settings->endGroup();
+    getInstance()->m_settings.beginGroup(group);
+    getInstance()->m_settings.setValue(setting, value);
+    getInstance()->m_settings.endGroup();
 }
 
-void SettingsManager::setSetting(const QString& setting, const int& value, const QString& group)
+void SettingsManager::setSetting(const QString& setting, int value, const QString& group)
 {
     setSetting(setting, QString::number(value), group);
 }
@@ -165,9 +160,7 @@ void SettingsManager::setLanguage(const QString& language)
 
 auto SettingsManager::getServerUrl(const QString& service, const bool& hasDefault)->QString
 {
-    auto connection = SettingsManager::getSetting("connection", "default", service);
-
-    if (hasDefault && (connection == "default"))
+    if (hasDefault && SettingsManager::getSetting("connection", "default", service) == "default")
     {
         return defaultServerUrl();
     }
@@ -252,9 +245,9 @@ auto SettingsManager::isUpdateCheckEnabled()->bool
 
 auto SettingsManager::getBoolSetting(const QString& setting, bool defaultValue, const QString& group)->bool
 {
-    getInstance()->m_settings->beginGroup(group);
-    auto isTrue = getInstance()->m_settings->value(setting, defaultValue).toBool();
-    getInstance()->m_settings->endGroup();
+    getInstance()->m_settings.beginGroup(group);
+    auto isTrue = getInstance()->m_settings.value(setting, defaultValue).toBool();
+    getInstance()->m_settings.endGroup();
     return isTrue;
 }
 
@@ -290,17 +283,17 @@ auto SettingsManager::defaultServerUrl() -> QString
 // Set addon disabled or enabled
 void SettingsManager::setAddonEnabled(const QString& addon, bool enabled)
 {
-    m_settings->beginGroup("Addons");
-    m_settings->setValue(addon, enabled);
-    m_settings->endGroup();
+    m_settings.beginGroup("Addons");
+    m_settings.setValue(addon, enabled);
+    m_settings.endGroup();
 }
 
 // Returns if addon is enabled
 auto SettingsManager::getIsAddonEnabled(const QString& addon)->bool
 {
-    m_settings->beginGroup("Addons");
-    bool enabled = m_settings->value(addon, true).toBool();
-    m_settings->endGroup();
+    m_settings.beginGroup("Addons");
+    bool enabled = m_settings.value(addon, false).toBool();
+    m_settings.endGroup();
 
     return enabled;
 }
@@ -308,17 +301,11 @@ auto SettingsManager::getIsAddonEnabled(const QString& addon)->bool
 /// Has setting been set?
 auto SettingsManager::hasSetting(const QString &setting, const QString &group) -> bool
 {
-    getInstance()->m_settings->beginGroup(group);
-    auto result = getInstance()->m_settings->contains(setting);
-    getInstance()->m_settings->endGroup();
+    getInstance()->m_settings.beginGroup(group);
+    auto result = getInstance()->m_settings.contains(setting);
+    getInstance()->m_settings.endGroup();
 
     return result;
-}
-
-// Returns Official Addons
-auto SettingsManager::getOfficialAddons()->QStringList
-{
-    return m_officialAddons;
 }
 
 // Updates the settings if something changed from a previous version
@@ -354,7 +341,7 @@ void SettingsManager::renameSetting(const QString& currentName, const QString& n
 
 void SettingsManager::removeSetting(const QString& setting, const QString& group)
 {
-    m_settings->beginGroup(group);
-    m_settings->remove(setting);
-    m_settings->endGroup();
+    m_settings.beginGroup(group);
+    m_settings.remove(setting);
+    m_settings.endGroup();
 }

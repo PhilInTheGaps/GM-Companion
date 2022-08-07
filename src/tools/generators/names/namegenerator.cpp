@@ -1,5 +1,7 @@
 #include "namegenerator.h"
 #include "namegeneratorfactory.h"
+#include "utils/fileutils.h"
+#include "addons/addonmanager.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QQmlContext>
@@ -35,21 +37,24 @@ void NameGenerator::loadCategories()
     a_categories.clear();
     m_generatorLists.clear();
 
-    for (const auto& file : findAllFiles())
+    for (const auto& fileName : findAllFiles())
     {
-        QFile f(QString("%1/%2").arg(namesPath, file));
+        QFile file(fileName);
+        qCDebug(gmNameGenerator()) << fileName;
 
-        qCDebug(gmNameGenerator()) << file;
-
-        if (f.open(QIODevice::ReadOnly))
+        if (file.open(QIODevice::ReadOnly))
         {
-            auto doc = QJsonDocument::fromJson(f.readAll());
+            auto doc = QJsonDocument::fromJson(file.readAll());
             auto name = doc.object()["name"].toString();
 
             a_categories << name;
             m_generatorLists << NameGeneratorFactory::buildFromJson(this, doc);
 
-            f.close();
+            file.close();
+        }
+        else
+        {
+            qCWarning(gmNameGenerator()) << "Could not open" << fileName;
         }
     }
 
@@ -61,9 +66,43 @@ void NameGenerator::loadCategories()
 
 auto NameGenerator::findAllFiles() -> QStringList
 {
-    QDir dir(namesPath);
+    auto list = findAllFiles(namesPath);
 
-    return dir.entryList(QDir::Files);
+    list.append(findAllAddonFiles());
+
+    return list;
+}
+
+auto NameGenerator::findAllFiles(const QString &path) -> QStringList
+{
+    QDir dir(path);
+
+    if (!dir.exists()) return {};
+
+    auto entries = dir.entryList({"*.json"}, QDir::Files);
+
+    for (int i = 0; i < entries.length(); i++)
+    {
+        entries[i] = FileUtils::fileInDir(entries[i], path);
+    }
+
+    return entries;
+}
+
+auto NameGenerator::findAllAddonFiles() -> QStringList
+{
+    QStringList list;
+
+    for (const auto *addon : AddonManager::instance()->addons())
+    {
+        if (addon && addon->enabled())
+        {
+            const auto namesPath = FileUtils::fileInDir(QStringLiteral("names"), addon->path());
+            list.append(findAllFiles(namesPath));
+        }
+    }
+
+    return list;
 }
 
 auto NameGenerator::loadCategory(int index) -> bool

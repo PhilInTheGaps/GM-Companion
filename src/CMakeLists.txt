@@ -93,7 +93,8 @@ set(SOURCES
   tools/shop/itemeditor.cpp
   tools/shop/shopeditor.cpp
   tools/shop/shoptool.cpp
-  managers/addonmanager.cpp
+  addons/addonmanager.cpp
+  addons/addon.cpp
 )
 
 # header files
@@ -167,7 +168,8 @@ set(HEADERS
   tools/generators/names/abstractnamegenerator.h
   tools/generators/names/listnamegenerator.h
   tools/generators/names/namegeneratorfactory.h
-  managers/addonmanager.h
+  addons/addonmanager.h
+  addons/addon.h
 )
 
 # resources

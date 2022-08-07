@@ -1,0 +1,7 @@
+{
+    "name": "Demo Addon",
+    "name_short": "Demo",
+    "version": "1.0.0",
+    "author": "Demo Author",
+    "description": "This is a demo addon for testing purposes."
+}

@@ -2,7 +2,6 @@
 #include <QJsonArray>
 #include <QRandomGenerator>
 #include <utility>
-#include <QDebug>
 
 ListNameGenerator::ListNameGenerator(QObject *parent, QJsonObject json)
     : AbstractNameGenerator{parent, json["name"].toString(), getCategoryNames(json), getPrefixNames(json), getSuffixNames(json)}, m_json(std::move(json))
@@ -134,7 +133,6 @@ auto ListNameGenerator::getTypeNames(const QJsonArray &array) -> QStringList
 
     for (const auto& entry : array)
     {
-        qDebug() << entry;
         list << entry.toObject()["name"].toString();
     }
 

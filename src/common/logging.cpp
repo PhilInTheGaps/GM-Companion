@@ -1,7 +1,5 @@
 #include "logging.h"
 
-Q_LOGGING_CATEGORY(gmMain,                   "gm.main")
-
 Q_LOGGING_CATEGORY(gmAudioTool,              "gm.audio.tool")
 Q_LOGGING_CATEGORY(gmAudioEditor,            "gm.audio.editor")
 Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")

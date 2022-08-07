@@ -27,6 +27,8 @@ public slots:
 private:
     void loadCategories();
     static auto findAllFiles() -> QStringList;
+    static auto findAllFiles(const QString& path) -> QStringList;
+    static auto findAllAddonFiles() -> QStringList;
 
     static constexpr const char* namesPath = ":/names";
     QList<QList<AbstractNameGenerator*>> m_generatorLists;

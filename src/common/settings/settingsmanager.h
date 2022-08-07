@@ -1,5 +1,4 @@
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -39,10 +38,10 @@ public slots:
     static QString getSetting(const QString& setting, const QString& defaultValue = "", QString group = DEFAULT_GROUP);
     static QString getSetting(const SettingRequest &request);
     static void setSetting(const QString& setting, const QString& value, const QString& group = DEFAULT_GROUP);
-    static void setSetting(const QString& setting, const int& value, const QString& group = DEFAULT_GROUP);
+    static void setSetting(const QString& setting, int value, const QString& group = DEFAULT_GROUP);
 
     static QString getPath(const QString& setting, QString group = "");
-    static void setPath(const QString& setting, const QString& value, QString group = "");
+    static void setPath(const QString& setting, const QString& value, QString group = QLatin1String());
 
     static QLocale getLanguage();
     static QString getLanguageString();
@@ -65,14 +64,12 @@ public slots:
     void setAddonEnabled(const QString& addon, bool enabled);
     bool getIsAddonEnabled(const QString& addon);
 
-    QStringList getOfficialAddons();
-
 signals:
     void showToolNamesChanged();
     void classicIconsChanged();
 
 private:
-    SettingsManager();
+    explicit SettingsManager() = default;
     inline static SettingsManager *m_instance = nullptr;
 
     static auto getDefaultPath(const QString& setting, const QString& group = PATHS_GROUP) -> QString;
@@ -84,19 +81,5 @@ private:
     void renameSetting(const QString& currentName, const QString& newName, const QString& group = DEFAULT_GROUP);
     void removeSetting(const QString& setting, const QString& group);
 
-    // Normal Settings
-    QSettings *m_settings;
-    QStringList m_settingsList;
-
-    // Addon Settings
-    QSettings m_addonSettings;
-
-    const QStringList m_officialAddons = {
-        "DSA5",
-        "SIFRP",
-        "HowToBeAHero",
-        "90MinutesOfMayhem",
-    };
+    QSettings m_settings = QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
 };
-
-#endif // SETTINGSMANAGER_H

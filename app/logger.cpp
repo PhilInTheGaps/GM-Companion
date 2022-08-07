@@ -5,8 +5,10 @@
 
 #include <QDateTime>
 #include <QDir>
-#include <QDebug>
+#include <QLoggingCategory>
 #include <iostream>
+
+Q_LOGGING_CATEGORY(gmLogger, "gm.logger")
 
 Logger::Logger()
 {
@@ -19,7 +21,7 @@ Logger::Logger()
     // Open for writing
     if (!m_logFile.open(QIODevice::Append | QIODevice::Text))
     {
-        qCWarning(gmMain()) << "Error: Could not open log file at" << m_logFile.fileName();
+        qCWarning(gmLogger()) << "Error: Could not open log file at" << m_logFile.fileName();
     }
 
     m_logStream.setDevice(&m_logFile);
@@ -82,7 +84,7 @@ void Logger::createLogFileDir(const QString &filePath)
 
     if (!dir.exists() || !dir.mkpath(dir.path()))
     {
-        qCWarning(gmMain()) << "Error: Create dir for log file:" << fileDir;
+        qCWarning(gmLogger()) << "Error: Create dir for log file:" << fileDir;
     }
 }
 

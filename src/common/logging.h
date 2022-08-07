@@ -3,8 +3,6 @@
 
 #include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(gmMain)
-
 Q_DECLARE_LOGGING_CATEGORY(gmAudioTool)
 Q_DECLARE_LOGGING_CATEGORY(gmAudioEditor)
 Q_DECLARE_LOGGING_CATEGORY(gmAudioEditorFileBrowser)

@@ -4,40 +4,38 @@ import QtQuick.Controls 2.2
 Item {
     id: root
 
-    Label {
-        id: addon_text
-        width: parent.width
-        text: qsTr("The following addons are available:")
-        font.pointSize: 12
-        clip: true
-        wrapMode: Text.WordWrap
-    }
+    Flickable {
+        id: flickable
+        anchors.fill: parent
+        anchors.margins: 10
+        anchors.rightMargin: 0
 
-    ScrollView {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.top: addon_text.bottom
-        anchors.topMargin: 10
         clip: true
         contentHeight: addon_column.implicitHeight
         contentWidth: -1
+        interactive: true
+
+        ScrollBar.vertical: ScrollBar {
+            id: scroll_bar
+            visible: flickable.contentHeight > flickable.height
+        }
 
         Column {
             id: addon_column
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.rightMargin: 10
             spacing: 10
-            topPadding: 10
 
             Repeater {
-                model: addon_manager.addonNames
+                model: addon_manager.addons
 
                 AddonItem {
                     addon: modelData
-                    description: addon_manager.getAddonDescriptions()[index]
-                    folder: addon_manager.getAddonPathNames()[index]
-                    addon_enabled: addon_manager.getAddonEnabledList()[index]
+                    addon_index: index
+
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                 }
             }
         }
