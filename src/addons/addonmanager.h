@@ -1,6 +1,11 @@
 #pragma once
 
 #include <QObject>
+
+// I don't exactly know what this include does but if it is not there,
+// the application won't compile on some systems.
+#include <QQmlContext>
+
 #include "addon.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
