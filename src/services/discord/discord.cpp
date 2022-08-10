@@ -13,8 +13,8 @@ Discord::Discord(QObject *parent) : Service("Discord", parent), a_enabled(false)
     m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    channel(SettingsManager::getSetting("channel", "", "Discord"));
-    enabled(SettingsManager::getBoolSetting("enabled", false, "Discord"));
+    channel(SettingsManager::instance()->get<QString>(QStringLiteral("channel"), QLatin1String(), QStringLiteral("Discord")));
+    enabled(SettingsManager::instance()->get(QStringLiteral("enabled"), false, QStringLiteral("Discord")));
 
     updateStatus(ServiceStatus::Type::Info, "");
 }

@@ -1,6 +1,6 @@
 #include "filelistresult.h"
 #include "utils/fileutils.h"
-#include "utils/utils.h"
+#include "utils/stringutils.h"
 
 using namespace Files;
 
@@ -36,7 +36,7 @@ auto FileListResult::getMatchingEntries(const QStringList &list, const QString &
 
     for (const auto &entry : list)
     {
-        if (Utils::hasWildcardMatch(entry, wildcard))
+        if (StringUtils::hasWildcardMatch(entry, wildcard))
         {
             results << entry;
         }

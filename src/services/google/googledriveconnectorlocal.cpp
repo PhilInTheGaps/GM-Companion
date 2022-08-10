@@ -16,8 +16,8 @@ GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(
     config.port                  = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_CONCURRENT_REQUESTS;
     config.authHeaderFormat      = QStringLiteral("Bearer %1");
-    config.idRequest             = SettingRequest(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google"));
-    config.secretRequest         = SettingRequest(QStringLiteral("googleSecret"), QLatin1String(), QStringLiteral("Google"));
+    config.idRequest             = SettingRequest<QString>(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google"));
+    config.secretRequest         = SettingRequest<QString>(QStringLiteral("googleSecret"), QLatin1String(), QStringLiteral("Google"));
 
     setConfig(config);
 

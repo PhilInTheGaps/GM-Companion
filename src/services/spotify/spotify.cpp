@@ -1,5 +1,4 @@
 ﻿#include "spotify.h"
-#include "config.h"
 
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -7,8 +6,6 @@
 #include <QJsonArray>
 #include <QNetworkRequest>
 #include <QLoggingCategory>
-#include "o0globals.h"
-#include "utils/processinfo.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 
 using namespace AsyncFuture;
@@ -23,7 +20,7 @@ Spotify::Spotify(QObject *parent)
       tracks(new TracksAPI(this))
 {
     m_networkManager = new QNetworkAccessManager(this);
-    username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
+    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify")));
 
     connect(m_librespotController.status(), &ServiceStatus::messageChanged, this, &Spotify::forwardClientStatus);
 
@@ -36,7 +33,7 @@ void Spotify::updateConnector()
 
     if (m_connector) m_connector->deleteLater();
 
-    if (SettingsManager::getSetting("connection", "default", "Spotify") == "local")
+    if (SettingsManager::instance()->get(QStringLiteral("connection"), QStringLiteral("default"), QStringLiteral("Spotify")) == "local")
     {
         m_connector = new SpotifyConnectorLocal(m_networkManager, new O2Spotify, this);
     }
@@ -154,7 +151,7 @@ auto Spotify::clientStatus() const -> ServiceStatus*
 
 void Spotify::connectService()
 {
-    username(SettingsManager::getSetting("spotifyUsername", "", "Spotify"));
+    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify")));
 
     const auto hasClientStarted = startClient();
 
@@ -173,10 +170,10 @@ void Spotify::disconnectService()
 {
     connected(false);
     if (m_connector) m_connector->disconnectService();
-    SettingsManager::setPassword(username(), "", "Spotify");
-    SettingsManager::setSetting("spotifyUsername", "", "Spotify");
-    SettingsManager::setSetting("spotifyID", "", "Spotify");
-    SettingsManager::setSetting("spotifySecret", "", "Spotify");
+    SettingsManager::setPassword(username(), QLatin1String(), QStringLiteral("Spotify"));
+    SettingsManager::instance()->set(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify"));
+    SettingsManager::instance()->set(QStringLiteral("spotifyID"), QLatin1String(), QStringLiteral("Spotify"));
+    SettingsManager::instance()->set(QStringLiteral("spotifySecret"), QLatin1String(), QStringLiteral("Spotify"));
     m_librespotController.stop();
 }
 

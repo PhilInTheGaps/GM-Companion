@@ -5,7 +5,7 @@ Service::Service(const QString &name, QObject *parent)
     : QObject(parent), a_connected(false),
       a_status(new ServiceStatus(this)), m_serviceName(name)
 {
-    connected(SettingsManager::getBoolSetting("connected", false, m_serviceName));
+    connected(SettingsManager::instance()->get(QStringLiteral("connected"), false, m_serviceName));
     updateConnectionStatus();
 
     connect(this, &Service::connectedChanged, this, &Service::onConnectedChanged);
@@ -31,6 +31,6 @@ void Service::updateConnectionStatus()
 
 void Service::onConnectedChanged(bool connected)
 {
-    SettingsManager::setSetting("connected", connected, m_serviceName);
+    SettingsManager::SettingsManager::instance()->set(QStringLiteral("connected"), connected, m_serviceName);
     updateConnectionStatus();
 }

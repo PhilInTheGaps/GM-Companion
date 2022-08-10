@@ -70,14 +70,14 @@ Column {
         // Show Tool Names
         CheckBox {
             text: qsTr("Show tool names in menu")
-            checked: settings_manager.getBoolSetting("showToolNames", false)
+            checked: settings_manager.showToolNames
             onClicked: settings_manager.showToolNames = checked
         }
 
         // Classic Icons
         CheckBox {
             text: qsTr("Classic menu icons")
-            checked: settings_manager.getBoolSetting("classicIcons", false)
+            checked: settings_manager.classicIcons
             onClicked: settings_manager.classicIcons = checked
         }
     }
@@ -95,11 +95,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Automated crash reports")
-                checked: settings_manager.getBoolSetting("crashReports", false,
-                                                         "Telemetry")
-                onClicked: settings_manager.setSetting("crashReports",
-                                                       checked ? 1 : 0,
-                                                       "Telemetry")
+                checked: settings_manager.crashReports
+                onClicked: settings_manager.crashReports = checked
             }
 
             HelpAnnotation {
@@ -112,11 +109,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Session tracking")
-                checked: settings_manager.getBoolSetting("sessionTracking",
-                                                         false, "Telemetry")
-                onClicked: settings_manager.setSetting("sessionTracking",
-                                                       checked ? 1 : 0,
-                                                       "Telemetry")
+                checked: settings_manager.sessionTracking
+                onClicked: settings_manager.sessionTracking = checked
             }
 
             HelpAnnotation {
@@ -157,12 +151,8 @@ Column {
         Row {
             CheckBox {
                 text: qsTr("Automatically check for updates")
-                checked: settings_manager.getBoolSetting("checkForUpdates",
-                                                         false, "Updates")
-
-                onCheckedChanged: settings_manager.setSetting(
-                                      "checkForUpdates", checked.toString(),
-                                      "Updates")
+                checked: settings_manager.checkForUpdates
+                onClicked: settings_manager.checkForUpdates = checked
             }
 
             HelpAnnotation {

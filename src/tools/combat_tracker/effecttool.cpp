@@ -56,7 +56,7 @@ void EffectTool::loadEffects()
     QString addon     = m_addons[index];
     QString addonPath = m_addonPaths[index];
 
-    if (SettingsManager::getInstance()->getIsAddonEnabled(addon))
+    if (SettingsManager::instance()->getIsAddonEnabled(addon))
     {
         QSettings s(addonPath + "/combat_effects.ini", QSettings::IniFormat);
         s.setIniCodec("UTF-8");

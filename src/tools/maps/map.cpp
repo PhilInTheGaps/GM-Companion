@@ -1,6 +1,7 @@
 #include "map.h"
 #include "logging.h"
 #include "utils/utils.h"
+#include "utils/stringutils.h"
 #include "utils/fileutils.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
@@ -23,7 +24,7 @@ Map::Map(const QString &name, const QString &path, QObject *parent)
 
         QPixmap pixmap;
         pixmap.loadFromData(result->data());
-        imageData(Utils::stringFromImage(pixmap));
+        imageData(StringUtils::stringFromImage(pixmap));
 
         loadMarkers();
         result->deleteLater();

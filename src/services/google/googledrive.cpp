@@ -3,7 +3,6 @@
 #include <utility>
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 
 using namespace AsyncFuture;
 
@@ -12,7 +11,7 @@ GoogleDrive::GoogleDrive(QObject *parent) : Service("Google", parent)
     m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    clientId(SettingsManager::getSetting("googleID", "", "Google"));
+    clientId(SettingsManager::instance()->get<QString>(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google")));
     updateConnector();
 }
 
@@ -77,7 +76,7 @@ void GoogleDrive::updateConnector()
 void GoogleDrive::connectService()
 {
     qCDebug(gmGoogleDrive()) << "Connecting GoogleDrive ...";
-    clientId(SettingsManager::getSetting("googleID", "", "Google"));
+    clientId(SettingsManager::instance()->get<QString>(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google")));
     updateConnector();
     grant();
 }
@@ -86,8 +85,8 @@ void GoogleDrive::disconnectService()
 {
     connected(false);
     m_connector->disconnectService();
-    SettingsManager::setSetting("googleID", "", "Google");
-    SettingsManager::setSetting("googleSecret", "", "Google");
+    SettingsManager::instance()->set(QStringLiteral("googleID"), QLatin1String(), QStringLiteral("Google"));
+    SettingsManager::instance()->set(QStringLiteral("googleSecret"), QLatin1String(), QStringLiteral("Google"));
 }
 
 void GoogleDrive::onAccessGranted()

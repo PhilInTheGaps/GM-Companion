@@ -3,7 +3,7 @@
 #include "logging.h"
 #include <QPixmap>
 #include <QBuffer>
-#include "utils/utils.h"
+#include "utils/stringutils.h"
 
 CharacterImageViewer::CharacterImageViewer(QObject *parent)
     : CharacterViewer(parent)
@@ -87,7 +87,7 @@ void CharacterImageViewer::loadImage(const QByteArray &data)
         return;
     }
 
-    m_image = Utils::stringFromImage(pixmap);
+    m_image = StringUtils::stringFromImage(pixmap);
     emit categoryChanged();
 }
 
@@ -137,14 +137,12 @@ void CharacterImageViewer::setPDFPage(int index)
 
     if (index < m_pdfDocument->numPages())
     {
-        auto *page = m_pdfDocument->page(index);
+        auto page = std::unique_ptr<Poppler::Page>(m_pdfDocument->page(index));
 
         if (page)
         {
-            m_image = Utils::stringFromImage(QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
+            m_image = StringUtils::stringFromImage(QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
         }
-
-        delete page;
     }
 
     emit categoryChanged();

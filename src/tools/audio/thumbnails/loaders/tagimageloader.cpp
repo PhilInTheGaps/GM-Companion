@@ -46,7 +46,7 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
         return completed(pixmap);
     }
 
-    const auto isLocalFile = SettingsManager::getSetting("cloudMode", "local") == "local";
+    const auto isLocalFile = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local")) == QStringLiteral("local");
     return QtConcurrent::run(loadFromFile, path, isLocalFile);
 }
 

@@ -19,11 +19,11 @@ NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
     if (connected())
     {
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
-        loginName(SettingsManager::getSetting("loginName", "", "NextCloud"));
-        serverUrl(SettingsManager::getServerUrl("NextCloud", false));
+        loginName(SettingsManager::instance()->get<QString>(QStringLiteral("loginName"), QLatin1String(), QStringLiteral("NextCloud")));
+        serverUrl(SettingsManager::getServerUrl(QStringLiteral("NextCloud"), false));
         m_loggingIn = true;
 
-        const auto future = SettingsManager::getPassword(loginName(), "NextCloud");
+        const auto future = SettingsManager::getPassword(loginName(), QStringLiteral("NextCloud"));
 
         observe(future).subscribe([this](const QString &password) {
             m_appPassword = password;
@@ -232,8 +232,8 @@ void NextCloud::pollAuthPoint(const QUrl& url, const QString& token)
             qCDebug(gmNextCloud()) << "LoginName:" << loginName();
             qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
 
-            SettingsManager::setSetting("loginName", loginName(), "NextCloud");
-            SettingsManager::setPassword(loginName(), m_appPassword, "NextCloud");
+            SettingsManager::instance()->set(QStringLiteral("loginName"), loginName(), QStringLiteral("NextCloud"));
+            SettingsManager::setPassword(loginName(), m_appPassword, QStringLiteral("NextCloud"));
             connected(true);
             m_loggingIn = false;
         }

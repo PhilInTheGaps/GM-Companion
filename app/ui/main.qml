@@ -89,12 +89,11 @@ ApplicationWindow {
         }]
 
     Component.onCompleted: {
-        if (settings_manager.isUpdateCheckEnabled) {
-            console.debug("Checking for updates")
+        if (settings_manager.checkForUpdates) {
             update_manager.checkForUpdates()
         }
 
-        if (!settings_manager.hasSetting("crashReports", "Telemetry")) {
+        if (!settings_manager.has("crashReports", "Telemetry")) {
             console.debug("CrashReports preference has not been set.")
             new_settings_dialog.open()
         }

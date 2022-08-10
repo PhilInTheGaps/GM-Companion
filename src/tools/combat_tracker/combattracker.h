@@ -5,6 +5,7 @@
 #include <QList>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QFile>
 #include "combatant.h"
 #include "combattrackerstate.h"
 #include "effecttool.h"

@@ -1,6 +1,15 @@
 #include "dicetool.h"
 #include "logging.h"
+#include "settings/settingsmanager.h"
+#include "utils/stringutils.h"
 #include <QQmlContext>
+
+constexpr ConstQString DICE_SETTINGS = "Dice";
+constexpr ConstQString ENABLE_CRITICALS_SETTING = "enableCriticals";
+constexpr ConstQString SUCCESS_SETTING = "success";
+constexpr ConstQString FAILURE_SETTING = "failure";
+constexpr ConstQString USE_MIN_MAX_SETTING = "useMinMax";
+constexpr ConstQString SUCCESS_MAX_SETTING = "successMax";
 
 DiceTool::DiceTool(QQmlEngine *engine, QObject *parent) : QObject(parent)
 {
@@ -15,11 +24,36 @@ void DiceTool::setSides(int sides)
 
 void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax)
 {
-    SettingsManager::setSetting(ENABLE_CRITICALS_SETTING, enableCriticals, DICE_SETTINGS);
-    SettingsManager::setSetting(SUCCESS_SETTING,          success,         DICE_SETTINGS);
-    SettingsManager::setSetting(FAILURE_SETTING,          failure,         DICE_SETTINGS);
-    SettingsManager::setSetting(USE_MIN_MAX_SETTING,      minMax,          DICE_SETTINGS);
-    SettingsManager::setSetting(SUCCESS_MAX_SETTING,      successMax,      DICE_SETTINGS);
+    SettingsManager::instance()->set(ENABLE_CRITICALS_SETTING, enableCriticals, DICE_SETTINGS);
+    SettingsManager::instance()->set(SUCCESS_SETTING,          success,         DICE_SETTINGS);
+    SettingsManager::instance()->set(FAILURE_SETTING,          failure,         DICE_SETTINGS);
+    SettingsManager::instance()->set(USE_MIN_MAX_SETTING,      minMax,          DICE_SETTINGS);
+    SettingsManager::instance()->set(SUCCESS_MAX_SETTING,      successMax,      DICE_SETTINGS);
+}
+
+auto DiceTool::getCriticalEnabled() -> bool
+{
+    return SettingsManager::instance()->get(ENABLE_CRITICALS_SETTING, true, DICE_SETTINGS);
+}
+
+auto DiceTool::getSuccess() -> int
+{
+    return SettingsManager::instance()->get(SUCCESS_SETTING, 20, DICE_SETTINGS);
+}
+
+auto DiceTool::getFailure() -> int
+{
+    return SettingsManager::instance()->get(FAILURE_SETTING, 1, DICE_SETTINGS);
+}
+
+auto DiceTool::getMinMax() -> int
+{
+    return SettingsManager::instance()->get(USE_MIN_MAX_SETTING, false, DICE_SETTINGS);
+}
+
+auto DiceTool::getSuccessMax() -> int
+{
+    return SettingsManager::instance()->get(SUCCESS_MAX_SETTING, true, DICE_SETTINGS);
 }
 
 int DiceTool::roll()

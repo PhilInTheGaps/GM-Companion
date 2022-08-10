@@ -1,16 +1,18 @@
 #include "librespotcontroller.h"
 #include "../config.h"
-#include "../spotify.h"
 #include "utils/processinfo.h"
 #include "utils/fileutils.h"
 #include "updates/updatemanager.h"
+#include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-#include "thirdparty/o2/src/o0globals.h"
 
 #include <QCoreApplication>
 #include <QNetworkRequest>
 #include <QLoggingCategory>
 #include <QJsonDocument>
+#include <QDir>
+#include <QFile>
+#include <QTimer>
 #include <chrono>
 
 Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot")
@@ -35,8 +37,8 @@ auto LibrespotController::start() -> QFuture<bool>
 
     m_isExitExpected = false;
 
-    const auto username = SettingsManager::getSetting("spotifyUsername", "", "Spotify");
-    const auto password = SettingsManager::getPassword(username, "Spotify");
+    const auto username = SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify"));
+    const auto password = SettingsManager::getPassword(username, QStringLiteral("Spotify"));
 
     if (username.isEmpty())
     {
@@ -220,15 +222,15 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
 
     args << "-n" << deviceName();
     args << "-u" << username;
-    args << "-b" << SettingsManager::getSetting("bitrate", "160", "Spotify");
+    args << "-b" << SettingsManager::instance()->get(QStringLiteral("bitrate"), QStringLiteral("160"), QStringLiteral("Spotify"));
     args << "--volume-ctrl" << "linear";
 
-    if (!SettingsManager::getBoolSetting("enableCache", true, "Spotify"))
+    if (!SettingsManager::instance()->get(QStringLiteral("enableCache"), true, QStringLiteral("Spotify")))
     {
         args << "--disable-audio-cache";
     }
 
-    if (SettingsManager::getBoolSetting("enableVolumeNormalization", false, "Spotify"))
+    if (SettingsManager::instance()->get(QStringLiteral("enableVolumeNormalization"), false, QStringLiteral("Spotify")))
     {
         args << "--enable-volume-normalisation";
     }

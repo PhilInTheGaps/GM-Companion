@@ -52,8 +52,7 @@ BaseAccountPage {
                 id: google_id_textfield
                 selectByMouse: true
                 Layout.fillWidth: true
-                Component.onCompleted: text = settings_manager.getSetting(
-                                           "googleID", "", "Google")
+                Component.onCompleted: text = settings_manager.googleID
             }
 
             Label {
@@ -65,8 +64,7 @@ BaseAccountPage {
                 id: google_secret_textfield
                 selectByMouse: true
                 Layout.fillWidth: true
-                Component.onCompleted: text = settings_manager.getSetting(
-                                           "googleSecret", "", "Google")
+                Component.onCompleted: text = settings_manager.googleSecret
             }
         }
 
@@ -77,12 +75,8 @@ BaseAccountPage {
                 if (googledrive_service.connected) {
                     googledrive_service.disconnectService()
                 } else {
-                    settings_manager.setSetting("googleID",
-                                                google_id_textfield.text,
-                                                "Google")
-                    settings_manager.setSetting("googleSecret",
-                                                google_secret_textfield.text,
-                                                "Google")
+                    settings_manager.googleID = google_id_textfield.text
+                    settings_manager.googleSecret = google_secret_textfield.text
                     google_secret_textfield.text = ""
                     googledrive_service.connectService()
                 }

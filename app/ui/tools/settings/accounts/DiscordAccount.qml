@@ -22,7 +22,7 @@ BaseAccountPage {
             checked: discord_service.enabled
 
             onClicked: {
-                settings_manager.setSetting("enabled", checked, "Discord")
+                settings_manager.discordEnabled = checked
                 discord_service.enabled = checked
             }
         }
@@ -46,7 +46,7 @@ BaseAccountPage {
                 placeholderText: "xxxxxxxxxxxxxxxxxx"
 
                 onTextEdited: {
-                    settings_manager.setSetting("channel", text, "Discord")
+                    settings_manager.discordChannel = text
                     discord_service.channel = text
                 }
 
@@ -58,11 +58,9 @@ BaseAccountPage {
                 text: qsTr("Use default server")
                 Layout.alignment: Qt.AlignVCenter
 
-                checked: settings_manager.getSetting("connection", "default",
-                                                     "Discord") === "default"
+                checked: settings_manager.discordConnection === "default"
 
-                onClicked: settings_manager.setSetting("connection", "default",
-                                                       "Discord")
+                onClicked: settings_manager.discordConnection = "default"
             }
 
             Item {
@@ -74,11 +72,9 @@ BaseAccountPage {
                 text: qsTr("Use custom server")
                 Layout.alignment: Qt.AlignVCenter
 
-                checked: settings_manager.getSetting("connection", "default",
-                                                     "Discord") === "custom"
+                checked: settings_manager.discordConnection === "custom"
 
-                onClicked: settings_manager.setSetting("connection", "custom",
-                                                       "Discord")
+                onClicked: settings_manager.discordConnection = "custom"
             }
 
             TextField {

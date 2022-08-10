@@ -61,8 +61,8 @@ void RESTServiceConnectorLocal::grantAccess()
         return;
     }
 
-    auto id     = SettingsManager::getSetting(m_config.idRequest);
-    auto secret = SettingsManager::getSetting(m_config.secretRequest);
+    auto id     = SettingsManager::instance()->get(m_config.idRequest);
+    auto secret = SettingsManager::instance()->get(m_config.secretRequest);
 
     m_o2->setClientId(id);
     m_o2->setClientSecret(secret);

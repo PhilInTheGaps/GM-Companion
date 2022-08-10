@@ -14,8 +14,8 @@ SpotifyConnectorLocal::SpotifyConnectorLocal
     config.scope                 = SCOPE;
     config.port                  = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_REQUESTS;
-    config.idRequest             = SettingRequest("spotifyID", "", "Spotify");
-    config.secretRequest         = SettingRequest("spotifySecret", "", "Spotify");
+    config.idRequest             = SettingRequest<QString>(QStringLiteral("spotifyID"), QLatin1String(), QStringLiteral("Spotify"));
+    config.secretRequest         = SettingRequest<QString>(QStringLiteral("spotifySecret"), QLatin1String(), QStringLiteral("Spotify"));
 
     setConfig(config);
 }

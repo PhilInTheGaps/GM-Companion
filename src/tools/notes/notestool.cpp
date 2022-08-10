@@ -1,6 +1,6 @@
 #include "notestool.h"
 #include "logging.h"
-#include "utils/utils.h"
+#include "utils/stringutils.h"
 
 #include <QQmlContext>
 #include <QFile>
@@ -91,7 +91,7 @@ void NotesTool::encrypt()
 {
     if (!m_currentPage) return;
 
-    m_currentPage->setContent(Utils::rot13(m_currentPage->content()));
+    m_currentPage->setContent(StringUtils::rot13(m_currentPage->content()));
     onPageContentLoaded();
 }
 

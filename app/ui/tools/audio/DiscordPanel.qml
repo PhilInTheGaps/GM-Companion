@@ -59,7 +59,7 @@ Rectangle {
         transparentBackground: true
 
         onClicked: {
-            settings_manager.setSetting("enabled", false, "Discord")
+            settings_manager.discordEnabled = false
             discord_service.enabled = false
         }
     }

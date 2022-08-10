@@ -13,7 +13,7 @@
 #include <sentry.h>
 
 #include "messages/messagemanager.h"
-#include "settings/settingsmanager.h"
+#include "settings/quicksettingsmanager.h"
 #include "logger.h"
 #include "tools.h"
 #include "filesystem/filedialog/filedialog.h"
@@ -92,14 +92,14 @@ auto main(int argc, char *argv[]) -> int
 
     // Sentry.io crash reporting
     // Crash reports and session tracking are opt-in settings
-    if (SettingsManager::getBoolSetting(QStringLiteral("crashReports"), false, "Telemetry"))
+    if (SettingsManager::instance()->get(QStringLiteral("crashReports"), false, QStringLiteral("Telemetry")))
     {
         qCDebug(gmMain()) << "Crash reports are enabled!";
         auto *sentryOptions = sentry_options_new();
         sentry_options_set_dsn(sentryOptions, "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
         sentry_options_set_release(sentryOptions, QStringLiteral("gm-companion@%1").arg(CURRENT_VERSION).toUtf8().data());
 
-        auto isSessionTrackingEnabled = SettingsManager::getBoolSetting(QStringLiteral("sessionTracking"), false, "Telemetry");
+        auto isSessionTrackingEnabled = SettingsManager::instance()->get(QStringLiteral("sessionTracking"), false, QStringLiteral("Telemetry"));
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
         if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
 
@@ -123,7 +123,7 @@ auto main(int argc, char *argv[]) -> int
     engine.addImportPath(QStringLiteral("qrc:/"));
 
     // Misc
-    engine.rootContext()->setContextProperty("settings_manager", SettingsManager::getInstance());
+    engine.rootContext()->setContextProperty("settings_manager", new QuickSettingsManager);
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);

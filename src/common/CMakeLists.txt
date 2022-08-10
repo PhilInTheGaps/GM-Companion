@@ -32,8 +32,9 @@ set(HEADERS
     utils/processinfo.h
     utils/stringutils.h
     models/treeitem.h
-    settings/settings.h
     settings/settingsmanager.h 
+    settings/abstractsettingsmanager.h
+    settings/quicksettingsmanager.h
     updates/updatemanager.h
     updates/version.h.in
     updates/version.h
@@ -52,6 +53,8 @@ set(SOURCES
     utils/stringutils.cpp
     models/treeitem.cpp
     settings/settingsmanager.cpp
+    settings/abstractsettingsmanager.cpp
+    settings/quicksettingsmanager.cpp
     updates/updatemanager.cpp
     updates/version.cpp
 )

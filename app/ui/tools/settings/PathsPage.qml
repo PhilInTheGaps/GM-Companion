@@ -69,13 +69,11 @@ Item {
                 text: modelData.name
                 iconText: modelData.icon
                 iconFont: modelData.iconFont
-                checked: settings_manager.getSetting(
-                             "cloudMode", "local") === modelData.setting
+                checked: settings_manager.cloudMode === modelData.setting
 
                 onClicked: {
                     if (checked) {
-                        settings_manager.setSetting("cloudMode",
-                                                    modelData.setting)
+                        settings_manager.cloudMode = modelData.setting
                         fileModeChanged()
                     }
                 }

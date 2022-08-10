@@ -26,11 +26,8 @@ Dialog {
             CheckBox {
                 id: crash_reports_box
                 text: qsTr("Automated crash reports")
-                checked: settings_manager.getBoolSetting("crashReports", false,
-                                                         "Telemetry")
-                onClicked: settings_manager.setSetting("crashReports",
-                                                       checked ? 1 : 0,
-                                                       "Telemetry")
+                checked: settings_manager.crashReports
+                onClicked: settings_manager.crashReports = checked
             }
 
             HelpAnnotation {
@@ -44,11 +41,8 @@ Dialog {
             CheckBox {
                 id: session_tracking_box
                 text: qsTr("Session tracking")
-                checked: settings_manager.getBoolSetting("sessionTracking",
-                                                         false, "Telemetry")
-                onClicked: settings_manager.setSetting("sessionTracking",
-                                                       checked ? 1 : 0,
-                                                       "Telemetry")
+                checked: settings_manager.sessionTracking
+                onClicked: settings_manager.sessionTracking = checked
             }
 
             HelpAnnotation {
@@ -59,11 +53,7 @@ Dialog {
     }
 
     onClosed: {
-        settings_manager.setSetting("crashReports",
-                                    crash_reports_box.checked ? 1 : 0,
-                                    "Telemetry")
-        settings_manager.setSetting("sessionTracking",
-                                    session_tracking_box.checked ? 1 : 0,
-                                    "Telemetry")
+        settings_manager.crashReports = crash_reports_box.checked
+        settings_manager.sessionTracking = session_tracking_box.checked
     }
 }

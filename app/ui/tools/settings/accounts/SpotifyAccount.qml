@@ -17,25 +17,21 @@ BaseAccountPage {
         spacing: 10
 
         function saveConnectionSettings() {
-            settings_manager.setSetting("spotifyUsername",
-                                        username_textfield.text, "Spotify")
+            settings_manager.spotifyUsername = username_textfield.text
             settings_manager.setPassword(username_textfield.text,
                                          password_textfield.text, "Spotify")
 
-            settings_manager.setSetting("spotifyID", spotify_id_textfield.text,
-                                        "Spotify")
-            settings_manager.setSetting("spotifySecret",
-                                        spotify_secret_textfield.text,
-                                        "Spotify")
-            settings_manager.setSetting("server", custom_server_textfield.text,
-                                        "Spotify")
+            settings_manager.spotifyID = spotify_id_textfield.text
+            settings_manager.spotifySecret = spotify_secret_textfield.text
+            settings_manager.setServerUrl(custom_server_textfield.text,
+                                          "Spotify")
 
             if (default_server_radio_button.checked) {
-                settings_manager.setSetting("connection", "default", "Spotify")
+                settings_manager.spotifyConnection = "default"
             } else if (custom_server_radio_button.checked) {
-                settings_manager.setSetting("connection", "custom", "Spotify")
+                settings_manager.spotifyConnection = "custom"
             } else {
-                settings_manager.setSetting("connection", "local", "Spotify")
+                settings_manager.spotifyConnection = "local"
             }
         }
 
@@ -73,8 +69,7 @@ BaseAccountPage {
                 id: username_textfield
                 selectByMouse: true
                 Layout.fillWidth: true
-                Component.onCompleted: text = settings_manager.getSetting(
-                                           "spotifyUsername", "", "Spotify")
+                Component.onCompleted: text = settings_manager.spotifyUsername
             }
 
             Label {
@@ -104,8 +99,7 @@ BaseAccountPage {
                 text: qsTr("Use default server")
                 anchors.left: parent.left
                 anchors.right: parent.right
-                checked: settings_manager.getSetting("connection", "default",
-                                                     "Spotify") === "default"
+                checked: settings_manager.spotifyConnection === "default"
             }
 
             // Custom Server
@@ -114,8 +108,7 @@ BaseAccountPage {
                 text: qsTr("Use custom server")
                 anchors.left: parent.left
                 anchors.right: parent.right
-                checked: settings_manager.getSetting("connection", "default",
-                                                     "Spotify") === "custom"
+                checked: settings_manager.spotifyConnection === "custom"
             }
 
             GridLayout {
@@ -147,8 +140,7 @@ BaseAccountPage {
                 text: qsTr("Client ID and Secret")
                 anchors.left: parent.left
                 anchors.right: parent.right
-                checked: settings_manager.getSetting("connection", "default",
-                                                     "Spotify") === "local"
+                checked: settings_manager.spotifyConnection === "local"
             }
 
             GridLayout {
@@ -169,8 +161,7 @@ BaseAccountPage {
                     selectByMouse: true
                     Layout.fillWidth: true
 
-                    Component.onCompleted: text = settings_manager.getSetting(
-                                               "spotifyID", "", "Spotify")
+                    Component.onCompleted: text = settings_manager.spotifyID
                 }
 
                 Label {
@@ -184,8 +175,7 @@ BaseAccountPage {
                     selectByMouse: true
                     Layout.fillWidth: true
 
-                    Component.onCompleted: text = settings_manager.getSetting(
-                                               "spotifySecret", "", "Spotify")
+                    Component.onCompleted: text = settings_manager.spotifySecret
                 }
             }
         }
@@ -218,13 +208,10 @@ BaseAccountPage {
         spacing: 10
 
         function saveQualitySettings() {
-            settings_manager.setSetting("enableCache",
-                                        enable_audio_cache_checkbox.checked,
-                                        "Spotify")
-            settings_manager.setSetting(
-                        "enableVolumeNormalization",
-                        enable_volume_normalization_checkbox.checked, "Spotify")
-            settings_manager.setSetting("bitrate", getNewBitrate(), "Spotify")
+            settings_manager.spotifyEnableCache = enable_audio_cache_checkbox.checked
+            settings_manager.spotifyEnableVolumeNormalization
+                    = enable_volume_normalization_checkbox.checked
+            settings_manager.spotifyBitrate = getNewBitrate()
         }
 
         function getNewBitrate() {
@@ -245,8 +232,7 @@ BaseAccountPage {
             text: qsTr("Enable Audio Cache")
             anchors.left: parent.left
             anchors.right: parent.right
-            checked: settings_manager.getBoolSetting("enableCache", true,
-                                                     "Spotify")
+            checked: settings_manager.spotifyEnableCache
         }
 
         CheckBox {
@@ -254,8 +240,7 @@ BaseAccountPage {
             text: qsTr("Enable Volume Normalization")
             anchors.left: parent.left
             anchors.right: parent.right
-            checked: settings_manager.getBoolSetting(
-                         "enableVolumeNormalization", false, "Spotify")
+            checked: settings_manager.spotifyEnableVolumeNormalization
         }
 
         Column {
@@ -277,8 +262,7 @@ BaseAccountPage {
                     text: qsTr("Low (96 kbps)")
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    checked: settings_manager.getSetting("bitrate", "160",
-                                                         "Spotify") === "96"
+                    checked: settings_manager.spotifyBitrate === "96"
                 }
 
                 RadioButton {
@@ -286,8 +270,7 @@ BaseAccountPage {
                     text: qsTr("Mid (160 kbps)")
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    checked: settings_manager.getSetting("bitrate", "160",
-                                                         "Spotify") === "160"
+                    checked: settings_manager.spotifyBitrate === "160"
                 }
 
                 RadioButton {
@@ -295,8 +278,7 @@ BaseAccountPage {
                     text: qsTr("High (320 kbps)")
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    checked: settings_manager.getSetting("bitrate", "160",
-                                                         "Spotify") === "320"
+                    checked: settings_manager.spotifyBitrate === "320"
                 }
             }
         }
