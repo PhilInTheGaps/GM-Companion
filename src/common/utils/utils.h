@@ -1,14 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <QPixmap>
+#include <QObject>
 
 class Utils
 {
 public:
-    static auto stringFromImage(const QPixmap &image) -> QString;
-    static auto rot13(const QString &input) -> QString;
-    static auto hasWildcardMatch(const QString &string, const QString &wildcard) -> bool;
     static auto isInHierarchy(const QObject &object, const QObject *root) -> bool;
 
     template<typename T>

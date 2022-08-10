@@ -30,6 +30,7 @@ set(HEADERS
     utils/markdownutils.h.in
     utils/networkutils.h 
     utils/processinfo.h
+    utils/stringutils.h
     models/treeitem.h
     settings/settings.h
     settings/settingsmanager.h 
@@ -48,9 +49,11 @@ set(SOURCES
     utils/markdownutils.cpp 
     utils/networkutils.cpp 
     utils/processinfo.cpp
+    utils/stringutils.cpp
     models/treeitem.cpp
     settings/settingsmanager.cpp
     updates/updatemanager.cpp
+    updates/version.cpp
 )
 
 add_library(common STATIC ${HEADERS} ${SOURCES})

@@ -4,6 +4,7 @@
 #include <QNetworkReply>
 #include <QString>
 #include <QNetworkAccessManager>
+#include <QFuture>
 
 #include "version.h"
 
@@ -18,16 +19,21 @@ public:
     Q_INVOKABLE QString getNewestVersion() const { return m_newestVersion; }
     Q_INVOKABLE QString getCurrentVersion() const { return CURRENT_VERSION; }
 
-    static bool compareVersions(const QString &v1, const QString &v2);
+    static auto compareVersions(const QString &v1, const QString &v2) -> bool;
 
-private slots:
-    void onNetworkManagerFinished(QNetworkReply*reply);
+protected:
+    static auto findVersionsFromXML(const QByteArray& xml) -> QStringList;
+    static auto findNewestVersion(const QStringList& versions) -> QString;
+
+    auto fetchNewestVersion() -> QFuture<QString>;
 
 private:
-    QNetworkAccessManager *networkManager = nullptr;
+    QNetworkAccessManager networkManager;
 
     QString m_feedURL;
     QString m_newestVersion;
+
+    static void checkSslInstallation();
 
 signals:
     void updateAvailable();

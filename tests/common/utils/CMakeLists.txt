@@ -16,6 +16,12 @@ target_link_libraries(test_utils common Qt5::Gui Qt5::Test)
 set_target_properties(test_utils PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_utils COMMAND test_utils)
 
+# String Utils
+add_executable(test_stringutils teststringutils.cpp)
+target_link_libraries(test_stringutils common Qt5::Gui Qt5::Test)
+set_target_properties(test_stringutils PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+add_test(NAME test_stringutils COMMAND test_stringutils)
+
 # File Utils
 add_executable(test_fileutils testfileutils.cpp)
 target_link_libraries(test_fileutils common Qt5::Test)

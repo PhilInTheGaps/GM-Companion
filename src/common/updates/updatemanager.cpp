@@ -1,23 +1,34 @@
 #include "updatemanager.h"
-
+#include "utils/stringutils.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QXmlStreamReader>
-#include <QDebug>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmUpdateManager, "gm.updates.manager")
+
+constexpr ConstQString DEFAULT_FEED_URL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
 UpdateManager::UpdateManager()
 {
-    qDebug().noquote() << "Initializing UpdateManager ...";
+    qCDebug(gmUpdateManager()) << "Initializing UpdateManager ...";
 
     // GitHub Release feed
-    m_feedURL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
+    m_feedURL = DEFAULT_FEED_URL;
 
-    networkManager = new QNetworkAccessManager(this);
-    connect(networkManager, &QNetworkAccessManager::finished, this, &UpdateManager::onNetworkManagerFinished);
+    networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    // Check if openSSL is installed, required for network access to work
-    qDebug().noquote() << "Checking SSL installation...";
+    checkSslInstallation();
+}
 
-    if (!QSslSocket::supportsSsl()) qWarning().noquote() << "Please install OpenSSL" << QSslSocket::sslLibraryBuildVersionString();
-    else qDebug().noquote() << "SSL version" << QSslSocket::sslLibraryVersionString() << "is installed.";
+/// Check if openSSL is installed, required for network access to work
+void UpdateManager::checkSslInstallation()
+{
+    qCDebug(gmUpdateManager()) << "Checking SSL installation...";
+
+    if (!QSslSocket::supportsSsl())
+        qCWarning(gmUpdateManager()) << "Please install OpenSSL" << QSslSocket::sslLibraryBuildVersionString();
+    else
+        qCDebug(gmUpdateManager()) << "SSL version" << QSslSocket::sslLibraryVersionString() << "is installed.";
 }
 
 /**
@@ -25,12 +36,26 @@ UpdateManager::UpdateManager()
  */
 void UpdateManager::checkForUpdates()
 {
-    qDebug().noquote() << "Checking for updates ...";
-    qDebug().noquote() << "Current version:" << CURRENT_VERSION;
-    qDebug().noquote() << "Releases feed URL:" << m_feedURL;
+    qCDebug(gmUpdateManager) << "Checking for updates ...";
+    qCDebug(gmUpdateManager) << "Current version:" << CURRENT_VERSION;
+    qCDebug(gmUpdateManager) << "Releases feed URL:" << m_feedURL;
 
-    // Get the release feed to check for a new version
-    networkManager->get(QNetworkRequest(QUrl(m_feedURL)));
+    auto version = fetchNewestVersion();
+    AsyncFuture::observe(version).subscribe([this](const QString& version) {
+        m_newestVersion = version;
+        qCDebug(gmUpdateManager()) << "Newest available version:" << version;
+
+        if (compareVersions(CURRENT_VERSION, m_newestVersion))
+        {
+            qCDebug(gmUpdateManager()) << "Your version" << CURRENT_VERSION << "is the newest one.";
+            emit noUpdateAvailable();
+        }
+        else
+        {
+            qCDebug(gmUpdateManager()) << "Found a newer version:" << m_newestVersion;
+            emit updateAvailable();
+        }
+    });
 }
 
 /**
@@ -41,114 +66,65 @@ void UpdateManager::checkForUpdates()
  */
 auto UpdateManager::compareVersions(const QString& v1, const QString& v2) -> bool
 {
-    QStringList split1 = v1.split('.');
-    QStringList split2 = v2.split('.');
-
-    for (int i = 0; i < split1.length(); i++)
-    {
-        auto split11 = split1[i].split('-');
-        auto num1 = split11[0].toInt();
-        auto dev1 = split11.length() > 1 ? split11[1] : "";
-
-        // 1.2.1 vs 1.2
-        if (split2.length() <= i) return true;
-
-        auto split21 = split2[i].split('-');
-        auto num2 = split21[0].toInt();
-        auto dev2 = split21.length() > 1 ? split21[1] : "";
-
-        // Is version newer?
-        if (num1 > num2) return true;
-
-        // Are versions same but have different dev tags?
-        if (num1 == num2)
-        {
-            if (dev1.isEmpty() && !dev2.isEmpty()) return true;
-
-            if (!dev1.isEmpty() && dev2.isEmpty()) return false;
-
-            if (!dev1.isEmpty() && !dev2.isEmpty())
-            {
-                return QString::compare(dev1, dev2, Qt::CaseInsensitive) > 0;
-            }
-        }
-    }
-
-    return false;
+    return Version::isGreater(v1, v2);
 }
 
-/**
- * @brief Evaluate the received release feed
- * @param reply NetworkReply with data from the feed
- */
-void UpdateManager::onNetworkManagerFinished(QNetworkReply *reply)
+auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
 {
-    qDebug().noquote() << "Finished getting update feed ...";
+    QXmlStreamReader reader(xml);
+    QStringList versions;
 
-    QString replyString = reply->readAll();
-    QXmlStreamReader reader(replyString);
+    if (!reader.readNextStartElement() || reader.name() != "feed") return {};
 
-    QString newestVersionTitle; // Title of the Version: Beta 3.2
-    m_newestVersion = "0.0.0";
-
-    // Release feed is XML, so here is a XML reader
-    qDebug() << "Found the following versions:";
-
-    if (reader.readNextStartElement())
+    while (reader.readNextStartElement())
     {
-        if (reader.name() == "feed")
+        if (reader.name() != QStringLiteral("entry"))
         {
-            while (reader.readNextStartElement())
-            {
-                if (reader.name() == "entry")
-                {
-                    QString id;
-                    QString version;
-                    QString title;
-                    QString content;
-
-                    // Read every xml entry and check if it is useful
-                    // information
-                    while (reader.readNextStartElement())
-                    {
-                        if (reader.name() == "id") id = reader.readElementText();
-
-                        else if (reader.name() == "title") title = reader.readElementText();
-
-                        else if (reader.name() == "content") content = reader.readElementText();
-
-                        else reader.skipCurrentElement();
-                    }
-
-                    // Version is converted from git tag, so we have to remove a
-                    // bunch of junk
-                    version = id.replace("tag:github.com,2008:Repository/78660365/", "");
-                    qDebug() << version;
-
-                    // Compare with current newest version
-                    if (compareVersions(version, m_newestVersion))
-                    {
-                        m_newestVersion    = version;
-                        newestVersionTitle = title;
-                    }
-                } else reader.skipCurrentElement();
-            }
+            reader.skipCurrentElement();
+            continue;
         }
-        else reader.raiseError("Incorrect file");
+
+        QString id;
+
+        // Read every xml entry and check if it is useful information
+        while (reader.readNextStartElement())
+        {
+            if (reader.name() == "id") id = reader.readElementText();
+
+            else reader.skipCurrentElement();
+        }
+
+        // Version is converted from git tag, so we have to remove a bunch of junk
+        versions << id.replace(QStringLiteral("tag:github.com,2008:Repository/78660365/"), QLatin1String());
     }
 
-    qDebug() << "Newest version:" << m_newestVersion;
+    return versions;
+}
 
-    // Decide if a newer version is available than the one installed
-    if (compareVersions(CURRENT_VERSION, m_newestVersion))
+auto UpdateManager::findNewestVersion(const QStringList &versions) -> QString
+{
+    QString newest;
+
+    for (const auto &version : versions)
     {
-        qDebug().noquote() << "Your version is the newest one.";
-        emit noUpdateAvailable();
+        if (compareVersions(version, newest))
+            newest = version;
     }
-    else
-    {
-        qDebug().noquote() << "Found a newer version:" << newestVersionTitle;
-        m_newestVersion = newestVersionTitle;
-        emit updateAvailable();
-    }
+
+    return newest;
+}
+
+auto UpdateManager::fetchNewestVersion() -> QFuture<QString>
+{
+    // Get the release feed to check for a new version
+    auto *reply = networkManager.get(QNetworkRequest(QUrl(m_feedURL)));
+
+    return AsyncFuture::observe(reply, &QNetworkReply::finished).subscribe([reply]() {
+        auto versions = findVersionsFromXML(reply->readAll());
+        reply->deleteLater();
+
+        qCDebug(gmUpdateManager()) << "Found the following versions:" << versions;
+
+        return findNewestVersion(versions);
+    }).future();
 }
