@@ -2,10 +2,13 @@
 frankosterfeld/qtkeychain@v0.13.2
 
 # taglib
-taglib/taglib@v1.12
+taglib/taglib@v1.13
 
 # cmark-gfm
 ryantm/cmark-gfm@fix-include
 
+# quazip
+stachenov/quazip@v1.3 -DQUAZIP_QT_MAJOR_VERSION=5
+
 # poppler
-https://poppler.freedesktop.org/poppler-22.08.0.tar.xz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF
+https://poppler.freedesktop.org/poppler-22.11.0.tar.xz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF

@@ -2,13 +2,13 @@
 pfultz2/pkgconfig
 
 # zlib, required for basically everything
-https://www.zlib.net/zlib-1.2.12.tar.gz
+https://www.zlib.net/zlib-1.2.13.tar.gz
 
 # qtkeychain
 frankosterfeld/qtkeychain@v0.13.2
 
 # taglib
-taglib/taglib@v1.12
+taglib/taglib@v1.13
 
 # cmark-gfm
 ryantm/cmark-gfm@fix-include
@@ -19,13 +19,13 @@ stachenov/quazip@v1.3 -DQUAZIP_QT_MAJOR_VERSION=5
 ### requirements for poppler ###
 
 # libpng
-https://download.sourceforge.net/libpng/libpng-1.6.37.tar.xz
+https://download.sourceforge.net/libpng/libpng-1.6.38.tar.xz
 
 # bzip2
 #https://github.com/sergiud/bzip2/archive/cmake.zip
 
 # curl
-https://curl.se/download/curl-7.84.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+https://curl.se/download/curl-7.86.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
 # brotli (optional)
 google/brotli@v1.0.9
@@ -34,7 +34,7 @@ google/brotli@v1.0.9
 https://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.xz -DFT_DISABLE_HARFBUZZ=TRUE -DFT_REQUIRE_ZLIB=True -DFT_REQUIRE_PNG=True -DFT_REQUIRE_BROTLI=True
 
 # libjpeg-turbo
-libjpeg-turbo/libjpeg-turbo@2.1.3
+libjpeg-turbo/libjpeg-turbo@2.1.4
 
 # libtiff
 http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz -Dlzma=OFF -Dwebp=OFF
@@ -43,4 +43,4 @@ http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz -Dlzma=OFF -Dwebp=OFF
 uclouvain/openjpeg@v2.4.0
 
 # poppler
-https://poppler.freedesktop.org/poppler-22.08.0.tar.xz -DENABLE_CPP=OFF -DENABLE_UTILS=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF -DENABLE_BOOST=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF
+https://poppler.freedesktop.org/poppler-22.11.0.tar.xz -DENABLE_CPP=OFF -DENABLE_UTILS=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF -DENABLE_BOOST=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF
