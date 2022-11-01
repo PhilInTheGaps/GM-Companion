@@ -4,9 +4,10 @@
 #include <utility>
 
 ListNameGenerator::ListNameGenerator(QObject *parent, QJsonObject json)
-    : AbstractNameGenerator{parent, json["name"].toString(), getCategoryNames(json), getPrefixNames(json), getSuffixNames(json)}, m_json(std::move(json))
+    : AbstractNameGenerator{parent, json[QStringLiteral("name")].toString(), getCategoryNames(json),
+                            getPrefixNames(json), getSuffixNames(json)},
+      m_json(std::move(json))
 {
-
 }
 
 auto ListNameGenerator::generate(int count) -> bool
@@ -27,7 +28,8 @@ auto ListNameGenerator::generate(int count) -> bool
 
 auto ListNameGenerator::generate(int categoryIndex, int count) -> QStringList
 {
-    if (!enabledCategories()[categoryIndex]) return {};
+    const auto enabledCategories = this->enabledCategories();
+    if (!enabledCategories[categoryIndex]) return {};
 
     auto availableFirstNames = getAvailableFirstNames(categoryIndex);
     auto availableSurnames = getAvailableSurnames(categoryIndex);
@@ -35,6 +37,7 @@ auto ListNameGenerator::generate(int categoryIndex, int count) -> QStringList
     auto availableSuffixes = getAvailableSuffixes(activeSuffix());
 
     QStringList names;
+    names.reserve(count);
 
     for (int i = 0; i < count; i++)
     {
@@ -43,7 +46,7 @@ auto ListNameGenerator::generate(int categoryIndex, int count) -> QStringList
         auto second = getRandomValue(availableSurnames);
         auto suffix = getRandomValue(availableSuffixes);
 
-        names << QString("%1 %2 %3 %4").arg(prefix, first, second, suffix).trimmed();
+        names << QStringLiteral("%1 %2 %3 %4").arg(prefix, first, second, suffix).trimmed();
     }
 
     return names;
@@ -61,14 +64,14 @@ auto ListNameGenerator::getAvailableSurnames(int categoryIndex) -> QList<QString
 
 auto ListNameGenerator::getAvailableNames(int categoryIndex, const QString &entryName) -> QList<QStringList>
 {
-    auto category = m_json["categories"].toArray()[categoryIndex].toObject();
+    auto category = m_json[QStringLiteral("categories")].toArray()[categoryIndex].toObject();
     auto firstname = category[entryName].toArray();
-    auto names = m_json["names"].toObject();
+    auto names = m_json[QStringLiteral("names")].toObject();
 
     QList<QStringList> availableNames;
     availableNames.reserve(firstname.count());
 
-    for (const auto& listName : firstname)
+    for (const auto &listName : firstname)
     {
         auto jsonArray = names[listName.toString()].toArray();
         availableNames << jsonToStringList(jsonArray);
@@ -93,13 +96,13 @@ auto ListNameGenerator::getAvailableSuffixesOrPrefixes(int index, const QString 
     index--;
 
     auto fieldObject = m_json[field].toObject();
-    auto types = fieldObject["types"].toArray();
-    auto lists = types[index].toObject()["lists"].toArray();
+    auto types = fieldObject[QStringLiteral("types")].toArray();
+    auto lists = types[index].toObject()[QStringLiteral("lists")].toArray();
 
     QList<QStringList> availableEntries;
     availableEntries.reserve(lists.count());
 
-    for (const auto& listName : lists)
+    for (const auto &listName : lists)
     {
         auto jsonArray = fieldObject[listName.toString()].toArray();
         availableEntries << jsonToStringList(jsonArray);
@@ -110,19 +113,19 @@ auto ListNameGenerator::getAvailableSuffixesOrPrefixes(int index, const QString 
 
 auto ListNameGenerator::getCategoryNames(const QJsonObject &json) -> QStringList
 {
-    return getTypeNames(json["categories"].toArray());
+    return getTypeNames(json[QStringLiteral("categories")].toArray());
 }
 
 auto ListNameGenerator::getPrefixNames(const QJsonObject &json) -> QStringList
 {
-    auto names = getTypeNames(json["prefixes"]["types"].toArray());
+    auto names = getTypeNames(json[QStringLiteral("prefixes")][QStringLiteral("types")].toArray());
     names.prepend(tr("None"));
     return names;
 }
 
 auto ListNameGenerator::getSuffixNames(const QJsonObject &json) -> QStringList
 {
-    auto names = getTypeNames(json["suffixes"]["types"].toArray());
+    auto names = getTypeNames(json[QStringLiteral("suffixes")][QStringLiteral("types")].toArray());
     names.prepend(tr("None"));
     return names;
 }
@@ -130,10 +133,11 @@ auto ListNameGenerator::getSuffixNames(const QJsonObject &json) -> QStringList
 auto ListNameGenerator::getTypeNames(const QJsonArray &array) -> QStringList
 {
     QStringList list;
+    list.reserve(array.count());
 
-    for (const auto& entry : array)
+    for (const auto &entry : array)
     {
-        list << entry.toObject()["name"].toString();
+        list << entry.toObject()[QStringLiteral("name")].toString();
     }
 
     return list;
@@ -155,7 +159,7 @@ auto ListNameGenerator::jsonToStringList(const QJsonArray &json) -> QStringList
     QStringList strings;
     strings.reserve(json.count());
 
-    for (const auto& entry : json)
+    for (const auto &entry : json)
     {
         strings << entry.toString();
     }

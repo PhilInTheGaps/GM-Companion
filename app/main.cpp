@@ -1,45 +1,50 @@
+#include <QFontDatabase>
+#include <QFuture>
 #include <QGuiApplication>
+#include <QIcon>
+#include <QLoggingCategory>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
-#include <QtQuickControls2/QQuickStyle>
-#include <QTranslator>
-#include <QFontDatabase>
-#include <QIcon>
 #include <QSGRendererInterface>
 #include <QScopeGuard>
-#include <QLoggingCategory>
+#include <QTranslator>
+#include <QtQuickControls2/QQuickStyle>
 
 #include <sentry.h>
 
+#include "filesystem/fileaccessswitcher.h"
+#include "filesystem/filedialog/filedialog.h"
+#include "logger.h"
 #include "messages/messagemanager.h"
 #include "settings/quicksettingsmanager.h"
-#include "logger.h"
 #include "tools.h"
-#include "filesystem/filedialog/filedialog.h"
-#include "filesystem/fileaccessswitcher.h"
 
-#include "services/spotify/spotify.h"
+#include "services/discord/discord.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
-#include "services/discord/discord.h"
+#include "services/spotify/spotify.h"
 
 #include "addons/addonmanager.h"
-#include "updates/updatemanager.h"
 #include "platformdetails.h"
+#include "updates/updatemanager.h"
 
 Q_LOGGING_CATEGORY(gmMain, "gm.main")
+
+Q_DECLARE_METATYPE(QFuture<void>)
 
 /// Register meta types for signals and slots
 void registerMetaTypes()
 {
     qmlRegisterType<Files::FileDialog>("lol.rophil.gmcompanion.filedialog", 1, 0, "FileDialogBackend");
     qmlRegisterSingletonType<Files::FileAccessSwitcher>("lol.rophil.gmcompanion.fileaccessswitcher", 1, 0,
-                                                        "FileAccessSwitcher", Files::FileAccessSwitcher::QmlSingletonProvider);
+                                                        "FileAccessSwitcher",
+                                                        Files::FileAccessSwitcher::QmlSingletonProvider);
 
     qRegisterMetaType<AudioElement *>();
-    qRegisterMetaType<QList<AudioProject *> >();
-    qRegisterMetaType<QList<QNetworkReply::RawHeaderPair> >();
+    qRegisterMetaType<QList<AudioProject *>>();
+    qRegisterMetaType<QList<QNetworkReply::RawHeaderPair>>();
+    qRegisterMetaType<QFuture<void>>();
 }
 
 /// Set the language and install a translator
@@ -96,10 +101,13 @@ auto main(int argc, char *argv[]) -> int
     {
         qCDebug(gmMain()) << "Crash reports are enabled!";
         auto *sentryOptions = sentry_options_new();
-        sentry_options_set_dsn(sentryOptions, "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
-        sentry_options_set_release(sentryOptions, QStringLiteral("gm-companion@%1").arg(CURRENT_VERSION).toUtf8().data());
+        sentry_options_set_dsn(sentryOptions,
+                               "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
+        sentry_options_set_release(sentryOptions,
+                                   QStringLiteral("gm-companion@%1").arg(CURRENT_VERSION).toUtf8().data());
 
-        auto isSessionTrackingEnabled = SettingsManager::instance()->get(QStringLiteral("sessionTracking"), false, QStringLiteral("Telemetry"));
+        auto isSessionTrackingEnabled =
+            SettingsManager::instance()->get(QStringLiteral("sessionTracking"), false, QStringLiteral("Telemetry"));
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
         if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
 
@@ -126,6 +134,8 @@ auto main(int argc, char *argv[]) -> int
     engine.rootContext()->setContextProperty("settings_manager", new QuickSettingsManager);
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
+    engine.rootContext()->setContextProperty("addon_repository_manager",
+                                             &(AddonManager::instance()->repositoryManager()));
     engine.rootContext()->setContextProperty("platform", new PlatformDetails);
     engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
     engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);
@@ -138,13 +148,13 @@ auto main(int argc, char *argv[]) -> int
 
     // Load tools
     AudioTool audioTool(&engine);
-    MapTool   mapTool(&engine);
-    DiceTool  diceTool(&engine);
+    MapTool mapTool(&engine);
+    DiceTool diceTool(&engine);
     CombatTracker combatTracker(&engine);
-    ShopTool      shopTool(&engine);
+    ShopTool shopTool(&engine);
     CharacterTool characterTool(&engine);
     NameGenerator nameGenerator(&engine);
-    NotesTool     notesTool(&engine);
+    NotesTool notesTool(&engine);
     ConverterTool converterTool(&engine);
 
     engine.load(source);

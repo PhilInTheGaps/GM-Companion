@@ -173,6 +173,13 @@ Item {
                 }
 
                 CreditsItem {
+                    title: "QuaZip"
+                    description: qsTr("A Qt/C++ library for working with Zip files.")
+                    license: [["LGPL v2.1", "https://github.com/stachenov/quazip/blob/master/COPYING"]]
+                    links: [["GitHub", "https://github.com/stachenov/quazip"]]
+                }
+
+                CreditsItem {
                     title: "Sentry Native SDK"
                     description: qsTr("Crash report SDK")
                     license: [["MIT", "https://github.com/getsentry/sentry-native/blob/master/LICENSE"]]

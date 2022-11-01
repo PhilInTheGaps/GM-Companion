@@ -1,30 +1,31 @@
 #include "namegenerator.h"
+#include "addons/addon_reader/addonreader.h"
+#include "addons/addonmanager.h"
 #include "namegeneratorfactory.h"
 #include "utils/fileutils.h"
-#include "addons/addonmanager.h"
+#include <QDir>
+#include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QQmlContext>
 #include <QLoggingCategory>
-#include <QFile>
-#include <QDir>
+#include <QQmlContext>
 
 Q_LOGGING_CATEGORY(gmNameGenerator, "gm.generators.names")
 
 NameGenerator::NameGenerator(const QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), a_currentGenerator(nullptr)
 {
-    qCDebug(gmNameGenerator()) << "Loading ...";
-
     if (engine)
     {
-        engine->rootContext()->setContextProperty("name_generator", this);
+        engine->rootContext()->setContextProperty(QStringLiteral("name_generator"), this);
     }
 }
 
 void NameGenerator::loadData()
 {
     if (isDataLoaded()) return;
+
+    qCDebug(gmNameGenerator()) << "Loading ...";
 
     isLoading(true);
     loadCategories();
@@ -37,25 +38,15 @@ void NameGenerator::loadCategories()
     a_categories.clear();
     m_generatorLists.clear();
 
-    for (const auto& fileName : findAllFiles())
+    const auto allFileData = findAndReadAllFiles();
+
+    for (const auto &data : allFileData)
     {
-        QFile file(fileName);
-        qCDebug(gmNameGenerator()) << fileName;
+        auto doc = QJsonDocument::fromJson(data);
+        auto name = doc.object()[QStringLiteral("name")].toString();
 
-        if (file.open(QIODevice::ReadOnly))
-        {
-            auto doc = QJsonDocument::fromJson(file.readAll());
-            auto name = doc.object()["name"].toString();
-
-            a_categories << name;
-            m_generatorLists << NameGeneratorFactory::buildFromJson(this, doc);
-
-            file.close();
-        }
-        else
-        {
-            qCWarning(gmNameGenerator()) << "Could not open" << fileName;
-        }
+        a_categories << name;
+        m_generatorLists << NameGeneratorFactory::buildFromJson(this, doc);
     }
 
     emit categoriesChanged(a_categories);
@@ -64,45 +55,64 @@ void NameGenerator::loadCategories()
     isLoading(false);
 }
 
-auto NameGenerator::findAllFiles() -> QStringList
+auto NameGenerator::findAndReadAllFiles() -> QByteArrayList
 {
-    auto list = findAllFiles(namesPath);
+    auto list = findAndReadAllFiles(internalNamesPath);
 
-    list.append(findAllAddonFiles());
+    list.append(findAndReadAllAddonFiles());
 
     return list;
 }
 
-auto NameGenerator::findAllFiles(const QString &path) -> QStringList
+auto NameGenerator::findAndReadAllFiles(const QString &path) -> QByteArrayList
 {
     QDir dir(path);
 
     if (!dir.exists()) return {};
 
-    auto entries = dir.entryList({"*.json"}, QDir::Files);
+    const auto entries = dir.entryList({"*.json"}, QDir::Files);
+
+    QByteArrayList result;
+    result.reserve(entries.length());
 
     for (int i = 0; i < entries.length(); i++)
     {
-        entries[i] = FileUtils::fileInDir(entries[i], path);
-    }
+        QFile file(FileUtils::fileInDir(entries[i], path));
 
-    return entries;
-}
-
-auto NameGenerator::findAllAddonFiles() -> QStringList
-{
-    QStringList list;
-
-    for (const auto *addon : AddonManager::instance()->addons())
-    {
-        if (addon && addon->enabled())
+        if (file.open(QIODevice::ReadOnly))
         {
-            const auto namesPath = FileUtils::fileInDir(QStringLiteral("names"), addon->path());
-            list.append(findAllFiles(namesPath));
+            result << file.readAll();
+            file.close();
+        }
+        else
+        {
+            qCWarning(gmNameGenerator()) << "Could not open" << file.fileName();
         }
     }
 
-    return list;
+    return result;
+}
+
+auto NameGenerator::findAndReadAllAddonFiles() -> QByteArrayList
+{
+    QByteArrayList result;
+    const auto addons = AddonManager::instance()->addons();
+
+    for (const auto *addon : addons)
+    {
+        if (addon && addon->isInstalledAndEnabled())
+        {
+            AddonReader reader(*addon);
+            const auto files = reader.findAllFiles(addonNamesPath, {"*.json"});
+
+            for (const auto &file : files)
+            {
+                result << reader.readFile(FileUtils::fileInDir(file, addonNamesPath));
+            }
+        }
+    }
+
+    return result;
 }
 
 auto NameGenerator::loadCategory(int index) -> bool
@@ -126,8 +136,7 @@ auto NameGenerator::loadGenerator(int index) -> bool
         return false;
     }
 
-    a_currentGenerator = generators()[index];
+    a_currentGenerator = qAsConst(a_generators)[index];
     emit currentGeneratorChanged(a_currentGenerator);
     return true;
 }
-

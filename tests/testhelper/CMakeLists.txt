@@ -27,4 +27,4 @@ add_library(testhelper STATIC ${HEADERS} ${SOURCES} ${RESOURCES})
 
 target_include_directories(testhelper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(testhelper filesystem Qt5::Gui Qt5::Quick Qt5::Test)
+target_link_libraries(testhelper gm-companion-lib filesystem Qt5::Gui Qt5::Quick Qt5::Test)

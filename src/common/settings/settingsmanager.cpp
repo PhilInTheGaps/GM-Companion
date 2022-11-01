@@ -1,7 +1,7 @@
 #include "settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <qt5keychain/keychain.h>
-#include "thirdparty/asyncfuture/asyncfuture.h"
 
 Q_LOGGING_CATEGORY(gmSettings, "gm.settings")
 
@@ -18,7 +18,7 @@ auto SettingsManager::instance() -> QPointer<SettingsManager>
     return m_instance;
 }
 
-auto SettingsManager::getPath(const QString& setting, QString group) -> QString
+auto SettingsManager::getPath(const QString &setting, QString group) -> QString
 {
     if (group.isEmpty()) group = getActivePathGroup();
     auto value = instance()->get<QString>(setting, QLatin1String(), group);
@@ -27,7 +27,7 @@ auto SettingsManager::getPath(const QString& setting, QString group) -> QString
     return value;
 }
 
-void SettingsManager::setPath(const QString& setting, const QString& value, QString group)
+void SettingsManager::setPath(const QString &setting, const QString &value, QString group)
 {
     if (group.isEmpty()) group = getActivePathGroup();
     instance()->set(setting, value, group);
@@ -39,10 +39,12 @@ auto SettingsManager::getLanguage() -> QLocale
 
     // Workaround for old settings versions
     if (value == QStringLiteral("Deutsch")) value = QStringLiteral("de");
-    else if (value == QStringLiteral("English")) value = QStringLiteral("en");
+    else if (value == QStringLiteral("English"))
+        value = QStringLiteral("en");
 
     const auto useDefault = value == QStringLiteral("default");
-    const auto isSystemLangAvailable = getLanguageNames().contains(QLocale::languageToString(QLocale::system().language()));
+    const auto isSystemLangAvailable =
+        getLanguageNames().contains(QLocale::languageToString(QLocale::system().language()));
     const auto useSystemLang = useDefault && isSystemLangAvailable;
 
     qCDebug(gmSettings()) << "Language:" << QLocale(value).name() << QLocale::system().name();
@@ -60,16 +62,15 @@ auto SettingsManager::getLanguages() -> QStringList
     QDir dir(QStringLiteral(":/translations"));
 
     dir.setFilter(QDir::Files);
-    dir.setNameFilters({ "*.qm" });
+    dir.setNameFilters({"*.qm"});
 
     QStringList languages;
     const auto availableLanguageFiles = dir.entryList();
 
     for (auto language : availableLanguageFiles)
     {
-        auto temp = language
-                .replace(QStringLiteral("gm-companion_"), QLatin1String())
-                .replace(QStringLiteral(".qm"), QLatin1String());
+        auto temp = language.replace(QStringLiteral("gm-companion_"), QLatin1String())
+                        .replace(QStringLiteral(".qm"), QLatin1String());
 
         languages.append(QLocale(temp).name());
     }
@@ -85,7 +86,7 @@ auto SettingsManager::getLanguageNames() -> QStringList
     QStringList strings;
     strings.reserve(availableLanguages.length());
 
-    for (const auto& language : availableLanguages)
+    for (const auto &language : availableLanguages)
     {
         strings << QLocale::languageToString(QLocale(language).language());
     }
@@ -93,9 +94,10 @@ auto SettingsManager::getLanguageNames() -> QStringList
     return strings;
 }
 
-auto SettingsManager::getServerUrl(const QString& service, bool hasDefault) -> QString
+auto SettingsManager::getServerUrl(const QString &service, bool hasDefault) -> QString
 {
-    if (hasDefault && instance()->get(QStringLiteral("connection"), QStringLiteral("default"), service) == QStringLiteral("default"))
+    if (hasDefault &&
+        instance()->get(QStringLiteral("connection"), QStringLiteral("default"), service) == QStringLiteral("default"))
     {
         return DEFAULT_SERVER_URL;
     }
@@ -108,18 +110,18 @@ auto SettingsManager::getServerUrl(const QString& service, bool hasDefault) -> Q
     return url;
 }
 
-void SettingsManager::setServerUrl(const QString& url, const QString& service)
+void SettingsManager::setServerUrl(const QString &url, const QString &service)
 {
     instance()->set(QStringLiteral("server"), url, service);
 }
 
-auto SettingsManager::getPassword(const QString& username, const QString& service) -> QFuture<QString>
+auto SettingsManager::getPassword(const QString &username, const QString &service) -> QFuture<QString>
 {
     auto *job = new QKeychain::ReadPasswordJob(QStringLiteral("gm-companion.%1").arg(service), instance());
     job->setAutoDelete(false);
     job->setKey(username);
 
-    const auto callback = [job, service](QKeychain::Job*) -> QString {
+    const auto callback = [job, service](QKeychain::Job *) -> QString {
         if (job->error())
         {
             qCCritical(gmSettings) << "Could not read password:" << job->error() << job->errorString();
@@ -134,25 +136,29 @@ auto SettingsManager::getPassword(const QString& username, const QString& servic
         return pw;
     };
 
-    const auto future = AsyncFuture::observe(job, &QKeychain::ReadPasswordJob::finished).subscribe(callback, [job, service](){
-        qCCritical(gmSettings) << "Password job cancelled for service" << service;
-        job->deleteLater();
-        return QLatin1String();
-    }).future();
+    const auto future = AsyncFuture::observe(job, &QKeychain::ReadPasswordJob::finished)
+                            .subscribe(callback,
+                                       [job, service]() {
+                                           qCCritical(gmSettings) << "Password job cancelled for service" << service;
+                                           job->deleteLater();
+                                           return QLatin1String();
+                                       })
+                            .future();
 
     job->start();
     return future;
 }
 
-void SettingsManager::setPassword(const QString& username, const QString& password, const QString& service)
+void SettingsManager::setPassword(const QString &username, const QString &password, const QString &service)
 {
     auto *passwordJob = new QKeychain::WritePasswordJob("gm-companion." + service);
     passwordJob->setAutoDelete(false);
     passwordJob->setKey(username);
     passwordJob->setTextData(password);
 
-    const auto callback = [passwordJob](QKeychain::Job*) {
-        if (passwordJob->error()) {
+    const auto callback = [passwordJob](QKeychain::Job *) {
+        if (passwordJob->error())
+        {
             qCCritical(gmSettings) << "Unable to save password:" << passwordJob->error() << passwordJob->errorString();
         }
         else
@@ -167,7 +173,7 @@ void SettingsManager::setPassword(const QString& username, const QString& passwo
     passwordJob->start();
 }
 
-auto SettingsManager::getDefaultPath(const QString& setting, const QString& group) -> QString
+auto SettingsManager::getDefaultPath(const QString &setting, const QString &group) -> QString
 {
     if (setting.isEmpty()) return QLatin1String();
 
@@ -190,13 +196,19 @@ auto SettingsManager::getActivePathGroup() -> QString
 }
 
 /// Set addon disabled or enabled
-void SettingsManager::setAddonEnabled(const QString& addon, bool enabled)
+void SettingsManager::setAddonEnabled(const QString &addon, bool enabled)
 {
+    if (addon.isEmpty())
+    {
+        qCWarning(gmSettings()) << "setAddonEnabled(): addon id is empty!";
+        return;
+    }
+
     set(addon, enabled, ADDONS_GROUP);
 }
 
 /// Returns if addon is enabled
-auto SettingsManager::getIsAddonEnabled(const QString& addon)->bool
+auto SettingsManager::getIsAddonEnabled(const QString &addon) -> bool
 {
     return get(addon, false, ADDONS_GROUP);
 }
@@ -215,13 +227,13 @@ void SettingsManager::updateSettings()
         set(QStringLiteral("cloudMode"), QStringLiteral("GoogleDrive"));
     }
 
-    rename<QString>(QStringLiteral("audioPath"),      QStringLiteral("audio"),      PATHS_GROUP);
+    rename<QString>(QStringLiteral("audioPath"), QStringLiteral("audio"), PATHS_GROUP);
     rename<QString>(QStringLiteral("charactersPath"), QStringLiteral("characters"), PATHS_GROUP);
-    rename<QString>(QStringLiteral("mapsPath"),       QStringLiteral("maps"),       PATHS_GROUP);
-    rename<QString>(QStringLiteral("musicPath"),      QStringLiteral("music"),      PATHS_GROUP);
-    rename<QString>(QStringLiteral("notesPath"),      QStringLiteral("notes"),      PATHS_GROUP);
-    rename<QString>(QStringLiteral("radioPath"),      QStringLiteral("radio"),      PATHS_GROUP);
-    rename<QString>(QStringLiteral("resourcesPath"),  QStringLiteral("resources"),  PATHS_GROUP);
-    rename<QString>(QStringLiteral("shopPath"),       QStringLiteral("shops"),      PATHS_GROUP);
-    rename<QString>(QStringLiteral("soundPath"),      QStringLiteral("sounds"),     PATHS_GROUP);
+    rename<QString>(QStringLiteral("mapsPath"), QStringLiteral("maps"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("musicPath"), QStringLiteral("music"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("notesPath"), QStringLiteral("notes"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("radioPath"), QStringLiteral("radio"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("resourcesPath"), QStringLiteral("resources"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("shopPath"), QStringLiteral("shops"), PATHS_GROUP);
+    rename<QString>(QStringLiteral("soundPath"), QStringLiteral("sounds"), PATHS_GROUP);
 }

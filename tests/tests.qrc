@@ -12,5 +12,12 @@
     <qresource prefix="/addons"/>
     <qresource prefix="/addons/test">
         <file alias="addon.json">resources/addons/test/addon.json</file>
+        <file alias="names/test.json">resources/addons/test/names/test.json</file>
+    </qresource>
+    <qresource prefix="/addon_repositories">
+        <file alias="testrepo.json">resources/addon_repositories/testrepo.json</file>
+    </qresource>
+    <qresource prefix="/addons_remote">
+        <file alias="demo-addon-1.zip">resources/addons_remote/demo-addon-1.zip</file>
     </qresource>
 </RCC>

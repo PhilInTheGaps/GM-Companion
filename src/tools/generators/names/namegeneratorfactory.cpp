@@ -5,14 +5,15 @@
 
 Q_LOGGING_CATEGORY(gmNameGeneratorFactory, "gm.generators.names.factory")
 
-auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonDocument &json) -> QList<AbstractNameGenerator*>
+auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonDocument &json) -> QList<AbstractNameGenerator *>
 {
-    QList<AbstractNameGenerator*> list;
-
     auto object = json.object();
-    auto generators = object["generators"].toArray();
+    auto generators = object[QStringLiteral("generators")].toArray();
 
-    for (const auto& generator : generators)
+    QList<AbstractNameGenerator *> list;
+    list.reserve(generators.count());
+
+    for (const auto &generator : generators)
     {
         list << buildFromJson(parent, generator.toObject());
     }
@@ -20,11 +21,11 @@ auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonDocument &j
     return list;
 }
 
-auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonObject &json) -> AbstractNameGenerator*
+auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonObject &json) -> AbstractNameGenerator *
 {
-    auto type = json["type"].toString();
+    auto type = json[QStringLiteral("type")].toString();
 
-    if (type == "list")
+    if (type == QLatin1String("list"))
     {
         return new ListNameGenerator(parent, json);
     }

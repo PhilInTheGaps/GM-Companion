@@ -1,19 +1,20 @@
-#ifndef NAMEGENERATOR_H
-#define NAMEGENERATOR_H
+#pragma once
 
-#include <QObject>
-#include <QStringList>
-#include <QQmlApplicationEngine>
-#include "abstracttool.h"
 #include "abstractnamegenerator.h"
+#include "abstracttool.h"
+#include "utils/stringutils.h"
+#include <QByteArrayList>
+#include <QObject>
+#include <QQmlApplicationEngine>
+#include <QStringList>
 
 class NameGenerator : public AbstractTool
 {
     Q_OBJECT
 
     READ_PROPERTY(QStringList, categories)
-    READ_PROPERTY(AbstractNameGenerator*, currentGenerator)
-    AUTO_PROPERTY(QList<AbstractNameGenerator*>, generators)
+    READ_PROPERTY(AbstractNameGenerator *, currentGenerator)
+    AUTO_PROPERTY(QList<AbstractNameGenerator *>, generators)
 
 public:
     explicit NameGenerator(const QQmlApplicationEngine *engine, QObject *parent = nullptr);
@@ -26,13 +27,12 @@ public slots:
 
 private:
     void loadCategories();
-    static auto findAllFiles() -> QStringList;
-    static auto findAllFiles(const QString& path) -> QStringList;
-    static auto findAllAddonFiles() -> QStringList;
+    static auto findAndReadAllFiles() -> QByteArrayList;
+    static auto findAndReadAllFiles(const QString &path) -> QByteArrayList;
+    static auto findAndReadAllAddonFiles() -> QByteArrayList;
 
-    static constexpr const char* namesPath = ":/names";
-    QList<QList<AbstractNameGenerator*>> m_generatorLists;
+    static constexpr ConstQString internalNamesPath = ":/names";
+    static constexpr ConstQString addonNamesPath = "names";
 
+    QList<QList<AbstractNameGenerator *>> m_generatorLists;
 };
-
-#endif // NAMEGENERATOR_H

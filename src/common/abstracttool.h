@@ -1,8 +1,8 @@
 #ifndef ABSTRACTTOOL_H
 #define ABSTRACTTOOL_H
 
-#include <QObject>
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QObject>
 
 class AbstractTool : public QObject
 {
@@ -10,14 +10,15 @@ class AbstractTool : public QObject
 public:
     explicit AbstractTool(QObject *parent = nullptr);
 
+    bool isDataLoaded() const;
+
     AUTO_PROPERTY(bool, isLoading)
 
 public slots:
     virtual void loadData() = 0;
 
 protected:
-    bool isDataLoaded() const { return m_isDataLoaded; }
-    void setIsDataLoaded(bool value) { m_isDataLoaded = value; }
+    void setIsDataLoaded(bool value);
 
 private:
     bool m_isDataLoaded = false;

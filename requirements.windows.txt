@@ -13,6 +13,9 @@ taglib/taglib@v1.12
 # cmark-gfm
 ryantm/cmark-gfm@fix-include
 
+# quazip
+stachenov/quazip@v1.3 -DQUAZIP_QT_MAJOR_VERSION=5
+
 ### requirements for poppler ###
 
 # libpng

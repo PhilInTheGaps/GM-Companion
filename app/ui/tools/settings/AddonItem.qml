@@ -5,10 +5,9 @@ import "../../colors.js" as Colors
 Rectangle {
     id: root
     property var addon: undefined
-    property int addon_index: -1
 
     color: Colors.base
-    border.color: Colors.border
+    border.color: addon && addon.enabled ? Colors.borderFocus : Colors.border
     border.width: 1
 
     height: Math.max(left_column.height, right_column.height) + 20
@@ -65,6 +64,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             height: 1
+            visible: addon && addon.path.length > 0
 
             color: Colors.border
         }
@@ -85,17 +85,75 @@ Rectangle {
         spacing: 10
 
         Button {
-            text: addon && addon.enabled ? qsTr("Disable") : qsTr("Enable")
+            text: qsTr("Update")
             anchors.horizontalCenter: parent.horizontalCenter
 
+            visible: addon && addon.isUpdateAvailable
+
+            background: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 40
+                opacity: enabled ? 1 : 0.3
+                color: Colors.button
+            }
+
             onClicked: {
-                addon_manager.setAddonEnabled(addon_index, !addon.enabled)
+                addon_manager.updateAsync(addon)
+            }
+        }
+
+        Button {
+            text: addon && addon.enabled ? qsTr("Disable") : qsTr("Enable")
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: addon && addon.isInstalled
+            enabled: addon && !addon.isInstalling
+
+            onClicked: {
+                addon_manager.setAddonEnabled(addon, !addon.enabled)
+            }
+        }
+
+        Button {
+            text: qsTr("Install")
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            visible: addon && !addon.isInstalled
+
+            onClicked: {
+                addon_manager.installAsync(addon)
+            }
+        }
+
+        Button {
+            text: qsTr("Uninstall")
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            enabled: addon && addon.isInstalled && !addon.isLocal
+                     && !addon.isInstalling
+            visible: addon && addon.isInstalled
+
+            onClicked: {
+                addon_manager.uninstall(addon)
             }
         }
 
         Label {
             text: addon ? "[ " + addon.version + " ]" : ""
             anchors.horizontalCenter: parent.horizontalCenter
+            visible: addon && addon.version.length > 0
+        }
+    }
+
+    Rectangle {
+        id: overlay
+        anchors.fill: parent
+        color: "black"
+
+        visible: addon && addon.isInstalling
+        opacity: 0.5
+
+        BusyIndicator {
+            anchors.centerIn: parent
         }
     }
 }

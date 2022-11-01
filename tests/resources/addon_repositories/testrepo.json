@@ -1,0 +1,17 @@
+[
+    {
+        "id": "local.test.1",
+        "name": "Demo Addon 1",
+        "name_short": "Demo1",
+        "author": "Demo Author",
+        "description": "This is a demo addon for testing purposes.",
+        "releases": [
+            {
+                "version": "1.0",
+                "compatibility": 1,
+                "source": "test",
+                "download": ":/addons_remote/demo-addon-1.zip"
+            }
+        ]
+    }
+]

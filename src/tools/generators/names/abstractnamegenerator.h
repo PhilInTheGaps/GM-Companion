@@ -1,14 +1,15 @@
 #pragma once
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QStringList>
-#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AbstractNameGenerator : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractNameGenerator(QObject *parent, QString name, QStringList categories, QStringList prefixes, QStringList suffixes);
+    explicit AbstractNameGenerator(QObject *parent, QString name, QStringList categories, QStringList prefixes,
+                                   QStringList suffixes);
 
     Q_INVOKABLE virtual bool generate(int count) = 0;
     Q_INVOKABLE bool setCategoryEnabled(int index, bool value);
@@ -24,7 +25,6 @@ public:
     AUTO_PROPERTY(int, activeSuffix)
 
 private:
-    auto buildEmptyNameList() const -> QList<QStringList>;
-    auto buildInitialEnabledCategoryList() const -> QList<bool>;
+    [[nodiscard]] auto buildEmptyNameList() const -> QList<QStringList>;
+    [[nodiscard]] auto buildInitialEnabledCategoryList() const -> QList<bool>;
 };
-

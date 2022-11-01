@@ -15,6 +15,7 @@ endif()
 
 # qt modules
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
+find_package(QuaZip-Qt5)
 
 # submodule libraries
 include(AddPoppler)
@@ -95,6 +96,10 @@ set(SOURCES
   tools/shop/shoptool.cpp
   addons/addonmanager.cpp
   addons/addon.cpp
+  addons/addonrepositorymanager.cpp
+  addons/addon_reader/addonreader.cpp
+  addons/addon_reader/archiveaddonreader.cpp
+  addons/addon_reader/folderaddonreader.cpp
 )
 
 # header files
@@ -170,6 +175,13 @@ set(HEADERS
   tools/generators/names/namegeneratorfactory.h
   addons/addonmanager.h
   addons/addon.h
+  addons/addonreleaseinfo.h
+  addons/addonrepository.h
+  addons/addonrepositorymanager.h
+  addons/addon_reader/addonreader.h
+  addons/addon_reader/abstractaddonreader.h
+  addons/addon_reader/archiveaddonreader.h
+  addons/addon_reader/folderaddonreader.h
 )
 
 # resources
@@ -193,6 +205,7 @@ target_link_libraries(
   Qt5::Multimedia
   Qt5::Network
   Qt5::DBus
+  QuaZip::QuaZip
   ${TAG_LIBRARY}
   ${POPPLER_QT5_LIBRARY}
 )

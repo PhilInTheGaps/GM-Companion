@@ -1,0 +1,24 @@
+{
+  "name": "Test Names 0",
+  "generators": [
+    {
+      "name": "English",
+      "type": "list",
+      "categories": [
+        { "name": "C0", "firstname": ["list0", "list1"], "surname": ["list2"] },
+        { "name": "C1", "firstname": ["list0"], "surname": ["list1"] },
+        { "name": "C2", "firstname": ["list0", "list1", "list2"], "surname": ["list0", "list1", "list2"] }
+      ],
+      "names": {
+        "list0": ["A", "B", "C"],
+        "list1": ["D", "E", "F"],
+        "list2": ["G", "H", "I"]
+      },
+      "prefixes": { "types": [{ "name": "Academic", "lists": ["academic"] }], "academic": ["Prof.", "Dr."] },
+      "suffixes": {
+        "types": [{ "name": "Nobility", "lists": ["nobility"] }],
+        "nobility": ["I", "II", "III", "IV", "V"]
+      }
+    }
+  ]
+}
