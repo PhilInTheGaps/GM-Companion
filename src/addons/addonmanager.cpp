@@ -171,8 +171,23 @@ auto AddonManager::uninstall(Addon *addon) -> bool
     setAddonEnabled(addon, false);
 
     QFile file(addon->path());
-    if (file.exists() && !file.remove())
+
+    // Modify file permissions, as otherwise we might not have permission to delete it
+    // Seems weird, but is necessary under Windows
+    file.setPermissions(file.permissions() | QFileDevice::WriteOwner | QFileDevice::WriteUser |
+                        QFileDevice::WriteGroup | QFileDevice::WriteOther);
+
+    if (!file.exists())
     {
+        qCWarning(gmAddonManager()) << "Could not uninstall addon, file does not exist:" << addon->id()
+                                    << addon->path();
+        return false;
+    }
+
+    if (!file.remove())
+    {
+        qCWarning(gmAddonManager()) << "Could not uninstall addon, file can not be removed:" << addon->id()
+                                    << addon->path() << file.errorString();
         return false;
     }
 
