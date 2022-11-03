@@ -10,12 +10,12 @@ class Addon : public QObject
     Q_OBJECT
 
 public:
-    enum AddonType
+    enum class Type
     {
         Folder,
         Archive
     };
-    Q_ENUM(AddonType)
+    Q_ENUM(Type)
 
     READONLY_PROPERTY(QString, id)
     AUTO_PROPERTY(QString, name)
@@ -27,17 +27,16 @@ public:
     AUTO_PROPERTY(bool, enabled)
     AUTO_PROPERTY(bool, isLocal)
     AUTO_PROPERTY(bool, isInstalling)
-    AUTO_PROPERTY(AddonType, type)
+    AUTO_PROPERTY(Type, type)
 
     Q_PROPERTY(bool isInstalled READ isInstalled NOTIFY pathChanged)
     Q_PROPERTY(bool isUpdateAvailable READ isUpdateAvailable NOTIFY isUpdateAvailableChanged)
 
 public:
     explicit Addon(QObject *parent, QString id, QString name, QString shortName, QString version, QString author,
-                   QString description, QString path, bool isLocal, AddonType type);
+                   QString description, QString path, bool isLocal, Type type);
 
-    static auto fromJson(QObject *parent, const QJsonDocument &json, QString path, bool isLocal, Addon::AddonType type)
-        -> Addon *;
+    static auto fromJson(QObject *parent, const QJsonDocument &json, QString path, bool isLocal, Type type) -> Addon *;
     static auto fromReleaseInfo(QObject *parent, const AddonReleaseInfo &release) -> Addon *;
 
     void setReleaseInfo(const AddonReleaseInfo &info);

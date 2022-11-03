@@ -1,8 +1,8 @@
 #include "updatemanager.h"
-#include "utils/stringutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-#include <QXmlStreamReader>
+#include "utils/stringutils.h"
 #include <QLoggingCategory>
+#include <QXmlStreamReader>
 
 Q_LOGGING_CATEGORY(gmUpdateManager, "gm.updates.manager")
 
@@ -41,7 +41,7 @@ void UpdateManager::checkForUpdates()
     qCDebug(gmUpdateManager) << "Releases feed URL:" << m_feedURL;
 
     auto version = fetchNewestVersion();
-    AsyncFuture::observe(version).subscribe([this](const QString& version) {
+    AsyncFuture::observe(version).subscribe([this](const QString &version) {
         m_newestVersion = version;
         qCDebug(gmUpdateManager()) << "Newest available version:" << version;
 
@@ -64,9 +64,9 @@ void UpdateManager::checkForUpdates()
  * @param v2 Version 2
  * @return True if v1 is newer than v2
  */
-auto UpdateManager::compareVersions(const QString& v1, const QString& v2) -> bool
+auto UpdateManager::compareVersions(const QString &v1, const QString &v2) -> bool
 {
-    return Version::isGreater(v1, v2);
+    return Version::isGreater(Version(v1), Version(v2));
 }
 
 auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
@@ -91,7 +91,8 @@ auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
         {
             if (reader.name() == "id") id = reader.readElementText();
 
-            else reader.skipCurrentElement();
+            else
+                reader.skipCurrentElement();
         }
 
         // Version is converted from git tag, so we have to remove a bunch of junk
@@ -107,8 +108,7 @@ auto UpdateManager::findNewestVersion(const QStringList &versions) -> QString
 
     for (const auto &version : versions)
     {
-        if (compareVersions(version, newest))
-            newest = version;
+        if (compareVersions(version, newest)) newest = version;
     }
 
     return newest;
@@ -119,12 +119,14 @@ auto UpdateManager::fetchNewestVersion() -> QFuture<QString>
     // Get the release feed to check for a new version
     auto *reply = networkManager.get(QNetworkRequest(QUrl(m_feedURL)));
 
-    return AsyncFuture::observe(reply, &QNetworkReply::finished).subscribe([reply]() {
-        auto versions = findVersionsFromXML(reply->readAll());
-        reply->deleteLater();
+    return AsyncFuture::observe(reply, &QNetworkReply::finished)
+        .subscribe([reply]() {
+            auto versions = findVersionsFromXML(reply->readAll());
+            reply->deleteLater();
 
-        qCDebug(gmUpdateManager()) << "Found the following versions:" << versions;
+            qCDebug(gmUpdateManager()) << "Found the following versions:" << versions;
 
-        return findNewestVersion(versions);
-    }).future();
+            return findNewestVersion(versions);
+        })
+        .future();
 }

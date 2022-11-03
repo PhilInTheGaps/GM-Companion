@@ -7,7 +7,7 @@
 Q_LOGGING_CATEGORY(gmAddons, "gm.addons")
 
 Addon::Addon(QObject *parent, QString id, QString name, QString shortName, QString version, QString author,
-             QString description, QString path, bool isLocal, AddonType type)
+             QString description, QString path, bool isLocal, Type type)
     : QObject{parent}, a_id(std::move(id)), a_name(std::move(name)), a_shortName(std::move(shortName)),
       a_version(std::move(version)), a_author(std::move(author)), a_description(std::move(description)),
       a_path(std::move(path)), a_enabled(false), a_isLocal(isLocal), a_isInstalling(false), a_type(type)
@@ -17,7 +17,7 @@ Addon::Addon(QObject *parent, QString id, QString name, QString shortName, QStri
                              .arg(this->id(), this->name(), this->shortName(), this->version(), this->path());
 }
 
-auto Addon::fromJson(QObject *parent, const QJsonDocument &json, QString path, bool isLocal, AddonType type) -> Addon *
+auto Addon::fromJson(QObject *parent, const QJsonDocument &json, QString path, bool isLocal, Type type) -> Addon *
 {
     auto root = json.object();
     auto id = root[QStringLiteral("id")].toString();
@@ -33,7 +33,7 @@ auto Addon::fromJson(QObject *parent, const QJsonDocument &json, QString path, b
 auto Addon::fromReleaseInfo(QObject *parent, const AddonReleaseInfo &release) -> Addon *
 {
     auto *addon = new Addon(parent, release.id, release.name, release.shortName, QLatin1String(), release.author,
-                            release.description, QLatin1String(), false, AddonType::Archive);
+                            release.description, QLatin1String(), false, Type::Archive);
     addon->setReleaseInfo(release);
 
     return addon;
@@ -80,5 +80,5 @@ auto Addon::isInstalledAndEnabled() const -> bool
 
 auto Addon::isUpdateAvailable() const -> bool
 {
-    return isInstalled() && Version::isGreater(m_releaseInfo.version, version());
+    return isInstalled() && Version::isGreater(Version(m_releaseInfo.version), Version(version()));
 }

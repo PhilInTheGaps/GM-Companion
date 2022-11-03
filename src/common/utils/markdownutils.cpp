@@ -1,24 +1,24 @@
 #include "markdownutils.h"
 
-QString MarkdownUtils::markdownToHtml(const QString &markdown)
+auto MarkdownUtils::markdownToHtml(const QString &markdown) -> QString
 {
-    #if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
-    
+#if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
+
     return markdownToHtmlCMark(markdown);
 
-    #elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
-    
+#elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
+
     return markdownToHtmlDiscount(markdown);
 
-    #else
+#else
 
-    return "";
+    return QLatin1String();
 
-    #endif
+#endif
 }
 
 #if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
-QString MarkdownUtils::markdownToHtmlCMark(const QString &markdown)
+auto MarkdownUtils::markdownToHtmlCMark(const QString &markdown) -> QString
 {
     int options = CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE;
 
@@ -48,22 +48,22 @@ void MarkdownUtils::addMarkdownExtension(cmark_parser *parser, const QString &ex
 }
 
 #elif MARKDOWN_LIBRARY == MARKDOWN_DISCOUNT
-QString MarkdownUtils::markdownToHtmlDiscount(const QString &markdown)
+auto MarkdownUtils::markdownToHtmlDiscount(const QString &markdown) -> QString
 {
     auto markdownStd = markdown.toStdString();
     auto flags = MKD_AUTOLINK;
-    MMIOT* doc = mkd_string(markdownStd.c_str(), markdownStd.size(), flags);
+    MMIOT *doc = mkd_string(markdownStd.c_str(), markdownStd.size(), flags);
 
-	if(doc == nullptr) return QStringLiteral("");
-	
+    if (doc == nullptr) return QLatin1String();
+
     mkd_compile(doc, flags);
 
-	char *cstr_buff;
-	int size = mkd_document(doc, &cstr_buff);
+    char *cstr_buff = nullptr;
+    int size = mkd_document(doc, &cstr_buff);
 
     std::string html;
-	html.assign(cstr_buff, size);
-	mkd_cleanup(doc);
+    html.assign(cstr_buff, size);
+    mkd_cleanup(doc);
 
     return QString::fromStdString(html);
 }

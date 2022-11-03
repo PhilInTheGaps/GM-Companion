@@ -74,9 +74,8 @@ auto AddonManager::installLocalAsync(Addon &addon) -> QFuture<void>
 {
     addon.isInstalling(true);
 
-    return QtConcurrent::run([&addon]() {
-        QFile file(addon.downloadUrl());
-        if (file.exists())
+    auto installSync = [&addon]() {
+        if (QFile file(addon.downloadUrl()); file.exists())
         {
             auto installFile = getRemotePath(buildFileName(addon, true) + QStringLiteral(".zip"));
 
@@ -103,7 +102,9 @@ auto AddonManager::installLocalAsync(Addon &addon) -> QFuture<void>
         }
 
         addon.isInstalling(false);
-    });
+    };
+
+    return QtConcurrent::run(installSync);
 }
 
 auto AddonManager::installRemoteAsync(Addon &addon) -> QFuture<void>
@@ -111,43 +112,44 @@ auto AddonManager::installRemoteAsync(Addon &addon) -> QFuture<void>
     addon.isInstalling(true);
 
     auto *reply = m_networkManager.get(QNetworkRequest(QUrl(addon.downloadUrl())));
-    return observe(reply, &QNetworkReply::finished)
-        .subscribe([&addon, reply]() {
-            if (reply->error() != QNetworkReply::NoError)
-            {
-                qCWarning(gmAddonManager()) << "Could not install addon" << addon.id() << addon.downloadUrl()
-                                            << reply->error() << reply->errorString();
-                reply->deleteLater();
-                return;
-            }
 
-            auto installFile = getRemotePath(buildFileName(addon, true) + QStringLiteral(".zip"));
-            auto data = reply->readAll();
+    auto callback = [&addon, reply]() {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qCWarning(gmAddonManager()) << "Could not install addon" << addon.id() << addon.downloadUrl()
+                                        << reply->error() << reply->errorString();
             reply->deleteLater();
+            return;
+        }
 
-            if (!ensureInstallationDirExists(installFile))
-            {
-                addon.isInstalling(false);
-                return;
-            }
+        auto installFile = getRemotePath(buildFileName(addon, true) + QStringLiteral(".zip"));
+        auto data = reply->readAll();
+        reply->deleteLater();
 
-            QFile file(installFile);
-            if (!file.open(QIODevice::WriteOnly))
-            {
-                addon.isInstalling(false);
-                qCWarning(gmAddonManager()) << "Could not install addon, could not write to file" << installFile;
-                return;
-            }
-
-            file.write(data);
-            file.close();
-
-            addon.updateWithReleaseInfo();
-            addon.path(installFile);
+        if (!ensureInstallationDirExists(installFile))
+        {
             addon.isInstalling(false);
-            qCDebug(gmAddonManager()) << "Installed remote addon" << addon.id();
-        })
-        .future();
+            return;
+        }
+
+        QFile file(installFile);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            addon.isInstalling(false);
+            qCWarning(gmAddonManager()) << "Could not install addon, could not write to file" << installFile;
+            return;
+        }
+
+        file.write(data);
+        file.close();
+
+        addon.updateWithReleaseInfo();
+        addon.path(installFile);
+        addon.isInstalling(false);
+        qCDebug(gmAddonManager()) << "Installed remote addon" << addon.id();
+    };
+
+    return observe(reply, &QNetworkReply::finished).subscribe(callback).future();
 }
 
 /// Update addon by removing the old version and installing the new one
@@ -278,7 +280,7 @@ auto AddonManager::loadAddonDir(const QString &dir, bool isLocal) -> Addon *
         auto json = QJsonDocument::fromJson(file.readAll());
         file.close();
 
-        auto *addon = Addon::fromJson(this, json, dir, isLocal, Addon::Folder);
+        auto *addon = Addon::fromJson(this, json, dir, isLocal, Addon::Type::Folder);
         addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->path()));
         return addon;
     }
@@ -321,7 +323,7 @@ auto AddonManager::loadAddonArchive(const QString &path, bool isLocal) -> Addon 
     zipFile.close();
     zip.close();
 
-    auto *addon = Addon::fromJson(this, json, path, isLocal, Addon::Archive);
+    auto *addon = Addon::fromJson(this, json, path, isLocal, Addon::Type::Archive);
     addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->path()));
 
     return addon;
@@ -379,8 +381,7 @@ auto AddonManager::ensureInstallationDirExists(const QString &fileName) -> bool
 {
     auto installDir = FileUtils::dirFromPath(fileName);
 
-    QDir dir(installDir);
-    if (!dir.exists() && !dir.mkpath(installDir))
+    if (QDir dir(installDir); !dir.exists() && !dir.mkpath(installDir))
     {
         qCWarning(gmAddonManager()) << "Could not install addon, could not create folder" << installDir;
         return false;

@@ -28,8 +28,7 @@ auto ListNameGenerator::generate(int count) -> bool
 
 auto ListNameGenerator::generate(int categoryIndex, int count) -> QStringList
 {
-    const auto enabledCategories = this->enabledCategories();
-    if (!enabledCategories[categoryIndex]) return {};
+    if (const auto enabledCategories = this->enabledCategories(); !enabledCategories[categoryIndex]) return {};
 
     auto availableFirstNames = getAvailableFirstNames(categoryIndex);
     auto availableSurnames = getAvailableSurnames(categoryIndex);

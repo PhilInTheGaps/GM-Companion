@@ -1,12 +1,13 @@
 #pragma once
 
-#include <QString>
 #include <QPixmap>
+#include <QString>
 
 struct ConstQString : public QLatin1String
 {
-    constexpr ConstQString(const char* const s) :
-        QLatin1String(s, static_cast<int>(std::char_traits<char>::length(s))) {}
+    constexpr ConstQString(const char *const s) : QLatin1String(s, static_cast<int>(std::char_traits<char>::length(s)))
+    {
+    }
 };
 
 class StringUtils
@@ -16,4 +17,3 @@ public:
     static auto rot13(const QString &input) -> QString;
     static auto hasWildcardMatch(const QString &string, const QString &wildcard) -> bool;
 };
-

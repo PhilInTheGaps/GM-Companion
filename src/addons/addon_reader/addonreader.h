@@ -8,7 +8,7 @@
 class AddonReader : public AbstractAddonReader
 {
 public:
-    AddonReader(const Addon &addon);
+    explicit AddonReader(const Addon &addon);
 
     auto findAllFiles(const QString &path, const QStringList &filter) -> QStringList override;
     auto readFile(const QString &path) -> QByteArray override;

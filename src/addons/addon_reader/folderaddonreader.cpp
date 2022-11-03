@@ -21,9 +21,8 @@ auto FolderAddonReader::findAllFiles(const QString &path, const QStringList &fil
 auto FolderAddonReader::readFile(const QString &path) -> QByteArray
 {
     const auto absolutePath = FileUtils::fileInDir(path, m_addon.path());
-    QFile file(absolutePath);
 
-    if (file.open(QIODevice::ReadOnly))
+    if (QFile file(absolutePath); file.open(QIODevice::ReadOnly))
     {
         auto data = file.readAll();
         file.close();

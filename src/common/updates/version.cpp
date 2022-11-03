@@ -10,7 +10,7 @@ Version::Version(const QString &str)
 
     auto numbers = match.captured(QStringLiteral("numbers")).split('.');
     m_numbers.reserve(numbers.length());
-    for (const auto& number : numbers)
+    for (const auto &number : numbers)
     {
         bool ok = false;
         int num = number.toInt(&ok);
@@ -29,23 +29,23 @@ Version::Version(const QString &str)
     }
 }
 
-auto Version::isGreater(const Version& other) -> bool
+auto Version::isGreater(const Version &other) const -> bool
 {
     return isGreater(other, *this);
 }
 
-auto Version::isGreater(const Version& first, const Version& second) -> bool
+auto Version::isGreater(const Version &first, const Version &second) -> bool
 {
-    auto compareNumbers = compare(first.m_numbers, second.m_numbers);
-    if (compareNumbers != 0) return compareNumbers > 0;
+    if (auto compareNumbers = compare(first.m_numbers, second.m_numbers); compareNumbers != 0)
+        return compareNumbers > 0;
 
-    auto compareSuffixes = compare(first.m_suffix, second.m_suffix);
-    if (compareSuffixes != 0) return compareSuffixes > 0;
+    if (auto compareSuffixes = compare(first.m_suffix, second.m_suffix); compareSuffixes != 0)
+        return compareSuffixes > 0;
 
     return first.m_suffixVer > second.m_suffixVer;
 }
 
-auto Version::compare(const QVector<int>& first, const QVector<int>& second) -> int
+auto Version::compare(const QVector<int> &first, const QVector<int> &second) -> int
 {
     if (first.isEmpty() && second.isEmpty()) return 0;
 
@@ -75,7 +75,7 @@ auto Version::compare(Suffix suffix0, Suffix suffix1) -> int
     return -1;
 }
 
-auto Version::suffixFromString(const QString& str) -> Suffix
+auto Version::suffixFromString(const QString &str) -> Suffix
 {
     if (str.isNull() || str.isEmpty()) return Suffix::None;
 

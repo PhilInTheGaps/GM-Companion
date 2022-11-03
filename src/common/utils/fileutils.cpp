@@ -4,11 +4,11 @@
  * @brief Get a path string from a list of folders.
  * Example: { "some", "folder" } becomes "/some/folder"
  */
-auto FileUtils::dirFromFolders(const QStringList& folders) -> QString
+auto FileUtils::dirFromFolders(const QStringList &folders) -> QString
 {
-    auto dirString = folders.join("/");
+    auto dirString = folders.join('/');
 
-    if (dirString.isEmpty()) dirString = "/";
+    if (dirString.isEmpty()) dirString = '/';
 
     return dirString;
 }
@@ -21,9 +21,9 @@ auto FileUtils::dirFromPath(const QString &path) -> QString
 {
     auto index = path.lastIndexOf('/');
 
-    if (index < 0) return "";
+    if (index < 0) return QLatin1String();
 
-    if (index == 0) return "/";
+    if (index == 0) return QStringLiteral("/");
 
     return path.left(index);
 }
@@ -32,7 +32,7 @@ auto FileUtils::dirFromPath(const QString &path) -> QString
  * @brief Get a list of folders from a path string.
  * Example: "/some/folder" becomes { "some", "folder" }
  */
-auto FileUtils::foldersFromDir(const QString& dir) -> QStringList
+auto FileUtils::foldersFromDir(const QString &dir) -> QStringList
 {
     return dir.split('/');
 }
@@ -45,7 +45,7 @@ auto FileUtils::suffix(const QString &fileName) -> QString
 {
     auto index = fileName.lastIndexOf('.');
 
-    return fileName.right(fileName.length() - index -1);
+    return fileName.right(fileName.length() - index - 1);
 }
 
 /**
@@ -56,15 +56,14 @@ auto FileUtils::fileName(const QString &path) -> QString
 {
     auto endsWithSlash = path.endsWith('/');
     auto from = endsWithSlash ? -2 : -1;
-    auto index = path.lastIndexOf('/', from);
 
-    if (index > -1)
+    if (auto index = path.lastIndexOf('/', from); index > -1)
     {
         auto result = path.right(path.length() - index - 1);
-        return endsWithSlash ? result.left(result.length() -1) : result;
+        return endsWithSlash ? result.left(result.length() - 1) : result;
     }
 
-    return endsWithSlash ? path.left(path.length() -1) : path;
+    return endsWithSlash ? path.left(path.length() - 1) : path;
 }
 
 /**
@@ -75,15 +74,14 @@ auto FileUtils::fileName(const QStringRef &path) -> QString
 {
     auto endsWithSlash = path.endsWith('/');
     auto from = endsWithSlash ? -2 : -1;
-    auto index = path.lastIndexOf('/', from);
 
-    if (index > -1)
+    if (auto index = path.lastIndexOf('/', from); index > -1)
     {
         auto result = path.right(path.length() - index - 1).toString();
-        return endsWithSlash ? result.left(result.length() -1) : result;
+        return endsWithSlash ? result.left(result.length() - 1) : result;
     }
 
-    return endsWithSlash ? path.left(path.length() -1).toString() : path.toString();
+    return endsWithSlash ? path.left(path.length() - 1).toString() : path.toString();
 }
 
 /**
@@ -92,7 +90,7 @@ auto FileUtils::fileName(const QStringRef &path) -> QString
  */
 auto FileUtils::incrementFileName(const QString &fileName) -> QString
 {
-    if (fileName.isEmpty()) return "";
+    if (fileName.isEmpty()) return QLatin1String();
 
     auto nameAndSuffix = splitFileNameAndSuffix(fileName);
     auto incrementedName = incrementName(nameAndSuffix.first);
@@ -102,7 +100,7 @@ auto FileUtils::incrementFileName(const QString &fileName) -> QString
 
 auto FileUtils::incrementName(const QString &name) -> QString
 {
-    if (name.isEmpty()) return "";
+    if (name.isEmpty()) return QLatin1String();
 
     auto list = name.split('_');
     auto number = list.length() == 1 ? 0 : incrementNumString(list.takeLast());
@@ -143,9 +141,7 @@ auto FileUtils::fileInDir(const QString &fileName, const QString &dir) -> QStrin
 /// Get the mimetype of a file, based on the file extension
 auto FileUtils::getMimeType(const QString &filename) -> FileUtils::MimeType
 {
-    const auto extension = FileUtils::suffix(filename);
-
-    if (extensionToMimeType.contains(extension))
+    if (const auto extension = FileUtils::suffix(filename); extensionToMimeType.contains(extension))
     {
         return extensionToMimeType[extension];
     }
@@ -157,9 +153,9 @@ auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> QPair<QString
 {
     auto suffix = FileUtils::suffix(fileName);
     auto pathWithoutSuffix = fileName;
-    pathWithoutSuffix.replace(suffix, "").chop(1);
+    pathWithoutSuffix.replace(suffix, QLatin1String()).chop(1);
 
-    return { pathWithoutSuffix, suffix };
+    return {pathWithoutSuffix, suffix};
 }
 
 auto FileUtils::incrementNumString(const QString &num) -> int

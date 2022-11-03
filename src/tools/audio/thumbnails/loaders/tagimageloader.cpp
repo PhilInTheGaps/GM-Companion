@@ -1,20 +1,20 @@
 #include "tagimageloader.h"
+#include "../audiothumbnailcache.h"
 #include "common/settings/settingsmanager.h"
 #include "common/utils/fileutils.h"
 #include "filesystem/file.h"
-#include "../audiothumbnailcache.h"
 
-#include <QtConcurrent/QtConcurrent>
-#include <QTemporaryFile>
 #include <QLoggingCategory>
+#include <QTemporaryFile>
 #include <QUuid>
-#include <taglib/taglib.h>
+#include <QtConcurrent/QtConcurrent>
 #include <taglib/attachedpictureframe.h>
-#include <taglib/mpegfile.h>
-#include <taglib/vorbisfile.h>
-#include <taglib/oggflacfile.h>
 #include <taglib/flacfile.h>
 #include <taglib/flacpicture.h>
+#include <taglib/mpegfile.h>
+#include <taglib/oggflacfile.h>
+#include <taglib/taglib.h>
+#include <taglib/vorbisfile.h>
 #include <taglib/wavfile.h>
 
 #include "thirdparty/asyncfuture/asyncfuture.h"
@@ -31,7 +31,8 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
 
     if (audioFile->source() != 0)
     {
-        qCCritical(gmAudioTagImageLoader()) << "Can not read image from tags, as audio file" << audioFile->url() << "is not a local file";
+        qCCritical(gmAudioTagImageLoader())
+            << "Can not read image from tags, as audio file" << audioFile->url() << "is not a local file";
         return completed(QPixmap());
     }
 
@@ -46,7 +47,8 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
         return completed(pixmap);
     }
 
-    const auto isLocalFile = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local")) == QStringLiteral("local");
+    const auto isLocalFile = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local")) ==
+                             QStringLiteral("local");
     return QtConcurrent::run(loadFromFile, path, isLocalFile);
 }
 
@@ -61,25 +63,27 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
 {
     const auto future = Files::File::getDataAsync(path);
 
-    return observe(future).subscribe([path](Files::FileDataResult *result) {
-        auto fileName = FileUtils::fileName(path);
+    return observe(future)
+        .subscribe([path](Files::FileDataResult *result) {
+            auto fileName = FileUtils::fileName(path);
 
 #ifdef Q_OS_WIN
-        fileName.push_front(QUuid::createUuid().toString(QUuid::Id128));
-        QFile tempFile(FileUtils::fileInDir(fileName, QDir::tempPath()));
-        tempFile.open(QIODevice::WriteOnly);
+            fileName.push_front(QUuid::createUuid().toString(QUuid::Id128));
+            QFile tempFile(FileUtils::fileInDir(fileName, QDir::tempPath()));
+            tempFile.open(QIODevice::WriteOnly);
 #else
-        auto tempFile = QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
-        tempFile.setAutoRemove(false);
-        tempFile.open();
+            auto tempFile = QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
+            tempFile.setAutoRemove(false);
+            tempFile.open();
 #endif
-        tempFile.write(result->data());
-        tempFile.close();
+            tempFile.write(result->data());
+            tempFile.close();
 
-        result->deleteLater();
+            result->deleteLater();
 
-        return loadFromLocalFile(tempFile.fileName());
-    }).future();
+            return loadFromLocalFile(tempFile.fileName());
+        })
+        .future();
 }
 
 auto TagImageLoader::loadFromLocalFile(const QString &path) -> QFuture<QPixmap>
@@ -88,15 +92,15 @@ auto TagImageLoader::loadFromLocalFile(const QString &path) -> QFuture<QPixmap>
 
     switch (mimeType)
     {
-    case FileUtils::MPEG:
+    case FileUtils::MimeType::MPEG:
         return loadFromLocalMpeg(path);
-    case FileUtils::OGA:
+    case FileUtils::MimeType::OGA:
         return loadFromOga(path);
-    case FileUtils::Vorbis:
+    case FileUtils::MimeType::Vorbis:
         return loadFromVorbis(path);
-    case FileUtils::FLAC:
+    case FileUtils::MimeType::FLAC:
         return loadFromFlac(path);
-    case FileUtils::WAV:
+    case FileUtils::MimeType::WAV:
         return loadFromWav(path);
     default:
         qCDebug(gmAudioTagImageLoader()) << "Could not load image from" << path << "mime type is not supported yet";
@@ -148,7 +152,8 @@ auto TagImageLoader::loadFromId3v2(const TagLib::ID3v2::Tag *tag, const QString 
     }
     else
     {
-        qCWarning(gmAudioTagImageLoader()) << "Image exists in metadata, but could it could not be read correctly:" << path;
+        qCWarning(gmAudioTagImageLoader())
+            << "Image exists in metadata, but could it could not be read correctly:" << path;
     }
 
     return completed(image);
@@ -160,7 +165,7 @@ auto TagImageLoader::pixmapFromId3v2Frames(const TagLib::ID3v2::FrameList &frame
 
     for (auto *frame : frames)
     {
-        const auto *pictureFrame = dynamic_cast<ID3v2::AttachedPictureFrame*>(frame);
+        const auto *pictureFrame = dynamic_cast<ID3v2::AttachedPictureFrame *>(frame);
 
         if (!pictureFrame)
         {
@@ -172,7 +177,9 @@ auto TagImageLoader::pixmapFromId3v2Frames(const TagLib::ID3v2::FrameList &frame
             pictureFrame->type() == ID3v2::AttachedPictureFrame::Other)
         {
             const auto format = pictureFrame->mimeType().toCString(true);
-            result.loadFromData(QByteArray::fromRawData(pictureFrame->picture().data(), static_cast<int>(pictureFrame->picture().size())), format);
+            result.loadFromData(QByteArray::fromRawData(pictureFrame->picture().data(),
+                                                        static_cast<int>(pictureFrame->picture().size())),
+                                format);
 
             if (!result.isNull()) break;
         }
@@ -276,12 +283,14 @@ auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QS
             }
             else
             {
-                qCWarning(gmAudioTagImageLoader()) << "Image exists in XiphComment metadata, but could it could not be read correctly:" << path;
+                qCWarning(gmAudioTagImageLoader())
+                    << "Image exists in XiphComment metadata, but could it could not be read correctly:" << path;
             }
         }
     }
 
-    qCDebug(gmAudioTagImageLoader) << "Could not find image in XiphComment meta data" << tag->pictureList().size() << path;
+    qCDebug(gmAudioTagImageLoader) << "Could not find image in XiphComment meta data" << tag->pictureList().size()
+                                   << path;
     return completed(QPixmap());
 }
 

@@ -1,18 +1,20 @@
 #pragma once
 
+#include "utils/stringutils.h"
+#include <QDir>
 #include <QObject>
 #include <QSettings>
-#include <QDir>
 #include <QVariant>
-#include "utils/stringutils.h"
 
 constexpr ConstQString DEFAULT_GROUP = "";
 
-template <typename T>
-struct SettingRequest {
+template <typename T> struct SettingRequest
+{
     SettingRequest() = default;
-    SettingRequest(const QString& identifier, const T& defaultValue, const QString& group = DEFAULT_GROUP) :
-        identifier(identifier), defaultValue(defaultValue), group(group) {}
+    SettingRequest(const QString &identifier, const T &defaultValue, const QString &group = DEFAULT_GROUP)
+        : identifier(identifier), defaultValue(defaultValue), group(group)
+    {
+    }
 
     QString identifier;
     T defaultValue;
@@ -26,28 +28,25 @@ public:
     explicit AbstractSettingsManager(QObject *parent = nullptr);
 
     Q_INVOKABLE template <typename T>
-    T get(const QString& setting, const T& defaultValue, const QString& group = DEFAULT_GROUP);
+    T get(const QString &setting, const T &defaultValue, const QString &group = DEFAULT_GROUP);
 
-    template <typename T>
-    T get(const SettingRequest<T> &request);
+    template <typename T> T get(const SettingRequest<T> &request);
 
     Q_INVOKABLE template <typename T>
-    void set(const QString& setting, const T& value, const QString& group = DEFAULT_GROUP);
+    void set(const QString &setting, const T &value, const QString &group = DEFAULT_GROUP);
 
-    Q_INVOKABLE bool has(const QString& setting, const QString& group = DEFAULT_GROUP);
+    Q_INVOKABLE bool has(const QString &setting, const QString &group = DEFAULT_GROUP);
 
 protected:
-    template <typename T>
-    void rename(const QString& currentName, const QString& newName, const QString& group);
+    template <typename T> void rename(const QString &currentName, const QString &newName, const QString &group);
 
-    void remove(const QString& setting, const QString& group);
+    void remove(const QString &setting, const QString &group);
 
 private:
     QSettings m_settings = QSettings(QDir::homePath() + "/.gm-companion/settings.ini", QSettings::IniFormat);
-
 };
 
-template<typename T>
+template <typename T>
 auto AbstractSettingsManager::get(const QString &setting, const T &defaultValue, const QString &group) -> T
 {
     m_settings.beginGroup(group);
@@ -56,14 +55,12 @@ auto AbstractSettingsManager::get(const QString &setting, const T &defaultValue,
     return variant.value<T>();
 }
 
-template<typename T>
-auto AbstractSettingsManager::get(const SettingRequest<T> &request) -> T
+template <typename T> auto AbstractSettingsManager::get(const SettingRequest<T> &request) -> T
 {
     return get(request.identifier, request.defaultValue, request.group);
 }
 
-template<typename T>
-void AbstractSettingsManager::set(const QString &setting, const T &value, const QString &group)
+template <typename T> void AbstractSettingsManager::set(const QString &setting, const T &value, const QString &group)
 {
     m_settings.beginGroup(group);
     m_settings.setValue(setting, value);

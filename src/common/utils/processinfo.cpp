@@ -1,57 +1,56 @@
 #include "processinfo.h"
-#include <QtGlobal>
-#include <QLoggingCategory>
-
-#include <sys/types.h>
-#include <dirent.h>
-#include <cerrno>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-#include <cstdio>
 #include <QDir>
-
-Q_LOGGING_CATEGORY(gmProcessInfo, "gm.utils.processinfo")
+#include <QLoggingCategory>
+#include <QtGlobal>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <dirent.h>
+#include <fstream>
+#include <iostream>
+#include <sys/types.h>
+#include <vector>
 
 #ifdef Q_OS_MACOS
 #include <libproc.h>
 #endif
 
 #ifdef Q_OS_WIN
-#include <windows.h>
-#include <tlhelp32.h>
-#include <tchar.h>
 #include <QStringList>
+#include <tchar.h>
+#include <tlhelp32.h>
+#include <windows.h>
 #endif
+
+Q_LOGGING_CATEGORY(gmProcessInfo, "gm.utils.processinfo")
 
 using namespace std;
 
 auto ProcessInfo::isProcessRunning(const QString &procName) -> bool
 {
-    #ifdef Q_OS_MACOS
+#ifdef Q_OS_MACOS
 
     return isProcessRunningMac(procName.toUtf8());
 
-    #elif defined Q_OS_UNIX
+#elif defined Q_OS_UNIX
 
     return isProcessRunningUnix(procName);
 
-    #elif defined Q_OS_WIN
+#elif defined Q_OS_WIN
     // https://stackoverflow.com/a/57164620
 
-    for (const auto &name : { procName, QString("%1%2").arg(procName, ".exe") })
+    for (const auto &name : {procName, QString("%1%2").arg(procName, ".exe")})
     {
         if (isProcessRunningWin(name)) return true;
     }
     return false;
 
-    #else
+#else
 
     qCWarning(gmProcessInfo) << "Error: Method isProcessRunning() is not defined for this operating system!";
 
     return false;
-    #endif
+#endif
 }
 
 #ifdef Q_OS_MACOS
@@ -91,7 +90,7 @@ auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
 
     bool isNumeric = false;
 
-    for (const auto& entry : entries)
+    for (const auto &entry : entries)
     {
         entry.toInt(&isNumeric);
 
@@ -99,27 +98,32 @@ auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
 
         // Read contents of virtual /proc/{pid}/cmdline file
         auto cmdPath = QStringLiteral("/proc/%1/cmdline").arg(entry);
-        auto cmdFile = QFile(cmdPath);
+        auto content = getProcNameFromFile(cmdPath);
 
-        if (cmdFile.open(QIODevice::ReadOnly))
-        {
-            auto content = cmdFile.readAll();
-            cmdFile.close();
-
-            if (!content.isEmpty())
-            {
-                // Get program path
-                content = content.left(content.indexOf('\0'));
-
-                // Keep program name only, removing the path
-                content = content.right(content.length() - content.lastIndexOf('/') - 1);
-
-                if (procName == content) return true;
-            }
-        }
+        if (procName == content) return true;
     }
 
     return false;
+}
+
+auto ProcessInfo::getProcNameFromFile(const QString &procFilePath) -> QString
+{
+    auto cmdFile = QFile(procFilePath);
+
+    if (!cmdFile.open(QIODevice::ReadOnly)) return {};
+
+    auto content = cmdFile.readAll();
+    cmdFile.close();
+
+    if (content.isEmpty()) return {};
+
+    // Get program path
+    content = content.left(content.indexOf('\0'));
+
+    // Keep program name only, removing the path
+    content = content.right(content.length() - content.lastIndexOf('/') - 1);
+
+    return content;
 }
 #elif defined Q_OS_WIN
 auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool
@@ -135,7 +139,8 @@ auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool
         return false;
     }
 
-    do {
+    do
+    {
         if (!QString::compare(QString::fromStdString(entry.szExeFile), name, Qt::CaseInsensitive))
         {
             CloseHandle(snapshot);

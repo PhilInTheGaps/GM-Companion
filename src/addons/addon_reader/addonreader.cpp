@@ -6,10 +6,10 @@ AddonReader::AddonReader(const Addon &addon)
 {
     switch (addon.type())
     {
-    case Addon::AddonType::Folder:
+    case Addon::Type::Folder:
         m_reader = std::make_unique<FolderAddonReader>(addon);
         break;
-    case Addon::AddonType::Archive:
+    case Addon::Type::Archive:
         m_reader = std::make_unique<ArchiveAddonReader>(addon);
         break;
     }
