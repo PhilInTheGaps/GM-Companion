@@ -1,17 +1,17 @@
 #include "librespotcontroller.h"
 #include "../config.h"
-#include "utils/processinfo.h"
-#include "utils/fileutils.h"
-#include "updates/updatemanager.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "updates/updatemanager.h"
+#include "utils/fileutils.h"
+#include "utils/processinfo.h"
 
 #include <QCoreApplication>
-#include <QNetworkRequest>
-#include <QLoggingCategory>
-#include <QJsonDocument>
 #include <QDir>
 #include <QFile>
+#include <QJsonDocument>
+#include <QLoggingCategory>
+#include <QNetworkRequest>
 #include <QTimer>
 #include <chrono>
 
@@ -32,12 +32,14 @@ auto LibrespotController::start() -> QFuture<bool>
     if (isOtherProcessIsRunning())
     {
         generateDeviceName(true);
-        qCWarning(gmLibrespotController()) << "At second librespot process is already running, this might lead to unexpected behavior.";
+        qCWarning(gmLibrespotController())
+            << "At second librespot process is already running, this might lead to unexpected behavior.";
     }
 
     m_isExitExpected = false;
 
-    const auto username = SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify"));
+    const auto username = SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
+                                                                    QStringLiteral("Spotify"));
     const auto password = SettingsManager::getPassword(username, QStringLiteral("Spotify"));
 
     if (username.isEmpty())
@@ -47,8 +49,7 @@ auto LibrespotController::start() -> QFuture<bool>
         return completed(false);
     }
 
-    const auto callback = [this, username](const QString &password)
-    {
+    const auto callback = [this, username](const QString &password) {
         if (password.isEmpty())
         {
             qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
@@ -60,8 +61,9 @@ auto LibrespotController::start() -> QFuture<bool>
         if (info.version.isEmpty())
         {
             qCWarning(gmLibrespotController()) << "Could not get librespot version number.";
-            updateStatus(ServiceStatus::Type::Error, tr("Error: Could not get librespot version number. "
-                                                        "This probably means that the librespot executable can not be found."));
+            updateStatus(ServiceStatus::Type::Error,
+                         tr("Error: Could not get librespot version number. "
+                            "This probably means that the librespot executable can not be found."));
             return completed(false);
         }
 
@@ -72,6 +74,11 @@ auto LibrespotController::start() -> QFuture<bool>
         const auto librespotPath = getLibrespotPath();
 
         qCDebug(gmLibrespotController()) << librespotPath << args;
+
+        if (m_librespotProcess.state() == QProcess::Running || QProcess::Starting)
+        {
+            stop();
+        }
 
         // In librespot versions > 0.3.1 passing the password via stdin is broken
         // but older versions don't support passing the pw via env variables
@@ -135,7 +142,8 @@ void LibrespotController::initProcess()
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::terminate);
 #endif
 
-    connect(&m_librespotProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &LibrespotController::onLibrespotFinished);
+    connect(&m_librespotProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this,
+            &LibrespotController::onLibrespotFinished);
     connect(&m_librespotProcess, &QProcess::errorOccurred, this, &LibrespotController::onLibrespotError);
     connect(&m_librespotProcess, &QProcess::readyReadStandardError, this, &LibrespotController::onLibrespotOutputReady);
 }
@@ -144,26 +152,29 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](QSharedPointer<SpotifyDevice> device) {
+    const auto callback = [this](const QSharedPointer<SpotifyDevice>& device) {
         if (device.isNull() || device->id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
             {
                 m_tryAgainIfSettingActiveFails = false;
-                qCDebug(gmLibrespotController()) << "Could not find spotify device" << deviceName() << "-> trying again in a few seconds.";
+                qCDebug(gmLibrespotController())
+                    << "Could not find spotify device" << deviceName() << "-> trying again in a few seconds.";
                 QTimer::singleShot(TRY_AGAIN_TIMEOUT_MS, this, &LibrespotController::setAsActiveDevice);
             }
             else
             {
                 qCCritical(gmLibrespotController()) << "Could not find spotify device" << deviceName();
-                updateStatus(ServiceStatus::Error, tr("Spotify device could not be found. Are the credentials correct?"));
+                updateStatus(ServiceStatus::Error,
+                             tr("Spotify device could not be found. Are the credentials correct?"));
             }
             return false;
         }
 
         if (device->isActive)
         {
-            qCDebug(gmLibrespotController()) << "Found librespot instance" << deviceName() << "-> it is already set as the active device.";
+            qCDebug(gmLibrespotController())
+                << "Found librespot instance" << deviceName() << "-> it is already set as the active device.";
             return true;
         }
 
@@ -207,11 +218,11 @@ auto LibrespotController::getLibrespotPath() -> QString
     return binaryName;
 }
 
-constexpr auto LibrespotController::getLibrespotBinaryName() -> const char*
+constexpr auto LibrespotController::getLibrespotBinaryName() -> const char *
 {
-    #ifdef Q_OS_WIN
+#ifdef Q_OS_WIN
     return "librespot.exe";
-    #else
+#else
     return "librespot";
 #endif
 }
@@ -222,8 +233,11 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
 
     args << "-n" << deviceName();
     args << "-u" << username;
-    args << "-b" << SettingsManager::instance()->get(QStringLiteral("bitrate"), QStringLiteral("160"), QStringLiteral("Spotify"));
-    args << "--volume-ctrl" << "linear";
+    args << "-b"
+         << SettingsManager::instance()->get(QStringLiteral("bitrate"), QStringLiteral("160"),
+                                             QStringLiteral("Spotify"));
+    args << "--volume-ctrl"
+         << "linear";
 
     if (!SettingsManager::instance()->get(QStringLiteral("enableCache"), true, QStringLiteral("Spotify")))
     {
@@ -240,18 +254,15 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
 
 auto LibrespotController::getLibrespotInfo() -> LibrespotInfo
 {
-    m_librespotProcess.start(getLibrespotPath(), { "--version" });
+    m_librespotProcess.start(getLibrespotPath(), {"--version"});
     m_librespotProcess.waitForFinished();
     const auto output = m_librespotProcess.readAll();
 
     const auto regex = QRegularExpression(R"((?'version'(\d\.?)+)\s+(?'commit'\w*).*(?'date'\d{4}-\d{2}-\d{2}))");
     const auto match = regex.match(output);
 
-    return {
-        match.captured("version"),
-        match.captured("commit"),
-        QDate::fromString(match.captured("date"), QStringLiteral("yyyy-MM-dd"))
-    };
+    return {match.captured("version"), match.captured("commit"),
+            QDate::fromString(match.captured("date"), QStringLiteral("yyyy-MM-dd"))};
 }
 
 void LibrespotController::onLibrespotFinished(int exitCode, const QProcess::ExitStatus &exitStatus)
@@ -305,7 +316,8 @@ void LibrespotController::onLibrespotOutputReady()
         {
             m_hasStarted = true;
             m_hasAuthenticated.complete(true);
-            updateStatus(ServiceStatus::Success, tr("Successfully started librespot client. (Spotify device %1)").arg(deviceName()));
+            updateStatus(ServiceStatus::Success,
+                         tr("Successfully started librespot client. (Spotify device %1)").arg(deviceName()));
         }
 
         if (line.contains("Connection failed:"))

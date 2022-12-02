@@ -1,9 +1,10 @@
 #pragma once
 
-#include <QObject>
 #include <QNetworkAccessManager>
+#include <QObject>
 
 #include "googledriveconnectorlocal.h"
+#include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class GoogleDrive : public Service
@@ -14,16 +15,23 @@ class GoogleDrive : public Service
 public:
     static GoogleDrive *getInstance();
 
-    void grant() { m_connector->grantAccess(); }
-    bool isGranted() const { return m_connector->isAccessGranted(); }
+    void grant()
+    {
+        m_connector->grantAccess();
+    }
+    bool isGranted() const
+    {
+        return m_connector->isAccessGranted();
+    }
 
-    QFuture<RestNetworkReply*> get(const QUrl &url);
-    QFuture<RestNetworkReply*> get(const QNetworkRequest &request);
-    QFuture<RestNetworkReply*> put(const QUrl &url, const QByteArray &data = "");
-    QFuture<RestNetworkReply*> put(const QNetworkRequest &request, const QByteArray &data);
-    QFuture<RestNetworkReply*> post(const QUrl &url, const QByteArray &data);
-    QFuture<RestNetworkReply*> post(const QNetworkRequest &request, const QByteArray &data);
-    QFuture<RestNetworkReply*> customRequest(const QNetworkRequest& request, const QByteArray& verb, const QByteArray& data);
+    QFuture<RestNetworkReply *> get(const QUrl &url);
+    QFuture<RestNetworkReply *> get(const QNetworkRequest &request);
+    QFuture<RestNetworkReply *> put(const QUrl &url, const QByteArray &data = "");
+    QFuture<RestNetworkReply *> put(const QNetworkRequest &request, const QByteArray &data);
+    QFuture<RestNetworkReply *> post(const QUrl &url, const QByteArray &data);
+    QFuture<RestNetworkReply *> post(const QNetworkRequest &request, const QByteArray &data);
+    QFuture<RestNetworkReply *> customRequest(const QNetworkRequest &request, const QByteArray &verb,
+                                              const QByteArray &data);
 
 public slots:
     void connectService() override;

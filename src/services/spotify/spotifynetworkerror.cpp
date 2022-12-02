@@ -5,12 +5,12 @@
 
 SpotifyNetworkError::SpotifyNetworkError(const QByteArray &data)
 {
-    auto error = QJsonDocument::fromJson(data).object()["error"].toObject();
-    a_message = error["message"].toString();
-    a_reason = error["reason"].toString();
+    auto error = QJsonDocument::fromJson(data).object()[QStringLiteral("error")].toObject();
+    a_message = error[QStringLiteral("message")].toString();
+    a_reason = error[QStringLiteral("reason")].toString();
 }
 
 SpotifyNetworkError::operator QString() const
 {
-    return QString("%1 (%2)").arg(message(), reason());
+    return QStringLiteral("%1 (%2)").arg(message(), reason());
 }

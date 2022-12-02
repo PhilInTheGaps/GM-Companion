@@ -8,7 +8,7 @@ class RestNetworkReply : public QObject
 {
     Q_OBJECT
 public:
-    RestNetworkReply(const QNetworkReply::NetworkError &error,
+    RestNetworkReply(QNetworkReply::NetworkError error,
                      const QString &errorText,
                      const QByteArray& data,
                      const QList<QNetworkReply::RawHeaderPair> &headers,

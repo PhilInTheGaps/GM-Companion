@@ -1,30 +1,29 @@
 ﻿#include "spotify.h"
 
+#include "settings/settingsmanager.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QDesktopServices>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QNetworkRequest>
 #include <QLoggingCategory>
-#include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QNetworkRequest>
 
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
 Spotify::Spotify(QObject *parent)
-    : Service("Spotify", parent),
-      albums(new AlbumAPI(this)),
-      player(new PlayerAPI(this)),
-      playlists(new PlaylistsAPI(this)),
-      tracks(new TracksAPI(this))
+    : Service(QStringLiteral("Spotify"), parent), albums(new AlbumAPI(this)), player(new PlayerAPI(this)),
+      playlists(new PlaylistsAPI(this)), tracks(new TracksAPI(this))
 {
     m_networkManager = new QNetworkAccessManager(this);
-    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify")));
+    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
+                                                       QStringLiteral("Spotify")));
 
     connect(m_librespotController.status(), &ServiceStatus::messageChanged, this, &Spotify::forwardClientStatus);
 
-    updateConnector();                                     
+    updateConnector();
 }
 
 void Spotify::updateConnector()
@@ -33,7 +32,8 @@ void Spotify::updateConnector()
 
     if (m_connector) m_connector->deleteLater();
 
-    if (SettingsManager::instance()->get(QStringLiteral("connection"), QStringLiteral("default"), QStringLiteral("Spotify")) == "local")
+    if (SettingsManager::instance()->get(QStringLiteral("connection"), QStringLiteral("default"),
+                                         QStringLiteral("Spotify")) == QLatin1String("local"))
     {
         m_connector = new SpotifyConnectorLocal(m_networkManager, new O2Spotify, this);
     }
@@ -44,7 +44,8 @@ void Spotify::updateConnector()
 
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);
     connect(m_connector, &RESTServiceConnector::statusChanged, this, &Spotify::updateStatus);
-    connect(m_connector, &RESTServiceConnector::isConnectedChanged, [this](bool connected) { this->connected(connected); });
+    connect(m_connector, &RESTServiceConnector::isConnectedChanged, this,
+            [this](bool connected) { this->connected(connected); });
 
     if (connected())
     {
@@ -66,7 +67,7 @@ auto Spotify::startClient() -> QFuture<bool>
     return m_librespotController.start();
 }
 
-auto Spotify::instance() -> Spotify*
+auto Spotify::instance() -> Spotify *
 {
     if (!m_instance)
     {
@@ -98,7 +99,7 @@ auto Spotify::isGranted() const -> bool
     return m_connector->isAccessGranted();
 }
 
-auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetworkReply*>>
+auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetworkReply *>>
 {
     if (!connected() || !m_connector) return {};
 
@@ -110,12 +111,12 @@ auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetw
     return observe(m_connector->get(request)).subscribe(callback).future();
 }
 
-auto Spotify::get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply*>>
+auto Spotify::get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply *>>
 {
     return get(QNetworkRequest(url));
 }
 
-auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
+auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
 {
     if (!connected() || !m_connector) return {};
 
@@ -127,12 +128,12 @@ auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFu
     return observe(m_connector->put(request, data)).subscribe(callback).future();
 }
 
-auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
+auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
 {
     return put(QNetworkRequest(url), data);
 }
 
-auto Spotify::post(const QNetworkRequest& request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply*>>
+auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
 {
     if (!connected() || !m_connector) return {};
 
@@ -144,14 +145,15 @@ auto Spotify::post(const QNetworkRequest& request, const QByteArray &data) -> QF
     return observe(m_connector->post(request, data)).subscribe(callback).future();
 }
 
-auto Spotify::clientStatus() const -> ServiceStatus*
+auto Spotify::clientStatus() const -> ServiceStatus *
 {
     return m_librespotController.status();
 }
 
 void Spotify::connectService()
 {
-    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify")));
+    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
+                                                       QStringLiteral("Spotify")));
 
     const auto hasClientStarted = startClient();
 
@@ -205,9 +207,9 @@ void Spotify::handleNetworkError(const RestNetworkReply *reply)
 
 void Spotify::handleAccessDenied(const SpotifyNetworkError &error)
 {
-    qCWarning(gmSpotify) << "Content Access Denied!" << error;
+    qCWarning(gmSpotify) << "Content Access Denied!" << (QString)error;
 
-    if (error.reason() == "PREMIUM_REQUIRED")
+    if (error.reason() == QStringLiteral("PREMIUM_REQUIRED"))
     {
         connected(false);
         updateStatus(ServiceStatus::Type::Error, tr("Error: Spotify premium is required!"));

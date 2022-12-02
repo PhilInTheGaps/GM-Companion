@@ -21,6 +21,7 @@ set(HEADERS
     rest/restserviceconnectorlocal.h
     rest/restnetworkreply.h
     rest/requestcontainer.h
+    rest/callbackserver.h
     spotify/config.h
     spotify/spotify.h
     spotify/spotifyutils.h
@@ -55,6 +56,7 @@ set(SOURCES
     service.cpp
     rest/restserviceconnectorlocal.cpp
     rest/restnetworkreply.cpp
+    rest/callbackserver.cpp
     spotify/spotify.cpp
     spotify/spotifyutils.cpp
     spotify/spotifyconnectorlocal.cpp

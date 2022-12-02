@@ -1,12 +1,12 @@
 #include "spotifyimageloader.h"
-#include "services/spotify/spotify.h"
 #include "../audiothumbnailcache.h"
+#include "services/spotify/spotify.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QUrlQuery>
 #include <QRandomGenerator>
+#include <QUrlQuery>
 
 #include <QLoggingCategory>
 Q_DECLARE_LOGGING_CATEGORY(gmAudioSpotifyImageLoader)
@@ -31,7 +31,7 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
         return completed(image);
     }
 
-    if (type == SpotifyUtils::Playlist)
+    if (type == SpotifyUtils::SpotifyType::Playlist)
     {
         return loadPlaylistImageAsync(id);
     }
@@ -74,7 +74,7 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
         const auto url = playlist->images.first()->url;
         const auto future = Spotify::instance()->get(url);
 
-        const auto callback = [id, url](gsl::owner<RestNetworkReply*> reply) {
+        const auto callback = [id, url](gsl::owner<RestNetworkReply *> reply) {
             QPixmap image;
 
             if (image.loadFromData(reply->data()))
@@ -226,11 +226,11 @@ void SpotifyImageLoader::initTimers()
 {
     m_haveTimersBeenInitialized = true;
 
-    initTimer(SpotifyUtils::Album);
-    initTimer(SpotifyUtils::Track);
-    initTimer(SpotifyUtils::Artist);
-    initTimer(SpotifyUtils::Episode);
-    initTimer(SpotifyUtils::Show);
+    initTimer(SpotifyUtils::SpotifyType::Album);
+    initTimer(SpotifyUtils::SpotifyType::Track);
+    initTimer(SpotifyUtils::SpotifyType::Artist);
+    initTimer(SpotifyUtils::SpotifyType::Episode);
+    initTimer(SpotifyUtils::SpotifyType::Show);
 }
 
 void SpotifyImageLoader::initTimer(SpotifyUtils::SpotifyType type)
@@ -239,28 +239,29 @@ void SpotifyImageLoader::initTimer(SpotifyUtils::SpotifyType type)
     if (!timer) return;
 
     timer->setSingleShot(true);
-    QObject::connect(timer, &QTimer::timeout, [type](){ SpotifyImageLoader::startRequest(type); });
+    QObject::connect(timer, &QTimer::timeout, [type]() { SpotifyImageLoader::startRequest(type); });
 }
 
-auto SpotifyImageLoader::getQueue(SpotifyUtils::SpotifyType type) -> QQueue<QString>*
+auto SpotifyImageLoader::getQueue(SpotifyUtils::SpotifyType type) -> QQueue<QString> *
 {
     switch (type)
     {
-    case SpotifyUtils::Album:
+    case SpotifyUtils::SpotifyType::Album:
         return &m_albumQueue;
-    case SpotifyUtils::Track:
+    case SpotifyUtils::SpotifyType::Track:
         return &m_trackQueue;
-    case SpotifyUtils::Artist:
+    case SpotifyUtils::SpotifyType::Artist:
         return &m_artistQueue;
-    case SpotifyUtils::Episode:
+    case SpotifyUtils::SpotifyType::Episode:
         return &m_episodeQueue;
-    case SpotifyUtils::Show:
+    case SpotifyUtils::SpotifyType::Show:
         return &m_showQueue;
-    case SpotifyUtils::Playlist:
+    case SpotifyUtils::SpotifyType::Playlist:
         qCCritical(gmAudioSpotifyImageLoader()) << "getQueue() should not have been called for a playlist image";
         break;
     default:
-        qCWarning(gmAudioSpotifyImageLoader()) << "The spotify type" << type << "has not been implemented yet for batch image requests";
+        qCWarning(gmAudioSpotifyImageLoader())
+            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
         break;
     }
 
@@ -271,44 +272,46 @@ auto SpotifyImageLoader::getCriticalQueueLength(SpotifyUtils::SpotifyType type) 
 {
     switch (type)
     {
-    case SpotifyUtils::Album:
+    case SpotifyUtils::SpotifyType::Album:
         return CRITICAL_ALBUM_QUEUE_LENGTH;
-    case SpotifyUtils::Track:
+    case SpotifyUtils::SpotifyType::Track:
         return CRITICAL_TRACK_QUEUE_LENGTH;
-    case SpotifyUtils::Artist:
+    case SpotifyUtils::SpotifyType::Artist:
         return CRITICAL_ARTIST_QUEUE_LENGTH;
-    case SpotifyUtils::Episode:
+    case SpotifyUtils::SpotifyType::Episode:
         return CRITICAL_EPISODE_QUEUE_LENGTH;
-    case SpotifyUtils::Show:
+    case SpotifyUtils::SpotifyType::Show:
         return CRITICAL_SHOW_QUEUE_LENGTH;
-    case SpotifyUtils::Playlist:
+    case SpotifyUtils::SpotifyType::Playlist:
         qCCritical(gmAudioSpotifyImageLoader()) << "getQueue() should not have been called for a playlist image";
         return 0;
     default:
-        qCWarning(gmAudioSpotifyImageLoader()) << "The spotify type" << type << "has not been implemented yet for batch image requests";
+        qCWarning(gmAudioSpotifyImageLoader())
+            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
         return 0;
     }
 }
 
-auto SpotifyImageLoader::getTimer(SpotifyUtils::SpotifyType type) -> QTimer*
+auto SpotifyImageLoader::getTimer(SpotifyUtils::SpotifyType type) -> QTimer *
 {
     switch (type)
     {
-    case SpotifyUtils::Album:
+    case SpotifyUtils::SpotifyType::Album:
         return &m_albumTimer;
-    case SpotifyUtils::Track:
+    case SpotifyUtils::SpotifyType::Track:
         return &m_trackTimer;
-    case SpotifyUtils::Artist:
+    case SpotifyUtils::SpotifyType::Artist:
         return &m_artistTimer;
-    case SpotifyUtils::Episode:
+    case SpotifyUtils::SpotifyType::Episode:
         return &m_episodeTimer;
-    case SpotifyUtils::Show:
+    case SpotifyUtils::SpotifyType::Show:
         return &m_showTimer;
-    case SpotifyUtils::Playlist:
+    case SpotifyUtils::SpotifyType::Playlist:
         qCCritical(gmAudioSpotifyImageLoader()) << "getTimer() should not have been called for a playlist image";
         break;
     default:
-        qCWarning(gmAudioSpotifyImageLoader()) << "The spotify type" << type << "has not been implemented yet for batch image requests";
+        qCWarning(gmAudioSpotifyImageLoader())
+            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
         break;
     }
 
@@ -319,20 +322,21 @@ auto SpotifyImageLoader::getEndpoint(SpotifyUtils::SpotifyType type) -> QString
 {
     switch (type)
     {
-    case SpotifyUtils::Album:
+    case SpotifyUtils::SpotifyType::Album:
         return QStringLiteral("https://api.spotify.com/v1/albums");
-    case SpotifyUtils::Track:
+    case SpotifyUtils::SpotifyType::Track:
         return QStringLiteral("https://api.spotify.com/v1/tracks");
-    case SpotifyUtils::Artist:
+    case SpotifyUtils::SpotifyType::Artist:
         return QStringLiteral("https://api.spotify.com/v1/artists");
-    case SpotifyUtils::Episode:
+    case SpotifyUtils::SpotifyType::Episode:
         return QStringLiteral("https://api.spotify.com/v1/episodes");
-    case SpotifyUtils::Show:
+    case SpotifyUtils::SpotifyType::Show:
         return QStringLiteral("https://api.spotify.com/v1/shows");
-    case SpotifyUtils::Playlist:
+    case SpotifyUtils::SpotifyType::Playlist:
         return QStringLiteral("https://api.spotify.com/v1/playlists/%1/images");
     default:
-        qCWarning(gmAudioSpotifyImageLoader()) << "The spotify type" << type << "has not been implemented yet for batch image requests";
+        qCWarning(gmAudioSpotifyImageLoader())
+            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
         return QLatin1String();
     }
 }
@@ -341,20 +345,21 @@ auto SpotifyImageLoader::getResultArrayName(SpotifyUtils::SpotifyType type) -> Q
 {
     switch (type)
     {
-    case SpotifyUtils::Album:
+    case SpotifyUtils::SpotifyType::Album:
         return QStringLiteral("albums");
-    case SpotifyUtils::Track:
+    case SpotifyUtils::SpotifyType::Track:
         return QStringLiteral("tracks");
-    case SpotifyUtils::Artist:
+    case SpotifyUtils::SpotifyType::Artist:
         return QStringLiteral("artists");
-    case SpotifyUtils::Episode:
+    case SpotifyUtils::SpotifyType::Episode:
         return QStringLiteral("episodes");
-    case SpotifyUtils::Show:
+    case SpotifyUtils::SpotifyType::Show:
         return QStringLiteral("shows");
-    case SpotifyUtils::Playlist:
+    case SpotifyUtils::SpotifyType::Playlist:
         return QStringLiteral("playlists");
     default:
-        qCWarning(gmAudioSpotifyImageLoader()) << "The spotify type" << type << "has not been implemented yet for batch image requests";
+        qCWarning(gmAudioSpotifyImageLoader())
+            << "The spotify type" << (int)type << "has not been implemented yet for batch image requests";
         return QLatin1String();
     }
 }

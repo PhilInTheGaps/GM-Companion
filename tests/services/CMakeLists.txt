@@ -9,4 +9,5 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 add_subdirectory(spotify)
+add_subdirectory(rest)
 

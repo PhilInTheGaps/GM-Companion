@@ -1,7 +1,7 @@
 #include "spotifyutils.h"
-#include <QStringList>
-#include <QRegularExpression>
 #include <QLoggingCategory>
+#include <QRegularExpression>
+#include <QStringList>
 
 Q_LOGGING_CATEGORY(gmSpotifyUtils, "gm.service.spotify.utils")
 
@@ -9,50 +9,49 @@ Q_LOGGING_CATEGORY(gmSpotifyUtils, "gm.service.spotify.utils")
  * @brief Get the type of a spotify uri.
  * @param uri Spotify URI like spotify:track:6rqhFgbbKwnb9MLmUQDhG6
  */
-auto SpotifyUtils::getUriType(const QString& uri) -> SpotifyType
+auto SpotifyUtils::getUriType(const QString &uri) -> SpotifyType
 {
-    if (uri.contains(QStringLiteral(":album:"))
-            || uri.contains(QStringLiteral("/album/"))
-            || uri.contains(QStringLiteral("/albums/"))) return Album;
+    if (uri.contains(QStringLiteral(":album:")) || uri.contains(QStringLiteral("/album/")) ||
+        uri.contains(QStringLiteral("/albums/")))
+        return SpotifyType::Album;
 
-    if (uri.contains(QStringLiteral(":playlist:"))
-            || uri.contains(QStringLiteral("/playlist/"))
-            || uri.contains(QStringLiteral("/playlists/"))) return Playlist;
+    if (uri.contains(QStringLiteral(":playlist:")) || uri.contains(QStringLiteral("/playlist/")) ||
+        uri.contains(QStringLiteral("/playlists/")))
+        return SpotifyType::Playlist;
 
-    if (uri.contains(QStringLiteral(":track:"))
-            || uri.contains(QStringLiteral("/track/"))
-            || uri.contains(QStringLiteral("/tracks/"))) return Track;
+    if (uri.contains(QStringLiteral(":track:")) || uri.contains(QStringLiteral("/track/")) ||
+        uri.contains(QStringLiteral("/tracks/")))
+        return SpotifyType::Track;
 
-    if (uri.contains(QStringLiteral(":artist:"))
-            || uri.contains(QStringLiteral("/artist/"))
-            || uri.contains(QStringLiteral("/artists/"))) return Artist;
+    if (uri.contains(QStringLiteral(":artist:")) || uri.contains(QStringLiteral("/artist/")) ||
+        uri.contains(QStringLiteral("/artists/")))
+        return SpotifyType::Artist;
 
-    if (uri.contains(QStringLiteral(":episode:"))
-            || uri.contains(QStringLiteral("/episode/"))
-            || uri.contains(QStringLiteral("/episodes/"))) return Episode;
+    if (uri.contains(QStringLiteral(":episode:")) || uri.contains(QStringLiteral("/episode/")) ||
+        uri.contains(QStringLiteral("/episodes/")))
+        return SpotifyType::Episode;
 
-    if (uri.contains(QStringLiteral(":show:"))
-            || uri.contains(QStringLiteral("/show/"))
-            || uri.contains(QStringLiteral("/shows/"))) return Show;
+    if (uri.contains(QStringLiteral(":show:")) || uri.contains(QStringLiteral("/show/")) ||
+        uri.contains(QStringLiteral("/shows/")))
+        return SpotifyType::Show;
 
-    if (uri.contains(QStringLiteral(":local:"))
-            || uri.contains(QStringLiteral("/local/"))) return Local;
+    if (uri.contains(QStringLiteral(":local:")) || uri.contains(QStringLiteral("/local/"))) return SpotifyType::Local;
 
-    return Unknown;
+    return SpotifyType::Unknown;
 }
 
 auto SpotifyUtils::typeFromString(const QString &str) -> SpotifyUtils::SpotifyType
 {
-    if (str == QStringLiteral("album")) return Album;
-    if (str == QStringLiteral("playlist")) return Playlist;
-    if (str == QStringLiteral("track")) return Track;
-    if (str == QStringLiteral("artist")) return Artist;
-    if (str == QStringLiteral("episode")) return Episode;
-    if (str == QStringLiteral("show")) return Show;
-    if (str == QStringLiteral("local")) return Local;
+    if (str == QStringLiteral("album")) return SpotifyType::Album;
+    if (str == QStringLiteral("playlist")) return SpotifyType::Playlist;
+    if (str == QStringLiteral("track")) return SpotifyType::Track;
+    if (str == QStringLiteral("artist")) return SpotifyType::Artist;
+    if (str == QStringLiteral("episode")) return SpotifyType::Episode;
+    if (str == QStringLiteral("show")) return SpotifyType::Show;
+    if (str == QStringLiteral("local")) return SpotifyType::Local;
 
     qCCritical(gmSpotifyUtils()) << "Unknown type:" << str;
-    return Unknown;
+    return SpotifyType::Unknown;
 }
 
 /**
@@ -61,12 +60,11 @@ auto SpotifyUtils::typeFromString(const QString &str) -> SpotifyUtils::SpotifyTy
  * or https://open.spotify.com/track/0W35nxtHtFlseSojmygEsf?si=43b918d258c540ad
  * @return Spotify ID like 6rqhFgbbKwnb9MLmUQDhG6
  */
-auto SpotifyUtils::getIdFromUri(const QString &uri)->QString
+auto SpotifyUtils::getIdFromUri(const QString &uri) -> QString
 {
     const auto regex = QRegularExpression(ID_FROM_URI);
-    const auto match = regex.match(uri);
 
-    if (match.isValid() && match.hasMatch())
+    if (const auto match = regex.match(uri); match.isValid() && match.hasMatch())
     {
         return match.captured(QStringLiteral("id"));
     }
@@ -79,12 +77,11 @@ auto SpotifyUtils::getIdFromUri(const QString &uri)->QString
  * @param href Spotify href like
  * https://api.spotify.com/v1/albums/6akEvsycLGftJxYudPjmqK/tracks?offset=0&limit=2
  */
-auto SpotifyUtils::getIdFromHref(const QString& href)->QString
+auto SpotifyUtils::getIdFromHref(const QString &href) -> QString
 {
     const auto regex = QRegularExpression(ID_FROM_HREF);
-    const auto match = regex.match(href);
 
-    if (match.isValid() && match.hasMatch())
+    if (const auto match = regex.match(href); match.isValid() && match.hasMatch())
     {
         return match.captured(QStringLiteral("id"));
     }
@@ -118,15 +115,15 @@ auto SpotifyUtils::isContainerType(SpotifyType type) -> bool
 {
     switch (type)
     {
-    case Album:
-    case Playlist:
-    case Show:
+    case SpotifyType::Album:
+    case SpotifyType::Playlist:
+    case SpotifyType::Show:
         return true;
-    case Track:
-    case Episode:
+    case SpotifyType::Track:
+    case SpotifyType::Episode:
         return false;
     default:
-        qCCritical(gmSpotifyUtils()) << "isContainerType(): unhandled type" << type;
+        qCCritical(gmSpotifyUtils()) << "isContainerType(): unhandled type" << (int)type;
         return false;
     }
 }

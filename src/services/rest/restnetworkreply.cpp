@@ -2,7 +2,9 @@
 
 auto RestNetworkReply::getHeader(const QByteArray &name) const -> QByteArray
 {
-    for (const auto &headerPair : headers())
+    const auto headerPairs = headers();
+
+    for (const auto &headerPair : headerPairs)
     {
         if (headerPair.first == name)
         {

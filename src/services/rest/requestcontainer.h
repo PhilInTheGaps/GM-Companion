@@ -24,14 +24,14 @@ class RequestContainer : public QObject
 public:
     explicit RequestContainer(
             const QNetworkRequest &request,
-            const RequestType &requestType,
+            RequestType requestType,
             const QByteArray &data,
             QObject *parent)
       : RequestContainer(-1, request, requestType, data, "", parent) {}
 
     explicit RequestContainer(
             const QNetworkRequest &request,
-            const RequestType &requestType,
+            RequestType requestType,
             const QByteArray &data,
             const QByteArray &verb,
             QObject *parent)
@@ -40,7 +40,7 @@ public:
     explicit RequestContainer(
             int id,
             const QNetworkRequest &request,
-            const RequestType &requestType,
+            RequestType requestType,
             const QByteArray &data,
             const QByteArray &verb,
             QObject *parent)
