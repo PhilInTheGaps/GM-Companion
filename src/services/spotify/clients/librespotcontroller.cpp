@@ -1,5 +1,4 @@
 #include "librespotcontroller.h"
-#include "../config.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "updates/updatemanager.h"
@@ -67,7 +66,7 @@ auto LibrespotController::start() -> QFuture<bool>
             return completed(false);
         }
 
-        qCDebug(gmLibrespotController()) << info;
+        qCDebug(gmLibrespotController()) << QString(info);
         m_hasAuthenticated = deferred<bool>();
 
         const auto args = getLibrespotArgs(username);
@@ -152,7 +151,7 @@ void LibrespotController::setAsActiveDevice()
 {
     qCDebug(gmLibrespotController()) << "Setting librespot instance as active device ...";
 
-    const auto callback = [this](const QSharedPointer<SpotifyDevice>& device) {
+    const auto callback = [this](const QSharedPointer<SpotifyDevice> &device) {
         if (device.isNull() || device->id.isEmpty())
         {
             if (m_tryAgainIfSettingActiveFails)
@@ -238,6 +237,8 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
                                              QStringLiteral("Spotify"));
     args << "--volume-ctrl"
          << "linear";
+    args << "--volume-range"
+         << "60.0";
 
     if (!SettingsManager::instance()->get(QStringLiteral("enableCache"), true, QStringLiteral("Spotify")))
     {

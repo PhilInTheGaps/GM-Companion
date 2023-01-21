@@ -1,9 +1,9 @@
 #pragma once
 
-#include <QObject>
-#include <QProcess>
 #include "abstractspotifyclientcontroller.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QObject>
+#include <QProcess>
 
 class LibrespotController : public AbstractSpotifyClientController
 {
@@ -29,7 +29,7 @@ private:
     static auto isOtherProcessIsRunning() -> bool;
 
     static auto getLibrespotPath() -> QString;
-    static constexpr auto getLibrespotBinaryName() -> const char*;
+    static constexpr auto getLibrespotBinaryName() -> const char *;
 
     auto getLibrespotArgs(const QString &username) const -> QStringList;
 
@@ -39,8 +39,10 @@ private:
         QString commit;
         QDate buildDate;
 
-        inline operator QString() const {
-            return QStringLiteral("librespot version %1 (%2) [%3]").arg(version, commit, buildDate.toString(Qt::ISODate));
+        explicit inline operator QString() const
+        {
+            return QStringLiteral("librespot version %1 (%2) [%3]")
+                .arg(version, commit, buildDate.toString(Qt::ISODate));
         }
     };
 
@@ -49,8 +51,7 @@ private:
     AsyncFuture::Deferred<bool> m_hasAuthenticated;
 
 private slots:
-    void onLibrespotFinished(int exitCode, const QProcess::ExitStatus& exitStatus);
-    void onLibrespotError(const QProcess::ProcessError& error);
+    void onLibrespotFinished(int exitCode, const QProcess::ExitStatus &exitStatus);
+    void onLibrespotError(const QProcess::ProcessError &error);
     void onLibrespotOutputReady();
 };
-

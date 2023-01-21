@@ -1,10 +1,10 @@
 #include "spotifyplayer.h"
+#include "o0globals.h"
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
-#include "o0globals.h"
-#include "utils/utils.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/utils.h"
 
 #include <QDateTime>
 #include <QJsonArray>
@@ -62,7 +62,7 @@ auto SpotifyPlayer::isSpotifyAvailable() -> bool
  * @param id Spotify ID of element
  * @param offset Index offset. Playback starts with song at offset index
  */
-void SpotifyPlayer::play(const QString& uri)
+void SpotifyPlayer::play(const QString &uri)
 {
     if (!isSpotifyAvailable()) return;
 
@@ -191,17 +191,17 @@ void SpotifyPlayer::again()
 
 void SpotifyPlayer::setVolume(int linear, int logarithmic)
 {
-    Q_UNUSED(logarithmic)
-    qCDebug(gmAudioSpotify) << "Setting volume:" << linear;
+    Q_UNUSED(linear)
+    qCDebug(gmAudioSpotify) << "Setting volume:" << logarithmic;
 
     const auto useDiscod = Discord::getInstance()->enabled();
-    const auto volumePercent = useDiscod ? 0: linear;
+    const auto volumePercent = useDiscod ? 0 : logarithmic;
 
     observe(Spotify::instance()->player->volume(volumePercent)).subscribe([](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 
-    m_volume = linear;
+    m_volume = logarithmic;
 }
 
 /**
@@ -211,11 +211,11 @@ void SpotifyPlayer::getCurrentSong()
 {
     qCDebug(gmAudioSpotify) << "Getting info on current song ...";
 
-    const auto callback = [this](QSharedPointer<SpotifyCurrentTrack> track)
-    {
+    const auto callback = [this](QSharedPointer<SpotifyCurrentTrack> track) {
         if (track->track->uri != m_currentUri)
         {
-            qCDebug(gmAudioSpotify()) << "Found track" << track->track->uri << "is not the expected track" << m_currentUri;
+            qCDebug(gmAudioSpotify()) << "Found track" << track->track->uri << "is not the expected track"
+                                      << m_currentUri;
             startMetaDataTimer();
             return;
         }
