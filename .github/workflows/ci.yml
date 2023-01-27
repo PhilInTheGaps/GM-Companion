@@ -8,22 +8,15 @@ jobs:
         qt-version: ["5.15.2"]
         compiler: ["msvc2019_64"]
     steps:
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v1
-        with:
-          path: ../Qt
-          key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-${{ matrix.compiler }}
-
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2.14.0
+        uses: jurplel/install-qt-action@v3
         with:
           version: ${{ matrix.qt-version }}
           host: "windows"
           arch: "win64_${{ matrix.compiler }}"
-          tools: "tools_openssl_x64,1.1.1-10,qt.tools.openssl.win_x64"
-          aqtversion: ">=2.0.0"
-          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+          tools: "tools_openssl_x64"
+          aqtversion: "==2.1.*"
+          cache: "true"
 
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
@@ -137,13 +130,13 @@ jobs:
           sudo apt-get update -q
           sudo apt-get upgrade -q
           sudo apt install -qq qtchooser mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools python3-setuptools patchelf libasound2-dev libquazip5-dev
-          
+
           echo "Configuring Qt ..."
           echo -e '/opt/qt515/bin\n/opt/qt515/lib' > qt515.conf
           cat qt515.conf
           sudo cp qt515.conf /usr/share/qtchooser/qt515.conf
           sudo ln -snf /usr/share/qtchooser/qt515.conf /usr/lib/x86_64-linux-gnu/qtchooser/default.conf
-          
+
           export QT_BASE_DIR=/opt/qt515
           export QTDIR=$QT_BASE_DIR
           export PATH=$QT_BASE_DIR/bin:$PATH
@@ -178,7 +171,7 @@ jobs:
           export PATH=$QT_BASE_DIR/bin:$PATH
           export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-          
+
           cd build
           cget init --shared
           cget install --release -f ../requirements.ubuntu.txt
@@ -190,7 +183,7 @@ jobs:
           export PATH=$QT_BASE_DIR/bin:$PATH
           export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-          
+
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON
           cmake --build . -j2
@@ -198,7 +191,7 @@ jobs:
       - name: Tests
         run: |
           export QT_QPA_PLATFORM="offscreen"
-          
+
           cd build
           ctest --output-on-failure
 
@@ -227,7 +220,7 @@ jobs:
         with:
           submodules: "recursive"
           fetch-depth: 0
-      
+
       - uses: kenchan0130/actions-system-info@master
         id: system-info
 
@@ -296,7 +289,7 @@ jobs:
           export PATH=$QT_BASE_DIR/bin:$PATH
           export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-          
+
           cd build
           cget init --shared
           cget install --release -f ../requirements.ubuntu.txt
@@ -308,7 +301,7 @@ jobs:
           export PATH=$QT_BASE_DIR/bin:$PATH
           export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
           export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-          
+
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DENABLE_CODE_COVERAGE=ON
           build-wrapper-linux-x86-64 --out-dir bw-output cmake --build . -j2
@@ -316,7 +309,7 @@ jobs:
       - name: Tests
         run: |
           export QT_QPA_PLATFORM="offscreen"
-          
+
           cd build
           ctest --output-on-failure
 
@@ -324,7 +317,7 @@ jobs:
         run: |
           cd build
           gcovr --keep --print-summary
-          
+
       - name: Cache sonar analysis
         id: cache-sonar-analysis
         uses: actions/cache@v2
