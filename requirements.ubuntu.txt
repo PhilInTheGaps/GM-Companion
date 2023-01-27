@@ -8,7 +8,7 @@ taglib/taglib@v1.13
 ryantm/cmark-gfm@fix-include
 
 # quazip
-stachenov/quazip@v1.3 -DQUAZIP_QT_MAJOR_VERSION=5
+stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
 
 # poppler
-https://poppler.freedesktop.org/poppler-22.11.0.tar.xz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF
+freedesktop/poppler@poppler-22.12.0 -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF

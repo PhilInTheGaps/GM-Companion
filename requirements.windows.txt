@@ -2,7 +2,7 @@
 pfultz2/pkgconfig
 
 # zlib, required for basically everything
-https://www.zlib.net/zlib-1.2.13.tar.gz
+madler/zlib@v1.2.13
 
 # qtkeychain
 frankosterfeld/qtkeychain@v0.13.2
@@ -14,24 +14,24 @@ taglib/taglib@v1.13
 ryantm/cmark-gfm@fix-include
 
 # quazip
-stachenov/quazip@v1.3 -DQUAZIP_QT_MAJOR_VERSION=5
+stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
 
 ### requirements for poppler ###
 
 # libpng
-https://download.sourceforge.net/libpng/libpng-1.6.38.tar.xz
+glennrp/libpng@v1.6.39
 
 # bzip2
-#https://github.com/sergiud/bzip2/archive/cmake.zip
+https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.zip
 
 # curl
-https://curl.se/download/curl-7.86.0.tar.gz -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+curl/curl@curl-7_87_0 -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
 # brotli (optional)
 google/brotli@v1.0.9
 
 # freetype
-https://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.xz -DFT_DISABLE_HARFBUZZ=TRUE -DFT_REQUIRE_ZLIB=True -DFT_REQUIRE_PNG=True -DFT_REQUIRE_BROTLI=True
+freetype/freetype@VER-2-12-1 -DFT_DISABLE_HARFBUZZ=TRUE -DFT_REQUIRE_ZLIB=True -DFT_REQUIRE_PNG=True -DFT_REQUIRE_BROTLI=True
 
 # libjpeg-turbo
 libjpeg-turbo/libjpeg-turbo@2.1.4
@@ -43,4 +43,4 @@ http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz -Dlzma=OFF -Dwebp=OFF
 uclouvain/openjpeg@v2.4.0
 
 # poppler
-https://poppler.freedesktop.org/poppler-22.11.0.tar.xz -DENABLE_CPP=OFF -DENABLE_UTILS=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF -DENABLE_BOOST=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF
+freedesktop/poppler@poppler-22.12.0 -DENABLE_CPP=OFF -DENABLE_UTILS=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF -DENABLE_BOOST=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF
