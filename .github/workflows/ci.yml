@@ -72,7 +72,7 @@ jobs:
         run: |
           cd build
           cp ..\..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
-          cp .\cget\bin\*.dll .\tests\RelWithDebInfo\
+          cp .\cget\**\*.dll .\tests\RelWithDebInfo\
           ls tests
           ls tests\RelWithDebInfo
           ctest -C RelWithDebInfo --verbose
