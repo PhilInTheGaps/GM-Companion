@@ -110,6 +110,13 @@ jobs:
           name: gm-companion_${{ runner.os }}
           path: .\build\install\bin
           if-no-files-found: error
+          
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 20
+        with:
+          limit-access-to-actor: true
   ubuntu:
     runs-on: ubuntu-18.04
     strategy:
