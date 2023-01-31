@@ -54,7 +54,6 @@ T.ComboBox {
                                          && activeFocus ? 3 : 1
         topPadding: 6 - control.padding
         bottomPadding: 6 - control.padding
-
         text: control.editable ? control.editText : control.displayText
 
         enabled: control.editable
@@ -76,6 +75,7 @@ T.ComboBox {
             border.width: parent && parent.activeFocus ? 2 : 1
             border.color: parent
                           && parent.activeFocus ? Colors.focus : Colors.border
+            implicitHeight: 40
         }
     }
 
