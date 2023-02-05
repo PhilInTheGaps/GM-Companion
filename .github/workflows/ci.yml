@@ -99,7 +99,7 @@ jobs:
         run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
 
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin -qmlDir ..\Qt\${{ matrix.qt-version }}\${{ matrix.compiler }}\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir ..\Qt\${{ matrix.qt-version }}\${{ matrix.compiler }}\qml -targetDir build\install\bin
 
       - name: Remove debug info from install folder
         run: rm .\build\install\**\*.pdb
