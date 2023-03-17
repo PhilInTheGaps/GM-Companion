@@ -12,6 +12,7 @@ CallbackServer::CallbackServer(QObject *parent) : QObject{parent}
 
 void CallbackServer::start(quint16 port, int maxRetries, const QString &successPage)
 {
+    m_port = port;
     m_maxRetries = maxRetries;
     m_successPage = successPage;
     m_server.listen(QHostAddress::LocalHost, port);
@@ -24,7 +25,7 @@ auto CallbackServer::isRunning() const -> bool
 
 auto CallbackServer::getUrl() const -> QString
 {
-    return QStringLiteral("http://localhost:%1").arg(m_server.serverPort());
+    return QStringLiteral("http://localhost:%1").arg(m_port);
 }
 
 auto CallbackServer::getParameters() const -> QMap<QString, QString>

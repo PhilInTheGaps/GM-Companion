@@ -23,6 +23,7 @@ signals:
 
 private:
     QTcpServer m_server;
+    quint16 m_port = 0;
     int m_maxRetries = 3;
     int m_tries = 0;
     QString m_successPage;
