@@ -1,0 +1,14 @@
+{
+    "categories": [
+        {
+            "name": "Test Category",
+            "scenarios": [
+                {
+                    "name": "Test Scenario"
+                }
+            ]
+        }
+    ],
+    "name": "Test",
+    "version": 3
+}

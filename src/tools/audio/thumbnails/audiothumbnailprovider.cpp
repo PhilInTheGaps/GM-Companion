@@ -4,18 +4,16 @@
 
 #include <QRegularExpression>
 
-AudioThumbnailProvider::AudioThumbnailProvider() :
-    QQuickImageProvider(QQuickImageProvider::Pixmap)
+AudioThumbnailProvider::AudioThumbnailProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
 }
 
-auto AudioThumbnailProvider::requestPixmap(const QString& id, QSize *size, const QSize& requestedSize) -> QPixmap
+auto AudioThumbnailProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) -> QPixmap
 {
     auto _id = id;
     auto type = QStringLiteral("Music");
-    const auto match = regex.match(id);
 
-    if (match.hasMatch())
+    if (const auto match = regex.match(id); match.hasMatch())
     {
         _id = match.captured(1);
         type = match.captured(2);

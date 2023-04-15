@@ -23,3 +23,9 @@ add_executable(test_audiosaveload testaudiosaveload.cpp)
 target_link_libraries(test_audiosaveload gm-companion-lib common testhelper Qt5::Gui Qt5::Test)
 set_target_properties(test_audiosaveload PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_audiosaveload COMMAND test_audiosaveload)
+
+# Audio Addons
+add_executable(test_audioaddons testaudioaddons.cpp)
+target_link_libraries(test_audioaddons gm-companion-lib common testhelper Qt5::Gui Qt5::Test)
+set_target_properties(test_audioaddons PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+add_test(NAME test_audioaddons COMMAND test_audioaddons)

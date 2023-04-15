@@ -15,4 +15,5 @@ public:
 
     virtual auto findAllFiles(const QString &path, const QStringList &filter) -> QStringList = 0;
     virtual auto readFile(const QString &path) -> QByteArray = 0;
+    virtual auto checkFile(const QString &path) -> bool = 0;
 };

@@ -1,44 +1,37 @@
-#ifndef ADDONELEMENTMANAGER_H
-#define ADDONELEMENTMANAGER_H
+#pragma once
 
+#include "src/addons/addon.h"
+#include "src/common/abstracttool.h"
+#include "src/tools/audio/project/audioproject.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QMap>
 #include <QObject>
-#include "../project/audioproject.h"
 
-class AddonElementManager : public QObject
+class AddonElementManager : public AbstractTool
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList spotifyFolders READ spotifyFolders NOTIFY spotifyFoldersChanged)
-    Q_PROPERTY(QStringList elementNames READ elements NOTIFY elementsChanged)
+    READ_PROPERTY(QList<Addon *>, addons)
+    READ_PROPERTY(QList<AudioProject *>, projects)
+    AUTO_PROPERTY(int, currentIndex)
 
 public:
     explicit AddonElementManager(QObject *parent = nullptr);
 
-    QStringList spotifyFolders() const { return m_spotifyFolders; }
-    Q_INVOKABLE void setFolder(QString folder);
+public slots:
+    void loadData() override;
 
-    QStringList elements() const { return m_spotifyNames; }
-    Q_INVOKABLE void setAddElement(int index, bool add);
-
-    Q_INVOKABLE void resetChecked();
-    Q_INVOKABLE void addElements(bool subscenario = false, int scenarioIndex = 0);
+private slots:
+    void onInstalledAddonsChanged(const QList<Addon *> &addons);
+    void onCurrentIndexChanged(int index);
+    void onCurrentScenarioChanged(AudioScenario *scenario);
+    void onProjectsChanged(QList<AudioProject *> projects);
 
 private:
-    void findAddons();
-    QStringList m_addonPaths;
-    QStringList m_spotifyFiles;
+    void loadAddonProjects(const Addon &addon);
+    static void removeUnsupportedElementsFromProject(AudioProject &project);
+    static void removeUnsupportedElementsFromCategory(AudioCategory &category);
+    static void removeUnsupportedElementsFromScenario(AudioScenario &scenario);
+    static void removeEmptySubscenarios(AudioScenario &scenario);
 
-    void findSpotifyFolders();
-    QStringList m_spotifyFolders;
-    QString m_currentSpotifyFolder;
-
-    void findSpotifyPlaylists();
-    QList<AudioElement*> m_spotifyElements;
-    QStringList m_spotifyNames;
-
-signals:
-    void spotifyFoldersChanged();
-    void elementsChanged();
-    void exportElements(QList<AudioElement*>, bool subscenario, int scenarioIndex);
+    QMap<QString, QList<AudioProject *>> m_projects;
 };
-
-#endif // ADDONELEMENTMANAGER_H

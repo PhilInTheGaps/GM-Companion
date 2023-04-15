@@ -1,16 +1,18 @@
 #include "audiocategory.h"
 #include "audioproject.h"
 #include "logging.h"
-
+#include "src/common/utils/fileutils.h"
+#include "src/common/utils/utils.h"
 #include <QJsonArray>
 #include <utility>
 
-AudioCategory::AudioCategory(const QString& name, const QString& path, QList<AudioScenario*> scenarios, AudioProject *parent)
-    : TreeItem(name, 0, true, parent), m_path(path + "/" + name), m_scenarios(std::move(scenarios))
+AudioCategory::AudioCategory(const QString &name, const QString &parentPath, QList<AudioScenario *> scenarios,
+                             AudioProject *parent)
+    : TreeItem(name, 0, true, parent), m_path(parentPath + "/" + name), m_scenarios(std::move(scenarios))
 {
     setName(name);
 
-    for (auto *scenario : m_scenarios)
+    for (auto *scenario : qAsConst(m_scenarios))
     {
         prepareScenario(scenario);
     }
@@ -18,13 +20,22 @@ AudioCategory::AudioCategory(const QString& name, const QString& path, QList<Aud
     if (!m_scenarios.isEmpty()) setCurrentScenario(m_scenarios.first());
 }
 
-AudioCategory::AudioCategory(const QJsonObject &object, const QString& path, AudioProject *parent)
-    : TreeItem("", 0, true, parent)
+AudioCategory::AudioCategory(const AudioCategory &other)
+    : AudioCategory(other.name(), FileUtils::dirFromPath(other.path()), Utils::copyList(other.scenarios()),
+                    qobject_cast<AudioProject *>(other.parent()))
+{
+}
+
+AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, AudioProject *parent)
+    : TreeItem(QLatin1String(""), 0, true, parent)
 {
     setName(object[QStringLiteral("name")].toString());
     m_path = path + "/" + name();
 
-    for (auto scenario : object[QStringLiteral("scenarios")].toArray())
+    const auto scenarios = object[QStringLiteral("scenarios")].toArray();
+    m_scenarios.reserve(scenarios.size());
+
+    for (auto scenario : scenarios)
     {
         auto *object = new AudioScenario(scenario.toObject(), m_path, this);
         prepareScenario(object);
@@ -39,7 +50,7 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString& path, Aud
  */
 auto AudioCategory::toJson() const -> QJsonObject
 {
-    QJsonObject object = {{ "name", name() }};
+    QJsonObject object = {{"name", name()}};
 
     QJsonArray scenariosJson;
 
@@ -51,7 +62,7 @@ auto AudioCategory::toJson() const -> QJsonObject
         }
     }
 
-    object.insert("scenarios", scenariosJson);
+    object.insert(QStringLiteral("scenarios"), scenariosJson);
     return object;
 }
 
@@ -64,14 +75,14 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
     if (!scenario || !m_scenarios.contains(scenario))
     {
         m_currentScenario = nullptr;
-        emit currentScenarioChanged();
+        emit currentScenarioChanged(nullptr);
         return false;
     }
 
     qDebug() << "AudioCategory: Setting current scenario:" << scenario->name() << "...";
 
     m_currentScenario = scenario;
-    emit currentScenarioChanged();
+    emit currentScenarioChanged(scenario);
     return true;
 }
 
@@ -123,9 +134,9 @@ auto AudioCategory::deleteScenario(AudioScenario *scenario) -> bool
 /**
  * @brief Get a list of all elements in the category.
  */
-auto AudioCategory::elements() const -> QList<AudioElement*>
+auto AudioCategory::elements() const -> QList<AudioElement *>
 {
-    QList<AudioElement*> list;
+    QList<AudioElement *> list;
 
     for (auto *scenario : m_scenarios)
     {

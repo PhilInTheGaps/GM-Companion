@@ -96,7 +96,7 @@ T.ComboBox {
         topMargin: 5
         bottomMargin: 5
         padding: 0
-        modal: control.model.length
+        modal: control && control.model && control.model.length
         transformOrigin: Item.Top
 
         enter: Transition {

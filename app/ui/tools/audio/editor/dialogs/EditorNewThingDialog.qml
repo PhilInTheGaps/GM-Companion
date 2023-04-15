@@ -11,6 +11,9 @@ Dialog {
     property alias subscenarioChecked: subscenario_check_box.checked
     property alias subscenarioIndex: subscenario_combo_box.currentIndex
     property bool canAccept: true
+    property alias currentMode: combo_box.currentIndex
+
+    signal openAddonDialog
 
     function updateCanAccept() {
         if (!audio_editor) {
@@ -43,14 +46,6 @@ Dialog {
             error_label.text = qsTr("Unknown Error")
             break
         }
-    }
-
-    AddonElementDialog {
-        id: addon_dialog
-
-        width: editor_root.width * 0.75
-        height: editor_root.height * 0.75
-        x: (editor_root.width - width) / 2
     }
 
     contentItem: Column {
@@ -107,14 +102,15 @@ Dialog {
         Button {
             id: add_from_addons_button
 
-            visible: canAccept && combo_box.currentIndex > 2
+            visible: canAccept
+            enabled: audio_addon_element_manager ? audio_addon_element_manager.addons.length
+                                                   > 0 : false
 
             anchors.left: parent.left
             anchors.right: parent.right
-            enabled: combo_box.currentIndex == 6
 
             text: qsTr("Add from Addons")
-            onClicked: addon_dialog.open()
+            onClicked: openAddonDialog()
         }
 
         TextField {
@@ -152,6 +148,10 @@ Dialog {
 
     onOpened: {
         textfield.forceActiveFocus()
+
+        if (audio_addon_element_manager) {
+            audio_addon_element_manager.loadData()
+        }
     }
 
     onAccepted: {

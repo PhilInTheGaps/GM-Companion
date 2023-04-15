@@ -55,7 +55,7 @@ void MusicPlayer::play()
 
     switch (m_currentFileSource)
     {
-    case 2:
+    case AudioFile::Source::Spotify:
         m_spotifyPlayer->play();
         emit startedPlaying();
         break;
@@ -128,10 +128,10 @@ void MusicPlayer::loadTrackNamesAsync()
         {
             switch (track->source())
             {
-            case AudioFile::Spotify:
+            case AudioFile::Source::Spotify:
                 if (SpotifyUtils::getUriType(track->url()) == SpotifyUtils::SpotifyType::Track) spotifyTracks << track;
                 break;
-            case AudioFile::Youtube:
+            case AudioFile::Source::Youtube:
                 track->title(tr("[BROKEN] %1").arg(track->url()));
                 qCWarning(gmAudioMusic()) << "Youtube integration is currently broken!";
                 break;
@@ -182,9 +182,9 @@ auto MusicPlayer::loadPlaylistRecursive(int index) -> QFuture<void>
 
     switch (audioFile->source())
     {
-    case AudioFile::Spotify:
+    case AudioFile::Source::Spotify:
         return loadPlaylistRecursiveSpotify(index, audioFile);
-    case AudioFile::Youtube:
+    case AudioFile::Source::Youtube:
         qCWarning(gmAudioMusic()) << "Youtube integration is currently broken";
         break;
     default:
@@ -217,7 +217,7 @@ auto MusicPlayer::loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) 
                 {
                 case SpotifyUtils::SpotifyType::Track:
                 case SpotifyUtils::SpotifyType::Episode:
-                    a_playlist << new AudioFile(track->uri, AudioFile::Spotify, track->name, this);
+                    a_playlist << new AudioFile(track->uri, AudioFile::Source::Spotify, track->name, this);
                 default:
                     break;
                 }
@@ -275,16 +275,16 @@ void MusicPlayer::loadMedia(AudioFile *file)
 
     switch (m_currentFileSource)
     {
-    case AudioFile::File:
+    case AudioFile::Source::File:
         loadLocalFile(file);
         break;
-    case AudioFile::Web:
+    case AudioFile::Source::Web:
         loadWebFile(file);
         break;
-    case AudioFile::Spotify:
+    case AudioFile::Source::Spotify:
         loadSpotifyFile(file);
         break;
-    case AudioFile::Youtube:
+    case AudioFile::Source::Youtube:
         loadYoutubeFile(file);
         break;
     default:
@@ -340,7 +340,7 @@ void MusicPlayer::pause()
 
     switch (m_currentFileSource)
     {
-    case AudioFile::Spotify:
+    case AudioFile::Source::Spotify:
         m_spotifyPlayer->pause();
         break;
 
@@ -396,7 +396,7 @@ void MusicPlayer::again()
 {
     switch (m_currentFileSource)
     {
-    case AudioFile::Spotify:
+    case AudioFile::Source::Spotify:
         m_spotifyPlayer->again();
         break;
 

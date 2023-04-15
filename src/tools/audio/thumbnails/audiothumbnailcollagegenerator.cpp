@@ -1,8 +1,8 @@
 #include "audiothumbnailcollagegenerator.h"
-#include "audiothumbnailgenerator.h"
 #include "audiothumbnail.h"
-#include "loaders/tagimageloader.h"
+#include "audiothumbnailgenerator.h"
 #include "loaders/spotifyimageloader.h"
+#include "loaders/tagimageloader.h"
 #include "loaders/webimageloader.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QPainter>
@@ -20,12 +20,11 @@ auto AudioThumbnailCollageGenerator::makeCollageAsync(AudioElement *element) -> 
     // Get pixmaps to use in the collage
     const auto future = findPixmapsForCollageAsync(element, 0, 0, 0);
 
-    return observe(future).subscribe([element]() {
-        return completed(generateCollageImage(element));
-    }).future();
+    return observe(future).subscribe([element]() { return completed(generateCollageImage(element)); }).future();
 }
 
-auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *element, int index, int fileCount, int failCount) -> QFuture<void>
+auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *element, int index, int fileCount,
+                                                                int failCount) -> QFuture<void>
 {
     auto *audioFile = element->files()[index];
     if (!audioFile) return completed();
@@ -83,14 +82,11 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(AudioElement *element, Aud
 {
     switch (audioFile->source())
     {
-    // Local file
-    case 0:
+    case AudioFile::Source::File:
         return TagImageLoader::loadImageAsync(element, audioFile);
-    // Spotify
-    case 2:
+    case AudioFile::Source::Spotify:
         return SpotifyImageLoader::loadImageAsync(audioFile);
-    // Youtube
-    case 3:
+    case AudioFile::Source::Youtube:
         // TODO: implement
     default:
         return completed(QPixmap());
@@ -104,7 +100,7 @@ auto AudioThumbnailCollageGenerator::generateCollageImage(AudioElement *element)
     if (!thumbnail || thumbnail->collageImages().isEmpty()) return {};
 
     // Create collage
-    QPixmap  image(thumbnailSize());
+    QPixmap image(thumbnailSize());
     QPainter painter;
     painter.begin(&image);
     painter.setBackgroundMode(Qt::OpaqueMode);
@@ -151,22 +147,22 @@ auto AudioThumbnailCollageGenerator::getTargetRect(QSize imageSize, int imageCou
 {
     if (imageCount > 3) imageCount = 4;
 
-    const qreal width  = imageCount == 4 ? imageSize.width() / 2 : imageSize.width() / imageCount;
+    const qreal width = imageCount == 4 ? imageSize.width() / 2 : imageSize.width() / imageCount;
     const qreal height = imageCount == 4 ? imageSize.height() / 2 : imageSize.height();
-    const qreal left   = imageCount == 4 ? width * ((index + 1) % 2) : width * index;
-    const qreal top    = imageCount == 4 ? (index > 1 ? height : 0) : 0;
+    const qreal left = imageCount == 4 ? width * ((index + 1) % 2) : width * index;
+    const qreal top = imageCount == 4 ? (index > 1 ? height : 0) : 0;
 
-    return { left, top, width, height };
+    return {left, top, width, height};
 }
 
 auto AudioThumbnailCollageGenerator::getSourceRect(QRect imageRect, int imageCount, int index) -> QRectF
 {
     if (imageCount > 3) return imageRect;
 
-    const qreal width  = imageRect.width() / imageCount;
+    const qreal width = imageRect.width() / imageCount;
     const qreal height = imageRect.height();
-    const qreal left   = width * index;
-    const qreal top    = 0;
+    const qreal left = width * index;
+    const qreal top = 0;
 
-    return { left, top, width, height };
+    return {left, top, width, height};
 }

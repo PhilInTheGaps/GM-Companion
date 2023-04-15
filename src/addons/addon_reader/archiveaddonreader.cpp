@@ -20,7 +20,7 @@ ArchiveAddonReader::ArchiveAddonReader(const Addon &addon) : m_addon(addon)
 
 auto ArchiveAddonReader::findAllFiles(const QString &path, const QStringList &filter) -> QStringList
 {
-    QuaZipDir dir(m_zip.get(), FileUtils::fileInDir(path, m_root));
+    QuaZipDir const dir(m_zip.get(), FileUtils::fileInDir(path, m_root));
     return dir.entryList(filter, QDir::Files);
 }
 
@@ -39,6 +39,14 @@ auto ArchiveAddonReader::readFile(const QString &path) -> QByteArray
     zipFile.close();
 
     return data;
+}
+
+auto ArchiveAddonReader::checkFile(const QString &path) -> bool
+{
+    qCDebug(gmAddonArchiveReader) << path;
+
+    QuaZipDir const dir(m_zip.get());
+    return dir.exists(FileUtils::fileInDir(path, m_root));
 }
 
 void ArchiveAddonReader::setRootDir()

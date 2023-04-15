@@ -1,37 +1,52 @@
 #include "audioscenario.h"
 #include "audiocategory.h"
 #include "logging.h"
-#include "utils/utils.h"
+#include "src/common/utils/fileutils.h"
+#include "src/common/utils/utils.h"
 #include <QJsonArray>
 
-AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements, QObject *parent)
+AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
+                             QObject *parent)
     : TreeItem(name, path.split("/").length() - 1, true, parent), m_path(path + "/" + name),
-      m_musicLists(std::move(elements.musicLists)),
-      m_soundLists(std::move(elements.soundLists)),
-      m_radios(std::move(elements.radios)),
-      m_scenarios(std::move(elements.scenarios))
+      m_musicLists(std::move(elements.musicLists)), m_soundLists(std::move(elements.soundLists)),
+      m_radios(std::move(elements.radios)), m_scenarios(std::move(elements.scenarios))
 {
     setName(name);
 
-    for (auto *element : m_musicLists) prepareElement(element);
+    for (auto *element : qAsConst(m_musicLists))
+        prepareElement(element);
 
-    for (auto *element : m_soundLists) prepareElement(element);
+    for (auto *element : qAsConst(m_soundLists))
+        prepareElement(element);
 
-    for (auto *element : m_radios) prepareElement(element);
+    for (auto *element : qAsConst(m_radios))
+        prepareElement(element);
 
-    for (auto *scenario : m_scenarios) prepareScenario(scenario);
+    for (auto *scenario : qAsConst(m_scenarios))
+        prepareScenario(scenario);
 }
 
-AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements, AudioCategory *parent)
-    : AudioScenario(name, path, elements, qobject_cast<QObject*>(parent))
+AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
+                             AudioCategory *parent)
+    : AudioScenario(name, path, elements, qobject_cast<QObject *>(parent))
 {
     m_isSubscenario = false;
 }
 
-AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements, AudioScenario *parent)
-    : AudioScenario(name, path, elements, qobject_cast<QObject*>(parent))
+AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
+                             AudioScenario *parent)
+    : AudioScenario(name, path, elements, qobject_cast<QObject *>(parent))
 {
     m_isSubscenario = true;
+}
+
+AudioScenario::AudioScenario(const AudioScenario &other)
+    : AudioScenario(other.name(), FileUtils::dirFromPath(other.path()),
+                    AudioScenarioElements(Utils::copyList(other.m_musicLists), Utils::copyList(other.m_soundLists),
+                                          Utils::copyList(other.m_radios), Utils::copyList(other.m_scenarios)),
+                    other.parent())
+{
+    m_isSubscenario = other.m_isSubscenario;
 }
 
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, QObject *parent)
@@ -69,14 +84,14 @@ AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, QOb
     }
 }
 
-AudioScenario::AudioScenario(const QJsonObject& object, const QString& path, AudioCategory *parent)
-    : AudioScenario(object, path, qobject_cast<QObject*>(parent))
+AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, AudioCategory *parent)
+    : AudioScenario(object, path, qobject_cast<QObject *>(parent))
 {
     m_isSubscenario = false;
 }
 
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, AudioScenario *parent)
-    : AudioScenario(object, path, qobject_cast<QObject*>(parent))
+    : AudioScenario(object, path, qobject_cast<QObject *>(parent))
 {
     m_isSubscenario = true;
 }
@@ -87,9 +102,9 @@ AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, Aud
 auto AudioScenario::toJson() const -> QJsonObject
 {
     QJsonObject object;
-    QJsonArray  musicElementsJson;
-    QJsonArray  soundElementsJson;
-    QJsonArray  radioElementsJson;
+    QJsonArray musicElementsJson;
+    QJsonArray soundElementsJson;
+    QJsonArray radioElementsJson;
 
     object.insert("name", name());
 
@@ -134,17 +149,17 @@ auto AudioScenario::toJson() const -> QJsonObject
 
 auto AudioScenario::model() -> QList<QObject *>
 {
-    QList<QObject*> list;
+    QList<QObject *> list;
     list.reserve(scenarios().length() + 1);
 
     if (!elements().isEmpty())
     {
-        list << qobject_cast<QObject*>(this);
+        list << qobject_cast<QObject *>(this);
     }
 
     for (auto *scenario : scenarios())
     {
-        list << qobject_cast<QObject*>(scenario);
+        list << qobject_cast<QObject *>(scenario);
     }
 
     return list;
@@ -176,7 +191,7 @@ auto AudioScenario::elements(bool recursive) const -> QList<AudioElement *>
     }
     else
     {
-        for (const auto &elementList : { m_musicLists, m_soundLists, m_radios })
+        for (const auto &elementList : {m_musicLists, m_soundLists, m_radios})
         {
             for (auto *element : elementList)
             {
@@ -207,7 +222,7 @@ auto AudioScenario::elements(const AudioElement::Type &type, bool recursive) -> 
 {
     if (!recursive) return getElementList(type);
 
-    QList<AudioElement*> list;
+    QList<AudioElement *> list;
     list.append(getElementList(type));
 
     for (auto *scenario : m_scenarios)
@@ -329,7 +344,7 @@ void AudioScenario::sortElements(bool recursive)
     qDebug() << "Scenario: Sorting elements ...";
     std::sort(m_musicLists.begin(), m_musicLists.end(), AudioElement::compare);
     std::sort(m_soundLists.begin(), m_soundLists.end(), AudioElement::compare);
-    std::sort(m_radios.begin(),     m_radios.end(),     AudioElement::compare);
+    std::sort(m_radios.begin(), m_radios.end(), AudioElement::compare);
 
     if (recursive)
     {
@@ -342,7 +357,6 @@ void AudioScenario::sortElements(bool recursive)
     emit elementsChanged();
     qDebug() << "Done.";
 }
-
 
 auto AudioScenario::addScenario(AudioScenario *scenario) -> bool
 {
@@ -408,7 +422,7 @@ auto AudioScenario::containsScenario(const QString &name) -> bool
     return false;
 }
 
-auto AudioScenario::getElementList(const AudioElement::Type &type) -> QList<AudioElement*>&
+auto AudioScenario::getElementList(const AudioElement::Type &type) -> QList<AudioElement *> &
 {
     switch (type)
     {
@@ -426,9 +440,9 @@ auto AudioScenario::prepareElement(AudioElement *element) -> void
     if (!element) return;
     element->setParent(this);
 
-    connect(element, &AudioElement::nameChanged,  this, &AudioScenario::wasEdited);
-    connect(element, &AudioElement::thumbnailChanged,  this, &AudioScenario::wasEdited);
-    connect(element, &AudioElement::modeChanged,  this, &AudioScenario::wasEdited);
+    connect(element, &AudioElement::nameChanged, this, &AudioScenario::wasEdited);
+    connect(element, &AudioElement::thumbnailChanged, this, &AudioScenario::wasEdited);
+    connect(element, &AudioElement::modeChanged, this, &AudioScenario::wasEdited);
     connect(element, &AudioElement::filesChanged, this, &AudioScenario::wasEdited);
 }
 
@@ -436,9 +450,9 @@ void AudioScenario::releaseElement(AudioElement *element)
 {
     if (!element || element->parent() != this) return;
 
-    disconnect(element, &AudioElement::nameChanged,  this, &AudioScenario::wasEdited);
-    disconnect(element, &AudioElement::thumbnailChanged,  this, &AudioScenario::wasEdited);
-    disconnect(element, &AudioElement::modeChanged,  this, &AudioScenario::wasEdited);
+    disconnect(element, &AudioElement::nameChanged, this, &AudioScenario::wasEdited);
+    disconnect(element, &AudioElement::thumbnailChanged, this, &AudioScenario::wasEdited);
+    disconnect(element, &AudioElement::modeChanged, this, &AudioScenario::wasEdited);
     disconnect(element, &AudioElement::filesChanged, this, &AudioScenario::wasEdited);
 }
 
@@ -446,6 +460,7 @@ void AudioScenario::prepareScenario(AudioScenario *scenario)
 {
     if (!scenario) return;
     scenario->setParent(this);
+    scenario->m_isSubscenario = true;
 
     connect(scenario, &AudioScenario::wasEdited, this, &AudioScenario::wasEdited);
     connect(scenario, &AudioScenario::nameChanged, this, &AudioScenario::wasEdited);

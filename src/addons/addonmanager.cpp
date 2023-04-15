@@ -281,7 +281,7 @@ auto AddonManager::loadAddonDir(const QString &dir, bool isLocal) -> Addon *
         file.close();
 
         auto *addon = Addon::fromJson(this, json, dir, isLocal, Addon::Type::Folder);
-        addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->path()));
+        addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->id()));
         return addon;
     }
 
@@ -324,7 +324,7 @@ auto AddonManager::loadAddonArchive(const QString &path, bool isLocal) -> Addon 
     zip.close();
 
     auto *addon = Addon::fromJson(this, json, path, isLocal, Addon::Type::Archive);
-    addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->path()));
+    addon->enabled(SettingsManager::instance()->getIsAddonEnabled(addon->id()));
 
     return addon;
 }

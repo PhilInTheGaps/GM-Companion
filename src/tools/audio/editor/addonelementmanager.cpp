@@ -1,174 +1,224 @@
 #include "addonelementmanager.h"
-#include "settings/settingsmanager.h"
-#include <QDebug>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QDir>
-#include <utility>
+#include "addons/addon_reader/addonreader.h"
+#include "addons/addonmanager.h"
+#include "src/common/utils/fileutils.h"
+#include "src/common/utils/utils.h"
+#include "src/tools/audio/audiosaveload.h"
+#include "src/tools/audio/thumbnails/audiothumbnailgenerator.h"
 
-AddonElementManager::AddonElementManager(QObject *parent) : QObject(parent)
+AddonElementManager::AddonElementManager(QObject *parent) : AbstractTool(parent), a_currentIndex(-1)
 {
-    qDebug() << "Loading Addon Element Manager ...";
-
-    findAddons();
-
-    if (!m_spotifyFolders.empty()) setFolder(m_spotifyFolders[m_spotifyFolders.size() - 1]);
+    connect(this, &AddonElementManager::currentIndexChanged, this, &AddonElementManager::onCurrentIndexChanged);
+    connect(this, &AddonElementManager::projectsChanged, this, &AddonElementManager::onProjectsChanged);
 }
 
-void AddonElementManager::addElements(bool subscenario, int scenarioIndex)
+void AddonElementManager::loadData()
 {
-    //    QList<MusicElement *> list;
+    if (isDataLoaded() || isLoading()) return;
 
-    //    for (auto e : m_spotifyElements)
-    //    {
-    //        if (e && e->isExport())
-    //        {
-    //            auto e2 = new MusicElement(e->name(), "addons/" + e->name());
-    //            e2->setFiles(e->files());
-    //            list.append(e2);
-    //        }
-    //    }
+    isLoading(true);
 
-    //    if (list.size() > 0) emit exportElements(list, subscenario,
-    // scenarioIndex);
+    connect(AddonManager::instance(), &AddonManager::addonsChanged, this,
+            &AddonElementManager::onInstalledAddonsChanged);
+
+    if (!AddonManager::instance()->isLoading())
+    {
+        onInstalledAddonsChanged(AddonManager::instance()->addons());
+    }
+
+    setIsDataLoaded(true);
 }
 
-void AddonElementManager::setFolder(QString folder)
+void AddonElementManager::onInstalledAddonsChanged(const QList<Addon *> &addons)
 {
-    m_currentSpotifyFolder = std::move(folder);
-    findSpotifyPlaylists();
-}
+    QList<Addon *> list;
 
-// Get all enabled addons
-void AddonElementManager::findAddons()
-{
-    QStringList paths = { QDir::homePath() + "/.gm-companion/addons", ":/addons" };
-
-    /*
-       for (QString path : paths)
-       {
-        for (QString addon : getFolders(path))
+    for (auto *addon : addons)
+    {
+        if (addon->isInstalledAndEnabled())
         {
-            if (!addon.startsWith(".") &&
-               SettingsManager::getInstance()->getIsAddonEnabled(addon))
+            AddonReader reader(*addon);
+            auto features = reader.getFeatures();
+
+            if (features.testFlag(AddonReader::Feature::Audio))
             {
-                m_addonPaths.append(path + "/" + addon);
-                QString spotifyFile = path + "/" + addon + "/spotify.json";
-
-                if (QFile(spotifyFile).exists())
-                   m_spotifyFiles.append(spotifyFile);
-            }
-        }
-       }
-     */
-    findSpotifyFolders();
-}
-
-// Read all Spotify files and get folders
-void AddonElementManager::findSpotifyFolders()
-{
-    for (const QString& file : m_spotifyFiles)
-    {
-        QFile f(file);
-        f.open(QIODevice::ReadOnly);
-        QString content = f.readAll();
-        f.close();
-
-        auto doc     = QJsonDocument::fromJson(content.toLocal8Bit());
-        auto root    = doc.object();
-        auto folders = root.value("data").toArray();
-
-        for (auto folder : folders)
-        {
-            QString folderName = folder.toObject().value("folder").toString();
-
-            if (!m_spotifyFolders.contains(folderName)) m_spotifyFolders.append(folderName);
-        }
-    }
-}
-
-void AddonElementManager::setAddElement(int index, bool add)
-{
-    if (index < m_spotifyElements.size())
-    {
-        auto e = m_spotifyElements[index];
-
-        if (e)
-        {
-            e->setIsChecked(add);
-        }
-    }
-}
-
-void AddonElementManager::resetChecked()
-{
-    for (auto e : m_spotifyElements)
-    {
-        if (e)
-        {
-            e->setIsChecked(false);
-        }
-    }
-
-    emit elementsChanged();
-}
-
-// Find Spotify Playlists (and Albums)
-void AddonElementManager::findSpotifyPlaylists()
-{
-    for (auto e : m_spotifyElements) e->deleteLater();
-
-    m_spotifyNames.clear();
-    m_spotifyElements.clear();
-
-    if (!m_currentSpotifyFolder.isEmpty())
-    {
-        for (const QString& file : m_spotifyFiles)
-        {
-            QFile f(file);
-            f.open(QIODevice::ReadOnly);
-            auto doc = QJsonDocument::fromJson(f.readAll());
-            f.close();
-
-            auto root    = doc.object();
-            auto folders = root.value("data").toArray();
-
-            for (auto folder : folders)
-            {
-                QString folderName = folder.toObject().value("folder").toString();
-
-                if (folderName == m_currentSpotifyFolder)
-                {
-                    for (QString value : { "playlists", "albums" })
-                    {
-                        auto playlists = folder.toObject().value(value).toArray();
-
-                        for (auto playlist : playlists)
-                        {
-                            auto name = playlist.toObject().value("name").toString();
-
-                            if (!m_spotifyNames.contains(name))
-                            {
-                                // auto uri     =
-                                // playlist.toObject().value("uri").toString();
-                                // auto element =
-                                // new MusicElement(name);
-                                // auto af      =
-                                // new AudioFile(uri, 2, "", element);
-                                // element->setFiles({
-                                // af });
-
-                                //                  element->setExport(false);
-                                //                  m_spotifyNames.append(name);
-                                //            m_spotifyElements.append(element);
-                            }
-                        }
-                    }
-                }
+                list << addon;
+                loadAddonProjects(*addon);
             }
         }
     }
 
-    emit elementsChanged();
+    a_addons = list;
+    emit addonsChanged(a_addons);
+    isLoading(false);
+}
+
+void AddonElementManager::onCurrentIndexChanged(int index)
+{
+    const auto _addons = addons();
+
+    if (!Utils::isInBounds(_addons, index)) return;
+
+    const auto *addon = _addons[index];
+
+    if (!addon) return;
+
+    a_projects = m_projects[addon->id()];
+    emit projectsChanged(a_projects);
+}
+
+void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario)
+{
+    AudioThumbnailGenerator::generateThumbnails(scenario);
+}
+
+void AddonElementManager::onProjectsChanged(QList<AudioProject *> projects)
+{
+    for (auto *project : qAsConst(projects))
+    {
+        if (!project || !project->currentScenario()) continue;
+
+        AudioThumbnailGenerator::generateThumbnails(project->currentScenario());
+    }
+}
+
+void AddonElementManager::loadAddonProjects(const Addon &addon)
+{
+    AddonReader reader(addon);
+
+    auto projectFiles =
+        reader.findAllFiles(QStringLiteral("/audio"), {QStringLiteral("*.audio"), QStringLiteral("*.json")});
+
+    QList<AudioProject *> projects;
+
+    for (const auto &file : projectFiles)
+    {
+        const auto data = reader.readFile(FileUtils::fileInDir(file, QStringLiteral("/audio")));
+        auto *project = AudioSaveLoad::loadProject(data, this);
+
+        removeUnsupportedElementsFromProject(*project);
+        connect(project, &AudioProject::currentScenarioChanged, this, &AddonElementManager::onCurrentScenarioChanged);
+
+        projects << project;
+    }
+
+    // delete previous projects
+    if (m_projects.contains(addon.id()))
+    {
+        auto list = m_projects.take(addon.id());
+
+        for (auto *project : list)
+        {
+            if (project) project->deleteLater();
+        }
+    }
+
+    m_projects[addon.id()] = projects;
+}
+
+/// Remove element types that are not supported (yet)
+void AddonElementManager::removeUnsupportedElementsFromProject(AudioProject &project)
+{
+    const auto categories = project.categories();
+    QList<AudioCategory *> categoriesToDelete;
+
+    for (auto *category : categories)
+    {
+        if (!category) continue;
+
+        removeUnsupportedElementsFromCategory(*category);
+
+        if (category->scenarios().isEmpty())
+        {
+            categoriesToDelete << category;
+        }
+    }
+
+    for (auto *category : qAsConst(categoriesToDelete))
+    {
+        project.deleteCategory(category);
+    }
+}
+
+void AddonElementManager::removeUnsupportedElementsFromCategory(AudioCategory &category)
+{
+    const auto scenarios = category.scenarios();
+    QList<AudioScenario *> scenariosToDelete;
+
+    for (auto *scenario : scenarios)
+    {
+        if (!scenario) continue;
+
+        removeUnsupportedElementsFromScenario(*scenario);
+        removeEmptySubscenarios(*scenario);
+
+        if (scenario->elements(true).isEmpty())
+        {
+            scenariosToDelete << scenario;
+        }
+    }
+
+    for (auto *scenario : qAsConst(scenariosToDelete))
+    {
+        category.deleteScenario(scenario);
+    }
+}
+
+void AddonElementManager::removeUnsupportedElementsFromScenario(AudioScenario &scenario)
+{
+    const auto elements = scenario.elements(true);
+    QList<AudioElement *> elementsToDelete;
+
+    for (auto *element : elements)
+    {
+        const auto files = element->files();
+        int fileIndex = 0;
+
+        for (const auto *file : files)
+        {
+            switch (file->source())
+            {
+            case AudioFile::Source::Spotify:
+            case AudioFile::Source::Web:
+            case AudioFile::Source::Youtube:
+                fileIndex++;
+                break;
+            default:
+                element->removeFile(fileIndex);
+                break;
+            }
+        }
+
+        if (element->files().isEmpty())
+        {
+            elementsToDelete << element;
+        }
+    }
+
+    for (auto *element : qAsConst(elementsToDelete))
+    {
+        scenario.removeElement(element, true);
+    }
+}
+
+void AddonElementManager::removeEmptySubscenarios(AudioScenario &scenario)
+{
+    const auto subscenarios = scenario.scenarios();
+    QList<AudioScenario *> scenariosToDelete;
+    scenariosToDelete.reserve(subscenarios.size());
+
+    for (auto *subscenario : subscenarios)
+    {
+        removeEmptySubscenarios(*subscenario);
+
+        if (subscenario->elements(true).isEmpty())
+        {
+            scenariosToDelete << subscenario;
+        }
+    }
+
+    for (auto *subscenario : qAsConst(scenariosToDelete))
+    {
+        scenario.deleteScenario(subscenario);
+    }
 }

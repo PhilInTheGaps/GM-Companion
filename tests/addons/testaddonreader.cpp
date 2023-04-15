@@ -11,9 +11,9 @@ private slots:
     void initTestCase();
     void canFindAllFiles();
     void canReadFiles();
+    void canCheckFiles();
+    void canLoadFeatures();
     void cleanupTestCase();
-
-private:
 };
 
 void TestAddonReader::initTestCase()
@@ -48,6 +48,33 @@ void TestAddonReader::canReadFiles()
 
         expectWarning();
         QVERIFY(reader.readFile(QStringLiteral("/this/file/is/missing.json")).isEmpty());
+    }
+}
+
+void TestAddonReader::canCheckFiles()
+{
+    const auto addons = testAddons();
+    for (auto *addon : addons)
+    {
+        AddonReader reader(*addon);
+
+        QVERIFY(reader.checkFile(QStringLiteral("addon.json")));
+        QVERIFY(reader.checkFile(QStringLiteral("/names")));
+        QVERIFY(reader.checkFile(QStringLiteral("/names/test.json")));
+        QVERIFY(!reader.checkFile(QStringLiteral("this-file-does-not-exist")));
+        QVERIFY(!reader.checkFile(QStringLiteral("/this/path/does/not/exist")));
+    }
+}
+
+void TestAddonReader::canLoadFeatures()
+{
+    const auto addons = testAddons();
+    for (auto *addon : addons)
+    {
+        AddonReader reader(*addon);
+        const auto features = reader.getFeatures();
+        QVERIFY(features.testFlag(AddonReader::Feature::Names));
+        QVERIFY(features.testFlag(AddonReader::Feature::Audio));
     }
 }
 

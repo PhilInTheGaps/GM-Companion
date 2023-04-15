@@ -1,9 +1,9 @@
 #include "audioexporter.h"
-#include "settings/settingsmanager.h"
 #include "filesystem/file.h"
 #include "logging.h"
-#include "utils/fileutils.h"
+#include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
 
 using namespace AsyncFuture;
 
@@ -29,9 +29,9 @@ void AudioExporter::exportFiles()
     auto *worker = new Worker(m_path, m_project);
 
     worker->moveToThread(&workerThread);
-    connect(worker, &Worker::copiedFiles,         [ = ]() { delete worker; });
-    connect(worker, &Worker::progressChanged,     this,   &AudioExporter::updateProgress);
-    connect(this,   &AudioExporter::startCopying, worker, &Worker::startCopying);
+    connect(worker, &Worker::copiedFiles, [=]() { delete worker; });
+    connect(worker, &Worker::progressChanged, this, &AudioExporter::updateProgress);
+    connect(this, &AudioExporter::startCopying, worker, &Worker::startCopying);
     workerThread.start();
     emit startCopying();
 }
@@ -43,10 +43,8 @@ void AudioExporter::updateProgress(float progress)
     emit progressChanged();
 }
 
-Worker::Worker(const QString &path, AudioProject *project)
-    : m_path(path), m_project(project)
+Worker::Worker(const QString &path, AudioProject *project) : m_path(path), m_project(project)
 {
-
 }
 
 void Worker::startCopying()
@@ -103,7 +101,8 @@ auto Worker::copyNext() -> bool
     {
         float percent = static_cast<float>(m_exportCount++) / m_fileCount;
         emit progressChanged(percent);
-        qCDebug(gmAudioExporter()) << "   Progress:" << m_exportCount << "/" << m_fileCount << "(" << percent * 100 << "%)";
+        qCDebug(gmAudioExporter()) << "   Progress:" << m_exportCount << "/" << m_fileCount << "(" << percent * 100
+                                   << "%)";
 
         if (copyNextMusic()) return true;
 
@@ -123,21 +122,24 @@ auto Worker::copyNextMusic() -> bool
 {
     if (m_musicFiles.isEmpty()) return false;
 
-    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Music)), "music");
+    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Music)),
+                    "music");
 }
 
 auto Worker::copyNextSound() -> bool
 {
     if (m_soundFiles.isEmpty()) return false;
 
-    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Sound)), "sounds");
+    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Sound)),
+                    "sounds");
 }
 
 auto Worker::copyNextRadio() -> bool
 {
     if (m_radioFiles.isEmpty()) return false;
 
-    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Radio)), "radios");
+    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Radio)),
+                    "radios");
 }
 
 auto Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder) -> bool
@@ -147,11 +149,7 @@ auto Worker::copyFile(const QString &filePath, const QString &base, const QStrin
     const auto oldPath = FileUtils::fileInDir(filePath, base);
     const auto newPath = FileUtils::fileInDir(FileUtils::fileInDir(filePath, subfolder), m_path);
 
-    observe(Files::File::copyAsync(oldPath, newPath)).subscribe([this]() {
-        copyNext();
-    }, [this]() {
-        copyNext();
-    });
+    observe(Files::File::copyAsync(oldPath, newPath)).subscribe([this]() { copyNext(); }, [this]() { copyNext(); });
     return true;
 }
 
@@ -166,7 +164,7 @@ void Worker::copyElements(AudioScenario *scenario)
             for (auto *file : element->files())
             {
                 // Only export local files
-                if (file->source() != 0) continue;
+                if (file->source() != AudioFile::Source::File) continue;
 
                 switch (element->type())
                 {

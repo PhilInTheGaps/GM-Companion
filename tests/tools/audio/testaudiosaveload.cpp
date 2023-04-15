@@ -1,12 +1,12 @@
-#include <QtTest>
-#include <QObject>
-#include <QUuid>
-#include <QJsonDocument>
-#include "src/tools/audio/project/audioproject.h"
-#include "src/tools/audio/audiosaveload.h"
 #include "src/filesystem/file.h"
 #include "src/filesystem/fileaccesslocal.h"
+#include "src/tools/audio/audiosaveload.h"
+#include "src/tools/audio/project/audioproject.h"
 #include "utils/fileutils.h"
+#include <QJsonDocument>
+#include <QObject>
+#include <QUuid>
+#include <QtTest>
 
 #include "tests/testhelper/abstracttest.h"
 
@@ -38,10 +38,7 @@ auto TestAudioSaveLoad::projectAsJson() const -> QByteArray
 void TestAudioSaveLoad::validateResult(QFuture<bool> &future, bool expected)
 {
     QTRY_VERIFY2(future.isFinished() && future.result() == expected,
-                 QString("IsFinished: %1, Result: %2")
-                 .arg(future.isFinished())
-                 .arg(future.result())
-                 .toUtf8());
+                 QString("IsFinished: %1, Result: %2").arg(future.isFinished()).arg(future.result()).toUtf8());
 }
 
 void TestAudioSaveLoad::initTestCase()
@@ -135,37 +132,33 @@ void TestAudioSaveLoad::findProjects()
 }
 
 void TestAudioSaveLoad::findMissingFiles()
-{    
-    QList<AudioFile*> files;
+{
+    QList<AudioFile *> files;
 
     for (int i = 0; i < 5; i++)
     {
-        files.append(new AudioFile(
-                         QUuid::createUuid().toString() + ".mp3", AudioFile::File,
-                         QString("Test File %1").arg(i), this));
+        files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::File,
+                                   QString("Test File %1").arg(i), this));
     }
 
-    files.append(new AudioFile(
-                     QUuid::createUuid().toString() + ".mp3", AudioFile::Web,
-                     QString("Test File (URL)"), this));
-    files.append(new AudioFile(
-                     QUuid::createUuid().toString(), AudioFile::Spotify,
-                     QString("Test File (Spotify))"), this));
-    files.append(new AudioFile(
-                     QUuid::createUuid().toString() + ".mp3", AudioFile::Youtube,
-                     QString("Test File (Youtube)"), this));
+    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Web,
+                               QString("Test File (URL)"), this));
+    files.append(new AudioFile(QUuid::createUuid().toString(), AudioFile::Source::Spotify,
+                               QString("Test File (Spotify))"), this));
+    files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Youtube,
+                               QString("Test File (Youtube)"), this));
 
     auto future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
     validateResult(future, true);
 
     for (auto *file : files)
     {
-        QCOMPARE(file->missing(), file->source() == 0);
+        QCOMPARE(file->missing(), file->source() == AudioFile::Source::File);
     }
 
     auto fileName = files[0]->url();
     auto future1 = Files::File::saveAsync(getFilePath(fileName), "test-data", fileAccess);
-    testFuture(future1, "File::saveAsync", [](){});
+    testFuture(future1, "File::saveAsync", []() {});
     verifyThatFileExists(getFilePath(fileName), true);
 
     future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
@@ -173,7 +166,7 @@ void TestAudioSaveLoad::findMissingFiles()
 
     for (auto *file : files)
     {
-        QCOMPARE(file->missing(), file->source() == 0 && file->url() != fileName);
+        QCOMPARE(file->missing(), file->source() == AudioFile::Source::File && file->url() != fileName);
     }
 }
 

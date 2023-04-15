@@ -1,15 +1,15 @@
 #include "soundplayer.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
 
 #include <algorithm>
-#include <random>
 #include <cstdlib>
+#include <random>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-# include <QRandomGenerator>
+#include <QRandomGenerator>
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
 using namespace AsyncFuture;
@@ -40,7 +40,7 @@ void SoundPlayerController::play(AudioElement *element)
     }
 }
 
-void SoundPlayerController::stop(const QString& element)
+void SoundPlayerController::stop(const QString &element)
 {
     if (Discord::getInstance()->enabled())
     {
@@ -59,7 +59,7 @@ void SoundPlayerController::stop(const QString& element)
 
 auto SoundPlayerController::activeElements() const -> QList<QObject *>
 {
-    QList<QObject*> list;
+    QList<QObject *> list;
 
     for (auto player : m_players)
     {
@@ -128,8 +128,9 @@ void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
     emit soundsChanged(elements());
 }
 
-SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager, DiscordPlayer *discordPlayer, QObject *parent) :
-    AudioPlayer(parent), m_element(element), m_discordPlayer(discordPlayer)
+SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager,
+                         DiscordPlayer *discordPlayer, QObject *parent)
+    : AudioPlayer(parent), m_element(element), m_discordPlayer(discordPlayer)
 {
     if (!element)
     {
@@ -141,8 +142,9 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManage
     m_mediaPlayer->setObjectName(element->name());
     m_mediaPlayer->setVolume(volume);
 
-    connect(m_mediaPlayer,              &QMediaPlayer::mediaStatusChanged,                        this, &SoundPlayer::onMediaStatusChanged);
-    connect(m_mediaPlayer,              QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this, &SoundPlayer::onMediaPlayerError);
+    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &SoundPlayer::onMediaStatusChanged);
+    connect(m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this,
+            &SoundPlayer::onMediaPlayerError);
 
     m_playlist = element->files();
     applyShuffleMode();
@@ -161,19 +163,17 @@ void SoundPlayer::loadMedia(AudioFile *file)
 
     switch (file->source())
     {
-    case 0:
-    {
+    case AudioFile::Source::File: {
         if (m_fileRequestContext) m_fileRequestContext->deleteLater();
         m_fileRequestContext = new QObject(this);
 
         m_fileName = file->url();
         observe(Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath("sounds"))))
-                .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
+            .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
         break;
     }
 
-    case 1:
-    {
+    case AudioFile::Source::Web: {
         m_mediaPlayer->setMedia(QUrl(file->url()));
         m_mediaPlayer->play();
         m_mediaPlayer->setMuted(useDiscord);
@@ -182,13 +182,11 @@ void SoundPlayer::loadMedia(AudioFile *file)
         break;
     }
 
-    case 3:
-    {
-//        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
-//        connect(m_streamManifest, &Streams::StreamManifest::ready, this, &SoundPlayer::onStreamManifestReceived);
-//        m_mediaPlayer->setMuted(useDiscord);
-//        m_fileName = file->url();
-//        if (useDiscord) m_discordPlayer->playSound(file->url());
+    case AudioFile::Source::Youtube: {
+        //        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
+        //        connect(m_streamManifest, &Streams::StreamManifest::ready, this,
+        //        &SoundPlayer::onStreamManifestReceived); m_mediaPlayer->setMuted(useDiscord); m_fileName =
+        //        file->url(); if (useDiscord) m_discordPlayer->playSound(file->url());
         break;
     }
 
@@ -215,7 +213,7 @@ void SoundPlayer::stop()
     emit playerStopped(this);
 }
 
-void SoundPlayer::stopElement(const QString& element)
+void SoundPlayer::stopElement(const QString &element)
 {
     if (m_element && (m_element->name() == element))
     {
@@ -244,7 +242,7 @@ void SoundPlayer::next()
     {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         m_playlistIndex = QRandomGenerator::system()->bounded(m_playlist.length());
-#else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+#else  // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
@@ -278,7 +276,7 @@ void SoundPlayer::applyShuffleMode()
 {
     if (m_element->mode() != 0) return;
 
-    #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QList<AudioFile *> temp;
 
     while (!m_playlist.isEmpty())
@@ -287,10 +285,10 @@ void SoundPlayer::applyShuffleMode()
     }
     m_playlist = temp;
 
-    #else // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+#else  // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     std::random_device rd;
     std::mt19937 gen(rd());
-    QList<AudioFile*> temp;
+    QList<AudioFile *> temp;
 
     while (!m_playlist.isEmpty())
     {
@@ -334,8 +332,8 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
         return;
     }
 
-    #ifdef Q_OS_WIN
-    QFile file(m_tempDir.path() + "/" +  FileUtils::fileName(m_fileName));
+#ifdef Q_OS_WIN
+    QFile file(m_tempDir.path() + "/" + FileUtils::fileName(m_fileName));
 
     if (!file.open(QIODevice::WriteOnly))
     {
@@ -344,14 +342,17 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
             file.setFileName(FileUtils::incrementFileName(file.fileName()));
             if (!file.open(QIODevice::WriteOnly))
             {
-                qCWarning(gmAudioSounds()) << "Error: Could not open temporary file even after incrementing the filename" << file.fileName() << file.errorString();
+                qCWarning(gmAudioSounds())
+                    << "Error: Could not open temporary file even after incrementing the filename" << file.fileName()
+                    << file.errorString();
                 result->deleteLater();
                 return;
             }
         }
         else
         {
-            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName() << file.errorString();
+            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName()
+                                       << file.errorString();
             result->deleteLater();
             return;
         }
@@ -362,12 +363,12 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     file.close();
 
     m_mediaPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
-    #else
+#else
     m_mediaBuffer.close();
     m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
     m_mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
-    #endif
+#endif
 
     auto useDiscord = Discord::getInstance()->enabled();
 
@@ -377,4 +378,3 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     m_mediaPlayer->play();
     result->deleteLater();
 }
-

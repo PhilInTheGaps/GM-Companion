@@ -12,9 +12,9 @@
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "spotifyplayer.h"
 #include "discordplayer.h"
 #include "filesystem/file.h"
+#include "spotifyplayer.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class MusicPlayer : public AudioPlayer
@@ -27,7 +27,7 @@ public:
     void setIndex(int index);
 
     AUTO_PROPERTY(int, playlistIndex);
-    READ_PROPERTY(QList<AudioFile*>, playlist)
+    READ_PROPERTY(QList<AudioFile *>, playlist)
 
 public slots:
     void play() override;
@@ -42,14 +42,14 @@ private:
     QMediaPlayer *m_mediaPlayer = nullptr;
     AudioElement *m_currentElement = nullptr;
     DiscordPlayer *m_discordPlayer = nullptr;
-    MetaDataReader* m_metaDataReader = nullptr;
+    MetaDataReader *m_metaDataReader = nullptr;
 
     /// Context object to easily stop file data requests by deleting the object
     QObject *m_fileRequestContext = nullptr;
     QObject *m_playlistLoadingContext = nullptr;
 
-    //QList<AudioFile*> m_playlist;
-    AudioFile::AudioFileSource m_currentFileSource = AudioFile::Unknown;
+    // QList<AudioFile*> m_playlist;
+    AudioFile::Source m_currentFileSource = AudioFile::Source::Unknown;
 
     QBuffer m_mediaBuffer;
     QString m_fileName;
@@ -67,7 +67,7 @@ private:
     auto loadPlaylist() -> QFuture<void>;
     void clearPlaylist();
     void loadTrackNamesAsync();
-    static void loadSpotifyTrackNamesAsync(const QList<AudioFile*> &tracks);
+    static void loadSpotifyTrackNamesAsync(const QList<AudioFile *> &tracks);
 
     auto loadPlaylistRecursive(int index = 0) -> QFuture<void>;
     auto loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) -> QFuture<void>;
@@ -92,8 +92,8 @@ signals:
     void startedPlaying();
     void clearMetaData();
     void metaDataChanged(QMediaPlayer *mediaPlayer);
-    void metaDataChanged(const QString& key, const QVariant& value);
-    void metaDataChanged(const QByteArray& data);
+    void metaDataChanged(const QString &key, const QVariant &value);
+    void metaDataChanged(const QByteArray &data);
     void currentIndexChanged();
 };
 

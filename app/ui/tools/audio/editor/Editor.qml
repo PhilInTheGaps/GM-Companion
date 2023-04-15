@@ -33,6 +33,22 @@ Page {
     // New Project, Category, Scenario, Element...
     EditorNewThingDialog {
         id: new_thing_dialog
+        onOpenAddonDialog: {
+            addon_dialog.open()
+            close()
+        }
+    }
+
+    AddonElementDialog {
+        id: addon_dialog
+
+        width: parent.width - 100
+        height: parent.height - 50
+        x: 50
+
+        mode: new_thing_dialog.currentMode
+        asSubscenario: new_thing_dialog.subscenarioChecked
+        subscenarioIndex: new_thing_dialog.subscenarioIndex
     }
 
     IconFinderUnsplash {

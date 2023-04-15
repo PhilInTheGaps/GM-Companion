@@ -29,7 +29,7 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
     // Paranoid pointer check
     if (!audioFile) return completed(QPixmap());
 
-    if (audioFile->source() != 0)
+    if (audioFile->source() != AudioFile::Source::File)
     {
         qCCritical(gmAudioTagImageLoader())
             << "Can not read image from tags, as audio file" << audioFile->url() << "is not a local file";

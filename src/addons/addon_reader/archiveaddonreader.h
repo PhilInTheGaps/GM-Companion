@@ -12,6 +12,7 @@ public:
 
     auto findAllFiles(const QString &path, const QStringList &filter) -> QStringList override;
     auto readFile(const QString &path) -> QByteArray override;
+    auto checkFile(const QString &path) -> bool override;
 
 private:
     void setRootDir();

@@ -1,7 +1,7 @@
-#include <QtTest>
-#include <QObject>
 #include "src/tools/audio/project/audioproject.h"
 #include "tests/testhelper/abstracttest.h"
+#include <QObject>
+#include <QtTest>
 
 class TestAudioProject : public AbstractTest
 {

@@ -12,6 +12,7 @@ Rectangle {
     property bool overlay_enabled: true
     property bool small_mode: false
     property string subscenario_name: ""
+    property bool hover_enabled: true
 
     signal clicked
 
@@ -109,7 +110,7 @@ Rectangle {
     MouseArea {
         id: mouse_area
         anchors.fill: parent
-        hoverEnabled: true
+        hoverEnabled: root.hover_enabled
 
         onClicked: root.clicked()
     }

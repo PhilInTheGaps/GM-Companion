@@ -11,7 +11,7 @@ FolderAddonReader::FolderAddonReader(const Addon &addon) : m_addon(addon)
 
 auto FolderAddonReader::findAllFiles(const QString &path, const QStringList &filter) -> QStringList
 {
-    QDir dir(FileUtils::fileInDir(path, m_addon.path()));
+    QDir const dir(FileUtils::fileInDir(path, m_addon.path()));
 
     if (!dir.exists()) return {};
 
@@ -32,4 +32,11 @@ auto FolderAddonReader::readFile(const QString &path) -> QByteArray
 
     qCWarning(gmAddonFolderReader()) << "Could not read file" << path << "as it does not exist";
     return {};
+}
+
+auto FolderAddonReader::checkFile(const QString &path) -> bool
+{
+    qCDebug(gmAddonFolderReader()) << FileUtils::fileInDir(path, m_addon.path());
+
+    return QFile::exists(FileUtils::fileInDir(path, m_addon.path()));
 }
