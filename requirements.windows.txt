@@ -11,7 +11,7 @@ frankosterfeld/qtkeychain@v0.13.2
 taglib/taglib@v1.13
 
 # cmark-gfm
-ryantm/cmark-gfm@fix-include
+github/cmark-gfm@0.29.0.gfm.11
 
 # bzip2
 https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.zip
@@ -25,7 +25,7 @@ stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
 glennrp/libpng@v1.6.39
 
 # curl
-curl/curl@curl-7_87_0 -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+curl/curl@curl-8_0_1 -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
 # brotli (optional)
 google/brotli@v1.0.9
