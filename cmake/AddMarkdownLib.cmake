@@ -2,6 +2,12 @@ find_library(DISCOUNT_LIBRARY markdown)
 find_library(CMARK_GFM_LIBRARY cmark-gfm)
 find_library(CMARK_GFM_EXTENSIONS_LIBRARY cmark-gfm-extensions)
 
+# Check for static CMARK
+if (NOT CMARK_GFM_LIBRARY)
+  find_library(CMARK_GFM_LIBRARY cmark-gfm_static)
+  find_library(CMARK_GFM_EXTENSIONS_LIBRARY cmark-gfm-extensions_static)
+endif()
+
 # Check if discount was found
 if (NOT DISCOUNT_LIBRARY)
 
