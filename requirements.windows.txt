@@ -11,7 +11,7 @@ frankosterfeld/qtkeychain@v0.13.2
 taglib/taglib@v1.13
 
 # cmark-gfm
-github/cmark-gfm@0.29.0.gfm.11
+github/cmark-gfm@0.29.0.gfm.11 -DCMARK_STATIC=ON -DCMARK_SHARED=OFF -DCMARK_TESTS=OFF
 
 # bzip2
 https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.zip
