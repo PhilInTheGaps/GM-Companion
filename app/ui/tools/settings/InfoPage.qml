@@ -24,7 +24,7 @@ Item {
                         "name": qsTr("Open Wiki"),
                         "icon": FontAwesome.book,
                         "iconFont": FontAwesome.familySolid,
-                        "url": "https://gm-companion.github.io/documentation.html"
+                        "url": "https://gm-companion.github.io/docs/"
                     }, {
                         "name": qsTr("Report a Bug"),
                         "icon": FontAwesome.bug,
@@ -44,7 +44,7 @@ Item {
                         "name": qsTr("Changelog"),
                         "icon": FontAwesome.clipboardList,
                         "iconFont": FontAwesome.familySolid,
-                        "url": "https://gm-companion.github.io/documentation/changelog.html"
+                        "url": "https://gm-companion.github.io/docs/changelog/"
                     }]
 
                 CustomButton {
