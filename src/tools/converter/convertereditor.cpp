@@ -184,8 +184,6 @@ void ConverterEditor::save()
         saveProject(project);
     }
 
-    // TODO: Apply changes to tool
-
     isSaved(true);
 }
 
@@ -280,9 +278,16 @@ auto ConverterEditor::saveProject(const ConverterProject *project) -> bool
 {
     if (!project) return true;
 
-    const auto name = QStringLiteral("%1.json").arg(project->name().isEmpty() ? QStringLiteral("unnamed project") : project->name());
+    const auto name =
+        QStringLiteral("%1.json").arg(project->name().isEmpty() ? QStringLiteral("unnamed project") : project->name());
 
     auto path = FileUtils::fileInDir(name, getLocalProjectPath());
+
+    // ensure that project directory exists
+    if (QDir const d(getLocalProjectPath()); !d.exists())
+    {
+        d.mkpath(getLocalProjectPath());
+    }
 
     while (QFileInfo::exists(path))
     {

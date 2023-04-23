@@ -23,6 +23,7 @@ private slots:
     void canDeleteUnit();
 
     void canSaveProjects();
+    void canSaveAndCreateDestinationDir();
 };
 
 void TestConverterEditor::canCreateNewProject()
@@ -265,6 +266,23 @@ void TestConverterEditor::canSaveProjects()
     QCOMPARE(d.entryList(QDir::Files).length(), 2);
     QVERIFY(d.exists(QStringLiteral("v1")));
     d.cd(QStringLiteral("v1"));
+    QCOMPARE(d.entryList(QDir::Files).length(), 1);
+
+    restoreUserFolder(backupDir, unitDir);
+}
+
+void TestConverterEditor::canSaveAndCreateDestinationDir()
+{
+    const auto unitDir = FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath());
+    const auto backupDir = backupUserFolder(unitDir);
+
+    QDir d(unitDir);
+    if (d.exists()) d.removeRecursively();
+
+    ConverterEditor editor(nullptr, nullptr);
+    editor.createProject(QStringLiteral("Test"));
+    editor.save();
+    QVERIFY(editor.isSaved());
     QCOMPARE(d.entryList(QDir::Files).length(), 1);
 
     restoreUserFolder(backupDir, unitDir);

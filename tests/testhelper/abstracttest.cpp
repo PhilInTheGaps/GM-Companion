@@ -162,7 +162,7 @@ void AbstractTest::moveFolderRecursively(const QString &userFolder, const QStrin
 
 void AbstractTest::restoreUserFolder(const QString &backupFolder, const QString &destination)
 {
-    if (!backupFolder.isEmpty()) return;
+    if (destination.isEmpty()) return;
 
     const QDir sourceDir(backupFolder);
     if (!sourceDir.exists())
@@ -171,8 +171,12 @@ void AbstractTest::restoreUserFolder(const QString &backupFolder, const QString 
         return;
     }
 
+    // remove any data from the user directory that the tests might have placed there
     QDir dest(destination);
     if (dest.exists()) dest.removeRecursively();
+
+    // if nothing was backed up, don't restore anything
+    if (backupFolder.isEmpty()) return;
 
     moveFolderRecursively(backupFolder, destination);
 }
