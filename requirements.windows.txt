@@ -43,4 +43,4 @@ http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz -Dlzma=OFF -Dwebp=OFF
 uclouvain/openjpeg@v2.4.0
 
 # poppler
-freedesktop/poppler@poppler-22.12.0 -DENABLE_CPP=OFF -DENABLE_UTILS=OFF -DWITH_ICONV=OFF -DENABLE_LIBCURL=OFF -DENABLE_GLIB=OFF -DENABLE_BOOST=OFF -DENABLE_QT6=OFF -DENABLE_QT5_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF
+https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-23.04.0/poppler-poppler-23.04.0.tar.gz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_UTILS=OFF -DBUILD_QT5_TESTS=OFF

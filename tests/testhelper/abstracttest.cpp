@@ -116,7 +116,7 @@ auto AbstractTest::readResource(const QString &path) -> QByteArray
 /// Returns new path.
 auto AbstractTest::backupUserFolder(const QString &userFolder) -> QString
 {
-    QDir dir(userFolder);
+    const QDir dir(userFolder);
     if (!dir.exists()) return QLatin1String();
 
     const auto folderName = FileUtils::fileName(userFolder);
@@ -139,7 +139,7 @@ void AbstractTest::moveFolderRecursively(const QString &userFolder, const QStrin
     const auto entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
     qDebug() << "Moving" << userFolder << entries << "to" << backupFolder;
 
-    QDir backupDir(backupFolder);
+    const QDir backupDir(backupFolder);
     if (!backupDir.exists()) backupDir.mkpath(backupFolder);
 
     for (const auto &entry : entries)
@@ -156,13 +156,15 @@ void AbstractTest::moveFolderRecursively(const QString &userFolder, const QStrin
         }
     }
 
-    QDir dir2(backupFolder);
+    const QDir dir2(backupFolder);
     qDebug() << backupFolder << dir2.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 }
 
 void AbstractTest::restoreUserFolder(const QString &backupFolder, const QString &destination)
 {
-    QDir sourceDir(backupFolder);
+    if (!backupFolder.isEmpty()) return;
+
+    const QDir sourceDir(backupFolder);
     if (!sourceDir.exists())
     {
         qWarning() << "Could not restore user folder: path does not exist" << backupFolder << destination;
