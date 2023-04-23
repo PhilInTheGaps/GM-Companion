@@ -367,9 +367,6 @@ Page {
                                 }
 
                                 onTextEdited: {
-                                    if (!acceptableInput)
-                                        return
-
                                     converter_editor.changeUnitValue(modelData,
                                                                      text)
                                 }

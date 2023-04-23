@@ -199,7 +199,7 @@ auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, C
 
     const auto factor = fromUnit->value() / toUnit->value();
     const auto value = textToNumber(fromValue);
-    return QString::number(factor * value, 'g', 4);
+    return QString::number(factor * value, 'g', 6);
 }
 
 auto ConverterTool::textToNumber(QString text, bool *ok) -> double
