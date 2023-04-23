@@ -75,6 +75,7 @@ void TestAddonReader::canLoadFeatures()
         const auto features = reader.getFeatures();
         QVERIFY(features.testFlag(AddonReader::Feature::Names));
         QVERIFY(features.testFlag(AddonReader::Feature::Audio));
+        QVERIFY(features.testFlag(AddonReader::Feature::Units));
     }
 }
 

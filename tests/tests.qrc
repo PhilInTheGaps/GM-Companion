@@ -16,6 +16,7 @@
         <file alias="addon.json">resources/addons/test/addon.json</file>
         <file alias="names/test.json">resources/addons/test/names/test.json</file>
         <file alias="audio/test.audio">resources/addons/test/audio/test.audio</file>
+        <file alias="units/units.json">resources/addons/test/units/units.json</file>
     </qresource>
     <qresource prefix="/addon_repositories">
         <file alias="testrepo.json">resources/addon_repositories/testrepo.json</file>

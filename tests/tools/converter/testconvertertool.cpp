@@ -1,3 +1,4 @@
+#include "src/common/utils/fileutils.h"
 #include "src/tools/converter/convertertool.h"
 #include "tests/testhelper/abstracttest.h"
 #include <QtTest>
@@ -7,12 +8,20 @@ class TestConverterTool : public AbstractTest
     Q_OBJECT
 
 private slots:
+    void initTestCase();
     void canConvertUnits();
     void canConvertProjectUnits();
     void canNotConvertInvalidUnits();
     void canLoadProjects();
+    void canLoadAddonProjects();
     void canHandleIncompleteProjects();
+    void cleanupTestCase();
 };
+
+void TestConverterTool::initTestCase()
+{
+    enableTestAddons();
+}
 
 void TestConverterTool::canConvertUnits()
 {
@@ -62,6 +71,24 @@ void TestConverterTool::canLoadProjects()
     QVERIFY(!converter.projects().isEmpty());
 }
 
+void TestConverterTool::canLoadAddonProjects()
+{
+    const auto unitDir = FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath());
+    const auto backupDir = backupUserFolder(unitDir);
+
+    ConverterTool converter(nullptr, nullptr);
+    QVERIFY(converter.projects().isEmpty());
+
+    converter.loadData();
+
+    const auto projects = converter.projects();
+
+    restoreUserFolder(backupDir, unitDir);
+
+    // should include one default project and two addon projects
+    QCOMPARE(converter.projects().length(), 3);
+}
+
 void TestConverterTool::canHandleIncompleteProjects()
 {
     ConverterTool converter(nullptr, nullptr);
@@ -71,5 +98,10 @@ void TestConverterTool::canHandleIncompleteProjects()
         new ConverterProject(QLatin1String(), {new ConverterCategory(QLatin1String(), this)}, this));
 }
 
-QTEST_APPLESS_MAIN(TestConverterTool)
+void TestConverterTool::cleanupTestCase()
+{
+    disableTestAddons();
+}
+
+QTEST_GUILESS_MAIN(TestConverterTool)
 #include "testconvertertool.moc"

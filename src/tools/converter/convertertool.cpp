@@ -1,6 +1,8 @@
 #include "convertertool.h"
 #include "convertereditor.h"
 #include "project/converterprojectupgrader.h"
+#include "src/addons/addon_reader/addonreader.h"
+#include "src/addons/addonmanager.h"
 #include "src/common/utils/fileutils.h"
 #include <QDir>
 #include <QJsonDocument>
@@ -22,6 +24,8 @@ ConverterTool::ConverterTool(const QQmlApplicationEngine *engine, QObject *paren
     connect(this, &ConverterTool::currentProjectChanged, this, &ConverterTool::onCurrentProjectChanged);
     connect(this, &ConverterTool::currentCategoryChanged, this, &ConverterTool::onCurrentCategoryChanged);
     connect(m_editor, &ConverterEditor::isSavedChanged, this, &ConverterTool::onEditorSavedChanged);
+    connect(AddonManager::instance(), &AddonManager::isLoadingChanged, this,
+            &ConverterTool::onAddonManagerLoadingChanged);
 }
 
 void ConverterTool::loadData()
@@ -34,7 +38,6 @@ void ConverterTool::loadData()
 
     a_projects = loadLocalProjects();
 
-    // TODO
     loadAddonProjects();
 
     isLoading(false);
@@ -89,6 +92,17 @@ void ConverterTool::onEditorSavedChanged(bool isSaved)
     forceReloadData();
 }
 
+void ConverterTool::onAddonManagerLoadingChanged(bool isLoading)
+{
+    if (isLoading) return;
+
+    if (isDataLoaded())
+    {
+        forceReloadData();
+        return;
+    }
+}
+
 auto ConverterTool::loadLocalProjects() -> QList<ConverterProject *>
 {
     const auto dirs = {QStringLiteral(":/units"),
@@ -117,7 +131,7 @@ auto ConverterTool::loadLocalProjects(const QStringList &paths, QObject *parent)
     return projects;
 }
 
-auto ConverterTool::loadLocalProject(const QString &path, QObject *parent) -> ConverterProject *
+auto ConverterTool::loadLocalProject(const QString &path, QObject *parent) -> gsl::owner<ConverterProject *>
 {
     QFile file(path);
 
@@ -145,6 +159,30 @@ auto ConverterTool::loadProject(const QByteArray &data, QObject *parent) -> gsl:
 
 void ConverterTool::loadAddonProjects()
 {
+    if (AddonManager::instance()->isLoading()) return;
+
+    const auto addons = AddonManager::instance()->addons();
+
+    for (const auto *addon : addons)
+    {
+        if (!addon || !addon->isInstalledAndEnabled()) continue;
+
+        loadAddonProjects(*addon);
+    }
+}
+
+void ConverterTool::loadAddonProjects(const Addon &addon)
+{
+    AddonReader reader(addon);
+    if (!reader.getFeatures().testFlag(AddonReader::Feature::Units)) return;
+
+    const auto unitsPath = QStringLiteral("/units");
+    const auto files = reader.findAllFiles(unitsPath, {QStringLiteral("*.json")});
+    for (const auto &file : files)
+    {
+        const auto data = reader.readFile(FileUtils::fileInDir(file, unitsPath));
+        a_projects << loadProject(data, this);
+    }
 }
 
 void ConverterTool::forceReloadData()

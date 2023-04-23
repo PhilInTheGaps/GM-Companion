@@ -12,7 +12,8 @@ public:
     {
         None,
         Audio,
-        Names
+        Names,
+        Units
     };
     Q_DECLARE_FLAGS(Features, Feature)
 

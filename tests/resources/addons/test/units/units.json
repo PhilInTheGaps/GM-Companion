@@ -1,0 +1,19 @@
+{
+  "name": "Test Units",
+  "version": 2,
+  "categories": [
+    {
+      "name": "Test Category",
+      "units": [
+        {
+          "name": "Test Unit",
+          "value": 1.0
+        },
+        {
+          "name": "Test Unit 2",
+          "value": 1.5
+        }
+      ]
+    }
+  ]
+}

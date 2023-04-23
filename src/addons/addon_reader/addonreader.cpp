@@ -46,5 +46,10 @@ auto AddonReader::getFeatures() -> AddonReader::Features
         features.setFlag(Feature::Audio);
     }
 
+    if (!findAllFiles(QStringLiteral("/units"), {QStringLiteral("*.json")}).isEmpty())
+    {
+        features.setFlag(Feature::Units);
+    }
+
     return features;
 }

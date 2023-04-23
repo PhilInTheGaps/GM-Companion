@@ -9,6 +9,7 @@
 #include <gsl/gsl>
 
 class ConverterEditor;
+class Addon;
 
 class ConverterTool : public AbstractTool
 {
@@ -35,6 +36,7 @@ private slots:
     void onCurrentProjectChanged(ConverterProject *project);
     void onCurrentCategoryChanged(ConverterCategory *category);
     void onEditorSavedChanged(bool isSaved);
+    void onAddonManagerLoadingChanged(bool isLoading);
 
 private:
     [[nodiscard]] auto loadLocalProjects() -> QList<ConverterProject *>;
@@ -43,6 +45,8 @@ private:
     [[nodiscard]] static auto loadProject(const QByteArray &data, QObject *parent) -> gsl::owner<ConverterProject *>;
 
     void loadAddonProjects();
+    void loadAddonProjects(const Addon &addon);
+
     void forceReloadData();
 
     [[nodiscard]] static auto textToNumber(QString text, bool *ok = nullptr) -> double;
