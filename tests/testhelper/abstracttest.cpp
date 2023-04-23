@@ -102,6 +102,79 @@ auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QFile *
     return tempFile;
 }
 
+auto AbstractTest::readResource(const QString &path) -> QByteArray
+{
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    auto content = file.readAll();
+    file.close();
+
+    return content;
+}
+
+/// Moves content of a folder into a temp dir.
+/// Returns new path.
+auto AbstractTest::backupUserFolder(const QString &userFolder) -> QString
+{
+    QDir dir(userFolder);
+    if (!dir.exists()) return QLatin1String();
+
+    const auto folderName = FileUtils::fileName(userFolder);
+    auto tempFolder = getFilePath(folderName);
+
+    while (QFileInfo::exists(tempFolder))
+    {
+        tempFolder = FileUtils::incrementName(tempFolder);
+    }
+    dir.mkpath(tempFolder);
+
+    moveFolderRecursively(userFolder, tempFolder);
+
+    return tempFolder;
+}
+
+void AbstractTest::moveFolderRecursively(const QString &userFolder, const QString &backupFolder)
+{
+    QDir dir(userFolder);
+    const auto entries = dir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+    qDebug() << "Moving" << userFolder << entries << "to" << backupFolder;
+
+    QDir backupDir(backupFolder);
+    if (!backupDir.exists()) backupDir.mkpath(backupFolder);
+
+    for (const auto &entry : entries)
+    {
+        const auto source = FileUtils::fileInDir(entry, userFolder);
+        const auto destination = FileUtils::fileInDir(entry, backupFolder);
+
+        if (!dir.rename(entry, destination))
+        {
+            // move recursively if simple rename failed
+            moveFolderRecursively(source, destination);
+
+            dir.removeRecursively();
+        }
+    }
+
+    QDir dir2(backupFolder);
+    qDebug() << backupFolder << dir2.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+}
+
+void AbstractTest::restoreUserFolder(const QString &backupFolder, const QString &destination)
+{
+    QDir sourceDir(backupFolder);
+    if (!sourceDir.exists())
+    {
+        qWarning() << "Could not restore user folder: path does not exist" << backupFolder << destination;
+        return;
+    }
+
+    QDir dest(destination);
+    if (dest.exists()) dest.removeRecursively();
+
+    moveFolderRecursively(backupFolder, destination);
+}
+
 void AbstractTest::enableTestAddons()
 {
     auto manager = AddonManager::instance();

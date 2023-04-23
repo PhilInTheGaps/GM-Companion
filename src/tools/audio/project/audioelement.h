@@ -15,13 +15,22 @@ class AudioElement : public TreeItem
     Q_OBJECT
 
 public:
-    enum Type
+    enum class Type
     {
         Music = 0,
         Sound = 1,
         Radio = 2
     };
     Q_ENUM(Type)
+
+    enum class Mode
+    {
+        RandomList = 0,
+        Random = 1,
+        ListLoop = 2,
+        ListOnce = 3
+    };
+    Q_ENUM(Mode)
 
     explicit AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent);
     explicit AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent);
@@ -75,7 +84,7 @@ public:
     static auto typeToSettings(AudioElement::Type type) -> QString;
     READONLY_PROPERTY(Type, type)
 
-    AUTO_PROPERTY(int, mode)
+    AUTO_PROPERTY(AudioElement::Mode, mode)
 
 private:
     QString m_path;

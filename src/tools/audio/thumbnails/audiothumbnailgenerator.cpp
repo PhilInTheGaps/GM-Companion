@@ -1,13 +1,13 @@
 #include "audiothumbnailgenerator.h"
+#include "audiothumbnail.h"
 #include "audiothumbnailcache.h"
 #include "audiothumbnailcollagegenerator.h"
-#include "audiothumbnail.h"
-#include "loaders/webimageloader.h"
 #include "loaders/fileimageloader.h"
 #include "loaders/spotifyimageloader.h"
+#include "loaders/webimageloader.h"
 #include "settings/settingsmanager.h"
-#include <QtConcurrent/QtConcurrentRun>
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QtConcurrent/QtConcurrentRun>
 
 #include <QLoggingCategory>
 Q_LOGGING_CATEGORY(gmAudioThumbnailGenerator, "gm.audio.thumbnails.generator")
@@ -50,8 +50,7 @@ void AudioThumbnailGenerator::receivedImage(AudioElement *element, const QPixmap
     if (pixmap.isNull() && makeFallbackCollage)
     {
         qCDebug(gmAudioThumbnailGenerator()) << "Received pixmap is null, making collage as fallback ...";
-        observe(AudioThumbnailCollageGenerator::makeCollageAsync(element))
-                .subscribe([element](const QPixmap &pixmap) {
+        observe(AudioThumbnailCollageGenerator::makeCollageAsync(element)).subscribe([element](const QPixmap &pixmap) {
             receivedImage(element, pixmap, false);
         });
         return;
@@ -64,40 +63,31 @@ void AudioThumbnailGenerator::receivedImage(AudioElement *element, const QPixmap
 void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
 {
     // Paranoid check
-    if (!element || !element->thumbnail()) return ;
+    if (!element || !element->thumbnail()) return;
 
-    qCDebug(gmAudioThumbnailGenerator()) << "Generating thumbnail for element"
-                                         << QString(*element) << "...";
+    qCDebug(gmAudioThumbnailGenerator()) << "Generating thumbnail for element" << QString(*element) << "...";
 
     const auto iconPath = element->thumbnail()->absoluteUrl();
-    const auto callbackWithFallback = [element](const QPixmap &pixmap) {
-        receivedImage(element, pixmap, true);
-    };
+    const auto callbackWithFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, true); };
 
     // Is web url
-    if (iconPath.startsWith("http://") ||
-        iconPath.startsWith("https://"))
+    if (iconPath.startsWith("http://") || iconPath.startsWith("https://"))
     {
-        observe(WebImageLoader::loadImageAsync(iconPath, networkManager))
-                .subscribe(callbackWithFallback);
+        observe(WebImageLoader::loadImageAsync(iconPath, networkManager)).subscribe(callbackWithFallback);
         return;
     }
 
     // Is a local file
     if (!iconPath.isEmpty())
     {
-        observe(FileImageLoader::loadImageAsync(iconPath))
-                .subscribe(callbackWithFallback);
+        observe(FileImageLoader::loadImageAsync(iconPath)).subscribe(callbackWithFallback);
         return;
     }
 
     // If no explicit thumbnail has been specified, generate collage
-    const auto callbackWithoutFallback = [element](const QPixmap &pixmap) {
-        receivedImage(element, pixmap, false);
-    };
+    const auto callbackWithoutFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); };
 
-    observe(AudioThumbnailCollageGenerator::makeCollageAsync(element))
-            .subscribe(callbackWithoutFallback);
+    observe(AudioThumbnailCollageGenerator::makeCollageAsync(element)).subscribe(callbackWithoutFallback);
 }
 
 auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPixmap
@@ -108,11 +98,11 @@ auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPix
 
 auto AudioThumbnailGenerator::getPlaceholderImage(const QString &type) -> QPixmap
 {
-    if (type == "Sound") return getPlaceholderImage(AudioElement::Sound);
+    if (type == "Sound") return getPlaceholderImage(AudioElement::Type::Sound);
 
-    if (type == "Radio") return getPlaceholderImage(AudioElement::Radio);
+    if (type == "Radio") return getPlaceholderImage(AudioElement::Type::Radio);
 
-    if (type == "Music") return getPlaceholderImage(AudioElement::Music);
+    if (type == "Music") return getPlaceholderImage(AudioElement::Type::Music);
 
     return emptyPixmap();
 }
@@ -121,13 +111,17 @@ auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement::Type type) -> QP
 {
     switch (type)
     {
-    case AudioElement::Type::Music: return QPixmap(":/icons/media/music_image.png");
+    case AudioElement::Type::Music:
+        return QPixmap(":/icons/media/music_image.png");
 
-    case AudioElement::Type::Sound: return QPixmap(":/icons/media/sound_image.png");
+    case AudioElement::Type::Sound:
+        return QPixmap(":/icons/media/sound_image.png");
 
-    case AudioElement::Type::Radio: return QPixmap(":/icons/media/radio_image.png");
+    case AudioElement::Type::Radio:
+        return QPixmap(":/icons/media/radio_image.png");
 
-    default: return emptyPixmap();
+    default:
+        return emptyPixmap();
     }
 }
 

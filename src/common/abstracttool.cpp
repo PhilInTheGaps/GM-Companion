@@ -5,7 +5,7 @@ AbstractTool::AbstractTool(QObject *parent) : QObject(parent), a_isLoading(false
 
 }
 
-bool AbstractTool::isDataLoaded() const
+auto AbstractTool::isDataLoaded() const -> bool
 {
     return m_isDataLoaded;
 }

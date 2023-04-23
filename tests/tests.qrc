@@ -8,6 +8,8 @@
         <file>resources/images/test.jpg</file>
         <file>resources/images/test.tif</file>
         <file>resources/images/test.gif</file>
+        <file>resources/audioproject/project_v3.audio</file>
+        <file>resources/units/units_v1.ini</file>
     </qresource>
     <qresource prefix="/addons"/>
     <qresource prefix="/addons/test">

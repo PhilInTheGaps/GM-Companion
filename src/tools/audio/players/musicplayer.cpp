@@ -72,7 +72,7 @@ void MusicPlayer::startPlaying()
 
     if (m_currentElement && !playlist().isEmpty())
     {
-        if (m_currentElement->mode() == 1)
+        if (m_currentElement->mode() == AudioElement::Mode::Random)
         {
             next();
             return;
@@ -246,7 +246,7 @@ auto MusicPlayer::loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) 
 void MusicPlayer::applyShuffleMode()
 {
     qCDebug(gmAudioMusic) << "Applying shuffle mode" << m_currentElement->mode();
-    if (m_currentElement->mode() != 0) return;
+    if (m_currentElement->mode() != AudioElement::Mode::RandomList) return;
 
     qCDebug(gmAudioMusic) << "Unshuffled playlist:";
     printPlaylist();
@@ -369,8 +369,7 @@ void MusicPlayer::next()
 
     if (!m_currentElement || a_playlist.isEmpty()) return;
 
-    // Complete random
-    if (m_currentElement->mode() == 1)
+    if (m_currentElement->mode() == AudioElement::Mode::Random)
     {
         playlistIndex(QRandomGenerator::system()->bounded(a_playlist.length()));
     }
@@ -383,7 +382,7 @@ void MusicPlayer::next()
         }
 
         // loop around (Mode 0 or 2)
-        else if (m_currentElement->mode() != 3)
+        else if (m_currentElement->mode() != AudioElement::Mode::ListOnce)
         {
             playlistIndex(0);
         }

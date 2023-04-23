@@ -117,24 +117,24 @@ void TestAudioProject::testModifications()
     QCOMPARE(scenario->model().length(), 2); // Only include main scenario if it contains elements
 
     // Elements
-    auto *music1 = new AudioElement("Music1", AudioElement::Music, scenario->path(), scenario);
-    auto *music2 = new AudioElement("Music2", AudioElement::Music, scenario->path(), subscenario);
-    auto *music3 = new AudioElement("Music3", AudioElement::Music, scenario->path(), subscenario2);
+    auto *music1 = new AudioElement("Music1", AudioElement::Type::Music, scenario->path(), scenario);
+    auto *music2 = new AudioElement("Music2", AudioElement::Type::Music, scenario->path(), subscenario);
+    auto *music3 = new AudioElement("Music3", AudioElement::Type::Music, scenario->path(), subscenario2);
     QVERIFY(scenario->addElement(music1));
     QVERIFY(subscenario->addElement(music2));
     QVERIFY(subscenario2->addElement(music3));
 
-    auto *sound1 = new AudioElement("Sound1", AudioElement::Sound, scenario->path(), scenario);
-    auto *radio1 = new AudioElement("Radio1", AudioElement::Radio, scenario->path(), scenario);
+    auto *sound1 = new AudioElement("Sound1", AudioElement::Type::Sound, scenario->path(), scenario);
+    auto *radio1 = new AudioElement("Radio1", AudioElement::Type::Radio, scenario->path(), scenario);
     QVERIFY(scenario->addElement(sound1));
     QVERIFY(scenario->addElement(radio1));
 
     QCOMPARE(scenario->model().length(), 3); // Main scenario now has elements
     QCOMPARE(scenario->elements(false).length(), 3);
     QCOMPARE(scenario->elements(true).length(), 5);
-    QCOMPARE(scenario->elements(AudioElement::Music, false).length(), 1);
-    QCOMPARE(scenario->elements(AudioElement::Sound, false).length(), 1);
-    QCOMPARE(scenario->elements(AudioElement::Radio, false).length(), 1);
+    QCOMPARE(scenario->elements(AudioElement::Type::Music, false).length(), 1);
+    QCOMPARE(scenario->elements(AudioElement::Type::Sound, false).length(), 1);
+    QCOMPARE(scenario->elements(AudioElement::Type::Radio, false).length(), 1);
     QCOMPARE(elementCount + 5, project->elements().length());
 }
 

@@ -760,7 +760,7 @@ void AudioEditor::madeChanges()
  */
 auto AudioEditor::addAudioFile(AudioFile *audioFile) -> bool
 {
-    if (m_currentElement->type() == AudioElement::Radio)
+    if (m_currentElement->type() == AudioElement::Type::Radio)
     {
         m_currentElement->setFiles({audioFile});
         fileModel->setElements({audioFile});

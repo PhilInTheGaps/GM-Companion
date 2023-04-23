@@ -7,96 +7,196 @@ import "../../defines.js" as Defines
 Page {
     id: page
 
-    signal setCategory(int category)
-    signal setUnit(int unit)
-    signal deleteUnit(int unit)
+    Component.onCompleted: {
+        from_value_text_field.forceActiveFocus()
+    }
 
-    property var categories
-    property var units
-    property string category: ""
+    Item {
+        id: split_view
+        anchors.fill: parent
+        anchors.margins: 10
 
-    footer: footer_rect
+        Item {
+            id: left_view
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: center_view.left
+            anchors.rightMargin: 5
 
-    ScrollView {
-        id: main_scroll
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: 500
-        clip: true
-        bottomPadding: 10
-        contentHeight: main_column.implicitHeight
+            TextField {
+                id: from_value_text_field
 
-        Column {
-            id: main_column
-            spacing: 10
-            width: 500
-            padding: 10
+                anchors.top: parent.top
+                anchors.right: parent.right
 
-            Repeater {
-                id: unit_repeater
-                model: units
+                width: Math.min(Defines.SIDEBAR_WIDTH * 2, left_view.width)
+                height: Defines.TOOLBAR_HEIGHT * 1.5
+                font.pointSize: 12
+                text: qsTr("1.0")
 
-                Button {
-                    text: modelData
-                    width: main_column.width - main_column.padding * 2
-                    hoverEnabled: true
+                validator: DoubleValidator {
+                    notation: DoubleValidator.ScientificNotation
+                }
 
-                    font.pointSize: 12
+                selectByMouse: true
+            }
 
-                    CustomToolBarButton {
-                        iconText: FontAwesome.times
-                        anchors.right: parent.right
-                        onClicked: deleteUnit(index)
-                        visible: parent.hovered && category == "Custom"
+            Flickable {
+                id: left_scroll
+
+                anchors.top: from_value_text_field.bottom
+                anchors.topMargin: 10
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+
+                width: from_value_text_field.width
+
+                clip: true
+                contentHeight: left_column.implicitHeight
+                interactive: left_scroll_bar.visible
+
+                ScrollBar.vertical: ScrollBar {
+                    id: left_scroll_bar
+                    anchors.right: parent.right
+                    visible: left_scroll.contentHeight > left_scroll.height
+                }
+
+                Column {
+                    id: left_column
+                    spacing: 10
+
+                    width: left_scroll_bar.visible ? parent.width - left_scroll_bar.width
+                                                     - 5 : parent.width
+
+                    Repeater {
+                        id: from_unit_repeater
+
+                        model: converter_tool
+                               && converter_tool.currentCategory ? converter_tool.currentCategory.units : []
+
+                        CustomButton {
+                            buttonText: modelData.name
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            hoverEnabled: true
+                            font.pointSize: 12
+
+                            backgroundColor: converter_tool
+                                             && converter_tool.fromUnit
+                                             === modelData ? palette.button : palette.dark
+
+                            onClicked: {
+                                if (!converter_tool)
+                                    return
+
+                                converter_tool.fromUnit = modelData
+                            }
+                        }
                     }
-
-                    onClicked: setUnit(index)
                 }
             }
         }
-    }
 
-    ToolBar {
-        id: footer_rect
-        height: category_flow.height
-
-        Flow {
-            id: category_flow
-            spacing: 10
-            leftPadding: 5
-            rightPadding: 5
-            anchors.left: parent.left
-            anchors.right: parent.right
+        Item {
+            id: center_view
+            anchors.top: parent.top
             anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: arrow_label.width
 
-            Repeater {
-                id: category_repeater
-                model: categories
+            Label {
+                id: arrow_label
+                text: FontAwesome.arrowRight
+                font.family: FontAwesome.familySolid
+                font.pointSize: 15
 
-                onModelChanged: category = categories[0]
+                height: Defines.TOOLBAR_HEIGHT * 1.5
+                verticalAlignment: Label.AlignVCenter
 
-                Button {
-                    height: Defines.TOOLBAR_HEIGHT
-                    width: category_text.width
-                    hoverEnabled: true
+                anchors.top: parent.top
+            }
+        }
 
-                    background: Rectangle {
-                        color: "transparent"
-                    }
+        Item {
+            id: right_view
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: center_view.right
+            anchors.leftMargin: 5
 
-                    Text {
-                        id: category_text
-                        text: modelData
-                        font.bold: true
-                        font.pointSize: 13
-                        color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : palette.text
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
+            TextField {
+                id: to_value_text_field
 
-                    onClicked: {
-                        setCategory(index)
-                        category = categories[index]
+                anchors.top: parent.top
+                anchors.left: parent.left
+
+                width: Math.min(Defines.SIDEBAR_WIDTH * 2, right_view.width)
+                height: Defines.TOOLBAR_HEIGHT * 1.5
+                font.pointSize: 12
+                readOnly: true
+                text: converter_tool ? converter_tool.convert(
+                                           converter_tool.fromUnit,
+                                           from_value_text_field.text,
+                                           converter_tool.toUnit) : ""
+            }
+
+            Flickable {
+                id: right_scroll
+
+                anchors.top: to_value_text_field.bottom
+                anchors.topMargin: 10
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                width: to_value_text_field.width
+
+                clip: true
+                contentHeight: right_column.implicitHeight
+                interactive: right_scroll_bar.visible
+
+                ScrollBar.vertical: ScrollBar {
+                    id: right_scroll_bar
+                    anchors.right: parent.right
+                    visible: right_scroll.contentHeight > right_scroll.height
+                }
+
+                Column {
+                    id: right_column
+                    spacing: 10
+
+                    width: right_scroll_bar.visible ? parent.width - right_scroll_bar.width
+                                                      - 5 : parent.width
+
+                    Repeater {
+                        id: to_unit_repeater
+
+                        model: converter_tool
+                               && converter_tool.currentCategory ? converter_tool.currentCategory.units : []
+
+                        CustomButton {
+                            property string converted: converter_tool ? converter_tool.convert(
+                                                                            converter_tool.fromUnit, from_value_text_field.text,
+                                                                            modelData) : ""
+
+                            buttonText: modelData.name + (converted.length
+                                                          > 0 ? " (" + converted + ")" : "")
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            hoverEnabled: true
+                            font.pointSize: 12
+
+                            backgroundColor: converter_tool
+                                             && converter_tool.toUnit
+                                             === modelData ? palette.button : palette.dark
+
+                            onClicked: {
+                                if (!converter_tool)
+                                    return
+
+                                converter_tool.toUnit = modelData
+                            }
+                        }
                     }
                 }
             }

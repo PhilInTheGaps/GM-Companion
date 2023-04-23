@@ -1,46 +1,36 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
 import "./converter"
-import "../defines.js" as Defines
 
 Page {
     id: converter
 
-    AddUnitDialog {
-        id: add_unit_dialog
+    Component.onCompleted: converter_tool.loadData()
+
+    StackView {
+        id: stack
+        anchors.fill: parent
+        clip: true
+        initialItem: converter_page
     }
 
-    header: ConverterHeader {
-        id: header_rect
+    ConverterTool {
+        id: converter_page
+
+        onOpenEditor: {
+            stack.push(converter_editor_component)
+        }
     }
 
-    ConverterBar {
-        id: converter_bar
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: side_bar.left
-    }
+    Component {
+        id: converter_editor_component
 
-    ConverterUnitPage {
-        id: unit_page
-        anchors.top: converter_bar.bottom
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: side_bar.left
+        ConverterEditor {
+            id: converter_editor_page
 
-        categories: converter_tool.categories
-        units: converter_tool.units
-
-        onSetCategory: converter_tool.setCurrentCategory(category)
-        onSetUnit: converter_tool.setUnit(unit)
-        onDeleteUnit: converter_tool.deleteUnit(unit)
-    }
-
-    ConverterMenu {
-        id: side_bar
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
+            onBackToTool: {
+                stack.pop()
+            }
+        }
     }
 }

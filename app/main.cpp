@@ -118,10 +118,6 @@ auto main(int argc, char *argv[]) -> int
 
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
-    // Convert Projects to newest version
-    ProjectConverter projectConverter;
-    projectConverter.convert();
-
     // Make classes available for QML
     QUrl source(QStringLiteral("qrc:/main.qml"));
 

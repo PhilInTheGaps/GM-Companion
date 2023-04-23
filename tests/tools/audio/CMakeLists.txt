@@ -18,6 +18,12 @@ target_link_libraries(test_audioproject gm-companion-lib common testhelper Qt5::
 set_target_properties(test_audioproject PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_audioproject COMMAND test_audioproject)
 
+# Audio Project Upgrader
+add_executable(test_audioprojectupgrader testaudioprojectupgrader.cpp)
+target_link_libraries(test_audioprojectupgrader gm-companion-lib common testhelper Qt5::Gui Qt5::Test)
+set_target_properties(test_audioprojectupgrader PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+add_test(NAME test_audioprojectupgrader COMMAND test_audioprojectupgrader)
+
 # Audio SaveLoad
 add_executable(test_audiosaveload testaudiosaveload.cpp)
 target_link_libraries(test_audiosaveload gm-companion-lib common testhelper Qt5::Gui Qt5::Test)

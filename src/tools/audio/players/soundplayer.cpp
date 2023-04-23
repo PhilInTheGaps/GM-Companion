@@ -197,7 +197,7 @@ void SoundPlayer::loadMedia(AudioFile *file)
 
 void SoundPlayer::play()
 {
-    if (m_element->mode() == 1)
+    if (m_element->mode() == AudioElement::Mode::Random)
     {
         next();
     }
@@ -238,7 +238,7 @@ void SoundPlayer::next()
     }
 
     // Complete random
-    if (m_element->mode() == 1)
+    if (m_element->mode() == AudioElement::Mode::Random)
     {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         m_playlistIndex = QRandomGenerator::system()->bounded(m_playlist.length());
@@ -259,7 +259,7 @@ void SoundPlayer::next()
     }
 
     // loop around (Mode 0 or 2)
-    else if (m_element->mode() != 3)
+    else if (m_element->mode() != AudioElement::Mode::ListOnce)
     {
         m_playlistIndex = 0;
         loadMedia(m_playlist[0]);
@@ -274,7 +274,7 @@ void SoundPlayer::next()
 
 void SoundPlayer::applyShuffleMode()
 {
-    if (m_element->mode() != 0) return;
+    if (m_element->mode() != AudioElement::Mode::RandomList) return;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QList<AudioFile *> temp;

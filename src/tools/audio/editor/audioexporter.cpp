@@ -122,24 +122,24 @@ auto Worker::copyNextMusic() -> bool
 {
     if (m_musicFiles.isEmpty()) return false;
 
-    return copyFile(m_musicFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Music)),
-                    "music");
+    return copyFile(m_musicFiles.dequeue(),
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Music)), "music");
 }
 
 auto Worker::copyNextSound() -> bool
 {
     if (m_soundFiles.isEmpty()) return false;
 
-    return copyFile(m_soundFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Sound)),
-                    "sounds");
+    return copyFile(m_soundFiles.dequeue(),
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Sound)), "sounds");
 }
 
 auto Worker::copyNextRadio() -> bool
 {
     if (m_radioFiles.isEmpty()) return false;
 
-    return copyFile(m_radioFiles.dequeue(), SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Radio)),
-                    "radios");
+    return copyFile(m_radioFiles.dequeue(),
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Radio)), "radios");
 }
 
 auto Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder) -> bool
@@ -168,13 +168,13 @@ void Worker::copyElements(AudioScenario *scenario)
 
                 switch (element->type())
                 {
-                case AudioElement::Music:
+                case AudioElement::Type::Music:
                     if (!m_musicFiles.contains(file->url())) m_musicFiles.enqueue(file->url());
                     break;
-                case AudioElement::Sound:
+                case AudioElement::Type::Sound:
                     if (!m_soundFiles.contains(file->url())) m_soundFiles.enqueue(file->url());
                     break;
-                case AudioElement::Radio:
+                case AudioElement::Type::Radio:
                     if (!m_radioFiles.contains(file->url())) m_radioFiles.enqueue(file->url());
                     break;
                 }

@@ -10,9 +10,11 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 REQUIRED COMPONENTS Gui Quick Test)
 
-
 # Audio Tool
 add_subdirectory(audio)
+
+# Converter Tool
+add_subdirectory(converter)
 
 # Combat Tracker
 add_executable(test_combattracker testcombattracker.cpp ${RESOURCES})

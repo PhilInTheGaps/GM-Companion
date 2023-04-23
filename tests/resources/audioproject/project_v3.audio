@@ -1,0 +1,66 @@
+{
+  "categories": [
+    {
+      "name": "Category0",
+      "scenarios": [
+        {
+          "music_elements": [
+            {
+              "files": [
+                "/test.mp3"
+              ],
+              "icon": "/test.jpg",
+              "mode": 0,
+              "name": "Music"
+            }
+          ],
+          "name": "Scenario0",
+          "radio_elements": [
+            {
+              "icon": "/test.jpg",
+              "local": false,
+              "name": "Radio",
+              "url": "http://localhost/radio"
+            },
+            {
+              "icon": "/test.jpg",
+              "local": true,
+              "name": "Radio Local",
+              "url": "/test.m3u"
+            }
+          ],
+          "sound_elements": [
+            {
+              "files": [
+                "/test.wav"
+              ],
+              "icon": "/test.jpg",
+              "mode": 0,
+              "name": "Sounds"
+            }
+          ],
+          "spotify_elements": [
+            {
+              "icon": "/test.jpg",
+              "id": "spotify:album:test",
+              "name": "Spotify"
+            }
+          ]
+        },
+        {
+          "name": "Scenario1",
+          "music_elements": [],
+          "radio_elements": [],
+          "sound_elements": [],
+          "spotify_elements": []
+        }
+      ]
+    },
+    {
+      "name": "Category1",
+      "scenarios": []
+    }
+  ],
+  "name": "TestProject",
+  "version": 3
+}

@@ -10,7 +10,7 @@
 Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
 AudioElement::AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
+    : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Mode::RandomList)
 {
     setName(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
@@ -18,10 +18,10 @@ AudioElement::AudioElement(const QString &name, Type type, const QString &path, 
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem("", path.split("/").length() - 1, false, parent), a_type(type), a_mode(Music)
+    : TreeItem("", path.split("/").length() - 1, false, parent), a_type(type), a_mode(Mode::RandomList)
 {
     setName(object["name"].toString());
-    mode(object["mode"].toInt());
+    mode(static_cast<Mode>(object["mode"].toInt()));
     m_path = path + "/" + typeToString(type) + "/" + name();
     m_thumbnail = new AudioThumbnail(m_path, this);
 
@@ -50,7 +50,7 @@ auto AudioElement::toJson() const -> QJsonObject
     QJsonObject object;
     object.insert("name", name());
     object.insert("icon", thumbnail()->relativeUrl());
-    object.insert("mode", mode());
+    object.insert("mode", static_cast<int>(mode()));
 
     // Files
     QJsonArray files;

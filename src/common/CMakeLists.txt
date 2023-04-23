@@ -9,57 +9,75 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core Gui Network REQUIRED)
+find_package(
+  Qt5
+  COMPONENTS Core Gui Network
+  REQUIRED)
 find_package(QtKeychain)
 
 include(AddMarkdownLib)
 
 # configure markdown lib
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h.in
-  ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h
-  @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/utils/markdownutils.h @ONLY)
 
-set(HEADERS
-    logging.h
-    platformdetails.h
-    abstracttool.h
-    utils/utils.h 
-    utils/fileutils.h 
+set(SRC_UTILS
+    utils/utils.h
+    utils/utils.cpp
+    utils/fileutils.h
+    utils/fileutils.cpp
     utils/markdownutils.h
     utils/markdownutils.h.in
-    utils/networkutils.h 
+    utils/markdownutils.cpp
+    utils/networkutils.h
+    utils/networkutils.cpp
     utils/processinfo.h
+    utils/processinfo.cpp
     utils/stringutils.h
+    utils/stringutils.cpp)
+
+set(SRC_MODELS
     models/treeitem.h
-    settings/settingsmanager.h 
+    models/treeitem.cpp)
+
+set(SRC_SETTINGS
+    settings/settingsmanager.h
+    settings/settingsmanager.cpp
     settings/abstractsettingsmanager.h
+    settings/abstractsettingsmanager.cpp
     settings/quicksettingsmanager.h
+    settings/quicksettingsmanager.cpp)
+
+set(SRC_UPDATES
     updates/updatemanager.h
+    updates/updatemanager.cpp
     updates/version.h.in
     updates/version.h
-    exceptions/notimplementedexception.h
-)
+    updates/version.cpp)
+
+set(SRC_PROJECTS
+    projects/abstractprojectupgrader.h
+    projects/abstractprojectupgrader.cpp
+    projects/abstractprojectupgraderjson.h
+    projects/abstractprojectupgraderjson.cpp
+    projects/abstractprojectupgraderini.h
+    projects/abstractprojectupgraderini.cpp)
 
 set(SOURCES
-    logging.cpp 
+    ${SRC_UTILS}
+    ${SRC_MODELS}
+    ${SRC_SETTINGS}
+    ${SRC_UPDATES}
+    ${SRC_PROJECTS}
+    logging.h
+    logging.cpp
+    abstracttool.h
     abstracttool.cpp
-    platformdetails.cpp 
-    utils/utils.cpp
-    utils/fileutils.cpp 
-    utils/markdownutils.cpp 
-    utils/networkutils.cpp 
-    utils/processinfo.cpp
-    utils/stringutils.cpp
-    models/treeitem.cpp
-    settings/settingsmanager.cpp
-    settings/abstractsettingsmanager.cpp
-    settings/quicksettingsmanager.cpp
-    updates/updatemanager.cpp
-    updates/version.cpp
-)
+    platformdetails.h
+    platformdetails.cpp
+    exceptions/notimplementedexception.h)
 
-add_library(common STATIC ${HEADERS} ${SOURCES})
+add_library(common STATIC ${SOURCES})
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(common
@@ -69,5 +87,4 @@ target_link_libraries(common
     ${QTKEYCHAIN_LIBRARY}
     Qt5::Core
     Qt5::Gui
-    Qt5::Network
-)
+    Qt5::Network)

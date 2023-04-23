@@ -1,0 +1,183 @@
+{
+    "categories": [
+        {
+            "name": "Area",
+            "units": [
+                {
+                    "name": "Square Meter",
+                    "value": 1
+                },
+                {
+                    "name": "Square Kilometer",
+                    "value": 1000000
+                },
+                {
+                    "name": "Hectare",
+                    "value": 10000
+                },
+                {
+                    "name": "Square Centimeter",
+                    "value": 0.0001
+                },
+                {
+                    "name": "Square Inch",
+                    "value": 0.000645
+                },
+                {
+                    "name": "Square Foot",
+                    "value": 0.092903
+                },
+                {
+                    "name": "Square Yard",
+                    "value": 0.836127
+                },
+                {
+                    "name": "Square Chain",
+                    "value": 404.69
+                },
+                {
+                    "name": "Square Furlong",
+                    "value": 40468.56
+                },
+                {
+                    "name": "Square Mile",
+                    "value": 2589988.11
+                },
+                {
+                    "name": "Rood",
+                    "value": 1011.71
+                },
+                {
+                    "name": "Acre",
+                    "value": 4000
+                }
+            ]
+        },
+        {
+            "name": "Length",
+            "units": [
+                {
+                    "name": "Meter",
+                    "value": 1
+                },
+                {
+                    "name": "Millimeter",
+                    "value": 0.001
+                },
+                {
+                    "name": "Centimeter",
+                    "value": 0.01
+                },
+                {
+                    "name": "Decimeter",
+                    "value": 0.1
+                },
+                {
+                    "name": "Kilometer",
+                    "value": 1000
+                },
+                {
+                    "name": "Inch",
+                    "value": 0.0254
+                },
+                {
+                    "name": "Foot",
+                    "value": 0.3048
+                },
+                {
+                    "name": "Yard",
+                    "value": 0.9144
+                },
+                {
+                    "name": "Mile",
+                    "value": 1609.344
+                },
+                {
+                    "name": "League",
+                    "value": 4828.032
+                }
+            ]
+        },
+        {
+            "name": "Money",
+            "units": [
+                {
+                    "name": "Dollars",
+                    "value": 1
+                },
+                {
+                    "name": "Cents",
+                    "value": 0.01
+                }
+            ]
+        },
+        {
+            "name": "Volume",
+            "units": [
+                {
+                    "name": "Cubic Meter",
+                    "value": 1
+                },
+                {
+                    "name": "Cubic Decimeter",
+                    "value": 0.001
+                },
+                {
+                    "name": "Cubic Kilometer",
+                    "value": 1000000000
+                },
+                {
+                    "name": "Cubic Foot",
+                    "value": 0.0283168
+                },
+                {
+                    "name": "Cubic Inch",
+                    "value": 1.6387e-05
+                }
+            ]
+        },
+        {
+            "name": "Weight",
+            "units": [
+                {
+                    "name": "Kilogram",
+                    "value": 1
+                },
+                {
+                    "name": "Gram",
+                    "value": 0.001
+                },
+                {
+                    "name": "Milligram",
+                    "value": 1e-06
+                },
+                {
+                    "name": "Metric Ton",
+                    "value": 1000
+                },
+                {
+                    "name": "Long Ton",
+                    "value": 1016.05
+                },
+                {
+                    "name": "Short Ton",
+                    "value": 907.185
+                },
+                {
+                    "name": "Stone",
+                    "value": 6.35019
+                },
+                {
+                    "name": "Pound",
+                    "value": 0.454592
+                },
+                {
+                    "name": "Ounce",
+                    "value": 0.0283495
+                }
+            ]
+        }
+    ],
+    "name": "General",
+    "version": 2
+}

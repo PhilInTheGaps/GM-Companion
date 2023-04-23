@@ -8,7 +8,7 @@
     </qresource>
     <qresource prefix="/translations"/>
     <qresource prefix="/units">
-        <file alias="default.ini">units.ini</file>
+        <file>units.json</file>
     </qresource>
     <qresource prefix="/icons/menu"/>
     <qresource prefix="/icons/dice">

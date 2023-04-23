@@ -1,9 +1,9 @@
-#include <QtTest>
-#include <QObject>
+#include "src/common/utils/fileutils.h"
 #include "src/tools/audio/project/audioelement.h"
 #include "src/tools/audio/thumbnails/audiothumbnail.h"
-#include "src/common/utils/fileutils.h"
 #include "tests/testhelper/abstracttest.h"
+#include <QObject>
+#include <QtTest>
 
 class TestAudioThumbnail : public AbstractTest
 {
@@ -38,7 +38,8 @@ auto TestAudioThumbnail::loadImage(const QString &resource) -> QPixmap
 
 void TestAudioThumbnail::initTestCase()
 {
-    m_element = QSharedPointer<AudioElement>(new AudioElement(QStringLiteral("test"), AudioElement::Music, QLatin1String(), nullptr));
+    m_element = QSharedPointer<AudioElement>(
+        new AudioElement(QStringLiteral("test"), AudioElement::Type::Music, QLatin1String(), nullptr));
 
     image0 = loadImage(":/resources/images/test.png");
     image1 = loadImage(":/resources/images/test.jpg");
@@ -58,12 +59,12 @@ void TestAudioThumbnail::testAudioThumbnail()
     QVERIFY(thumbnail->imageIdForReload() != id);
 
     // Can add images, but not the same image twice
-    QVERIFY(thumbnail->addCollageImage({ "file0", image0 }));
-    QVERIFY(!thumbnail->addCollageImage({ "file0", image0 }));
-    QVERIFY(!thumbnail->addCollageImage({ "fileX", image0 }));
-    QVERIFY(thumbnail->addCollageImage({ "file1", image1 }));
-    QVERIFY(thumbnail->addCollageImage({ "file2", image2 }));
-    QVERIFY(thumbnail->addCollageImage({ "file3", image3 }));
+    QVERIFY(thumbnail->addCollageImage({"file0", image0}));
+    QVERIFY(!thumbnail->addCollageImage({"file0", image0}));
+    QVERIFY(!thumbnail->addCollageImage({"fileX", image0}));
+    QVERIFY(thumbnail->addCollageImage({"file1", image1}));
+    QVERIFY(thumbnail->addCollageImage({"file2", image2}));
+    QVERIFY(thumbnail->addCollageImage({"file3", image3}));
     QCOMPARE(thumbnail->collageImages().length(), 4);
 
     // Set explicit image instead of collage

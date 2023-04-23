@@ -96,9 +96,6 @@
         <file>tools/shop/shop_editor/ItemList.qml</file>
         <file>tools/shop/item_editor/ItemEditor.qml</file>
         <file>tools/shop/item_editor/ItemDetails.qml</file>
-        <file>tools/converter/AddUnitDialog.qml</file>
-        <file>tools/converter/ConverterHeader.qml</file>
-        <file>tools/converter/ConverterBar.qml</file>
         <file>tools/converter/ConverterMenu.qml</file>
         <file>tools/characters/classic/ImageControlBar.qml</file>
         <file>tools/characters/classic/ClassicPage.qml</file>
@@ -166,5 +163,9 @@
         <file>tools/settings/accounts/BaseAccountPage.qml</file>
         <file>main/NewSettingsDialog.qml</file>
         <file>common/HelpAnnotation.qml</file>
+        <file>common/ProjectComboBoxWithEditorButton.qml</file>
+        <file>tools/converter/ConverterTool.qml</file>
+        <file>tools/converter/ConverterEditor.qml</file>
+        <file>tools/converter/ConverterEditorNewThingDialog.qml</file>
     </qresource>
 </RCC>

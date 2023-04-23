@@ -57,6 +57,10 @@ protected:
 
     static void loadResources();
     static auto copyResourceToTempFile(const QString &resource) -> QFile *;
+    static auto readResource(const QString &path) -> QByteArray;
+
+    auto backupUserFolder(const QString &userFolder) -> QString;
+    void restoreUserFolder(const QString &backupFolder, const QString &destination);
 
     void enableTestAddons();
     void disableTestAddons();
@@ -64,6 +68,7 @@ protected:
 
 private:
     void checkOrCreateFileAccess();
+    void moveFolderRecursively(const QString &userFolder, const QString &backupFolder);
 
     QList<Addon *> m_addons;
     const QStringList m_testAddonIds = {"local.test.0", "local.test.1"};

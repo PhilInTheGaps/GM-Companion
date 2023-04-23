@@ -5,6 +5,7 @@
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "tools/audio/project/audiofile.h"
 #include "tools/audio/project/audioproject.h"
+#include "tools/audio/project/audioprojectupgrader.h"
 #include "utils/fileutils.h"
 
 #include <QJsonDocument>
@@ -25,7 +26,11 @@ auto AudioSaveLoad::findProjectsAsync(const QString &folder) -> QFuture<QVector<
 
 auto AudioSaveLoad::loadProject(const QByteArray &data, QObject *parent) -> AudioProject *
 {
-    const auto doc = QJsonDocument::fromJson(data);
+    AudioProjectUpgrader upgrader;
+    upgrader.parse(data);
+    const auto convertedData = upgrader.run();
+
+    const auto doc = QJsonDocument::fromJson(convertedData.isEmpty() ? data : convertedData);
     return new AudioProject(doc.object(), parent);
 }
 
