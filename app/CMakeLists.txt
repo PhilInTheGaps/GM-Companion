@@ -52,13 +52,16 @@ set(RCFILES
 )
 
 # translations
-qt5_create_translation(TRANSLATIONS
-  ${CMAKE_SOURCE_DIR}
-  resources/translations/gm-companion_de_DE.ts
-  resources/translations/gm-companion_en_US.ts
-)
+if (BUILD_TRANSLATIONS)
+    qt5_create_translation(TRANSLATIONS
+      .
+      ../src
+      resources/translations/gm-companion_de_DE.ts
+      resources/translations/gm-companion_en_US.ts
+    )
+endif()
 
-add_executable(gm-companion WIN32 ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES})
+add_executable(gm-companion WIN32 ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES} ${TRANSLATIONS})
 
 message(${CMAKE_SOURCE_DIR}/src)
 

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.1.0)
 project(gm-companion)
 
 include(GNUInstallDirs)
+include(CMakePrintHelpers)
 
 set(CGET_TOOLCHAIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/cget/cget/cget.cmake)
 
@@ -32,6 +33,16 @@ set(CMAKE_AUTORCC ON)
 
 # set version number
 include(SetVersionNumber)
+
+# build options
+option(BUILD_TRANSLATIONS "Generate translation files" OFF)
+cmake_print_variables(BUILD_TRANSLATIONS)
+option(ENABLE_CODE_COVERAGE "Generate code coverage, don't use this for regular builds" OFF)
+cmake_print_variables(ENABLE_CODE_COVERAGE)
+option(ENABLE_EXTRA_TESTS "Enable extra tests that require special setup and can not be run on every machine" OFF)
+cmake_print_variables(ENABLE_EXTRA_TESTS)
+option(IS_RUNNING_IN_CI "Variable used to en- and disable stuff when running CI environments" OFF)
+cmake_print_variables(IS_RUNNING_IN_CI)
 
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 

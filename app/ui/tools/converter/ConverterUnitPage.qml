@@ -76,7 +76,7 @@ Page {
                                && converter_tool.currentCategory ? converter_tool.currentCategory.units : []
 
                         CustomButton {
-                            buttonText: modelData.name
+                            buttonText: qsTranslate("Units", modelData.name)
                             anchors.left: parent.left
                             anchors.right: parent.right
                             hoverEnabled: true
@@ -179,8 +179,8 @@ Page {
                                                                             converter_tool.fromUnit, from_value_text_field.text,
                                                                             modelData) : ""
 
-                            buttonText: modelData.name + (converted.length
-                                                          > 0 ? " (" + converted + ")" : "")
+                            buttonText: qsTranslate("Units", modelData.name)
+                                        + (converted.length > 0 ? " (" + converted + ")" : "")
                             anchors.left: parent.left
                             anchors.right: parent.right
                             hoverEnabled: true

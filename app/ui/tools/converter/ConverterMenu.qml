@@ -59,7 +59,7 @@ Rectangle {
                        && converter_tool.currentProject ? converter_tool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData.name
+                    buttonText: qsTranslate("Units", modelData.name)
 
                     anchors.left: parent.left
                     anchors.right: parent.right
