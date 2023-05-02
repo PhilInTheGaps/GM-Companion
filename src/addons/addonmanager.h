@@ -15,7 +15,7 @@ class AddonManager : public QObject
 {
     Q_OBJECT
     READ_PROPERTY(QList<Addon *>, addons)
-    AUTO_PROPERTY(bool, isLoading)
+    AUTO_PROPERTY_VAL2(bool, isLoading, false)
 
 public:
     static auto instance() -> QPointer<AddonManager>;

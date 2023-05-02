@@ -15,7 +15,7 @@ class AddonRepositoryManager : public QObject
     Q_OBJECT
 
     READ_PROPERTY(QList<AddonRepository *>, repositories)
-    AUTO_PROPERTY(bool, isLoading)
+    AUTO_PROPERTY_VAL2(bool, isLoading, false)
 
 public:
     explicit AddonRepositoryManager(QObject *parent = nullptr);
@@ -31,7 +31,7 @@ public:
     }
 
 private:
-    const QStringList defaultRepositories = {}; // TODO
+    const QStringList defaultRepositories = {"https://raw.githubusercontent.com/gm-companion/addons/main/addons.json"};
 
     void loadLocalRepositories();
     void loadDefaultRemoteRepositories();

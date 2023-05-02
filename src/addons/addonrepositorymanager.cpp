@@ -20,7 +20,7 @@ using namespace AsyncFuture;
 constexpr ConstQString REPOSITORY_SETTING = "addonRepositories";
 constexpr int MINIMAL_COMPATIBLE_VERSION = 1;
 
-AddonRepositoryManager::AddonRepositoryManager(QObject *parent) : QObject{parent}, a_isLoading(false)
+AddonRepositoryManager::AddonRepositoryManager(QObject *parent) : QObject{parent}
 {
     m_networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
@@ -83,12 +83,13 @@ void AddonRepositoryManager::fetchAllRepositoryData()
         combinator << future;
     }
 
-    combinator.subscribe([this]() { isLoading(false); });
+    auto callback = [this]() { isLoading(false); };
+    combinator.subscribe(callback, callback);
 }
 
 void AddonRepositoryManager::loadLocalRepositories()
 {
-    QDir dir(QStringLiteral(":/addon_repositories"));
+    QDir const dir(QStringLiteral(":/addon_repositories"));
 
     if (!dir.exists()) return;
 

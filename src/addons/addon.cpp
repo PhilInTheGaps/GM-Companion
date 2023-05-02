@@ -10,7 +10,7 @@ Addon::Addon(QObject *parent, QString id, QString name, QString shortName, QStri
              QString description, QString path, bool isLocal, Type type)
     : QObject{parent}, a_id(std::move(id)), a_name(std::move(name)), a_shortName(std::move(shortName)),
       a_version(std::move(version)), a_author(std::move(author)), a_description(std::move(description)),
-      a_path(std::move(path)), a_enabled(false), a_isLocal(isLocal), a_isInstalling(false), a_type(type)
+      a_path(std::move(path)), a_isLocal(isLocal), a_type(type)
 {
     qCDebug(gmAddons) << "Loaded addon:"
                       << QStringLiteral("%1: %2 (%3) [%4] - %5")

@@ -16,7 +16,7 @@ using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAddonManager, "gm.addons.manager")
 
-AddonManager::AddonManager(QObject *parent) : QObject(parent), a_isLoading(false)
+AddonManager::AddonManager(QObject *parent) : QObject(parent)
 {
     m_networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
     connect(&m_repoManager, &AddonRepositoryManager::isLoadingChanged, this,

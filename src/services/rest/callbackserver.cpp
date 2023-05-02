@@ -72,7 +72,6 @@ auto CallbackServer::parseQueryParams(const QByteArray &data) -> QMap<QString, Q
 #endif // if QT_VERSION < 0x050000
 
     QMap<QString, QString> queryParams;
-    QPair<QString, QString> tokenPair;
 
     for (const auto &tokenPair : qAsConst(tokens))
     {
