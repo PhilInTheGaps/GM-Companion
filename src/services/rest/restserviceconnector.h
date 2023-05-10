@@ -13,7 +13,7 @@ class RESTServiceConnector : public QObject
 {
     Q_OBJECT
 public:
-    RESTServiceConnector(QNetworkAccessManager *networkManager, const QLoggingCategory &loggingCategory,
+    RESTServiceConnector(QNetworkAccessManager &networkManager, const QLoggingCategory &loggingCategory,
                          QObject *parent = nullptr)
         : QObject(parent), m_networkManager(networkManager), m_loggingCategory(loggingCategory)
     {
@@ -30,7 +30,7 @@ public:
                                                       const QByteArray &data) = 0;
 
 protected:
-    QNetworkAccessManager *m_networkManager = nullptr;
+    QNetworkAccessManager &m_networkManager;
     const QLoggingCategory &m_loggingCategory;
     bool m_wasConfigured = false;
 
@@ -38,10 +38,10 @@ protected:
     {
         switch (type)
         {
-        case ServiceStatus::Warning:
+        case ServiceStatus::Type::Warning:
             qCWarning(m_loggingCategory) << message;
             break;
-        case ServiceStatus::Error:
+        case ServiceStatus::Type::Error:
             qCCritical(m_loggingCategory) << message;
             break;
         default:

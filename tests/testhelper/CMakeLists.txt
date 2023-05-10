@@ -15,15 +15,18 @@ set(RESOURCES
   ../tests.qrc
 )
 
-set(HEADERS
-    abstracttest.h
-)
-
 set(SOURCES
+    abstracttest.h
     abstracttest.cpp
+    abstractmocknetworkmanager.h
+    abstractmocknetworkmanager.cpp
+    mocknetworkreply.h
+    mocknetworkreply.cpp
+    mockfs.h
+    mockfs.cpp
 )
 
-add_library(testhelper STATIC ${HEADERS} ${SOURCES} ${RESOURCES})
+add_library(testhelper STATIC ${SOURCES} ${RESOURCES})
 
 target_include_directories(testhelper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

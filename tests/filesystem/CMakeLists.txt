@@ -27,13 +27,14 @@ target_link_libraries(test_filedialog testhelper filesystem Qt5::Core Qt5::Test)
 set_target_properties(test_filedialog PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_filedialog COMMAND test_filedialog)
 
-if (ENABLE_EXTRA_TESTS)
-    # Nextcloud
-    add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp)
-    target_link_libraries(test_nextcloudaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
-    set_target_properties(test_nextcloudaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
-    add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
 
+# Nextcloud
+add_executable(test_nextcloudaccess ${BASE_FILES} testnextcloudaccess.cpp mocknextcloud.cpp mocknextcloud.h oputils.h oputils.cpp)
+target_link_libraries(test_nextcloudaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)
+set_target_properties(test_nextcloudaccess PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+add_test(NAME test_nextcloudaccess COMMAND test_nextcloudaccess)
+
+if (ENABLE_EXTRA_TESTS)
     # GoogleDrive
     add_executable(test_googledriveaccess ${BASE_FILES} testgoogledriveaccess.cpp)
     target_link_libraries(test_googledriveaccess testhelper filesystem Qt5::Core Qt5::Network Qt5::Test)

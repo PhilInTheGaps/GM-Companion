@@ -3,7 +3,6 @@
 #include <QObject>
 
 #include "abstracttest.h"
-#include "fileaccess.h"
 
 class AbstractAccessTest : public AbstractTest
 {
@@ -18,10 +17,10 @@ protected:
 
     void runAllTests();
 
-    void createDirAndVerify(const QString& path);
-    void removeFileAndVerify(const QString& path);
-    void saveFileAndVerify(const QString& path, const QByteArray& data);
-    void copyFileAndVerify(const QString& path, const QString& copy);
+    void createDirAndVerify(const QString &path);
+    void removeFileAndVerify(const QString &path);
+    void saveFileAndVerify(const QString &path, const QByteArray &data);
+    void copyFileAndVerify(const QString &path, const QString &copy);
 
 private slots:
     void getDataAsync();

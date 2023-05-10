@@ -16,7 +16,7 @@ class SpotifyConnectorServer : public RESTServiceConnector
 {
     Q_OBJECT
 public:
-    explicit SpotifyConnectorServer(QNetworkAccessManager *networkManager, QObject *parent = nullptr);
+    explicit SpotifyConnectorServer(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
 
     void grantAccess() override;
     void disconnectService() override;

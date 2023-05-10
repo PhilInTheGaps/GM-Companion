@@ -1,17 +1,21 @@
 #ifndef NETWORKUTILS_H
 #define NETWORKUTILS_H
 
+#include <QMap>
+#include <QNetworkRequest>
 #include <QString>
 #include <QUrl>
-#include <QNetworkRequest>
+#include <QUrlQuery>
 
 class NetworkUtils
 {
 public:
-    static auto basicAuthHeader(const QString &username, const QString &password) -> QByteArray;
+    [[nodiscard]] static auto basicAuthHeader(const QString &username, const QString &password) -> QByteArray;
 
-    static auto makeJsonRequest(const QUrl &url) -> QNetworkRequest;
+    [[nodiscard]] static auto makeJsonRequest(const QUrl &url) -> QNetworkRequest;
     static void makeJsonRequest(QNetworkRequest &request);
+
+    [[nodiscard]] static auto queryToMap(const QUrlQuery &query) -> QMap<QString, QString>;
 };
 
 #endif // NETWORKUTILS_H

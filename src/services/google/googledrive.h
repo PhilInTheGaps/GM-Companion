@@ -13,13 +13,15 @@ class GoogleDrive : public Service
     AUTO_PROPERTY(QString, clientId)
 
 public:
-    static GoogleDrive *getInstance();
+    GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent = nullptr);
+    GoogleDrive(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent = nullptr);
 
     void grant()
     {
         m_connector->grantAccess();
     }
-    bool isGranted() const
+
+    auto isGranted() const -> bool
     {
         return m_connector->isAccessGranted();
     }
@@ -38,11 +40,7 @@ public slots:
     void disconnectService() override;
 
 private:
-    GoogleDrive(QObject *parent = nullptr);
-
-    inline static GoogleDrive *single = nullptr;
-
-    QNetworkAccessManager *m_networkManager = nullptr;
+    QNetworkAccessManager &m_networkManager;
     RESTServiceConnector *m_connector = nullptr;
 
     void updateConnector();

@@ -1,17 +1,37 @@
 #include "fileaccessgoogledrive.h"
-#include "google/googledrive.h"
-#include "utils/fileutils.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "logging.h"
+#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thirdparty/o2/src/o0globals.h"
+#include "utils/fileutils.h"
+#include "utils/stringutils.h"
 
+#include <QHttpMultiPart>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QUrlQuery>
-#include <QHttpMultiPart>
+
+class GoogleDriveMimeType
+{
+public:
+    static constexpr auto FOLDER = "application/vnd.google-apps.folder";
+    static constexpr auto FILE = "application/vnd.google-apps.file";
+    static constexpr auto UNKNOWN = "application/vnd.google-apps.unknown";
+    static constexpr auto AUDIO = "application/vnd.google-apps.audio";
+    static constexpr auto VIDEO = "application/vnd.google-apps.video";
+    static constexpr auto PHOTO = "application/vnd.google-apps.photo";
+};
+
+constexpr ConstQString FILES_ENDPOINT = "https://www.googleapis.com/drive/v3/files";
+constexpr ConstQString UPLOAD_ENDPOINT = "https://www.googleapis.com/upload/drive/v3/files";
+constexpr ConstQString BATCH_ENDPOINT = "https://www.googleapis.com/batch/drive/v3";
 
 using namespace Files;
+
+FileAccessGoogleDrive::FileAccessGoogleDrive(GoogleDrive &googleDrive, QObject *parent)
+    : FileAccess(parent), m_gd(googleDrive)
+{
+}
 
 auto FileAccessGoogleDrive::getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult *>
 {
@@ -24,47 +44,42 @@ auto FileAccessGoogleDrive::getDataAsync(const QString &path, bool allowCache) -
         return AsyncFuture::completed(new FileDataResult(data, this));
     }
 
-    auto deferred = AsyncFuture::deferred<FileDataResult*>();
+    auto deferred = AsyncFuture::deferred<FileDataResult *>();
 
-    auto errorCallback = [this, deferred](const QString &error) mutable
-    {
+    auto errorCallback = [this, deferred](const QString &error) mutable {
         qCWarning(gmFileAccessGoogle()) << "Error: Could not download file!" << error;
         deferred.complete(new FileDataResult(error, this));
     };
 
     AsyncFuture::observe(getFileIdAsync(path))
-            .subscribe([this, path, deferred, errorCallback](const QString &id) mutable
-    {
-        const auto url = QUrl(QString("%1/%2?alt=media").arg(FILES_ENDPOINT, id));
+        .subscribe(
+            [this, path, deferred, errorCallback](const QString &id) mutable {
+                const auto url = QUrl(QStringLiteral("%1/%2?alt=media").arg(FILES_ENDPOINT, id));
 
-        AsyncFuture::observe(GoogleDrive::getInstance()->get(url))
-                .subscribe([this, path, deferred](RestNetworkReply *reply) mutable
-        {
-            if (reply->error() == QNetworkReply::NoError)
-            {
-                qCDebug(gmFileAccessGoogle()) << "Successfully downloaded file" << path;
-                m_fileCache.createOrUpdateEntry(path, reply->data());
-            }
-            else
-            {
-                qCWarning(gmFileAccessGoogle()) << reply->errorText();
-            }
+                AsyncFuture::observe(m_gd.get(url))
+                    .subscribe(
+                        [this, path, deferred](RestNetworkReply *reply) mutable {
+                            if (reply->error() == QNetworkReply::NoError)
+                            {
+                                qCDebug(gmFileAccessGoogle()) << "Successfully downloaded file" << path;
+                                m_fileCache.createOrUpdateEntry(path, reply->data());
+                            }
+                            else
+                            {
+                                qCWarning(gmFileAccessGoogle()) << reply->errorText();
+                            }
 
-            deferred.complete(FileDataResult::fromNetworkReply(reply, this));
-        }, [errorCallback]() mutable
-        {
-            errorCallback(QStringLiteral("Could not get GoogleDrive ID"));
-        });
-
-    }, [errorCallback]() mutable
-    {
-        errorCallback(QStringLiteral("Could not get GoogleDrive ID"));
-    });
+                            deferred.complete(FileDataResult::fromNetworkReply(reply, this));
+                        },
+                        [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get GoogleDrive ID")); });
+            },
+            [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get GoogleDrive ID")); });
 
     return deferred.future();
 }
 
-auto FileAccessGoogleDrive::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *> >
+auto FileAccessGoogleDrive::getDataAsync(const QStringList &paths, bool allowCache)
+    -> QFuture<QVector<FileDataResult *>>
 {
     qCDebug(gmFileAccessGoogle()) << "getDataAsync(" << paths << "," << allowCache << ")";
     return FileAccess::getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
@@ -74,33 +89,27 @@ auto FileAccessGoogleDrive::saveAsync(const QString &path, const QByteArray &dat
 {
     qCDebug(gmFileAccessGoogle()) << "saveAsync(" << path << ")";
 
-    auto deferred = AsyncFuture::deferred<FileResult*>();
+    auto deferred = AsyncFuture::deferred<FileResult *>();
 
-    auto errorCallback = [deferred]() mutable
-    {
+    auto errorCallback = [deferred]() mutable {
         qCWarning(gmFileAccessGoogle()) << "Error: Could not save file content!";
         deferred.cancel();
     };
 
-    auto updateExistingFile = [this, path, data, deferred, errorCallback](const QString &id) mutable
-    {
+    auto updateExistingFile = [this, path, data, deferred, errorCallback](const QString &id) mutable {
         AsyncFuture::observe(updateFileContent(id, path, data))
-                .subscribe([deferred](FileResult *result) mutable
-        {
-            deferred.complete(result);
-        }, errorCallback);
+            .subscribe([deferred](FileResult *result) mutable { deferred.complete(result); }, errorCallback);
     };
 
-    auto createNewFile = [this, path, data, updateExistingFile, deferred, errorCallback]() mutable
-    {
+    auto createNewFile = [this, path, data, updateExistingFile, deferred, errorCallback]() mutable {
         // Create file first
         AsyncFuture::observe(createFileAsync(path, QByteArray()))
-                .subscribe([this, path, updateExistingFile, deferred, errorCallback]()
-        {
-            // Get file id and then update the file with data
-            AsyncFuture::observe(getFileIdAsync(path))
-                    .subscribe(updateExistingFile, errorCallback);
-        }, errorCallback);
+            .subscribe(
+                [this, path, updateExistingFile, deferred, errorCallback]() {
+                    // Get file id and then update the file with data
+                    AsyncFuture::observe(getFileIdAsync(path)).subscribe(updateExistingFile, errorCallback);
+                },
+                errorCallback);
     };
 
     AsyncFuture::observe(getFileIdAsync(path)).subscribe(updateExistingFile, createNewFile);
@@ -108,54 +117,58 @@ auto FileAccessGoogleDrive::saveAsync(const QString &path, const QByteArray &dat
     return deferred.future();
 }
 
-auto FileAccessGoogleDrive::updateFileContent(const QString &id, const QString &path, const QByteArray &data) -> QFuture<FileResult *>
+auto FileAccessGoogleDrive::updateFileContent(const QString &id, const QString &path, const QByteArray &data)
+    -> QFuture<FileResult *>
 {
     qCDebug(gmFileAccessGoogle()) << "updateFile(" << path << ")";
 
-    const auto url = QUrl(QString("%1/%2?uploadType=resumable").arg(UPLOAD_ENDPOINT, id));
+    const auto url = QUrl(QStringLiteral("%1/%2?uploadType=resumable").arg(UPLOAD_ENDPOINT, id));
     const auto request = makeJsonRequest(url);
 
-    const auto errorCallback = []()
-    {
+    const auto errorCallback = []() {
         qCWarning(gmFileAccessGoogle()) << "Error: Could not update file!";
         return QFuture<FileResult *>();
     };
 
     // Tell GoogleDrive that we want to upload a file
-    return AsyncFuture::observe(GoogleDrive::getInstance()->customRequest(request, "PATCH", ""))
-            .subscribe([this, path, data, errorCallback](RestNetworkReply *reply)
-    {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qCWarning(gmFileAccessGoogle()) << "Error during file upload:" << reply->errorText();
-            return AsyncFuture::completed(new FileResult(false, reply->errorText(), this));
-        }
+    return AsyncFuture::observe(m_gd.customRequest(request, "PATCH", ""))
+        .subscribe(
+            [this, path, data, errorCallback](RestNetworkReply *reply) {
+                if (reply->error() != QNetworkReply::NoError)
+                {
+                    qCWarning(gmFileAccessGoogle()) << "Error during file upload:" << reply->errorText();
+                    return AsyncFuture::completed(new FileResult(false, reply->errorText(), this));
+                }
 
-        qCDebug(gmFileAccessGoogle()) << "Received upload URL for file" << path;
+                qCDebug(gmFileAccessGoogle()) << "Received upload URL for file" << path;
 
-        const auto uploadUrl = reply->getHeader("Location");
-        reply->deleteLater();
+                const auto uploadUrl = reply->getHeader("Location");
+                reply->deleteLater();
 
-        auto request = QNetworkRequest(QUrl(QString::fromUtf8(uploadUrl)));
-        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
-        request.setHeader(QNetworkRequest::ContentLengthHeader, data.size());
+                auto request = QNetworkRequest(QUrl(QString::fromUtf8(uploadUrl)));
+                request.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
+                request.setHeader(QNetworkRequest::ContentLengthHeader, data.size());
 
-        return AsyncFuture::observe(GoogleDrive::getInstance()->put(request, data))
-                .subscribe([this, path, data](RestNetworkReply *reply)
-        {
-            if (reply->error() == QNetworkReply::NoError)
-            {
-                qCDebug(gmFileAccessGoogle()) << "Successfully updated file" << path;
-                m_fileCache.createOrUpdateEntry(path, data);
-            }
-            else
-            {
-                qCWarning(gmFileAccessGoogle()) << reply->errorText();
-            }
+                return AsyncFuture::observe(m_gd.put(request, data))
+                    .subscribe(
+                        [this, path, data](RestNetworkReply *reply) {
+                            if (reply->error() == QNetworkReply::NoError)
+                            {
+                                qCDebug(gmFileAccessGoogle()) << "Successfully updated file" << path;
+                                m_fileCache.createOrUpdateEntry(path, data);
+                            }
+                            else
+                            {
+                                qCWarning(gmFileAccessGoogle()) << reply->errorText();
+                            }
 
-            return FileResult::fromNetworkReply(reply, this);
-        }, errorCallback).future();
-    }, errorCallback).future();
+                            return FileResult::fromNetworkReply(reply, this);
+                        },
+                        errorCallback)
+                    .future();
+            },
+            errorCallback)
+        .future();
 }
 
 /// Move a file from one path to another
@@ -168,69 +181,66 @@ auto FileAccessGoogleDrive::moveAsync(const QString &oldPath, const QString &new
 {
     qCDebug(gmFileAccessGoogle()) << "moveAsync(" << oldPath << "," << newPath << ")";
 
-    auto deferred = AsyncFuture::deferred<FileResult*>();
+    auto deferred = AsyncFuture::deferred<FileResult *>();
 
-    auto errorCallback = [this, deferred](const QString &error) mutable
-    {
+    auto errorCallback = [this, deferred](const QString &error) mutable {
         qCWarning(gmFileAccessGoogle()) << "Error during moveAsync():" << error;
         deferred.complete(new FileResult(error, this));
     };
 
-    auto createNewParentFolderAndTryAgain = [this, oldPath, newPath, deferred, errorCallback]() mutable
-    {
+    auto createNewParentFolderAndTryAgain = [this, oldPath, newPath, deferred, errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(newPath);
 
         AsyncFuture::observe(createDirAsync(parentPath))
-                .subscribe([this, oldPath, newPath, deferred]() mutable
-        {
-            deferred.complete(moveAsync(oldPath, newPath));
-        }, [errorCallback]() mutable
-        {
-            errorCallback(QStringLiteral("Could not create new parent folder"));
-        });
+            .subscribe(
+                [this, oldPath, newPath, deferred]() mutable { deferred.complete(moveAsync(oldPath, newPath)); },
+                [errorCallback]() mutable { errorCallback(QStringLiteral("Could not create new parent folder")); });
     };
 
     AsyncFuture::observe(getFileIdAsync(oldPath))
-            .subscribe([this, oldPath, newPath, deferred, errorCallback, createNewParentFolderAndTryAgain](const QString &fileId) mutable
-    {
-        AsyncFuture::observe(getParentIdAsync(oldPath))
-                .subscribe([this, fileId, oldPath, newPath, deferred, errorCallback,createNewParentFolderAndTryAgain](const QPair<QString, QByteArray> &oldPair) mutable
-        {
-            AsyncFuture::observe(getParentIdAsync(newPath))
-                    .subscribe([this, fileId, oldPath, newPath, oldPair, deferred, errorCallback, createNewParentFolderAndTryAgain](const QPair<QString, QByteArray> &newPair) mutable
-            {
-                const auto filename = FileUtils::fileName(newPath);
-                const auto metadata = makeMetaData(filename);
+        .subscribe(
+            [this, oldPath, newPath, deferred, errorCallback,
+             createNewParentFolderAndTryAgain](const QString &fileId) mutable {
+                AsyncFuture::observe(getParentIdAsync(oldPath))
+                    .subscribe(
+                        [this, fileId, oldPath, newPath, deferred, errorCallback,
+                         createNewParentFolderAndTryAgain](const QPair<QString, QByteArray> &oldPair) mutable {
+                            AsyncFuture::observe(getParentIdAsync(newPath))
+                                .subscribe(
+                                    [this, fileId, oldPath, newPath, oldPair, deferred, errorCallback,
+                                     createNewParentFolderAndTryAgain](
+                                        const QPair<QString, QByteArray> &newPair) mutable {
+                                        const auto filename = FileUtils::fileName(newPath);
+                                        const auto metadata = makeMetaData(filename);
 
-                const auto url = QUrl(QString("%1/%2?addParents=%3&removeParents=%4")
-                                      .arg(FILES_ENDPOINT, fileId, newPair.second, oldPair.second));
-                const auto request = makeJsonRequest(url);
+                                        const auto url =
+                                            QUrl(QStringLiteral("%1/%2?addParents=%3&removeParents=%4")
+                                                     .arg(FILES_ENDPOINT, fileId, newPair.second, oldPair.second));
+                                        const auto request = makeJsonRequest(url);
 
-                AsyncFuture::observe(GoogleDrive::getInstance()->customRequest(request, "PATCH", metadata))
-                        .subscribe([this, oldPath, newPath, deferred](RestNetworkReply *reply) mutable
-                {
-                    qCDebug(gmFileAccessGoogle()) << "Successfully moved file/folder from" << oldPath << "to" << newPath;
+                                        AsyncFuture::observe(m_gd.customRequest(request, "PATCH", metadata))
+                                            .subscribe(
+                                                [this, oldPath, newPath, deferred](RestNetworkReply *reply) mutable {
+                                                    qCDebug(gmFileAccessGoogle())
+                                                        << "Successfully moved file/folder from" << oldPath << "to"
+                                                        << newPath;
 
-                    m_fileCache.moveEntry(oldPath, newPath);
-                    m_idCache.moveEntry(oldPath, newPath);
+                                                    m_fileCache.moveEntry(oldPath, newPath);
+                                                    m_idCache.moveEntry(oldPath, newPath);
 
-                    deferred.complete(FileResult::fromNetworkReply(reply, this));
-                }, [errorCallback]() mutable
-                {
-                    errorCallback(QStringLiteral("Could not send PATCH request"));
-                });
-
-            }, createNewParentFolderAndTryAgain);
-
-        }, [errorCallback]() mutable
-        {
-            errorCallback(QStringLiteral("Could not find ID of old parent folder"));
-        });
-
-    }, [errorCallback]() mutable
-    {
-        errorCallback(QStringLiteral("Could not find file/folder ID"));
-    });
+                                                    deferred.complete(FileResult::fromNetworkReply(reply, this));
+                                                },
+                                                [errorCallback]() mutable {
+                                                    errorCallback(QStringLiteral("Could not send PATCH request"));
+                                                });
+                                    },
+                                    createNewParentFolderAndTryAgain);
+                        },
+                        [errorCallback]() mutable {
+                            errorCallback(QStringLiteral("Could not find ID of old parent folder"));
+                        });
+            },
+            [errorCallback]() mutable { errorCallback(QStringLiteral("Could not find file/folder ID")); });
 
     return deferred.future();
 }
@@ -242,39 +252,41 @@ auto FileAccessGoogleDrive::deleteAsync(const QString &path) -> QFuture<FileResu
 {
     qCDebug(gmFileAccessGoogle()) << "deleteAsync(" << path << ")";
 
-    auto deferred = AsyncFuture::deferred<FileResult*>();
+    auto deferred = AsyncFuture::deferred<FileResult *>();
 
-    const auto errorCallback = [this, path, deferred]() mutable
-    {
+    const auto errorCallback = [this, path, deferred]() mutable {
         qCWarning(gmFileAccessGoogle()) << "Error: Could not delete file" << path << "!";
         deferred.complete(new FileResult(false, this));
     };
 
     AsyncFuture::observe(getFileIdAsync(path))
-            .subscribe([this, path, deferred, errorCallback](const QString &id) mutable
-    {
-        const auto url = QUrl(QString("%1/%2").arg(FILES_ENDPOINT, id));
-        const auto request = QNetworkRequest(url);
+        .subscribe(
+            [this, path, deferred, errorCallback](const QString &id) mutable {
+                const auto url = QUrl(QStringLiteral("%1/%2").arg(FILES_ENDPOINT, id));
+                const auto request = QNetworkRequest(url);
 
-        AsyncFuture::observe(GoogleDrive::getInstance()->customRequest(request, "DELETE", ""))
-                .subscribe([this, path, deferred](RestNetworkReply *reply) mutable
-        {
-            if (reply->error() == QNetworkReply::NoError)
-            {
-                // Save the folder ID
-                m_idCache.removeEntry(path);
-                m_fileCache.removeEntry(path);
+                AsyncFuture::observe(m_gd.customRequest(request, "DELETE", ""))
+                    .subscribe(
+                        [this, path, deferred](RestNetworkReply *reply) mutable {
+                            if (reply->error() == QNetworkReply::NoError)
+                            {
+                                // Save the folder ID
+                                m_idCache.removeEntry(path);
+                                m_fileCache.removeEntry(path);
 
-                qCDebug(gmFileAccessGoogle()) << "Successfully deleted file" << path;
-            }
-            else
-            {
-                qCWarning(gmFileAccessGoogle()) << "Error during deletion of file" << path << ":" << reply->errorText();
-            }
+                                qCDebug(gmFileAccessGoogle()) << "Successfully deleted file" << path;
+                            }
+                            else
+                            {
+                                qCWarning(gmFileAccessGoogle())
+                                    << "Error during deletion of file" << path << ":" << reply->errorText();
+                            }
 
-            deferred.complete(AsyncFuture::completed(FileResult::fromNetworkReply(reply, this)));
-        }, errorCallback);
-    }, errorCallback);
+                            deferred.complete(AsyncFuture::completed(FileResult::fromNetworkReply(reply, this)));
+                        },
+                        errorCallback);
+            },
+            errorCallback);
 
     return deferred.future();
 }
@@ -289,77 +301,90 @@ auto FileAccessGoogleDrive::copyAsync(const QString &path, const QString &copy) 
 {
     qCDebug(gmFileAccessGoogle()) << "copyAsync(" << path << "," << copy << ")";
 
-    auto deferred = AsyncFuture::deferred<FileResult*>();
+    auto deferred = AsyncFuture::deferred<FileResult *>();
 
-    auto errorCallback = [this, deferred](const QString &error) mutable
-    {
+    auto errorCallback = [this, deferred](const QString &error) mutable {
         qCWarning(gmFileAccessGoogle()) << error;
         deferred.complete(new FileResult(false, error, this));
     };
 
-    auto createNewParentFolderAndTryAgain = [this, path, copy, deferred, errorCallback]() mutable
-    {
+    auto createNewParentFolderAndTryAgain = [this, path, copy, deferred, errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(copy);
 
         AsyncFuture::observe(createDirAsync(parentPath))
-                .subscribe([this, path, copy, deferred]() mutable
-        {
-            deferred.complete(copyAsync(path, copy));
-        },[errorCallback]() mutable
-        {
-            errorCallback(QStringLiteral("Could not create new parent folder"));
-        });
+            .subscribe(
+                [this, path, copy, deferred]() mutable { deferred.complete(copyAsync(path, copy)); },
+                [errorCallback]() mutable { errorCallback(QStringLiteral("Could not create new parent folder")); });
     };
 
     AsyncFuture::observe(checkAsync(copy, true))
-            .subscribe([this, path, copy, deferred, errorCallback, createNewParentFolderAndTryAgain](FileCheckResult *result) mutable
-    {
-        if (!result)
-        {
-            errorCallback(QStringLiteral("Tried to check if destination already exists -> received null result"));
-            return;
-        }
-
-        if (result->exists())
-        {
-            errorCallback(QStringLiteral("Destination already exists!"));
-            return;
-        }
-
-        result->deleteLater();
-
-        AsyncFuture::observe(getFileIdAsync(path)).subscribe([this, path, copy, deferred, errorCallback, createNewParentFolderAndTryAgain](const QString &id) mutable
-        {
-            AsyncFuture::observe(getParentIdAsync(copy)).subscribe([this, path, copy, id, deferred, errorCallback](const QPair<QString, QByteArray> &parent) mutable
-            {
-                const auto filename = FileUtils::fileName(copy);
-                const auto metadata = makeMetaData(filename, parent.second);
-
-                const auto url = QUrl(QString("%1/%2/copy").arg(FILES_ENDPOINT, id));
-                const auto request = makeJsonRequest(url);
-
-                AsyncFuture::observe(GoogleDrive::getInstance()->post(request, metadata))
-                        .subscribe([this, path, copy, deferred](RestNetworkReply *reply) mutable
+        .subscribe(
+            [this, path, copy, deferred, errorCallback,
+             createNewParentFolderAndTryAgain](FileCheckResult *result) mutable {
+                if (!result)
                 {
-                    if (reply->error() == QNetworkReply::NoError)
-                    {
-                        // Save the folder ID
-                        const auto json = QJsonDocument::fromJson(reply->data()).object();
-                        m_idCache.createOrUpdateEntry(copy, json["id"].toString().toUtf8());
-                        m_fileCache.copyEntry(path, copy);
+                    errorCallback(
+                        QStringLiteral("Tried to check if destination already exists -> received null result"));
+                    return;
+                }
 
-                        qCDebug(gmFileAccessGoogle()) << "Successfully copied file" << path << "to" << copy;
-                    }
-                    else
-                    {
-                        qCWarning(gmFileAccessGoogle()) << "Error during copying of file" << path << ":" << reply->errorText();
-                    }
+                if (result->exists())
+                {
+                    errorCallback(QStringLiteral("Destination already exists!"));
+                    return;
+                }
 
-                    deferred.complete(FileResult::fromNetworkReply(reply, this));
-                }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not send copy request")); });
-            }, createNewParentFolderAndTryAgain);
-        }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get file ID")); });
-    }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not check if destination already exists!")); });
+                result->deleteLater();
+
+                AsyncFuture::observe(getFileIdAsync(path))
+                    .subscribe(
+                        [this, path, copy, deferred, errorCallback,
+                         createNewParentFolderAndTryAgain](const QString &id) mutable {
+                            AsyncFuture::observe(getParentIdAsync(copy))
+                                .subscribe(
+                                    [this, path, copy, id, deferred,
+                                     errorCallback](const QPair<QString, QByteArray> &parent) mutable {
+                                        const auto filename = FileUtils::fileName(copy);
+                                        const auto metadata = makeMetaData(filename, parent.second);
+
+                                        const auto url = QUrl(QStringLiteral("%1/%2/copy").arg(FILES_ENDPOINT, id));
+                                        const auto request = makeJsonRequest(url);
+
+                                        AsyncFuture::observe(m_gd.post(request, metadata))
+                                            .subscribe(
+                                                [this, path, copy, deferred](RestNetworkReply *reply) mutable {
+                                                    if (reply->error() == QNetworkReply::NoError)
+                                                    {
+                                                        // Save the folder ID
+                                                        const auto json =
+                                                            QJsonDocument::fromJson(reply->data()).object();
+                                                        m_idCache.createOrUpdateEntry(copy,
+                                                                                      json["id"].toString().toUtf8());
+                                                        m_fileCache.copyEntry(path, copy);
+
+                                                        qCDebug(gmFileAccessGoogle())
+                                                            << "Successfully copied file" << path << "to" << copy;
+                                                    }
+                                                    else
+                                                    {
+                                                        qCWarning(gmFileAccessGoogle())
+                                                            << "Error during copying of file" << path << ":"
+                                                            << reply->errorText();
+                                                    }
+
+                                                    deferred.complete(FileResult::fromNetworkReply(reply, this));
+                                                },
+                                                [errorCallback]() mutable {
+                                                    errorCallback(QStringLiteral("Could not send copy request"));
+                                                });
+                                    },
+                                    createNewParentFolderAndTryAgain);
+                        },
+                        [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get file ID")); });
+            },
+            [errorCallback]() mutable {
+                errorCallback(QStringLiteral("Could not check if destination already exists!"));
+            });
 
     return deferred.future();
 }
@@ -369,24 +394,25 @@ auto FileAccessGoogleDrive::listAsync(const QString &path, bool files, bool fold
 {
     qCDebug(gmFileAccessGoogle()) << "listAsync(" << path << "," << files << "," << folders << ")";
 
-    auto deferred = AsyncFuture::deferred<FileListResult*>();
+    auto deferred = AsyncFuture::deferred<FileListResult *>();
 
-    auto errorCallback = [this, path, deferred](const QString &error) mutable
-    {
+    auto errorCallback = [this, path, deferred](const QString &error) mutable {
         deferred.complete(new FileListResult(path, error, this));
     };
 
-    AsyncFuture::observe(getFileIdAsync(path)).subscribe([this, path, files, folders, deferred](const QString &id) mutable
-    {
-        const auto q = makeListQuery(id, files, folders);
-        deferred.complete(listAsync(path, q));
-    },
-    [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get folder id")); });
+    AsyncFuture::observe(getFileIdAsync(path))
+        .subscribe(
+            [this, path, files, folders, deferred](const QString &id) mutable {
+                const auto q = makeListQuery(id, files, folders);
+                deferred.complete(listAsync(path, q));
+            },
+            [errorCallback]() mutable { errorCallback(QStringLiteral("Could not get folder id")); });
 
     return deferred.future();
 }
 
-auto FileAccessGoogleDrive::listAsync(const QString &path, const QString &q, const QString &pageToken) -> QFuture<FileListResult *>
+auto FileAccessGoogleDrive::listAsync(const QString &path, const QString &q, const QString &pageToken)
+    -> QFuture<FileListResult *>
 {
     QUrl url(FILES_ENDPOINT);
     auto query = QUrlQuery({{"q", QUrl::toPercentEncoding(q)}});
@@ -398,67 +424,71 @@ auto FileAccessGoogleDrive::listAsync(const QString &path, const QString &q, con
 
     url.setQuery(query);
 
-    return AsyncFuture::observe(GoogleDrive::getInstance()->get(makeJsonRequest(url)))
-            .subscribe([this, path, q](RestNetworkReply *reply)
-    {
-        if (reply->error() == QNetworkReply::NoError)
-        {
-            const auto json = QJsonDocument::fromJson(reply->data()).object();
-            const auto fileArray = json["files"].toArray();
-
-            QStringList files;
-            QStringList folders;
-
-            for (const auto &file : fileArray)
-            {
-                const auto fileName = file["name"].toString();
-                const auto filePath = FileUtils::fileInDir(fileName, path);
-                const auto id = file["id"].toString().toUtf8();
-                const auto mimeType = file["mimeType"].toString();
-
-                if (mimeType == GoogleDriveMimeType::FOLDER)
+    return AsyncFuture::observe(m_gd.get(makeJsonRequest(url)))
+        .subscribe(
+            [this, path, q](RestNetworkReply *reply) {
+                if (reply->error() == QNetworkReply::NoError)
                 {
-                    folders << fileName;
-                }
-                else
-                {
-                    files << fileName;
+                    const auto json = QJsonDocument::fromJson(reply->data()).object();
+                    const auto fileArray = json["files"].toArray();
+
+                    QStringList files;
+                    QStringList folders;
+
+                    for (const auto &file : fileArray)
+                    {
+                        const auto fileName = file["name"].toString();
+                        const auto filePath = FileUtils::fileInDir(fileName, path);
+                        const auto id = file["id"].toString().toUtf8();
+                        const auto mimeType = file["mimeType"].toString();
+
+                        if (mimeType == GoogleDriveMimeType::FOLDER)
+                        {
+                            folders << fileName;
+                        }
+                        else
+                        {
+                            files << fileName;
+                        }
+
+                        m_idCache.createOrUpdateEntry(filePath, id);
+                    }
+
+                    // Get the next page
+                    if (json.contains("nextPageToken"))
+                    {
+                        reply->deleteLater();
+                        const auto nextPageToken = json["nextPageToken"].toString();
+
+                        return AsyncFuture::observe(listAsync(path, q, nextPageToken))
+                            .subscribe(
+                                [this, path, files, folders](FileListResult *result) mutable {
+                                    files.append(result->files());
+                                    folders.append(result->folders());
+                                    result->deleteLater();
+
+                                    return new FileListResult(path, folders, files, this);
+                                },
+                                []() { return QFuture<FileListResult *>(); })
+                            .future();
+                    }
+
+                    return AsyncFuture::completed(new FileListResult(path, folders, files, this));
                 }
 
-                m_idCache.createOrUpdateEntry(filePath, id);
-            }
-
-            // Get the next page
-            if (json.contains("nextPageToken"))
-            {
+                const auto error = reply->errorText();
                 reply->deleteLater();
-                const auto nextPageToken = json["nextPageToken"].toString();
 
-                return AsyncFuture::observe(listAsync(path, q, nextPageToken))
-                        .subscribe([this, path, files, folders](FileListResult *result) mutable
-                {
-                    files.append(result->files());
-                    folders.append(result->folders());
-                    result->deleteLater();
-
-                    return new FileListResult(path, folders, files, this);
-                },[]() { return QFuture<FileListResult*>(); }).future();
-            }
-
-            return AsyncFuture::completed(new FileListResult(path, folders, files, this));
-        }
-
-        const auto error = reply->errorText();
-        reply->deleteLater();
-
-        qCWarning(gmFileAccessGoogle()) << error;
-        return AsyncFuture::completed(new FileListResult(path, error, this));
-    }, []() { return QFuture<FileListResult*>(); }).future();
+                qCWarning(gmFileAccessGoogle()) << error;
+                return AsyncFuture::completed(new FileListResult(path, error, this));
+            },
+            []() { return QFuture<FileListResult *>(); })
+        .future();
 }
 
 auto FileAccessGoogleDrive::makeListQuery(const QString &id, bool files, bool folders) -> QString
 {
-    auto q = QString("'%1' in parents and trashed = false").arg(id);
+    auto q = QStringLiteral("'%1' in parents and trashed = false").arg(id);
 
     if (folders && !files)
     {
@@ -487,70 +517,77 @@ auto FileAccessGoogleDrive::createFileAsync(const QString &path, const QByteArra
 {
     qCDebug(gmFileAccessGoogle()) << "createFileAsync(" << path << "," << mimeType << ")";
 
-    auto deferred = AsyncFuture::deferred<FileResult*>();
+    auto deferred = AsyncFuture::deferred<FileResult *>();
 
-    auto errorCallback = [this, deferred](const QString &error) mutable
-    {
+    auto errorCallback = [this, deferred](const QString &error) mutable {
         qCWarning(gmFileAccessGoogle()) << error;
         deferred.complete(new FileResult(false, error, this));
     };
 
-    auto createParentDirAndTryAgain = [this, path, mimeType, deferred, errorCallback]() mutable
-    {
+    auto createParentDirAndTryAgain = [this, path, mimeType, deferred, errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(path);
         AsyncFuture::observe(createDirAsync(parentPath))
-                .subscribe([this, path, mimeType, deferred]() mutable
-        {
-            deferred.complete(createFileAsync(path, mimeType));
-        }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not create parent dir!")); });
+            .subscribe(
+                [this, path, mimeType, deferred]() mutable { deferred.complete(createFileAsync(path, mimeType)); },
+                [errorCallback]() mutable { errorCallback(QStringLiteral("Could not create parent dir!")); });
     };
 
     AsyncFuture::observe(checkAsync(path, true))
-            .subscribe([this, path, mimeType, deferred, errorCallback, createParentDirAndTryAgain](FileCheckResult *result) mutable
-    {
-        if (!result)
-        {
-            errorCallback(QStringLiteral("Tried to check if file already exists -> received null result"));
-            return;
-        }
-
-        if (result->exists())
-        {
-            errorCallback(QStringLiteral("File already exists!"));
-            return;
-        }
-
-        result->deleteLater();
-
-        // Get parent folder ID first
-        AsyncFuture::observe(getParentIdAsync(path))
-                .subscribe([this, path, mimeType, deferred, errorCallback](const QPair<QString, QByteArray> &parent) mutable
-        {
-            // Build file meta data
-            const auto data = makeMetaData(FileUtils::fileName(path), parent.second, mimeType);
-            const auto request = makeJsonRequest(QUrl(FILES_ENDPOINT));
-
-            // Send "create" request
-            return AsyncFuture::observe(GoogleDrive::getInstance()->post(request, data))
-                    .subscribe([this, path, mimeType, deferred](RestNetworkReply *reply) mutable
-            {
-                if (reply->error() == QNetworkReply::NoError)
+        .subscribe(
+            [this, path, mimeType, deferred, errorCallback,
+             createParentDirAndTryAgain](FileCheckResult *result) mutable {
+                if (!result)
                 {
-                    // Save the folder ID
-                    const auto json = QJsonDocument::fromJson(reply->data()).object();
-                    m_idCache.createOrUpdateEntry(path, json["id"].toString().toUtf8());
-
-                    qCDebug(gmFileAccessGoogle()) << "Successfully created file" << path << mimeType;
-                }
-                else
-                {
-                    qCWarning(gmFileAccessGoogle()) << "Error during creation of file" << path << mimeType << ":" << reply->errorText();
+                    errorCallback(QStringLiteral("Tried to check if file already exists -> received null result"));
+                    return;
                 }
 
-                deferred.complete(FileResult::fromNetworkReply(reply, this));
-            }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not send POST request!")); }).future();
-        }, createParentDirAndTryAgain);
-    }, [errorCallback]() mutable { errorCallback(QStringLiteral("Could not check if file already exists!")); });
+                if (result->exists())
+                {
+                    errorCallback(QStringLiteral("File already exists!"));
+                    return;
+                }
+
+                result->deleteLater();
+
+                // Get parent folder ID first
+                AsyncFuture::observe(getParentIdAsync(path))
+                    .subscribe(
+                        [this, path, mimeType, deferred,
+                         errorCallback](const QPair<QString, QByteArray> &parent) mutable {
+                            // Build file meta data
+                            const auto data = makeMetaData(FileUtils::fileName(path), parent.second, mimeType);
+                            const auto request = makeJsonRequest(QUrl(FILES_ENDPOINT));
+
+                            // Send "create" request
+                            return AsyncFuture::observe(m_gd.post(request, data))
+                                .subscribe(
+                                    [this, path, mimeType, deferred](RestNetworkReply *reply) mutable {
+                                        if (reply->error() == QNetworkReply::NoError)
+                                        {
+                                            // Save the folder ID
+                                            const auto json = QJsonDocument::fromJson(reply->data()).object();
+                                            m_idCache.createOrUpdateEntry(path, json["id"].toString().toUtf8());
+
+                                            qCDebug(gmFileAccessGoogle())
+                                                << "Successfully created file" << path << mimeType;
+                                        }
+                                        else
+                                        {
+                                            qCWarning(gmFileAccessGoogle()) << "Error during creation of file" << path
+                                                                            << mimeType << ":" << reply->errorText();
+                                        }
+
+                                        deferred.complete(FileResult::fromNetworkReply(reply, this));
+                                    },
+                                    [errorCallback]() mutable {
+                                        errorCallback(QStringLiteral("Could not send POST request!"));
+                                    })
+                                .future();
+                        },
+                        createParentDirAndTryAgain);
+            },
+            [errorCallback]() mutable { errorCallback(QStringLiteral("Could not check if file already exists!")); });
 
     return deferred.future();
 }
@@ -569,31 +606,31 @@ auto FileAccessGoogleDrive::checkAsync(const QString &path, bool allowCache) -> 
 
     auto deferred = AsyncFuture::deferred<FileCheckResult *>();
 
-    const auto errorCallback = [this, path, deferred]() mutable
-    {
+    const auto errorCallback = [this, path, deferred]() mutable {
         deferred.complete(new FileCheckResult(path, false, this));
     };
 
     AsyncFuture::observe(getFileIdAsync(path))
-            .subscribe([this, path, deferred](const QString &folderId) mutable
-    {
-        const auto url = QUrl(QString("%1/%2").arg(FILES_ENDPOINT, folderId));
+        .subscribe(
+            [this, path, deferred](const QString &folderId) mutable {
+                const auto url = QUrl(QStringLiteral("%1/%2").arg(FILES_ENDPOINT, folderId));
 
-        AsyncFuture::observe(GoogleDrive::getInstance()->get(url))
-                .subscribe([this, path, deferred](RestNetworkReply *reply) mutable
-        {
-            const auto json = QJsonDocument::fromJson(reply->data()).object();
-            const auto id = json["id"].toString();
-            m_idCache.createOrUpdateEntry(path, id.toUtf8());
+                AsyncFuture::observe(m_gd.get(url))
+                    .subscribe(
+                        [this, path, deferred](RestNetworkReply *reply) mutable {
+                            const auto json = QJsonDocument::fromJson(reply->data()).object();
+                            const auto id = json["id"].toString();
+                            m_idCache.createOrUpdateEntry(path, id.toUtf8());
 
-            deferred.complete(FileCheckResult::fromNetworkReply(reply, path, this));
-        }, [this, path, deferred]() mutable
-        {
-            deferred.complete(new FileCheckResult(path, false, this));
-        });
+                            deferred.complete(FileCheckResult::fromNetworkReply(reply, path, this));
+                        },
+                        [this, path, deferred]() mutable {
+                            deferred.complete(new FileCheckResult(path, false, this));
+                        });
 
-        return deferred.future();
-    }, errorCallback);
+                return deferred.future();
+            },
+            errorCallback);
 
     return deferred.future();
 }
@@ -605,12 +642,12 @@ auto FileAccessGoogleDrive::checkAsync(const QStringList &paths, bool allowCache
 }
 
 /// Find IDs of all files located in a folder
-auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QString &parentPath, const QString &pageToken) -> QFuture<void>
+auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QString &parentPath,
+                                              const QString &pageToken) -> QFuture<void>
 {
     QUrl url(FILES_ENDPOINT);
 
-    const auto queryString = QString("'%1' in parents and trashed = false")
-            .arg(parentId);
+    const auto queryString = QStringLiteral("'%1' in parents and trashed = false").arg(parentId);
 
     auto query = QUrlQuery({{"q", QUrl::toPercentEncoding(queryString)}});
 
@@ -621,8 +658,7 @@ auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QSt
 
     url.setQuery(query);
 
-    const auto callback = [this, parentId, parentPath](RestNetworkReply *reply)
-    {
+    const auto callback = [this, parentId, parentPath](RestNetworkReply *reply) {
         // Success
         if (reply->error() == QNetworkReply::NoError)
         {
@@ -654,11 +690,11 @@ auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QSt
 
     const auto errorCallback = []() { return QFuture<void>(); };
 
-    return AsyncFuture::observe(GoogleDrive::getInstance()->get(url))
-            .subscribe(callback, errorCallback).future();
+    return AsyncFuture::observe(m_gd.get(url)).subscribe(callback, errorCallback).future();
 }
 
-auto FileAccessGoogleDrive::getFolderEntryIds(const QPair<QString, QByteArray> &dir, const QString &pageToken) -> QFuture<void>
+auto FileAccessGoogleDrive::getFolderEntryIds(const QPair<QString, QByteArray> &dir, const QString &pageToken)
+    -> QFuture<void>
 {
     return getFolderEntryIds(dir.second, dir.first, pageToken);
 }
@@ -668,7 +704,8 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
 {
     qCDebug(gmFileAccessGoogle()) << "getFileId(" << path << ")";
 
-    if (path.isEmpty()) return AsyncFuture::completed(QStringLiteral("root"));;
+    if (path.isEmpty()) return AsyncFuture::completed(QStringLiteral("root"));
+    ;
 
     // First check if id is in cache
     QByteArray id;
@@ -681,8 +718,7 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
     const auto errorCallback = [path]() { return QFuture<QString>(); };
 
     // This is executed after ids in parent folder have been found
-    const auto callback = [this, path, errorCallback]()
-    {
+    const auto callback = [this, path, errorCallback]() {
         QByteArray id;
         if (m_idCache.tryGetData(path, id))
         {
@@ -693,19 +729,19 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
     };
 
     return AsyncFuture::observe(getParentIdAsync(path))
-            .subscribe([this, path, callback, errorCallback](const QPair<QString, QByteArray> &parentPair)
-    {
-        // Has ID been found in the meantime?
-        QByteArray id;
-        if (m_idCache.tryGetData(path, id))
-        {
-            return AsyncFuture::completed(QString(id));
-        }
+        .subscribe(
+            [this, path, callback, errorCallback](const QPair<QString, QByteArray> &parentPair) {
+                // Has ID been found in the meantime?
+                QByteArray id;
+                if (m_idCache.tryGetData(path, id))
+                {
+                    return AsyncFuture::completed(QString(id));
+                }
 
-        return AsyncFuture::observe(getFolderEntryIds(parentPair))
-                .subscribe(callback, errorCallback)
-                .future();
-    }, errorCallback).future();
+                return AsyncFuture::observe(getFolderEntryIds(parentPair)).subscribe(callback, errorCallback).future();
+            },
+            errorCallback)
+        .future();
 }
 
 /// Get the ID of the parent folder
@@ -720,20 +756,19 @@ auto FileAccessGoogleDrive::getParentIdAsync(const QString &path) -> QFuture<QPa
     }
 
     return AsyncFuture::observe(getFileIdAsync(parentPath))
-            .subscribe([parentPath](const QString &id)
-    {
-        return AsyncFuture::completed(QPair(parentPath, id.toUtf8()));
-    }).future();
+        .subscribe([parentPath](const QString &id) { return AsyncFuture::completed(QPair(parentPath, id.toUtf8())); })
+        .future();
 }
 
 /// Construct file metadata in json format
-auto FileAccessGoogleDrive::makeMetaData(const QString &name, const QString &parentId, const QByteArray &mimeType) -> QByteArray
+auto FileAccessGoogleDrive::makeMetaData(const QString &name, const QString &parentId, const QByteArray &mimeType)
+    -> QByteArray
 {
-    auto json = QJsonObject({{ "name", name }});
+    auto json = QJsonObject({{"name", name}});
 
     if (!parentId.isEmpty())
     {
-        json["parents"] = QJsonArray({ parentId });
+        json["parents"] = QJsonArray({parentId});
     }
 
     if (!mimeType.isEmpty())
@@ -748,6 +783,6 @@ auto FileAccessGoogleDrive::makeMetaData(const QString &name, const QString &par
 auto FileAccessGoogleDrive::makeJsonRequest(const QUrl &url) -> QNetworkRequest
 {
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, static_cast<const char*>(O2_MIME_TYPE_JSON));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, static_cast<const char *>(O2_MIME_TYPE_JSON));
     return request;
 }

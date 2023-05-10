@@ -13,10 +13,10 @@
 
 Q_LOGGING_CATEGORY(gmSpotifyServer, "gm.service.spotify.server")
 
-SpotifyConnectorServer::SpotifyConnectorServer(QNetworkAccessManager *networkManager, QObject *parent)
+SpotifyConnectorServer::SpotifyConnectorServer(QNetworkAccessManager &networkManager, QObject *parent)
     : RESTServiceConnector(networkManager, gmSpotifyServer(), parent)
 {
-    m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+    m_networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
     connect(&m_callbackServer, &CallbackServer::serverError, this, &SpotifyConnectorServer::onServerError);
     connect(&m_callbackServer, &CallbackServer::serverClosed, this, &SpotifyConnectorServer::onServerClosed);
@@ -60,16 +60,16 @@ void SpotifyConnectorServer::sendRequest(RequestContainer *container,
     {
     case GET:
         qCDebug(gmSpotifyServer) << "Sending GET Request to URL" << request.url();
-        reply = m_networkManager->get(request);
+        reply = m_networkManager.get(request);
         break;
     case PUT:
         qCDebug(gmSpotifyServer) << "Sending PUT Request to URL" << request.url() << "Data:" << container->data();
-        reply = m_networkManager->put(request, container->data());
+        reply = m_networkManager.put(request, container->data());
         break;
     case POST:
         qCDebug(gmSpotifyServer) << "Sending POST Request to URL" << request.url() << "Data:" << container->data();
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-        reply = m_networkManager->post(request, container->data());
+        reply = m_networkManager.post(request, container->data());
         break;
     default:
         throw NotImplementedException();
@@ -161,7 +161,7 @@ void SpotifyConnectorServer::requestAccessToken(const QString &code)
     query.addQueryItem(QStringLiteral("redirect_uri"), QUrl::toPercentEncoding(m_callbackServer.getUrl()));
     url.setQuery(query);
 
-    auto *reply = m_networkManager->get(QNetworkRequest(url));
+    auto *reply = m_networkManager.get(QNetworkRequest(url));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         qCDebug(gmSpotifyServer()) << "Received access token and refresh token ...";
@@ -209,7 +209,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 
     url.setQuery(QUrlQuery({{"refresh_token", refreshToken}}));
 
-    auto *reply = m_networkManager->get(QNetworkRequest(url));
+    auto *reply = m_networkManager.get(QNetworkRequest(url));
     connect(reply, &QNetworkReply::finished, this, [this, reply, updateAuthentication]() {
         // Network error, maybe server is unreachable?
         if (reply->error() != QNetworkReply::NoError)
@@ -409,7 +409,7 @@ void SpotifyConnectorServer::onCooldownFinished()
 
 void SpotifyConnectorServer::onServerError(const QString &error)
 {
-    emit statusChanged(ServiceStatus::Error, error);
+    emit statusChanged(ServiceStatus::Type::Error, error);
 }
 
 void SpotifyConnectorServer::onServerClosed(bool hasParameters)

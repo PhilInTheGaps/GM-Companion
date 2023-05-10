@@ -13,20 +13,19 @@
 
 #include <sentry.h>
 
+#include "addons/addonmanager.h"
+#include "filesystem/file.h"
 #include "filesystem/fileaccessswitcher.h"
 #include "filesystem/filedialog/filedialog.h"
 #include "logger.h"
 #include "messages/messagemanager.h"
-#include "settings/quicksettingsmanager.h"
-#include "tools.h"
-
+#include "platformdetails.h"
 #include "services/discord/discord.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
 #include "services/spotify/spotify.h"
-
-#include "addons/addonmanager.h"
-#include "platformdetails.h"
+#include "settings/quicksettingsmanager.h"
+#include "tools.h"
 #include "updates/updatemanager.h"
 
 Q_LOGGING_CATEGORY(gmMain, "gm.main")
@@ -127,6 +126,13 @@ auto main(int argc, char *argv[]) -> int
     engine.addImportPath(QStringLiteral("qrc:/"));
 
     // Misc
+    QNetworkAccessManager networkManager(nullptr);
+    networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+
+    NextCloud nc(networkManager, nullptr);
+    GoogleDrive gd(networkManager, nullptr);
+    Files::File::init(&nc, &gd);
+
     engine.rootContext()->setContextProperty("settings_manager", new QuickSettingsManager);
     engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
     engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
@@ -138,8 +144,8 @@ auto main(int argc, char *argv[]) -> int
 
     // Services
     engine.rootContext()->setContextProperty("spotify_service", Spotify::instance());
-    engine.rootContext()->setContextProperty("googledrive_service", GoogleDrive::getInstance());
-    engine.rootContext()->setContextProperty("nextcloud_service", NextCloud::getInstance());
+    engine.rootContext()->setContextProperty("googledrive_service", &gd);
+    engine.rootContext()->setContextProperty("nextcloud_service", &nc);
     engine.rootContext()->setContextProperty("discord_service", Discord::getInstance());
 
     // Load tools

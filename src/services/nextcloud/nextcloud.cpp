@@ -1,63 +1,65 @@
 #include "nextcloud.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "utils/networkutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/networkutils.h"
 
+#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTimer>
-#include <QDesktopServices>
 
 using namespace AsyncFuture;
 
-NextCloud::NextCloud(QObject *parent) : Service("NextCloud", parent)
-{
-    m_networkManager = new QNetworkAccessManager(this);
-    m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
+constexpr auto AUTH_URL = "/index.php/login/v2";
+constexpr auto DAV_ENDPOINT = "/remote.php/dav/files";
+constexpr auto AUTH_POLL_DELAY = 3000;
+constexpr auto MAX_AUTH_POLLS = 20;
 
+NextCloud::NextCloud(QNetworkAccessManager &networkManager, QObject *parent)
+    : NextCloud(QStringLiteral("NextCloud"), networkManager, parent)
+{
+}
+
+NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent)
+    : Service(serviceName, parent), m_networkManager(networkManager)
+{
     if (connected())
     {
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
-        loginName(SettingsManager::instance()->get<QString>(QStringLiteral("loginName"), QLatin1String(), QStringLiteral("NextCloud")));
-        serverUrl(SettingsManager::getServerUrl(QStringLiteral("NextCloud"), false));
+        loginName(SettingsManager::instance()->get<QString>(QStringLiteral("loginName"), QLatin1String(), serviceName));
+        serverUrl(SettingsManager::getServerUrl(serviceName, false));
         m_loggingIn = true;
 
-        const auto future = SettingsManager::getPassword(loginName(), QStringLiteral("NextCloud"));
+        const auto future = SettingsManager::getPassword(loginName(), serviceName);
 
-        observe(future).subscribe([this](const QString &password) {
-            m_appPassword = password;
+        observe(future).subscribe(
+            [this](const QString &password) {
+                m_appPassword = password;
 
-            if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
-            {
+                if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
+                {
+                    connected(false);
+                }
+                else
+                {
+                    qCDebug(gmNextCloud())
+                        << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
+                }
+
+                m_loggingIn = false;
+                emit loggedIn();
+            },
+            [this]() {
+                qCCritical(gmNextCloud()) << "Error during reading of password";
+                m_loggingIn = false;
                 connected(false);
-            }
-            else
-            {
-                qCDebug(gmNextCloud()) << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
-            }
-
-            m_loggingIn = false;
-            emit loggedIn();
-        }, [this]() {
-            qCCritical(gmNextCloud()) << "Error during reading of password";
-            m_loggingIn = false;
-            connected(false);
-        });
+            });
     }
 }
 
-auto NextCloud::getInstance() -> NextCloud *
-{
-    if (!single)
-    {
-        single = new NextCloud(nullptr);
-    }
-    return single;
-}
-
-auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, const QByteArray& data,
-                               const QList<QPair<QByteArray, QByteArray>>& headers) -> QFuture<QNetworkReply*>
+auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
+                               const QList<QPair<QByteArray, QByteArray>> &headers) -> QFuture<QNetworkReply *>
 {
     if (!connected()) connectService();
 
@@ -66,12 +68,12 @@ auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, co
     {
         qCDebug(gmNextCloud()) << "Delaying DAV request, because we are waiting for authentication ...";
 
-        return observe(this, &NextCloud::loggedIn).subscribe([this, method, path, data]() {
-            return sendDavRequest(method, path, data);
-        }).future();
+        return observe(this, &NextCloud::loggedIn)
+            .subscribe([this, method, path, data]() { return sendDavRequest(method, path, data); })
+            .future();
     }
 
-    auto url     = getPathUrl(path);
+    auto url = getPathUrl(path);
     auto request = QNetworkRequest(QUrl(url));
 
     qCDebug(gmNextCloud()) << "Sending DAV request (" << method << ") to" << url;
@@ -93,10 +95,10 @@ auto NextCloud::sendDavRequest(const QByteArray& method, const QString& path, co
         }
     }
 
-    return AsyncFuture::completed(m_networkManager->sendCustomRequest(request, method, data));
+    return AsyncFuture::completed(m_networkManager.sendCustomRequest(request, method, data));
 }
 
-auto NextCloud::getPathUrl(const QString &path) -> QString
+auto NextCloud::getPathUrl(const QString &path) const -> QString
 {
     const auto seperator = path.startsWith('/') ? QLatin1String() : QStringLiteral("/");
     return QStringLiteral("%1%2/%3%4%5").arg(serverUrl(), DAV_ENDPOINT, loginName(), seperator, path);
@@ -129,9 +131,9 @@ void NextCloud::disconnectService()
     qCDebug(gmNextCloud()) << "Logout() ...";
     updateStatus(ServiceStatus::Type::Info, tr("Logging out ..."));
 
-    // TODO
+    SettingsManager::setPassword(loginName(), QLatin1String(), serviceName());
 
-    connected(false);
+    disconnect();
 }
 
 /**
@@ -142,7 +144,7 @@ void NextCloud::startLoginFlow()
 {
     qCDebug(gmNextCloud()) << "Starting login flow v2 ...";
 
-    serverUrl(SettingsManager::getServerUrl("NextCloud", false));
+    serverUrl(SettingsManager::getServerUrl(serviceName(), false));
 
     if (serverUrl().isEmpty())
     {
@@ -160,9 +162,9 @@ void NextCloud::startLoginFlow()
     auto request = QNetworkRequest(QUrl(authUrl));
     request.setRawHeader("User-Agent", "GM-Companion");
 
-    auto *reply = m_networkManager->post(request, "");
+    auto *reply = m_networkManager.post(request, "");
 
-    connect(reply, &QNetworkReply::finished, [ = ]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         auto data = QJsonDocument::fromJson(reply->readAll());
 
         qCDebug(gmNextCloud()) << "Auth reply:" << data.toJson();
@@ -175,10 +177,10 @@ void NextCloud::startLoginFlow()
         }
         else
         {
-            auto poll     = data.object()["poll"].toObject();
-            auto token    = poll["token"].toString();
-            auto endpoint = poll["endpoint"].toString();
-            auto login    = data.object()["login"].toString();
+            auto poll = data.object()[QStringLiteral("poll")].toObject();
+            auto token = poll[QStringLiteral("token")].toString();
+            auto endpoint = poll[QStringLiteral("endpoint")].toString();
+            auto login = data.object()[QStringLiteral("login")].toString();
 
             updateStatus(ServiceStatus::Type::Info, tr("Waiting for login ..."));
             QDesktopServices::openUrl(QUrl(login));
@@ -192,52 +194,68 @@ void NextCloud::startLoginFlow()
 /**
  * @brief Poll the auth point to receive loginName and appPassword
  */
-void NextCloud::pollAuthPoint(const QUrl& url, const QString& token)
+void NextCloud::pollAuthPoint(const QUrl &url, const QString &token)
 {
     qCDebug(gmNextCloud()) << "Polling auth point ...";
 
-    QByteArray data = "token=" + token.toUtf8();
-    auto *reply     = m_networkManager->post(QNetworkRequest(url), data);
+    const QByteArray data = "token=" + token.toUtf8();
+    auto *reply = m_networkManager.post(QNetworkRequest(url), data);
     m_authPolls++;
 
     qCDebug(gmNextCloud()) << "URL:" << url.toString();
     qCDebug(gmNextCloud()) << "Token:" << token;
 
-    connect(reply, &QNetworkReply::finished, [ = ]() {
-        // Polling endpoint returns 404 until authentication is done
-        if (reply->error() == QNetworkReply::ContentNotFoundError)
-        {
-            if ((m_authPolls < MAX_AUTH_POLLS) && m_loggingIn)
-            {
-                qCDebug(gmNextCloud()) << "Finished poll" << m_authPolls << "/"
-                                       << MAX_AUTH_POLLS
-                                       << "waiting and polling again ...";
+    connect(reply, &QNetworkReply::finished, this,
+            [this, url, token, reply]() { handleAuthPointReply(reply, url, token); });
+}
 
-                QTimer::singleShot(AUTH_POLL_DELAY, [ = ]() { pollAuthPoint(url, token); });
-            }
-            else
-            {
-                qCWarning(gmNextCloud()) << "Timeout: Max polls (" << MAX_AUTH_POLLS << ") reached!";
-                updateStatus(ServiceStatus::Type::Error, tr("Login timed out, please try again."));
-                m_loggingIn = false;
-            }
-        }
-        else
-        {
-            auto content = QJsonDocument::fromJson(reply->readAll()).object();
-            loginName(content["loginName"].toString());
-            m_appPassword = content["appPassword"].toString();
+void NextCloud::handleAuthPointReply(QNetworkReply *reply, const QUrl &url, const QString &token)
+{
+    if (!reply) return;
 
-            qCDebug(gmNextCloud()) << "Logged in successfully!";
-            qCDebug(gmNextCloud()) << "LoginName:" << loginName();
-            qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
+    // Polling endpoint returns 404 until authentication is done
+    if (reply->error() == QNetworkReply::ContentNotFoundError)
+    {
+        handleAuthPointNotFound(url, token);
+    }
+    else
+    {
+        handleAuthPointSuccess(*reply);
+    }
 
-            SettingsManager::instance()->set(QStringLiteral("loginName"), loginName(), QStringLiteral("NextCloud"));
-            SettingsManager::setPassword(loginName(), m_appPassword, QStringLiteral("NextCloud"));
-            connected(true);
-            m_loggingIn = false;
-        }
+    reply->deleteLater();
+}
 
-        reply->deleteLater();
-    });
+void NextCloud::handleAuthPointNotFound(const QUrl &url, const QString &token)
+{
+    if ((m_authPolls < MAX_AUTH_POLLS) && m_loggingIn)
+    {
+        qCDebug(gmNextCloud()) << "Finished poll" << m_authPolls << "/" << MAX_AUTH_POLLS
+                               << "waiting and polling again ...";
+
+        QTimer::singleShot(AUTH_POLL_DELAY, this, [this, url, token]() { pollAuthPoint(url, token); });
+    }
+    else
+    {
+        qCWarning(gmNextCloud()) << "Timeout: Max polls (" << MAX_AUTH_POLLS << ") reached!";
+        updateStatus(ServiceStatus::Type::Error, tr("Login timed out, please try again."));
+        m_loggingIn = false;
+    }
+}
+
+void NextCloud::handleAuthPointSuccess(QNetworkReply &reply)
+{
+    const auto content = QJsonDocument::fromJson(reply.readAll()).object();
+    loginName(content[QStringLiteral("loginName")].toString());
+    m_appPassword = content[QStringLiteral("appPassword")].toString();
+
+    qCDebug(gmNextCloud()) << "Logged in successfully!";
+    qCDebug(gmNextCloud()) << "LoginName:" << loginName();
+    qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
+
+    SettingsManager::instance()->set(QStringLiteral("loginName"), loginName(), serviceName());
+    SettingsManager::setPassword(loginName(), m_appPassword, serviceName());
+    connected(true);
+    m_loggingIn = false;
+    emit loggedIn();
 }

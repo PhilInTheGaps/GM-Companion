@@ -35,11 +35,11 @@ void Spotify::updateConnector()
     if (SettingsManager::instance()->get(QStringLiteral("connection"), QStringLiteral("default"),
                                          QStringLiteral("Spotify")) == QLatin1String("local"))
     {
-        m_connector = new SpotifyConnectorLocal(m_networkManager, new O2Spotify, this);
+        m_connector = new SpotifyConnectorLocal(*m_networkManager, new O2Spotify, this);
     }
     else
     {
-        m_connector = new SpotifyConnectorServer(m_networkManager, this);
+        m_connector = new SpotifyConnectorServer(*m_networkManager, this);
     }
 
     connect(m_connector, &RESTServiceConnector::accessGranted, this, &Spotify::onAccessGranted);

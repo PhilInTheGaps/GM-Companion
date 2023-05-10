@@ -12,10 +12,11 @@ class AbstractTest : public QObject
 {
     Q_OBJECT
 public:
-    AbstractTest();
+    explicit AbstractTest(QObject *parent = nullptr);
     ~AbstractTest() override = default;
 
 protected:
+    QNetworkAccessManager *networkManager = nullptr;
     Files::FileAccess *fileAccess = nullptr;
     QTemporaryDir tempDir;
 

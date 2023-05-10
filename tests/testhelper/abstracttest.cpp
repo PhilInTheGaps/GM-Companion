@@ -8,7 +8,7 @@
 
 using namespace Files;
 
-AbstractTest::AbstractTest()
+AbstractTest::AbstractTest(QObject *parent) : QObject(parent)
 {
     loadResources();
 

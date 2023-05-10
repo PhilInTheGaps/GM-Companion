@@ -26,7 +26,6 @@ set(o2_SOURCES
   ${EXTERNAL_LIB_DIR}/o2/src/o0settingsstore.cpp
   ${EXTERNAL_LIB_DIR}/o2/src/o0baseauth.cpp
   ${EXTERNAL_LIB_DIR}/o2/src/o0jsonresponse.cpp
-  ${EXTERNAL_LIB_DIR}/o2/src/o2google.cpp
   ${EXTERNAL_LIB_DIR}/o2/src/o2spotify.cpp
 )
 
@@ -44,7 +43,6 @@ set(o2_HEADERS
   ${EXTERNAL_LIB_DIR}/o2/src/o0settingsstore.h
   ${EXTERNAL_LIB_DIR}/o2/src/o0simplecrypt.h
   ${EXTERNAL_LIB_DIR}/o2/src/o0jsonresponse.h
-  ${EXTERNAL_LIB_DIR}/o2/src/o2google.h
   ${EXTERNAL_LIB_DIR}/o2/src/o2spotify.h
 )
 

@@ -1,23 +1,25 @@
 #pragma once
 
-#include <QObject>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QFuture>
 #include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QFuture>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QObject>
+#include <gsl/gsl>
 
 class NextCloud : public Service
 {
     Q_OBJECT
 public:
-    static NextCloud *getInstance();
+    explicit NextCloud(QNetworkAccessManager &networkManager, QObject *parent);
+    explicit NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent);
 
-    QFuture<QNetworkReply*> sendDavRequest(const QByteArray& method, const QString &path, const QByteArray& data,
-                                  const QList<QPair<QByteArray, QByteArray> >& headers = {});
+    auto sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
+                        const QList<QPair<QByteArray, QByteArray>> &headers = {}) -> QFuture<QNetworkReply *>;
 
-    QString getPathUrl(const QString &path);
+    [[nodiscard]] QString getPathUrl(const QString &path) const;
 
     AUTO_PROPERTY(QString, loginName)
     AUTO_PROPERTY(QString, serverUrl)
@@ -30,21 +32,15 @@ signals:
     void loggedIn();
 
 private:
-    explicit NextCloud(QObject *parent = nullptr);
-
     void startLoginFlow();
-    void pollAuthPoint(const QUrl& url, const QString& token);
+    void pollAuthPoint(const QUrl &url, const QString &token);
+    void handleAuthPointReply(QNetworkReply *reply, const QUrl &url, const QString &token);
+    void handleAuthPointNotFound(const QUrl &url, const QString &token);
+    void handleAuthPointSuccess(QNetworkReply &reply);
 
-    inline static NextCloud *single = nullptr;
-
-    static constexpr const char* AUTH_URL = "/index.php/login/v2";
-    static constexpr const char* DAV_ENDPOINT = "/remote.php/dav/files";
-    static constexpr int AUTH_POLL_DELAY = 3000;
-    static constexpr int MAX_AUTH_POLLS = 20;
-
-    QNetworkAccessManager *m_networkManager = nullptr;
+    QNetworkAccessManager &m_networkManager;
     int m_authPolls = 0;
     bool m_loggingIn = false;
 
-    QString m_appPassword = "";
+    QString m_appPassword = QLatin1String("");
 };

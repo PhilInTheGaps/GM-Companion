@@ -24,22 +24,22 @@ class RESTServiceConnectorLocal : public RESTServiceConnector
 {
     Q_OBJECT
 public:
-    RESTServiceConnectorLocal(QNetworkAccessManager *networkManager, O2 *o2, const QLoggingCategory &loggingCategory,
+    RESTServiceConnectorLocal(QNetworkAccessManager &networkManager, O2 *o2, const QLoggingCategory &loggingCategory,
                               QObject *parent);
     ~RESTServiceConnectorLocal() override;
 
     void grantAccess() override;
     void disconnectService() override;
-    [[nodiscard]] bool isAccessGranted() const override
+    [[nodiscard]] auto isAccessGranted() const -> bool override
     {
         return m_o2->linked();
     }
 
-    QFuture<RestNetworkReply *> get(const QNetworkRequest &request) override;
-    QFuture<RestNetworkReply *> put(QNetworkRequest request, const QByteArray &data) override;
-    QFuture<RestNetworkReply *> post(QNetworkRequest request, const QByteArray &data) override;
-    QFuture<RestNetworkReply *> customRequest(const QNetworkRequest &req, const QByteArray &verb,
-                                              const QByteArray &data) override;
+    auto get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *> override;
+    auto put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> override;
+    auto post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *> override;
+    auto customRequest(const QNetworkRequest &req, const QByteArray &verb, const QByteArray &data)
+        -> QFuture<RestNetworkReply *> override;
 
 protected:
     O2 *m_o2 = nullptr;

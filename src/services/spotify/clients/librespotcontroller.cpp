@@ -26,7 +26,7 @@ LibrespotController::LibrespotController(QObject *parent)
 
 auto LibrespotController::start() -> QFuture<bool>
 {
-    updateStatus(ServiceStatus::Info, "Starting librespot client ...");
+    updateStatus(ServiceStatus::Type::Info, "Starting librespot client ...");
 
     if (isOtherProcessIsRunning())
     {
@@ -107,24 +107,25 @@ auto LibrespotController::stop() -> bool
 
     if (m_librespotProcess.state() == QProcess::NotRunning) return true;
 
-    updateStatus(ServiceStatus::Info, tr("Stopping librespot client ..."));
+    updateStatus(ServiceStatus::Type::Info, tr("Stopping librespot client ..."));
 
     m_isExitExpected = true;
     m_librespotProcess.terminate();
 
     if (!m_librespotProcess.waitForFinished(PROCESS_TERMINATE_TIMEOUT_MS))
     {
-        updateStatus(ServiceStatus::Error, tr("Librespot thread could not be terminated, trying to kill it now ..."));
+        updateStatus(ServiceStatus::Type::Error,
+                     tr("Librespot thread could not be terminated, trying to kill it now ..."));
         m_librespotProcess.kill();
 
         if (!m_librespotProcess.waitForFinished(PROCESS_TERMINATE_TIMEOUT_MS))
         {
-            updateStatus(ServiceStatus::Error, tr("Librespot thread could not be killed."));
+            updateStatus(ServiceStatus::Type::Error, tr("Librespot thread could not be killed."));
             return false;
         }
     }
 
-    updateStatus(ServiceStatus::Info, tr("Librespot client has stopped."));
+    updateStatus(ServiceStatus::Type::Info, tr("Librespot client has stopped."));
     return true;
 }
 
@@ -164,7 +165,7 @@ void LibrespotController::setAsActiveDevice()
             else
             {
                 qCCritical(gmLibrespotController()) << "Could not find spotify device" << deviceName();
-                updateStatus(ServiceStatus::Error,
+                updateStatus(ServiceStatus::Type::Error,
                              tr("Spotify device could not be found. Are the credentials correct?"));
             }
             return false;
@@ -301,12 +302,12 @@ void LibrespotController::onLibrespotOutputReady()
             }
 
             qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-            updateStatus(ServiceStatus::Warning, line);
+            updateStatus(ServiceStatus::Type::Warning, line);
         }
         else if (line.contains("ERROR"))
         {
             qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-            updateStatus(ServiceStatus::Error, line);
+            updateStatus(ServiceStatus::Type::Error, line);
         }
         else
         {
@@ -317,14 +318,14 @@ void LibrespotController::onLibrespotOutputReady()
         {
             m_hasStarted = true;
             m_hasAuthenticated.complete(true);
-            updateStatus(ServiceStatus::Success,
+            updateStatus(ServiceStatus::Type::Success,
                          tr("Successfully started librespot client. (Spotify device %1)").arg(deviceName()));
         }
 
         if (line.contains("Connection failed:"))
         {
             m_hasAuthenticated.complete(false);
-            updateStatus(ServiceStatus::Error, line);
+            updateStatus(ServiceStatus::Type::Error, line);
             stop();
         }
     }

@@ -37,6 +37,8 @@ public:
 
     Q_INVOKABLE bool has(const QString &setting, const QString &group = DEFAULT_GROUP);
 
+    void forceSync();
+
 protected:
     template <typename T> void rename(const QString &currentName, const QString &newName, const QString &group);
 

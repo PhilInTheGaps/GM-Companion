@@ -1,9 +1,7 @@
 #include "abstractsettingsmanager.h"
 
-AbstractSettingsManager::AbstractSettingsManager(QObject *parent)
-    : QObject{parent}
+AbstractSettingsManager::AbstractSettingsManager(QObject *parent) : QObject{parent}
 {
-
 }
 
 auto AbstractSettingsManager::has(const QString &setting, const QString &group) -> bool
@@ -13,6 +11,11 @@ auto AbstractSettingsManager::has(const QString &setting, const QString &group) 
     m_settings.endGroup();
 
     return result;
+}
+
+void AbstractSettingsManager::forceSync()
+{
+    m_settings.sync();
 }
 
 void AbstractSettingsManager::remove(const QString &setting, const QString &group)

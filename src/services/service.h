@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QObject>
 #include "servicestatus.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QObject>
 
 class Service : public QObject
 {
@@ -10,19 +10,21 @@ class Service : public QObject
 public:
     explicit Service(const QString &name, QObject *parent = nullptr);
 
-    AUTO_PROPERTY(bool, connected)
-    READ_PROPERTY(ServiceStatus*, status)
+    AUTO_PROPERTY_VAL2(bool, connected, false)
+    READ_PROPERTY(ServiceStatus *, status)
+    AUTO_PROPERTY(QString, serviceName)
 
 public slots:
     virtual void connectService() = 0;
     virtual void disconnectService() = 0;
 
+protected:
+    void disconnect();
+
 protected slots:
-    void updateStatus(const ServiceStatus::Type& type, const QString& message);
+    void updateStatus(ServiceStatus::Type type, const QString &message);
 
 private:
-    QString m_serviceName;
-
     void updateConnectionStatus();
 
 private slots:
