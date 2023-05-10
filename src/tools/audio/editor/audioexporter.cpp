@@ -13,7 +13,7 @@ using namespace AsyncFuture;
 void AudioExporter::setProject(AudioProject *project)
 {
     m_project = project;
-    m_project->setIsOpen(true);
+    m_project->isOpen(true);
     m_model = m_project;
     emit modelChanged();
 }
@@ -29,7 +29,7 @@ void AudioExporter::exportFiles()
     auto *worker = new Worker(m_path, m_project);
 
     worker->moveToThread(&workerThread);
-    connect(worker, &Worker::copiedFiles, [=]() { delete worker; });
+    connect(worker, &Worker::copiedFiles, [=]() { worker->deleteLater(); });
     connect(worker, &Worker::progressChanged, this, &AudioExporter::updateProgress);
     connect(this, &AudioExporter::startCopying, worker, &Worker::startCopying);
     workerThread.start();
@@ -79,14 +79,16 @@ void Worker::collectFilesToExport()
     if (Q_UNLIKELY(!m_project)) return;
 
     // Categories
-    for (auto *category : m_project->categories())
+    const auto categories = m_project->categories();
+    for (auto *category : categories)
     {
-        if (category && category->isChecked() > 0)
+        if (category && category->isChecked() != TreeItem::CheckedState::Unchecked)
         {
             // Scenarios
-            for (auto *scenario : category->scenarios())
+            const auto scenarios = category->scenarios();
+            for (auto *scenario : scenarios)
             {
-                if (scenario && scenario->isChecked() > 0)
+                if (scenario && scenario->isChecked() != TreeItem::CheckedState::Unchecked)
                 {
                     copyElements(scenario);
                 }
@@ -159,9 +161,10 @@ void Worker::copyElements(AudioScenario *scenario)
 
     for (auto *element : scenario->elements(true))
     {
-        if (element && element->isChecked() > 0)
+        if (element && element->isChecked() != TreeItem::CheckedState::Unchecked)
         {
-            for (auto *file : element->files())
+            const auto files = element->files();
+            for (auto *file : files)
             {
                 // Only export local files
                 if (file->source() != AudioFile::Source::File) continue;

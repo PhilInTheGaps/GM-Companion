@@ -13,8 +13,8 @@ CustomButton {
 
     anchors.right: parent ? parent.right : undefined
     anchors.left: parent ? parent.left : undefined
-    anchors.leftMargin: modelData.depth() * 5 + (!modelData.canToggle
-                                                 && itemIcon === "" ? 22 : 0)
+    anchors.leftMargin: modelData.depth * 5 + (!modelData.canToggle
+                                               && itemIcon === "" ? 22 : 0)
 
     iconText: modelData.canToggle ? (modelData.isOpen ? FontAwesome.caretDown : FontAwesome.caretRight) : itemIcon
 

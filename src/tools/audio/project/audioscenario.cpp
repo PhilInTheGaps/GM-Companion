@@ -11,7 +11,7 @@ AudioScenario::AudioScenario(const QString &name, const QString &path, const Aud
       m_musicLists(std::move(elements.musicLists)), m_soundLists(std::move(elements.soundLists)),
       m_radios(std::move(elements.radios)), m_scenarios(std::move(elements.scenarios))
 {
-    setName(name);
+    this->name(name);
 
     for (auto *element : qAsConst(m_musicLists))
         prepareElement(element);
@@ -52,7 +52,7 @@ AudioScenario::AudioScenario(const AudioScenario &other)
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, QObject *parent)
     : TreeItem("", path.split("/").length() - 1, true, parent)
 {
-    setName(object[QStringLiteral("name")].toString());
+    name(object[QStringLiteral("name")].toString());
     m_path = path + "/" + name();
 
     for (auto element : object[QStringLiteral("music_elements")].toArray())

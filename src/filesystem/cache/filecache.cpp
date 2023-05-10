@@ -65,11 +65,9 @@ auto FileCache::copyEntry(const QString &path, const QString &copy) -> bool
 {
     if (!m_entries.contains(path)) return false;
 
-    auto *entry = m_entries[path];
-    if (entry->isFresh())
+    if (auto *entry = m_entries[path]; entry->isFresh())
     {
-        QByteArray data;
-        if (entry->tryGetData(data))
+        if (QByteArray data; entry->tryGetData(data))
         {
             return createOrUpdateEntry(copy, data);
         }
@@ -98,6 +96,7 @@ void FileCache::printEntries() const
         QByteArray data;
         value->tryGetData(data);
 
-        qDebug() << "\t" << "key:" << key << "\tvalue:" << data << "\tisFresh:" << value->isFresh();
+        qDebug() << "\t"
+                 << "key:" << key << "\tvalue:" << data << "\tisFresh:" << value->isFresh();
     }
 }

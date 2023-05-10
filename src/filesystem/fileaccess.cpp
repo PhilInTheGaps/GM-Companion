@@ -3,7 +3,8 @@
 
 using namespace Files;
 
-auto FileAccess::getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache) -> QFuture<QVector<FileDataResult *>>
+auto FileAccess::multiGetDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache)
+    -> QFuture<QVector<FileDataResult *>>
 {
     if (helper->isDone())
     {
@@ -14,14 +15,16 @@ auto FileAccess::getDataAsync(MultiGetHelper<FileDataResult> *helper, bool allow
 
     auto next = getDataAsync(helper->getNextPath(), allowCache);
 
-    return AsyncFuture::observe(next).subscribe([this, helper, allowCache](FileDataResult *result)
-    {
-        helper->addResult(result);
-        return getDataAsync(helper, allowCache);
-    }).future();
+    return AsyncFuture::observe(next)
+        .subscribe([this, helper, allowCache](FileDataResult *result) {
+            helper->addResult(result);
+            return multiGetDataAsync(helper, allowCache);
+        })
+        .future();
 }
 
-auto FileAccess::checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache) -> QFuture<FileMultiCheckResult *>
+auto FileAccess::multiCheckAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache)
+    -> QFuture<FileMultiCheckResult *>
 {
     if (helper->isDone())
     {
@@ -32,9 +35,10 @@ auto FileAccess::checkAsync(MultiGetHelper<FileCheckResult> *helper, bool allowC
 
     auto next = checkAsync(helper->getNextPath(), allowCache);
 
-    return AsyncFuture::observe(next).subscribe([this, helper, allowCache](FileCheckResult *result)
-    {
-        helper->addResult(result);
-        return checkAsync(helper, allowCache);
-    }).future();
+    return AsyncFuture::observe(next)
+        .subscribe([this, helper, allowCache](FileCheckResult *result) {
+            helper->addResult(result);
+            return multiCheckAsync(helper, allowCache);
+        })
+        .future();
 }

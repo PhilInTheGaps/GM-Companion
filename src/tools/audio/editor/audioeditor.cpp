@@ -164,7 +164,7 @@ void AudioEditor::renameProject(const QString &name)
         m_currentProject->oldName(m_currentProject->name());
     }
 
-    m_currentProject->setName(name);
+    m_currentProject->name(name);
     emit projectsChanged();
 }
 
@@ -263,7 +263,7 @@ void AudioEditor::createCategoryFromTemplate(AudioCategory *other)
 
     while (m_currentProject->containsCategory(category->name()))
     {
-        category->setName(FileUtils::incrementName(category->name()));
+        category->name(FileUtils::incrementName(category->name()));
     }
 
     if (!m_currentProject->addCategory(category, true))
@@ -285,7 +285,7 @@ void AudioEditor::renameCategory(const QString &name)
 
     qCDebug(gmAudioEditor) << "Renaming category" << category->name() << "to" << name << "...";
 
-    category->setName(name);
+    category->name(name);
     emit currentProjectChanged();
 }
 
@@ -431,7 +431,7 @@ void AudioEditor::createScenarioFromTemplate(AudioScenario *other, bool isSubsce
 
     while (doesNameExist(scenario->name()))
     {
-        scenario->setName(FileUtils::incrementName(scenario->name()));
+        scenario->name(FileUtils::incrementName(scenario->name()));
     }
 
     if (isSubscenario)
@@ -470,7 +470,7 @@ void AudioEditor::renameScenario(const QString &name)
 
     qCDebug(gmAudioEditor) << "Renaming scenario" << scenario->name() << "to" << name << "...";
 
-    scenario->setName(name);
+    scenario->name(name);
 }
 
 /**

@@ -71,7 +71,7 @@ void AddonRepositoryManager::fetchAllRepositoryData()
     {
         auto future = observe(fetchRepositoryDataAsync(repo->url()))
                           .subscribe([this, repo](const QVector<AddonReleaseInfo> &info) {
-                              if (info.length() > 0)
+                              if (!info.isEmpty())
                               {
                                   qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
                               }

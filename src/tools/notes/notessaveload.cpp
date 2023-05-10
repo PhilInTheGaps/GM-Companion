@@ -1,9 +1,9 @@
 #include "notessaveload.h"
+#include "filesystem/file.h"
 #include "logging.h"
 #include "settings/settingsmanager.h"
-#include "filesystem/file.h"
-#include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
 
 #include <QBuffer>
 #include <QPdfWriter>
@@ -21,7 +21,7 @@ void NotesSaveLoad::loadBooks()
 {
     qCDebug(gmNotesSaveLoad()) << "Loading note books ...";
 
-    const auto directory = SettingsManager::getPath("notes");
+    const auto directory = SettingsManager::getPath(QStringLiteral("notes"));
 
     observe(Files::File::listAsync(directory, false, true)).subscribe([this](Files::FileListResult *result) {
         buildBooks(result->folders(), nullptr);
@@ -34,10 +34,10 @@ void NotesSaveLoad::loadBooks()
  */
 void NotesSaveLoad::loadChapters()
 {
-    auto *book = qobject_cast<NoteBook*>(sender());
+    auto *book = qobject_cast<NoteBook *>(sender());
     if (!book) return;
 
-    const auto directory = FileUtils::fileInDir(book->path(), SettingsManager::getPath("notes"));
+    const auto directory = FileUtils::fileInDir(book->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
     qCDebug(gmNotesSaveLoad()) << "Loading chapters in" << directory;
 
@@ -52,10 +52,10 @@ void NotesSaveLoad::loadChapters()
  */
 void NotesSaveLoad::loadPages()
 {
-    auto *chapter = qobject_cast<NoteBookChapter*>(sender());
+    auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter) return;
 
-    const auto directory = FileUtils::fileInDir(chapter->path(), SettingsManager::getPath("notes"));
+    const auto directory = FileUtils::fileInDir(chapter->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
     qCDebug(gmNotesSaveLoad()) << "Loading pages in" << directory;
 
@@ -70,10 +70,10 @@ void NotesSaveLoad::loadPages()
  */
 void NotesSaveLoad::loadPageContent()
 {
-    auto *page = qobject_cast<NoteBookPage*>(sender());
+    auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
 
-    const auto fileName = FileUtils::fileInDir(page->path(), SettingsManager::getPath("notes"));
+    const auto fileName = FileUtils::fileInDir(page->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
     qCDebug(gmNotesSaveLoad()) << "Loading page content of" << fileName;
 
@@ -88,10 +88,10 @@ void NotesSaveLoad::loadPageContent()
  */
 void NotesSaveLoad::savePage()
 {
-    auto *page = qobject_cast<NoteBookPage*>(sender());
+    auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
 
-    const auto fileName = FileUtils::fileInDir(page->path(), SettingsManager::getPath("notes"));
+    const auto fileName = FileUtils::fileInDir(page->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
     qCDebug(gmNotesSaveLoad()) << "Saving page content of" << fileName;
 
@@ -104,10 +104,10 @@ void NotesSaveLoad::savePage()
  */
 void NotesSaveLoad::renameChapter(const QString &oldPath)
 {
-    auto *chapter = qobject_cast<NoteBookChapter*>(sender());
+    auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter || oldPath == chapter->path()) return;
 
-    const auto basePath = SettingsManager::getPath("notes");
+    const auto basePath = SettingsManager::getPath(QStringLiteral("notes"));
     const auto old = FileUtils::fileInDir(oldPath, basePath);
     const auto newPath = FileUtils::fileInDir(chapter->path(), basePath);
 
@@ -121,10 +121,10 @@ void NotesSaveLoad::renameChapter(const QString &oldPath)
  */
 void NotesSaveLoad::renamePage(const QString &oldPath)
 {
-    auto *page = qobject_cast<NoteBookPage*>(sender());
+    auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page || oldPath == page->path()) return;
 
-    const auto basePath = SettingsManager::getPath("notes");
+    const auto basePath = SettingsManager::getPath(QStringLiteral("notes"));
     const auto old = FileUtils::fileInDir(oldPath, basePath);
     const auto newPath = FileUtils::fileInDir(page->path(), basePath);
 
@@ -138,14 +138,16 @@ void NotesSaveLoad::renamePage(const QString &oldPath)
  */
 void NotesSaveLoad::deleteChapter()
 {
-    auto *chapter = qobject_cast<NoteBookChapter*>(sender());
+    auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter) return;
 
     qCDebug(gmNotesSaveLoad()) << "Deleting chapter or book" << chapter->path();
 
-    const auto path = FileUtils::fileInDir(chapter->path(), SettingsManager::getPath("notes"));
+    const auto path = FileUtils::fileInDir(chapter->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
-    for (auto *page : chapter->pages()) page->close();
+    const auto pages = chapter->pages();
+    for (auto *page : pages)
+        page->close();
 
     chapter->deleteLater();
 
@@ -157,12 +159,12 @@ void NotesSaveLoad::deleteChapter()
  */
 void NotesSaveLoad::deletePage()
 {
-    auto *page = qobject_cast<NoteBookPage*>(sender());
+    auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
 
     qCDebug(gmNotesSaveLoad()) << "Deleting page" << page->path();
 
-    const auto path = FileUtils::fileInDir(page->path(), SettingsManager::getPath("notes"));
+    const auto path = FileUtils::fileInDir(page->path(), SettingsManager::getPath(QStringLiteral("notes")));
 
     page->close();
     page->deleteLater();
@@ -179,9 +181,9 @@ void NotesSaveLoad::createBook(const QString &name, QObject *root)
 
     qCDebug(gmNotesSaveLoad()) << "Creating book" << name;
 
-    const auto path = FileUtils::fileInDir(name, SettingsManager::getPath("notes"));
+    const auto path = FileUtils::fileInDir(name, SettingsManager::getPath(QStringLiteral("notes")));
     observe(Files::File::createDirAsync(path)).subscribe([this, name, root]() {
-        buildBooks({ name }, qobject_cast<TreeItem*>(root));
+        buildBooks({name}, qobject_cast<TreeItem *>(root));
     });
 }
 
@@ -192,7 +194,7 @@ void NotesSaveLoad::createChapter(const QString &name)
 {
     if (name.isEmpty()) return;
 
-    auto *book = qobject_cast<NoteBook*>(sender());
+    auto *book = qobject_cast<NoteBook *>(sender());
     if (!book) return;
 
     qCDebug(gmNotesSaveLoad()) << "Creating chapter" << name << "in book" << book->name();
@@ -200,15 +202,13 @@ void NotesSaveLoad::createChapter(const QString &name)
     // Check if chapter with name already exists
     for (auto *child : qAsConst(book->children()))
     {
-        const auto *chapter = qobject_cast<NoteBookChapter*>(child);
+        const auto *chapter = qobject_cast<NoteBookChapter *>(child);
         if (chapter && chapter->name() == name) return;
     }
 
     const auto localPath = FileUtils::fileInDir(name, book->path());
-    const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath("notes"));
-    observe(Files::File::createDirAsync(path)).subscribe([this, name, book]() {
-        buildChapters({ name }, book);
-    });
+    const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath(QStringLiteral("notes")));
+    observe(Files::File::createDirAsync(path)).subscribe([this, name, book]() { buildChapters({name}, book); });
 }
 
 /**
@@ -216,9 +216,9 @@ void NotesSaveLoad::createChapter(const QString &name)
  */
 void NotesSaveLoad::createPage(const QString &name)
 {
-    if (name.isEmpty() || name == ".") return;
+    if (name.isEmpty() || name == QLatin1String(".")) return;
 
-    auto *chapter = qobject_cast<NoteBookChapter*>(sender());
+    auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter) return;
 
     qCDebug(gmNotesSaveLoad()) << "Creating page" << name;
@@ -226,19 +226,20 @@ void NotesSaveLoad::createPage(const QString &name)
     // Check if page with name already exists
     for (auto *child : qAsConst(chapter->children()))
     {
-        const auto *page = qobject_cast<NoteBookPage*>(child);
+        const auto *page = qobject_cast<NoteBookPage *>(child);
         if (page && page->name() == name) return;
     }
 
     auto correctName = name;
 
-    if (name.endsWith(".")) correctName = correctName.left(correctName.length() - 1);
+    if (name.endsWith(QLatin1String("."))) correctName = correctName.left(correctName.length() - 1);
 
-    if (!correctName.endsWith(".md") && !correctName.endsWith(".txt") && !correctName.endsWith(".markdown"))
-        correctName += ".md";
+    if (!correctName.endsWith(QLatin1String(".md")) && !correctName.endsWith(QLatin1String(".txt")) &&
+        !correctName.endsWith(QLatin1String(".markdown")))
+        correctName += QLatin1String(".md");
 
     const auto localPath = FileUtils::fileInDir(correctName, chapter->path());
-    const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath("notes"));
+    const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath(QStringLiteral("notes")));
     const auto data = "# " + name.toUtf8() + "\n";
 
     Files::File::saveAsync(path, data);
@@ -262,7 +263,7 @@ void NotesSaveLoad::exportPage(NoteBookPage *page, QTextDocument *document)
     auto *writer = new QPdfWriter(buffer);
 
     writer->setTitle(page->name());
-    writer->setCreator("GM-Companion");
+    writer->setCreator(QStringLiteral("GM-Companion"));
 
     auto pageSize = QPageSize(QPageSize::A4);
     auto pageOrientation = QPageLayout::Portrait;
@@ -301,8 +302,8 @@ void NotesSaveLoad::buildBooks(const QStringList &folders, TreeItem *root)
     if (!root)
     {
         replace = true;
-        root = new TreeItem("/", 0, true, this);
-        root->setIsOpen(true);
+        root = new TreeItem(QStringLiteral("/"), 0, true, this);
+        root->isOpen(true);
     }
 
     for (const auto &folder : folders)
@@ -318,7 +319,8 @@ void NotesSaveLoad::buildBooks(const QStringList &folders, TreeItem *root)
     }
 
     if (replace) emit booksLoaded(root);
-    else root->childItemAdded();
+    else
+        root->onChildItemAdded();
 }
 
 /**
@@ -333,8 +335,9 @@ void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook *book)
     for (const auto &folder : folders)
     {
         bool exists = false;
+        const auto chapters = book->chapters();
 
-        for (const auto *chapter : book->chapters())
+        for (const auto *chapter : chapters)
         {
             if (chapter->name() == folder)
             {
@@ -365,13 +368,14 @@ void NotesSaveLoad::buildPages(const QStringList &files, NoteBookChapter *chapte
 
     qCDebug(gmNotesSaveLoad()) << "Building pages in chapter" << chapter->name() << files;
 
-    QList<NoteBookPage*> pages;
+    QList<NoteBookPage *> pages;
 
     for (const auto &file : files)
     {
         bool exists = false;
+        const auto _pages = chapter->pages();
 
-        for (const auto *page : chapter->pages())
+        for (const auto *page : _pages)
         {
             if (page->name() == file)
             {
@@ -394,9 +398,10 @@ void NotesSaveLoad::buildPages(const QStringList &files, NoteBookChapter *chapte
 /**
  * Construct a single page
  */
-auto NotesSaveLoad::buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal) -> NoteBookPage*
+auto NotesSaveLoad::buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal) -> NoteBookPage *
 {
-    if (name.endsWith(".md") || name.endsWith(".txt") || name.endsWith(".markdown"))
+    if (name.endsWith(QLatin1String(".md")) || name.endsWith(QLatin1String(".txt")) ||
+        name.endsWith(QLatin1String(".markdown")))
     {
         auto *page = new NoteBookPage(name, chapter->depth() + 1, chapter);
 
@@ -408,7 +413,7 @@ auto NotesSaveLoad::buildPage(const QString &name, NoteBookChapter *chapter, boo
         if (emitSignal)
         {
             chapter->onPagesLoaded();
-            emit pagesLoaded({ page });
+            emit pagesLoaded({page});
         }
 
         return page;
@@ -426,7 +431,7 @@ auto NotesSaveLoad::getPdfPath(NoteBookPage *page) -> QString
 {
     auto fileName = page->path();
 
-    QStringList endings = { ".md", ".txt", ".markdown" };
+    QStringList endings = {".md", ".txt", ".markdown"};
 
     for (const auto &ending : endings)
     {
@@ -437,7 +442,7 @@ auto NotesSaveLoad::getPdfPath(NoteBookPage *page) -> QString
         }
     }
 
-    fileName += ".pdf";
+    fileName += QStringLiteral(".pdf");
 
-    return FileUtils::fileInDir(fileName, SettingsManager::getPath("notes"));
+    return FileUtils::fileInDir(fileName, SettingsManager::getPath(QStringLiteral("notes")));
 }

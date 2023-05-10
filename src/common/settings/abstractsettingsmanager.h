@@ -72,8 +72,9 @@ template <typename T> void AbstractSettingsManager::set(const QString &setting, 
 template <typename T>
 void AbstractSettingsManager::rename(const QString &currentName, const QString &newName, const QString &group)
 {
-    const auto value = get<T>(currentName, T(), group);
-
-    if (!value.isEmpty()) set(newName, value, group);
+    if (const auto value = get<T>(currentName, T(), group); !value.isEmpty())
+    {
+        set(newName, value, group);
+    }
     remove(currentName, group);
 }

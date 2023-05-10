@@ -10,7 +10,7 @@ AudioCategory::AudioCategory(const QString &name, const QString &parentPath, QLi
                              AudioProject *parent)
     : TreeItem(name, 0, true, parent), m_path(parentPath + "/" + name), m_scenarios(std::move(scenarios))
 {
-    setName(name);
+    this->name(name);
 
     for (auto *scenario : qAsConst(m_scenarios))
     {
@@ -29,7 +29,7 @@ AudioCategory::AudioCategory(const AudioCategory &other)
 AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, AudioProject *parent)
     : TreeItem(QLatin1String(""), 0, true, parent)
 {
-    setName(object[QStringLiteral("name")].toString());
+    name(object[QStringLiteral("name")].toString());
     m_path = path + "/" + name();
 
     const auto scenarios = object[QStringLiteral("scenarios")].toArray();

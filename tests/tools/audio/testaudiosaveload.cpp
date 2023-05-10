@@ -86,7 +86,7 @@ void TestAudioSaveLoad::saveProject()
     const auto newName = FileUtils::incrementName(m_project->name());
     m_project->oldName(m_project->name());
     m_project->wasRenamed(true);
-    m_project->setName(newName);
+    m_project->name(newName);
 
     future = AudioSaveLoad::saveProject(m_project, getFilePath());
     validateResult(future, true);

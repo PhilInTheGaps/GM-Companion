@@ -13,7 +13,7 @@ AudioProject::AudioProject(const QString &name, int version, QList<AudioCategory
     qCDebug(gmAudioProject()) << "Initializing AudioProject:" << name << "[Version:" << version
                               << "Categories:" << m_categories.size() << "]";
 
-    setName(name);
+    this->name(name);
 
     if (!m_categories.isEmpty()) setCurrentCategory(m_categories.first());
 
@@ -33,7 +33,7 @@ AudioProject::AudioProject(const AudioProject &other, QObject *parent)
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
     : TreeItem("", 0, true, parent), a_isSaved(true), a_version(object["version"].toInt()), a_wasRenamed(false)
 {
-    setName(object[QStringLiteral("name")].toString());
+    name(object[QStringLiteral("name")].toString());
     const auto categories = object[QStringLiteral("categories")].toArray();
 
     for (auto category : categories)

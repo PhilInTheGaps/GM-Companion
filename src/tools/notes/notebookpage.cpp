@@ -2,10 +2,9 @@
 
 int NoteBookPage::editCount = 0;
 
-NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *chapter)
-    : TreeItem(name, depth, false, chapter)
+NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *chapter) : TreeItem(name, depth, false, chapter)
 {
-    setPriority(0);
+    priority(0);
 }
 
 QString NoteBookPage::content()
@@ -88,9 +87,8 @@ void NoteBookPage::rename(const QString &newName)
 
     auto correctName = newName;
 
-    if (newName.lastIndexOf('.') < 0)
-        correctName += ".md";
+    if (newName.lastIndexOf('.') < 0) correctName += ".md";
 
-    setName(correctName);
+    name(correctName);
     emit renamePage(oldPath);
 }

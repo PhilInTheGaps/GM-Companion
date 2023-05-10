@@ -1,27 +1,26 @@
 #include "notebookchapter.h"
 
-NoteBookChapter::NoteBookChapter(const QString &name, int depth, QObject *parent)
-    : TreeItem(name, depth, true, parent)
+NoteBookChapter::NoteBookChapter(const QString &name, int depth, QObject *parent) : TreeItem(name, depth, true, parent)
 {
     connect(this, &TreeItem::isOpenChanged, this, &NoteBookChapter::onIsOpenChanged);
 }
 
 QList<NoteBookPage *> NoteBookChapter::pages() const
 {
-    QList<NoteBookPage*> pages;
+    QList<NoteBookPage *> pages;
 
     for (auto *child : children())
     {
-        auto *page = qobject_cast<NoteBookPage*>(child);
+        auto *page = qobject_cast<NoteBookPage *>(child);
         if (page) pages.append(page);
     }
 
     return pages;
 }
 
-NoteBookChapter::NoteBookChapter(const QString &name, QObject *parent)
-    : NoteBookChapter(name, 1, parent)
-{}
+NoteBookChapter::NoteBookChapter(const QString &name, QObject *parent) : NoteBookChapter(name, 1, parent)
+{
+}
 
 void NoteBookChapter::onPagesLoaded()
 {
@@ -41,7 +40,7 @@ void NoteBookChapter::create(const QString &type, const QString &name)
 void NoteBookChapter::rename(const QString &newName)
 {
     auto oldPath = path();
-    setName(newName);
+    name(newName);
 
     emit renameChapter(oldPath);
 }

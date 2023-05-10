@@ -37,8 +37,7 @@ auto FileAccessGoogleDrive::getDataAsync(const QString &path, bool allowCache) -
 {
     qCDebug(gmFileAccessGoogle()) << "getDataAsync(" << path << "," << allowCache << ")";
 
-    QByteArray data;
-    if (allowCache && m_fileCache.tryGetData(path, data))
+    if (QByteArray data; allowCache && m_fileCache.tryGetData(path, data))
     {
         // Return file from cache
         return AsyncFuture::completed(new FileDataResult(data, this));
@@ -82,7 +81,7 @@ auto FileAccessGoogleDrive::getDataAsync(const QStringList &paths, bool allowCac
     -> QFuture<QVector<FileDataResult *>>
 {
     qCDebug(gmFileAccessGoogle()) << "getDataAsync(" << paths << "," << allowCache << ")";
-    return FileAccess::getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
+    return FileAccess::multiGetDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
 }
 
 auto FileAccessGoogleDrive::saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult *>
@@ -101,7 +100,7 @@ auto FileAccessGoogleDrive::saveAsync(const QString &path, const QByteArray &dat
             .subscribe([deferred](FileResult *result) mutable { deferred.complete(result); }, errorCallback);
     };
 
-    auto createNewFile = [this, path, data, updateExistingFile, deferred, errorCallback]() mutable {
+    auto createNewFile = [this, path, updateExistingFile, deferred, errorCallback]() mutable {
         // Create file first
         AsyncFuture::observe(createFileAsync(path, QByteArray()))
             .subscribe(
@@ -188,7 +187,7 @@ auto FileAccessGoogleDrive::moveAsync(const QString &oldPath, const QString &new
         deferred.complete(new FileResult(error, this));
     };
 
-    auto createNewParentFolderAndTryAgain = [this, oldPath, newPath, deferred, errorCallback]() mutable {
+    auto createNewParentFolderAndTryAgain = [this, oldPath, newPath, &deferred, &errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(newPath);
 
         AsyncFuture::observe(createDirAsync(parentPath))
@@ -308,7 +307,7 @@ auto FileAccessGoogleDrive::copyAsync(const QString &path, const QString &copy) 
         deferred.complete(new FileResult(false, error, this));
     };
 
-    auto createNewParentFolderAndTryAgain = [this, path, copy, deferred, errorCallback]() mutable {
+    auto createNewParentFolderAndTryAgain = [this, path, copy, &deferred, &errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(copy);
 
         AsyncFuture::observe(createDirAsync(parentPath))
@@ -524,7 +523,7 @@ auto FileAccessGoogleDrive::createFileAsync(const QString &path, const QByteArra
         deferred.complete(new FileResult(false, error, this));
     };
 
-    auto createParentDirAndTryAgain = [this, path, mimeType, deferred, errorCallback]() mutable {
+    auto createParentDirAndTryAgain = [this, path, mimeType, &deferred, &errorCallback]() mutable {
         const auto parentPath = FileUtils::dirFromPath(path);
         AsyncFuture::observe(createDirAsync(parentPath))
             .subscribe(
@@ -638,7 +637,7 @@ auto FileAccessGoogleDrive::checkAsync(const QString &path, bool allowCache) -> 
 auto FileAccessGoogleDrive::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult *>
 {
     qCDebug(gmFileAccessGoogle()) << "checkAsync(" << paths << "," << allowCache << ")";
-    return FileAccess::checkAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
+    return FileAccess::multiCheckAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
 }
 
 /// Find IDs of all files located in a folder
@@ -705,22 +704,19 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
     qCDebug(gmFileAccessGoogle()) << "getFileId(" << path << ")";
 
     if (path.isEmpty()) return AsyncFuture::completed(QStringLiteral("root"));
-    ;
 
     // First check if id is in cache
-    QByteArray id;
-    if (m_idCache.tryGetData(path, id))
+    if (QByteArray id; m_idCache.tryGetData(path, id))
     {
         return AsyncFuture::completed(QString(id));
     }
 
     // This is executed when the file id could not be found
-    const auto errorCallback = [path]() { return QFuture<QString>(); };
+    const auto errorCallback = []() { return QFuture<QString>(); };
 
     // This is executed after ids in parent folder have been found
     const auto callback = [this, path, errorCallback]() {
-        QByteArray id;
-        if (m_idCache.tryGetData(path, id))
+        if (QByteArray id; m_idCache.tryGetData(path, id))
         {
             return AsyncFuture::completed(QString(id));
         }
@@ -732,8 +728,7 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
         .subscribe(
             [this, path, callback, errorCallback](const QPair<QString, QByteArray> &parentPair) {
                 // Has ID been found in the meantime?
-                QByteArray id;
-                if (m_idCache.tryGetData(path, id))
+                if (QByteArray id; m_idCache.tryGetData(path, id))
                 {
                     return AsyncFuture::completed(QString(id));
                 }

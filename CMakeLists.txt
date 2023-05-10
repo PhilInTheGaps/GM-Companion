@@ -4,6 +4,7 @@ project(gm-companion)
 
 include(GNUInstallDirs)
 include(CMakePrintHelpers)
+include(FeatureSummary)
 
 set(CGET_TOOLCHAIN_FILE ${CMAKE_CURRENT_BINARY_DIR}/cget/cget/cget.cmake)
 
@@ -70,3 +71,5 @@ endif()
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(app)
+
+feature_summary(WHAT ALL)

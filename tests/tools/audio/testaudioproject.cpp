@@ -81,14 +81,14 @@ void TestAudioProject::testModifications()
 {
     // Name
     project->oldName(project->name());
-    project->setName("Modified Name");
+    project->name("Modified Name");
     project->wasRenamed(true);
     QCOMPARE(project->name(), QStringLiteral("Modified Name"));
     QCOMPARE(project->oldName(), QStringLiteral("Project"));
     QVERIFY(project->wasRenamed());
     QVERIFY(!project->isSaved());
 
-    project->setName("Modified Again");
+    project->name("Modified Again");
     QCOMPARE(project->name(), QStringLiteral("Modified Again"));
     QCOMPARE(project->oldName(), QStringLiteral("Project"));
 

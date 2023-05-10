@@ -1,8 +1,6 @@
 #include "logger.h"
-#include "messages/messagemanager.h"
-#include "messages/messagedispatcher.h"
 #include "common/utils/fileutils.h"
-
+#include "messages/messagedispatcher.h"
 #include <QDateTime>
 #include <QDir>
 #include <QLoggingCategory>
@@ -40,23 +38,11 @@ Logger::~Logger()
 void Logger::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     auto timestamp = QDateTime::currentDateTime();
-    auto line = timestamp.toString("yyyy-MM-dd hh:mm:ss.zzz ").toUtf8();
+    auto line = QStringLiteral("%1 %2 %3: %4")
+                    .arg(timestamp.toString(QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz ")).toUtf8(), msgTypeToPrefix(type),
+                         context.category, msg.toUtf8());
 
-    // By type determine to what level belongs message
-    switch (type)
-    {
-    case QtInfoMsg:     line.append("INF "); break;
-    case QtDebugMsg:    line.append("DBG "); break;
-    case QtWarningMsg:  line.append("WRN "); break;
-    case QtCriticalMsg: line.append("CRT "); break;
-    case QtFatalMsg:    line.append("FTL "); break;
-    default: qCritical() << "Error: Unexpected log message type" << type;
-    }
-
-    // Write to the output category of the message and the message itself
-    line.append(context.category).append(": ").append(msg.toUtf8());
-
-    QMutexLocker locker(&m_logMutex);
+    QMutexLocker const locker(&m_logMutex);
 
     if (type == QtInfoMsg || type == QtDebugMsg)
     {
@@ -95,5 +81,25 @@ void Logger::clearOldLog()
     {
         m_logFile.write("");
         m_logFile.close();
+    }
+}
+
+auto Logger::msgTypeToPrefix(QtMsgType type) -> QString
+{
+    switch (type)
+    {
+    case QtInfoMsg:
+        return QStringLiteral("INF");
+    case QtDebugMsg:
+        return QStringLiteral("DBG");
+    case QtWarningMsg:
+        return QStringLiteral("WRN");
+    case QtCriticalMsg:
+        return QStringLiteral("CRT");
+    case QtFatalMsg:
+        return QStringLiteral("FTL");
+    default:
+        qCritical() << "Error: Unexpected log message type" << type;
+        return QStringLiteral("UKN");
     }
 }

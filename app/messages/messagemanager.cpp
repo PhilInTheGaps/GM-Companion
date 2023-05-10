@@ -1,12 +1,6 @@
 #include "messagemanager.h"
 
-MessageManager::MessageManager(QObject *parent)
-    : QObject{parent}, a_hasNewErrors(false)
-{
-
-}
-
-auto MessageManager::instance() -> MessageManager*
+auto MessageManager::instance() -> MessageManager *
 {
     if (!single)
     {
@@ -16,7 +10,8 @@ auto MessageManager::instance() -> MessageManager*
     return single;
 }
 
-void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body)
+void MessageManager::addMessage(const QDateTime &timestamp, QtMsgType type, const QString &category,
+                                const QString &body)
 {
     auto *message = new Message(this, timestamp, type, category, body);
     addMessage(message);
@@ -29,7 +24,7 @@ void MessageManager::addMessage(Message *message)
     a_messages.prepend(message);
 
     // filter errors
-    if (message->type() > 0 && message->type() < 4 )
+    if (message->type() > 0 && message->type() < 4)
     {
         hasNewErrors(true);
     }

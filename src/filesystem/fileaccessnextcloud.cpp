@@ -50,7 +50,7 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> 
 
 auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *>>
 {
-    return FileAccess::getDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
+    return FileAccess::multiGetDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
 }
 
 template <typename T1, typename T2>
@@ -382,7 +382,7 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
 
 auto FileAccessNextcloud::checkAsync(const QStringList &paths, bool allowCache) -> QFuture<FileMultiCheckResult *>
 {
-    return FileAccess::checkAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
+    return FileAccess::multiCheckAsync(new MultiGetHelper<FileCheckResult>(paths, this), allowCache);
 }
 
 auto FileAccessNextcloud::encodePath(const QString &data) -> QByteArray

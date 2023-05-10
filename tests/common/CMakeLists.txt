@@ -8,5 +8,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+add_subdirectory(models)
 add_subdirectory(updates)
 add_subdirectory(utils)

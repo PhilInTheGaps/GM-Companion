@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QObject>
 #include <QDateTime>
+#include <QObject>
 #include <QString>
 
 #include "message.h"
@@ -13,10 +13,9 @@ public:
     static void dispatch(const QDateTime &timestamp, QtMsgType type, const QString &category, const QString &body);
 
 private:
-    MessageDispatcher();
+    using QObject::QObject;
     void dispatch(Message *message);
 
 signals:
     void dispatchMessage(Message *message);
 };
-

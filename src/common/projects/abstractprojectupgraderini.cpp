@@ -29,8 +29,7 @@ auto AbstractProjectUpgraderINI::isProjectCompatible() const -> bool
 
     // does the file contain any keys?
     // if not it is probably of a different format
-    const auto entries = m_ini->allKeys();
-    if (entries.isEmpty()) return false;
+    if (const auto entries = m_ini->allKeys(); entries.isEmpty()) return false;
 
     return version == this->version();
 }
