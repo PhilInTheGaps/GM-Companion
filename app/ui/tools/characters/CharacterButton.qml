@@ -13,7 +13,7 @@ Rectangle {
 
     anchors.left: parent.left
     anchors.right: parent.right
-    height: platform.isAndroid ? width / 6 : 40
+    height: 40
 
     Row {
         anchors.fill: parent

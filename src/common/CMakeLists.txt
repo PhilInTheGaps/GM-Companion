@@ -73,8 +73,6 @@ set(SOURCES
     logging.cpp
     abstracttool.h
     abstracttool.cpp
-    platformdetails.h
-    platformdetails.cpp
     exceptions/notimplementedexception.h)
 
 add_library(common STATIC ${SOURCES})

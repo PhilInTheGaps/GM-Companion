@@ -22,7 +22,7 @@ Column {
 
             Label {
                 text: qsTr("Select Language")
-                width: platform.isAndroid ? settings_page.width / 4 : language_box.width
+                width: language_box.width
                 anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -145,7 +145,6 @@ Column {
         Label {
             text: qsTr("Updates")
             font.bold: true
-            visible: platform.isAndroid ? false : true
         }
 
         Row {
@@ -167,7 +166,6 @@ Column {
             Button {
                 id: check_for_updates_button
                 text: qsTr("Check for Updates")
-                visible: platform.isAndroid ? false : true
 
                 onClicked: {
                     update_text.visible = false

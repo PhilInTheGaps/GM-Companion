@@ -19,7 +19,6 @@
 #include "filesystem/filedialog/filedialog.h"
 #include "logger.h"
 #include "messages/messagemanager.h"
-#include "platformdetails.h"
 #include "services/discord/discord.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
@@ -138,7 +137,6 @@ auto main(int argc, char *argv[]) -> int
     engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
     engine.rootContext()->setContextProperty("addon_repository_manager",
                                              &(AddonManager::instance()->repositoryManager()));
-    engine.rootContext()->setContextProperty("platform", new PlatformDetails);
     engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
     engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);
 
