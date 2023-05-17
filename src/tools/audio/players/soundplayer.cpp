@@ -26,7 +26,7 @@ void SoundPlayerController::play(AudioElement *element)
 
     if (!isSoundPlaying(element))
     {
-        auto *player = new SoundPlayer(element, m_volume, m_networkManager, m_discordPlayer, this);
+        auto *player = new SoundPlayer(element, m_volume, this);
 
         connect(player, &SoundPlayer::playerStopped, this, &SoundPlayerController::onPlayerStopped);
         connect(this, &SoundPlayerController::setPlayerVolume, player, &SoundPlayer::setVolume);
@@ -42,18 +42,6 @@ void SoundPlayerController::play(AudioElement *element)
 
 void SoundPlayerController::stop(const QString &element)
 {
-    if (Discord::getInstance()->enabled())
-    {
-        for (const auto *player : m_players)
-        {
-            if (player->element() && player->element()->name() == element)
-            {
-                m_discordPlayer->stopSound(player->fileName());
-                break;
-            }
-        }
-    }
-
     emit stopElement(element);
 }
 
@@ -128,9 +116,7 @@ void SoundPlayerController::onPlayerStopped(SoundPlayer *player)
     emit soundsChanged(elements());
 }
 
-SoundPlayer::SoundPlayer(AudioElement *element, int volume, QNetworkAccessManager *networkManager,
-                         DiscordPlayer *discordPlayer, QObject *parent)
-    : AudioPlayer(parent), m_element(element), m_discordPlayer(discordPlayer)
+SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) : AudioPlayer(parent), m_element(element)
 {
     if (!element)
     {
@@ -159,8 +145,6 @@ void SoundPlayer::loadMedia(AudioFile *file)
 {
     qCDebug(gmAudioSounds()) << "Loading media" << file->url();
 
-    auto useDiscord = Discord::getInstance()->enabled();
-
     switch (file->source())
     {
     case AudioFile::Source::File: {
@@ -176,17 +160,16 @@ void SoundPlayer::loadMedia(AudioFile *file)
     case AudioFile::Source::Web: {
         m_mediaPlayer->setMedia(QUrl(file->url()));
         m_mediaPlayer->play();
-        m_mediaPlayer->setMuted(useDiscord);
+        m_mediaPlayer->setMuted(false);
         m_fileName = file->url();
-        if (useDiscord) m_discordPlayer->playSound(file->url());
         break;
     }
 
     case AudioFile::Source::Youtube: {
         //        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
         //        connect(m_streamManifest, &Streams::StreamManifest::ready, this,
-        //        &SoundPlayer::onStreamManifestReceived); m_mediaPlayer->setMuted(useDiscord); m_fileName =
-        //        file->url(); if (useDiscord) m_discordPlayer->playSound(file->url());
+        //        &SoundPlayer::onStreamManifestReceived); m_mediaPlayer->setMuted(false); m_fileName =
+        //        file->url();
         break;
     }
 
@@ -370,10 +353,7 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     m_mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
 #endif
 
-    auto useDiscord = Discord::getInstance()->enabled();
-
-    m_mediaPlayer->setMuted(useDiscord);
-    if (useDiscord) m_discordPlayer->playSound(m_fileName, result->data());
+    m_mediaPlayer->setMuted(false);
 
     m_mediaPlayer->play();
     result->deleteLater();

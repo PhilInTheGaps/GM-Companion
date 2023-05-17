@@ -1,33 +1,31 @@
 #include "audiotool.h"
-#include "thumbnails/audiothumbnailgenerator.h"
-#include "services/spotify/spotify.h"
 #include "logging.h"
+#include "services/spotify/spotify.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "thumbnails/audiothumbnailgenerator.h"
 
-#include <QSettings>
 #include <QQmlContext>
+#include <QSettings>
 #include <cstdlib>
 #include <exception>
 
 using namespace AsyncFuture;
 
-AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), qmlEngine(engine)
+AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), qmlEngine(engine)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 
     auto *networkManager = new QNetworkAccessManager(this);
     networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    editor         = new AudioEditor(qmlEngine, networkManager, this);
+    editor = new AudioEditor(qmlEngine, networkManager, this);
     metaDataReader = new MetaDataReader(this);
-    mprisManager   = new MprisManager(this);
-    discordPlayer  = new DiscordPlayer(this);
-    musicPlayer    = new MusicPlayer(metaDataReader, discordPlayer, this);
-    radioPlayer    = new RadioPlayer(metaDataReader, discordPlayer, this);
-    audioPlayers   = { musicPlayer, radioPlayer };
+    mprisManager = new MprisManager(this);
+    musicPlayer = new MusicPlayer(metaDataReader, this);
+    radioPlayer = new RadioPlayer(metaDataReader, this);
+    audioPlayers = {musicPlayer, radioPlayer};
 
-    soundPlayerController = new SoundPlayerController(discordPlayer, this);
+    soundPlayerController = new SoundPlayerController(this);
 
     // QML Engine
     engine->rootContext()->setContextProperty("audio_tool", this);
@@ -37,9 +35,13 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     connect(Spotify::instance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
 
     // Music Player
-    connect(musicPlayer, &MusicPlayer::startedPlaying,      this, &AudioTool::onStartedPlaying);
-    connect(musicPlayer, &MusicPlayer::playlistChanged,     this, [this](const QList<AudioFile*> &files) { Q_UNUSED(files); emit playlistChanged(); });
-    connect(musicPlayer, &MusicPlayer::playlistChanged,     this, [](const QList<AudioFile*> &files) { qCDebug(gmAudioTool()) << "Playlist Changed!" << files.length(); });
+    connect(musicPlayer, &MusicPlayer::startedPlaying, this, &AudioTool::onStartedPlaying);
+    connect(musicPlayer, &MusicPlayer::playlistChanged, this, [this](const QList<AudioFile *> &files) {
+        Q_UNUSED(files);
+        emit playlistChanged();
+    });
+    connect(musicPlayer, &MusicPlayer::playlistChanged, this,
+            [](const QList<AudioFile *> &files) { qCDebug(gmAudioTool()) << "Playlist Changed!" << files.length(); });
     connect(musicPlayer, &MusicPlayer::currentIndexChanged, this, &AudioTool::currentIndexChanged);
 
     // Radio Player
@@ -49,13 +51,19 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     connect(metaDataReader, &MetaDataReader::metaDataChanged, this, &AudioTool::onMetaDataUpdated);
 
     // Mpris
-    connect(mprisManager, &MprisManager::play,         this, [ = ]() { if (m_isPaused) playPause(); });
-    connect(mprisManager, &MprisManager::playPause,    this, [ = ]() { playPause(); });
-    connect(mprisManager, &MprisManager::pause,        this, [ = ]() { if (!m_isPaused) playPause(); });
-    connect(mprisManager, &MprisManager::stop,         this, [ = ]() { if (!m_isPaused) playPause(); });
-    connect(mprisManager, &MprisManager::next,         this, [ = ]() { next(); });
-    connect(mprisManager, &MprisManager::previous,     this, [ = ]() { again(); });
-    connect(mprisManager, &MprisManager::changeVolume, this, [ = ](double volume) { setMusicVolume(volume); });
+    connect(mprisManager, &MprisManager::play, this, [=]() {
+        if (m_isPaused) playPause();
+    });
+    connect(mprisManager, &MprisManager::playPause, this, [=]() { playPause(); });
+    connect(mprisManager, &MprisManager::pause, this, [=]() {
+        if (!m_isPaused) playPause();
+    });
+    connect(mprisManager, &MprisManager::stop, this, [=]() {
+        if (!m_isPaused) playPause();
+    });
+    connect(mprisManager, &MprisManager::next, this, [=]() { next(); });
+    connect(mprisManager, &MprisManager::previous, this, [=]() { again(); });
+    connect(mprisManager, &MprisManager::changeVolume, this, [=](double volume) { setMusicVolume(volume); });
 }
 
 void AudioTool::loadData()
@@ -70,7 +78,7 @@ void AudioTool::loadData()
 
 void AudioTool::updateProjectList()
 {
-    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject*> projects) {
+    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](QVector<AudioProject *> projects) {
         onProjectsChanged(projects);
     });
 }
@@ -89,7 +97,7 @@ auto AudioTool::currentProjectName() const -> QString
     Change the project, notify UI
     @param projects List with pointers to audio projects
  */
-void AudioTool::onProjectsChanged(QVector<AudioProject *>projects)
+void AudioTool::onProjectsChanged(QVector<AudioProject *> projects)
 {
     m_projects = std::move(projects);
 
@@ -122,8 +130,7 @@ void AudioTool::setCurrentProject(int index)
 
     if (m_currentProject)
     {
-        disconnect(m_currentProject, &AudioProject::currentScenarioChanged,
-                   this, &AudioTool::onCurrentScenarioChanged);
+        disconnect(m_currentProject, &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
     }
 
     m_currentProject = m_projects[index];
@@ -131,8 +138,7 @@ void AudioTool::setCurrentProject(int index)
 
     if (m_currentProject)
     {
-        connect(m_currentProject, &AudioProject::currentScenarioChanged,
-                this, &AudioTool::onCurrentScenarioChanged);
+        connect(m_currentProject, &AudioProject::currentScenarioChanged, this, &AudioTool::onCurrentScenarioChanged);
     }
 
     emit currentProjectChanged();
@@ -198,7 +204,8 @@ void AudioTool::next()
     case AudioElement::Type::Music:
         musicPlayer->next();
         break;
-    default: return;
+    default:
+        return;
     }
 }
 
@@ -217,10 +224,9 @@ void AudioTool::playPause()
         case AudioElement::Type::Radio:
             radioPlayer->play();
             break;
-        default: break;
+        default:
+            break;
         }
-
-        discordPlayer->play();
     }
     else
     {
@@ -232,10 +238,9 @@ void AudioTool::playPause()
         case AudioElement::Type::Radio:
             radioPlayer->pause();
             break;
-        default: break;
+        default:
+            break;
         }
-
-        discordPlayer->pause();
 
         m_isPaused = true;
         emit isPausedChanged();
@@ -251,7 +256,6 @@ void AudioTool::stop()
     musicPlayer->stop();
     radioPlayer->stop();
     soundPlayerController->stop();
-    discordPlayer->pause();
     m_isPaused = true;
     emit isPausedChanged();
 }
@@ -266,7 +270,8 @@ void AudioTool::again()
     case AudioElement::Type::Music:
         musicPlayer->again();
         break;
-    default: break;
+    default:
+        break;
     }
 }
 
@@ -288,7 +293,6 @@ void AudioTool::setMusicVolume(qreal volume)
         player->setVolume(linearVolume, logarithmicVolume);
     }
 
-    discordPlayer->setMusicVolume(logarithmicVolume);
     mprisManager->setVolume(logarithmicVolume);
 }
 
@@ -303,7 +307,6 @@ void AudioTool::setSoundVolume(qreal volume)
     m_soundVolume = volume;
 
     soundPlayerController->setVolume(linearVolume, logarithmicVolume);
-    discordPlayer->setSoundsVolume(logarithmicVolume);
 }
 
 auto AudioTool::makeLinearVolume(qreal linearVolume) -> int
@@ -313,7 +316,8 @@ auto AudioTool::makeLinearVolume(qreal linearVolume) -> int
 
 auto AudioTool::makeLogarithmicVolume(qreal linearVolume) -> int
 {
-    return qRound(QAudio::convertVolume(linearVolume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) * VOLUME_FACTOR);
+    return qRound(QAudio::convertVolume(linearVolume, QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale) *
+                  VOLUME_FACTOR);
 }
 
 auto AudioTool::playlist() const -> QList<AudioFile *>
@@ -322,7 +326,8 @@ auto AudioTool::playlist() const -> QList<AudioFile *>
     {
     case AudioElement::Type::Music:
         return musicPlayer->playlist();
-    default: return {};
+    default:
+        return {};
     }
 }
 
@@ -352,7 +357,8 @@ void AudioTool::setMusicIndex(int index)
     case AudioElement::Type::Music:
         musicPlayer->setIndex(index);
         break;
-    default: return;
+    default:
+        return;
     }
 }
 
@@ -363,7 +369,7 @@ void AudioTool::onMetaDataUpdated()
     emit currentIndexChanged();
 }
 
-void AudioTool::findElement(const QString& term)
+void AudioTool::findElement(const QString &term)
 {
     AudioScenario::setFilterString(term);
 

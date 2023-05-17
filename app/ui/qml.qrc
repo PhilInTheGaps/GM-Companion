@@ -105,8 +105,6 @@
         <file>tools/settings/accounts/GoogleDriveAccount.qml</file>
         <file>tools/settings/accounts/NextCloudAccount.qml</file>
         <file>tools/settings/accounts/StatusBar.qml</file>
-        <file>tools/settings/accounts/DiscordAccount.qml</file>
-        <file>tools/audio/DiscordPanel.qml</file>
         <file>tools/notes/NotesControlView.qml</file>
         <file>tools/notes/NotesControlBar.qml</file>
         <file>tools/notes/NotesPage.qml</file>

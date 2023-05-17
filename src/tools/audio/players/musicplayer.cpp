@@ -11,9 +11,8 @@
 
 using namespace AsyncFuture;
 
-MusicPlayer::MusicPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent)
-    : AudioPlayer(parent), a_playlistIndex(0), m_mediaPlayer(new QMediaPlayer(this)), m_discordPlayer(discordPlayer),
-      m_metaDataReader(metaDataReader)
+MusicPlayer::MusicPlayer(MetaDataReader *metaDataReader, QObject *parent)
+    : AudioPlayer(parent), a_playlistIndex(0), m_mediaPlayer(new QMediaPlayer(this)), m_metaDataReader(metaDataReader)
 {
     m_mediaPlayer->setObjectName(tr("Music"));
 
@@ -309,13 +308,9 @@ void MusicPlayer::loadLocalFile(AudioFile *file)
 
 void MusicPlayer::loadWebFile(AudioFile *file)
 {
-    const auto useDiscord = Discord::getInstance()->enabled();
-
     m_mediaPlayer->setMedia(QUrl(file->url()));
     m_mediaPlayer->play();
-    m_mediaPlayer->setMuted(useDiscord);
-
-    if (useDiscord) m_discordPlayer->playMusic(file->url());
+    m_mediaPlayer->setMuted(false);
 }
 
 void MusicPlayer::loadSpotifyFile(AudioFile *file)
@@ -522,14 +517,9 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
     m_mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
 #endif
 
-    auto useDiscord = Discord::getInstance()->enabled();
-
-    m_mediaPlayer->setMuted(useDiscord);
-    if (useDiscord) m_discordPlayer->playMusic(result->data());
-
     m_mediaPlayer->play();
 
-    if (clickingWorkaround && !useDiscord) QTimer::singleShot(100, [=]() { m_mediaPlayer->setMuted(false); });
+    if (clickingWorkaround) QTimer::singleShot(100, [=]() { m_mediaPlayer->setMuted(false); });
 
     qCDebug(gmAudioMusic()) << "Sending file data to metadatareader ...";
 
@@ -567,6 +557,6 @@ void MusicPlayer::connectMetaDataSignals(MetaDataReader *metaDataReader)
 
 void MusicPlayer::initSpotifyPlayer()
 {
-    m_spotifyPlayer = new SpotifyPlayer(m_metaDataReader, m_discordPlayer, this);
+    m_spotifyPlayer = new SpotifyPlayer(m_metaDataReader, this);
     connect(m_spotifyPlayer, &SpotifyPlayer::songEnded, this, &MusicPlayer::onSpotifySongEnded);
 }

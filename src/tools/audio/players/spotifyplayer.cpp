@@ -1,10 +1,6 @@
 #include "spotifyplayer.h"
-#include "o0globals.h"
 #include "services/spotify/spotify.h"
-#include "services/spotify/spotifyutils.h"
-#include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-#include "utils/utils.h"
 
 #include <QDateTime>
 #include <QJsonArray>
@@ -15,8 +11,7 @@ Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
 
 using namespace AsyncFuture;
 
-SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, DiscordPlayer *discordPlayer, QObject *parent)
-    : AudioPlayer(parent), metaDataReader(mDReader), m_discordPlayer(discordPlayer)
+SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, QObject *parent) : AudioPlayer(parent), metaDataReader(mDReader)
 {
     qCDebug(gmAudioSpotify()) << "Loading ...";
 
@@ -68,12 +63,6 @@ void SpotifyPlayer::play(const QString &uri)
 
     qCDebug(gmAudioSpotify) << "Playing:" << uri;
     m_currentUri = uri;
-
-    // Is discord mode enabled?
-    if (Discord::getInstance()->enabled())
-    {
-        m_discordPlayer->playMusic(uri);
-    }
 
     const auto callback = [this](RestNetworkReply *reply) {
         if (!reply) return;
@@ -194,10 +183,7 @@ void SpotifyPlayer::setVolume(int linear, int logarithmic)
     Q_UNUSED(linear)
     qCDebug(gmAudioSpotify) << "Setting volume:" << logarithmic;
 
-    const auto useDiscod = Discord::getInstance()->enabled();
-    const auto volumePercent = useDiscod ? 0 : logarithmic;
-
-    observe(Spotify::instance()->player->volume(volumePercent)).subscribe([](RestNetworkReply *reply) {
+    observe(Spotify::instance()->player->volume(logarithmic)).subscribe([](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 

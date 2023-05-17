@@ -59,8 +59,6 @@ set(SRC_AUDIO
     tools/audio/players/soundplayer.cpp
     tools/audio/players/radioplayer.h
     tools/audio/players/radioplayer.cpp
-    tools/audio/players/discordplayer.h
-    tools/audio/players/discordplayer.cpp
     tools/audio/players/spotifyplayer.h
     tools/audio/players/spotifyplayer.cpp
     tools/audio/project/audioproject.h

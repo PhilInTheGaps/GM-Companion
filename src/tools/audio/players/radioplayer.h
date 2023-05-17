@@ -9,15 +9,13 @@
 #include "../metadata/metadatareader.h"
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "discordplayer.h"
 #include "filesystem/file.h"
 
 class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *m_discordPlayer,
-                QObject *parent = nullptr);
+    RadioPlayer(MetaDataReader *metaDataReader, QObject *parent = nullptr);
 
 public slots:
     void play(AudioElement *element);
@@ -25,13 +23,16 @@ public slots:
     void pause() override;
     void stop() override;
     void setVolume(int linear, int logarithmic) override;
-    void again() override { }
-    void next() override { }
+    void again() override
+    {
+    }
+    void next() override
+    {
+    }
 
 private:
     QMediaPlayer *m_mediaPlayer = nullptr;
     QMediaPlaylist *m_playlist = nullptr;
-    DiscordPlayer *m_discordPlayer = nullptr;
     QObject *m_fileRequestContext = nullptr;
 
     AudioElement *m_currentElement = nullptr;

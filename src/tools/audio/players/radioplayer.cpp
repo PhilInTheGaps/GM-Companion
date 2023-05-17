@@ -6,8 +6,7 @@
 
 using namespace AsyncFuture;
 
-RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent)
-    : AudioPlayer(parent), m_discordPlayer(discordPlayer)
+RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, QObject *parent) : AudioPlayer(parent)
 {
     qCDebug(gmAudioRadio()) << "Loading RadioPlayer ...";
 
@@ -70,11 +69,7 @@ void RadioPlayer::play(AudioElement *element)
     {
         qCDebug(gmAudioRadio()) << "Playing radio from url:" << audioFile->url();
         m_mediaPlayer->setMedia(QUrl(audioFile->url()));
-
-        auto useDiscord = Discord::getInstance()->enabled();
-        m_mediaPlayer->setMuted(useDiscord);
-        if (useDiscord) m_discordPlayer->playMusic(audioFile->url());
-
+        m_mediaPlayer->setMuted(false);
         m_mediaPlayer->play();
     }
 }
@@ -186,10 +181,7 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
     m_playlist->load(&m_mediaBuffer);
 #endif
 
-    auto useDiscord = Discord::getInstance()->enabled();
-    m_mediaPlayer->setMuted(useDiscord);
-    if (useDiscord) m_discordPlayer->playRadioPlaylist(result->data());
-
+    m_mediaPlayer->setMuted(false);
     m_mediaPlayer->setPlaylist(m_playlist);
     m_mediaPlayer->play();
 

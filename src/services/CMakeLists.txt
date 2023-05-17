@@ -49,7 +49,6 @@ set(HEADERS
     google/googledrive.h
     google/googledriveconnectorlocal.h
     google/googledrivereply.h
-    discord/discord.h
 )
 
 set(SOURCES
@@ -81,7 +80,6 @@ set(SOURCES
     nextcloud/nextcloud.cpp
     google/googledrive.cpp
     google/googledriveconnectorlocal.cpp
-    discord/discord.cpp
 )
 
 add_library(services STATIC ${HEADERS} ${SOURCES})

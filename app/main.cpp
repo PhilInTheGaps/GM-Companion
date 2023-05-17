@@ -19,7 +19,6 @@
 #include "filesystem/filedialog/filedialog.h"
 #include "logger.h"
 #include "messages/messagemanager.h"
-#include "services/discord/discord.h"
 #include "services/google/googledrive.h"
 #include "services/nextcloud/nextcloud.h"
 #include "services/spotify/spotify.h"
@@ -144,7 +143,6 @@ auto main(int argc, char *argv[]) -> int
     engine.rootContext()->setContextProperty("spotify_service", Spotify::instance());
     engine.rootContext()->setContextProperty("googledrive_service", &gd);
     engine.rootContext()->setContextProperty("nextcloud_service", &nc);
-    engine.rootContext()->setContextProperty("discord_service", Discord::getInstance());
 
     // Load tools
     AudioTool audioTool(&engine);

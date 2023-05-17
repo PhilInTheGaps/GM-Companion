@@ -12,7 +12,6 @@
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "discordplayer.h"
 #include "filesystem/file.h"
 #include "spotifyplayer.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
@@ -21,7 +20,7 @@ class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(MetaDataReader *metaDataReader, DiscordPlayer *discordPlayer, QObject *parent = nullptr);
+    explicit MusicPlayer(MetaDataReader *metaDataReader, QObject *parent = nullptr);
 
     void play(AudioElement *element);
     void setIndex(int index);
@@ -41,7 +40,6 @@ private:
     SpotifyPlayer *m_spotifyPlayer = nullptr;
     QMediaPlayer *m_mediaPlayer = nullptr;
     AudioElement *m_currentElement = nullptr;
-    DiscordPlayer *m_discordPlayer = nullptr;
     MetaDataReader *m_metaDataReader = nullptr;
 
     /// Context object to easily stop file data requests by deleting the object

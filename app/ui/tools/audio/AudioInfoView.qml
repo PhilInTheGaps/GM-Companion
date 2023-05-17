@@ -101,13 +101,6 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        // Discord indicator panel
-        DiscordPanel {
-            id: discord_panel
-            anchors.left: parent.left
-            anchors.right: parent.right
-        }
-
         // Volume Dialog
         VolumeItem {
             id: volume_item
