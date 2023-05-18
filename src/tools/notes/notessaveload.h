@@ -1,15 +1,16 @@
 #ifndef NOTESSAVELOAD_H
 #define NOTESSAVELOAD_H
 
+#include "notebook.h"
 #include <QObject>
 #include <QTextDocument>
-#include "notebook.h"
 
 class NotesSaveLoad : public QObject
 {
     Q_OBJECT
 public:
-    explicit NotesSaveLoad(QObject *parent = nullptr);
+    using QObject::QObject;
+
     void exportPage(NoteBookPage *page, QTextDocument *document);
 
 public slots:
@@ -17,31 +18,31 @@ public slots:
     void createBook(const QString &name, QObject *root);
 
 signals:
-    void booksLoaded(QObject* root);
-    void pagesLoaded(const QList<NoteBookPage*> &pages);
+    void booksLoaded(QObject *root);
+    void pagesLoaded(const QList<NoteBookPage *> &pages);
 
 private:
-    void buildBooks(const QStringList& folders, TreeItem *root);
-    void buildChapters(const QStringList& folders, NoteBook *book);
-    void buildPages(const QStringList& files, NoteBookChapter *chapter);
-    NoteBookPage *buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal = true);
+    void buildBooks(const QStringList &folders, TreeItem *root);
+    void buildChapters(const QStringList &folders, NoteBook *book) const;
+    void buildPages(const QStringList &files, NoteBookChapter *chapter);
+    auto buildPage(const QString &name, NoteBookChapter *chapter, bool emitSignal = true) -> NoteBookPage *;
 
-    static QString getPdfPath(NoteBookPage *page);
+    static auto getPdfPath(NoteBookPage *page) -> QString;
 
 private slots:
     void loadChapters();
     void loadPages();
-    void loadPageContent();
-    void savePage();
+    void loadPageContent() const;
+    void savePage() const;
 
-    void createChapter(const QString& name);
+    void createChapter(const QString &name);
     void createPage(const QString &name);
 
-    void renameChapter(const QString &oldPath);
-    void renamePage(const QString &oldPath);
+    void renameChapter(const QString &oldPath) const;
+    void renamePage(const QString &oldPath) const;
 
-    void deleteChapter();
-    void deletePage();
+    void deleteChapter() const;
+    void deletePage() const;
 };
 
 #endif // NOTESSAVELOAD_H

@@ -5,6 +5,7 @@
 #include <QStringList>
 
 #include "common/abstracttool.h"
+#include "common/utils/utils.h"
 #include "editor/audioeditor.h"
 #include "metadata/metadatareader.h"
 #include "mpris/mprismanager.h"
@@ -18,7 +19,7 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(QObject *currentProject READ currentProject NOTIFY currentProjectChanged)
     Q_PROPERTY(QList<QObject *> projects READ projects NOTIFY projectsChanged)
 
-    Q_PROPERTY(QObject *soundController READ soundController CONSTANT)
+    Q_PROPERTY(SoundPlayerController *soundController READ soundController CONSTANT)
 
     Q_PROPERTY(bool isPaused READ isPaused NOTIFY isPausedChanged)
     Q_PROPERTY(qreal musicVolume READ musicVolume NOTIFY musicVolumeChanged)
@@ -30,11 +31,6 @@ class AudioTool : public AbstractTool
 
 public:
     explicit AudioTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
-
-    [[nodiscard]] auto getEditor() const -> AudioEditor *
-    {
-        return editor;
-    }
 
     // Project
     [[nodiscard]] auto projects() const -> QList<QObject *>
@@ -50,9 +46,9 @@ public:
     Q_INVOKABLE void setCurrentProject(int index);
     Q_INVOKABLE int getCurrentProjectIndex();
 
-    [[nodiscard]] auto soundController() const -> QObject *
+    [[nodiscard]] auto soundController() -> SoundPlayerController *
     {
-        return qobject_cast<QObject *>(soundPlayerController);
+        return &soundPlayerController;
     }
 
     // Volume
@@ -76,7 +72,7 @@ public:
     Q_INVOKABLE void setMusicIndex(int index);
     Q_INVOKABLE void stopSound(const QString &sound)
     {
-        soundPlayerController->stop(sound);
+        soundPlayerController.stop(sound);
     }
     [[nodiscard]] auto isPaused() const -> bool
     {
@@ -84,12 +80,12 @@ public:
     }
     void stop();
 
-    Q_INVOKABLE void findElement(const QString &term);
+    Q_INVOKABLE void findElement(const QString &term) const;
 
     // Meta Data
     [[nodiscard]] auto metaData() const -> QObject *
     {
-        return metaDataReader->metaData();
+        return metaDataReader.metaData();
     }
     [[nodiscard]] auto index() const -> int;
     [[nodiscard]] auto playlist() const -> QList<AudioFile *>;
@@ -109,11 +105,10 @@ signals:
     void spotifyAuthorized();
     void musicVolumeChanged();
     void soundVolumeChanged();
-    void isLoadingChanged();
 
 private slots:
     void onProjectsChanged(QVector<AudioProject *> projects);
-    void onCurrentScenarioChanged();
+    void onCurrentScenarioChanged() const;
     void onStartedPlaying();
     void onMetaDataUpdated();
     void onSpotifyAuthorized()
@@ -122,16 +117,14 @@ private slots:
     }
 
 private:
-    AudioEditor *editor = nullptr;
-    QQmlApplicationEngine *qmlEngine = nullptr;
-    MetaDataReader *metaDataReader = nullptr;
-    MprisManager *mprisManager = nullptr;
+    AudioEditor editor;
+    MetaDataReader metaDataReader;
+    MprisManager mprisManager;
 
     // Players
-    MusicPlayer *musicPlayer = nullptr;
-    SoundPlayerController *soundPlayerController = nullptr;
-    RadioPlayer *radioPlayer = nullptr;
-    QList<AudioPlayer *> audioPlayers;
+    MusicPlayer musicPlayer;
+    SoundPlayerController soundPlayerController;
+    RadioPlayer radioPlayer;
 
     AudioElement::Type m_musicElementType = AudioElement::Type::Music;
     bool m_isPaused = true;

@@ -1,6 +1,6 @@
 #include "audiofilemodel.h"
 
-auto AudioFileModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
+auto AudioFileModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
 {
     QObject *item = m_items.at(index.row());
 
@@ -25,7 +25,8 @@ void AudioFileModel::append(QObject *item)
     emit isEmptyChanged();
 }
 
-auto AudioFileModel::moveRow(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild) -> bool
+auto AudioFileModel::moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent,
+                             int destinationChild) -> bool
 {
     int destination = destinationChild > sourceRow ? destinationChild + 1 : destinationChild;
     if (beginMoveRows(sourceParent, sourceRow, sourceRow, destinationParent, destination))
@@ -40,8 +41,10 @@ auto AudioFileModel::moveRow(const QModelIndex& sourceParent, int sourceRow, con
 
 void AudioFileModel::remove(QObject *item)
 {
-    for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items.at(i) == item) {
+    for (int i = 0; i < m_items.size(); ++i)
+    {
+        if (m_items.at(i) == item)
+        {
             remove(i);
             break;
         }
@@ -77,11 +80,11 @@ void AudioFileModel::clear()
     emit isEmptyChanged();
 }
 
-void AudioFileModel::setElements(const QList<AudioFile *>&elements)
+void AudioFileModel::setElements(const QList<AudioFile *> &elements)
 {
     clear();
 
-    for (auto element : elements)
+    foreach (auto *element, elements)
     {
         append(element);
     }

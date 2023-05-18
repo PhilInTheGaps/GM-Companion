@@ -73,18 +73,18 @@ public:
         m_path = path;
     }
 
-    static auto compare(AudioElement *e1, AudioElement *e2) -> bool;
+    static auto compare(const AudioElement *e1, const AudioElement *e2) -> bool;
 
     inline operator QString() const
     {
-        return QString("%1 (%2)").arg(name(), typeToString(type()));
+        return QStringLiteral("%1 (%2)").arg(name(), typeToString(type()));
     }
 
     static auto typeToString(Type type) -> QString;
     static auto typeToSettings(AudioElement::Type type) -> QString;
     READONLY_PROPERTY(Type, type)
 
-    AUTO_PROPERTY(AudioElement::Mode, mode)
+    AUTO_PROPERTY_VAL2(AudioElement::Mode, mode, Mode::RandomList)
 
 private:
     QString m_path;

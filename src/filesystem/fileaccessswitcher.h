@@ -1,17 +1,18 @@
 #pragma once
 
+#include "file.h"
 #include <QJSEngine>
 #include <QObject>
 #include <QQmlEngine>
-#include "file.h"
 
-namespace Files {
+namespace Files
+{
 
 class FileAccessSwitcher : public QObject
 {
     Q_OBJECT
 public:
-    static auto instance() -> FileAccessSwitcher*
+    static auto instance() -> FileAccessSwitcher *
     {
         if (!single)
         {
@@ -28,15 +29,15 @@ public:
         return instance();
     }
 
-    Q_INVOKABLE void updateFileAccess()
+    Q_INVOKABLE static void updateFileAccess()
     {
         File::updateFileAccess();
     }
 
 private:
-    FileAccessSwitcher(QObject *parent) : QObject(parent) {}
+    using QObject::QObject;
 
     inline static FileAccessSwitcher *single = nullptr;
 };
 
-}
+} // namespace Files

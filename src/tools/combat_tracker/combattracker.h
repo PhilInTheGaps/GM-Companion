@@ -1,15 +1,15 @@
 #ifndef COMBATTRACKER_H
 #define COMBATTRACKER_H
 
-#include <QObject>
-#include <QList>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QFile>
+#include "abstracttool.h"
 #include "combatant.h"
 #include "combattrackerstate.h"
 #include "effecttool.h"
-#include "abstracttool.h"
+#include <QFile>
+#include <QList>
+#include <QObject>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 class CombatTracker : public AbstractTool
 {
@@ -20,11 +20,18 @@ class CombatTracker : public AbstractTool
 public:
     explicit CombatTracker(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    [[nodiscard]] int currentRound() const { return m_state.currentRound(); }
-    [[nodiscard]] int currentIndex() const { return m_state.currentIndex(); }
+    [[nodiscard]] int currentRound() const
+    {
+        return m_state.currentRound();
+    }
+    [[nodiscard]] int currentIndex() const
+    {
+        return m_state.currentIndex();
+    }
 
     Q_INVOKABLE void next();
-    Q_INVOKABLE bool add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort = true);
+    Q_INVOKABLE bool add(const QString &name, int ini, int health, int priority, const QString &notes,
+                         bool sort = true);
     Q_INVOKABLE void clear(bool saveAfterClear = true);
     Q_INVOKABLE void reset();
     Q_INVOKABLE bool remove(int index);
@@ -52,16 +59,16 @@ signals:
     void currentIndexChanged();
 
 protected:
-    QList<Combatant*> combatants() const;
-    Combatant *getCombatant(int index);
+    [[nodiscard]] auto combatants() const -> QList<Combatant *>;
+    [[nodiscard]] auto getCombatant(int index) -> Combatant *;
 
     void resetDelayForAll();
-    void saveToDisk();
+    void saveToDisk() const;
 
-    static QFile getCacheFile();
+    static auto getCacheFile() -> QFile;
 
 private:
-    EffectTool *effectTool = nullptr;
+    EffectTool m_effectTool;
 
     CombatTrackerState m_state;
 };

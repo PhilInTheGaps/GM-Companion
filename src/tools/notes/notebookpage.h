@@ -2,42 +2,47 @@
 #define NOTEBOOKPAGE_H
 
 #include "models/treeitem.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class NoteBookPage : public TreeItem
 {
     Q_OBJECT
 public:
-    explicit NoteBookPage(const QString& name, int depth, QObject *chapter = nullptr);
+    explicit NoteBookPage(const QString &name, int depth, QObject *chapter = nullptr);
 
-    QString content();
+    [[nodiscard]] auto content() -> QString;
     void setContent(const QString &content, bool edited = true);
 
-    QString html() const { return m_html; }
-    QString origContent() const { return m_origContent; }
+    [[nodiscard]] auto html() const -> QString
+    {
+        return m_html;
+    }
+    [[nodiscard]] auto origContent() const -> QString
+    {
+        return m_origContent;
+    }
 
     Q_PROPERTY(bool isSaved READ isSaved WRITE setIsSaved NOTIFY isSavedChanged)
-    bool isSaved() const { return m_isSaved; }
+    [[nodiscard]] auto isSaved() const -> bool
+    {
+        return m_isSaved;
+    }
     void setIsSaved(bool isSaved);
 
-    Q_PROPERTY(bool isCurrent READ isCurrent WRITE setIsCurrent NOTIFY isCurrentChanged)
-    bool isCurrent() const { return m_isCurrent; }
-    void setIsCurrent(bool isCurrent) { m_isCurrent = isCurrent; emit isCurrentChanged(); }
-
-    Q_PROPERTY(bool wasEdited READ wasEdited WRITE setWasEdited NOTIFY wasEditedChanged)
-    bool wasEdited() const { return m_wasEdited; }
-    void setWasEdited(bool wasEdited) { m_wasEdited = wasEdited; emit wasEditedChanged(); }
-
-    Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
-    int cursorPosition() const { return m_cursorPosition; }
-    void setCursorPosition(int position) { m_cursorPosition = position; emit cursorPositionChanged(); }
+    AUTO_PROPERTY_VAL2(bool, isCurrent, false)
+    AUTO_PROPERTY_VAL2(bool, wasEdited, false)
+    AUTO_PROPERTY_VAL2(int, cursorPosition, 0)
 
 public slots:
     void onContentLoaded(const QString &content);
     void onHtmlGenerated(const QString &html, int id);
     void save();
     void close();
-    void rename(const QString& newName) override;
-    void remove() override { emit deletePage(); }
+    void rename(const QString &newName) override;
+    void remove() override
+    {
+        emit deletePage();
+    }
 
 signals:
     void loadPageContent();
@@ -45,9 +50,6 @@ signals:
     void generateHtml(const QString &raw, int id);
     void htmlGenerated();
     void isSavedChanged();
-    void isCurrentChanged();
-    void wasEditedChanged();
-    void cursorPositionChanged();
     void savePage();
     void closePage();
     void renamePage(const QString &oldPath);
@@ -58,16 +60,11 @@ private:
     QString m_content;
     QString m_html;
 
-    int m_cursorPosition = 0;
-
     bool m_wasContentLoaded = false;
     bool m_isSaved = true;
-    bool m_isCurrent = false;
-    bool m_wasEdited = false;
 
     static int editCount;
     int m_editCount = 0;
-
 };
 
 #endif // NOTEBOOKPAGE_H

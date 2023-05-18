@@ -1,12 +1,12 @@
 #ifndef CHARACTERTOOL_H
 #define CHARACTERTOOL_H
 
+#include "character.h"
+#include "common/abstracttool.h"
+#include "viewers/characterdsa5viewer.h"
+#include "viewers/characterimageviewer.h"
 #include <QList>
 #include <QQmlApplicationEngine>
-#include "common/abstracttool.h"
-#include "character.h"
-#include "viewers/characterimageviewer.h"
-#include "viewers/characterdsa5viewer.h"
 
 class CharacterTool : public AbstractTool
 {
@@ -20,17 +20,26 @@ class CharacterTool : public AbstractTool
 public:
     explicit CharacterTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
 
-    CharacterImageViewer *getImageViewer() const { return m_imageViewer; }
-    CharacterDSA5Viewer *getDSA5Viewer() const { return m_dsa5Viewer; }
-
     QStringList characters() const;
-    QStringList categories() const { if (m_currentViewer) return m_currentViewer->categories(); else return {}; }
-    int categoryIndex() const { if (m_currentViewer) return m_currentViewer->categoryIndex(); else return 0; }
-    int pageIndex() const { if (m_currentViewer) return m_currentViewer->pageIndex(); else return 0; }
+    QStringList categories() const
+    {
+        return m_currentViewer ? m_currentViewer->categories() : QStringList();
+    }
+    int categoryIndex() const
+    {
+        return m_currentViewer ? m_currentViewer->categoryIndex() : 0;
+    }
+    int pageIndex() const
+    {
+        return m_currentViewer ? m_currentViewer->pageIndex() : 0;
+    }
 
     Q_INVOKABLE void setCurrentCategory(int index);
 
-    bool active() const { return m_active; }
+    bool active() const
+    {
+        return m_active;
+    }
     Q_INVOKABLE void toggleCharacterActive(int index);
 
     Q_INVOKABLE void setCurrentCharacter(int index);
@@ -51,23 +60,21 @@ private:
     CharacterImageViewer *m_imageViewer = nullptr;
     CharacterDSA5Viewer *m_dsa5Viewer = nullptr;
 
-    QList<Character*> m_characters;
+    QList<Character *> m_characters;
     QStringList m_inactiveCharacters;
     Character *m_currentCharacter = nullptr;
 
     bool m_active = true;
 
     void loadCharacters();
-    void receivedCharacterFolders(const QStringList& folders);
-    void receivedCharacterFiles(const QStringList& files);
+    void receivedCharacterFolders(const QStringList &folders);
+    void receivedCharacterFiles(const QStringList &files);
 
-    void loadInactiveCharacters(const QByteArray& data);
-    void saveInactiveCharacters();
-    void updateCharacter();
+    void loadInactiveCharacters(const QByteArray &data);
+    void saveInactiveCharacters() const;
+    void updateCharacter() const;
 
-    void convertSettingsFile(const QByteArray& data);
+    void convertSettingsFile(const QByteArray &data);
 };
 
-
 #endif // CHARACTERTOOL_H
-

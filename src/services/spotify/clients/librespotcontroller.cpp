@@ -26,7 +26,7 @@ LibrespotController::LibrespotController(QObject *parent)
 
 auto LibrespotController::start() -> QFuture<bool>
 {
-    updateStatus(ServiceStatus::Type::Info, "Starting librespot client ...");
+    updateStatus(ServiceStatus::Type::Info, QStringLiteral("Starting librespot client ..."));
 
     if (isOtherProcessIsRunning())
     {
@@ -134,7 +134,7 @@ auto LibrespotController::hasStarted() const -> bool
     return m_hasStarted;
 }
 
-void LibrespotController::initProcess()
+void LibrespotController::initProcess() const
 {
 #ifdef Q_OS_WINDOWS
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, &m_librespotProcess, &QProcess::kill);
@@ -231,24 +231,24 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
 {
     QStringList args;
 
-    args << "-n" << deviceName();
-    args << "-u" << username;
-    args << "-b"
+    args << QStringLiteral("-n") << deviceName();
+    args << QStringLiteral("-u") << username;
+    args << QStringLiteral("-b")
          << SettingsManager::instance()->get(QStringLiteral("bitrate"), QStringLiteral("160"),
                                              QStringLiteral("Spotify"));
-    args << "--volume-ctrl"
-         << "linear";
-    args << "--volume-range"
-         << "60.0";
+    args << QStringLiteral("--volume-ctrl")
+         << QStringLiteral("linear");
+    args << QStringLiteral("--volume-range")
+         << QStringLiteral("60.0");
 
     if (!SettingsManager::instance()->get(QStringLiteral("enableCache"), true, QStringLiteral("Spotify")))
     {
-        args << "--disable-audio-cache";
+        args << QStringLiteral("--disable-audio-cache");
     }
 
     if (SettingsManager::instance()->get(QStringLiteral("enableVolumeNormalization"), false, QStringLiteral("Spotify")))
     {
-        args << "--enable-volume-normalisation";
+        args << QStringLiteral("--enable-volume-normalisation");
     }
 
     return args;
@@ -260,14 +260,15 @@ auto LibrespotController::getLibrespotInfo() -> LibrespotInfo
     m_librespotProcess.waitForFinished();
     const auto output = m_librespotProcess.readAll();
 
-    const auto regex = QRegularExpression(R"((?'version'(\d\.?)+)\s+(?'commit'\w*).*(?'date'\d{4}-\d{2}-\d{2}))");
-    const auto match = regex.match(output);
+    static auto regex =
+        QRegularExpression(QStringLiteral(R"((?'version'(\d\.?)+)\s+(?'commit'\w*).*(?'date'\d{4}-\d{2}-\d{2}))"));
+    auto match = regex.match(output);
 
     return {match.captured("version"), match.captured("commit"),
             QDate::fromString(match.captured("date"), QStringLiteral("yyyy-MM-dd"))};
 }
 
-void LibrespotController::onLibrespotFinished(int exitCode, const QProcess::ExitStatus &exitStatus)
+void LibrespotController::onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     m_hasStarted = false;
 
@@ -276,7 +277,7 @@ void LibrespotController::onLibrespotFinished(int exitCode, const QProcess::Exit
     qCWarning(gmLibrespotController()) << "Librespot exited with code" << exitCode << exitStatus;
 }
 
-void LibrespotController::onLibrespotError(const QProcess::ProcessError &error)
+void LibrespotController::onLibrespotError(QProcess::ProcessError error) const
 {
     if (m_isExitExpected) return;
     qCWarning(gmLibrespotController()) << "An error occurred with librespot:" << error;
@@ -287,32 +288,11 @@ void LibrespotController::onLibrespotOutputReady()
 {
     const auto output = m_librespotProcess.readAllStandardError();
 
-    for (const auto &line : output.split('\n'))
+    foreach (const auto &line, output.split('\n'))
     {
         if (line.isEmpty()) continue;
 
-        if (line.contains("WARN"))
-        {
-            // for some reason "ignoring blacklisted access point ..."
-            // messages are categorized as warnings, so we want to handle them as debug info
-            if (line.contains("Ignoring"))
-            {
-                qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
-                continue;
-            }
-
-            qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-            updateStatus(ServiceStatus::Type::Warning, line);
-        }
-        else if (line.contains("ERROR"))
-        {
-            qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
-            updateStatus(ServiceStatus::Type::Error, line);
-        }
-        else
-        {
-            qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
-        }
+        printOutputAndUpdateStatus(line);
 
         if (line.contains("Authenticated as"))
         {
@@ -328,5 +308,31 @@ void LibrespotController::onLibrespotOutputReady()
             updateStatus(ServiceStatus::Type::Error, line);
             stop();
         }
+    }
+}
+
+void LibrespotController::printOutputAndUpdateStatus(const QString &line)
+{
+    if (line.contains(QLatin1String("WARN")))
+    {
+        // for some reason "ignoring blacklisted access point ..."
+        // messages are categorized as warnings, so we want to handle them as debug info
+        if (line.contains(QLatin1String("Ignoring")))
+        {
+            qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
+            return;
+        }
+
+        qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
+        updateStatus(ServiceStatus::Type::Warning, line);
+    }
+    else if (line.contains(QLatin1String("ERROR")))
+    {
+        qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
+        updateStatus(ServiceStatus::Type::Error, line);
+    }
+    else
+    {
+        qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
     }
 }

@@ -2,11 +2,11 @@
 #include <utils/fileutils.h>
 
 AudioFile::AudioFile(const QString &url, Source source, const QString &title, QObject *parent)
-    : QObject(parent), a_url(url), a_title(title), a_source(source), a_missing(false)
+    : QObject(parent), a_url(url), a_title(title), a_source(source)
 {
 }
 
-AudioFile::AudioFile(const QJsonObject &object, QObject *parent) : QObject(parent), a_missing(false)
+AudioFile::AudioFile(const QJsonObject &object, QObject *parent) : QObject(parent)
 {
     url(object[QStringLiteral("url")].toString());
     a_source = static_cast<Source>(object[QStringLiteral("source")].toInt());

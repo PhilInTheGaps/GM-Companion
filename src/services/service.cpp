@@ -18,8 +18,8 @@ void Service::disconnect()
 
 void Service::updateStatus(ServiceStatus::Type type, const QString &message)
 {
-    status()->type(type);
-    status()->message(message);
+    a_status->type(type);
+    a_status->message(message);
 }
 
 void Service::updateConnectionStatus()

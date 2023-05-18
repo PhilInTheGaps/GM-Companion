@@ -1,11 +1,11 @@
 #include "mprisadaptor.h"
 
-void MprisAdaptor::Raise()
+void MprisAdaptor::Raise() const
 {
     // Not implemented
 }
 
-void MprisAdaptor::Quit()
+void MprisAdaptor::Quit() const
 {
     // Not implemented
 }

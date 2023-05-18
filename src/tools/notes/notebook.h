@@ -1,7 +1,6 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
-#include "models/treeitem.h"
 #include "notebookchapter.h"
 
 class NoteBook : public NoteBookChapter
@@ -9,11 +8,14 @@ class NoteBook : public NoteBookChapter
     Q_OBJECT
 
 public:
-    explicit NoteBook(const QString& name, QObject *parent = nullptr);
+    explicit NoteBook(const QString &name, QObject *parent = nullptr);
 
-    QList<NoteBookChapter*> chapters();
+    auto chapters() -> QList<NoteBookChapter *>;
 
-    QStringList creatables() const override { return { tr("Chapter"), tr("Note") }; }
+    [[nodiscard]] auto creatables() const -> QStringList override
+    {
+        return {tr("Chapter"), tr("Note")};
+    }
 
 public slots:
     void onChaptersLoaded();
@@ -25,7 +27,7 @@ signals:
 
 private:
     bool m_wereChaptersLoaded = false;
-    QList<NoteBookChapter*> m_chapters;
+    QList<NoteBookChapter *> m_chapters;
 
 private slots:
     void onIsOpenChanged() override;

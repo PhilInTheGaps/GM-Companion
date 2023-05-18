@@ -1,23 +1,22 @@
 #include "combattracker.h"
-#include "utils/utils.h"
 #include "utils/fileutils.h"
-#include <algorithm>
-#include <QLoggingCategory>
+#include "utils/utils.h"
+#include <QDir>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
-#include <QFile>
-#include <QDir>
+#include <QLoggingCategory>
+#include <algorithm>
 
 Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
-CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), effectTool(new EffectTool(this))
+CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
 {
     if (engine)
     {
         engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker"), this);
-        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker_effects"), effectTool);
+        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker_effects"), &m_effectTool);
         engine->rootContext()->setContextProperty(QStringLiteral("combatantListModel"), &m_state.model());
     }
 
@@ -74,7 +73,7 @@ void CombatTracker::next()
  * @param health Health of combatant
  * @param sort If combatant list should be sorted after adding
  */
-auto CombatTracker::add(const QString& name, int ini, int health, int priority, const QString &notes, bool sort) -> bool
+auto CombatTracker::add(const QString &name, int ini, int health, int priority, const QString &notes, bool sort) -> bool
 {
     if (!name.isEmpty() && (ini > -1))
     {
@@ -256,7 +255,7 @@ auto CombatTracker::delayTurn(int index) -> bool
     return true;
 }
 
-auto CombatTracker::combatants() const -> QList<Combatant*>
+auto CombatTracker::combatants() const -> QList<Combatant *>
 {
     return m_state.combatants();
 }
@@ -299,7 +298,7 @@ void CombatTracker::loadData()
     setIsDataLoaded(true);
 }
 
-void CombatTracker::saveToDisk()
+void CombatTracker::saveToDisk() const
 {
     auto json = m_state.serialize();
     auto tempFile = getCacheFile();
@@ -313,7 +312,7 @@ void CombatTracker::saveToDisk()
 
 auto CombatTracker::getCacheFile() -> QFile
 {
-    const auto filePath = FileUtils::fileInDir("combat-tracker-state.json", QDir::tempPath());
+    const auto filePath = FileUtils::fileInDir(QStringLiteral("combat-tracker-state.json"), QDir::tempPath());
 
     return {filePath};
 }

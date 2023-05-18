@@ -3,9 +3,9 @@
 
 #include <QObject>
 
+#include "../metadata/metadatareader.h"
 #include "mprisadaptor.h"
 #include "mprisplayeradaptor.h"
-#include "../metadata/metadatareader.h"
 
 class MprisManager : public QObject
 {
@@ -21,7 +21,7 @@ private:
     MprisAdaptor *mprisAdaptor = nullptr;
     MprisPlayerAdaptor *mprisPlayerAdaptor = nullptr;
 
-    void sendMprisUpdateSignal(const QString& property, const QVariant& value);
+    void sendMprisUpdateSignal(const QString &property, const QVariant &value) const;
 
 signals:
     void play();
@@ -31,7 +31,6 @@ signals:
     void next();
     void previous();
     void changeVolume(double volume);
-
 };
 
 #endif // MPRISMANAGER_H

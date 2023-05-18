@@ -1,12 +1,6 @@
 #include "combattrackerstate.h"
-#include <QJsonObject>
 #include <QJsonArray>
-
-CombatTrackerState::CombatTrackerState(QObject *parent)
-    : QObject{parent}, a_currentIndex(0), a_currentRound(1)
-{
-
-}
+#include <QJsonObject>
 
 void CombatTrackerState::reset()
 {
@@ -101,7 +95,7 @@ void CombatTrackerState::sortCombatants(bool keepDelay)
     loadModel();
 }
 
-void CombatTrackerState::load(const QJsonDocument& json)
+void CombatTrackerState::load(const QJsonDocument &json)
 {
     clear();
 
@@ -114,8 +108,8 @@ void CombatTrackerState::load(const QJsonDocument& json)
 
     loadModel();
 
-    currentIndex(state["currentIndex"].toInt());
-    currentRound(state["currentRound"].toInt());
+    currentIndex(state[QStringLiteral("currentIndex")].toInt());
+    currentRound(state[QStringLiteral("currentRound")].toInt());
 }
 
 auto CombatTrackerState::serialize() const -> QJsonDocument
@@ -129,9 +123,8 @@ auto CombatTrackerState::serialize() const -> QJsonDocument
         }
     }
 
-    const auto state = QJsonObject({{"currentIndex", currentIndex()},
-                                    {"currentRound", currentRound()},
-                                    {"combatants",   combatants}});
+    const auto state =
+        QJsonObject({{"currentIndex", currentIndex()}, {"currentRound", currentRound()}, {"combatants", combatants}});
     return QJsonDocument(state);
 }
 

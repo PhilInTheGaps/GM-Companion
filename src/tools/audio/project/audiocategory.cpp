@@ -35,7 +35,7 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, Aud
     const auto scenarios = object[QStringLiteral("scenarios")].toArray();
     m_scenarios.reserve(scenarios.size());
 
-    for (auto scenario : scenarios)
+    for (const auto &scenario : scenarios)
     {
         auto *object = new AudioScenario(scenario.toObject(), m_path, this);
         prepareScenario(object);
@@ -54,7 +54,7 @@ auto AudioCategory::toJson() const -> QJsonObject
 
     QJsonArray scenariosJson;
 
-    for (auto *scenario : m_scenarios)
+    foreach (const auto *scenario, m_scenarios)
     {
         if (scenario)
         {
@@ -88,12 +88,8 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
 
 auto AudioCategory::containsScenario(const QString &name) const -> bool
 {
-    for (auto *scenario : m_scenarios)
-    {
-        if (scenario && scenario->name() == name) return true;
-    }
-
-    return false;
+    return std::any_of(m_scenarios.constBegin(), m_scenarios.constEnd(),
+                       [name](const AudioScenario *scenario) { return scenario && scenario->name() == name; });
 }
 
 /**
@@ -138,7 +134,7 @@ auto AudioCategory::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    for (auto *scenario : m_scenarios)
+    foreach (auto *scenario, m_scenarios)
     {
         list.append(scenario->elements(true));
     }

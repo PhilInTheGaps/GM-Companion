@@ -4,7 +4,7 @@ UnsplashImage::UnsplashImage(QObject *parent) : QObject(parent)
 {
 }
 
-auto ImageListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
+auto ImageListModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
 {
     QObject *item = m_items.at(index.row());
 
@@ -20,8 +20,10 @@ void ImageListModel::insert(QObject *item)
 
 void ImageListModel::remove(QObject *item)
 {
-    for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items.at(i) == item) {
+    for (int i = 0; i < m_items.size(); ++i)
+    {
+        if (m_items.at(i) == item)
+        {
             beginRemoveRows(QModelIndex(), i, i);
             m_items.remove(i);
             endRemoveRows();
@@ -42,11 +44,11 @@ void ImageListModel::clear()
 {
     while (!m_items.empty())
     {
-        remove(m_items[0]);
+        remove(m_items.constFirst());
     }
 }
 
-void ImageListModel::setElements(QList<UnsplashImage *>elements)
+void ImageListModel::setElements(QList<UnsplashImage *> elements)
 {
     clear();
 

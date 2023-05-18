@@ -10,10 +10,6 @@
 
 using namespace AsyncFuture;
 
-NotesSaveLoad::NotesSaveLoad(QObject *parent) : QObject(parent)
-{
-}
-
 /**
  * Load book directories in notes path
  */
@@ -68,7 +64,7 @@ void NotesSaveLoad::loadPages()
 /**
  * Load content from page file
  */
-void NotesSaveLoad::loadPageContent()
+void NotesSaveLoad::loadPageContent() const
 {
     auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
@@ -86,7 +82,7 @@ void NotesSaveLoad::loadPageContent()
 /**
  * Write page content to file
  */
-void NotesSaveLoad::savePage()
+void NotesSaveLoad::savePage() const
 {
     auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
@@ -102,7 +98,7 @@ void NotesSaveLoad::savePage()
 /**
  * Rename a chapter folder
  */
-void NotesSaveLoad::renameChapter(const QString &oldPath)
+void NotesSaveLoad::renameChapter(const QString &oldPath) const
 {
     auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter || oldPath == chapter->path()) return;
@@ -119,7 +115,7 @@ void NotesSaveLoad::renameChapter(const QString &oldPath)
 /**
  * Rename a page file to it's new name
  */
-void NotesSaveLoad::renamePage(const QString &oldPath)
+void NotesSaveLoad::renamePage(const QString &oldPath) const
 {
     auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page || oldPath == page->path()) return;
@@ -136,7 +132,7 @@ void NotesSaveLoad::renamePage(const QString &oldPath)
 /**
  * Delete chapter folder
  */
-void NotesSaveLoad::deleteChapter()
+void NotesSaveLoad::deleteChapter() const
 {
     auto *chapter = qobject_cast<NoteBookChapter *>(sender());
     if (!chapter) return;
@@ -157,7 +153,7 @@ void NotesSaveLoad::deleteChapter()
 /**
  * Delete page file
  */
-void NotesSaveLoad::deletePage()
+void NotesSaveLoad::deletePage() const
 {
     auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
@@ -259,8 +255,8 @@ void NotesSaveLoad::exportPage(NoteBookPage *page, QTextDocument *document)
 
     qCDebug(gmNotesSaveLoad()) << "Exporting page as pdf ...";
 
-    auto *buffer = new QBuffer(this);
-    auto *writer = new QPdfWriter(buffer);
+    auto buffer = std::make_unique<QBuffer>();
+    auto writer = std::make_unique<QPdfWriter>(buffer.get());
 
     writer->setTitle(page->name());
     writer->setCreator(QStringLiteral("GM-Companion"));
@@ -275,7 +271,7 @@ void NotesSaveLoad::exportPage(NoteBookPage *page, QTextDocument *document)
 
     if (buffer->open(QIODevice::WriteOnly))
     {
-        document->print(writer);
+        document->print(writer.get());
         buffer->close();
 
         const auto filePath = NotesSaveLoad::getPdfPath(page);
@@ -283,11 +279,8 @@ void NotesSaveLoad::exportPage(NoteBookPage *page, QTextDocument *document)
     }
     else
     {
-        qCWarning(gmNotesSaveLoad()) << "Error: Could not opoen buffer for pdf export.";
+        qCWarning(gmNotesSaveLoad()) << "Error: Could not open buffer for pdf export.";
     }
-
-    buffer->deleteLater();
-    writer->deleteLater();
 }
 
 /**
@@ -326,7 +319,7 @@ void NotesSaveLoad::buildBooks(const QStringList &folders, TreeItem *root)
 /**
  * Construct chapter objects from folder list
  */
-void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook *book)
+void NotesSaveLoad::buildChapters(const QStringList &folders, NoteBook *book) const
 {
     if (!book) return;
 
@@ -431,7 +424,7 @@ auto NotesSaveLoad::getPdfPath(NoteBookPage *page) -> QString
 {
     auto fileName = page->path();
 
-    QStringList endings = {".md", ".txt", ".markdown"};
+    const QStringList endings = {".md", ".txt", ".markdown"};
 
     for (const auto &ending : endings)
     {

@@ -41,15 +41,15 @@ public:
     }
     auto deleteCategory(AudioCategory *category) -> bool;
     auto addCategory(AudioCategory *category, bool setAsCurrent = false) -> bool;
-    auto containsCategory(const QString &name) const -> bool;
+    [[nodiscard]] auto containsCategory(const QString &name) const -> bool;
 
     Q_PROPERTY(AudioScenario *currentScenario READ currentScenario NOTIFY currentScenarioChanged)
     [[nodiscard]] auto currentScenario() const -> AudioScenario *;
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
 
-    AUTO_PROPERTY(bool, isSaved)
+    AUTO_PROPERTY_VAL(bool, isSaved)
     READONLY_PROPERTY(int, version)
-    AUTO_PROPERTY(bool, wasRenamed)
+    AUTO_PROPERTY_VAL(bool, wasRenamed)
     AUTO_PROPERTY(QString, oldName)
 
 signals:
@@ -61,7 +61,7 @@ private:
     QList<AudioCategory *> m_categories;
     AudioCategory *m_currentCategory = nullptr;
 
-    void connectSignals();
+    void connectSignals() const;
     void prepareCategory(AudioCategory *category);
 
 private slots:

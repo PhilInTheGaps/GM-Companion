@@ -8,7 +8,6 @@
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "common/utils/utils.h"
 #include "filesystem/file.h"
 
 class SoundPlayer : public AudioPlayer
@@ -17,7 +16,6 @@ class SoundPlayer : public AudioPlayer
 
 public:
     SoundPlayer(AudioElement *element, int volume, QObject *parent = nullptr);
-    ~SoundPlayer() override;
 
     [[nodiscard]] auto element() const -> AudioElement *
     {
@@ -27,14 +25,11 @@ public:
     {
         return m_fileName;
     }
-    void loadMedia(AudioFile *file);
+    void loadMedia(const AudioFile *file);
 
 public slots:
     void play() override;
-    void pause() override
-    {
-        m_mediaPlayer->pause();
-    }
+    void pause() override;
     void stop() override;
     void stopElement(const QString &element);
     void setVolume(int linear, int logarithmic) override;
@@ -45,7 +40,7 @@ public slots:
 
 private:
     AudioElement *m_element = nullptr;
-    QMediaPlayer *m_mediaPlayer = nullptr;
+    QMediaPlayer m_mediaPlayer;
     QObject *m_fileRequestContext = nullptr;
 
     QList<AudioFile *> m_playlist;

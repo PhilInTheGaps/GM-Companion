@@ -15,7 +15,7 @@ class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    RadioPlayer(MetaDataReader *metaDataReader, QObject *parent = nullptr);
+    RadioPlayer(MetaDataReader &metaDataReader, QObject *parent = nullptr);
 
 public slots:
     void play(AudioElement *element);
@@ -31,8 +31,8 @@ public slots:
     }
 
 private:
-    QMediaPlayer *m_mediaPlayer = nullptr;
-    QMediaPlaylist *m_playlist = nullptr;
+    QMediaPlayer m_mediaPlayer;
+    QMediaPlaylist m_playlist;
     QObject *m_fileRequestContext = nullptr;
 
     AudioElement *m_currentElement = nullptr;

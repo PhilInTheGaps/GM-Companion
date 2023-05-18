@@ -13,14 +13,13 @@
 #include "../metadata/metadatareader.h"
 #include "../project/audioelement.h"
 #include "audioplayer.h"
-#include "rest/restnetworkreply.h"
 
 class SpotifyPlayer : public AudioPlayer
 {
     Q_OBJECT
 
 public:
-    SpotifyPlayer(MetaDataReader *mDReader, QObject *parent = nullptr);
+    SpotifyPlayer(MetaDataReader &mDReader, QObject *parent = nullptr);
 
 public slots:
     void play(const QString &uri);
@@ -36,7 +35,7 @@ public slots:
     void setVolume(int linear, int logarithmic) override;
 
 private:
-    QPointer<MetaDataReader> metaDataReader = nullptr;
+    MetaDataReader &m_metaDataReader;
     gsl::owner<QTimer *> m_songDurationTimer = nullptr;
     gsl::owner<QTimer *> m_metaDataTimer = nullptr;
 

@@ -10,7 +10,7 @@
 Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
 AudioElement::AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(name, path.split("/").length() - 1, false, parent), a_type(type), a_mode(Mode::RandomList)
+    : TreeItem(name, path.split(QStringLiteral("/")).length() - 1, false, parent), a_type(type)
 {
     this->name(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
@@ -18,16 +18,16 @@ AudioElement::AudioElement(const QString &name, Type type, const QString &path, 
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem("", path.split("/").length() - 1, false, parent), a_type(type), a_mode(Mode::RandomList)
+    : TreeItem(QLatin1String(""), path.split(QStringLiteral("/")).length() - 1, false, parent), a_type(type)
 {
-    name(object["name"].toString());
-    mode(static_cast<Mode>(object["mode"].toInt()));
+    name(object[QStringLiteral("name")].toString());
+    mode(static_cast<Mode>(object[QStringLiteral("mode")].toInt()));
     m_path = path + "/" + typeToString(type) + "/" + name();
     m_thumbnail = new AudioThumbnail(m_path, this);
 
-    m_thumbnail->setRelativeUrl(object["icon"].toString());
+    m_thumbnail->setRelativeUrl(object[QStringLiteral("icon")].toString());
 
-    for (auto file : object.value("files").toArray())
+    foreach (const auto &file, object.value(QStringLiteral("files")).toArray())
     {
         m_files.append(new AudioFile(file.toObject(), this));
     }
@@ -47,24 +47,21 @@ AudioElement::AudioElement(const AudioElement &other)
  */
 auto AudioElement::toJson() const -> QJsonObject
 {
-    QJsonObject object;
-    object.insert("name", name());
-    object.insert("icon", thumbnail()->relativeUrl());
-    object.insert("mode", static_cast<int>(mode()));
+    QJsonObject object({{"name", name()}, {"icon", thumbnail()->relativeUrl()}, {"mode", static_cast<int>(mode())}});
 
     // Files
     QJsonArray files;
-    for (auto *file : m_files)
+    foreach (const auto *file, m_files)
     {
         files.append(file->toJson());
     }
-    object.insert("files", files);
+    object.insert(QStringLiteral("files"), files);
     return object;
 }
 
 auto AudioElement::thumnailObject() const -> QObject *
 {
-    return qobject_cast<QObject *>(thumbnail());
+    return thumbnail();
 }
 
 /**
@@ -73,7 +70,7 @@ auto AudioElement::thumnailObject() const -> QObject *
  */
 void AudioElement::setFiles(QList<AudioFile *> files)
 {
-    for (auto *file : m_files)
+    foreach (auto *file, m_files)
     {
         if (file) file->deleteLater();
     }
@@ -116,7 +113,7 @@ auto AudioElement::removeFile(int index) -> bool
  */
 auto AudioElement::moveFile(int from, int steps) -> bool
 {
-    int to = from + steps;
+    const int to = from + steps;
 
     if (Utils::isInBounds(m_files, to))
     {
@@ -146,14 +143,14 @@ auto AudioElement::typeToSettings(AudioElement::Type type) -> QString
     default:
         qCWarning(gmAudioElement()) << "Error: getPath() was called with illegal element type:"
                                     << AudioElement::typeToString(type);
-        return "";
+        return QLatin1String("");
     }
 }
 
 /**
  * @brief Compare two audio elements, true if e1 comes alphabetically before e2.
  */
-auto AudioElement::compare(AudioElement *e1, AudioElement *e2) -> bool
+auto AudioElement::compare(const AudioElement *e1, const AudioElement *e2) -> bool
 {
     if (e1 && e2) return e1->name() < e2->name();
     return true;

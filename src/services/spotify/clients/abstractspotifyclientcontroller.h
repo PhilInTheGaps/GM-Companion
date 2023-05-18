@@ -26,7 +26,7 @@ protected:
 
     [[nodiscard]] static auto getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>;
 
-    void updateStatus(const ServiceStatus::Type& type, const QString& message);
+    void updateStatus(ServiceStatus::Type type, const QString& message);
 
     void setActiveDevice(const SpotifyDevice &device);
 

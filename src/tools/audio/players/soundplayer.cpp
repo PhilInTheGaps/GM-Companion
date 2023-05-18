@@ -48,8 +48,9 @@ void SoundPlayerController::stop(const QString &element)
 auto SoundPlayerController::activeElements() const -> QList<QObject *>
 {
     QList<QObject *> list;
+    list.reserve(m_players.size());
 
-    for (auto player : m_players)
+    foreach (const auto *player, m_players)
     {
         if (player)
         {
@@ -69,7 +70,7 @@ auto SoundPlayerController::isSoundPlaying(AudioElement *element) const -> bool
 {
     qCDebug(gmAudioSounds()) << "Checking if sound" << element->name() << "is playing ...";
 
-    for (auto *player : m_players)
+    foreach (const auto *player, m_players)
     {
         if (player && (player->element() == element))
         {
@@ -97,7 +98,7 @@ auto SoundPlayerController::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> elements;
 
-    for (auto *player : m_players)
+    foreach (const auto *player, m_players)
     {
         if (player) elements.append(player->element());
     }
@@ -124,24 +125,18 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) : A
         return;
     }
 
-    m_mediaPlayer = new QMediaPlayer(this);
-    m_mediaPlayer->setObjectName(element->name());
-    m_mediaPlayer->setVolume(volume);
+    m_mediaPlayer.setObjectName(element->name());
+    m_mediaPlayer.setVolume(volume);
 
-    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &SoundPlayer::onMediaStatusChanged);
-    connect(m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this,
+    connect(&m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &SoundPlayer::onMediaStatusChanged);
+    connect(&m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this,
             &SoundPlayer::onMediaPlayerError);
 
     m_playlist = element->files();
     applyShuffleMode();
 }
 
-SoundPlayer::~SoundPlayer()
-{
-    m_mediaPlayer->stop();
-}
-
-void SoundPlayer::loadMedia(AudioFile *file)
+void SoundPlayer::loadMedia(const AudioFile *file)
 {
     qCDebug(gmAudioSounds()) << "Loading media" << file->url();
 
@@ -152,15 +147,16 @@ void SoundPlayer::loadMedia(AudioFile *file)
         m_fileRequestContext = new QObject(this);
 
         m_fileName = file->url();
-        observe(Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath("sounds"))))
+        observe(Files::File::getDataAsync(
+                    FileUtils::fileInDir(file->url(), SettingsManager::getPath(QStringLiteral("sounds")))))
             .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
         break;
     }
 
     case AudioFile::Source::Web: {
-        m_mediaPlayer->setMedia(QUrl(file->url()));
-        m_mediaPlayer->play();
-        m_mediaPlayer->setMuted(false);
+        m_mediaPlayer.setMedia(QUrl(file->url()));
+        m_mediaPlayer.play();
+        m_mediaPlayer.setMuted(false);
         m_fileName = file->url();
         break;
     }
@@ -186,13 +182,18 @@ void SoundPlayer::play()
     }
     else
     {
-        loadMedia(m_playlist.first());
+        loadMedia(m_playlist.constFirst());
     }
+}
+
+void SoundPlayer::pause()
+{
+    m_mediaPlayer.pause();
 }
 
 void SoundPlayer::stop()
 {
-    m_mediaPlayer->stop();
+    m_mediaPlayer.stop();
     emit playerStopped(this);
 }
 
@@ -201,7 +202,7 @@ void SoundPlayer::stopElement(const QString &element)
     if (m_element && (m_element->name() == element))
     {
         qCDebug(gmAudioSounds()) << "Stopping" << element;
-        m_mediaPlayer->stop();
+        m_mediaPlayer.stop();
         emit playerStopped(this);
     }
 }
@@ -209,7 +210,7 @@ void SoundPlayer::stopElement(const QString &element)
 void SoundPlayer::setVolume(int linear, int logarithmic)
 {
     Q_UNUSED(linear)
-    m_mediaPlayer->setVolume(logarithmic);
+    m_mediaPlayer.setVolume(logarithmic);
 }
 
 void SoundPlayer::next()
@@ -231,21 +232,21 @@ void SoundPlayer::next()
         std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
         m_playlistIndex = dis(gen);
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-        loadMedia(m_playlist[m_playlistIndex]);
+        loadMedia(m_playlist.at(m_playlistIndex));
         return;
     }
 
     // choose next in line (mode 0, 2, 3)
     if (m_playlistIndex + 1 < m_playlist.length())
     {
-        loadMedia(m_playlist[++m_playlistIndex]);
+        loadMedia(m_playlist.at(++m_playlistIndex));
     }
 
     // loop around (Mode 0 or 2)
     else if (m_element->mode() != AudioElement::Mode::ListOnce)
     {
         m_playlistIndex = 0;
-        loadMedia(m_playlist[0]);
+        loadMedia(m_playlist.constFirst());
     }
 
     // reached end of playlist, stop
@@ -294,7 +295,7 @@ void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
 
 void SoundPlayer::onMediaPlayerError(QMediaPlayer::Error error)
 {
-    qCWarning(gmAudioSounds()) << error << m_mediaPlayer->errorString();
+    qCWarning(gmAudioSounds()) << error << m_mediaPlayer.errorString();
 
     if (error == QMediaPlayer::FormatError)
     {
@@ -306,7 +307,7 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
 {
     if (!result) return;
 
-    m_mediaPlayer->stop();
+    m_mediaPlayer.stop();
 
     if (result->data().isEmpty())
     {
@@ -345,16 +346,16 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     file.write(result->data());
     file.close();
 
-    m_mediaPlayer->setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
+    m_mediaPlayer.setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
 #else
     m_mediaBuffer.close();
     m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
-    m_mediaPlayer->setMedia(QMediaContent(), &m_mediaBuffer);
+    m_mediaPlayer.setMedia(QMediaContent(), &m_mediaBuffer);
 #endif
 
-    m_mediaPlayer->setMuted(false);
+    m_mediaPlayer.setMuted(false);
 
-    m_mediaPlayer->play();
+    m_mediaPlayer.play();
     result->deleteLater();
 }

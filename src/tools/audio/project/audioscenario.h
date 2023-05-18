@@ -58,9 +58,9 @@ public:
 
     Q_PROPERTY(QList<AudioElement *> elements READ elements NOTIFY elementsChanged)
     [[nodiscard]] auto elements(bool recursive = false) const -> QList<AudioElement *>;
-    [[nodiscard]] auto elements(const AudioElement::Type &type, bool recursive = false) -> QList<AudioElement *>;
+    [[nodiscard]] auto elements(AudioElement::Type type, bool recursive = false) -> QList<AudioElement *>;
 
-    auto element(const QString &name, const AudioElement::Type &type) -> AudioElement *;
+    auto element(const QString &name, AudioElement::Type type) -> AudioElement *;
     auto moveElement(AudioElement *element, int steps) -> bool;
     auto addElement(AudioElement *element) -> bool;
     auto removeElement(AudioElement *element, bool deleteElement = true) -> bool;
@@ -75,7 +75,7 @@ public:
     auto addScenario(AudioScenario *scenario) -> bool;
     auto deleteScenario(AudioScenario *scenario) -> bool;
     auto moveScenario(AudioScenario *scenario, int steps) -> bool;
-    auto containsScenario(const QString &name) -> bool;
+    [[nodiscard]] auto containsScenario(const QString &name) const -> bool;
 
     Q_PROPERTY(QList<QObject *> model READ model NOTIFY scenariosChanged)
     auto model() -> QList<QObject *>;
@@ -95,9 +95,9 @@ signals:
 
 private:
     explicit AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
-                           QObject *parent);
-    explicit AudioScenario(const QJsonObject &object, const QString &path, QObject *parent);
-    auto getElementList(const AudioElement::Type &type) -> QList<AudioElement *> &;
+                           bool isSubscenario, QObject *parent);
+    explicit AudioScenario(const QJsonObject &object, const QString &path, bool isSubscenario, QObject *parent);
+    auto getElementList(AudioElement::Type type) -> QList<AudioElement *> &;
 
     inline static QString filterString = QLatin1String();
 
@@ -110,7 +110,7 @@ private:
     QList<AudioScenario *> m_scenarios;
 
     void prepareElement(AudioElement *element);
-    void releaseElement(AudioElement *element);
+    void releaseElement(AudioElement *element) const;
     void prepareScenario(AudioScenario *scenario);
 };
 

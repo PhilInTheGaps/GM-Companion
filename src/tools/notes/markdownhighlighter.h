@@ -8,7 +8,7 @@ class MarkdownHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    explicit MarkdownHighlighter(QObject *parent = nullptr);
+    using QSyntaxHighlighter::QSyntaxHighlighter;
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -16,15 +16,15 @@ protected:
 private:
     void applyRegexMatch(const QString &text, const QString &regex, const QTextCharFormat &format, int group = 0);
 
-    static QTextCharFormat combineFormats(const QTextCharFormat &one, const QTextCharFormat &two);
+    static auto combineFormats(const QTextCharFormat &one, const QTextCharFormat &two) -> QTextCharFormat;
 
-    static QTextCharFormat headerFormat();
-    static QTextCharFormat boldFormat();
-    static QTextCharFormat italicFormat();
-    static QTextCharFormat codeInlineFormat();
-    static QTextCharFormat strikethroughFormat();
-    static QTextCharFormat quoteFormat();
-    static QTextCharFormat listFormat();
+    static auto headerFormat() -> QTextCharFormat;
+    static auto boldFormat() -> QTextCharFormat;
+    static auto italicFormat() -> QTextCharFormat;
+    static auto codeInlineFormat() -> QTextCharFormat;
+    static auto strikethroughFormat() -> QTextCharFormat;
+    static auto quoteFormat() -> QTextCharFormat;
+    static auto listFormat() -> QTextCharFormat;
 };
 
 #endif // MARKDOWNHIGHLIGHTER_H

@@ -27,10 +27,10 @@ void HtmlWorker::generate(const QString &raw, int id)
     auto html = MarkdownUtils::markdownToHtml(raw);
 
     // Qt RichText can only display <s>, not <del> for strikethrough
-    html.replace("<del>", "<s>").replace("</del>", "</s>");
+    html.replace(QLatin1String("<del>"), "<s>").replace("</del>", "</s>");
 
     // Insert table style manually here, does not work via CSS
-    html.replace("<table>", "<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">");
+    html.replace(QLatin1String("<table>"), "<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">");
 
     emit generated(html, id);
 }

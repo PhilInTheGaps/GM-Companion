@@ -1,32 +1,30 @@
 #include "markdownhighlighter.h"
-#include "utils/utils.h"
 #include <QRegularExpression>
 
-#define MD_HEADER_REGEX R"(^#{1,6}\s.+$)"
+static constexpr auto MD_HEADER_REGEX = R"(^#{1,6}\s.+$)";
 
-#define MD_BOLD_REGEX R"(\*{2}[^\s].*[^\s]\*{2})"
-#define MD_BOLD_ALT_REGEX R"(_{2}[^\s].*[^\s]_{2})"
+static constexpr auto MD_BOLD_REGEX = R"(\*{2}[^\s].*[^\s]\*{2})";
+static constexpr auto MD_BOLD_ALT_REGEX = R"(_{2}[^\s].*[^\s]_{2})";
 
-#define MD_ITALIC_REGEX R"((^|[^\*])\*([^\s\*].*[^\s\*])\*)"
-#define MD_ITALIC_ALT_REGEX R"((^|[^\_])\_([^\s\_].*[^\s\_])\_)"
+static constexpr auto MD_ITALIC_REGEX = R"((^|[^\*])\*([^\s\*].*[^\s\*])\*)";
+static constexpr auto MD_ITALIC_ALT_REGEX = R"((^|[^\_])\_([^\s\_].*[^\s\_])\_)";
 
-#define MD_CODE_INLINE_REGEX R"(\`.*\`)"
-#define MD_STRIKETHROUGH_REGEX R"(~{2}(.*)~{2})"
-#define MD_QUOTE_REGEX R"(^\>\s)"
+static constexpr auto MD_CODE_INLINE_REGEX = R"(\`.*\`)";
+static constexpr auto MD_STRIKETHROUGH_REGEX = R"(~{2}(.*)~{2})";
+static constexpr auto MD_QUOTE_REGEX = R"(^\>\s)";
 
-#define MD_LIST_ASTERISK_REGEX R"(^\s*\*\s)"
-#define MD_LIST_DASH_REGEX R"(^\s*\-\s)"
-#define MD_LIST_PLUS_REGEX R"(^\s*\+\s)"
-#define MD_LIST_DIGIT_REGEX R"(^\s*\d+\.\s)"
+static constexpr auto MD_LIST_ASTERISK_REGEX = R"(^\s*\*\s)";
+static constexpr auto MD_LIST_DASH_REGEX = R"(^\s*\-\s)";
+static constexpr auto MD_LIST_PLUS_REGEX = R"(^\s*\+\s)";
+static constexpr auto MD_LIST_DIGIT_REGEX = R"(^\s*\d+\.\s)";
 
-MarkdownHighlighter::MarkdownHighlighter(QObject *parent)
-    : QSyntaxHighlighter(parent)
-{
-
-}
+static constexpr auto HEADER_COLOR = QColor(0x56, 0x9c, 0xd6);
+static constexpr auto CODE_COLOR = QColor(0xe6, 0xa1, 0x52);
+static constexpr auto QUOTE_COLOR = QColor(0x56, 0x9c, 0xd6);
+static constexpr auto LIST_COLOR = QColor(0x56, 0x9c, 0xd6);
 
 void MarkdownHighlighter::highlightBlock(const QString &text)
-{   
+{
     // Headers
     applyRegexMatch(text, MD_HEADER_REGEX, headerFormat());
 
@@ -54,23 +52,24 @@ void MarkdownHighlighter::highlightBlock(const QString &text)
     applyRegexMatch(text, MD_LIST_DIGIT_REGEX, listFormat());
 }
 
-void MarkdownHighlighter::applyRegexMatch(const QString &text, const QString &regex, const QTextCharFormat &charFormat, int group)
+void MarkdownHighlighter::applyRegexMatch(const QString &text, const QString &regex, const QTextCharFormat &charFormat,
+                                          int group)
 {
-    QRegularExpression expression(regex);
+    const QRegularExpression expression(regex);
     auto iterator = expression.globalMatch(text);
 
     while (iterator.hasNext())
     {
-      auto match = iterator.next();
+        auto match = iterator.next();
 
-      for (int i = match.capturedStart(group); i < match.capturedEnd(group); i++)
-      {
-          setFormat(i, 1, combineFormats(format(i), charFormat));
-      }
+        for (int i = match.capturedStart(group); i < match.capturedEnd(group); i++)
+        {
+            setFormat(i, 1, combineFormats(format(i), charFormat));
+        }
     }
 }
 
-QTextCharFormat MarkdownHighlighter::combineFormats(const QTextCharFormat &one, const QTextCharFormat &two)
+auto MarkdownHighlighter::combineFormats(const QTextCharFormat &one, const QTextCharFormat &two) -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontWeight(qMax(one.fontWeight(), two.fontWeight()));
@@ -86,61 +85,60 @@ QTextCharFormat MarkdownHighlighter::combineFormats(const QTextCharFormat &one, 
         format.setForeground(one.foreground());
     }
 
-    auto isTypeWriter = one.fontStyleHint() == QFont::TypeWriter
-            || two.fontStyleHint() == QFont::TypeWriter;
+    auto isTypeWriter = one.fontStyleHint() == QFont::TypeWriter || two.fontStyleHint() == QFont::TypeWriter;
 
     if (isTypeWriter) format.setFontStyleHint(QFont::TypeWriter);
 
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::headerFormat()
+auto MarkdownHighlighter::headerFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontWeight(QFont::Bold);
-    format.setForeground(QColor("#569cd6"));
+    format.setForeground(HEADER_COLOR);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::boldFormat()
+auto MarkdownHighlighter::boldFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontWeight(QFont::Bold);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::italicFormat()
+auto MarkdownHighlighter::italicFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontItalic(true);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::codeInlineFormat()
+auto MarkdownHighlighter::codeInlineFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontStyleHint(QFont::TypeWriter);
-    format.setForeground(QColor("#e6a152"));
+    format.setForeground(CODE_COLOR);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::strikethroughFormat()
+auto MarkdownHighlighter::strikethroughFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
     format.setFontStrikeOut(true);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::quoteFormat()
+auto MarkdownHighlighter::quoteFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
-    format.setForeground(QColor("#569cd6"));
+    format.setForeground(QUOTE_COLOR);
     return format;
 }
 
-QTextCharFormat MarkdownHighlighter::listFormat()
+auto MarkdownHighlighter::listFormat() -> QTextCharFormat
 {
     QTextCharFormat format;
-    format.setForeground(QColor("#569cd6"));
+    format.setForeground(LIST_COLOR);
     return format;
 }

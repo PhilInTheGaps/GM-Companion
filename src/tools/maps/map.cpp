@@ -1,24 +1,22 @@
 #include "map.h"
-#include "logging.h"
-#include "utils/utils.h"
-#include "utils/stringutils.h"
-#include "utils/fileutils.h"
 #include "filesystem/file.h"
+#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
+#include "utils/stringutils.h"
+#include "utils/utils.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QPixmap>
 
 using namespace AsyncFuture;
 
 Map::Map(const QString &name, const QString &path, QObject *parent)
-    : QObject(parent), a_name(name), a_path(path)
+    : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    m_markers = new MapMarkerModel(this);
-
     observe(Files::File::getDataAsync(path)).subscribe([this](Files::FileDataResult *result) {
         if (!result) return;
 
@@ -31,16 +29,16 @@ Map::Map(const QString &name, const QString &path, QObject *parent)
     });
 }
 
-void Map::saveMarkers()
+void Map::saveMarkers() const
 {
     QJsonArray markerArray;
 
-    for (auto *marker : m_markers->elements())
+    foreach (auto *marker, m_markers.elements())
     {
         markerArray.append(marker->toJson());
     }
 
-    QJsonObject root({ { "markers", markerArray } });
+    QJsonObject root({{"markers", markerArray}});
 
     Files::File::saveAsync(path() + ".json", QJsonDocument(root).toJson());
 }
@@ -56,7 +54,7 @@ void Map::loadMarkers()
             observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
                 if (!result) return;
 
-                auto markers = QJsonDocument::fromJson(result->data()).object()["markers"].toArray();
+                auto markers = QJsonDocument::fromJson(result->data()).object()[QStringLiteral("markers")].toArray();
 
                 for (const auto &marker : markers)
                 {
@@ -73,13 +71,13 @@ void Map::loadMarkers()
 
 void Map::deleteMarker(int index)
 {
-    if (Utils::isInBounds(m_markers->elements(), index))
+    if (Utils::isInBounds(m_markers.elements(), index))
     {
-        m_markers->removeAt(index);
+        m_markers.removeAt(index);
     }
 }
 
-MapCategory::MapCategory(const QString &name, const QList<Map*> &maps, QObject *parent)
+MapCategory::MapCategory(const QString &name, const QList<Map *> &maps, QObject *parent)
     : QObject(parent), a_name(name), a_maps(maps)
 {
 }
@@ -107,14 +105,14 @@ void MapCategory::loadMaps()
 
     m_wasLoaded = true;
 
-    const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath("maps"));
+    const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(QStringLiteral("maps")));
 
     observe(Files::File::listAsync(path, true, false)).subscribe([this, path](Files::FileListResult *result) {
         if (!result) return;
 
-        for (const auto &file : result->files())
+        foreach (const auto &file, result->files())
         {
-            if (!file.endsWith(".json"))
+            if (!file.endsWith(QLatin1String(".json")))
             {
                 addMap(new Map(file, FileUtils::fileInDir(file, path), this));
             }
@@ -126,7 +124,7 @@ void MapCategory::loadMaps()
     });
 }
 
-auto MapListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
+auto MapListModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
 {
     auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
@@ -141,8 +139,10 @@ void MapListModel::insert(QObject *item)
 
 void MapListModel::remove(QObject *item)
 {
-    for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items.at(i) == item) {
+    for (int i = 0; i < m_items.size(); ++i)
+    {
+        if (m_items.at(i) == item)
+        {
             beginRemoveRows(QModelIndex(), i, i);
             m_items.remove(i);
             endRemoveRows();
@@ -163,11 +163,11 @@ void MapListModel::clear()
 {
     while (!m_items.isEmpty())
     {
-        remove(m_items[0]);
+        remove(m_items.constFirst());
     }
 }
 
-void MapListModel::setElements(QList<Map *>elements)
+void MapListModel::setElements(QList<Map *> elements)
 {
     clear();
 

@@ -2,44 +2,51 @@
 #define AUDIOFILEMODEL_H
 
 #include "audiofile.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 
-class AudioFileModel : public QAbstractListModel {
+class AudioFileModel : public QAbstractListModel
+{
     Q_OBJECT
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    AUTO_PROPERTY(QString, name)
 
 public:
-    AudioFileModel(QObject *parent) : QAbstractListModel(parent) {}
+    using QAbstractListModel::QAbstractListModel;
 
-    int rowCount(const QModelIndex&) const override { return m_items.size(); }
-    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex &) const override
+    {
+        return m_items.size();
+    }
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    QVector<QObject*> elements() const { return m_items; }
-    void setElements(const QList<AudioFile*>& elements);
+    QVector<QObject *> elements() const
+    {
+        return m_items;
+    }
+    void setElements(const QList<AudioFile *> &elements);
 
     void clear();
-    auto isEmpty() const -> bool { return m_items.isEmpty(); }
+    auto isEmpty() const -> bool
+    {
+        return m_items.isEmpty();
+    }
 
-    auto name() const -> QString { return m_name; }
-    void setName(QString name) { m_name = name; emit nameChanged(); }
-
-    void insert(int index, QObject* item);
-    void remove(QObject* item);
+    void insert(int index, QObject *item);
+    void remove(QObject *item);
     void remove(int index);
-    void append(QObject* item);
-    bool moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent, int destinationChild);
+    void append(QObject *item);
+    bool moveRow(const QModelIndex &sourceParent, int sourceRow, const QModelIndex &destinationParent,
+                 int destinationChild);
 
 signals:
     void isEmptyChanged();
-    void nameChanged();
 
 protected:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
-    QVector<QObject*> m_items = {};
-    QString m_name;
+    QVector<QObject *> m_items = {};
 };
 
 #endif // AUDIOFILEMODEL_H

@@ -11,7 +11,8 @@ Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
 
 using namespace AsyncFuture;
 
-SpotifyPlayer::SpotifyPlayer(MetaDataReader *mDReader, QObject *parent) : AudioPlayer(parent), metaDataReader(mDReader)
+SpotifyPlayer::SpotifyPlayer(MetaDataReader &mDReader, QObject *parent)
+    : AudioPlayer(parent), m_metaDataReader(mDReader)
 {
     qCDebug(gmAudioSpotify()) << "Loading ...";
 
@@ -77,7 +78,7 @@ void SpotifyPlayer::play(const QString &uri)
 
         reply->deleteLater();
 
-        metaDataReader->clearMetaData();
+        m_metaDataReader.clearMetaData();
         startMetaDataTimer();
     };
 
@@ -206,18 +207,18 @@ void SpotifyPlayer::getCurrentSong()
             return;
         }
 
-        auto *metadata = new AudioMetaData(metaDataReader);
-        metadata->setTitle(track->track->name);
-        metadata->setAlbum(track->track->album->name);
-        metadata->setArtist(track->track->artistString());
-        metadata->setCover(track->track->image()->url);
+        auto *metadata = new AudioMetaData(&m_metaDataReader);
+        metadata->title(track->track->name);
+        metadata->album(track->track->album->name);
+        metadata->artist(track->track->artistString());
+        metadata->cover(track->track->image()->url);
 
         using namespace std::chrono;
         auto duration = milliseconds(track->track->durationMs);
         auto progress = milliseconds(track->progressMs);
 
         startDurationTimer(duration - progress);
-        metaDataReader->setMetaData(metadata);
+        m_metaDataReader.setMetaData(metadata);
     };
 
     observe(Spotify::instance()->player->getCurrentlyPlaying()).subscribe(callback);

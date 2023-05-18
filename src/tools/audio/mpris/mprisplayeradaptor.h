@@ -1,10 +1,10 @@
 #ifndef MPRISPLAYERADAPTOR_H
 #define MPRISPLAYERADAPTOR_H
 
-#include <QObject>
 #include <QDBusAbstractAdaptor>
-#include <QDBusObjectPath>
 #include <QDBusArgument>
+#include <QDBusObjectPath>
+#include <QObject>
 #include <QTemporaryFile>
 
 class MprisPlayerAdaptor : public QDBusAbstractAdaptor
@@ -28,40 +28,96 @@ class MprisPlayerAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(bool CanControl READ canControl CONSTANT)
 
 public:
-    MprisPlayerAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj) {}
+    MprisPlayerAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj)
+    {
+    }
 
-    QString playbackStatus() const { return m_PlaybackStatus; }
+    QString playbackStatus() const
+    {
+        return m_PlaybackStatus;
+    }
     void setPlaybackStatus(int status);
 
-    QString loopStatus() const { return m_LoopStatus; }
-    void setLoopStatus(QString /*status*/) { /* Not Implemented */ }
+    QString loopStatus() const
+    {
+        return m_LoopStatus;
+    }
+    void setLoopStatus(const QString & /*status*/) const
+    { /* Not Implemented */
+    }
 
-    double rate() const { return 1.0; }
-    void setRate(double /*rate*/) { /* Not Implemented */ }
+    double rate() const
+    {
+        return 1.0;
+    }
+    void setRate(double /*rate*/) const
+    { /* Not Implemented */
+    }
 
-    bool shuffle() const { return m_Shuffle; }
-    void setShuffle(bool /*set*/) { /* Not Implemented */ }
+    bool shuffle() const
+    {
+        return m_Shuffle;
+    }
+    void setShuffle(bool /*set*/) const
+    { /* Not Implemented */
+    }
 
-    QMap<QString, QVariant> metadata() const { return m_Metadata; }
+    QMap<QString, QVariant> metadata() const
+    {
+        return m_Metadata;
+    }
     void setMetadata(const QMap<QString, QVariant> &data);
 
-    double volume() const { return m_Volume; }
-    void setVolume(double /*volume*/) {  } // emit changeVolume(volume);
+    double volume() const
+    {
+        return m_Volume;
+    }
+    void setVolume(double /*volume*/) const
+    {
+    } // emit changeVolume(volume);
 
-    qlonglong position() const { return m_Position; }
-    double minimumRate() const { return 1.0; }
-    double maximumRate() const { return 1.0; }
+    qlonglong position() const
+    {
+        return m_Position;
+    }
+    double minimumRate() const
+    {
+        return 1.0;
+    }
+    double maximumRate() const
+    {
+        return 1.0;
+    }
 
-    bool canGoNext() const { return true; }
-    bool canGoPrevious() const { return true; }
-    bool canPlay() const { return true; }
-    bool canPause() const { return true; }
-    bool canSeek() const { return false; }
-    bool canControl() const { return true; }
+    bool canGoNext() const
+    {
+        return true;
+    }
+    bool canGoPrevious() const
+    {
+        return true;
+    }
+    bool canPlay() const
+    {
+        return true;
+    }
+    bool canPause() const
+    {
+        return true;
+    }
+    bool canSeek() const
+    {
+        return false;
+    }
+    bool canControl() const
+    {
+        return true;
+    }
 
 private:
-    QString m_PlaybackStatus = "Stopped", m_LoopStatus;
-    double m_Volume;
+    QString m_PlaybackStatus = QStringLiteral("Stopped");
+    QString m_LoopStatus;
+    double m_Volume = 0;
     bool m_Shuffle = false;
     QMap<QString, QVariant> m_Metadata;
     qlonglong m_Position = 0;
@@ -81,17 +137,35 @@ signals:
     void metadataChanged(QMap<QString, QVariant>);
 
 public slots:
-    Q_NOREPLY void Next() { emit next(); }
-    Q_NOREPLY void Previous() { emit previous(); }
-    Q_NOREPLY void Pause() { emit pause(); }
-    Q_NOREPLY void PlayPause() { emit playPause();}
-    Q_NOREPLY void Stop() { emit stop(); }
-    Q_NOREPLY void Play() { emit play(); }
+    Q_NOREPLY void Next()
+    {
+        emit next();
+    }
+    Q_NOREPLY void Previous()
+    {
+        emit previous();
+    }
+    Q_NOREPLY void Pause()
+    {
+        emit pause();
+    }
+    Q_NOREPLY void PlayPause()
+    {
+        emit playPause();
+    }
+    Q_NOREPLY void Stop()
+    {
+        emit stop();
+    }
+    Q_NOREPLY void Play()
+    {
+        emit play();
+    }
 
     // Not actually implemented
-    Q_NOREPLY void Seek(qlonglong);
-    Q_NOREPLY void SetPosition(const QDBusObjectPath&, const qlonglong &);
-    Q_NOREPLY void OpenUri(const QString&);
+    Q_NOREPLY void Seek(qlonglong) const;
+    Q_NOREPLY void SetPosition(const QDBusObjectPath &, qlonglong) const;
+    Q_NOREPLY void OpenUri(const QString &) const;
 };
 
 #endif // MPRISPLAYERADAPTOR_H

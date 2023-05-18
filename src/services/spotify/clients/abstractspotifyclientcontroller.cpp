@@ -2,7 +2,6 @@
 #include "../config.h"
 #include "spotify/spotify.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-#include "thirdparty/o2/src/o0globals.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -24,7 +23,7 @@ AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent
 auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<QSharedPointer<SpotifyDevice>>
 {
     const auto callback = [name](QSharedPointer<SpotifyDeviceList> deviceList) {
-        for (const auto &device : deviceList->devices)
+        foreach (const auto &device, deviceList->devices)
         {
             if (device->name == name) return device;
         }
@@ -35,10 +34,10 @@ auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<
     return observe(Spotify::instance()->player->devices()).subscribe(callback).future();
 }
 
-void AbstractSpotifyClientController::updateStatus(const ServiceStatus::Type &type, const QString &message)
+void AbstractSpotifyClientController::updateStatus(ServiceStatus::Type type, const QString &message)
 {
-    status()->type(type);
-    status()->message(message);
+    a_status->type(type);
+    a_status->message(message);
 
     qCDebug(m_loggingCategory) << message;
 }

@@ -2,21 +2,18 @@
 #include "logging.h"
 #include "utils/stringutils.h"
 
-#include <QQmlContext>
-#include <QFile>
 #include <QDesktopServices>
+#include <QFile>
+#include <QQmlContext>
 
-NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent)
+NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent)
+    : AbstractTool(parent), m_saveLoad(this), m_htmlGenerator(this), m_markdownHighlighter(this)
 {
-    m_saveLoad = new NotesSaveLoad(this);
-    m_htmlGenerator =  new HtmlGenerator(this);
-    m_markdownHighlighter = new MarkdownHighlighter(this);
+    engine->rootContext()->setContextProperty(QStringLiteral("notes_tool"), this);
 
-    engine->rootContext()->setContextProperty("notes_tool", this);
-
-    connect(this, &NotesTool::loadBooks, m_saveLoad, &NotesSaveLoad::loadBooks);
-    connect(m_saveLoad, &NotesSaveLoad::booksLoaded, this, &NotesTool::onNoteBooksLoaded);
-    connect(m_saveLoad, &NotesSaveLoad::pagesLoaded, this, &NotesTool::onPagesLoaded);
+    connect(this, &NotesTool::loadBooks, &m_saveLoad, &NotesSaveLoad::loadBooks);
+    connect(&m_saveLoad, &NotesSaveLoad::booksLoaded, this, &NotesTool::onNoteBooksLoaded);
+    connect(&m_saveLoad, &NotesSaveLoad::pagesLoaded, this, &NotesTool::onPagesLoaded);
 }
 
 void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
@@ -27,17 +24,17 @@ void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
     if (!m_qmlTextDoc || !m_qmlTextDoc->textDocument()) return;
 
     // Load style sheet
-    QFile f(":/notes/style.css");
+    QFile f(QStringLiteral(":/notes/style.css"));
     if (f.open(QIODevice::ReadOnly))
     {
-        QString style = f.readAll();
+        const QString style = f.readAll();
         m_qmlTextDoc->textDocument()->setDefaultStyleSheet(style);
         f.close();
     }
 
     connect(m_qmlTextDoc->textDocument(), &QTextDocument::contentsChanged, this, &NotesTool::onDocumentEdited);
 
-    m_markdownHighlighter->setDocument(m_qmlTextDoc->textDocument());
+    m_markdownHighlighter.setDocument(m_qmlTextDoc->textDocument());
 
     if (m_currentPage) displayPageContent();
 }
@@ -48,13 +45,13 @@ void NotesTool::setCurrentPage(NoteBookPage *page)
     {
         disconnect(m_currentPage, &NoteBookPage::contentLoaded, this, &NotesTool::onPageContentLoaded);
         disconnect(m_currentPage, &NoteBookPage::htmlGenerated, this, &NotesTool::onPageHtmlLoaded);
-        m_currentPage->setIsCurrent(false);
+        m_currentPage->isCurrent(false);
     }
 
     if (page)
     {
         m_currentPage = page;
-        m_currentPage->setIsCurrent(true);
+        m_currentPage->isCurrent(true);
         connect(m_currentPage, &NoteBookPage::contentLoaded, this, &NotesTool::onPageContentLoaded);
         connect(m_currentPage, &NoteBookPage::htmlGenerated, this, &NotesTool::onPageHtmlLoaded);
 
@@ -102,7 +99,7 @@ void NotesTool::exportPdf()
 {
     if (editMode() || !m_currentPage || !m_qmlTextDoc) return;
 
-    m_saveLoad->exportPage(m_currentPage, m_qmlTextDoc->textDocument());
+    m_saveLoad.exportPage(m_currentPage, m_qmlTextDoc->textDocument());
 }
 
 /**
@@ -111,22 +108,27 @@ void NotesTool::exportPdf()
  * @note Maybe this can later be used for integration
  * with other tools.
  */
-void NotesTool::linkClicked(const QString &link)
+void NotesTool::linkClicked(const QString &link) const
 {
     QDesktopServices::openUrl(link);
+}
+
+void NotesTool::createBook(const QString &name)
+{
+    if (!doesBookExist(name)) m_saveLoad.createBook(name, notesModel());
 }
 
 /**
  * Connect signals of newly loaded pages
  */
-void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages)
+void NotesTool::onPagesLoaded(const QList<NoteBookPage *> &pages) const
 {
     for (const auto *page : qAsConst(pages))
     {
         connect(page, &NoteBookPage::selected, this, &NotesTool::onPageClicked);
         connect(page, &NoteBookPage::closePage, this, &NotesTool::onClosePage);
-        connect(page, &NoteBookPage::generateHtml, m_htmlGenerator, &HtmlGenerator::startGenerating);
-        connect(m_htmlGenerator, &HtmlGenerator::generated, page, &NoteBookPage::onHtmlGenerated);
+        connect(page, &NoteBookPage::generateHtml, &m_htmlGenerator, &HtmlGenerator::startGenerating);
+        connect(&m_htmlGenerator, &HtmlGenerator::generated, page, &NoteBookPage::onHtmlGenerated);
     }
 }
 
@@ -153,8 +155,7 @@ void NotesTool::closeUnneededPages()
  */
 void NotesTool::displayPageContent()
 {
-    if (editMode())
-        onPageContentLoaded();
+    if (editMode()) onPageContentLoaded();
     else
         onPageHtmlLoaded();
 }
@@ -162,15 +163,19 @@ void NotesTool::displayPageContent()
 /**
  * Find out if a book already exists
  */
-auto NotesTool::doesBookExist(const QString &name) -> bool
+auto NotesTool::doesBookExist(const QString &name) const -> bool
 {
-    for (auto *object : m_notesModel->children())
-    {
-        auto *book = qobject_cast<NoteBook*>(object);
-        if (book && book->name() == name) return true;
-    }
+    const auto books = m_notesModel->children();
 
-    return false;
+    return std::any_of(books.constBegin(), books.constEnd(), [name](const QObject *object) {
+        const auto *book = qobject_cast<const NoteBook *>(object);
+        return book && book->name() == name;
+    });
+}
+
+void NotesTool::onNoteBooksLoaded(QObject *root)
+{
+    setNotesModel(root);
 }
 
 void NotesTool::onPageClicked()
@@ -182,7 +187,7 @@ void NotesTool::onPageClicked()
         emit openedPagesChanged();
     }
 
-    auto *page = qobject_cast<NoteBookPage*>(sender());
+    auto *page = qobject_cast<NoteBookPage *>(sender());
     setCurrentPage(page);
 }
 
@@ -205,10 +210,9 @@ void NotesTool::onClosePage()
                 break;
             }
 
-            if (i >= m_openedPages.length())
-                i = m_openedPages.length() -1;
+            if (i >= m_openedPages.length()) i = m_openedPages.length() - 1;
 
-            auto *newPage = qobject_cast<NoteBookPage*>(m_openedPages[i]);
+            auto *newPage = qobject_cast<NoteBookPage *>(m_openedPages.at(i));
 
             if (newPage) newPage->toggle();
 
@@ -228,7 +232,7 @@ void NotesTool::onPageContentLoaded()
         m_cursorPosition = m_currentPage->cursorPosition();
 
         auto *doc = m_qmlTextDoc->textDocument();
-        doc->setDefaultFont(QFont("Mono"));
+        doc->setDefaultFont(QFont(QStringLiteral("Mono")));
         doc->setPlainText(m_currentPage->content());
     }
 }
@@ -242,7 +246,7 @@ void NotesTool::onPageHtmlLoaded()
         if (!m_currentPage->content().isEmpty())
         {
             auto *doc = m_qmlTextDoc->textDocument();
-            doc->setDefaultFont(QFont("sans serif"));
+            doc->setDefaultFont(QFont(QStringLiteral("sans serif")));
             doc->setHtml(m_currentPage->html());
         }
     }
@@ -258,8 +262,7 @@ void NotesTool::onDocumentEdited()
     {
         auto plainText = doc->toPlainText();
 
-        if (plainText != m_currentPage->content())
-            m_currentPage->setContent(plainText);
+        if (plainText != m_currentPage->content()) m_currentPage->setContent(plainText);
     }
 
     // Have we just replaced the document content?

@@ -25,7 +25,7 @@ private:
     static constexpr int TRY_AGAIN_TIMEOUT_MS = 3000;
     static constexpr int PROCESS_TERMINATE_TIMEOUT_MS = 1000;
 
-    void initProcess();
+    void initProcess() const;
     static auto isOtherProcessIsRunning() -> bool;
 
     static auto getLibrespotPath() -> QString;
@@ -47,11 +47,12 @@ private:
     };
 
     auto getLibrespotInfo() -> LibrespotInfo;
+    void printOutputAndUpdateStatus(const QString &line);
 
     AsyncFuture::Deferred<bool> m_hasAuthenticated;
 
 private slots:
-    void onLibrespotFinished(int exitCode, const QProcess::ExitStatus &exitStatus);
-    void onLibrespotError(const QProcess::ProcessError &error);
+    void onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void onLibrespotError(QProcess::ProcessError error) const;
     void onLibrespotOutputReady();
 };

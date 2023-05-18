@@ -6,7 +6,7 @@
 #include "src/tools/audio/audiosaveload.h"
 #include "src/tools/audio/thumbnails/audiothumbnailgenerator.h"
 
-AddonElementManager::AddonElementManager(QObject *parent) : AbstractTool(parent), a_currentIndex(-1)
+AddonElementManager::AddonElementManager(QObject *parent) : AbstractTool(parent)
 {
     connect(this, &AddonElementManager::currentIndexChanged, this, &AddonElementManager::onCurrentIndexChanged);
     connect(this, &AddonElementManager::projectsChanged, this, &AddonElementManager::onProjectsChanged);
@@ -55,11 +55,9 @@ void AddonElementManager::onInstalledAddonsChanged(const QList<Addon *> &addons)
 
 void AddonElementManager::onCurrentIndexChanged(int index)
 {
-    const auto _addons = addons();
+    if (!Utils::isInBounds(addons(), index)) return;
 
-    if (!Utils::isInBounds(_addons, index)) return;
-
-    const auto *addon = _addons[index];
+    const auto *addon = addons().at(index);
 
     if (!addon) return;
 
@@ -67,12 +65,12 @@ void AddonElementManager::onCurrentIndexChanged(int index)
     emit projectsChanged(a_projects);
 }
 
-void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario)
+void AddonElementManager::onCurrentScenarioChanged(AudioScenario *scenario) const
 {
     AudioThumbnailGenerator::generateThumbnails(scenario);
 }
 
-void AddonElementManager::onProjectsChanged(QList<AudioProject *> projects)
+void AddonElementManager::onProjectsChanged(QList<AudioProject *> projects) const
 {
     for (auto *project : qAsConst(projects))
     {

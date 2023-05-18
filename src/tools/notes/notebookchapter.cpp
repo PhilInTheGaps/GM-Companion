@@ -8,8 +8,9 @@ NoteBookChapter::NoteBookChapter(const QString &name, int depth, QObject *parent
 QList<NoteBookPage *> NoteBookChapter::pages() const
 {
     QList<NoteBookPage *> pages;
+    pages.reserve(children().size());
 
-    for (auto *child : children())
+    foreach (auto *child, children())
     {
         auto *page = qobject_cast<NoteBookPage *>(child);
         if (page) pages.append(page);
@@ -31,7 +32,7 @@ void NoteBookChapter::create(const QString &type, const QString &name)
 {
     const auto creatableTypes = creatables();
 
-    if (type == creatableTypes.first())
+    if (type == creatableTypes.constFirst())
     {
         emit createPage(name);
     }

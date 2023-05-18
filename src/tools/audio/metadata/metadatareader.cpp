@@ -1,16 +1,14 @@
 #include "metadatareader.h"
-#include "utils/utils.h"
 #include "logging.h"
-#include <QMediaMetaData>
 #include <QImage>
+#include <QMediaMetaData>
 
+#include <taglib/fileref.h>
 #include <taglib/tbytevector.h>
 #include <taglib/tbytevectorstream.h>
-#include <taglib/fileref.h>
 
-MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent)
+MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent), m_metaData(new AudioMetaData(this))
 {
-    m_metaData = new AudioMetaData(this);
 }
 
 void MetaDataReader::setMetaData(AudioMetaData *metaData)
@@ -33,25 +31,26 @@ void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
     updateDuration(mediaPlayer->duration() * 1000);
 }
 
-void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
+void MetaDataReader::updateMetaData(const QString &key, const QVariant &value)
 {
     qCDebug(gmAudioMetaData()) << "Updating meta data:" << key;
 
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    if (key == "Title")
+    if (key == QLatin1String("Title"))
     {
-        m_metaData->setTitle(value.toString());
+        m_metaData->title(value.toString());
     }
-    else if ((key == "AlbumArtist") || (key == "Artist") || (key == "Composer"))
+    else if ((key == QLatin1String("AlbumArtist")) || (key == QLatin1String("Artist")) ||
+             (key == QLatin1String("Composer")))
     {
-        m_metaData->setArtist(value.toString());
+        m_metaData->artist(value.toString());
     }
-    else if (key == "AlbumTitle")
+    else if (key == QLatin1String("AlbumTitle"))
     {
-        m_metaData->setAlbum(value.toString());
+        m_metaData->album(value.toString());
     }
-    else if ((key == "CoverArtImage") || (key == "ThumbnailImage"))
+    else if ((key == QLatin1String("CoverArtImage")) || (key == QLatin1String("ThumbnailImage")))
     {
         if (m_coverFile) m_coverFile->deleteLater();
 
@@ -64,13 +63,13 @@ void MetaDataReader::updateMetaData(const QString& key, const QVariant& value)
                 qWarning(gmAudioMetaData()) << "Could not save cover art in temp file.";
             }
 
-            m_metaData->setCover(QUrl::fromLocalFile(m_coverFile->fileName()).toEncoded());
+            m_metaData->cover(QUrl::fromLocalFile(m_coverFile->fileName()).toEncoded());
             m_coverFile->close();
         }
     }
-    else if (key == "Type")
+    else if (key == QLatin1String("Type"))
     {
-        m_metaData->setType(value.toString());
+        m_metaData->type(value.toString());
     }
 }
 
@@ -85,9 +84,9 @@ void MetaDataReader::updateMetaData(const QByteArray &data)
 
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    TagLib::ByteVector bvector(data.data(), data.length());
+    const TagLib::ByteVector bvector(data.data(), data.length());
     TagLib::ByteVectorStream bvstream(bvector);
-    TagLib::FileRef ref(&bvstream);
+    const TagLib::FileRef ref(&bvstream);
     auto *tag = ref.tag();
 
     if (!tag || tag->isEmpty()) return;
@@ -98,20 +97,20 @@ void MetaDataReader::updateMetaData(const QByteArray &data)
     auto artist = tag->artist();
     auto album = tag->album();
 
-    if (!title.isEmpty())  m_metaData->setTitle(QString::fromStdString(title.to8Bit(true)));
-    if (!artist.isEmpty()) m_metaData->setArtist(QString::fromStdString(artist.to8Bit(true)));
-    if (!album.isEmpty())  m_metaData->setAlbum(QString::fromStdString(album.to8Bit(true)));
+    if (!title.isEmpty()) m_metaData->title(QString::fromStdString(title.to8Bit(true)));
+    if (!artist.isEmpty()) m_metaData->artist(QString::fromStdString(artist.to8Bit(true)));
+    if (!album.isEmpty()) m_metaData->album(QString::fromStdString(album.to8Bit(true)));
 
     emit metaDataChanged();
 
 #endif
 }
 
-void MetaDataReader::updateDuration(const qint64& duration)
+void MetaDataReader::updateDuration(qint64 duration)
 {
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    m_metaData->setLength(duration);
+    m_metaData->length(duration);
     emit metaDataChanged();
 }
 
@@ -121,11 +120,11 @@ void MetaDataReader::clearMetaData()
 
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    m_metaData->setArtist(QStringLiteral("-"));
-    m_metaData->setAlbum(QStringLiteral("-"));
-    m_metaData->setTitle(QStringLiteral("-"));
-    m_metaData->setCover(QStringLiteral(""));
-    m_metaData->setLength(0);
+    m_metaData->artist(QStringLiteral("-"));
+    m_metaData->album(QStringLiteral("-"));
+    m_metaData->title(QStringLiteral("-"));
+    m_metaData->cover(QLatin1String(""));
+    m_metaData->length(0);
 
     emit metaDataChanged();
 }

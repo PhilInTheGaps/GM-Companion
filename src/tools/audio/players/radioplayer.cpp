@@ -6,32 +6,39 @@
 
 using namespace AsyncFuture;
 
-RadioPlayer::RadioPlayer(MetaDataReader *metaDataReader, QObject *parent) : AudioPlayer(parent)
+static constexpr auto BUFFER_FULL = 100;
+
+RadioPlayer::RadioPlayer(MetaDataReader &metaDataReader, QObject *parent) : AudioPlayer(parent)
 {
     qCDebug(gmAudioRadio()) << "Loading RadioPlayer ...";
 
-    m_mediaPlayer = new QMediaPlayer(this);
-    m_mediaPlayer->setObjectName(tr("Radio"));
+    m_mediaPlayer.setObjectName(tr("Radio"));
 
-    connect(m_mediaPlayer, &QMediaPlayer::stateChanged, [=]() {
-        qCDebug(gmAudioRadio()) << "State changed:" << m_mediaPlayer->state();
+    connect(&m_mediaPlayer, &QMediaPlayer::stateChanged, this, [this]() {
+        qCDebug(gmAudioRadio()) << "State changed:" << m_mediaPlayer.state();
 
-        if (m_mediaPlayer->state() == QMediaPlayer::PlayingState) emit startedPlaying();
+        if (m_mediaPlayer.state() == QMediaPlayer::PlayingState) emit startedPlaying();
     });
 
-    connect(m_mediaPlayer, &QMediaPlayer::bufferStatusChanged,
-            [=]() { qCDebug(gmAudioRadio()) << "Buffer status changed:" << m_mediaPlayer->bufferStatus(); });
-    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged,
-            [=]() { qCDebug(gmAudioRadio()) << "Media status changed:" << m_mediaPlayer->mediaStatus(); });
-    connect(m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), [=](QMediaPlayer::Error error) {
-        qCDebug(gmAudioRadio()) << "Error:" << error << m_mediaPlayer->errorString();
-    });
+    connect(&m_mediaPlayer, &QMediaPlayer::bufferStatusChanged, this,
+            [this]() { qCDebug(gmAudioRadio()) << "Buffer status changed:" << m_mediaPlayer.bufferStatus(); });
+    connect(&m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this,
+            [this]() { qCDebug(gmAudioRadio()) << "Media status changed:" << m_mediaPlayer.mediaStatus(); });
+    connect(&m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this,
+            [this](QMediaPlayer::Error error) {
+                qCDebug(gmAudioRadio()) << "Error:" << error << m_mediaPlayer.errorString();
+            });
+
+    connect(&m_playlist, &QMediaPlaylist::loaded, this,
+            []() { qCDebug(gmAudioRadio()) << "Successfully loaded playlist."; });
+    connect(&m_playlist, &QMediaPlaylist::loadFailed, this,
+            [this]() { qCDebug(gmAudioRadio()) << "Failed to load playlist:" << m_playlist.errorString(); });
 
     // MetaData
-    connect(m_mediaPlayer, QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
-    connect(m_mediaPlayer, QOverload<const QString &, const QVariant &>::of(&QMediaObject::metaDataChanged),
-            metaDataReader, QOverload<const QString &, const QVariant &>::of(&MetaDataReader::updateMetaData));
-    connect(this, QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged), metaDataReader,
+    connect(&m_mediaPlayer, QOverload<>::of(&QMediaObject::metaDataChanged), this, &RadioPlayer::onMetaDataChanged);
+    connect(&m_mediaPlayer, QOverload<const QString &, const QVariant &>::of(&QMediaObject::metaDataChanged),
+            &metaDataReader, QOverload<const QString &, const QVariant &>::of(&MetaDataReader::updateMetaData));
+    connect(this, QOverload<QMediaPlayer *>::of(&RadioPlayer::metaDataChanged), &metaDataReader,
             QOverload<QMediaPlayer *>::of(&MetaDataReader::updateMetaData));
 }
 
@@ -45,13 +52,13 @@ void RadioPlayer::play(AudioElement *element)
 
     qCDebug(gmAudioRadio()) << "Playing radio element:" << element->name();
 
-    m_mediaPlayer->stop();
-    m_mediaPlayer->setObjectName(tr("Radio") + ": " + element->name());
+    m_mediaPlayer.stop();
+    m_mediaPlayer.setObjectName(tr("Radio") + ": " + element->name());
     m_currentElement = element;
 
     if (element->files().empty()) return;
 
-    auto *audioFile = element->files()[0];
+    const auto *audioFile = element->files().constFirst();
     m_fileName = audioFile->url();
 
     if (audioFile->source() == AudioFile::Source::File)
@@ -62,15 +69,16 @@ void RadioPlayer::play(AudioElement *element)
         m_fileRequestContext = new QObject(this);
 
         m_fileName = audioFile->url();
-        observe(Files::File::getDataAsync(FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath("music"))))
+        observe(Files::File::getDataAsync(
+                    FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath(QStringLiteral("music")))))
             .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
     }
     else
     {
         qCDebug(gmAudioRadio()) << "Playing radio from url:" << audioFile->url();
-        m_mediaPlayer->setMedia(QUrl(audioFile->url()));
-        m_mediaPlayer->setMuted(false);
-        m_mediaPlayer->play();
+        m_mediaPlayer.setMedia(QUrl(audioFile->url()));
+        m_mediaPlayer.setMuted(false);
+        m_mediaPlayer.play();
     }
 }
 
@@ -80,7 +88,7 @@ void RadioPlayer::play(AudioElement *element)
 void RadioPlayer::play()
 {
     qCDebug(gmAudioRadio()) << "Continue play of RadioPlayer ...";
-    m_mediaPlayer->play();
+    m_mediaPlayer.play();
 }
 
 /**
@@ -89,7 +97,7 @@ void RadioPlayer::play()
 void RadioPlayer::pause()
 {
     qCDebug(gmAudioRadio()) << "Pausing RadioPlayer ...";
-    m_mediaPlayer->pause();
+    m_mediaPlayer.pause();
 }
 
 /**
@@ -99,13 +107,13 @@ void RadioPlayer::stop()
 {
     qCDebug(gmAudioRadio()) << "Stopping RadioPlayer ...";
 
-    m_mediaPlayer->stop();
+    m_mediaPlayer.stop();
 }
 
 void RadioPlayer::setVolume(int linear, int logarithmic)
 {
     Q_UNUSED(linear)
-    m_mediaPlayer->setVolume(logarithmic);
+    m_mediaPlayer.setVolume(logarithmic);
 }
 
 /**
@@ -115,9 +123,9 @@ void RadioPlayer::onMetaDataChanged()
 {
     qCDebug(gmAudioRadio()) << "MetaData changed!";
 
-    if ((m_mediaPlayer->bufferStatus() == 100) || (m_mediaPlayer->mediaStatus() == QMediaPlayer::BufferedMedia))
+    if ((m_mediaPlayer.bufferStatus() == BUFFER_FULL) || (m_mediaPlayer.mediaStatus() == QMediaPlayer::BufferedMedia))
     {
-        emit metaDataChanged(m_mediaPlayer);
+        emit metaDataChanged(&m_mediaPlayer);
     }
 }
 
@@ -127,7 +135,7 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
 
     qCDebug(gmAudioRadio()) << "Received file ...";
 
-    m_mediaPlayer->stop();
+    m_mediaPlayer.stop();
 
     if (result->data().isEmpty())
     {
@@ -136,12 +144,7 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
         return;
     }
 
-    if (m_playlist) m_playlist->deleteLater();
-
-    m_playlist = new QMediaPlaylist(this);
-    connect(m_playlist, &QMediaPlaylist::loaded, [=]() { qCDebug(gmAudioRadio()) << "Successfully loaded playlist."; });
-    connect(m_playlist, &QMediaPlaylist::loadFailed,
-            [=]() { qCDebug(gmAudioRadio()) << "Failed to load playlist:" << m_playlist->errorString(); });
+    m_playlist.clear();
 
 #ifdef Q_OS_WIN
     QFile file(m_tempDir.path() + "/" + FileUtils::fileName(m_fileName));
@@ -173,17 +176,17 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
     file.write(result->data());
     file.close();
 
-    m_playlist->load(QUrl::fromLocalFile(file.fileName()));
+    m_playlist.load(QUrl::fromLocalFile(file.fileName()));
 #else
     m_mediaBuffer.close();
     m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
-    m_playlist->load(&m_mediaBuffer);
+    m_playlist.load(&m_mediaBuffer);
 #endif
 
-    m_mediaPlayer->setMuted(false);
-    m_mediaPlayer->setPlaylist(m_playlist);
-    m_mediaPlayer->play();
+    m_mediaPlayer.setMuted(false);
+    m_mediaPlayer.setPlaylist(&m_playlist);
+    m_mediaPlayer.play();
 
     result->deleteLater();
 }

@@ -20,12 +20,12 @@ class MusicPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    explicit MusicPlayer(MetaDataReader *metaDataReader, QObject *parent = nullptr);
+    explicit MusicPlayer(MetaDataReader &metaDataReader, QObject *parent = nullptr);
 
     void play(AudioElement *element);
     void setIndex(int index);
 
-    AUTO_PROPERTY(int, playlistIndex);
+    AUTO_PROPERTY_VAL2(int, playlistIndex, 0);
     READ_PROPERTY(QList<AudioFile *>, playlist)
 
 public slots:
@@ -37,10 +37,9 @@ public slots:
     void again() override;
 
 private:
-    SpotifyPlayer *m_spotifyPlayer = nullptr;
-    QMediaPlayer *m_mediaPlayer = nullptr;
+    SpotifyPlayer m_spotifyPlayer;
+    QMediaPlayer m_mediaPlayer;
     AudioElement *m_currentElement = nullptr;
-    MetaDataReader *m_metaDataReader = nullptr;
 
     /// Context object to easily stop file data requests by deleting the object
     QObject *m_fileRequestContext = nullptr;
@@ -60,11 +59,11 @@ private:
     void loadLocalFile(AudioFile *file);
     void loadWebFile(AudioFile *file);
     void loadSpotifyFile(AudioFile *file);
-    void loadYoutubeFile(AudioFile *file);
+    void loadYoutubeFile(AudioFile *file) const;
 
     auto loadPlaylist() -> QFuture<void>;
     void clearPlaylist();
-    void loadTrackNamesAsync();
+    void loadTrackNamesAsync() const;
     static void loadSpotifyTrackNamesAsync(const QList<AudioFile *> &tracks);
 
     auto loadPlaylistRecursive(int index = 0) -> QFuture<void>;
@@ -72,9 +71,8 @@ private:
     void applyShuffleMode();
     void startPlaying();
 
-    void connectPlaybackStateSignals();
-    void connectMetaDataSignals(MetaDataReader *metaDataReader);
-    void initSpotifyPlayer();
+    void connectPlaybackStateSignals() const;
+    void connectMetaDataSignals(MetaDataReader &metaDataReader) const;
 
     void printPlaylist() const;
 
@@ -82,7 +80,7 @@ private slots:
     void onMediaPlayerStateChanged();
     void onMediaPlayerMediaStatusChanged();
     void onMediaPlayerError(QMediaPlayer::Error error);
-    void onMediaPlayerMediaChanged();
+    void onMediaPlayerMediaChanged() const;
     void onFileReceived(Files::FileDataResult *result);
     void onSpotifySongEnded();
 

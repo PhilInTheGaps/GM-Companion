@@ -8,11 +8,11 @@ class AbstractTool : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractTool(QObject *parent = nullptr);
+    using QObject::QObject;
 
-    bool isDataLoaded() const;
+    [[nodiscard]] auto isDataLoaded() const -> bool;
 
-    AUTO_PROPERTY(bool, isLoading)
+    AUTO_PROPERTY_VAL2(bool, isLoading, false)
 
 public slots:
     virtual void loadData() = 0;

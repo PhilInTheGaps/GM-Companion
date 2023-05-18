@@ -1,8 +1,8 @@
 #ifndef MPRISADAPTOR_H
 #define MPRISADAPTOR_H
 
-#include <QObject>
 #include <QDBusAbstractAdaptor>
+#include <QObject>
 
 class MprisAdaptor : public QDBusAbstractAdaptor
 {
@@ -17,19 +17,42 @@ class MprisAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes CONSTANT)
 
 public:
-    MprisAdaptor(QObject *obj) : QDBusAbstractAdaptor(obj) {}
+    MprisAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent)
+    {
+    }
 
-    bool canQuit() const { return false; }
-    bool canRaise() const { return false; }
-    bool hasTrackList() const { return false; }
-    QString identity() const { return "GM-Companion"; }
-    QString desktopEntry() const { return "gm-companion"; }
-    QStringList supportedUriSchemes() const { return {}; }
-    QStringList supportedMimeTypes() const { return {}; }
+    [[nodiscard]] bool canQuit() const
+    {
+        return false;
+    }
+    [[nodiscard]] bool canRaise() const
+    {
+        return false;
+    }
+    [[nodiscard]] bool hasTrackList() const
+    {
+        return false;
+    }
+    [[nodiscard]] QString identity() const
+    {
+        return QStringLiteral("GM-Companion");
+    }
+    [[nodiscard]] QString desktopEntry() const
+    {
+        return QStringLiteral("gm-companion");
+    }
+    [[nodiscard]] QStringList supportedUriSchemes() const
+    {
+        return {};
+    }
+    [[nodiscard]] QStringList supportedMimeTypes() const
+    {
+        return {};
+    }
 
 public slots:
-    Q_NOREPLY void Raise();
-    Q_NOREPLY void Quit();
+    Q_NOREPLY void Raise() const;
+    Q_NOREPLY void Quit() const;
 };
 
 #endif // MPRISADAPTOR_H

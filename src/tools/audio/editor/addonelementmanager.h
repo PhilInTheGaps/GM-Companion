@@ -12,7 +12,7 @@ class AddonElementManager : public AbstractTool
     Q_OBJECT
     READ_PROPERTY(QList<Addon *>, addons)
     READ_PROPERTY(QList<AudioProject *>, projects)
-    AUTO_PROPERTY(int, currentIndex)
+    AUTO_PROPERTY_VAL2(int, currentIndex, -1)
 
 public:
     explicit AddonElementManager(QObject *parent = nullptr);
@@ -23,8 +23,8 @@ public slots:
 private slots:
     void onInstalledAddonsChanged(const QList<Addon *> &addons);
     void onCurrentIndexChanged(int index);
-    void onCurrentScenarioChanged(AudioScenario *scenario);
-    void onProjectsChanged(QList<AudioProject *> projects);
+    void onCurrentScenarioChanged(AudioScenario *scenario) const;
+    void onProjectsChanged(QList<AudioProject *> projects) const;
 
 private:
     void loadAddonProjects(const Addon &addon);

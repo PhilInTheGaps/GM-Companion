@@ -31,12 +31,13 @@ AudioProject::AudioProject(const AudioProject &other, QObject *parent)
 }
 
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
-    : TreeItem("", 0, true, parent), a_isSaved(true), a_version(object["version"].toInt()), a_wasRenamed(false)
+    : TreeItem(QLatin1String(""), 0, true, parent), a_isSaved(true), a_version(object[QStringLiteral("version")].toInt()), a_wasRenamed(false)
 {
     name(object[QStringLiteral("name")].toString());
     const auto categories = object[QStringLiteral("categories")].toArray();
+    m_categories.reserve(categories.size());
 
-    for (auto category : categories)
+    foreach (const auto &category, categories)
     {
         auto *object = new AudioCategory(category.toObject(), name(), this);
         prepareCategory(object);
@@ -133,8 +134,8 @@ auto AudioProject::addCategory(AudioCategory *category, bool setAsCurrent) -> bo
 
 auto AudioProject::containsCategory(const QString &name) const -> bool
 {
-    return std::any_of(m_categories.begin(), m_categories.end(),
-                       [name](AudioCategory *category) { return category && category->name() == name; });
+    return std::any_of(m_categories.constBegin(), m_categories.constEnd(),
+                       [name](const AudioCategory *category) { return category && category->name() == name; });
 }
 
 /**
@@ -154,7 +155,7 @@ auto AudioProject::elements() const -> QList<AudioElement *>
 {
     QList<AudioElement *> list;
 
-    for (const auto *category : m_categories)
+    foreach (const auto *category, m_categories)
     {
         if (category) list.append(category->elements());
     }
@@ -162,7 +163,7 @@ auto AudioProject::elements() const -> QList<AudioElement *>
     return list;
 }
 
-auto AudioProject::connectSignals() -> void
+auto AudioProject::connectSignals() const -> void
 {
     connect(this, &AudioProject::nameChanged, this, &AudioProject::onWasEdited);
     connect(this, &AudioProject::categoriesChanged, this, &AudioProject::onWasEdited);

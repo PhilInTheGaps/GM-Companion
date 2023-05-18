@@ -65,7 +65,7 @@ void MprisManager::updateMetaData(AudioMetaData *metaData)
  * @param property Name of the property
  * @param value Value of the property
  */
-void MprisManager::sendMprisUpdateSignal(const QString &property, const QVariant &value)
+void MprisManager::sendMprisUpdateSignal(const QString &property, const QVariant &value) const
 {
 #ifndef NO_DBUS
     QDBusMessage signal = QDBusMessage::createSignal(

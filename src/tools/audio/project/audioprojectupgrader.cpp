@@ -19,8 +19,7 @@ auto AudioProjectUpgrader::run() -> QByteArray
     const auto categories = project[QStringLiteral("categories")].toArray();
     const auto categoriesNew = convertCategories(categories);
 
-    QJsonObject projectNew{{"name", project["name"]}, {"version", NEW_VERSION}, {"categories", categoriesNew}};
-
+    const QJsonObject projectNew{{"name", project["name"]}, {"version", NEW_VERSION}, {"categories", categoriesNew}};
     return QJsonDocument(projectNew).toJson();
 }
 
@@ -31,7 +30,7 @@ auto AudioProjectUpgrader::convertCategories(const QJsonArray &categories) -> QJ
     for (const auto &category : categories)
     {
         QJsonObject categoryNew{{"name", category.toObject()["name"]}};
-        const auto scenarios = category.toObject()["scenarios"].toArray();
+        const auto scenarios = category.toObject()[QStringLiteral("scenarios")].toArray();
 
         categoryNew.insert(QStringLiteral("scenarios"), convertScenarios(scenarios));
         categoriesNew.append(categoryNew);
@@ -48,25 +47,25 @@ auto AudioProjectUpgrader::convertScenarios(const QJsonArray &scenarios) -> QJso
     {
         QJsonObject scenarioNew{{"name", scenario["name"]}};
 
-        const auto musicElements = scenario["music_elements"].toArray();
+        const auto musicElements = scenario[QStringLiteral("music_elements")].toArray();
         auto musicElementsNew = convertMusicElements(musicElements);
 
-        const auto spotifyElements = scenario["spotify_elements"].toArray();
+        const auto spotifyElements = scenario[QStringLiteral("spotify_elements")].toArray();
         convertSpotifyElements(spotifyElements, musicElementsNew);
 
-        const auto radioElements = scenario["radio_elements"].toArray();
+        const auto radioElements = scenario[QStringLiteral("radio_elements")].toArray();
         const auto radioElementsNew = convertRadioElements(radioElements);
 
-        const auto soundElements = scenario["sound_elements"].toArray();
+        const auto soundElements = scenario[QStringLiteral("sound_elements")].toArray();
         const auto soundElementsNew = convertSoundElements(soundElements);
 
-        const auto subScenarios = scenario["scenarios"].toArray();
+        const auto subScenarios = scenario[QStringLiteral("scenarios")].toArray();
         const auto subScenariosNew = convertScenarios(subScenarios);
 
-        scenarioNew.insert("music_elements", musicElementsNew);
-        scenarioNew.insert("radio_elements", radioElementsNew);
-        scenarioNew.insert("sound_elements", soundElementsNew);
-        scenarioNew.insert("scenarios", subScenariosNew);
+        scenarioNew.insert(QStringLiteral("music_elements"), musicElementsNew);
+        scenarioNew.insert(QStringLiteral("radio_elements"), radioElementsNew);
+        scenarioNew.insert(QStringLiteral("sound_elements"), soundElementsNew);
+        scenarioNew.insert(QStringLiteral("scenarios"), subScenariosNew);
 
         scenariosNew.append(scenarioNew);
     }
@@ -86,12 +85,12 @@ auto AudioProjectUpgrader::convertMusicElements(const QJsonArray &elements) -> Q
 
         QJsonArray filesNew;
 
-        for (auto file : element.toObject()["files"].toArray())
+        foreach (const auto &file, element.toObject()[QStringLiteral("files")].toArray())
         {
             filesNew.append(QJsonObject{{"url", file.toString()}, {"source", 0}});
         }
 
-        elementNew.insert("files", filesNew);
+        elementNew.insert(QStringLiteral("files"), filesNew);
         elementsNew.append(elementNew);
     }
 
@@ -110,7 +109,7 @@ void AudioProjectUpgrader::convertSpotifyElements(const QJsonArray &elements, QJ
         QJsonArray filesNew;
         filesNew.append(QJsonObject{{"url", element.toObject()["id"]}, {"source", 2}});
 
-        elementNew.insert("files", filesNew);
+        elementNew.insert(QStringLiteral("files"), filesNew);
         musicElementsNew.append(elementNew);
     }
 }
@@ -133,7 +132,7 @@ auto AudioProjectUpgrader::convertRadioElements(const QJsonArray &elements) -> Q
         filesNew.append(
             QJsonObject{{"url", element.toObject()["url"]}, {"source", element.toObject()["local"].toBool() ? 0 : 1}});
 
-        elementNew.insert("files", filesNew);
+        elementNew.insert(QStringLiteral("files"), filesNew);
         elementsNew.append(elementNew);
     }
 

@@ -1,16 +1,16 @@
 #include "combatant.h"
-#include <utility>
 #include <QDebug>
+#include <utility>
 
 Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, QObject *parent)
     : Combatant(name, notes, ini, health, priority, false, parent)
 {
 }
 
-Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, bool delay, QObject *parent)
+Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, bool delay,
+                     QObject *parent)
     : QObject(parent), a_name(name), a_notes(notes), a_ini(ini), a_health(health), a_priority(priority), a_delay(delay)
 {
-
 }
 
 auto Combatant::toJson() const -> QJsonObject
@@ -23,19 +23,14 @@ auto Combatant::toJson() const -> QJsonObject
                         {"delay", delay()}});
 }
 
-auto Combatant::fromJson(const QJsonObject &json, QObject *parent) -> Combatant*
+auto Combatant::fromJson(const QJsonObject &json, QObject *parent) -> Combatant *
 {
-    return new Combatant(
-                json["name"].toString(),
-                json["notes"].toString(),
-                json["ini"].toInt(),
-                json["health"].toInt(),
-                json["priority"].toInt(),
-                json["delay"].toBool(),
-                parent);
+    return new Combatant(json[QStringLiteral("name")].toString(), json[QStringLiteral("notes")].toString(),
+                         json[QStringLiteral("ini")].toInt(), json[QStringLiteral("health")].toInt(),
+                         json[QStringLiteral("priority")].toInt(), json[QStringLiteral("delay")].toBool(), parent);
 }
 
-auto CombatantListModel::data(const QModelIndex& index, int /*role*/) const -> QVariant
+auto CombatantListModel::data(const QModelIndex &index, int /*role*/) const -> QVariant
 {
     auto *item = m_items.at(index.row());
     return QVariant::fromValue(item);
@@ -75,7 +70,7 @@ auto CombatantListModel::clear() -> void
 {
     while (!m_items.empty())
     {
-        remove(m_items.first());
+        remove(m_items.constFirst());
     }
 }
 
@@ -86,11 +81,11 @@ void CombatantListModel::move(int from, int to)
     endMoveRows();
 }
 
-auto CombatantListModel::setElements(const QList<Combatant *>&elements) -> void
+auto CombatantListModel::setElements(const QList<Combatant *> &elements) -> void
 {
     clear();
 
-    for (auto *element : elements)
+    foreach (auto *element, elements)
     {
         append(element);
     }

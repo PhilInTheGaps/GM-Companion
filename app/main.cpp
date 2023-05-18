@@ -50,7 +50,8 @@ void initTranslations()
     qCDebug(gmMain()) << "Initializing translations ...";
     auto *translator = new QTranslator;
 
-    if (translator->load(SettingsManager::getLanguage(), "gm-companion", "_", ":/translations"))
+    if (translator->load(SettingsManager::getLanguage(), QStringLiteral("gm-companion"), QStringLiteral("_"),
+                         QStringLiteral(":/translations")))
     {
         QGuiApplication::installTranslator(translator);
 
@@ -67,24 +68,24 @@ void initResources()
 {
     Q_INIT_RESOURCE(fontawesome);
     Q_INIT_RESOURCE(libresources);
-    QFontDatabase::addApplicationFont(":/fonts/fa-solid.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/fa-regular.ttf");
-    QFontDatabase::addApplicationFont(":/fonts/fa-brands.ttf");
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-solid.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-regular.ttf"));
+    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-brands.ttf"));
 }
 
 auto main(int argc, char *argv[]) -> int
 {
     QGuiApplication app(argc, argv);
-    QGuiApplication::setApplicationName("GM-Companion");
-    QGuiApplication::setOrganizationName("GM-Companion");
-    QGuiApplication::setOrganizationDomain("gm-companion.github.io");
+    QGuiApplication::setApplicationName(QStringLiteral("GM-Companion"));
+    QGuiApplication::setOrganizationName(QStringLiteral("GM-Companion"));
+    QGuiApplication::setOrganizationDomain(QStringLiteral("gm-companion.github.io"));
     QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
 
 #if defined(Q_OS_WIN)
     app.setFont(QFont("Segoe UI"));
 #endif // if defined(Q_OS_WIN)
 
-    Logger logger;
+    const Logger logger;
 
     qCDebug(gmMain()).noquote() << "Starting GM-Companion" << CURRENT_VERSION << "...";
 
@@ -116,7 +117,7 @@ auto main(int argc, char *argv[]) -> int
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
     // Make classes available for QML
-    QUrl source(QStringLiteral("qrc:/main.qml"));
+    QUrl const source(QStringLiteral("qrc:/main.qml"));
 
     QQuickStyle::setStyle(QStringLiteral(":/style"));
 
@@ -131,29 +132,29 @@ auto main(int argc, char *argv[]) -> int
     GoogleDrive gd(networkManager, nullptr);
     Files::File::init(&nc, &gd);
 
-    engine.rootContext()->setContextProperty("settings_manager", new QuickSettingsManager);
-    engine.rootContext()->setContextProperty("update_manager", new UpdateManager);
-    engine.rootContext()->setContextProperty("addon_manager", AddonManager::instance());
-    engine.rootContext()->setContextProperty("addon_repository_manager",
+    engine.rootContext()->setContextProperty(QStringLiteral("settings_manager"), new QuickSettingsManager);
+    engine.rootContext()->setContextProperty(QStringLiteral("update_manager"), new UpdateManager);
+    engine.rootContext()->setContextProperty(QStringLiteral("addon_manager"), AddonManager::instance());
+    engine.rootContext()->setContextProperty(QStringLiteral("addon_repository_manager"),
                                              &(AddonManager::instance()->repositoryManager()));
-    engine.rootContext()->setContextProperty("message_manager", MessageManager::instance());
-    engine.addImageProvider("audioElementIcons", new AudioThumbnailProvider);
+    engine.rootContext()->setContextProperty(QStringLiteral("message_manager"), MessageManager::instance());
+    engine.addImageProvider(QStringLiteral("audioElementIcons"), new AudioThumbnailProvider);
 
     // Services
-    engine.rootContext()->setContextProperty("spotify_service", Spotify::instance());
-    engine.rootContext()->setContextProperty("googledrive_service", &gd);
-    engine.rootContext()->setContextProperty("nextcloud_service", &nc);
+    engine.rootContext()->setContextProperty(QStringLiteral("spotify_service"), Spotify::instance());
+    engine.rootContext()->setContextProperty(QStringLiteral("googledrive_service"), &gd);
+    engine.rootContext()->setContextProperty(QStringLiteral("nextcloud_service"), &nc);
 
     // Load tools
-    AudioTool audioTool(&engine);
-    MapTool mapTool(&engine);
-    DiceTool diceTool(&engine);
-    CombatTracker combatTracker(&engine);
-    ShopTool shopTool(&engine);
-    CharacterTool characterTool(&engine);
-    NameGenerator nameGenerator(&engine);
-    NotesTool notesTool(&engine);
-    ConverterTool converterTool(&engine);
+    const AudioTool audioTool(&engine);
+    const MapTool mapTool(&engine);
+    const DiceTool diceTool(&engine);
+    const CombatTracker combatTracker(&engine);
+    const ShopTool shopTool(&engine);
+    const CharacterTool characterTool(&engine);
+    const NameGenerator nameGenerator(&engine);
+    const NotesTool notesTool(&engine);
+    const ConverterTool converterTool(&engine);
 
     engine.load(source);
 

@@ -7,20 +7,23 @@ void MprisPlayerAdaptor::setPlaybackStatus(int status)
 {
     switch (status)
     {
-    case 0: m_PlaybackStatus = "Stopped";
+    case 0:
+        m_PlaybackStatus = "Stopped";
         break;
 
-    case 1: m_PlaybackStatus = "Playing";
+    case 1:
+        m_PlaybackStatus = "Playing";
         break;
 
-    case 2: m_PlaybackStatus = "Paused";
+    case 2:
+        m_PlaybackStatus = "Paused";
         break;
     }
 
     emit playbackStatusChanged(m_PlaybackStatus);
 }
 
-void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant>& data)
+void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant> &data)
 {
     qDebug() << "Updating mpris metadata ...";
 
@@ -28,17 +31,17 @@ void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant>& data)
     emit metadataChanged(m_Metadata);
 }
 
-void MprisPlayerAdaptor::Seek(qlonglong /*Offset*/)
+void MprisPlayerAdaptor::Seek(qlonglong /*Offset*/) const
 {
     // Not implemented
 }
 
-void MprisPlayerAdaptor::SetPosition(const QDBusObjectPath& /*TrackId*/, const qlonglong& /*Position*/)
+void MprisPlayerAdaptor::SetPosition(const QDBusObjectPath & /*TrackId*/, qlonglong /*Position*/) const
 {
     // Not implemented
 }
 
-void MprisPlayerAdaptor::OpenUri(const QString& /*Uri*/)
+void MprisPlayerAdaptor::OpenUri(const QString & /*Uri*/) const
 {
     // Not implemented
 }

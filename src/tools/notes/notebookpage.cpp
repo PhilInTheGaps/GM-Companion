@@ -7,7 +7,7 @@ NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *chapter) : T
     priority(0);
 }
 
-QString NoteBookPage::content()
+auto NoteBookPage::content() -> QString
 {
     if (!m_wasContentLoaded)
     {
@@ -25,7 +25,7 @@ void NoteBookPage::setContent(const QString &content, bool edited)
     if (edited)
     {
         setIsSaved(false);
-        setWasEdited(true);
+        wasEdited(true);
     }
     else
     {
@@ -75,8 +75,8 @@ void NoteBookPage::close()
         setIsSaved(true);
     }
 
-    setWasEdited(false);
-    setIsCurrent(false);
+    wasEdited(false);
+    isCurrent(false);
 
     emit closePage();
 }
@@ -84,10 +84,9 @@ void NoteBookPage::close()
 void NoteBookPage::rename(const QString &newName)
 {
     auto oldPath = path();
-
     auto correctName = newName;
 
-    if (newName.lastIndexOf('.') < 0) correctName += ".md";
+    if (newName.lastIndexOf('.') < 0) correctName += QStringLiteral(".md");
 
     name(correctName);
     emit renamePage(oldPath);
