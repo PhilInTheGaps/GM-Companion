@@ -4,6 +4,7 @@
 #include "src/addons/addonmanager.h"
 #include "utils/fileutils.h"
 #include <QDebug>
+#include <QDir>
 #include <QtTest>
 
 using namespace Files;
@@ -84,7 +85,15 @@ void AbstractTest::copyResourceToFile(const QString &resource, const QString &de
     QVERIFY(!data.isEmpty());
 
     QFile destinationFile(destination);
-    QVERIFY(destinationFile.open(QIODevice::WriteOnly));
+    auto dir = FileUtils::dirFromPath(destination);
+
+    const QDir qdir(dir);
+    if (!qdir.exists())
+    {
+        QVERIFY2(qdir.mkpath(dir), "Could not create path: " + dir.toUtf8());
+    }
+
+    QVERIFY2(destinationFile.open(QIODevice::WriteOnly), "Could not open file " + destination.toUtf8());
     destinationFile.write(data);
     destinationFile.close();
 }
