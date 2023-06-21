@@ -1,8 +1,8 @@
 #include "treeitem.h"
 #include <utility>
 
-TreeItem::TreeItem(QString name, int depth, bool canToggle, QObject *parent)
-    : QObject(parent), a_name(std::move(name)), a_canToggle(canToggle), a_depth(depth)
+TreeItem::TreeItem(const QString &name, int depth, bool canToggle, QObject *parent)
+    : BaseProjectItem(name, parent), a_canToggle(canToggle), a_depth(depth)
 {
     if (auto *parentItem = qobject_cast<TreeItem *>(parent); parentItem)
     {

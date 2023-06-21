@@ -49,18 +49,19 @@ Page {
             visible: item_list_table.contentHeight > item_list_table.height
         }
 
-        model: shopEditorItemModel2
+        model: shop_tool
+               && shop_tool.editor ? shop_tool.editor.itemModelGroup : []
 
         delegate: Rectangle {
             id: item_delegate_rect
             height: item_list_table.currentIndex
-                    == index ? Math.max(
-                                   item_delegate_text_column.height,
-                                   Defines.TOOLBAR_HEIGHT) : item_delegate_text_column.height
+                    === index ? Math.max(
+                                    item_delegate_text_column.height,
+                                    Defines.TOOLBAR_HEIGHT) : item_delegate_text_column.height
             anchors.left: parent ? parent.left : undefined
             anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
-            color: item_list_table.currentIndex == index ? palette.button : "transparent"
+            color: item_list_table.currentIndex === index ? palette.button : "transparent"
 
             Column {
                 id: item_delegate_text_column
@@ -83,12 +84,12 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         verticalAlignment: Text.AlignVCenter
 
-                        text: modelData.name
+                        text: name
                         font.pointSize: 12
 
                         clip: true
                         elide: Text.ElideRight
-                        wrapMode: item_list_table.currentIndex == index ? Text.Wrap : Text.NoWrap
+                        wrapMode: item_list_table.currentIndex === index ? Text.Wrap : Text.NoWrap
                     }
 
                     Label {
@@ -99,13 +100,13 @@ Page {
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignRight
 
-                        text: modelData.price
+                        text: price
                         font.pointSize: 12
 
                         clip: true
                         elide: Text.ElideRight
                         wrapMode: item_list_table.currentIndex
-                                  == index ? Text.WordWrap : Text.NoWrap
+                                  === index ? Text.WordWrap : Text.NoWrap
                     }
                 }
 
@@ -114,15 +115,15 @@ Page {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     verticalAlignment: Text.AlignTop
-                    visible: item_list_table.currentIndex == index
-                             && modelData.description !== ""
+                    visible: item_list_table.currentIndex === index
+                             && description !== ""
 
-                    text: modelData.description
+                    text: description
                     font.pointSize: 12
 
                     clip: true
                     elide: Text.ElideRight
-                    wrapMode: item_list_table.currentIndex == index ? Text.WordWrap : Text.NoWrap
+                    wrapMode: item_list_table.currentIndex === index ? Text.WordWrap : Text.NoWrap
                 }
 
                 Rectangle {
@@ -148,10 +149,10 @@ Page {
                 background: Item {}
                 iconItem.font.pointSize: 14
 
-                visible: item_list_table.currentIndex == index
+                visible: item_list_table.currentIndex === index
 
                 iconText: FontAwesome.chevronCircleLeft
-                onClicked: shop_editor.addItem(index)
+                onClicked: shop_tool.editor.addItem(index)
             }
         }
     }

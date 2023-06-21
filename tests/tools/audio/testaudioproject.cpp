@@ -80,17 +80,16 @@ void TestAudioProject::checkProjectContents()
 void TestAudioProject::testModifications()
 {
     // Name
-    project->oldName(project->name());
     project->name("Modified Name");
     project->wasRenamed(true);
     QCOMPARE(project->name(), QStringLiteral("Modified Name"));
-    QCOMPARE(project->oldName(), QStringLiteral("Project"));
+    QCOMPARE(project->originalName(), QStringLiteral("Project"));
     QVERIFY(project->wasRenamed());
     QVERIFY(!project->isSaved());
 
     project->name("Modified Again");
     QCOMPARE(project->name(), QStringLiteral("Modified Again"));
-    QCOMPARE(project->oldName(), QStringLiteral("Project"));
+    QCOMPARE(project->originalName(), QStringLiteral("Project"));
 
     // Categories
     auto categoryCount = project->categories().length();

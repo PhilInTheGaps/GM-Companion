@@ -78,6 +78,17 @@ void AbstractTest::loadResources()
     Q_INIT_RESOURCE(libresources);
 }
 
+void AbstractTest::copyResourceToFile(const QString &resource, const QString &destination)
+{
+    const auto data = readResource(resource);
+    QVERIFY(!data.isEmpty());
+
+    QFile destinationFile(destination);
+    QVERIFY(destinationFile.open(QIODevice::WriteOnly));
+    destinationFile.write(data);
+    destinationFile.close();
+}
+
 auto AbstractTest::copyResourceToTempFile(const QString &resource) -> QFile *
 {
     QFile resourceFile(resource);

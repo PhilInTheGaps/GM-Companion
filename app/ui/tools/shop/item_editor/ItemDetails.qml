@@ -28,7 +28,8 @@ Rectangle {
 
             onClicked: {
                 if (category_name_field.text != "") {
-                    item_editor.addCategory(category_name_field.text)
+                    shop_tool.editor.itemEditor.addCategory(
+                                category_name_field.text)
                 }
             }
         }
@@ -55,7 +56,8 @@ Rectangle {
             id: category_combobox
             anchors.left: parent.left
             anchors.right: parent.right
-            model: item_editor.categories
+            model: shop_tool && shop_tool.editor
+                   && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.categories : []
         }
 
         CustomTextEdit {
@@ -74,10 +76,10 @@ Rectangle {
             text: qsTr("Add Item")
             enabled: category_combobox.currentText != ""
 
-            onClicked: item_editor.addItem(item_name_field.text,
-                                           item_price_field.text,
-                                           category_combobox.currentText,
-                                           item_description_field.text)
+            onClicked: shop_tool.editor.itemEditor.addItem(
+                           item_name_field.text, item_price_field.text,
+                           category_combobox.currentText,
+                           item_description_field.text)
         }
     }
 }

@@ -7,10 +7,9 @@
 
 AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
                              bool isSubscenario, QObject *parent)
-    : TreeItem(name, path.split(QStringLiteral("/")).length() - 1, true, parent), m_isSubscenario(isSubscenario),
-      m_path(path + QStringLiteral("/") + name), m_musicLists(std::move(elements.musicLists)),
-      m_soundLists(std::move(elements.soundLists)), m_radios(std::move(elements.radios)),
-      m_scenarios(std::move(elements.scenarios))
+    : TreeItem(name, path.split(QStringLiteral("/")).length() - 1, true, parent), a_isSubscenario(isSubscenario),
+      m_path(path + QStringLiteral("/") + name), m_musicLists(elements.musicLists), m_soundLists(elements.soundLists),
+      m_radios(elements.radios), m_scenarios(elements.scenarios)
 {
     this->name(name);
 
@@ -49,7 +48,7 @@ AudioScenario::AudioScenario(const AudioScenario &other)
 
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, bool isSubscenario, QObject *parent)
     : TreeItem(QLatin1String(), path.split(QStringLiteral("/")).length() - 1, true, parent),
-      m_isSubscenario(isSubscenario)
+      a_isSubscenario(isSubscenario)
 {
     name(object[QStringLiteral("name")].toString());
     m_path = path + QStringLiteral("/") + name();
@@ -455,7 +454,7 @@ void AudioScenario::prepareScenario(AudioScenario *scenario)
 {
     if (!scenario) return;
     scenario->setParent(this);
-    scenario->m_isSubscenario = true;
+    scenario->isSubscenario(true);
 
     connect(scenario, &AudioScenario::wasEdited, this, &AudioScenario::wasEdited);
     connect(scenario, &AudioScenario::nameChanged, this, &AudioScenario::wasEdited);

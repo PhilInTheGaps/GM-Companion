@@ -16,6 +16,9 @@ add_subdirectory(audio)
 # Converter Tool
 add_subdirectory(converter)
 
+# Shop Tool
+add_subdirectory(shop)
+
 # Combat Tracker
 add_executable(test_combattracker testcombattracker.cpp ${RESOURCES})
 target_link_libraries(test_combattracker gm-companion-lib common Qt5::Gui Qt5::Quick Qt5::Test)

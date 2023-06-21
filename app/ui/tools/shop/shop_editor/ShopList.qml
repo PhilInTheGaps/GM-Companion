@@ -27,13 +27,16 @@ Rectangle {
             topPadding: 5
 
             Repeater {
-                model: shop_editor.shopNames
+                model: shop_tool && shop_tool.editor
+                       && shop_tool.editor.currentProject
+                       && shop_tool.editor.currentProject.currentCategory ? shop_tool.editor.currentProject.currentCategory.shops : []
 
                 CustomButton {
-                    buttonText: modelData
+                    buttonText: modelData.name
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    onClicked: shop_editor.setCurrentShop(index)
+                    onClicked: shop_tool.editor.currentProject.currentCategory.currentShop
+                               = modelData
                 }
             }
         }

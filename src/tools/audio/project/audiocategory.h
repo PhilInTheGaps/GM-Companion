@@ -60,7 +60,6 @@ signals:
     void pathChanged();
     void scenariosChanged();
     void currentScenarioChanged(AudioScenario *scenario);
-    void wasEdited();
 
 private:
     QString m_path;

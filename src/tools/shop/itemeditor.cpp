@@ -1,156 +1,97 @@
 #include "itemeditor.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
-#include "utils/utils.h"
-#include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-
+#include "utils/fileutils.h"
+#include "utils/utils.h"
 #include <QJsonDocument>
+#include <QLoggingCategory>
 #include <QQmlContext>
+#include <filesystem/file.h>
 
 using namespace AsyncFuture;
 
-ItemEditor::ItemEditor(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent), a_isSaved(true), qmlEngine(engine)
+Q_LOGGING_CATEGORY(gmShopsItemEditor, "gm.shops.items.editor")
+
+auto ItemEditor::itemModel() -> ItemModel *
 {
-    qDebug() << "Loading Item Editor ...";
-
-    itemModel = new ItemModel;
-    qmlEngine->rootContext()->setContextProperty("itemEditorItemModel", itemModel);
-}
-
-void ItemEditor::findItems()
-{
-    qCDebug(gmShopsItemEditor()) << "Finding items ...";
-
-    const auto path = FileUtils::fileInDir("CustomItems.items", SettingsManager::getPath("shops"));
-    observe(Files::File::getDataAsync(path)).subscribe([this](Files::FileDataResult *result) {
-        if (!result) return;
-
-        qCDebug(gmShopsItemEditor()) << "Received custom items.";
-
-        m_itemGroup = new ItemGroup(tr("Custom"), QJsonDocument::fromJson(result->data()).object());
-        updateCategories();
-        updateItemModel();
-
-        result->deleteLater();
-    });
+    return &m_itemModel;
 }
 
 /**
  * @brief Add an item category
  * @param name Name of the category
  */
-void ItemEditor::addCategory(const QString &name)
+auto ItemEditor::addCategory(const QString &name) -> bool
 {
     qCDebug(gmShopsItemEditor()) << "Adding category" << name << "...";
 
-    if (!categories().contains(name))
-    {
-        a_categories.append(name);
-        emit categoriesChanged(categories());
-        madeChanges();
-    }
+    if (categories().contains(name)) return false;
+
+    a_categories.append(name);
+    emit categoriesChanged(categories());
+    madeChanges();
+    return true;
 }
 
 /**
  * @brief Get all categories from items
  */
-void ItemEditor::updateCategories()
+void ItemEditor::updateCategories(const ItemGroup &group)
 {
     a_categories.clear();
 
-    if (m_itemGroup)
+    foreach (const auto *item, group.items())
     {
-        for (auto i : m_itemGroup->items())
+        if (item && !a_categories.contains(item->category()))
         {
-            if (i && !a_categories.contains(i->category()))
-            {
-                a_categories.append(i->category());
-            }
+            a_categories.append(item->category());
         }
     }
 
     emit categoriesChanged(categories());
 }
 
-/**
- * @brief Add an item
- * @param name Name (Must not be empty)
- * @param price Price
- * @param category Category (Must not be empty)
- * @param description Description
- */
-void ItemEditor::addItem(const QString &name, const QString &price, const QString &category, QString description)
+void ItemEditor::initItemModel(const ItemGroup &group)
 {
-    if (name.isEmpty() || category.isEmpty()) return;
+    m_itemModel.replaceAll(Utils::toQObjectVector(group.items()));
+}
 
-    auto *item = new Item(name, price, description.replace("\n", " "), category);
-    QList<Item *> items;
-    int insert = -1;
+auto ItemEditor::addItem(const QString &name, const QString &price, const QString &category, QString description)
+    -> bool
+{
+    if (name.isEmpty() || category.isEmpty()) return false;
 
-    if (m_itemGroup)
+    auto *item = new Item(name, price, description.replace(QLatin1String("\n"), QLatin1String(" ")), category, this);
+    int insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
+
+    if (insert <= 0)
     {
-        items = m_itemGroup->items();
-
-        // Find insertion index
-        for (int i = 0; i < items.size(); i++)
-        {
-            if (items[i] && (items[i]->category() == category)) insert = i;
-        }
-    }
-
-    if (insert < 0)
-    {
-        items.append(item);
+        m_itemModel.append(item);
     }
     else
     {
-        items.insert(insert + 1, item);
+        m_itemModel.insert(insert, item);
     }
 
-    if (!m_itemGroup) m_itemGroup = new ItemGroup(tr("Custom"), items);
-    else m_itemGroup->items(items);
-
-    itemModel->setElements(items);
     madeChanges();
-}
-
-/**
- * @brief Add items to item model
- */
-void ItemEditor::updateItemModel()
-{
-    itemModel->clear();
-
-    if (m_itemGroup)
-    {
-        itemModel->setElements(m_itemGroup->items());
-    }
+    return true;
 }
 
 /**
  * @brief Remove an item
  * @param index Index of the item
  */
-void ItemEditor::deleteItem(int index)
+auto ItemEditor::deleteItem(int index) -> bool
 {
-    if (!m_itemGroup) return;
+    const bool success = m_itemModel.removeRow(index);
 
-    if (Utils::isInBounds(m_itemGroup->items(), index))
-    {
-        auto items = m_itemGroup->items();
-        auto item  = items.takeAt(index);
-        m_itemGroup->items(items);
-        itemModel->setElements(items);
+    if (success) madeChanges();
 
-        item->deleteLater();
-        madeChanges();
-    }
+    return success;
 }
 
 /**
- * @brief Save the custom items to disc and send them to the shop editor
+ * @brief Save the custom items and send them to the shop editor
  */
 void ItemEditor::save()
 {
@@ -158,21 +99,41 @@ void ItemEditor::save()
     if (isSaved()) return;
 
     // Save to disk
-    const auto savePath = FileUtils::fileInDir("CustomItems.items", SettingsManager::getPath("shops"));
-    const auto data     = QJsonDocument(m_itemGroup->toJson()).toJson();
+    const auto savePath =
+        FileUtils::fileInDir(QStringLiteral("CustomItems.items"), SettingsManager::getPath(QStringLiteral("shops")));
 
-    observe(Files::File::saveAsync(savePath, data)
-    ).subscribe([this]() {
-        // Notify editor
-        isSaved(true);
-        emit showInfoBar(tr("Saved!"));
-    }, [this]() {
-        emit showInfoBar(tr("Error: Could not save items!"));
-    });
+    const auto group = ItemGroup(defaultGroupName(), Utils::toList<Item *>(m_itemModel.getAll()), nullptr);
+    const auto data = QJsonDocument(group.toJson()).toJson();
+
+    observe(Files::File::saveAsync(savePath, data))
+        .subscribe(
+            [this]() {
+                // Notify editor
+                isSaved(true);
+                emit showInfoBar(tr("Saved!"));
+            },
+            [this]() { emit showInfoBar(tr("Error: Could not save items!")); });
 
     // Copy all items and send them to the shop editor
-    auto copy = new ItemGroup(m_itemGroup);
+    auto *copy = new ItemGroup(group, this);
     emit itemsSaved(copy);
+}
+
+void ItemEditor::loadData()
+{
+    if (isDataLoaded()) return;
+
+    isLoading(true);
+    m_itemModel.clear();
+
+    qCDebug(gmShopsItemEditor()) << "Finding items ...";
+
+    const auto path =
+        FileUtils::fileInDir(QStringLiteral("CustomItems.items"), SettingsManager::getPath(QStringLiteral("shops")));
+
+    observe(Files::File::checkAsync(path))
+        .subscribe([this](Files::FileCheckResult *result) { onFileCheckReceived(result); },
+                   [this]() { isLoading(false); });
 }
 
 /**
@@ -181,4 +142,52 @@ void ItemEditor::save()
 void ItemEditor::madeChanges()
 {
     isSaved(false);
+}
+
+auto ItemEditor::defaultGroupName() -> QString
+{
+    return tr("Custom");
+}
+
+void ItemEditor::onFileCheckReceived(Files::FileCheckResult *result)
+{
+    if (!result)
+    {
+        isLoading(false);
+        return;
+    }
+
+    const auto exists = result->exists();
+    const auto path = result->path();
+    result->deleteLater();
+
+    if (!exists)
+    {
+        isLoading(false);
+        return;
+    }
+
+    observe(Files::File::getDataAsync(path))
+        .subscribe([this](Files::FileDataResult *result) { onDataReceived(result); }, [this]() { isLoading(false); });
+}
+
+void ItemEditor::onDataReceived(Files::FileDataResult *result)
+{
+    if (!result)
+    {
+        isLoading(false);
+        return;
+    }
+
+    qCDebug(gmShopsItemEditor()) << "Received custom items.";
+
+    ItemGroup group(defaultGroupName(), QJsonDocument::fromJson(result->data()).object(), nullptr);
+
+    initItemModel(group);
+    updateCategories(group);
+
+    result->deleteLater();
+
+    setIsDataLoaded(true);
+    isLoading(false);
 }

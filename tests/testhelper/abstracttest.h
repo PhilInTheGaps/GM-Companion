@@ -57,6 +57,7 @@ protected:
     static void expectWarning();
 
     static void loadResources();
+    static void copyResourceToFile(const QString &resource, const QString &destination);
     static auto copyResourceToTempFile(const QString &resource) -> QFile *;
     static auto readResource(const QString &path) -> QByteArray;
 

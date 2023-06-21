@@ -81,11 +81,11 @@ void File::updateFileAccess()
     const auto cloudMode = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local"));
     qCDebug(gmFileManager()) << "Setting file access to" << cloudMode;
 
-    if (cloudMode == QStringLiteral("NextCloud"))
+    if (s_nc && cloudMode == QStringLiteral("NextCloud"))
     {
         FileAccess::setInstance(new FileAccessNextcloud(*s_nc, nullptr));
     }
-    else if (cloudMode == QStringLiteral("GoogleDrive"))
+    else if (s_gd && cloudMode == QStringLiteral("GoogleDrive"))
     {
         FileAccess::setInstance(new FileAccessGoogleDrive(*s_gd, nullptr));
     }

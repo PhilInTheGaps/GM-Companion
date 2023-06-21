@@ -2,6 +2,7 @@
 #define AUDIOSCENARIO_H
 
 #include "audioelement.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AudioCategory;
 
@@ -37,12 +38,6 @@ public:
     [[nodiscard]] auto isCheckable() const -> bool override
     {
         return true;
-    }
-
-    Q_PROPERTY(bool isSubscenario READ isSubscenario NOTIFY isSubscenarioChanged)
-    [[nodiscard]] auto isSubscenario() const -> bool
-    {
-        return m_isSubscenario;
     }
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
@@ -86,12 +81,12 @@ public:
     }
     void refreshElements();
 
+    AUTO_PROPERTY_VAL2(bool, isSubscenario, false)
+
 signals:
     void pathChanged();
     void elementsChanged();
     void scenariosChanged();
-    void isSubscenarioChanged();
-    void wasEdited();
 
 private:
     explicit AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
@@ -101,7 +96,6 @@ private:
 
     inline static QString filterString = QLatin1String();
 
-    bool m_isSubscenario = false;
     QString m_path;
 
     QList<AudioElement *> m_musicLists;

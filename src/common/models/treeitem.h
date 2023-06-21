@@ -1,9 +1,10 @@
 #pragma once
 
+#include "baseprojectitem.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 
-class TreeItem : public QObject
+class TreeItem : public BaseProjectItem
 {
     Q_OBJECT
 
@@ -15,8 +16,6 @@ public:
         Checked = 2
     };
     Q_ENUM(CheckedState)
-
-    AUTO_PROPERTY(QString, name);
 
     /// Whether children are shown or not.
     AUTO_PROPERTY_VAL2(bool, isOpen, false)
@@ -35,7 +34,7 @@ public:
     READ_PROPERTY(int, depth)
 
 public:
-    explicit TreeItem(QString name, int depth, bool canToggle = true, QObject *parent = nullptr);
+    explicit TreeItem(const QString& name, int depth, bool canToggle = true, QObject *parent = nullptr);
 
     /// Whether a checkbox should be displayed.
     [[nodiscard]] virtual auto isCheckable() const -> bool;

@@ -7,7 +7,6 @@ import "../../../defines.js" as Defines
 Item {
     id: root
 
-    readonly property int sidebarWidth: 180
     signal openEditor
 
     Component.onCompleted: shop_tool.loadData()
@@ -17,7 +16,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: sidebarWidth
+        width: Defines.SIDEBAR_WIDTH
 
         onEditorButtonClicked: openEditor()
     }
@@ -30,6 +29,11 @@ Item {
         anchors.right: shop_list.left
         anchors.leftMargin: 5
         anchors.rightMargin: 5
+
+        visible: shop != undefined
+
+        shop: shop_tool && shop_tool.currentProject
+              && shop_tool.currentProject.currentCategory ? shop_tool.currentProject.currentCategory.currentShop : undefined
     }
 
     ShopList {
@@ -37,6 +41,6 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        width: sidebarWidth
+        width: Defines.SIDEBAR_WIDTH
     }
 }

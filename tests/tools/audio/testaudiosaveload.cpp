@@ -71,6 +71,7 @@ void TestAudioSaveLoad::initTestCase()
 void TestAudioSaveLoad::saveProject()
 {
     m_project->isSaved(false);
+    QVERIFY(!m_project->originalName().isEmpty());
 
     // Save first time
     auto future = AudioSaveLoad::saveProject(m_project, getFilePath());
@@ -84,7 +85,6 @@ void TestAudioSaveLoad::saveProject()
 
     // Rename project
     const auto newName = FileUtils::incrementName(m_project->name());
-    m_project->oldName(m_project->name());
     m_project->wasRenamed(true);
     m_project->name(newName);
 

@@ -7,15 +7,14 @@
 Q_LOGGING_CATEGORY(gmAudioProject, "gm.audio.project")
 
 AudioProject::AudioProject(const QString &name, int version, QList<AudioCategory *> categories, QObject *parent)
-    : TreeItem(name, 0, true, parent), a_isSaved(true), a_version(version), a_wasRenamed(false),
-      m_categories(std::move(categories))
+    : TreeItem(name, 0, true, parent), a_version(version), m_categories(std::move(categories))
 {
     qCDebug(gmAudioProject()) << "Initializing AudioProject:" << name << "[Version:" << version
                               << "Categories:" << m_categories.size() << "]";
 
     this->name(name);
 
-    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.first());
+    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.constFirst());
 
     for (auto *category : qAsConst(m_categories))
     {
@@ -31,9 +30,9 @@ AudioProject::AudioProject(const AudioProject &other, QObject *parent)
 }
 
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
-    : TreeItem(QLatin1String(""), 0, true, parent), a_isSaved(true), a_version(object[QStringLiteral("version")].toInt()), a_wasRenamed(false)
+    : TreeItem(object[QStringLiteral("name")].toString(), 0, true, parent),
+      a_version(object[QStringLiteral("version")].toInt())
 {
-    name(object[QStringLiteral("name")].toString());
     const auto categories = object[QStringLiteral("categories")].toArray();
     m_categories.reserve(categories.size());
 
@@ -44,7 +43,7 @@ AudioProject::AudioProject(QJsonObject object, QObject *parent)
         m_categories.append(object);
     }
 
-    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.first());
+    if (!m_categories.isEmpty()) setCurrentCategory(m_categories.constFirst());
     connectSignals();
 }
 

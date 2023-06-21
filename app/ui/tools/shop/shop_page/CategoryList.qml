@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import CustomComponents 1.0
 import FontAwesome 2.0
 import "../../../defines.js" as Defines
+import "../../../common"
 
 Rectangle {
     id: left_menu
@@ -10,7 +11,7 @@ Rectangle {
 
     signal editorButtonClicked
 
-    Item {
+    ProjectComboBoxWithEditorButton {
         id: top_bar
 
         anchors.top: parent.top
@@ -18,31 +19,19 @@ Rectangle {
         anchors.right: parent.right
         height: Defines.TOOLBAR_HEIGHT
 
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
+        model: shop_tool ? shop_tool.projects : []
+        emptyString: shop_tool
+                     && shop_tool.isLoading ? qsTr("Loading ...") : qsTr(
+                                                  "No Projects")
 
-        // Project ComboBox
-        CustomToolBarComboBox {
-            anchors.left: parent.left
-            anchors.right: editor_button.left
-            width: parent.width - editor_button.width - parent.spacing
-            leftPadding: 0
-            model: shop_tool.projects
+        onCurrentIndexChanged: {
+            if (!shop_tool || shop_tool.projects.length < 1)
+                return
 
-            onCurrentTextChanged: shop_tool.setCurrentProject(currentIndex)
+            shop_tool.currentProject = shop_tool.projects[index]
         }
 
-        // Open Editor Button
-        CustomToolBarButton {
-            id: editor_button
-            iconText: FontAwesome.edit
-
-            anchors.right: parent.right
-            anchors.topMargin: 8
-            anchors.bottomMargin: 8
-
-            onClicked: editorButtonClicked()
-        }
+        onEditorButtonClicked: left_menu.editorButtonClicked()
     }
 
     ScrollView {
@@ -62,16 +51,16 @@ Rectangle {
             anchors.right: parent.right
 
             Repeater {
-                model: shop_tool.categories
-                onModelChanged: console.debug(model)
+                model: shop_tool
+                       && shop_tool.currentProject ? shop_tool.currentProject.categories : []
 
                 CustomButton {
-                    buttonText: modelData
+                    buttonText: modelData.name
 
                     anchors.left: parent.left
                     anchors.right: parent.right
 
-                    onClicked: shop_tool.setCurrentCategory(index)
+                    onClicked: shop_tool.currentProject.currentCategory = modelData
                 }
             }
         }

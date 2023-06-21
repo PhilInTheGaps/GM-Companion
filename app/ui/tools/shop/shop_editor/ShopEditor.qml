@@ -10,10 +10,10 @@ Page {
     signal backToViewer
     signal switchToItemEditor
 
-    Component.onCompleted: shop_editor.loadData()
+    Component.onCompleted: shop_tool.editor.loadData()
 
     Connections {
-        target: shop_editor
+        target: shop_tool ? shop_tool.editor : undefined
 
         function onShowInfoBar(message) {
             info_text.text = message
@@ -83,7 +83,7 @@ Page {
                 color: palette.button
             }
 
-            onClicked: shop_editor.enableAllItemCategories(checked)
+            onClicked: shop_tool.editor.enableAllItemCategories(checked)
         }
 
         Flickable {
@@ -107,8 +107,11 @@ Page {
 
                 Repeater {
                     id: item_category_repeater
-                    model: shop_editor.itemCategories
 
+                    model: shop_tool && shop_tool.editor
+                           && shop_tool.editor.currentItemGroup ? shop_tool
+                                                                  && shop_tool.editor
+                                                                  && shop_tool.editor.currentItemGroup.categories : []
                     CheckBox {
                         id: category_checkbox
                         anchors.left: parent.left
@@ -116,16 +119,22 @@ Page {
 
                         text: modelData
 
-                        Connections {
-                            target: shop_editor
-                            function onItemGroupChanged() {
-                                category_checkbox.checked = shop_editor.isItemCategoryEnabled(
-                                            modelData)
-                            }
+                        onClicked: shop_tool.editor.setItemCategoryEnabled(
+                                       modelData, checked)
+
+                        Component.onCompleted: {
+                            checked = shop_tool
+                                    && shop_tool.editor ? shop_tool.editor.isItemCategoryEnabled(
+                                                              modelData) : false
                         }
 
-                        onClicked: shop_editor.setItemCategoryEnabled(
-                                       modelData, checked)
+                        Connections {
+                            target: item_category_select_bar
+
+                            function onCheckedChanged() {
+                                category_checkbox.checked = item_category_select_bar.checked
+                            }
+                        }
                     }
                 }
             }

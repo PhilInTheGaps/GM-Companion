@@ -6,12 +6,14 @@ import "../../../defines.js" as Defines
 Page {
     id: root
 
+    property var shop: undefined
+
     header: Row {
         spacing: 10
         height: Defines.TOOLBAR_HEIGHT
 
         Label {
-            text: shop_tool.shopName
+            text: shop ? shop.name : ""
             font.pixelSize: height - 20
             font.bold: true
             anchors.top: parent.top
@@ -25,13 +27,13 @@ Page {
 
             Label {
                 id: shop_owner_text
-                text: shop_tool.shopOwner
+                text: shop ? shop.owner : ""
                 font.pointSize: 10
             }
 
             Label {
                 id: shop_description_text
-                text: shop_tool.shopDescription
+                text: shop ? shop.description : ""
                 font.pointSize: 10
             }
         }
@@ -97,18 +99,22 @@ Page {
 
             clip: true
             spacing: 0
+            focus: true
 
             ScrollBar.vertical: ScrollBar {
                 visible: list_view.contentHeight > list_view.height
             }
 
-            model: shopItemModel
+            model: shop_tool ? shop_tool.itemModel : []
 
             delegate: Rectangle {
                 height: delegate_row.height
                 anchors.left: parent ? parent.left : undefined
                 anchors.right: parent ? parent.right : undefined
+
                 color: "transparent"
+                border.color: palette.button
+                border.width: ListView.isCurrentItem ? 2 : mouse_area.containsMouse ? 1 : 0
 
                 Row {
                     id: delegate_row
@@ -117,13 +123,13 @@ Page {
                     rightPadding: main.columnPadding
                     spacing: main.columnSpacing
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+                    anchors.left: parent ? parent.left : undefined
+                    anchors.right: parent ? parent.right : undefined
                     height: description_label.height > Defines.TOOLBAR_HEIGHT
                             - 10 ? description_label.height : Defines.TOOLBAR_HEIGHT - 10
 
                     Label {
-                        text: modelData.name
+                        text: name
                         width: main.itemColumnWidth
                         clip: true
                         elide: Text.ElideRight
@@ -134,7 +140,7 @@ Page {
                     }
 
                     Label {
-                        text: modelData.price
+                        text: price
                         width: main.priceColumnWidth
                         clip: true
                         elide: Text.ElideRight
@@ -146,13 +152,21 @@ Page {
 
                     Label {
                         id: description_label
-                        text: modelData.description
+                        text: description
                         topPadding: 5
                         font.pointSize: 12
                         width: main.descriptionColumnWidth
                         anchors.top: parent.top
                         wrapMode: Text.WordWrap
                     }
+                }
+
+                MouseArea {
+                    id: mouse_area
+                    anchors.fill: parent
+                    hoverEnabled: true
+
+                    onClicked: list_view.currentIndex = index
                 }
             }
         }

@@ -154,12 +154,6 @@ void AudioEditor::renameProject(const QString &name)
 
     qCDebug(gmAudioEditor) << "Renaming project" << m_currentProject->name() << "to" << name << "...";
 
-    if (!m_currentProject->wasRenamed())
-    {
-        m_currentProject->wasRenamed(true);
-        m_currentProject->oldName(m_currentProject->name());
-    }
-
     m_currentProject->name(name);
     emit projectsChanged();
 }

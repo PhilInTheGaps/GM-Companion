@@ -10,7 +10,8 @@ Page {
     signal backToShopEditor
 
     Connections {
-        target: item_editor
+        target: shop_tool && shop_tool.editor
+                && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor : undefined
 
         function onShowInfoBar(message) {
             info_text.text = message
@@ -26,8 +27,9 @@ Page {
         onBackClicked: backToShopEditor()
 
         enableSave: true
-        isSaved: item_editor.isSaved
-        onSaveClicked: item_editor.save()
+        isSaved: shop_tool && shop_tool.editor
+                 && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.isSaved : true
+        onSaveClicked: shop_tool.editor.itemEditor.save()
     }
 
     ItemDetails {
@@ -110,7 +112,8 @@ Page {
 
             ScrollBar.vertical: ScrollBar {}
 
-            model: itemEditorItemModel
+            model: shop_tool && shop_tool.editor
+                   && shop_tool.editor.itemEditor ? shop_tool.editor.itemEditor.itemModel : []
 
             delegate: Rectangle {
                 height: delegate_row.height
@@ -143,7 +146,7 @@ Page {
                     height: 30
 
                     Label {
-                        text: modelData.name
+                        text: name
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                         clip: true
                         elide: Text.ElideRight
@@ -152,7 +155,7 @@ Page {
                     }
 
                     Label {
-                        text: modelData.price
+                        text: price
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
                         clip: true
                         elide: Text.ElideRight
@@ -162,7 +165,7 @@ Page {
                     }
 
                     Label {
-                        text: modelData.category
+                        text: category
                         width: (parent.width - parent.leftPadding * 2 - parent.spacing * 2) / 6
                         clip: true
                         elide: Text.ElideRight
@@ -171,7 +174,7 @@ Page {
                     }
 
                     Label {
-                        text: modelData.description
+                        text: description
                         width: (parent.width - x - delete_button.width
                                 - parent.spacing - parent.rightPadding)
                         clip: true
@@ -199,7 +202,7 @@ Page {
                             color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : palette.text)
                         }
 
-                        onClicked: item_editor.deleteItem(index)
+                        onClicked: shop_tool.editor.itemEditor.deleteItem(index)
                     }
                 }
             }

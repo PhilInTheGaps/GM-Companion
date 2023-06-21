@@ -22,12 +22,6 @@ Q_LOGGING_CATEGORY(gmCharactersTool, "gm.characters.tool")
 Q_LOGGING_CATEGORY(gmCharactersCharacter, "gm.characters.character")
 Q_LOGGING_CATEGORY(gmCharactersImageViewer, "gm.characters.viewer.images")
 
-Q_LOGGING_CATEGORY(gmShopsTool, "gm.shops.tool")
-Q_LOGGING_CATEGORY(gmShopsItemShop, "gm.shops.items.shop")
-Q_LOGGING_CATEGORY(gmShopsItemEditor, "gm.shops.items.editor")
-Q_LOGGING_CATEGORY(gmShopsShopEditor, "gm.shops.editor")
-Q_LOGGING_CATEGORY(gmShopsShopProject, "gm.shops.project")
-
 Q_LOGGING_CATEGORY(gmNotesTool, "gm.notes.tool")
 Q_LOGGING_CATEGORY(gmNotesSaveLoad, "gm.notes.saveload")
 

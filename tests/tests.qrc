@@ -10,6 +10,8 @@
         <file>resources/images/test.gif</file>
         <file>resources/audioproject/project_v3.audio</file>
         <file>resources/units/units_v1.ini</file>
+        <file>resources/shopproject/project.shop</file>
+        <file>resources/shopproject/group.items</file>
     </qresource>
     <qresource prefix="/addons"/>
     <qresource prefix="/addons/test">

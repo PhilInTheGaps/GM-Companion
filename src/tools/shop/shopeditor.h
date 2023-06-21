@@ -1,116 +1,92 @@
-#ifndef SHOPEDITOR_H
-#define SHOPEDITOR_H
+#pragma once
 
-#include "common/abstracttool.h"
+#include "baseshoptool.h"
 #include "itemeditor.h"
-#include "filesystem/file.h"
-#include <QQmlApplicationEngine>
-#include <QVector>
+#include "project/shopproject.h"
+#include "results/filelistresult.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QSortFilterProxyModel>
 
-class ShopEditor : public AbstractTool
+class ShopEditor : public BaseShopTool
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList projectNames READ projectNames NOTIFY projectListChanged)
-    Q_PROPERTY(QStringList categoryNames READ categoryNames NOTIFY projectChanged)
-    Q_PROPERTY(QStringList shopNames READ shopNames NOTIFY categoryChanged)
 
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY shopChanged)
-    Q_PROPERTY(QString owner READ owner WRITE setOwner NOTIFY shopChanged)
-    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY shopChanged)
+    AUTO_PROPERTY(QList<ItemGroup *>, itemGroups)
+    AUTO_PROPERTY_VAL2(ItemGroup *, currentItemGroup, nullptr)
+    READ_PROPERTY(QStringList, disabledItemCategories)
 
-    Q_PROPERTY(QStringList itemGroups READ itemGroups NOTIFY itemGroupChanged)
-    Q_PROPERTY(QStringList itemCategories READ itemCategories NOTIFY itemGroupChanged)
-
-    Q_PROPERTY(bool isSaved READ isSaved NOTIFY isSavedChanged)
+    AUTO_PROPERTY_VAL2(bool, isSaved, true)
 
 public:
-    explicit ShopEditor(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit ShopEditor(QObject *parent = nullptr);
 
-    void findShops();
-    void findItems();
+    enum class Type
+    {
+        Project,
+        Category,
+        Shop
+    };
+    Q_ENUM(Type)
 
-    QStringList projectNames() const;
-    QStringList categoryNames() const;
-    QStringList shopNames() const;
+    Q_PROPERTY(ItemEditor *itemEditor READ itemEditor CONSTANT)
+    [[nodiscard]] auto itemEditor() -> ItemEditor *;
 
-    Q_INVOKABLE void setCurrentProject(int index);
-    Q_INVOKABLE void setCurrentCategory(int index);
-    Q_INVOKABLE void setCurrentShop(int index);
+    Q_PROPERTY(ItemModel *itemModelShop READ itemModelShop CONSTANT)
+    [[nodiscard]] auto itemModelShop() -> ItemModel *;
 
-    QString name() const;
-    void setName(const QString &name);
+    Q_PROPERTY(QSortFilterProxyModel *itemModelGroup READ itemModelGroup CONSTANT)
+    [[nodiscard]] auto itemModelGroup() -> QSortFilterProxyModel *;
 
-    QString owner() const;
-    Q_INVOKABLE void setOwner(const QString &owner);
+    Q_INVOKABLE bool createThing(const QString &name, ShopEditor::Type type);
 
-    QString description() const;
-    Q_INVOKABLE void setDescription(const QString &description);
+    Q_INVOKABLE bool deleteProject(ShopProject *project);
+    Q_INVOKABLE bool deleteCategory(ShopCategory *category);
 
-    Q_INVOKABLE void moveShop(int positions);
-    Q_INVOKABLE void deleteShop();
-    Q_INVOKABLE void deleteItem(int index);
-    Q_INVOKABLE void createThing(const QString &name, int index);
-    Q_INVOKABLE void addItem(int index);
+    Q_INVOKABLE bool moveShop(int positions);
+    Q_INVOKABLE bool deleteShop();
+
+    Q_INVOKABLE bool addItem(int index);
+    Q_INVOKABLE bool deleteItem(int index);
+
     Q_INVOKABLE void save();
 
-    QStringList itemGroups() const;
-    QStringList itemCategories() const;
-
-    Q_INVOKABLE void setCurrentItemGroup(int index);
-    Q_INVOKABLE void enableAllItemCategories(bool b = true);
-    Q_INVOKABLE void setItemCategoryEnabled(const QString &category, bool b = true);
-    Q_INVOKABLE bool isItemCategoryEnabled(const QString &category) const { return !m_disabledItemCategories.contains(category); }
-
-    bool isSaved() const { return m_isSaved; }
+    Q_INVOKABLE void enableAllItemCategories(bool enable = true);
+    Q_INVOKABLE void setItemCategoryEnabled(const QString &category, bool enable = true);
+    Q_INVOKABLE bool isItemCategoryEnabled(const QString &category) const;
 
 public slots:
     void loadData() override;
 
 signals:
-    void projectListChanged();
-    void projectChanged();
-    void categoryChanged();
-    void shopChanged();
-
-    void itemGroupChanged();
-    void itemGroupsChanged();
-
-    void isSavedChanged();
     void showInfoBar(const QString &message);
-    void projectsSaved(QList<ShopProject*> projects);
+    void projectsSaved(QList<ShopProject *> projects);
 
 private:
-    ItemEditor *itemEditor = nullptr;
-    QQmlApplicationEngine *qmlEngine = nullptr;
-    ItemModel *itemModel = nullptr;
-    ItemModel *itemModel2 = nullptr;
+    ItemEditor m_itemEditor;
+    ItemModel m_itemModelShop = ItemModel(false, nullptr);
+    ItemModel m_itemModelGroup = ItemModel(false, nullptr);
+    QSortFilterProxyModel m_itemModelGroupProxy = QSortFilterProxyModel();
 
-    QList<ShopProject*> m_projects;
-    ShopProject *m_currentProject = nullptr;
-
-    QList<ItemGroup*> m_itemGroups;
-    ItemGroup *m_currentItemGroup = nullptr;
-    QStringList m_disabledItemCategories;
-    QList<Item*> m_items;
-
-    bool m_isSaved = true;
+    void findItems();
     void madeChanges();
 
-    void createProject(const QString &name);
-    void createCategory(const QString &name);
-    void createShop(const QString &name);
+    auto createProject(const QString &name) -> bool;
+    auto createCategory(const QString &name) -> bool;
+    auto createShop(const QString &name) -> bool;
 
-    bool isCurrentShopValid() const;
-    ItemShop* currentShop() const;
+    void connectProject(ShopProject *project) const;
+    void sendProjectCopiesToTool();
 
-    static constexpr const char* PROJECT_FILE_GLOB = "*.shop";
+    [[nodiscard]] auto isCurrentShopValid() const -> bool;
+    [[nodiscard]] auto currentShop() const -> ItemShop *;
 
 private slots:
-    void onShopChanged();
-    void onItemsChanged();
+    void onItemFilesFound(Files::FileListResult *result);
     void itemEditorSaved(ItemGroup *group);
-    void onShopFilesFound(Files::FileListResult *result);
-    void onShopFileDataReceived(const QVector<Files::FileDataResult*> &results);
+    void onProjectWasEdited();
+    void onCurrentProjectChanged(ShopProject *currentProject);
+    void onCurrentShopChanged(ItemShop *currentShop);
+    void onCurrentItemGroupChanged(ItemGroup *currentGroup);
+    void onDisabledItemCategoriesChanged(const QStringList &categories);
+    void onIsLoadingChanged(bool isLoading);
 };
-
-#endif // SHOPEDITOR_H

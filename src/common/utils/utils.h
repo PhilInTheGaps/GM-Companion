@@ -10,11 +10,33 @@ public:
 
     template <typename T> static auto toQObjectList(const T &from) -> QList<QObject *>
     {
-        QList<QObject *> list;
+        return toList<QObject *>(from);
+    }
+
+    template <typename T> static auto toQObjectVector(const T &from) -> QVector<QObject *>
+    {
+        return toVector<QObject *>(from);
+    }
+
+    template <typename T, typename L> static auto toList(const L &from) -> QList<T>
+    {
+        QList<T> list;
         list.reserve(from.count());
         for (auto entry : from)
         {
-            auto *object = qobject_cast<QObject *>(entry);
+            auto *object = qobject_cast<T>(entry);
+            if (object) list.push_back(object);
+        }
+        return list;
+    }
+
+    template <typename T, typename L> static auto toVector(const L &from) -> QVector<T>
+    {
+        QVector<T> list;
+        list.reserve(from.count());
+        for (auto entry : from)
+        {
+            auto *object = qobject_cast<T>(entry);
             if (object) list.push_back(object);
         }
         return list;

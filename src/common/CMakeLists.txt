@@ -38,7 +38,11 @@ set(SRC_UTILS
 
 set(SRC_MODELS
     models/treeitem.h
-    models/treeitem.cpp)
+    models/treeitem.cpp
+    models/customobjectlistmodel.h
+    models/customobjectlistmodel.cpp
+    models/baseprojectitem.h
+    models/baseprojectitem.cpp)
 
 set(SRC_SETTINGS
     settings/settingsmanager.h

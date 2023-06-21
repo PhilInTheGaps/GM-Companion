@@ -21,16 +21,16 @@ Rectangle {
             id: shop_list_column
             anchors.left: parent.left
             anchors.right: parent.right
-            spacing: 5
 
             Repeater {
-                model: shop_tool.shops
+                model: shop_tool && shop_tool.currentProject
+                       && shop_tool.currentProject.currentCategory ? shop_tool.currentProject.currentCategory.shops : []
 
                 CustomButton {
-                    buttonText: modelData
+                    buttonText: modelData.name
                     width: shop_scroll_view.width
 
-                    onClicked: shop_tool.setCurrentShop(index)
+                    onClicked: shop_tool.currentProject.currentCategory.currentShop = modelData
                 }
             }
         }

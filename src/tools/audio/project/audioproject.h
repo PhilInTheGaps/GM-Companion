@@ -47,10 +47,8 @@ public:
     [[nodiscard]] auto currentScenario() const -> AudioScenario *;
     [[nodiscard]] auto elements() const -> QList<AudioElement *>;
 
-    AUTO_PROPERTY_VAL(bool, isSaved)
+    AUTO_PROPERTY_VAL2(bool, isSaved, true)
     READONLY_PROPERTY(int, version)
-    AUTO_PROPERTY_VAL(bool, wasRenamed)
-    AUTO_PROPERTY(QString, oldName)
 
 signals:
     void categoriesChanged();

@@ -8,6 +8,10 @@ Column {
     id: root
     spacing: 5
 
+    property var currentShop: shop_tool && shop_tool.editor
+                              && shop_tool.editor.currentProject
+                              && shop_tool.editor.currentProject.currentCategory ? shop_tool.editor.currentProject.currentCategory.currentShop : undefined
+
     // Shop Info
     Item {
         id: shop_info_item
@@ -46,9 +50,9 @@ Column {
                 onClicked: {
                     if (shop_name_field.editMode) {
                         shop_name_field.editMode = false
-                        shop_editor.name = shop_name_field.text
+                        root.currentShop.name = shop_name_field.text
                     } else {
-                        shop_editor.moveShop(-1)
+                        shop_tool.editor.moveShop(-1)
                     }
                 }
             }
@@ -77,9 +81,9 @@ Column {
                 onClicked: {
                     if (shop_name_field.editMode) {
                         shop_name_field.editMode = false
-                        shop_name_field.text = shop_editor.name
+                        shop_name_field.text = root.currentShop.name
                     } else {
-                        shop_editor.moveShop(1)
+                        shop_tool.editor.moveShop(1)
                     }
                 }
             }
@@ -88,7 +92,7 @@ Column {
         // Name of shop
         TextField {
             id: shop_name_field
-            text: shop_editor.name
+            text: root.currentShop ? root.currentShop.name : ""
             anchors.left: shop_up_down.right
             anchors.right: parent.right
             anchors.top: parent.top
@@ -182,7 +186,7 @@ Column {
                         }
 
                         onClicked: {
-                            shop_editor.deleteShop()
+                            shop_tool.editor.deleteShop()
                             shop_delete_overlay.visible = false
                         }
                     }
@@ -228,9 +232,13 @@ Column {
             width: parent.width / 4
             placeholderText: qsTr("Shop Owner")
             selectByMouse: true
-            text: shop_editor.owner
+            text: root.currentShop ? root.currentShop.owner : ""
 
-            onTextEdited: shop_editor.setOwner(text)
+            onTextEdited: {
+                if (!root.currentShop)
+                    return
+                root.currentShop.owner = text
+            }
         }
 
         // Description
@@ -239,9 +247,13 @@ Column {
             width: parent.width - parent.spacing - shop_owner_textfield.width
             placeholderText: qsTr("Shop Description")
             selectByMouse: true
-            text: shop_editor.description
+            text: root.currentShop ? root.currentShop.description : ""
 
-            onTextEdited: shop_editor.setDescription(text)
+            onTextEdited: {
+                if (!root.currentShop)
+                    return
+                root.currentShop.description = text
+            }
         }
     }
 
@@ -310,7 +322,8 @@ Column {
             visible: shop_items_table.contentHeight > shop_items_table.height
         }
 
-        model: shopEditorItemModel
+        model: shop_tool
+               && shop_tool.editor ? shop_tool.editor.itemModelShop : []
 
         delegate: Rectangle {
             id: delegate_item
@@ -318,8 +331,8 @@ Column {
                     == index ? (description_text.lineCount
                                 > 1 ? description_text.height
                                       + 10 : Defines.TOOLBAR_HEIGHT) : delegate_row.height + 10
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.left: parent ? parent.left : undefined
+            anchors.right: parent ? parent.right : undefined
             anchors.rightMargin: scroll_bar.visible ? scroll_bar.width : 0
             color: shop_items_table.currentIndex == index ? palette.alternateBase : "transparent"
 
@@ -336,7 +349,7 @@ Column {
                 height: 30
 
                 Label {
-                    text: modelData.name
+                    text: name
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 4
                     clip: true
                     elide: Text.ElideRight
@@ -345,7 +358,7 @@ Column {
                 }
 
                 Label {
-                    text: modelData.price
+                    text: price
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                     clip: true
                     elide: Text.ElideRight
@@ -355,7 +368,7 @@ Column {
                 }
 
                 Label {
-                    text: modelData.category
+                    text: category
                     width: (delegate_item.width - parent.leftPadding * 2 - parent.spacing * 2) / 5
                     clip: true
                     elide: Text.ElideRight
@@ -365,7 +378,7 @@ Column {
 
                 Label {
                     id: description_text
-                    text: modelData.description
+                    text: description
                     width: parent.width - x - parent.rightPadding
                     clip: true
                     elide: Text.ElideRight
@@ -394,7 +407,7 @@ Column {
                 anchors.verticalCenter: parent.verticalCenter
 
                 visible: shop_items_table.currentIndex == index
-                onClicked: shop_editor.deleteItem(index)
+                onClicked: shop_tool.editor.deleteItem(index)
             }
         }
     }

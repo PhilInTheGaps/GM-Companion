@@ -13,8 +13,9 @@ CustomToolBar {
     onAddClicked: new_thing_dialog.open()
 
     enableSave: true
-    isSaved: shop_editor.isSaved
-    onSaveClicked: shop_editor.save()
+
+    isSaved: shop_tool && shop_tool.editor ? shop_tool.editor.isSaved : true
+    onSaveClicked: shop_tool.editor.save()
 
     Row {
         id: header_row_left
@@ -28,16 +29,49 @@ CustomToolBar {
         CustomToolBarComboBox {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            model: shop_editor.projectNames
-            onCurrentIndexChanged: shop_editor.setCurrentProject(currentIndex)
+            width: 150
+            textRole: "name"
+
+            model: shop_tool
+                   && shop_tool.editor ? shop_tool.editor.projects : []
+            emptyString: shop_tool && shop_tool.editor
+                         && shop_tool.editor.isLoading ? qsTr("Loading ...") : qsTr(
+                                                             "No Projects")
+
+            onCurrentIndexChanged: {
+                if (!shop_tool || !shop_tool.editor
+                        || shop_tool.editor.projects.length < 1)
+                    return
+
+                shop_tool.editor.currentProject = shop_tool.editor.projects[currentIndex]
+            }
         }
 
         // Categories
         CustomToolBarComboBox {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            model: shop_editor.categoryNames
-            onCurrentIndexChanged: shop_editor.setCurrentCategory(currentIndex)
+            width: 150
+            textRole: "name"
+
+            model: shop_tool && shop_tool.editor
+                   && shop_tool.editor.currentProject ? shop_tool.editor.currentProject.categories : []
+            emptyString: shop_tool && shop_tool.editor
+                         && shop_tool.editor.currentProject
+                         && shop_tool.editor.isLoading ? qsTr("Loading ...") : qsTr(
+                                                             "No Categories")
+
+            onCurrentIndexChanged: {
+                if (!shop_tool || !shop_tool.editor
+                        || !shop_tool.editor.currentProject)
+                    return
+
+                if (shop_tool.editor.currentProject.categories.length < 1)
+                    return
+
+                shop_tool.editor.currentProject.currentCategory
+                        = shop_tool.editor.currentProject.categories[currentIndex]
+            }
         }
     }
 
@@ -61,9 +95,21 @@ CustomToolBar {
         CustomToolBarComboBox {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            textRole: "name"
 
-            model: shop_editor.itemGroups
-            onCurrentIndexChanged: shop_editor.setCurrentItemGroup(currentIndex)
+            model: shop_tool
+                   && shop_tool.editor ? shop_tool.editor.itemGroups : []
+            emptyString: shop_tool && shop_tool.editor
+                         && shop_tool.editor.isLoading ? qsTr("Loading ...") : qsTr(
+                                                             "No Items")
+
+            onCurrentIndexChanged: {
+                if (!shop_tool || !shop_tool.editor
+                        || shop_tool.editor.itemGroups.length < 1)
+                    return
+
+                shop_tool.editor.currentItemGroup = shop_tool.editor.itemGroups[currentIndex]
+            }
         }
     }
 }

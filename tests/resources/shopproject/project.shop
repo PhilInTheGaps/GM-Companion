@@ -1,0 +1,116 @@
+{
+  "categories": [
+    {
+      "name": "Category 1",
+      "shops": [
+        {
+          "description": "Description 1",
+          "items": [
+            {
+              "category": "Item Category 1",
+              "description": "Item Description 1",
+              "name": "Item 1",
+              "price": "1 Units"
+            },
+            {
+              "category": "Item Category 2",
+              "description": "Item Description 2",
+              "name": "Item 2",
+              "price": "2 Units"
+            },
+            {
+              "category": "Item Category 3",
+              "description": "Item Description 3",
+              "name": "Item 3",
+              "price": "3 Units"
+            }
+          ],
+          "name": "Shop 1",
+          "owner": "Owner 1"
+        },
+        {
+          "description": "Description 2",
+          "items": [
+            {
+              "category": "Item Category 1",
+              "description": "Item Description 1",
+              "name": "Item 1",
+              "price": "1 Units"
+            },
+            {
+              "category": "Item Category 2",
+              "description": "Item Description 2",
+              "name": "Item 2",
+              "price": "2 Units"
+            },
+            {
+              "category": "Item Category 3",
+              "description": "Item Description 3",
+              "name": "Item 3",
+              "price": "3 Units"
+            }
+          ],
+          "name": "Shop 2",
+          "owner": "Owner 2"
+        }
+      ]
+    },
+    {
+      "name": "Category 2",
+      "shops": [
+        {
+          "description": "Description 3",
+          "items": [
+            {
+              "category": "Item Category 1",
+              "description": "Item Description 1",
+              "name": "Item 1",
+              "price": "1 Units"
+            },
+            {
+              "category": "Item Category 2",
+              "description": "Item Description 2",
+              "name": "Item 2",
+              "price": "2 Units"
+            },
+            {
+              "category": "Item Category 3",
+              "description": "Item Description 3",
+              "name": "Item 3",
+              "price": "3 Units"
+            }
+          ],
+          "name": "Shop 3",
+          "owner": "Owner 3"
+        },
+        {
+          "description": "Description 4",
+          "items": [
+            {
+              "category": "Item Category 1",
+              "description": "Item Description 1",
+              "name": "Item 1",
+              "price": "1 Units"
+            },
+            {
+              "category": "Item Category 2",
+              "description": "Item Description 2",
+              "name": "Item 2",
+              "price": "2 Units"
+            },
+            {
+              "category": "Item Category 3",
+              "description": "Item Description 3",
+              "name": "Item 3",
+              "price": "3 Units"
+            }
+          ],
+          "name": "Shop 4",
+          "owner": "Owner 4"
+        }
+      ]
+    }
+  ],
+  "name": "TestProject",
+  "version": 3
+}

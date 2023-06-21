@@ -162,13 +162,16 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &filePath, 
 auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &filePath, const QByteArray &data,
                                        const QString &folder) -> QFuture<bool>
 {
-    project->wasRenamed(false);
-
-    auto filePathOld = getProjectFolder(folder) + "/" + project->oldName() + PROJECT_FILE_SUFFIX;
+    auto filePathOld = getProjectFolder(folder) + "/" + project->originalName() + PROJECT_FILE_SUFFIX;
     auto future = File::moveAsync(filePathOld, filePath);
 
     return observe(future)
-        .subscribe([filePath, data, project]() { return saveProject(project, filePath, data); }, []() { return false; })
+        .subscribe(
+            [filePath, data, project]() {
+                project->wasRenamed(false);
+                return saveProject(project, filePath, data);
+            },
+            []() { return false; })
         .future();
 }
 

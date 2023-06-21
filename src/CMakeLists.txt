@@ -169,16 +169,24 @@ set(SRC_COMBAT
     tools/combat_tracker/combatant.cpp)
 
 set(SRC_SHOP
+    tools/shop/baseshoptool.h
+    tools/shop/baseshoptool.cpp
     tools/shop/shoptool.h
     tools/shop/shoptool.cpp
-    tools/shop/shopproject.h
-    tools/shop/shopproject.cpp
-    tools/shop/itemshop.h
-    tools/shop/itemshop.cpp
     tools/shop/itemeditor.h
     tools/shop/itemeditor.cpp
     tools/shop/shopeditor.h
-    tools/shop/shopeditor.cpp)
+    tools/shop/shopeditor.cpp
+    tools/shop/project/shopproject.h
+    tools/shop/project/shopproject.cpp
+    tools/shop/project/shopcategory.h
+    tools/shop/project/shopcategory.cpp
+    tools/shop/project/itemshop.h
+    tools/shop/project/itemshop.cpp
+    tools/shop/project/item.h
+    tools/shop/project/item.cpp
+    tools/shop/project/itemgroup.h
+    tools/shop/project/itemgroup.cpp)
 
 set(SRC_CHARACTERS
     tools/characters/charactertool.h

@@ -28,7 +28,7 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
 
     onAccepted: {
-        shop_editor.createThing(text_field.text, combo_box.currentIndex)
+        shop_tool.editor.createThing(text_field.text, combo_box.currentIndex)
         text_field.clear()
     }
 }
