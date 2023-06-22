@@ -1,7 +1,7 @@
 #include "dicetool.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "utils/stringutils.h"
+#include <QLoggingCategory>
 #include <QQmlContext>
 
 constexpr ConstQString DICE_SETTINGS = "Dice";
@@ -11,9 +11,11 @@ constexpr ConstQString FAILURE_SETTING = "failure";
 constexpr ConstQString USE_MIN_MAX_SETTING = "useMinMax";
 constexpr ConstQString SUCCESS_MAX_SETTING = "successMax";
 
+Q_LOGGING_CATEGORY(gmDiceTool, "gm.dice.tool")
+
 DiceTool::DiceTool(QQmlEngine *engine, QObject *parent) : QObject(parent)
 {
-    engine->rootContext()->setContextProperty("dice_tool", this);
+    engine->rootContext()->setContextProperty(QStringLiteral("dice_tool"), this);
 }
 
 void DiceTool::setSides(int sides)
@@ -25,10 +27,10 @@ void DiceTool::setSides(int sides)
 void DiceTool::setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax)
 {
     SettingsManager::instance()->set(ENABLE_CRITICALS_SETTING, enableCriticals, DICE_SETTINGS);
-    SettingsManager::instance()->set(SUCCESS_SETTING,          success,         DICE_SETTINGS);
-    SettingsManager::instance()->set(FAILURE_SETTING,          failure,         DICE_SETTINGS);
-    SettingsManager::instance()->set(USE_MIN_MAX_SETTING,      minMax,          DICE_SETTINGS);
-    SettingsManager::instance()->set(SUCCESS_MAX_SETTING,      successMax,      DICE_SETTINGS);
+    SettingsManager::instance()->set(SUCCESS_SETTING, success, DICE_SETTINGS);
+    SettingsManager::instance()->set(FAILURE_SETTING, failure, DICE_SETTINGS);
+    SettingsManager::instance()->set(USE_MIN_MAX_SETTING, minMax, DICE_SETTINGS);
+    SettingsManager::instance()->set(SUCCESS_MAX_SETTING, successMax, DICE_SETTINGS);
 }
 
 auto DiceTool::getCriticalEnabled() -> bool
@@ -102,8 +104,8 @@ int DiceTool::roll()
 
         // Check for critical successes or failures
         if (temp == criticalSuccess) criticalSuccesses++;
-        else if (temp == criticalFailure) criticalFailures++;
-
+        else if (temp == criticalFailure)
+            criticalFailures++;
 
         // Add the temporary result to the overall result
         result += temp;
@@ -126,7 +128,8 @@ int DiceTool::roll()
 
     // Add modifier
     result += m_modifier;
-    m_calculationString.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") + QString::number(result));
+    m_calculationString.append(tr("Modifier: ") + QString::number(m_modifier) + "\n\n" + tr("Result: ") +
+                               QString::number(result));
 
     emit rollChanged();
     emit calculationStringChanged();
@@ -135,9 +138,12 @@ int DiceTool::roll()
     if (getCriticalEnabled())
     {
         if ((criticalSuccesses > 0) && (criticalFailures > 0)) emit mixedCriticalResult();
-        else if (criticalSuccesses > 0) emit                        successfulCriticalResult();
-        else if (criticalFailures > 0) emit                         failedCriticalResult();
-        else emit                                                   normalResult();
+        else if (criticalSuccesses > 0)
+            emit successfulCriticalResult();
+        else if (criticalFailures > 0)
+            emit failedCriticalResult();
+        else
+            emit normalResult();
     }
     else
     {

@@ -1,16 +1,18 @@
 #include "effecttool.h"
-#include <QDebug>
-#include <QDir>
 #include "settings/settingsmanager.h"
+#include <QDir>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmEffectTool, "gm.combat.effects")
 
 EffectTool::EffectTool(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Loading Effect Tool...";
+    qCDebug(gmEffectTool()) << "Loading Effect Tool...";
 }
 
 void EffectTool::loadAddons()
 {
-    QStringList addonFolders = { ":/addons", QDir::homePath() + "/.gm-companion/addons" };
+    QStringList addonFolders = {":/addons", QDir::homePath() + "/.gm-companion/addons"};
 
     m_addonPaths.clear();
     m_addons.clear();
@@ -53,7 +55,7 @@ void EffectTool::loadEffects()
 
     m_effectTypes.clear();
 
-    QString addon     = m_addons[index];
+    QString addon = m_addons[index];
     QString addonPath = m_addonPaths[index];
 
     if (SettingsManager::instance()->getIsAddonEnabled(addon))
@@ -62,17 +64,17 @@ void EffectTool::loadEffects()
         s.setIniCodec("UTF-8");
         QStringList types = s.value("types").toStringList();
 
-        for (const QString& type : types)
+        for (const QString &type : types)
         {
-            qDebug() << type;
+            qCDebug(gmEffectTool()) << type;
 
             s.beginGroup(type);
 
-            int dice            = s.value("dice").toInt();
-            int sides           = s.value("sides").toInt();
-            int mod             = s.value("mod").toInt();
+            int dice = s.value("dice").toInt();
+            int sides = s.value("sides").toInt();
+            int mod = s.value("mod").toInt();
             QStringList effects = s.value("effects").toStringList();
-            QString     icon    = s.value("icon", "").toString();
+            QString icon = s.value("icon", "").toString();
 
             s.endGroup();
 
@@ -82,15 +84,14 @@ void EffectTool::loadEffects()
         }
     }
 
-
-    qDebug() << effectTypes();
+    qCDebug(gmEffectTool()) << effectTypes();
     emit effectTypesChanged();
 }
 
 auto EffectTool::getIcon(int index) -> QString
 {
     int addonIndex = m_addons.indexOf(m_currentAddon);
-    QString path   = m_addonPaths[addonIndex] + "/";
+    QString path = m_addonPaths[addonIndex] + "/";
 
     QString icon = m_effectList[index]->icon();
 
@@ -111,7 +112,7 @@ auto EffectTool::getIcon(int index) -> QString
     return path + icon;
 }
 
-auto EffectTool::randomEffect(const QString& effectType) -> QString
+auto EffectTool::randomEffect(const QString &effectType) -> QString
 {
     return m_effectList[m_effectTypes.indexOf(effectType)]->getEffect();
 }

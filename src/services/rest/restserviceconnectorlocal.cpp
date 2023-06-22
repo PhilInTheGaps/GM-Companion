@@ -1,9 +1,7 @@
 #include "restserviceconnectorlocal.h"
-#include "logging.h"
 #include "o0globals.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
-
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>

@@ -1,14 +1,15 @@
 #include "character.h"
-#include "logging.h"
 #include "filesystem/file.h"
-#include "utils/utils.h"
-#include "utils/fileutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/fileutils.h"
+#include "utils/utils.h"
+#include <QLoggingCategory>
 
 using namespace AsyncFuture;
 
-Character::Character(const QString &name, QObject *parent)
-    : QObject(parent), a_name(name)
+Q_LOGGING_CATEGORY(gmCharactersCharacter, "gm.characters.character")
+
+Character::Character(const QString &name, QObject *parent) : QObject(parent), a_name(name)
 {
     qCDebug(gmCharactersCharacter()) << "Initializing new character:" << name << "...";
 }
@@ -17,9 +18,9 @@ int Character::type() const
 {
     if (m_files.size() < 1) return -1;
 
-    if (m_files[0]->name().endsWith("pdf")) return 1;
+    if (m_files.at(0)->name().endsWith(QStringLiteral("pdf"))) return 1;
 
-    if (m_files[0]->name().endsWith("json")) return 2;
+    if (m_files.at(0)->name().endsWith(QStringLiteral("json"))) return 2;
 
     return 0;
 }
@@ -43,7 +44,7 @@ void Character::loadFileList()
     observe(Files::File::listAsync(folder(), true, false)).subscribe([this](Files::FileListResult *result) {
         if (!result) return;
 
-        for (const auto &fileName : result->files())
+        foreach (const auto &fileName, result->files())
         {
             m_files.append(new CharacterFile(fileName, FileUtils::fileInDir(fileName, folder()), this));
         }
@@ -59,18 +60,18 @@ void Character::loadFileData(int index)
 
     if (!m_files[index]->data().isEmpty())
     {
-        qCDebug(gmCharactersImageViewer()) << "File data already loaded.";
-        emit fileDataLoaded(index, m_files[index]->data());
+        qCDebug(gmCharactersCharacter()) << "File data already loaded.";
+        emit fileDataLoaded(index, m_files.at(index)->data());
         return;
     }
 
-    observe(Files::File::getDataAsync(m_files[index]->path()))
-            .subscribe([this, index](Files::FileDataResult *result) {
-        if (!result) return;
+    observe(Files::File::getDataAsync(m_files.at(index)->path()))
+        .subscribe([this, index](Files::FileDataResult *result) {
+            if (!result) return;
 
-        m_files[index]->data(result->data());
-        emit fileDataLoaded(index, result->data());
+            m_files.at(index)->data(result->data());
+            emit fileDataLoaded(index, result->data());
 
-        result->deleteLater();
-    });
+            result->deleteLater();
+        });
 }

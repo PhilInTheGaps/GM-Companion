@@ -1,12 +1,12 @@
 #include "characterimageviewer.h"
-
-#include "logging.h"
-#include <QPixmap>
-#include <QBuffer>
 #include "utils/stringutils.h"
+#include <QBuffer>
+#include <QLoggingCategory>
+#include <QPixmap>
 
-CharacterImageViewer::CharacterImageViewer(QObject *parent)
-    : CharacterViewer(parent)
+Q_LOGGING_CATEGORY(gmCharactersImageViewer, "gm.characters.viewer.images")
+
+CharacterImageViewer::CharacterImageViewer(QObject *parent) : CharacterViewer(parent)
 {
 }
 
@@ -24,8 +24,10 @@ void CharacterImageViewer::setCharacter(Character *character)
 
     if (m_currentCharacter)
     {
-        disconnect(m_currentCharacter, &Character::fileListLoaded, this, &CharacterImageViewer::onCharacterFileListLoaded);
-        disconnect(m_currentCharacter, &Character::fileDataLoaded, this, &CharacterImageViewer::onCharacterFileDataLoaded);
+        disconnect(m_currentCharacter, &Character::fileListLoaded, this,
+                   &CharacterImageViewer::onCharacterFileListLoaded);
+        disconnect(m_currentCharacter, &Character::fileDataLoaded, this,
+                   &CharacterImageViewer::onCharacterFileDataLoaded);
     }
 
     // Load new character
@@ -42,11 +44,12 @@ void CharacterImageViewer::setCharacter(Character *character)
     }
 }
 
-void CharacterImageViewer::onCharacterFileListLoaded(const QList<CharacterFile*> &files)
+void CharacterImageViewer::onCharacterFileListLoaded(const QList<CharacterFile *> &files)
 {
     qCDebug(gmCharactersImageViewer()) << "Character files list was loaded.";
 
-    for (auto *file : files) m_categories.append(file->name());
+    for (auto *file : files)
+        m_categories.append(file->name());
     emit categoriesChanged();
 
     if (!m_categories.isEmpty()) setCurrentCategory(0);
@@ -69,9 +72,8 @@ void CharacterImageViewer::onCharacterFileDataLoaded(int index, const QByteArray
         break;
 
     default:
-        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type()
-                                              << "of character" << m_currentCharacter->name()
-                                              << "not implemented.";
+        qCCritical(gmCharactersImageViewer()) << "Character type" << m_currentCharacter->type() << "of character"
+                                              << m_currentCharacter->name() << "not implemented.";
     }
 }
 
@@ -104,7 +106,7 @@ void CharacterImageViewer::loadPDF(int index, const QByteArray &data)
         delete m_pdfDocument;
 
         m_pdfCharacter = m_currentCharacter->name();
-        m_pdfDocument  = Poppler::Document::loadFromData(data);
+        m_pdfDocument = Poppler::Document::loadFromData(data);
 
         if (!m_pdfDocument || m_pdfDocument->isLocked())
         {
@@ -141,7 +143,8 @@ void CharacterImageViewer::setPDFPage(int index)
 
         if (page)
         {
-            m_image = StringUtils::stringFromImage(QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
+            m_image = StringUtils::stringFromImage(
+                QPixmap::fromImage(page->renderToImage(IMAGE_RESOLUTION, IMAGE_RESOLUTION)));
         }
     }
 
@@ -174,11 +177,13 @@ void CharacterImageViewer::nextImage(bool right)
     if (right)
     {
         if (m_categoryIndex < m_categories.size() - 1) setCurrentCategory(m_categoryIndex + 1);
-        else setCurrentCategory(0);
+        else
+            setCurrentCategory(0);
     }
     else
     {
         if (m_categoryIndex > 0) setCurrentCategory(m_categoryIndex - 1);
-        else setCurrentCategory(m_categories.size() - 1);
+        else
+            setCurrentCategory(m_categories.size() - 1);
     }
 }

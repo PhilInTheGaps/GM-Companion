@@ -1,12 +1,14 @@
 #include "fileaccessnextcloud.h"
-#include "logging.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
+#include <QLoggingCategory>
 #include <QQueue>
 #include <QXmlStreamReader>
 
 using namespace AsyncFuture;
 using namespace Files;
+
+Q_LOGGING_CATEGORY(gmFileAccessNextCloud, "gm.files.access.nextcloud")
 
 FileAccessNextcloud::FileAccessNextcloud(NextCloud &nextcloud, QObject *parent) : FileAccess(parent), m_nc(nextcloud)
 {
@@ -269,7 +271,7 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray &data, const QStrin
     QString element;
     bool foundFirstFolder = false;
 
-    qCDebug(gmNextCloud()) << "PROPFIND:" << data;
+    qCDebug(gmFileAccessNextCloud()) << "PROPFIND:" << data;
 
     while (!xml.atEnd())
     {
@@ -369,7 +371,7 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
                                  return deleteReplyAndReturn(new FileCheckResult(path, errorMessage, this), reply);
                              }
 
-                             qCDebug(gmNextCloud()) << "PROPFIND:" << reply->readAll();
+                             qCDebug(gmFileAccessNextCloud()) << "PROPFIND:" << reply->readAll();
 
                              qCDebug(gmFileAccessNextCloud())
                                  << "Successfully checked if file" << path << "exists:" << doesExist;

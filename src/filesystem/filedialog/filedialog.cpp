@@ -1,21 +1,21 @@
 #include "filedialog.h"
-#include "fileobject.h"
 #include "file.h"
-#include "logging.h"
-#include "utils/utils.h"
-
+#include "fileobject.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/utils.h"
+#include <QLoggingCategory>
 
 using namespace Files;
 using namespace AsyncFuture;
 
-FileDialog::FileDialog(QObject *parent)
-    : QObject(parent), a_folderMode(false), a_isLoading(false)
+Q_LOGGING_CATEGORY(gmFileDialog, "gm.files.dialog")
+
+FileDialog::FileDialog(QObject *parent) : QObject(parent), a_folderMode(false), a_isLoading(false)
 {
     connect(this, &FileDialog::currentDirChanged, &FileDialog::onCurrentDirChanged);
 }
 
-void FileDialog::setCurrentDir(const QString& dir)
+void FileDialog::setCurrentDir(const QString &dir)
 {
     qCDebug(gmFileDialog()) << "Setting current dir:" << dir;
     m_currentDir = dir.split('/');
@@ -28,7 +28,7 @@ void FileDialog::enterFolder(int index)
 {
     if (Utils::isInBounds(entries(), index))
     {
-        const auto *folder = qobject_cast<FileObject*>(entries()[index]);
+        const auto *folder = qobject_cast<FileObject *>(entries().at(index));
 
         if (folder->isFolder())
         {
@@ -52,7 +52,7 @@ auto FileDialog::getSelected(int index) const -> QString
 
     if (Utils::isInBounds(entries(), index))
     {
-        selectedFolder.append(qobject_cast<FileObject*>(entries()[index])->name());
+        selectedFolder.append(qobject_cast<FileObject *>(entries().at(index))->name());
     }
 
     return FileUtils::dirFromFolders(selectedFolder);
@@ -118,17 +118,17 @@ void FileDialog::updateFileList()
     isLoading(true);
 
     m_currentFuture = File::listAsync(currentDir(), !folderMode(), true);
-    observe(m_currentFuture).subscribe([this](FileListResult *result){
-        onFileListReceived(result);
-    }, [this](){
-        qCDebug(gmFileDialog()) << "file list update was cancelled.";
-        isLoading(false);
-    });
+    observe(m_currentFuture)
+        .subscribe([this](FileListResult *result) { onFileListReceived(result); },
+                   [this]() {
+                       qCDebug(gmFileDialog()) << "file list update was cancelled.";
+                       isLoading(false);
+                   });
 }
 
 void FileDialog::clearFileList()
 {
-    for (const auto& file : entries())
+    foreach (const auto &file, entries())
     {
         if (file) file->deleteLater();
     }
@@ -144,16 +144,16 @@ void FileDialog::stopCurrentRequest()
     }
 }
 
-void FileDialog::onFileListReceived(FileListResult* result)
+void FileDialog::onFileListReceived(FileListResult *result)
 {
-    QList<QObject*> objects;
+    QList<QObject *> objects;
 
-    for (const auto& folder : result->folders())
+    foreach (const auto &folder, result->folders())
     {
         objects.append(new FileObject(folder, true, this));
     }
 
-    for (const auto& file : result->files())
+    foreach (const auto &file, result->files())
     {
         objects.append(new FileObject(file, false, this));
     }
@@ -163,7 +163,7 @@ void FileDialog::onFileListReceived(FileListResult* result)
     result->deleteLater();
 }
 
-void FileDialog::onCurrentDirChanged(const QString &/*dir*/)
+void FileDialog::onCurrentDirChanged(const QString & /*dir*/)
 {
     emit canGoForwardChanged(canGoForward());
     emit canGoBackChanged(canGoBack());

@@ -1,14 +1,15 @@
 #include "googledriveconnectorlocal.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
-
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 
 constexpr auto LOCAL_PORT = 59993;
 constexpr auto MAX_CONCURRENT_REQUESTS = 5;
 constexpr auto SCOPE = "https://www.googleapis.com/auth/drive";
+
+Q_LOGGING_CATEGORY(gmGoogleDriveLocal, "gm.service.google.drive.local")
 
 GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(const QString &serviceName, QNetworkAccessManager &networkManager,
                                                      O2 *o2, QObject *parent)

@@ -1,13 +1,13 @@
 #include "fileaccesslocal.h"
-
-#include "logging.h"
-#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QLoggingCategory>
 #include <QtConcurrent/QtConcurrentRun>
 
 using namespace Files;
+
+Q_LOGGING_CATEGORY(gmFileAccessLocal, "gm.files.access.local")
 
 /// Read data from one file
 auto FileAccessLocal::getData(const QString &path, bool allowCache) -> FileDataResult *
@@ -143,7 +143,7 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
         {
             auto errorMessage =
                 QStringLiteral("Could not move %1 to %2: %3").arg(oldPath, newPath, createDirResult->errorMessage());
-            qCWarning(gmFileAccessNextCloud()) << "Warning:" << errorMessage;
+            qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
             createDirResult->deleteLater();
             return new FileResult(false, errorMessage);
         }

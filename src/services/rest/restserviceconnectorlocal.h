@@ -1,7 +1,5 @@
 #pragma once
 
-#include <QQueue>
-
 #include "o0settingsstore.h"
 #include "o2.h"
 #include "o2requestor.h"
@@ -9,6 +7,8 @@
 #include "restserviceconnector.h"
 #include "settings/abstractsettingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QLoggingCategory>
+#include <QQueue>
 
 struct RESTServiceLocalConfig
 {

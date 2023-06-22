@@ -1,16 +1,17 @@
 #include "audiotool.h"
 #include "audiosaveload.h"
-#include "logging.h"
 #include "services/spotify/spotify.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thumbnails/audiothumbnailgenerator.h"
-
+#include <QLoggingCategory>
 #include <QQmlContext>
 #include <QSettings>
 #include <cstdlib>
 #include <exception>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
 AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), editor(engine), musicPlayer(metaDataReader), radioPlayer(metaDataReader)

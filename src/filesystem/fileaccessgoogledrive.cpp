@@ -1,15 +1,16 @@
 #include "fileaccessgoogledrive.h"
-#include "logging.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thirdparty/o2/src/o0globals.h"
 #include "utils/fileutils.h"
 #include "utils/stringutils.h"
-
 #include <QHttpMultiPart>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QUrlQuery>
+
+Q_LOGGING_CATEGORY(gmFileAccessGoogle, "gm.files.access.google")
 
 class GoogleDriveMimeType
 {

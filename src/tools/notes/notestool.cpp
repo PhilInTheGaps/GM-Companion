@@ -1,10 +1,11 @@
 #include "notestool.h"
-#include "logging.h"
 #include "utils/stringutils.h"
-
 #include <QDesktopServices>
 #include <QFile>
+#include <QLoggingCategory>
 #include <QQmlContext>
+
+Q_LOGGING_CATEGORY(gmNotesTool, "gm.notes.tool")
 
 NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), m_saveLoad(this), m_htmlGenerator(this), m_markdownHighlighter(this)

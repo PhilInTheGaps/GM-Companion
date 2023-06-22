@@ -1,10 +1,12 @@
 #include "audiocategory.h"
 #include "audioproject.h"
-#include "logging.h"
 #include "src/common/utils/fileutils.h"
 #include "src/common/utils/utils.h"
 #include <QJsonArray>
+#include <QLoggingCategory>
 #include <utility>
+
+Q_LOGGING_CATEGORY(gmAudioCategory, "gm.audio.project.category")
 
 AudioCategory::AudioCategory(const QString &name, const QString &parentPath, QList<AudioScenario *> scenarios,
                              AudioProject *parent)
@@ -79,7 +81,7 @@ auto AudioCategory::setCurrentScenario(AudioScenario *scenario) -> bool
         return false;
     }
 
-    qDebug() << "AudioCategory: Setting current scenario:" << scenario->name() << "...";
+    qCDebug(gmAudioCategory()) << "Setting current scenario:" << scenario->name() << "...";
 
     m_currentScenario = scenario;
     emit currentScenarioChanged(scenario);

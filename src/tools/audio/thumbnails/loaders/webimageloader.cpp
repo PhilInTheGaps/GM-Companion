@@ -1,13 +1,11 @@
 #include "webimageloader.h"
 #include "../audiothumbnailcache.h"
-#include "logging.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
-
-#include <QUrl>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-
 #include <QLoggingCategory>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QUrl>
+
 Q_LOGGING_CATEGORY(gmAudioWebImageLoader, "gm.audio.thumbnails.loaders.web")
 
 using namespace AsyncFuture;
@@ -22,7 +20,7 @@ auto WebImageLoader::loadImageAsync(const QString &url, QNetworkAccessManager *n
 
     // Load from url
     const auto request = QNetworkRequest(QUrl(url));
-    auto *reply  = networkManager->get(request);
+    auto *reply = networkManager->get(request);
 
     return loadImageAsync(reply, url);
 }
@@ -34,8 +32,10 @@ auto WebImageLoader::loadImageAsync(QNetworkReply *reply, const QString &url) ->
     const auto callback = [url, reply]() {
         QPixmap image;
 
-        if (reply->error() != QNetworkReply::NoError) {
-            qCWarning(gmAudioWebImageLoader()) << reply->error() << reply->errorString() << "Could not load image from" << url;
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qCWarning(gmAudioWebImageLoader())
+                << reply->error() << reply->errorString() << "Could not load image from" << url;
             reply->deleteLater();
             return image;
         }

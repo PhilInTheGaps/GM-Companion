@@ -1,9 +1,7 @@
 #include "filecache.h"
-#include <QDebug>
+#include <QLoggingCategory>
 
-FileCache::FileCache(QObject *parent) : QObject(parent)
-{
-}
+Q_LOGGING_CATEGORY(gmFileCache, "gm.filesystem.cache")
 
 auto FileCache::tryGetData(const QString &path, QByteArray &data) -> bool
 {
@@ -87,16 +85,16 @@ auto FileCache::checkEntry(const QString &path) -> bool
 
 void FileCache::printEntries() const
 {
-    qDebug() << "FileCache:";
+    qCDebug(gmFileCache()) << "Cache entries:";
 
-    for (const auto &key : m_entries.keys())
+    foreach (const auto &key, m_entries.keys())
     {
         auto *value = m_entries[key];
 
         QByteArray data;
         value->tryGetData(data);
 
-        qDebug() << "\t"
-                 << "key:" << key << "\tvalue:" << data << "\tisFresh:" << value->isFresh();
+        qCDebug(gmFileCache()) << "\t"
+                               << "key:" << key << "\tvalue:" << data << "\tisFresh:" << value->isFresh();
     }
 }

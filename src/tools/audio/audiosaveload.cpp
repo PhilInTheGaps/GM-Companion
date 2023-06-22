@@ -1,17 +1,18 @@
 #include "audiosaveload.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "tools/audio/project/audiofile.h"
 #include "tools/audio/project/audioproject.h"
 #include "tools/audio/project/audioprojectupgrader.h"
 #include "utils/fileutils.h"
-
 #include <QJsonDocument>
+#include <QLoggingCategory>
 
 using namespace Files;
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioSaveLoad, "gm.audio.saveload")
 
 /**
  * @brief Find audio project files

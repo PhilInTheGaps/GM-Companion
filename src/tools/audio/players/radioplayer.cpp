@@ -1,12 +1,14 @@
 #include "radioplayer.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
+#include <QLoggingCategory>
 
 using namespace AsyncFuture;
 
 static constexpr auto BUFFER_FULL = 100;
+
+Q_LOGGING_CATEGORY(gmAudioRadio, "gm.audio.radio")
 
 RadioPlayer::RadioPlayer(MetaDataReader &metaDataReader, QObject *parent) : AudioPlayer(parent)
 {

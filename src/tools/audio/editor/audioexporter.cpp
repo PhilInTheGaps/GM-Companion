@@ -1,11 +1,13 @@
 #include "audioexporter.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
+#include <QLoggingCategory>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioExporter, "gm.audio.exporter")
 
 /**
  * @brief Export all files in project that are marked as enabled

@@ -1,13 +1,14 @@
 #include "audioeditorfilebrowser.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
-
+#include <QLoggingCategory>
 #include <QQmlContext>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
 
 AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {

@@ -1,14 +1,15 @@
 #include "notessaveload.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
-
 #include <QBuffer>
+#include <QLoggingCategory>
 #include <QPdfWriter>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmNotesSaveLoad, "gm.notes.saveload")
 
 /**
  * Load book directories in notes path

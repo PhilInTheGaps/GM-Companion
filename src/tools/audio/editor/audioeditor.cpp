@@ -1,16 +1,17 @@
 #include "audioeditor.h"
 #include "../audiosaveload.h"
 #include "../thumbnails/audiothumbnailgenerator.h"
-#include "logging.h"
 #include "spotify/spotifyutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
-
+#include <QLoggingCategory>
 #include <QQmlContext>
 #include <utility>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioEditor, "gm.audio.editor")
 
 AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), a_isSaved(true), addonElementManager(this), audioExporter(this), fileBrowser(engine, this),

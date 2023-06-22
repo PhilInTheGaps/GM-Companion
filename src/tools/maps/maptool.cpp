@@ -1,14 +1,13 @@
 #include "maptool.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/utils.h"
-
 #include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QQmlContext>
 
 using namespace AsyncFuture;
@@ -16,10 +15,12 @@ using namespace AsyncFuture;
 static constexpr auto DEFAULT_COLOR = "red";
 static constexpr auto DEFAULT_ICON = "\uf3c5";
 
+Q_LOGGING_CATEGORY(gmMapsTool, "gm.maps.tool")
+
 MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), mapListModel(this), mapMarkerModel(this)
 {
-    qDebug() << "Loading Map Tool ...";
+    qCDebug(gmMapsTool()) << "Loading Map Tool ...";
 
     engine->rootContext()->setContextProperty(QStringLiteral("map_tool"), this);
     engine->rootContext()->setContextProperty(QStringLiteral("mapListModel"), &mapListModel);

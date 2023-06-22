@@ -2,11 +2,13 @@
 #include "fileaccessgoogledrive.h"
 #include "fileaccesslocal.h"
 #include "fileaccessnextcloud.h"
-#include "logging.h"
 #include "nextcloud/nextcloud.h"
 #include "settings/settingsmanager.h"
+#include <QLoggingCategory>
 
 using namespace Files;
+
+Q_LOGGING_CATEGORY(gmFileManager, "gm.files.manager")
 
 void File::init(NextCloud *nc, GoogleDrive *gd)
 {

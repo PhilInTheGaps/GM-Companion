@@ -1,22 +1,22 @@
 #include "mprisplayeradaptor.h"
-#include <QDebug>
-#include <QImage>
-#include <QUrl>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmMprisPlayer, "gm.mpris.player")
 
 void MprisPlayerAdaptor::setPlaybackStatus(int status)
 {
     switch (status)
     {
     case 0:
-        m_PlaybackStatus = "Stopped";
+        m_PlaybackStatus = QStringLiteral("Stopped");
         break;
 
     case 1:
-        m_PlaybackStatus = "Playing";
+        m_PlaybackStatus = QStringLiteral("Playing");
         break;
 
     case 2:
-        m_PlaybackStatus = "Paused";
+        m_PlaybackStatus = QStringLiteral("Paused");
         break;
     }
 
@@ -25,7 +25,7 @@ void MprisPlayerAdaptor::setPlaybackStatus(int status)
 
 void MprisPlayerAdaptor::setMetadata(const QMap<QString, QVariant> &data)
 {
-    qDebug() << "Updating mpris metadata ...";
+    qCDebug(gmMprisPlayer()) << "Updating mpris metadata ...";
 
     m_Metadata = data;
     emit metadataChanged(m_Metadata);

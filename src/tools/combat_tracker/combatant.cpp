@@ -1,5 +1,4 @@
 #include "combatant.h"
-#include <QDebug>
 #include <utility>
 
 Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, QObject *parent)

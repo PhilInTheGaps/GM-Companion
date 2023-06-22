@@ -80,7 +80,6 @@ auto ProcessInfo::isProcessRunningMac(const QString &procName) -> bool
     return false;
 }
 #elif defined Q_OS_UNIX
-#include <QDebug>
 // Based on https://proswdev.blogspot.com/2012/02/get-process-id-by-name-in-linux-using-c.html
 // but implemented using Qt classes
 auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool

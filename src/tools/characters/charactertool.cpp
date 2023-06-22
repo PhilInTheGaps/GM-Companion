@@ -1,20 +1,21 @@
 #include "charactertool.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
-
 #include <QJsonArray>
+#include <QLoggingCategory>
 #include <QSettings>
 #include <QTemporaryFile>
 
 using namespace AsyncFuture;
 
+Q_LOGGING_CATEGORY(gmCharactersTool, "gm.characters.tool")
+
 CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent)
 {
-    qDebug() << "Loading Character Tool ...";
+    qCDebug(gmCharactersTool()) << "Loading Character Tool ...";
 
     m_imageViewer = new CharacterImageViewer(this);
     m_dsa5Viewer = new CharacterDSA5Viewer(engine, this);
@@ -153,8 +154,8 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
         qCDebug(gmCharactersTool())
             << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
 
-        const auto filePath =
-            FileUtils::fileInDir(QStringLiteral("settings.ini"), SettingsManager::getPath(QStringLiteral("characters")));
+        const auto filePath = FileUtils::fileInDir(QStringLiteral("settings.ini"),
+                                                   SettingsManager::getPath(QStringLiteral("characters")));
         observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
             convertSettingsFile(result->data());
             result->deleteLater();
@@ -183,7 +184,8 @@ void CharacterTool::saveInactiveCharacters() const
 {
     qCDebug(gmCharactersTool()) << "Saving inactive characters ...";
 
-    const auto filePath = FileUtils::fileInDir(QStringLiteral("inactive.json"), SettingsManager::getPath(QStringLiteral("characters")));
+    const auto filePath =
+        FileUtils::fileInDir(QStringLiteral("inactive.json"), SettingsManager::getPath(QStringLiteral("characters")));
     const auto data = QJsonDocument(QJsonArray::fromStringList(m_inactiveCharacters)).toJson();
 
     Files::File::saveAsync(filePath, data);

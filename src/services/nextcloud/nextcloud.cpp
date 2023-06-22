@@ -1,12 +1,11 @@
 #include "nextcloud.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/networkutils.h"
-
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QTimer>
 
 using namespace AsyncFuture;
@@ -15,6 +14,8 @@ constexpr auto AUTH_URL = "/index.php/login/v2";
 constexpr auto DAV_ENDPOINT = "/remote.php/dav/files";
 constexpr auto AUTH_POLL_DELAY = 3000;
 constexpr auto MAX_AUTH_POLLS = 20;
+
+Q_LOGGING_CATEGORY(gmNextCloud, "gm.service.nextcloud")
 
 NextCloud::NextCloud(QNetworkAccessManager &networkManager, QObject *parent)
     : NextCloud(QStringLiteral("NextCloud"), networkManager, parent)

@@ -1,15 +1,16 @@
 #include "musicplayer.h"
-#include "logging.h"
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
-
+#include <QLoggingCategory>
 #include <QRandomGenerator>
 #include <algorithm>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioMusic, "gm.audio.music")
 
 MusicPlayer::MusicPlayer(MetaDataReader &metaDataReader, QObject *parent)
     : AudioPlayer(parent), m_spotifyPlayer(metaDataReader)

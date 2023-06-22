@@ -1,18 +1,19 @@
 #include "map.h"
 #include "filesystem/file.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/stringutils.h"
 #include "utils/utils.h"
-
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QPixmap>
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmMapsMap, "gm.maps.map")
 
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)

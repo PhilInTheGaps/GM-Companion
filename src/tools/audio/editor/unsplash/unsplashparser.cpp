@@ -1,37 +1,39 @@
 #include "unsplashparser.h"
-#include <QQmlContext>
-#include <QFile>
 #include <QDir>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QNetworkRequest>
+#include <QLoggingCategory>
 #include <QNetworkReply>
-#include <QDebug>
+#include <QNetworkRequest>
+#include <QQmlContext>
 #include <algorithm>
 #include <random>
 
-UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent)
-    : QObject(parent)
+Q_LOGGING_CATEGORY(gmUnsplashParser, "gm.unsplash.parser")
+
+UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
-    qmlEngine    = engine;
+    qmlEngine = engine;
     m_imageModel = new ImageListModel;
-    m_manager    = new QNetworkAccessManager;
+    m_manager = new QNetworkAccessManager;
     qmlEngine->rootContext()->setContextProperty("unsplashImageListModel", m_imageModel);
     parse();
 }
 
 void UnsplashParser::parse()
 {
-    QNetworkRequest request(QUrl("https://gist.githubusercontent.com/PhilInTheGaps/0d61b30b0f5ccc00f4abd81566a4cf77/raw/gm-companion-unsplash.json"));
+    QNetworkRequest request(QUrl("https://gist.githubusercontent.com/PhilInTheGaps/0d61b30b0f5ccc00f4abd81566a4cf77/"
+                                 "raw/gm-companion-unsplash.json"));
 
     auto reply = m_manager->get(request);
 
-    connect(reply, &QNetworkReply::finished, this, [ = ]() {
-        qDebug() << "Received Unsplash JSON file.";
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        qCDebug(gmUnsplashParser()) << "Received Unsplash JSON file.";
 
         if (reply->error() != QNetworkReply::NoError)
         {
-            qDebug() << "Unsplash JSON Error:" << reply->errorString();
+            qCDebug(gmUnsplashParser()) << "Unsplash JSON Error:" << reply->errorString();
             reply->deleteLater();
             return;
         }
@@ -65,11 +67,12 @@ void UnsplashParser::parse()
     });
 }
 
-void UnsplashParser::findImage(const QString& text)
+void UnsplashParser::findImage(const QString &text)
 {
-    qDebug() << "Searching for" << text;
+    qCDebug(gmUnsplashParser()) << "Searching for" << text;
 
-    if (text.isEmpty()) {
+    if (text.isEmpty())
+    {
         m_imageModel->setElements(m_images);
         return;
     }
@@ -79,11 +82,11 @@ void UnsplashParser::findImage(const QString& text)
 
     for (auto i : m_images)
     {
-        for (const auto& term : terms)
+        for (const auto &term : terms)
         {
             if (images.contains(i)) break;
 
-            for (const auto& tag : i->tags())
+            for (const auto &tag : i->tags())
             {
                 if (images.contains(i)) break;
 

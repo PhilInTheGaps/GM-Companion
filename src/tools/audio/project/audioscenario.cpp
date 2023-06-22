@@ -1,9 +1,11 @@
 #include "audioscenario.h"
 #include "audiocategory.h"
-#include "logging.h"
 #include "src/common/utils/fileutils.h"
 #include "src/common/utils/utils.h"
 #include <QJsonArray>
+#include <QLoggingCategory>
+
+Q_LOGGING_CATEGORY(gmAudioScenario, "gm.audio.project.scenario")
 
 AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
                              bool isSubscenario, QObject *parent)
@@ -258,7 +260,7 @@ auto AudioScenario::moveElement(AudioElement *element, int steps) -> bool
 
     if (Utils::isInBounds(list, indexNew))
     {
-        qDebug() << index << indexNew;
+        qCDebug(gmAudioScenario()) << index << indexNew;
         list.move(index, indexNew);
         emit elementsChanged();
         return true;
@@ -312,7 +314,7 @@ auto AudioScenario::removeElement(AudioElement *element, bool deleteElement) -> 
             }
         }
 
-        qWarning() << "Error: AudioScenario can only remove elements it owns.";
+        qWarning(gmAudioScenario()) << "Error: AudioScenario can only remove elements it owns.";
         return false;
     }
 
@@ -335,7 +337,7 @@ auto AudioScenario::removeElement(AudioElement *element, bool deleteElement) -> 
  */
 void AudioScenario::sortElements(bool recursive)
 {
-    qDebug() << "Scenario: Sorting elements ...";
+    qCDebug(gmAudioScenario()) << "Sorting elements ...";
     std::sort(m_musicLists.begin(), m_musicLists.end(), AudioElement::compare);
     std::sort(m_soundLists.begin(), m_soundLists.end(), AudioElement::compare);
     std::sort(m_radios.begin(), m_radios.end(), AudioElement::compare);
@@ -349,7 +351,7 @@ void AudioScenario::sortElements(bool recursive)
     }
 
     emit elementsChanged();
-    qDebug() << "Done.";
+    qCDebug(gmAudioScenario()) << "Done.";
 }
 
 auto AudioScenario::addScenario(AudioScenario *scenario) -> bool
@@ -368,7 +370,7 @@ auto AudioScenario::deleteScenario(AudioScenario *scenario) -> bool
 
     if (scenario->parent() != this)
     {
-        qWarning() << "Error: AudioScenario can only remove subscenarios it owns.";
+        qCWarning(gmAudioScenario()) << "Error: AudioScenario can only remove subscenarios it owns.";
         return false;
     }
 
@@ -389,7 +391,7 @@ auto AudioScenario::moveScenario(AudioScenario *scenario, int steps) -> bool
 
     if (scenario->parent() != this)
     {
-        qWarning() << "Error: AudioScenario can only move subscenarios it owns.";
+        qCWarning(gmAudioScenario()) << "Error: AudioScenario can only move subscenarios it owns.";
         return false;
     }
 

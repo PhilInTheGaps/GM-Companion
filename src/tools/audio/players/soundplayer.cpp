@@ -1,9 +1,8 @@
 #include "soundplayer.h"
-#include "logging.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
-
+#include <QLoggingCategory>
 #include <algorithm>
 #include <cstdlib>
 #include <random>
@@ -13,6 +12,8 @@
 #endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
 using namespace AsyncFuture;
+
+Q_LOGGING_CATEGORY(gmAudioSounds, "gm.audio.sounds")
 
 /**
  * @brief Play a sound element

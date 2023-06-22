@@ -1,11 +1,12 @@
 #include "metadatareader.h"
-#include "logging.h"
 #include <QImage>
+#include <QLoggingCategory>
 #include <QMediaMetaData>
-
 #include <taglib/fileref.h>
 #include <taglib/tbytevector.h>
 #include <taglib/tbytevectorstream.h>
+
+Q_LOGGING_CATEGORY(gmAudioMetaData, "gm.audio.metadata")
 
 MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent), m_metaData(new AudioMetaData(this))
 {

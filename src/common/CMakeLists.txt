@@ -73,8 +73,6 @@ set(SOURCES
     ${SRC_SETTINGS}
     ${SRC_UPDATES}
     ${SRC_PROJECTS}
-    logging.h
-    logging.cpp
     abstracttool.h
     abstracttool.cpp
     exceptions/notimplementedexception.h)

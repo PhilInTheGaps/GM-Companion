@@ -1,7 +1,6 @@
 #include "googledrive.h"
-
-#include "logging.h"
 #include "settings/settingsmanager.h"
+#include <QLoggingCategory>
 #include <utility>
 
 using namespace AsyncFuture;
@@ -9,6 +8,8 @@ using namespace AsyncFuture;
 constexpr auto AUTH_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 constexpr auto AUTH_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";
 constexpr auto AUTH_REFRESH_URL = "https://accounts.google.com/o/oauth2/token";
+
+Q_LOGGING_CATEGORY(gmGoogleDrive, "gm.service.google.drive")
 
 GoogleDrive::GoogleDrive(QNetworkAccessManager &networkManager, QObject *parent)
     : GoogleDrive(QStringLiteral("Google"), networkManager, parent)
