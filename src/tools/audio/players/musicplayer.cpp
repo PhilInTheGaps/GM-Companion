@@ -384,7 +384,7 @@ void MusicPlayer::next()
         }
     }
 
-    loadMedia(a_playlist[playlistIndex()]);
+    loadMedia(a_playlist.at(playlistIndex()));
 }
 
 void MusicPlayer::again()
@@ -490,17 +490,16 @@ void MusicPlayer::onFileReceived(Files::FileDataResult *result)
             file.setFileName(FileUtils::incrementFileName(file.fileName()));
             if (!file.open(QIODevice::WriteOnly))
             {
-                qCWarning(gmAudioSounds())
-                    << "Error: Could not open temporary file even after incrementing the filename" << file.fileName()
-                    << file.errorString();
+                qCWarning(gmAudioMusic()) << "Error: Could not open temporary file even after incrementing the filename"
+                                          << file.fileName() << file.errorString();
                 result->deleteLater();
                 return;
             }
         }
         else
         {
-            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName()
-                                       << file.errorString();
+            qCWarning(gmAudioMusic()) << "Error: Could not open temporary file:" << file.fileName()
+                                      << file.errorString();
             result->deleteLater();
             return;
         }

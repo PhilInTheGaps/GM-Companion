@@ -158,17 +158,16 @@ void RadioPlayer::onFileReceived(Files::FileDataResult *result)
             file.setFileName(FileUtils::incrementFileName(file.fileName()));
             if (!file.open(QIODevice::WriteOnly))
             {
-                qCWarning(gmAudioSounds())
-                    << "Error: Could not open temporary file even after incrementing the filename" << file.fileName()
-                    << file.errorString();
+                qCWarning(gmAudioRadio()) << "Error: Could not open temporary file even after incrementing the filename"
+                                          << file.fileName() << file.errorString();
                 result->deleteLater();
                 return;
             }
         }
         else
         {
-            qCWarning(gmAudioSounds()) << "Error: Could not open temporary file:" << file.fileName()
-                                       << file.errorString();
+            qCWarning(gmAudioRadio()) << "Error: Could not open temporary file:" << file.fileName()
+                                      << file.errorString();
             result->deleteLater();
             return;
         }
