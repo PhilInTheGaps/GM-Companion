@@ -17,7 +17,7 @@ Q_LOGGING_CATEGORY(gmAudioSaveLoad, "gm.audio.saveload")
 /**
  * @brief Find audio project files
  */
-auto AudioSaveLoad::findProjectsAsync(const QString &folder) -> QFuture<QVector<AudioProject *>>
+auto AudioSaveLoad::findProjectsAsync(const QString &folder) -> QFuture<std::vector<AudioProject *>>
 {
     qCDebug(gmAudioSaveLoad()) << "Finding audio projects ...";
 
@@ -35,7 +35,7 @@ auto AudioSaveLoad::loadProject(const QByteArray &data, QObject *parent) -> Audi
     return new AudioProject(doc.object(), parent);
 }
 
-auto AudioSaveLoad::loadProjects(FileListResult *files) -> QFuture<QVector<AudioProject *>>
+auto AudioSaveLoad::loadProjects(FileListResult *files) -> QFuture<std::vector<AudioProject *>>
 {
     QStringList fileNames;
     const auto filePaths = files->filesFull();
@@ -51,14 +51,14 @@ auto AudioSaveLoad::loadProjects(FileListResult *files) -> QFuture<QVector<Audio
     files->deleteLater();
 
     return observe(futureContents)
-        .subscribe([](const QVector<FileDataResult *> &contents) {
+        .subscribe([](const std::vector<FileDataResult *> &contents) {
             qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
-            QVector<AudioProject *> projects;
+            std::vector<AudioProject *> projects;
             projects.reserve(contents.size());
 
             for (auto *content : contents)
             {
-                projects << loadProject(content->data(), nullptr);
+                projects.push_back(loadProject(content->data(), nullptr));
                 content->deleteLater();
             }
 

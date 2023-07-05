@@ -36,18 +36,21 @@ void AudioEditor::loadData()
     isLoading(true);
     setIsDataLoaded(true);
 
-    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const QVector<AudioProject *> &projects) {
+    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const std::vector<AudioProject *> &projects) {
         onFoundProjects(projects);
     });
 }
 
-void AudioEditor::onFoundProjects(const QVector<AudioProject *> &vector)
+void AudioEditor::onFoundProjects(const std::vector<AudioProject *> &projects)
 {
     qCDebug(gmAudioEditor) << "Projects changed!";
-    m_projects = QList<AudioProject *>::fromVector(vector);
+    m_projects.clear();
+    m_projects.reserve(projects.size());
 
-    foreach (auto *project, m_projects)
+    foreach (auto *project, projects)
     {
+        m_projects << project;
+
         if (project)
         {
             project->setParent(this);

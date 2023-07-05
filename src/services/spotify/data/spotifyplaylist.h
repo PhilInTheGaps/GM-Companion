@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QString>
-#include <QList>
 #include <QJsonObject>
+#include <QList>
+#include <QString>
 
 #include "basespotifyelement.h"
-#include "spotifytracklist.h"
 #include "spotifyimage.h"
+#include "spotifytracklist.h"
 
 struct SpotifyPlaylist : public BaseSpotifyElement
 {
@@ -19,7 +19,6 @@ struct SpotifyPlaylist : public BaseSpotifyElement
     bool isCollaborative;
     bool isPublic;
 
-    QVector<QSharedPointer<SpotifyImage>> images;
+    QList<QSharedPointer<SpotifyImage>> images;
     QSharedPointer<SpotifyTrackList> tracks;
 };
-

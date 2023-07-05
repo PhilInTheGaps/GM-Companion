@@ -41,7 +41,7 @@ void CustomObjectListModel::clear()
     endResetModel();
 }
 
-void CustomObjectListModel::replaceAll(const QVector<QObject *> &objects)
+void CustomObjectListModel::replaceAll(const QList<QObject *> &objects)
 {
     clear();
 
@@ -50,11 +50,6 @@ void CustomObjectListModel::replaceAll(const QVector<QObject *> &objects)
     beginResetModel();
     m_objects = objects;
     endResetModel();
-}
-
-void CustomObjectListModel::replaceAll(const QList<QObject *> &objects)
-{
-    replaceAll(objects.toVector());
 }
 
 auto CustomObjectListModel::removeRows(int row, int count, const QModelIndex &parent) -> bool
@@ -127,7 +122,7 @@ auto CustomObjectListModel::get(int row) const -> QObject *
     return m_objects.at(row);
 }
 
-auto CustomObjectListModel::getAll() const -> QVector<QObject *>
+auto CustomObjectListModel::getAll() const -> QList<QObject *>
 {
     return m_objects;
 }
@@ -139,7 +134,7 @@ void CustomObjectListModel::takeOwnershipIfRequired(QObject *object)
     object->setParent(this);
 }
 
-void CustomObjectListModel::takeOwnershipIfRequired(const QVector<QObject *> &objects)
+void CustomObjectListModel::takeOwnershipIfRequired(const QList<QObject *> &objects)
 {
     if (!isOwning()) return;
 

@@ -1,31 +1,8 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.16)
 
-# find includes in the build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
+find_package(QuaZip-Qt6 REQUIRED)
 
-# turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-# compiler definitions
-if(${CMAKE_VERSION} VERSION_GREATER 3.11)
-  add_compile_definitions(QT_DEPRECATED_WARNINGS)
-endif()
-
-# qt modules
-find_package(
-  Qt5 REQUIRED
-  COMPONENTS Core
-             Gui
-             Quick
-             Qml
-             Multimedia
-             Network
-             DBus)
-find_package(QuaZip-Qt5)
-
-# submodule libraries
 include(AddPoppler)
 include(AddTagLib)
 include(AddGSL)
@@ -34,7 +11,6 @@ add_subdirectory(common)
 add_subdirectory(services)
 add_subdirectory(filesystem)
 
-# source files
 set(SRC_AUDIO
     tools/audio/audiotool.h
     tools/audio/audiotool.cpp
@@ -53,6 +29,7 @@ set(SRC_AUDIO
     tools/audio/editor/unsplash/unsplashparser.h
     tools/audio/editor/unsplash/unsplashparser.cpp
     tools/audio/players/audioplayer.h
+    tools/audio/players/audioplayer.cpp
     tools/audio/players/musicplayer.h
     tools/audio/players/musicplayer.cpp
     tools/audio/players/soundplayer.h
@@ -195,11 +172,7 @@ set(SRC_CHARACTERS
     tools/characters/character.cpp
     tools/characters/viewers/characterviewer.h
     tools/characters/viewers/characterimageviewer.h
-    tools/characters/viewers/characterimageviewer.cpp
-    tools/characters/viewers/characterdsa5viewer.h
-    tools/characters/viewers/characterdsa5viewer.cpp
-    tools/characters/viewers/dsa5/dsa5listitem.h
-    tools/characters/viewers/dsa5/dsa5listitem.cpp)
+    tools/characters/viewers/characterimageviewer.cpp)
 
 set(SRC_CONVERTER
     tools/converter/convertertool.h
@@ -227,28 +200,25 @@ set(SOURCES
     ${SRC_CONVERTER}
     ${SRC_ADDONS})
 
-# resources
 set(RESOURCES resources/libresources.qrc)
 
-# target executable
-add_library(gm-companion-lib STATIC ${SOURCES} ${RESOURCES})
+qt_add_library(gm-companion-lib STATIC ${SOURCES} ${RESOURCES})
 
-target_link_libraries(
-  gm-companion-lib
+target_link_libraries(gm-companion-lib PUBLIC
   common
   services
   filesystem
   propertyhelper
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Quick
-  Qt5::Qml
-  Qt5::Multimedia
-  Qt5::Network
-  Qt5::DBus
+  Qt6::Core
+  Qt6::Gui
+  Qt6::Quick
+  Qt6::Qml
+  Qt6::Multimedia
+  Qt6::Network
+  Qt6::DBus
   QuaZip::QuaZip
   ${TAG_LIBRARY}
-  ${POPPLER_QT5_LIBRARY})
+  ${POPPLER_QT6_LIBRARY})
 
 install(
   TARGETS gm-companion-lib

@@ -77,7 +77,7 @@ void ShopEditor::onItemFilesFound(Files::FileListResult *result)
         return;
     }
 
-    observe(Files::File::getDataAsync(files)).subscribe([this](const QVector<Files::FileDataResult *> &results) {
+    observe(Files::File::getDataAsync(files)).subscribe([this](const std::vector<Files::FileDataResult *> &results) {
         QList<ItemGroup *> groups = {};
 
         foreach (auto *result, results)
@@ -149,11 +149,12 @@ auto ShopEditor::deleteShop() -> bool
 {
     if (!isCurrentShopValid()) return false;
 
-    const int index = currentProject()->currentCategory()->deleteShop(currentShop());
+    const qsizetype index = currentProject()->currentCategory()->deleteShop(currentShop());
 
     if (!currentProject()->currentCategory()->shops().isEmpty())
     {
-        const int nextIndex = std::clamp(index - 1, 0, currentProject()->currentCategory()->shops().size() - 1);
+        const auto nextIndex =
+            std::clamp(index - 1, static_cast<qsizetype>(0), currentProject()->currentCategory()->shops().size() - 1);
         currentProject()->currentCategory()->currentShop(currentProject()->currentCategory()->shops().at(nextIndex));
     }
 
@@ -369,7 +370,7 @@ void ShopEditor::onCurrentShopChanged(ItemShop *currentShop)
         return;
     }
 
-    m_itemModelShop.replaceAll(Utils::toQObjectVector(currentShop->items()));
+    m_itemModelShop.replaceAll(Utils::toQObjectList(currentShop->items()));
 }
 
 void ShopEditor::onCurrentItemGroupChanged(ItemGroup *currentGroup)
@@ -380,7 +381,7 @@ void ShopEditor::onCurrentItemGroupChanged(ItemGroup *currentGroup)
         return;
     }
 
-    m_itemModelGroup.replaceAll(Utils::toQObjectVector(currentGroup->items()));
+    m_itemModelGroup.replaceAll(Utils::toQObjectList(currentGroup->items()));
 }
 
 void ShopEditor::onDisabledItemCategoriesChanged(const QStringList &categories)

@@ -32,7 +32,7 @@ Item {
 
         onZoomIn: image_viewer.zoomIn()
         onZoomOut: image_viewer.zoomOut()
-        onSetScale: image_viewer.scaleImage(value)
+        onSetScale: value => image_viewer.scaleImage(value)
         onRotateLeft: image_viewer.rotateLeft()
         onRotateRight: image_viewer.rotateRight()
         onFitToScreen: image_viewer.fitToScreen()

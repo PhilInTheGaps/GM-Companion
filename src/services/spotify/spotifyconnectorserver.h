@@ -42,7 +42,7 @@ private:
     bool m_isOnCooldown = false;
     int m_requestCount = 0;
     int m_currentRequestCount = 0;
-    QQueue<QPair<RequestContainer *, AsyncFuture::Deferred<RestNetworkReply *>>> m_requestQueue;
+    QQueue<std::pair<RequestContainer *, AsyncFuture::Deferred<RestNetworkReply *>>> m_requestQueue;
 
     static constexpr ConstQString ACCESS_TOKEN_KEY = "SPOTIFY_ACCESS_TOKEN";
     static constexpr ConstQString REFRESH_TOKEN_KEY = "SPOTIFY_REFRESH_TOKEN";
@@ -72,7 +72,7 @@ private:
     [[nodiscard]] auto addAuthHeader(QNetworkRequest request) -> QNetworkRequest;
 
     void handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
-                         const QList<QPair<QByteArray, QByteArray>> &headers);
+                         const QList<std::pair<QByteArray, QByteArray>> &headers);
     void startCooldown(std::chrono::seconds seconds);
 
 private slots:

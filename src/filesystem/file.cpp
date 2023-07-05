@@ -23,10 +23,10 @@ auto File::getDataAsync(const QString &path, bool allowCache, FileAccess *fileAc
 }
 
 auto File::getDataAsync(const QStringList &paths, bool allowCache, FileAccess *fileAccess)
-    -> QFuture<QVector<FileDataResult *>>
+    -> QFuture<std::vector<FileDataResult *>>
 {
     auto *access = getFileAccess(fileAccess);
-    return access ? access->getDataAsync(paths, allowCache) : QFuture<QVector<FileDataResult *>>();
+    return access ? access->getDataAsync(paths, allowCache) : QFuture<std::vector<FileDataResult *>>();
 }
 
 auto File::saveAsync(const QString &path, const QByteArray &data, FileAccess *fileAccess) -> QFuture<FileResult *>

@@ -37,9 +37,6 @@ void TestUtils::isInBounds()
 {
     QList<QObject *> list;
     isInBoundsHelper(list);
-
-    QVector<QObject *> vector;
-    isInBoundsHelper(vector);
 }
 
 void TestUtils::isInHierarchy()

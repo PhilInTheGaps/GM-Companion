@@ -3,6 +3,8 @@
 #include <QJsonObject>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioUpgrader, "gm.audio.project.upgrader")
 
 AudioProjectUpgrader::AudioProjectUpgrader() : AbstractProjectUpgraderJSON(OLD_VERSION)
@@ -43,29 +45,29 @@ auto AudioProjectUpgrader::convertScenarios(const QJsonArray &scenarios) -> QJso
 {
     QJsonArray scenariosNew;
 
-    for (const auto &scenario : scenarios)
+    foreach (const auto &scenario, scenarios)
     {
-        QJsonObject scenarioNew{{"name", scenario["name"]}};
+        QJsonObject scenarioNew{{"name", scenario["name"_L1]}};
 
-        const auto musicElements = scenario[QStringLiteral("music_elements")].toArray();
+        const auto musicElements = scenario["music_elements"_L1].toArray();
         auto musicElementsNew = convertMusicElements(musicElements);
 
-        const auto spotifyElements = scenario[QStringLiteral("spotify_elements")].toArray();
+        const auto spotifyElements = scenario["spotify_elements"_L1].toArray();
         convertSpotifyElements(spotifyElements, musicElementsNew);
 
-        const auto radioElements = scenario[QStringLiteral("radio_elements")].toArray();
+        const auto radioElements = scenario["radio_elements"_L1].toArray();
         const auto radioElementsNew = convertRadioElements(radioElements);
 
-        const auto soundElements = scenario[QStringLiteral("sound_elements")].toArray();
+        const auto soundElements = scenario["sound_elements"_L1].toArray();
         const auto soundElementsNew = convertSoundElements(soundElements);
 
-        const auto subScenarios = scenario[QStringLiteral("scenarios")].toArray();
+        const auto subScenarios = scenario["scenarios"_L1].toArray();
         const auto subScenariosNew = convertScenarios(subScenarios);
 
-        scenarioNew.insert(QStringLiteral("music_elements"), musicElementsNew);
-        scenarioNew.insert(QStringLiteral("radio_elements"), radioElementsNew);
-        scenarioNew.insert(QStringLiteral("sound_elements"), soundElementsNew);
-        scenarioNew.insert(QStringLiteral("scenarios"), subScenariosNew);
+        scenarioNew.insert(u"music_elements"_s, musicElementsNew);
+        scenarioNew.insert(u"radio_elements"_s, radioElementsNew);
+        scenarioNew.insert(u"sound_elements"_s, soundElementsNew);
+        scenarioNew.insert(u"scenarios"_s, subScenariosNew);
 
         scenariosNew.append(scenarioNew);
     }

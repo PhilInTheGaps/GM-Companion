@@ -86,12 +86,5 @@ Page {
             asynchronous: true
             active: true
         }
-
-        //        Loader {
-        //            id: dsa5_page
-        //            source: "characters/DSA5Page.qml"
-        //            asynchronous: true
-        //            active: true
-        //        }
     }
 }

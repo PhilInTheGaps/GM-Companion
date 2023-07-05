@@ -1,19 +1,13 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-# find includes in the build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-
 # check if submodules are updated
 if(NOT EXISTS ${EXTERNAL_LIB_DIR}/o2/CMakeLists.txt)
     message(FATAL_ERROR "The O2 submodule was not downloaded! Please run  git submodules update --init --recursive  and try again.")
 endif()
 
-# find qt5 packages
-find_package(Qt5 REQUIRED COMPONENTS Core Network)
-find_package(QtKeychain)
+# find qt6 packages
+find_package(Qt6 REQUIRED COMPONENTS Core Network)
+find_package(QtKeychain REQUIRED)
 
 # o2 lib
 set(o2_SOURCES
@@ -58,11 +52,11 @@ if(QTKEYCHAIN_FOUND)
     ${EXTERNAL_LIB_DIR}/o2/src/o0keychainstore.h
   )
 else()
-  message(FATAL_ERROR "Qt5Keychain or QtKeychain is required")
+  message(FATAL_ERROR "Qt6Keychain or QtKeychain is required")
 endif()
 
-add_library(o2 STATIC ${o2_SOURCES} ${o2_HEADERS})
-target_link_libraries(o2 Qt5::Core Qt5::Network ${LINK_TARGETS})
+qt_add_library(o2 STATIC ${o2_SOURCES} ${o2_HEADERS})
+target_link_libraries(o2 Qt6::Core Qt6::Network ${LINK_TARGETS})
 target_include_directories(o2 PUBLIC ${EXTERNAL_LIB_DIR}/o2/src)
 
 # needed for statically linked o2 in shared libs on x86_64

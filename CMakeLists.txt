@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.19)
 
-project(gm-companion)
+project(gm-companion LANGUAGES CXX)
 
 include(GNUInstallDirs)
 include(CMakePrintHelpers)
@@ -12,6 +12,11 @@ if (EXISTS ${CGET_TOOLCHAIN_FILE})
   include(${CGET_TOOLCHAIN_FILE})
   message(STATUS "Found CGet toolchain file: ${CGET_TOOLCHAIN_FILE}")
 endif()
+
+find_package(Qt6 COMPONENTS Core REQUIRED)
+qt_standard_project_setup(REQUIRES 6.5)
+set(CMAKE_AUTORCC ON) # turn on automatic invocation of the RCC
+add_compile_definitions(QT_DEPRECATED_WARNINGS)
 
 # set c++ version
 set(CMAKE_CXX_STANDARD 17)
@@ -27,22 +32,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 # set external lib dir
 set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/thirdparty)
 
-# turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
 # set version number
 include(SetVersionNumber)
 
 # build options
-option(BUILD_TRANSLATIONS "Generate translation files" OFF)
+option(BUILD_TRANSLATIONS "Generate translation files" ON)
 cmake_print_variables(BUILD_TRANSLATIONS)
 option(ENABLE_CODE_COVERAGE "Generate code coverage, don't use this for regular builds" OFF)
 cmake_print_variables(ENABLE_CODE_COVERAGE)
 option(ENABLE_EXTRA_TESTS "Enable extra tests that require special setup and can not be run on every machine" OFF)
 cmake_print_variables(ENABLE_EXTRA_TESTS)
-option(IS_RUNNING_IN_CI "Variable used to en- and disable stuff when running CI environments" OFF)
+option(IS_RUNNING_IN_CI "Variable used to en- and disable stuff when running in CI environments" OFF)
 cmake_print_variables(IS_RUNNING_IN_CI)
 
 message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
@@ -54,7 +54,6 @@ include(AddPropertyHelper)
 include(AddHttpStatusCodes)
 
 set(SENTRY_ENABLE_INSTALL ON)
-find_package(Qt5 COMPONENTS Core)
 add_subdirectory(thirdparty/sentry-native)
 
 # Code Coverage

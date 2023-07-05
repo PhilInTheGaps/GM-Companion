@@ -16,13 +16,14 @@ auto SpotifyTrack::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTr
 
     const auto isLinked = json.contains(QStringLiteral("linked_from"));
 
-    auto *track = new SpotifyTrack {
-        {
-            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("href")].toString() : json[QStringLiteral("href")].toString(),
-            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("uri")].toString() : json[QStringLiteral("uri")].toString(),
-            isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("id")].toString() : json[QStringLiteral("id")].toString(),
-            json[QStringLiteral("name")].toString()
-        },
+    auto *track = new SpotifyTrack{
+        {isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("href")].toString()
+                  : json[QStringLiteral("href")].toString(),
+         isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("uri")].toString()
+                  : json[QStringLiteral("uri")].toString(),
+         isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("id")].toString()
+                  : json[QStringLiteral("id")].toString(),
+         json[QStringLiteral("name")].toString()},
         json[QStringLiteral("duration_ms")].toInt(),
         getIsPlayable(json),
         SpotifyAlbumInfo::fromJson(json[QStringLiteral("album")].toObject()),
@@ -38,20 +39,20 @@ auto SpotifyTrack::fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTra
     return SpotifyTrack::fromJson(json);
 }
 
-auto SpotifyTrack::fromJsonArray(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>
+auto SpotifyTrack::fromJsonArray(const QJsonArray &json) -> std::vector<QSharedPointer<SpotifyTrack>>
 {
-    QVector<QSharedPointer<SpotifyTrack>> tracks;
+    std::vector<QSharedPointer<SpotifyTrack>> tracks;
     tracks.reserve(json.count());
 
-    for (const auto &item : json)
+    foreach (const auto &item, json)
     {
-        tracks << SpotifyTrack::fromJson(item.toObject());
+        tracks.push_back(SpotifyTrack::fromJson(item.toObject()));
     }
 
     return tracks;
 }
 
-auto SpotifyTrack::fromJsonArray(const QByteArray &data) -> QVector<QSharedPointer<SpotifyTrack>>
+auto SpotifyTrack::fromJsonArray(const QByteArray &data) -> std::vector<QSharedPointer<SpotifyTrack>>
 {
     const auto json = QJsonDocument::fromJson(data).object();
     return SpotifyTrack::fromJsonArray(json[QStringLiteral("tracks")].toArray());
@@ -72,12 +73,15 @@ auto SpotifyTrack::artistString() const -> QString
 
 auto SpotifyTrack::image() const -> QSharedPointer<SpotifyImage>
 {
-    if (album->images.isEmpty()) {}
+    if (album->images.isEmpty())
+    {
+        // FIXME
+    }
 
-    return album->images.first();
+    return album->images.constFirst();
 }
 
-auto SpotifyTrack::getIsPlayable(const QJsonObject &json) ->bool
+auto SpotifyTrack::getIsPlayable(const QJsonObject &json) -> bool
 {
     if (json.contains(QStringLiteral("is_playable")))
     {

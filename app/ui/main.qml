@@ -1,10 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-
+import QtQuick
+import QtQuick.Controls
 import FontAwesome 2.0
 import "./tools"
 import "./main"
-
 import "defines.js" as Defines
 
 ApplicationWindow {
@@ -12,24 +10,21 @@ ApplicationWindow {
     title: qsTr("GM-Companion")
     visible: true
 
-    Item {
-        id: palette
-        readonly property string text: "#f6f7f8"
-        readonly property string base: "#2e2e2e"
-        readonly property string alternateBase: "#343a43"
-        readonly property string window: "#2e2e2e"
-        readonly property string windowText: "#f6f7f8"
-        readonly property string button: "#3f4957"
-        readonly property string buttonText: "#f6f7f8"
-        readonly property string light: "#ebedef"
-        readonly property string midlight: "#d5dade"
-        readonly property string mid: "#bfc6cd"
-        readonly property string dark: "#1f1f1f"
-        readonly property string highlight: "#3f4957"
-        readonly property string highlightedText: "#f6f7f8"
-        readonly property string toolTipText: "#f6f7f8"
-        readonly property string toolTipBase: "#1f1f1f"
-    }
+    palette.text: "#f6f7f8"
+    palette.base: "#2e2e2e"
+    palette.alternateBase: "#343a43"
+    palette.window: "#2e2e2e"
+    palette.windowText: "#f6f7f8"
+    palette.button: "#3f4957"
+    palette.buttonText: "#f6f7f8"
+    palette.light: "#ebedef"
+    palette.midlight: "#d5dade"
+    palette.mid: "#bfc6cd"
+    palette.dark: "#1f1f1f"
+    palette.highlight: "#3f4957"
+    palette.highlightedText: "#f6f7f8"
+    palette.toolTipText: "#f6f7f8"
+    palette.toolTipBase: "#1f1f1f"
 
     width: 1280
     height: 720

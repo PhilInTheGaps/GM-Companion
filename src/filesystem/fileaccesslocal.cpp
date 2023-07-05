@@ -36,17 +36,17 @@ auto FileAccessLocal::getDataAsync(const QString &path, bool allowCache) -> QFut
 }
 
 /// Read data from multiple files
-auto FileAccessLocal::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *>>
+auto FileAccessLocal::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<std::vector<FileDataResult *>>
 {
     qCDebug(gmFileAccessLocal()) << "Getting data from multiple files:" << paths << "...";
 
     return QtConcurrent::run([paths, allowCache]() {
-        QVector<FileDataResult *> results;
+        std::vector<FileDataResult *> results;
         results.reserve(paths.size());
 
-        for (const auto &path : paths)
+        foreach (const auto &path, paths)
         {
-            results.append(getData(path, allowCache));
+            results.push_back(getData(path, allowCache));
         }
 
         return results;
@@ -102,8 +102,8 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
     {
         if (f.write(data) == -1)
         {
-            errorMessage =
-                QStringLiteral("Could not write to file %1: %2 %3").arg(path, QString(f.error()), f.errorString());
+            errorMessage = QStringLiteral("Could not write to file %1: %2 %3")
+                               .arg(path, QString::number(f.error()), f.errorString());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         }
         else
@@ -115,8 +115,8 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
     }
     else
     {
-        errorMessage =
-            QStringLiteral("Could not open file for saving %1: %2 %3").arg(path, QString(f.error()), f.errorString());
+        errorMessage = QStringLiteral("Could not open file for saving %1: %2 %3")
+                           .arg(path, QString::number(f.error()), f.errorString());
         status = false;
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
     }
@@ -152,8 +152,8 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
 
     if (!f.rename(newPath))
     {
-        auto errorMessage =
-            QStringLiteral("Could not move %1 to %2: %3 %4").arg(oldPath, newPath, QString(f.error()), f.errorString());
+        auto errorMessage = QStringLiteral("Could not move %1 to %2: %3 %4")
+                                .arg(oldPath, newPath, QString::number(f.error()), f.errorString());
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         return new FileResult(false, errorMessage);
     }
@@ -175,8 +175,8 @@ auto FileAccessLocal::deleteAsync(const QString &path) -> QFuture<FileResult *>
     return QtConcurrent::run([path]() {
         if (QFile f(path); !f.remove())
         {
-            auto errorMessage =
-                QStringLiteral("Could not delete file/folder %1: %2 %3").arg(path, QString(f.error()), f.errorString());
+            auto errorMessage = QStringLiteral("Could not delete file/folder %1: %2 %3")
+                                    .arg(path, QString::number(f.error()), f.errorString());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
             return new FileResult(false, errorMessage);
         }
@@ -205,8 +205,8 @@ auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResu
 
     if (!f.copy(copy))
     {
-        auto errorMessage =
-            QStringLiteral("Could not copy %1 to %2: %3 %4").arg(path, copy, QString(f.error()), f.errorString());
+        auto errorMessage = QStringLiteral("Could not copy %1 to %2: %3 %4")
+                                .arg(path, copy, QString::number(f.error()), f.errorString());
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         return new FileResult(false, errorMessage);
     }

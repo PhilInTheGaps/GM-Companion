@@ -51,7 +51,7 @@ void initTranslations()
     auto *translator = new QTranslator;
 
     if (translator->load(SettingsManager::getLanguage(), QStringLiteral("gm-companion"), QStringLiteral("_"),
-                         QStringLiteral(":/translations")))
+                         QStringLiteral(":/i18n")))
     {
         QGuiApplication::installTranslator(translator);
 
@@ -119,7 +119,7 @@ auto main(int argc, char *argv[]) -> int
     // Make classes available for QML
     QUrl const source(QStringLiteral("qrc:/main.qml"));
 
-    QQuickStyle::setStyle(QStringLiteral(":/style"));
+    QQuickStyle::setStyle(QStringLiteral("style"));
 
     QQmlApplicationEngine engine;
     engine.addImportPath(QStringLiteral("qrc:/"));

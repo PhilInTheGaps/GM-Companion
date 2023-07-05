@@ -3,6 +3,7 @@
 #include "services/spotify/spotify.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thumbnails/audiothumbnailgenerator.h"
+#include "utils/utils.h"
 #include <QLoggingCategory>
 #include <QQmlContext>
 #include <QSettings>
@@ -69,7 +70,7 @@ void AudioTool::loadData()
 
 void AudioTool::updateProjectList()
 {
-    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const QVector<AudioProject *> &projects) {
+    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const std::vector<AudioProject *> &projects) {
         onProjectsChanged(projects);
     });
 }
@@ -88,9 +89,9 @@ auto AudioTool::currentProjectName() const -> QString
     Change the project, notify UI
     @param projects List with pointers to audio projects
  */
-void AudioTool::onProjectsChanged(QVector<AudioProject *> projects)
+void AudioTool::onProjectsChanged(const std::vector<AudioProject *> &projects)
 {
-    m_projects = std::move(projects);
+    m_projects = Utils::toList<AudioProject *>(projects);
 
     foreach (auto *project, m_projects)
     {
@@ -117,7 +118,7 @@ void AudioTool::setCurrentProject(int index)
 {
     if (m_projects.isEmpty()) return;
 
-    qCDebug(gmAudioTool) << "Setting current project:" << index << m_projects[index]->name();
+    qCDebug(gmAudioTool) << "Setting current project:" << index << m_projects.at(index)->name();
 
     if (m_currentProject)
     {

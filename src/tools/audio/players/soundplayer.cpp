@@ -3,13 +3,9 @@
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
+#include <QRandomGenerator>
 #include <algorithm>
 #include <cstdlib>
-#include <random>
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-#include <QRandomGenerator>
-#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 
 using namespace AsyncFuture;
 
@@ -127,11 +123,11 @@ SoundPlayer::SoundPlayer(AudioElement *element, int volume, QObject *parent) : A
     }
 
     m_mediaPlayer.setObjectName(element->name());
-    m_mediaPlayer.setVolume(volume);
+    m_mediaPlayer.setAudioOutput(&m_audioOutput);
+    m_audioOutput.setVolume(normalizeVolume(volume));
 
     connect(&m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &SoundPlayer::onMediaStatusChanged);
-    connect(&m_mediaPlayer, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error), this,
-            &SoundPlayer::onMediaPlayerError);
+    connect(&m_mediaPlayer, &QMediaPlayer::errorOccurred, this, &SoundPlayer::onMediaPlayerErrorOccurred);
 
     m_playlist = element->files();
     applyShuffleMode();
@@ -155,18 +151,15 @@ void SoundPlayer::loadMedia(const AudioFile *file)
     }
 
     case AudioFile::Source::Web: {
-        m_mediaPlayer.setMedia(QUrl(file->url()));
+        m_mediaPlayer.setSource(QUrl(file->url()));
         m_mediaPlayer.play();
-        m_mediaPlayer.setMuted(false);
+        m_audioOutput.setMuted(false);
         m_fileName = file->url();
         break;
     }
 
     case AudioFile::Source::Youtube: {
-        //        m_streamManifest = m_videoClient->streams()->getManifest(file->url());
-        //        connect(m_streamManifest, &Streams::StreamManifest::ready, this,
-        //        &SoundPlayer::onStreamManifestReceived); m_mediaPlayer->setMuted(false); m_fileName =
-        //        file->url();
+        // FIXME
         break;
     }
 
@@ -211,12 +204,12 @@ void SoundPlayer::stopElement(const QString &element)
 void SoundPlayer::setVolume(int linear, int logarithmic)
 {
     Q_UNUSED(linear)
-    m_mediaPlayer.setVolume(logarithmic);
+    m_audioOutput.setVolume(normalizeVolume(logarithmic));
 }
 
 void SoundPlayer::next()
 {
-    if (!m_element || (m_playlist.length() < 1))
+    if (!m_element || (m_playlist.isEmpty()))
     {
         emit playerStopped(this);
         return;
@@ -225,14 +218,7 @@ void SoundPlayer::next()
     // Complete random
     if (m_element->mode() == AudioElement::Mode::Random)
     {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         m_playlistIndex = QRandomGenerator::system()->bounded(m_playlist.length());
-#else  // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
-        m_playlistIndex = dis(gen);
-#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
         loadMedia(m_playlist.at(m_playlistIndex));
         return;
     }
@@ -261,7 +247,6 @@ void SoundPlayer::applyShuffleMode()
 {
     if (m_element->mode() != AudioElement::Mode::RandomList) return;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QList<AudioFile *> temp;
 
     while (!m_playlist.isEmpty())
@@ -269,19 +254,6 @@ void SoundPlayer::applyShuffleMode()
         temp.append(m_playlist.takeAt(QRandomGenerator::global()->bounded(m_playlist.size())));
     }
     m_playlist = temp;
-
-#else  // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    QList<AudioFile *> temp;
-
-    while (!m_playlist.isEmpty())
-    {
-        std::uniform_int_distribution<> dis(0, m_playlist.length() - 1);
-        temp.append(m_playlist.takeAt(dis(gen)));
-    }
-    m_playlist = temp;
-#endif // if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 }
 
 void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
@@ -294,9 +266,9 @@ void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
     }
 }
 
-void SoundPlayer::onMediaPlayerError(QMediaPlayer::Error error)
+void SoundPlayer::onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString)
 {
-    qCWarning(gmAudioSounds()) << error << m_mediaPlayer.errorString();
+    qCWarning(gmAudioSounds()) << error << errorString;
 
     if (error == QMediaPlayer::FormatError)
     {
@@ -347,15 +319,15 @@ void SoundPlayer::onFileReceived(Files::FileDataResult *result)
     file.write(result->data());
     file.close();
 
-    m_mediaPlayer.setMedia(QMediaContent(QUrl::fromLocalFile(file.fileName())), nullptr);
+    m_mediaPlayer.setSource(QUrl::fromLocalFile(file.fileName()));
 #else
     m_mediaBuffer.close();
     m_mediaBuffer.setData(result->data());
     m_mediaBuffer.open(QIODevice::ReadOnly);
-    m_mediaPlayer.setMedia(QMediaContent(), &m_mediaBuffer);
+    m_mediaPlayer.setSourceDevice(&m_mediaBuffer);
 #endif
 
-    m_mediaPlayer.setMuted(false);
+    m_audioOutput.setMuted(false);
 
     m_mediaPlayer.play();
     result->deleteLater();

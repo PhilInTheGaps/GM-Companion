@@ -47,14 +47,14 @@ protected:
     RESTServiceLocalConfig m_config;
 
     void setConfig(const RESTServiceLocalConfig &config);
-    void handleRateLimit(const QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair);
+    void handleRateLimit(const std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair);
     void startCooldown(int seconds);
     void dequeueRequests();
 
     bool m_isOnCooldown = false;
 
-    QMap<int, QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_activeRequests;
-    QQueue<QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_requestQueue;
+    QMap<int, std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_activeRequests;
+    QQueue<std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_requestQueue;
 
     [[nodiscard]] int activeRequestCount() const
     {

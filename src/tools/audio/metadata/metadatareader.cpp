@@ -6,6 +6,8 @@
 #include <taglib/tbytevector.h>
 #include <taglib/tbytevectorstream.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioMetaData, "gm.audio.metadata")
 
 MetaDataReader::MetaDataReader(QObject *parent) : QObject(parent), m_metaData(new AudioMetaData(this))
@@ -32,27 +34,38 @@ void MetaDataReader::updateMetaData(QMediaPlayer *mediaPlayer)
     updateDuration(mediaPlayer->duration() * 1000);
 }
 
-void MetaDataReader::updateMetaData(const QString &key, const QVariant &value)
+void MetaDataReader::updateMetaData(const QMediaMetaData &metaData)
 {
-    qCDebug(gmAudioMetaData()) << "Updating meta data:" << key;
-
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    if (key == QLatin1String("Title"))
+    foreach (auto key, metaData.keys())
     {
+        updateMetaData(key, metaData.value(key));
+    }
+}
+
+void MetaDataReader::updateMetaData(QMediaMetaData::Key key, const QVariant &value)
+{
+    if (!value.isValid() || value.isNull()) return;
+
+    switch (key)
+    {
+    case QMediaMetaData::Title:
         m_metaData->title(value.toString());
-    }
-    else if ((key == QLatin1String("AlbumArtist")) || (key == QLatin1String("Artist")) ||
-             (key == QLatin1String("Composer")))
-    {
+        break;
+    case QMediaMetaData::Author:
+    case QMediaMetaData::AlbumArtist:
+    case QMediaMetaData::Composer:
+    case QMediaMetaData::LeadPerformer:
         m_metaData->artist(value.toString());
-    }
-    else if (key == QLatin1String("AlbumTitle"))
-    {
+        break;
+    case QMediaMetaData::AlbumTitle:
         m_metaData->album(value.toString());
-    }
-    else if ((key == QLatin1String("CoverArtImage")) || (key == QLatin1String("ThumbnailImage")))
-    {
+    case QMediaMetaData::MediaType:
+        m_metaData->type(value.toString());
+        break;
+    case QMediaMetaData::ThumbnailImage:
+    case QMediaMetaData::CoverArtImage: {
         if (m_coverFile) m_coverFile->deleteLater();
 
         m_coverFile = new QTemporaryFile(this);
@@ -67,10 +80,65 @@ void MetaDataReader::updateMetaData(const QString &key, const QVariant &value)
             m_metaData->cover(QUrl::fromLocalFile(m_coverFile->fileName()).toEncoded());
             m_coverFile->close();
         }
+        break;
     }
-    else if (key == QLatin1String("Type"))
+    default:
+        break;
+    }
+}
+
+void MetaDataReader::updateMetaData(const QString &key, const QVariant &value)
+{
+    qCDebug(gmAudioMetaData()) << "Updating meta data:" << key;
+
+    if (!m_metaData) m_metaData = new AudioMetaData(this);
+
+    if (key == "Title"_L1)
     {
-        m_metaData->type(value.toString());
+        updateMetaData(QMediaMetaData::Title, value);
+        return;
+    }
+
+    if (key == "AlbumArtist"_L1)
+    {
+        updateMetaData(QMediaMetaData::AlbumArtist, value);
+        return;
+    }
+
+    if (key == "Artist"_L1)
+    {
+        updateMetaData(QMediaMetaData::Author, value);
+        return;
+    }
+
+    if (key == "Composer"_L1)
+    {
+        updateMetaData(QMediaMetaData::Composer, value);
+        return;
+    }
+
+    if (key == "AlbumTitle"_L1)
+    {
+        updateMetaData(QMediaMetaData::AlbumTitle, value);
+        return;
+    }
+
+    if (key == "ThumbnailImage"_L1)
+    {
+        updateMetaData(QMediaMetaData::ThumbnailImage, value);
+        return;
+    }
+
+    if (key == "CoverArtImage"_L1)
+    {
+        updateMetaData(QMediaMetaData::CoverArtImage, value);
+        return;
+    }
+
+    if (key == "Type"_L1)
+    {
+        updateMetaData(QMediaMetaData::MediaType, value);
+        return;
     }
 }
 

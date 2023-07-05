@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>splash.jpg</file>
-        <file>translations/gm-companion_de_DE.qm</file>
-        <file>translations/gm-companion_en_US.qm</file>
         <file>icons/audio.png</file>
         <file>icons/characters.png</file>
         <file>icons/combat.png</file>
@@ -15,5 +13,14 @@
         <file>icons/maps.png</file>
         <file>icons/notes.png</file>
         <file>icons/settings.png</file>
+        <file>icons/dice/d4.png</file>
+        <file>icons/dice/d6.png</file>
+        <file>icons/dice/d8.png</file>
+        <file>icons/dice/d10.png</file>
+        <file>icons/dice/d12.png</file>
+        <file>icons/dice/d20.png</file>
+        <file>icons/media/music_image.png</file>
+        <file>icons/media/radio_image.png</file>
+        <file>icons/media/sound_image.png</file>
     </qresource>
 </RCC>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <QStringList>
-#include <QJsonObject>
 #include "spotifytrack.h"
+#include <QJsonObject>
+#include <QStringList>
 
 struct SpotifyTrackList
 {
@@ -11,7 +11,6 @@ struct SpotifyTrackList
 
     void append(const SpotifyTrackList &other);
 
-    QVector<QSharedPointer<SpotifyTrack>> tracks;
+    QList<QSharedPointer<SpotifyTrack>> tracks;
     QString next;
 };
-

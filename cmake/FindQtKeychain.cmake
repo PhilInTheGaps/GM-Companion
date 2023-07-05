@@ -31,21 +31,21 @@
 #  QTKEYCHAIN_DEFINITIONS - Compiler switches required for using LibXml2
 
 # CHANGES:
-# Was modified to find qtkeychain even if it is called qt5keychain.
+# Was modified to find qtkeychain even if it is called qt6keychain.
 # Also, build the qtkeychain if no system lib can be found.
 
-if (Qt5Core_DIR)
+if (Qt6Core_DIR)
   find_path(QTKEYCHAIN_INCLUDE_DIR
     NAMES
       keychain.h
     PATH_SUFFIXES
-      qt5keychain
+      qt6keychain
   )
 
   find_library(QTKEYCHAIN_LIBRARY
     NAMES
-      qt5keychain
-      lib5qtkeychain
+      qt6keychain
+      libqt6keychain
     PATHS
       /usr/lib
       /usr/lib/${CMAKE_ARCH_TRIPLET}

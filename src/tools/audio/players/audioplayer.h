@@ -1,5 +1,4 @@
-#ifndef AUDIOPLAYER_H
-#define AUDIOPLAYER_H
+#pragma once
 
 #include <QObject>
 
@@ -16,6 +15,7 @@ public slots:
     virtual void setVolume(int linear, int logarithmic) = 0;
     virtual void again() = 0;
     virtual void next() = 0;
-};
 
-#endif // AUDIOPLAYER_H
+protected:
+    static auto normalizeVolume(int volume) -> float;
+};

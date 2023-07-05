@@ -1,8 +1,8 @@
-import QtQuick 2.9
-import QtQuick.Window 2.3
-import QtQuick.Controls 2.2
-import QtQuick.Controls.impl 2.2
-import QtQuick.Templates 2.2 as T
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.impl
+import QtQuick.Templates as T
 import "../colors.js" as Colors
 
 T.ApplicationWindow {
@@ -10,7 +10,7 @@ T.ApplicationWindow {
 
     color: Colors.window
 
-    overlay.modal: Rectangle {
+    Overlay.overlay.modal: Rectangle {
         color: Colors.dim
         Behavior on opacity {
             NumberAnimation {
@@ -19,7 +19,7 @@ T.ApplicationWindow {
         }
     }
 
-    overlay.modeless: Rectangle {
+    Overlay.overlay.modeless: Rectangle {
         color: Colors.dim
         Behavior on opacity {
             NumberAnimation {

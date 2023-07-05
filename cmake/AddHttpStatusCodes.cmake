@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(http-status-codes INTERFACE)
+qt_add_library(http-status-codes INTERFACE)
 
 target_include_directories(http-status-codes INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>

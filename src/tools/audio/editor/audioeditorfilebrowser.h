@@ -46,7 +46,7 @@ public:
     }
     QVariant data(const QModelIndex &index, int role) const override;
 
-    QVector<QObject *> elements() const
+    QList<QObject *> elements() const
     {
         return m_items;
     }
@@ -78,7 +78,7 @@ protected:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
-    QVector<QObject *> m_items = {};
+    QList<QObject *> m_items = {};
     QString m_name;
 };
 

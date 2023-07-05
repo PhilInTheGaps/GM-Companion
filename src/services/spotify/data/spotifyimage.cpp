@@ -11,9 +11,9 @@ auto SpotifyImage::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyIm
     return QSharedPointer<SpotifyImage>(image);
 }
 
-auto SpotifyImage::fromJson(const QJsonArray &array) -> QVector<QSharedPointer<SpotifyImage>>
+auto SpotifyImage::fromJson(const QJsonArray &array) -> QList<QSharedPointer<SpotifyImage>>
 {
-    QVector<QSharedPointer<SpotifyImage>> images;
+    QList<QSharedPointer<SpotifyImage>> images;
     images.reserve(array.count());
 
     for (const auto &element : array)
@@ -26,5 +26,5 @@ auto SpotifyImage::fromJson(const QJsonArray &array) -> QVector<QSharedPointer<S
 
 auto SpotifyImage::size() const -> QSize
 {
-    return { width, height };
+    return {width, height};
 }

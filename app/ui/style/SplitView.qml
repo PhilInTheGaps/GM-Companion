@@ -1,7 +1,7 @@
-import QtQuick 2.13
-import QtQuick.Templates 2.13 as T
-import QtQuick.Controls 2.13
-import QtQuick.Controls.impl 2.13
+import QtQuick
+import QtQuick.Templates as T
+import QtQuick.Controls
+import QtQuick.Controls.impl
 import "../colors.js" as Colors
 
 T.SplitView {

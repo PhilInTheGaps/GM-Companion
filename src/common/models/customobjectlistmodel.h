@@ -3,7 +3,6 @@
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QList>
-#include <QVector>
 
 class CustomObjectListModel : public QAbstractListModel
 {
@@ -18,7 +17,6 @@ public:
         -> QVariant override;
 
     void clear();
-    void replaceAll(const QVector<QObject *> &objects);
     void replaceAll(const QList<QObject *> &objects);
 
     auto removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) -> bool override;
@@ -28,12 +26,12 @@ public:
     void prepend(QObject *object, const QModelIndex &parent = QModelIndex());
 
     [[nodiscard]] auto get(int row) const -> QObject *;
-    [[nodiscard]] auto getAll() const -> QVector<QObject *>;
+    [[nodiscard]] auto getAll() const -> QList<QObject *>;
 
 protected:
     void takeOwnershipIfRequired(QObject *object);
-    void takeOwnershipIfRequired(const QVector<QObject *> &objects);
+    void takeOwnershipIfRequired(const QList<QObject *> &objects);
 
 private:
-    QVector<QObject *> m_objects;
+    QList<QObject *> m_objects;
 };

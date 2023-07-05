@@ -6,15 +6,6 @@
 
 Q_LOGGING_CATEGORY(gmCharactersImageViewer, "gm.characters.viewer.images")
 
-CharacterImageViewer::CharacterImageViewer(QObject *parent) : CharacterViewer(parent)
-{
-}
-
-CharacterImageViewer::~CharacterImageViewer()
-{
-    delete m_pdfDocument;
-}
-
 void CharacterImageViewer::setCharacter(Character *character)
 {
     // House cleaning
@@ -103,8 +94,6 @@ void CharacterImageViewer::loadPDF(int index, const QByteArray &data)
     }
     else
     {
-        delete m_pdfDocument;
-
         m_pdfCharacter = m_currentCharacter->name();
         m_pdfDocument = Poppler::Document::loadFromData(data);
 
@@ -151,7 +140,7 @@ void CharacterImageViewer::setPDFPage(int index)
     emit categoryChanged();
 }
 
-void CharacterImageViewer::setCurrentCategory(int index)
+void CharacterImageViewer::setCurrentCategory(qsizetype index)
 {
     qCDebug(gmCharactersImageViewer()) << "Changing page:" << index;
 

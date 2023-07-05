@@ -28,7 +28,7 @@ Item {
             notes_tool.qmlTextDoc = textDocument
         }
 
-        onCursorPositionChanged: {
+        onCursorPositionChanged: function (position) {
             // Sometimes the cursor position changes again
             // after it was manually set, so here is
             // an ugly workaround for that.
@@ -44,7 +44,7 @@ Item {
             }
         }
 
-        onLinkClicked: {
+        onLinkClicked: function (link) {
             notes_tool.linkClicked(link)
         }
 
@@ -72,7 +72,7 @@ Item {
 
         Connections {
             target: notes_tool
-            function onSetCursorPosition() {
+            function onSetCursorPosition(position) {
                 textedit.justChangedCursor = true
                 textedit.tempCursorPosition = position
                 textedit.edit.cursorPosition = position

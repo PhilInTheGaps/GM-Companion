@@ -57,7 +57,7 @@ void TestAudioSaveLoad::initTestCase()
     auto future = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(list.isEmpty(), "Project list is not empty, when it should be!");
+        QVERIFY2(list.empty(), "Project list is not empty, when it should be!");
     });
 
     // Create two empty projects
@@ -104,8 +104,8 @@ void TestAudioSaveLoad::findProjects()
     auto future = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(!list.isEmpty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.length(), 1);
+        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
+        QCOMPARE(list.size(), 1);
 
         auto *project = list[0];
         QCOMPARE(project->name(), "Project_0");
@@ -119,8 +119,8 @@ void TestAudioSaveLoad::findProjects()
     future = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
-        QVERIFY2(!list.isEmpty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.length(), 3);
+        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
+        QCOMPARE(list.size(), 3);
 
         auto *project = list[0];
         QCOMPARE(project->name(), "Project_0");
@@ -178,8 +178,8 @@ void TestAudioSaveLoad::deleteProject()
     auto future2 = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
-        QVERIFY2(!list.isEmpty(), "Project list is empty, when it should not be!");
-        QCOMPARE(list.length(), 2);
+        QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
+        QCOMPARE(list.size(), 2);
 
         auto *project = list[0];
         QCOMPARE(project->name(), "Project_0");
@@ -199,7 +199,7 @@ void TestAudioSaveLoad::deleteProject()
     future2 = AudioSaveLoad::findProjectsAsync(getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
-        QVERIFY2(list.isEmpty(), "Project list is not empty, when it should be!");
+        QVERIFY2(list.empty(), "Project list is not empty, when it should be!");
     });
 }
 

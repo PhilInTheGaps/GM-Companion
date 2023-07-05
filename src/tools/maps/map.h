@@ -83,7 +83,7 @@ protected:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
-    QVector<QObject *> m_items = {};
+    QList<QObject *> m_items = {};
 };
 
 class MapCategory : public QObject

@@ -50,7 +50,7 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *el
         else
         {
             // Store pixmap as a collage icon and find next one (if less than 4 have been found)
-            auto pair = QPair<QString, QPixmap>(audioFile->url(), pixmap);
+            auto pair = std::pair<QString, QPixmap>(audioFile->url(), pixmap);
             element->thumbnail()->addCollageImage(pair);
 
             if (fileCount + 1 < 4 && index + 1 < audioFileCount)

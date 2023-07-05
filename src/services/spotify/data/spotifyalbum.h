@@ -1,11 +1,11 @@
 #pragma once
 
+#include "basespotifyelement.h"
+#include "spotifyartist.h"
+#include "spotifyimage.h"
+#include "spotifytracklist.h"
 #include <QJsonObject>
 #include <QSharedPointer>
-#include "basespotifyelement.h"
-#include "spotifytracklist.h"
-#include "spotifyimage.h"
-#include "spotifyartist.h"
 
 struct SpotifyAlbum : public BaseSpotifyElement
 {
@@ -14,9 +14,8 @@ struct SpotifyAlbum : public BaseSpotifyElement
 
     QString releaseDate;
 
-    QVector<QSharedPointer<SpotifyImage>> images;
-    QVector<QSharedPointer<SpotifyArtist>> artists;
+    QList<QSharedPointer<SpotifyImage>> images;
+    QList<QSharedPointer<SpotifyArtist>> artists;
 
     QSharedPointer<SpotifyTrackList> tracks;
 };
-

@@ -1,7 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import FontAwesome 2.0
-import QtGraphicalEffects 1.0
 import "../defines.js" as Defines
 
 Button {
@@ -43,11 +43,13 @@ Button {
             visible: settings_manager.classicIcons
             asynchronous: true
 
-            ColorOverlay {
-                anchors.fill: parent
-                source: parent
+            MultiEffect {
+                source: button_icon
+                anchors.fill: button_icon
+
                 visible: button.pressed || button.hovered
-                color: {
+                colorization: 1
+                colorizationColor: {
                     if (button.pressed) {
                         Qt.rgba(0, 0, 0, 0.4)
                     } else if (button.hovered) {

@@ -18,7 +18,7 @@ class AudioSaveLoad
 public:
     AudioSaveLoad() = delete;
 
-    static QFuture<QVector<AudioProject *>> findProjectsAsync(const QString &folder = "");
+    static QFuture<std::vector<AudioProject *>> findProjectsAsync(const QString &folder = "");
 
     static AudioProject *loadProject(const QByteArray &data, QObject *parent);
 
@@ -31,7 +31,7 @@ public:
 private:
     static constexpr const char *PROJECT_FILE_SUFFIX = ".audio";
 
-    static QFuture<QVector<AudioProject *>> loadProjects(Files::FileListResult *files);
+    static QFuture<std::vector<AudioProject *>> loadProjects(Files::FileListResult *files);
     static QStringList getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath);
 
     static QFuture<bool> saveProject(AudioProject *project, const QString &filePath, const QByteArray &data);

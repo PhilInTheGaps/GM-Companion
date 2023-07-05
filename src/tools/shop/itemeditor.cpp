@@ -53,7 +53,7 @@ void ItemEditor::updateCategories(const ItemGroup &group)
 
 void ItemEditor::initItemModel(const ItemGroup &group)
 {
-    m_itemModel.replaceAll(Utils::toQObjectVector(group.items()));
+    m_itemModel.replaceAll(Utils::toQObjectList(group.items()));
 }
 
 auto ItemEditor::addItem(const QString &name, const QString &price, const QString &category, QString description)

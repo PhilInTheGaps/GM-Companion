@@ -169,7 +169,7 @@ Item {
                     cursorShape: pressed
                                  || flickable.dragging ? Qt.ClosedHandCursor : Qt.OpenHandCursor
 
-                    onWheel: {
+                    onWheel: function (wheel) {
                         if (wheel.modifiers & Qt.ControlModifier) {
                             if (wheel.angleDelta.y > 0)
                                 zoomIn()

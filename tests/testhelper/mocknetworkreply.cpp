@@ -2,6 +2,8 @@
 #include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
 #include <QTimer>
 
+using namespace Qt::Literals::StringLiterals;
+
 MockNetworkReply::MockNetworkReply(QObject *parent) : QNetworkReply(parent)
 {
 }
@@ -95,12 +97,12 @@ auto MockNetworkReply::successXml(const QByteArray &data, QObject *parent) -> Mo
 
 auto MockNetworkReply::notFound(QObject *parent) -> MockNetworkReply *
 {
-    return new MockNetworkReply(HttpStatus::Code::NotFound, {}, {}, parent);
+    return new MockNetworkReply(HttpStatus::Code::NotFound, "", {}, parent);
 }
 
 auto MockNetworkReply::badRequest(QObject *parent) -> MockNetworkReply *
 {
-    return new MockNetworkReply(HttpStatus::Code::BadRequest, {}, {}, parent);
+    return new MockNetworkReply(HttpStatus::Code::BadRequest, "", {}, parent);
 }
 
 auto MockNetworkReply::readData(char *data, qint64 maxSize) -> qint64
@@ -119,13 +121,13 @@ void MockNetworkReply::setErrorBasedOnStatusCode(int code)
     switch (code)
     {
     case HttpStatus::Code::NotFound:
-        setError(NetworkError::ContentNotFoundError, QStringLiteral("Not found"));
+        setError(NetworkError::ContentNotFoundError, u"Not found"_s);
         break;
     case HttpStatus::Code::BadRequest:
-        setError(NetworkError::ProtocolInvalidOperationError, QStringLiteral("Bad Request"));
+        setError(NetworkError::ProtocolInvalidOperationError, u"Bad Request"_s);
         break;
     default:
-        setError(NetworkError::NoError, QLatin1String());
+        setError(NetworkError::NoError, u""_s);
         break;
     }
 }

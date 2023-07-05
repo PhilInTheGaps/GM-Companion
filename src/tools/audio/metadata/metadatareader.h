@@ -2,6 +2,7 @@
 #define METADATAREADER_H
 
 #include "audiometadata.h"
+#include <QMediaMetaData>
 #include <QMediaPlayer>
 #include <QObject>
 #include <QPixmap>
@@ -28,7 +29,9 @@ signals:
 
 public slots:
     void updateMetaData(QMediaPlayer *mediaPlayer);
+    void updateMetaData(const QMediaMetaData &metaData);
     void updateMetaData(const QString &key, const QVariant &value);
+    void updateMetaData(QMediaMetaData::Key key, const QVariant &value);
     void updateMetaData(const QByteArray &data);
     void updateDuration(qint64 duration);
     void clearMetaData();

@@ -1,14 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
-
-# Find includes in the build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-find_package(Qt5 REQUIRED COMPONENTS Gui Quick Test)
+cmake_minimum_required(VERSION 3.19)
 
 # resources
 set(RESOURCES
@@ -26,8 +16,6 @@ set(SOURCES
     mockfs.cpp
 )
 
-add_library(testhelper STATIC ${SOURCES} ${RESOURCES})
-
+qt_add_library(testhelper STATIC ${SOURCES} ${RESOURCES})
 target_include_directories(testhelper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(testhelper gm-companion-lib filesystem Qt5::Gui Qt5::Quick Qt5::Test)
+target_link_libraries(testhelper PUBLIC gm-companion-lib filesystem Qt6::Gui Qt6::Quick Qt6::Test)

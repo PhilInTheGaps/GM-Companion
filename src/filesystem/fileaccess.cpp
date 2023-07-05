@@ -4,7 +4,7 @@
 using namespace Files;
 
 auto FileAccess::multiGetDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache)
-    -> QFuture<QVector<FileDataResult *>>
+    -> QFuture<std::vector<FileDataResult *>>
 {
     if (helper->isDone())
     {

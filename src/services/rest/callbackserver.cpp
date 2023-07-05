@@ -63,13 +63,9 @@ auto CallbackServer::parseQueryParams(const QByteArray &data) -> QMap<QString, Q
     splitGetLine.prepend("http://localhost");
     QUrl getTokenUrl(splitGetLine);
 
-    QList<QPair<QString, QString>> tokens;
-#if QT_VERSION < 0x050000
-    tokens = getTokenUrl.queryItems();
-#else  // if QT_VERSION < 0x050000
+    QList<std::pair<QString, QString>> tokens;
     QUrlQuery query(getTokenUrl);
     tokens = query.queryItems();
-#endif // if QT_VERSION < 0x050000
 
     QMap<QString, QString> queryParams;
 

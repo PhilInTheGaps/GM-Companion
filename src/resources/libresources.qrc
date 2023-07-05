@@ -1,26 +1,8 @@
 <RCC>
     <qresource prefix="/"/>
-    <qresource prefix="/icons/gm-companion"/>
-    <qresource prefix="/icons/media">
-        <file alias="music_image.png">icons/media/music_image.png</file>
-        <file alias="radio_image.png">icons/media/radio_image.png</file>
-        <file alias="sound_image.png">icons/media/sound_image.png</file>
-    </qresource>
-    <qresource prefix="/translations"/>
     <qresource prefix="/units">
         <file>units.json</file>
     </qresource>
-    <qresource prefix="/icons/menu"/>
-    <qresource prefix="/icons/dice">
-        <file alias="d4.png">icons/dice/d4.png</file>
-        <file alias="d12.png">icons/dice/d12.png</file>
-        <file alias="d20.png">icons/dice/dice-twenty-faces-twenty.png</file>
-        <file alias="d6.png">icons/dice/perspective-dice-six.png</file>
-        <file alias="dice_roll.png">icons/dice/rolling-dice-cup.png</file>
-        <file alias="d10.png">icons/dice/d10.png</file>
-        <file alias="d8.png">icons/dice/dice-eight-faces-eight.png</file>
-    </qresource>
-    <qresource prefix="/ui"/>
     <qresource prefix="/services">
         <file alias="auth-success.html">services/auth-success.html</file>
         <file alias="nextcloud/getFileList.xml">services/nextcloud/getFileList.xml</file>

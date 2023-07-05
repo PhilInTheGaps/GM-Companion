@@ -1,7 +1,7 @@
 #include "settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
-#include <qt5keychain/keychain.h>
+#include <qt6keychain/keychain.h>
 
 Q_LOGGING_CATEGORY(gmSettings, "gm.settings")
 
@@ -59,7 +59,7 @@ auto SettingsManager::getLanguageString() -> QString
 
 auto SettingsManager::getLanguages() -> QStringList
 {
-    QDir dir(QStringLiteral(":/translations"));
+    QDir dir(QStringLiteral(":/i18n"));
 
     dir.setFilter(QDir::Files);
     dir.setNameFilters({"*.qm"});
@@ -151,8 +151,7 @@ auto SettingsManager::getPassword(const QString &username, const QString &servic
 
 void SettingsManager::setPassword(const QString &username, const QString &password, const QString &service)
 {
-    auto *passwordJob = new QKeychain::WritePasswordJob("gm-companion." + service);
-    passwordJob->setAutoDelete(false);
+    auto *passwordJob = new QKeychain::WritePasswordJob(QStringLiteral("gm-companion.%1").arg(service));
     passwordJob->setKey(username);
     passwordJob->setTextData(password);
 
@@ -165,11 +164,9 @@ void SettingsManager::setPassword(const QString &username, const QString &passwo
         {
             qCDebug(gmSettings) << "Successfully saved password.";
         }
-
-        passwordJob->deleteLater();
     };
 
-    AsyncFuture::observe(passwordJob, &QKeychain::Job::finished).subscribe(callback);
+    QObject::connect(passwordJob, &QKeychain::WritePasswordJob::finished, callback);
     passwordJob->start();
 }
 

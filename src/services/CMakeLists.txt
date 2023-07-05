@@ -1,15 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(services LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(Qt5 COMPONENTS Core Gui Network REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Network REQUIRED)
 
 include(AddO2)
 include(AddGSL)
@@ -82,7 +73,7 @@ set(SOURCES
     google/googledriveconnectorlocal.cpp
 )
 
-add_library(services STATIC ${HEADERS} ${SOURCES})
+qt_add_library(services STATIC ${HEADERS} ${SOURCES})
 
 target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -92,7 +83,7 @@ target_link_libraries(services
     qtasyncfuture
     http-status-codes
     GSL
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Network
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Network
 )

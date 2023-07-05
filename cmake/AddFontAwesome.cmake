@@ -1,12 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-find_package(Qt5 REQUIRED COMPONENTS Core Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 
 set(FONT_AWESOME_DIR ${EXTERNAL_LIB_DIR}/fontawesome.pri)
 
@@ -19,4 +13,4 @@ set(SOURCES
 )
 
 add_library(fontawesome STATIC ${SOURCES})
-target_link_libraries(fontawesome Qt5::Core Qt5::Quick)
+target_link_libraries(fontawesome Qt6::Core Qt6::Quick)

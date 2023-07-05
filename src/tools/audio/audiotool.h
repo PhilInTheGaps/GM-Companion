@@ -107,7 +107,7 @@ signals:
     void soundVolumeChanged();
 
 private slots:
-    void onProjectsChanged(QVector<AudioProject *> projects);
+    void onProjectsChanged(const std::vector<AudioProject *> &projects);
     void onCurrentScenarioChanged() const;
     void onStartedPlaying();
     void onMetaDataUpdated();
@@ -141,7 +141,7 @@ private:
     static auto makeLogarithmicVolume(qreal linearVolume) -> int;
 
     // Project
-    QVector<AudioProject *> m_projects;
+    QList<AudioProject *> m_projects;
     AudioProject *m_currentProject = nullptr;
 };
 

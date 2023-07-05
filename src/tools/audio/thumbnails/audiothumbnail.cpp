@@ -26,7 +26,7 @@ void AudioThumbnail::setRelativeUrl(const QString &url)
     emit urlChanged();
 }
 
-auto AudioThumbnail::addCollageImage(const QPair<QString, QPixmap> &icon) -> bool
+auto AudioThumbnail::addCollageImage(const std::pair<QString, QPixmap> &icon) -> bool
 {
     // Check if icon already exists
     for (const auto &entry : m_collageIcons)

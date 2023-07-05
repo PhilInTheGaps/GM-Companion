@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 
 Button {
     id: root
@@ -24,10 +24,11 @@ Button {
         sourceSize.width: width
     }
 
-    ColorOverlay {
+    MultiEffect {
         anchors.fill: image
         source: image
-        color: parent.pressed ? "grey" : isCurrentType ? "tomato" : "white"
+        colorization: 1
+        colorizationColor: parent.pressed ? "grey" : isCurrentType ? "tomato" : "white"
     }
 
     ToolTip.text: toolTipText

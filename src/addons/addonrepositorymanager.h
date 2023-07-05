@@ -25,7 +25,7 @@ public:
 
     void fetchAllRepositoryData();
 
-    [[nodiscard]] auto releaseInfos() const -> QVector<AddonReleaseInfo>
+    [[nodiscard]] auto releaseInfos() const -> std::vector<AddonReleaseInfo>
     {
         return m_releaseInfos;
     }
@@ -39,13 +39,14 @@ private:
 
     [[nodiscard]] auto getRepositoryUrls(bool onlyCustom) const -> QStringList;
 
-    [[nodiscard]] auto fetchRepositoryDataAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>;
-    [[nodiscard]] static auto fetchRepositoryDataLocalAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>;
-    [[nodiscard]] auto fetchRepositoryDataRemoteAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>;
-    [[nodiscard]] static auto parseRepositoryData(const QByteArray &data) -> QVector<AddonReleaseInfo>;
+    [[nodiscard]] auto fetchRepositoryDataAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>;
+    [[nodiscard]] static auto fetchRepositoryDataLocalAsync(const QString &url)
+        -> QFuture<std::vector<AddonReleaseInfo>>;
+    [[nodiscard]] auto fetchRepositoryDataRemoteAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>;
+    [[nodiscard]] static auto parseRepositoryData(const QByteArray &data) -> std::vector<AddonReleaseInfo>;
 
     [[nodiscard]] static auto getNewestCompatibleRelease(const QJsonArray &releases) -> QJsonObject;
 
-    QVector<AddonReleaseInfo> m_releaseInfos;
+    std::vector<AddonReleaseInfo> m_releaseInfos;
     QNetworkAccessManager m_networkManager;
 };

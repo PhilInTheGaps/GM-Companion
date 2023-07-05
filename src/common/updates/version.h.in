@@ -1,7 +1,7 @@
 #pragma once
 
+#include <QList>
 #include <QString>
-#include <QVector>
 
 #define CURRENT_VERSION QStringLiteral("@APP_VERSION_MAJOR@.@APP_VERSION_MINOR@.@APP_VERSION_PATCH@")
 #define CURRENT_VERSION_TITLE QStringLiteral("@APP_VERSION_TITLE@")
@@ -24,11 +24,11 @@ public:
     static auto isGreater(const Version &first, const Version &second) -> bool;
 
 private:
-    static auto compare(const QVector<int> &first, const QVector<int> &second) -> int;
+    static auto compare(const QList<int> &first, const QList<int> &second) -> int;
     static auto compare(Suffix suffix0, Suffix suffix1) -> int;
     static auto suffixFromString(const QString &str) -> Suffix;
 
-    QVector<int> m_numbers;
+    QList<int> m_numbers;
 
     Suffix m_suffix = Suffix::None;
     int m_suffixVer = 0;

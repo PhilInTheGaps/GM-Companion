@@ -214,7 +214,7 @@ auto RESTServiceConnectorLocal::checkAndEnqueueRequest(RequestContainer *contain
     }
 
     container->id(getQueueId());
-    m_requestQueue.enqueue(QPair(deferred, container));
+    m_requestQueue.enqueue(std::pair(deferred, container));
 
     return true;
 }
@@ -305,7 +305,7 @@ void RESTServiceConnectorLocal::dequeueRequests()
 {
     qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueue.count();
 
-    QQueue<QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> tempQueue;
+    QQueue<std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> tempQueue;
 
     while (tempQueue.length() < m_config.maxConcurrentRequests - activeRequestCount() && !m_requestQueue.empty())
     {
@@ -331,7 +331,7 @@ auto RESTServiceConnectorLocal::getQueueId() -> int
 }
 
 void RESTServiceConnectorLocal::handleRateLimit(
-    const QPair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair)
+    const std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair)
 {
     qCDebug(m_loggingCategory) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
     startCooldown(2);

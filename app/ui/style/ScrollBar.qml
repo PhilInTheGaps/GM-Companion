@@ -1,7 +1,7 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Controls.impl 2.2
-import QtQuick.Templates 2.2 as T
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.impl
+import QtQuick.Templates as T
 import "../colors.js" as Colors
 
 T.ScrollBar {

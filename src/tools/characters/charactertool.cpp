@@ -5,7 +5,9 @@
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
+#include <QQmlContext>
 #include <QSettings>
 #include <QTemporaryFile>
 
@@ -18,25 +20,17 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent) : A
     qCDebug(gmCharactersTool()) << "Loading Character Tool ...";
 
     m_imageViewer = new CharacterImageViewer(this);
-    m_dsa5Viewer = new CharacterDSA5Viewer(engine, this);
 
     engine->rootContext()->setContextProperty(QStringLiteral("character_tool"), this);
     engine->rootContext()->setContextProperty(QStringLiteral("character_image_viewer"), m_imageViewer);
-    engine->rootContext()->setContextProperty(QStringLiteral("character_dsa5_viewer"), m_dsa5Viewer);
 
     connect(m_imageViewer, &CharacterImageViewer::categoryChanged, this, [this]() {
         if (m_currentViewer == m_imageViewer) emit categoryChanged();
     });
 
-    // connect(m_dsa5Viewer, &CharacterImageViewer::categoryChanged,    [ = ]()
-    // { if (m_currentViewer == m_dsa5Viewer) emit categoryChanged(); });
-
     connect(m_imageViewer, &CharacterImageViewer::categoriesChanged, this, [this]() {
         if (m_currentViewer == m_imageViewer) emit categoriesChanged();
     });
-
-    // connect(m_dsa5Viewer, &CharacterDSA5Viewer::categoriesChanged, [ = ]()
-    // { if (m_currentViewer == m_dsa5Viewer) emit categoriesChanged(); });
 }
 
 auto CharacterTool::characters() const -> QStringList
@@ -87,8 +81,6 @@ void CharacterTool::setCurrentCharacter(int index)
     if (m_currentCharacter)
     {
         if (m_currentCharacter->type() < 2) m_currentViewer = m_imageViewer;
-        else
-            m_currentViewer = m_dsa5Viewer;
 
         m_currentViewer->setCharacter(m_currentCharacter);
     }

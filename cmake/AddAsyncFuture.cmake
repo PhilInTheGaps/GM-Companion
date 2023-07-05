@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(qtasyncfuture INTERFACE)
+qt_add_library(qtasyncfuture INTERFACE)
 
 target_include_directories(qtasyncfuture INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>

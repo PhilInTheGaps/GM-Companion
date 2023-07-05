@@ -1,8 +1,8 @@
 #include "spotifytracklist.h"
 #include "spotifytrack.h"
 
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
 
 Q_LOGGING_CATEGORY(gmSpotifyTrackList, "gm.services.spotify.data.tracklist")
@@ -11,7 +11,7 @@ auto SpotifyTrackList::fromJson(const QJsonObject &json) -> QSharedPointer<Spoti
 {
     const auto items = json[QStringLiteral("items")].toArray();
 
-    QVector<QSharedPointer<SpotifyTrack>> tracks;
+    QList<QSharedPointer<SpotifyTrack>> tracks;
     tracks.reserve(items.count());
 
     for (const auto &item : items)
@@ -21,7 +21,7 @@ auto SpotifyTrackList::fromJson(const QJsonObject &json) -> QSharedPointer<Spoti
 
     const auto next = json[QStringLiteral("next")].toString();
 
-    return QSharedPointer<SpotifyTrackList>(new SpotifyTrackList { tracks, next });
+    return QSharedPointer<SpotifyTrackList>(new SpotifyTrackList{tracks, next});
 }
 
 auto SpotifyTrackList::fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTrackList>

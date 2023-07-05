@@ -24,7 +24,7 @@ Rectangle {
                      && converter_tool.isLoading ? qsTr("Loading ...") : qsTr(
                                                        "No Units")
 
-        onCurrentIndexChanged: {
+        onCurrentIndexChanged: function (index) {
             if (!converter_tool || converter_tool.projects.length < 1)
                 return
 

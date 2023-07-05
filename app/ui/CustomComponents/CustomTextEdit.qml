@@ -62,7 +62,7 @@ Item {
 
             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
             onCursorPositionChanged: root.cursorPositionChanged(cursorPosition)
-            onLinkActivated: root.linkClicked(link)
+            onLinkActivated: link => root.linkClicked(link)
 
             background: Item {}
 

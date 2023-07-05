@@ -8,6 +8,8 @@ Q_LOGGING_CATEGORY(gmUpdateManager, "gm.updates.manager")
 
 constexpr ConstQString DEFAULT_FEED_URL = "https://github.com/PhilInTheGaps/GM-Companion/releases.atom";
 
+using namespace Qt::Literals::StringLiterals;
+
 UpdateManager::UpdateManager()
 {
     qCDebug(gmUpdateManager()) << "Initializing UpdateManager ...";
@@ -74,11 +76,11 @@ auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
     QXmlStreamReader reader(xml);
     QStringList versions;
 
-    if (!reader.readNextStartElement() || reader.name() != "feed") return {};
+    if (!reader.readNextStartElement() || reader.name() != "feed"_L1) return {};
 
     while (reader.readNextStartElement())
     {
-        if (reader.name() != QStringLiteral("entry"))
+        if (reader.name() != "entry"_L1)
         {
             reader.skipCurrentElement();
             continue;
@@ -89,14 +91,14 @@ auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
         // Read every xml entry and check if it is useful information
         while (reader.readNextStartElement())
         {
-            if (reader.name() == "id") id = reader.readElementText();
+            if (reader.name() == "id"_L1) id = reader.readElementText();
 
             else
                 reader.skipCurrentElement();
         }
 
         // Version is converted from git tag, so we have to remove a bunch of junk
-        versions << id.replace(QStringLiteral("tag:github.com,2008:Repository/78660365/"), QLatin1String());
+        versions << id.replace(u"tag:github.com,2008:Repository/78660365/"_s, QLatin1String());
     }
 
     return versions;

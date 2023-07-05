@@ -1,24 +1,24 @@
 #pragma once
 
-#include <QString>
-#include <QJsonObject>
-#include <QJsonArray>
 #include "basespotifyelement.h"
-#include "spotifyartist.h"
 #include "spotifyalbuminfo.h"
+#include "spotifyartist.h"
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QString>
 
 struct SpotifyTrack : public BaseSpotifyElement
 {
     [[nodiscard]] static auto fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTrack>;
     [[nodiscard]] static auto fromJson(const QByteArray &data) -> QSharedPointer<SpotifyTrack>;
-    [[nodiscard]] static auto fromJsonArray(const QJsonArray &json) -> QVector<QSharedPointer<SpotifyTrack>>;
-    [[nodiscard]] static auto fromJsonArray(const QByteArray &data) -> QVector<QSharedPointer<SpotifyTrack>>;
+    [[nodiscard]] static auto fromJsonArray(const QJsonArray &json) -> std::vector<QSharedPointer<SpotifyTrack>>;
+    [[nodiscard]] static auto fromJsonArray(const QByteArray &data) -> std::vector<QSharedPointer<SpotifyTrack>>;
 
     int durationMs;
     bool isPlayable;
 
     QSharedPointer<SpotifyAlbumInfo> album;
-    QVector<QSharedPointer<SpotifyArtist>> artists;
+    QList<QSharedPointer<SpotifyArtist>> artists;
 
     [[nodiscard]] auto artistString() const -> QString;
     [[nodiscard]] auto image() const -> QSharedPointer<SpotifyImage>;
@@ -26,4 +26,3 @@ struct SpotifyTrack : public BaseSpotifyElement
 private:
     [[nodiscard]] static auto getIsPlayable(const QJsonObject &json) -> bool;
 };
-

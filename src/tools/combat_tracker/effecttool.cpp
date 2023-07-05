@@ -61,7 +61,6 @@ void EffectTool::loadEffects()
     if (SettingsManager::instance()->getIsAddonEnabled(addon))
     {
         QSettings s(addonPath + "/combat_effects.ini", QSettings::IniFormat);
-        s.setIniCodec("UTF-8");
         QStringList types = s.value("types").toStringList();
 
         for (const QString &type : types)

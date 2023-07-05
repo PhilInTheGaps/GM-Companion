@@ -33,7 +33,7 @@ void ShopTool::onCurrentShopChanged(ItemShop *shop)
 {
     if (!shop) return;
 
-    m_itemModel.replaceAll(Utils::toQObjectVector(shop->items()));
+    m_itemModel.replaceAll(Utils::toQObjectList(shop->items()));
 }
 
 void ShopTool::onShopEditorSaved(const QList<ShopProject *> &projects)

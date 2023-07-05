@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import "../../defines.js" as Defines
 
 Item {
@@ -61,13 +61,13 @@ Item {
             model: combat_tracker_effects.effectTypes
 
             Button {
-                text: icon.source != "" ? "" : modelData
+                text: icon.source !== "" ? "" : modelData
                 onClicked: effect_text.text = combat_tracker_effects.randomEffect(
                                modelData)
                 hoverEnabled: true
 
                 ToolTip {
-                    visible: parent.hovered && parent.text == ""
+                    visible: parent.hovered && parent.text === ""
                     text: modelData
                 }
 
@@ -83,14 +83,15 @@ Item {
                     asynchronous: true
                 }
 
-                ColorOverlay {
+                MultiEffect {
                     source: icon
-                    color: "black"
+                    colorizationColor: "black"
+                    colorization: 1
                     anchors.fill: icon
                 }
 
                 Component.onCompleted: {
-                    if (icon.source != "") {
+                    if (icon.source !== "") {
                         width = height
                     }
                 }

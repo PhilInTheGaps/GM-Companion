@@ -60,7 +60,7 @@ NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkM
 }
 
 auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
-                               const QList<QPair<QByteArray, QByteArray>> &headers) -> QFuture<QNetworkReply *>
+                               const QList<std::pair<QByteArray, QByteArray>> &headers) -> QFuture<QNetworkReply *>
 {
     if (!connected()) connectService();
 

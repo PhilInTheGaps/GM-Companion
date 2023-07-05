@@ -49,7 +49,7 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
 
     const auto isLocalFile = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local")) ==
                              QStringLiteral("local");
-    return QtConcurrent::run(loadFromFile, path, isLocalFile);
+    return observe(QtConcurrent::run(loadFromFile, path, isLocalFile)).future();
 }
 
 auto TagImageLoader::loadFromFile(const QString &path, bool isLocalFile) -> QFuture<QPixmap>

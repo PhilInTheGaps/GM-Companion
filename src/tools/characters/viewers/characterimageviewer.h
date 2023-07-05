@@ -3,8 +3,8 @@
 
 #include "characterviewer.h"
 #include <QObject>
-
-#include <poppler/qt5/poppler-qt5.h>
+#include <memory>
+#include <poppler/qt6/poppler-qt6.h>
 
 class CharacterImageViewer : public CharacterViewer
 {
@@ -14,13 +14,15 @@ class CharacterImageViewer : public CharacterViewer
     Q_PROPERTY(QStringList images READ categories NOTIFY categoriesChanged)
 
 public:
-    explicit CharacterImageViewer(QObject *parent);
-    ~CharacterImageViewer();
+    using CharacterViewer::CharacterViewer;
 
-    void setCharacter(Character* character);
+    void setCharacter(Character *character) override;
 
-    QString image() const { return m_image; }
-    void setCurrentCategory(int index);
+    QString image() const
+    {
+        return m_image;
+    }
+    void setCurrentCategory(qsizetype index) override;
 
     Q_INVOKABLE void nextImage(bool right);
 
@@ -29,7 +31,7 @@ signals:
     void categoriesChanged();
 
 private:
-    Poppler::Document *m_pdfDocument = nullptr;
+    std::unique_ptr<Poppler::Document> m_pdfDocument;
     QString m_pdfCharacter;
     QString m_image;
 

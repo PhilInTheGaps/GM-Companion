@@ -18,7 +18,7 @@ public:
     explicit FileAccessGoogleDrive(GoogleDrive &googleDrive, QObject *parent);
 
     auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult *> override;
-    auto getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *>> override;
+    auto getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<std::vector<FileDataResult *>> override;
     auto saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult *> override;
     auto moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<FileResult *> override;
     auto deleteAsync(const QString &path) -> QFuture<FileResult *> override;
@@ -38,10 +38,10 @@ private:
 
     auto getFolderEntryIds(const QString &parentId, const QString &parentPath,
                            const QString &pageToken = QLatin1String()) -> QFuture<void>;
-    auto getFolderEntryIds(const QPair<QString, QByteArray> &dir, const QString &pageToken = QLatin1String())
+    auto getFolderEntryIds(const std::pair<QString, QByteArray> &dir, const QString &pageToken = QLatin1String())
         -> QFuture<void>;
     auto getFileIdAsync(const QString &path) -> QFuture<QString>;
-    auto getParentIdAsync(const QString &path) -> QFuture<QPair<QString, QByteArray>>;
+    auto getParentIdAsync(const QString &path) -> QFuture<std::pair<QString, QByteArray>>;
 
     static auto makeMetaData(const QString &name, const QString &parentId = QLatin1String(),
                              const QByteArray &mimeType = {}) -> QByteArray;

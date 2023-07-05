@@ -41,19 +41,6 @@
         <file>tools/settings/PathsPage.qml</file>
         <file>tools/settings/AddonsPage.qml</file>
         <file>tools/settings/InfoPage.qml</file>
-        <file>tools/characters/DSA5Page.qml</file>
-        <file>tools/characters/dsa5/ProfileOverview.qml</file>
-        <file>tools/characters/dsa5/ProfileRules.qml</file>
-        <file>tools/characters/dsa5/Attributes.qml</file>
-        <file>tools/characters/dsa5/Advantages.qml</file>
-        <file>tools/characters/dsa5/AbilitiesTalents.qml</file>
-        <file>tools/characters/dsa5/BelongingsItems.qml</file>
-        <file>tools/characters/dsa5/BelongingsPets.qml</file>
-        <file>tools/characters/dsa5/DSA5ItemList.qml</file>
-        <file>tools/characters/dsa5/AbilitiesCombat.qml</file>
-        <file>tools/characters/dsa5/AbilitiesSpecial.qml</file>
-        <file>tools/characters/dsa5/AbilitiesLiturgies.qml</file>
-        <file>tools/characters/dsa5/AbilitiesSpells.qml</file>
         <file>tools/settings/CreditsItem.qml</file>
         <file>tools/maps/MapMarker.qml</file>
         <file>tools/maps/MapMarkerEditor.qml</file>
@@ -123,9 +110,6 @@
         <file>style/DialogButtonBox.qml</file>
         <file>style/ScrollBar.qml</file>
         <file>style/TextField.qml</file>
-        <file>tools/audio/editor/views/main/EditorMainView.qml</file>
-        <file>tools/audio/editor/views/main/EditorMainViewFallback.qml</file>
-        <file>tools/audio/editor/views/main/EditorMainViewDefault.qml</file>
         <file>tools/audio/editor/dialogs/EditorRenameDialog.qml</file>
         <file>tools/audio/editor/dialogs/AddonElementDialog.qml</file>
         <file>tools/audio/editor/dialogs/EditorDeleteDialog.qml</file>
@@ -165,5 +149,7 @@
         <file>tools/converter/ConverterTool.qml</file>
         <file>tools/converter/ConverterEditor.qml</file>
         <file>tools/converter/ConverterEditorNewThingDialog.qml</file>
+        <file>style/qmldir</file>
+        <file>tools/audio/editor/views/EditorMainView.qml</file>
     </qresource>
 </RCC>

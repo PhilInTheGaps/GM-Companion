@@ -21,7 +21,7 @@ public:
     using QObject::QObject;
 
     virtual auto getDataAsync(const QString &path, bool allowCache) -> QFuture<FileDataResult *> = 0;
-    virtual auto getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *>> = 0;
+    virtual auto getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<std::vector<FileDataResult *>> = 0;
     virtual auto saveAsync(const QString &path, const QByteArray &data) -> QFuture<FileResult *> = 0;
     virtual auto moveAsync(const QString &oldPath, const QString &newPath) -> QFuture<FileResult *> = 0;
     virtual auto deleteAsync(const QString &path) -> QFuture<FileResult *> = 0;
@@ -44,7 +44,7 @@ public:
 
 protected:
     auto multiGetDataAsync(MultiGetHelper<FileDataResult> *helper, bool allowCache)
-        -> QFuture<QVector<FileDataResult *>>;
+        -> QFuture<std::vector<FileDataResult *>>;
     auto multiCheckAsync(MultiGetHelper<FileCheckResult> *helper, bool allowCache) -> QFuture<FileMultiCheckResult *>;
 
 private:

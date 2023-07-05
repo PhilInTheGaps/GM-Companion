@@ -1,8 +1,8 @@
-find_library(POPPLER_QT5_LIBRARY poppler-qt5)
+find_library(POPPLER_QT6_LIBRARY poppler-qt6)
 
-if (NOT POPPLER_QT5_LIBRARY)
-  message(FATAL_ERROR "Could NOT find POPPLER-QT5")
+if (NOT POPPLER_QT6_LIBRARY)
+  message(FATAL_ERROR "Could NOT find POPPLER-QT6")
 else()
-  message(STATUS "Found POPPLER-QT5: ${POPPLER_QT5_LIBRARY}")
+  message(STATUS "Found POPPLER-QT6: ${POPPLER_QT6_LIBRARY}")
 endif()
 

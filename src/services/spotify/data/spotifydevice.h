@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QString>
 
 struct SpotifyDevice;
 struct SpotifyDeviceList
 {
-    QVector<QSharedPointer<SpotifyDevice>> devices;
+    QList<QSharedPointer<SpotifyDevice>> devices;
 };
 
 struct SpotifyDevice

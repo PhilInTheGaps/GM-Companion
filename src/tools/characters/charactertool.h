@@ -3,7 +3,6 @@
 
 #include "character.h"
 #include "common/abstracttool.h"
-#include "viewers/characterdsa5viewer.h"
 #include "viewers/characterimageviewer.h"
 #include <QList>
 #include <QQmlApplicationEngine>
@@ -58,7 +57,6 @@ signals:
 private:
     CharacterViewer *m_currentViewer = nullptr;
     CharacterImageViewer *m_imageViewer = nullptr;
-    CharacterDSA5Viewer *m_dsa5Viewer = nullptr;
 
     QList<Character *> m_characters;
     QStringList m_inactiveCharacters;

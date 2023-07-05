@@ -52,7 +52,7 @@ auto TestCustomObjectList::createObject(const QString &name) -> QObject *
 void TestCustomObjectList::testModel(TestModel &model)
 {
     QCOMPARE(model.rowCount(), 0);
-    QCOMPARE(model.headerData(0, Qt::Horizontal), {});
+    QCOMPARE(model.headerData(0, Qt::Horizontal), QVariant());
 
     QVERIFY(!model.removeRow(0));
     QVERIFY(!model.removeRow(-1));

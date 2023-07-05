@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import QtQuick.Templates 2.2 as T
+import QtQuick
+import QtQuick.Templates as T
 import "../colors.js" as Colors
 
 T.DialogButtonBox {

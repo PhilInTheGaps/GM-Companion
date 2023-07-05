@@ -24,7 +24,7 @@ Rectangle {
                      && shop_tool.isLoading ? qsTr("Loading ...") : qsTr(
                                                   "No Projects")
 
-        onCurrentIndexChanged: {
+        onCurrentIndexChanged: function (index) {
             if (!shop_tool || shop_tool.projects.length < 1)
                 return
 

@@ -13,7 +13,7 @@ public:
     static auto foldersFromDir(const QString &dir) -> QStringList;
     static auto suffix(const QString &fileName) -> QString;
     static auto fileName(const QString &path) -> QString;
-    static auto fileName(const QStringRef &path) -> QString;
+    static auto fileName(QStringView path) -> QString;
     static auto incrementFileName(const QString &fileName) -> QString;
     static auto incrementName(const QString &name) -> QString;
     static auto fileInDir(const QString &fileName, const QString &dir) -> QString;
@@ -44,7 +44,7 @@ public:
     static auto getMimeType(const QString &filename) -> MimeType;
 
 private:
-    static auto splitFileNameAndSuffix(const QString &fileName) -> QPair<QString, QString>;
+    static auto splitFileNameAndSuffix(const QString &fileName) -> std::pair<QString, QString>;
     static auto incrementNumString(const QString &num) -> int;
 
     inline static const auto extensionToMimeType = QHash<QString, MimeType>{

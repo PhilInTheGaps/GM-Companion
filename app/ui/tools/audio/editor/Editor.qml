@@ -1,12 +1,11 @@
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 import CustomComponents 1.0
 import FontAwesome 2.0
 
 import "../audio_exporter"
 import "./dialogs"
 import "./views"
-import "./views/main"
 import "./views/element_properties"
 import "../../../defines.js" as Defines
 import "../../../common"
@@ -78,7 +77,6 @@ Page {
 
             fillMode: Image.PreserveAspectFit
         }
-
         onOpened: console.log(contentItem.source)
     }
 

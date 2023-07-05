@@ -3,10 +3,13 @@
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QJsonDocument>
+#include <QLoggingCategory>
 
 using namespace AsyncFuture;
 
 static constexpr auto PROJECT_FILE_GLOB = "*.shop";
+
+Q_LOGGING_CATEGORY(gmShopsBaseTool, "gm.shops.base")
 
 void BaseShopTool::loadData()
 {
@@ -37,13 +40,15 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
         return;
     }
 
-    observe(Files::File::getDataAsync(files)).subscribe([this](const QVector<Files::FileDataResult *> &results) {
+    observe(Files::File::getDataAsync(files)).subscribe([this](const std::vector<Files::FileDataResult *> &results) {
         onShopFileDataReceived(results);
     });
 }
 
-void BaseShopTool::onShopFileDataReceived(const QVector<Files::FileDataResult *> &results)
+void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResult *> &results)
 {
+    qCDebug(gmShopsBaseTool()) << "Loading" << results.size() << "projects ...";
+
     foreach (auto *result, results)
     {
         a_projects.append(new ShopProject(QJsonDocument::fromJson(result->data()).object(), this));

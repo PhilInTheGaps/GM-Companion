@@ -1,14 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
-
-project(gm-companion)
-
-# find includes in the build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# turn on automatic invocation of the MOC, UIC & RCC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
+cmake_minimum_required(VERSION 3.19)
 
 include(AddFontAwesome)
 
@@ -18,7 +8,7 @@ list(APPEND QML_IMPORT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ui")
 list(REMOVE_DUPLICATES QML_IMPORT_PATH)
 set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Qml LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Qml LinguistTools)
 find_library(GM-COMPANION-LIB_DIR gm-companion-lib)
 
 # sources
@@ -52,33 +42,43 @@ set(RCFILES
 )
 
 # translations
+set(TRANSLATIONS
+  resources/translations/gm-companion_de_DE.ts
+  resources/translations/gm-companion_en_US.ts
+)
+
+qt_add_executable(gm-companion ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES})
+
 if (BUILD_TRANSLATIONS)
-    qt5_create_translation(TRANSLATIONS
-      .
-      ../src
-      resources/translations/gm-companion_de_DE.ts
-      resources/translations/gm-companion_en_US.ts
-    )
+  qt_add_translations(gm-companion
+    TS_FILES
+    resources/translations/gm-companion_de_DE.ts
+    resources/translations/gm-companion_en_US.ts
+    INCLUDE_DIRECTORIES
+    .
+    ../src
+  )
+
 endif()
-
-add_executable(gm-companion WIN32 ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES} ${TRANSLATIONS})
-
-message(${CMAKE_SOURCE_DIR}/src)
 
 target_include_directories(gm-companion PRIVATE
   ${CMAKE_SOURCE_DIR}/src
 )
 
-target_link_libraries(
-  gm-companion
+target_link_libraries(gm-companion PRIVATE
   gm-companion-lib
-  Qt5::Core
-  Qt5::Gui
-  Qt5::Quick
-  Qt5::QuickControls2
-  Qt5::Qml
+  Qt6::Core
+  Qt6::Gui
+  Qt6::Quick
+  Qt6::QuickControls2
+  Qt6::Qml
   fontawesome
   sentry
+)
+
+set_target_properties(gm-companion PROPERTIES
+    WIN32_EXECUTABLE ON
+    MACOSX_BUNDLE ON
 )
 
 install(

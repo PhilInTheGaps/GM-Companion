@@ -1,10 +1,10 @@
 #pragma once
 
+#include "../project/audioelement.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QPixmap>
 #include <QUrl>
-#include "../project/audioelement.h"
-#include "thirdparty/propertyhelper/PropertyHelper.h"
 
 class AudioThumbnail : public QObject
 {
@@ -17,21 +17,39 @@ class AudioThumbnail : public QObject
     AUTO_PROPERTY(int, lastFileIndex)
 
 public:
-    AudioThumbnail(const QString& imageId, AudioElement *parent)
-        : QObject(parent), a_lastFileIndex(0), element(parent), m_imageId(imageId) {}
+    AudioThumbnail(const QString &imageId, AudioElement *parent)
+        : QObject(parent), a_lastFileIndex(0), element(parent), m_imageId(imageId)
+    {
+    }
 
-    [[nodiscard]] auto imageId() const -> QString { return m_imageId; }
+    [[nodiscard]] auto imageId() const -> QString
+    {
+        return m_imageId;
+    }
     [[nodiscard]] auto imageIdForReload() -> QString;
-    void setImageId(const QString &image) { m_imageId = image; emit thumbnailChanged(); }
+    void setImageId(const QString &image)
+    {
+        m_imageId = image;
+        emit thumbnailChanged();
+    }
 
     [[nodiscard]] auto absoluteUrl() const -> QString;
-    [[nodiscard]] auto relativeUrl() const -> QString { return m_relativeUrl; }
+    [[nodiscard]] auto relativeUrl() const -> QString
+    {
+        return m_relativeUrl;
+    }
     void setRelativeUrl(const QString &url);
 
-    [[nodiscard]] auto collageImages() const -> QList<QPair<QString, QPixmap>> { return m_collageIcons; }
-    auto addCollageImage(const QPair<QString, QPixmap> &icon) -> bool;
+    [[nodiscard]] auto collageImages() const -> QList<std::pair<QString, QPixmap>>
+    {
+        return m_collageIcons;
+    }
+    auto addCollageImage(const std::pair<QString, QPixmap> &icon) -> bool;
 
-    void update() { emit thumbnailChanged(); }
+    void update()
+    {
+        emit thumbnailChanged();
+    }
 
 signals:
     void thumbnailChanged();
@@ -40,6 +58,6 @@ signals:
 private:
     AudioElement *element = nullptr;
     QString m_imageId, m_relativeUrl;
-    QList<QPair<QString, QPixmap>> m_collageIcons;
+    QList<std::pair<QString, QPixmap>> m_collageIcons;
     bool m_imageIdCounter = false;
 };

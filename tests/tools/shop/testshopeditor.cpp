@@ -43,16 +43,22 @@ void TestShopEditor::initTestCase()
     copyResourceToFile(QStringLiteral(":/resources/shopproject/group.items"),
                        FileUtils::fileInDir(QStringLiteral("group.items"), userPath));
 
+    // wait for tool to finish loading data
     tool.loadData();
+    QSignalSpy spyTool(&tool, &ShopEditor::isLoadingChanged);
+    spyTool.wait();
+    QVERIFY(!tool.isLoading());
+    QVERIFY(tool.isDataLoaded());
 
+    // load editor data
     editor = tool.editor();
     QVERIFY(editor);
 
     QVERIFY(!editor->isDataLoaded());
     editor->loadData();
 
-    QSignalSpy spy(editor, &ShopEditor::isLoadingChanged);
-    spy.wait();
+    QSignalSpy spyEditor(editor, &ShopEditor::isLoadingChanged);
+    spyEditor.wait();
 
     QVERIFY(!editor->isLoading());
     QVERIFY(editor->isDataLoaded());
@@ -77,7 +83,7 @@ void TestShopEditor::canEditShops()
     QVERIFY(editor->isSaved());
 
     // can create shop
-    const int shopCount = editor->currentProject()->currentCategory()->shops().count();
+    const auto shopCount = editor->currentProject()->currentCategory()->shops().count();
     QVERIFY(editor->createThing(QStringLiteral("test-shop"), ShopEditor::Type::Shop));
     QCOMPARE(editor->currentProject()->currentCategory()->shops().count(), shopCount + 1);
     QCOMPARE(editor->currentProject()->currentCategory()->shops().constLast()->name(), QStringLiteral("test-shop"));
@@ -208,14 +214,11 @@ void TestShopEditor::canSave()
     editor->createThing(QStringLiteral("new-project"), ShopEditor::Type::Project);
     QVERIFY(!editor->isSaved());
 
-    editor->save();
-
     QSignalSpy spy(editor, &ShopEditor::isSavedChanged);
-    spy.wait();
+    editor->save();
+    QVERIFY(spy.wait());
 
     QVERIFY(editor->isSaved());
-
-    // has tool been updated?
     QCOMPARE(tool.projects().count(), editor->projects().count());
 }
 
@@ -225,7 +228,7 @@ void TestShopEditor::canEditItems()
     QVERIFY(!itemEditor->isLoading());
     QVERIFY(itemEditor->isSaved());
 
-    int categoryCount = itemEditor->categories().count();
+    auto categoryCount = itemEditor->categories().count();
     QVERIFY(itemEditor->addCategory(QStringLiteral("cat0")));
     QCOMPARE(itemEditor->categories().count(), categoryCount + 1);
     QVERIFY(!itemEditor->isSaved());
@@ -256,7 +259,7 @@ void TestShopEditor::canEditItems()
 
     const auto index = itemEditor->itemModel()->index(itemCount - 2);
     QCOMPARE(itemEditor->itemModel()->data(index, Qt::DisplayRole), QStringLiteral("item2"));
-    QCOMPARE(itemEditor->itemModel()->data(index, Qt::ToolTipRole), {});
+    QCOMPARE(itemEditor->itemModel()->data(index, Qt::ToolTipRole), QVariant());
     QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Name)), QStringLiteral("item2"));
     QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Price)), QStringLiteral("price2"));
     QCOMPARE(itemEditor->itemModel()->data(index, static_cast<int>(ItemModel::Roles::Description)),

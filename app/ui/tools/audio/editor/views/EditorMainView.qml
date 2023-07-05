@@ -1,8 +1,7 @@
-import QtQuick 2.2
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 import ".."
-import "../.."
 
 SplitView {
     id: main_item

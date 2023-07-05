@@ -1,15 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(filesystem LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(Qt5 COMPONENTS Core Quick Qml REQUIRED)
+find_package(Qt6 COMPONENTS Core Quick Qml REQUIRED)
 
 set(HEADERS
     file.h
@@ -45,8 +36,7 @@ set(SOURCES
     results/filedataresult.cpp
 )
 
-add_library(filesystem STATIC ${HEADERS} ${SOURCES})
-target_compile_features(filesystem PUBLIC cxx_std_17)
+qt_add_library(filesystem STATIC ${HEADERS} ${SOURCES})
 target_include_directories(filesystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(filesystem
@@ -56,7 +46,7 @@ target_link_libraries(filesystem
     common
     PRIVATE
     services
-    Qt5::Core
-    Qt5::Quick
-    Qt5::Qml
+    Qt6::Core
+    Qt6::Quick
+    Qt6::Qml
 )

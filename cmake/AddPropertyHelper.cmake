@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(propertyhelper INTERFACE)
+qt_add_library(propertyhelper INTERFACE)
 
 target_include_directories(propertyhelper INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>

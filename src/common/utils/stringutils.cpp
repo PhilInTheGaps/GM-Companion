@@ -1,21 +1,16 @@
 #include "stringutils.h"
 #include <QBuffer>
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-# include <QRegExp>
-#else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-# include <QRegularExpression>
-#endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
+#include <QRegularExpression>
 
 constexpr int ROT13_PLACES = 13;
 
 /**
  * @brief Convert QPixmap to base64 encoded QString
  */
-auto StringUtils::stringFromImage(const QPixmap& image)->QString
+auto StringUtils::stringFromImage(const QPixmap &image) -> QString
 {
     QByteArray bArray;
-    QBuffer    buffer(&bArray);
+    QBuffer buffer(&bArray);
 
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer, "JPEG");
@@ -28,14 +23,14 @@ auto StringUtils::stringFromImage(const QPixmap& image)->QString
 /**
  * @brief Takes a string and encrypts it in ROT13 encryption
  */
-auto StringUtils::rot13(const QString& input)->QString
+auto StringUtils::rot13(const QString &input) -> QString
 {
     // This is probably really stupid, but it works:
     // The following strings are both 2 times the alphabet
     // When encrypting, a character is replaced by the one 13 spots to the right
     // The strings have to be 2 times as long as usual so that there are still
     // characters further to the right than 'z'
-    const auto lowCaps   = QStringLiteral("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+    const auto lowCaps = QStringLiteral("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
     const auto upperCaps = QStringLiteral("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     QString encrypted = QLatin1String();
@@ -65,15 +60,9 @@ auto StringUtils::hasWildcardMatch(const QString &string, const QString &wildcar
 {
     bool hasMatch = false;
 
-    #if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-    QRegExp rx(wildcard);
-    rx.setPatternSyntax(QRegExp::Wildcard);
-    hasMatch = rx.exactMatch(string);
-    #else // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
-    auto re    = QRegularExpression(QRegularExpression::wildcardToRegularExpression(wildcard));
+    auto re = QRegularExpression(QRegularExpression::wildcardToRegularExpression(wildcard));
     auto match = re.match(string);
     hasMatch = match.hasMatch();
-    #endif // if (QT_VERSION < QT_VERSION_CHECK(5, 12, 0))
 
     return hasMatch;
 }

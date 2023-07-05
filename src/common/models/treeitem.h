@@ -3,6 +3,7 @@
 #include "baseprojectitem.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
+#include <limits>
 
 class TreeItem : public BaseProjectItem
 {
@@ -24,7 +25,7 @@ public:
     AUTO_PROPERTY_VAL2(bool, canToggle, true)
 
     /// Sorting priority. Smaller means higher priority.
-    AUTO_PROPERTY_VAL2(int, priority, INT_MAX)
+    AUTO_PROPERTY_VAL2(int, priority, std::numeric_limits<int>::max())
 
     Q_PROPERTY(bool isCheckable READ isCheckable CONSTANT)
     Q_PROPERTY(CheckedState isChecked READ isChecked WRITE setIsChecked NOTIFY isCheckedChanged)
@@ -34,7 +35,7 @@ public:
     READ_PROPERTY(int, depth)
 
 public:
-    explicit TreeItem(const QString& name, int depth, bool canToggle = true, QObject *parent = nullptr);
+    explicit TreeItem(const QString &name, int depth, bool canToggle = true, QObject *parent = nullptr);
 
     /// Whether a checkbox should be displayed.
     [[nodiscard]] virtual auto isCheckable() const -> bool;

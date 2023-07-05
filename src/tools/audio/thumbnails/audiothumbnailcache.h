@@ -1,8 +1,9 @@
 #pragma once
 
+#include <QHash>
 #include <QObject>
-#include <QPointer>
 #include <QPixmap>
+#include <QPointer>
 #include <QReadWriteLock>
 
 class AudioThumbnailCache : public QObject
@@ -18,12 +19,12 @@ public slots:
     void insertImage(const QString &key, const QPixmap &image);
 
 private:
-    explicit AudioThumbnailCache(QObject *parent = nullptr) : QObject(parent) {}
+    using QObject::QObject;
+
     static inline QPointer<AudioThumbnailCache> m_instance = nullptr;
 
     static constexpr int LOCK_TIMEOUT = 250;
 
     QHash<QString, QPixmap> m_cache;
     QReadWriteLock lock;
-
 };

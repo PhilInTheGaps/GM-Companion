@@ -292,7 +292,7 @@ auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkR
 
 void SpotifyConnectorServer::handleRateLimit(RequestContainer *container,
                                              const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
-                                             const QList<QPair<QByteArray, QByteArray>> &headers)
+                                             const QList<std::pair<QByteArray, QByteArray>> &headers)
 {
     using namespace std;
 
@@ -335,7 +335,7 @@ auto SpotifyConnectorServer::canSendRequest() -> bool
 void SpotifyConnectorServer::enqueueRequest(RequestContainer *container,
                                             const AsyncFuture::Deferred<RestNetworkReply *> &deferred)
 {
-    m_requestQueue.enqueue(QPair(container, deferred));
+    m_requestQueue.enqueue(std::pair(container, deferred));
 }
 
 void SpotifyConnectorServer::dequeueRequests()

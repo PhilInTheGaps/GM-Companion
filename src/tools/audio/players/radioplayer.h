@@ -1,15 +1,13 @@
-#ifndef RADIOPLAYER_H
-#define RADIOPLAYER_H
-
-#include <QBuffer>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QTemporaryDir>
+#pragma once
 
 #include "../metadata/metadatareader.h"
 #include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "filesystem/file.h"
+#include <QAudioOutput>
+#include <QBuffer>
+#include <QMediaPlayer>
+#include <QTemporaryDir>
 
 class RadioPlayer : public AudioPlayer
 {
@@ -32,7 +30,7 @@ public slots:
 
 private:
     QMediaPlayer m_mediaPlayer;
-    QMediaPlaylist m_playlist;
+    QAudioOutput m_audioOutput;
     QObject *m_fileRequestContext = nullptr;
 
     AudioElement *m_currentElement = nullptr;
@@ -43,11 +41,12 @@ private:
 
 signals:
     void startedPlaying();
-    void metaDataChanged(QMediaPlayer *mediaPlayer);
+    void metaDataChanged(const QMediaMetaData &metaData);
 
 private slots:
     void onMetaDataChanged();
     void onFileReceived(Files::FileDataResult *result);
+    void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
+    void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
 };
-
-#endif // RADIOPLAYER_H

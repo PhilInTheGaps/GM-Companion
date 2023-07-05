@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QObject>
 #include <QFuture>
+#include <QObject>
 #include <QPointer>
 #include <QSharedPointer>
 
@@ -17,15 +17,14 @@ class TracksAPI : public QObject
 public:
     [[nodiscard]] auto getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTrack>>;
 
-    [[nodiscard]] auto getTracks(const QStringList &ids) const -> QFuture<QVector<QSharedPointer<SpotifyTrack>>>;
+    [[nodiscard]] auto getTracks(const QStringList &ids) const -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>;
 
 private:
     explicit TracksAPI(Spotify *parent);
     const QPointer<Spotify> m_spotify = nullptr;
 
-    static constexpr auto MAX_TRACK_COUNT = 50;
-
-    [[nodiscard]] auto getTracks(const QStringList &ids, QVector<QSharedPointer<SpotifyTrack>> &&previous) const -> QFuture<QVector<QSharedPointer<SpotifyTrack>>>;
-    [[nodiscard]] static auto getNextBatch(const QStringList &ids, const QVector<QSharedPointer<SpotifyTrack>> &previous) -> QStringList;
+    [[nodiscard]] auto getTracks(const QStringList &ids, std::vector<QSharedPointer<SpotifyTrack>> &&previous) const
+        -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>;
+    [[nodiscard]] static auto getNextBatch(const QStringList &ids,
+                                           const std::vector<QSharedPointer<SpotifyTrack>> &previous) -> QStringList;
 };
-

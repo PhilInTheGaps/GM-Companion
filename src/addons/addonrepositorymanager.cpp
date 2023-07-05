@@ -70,13 +70,13 @@ void AddonRepositoryManager::fetchAllRepositoryData()
     for (const auto *repo : repos)
     {
         auto future = observe(fetchRepositoryDataAsync(repo->url()))
-                          .subscribe([this, repo](const QVector<AddonReleaseInfo> &info) {
-                              if (!info.isEmpty())
+                          .subscribe([this, repo](const std::vector<AddonReleaseInfo> &info) {
+                              if (!info.empty())
                               {
                                   qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
                               }
 
-                              m_releaseInfos.append(info);
+                              m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
                           })
                           .future();
 
@@ -142,7 +142,7 @@ auto AddonRepositoryManager::getRepositoryUrls(bool onlyCustom) const -> QString
     return urls;
 }
 
-auto AddonRepositoryManager::fetchRepositoryDataAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>
+auto AddonRepositoryManager::fetchRepositoryDataAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>
 {
     if (url.startsWith(QStringLiteral("http://")) || url.startsWith(QStringLiteral("https://")))
     {
@@ -152,7 +152,7 @@ auto AddonRepositoryManager::fetchRepositoryDataAsync(const QString &url) -> QFu
     return fetchRepositoryDataLocalAsync(url);
 }
 
-auto AddonRepositoryManager::fetchRepositoryDataLocalAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>
+auto AddonRepositoryManager::fetchRepositoryDataLocalAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>
 {
     return QtConcurrent::run([url]() {
         QFile file(url);
@@ -160,7 +160,7 @@ auto AddonRepositoryManager::fetchRepositoryDataLocalAsync(const QString &url) -
         if (!file.exists() || !file.open(QIODevice::ReadOnly))
         {
             qCWarning(gmAddonRepoManager) << "Could not read addon repository at" << url;
-            return QVector<AddonReleaseInfo>();
+            return std::vector<AddonReleaseInfo>();
         }
 
         const auto data = file.readAll();
@@ -170,7 +170,8 @@ auto AddonRepositoryManager::fetchRepositoryDataLocalAsync(const QString &url) -
     });
 }
 
-auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url) -> QFuture<QVector<AddonReleaseInfo>>
+auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url)
+    -> QFuture<std::vector<AddonReleaseInfo>>
 {
     auto *reply = m_networkManager.get(QNetworkRequest(QUrl(url)));
 
@@ -181,7 +182,7 @@ auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url) 
                 qCWarning(gmAddonRepoManager())
                     << "Could not read remote addon repository at" << url << reply->error() << reply->errorString();
                 reply->deleteLater();
-                return QVector<AddonReleaseInfo>();
+                return std::vector<AddonReleaseInfo>();
             }
 
             const auto data = reply->readAll();
@@ -192,21 +193,23 @@ auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url) 
         .future();
 }
 
-auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> QVector<AddonReleaseInfo>
+auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> std::vector<AddonReleaseInfo>
 {
     const auto jsonArray = QJsonDocument::fromJson(data).array();
-    QVector<AddonReleaseInfo> result;
+    std::vector<AddonReleaseInfo> result;
+    result.reserve(jsonArray.size());
 
     for (const auto &entry : jsonArray)
     {
         auto release = getNewestCompatibleRelease(entry.toObject()[QStringLiteral("releases")].toArray());
         if (release.isEmpty()) continue;
 
-        result << AddonReleaseInfo(
+        result.push_back(AddonReleaseInfo(
             entry.toObject()[QStringLiteral("id")].toString(), entry.toObject()[QStringLiteral("name")].toString(),
             entry.toObject()[QStringLiteral("name_short")].toString(), release[QStringLiteral("version")].toString(),
             entry.toObject()[QStringLiteral("author")].toString(),
-            entry.toObject()[QStringLiteral("description")].toString(), release[QStringLiteral("download")].toString());
+            entry.toObject()[QStringLiteral("description")].toString(),
+            release[QStringLiteral("download")].toString()));
     }
 
     return result;

@@ -45,7 +45,7 @@ auto Version::isGreater(const Version &first, const Version &second) -> bool
     return first.m_suffixVer > second.m_suffixVer;
 }
 
-auto Version::compare(const QVector<int> &first, const QVector<int> &second) -> int
+auto Version::compare(const QList<int> &first, const QList<int> &second) -> int
 {
     if (first.isEmpty() && second.isEmpty()) return 0;
 

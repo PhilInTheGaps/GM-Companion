@@ -70,7 +70,7 @@ auto FileUtils::fileName(const QString &path) -> QString
  * @brief Get the filename (with suffix) from a path.
  * Example: path "/some/file.mp3" becomes "file.mp3"
  */
-auto FileUtils::fileName(const QStringRef &path) -> QString
+auto FileUtils::fileName(QStringView path) -> QString
 {
     auto endsWithSlash = path.endsWith('/');
     auto from = endsWithSlash ? -2 : -1;
@@ -149,7 +149,7 @@ auto FileUtils::getMimeType(const QString &filename) -> FileUtils::MimeType
     return MimeType::Unknown;
 }
 
-auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> QPair<QString, QString>
+auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> std::pair<QString, QString>
 {
     auto suffix = FileUtils::suffix(fileName);
     auto pathWithoutSuffix = fileName;

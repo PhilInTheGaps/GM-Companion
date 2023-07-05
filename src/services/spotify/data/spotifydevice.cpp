@@ -15,7 +15,7 @@ auto SpotifyDevice::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyD
 
 auto SpotifyDevice::fromJson(const QJsonArray &json) -> QSharedPointer<SpotifyDeviceList>
 {
-    QVector<QSharedPointer<SpotifyDevice>> devices;
+    QList<QSharedPointer<SpotifyDevice>> devices;
     devices.reserve(json.count());
 
     for (const auto &entry : json)
@@ -23,5 +23,5 @@ auto SpotifyDevice::fromJson(const QJsonArray &json) -> QSharedPointer<SpotifyDe
         devices << SpotifyDevice::fromJson(entry.toObject());
     }
 
-    return QSharedPointer<SpotifyDeviceList>(new SpotifyDeviceList { devices });
+    return QSharedPointer<SpotifyDeviceList>(new SpotifyDeviceList{devices});
 }

@@ -1,14 +1,12 @@
-#ifndef SOUNDPLAYER_H
-#define SOUNDPLAYER_H
-
-#include <QBuffer>
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QTemporaryDir>
+#pragma once
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "filesystem/file.h"
+#include <QAudioOutput>
+#include <QBuffer>
+#include <QMediaPlayer>
+#include <QTemporaryDir>
 
 class SoundPlayer : public AudioPlayer
 {
@@ -41,6 +39,7 @@ public slots:
 private:
     AudioElement *m_element = nullptr;
     QMediaPlayer m_mediaPlayer;
+    QAudioOutput m_audioOutput;
     QObject *m_fileRequestContext = nullptr;
 
     QList<AudioFile *> m_playlist;
@@ -55,7 +54,7 @@ private:
 
 private slots:
     void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
-    void onMediaPlayerError(QMediaPlayer::Error error);
+    void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
     void onFileReceived(Files::FileDataResult *result);
 
 signals:
@@ -110,5 +109,3 @@ signals:
     void stopAll();
     void soundsChanged(QList<AudioElement *>);
 };
-
-#endif // SOUNDPLAYER_H

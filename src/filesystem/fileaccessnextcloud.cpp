@@ -7,6 +7,7 @@
 
 using namespace AsyncFuture;
 using namespace Files;
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmFileAccessNextCloud, "gm.files.access.nextcloud")
 
@@ -50,7 +51,8 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> 
         .future();
 }
 
-auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache) -> QFuture<QVector<FileDataResult *>>
+auto FileAccessNextcloud::getDataAsync(const QStringList &paths, bool allowCache)
+    -> QFuture<std::vector<FileDataResult *>>
 {
     return FileAccess::multiGetDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
 }
@@ -189,8 +191,8 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
 {
     qCDebug(gmFileAccessNextCloud()) << "Copying file" << path << "to" << copy;
 
-    const auto destinationHeader = QPair(QByteArray("Destination"), copy.toUtf8());
-    const auto overwriteHeader = QPair(QByteArray("Overwrite"), QByteArray("F"));
+    const auto destinationHeader = std::pair(QByteArray("Destination"), copy.toUtf8());
+    const auto overwriteHeader = std::pair(QByteArray("Overwrite"), QByteArray("F"));
 
     const auto future =
         m_nc.sendDavRequest("COPY", encodePath(path), QByteArray(), {destinationHeader, overwriteHeader});
@@ -279,13 +281,13 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray &data, const QStrin
 
         if (tokenType == QXmlStreamReader::StartElement)
         {
-            if (xml.name() == "href")
+            if (xml.name() == "href"_L1)
             {
                 const auto rawElement = xml.readElementText();
                 const auto decoded = QByteArray::fromPercentEncoding(rawElement.toUtf8());
                 element = FileUtils::fileName(decoded);
             }
-            else if (folders && xml.name() == "collection")
+            else if (folders && xml.name() == "collection"_L1)
             {
                 if (!element.isEmpty())
                 {
@@ -299,7 +301,7 @@ auto FileAccessNextcloud::parseListResponse(const QByteArray &data, const QStrin
                     }
                 }
             }
-            else if (files && xml.name() == "getcontenttype" &&
+            else if (files && xml.name() == "getcontenttype"_L1 &&
                      !xml.readElementText(QXmlStreamReader::SkipChildElements).isEmpty())
             {
                 if (!element.isEmpty()) fileList << element;
@@ -406,13 +408,13 @@ auto FileAccessNextcloud::makeAndPrintError(const QString &errorMessage, const Q
 
 auto FileAccessNextcloud::replyErrorToString(const QNetworkReply *reply) -> QString
 {
-    return QStringLiteral("%1 (%2)").arg(QString(reply->error()), reply->errorString());
+    return QStringLiteral("%1 (%2)").arg(QString::number(reply->error()), reply->errorString());
 }
 
-auto FileAccessNextcloud::makeMoveHeaders(const QString &newPath) -> QList<QPair<QByteArray, QByteArray>>
+auto FileAccessNextcloud::makeMoveHeaders(const QString &newPath) -> QList<std::pair<QByteArray, QByteArray>>
 {
-    auto destinationHeader = QPair(QByteArray("Destination"), newPath.toUtf8());
-    auto overwriteHeader = QPair(QByteArray("Overwrite"), QByteArray("F"));
+    auto destinationHeader = std::pair(QByteArray("Destination"), newPath.toUtf8());
+    auto overwriteHeader = std::pair(QByteArray("Overwrite"), QByteArray("F"));
     return {destinationHeader, overwriteHeader};
 }
 

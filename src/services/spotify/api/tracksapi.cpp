@@ -1,7 +1,7 @@
 #include "tracksapi.h"
 #include "spotify/spotify.h"
-#include "utils/networkutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/networkutils.h"
 
 #include <QLoggingCategory>
 #include <QUrlQuery>
@@ -10,7 +10,11 @@ Q_LOGGING_CATEGORY(gmSpotifyTracks, "gm.services.spotify.api.tracks")
 
 using namespace AsyncFuture;
 
-TracksAPI::TracksAPI(Spotify *parent) : QObject(parent), m_spotify(parent) {}
+constexpr size_t MAX_TRACK_COUNT = 50;
+
+TracksAPI::TracksAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
+{
+}
 
 auto TracksAPI::getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTrack>>
 {
@@ -44,7 +48,7 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTra
     return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
 }
 
-auto TracksAPI::getTracks(const QStringList &ids) const -> QFuture<QVector<QSharedPointer<SpotifyTrack>>>
+auto TracksAPI::getTracks(const QStringList &ids) const -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>
 {
     if (ids.isEmpty())
     {
@@ -55,10 +59,11 @@ auto TracksAPI::getTracks(const QStringList &ids) const -> QFuture<QVector<QShar
     return getTracks(ids, {});
 }
 
-auto TracksAPI::getTracks(const QStringList &ids, QVector<QSharedPointer<SpotifyTrack>> &&previous) const -> QFuture<QVector<QSharedPointer<SpotifyTrack>>>
+auto TracksAPI::getTracks(const QStringList &ids, std::vector<QSharedPointer<SpotifyTrack>> &&previous) const
+    -> QFuture<std::vector<QSharedPointer<SpotifyTrack>>>
 {
     auto batch = getNextBatch(ids, previous);
-    if (batch.isEmpty()) return completed(previous);
+    if (batch.isEmpty()) return completed<std::vector<QSharedPointer<SpotifyTrack>>>(previous);
 
     QUrl url(QStringLiteral("https://api.spotify.com/v1/tracks"));
 
@@ -72,19 +77,20 @@ auto TracksAPI::getTracks(const QStringList &ids, QVector<QSharedPointer<Spotify
         {
             qCWarning(gmSpotifyTracks()) << "getTracks():" << reply->errorText();
             reply->deleteLater();
-            return QFuture<QVector<QSharedPointer<SpotifyTrack>>>();
+            return QFuture<std::vector<QSharedPointer<SpotifyTrack>>>();
         }
 
         const auto data = reply->data();
         reply->deleteLater();
 
-        if (previous.isEmpty())
-            previous = SpotifyTrack::fromJsonArray(data);
+        if (previous.empty()) previous = SpotifyTrack::fromJsonArray(data);
         else
-            previous << SpotifyTrack::fromJsonArray(data);
+        {
+            auto newTracks = SpotifyTrack::fromJsonArray(data);
+            previous.insert(previous.end(), newTracks.begin(), newTracks.end());
+        }
 
-        if (ids.length() > previous.length())
-            return getTracks(ids, std::move(previous));
+        if (static_cast<size_t>(ids.length()) > previous.size()) return getTracks(ids, std::move(previous));
 
         return completed(previous);
     };
@@ -92,23 +98,22 @@ auto TracksAPI::getTracks(const QStringList &ids, QVector<QSharedPointer<Spotify
     return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
 }
 
-auto TracksAPI::getNextBatch(const QStringList &ids, const QVector<QSharedPointer<SpotifyTrack>> &previous) -> QStringList
+auto TracksAPI::getNextBatch(const QStringList &ids, const std::vector<QSharedPointer<SpotifyTrack>> &previous)
+    -> QStringList
 {
-    auto remaining = ids.length() - previous.length();
+    size_t remaining = ids.length() - previous.size();
     if (remaining < 1) return {};
 
     const auto nextBatchSize = std::min(remaining, MAX_TRACK_COUNT);
-    const auto lastIndex = nextBatchSize + previous.length() - 1;
+    const auto lastIndex = nextBatchSize + previous.size() - 1;
 
     QStringList batch;
     batch.reserve(nextBatchSize);
 
-    for (auto i = previous.length(); i <= lastIndex ; i++)
+    for (auto i = previous.size(); i <= lastIndex; i++)
     {
-        batch << ids[i];
+        batch << ids.at(i);
     }
 
     return batch;
 }
-
-

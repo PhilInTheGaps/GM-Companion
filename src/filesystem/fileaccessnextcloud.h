@@ -17,7 +17,7 @@ public:
     explicit FileAccessNextcloud(NextCloud &nextcloud, QObject *parent);
 
     QFuture<FileDataResult *> getDataAsync(const QString &path, bool allowCache) override;
-    QFuture<QVector<FileDataResult *>> getDataAsync(const QStringList &paths, bool allowCache) override;
+    QFuture<std::vector<FileDataResult *>> getDataAsync(const QStringList &paths, bool allowCache) override;
     QFuture<FileResult *> saveAsync(const QString &path, const QByteArray &data) override;
     QFuture<FileResult *> moveAsync(const QString &oldPath, const QString &newPath) override;
     QFuture<FileResult *> deleteAsync(const QString &path) override;
@@ -35,7 +35,7 @@ private:
     static inline bool replyHasError(QNetworkReply *reply);
     static QString makeAndPrintError(const QString &errorMessage, const QNetworkReply *reply);
     static QString replyErrorToString(const QNetworkReply *reply);
-    static QList<QPair<QByteArray, QByteArray>> makeMoveHeaders(const QString &newPath);
+    static QList<std::pair<QByteArray, QByteArray>> makeMoveHeaders(const QString &newPath);
 
     template <typename T> static T deleteReplyAndReturn(const T &value, QNetworkReply *reply);
 

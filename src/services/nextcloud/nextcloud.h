@@ -17,7 +17,7 @@ public:
     explicit NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent);
 
     auto sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
-                        const QList<QPair<QByteArray, QByteArray>> &headers = {}) -> QFuture<QNetworkReply *>;
+                        const QList<std::pair<QByteArray, QByteArray>> &headers = {}) -> QFuture<QNetworkReply *>;
 
     [[nodiscard]] QString getPathUrl(const QString &path) const;
 

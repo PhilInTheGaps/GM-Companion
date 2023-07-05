@@ -105,7 +105,7 @@ Control {
 
         acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        onClicked: {
+        onClicked: function (mouse) {
             if (mouse.button === Qt.LeftButton) {
                 root.clicked(root.buttonText)
             } else if (mouse.button === Qt.RightButton) {

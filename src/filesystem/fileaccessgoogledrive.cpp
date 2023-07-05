@@ -10,6 +10,8 @@
 #include <QLoggingCategory>
 #include <QUrlQuery>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmFileAccessGoogle, "gm.files.access.google")
 
 class GoogleDriveMimeType
@@ -79,7 +81,7 @@ auto FileAccessGoogleDrive::getDataAsync(const QString &path, bool allowCache) -
 }
 
 auto FileAccessGoogleDrive::getDataAsync(const QStringList &paths, bool allowCache)
-    -> QFuture<QVector<FileDataResult *>>
+    -> QFuture<std::vector<FileDataResult *>>
 {
     qCDebug(gmFileAccessGoogle()) << "getDataAsync(" << paths << "," << allowCache << ")";
     return FileAccess::multiGetDataAsync(new MultiGetHelper<FileDataResult>(paths, this), allowCache);
@@ -204,12 +206,12 @@ auto FileAccessGoogleDrive::moveAsync(const QString &oldPath, const QString &new
                 AsyncFuture::observe(getParentIdAsync(oldPath))
                     .subscribe(
                         [this, fileId, oldPath, newPath, deferred, errorCallback,
-                         createNewParentFolderAndTryAgain](const QPair<QString, QByteArray> &oldPair) mutable {
+                         createNewParentFolderAndTryAgain](const std::pair<QString, QByteArray> &oldPair) mutable {
                             AsyncFuture::observe(getParentIdAsync(newPath))
                                 .subscribe(
                                     [this, fileId, oldPath, newPath, oldPair, deferred, errorCallback,
                                      createNewParentFolderAndTryAgain](
-                                        const QPair<QString, QByteArray> &newPair) mutable {
+                                        const std::pair<QString, QByteArray> &newPair) mutable {
                                         const auto filename = FileUtils::fileName(newPath);
                                         const auto metadata = makeMetaData(filename);
 
@@ -343,7 +345,7 @@ auto FileAccessGoogleDrive::copyAsync(const QString &path, const QString &copy) 
                             AsyncFuture::observe(getParentIdAsync(copy))
                                 .subscribe(
                                     [this, path, copy, id, deferred,
-                                     errorCallback](const QPair<QString, QByteArray> &parent) mutable {
+                                     errorCallback](const std::pair<QString, QByteArray> &parent) mutable {
                                         const auto filename = FileUtils::fileName(copy);
                                         const auto metadata = makeMetaData(filename, parent.second);
 
@@ -437,10 +439,10 @@ auto FileAccessGoogleDrive::listAsync(const QString &path, const QString &q, con
 
                     for (const auto &file : fileArray)
                     {
-                        const auto fileName = file["name"].toString();
+                        const auto fileName = file["name"_L1].toString();
                         const auto filePath = FileUtils::fileInDir(fileName, path);
-                        const auto id = file["id"].toString().toUtf8();
-                        const auto mimeType = file["mimeType"].toString();
+                        const auto id = file["id"_L1].toString().toUtf8();
+                        const auto mimeType = file["mimeType"_L1].toString();
 
                         if (mimeType == GoogleDriveMimeType::FOLDER)
                         {
@@ -554,7 +556,7 @@ auto FileAccessGoogleDrive::createFileAsync(const QString &path, const QByteArra
                 AsyncFuture::observe(getParentIdAsync(path))
                     .subscribe(
                         [this, path, mimeType, deferred,
-                         errorCallback](const QPair<QString, QByteArray> &parent) mutable {
+                         errorCallback](const std::pair<QString, QByteArray> &parent) mutable {
                             // Build file meta data
                             const auto data = makeMetaData(FileUtils::fileName(path), parent.second, mimeType);
                             const auto request = makeJsonRequest(QUrl(FILES_ENDPOINT));
@@ -667,8 +669,8 @@ auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QSt
 
             for (const auto &file : files)
             {
-                const auto path = FileUtils::fileInDir(file["name"].toString(), parentPath);
-                const auto id = file["id"].toString().toUtf8();
+                const auto path = FileUtils::fileInDir(file["name"_L1].toString(), parentPath);
+                const auto id = file["id"_L1].toString().toUtf8();
                 m_idCache.createOrUpdateEntry(path, id);
             }
 
@@ -693,7 +695,7 @@ auto FileAccessGoogleDrive::getFolderEntryIds(const QString &parentId, const QSt
     return AsyncFuture::observe(m_gd.get(url)).subscribe(callback, errorCallback).future();
 }
 
-auto FileAccessGoogleDrive::getFolderEntryIds(const QPair<QString, QByteArray> &dir, const QString &pageToken)
+auto FileAccessGoogleDrive::getFolderEntryIds(const std::pair<QString, QByteArray> &dir, const QString &pageToken)
     -> QFuture<void>
 {
     return getFolderEntryIds(dir.second, dir.first, pageToken);
@@ -727,7 +729,7 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
 
     return AsyncFuture::observe(getParentIdAsync(path))
         .subscribe(
-            [this, path, callback, errorCallback](const QPair<QString, QByteArray> &parentPair) {
+            [this, path, callback, errorCallback](const std::pair<QString, QByteArray> &parentPair) {
                 // Has ID been found in the meantime?
                 if (QByteArray id; m_idCache.tryGetData(path, id))
                 {
@@ -741,18 +743,19 @@ auto FileAccessGoogleDrive::getFileIdAsync(const QString &path) -> QFuture<QStri
 }
 
 /// Get the ID of the parent folder
-auto FileAccessGoogleDrive::getParentIdAsync(const QString &path) -> QFuture<QPair<QString, QByteArray>>
+auto FileAccessGoogleDrive::getParentIdAsync(const QString &path) -> QFuture<std::pair<QString, QByteArray>>
 {
     const auto parentPath = FileUtils::dirFromPath(path);
 
     // top level ID is "root"
     if (parentPath.isEmpty() || parentPath == '/')
     {
-        return AsyncFuture::completed(QPair(parentPath, QByteArray("root")));
+        return AsyncFuture::completed(std::pair(parentPath, QByteArray("root")));
     }
 
     return AsyncFuture::observe(getFileIdAsync(parentPath))
-        .subscribe([parentPath](const QString &id) { return AsyncFuture::completed(QPair(parentPath, id.toUtf8())); })
+        .subscribe(
+            [parentPath](const QString &id) { return AsyncFuture::completed(std::pair(parentPath, id.toUtf8())); })
         .future();
 }
 

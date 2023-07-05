@@ -146,7 +146,7 @@ private:
 
 private slots:
     void addFiles(const QStringList &files);
-    void onFoundProjects(const QVector<AudioProject *> &list);
+    void onFoundProjects(const std::vector<AudioProject *> &projects);
     void onCurrentScenarioChanged() const;
     void onProjectSavedChanged();
 };

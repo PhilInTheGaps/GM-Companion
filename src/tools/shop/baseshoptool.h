@@ -21,7 +21,7 @@ public slots:
 
 protected slots:
     void onShopFilesFound(Files::FileListResult *result);
-    void onShopFileDataReceived(const QVector<Files::FileDataResult *> &results);
+    void onShopFileDataReceived(const std::vector<Files::FileDataResult *> &results);
 
 protected:
     void setFirstProjectAsCurrent();

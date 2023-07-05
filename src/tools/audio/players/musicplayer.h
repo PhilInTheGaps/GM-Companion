@@ -1,20 +1,18 @@
-#ifndef MUSICPLAYER_H
-#define MUSICPLAYER_H
-
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
-#include <QPointer>
-#include <gsl/gsl>
-
-#ifdef Q_OS_WIN
-#include <QTemporaryDir>
-#endif
+#pragma once
 
 #include "../project/audioelement.h"
 #include "audioplayer.h"
 #include "filesystem/file.h"
 #include "spotifyplayer.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QAudioOutput>
+#include <QMediaPlayer>
+#include <QPointer>
+#include <gsl/gsl>
+
+#ifdef Q_OS_WIN
+#include <QTemporaryDir>
+#endif
 
 class MusicPlayer : public AudioPlayer
 {
@@ -39,13 +37,13 @@ public slots:
 private:
     SpotifyPlayer m_spotifyPlayer;
     QMediaPlayer m_mediaPlayer;
+    QAudioOutput m_audioOutput;
     AudioElement *m_currentElement = nullptr;
 
     /// Context object to easily stop file data requests by deleting the object
     QObject *m_fileRequestContext = nullptr;
     QObject *m_playlistLoadingContext = nullptr;
 
-    // QList<AudioFile*> m_playlist;
     AudioFile::Source m_currentFileSource = AudioFile::Source::Unknown;
 
     QBuffer m_mediaBuffer;
@@ -77,10 +75,9 @@ private:
     void printPlaylist() const;
 
 private slots:
-    void onMediaPlayerStateChanged();
-    void onMediaPlayerMediaStatusChanged();
-    void onMediaPlayerError(QMediaPlayer::Error error);
-    void onMediaPlayerMediaChanged() const;
+    void onMediaPlayerPlaybackStateChanged(QMediaPlayer::PlaybackState newState);
+    void onMediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onMediaPlayerErrorOccurred(QMediaPlayer::Error error, const QString &errorString);
     void onFileReceived(Files::FileDataResult *result);
     void onSpotifySongEnded();
 
@@ -92,5 +89,3 @@ signals:
     void metaDataChanged(const QByteArray &data);
     void currentIndexChanged();
 };
-
-#endif // MUSICPLAYER_H
