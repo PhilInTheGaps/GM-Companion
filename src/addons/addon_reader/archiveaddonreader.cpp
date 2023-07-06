@@ -4,6 +4,8 @@
 #include <quazipdir.h>
 #include <quazipfile.h>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAddonArchiveReader, "gm.addons.reader.archive")
 
 ArchiveAddonReader::ArchiveAddonReader(const Addon &addon) : m_addon(addon)
@@ -61,12 +63,12 @@ auto ArchiveAddonReader::findAddonJson() const -> QString
 
     for (const auto &entry : entries)
     {
-        if (entry.endsWith(QStringLiteral("addon.json")))
+        if (entry.endsWith("addon.json"_L1))
         {
             return entry;
         }
     }
 
     qCWarning(gmAddonArchiveReader()) << "Error: addon.json could not be found in addon" << m_addon.id();
-    return QLatin1String();
+    return u""_s;
 }

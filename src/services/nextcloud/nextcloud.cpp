@@ -8,6 +8,7 @@
 #include <QLoggingCategory>
 #include <QTimer>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 constexpr auto AUTH_URL = "/index.php/login/v2";
@@ -18,7 +19,7 @@ constexpr auto MAX_AUTH_POLLS = 20;
 Q_LOGGING_CATEGORY(gmNextCloud, "gm.service.nextcloud")
 
 NextCloud::NextCloud(QNetworkAccessManager &networkManager, QObject *parent)
-    : NextCloud(QStringLiteral("NextCloud"), networkManager, parent)
+    : NextCloud(u"NextCloud"_s, networkManager, parent)
 {
 }
 
@@ -28,7 +29,7 @@ NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkM
     if (connected())
     {
         updateStatus(ServiceStatus::Type::Success, tr("Connected"));
-        loginName(SettingsManager::instance()->get<QString>(QStringLiteral("loginName"), QLatin1String(), serviceName));
+        loginName(SettingsManager::instance()->get<QString>(u"loginName"_s, u""_s, serviceName));
         serverUrl(SettingsManager::getServerUrl(serviceName, false));
         m_loggingIn = true;
 
@@ -101,8 +102,8 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
 
 auto NextCloud::getPathUrl(const QString &path) const -> QString
 {
-    const auto seperator = path.startsWith('/') ? QLatin1String() : QStringLiteral("/");
-    return QStringLiteral("%1%2/%3%4%5").arg(serverUrl(), DAV_ENDPOINT, loginName(), seperator, path);
+    const auto seperator = path.startsWith('/') ? u""_s : u"/"_s;
+    return u"%1%2/%3%4%5"_s.arg(serverUrl(), DAV_ENDPOINT, loginName(), seperator, path);
 }
 
 void NextCloud::connectService()
@@ -132,7 +133,7 @@ void NextCloud::disconnectService()
     qCDebug(gmNextCloud()) << "Logout() ...";
     updateStatus(ServiceStatus::Type::Info, tr("Logging out ..."));
 
-    SettingsManager::setPassword(loginName(), QLatin1String(), serviceName());
+    SettingsManager::setPassword(loginName(), ""_L1, serviceName());
 
     disconnect();
 }
@@ -178,10 +179,10 @@ void NextCloud::startLoginFlow()
         }
         else
         {
-            auto poll = data.object()[QStringLiteral("poll")].toObject();
-            auto token = poll[QStringLiteral("token")].toString();
-            auto endpoint = poll[QStringLiteral("endpoint")].toString();
-            auto login = data.object()[QStringLiteral("login")].toString();
+            auto poll = data.object()["poll"_L1].toObject();
+            auto token = poll["token"_L1].toString();
+            auto endpoint = poll["endpoint"_L1].toString();
+            auto login = data.object()["login"_L1].toString();
 
             updateStatus(ServiceStatus::Type::Info, tr("Waiting for login ..."));
             QDesktopServices::openUrl(QUrl(login));
@@ -247,14 +248,14 @@ void NextCloud::handleAuthPointNotFound(const QUrl &url, const QString &token)
 void NextCloud::handleAuthPointSuccess(QNetworkReply &reply)
 {
     const auto content = QJsonDocument::fromJson(reply.readAll()).object();
-    loginName(content[QStringLiteral("loginName")].toString());
-    m_appPassword = content[QStringLiteral("appPassword")].toString();
+    loginName(content["loginName"_L1].toString());
+    m_appPassword = content["appPassword"_L1].toString();
 
     qCDebug(gmNextCloud()) << "Logged in successfully!";
     qCDebug(gmNextCloud()) << "LoginName:" << loginName();
     qCDebug(gmNextCloud()) << "AppPassword:" << m_appPassword;
 
-    SettingsManager::instance()->set(QStringLiteral("loginName"), loginName(), serviceName());
+    SettingsManager::instance()->set("loginName"_L1, loginName(), serviceName());
     SettingsManager::setPassword(loginName(), m_appPassword, serviceName());
     connected(true);
     m_loggingIn = false;

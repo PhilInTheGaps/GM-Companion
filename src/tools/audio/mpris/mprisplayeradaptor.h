@@ -15,7 +15,7 @@ class MprisPlayerAdaptor : public QDBusAbstractAdaptor
     Q_PROPERTY(QString LoopStatus READ loopStatus WRITE setLoopStatus)
     Q_PROPERTY(double Rate READ rate WRITE setRate)
     Q_PROPERTY(bool Shuffle READ shuffle WRITE setShuffle)
-    Q_PROPERTY(QMap Metadata READ metadata NOTIFY metadataChanged)
+    Q_PROPERTY(QMap<QString, QVariant> Metadata READ metadata NOTIFY metadataChanged)
     Q_PROPERTY(double Volume READ volume WRITE setVolume)
     Q_PROPERTY(qlonglong Position READ position)
     Q_PROPERTY(double MinimumRate READ minimumRate)

@@ -2,6 +2,7 @@
 #include "utils/fileutils.h"
 #include "utils/stringutils.h"
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
 auto FileListResult::filesFull(const QString &wildcard) const -> QStringList
@@ -30,7 +31,7 @@ auto FileListResult::getFullyQualified(const QStringList &list) const -> QString
 
 auto FileListResult::getMatchingEntries(const QStringList &list, const QString &wildcard) -> QStringList
 {
-    if (wildcard.isEmpty() || wildcard == "*") return list;
+    if (wildcard.isEmpty() || wildcard == "*"_L1) return list;
 
     QStringList results;
 

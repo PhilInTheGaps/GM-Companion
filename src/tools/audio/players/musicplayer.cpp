@@ -8,6 +8,7 @@
 #include <QRandomGenerator>
 #include <algorithm>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioMusic, "gm.audio.music")
@@ -302,7 +303,7 @@ void MusicPlayer::loadLocalFile(AudioFile *file)
 
     m_fileName = file->url();
 
-    const auto path = FileUtils::fileInDir(file->url(), SettingsManager::getPath(QStringLiteral("music")));
+    const auto path = FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"music"_s));
     const auto callback = [this](Files::FileDataResult *result) { onFileReceived(result); };
 
     observe(Files::File::getDataAsync(path)).context(m_fileRequestContext, callback);

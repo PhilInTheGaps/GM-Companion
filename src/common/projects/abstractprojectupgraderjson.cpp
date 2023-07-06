@@ -3,6 +3,8 @@
 #include <QJsonParseError>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAbstractProjectUpgraderJSON, "gm.common.projects.upgrader.json")
 
 AbstractProjectUpgraderJSON::AbstractProjectUpgraderJSON(int version) : AbstractProjectUpgrader(version)
@@ -23,7 +25,7 @@ void AbstractProjectUpgraderJSON::parse(const QByteArray &data)
 auto AbstractProjectUpgraderJSON::isProjectCompatible() const -> bool
 {
     const auto project = m_json.object();
-    const auto version = project[QStringLiteral("version")].toInt(0);
+    const auto version = project["version"_L1].toInt(0);
     return version == this->version();
 }
 

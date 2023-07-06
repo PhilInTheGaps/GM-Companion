@@ -1,8 +1,9 @@
 #include "quicksettingsmanager.h"
 #include "utils/utils.h"
 
-QuickSettingsManager::QuickSettingsManager(QObject *parent)
-    : QObject{parent}
+using namespace Qt::Literals::StringLiterals;
+
+QuickSettingsManager::QuickSettingsManager(QObject *parent) : QObject{parent}
 {
 }
 
@@ -23,11 +24,11 @@ void QuickSettingsManager::setPath(const QString &path, const QString &value)
 
 auto QuickSettingsManager::getLanguageIndex() -> int
 {
-    auto language  = SettingsManager::getLanguageString();
+    auto language = SettingsManager::getLanguageString();
     auto languages = getLanguageNames();
-    auto index     = languages.indexOf(language);
+    auto index = languages.indexOf(language);
 
-    if (index < 0) index = languages.indexOf(QStringLiteral("English"));
+    if (index < 0) index = languages.indexOf("English"_L1);
 
     return index;
 }
@@ -37,14 +38,14 @@ auto QuickSettingsManager::getLanguageNames() -> QStringList
     return SettingsManager::getLanguageNames();
 }
 
-void QuickSettingsManager::setLanguage(const QString& language)
+void QuickSettingsManager::setLanguage(const QString &language)
 {
-    auto languages     = SettingsManager::getLanguages();
+    auto languages = SettingsManager::getLanguages();
     auto languageNames = getLanguageNames();
-    auto index         = languageNames.indexOf(language);
-    auto chosenLanguage = Utils::isInBounds(languages, index) ? languages[index] : QStringLiteral("default");
+    auto index = languageNames.indexOf(language);
+    auto chosenLanguage = Utils::isInBounds(languages, index) ? languages[index] : u"default"_s;
 
-    SettingsManager::instance()->set(QStringLiteral("language"), chosenLanguage);
+    SettingsManager::instance()->set(u"language"_s, chosenLanguage);
 }
 
 auto QuickSettingsManager::getServerUrl(const QString &service) -> QString

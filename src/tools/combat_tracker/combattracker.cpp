@@ -9,15 +9,17 @@
 #include <QLoggingCategory>
 #include <algorithm>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmCombatTracker, "gm.combat.tracker")
 
 CombatTracker::CombatTracker(QQmlApplicationEngine *engine, QObject *parent) : AbstractTool(parent), m_effectTool(this)
 {
     if (engine)
     {
-        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker"), this);
-        engine->rootContext()->setContextProperty(QStringLiteral("combat_tracker_effects"), &m_effectTool);
-        engine->rootContext()->setContextProperty(QStringLiteral("combatantListModel"), &m_state.model());
+        engine->rootContext()->setContextProperty(u"combat_tracker"_s, this);
+        engine->rootContext()->setContextProperty(u"combat_tracker_effects"_s, &m_effectTool);
+        engine->rootContext()->setContextProperty(u"combatantListModel"_s, &m_state.model());
     }
 
     connect(&m_state, &CombatTrackerState::currentIndexChanged, this, &CombatTracker::currentIndexChanged);
@@ -312,7 +314,7 @@ void CombatTracker::saveToDisk() const
 
 auto CombatTracker::getCacheFile() -> QFile
 {
-    const auto filePath = FileUtils::fileInDir(QStringLiteral("combat-tracker-state.json"), QDir::tempPath());
+    const auto filePath = FileUtils::fileInDir(u"combat-tracker-state.json"_s, QDir::tempPath());
 
     return {filePath};
 }

@@ -6,6 +6,8 @@
 #include <QLoggingCategory>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioCategory, "gm.audio.project.category")
 
 AudioCategory::AudioCategory(const QString &name, const QString &parentPath, QList<AudioScenario *> scenarios,
@@ -29,12 +31,12 @@ AudioCategory::AudioCategory(const AudioCategory &other)
 }
 
 AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, AudioProject *parent)
-    : TreeItem(QLatin1String(""), 0, true, parent)
+    : TreeItem(u""_s, 0, true, parent)
 {
-    name(object[QStringLiteral("name")].toString());
+    name(object["name"_L1].toString());
     m_path = path + "/" + name();
 
-    const auto scenarios = object[QStringLiteral("scenarios")].toArray();
+    const auto scenarios = object["scenarios"_L1].toArray();
     m_scenarios.reserve(scenarios.size());
 
     for (const auto &scenario : scenarios)
@@ -53,7 +55,6 @@ AudioCategory::AudioCategory(const QJsonObject &object, const QString &path, Aud
 auto AudioCategory::toJson() const -> QJsonObject
 {
     QJsonObject object = {{"name", name()}};
-
     QJsonArray scenariosJson;
 
     foreach (const auto *scenario, m_scenarios)
@@ -64,7 +65,7 @@ auto AudioCategory::toJson() const -> QJsonObject
         }
     }
 
-    object.insert(QStringLiteral("scenarios"), scenariosJson);
+    object.insert(u"scenarios"_s, scenariosJson);
     return object;
 }
 

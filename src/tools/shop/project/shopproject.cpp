@@ -2,6 +2,8 @@
 #include <QJsonArray>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmShopsShopProject, "gm.shops.project")
 
 ShopProject::ShopProject(const QString &name, const QList<ShopCategory *> &categories, QObject *parent)
@@ -32,19 +34,18 @@ ShopProject::ShopProject(const ShopProject &other, QObject *parent)
 }
 
 ShopProject::ShopProject(const QJsonObject &json, QObject *parent)
-    : BaseProjectItem(json[QStringLiteral("name")].toString(), parent),
-      a_version(json[QStringLiteral("version")].toInt())
+    : BaseProjectItem(json["name"_L1].toString(), parent), a_version(json["version"_L1].toInt())
 {
     connectSignals();
 
-    auto categoryArray = json[QStringLiteral("categories")].toArray();
+    auto categoryArray = json["categories"_L1].toArray();
 
     foreach (const auto &categoryJson, categoryArray)
     {
         const auto categoryObject = categoryJson.toObject();
 
         QList<ItemShop *> shops;
-        auto shopArray = categoryObject.value(QStringLiteral("shops")).toArray();
+        auto shopArray = categoryObject["shops"_L1].toArray();
         shops.reserve(shopArray.size());
 
         foreach (const auto &shop, shopArray)
@@ -52,7 +53,7 @@ ShopProject::ShopProject(const QJsonObject &json, QObject *parent)
             shops.append(new ItemShop(shop.toObject(), this));
         }
 
-        auto *category = new ShopCategory(categoryObject.value(QStringLiteral("name")).toString(), shops, this);
+        auto *category = new ShopCategory(categoryObject["name"_L1].toString(), shops, this);
         connectCategory(category);
         a_categories.append(category);
     }
@@ -73,7 +74,7 @@ auto ShopProject::toJson() const -> QJsonObject
         }
     }
 
-    root.insert(QStringLiteral("categories"), categoryArray);
+    root.insert(u"categories"_s, categoryArray);
     return root;
 }
 

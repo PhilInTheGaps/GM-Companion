@@ -13,23 +13,25 @@ namespace Files
 class FileListResult;
 }
 
+using namespace Qt::Literals::StringLiterals;
+
 class AudioSaveLoad
 {
 public:
     AudioSaveLoad() = delete;
 
-    static QFuture<std::vector<AudioProject *>> findProjectsAsync(const QString &folder = "");
+    static QFuture<std::vector<AudioProject *>> findProjectsAsync(const QString &folder = u""_s);
 
     static AudioProject *loadProject(const QByteArray &data, QObject *parent);
 
     static QFuture<bool> findMissingFilesAsync(const QList<AudioFile *> &audioFiles, const QString &basePath);
 
-    static QFuture<bool> saveProject(AudioProject *project, const QString &folder = "");
+    static QFuture<bool> saveProject(AudioProject *project, const QString &folder = u""_s);
 
-    static QFuture<bool> deleteProject(AudioProject *project, const QString &folder = "");
+    static QFuture<bool> deleteProject(AudioProject *project, const QString &folder = u""_s);
 
 private:
-    static constexpr const char *PROJECT_FILE_SUFFIX = ".audio";
+    static constexpr const auto PROJECT_FILE_SUFFIX = ".audio";
 
     static QFuture<std::vector<AudioProject *>> loadProjects(Files::FileListResult *files);
     static QStringList getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath);

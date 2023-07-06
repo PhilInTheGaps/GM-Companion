@@ -1,33 +1,30 @@
 #include "spotifytrack.h"
-
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
+
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmSpotifyTrack, "gm.services.spotify.data.track")
 
 auto SpotifyTrack::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyTrack>
 {
     // Tracks in playlists might be located inside a container with playlist-specific meta infos
-    if (json.contains(QStringLiteral("added_at")))
+    if (json.contains("added_at"_L1))
     {
-        return SpotifyTrack::fromJson(json[QStringLiteral("track")].toObject());
+        return SpotifyTrack::fromJson(json["track"_L1].toObject());
     }
 
-    const auto isLinked = json.contains(QStringLiteral("linked_from"));
+    const auto isLinked = json.contains("linked_from"_L1);
 
     auto *track = new SpotifyTrack{
-        {isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("href")].toString()
-                  : json[QStringLiteral("href")].toString(),
-         isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("uri")].toString()
-                  : json[QStringLiteral("uri")].toString(),
-         isLinked ? json[QStringLiteral("linked_from")][QStringLiteral("id")].toString()
-                  : json[QStringLiteral("id")].toString(),
-         json[QStringLiteral("name")].toString()},
-        json[QStringLiteral("duration_ms")].toInt(),
+        {isLinked ? json["linked_from"_L1]["href"_L1].toString() : json["href"_L1].toString(),
+         isLinked ? json["linked_from"_L1]["uri"_L1].toString() : json["uri"_L1].toString(),
+         isLinked ? json["linked_from"_L1]["id"_L1].toString() : json["id"_L1].toString(), json["name"_L1].toString()},
+        json["duration_ms"_L1].toInt(),
         getIsPlayable(json),
-        SpotifyAlbumInfo::fromJson(json[QStringLiteral("album")].toObject()),
-        SpotifyArtist::fromJson(json[QStringLiteral("artists")].toArray()),
+        SpotifyAlbumInfo::fromJson(json["album"_L1].toObject()),
+        SpotifyArtist::fromJson(json["artists"_L1].toArray()),
     };
 
     return QSharedPointer<SpotifyTrack>(track);
@@ -55,7 +52,7 @@ auto SpotifyTrack::fromJsonArray(const QJsonArray &json) -> std::vector<QSharedP
 auto SpotifyTrack::fromJsonArray(const QByteArray &data) -> std::vector<QSharedPointer<SpotifyTrack>>
 {
     const auto json = QJsonDocument::fromJson(data).object();
-    return SpotifyTrack::fromJsonArray(json[QStringLiteral("tracks")].toArray());
+    return SpotifyTrack::fromJsonArray(json["tracks"_L1].toArray());
 }
 
 auto SpotifyTrack::artistString() const -> QString
@@ -68,7 +65,7 @@ auto SpotifyTrack::artistString() const -> QString
         names << artist->name;
     }
 
-    return names.join(QStringLiteral(", "));
+    return names.join(u", "_s);
 }
 
 auto SpotifyTrack::image() const -> QSharedPointer<SpotifyImage>
@@ -83,14 +80,14 @@ auto SpotifyTrack::image() const -> QSharedPointer<SpotifyImage>
 
 auto SpotifyTrack::getIsPlayable(const QJsonObject &json) -> bool
 {
-    if (json.contains(QStringLiteral("is_playable")))
+    if (json.contains("is_playable"_L1))
     {
-        return json[QStringLiteral("is_playable")].toBool();
+        return json["is_playable"_L1].toBool();
     }
 
-    if (json.contains(QStringLiteral("available_markets")))
+    if (json.contains("available_markets"_L1))
     {
-        return !json[QStringLiteral("available_markets")].toArray().isEmpty();
+        return !json["available_markets"_L1].toArray().isEmpty();
     }
 
     return true;

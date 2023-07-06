@@ -1,6 +1,8 @@
 #include "treeitem.h"
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 TreeItem::TreeItem(const QString &name, int depth, bool canToggle, QObject *parent)
     : BaseProjectItem(name, parent), a_canToggle(canToggle), a_depth(depth)
 {
@@ -157,7 +159,7 @@ auto TreeItem::path() const -> QString
     {
         auto path = parentItem->path();
 
-        if (!path.isEmpty()) return QStringLiteral("%1/%2").arg(path, name);
+        if (!path.isEmpty()) return u"%1/%2"_s.arg(path, name);
     }
 
     return name;

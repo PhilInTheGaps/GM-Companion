@@ -24,6 +24,7 @@
 
 Q_LOGGING_CATEGORY(gmProcessInfo, "gm.utils.processinfo")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace std;
 
 auto ProcessInfo::isProcessRunning(const QString &procName) -> bool
@@ -84,7 +85,7 @@ auto ProcessInfo::isProcessRunningMac(const QString &procName) -> bool
 // but implemented using Qt classes
 auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
 {
-    QDir procDir(QStringLiteral("/proc"));
+    QDir procDir(u"/proc"_s);
     auto entries = procDir.entryList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Readable);
 
     bool isNumeric = false;
@@ -96,7 +97,7 @@ auto ProcessInfo::isProcessRunningUnix(const QString &procName) -> bool
         if (!isNumeric) continue;
 
         // Read contents of virtual /proc/{pid}/cmdline file
-        auto cmdPath = QStringLiteral("/proc/%1/cmdline").arg(entry);
+        auto cmdPath = u"/proc/%1/cmdline"_s.arg(entry);
         auto content = getProcNameFromFile(cmdPath);
 
         if (procName == content) return true;

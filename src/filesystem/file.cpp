@@ -6,6 +6,7 @@
 #include "settings/settingsmanager.h"
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
 Q_LOGGING_CATEGORY(gmFileManager, "gm.files.manager")
@@ -80,14 +81,14 @@ auto File::checkAsync(const QStringList &paths, bool allowCache, FileAccess *fil
 
 void File::updateFileAccess()
 {
-    const auto cloudMode = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local"));
+    const auto cloudMode = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s);
     qCDebug(gmFileManager()) << "Setting file access to" << cloudMode;
 
-    if (s_nc && cloudMode == QStringLiteral("NextCloud"))
+    if (s_nc && cloudMode == "NextCloud"_L1)
     {
         FileAccess::setInstance(new FileAccessNextcloud(*s_nc, nullptr));
     }
-    else if (s_gd && cloudMode == QStringLiteral("GoogleDrive"))
+    else if (s_gd && cloudMode == "GoogleDrive"_L1)
     {
         FileAccess::setInstance(new FileAccessGoogleDrive(*s_gd, nullptr));
     }

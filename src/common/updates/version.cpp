@@ -1,14 +1,15 @@
 #include "version.h"
 #include "utils/utils.h"
-
 #include <QRegularExpression>
+
+using namespace Qt::Literals::StringLiterals;
 
 Version::Version(const QString &str)
 {
     auto regex = QRegularExpression(QStringLiteral(R"((?'numbers'[\.\d]+)(-(?'suffix'[a-zA-Z]+)(?'suffixVer'\d+))?)"));
     auto match = regex.match(str);
 
-    auto numbers = match.captured(QStringLiteral("numbers")).split('.');
+    auto numbers = match.captured("numbers"_L1).split('.');
     m_numbers.reserve(numbers.length());
     for (const auto &number : numbers)
     {
@@ -17,10 +18,10 @@ Version::Version(const QString &str)
         m_numbers << (ok ? num : 0);
     }
 
-    auto suffix = match.captured(QStringLiteral("suffix"));
+    auto suffix = match.captured("suffix"_L1);
     m_suffix = suffixFromString(suffix);
 
-    auto suffixVer = match.captured(QStringLiteral("suffixVer"));
+    auto suffixVer = match.captured("suffixVer"_L1);
     if (!suffixVer.isNull() && !suffixVer.isEmpty())
     {
         bool ok = false;
@@ -79,11 +80,11 @@ auto Version::suffixFromString(const QString &str) -> Suffix
 {
     if (str.isNull() || str.isEmpty()) return Suffix::None;
 
-    if (str == QStringLiteral("alpha")) return Suffix::Alpha;
+    if (str == "alpha"_L1) return Suffix::Alpha;
 
-    if (str == QStringLiteral("beta")) return Suffix::Beta;
+    if (str == "beta"_L1) return Suffix::Beta;
 
-    if (str == QStringLiteral("rc")) return Suffix::RC;
+    if (str == "rc"_L1) return Suffix::RC;
 
     return Suffix::Other;
 }

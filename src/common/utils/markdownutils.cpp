@@ -1,5 +1,7 @@
 #include "markdownutils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 auto MarkdownUtils::markdownToHtml(const QString &markdown) -> QString
 {
 #if MARKDOWN_LIBRARY == MARKDOWN_CMARK_GFM
@@ -12,7 +14,7 @@ auto MarkdownUtils::markdownToHtml(const QString &markdown) -> QString
 
 #else
 
-    return QLatin1String();
+    return u""_s;
 
 #endif
 }
@@ -54,7 +56,7 @@ auto MarkdownUtils::markdownToHtmlDiscount(const QString &markdown) -> QString
     auto flags = MKD_AUTOLINK;
     MMIOT *doc = mkd_string(markdownStd.c_str(), markdownStd.size(), flags);
 
-    if (doc == nullptr) return QLatin1String();
+    if (doc == nullptr) return u""_s;
 
     mkd_compile(doc, flags);
 

@@ -2,17 +2,19 @@
 #define AUDIOEXPORTER_H
 
 #include <QObject>
+#include <QPointer>
 #include <QQueue>
 #include <QThread>
-#include <QPointer>
 
 #include "../project/audioproject.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 class Worker : public QObject
 {
     Q_OBJECT
 public:
-    Worker(const QString &path, AudioProject* project);
+    Worker(const QString &path, AudioProject *project);
 
 public slots:
     void startCopying();
@@ -32,7 +34,7 @@ private:
     int m_fileCount = 0;
     int m_exportCount = 0;
 
-    void copyElements(AudioScenario* scenario);
+    void copyElements(AudioScenario *scenario);
     void collectFilesToExport();
 
     bool copyNext();
@@ -46,25 +48,37 @@ class AudioExporter : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject* model READ model NOTIFY modelChanged)
+    Q_PROPERTY(QObject *model READ model NOTIFY modelChanged)
     Q_PROPERTY(float progress READ progress NOTIFY progressChanged)
 
     QThread workerThread;
 
 public:
-    explicit AudioExporter(QObject *parent = nullptr) : QObject(parent) {}
-    ~AudioExporter() {
+    explicit AudioExporter(QObject *parent = nullptr) : QObject(parent)
+    {
+    }
+    ~AudioExporter()
+    {
         workerThread.quit();
         workerThread.wait();
     }
 
-    QObject* model() const { return m_model; }
+    QObject *model() const
+    {
+        return m_model;
+    }
     void setProject(AudioProject *project);
 
-    Q_INVOKABLE void setPath(QString path) { m_path = path; }
+    Q_INVOKABLE void setPath(QString path)
+    {
+        m_path = path;
+    }
     Q_INVOKABLE void exportFiles();
 
-    float progress() const { return m_progress; }
+    float progress() const
+    {
+        return m_progress;
+    }
 
 signals:
     void modelChanged();
@@ -72,11 +86,11 @@ signals:
     void startCopying();
 
 private:
-    AudioProject* m_project = nullptr;
+    AudioProject *m_project = nullptr;
     QPointer<QObject> m_model = nullptr;
 
     float m_progress = 0;
-    QString m_path = "";
+    QString m_path = u""_s;
 
 public slots:
     void updateProgress(float progress);

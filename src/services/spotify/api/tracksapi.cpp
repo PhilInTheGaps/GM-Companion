@@ -2,12 +2,12 @@
 #include "spotify/spotify.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/networkutils.h"
-
 #include <QLoggingCategory>
 #include <QUrlQuery>
 
 Q_LOGGING_CATEGORY(gmSpotifyTracks, "gm.services.spotify.api.tracks")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 constexpr size_t MAX_TRACK_COUNT = 50;
@@ -24,10 +24,10 @@ auto TracksAPI::getTrack(const QString &id) -> QFuture<QSharedPointer<SpotifyTra
         return {};
     }
 
-    QUrl url(QStringLiteral("https://api.spotify.com/v1/tracks/%1").arg(id));
+    QUrl url(u"https://api.spotify.com/v1/tracks/%1"_s.arg(id));
 
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("market"), QStringLiteral("from_token"));
+    query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
     const auto callback = [](RestNetworkReply *reply) {
@@ -65,11 +65,11 @@ auto TracksAPI::getTracks(const QStringList &ids, std::vector<QSharedPointer<Spo
     auto batch = getNextBatch(ids, previous);
     if (batch.isEmpty()) return completed<std::vector<QSharedPointer<SpotifyTrack>>>(previous);
 
-    QUrl url(QStringLiteral("https://api.spotify.com/v1/tracks"));
+    QUrl url(u"https://api.spotify.com/v1/tracks"_s);
 
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("ids"), batch.join(','));
-    query.addQueryItem(QStringLiteral("market"), QStringLiteral("from_token"));
+    query.addQueryItem(u"ids"_s, batch.join(','));
+    query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
     const auto callback = [this, ids, previous](RestNetworkReply *reply) mutable {

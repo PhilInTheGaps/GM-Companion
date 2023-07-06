@@ -12,6 +12,7 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAddonManager, "gm.addons.manager")
@@ -61,8 +62,7 @@ auto AddonManager::installAsync(Addon *addon) -> QFuture<void>
         return {};
     }
 
-    if (addon->downloadUrl().startsWith(QStringLiteral("http://")) ||
-        addon->downloadUrl().startsWith(QStringLiteral("https://")))
+    if (addon->downloadUrl().startsWith("http://"_L1) || addon->downloadUrl().startsWith("https://"_L1))
     {
         return installRemoteAsync(*addon);
     }
@@ -77,7 +77,7 @@ auto AddonManager::installLocalAsync(Addon &addon) -> QFuture<void>
     auto installSync = [&addon]() {
         if (QFile file(addon.downloadUrl()); file.exists())
         {
-            auto installFile = getRemotePath(buildFileName(addon, true) + QStringLiteral(".zip"));
+            auto installFile = getRemotePath(buildFileName(addon, true) + ".zip"_L1);
 
             if (!ensureInstallationDirExists(installFile))
             {
@@ -122,7 +122,7 @@ auto AddonManager::installRemoteAsync(Addon &addon) -> QFuture<void>
             return;
         }
 
-        auto installFile = getRemotePath(buildFileName(addon, true) + QStringLiteral(".zip"));
+        auto installFile = getRemotePath(buildFileName(addon, true) + ".zip"_L1);
         auto data = reply->readAll();
         reply->deleteLater();
 
@@ -223,7 +223,7 @@ void AddonManager::loadAsync()
     qCDebug(gmAddonManager()) << "Loading ...";
     isLoading(true);
 
-    const auto localAddonDirs = {QStringLiteral(":/addons"), getLocalPath()};
+    const auto localAddonDirs = {u":/addons"_s, getLocalPath()};
 
     for (const auto &dir : localAddonDirs)
     {
@@ -257,7 +257,7 @@ void AddonManager::loadInDir(const QString &dir, bool isLocal)
         }
     }
 
-    const auto archives = addonsDir.entryList({QStringLiteral("*.zip")}, QDir::Files);
+    const auto archives = addonsDir.entryList({u"*.zip"_s}, QDir::Files);
 
     for (const auto &archive : archives)
     {
@@ -273,7 +273,7 @@ void AddonManager::loadInDir(const QString &dir, bool isLocal)
 
 auto AddonManager::loadAddonDir(const QString &dir, bool isLocal) -> Addon *
 {
-    QFile file(FileUtils::fileInDir(QStringLiteral("addon.json"), dir));
+    QFile file(FileUtils::fileInDir(u"addon.json"_s, dir));
 
     if (file.exists() && file.open(QIODevice::ReadOnly))
     {
@@ -344,7 +344,7 @@ void AddonManager::sortAddons()
 
 auto AddonManager::getRemotePath(const QString &file) -> QString
 {
-    auto path = QStringLiteral("%1/.gm-companion/addons/remote").arg(QDir::homePath());
+    auto path = u"%1/.gm-companion/addons/remote"_s.arg(QDir::homePath());
 
     if (file.isEmpty()) return path;
 
@@ -353,7 +353,7 @@ auto AddonManager::getRemotePath(const QString &file) -> QString
 
 auto AddonManager::getLocalPath(const QString &file) -> QString
 {
-    auto path = QStringLiteral("%1/.gm-companion/addons/local").arg(QDir::homePath());
+    auto path = u"%1/.gm-companion/addons/local"_s.arg(QDir::homePath());
 
     if (file.isEmpty()) return path;
 
@@ -362,7 +362,7 @@ auto AddonManager::getLocalPath(const QString &file) -> QString
 
 auto AddonManager::buildFileName(const Addon &addon, bool useNewVersion) -> QString
 {
-    auto name = QStringLiteral("%1_%2").arg(addon.id(), useNewVersion ? addon.newVersion() : addon.version());
+    auto name = u"%1_%2"_s.arg(addon.id(), useNewVersion ? addon.newVersion() : addon.version());
     name = name.replace('.', '-');
     return name;
 }
@@ -371,10 +371,10 @@ auto AddonManager::findAddonJson(const QStringList &files) -> QString
 {
     for (const auto &file : files)
     {
-        if (file.endsWith(QStringLiteral("addon.json"))) return file;
+        if (file.endsWith("addon.json"_L1)) return file;
     }
 
-    return QLatin1String();
+    return u""_s;
 }
 
 auto AddonManager::ensureInstallationDirExists(const QString &fileName) -> bool

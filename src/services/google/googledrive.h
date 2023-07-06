@@ -1,11 +1,10 @@
 #pragma once
 
-#include <QNetworkAccessManager>
-#include <QObject>
-
 #include "googledriveconnectorlocal.h"
 #include "service.h"
 #include "thirdparty/propertyhelper/PropertyHelper.h"
+#include <QNetworkAccessManager>
+#include <QObject>
 
 class GoogleDrive : public Service
 {
@@ -50,5 +49,4 @@ private slots:
 
 signals:
     void authorized();
-    void clientIdChanged();
 };

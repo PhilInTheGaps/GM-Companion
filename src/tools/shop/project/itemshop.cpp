@@ -3,6 +3,8 @@
 #include <QJsonArray>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmShopsItemShop, "gm.shops.project.shop")
 
 ItemShop::ItemShop(const QString &name, const QString &owner, const QString &description, const QList<Item *> &items,
@@ -28,10 +30,9 @@ ItemShop::ItemShop(const ItemShop &other, QObject *parent)
     connectSignals();
 }
 
-ItemShop::ItemShop(const QJsonObject &json, QObject *parent)
-    : BaseProjectItem(json[QStringLiteral("name")].toString(), parent)
+ItemShop::ItemShop(const QJsonObject &json, QObject *parent) : BaseProjectItem(json["name"_L1].toString(), parent)
 {
-    auto itemArray = json[QStringLiteral("items")].toArray();
+    auto itemArray = json["items"_L1].toArray();
     a_items.reserve(itemArray.size());
 
     foreach (const auto &item, itemArray)
@@ -39,17 +40,17 @@ ItemShop::ItemShop(const QJsonObject &json, QObject *parent)
         a_items.append(new Item(item.toObject(), this));
     }
 
-    owner(json[QStringLiteral("owner")].toString());
-    description(json[QStringLiteral("description")].toString());
+    owner(json["owner"_L1].toString());
+    description(json["description"_L1].toString());
 }
 
 auto ItemShop::toJson() const -> QJsonObject
 {
     QJsonObject root;
 
-    root.insert(QStringLiteral("name"), name());
-    root.insert(QStringLiteral("owner"), owner());
-    root.insert(QStringLiteral("description"), description());
+    root.insert(u"name"_s, name());
+    root.insert(u"owner"_s, owner());
+    root.insert(u"description"_s, description());
 
     QJsonArray itemArray;
 
@@ -60,7 +61,7 @@ auto ItemShop::toJson() const -> QJsonObject
             itemArray.append(item->toJson());
         }
     }
-    root.insert(QStringLiteral("items"), itemArray);
+    root.insert(u"items"_s, itemArray);
 
     return root;
 }

@@ -4,6 +4,8 @@
 #include <QLoggingCategory>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAddons, "gm.addons")
 
 Addon::Addon(QObject *parent, QString id, QString name, QString shortName, QString version, QString author,
@@ -13,27 +15,27 @@ Addon::Addon(QObject *parent, QString id, QString name, QString shortName, QStri
       a_path(std::move(path)), a_isLocal(isLocal), a_type(type)
 {
     qCDebug(gmAddons) << "Loaded addon:"
-                      << QStringLiteral("%1: %2 (%3) [%4] - %5")
-                             .arg(this->id(), this->name(), this->shortName(), this->version(), this->path());
+                      << u"%1: %2 (%3) [%4] - %5"_s.arg(this->id(), this->name(), this->shortName(), this->version(),
+                                                        this->path());
 }
 
 auto Addon::fromJson(QObject *parent, const QJsonDocument &json, QString path, bool isLocal, Type type) -> Addon *
 {
     auto root = json.object();
-    auto id = root[QStringLiteral("id")].toString();
-    auto name = root[QStringLiteral("name")].toString();
-    auto shortName = root[QStringLiteral("name_short")].toString();
-    auto version = root[QStringLiteral("version")].toString();
-    auto author = root[QStringLiteral("author")].toString();
-    auto description = root[QStringLiteral("description")].toString();
+    auto id = root["id"_L1].toString();
+    auto name = root["name"_L1].toString();
+    auto shortName = root["name_short"_L1].toString();
+    auto version = root["version"_L1].toString();
+    auto author = root["author"_L1].toString();
+    auto description = root["description"_L1].toString();
 
     return new Addon(parent, id, name, shortName, version, author, description, std::move(path), isLocal, type);
 }
 
 auto Addon::fromReleaseInfo(QObject *parent, const AddonReleaseInfo &release) -> Addon *
 {
-    auto *addon = new Addon(parent, release.id, release.name, release.shortName, QLatin1String(), release.author,
-                            release.description, QLatin1String(), false, Type::Archive);
+    auto *addon = new Addon(parent, release.id, release.name, release.shortName, ""_L1, release.author,
+                            release.description, ""_L1, false, Type::Archive);
     addon->setReleaseInfo(release);
 
     return addon;

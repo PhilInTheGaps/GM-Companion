@@ -3,12 +3,14 @@
 #include <QJsonArray>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmNameGeneratorFactory, "gm.generators.names.factory")
 
 auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonDocument &json) -> QList<AbstractNameGenerator *>
 {
     auto object = json.object();
-    auto generators = object[QStringLiteral("generators")].toArray();
+    auto generators = object["generators"_L1].toArray();
 
     QList<AbstractNameGenerator *> list;
     list.reserve(generators.count());
@@ -23,9 +25,9 @@ auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonDocument &j
 
 auto NameGeneratorFactory::buildFromJson(QObject *parent, const QJsonObject &json) -> AbstractNameGenerator *
 {
-    auto type = json[QStringLiteral("type")].toString();
+    auto type = json["type"_L1].toString();
 
-    if (type == QLatin1String("list"))
+    if (type == "list"_L1)
     {
         return new ListNameGenerator(parent, json);
     }

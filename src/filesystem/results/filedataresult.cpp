@@ -1,6 +1,7 @@
 #include "filedataresult.h"
 #include "rest/restnetworkreply.h"
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
 auto FileDataResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) -> FileDataResult *
@@ -11,7 +12,7 @@ auto FileDataResult::fromNetworkReply(RestNetworkReply *reply, QObject *parent) 
     if (!reply)
     {
         success = false;
-        errorMessage = "RestNetworkReply is null! (this is probably caused by a prior error)";
+        errorMessage = u"RestNetworkReply is null! (this is probably caused by a prior error)"_s;
         return new FileDataResult(errorMessage, parent);
     }
 

@@ -12,6 +12,7 @@
 
 Q_LOGGING_CATEGORY(gmSpotifyPlayer, "gm.spotify.api.player")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 PlayerAPI::PlayerAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
@@ -20,16 +21,16 @@ PlayerAPI::PlayerAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
 
 auto PlayerAPI::play() const -> QFuture<RestNetworkReply *>
 {
-    return m_spotify->put(QUrl("https://api.spotify.com/v1/me/player/play"));
+    return m_spotify->put(QUrl(u"https://api.spotify.com/v1/me/player/play"_s));
 }
 
 auto PlayerAPI::play(const QString &deviceId, const QJsonObject &body) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/play");
+    QUrl url(u"https://api.spotify.com/v1/me/player/play"_s);
 
     if (!deviceId.isEmpty())
     {
-        QUrlQuery query{{QStringLiteral("device_id"), deviceId}};
+        QUrlQuery query{{u"device_id"_s, deviceId}};
         url.setQuery(query);
     }
 
@@ -43,7 +44,7 @@ auto PlayerAPI::play(const QString &uri) const -> QFuture<gsl::owner<RestNetwork
 
     if (type == SpotifyUtils::SpotifyType::Track || type == SpotifyUtils::SpotifyType::Episode)
     {
-        return play(makePlayBody("", {uri}, -1, -1));
+        return play(makePlayBody(u""_s, {uri}, -1, -1));
     }
 
     return play(makePlayBody(uri, {}, -1, -1));
@@ -51,7 +52,7 @@ auto PlayerAPI::play(const QString &uri) const -> QFuture<gsl::owner<RestNetwork
 
 auto PlayerAPI::play(const QJsonObject &body) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return play("", body);
+    return play(u""_s, body);
 }
 
 auto PlayerAPI::makePlayBody(const QString &contextUri, const QStringList &uris, int position, int positionMs)
@@ -61,23 +62,23 @@ auto PlayerAPI::makePlayBody(const QString &contextUri, const QStringList &uris,
 
     if (!contextUri.isEmpty())
     {
-        body["context_uri"] = contextUri;
+        body["context_uri"_L1] = contextUri;
     }
 
     if (!uris.isEmpty())
     {
-        body["uris"] = QJsonArray::fromStringList(uris);
+        body["uris"_L1] = QJsonArray::fromStringList(uris);
     }
 
     if (position > -1)
     {
         QJsonObject offset{{"position", position}};
-        body["offset"] = offset;
+        body["offset"_L1] = offset;
     }
 
     if (positionMs > -1)
     {
-        body["position_ms"] = positionMs;
+        body["position_ms"_L1] = positionMs;
     }
 
     return body;
@@ -85,16 +86,16 @@ auto PlayerAPI::makePlayBody(const QString &contextUri, const QStringList &uris,
 
 auto PlayerAPI::pause() const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return pause(QLatin1String());
+    return pause(u""_s);
 }
 
 auto PlayerAPI::pause(const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/pause");
+    QUrl url(u"https://api.spotify.com/v1/me/player/pause"_s);
 
     if (!deviceId.isEmpty())
     {
-        QUrlQuery query = {{QStringLiteral("device_id"), deviceId}};
+        QUrlQuery query = {{u"device_id"_s, deviceId}};
         url.setQuery(query);
     }
 
@@ -103,16 +104,16 @@ auto PlayerAPI::pause(const QString &deviceId) const -> QFuture<gsl::owner<RestN
 
 auto PlayerAPI::next() const -> QFuture<RestNetworkReply *>
 {
-    return next(QLatin1String());
+    return next(u""_s);
 }
 
 auto PlayerAPI::next(const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/next");
+    QUrl url(u"https://api.spotify.com/v1/me/player/next"_s);
 
     if (!deviceId.isEmpty())
     {
-        QUrlQuery query = {{QStringLiteral("device_id"), deviceId}};
+        QUrlQuery query = {{u"device_id"_s, deviceId}};
         url.setQuery(query);
     }
 
@@ -121,16 +122,16 @@ auto PlayerAPI::next(const QString &deviceId) const -> QFuture<gsl::owner<RestNe
 
 auto PlayerAPI::previous() const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return previous(QLatin1String());
+    return previous(u""_s);
 }
 
 auto PlayerAPI::previous(const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/previous");
+    QUrl url(u"https://api.spotify.com/v1/me/player/previous"_s);
 
     if (!deviceId.isEmpty())
     {
-        QUrlQuery query = {{QStringLiteral("device_id"), deviceId}};
+        QUrlQuery query = {{u"device_id"_s, deviceId}};
         url.setQuery(query);
     }
 
@@ -139,17 +140,17 @@ auto PlayerAPI::previous(const QString &deviceId) const -> QFuture<gsl::owner<Re
 
 auto PlayerAPI::seek(int positionMs) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return seek(positionMs, QLatin1String());
+    return seek(positionMs, u""_s);
 }
 
 auto PlayerAPI::seek(int positionMs, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/seek");
-    QUrlQuery query = {{QStringLiteral("position_ms"), QString::number(positionMs)}};
+    QUrl url(u"https://api.spotify.com/v1/me/player/seek"_s);
+    QUrlQuery query = {{u"position_ms"_s, QString::number(positionMs)}};
 
     if (!deviceId.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("device_id"), deviceId);
+        query.addQueryItem(u"device_id"_s, deviceId);
     }
 
     url.setQuery(query);
@@ -159,23 +160,23 @@ auto PlayerAPI::seek(int positionMs, const QString &deviceId) const -> QFuture<g
 
 auto PlayerAPI::getState() const -> QFuture<QSharedPointer<SpotifyPlaybackState>>
 {
-    return getState({}, QLatin1String());
+    return getState({}, u""_s);
 }
 
 auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &market) const
     -> QFuture<QSharedPointer<SpotifyPlaybackState>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player");
+    QUrl url(u"https://api.spotify.com/v1/me/player"_s);
     QUrlQuery query;
 
     if (!additionalTypes.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("additional_types"), additionalTypes.join(','));
+        query.addQueryItem(u"additional_types"_s, additionalTypes.join(','));
     }
 
     if (!market.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("market"), market);
+        query.addQueryItem(u"market"_s, market);
     }
 
     url.setQuery(query);
@@ -199,26 +200,26 @@ auto PlayerAPI::getState(const QStringList &additionalTypes, const QString &mark
 
 auto PlayerAPI::getCurrentlyPlaying() const -> QFuture<QSharedPointer<SpotifyCurrentTrack>>
 {
-    return getCurrentlyPlaying({}, QLatin1String());
+    return getCurrentlyPlaying({}, u""_s);
 }
 
 auto PlayerAPI::getCurrentlyPlaying(const QStringList &additionalTypes, const QString &market) const
     -> QFuture<QSharedPointer<SpotifyCurrentTrack>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/currently-playing");
+    QUrl url(u"https://api.spotify.com/v1/me/player/currently-playing"_s);
     QUrlQuery query;
 
     if (!additionalTypes.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("additional_types"), additionalTypes.join(','));
+        query.addQueryItem(u"additional_types"_s, additionalTypes.join(','));
     }
 
     if (!market.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("market"), market);
+        query.addQueryItem(u"market"_s, market);
     }
 
-    query.addQueryItem(QStringLiteral("market"), QStringLiteral("from_token"));
+    query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
     const auto callback = [](gsl::owner<RestNetworkReply *> reply) -> QFuture<QSharedPointer<SpotifyCurrentTrack>> {
@@ -245,10 +246,9 @@ auto PlayerAPI::transfer(const QStringList &deviceIds) const -> QFuture<gsl::own
 
 auto PlayerAPI::transfer(const QStringList &deviceIds, bool play) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player");
+    QUrl url(u"https://api.spotify.com/v1/me/player"_s);
 
-    const QJsonObject body{{QStringLiteral("device_ids"), QJsonArray::fromStringList(deviceIds)},
-                           {QStringLiteral("play"), play}};
+    const QJsonObject body{{u"device_ids"_s, QJsonArray::fromStringList(deviceIds)}, {u"play"_s, play}};
 
     const auto doc = QJsonDocument(body);
     return m_spotify->put(NetworkUtils::makeJsonRequest(url), doc.toJson(QJsonDocument::Compact));
@@ -256,14 +256,14 @@ auto PlayerAPI::transfer(const QStringList &deviceIds, bool play) const -> QFutu
 
 auto PlayerAPI::devices() const -> QFuture<QSharedPointer<SpotifyDeviceList>>
 {
-    const QUrl url("https://api.spotify.com/v1/me/player/devices");
+    const QUrl url(u"https://api.spotify.com/v1/me/player/devices"_s);
 
     const auto callback = [](gsl::owner<RestNetworkReply *> reply) {
         const auto data = reply->data();
         reply->deleteLater();
 
         const auto json = QJsonDocument::fromJson(data).object();
-        const auto devices = json[QStringLiteral("devices")].toArray();
+        const auto devices = json["devices"_L1].toArray();
         return SpotifyDevice::fromJson(devices);
     };
 
@@ -272,7 +272,7 @@ auto PlayerAPI::devices() const -> QFuture<QSharedPointer<SpotifyDeviceList>>
 
 auto PlayerAPI::repeat(SpotifyRepeatMode mode) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return repeat(mode, QLatin1String());
+    return repeat(mode, u""_s);
 }
 
 auto PlayerAPI::repeat(SpotifyRepeatMode mode, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
@@ -280,11 +280,11 @@ auto PlayerAPI::repeat(SpotifyRepeatMode mode, const QString &deviceId) const ->
     switch (mode)
     {
     case SpotifyRepeatMode::Track:
-        return repeat(QStringLiteral("track"), deviceId);
+        return repeat(u"track"_s, deviceId);
     case SpotifyRepeatMode::Context:
-        return repeat(QStringLiteral("context"), deviceId);
+        return repeat(u"context"_s, deviceId);
     case SpotifyRepeatMode::Off:
-        return repeat(QStringLiteral("off"), deviceId);
+        return repeat(u"off"_s, deviceId);
     default:
         qCCritical(gmSpotifyPlayer()) << "repeat(): unknown repeat mode" << mode;
         return {};
@@ -293,12 +293,12 @@ auto PlayerAPI::repeat(SpotifyRepeatMode mode, const QString &deviceId) const ->
 
 auto PlayerAPI::repeat(const QString &state, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/repeat");
-    QUrlQuery query = {{QStringLiteral("state"), state}};
+    QUrl url(u"https://api.spotify.com/v1/me/player/repeat"_s);
+    QUrlQuery query = {{u"state"_s, state}};
 
     if (!deviceId.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("device_id"), deviceId);
+        query.addQueryItem(u"device_id"_s, deviceId);
     }
 
     url.setQuery(query);
@@ -307,17 +307,17 @@ auto PlayerAPI::repeat(const QString &state, const QString &deviceId) const -> Q
 
 auto PlayerAPI::volume(int volumePercent) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return volume(volumePercent, QLatin1String());
+    return volume(volumePercent, u""_s);
 }
 
 auto PlayerAPI::volume(int volumePercent, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/volume");
-    QUrlQuery query = {{QStringLiteral("volume_percent"), QString::number(volumePercent)}};
+    QUrl url(u"https://api.spotify.com/v1/me/player/volume"_s);
+    QUrlQuery query = {{u"volume_percent"_s, QString::number(volumePercent)}};
 
     if (!deviceId.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("device_id"), deviceId);
+        query.addQueryItem(u"device_id"_s, deviceId);
     }
 
     url.setQuery(query);
@@ -326,17 +326,17 @@ auto PlayerAPI::volume(int volumePercent, const QString &deviceId) const -> QFut
 
 auto PlayerAPI::shuffle(bool state) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return shuffle(state, QLatin1String());
+    return shuffle(state, u""_s);
 }
 
 auto PlayerAPI::shuffle(bool state, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/shuffle");
-    QUrlQuery query = {{QStringLiteral("volume_percent"), state ? "true" : "false"}};
+    QUrl url(u"https://api.spotify.com/v1/me/player/shuffle"_s);
+    QUrlQuery query = {{u"volume_percent"_s, state ? "true" : "false"}};
 
     if (!deviceId.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("device_id"), deviceId);
+        query.addQueryItem(u"device_id"_s, deviceId);
     }
 
     url.setQuery(query);
@@ -351,12 +351,12 @@ auto PlayerAPI::getRecentlyPlayed(int limit) const -> QFuture<gsl::owner<RestNet
 auto PlayerAPI::getRecentlyPlayed(const QDateTime &after, const QDateTime &before, int limit) const
     -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    QUrl url("https://api.spotify.com/v1/me/player/recently-played");
+    QUrl url(u"https://api.spotify.com/v1/me/player/recently-played"_s);
     QUrlQuery query;
 
     if (!after.isNull())
     {
-        query.addQueryItem(QStringLiteral("after"), QString::number(after.toMSecsSinceEpoch()));
+        query.addQueryItem(u"after"_s, QString::number(after.toMSecsSinceEpoch()));
     }
 
     if (!before.isNull())
@@ -368,11 +368,11 @@ auto PlayerAPI::getRecentlyPlayed(const QDateTime &after, const QDateTime &befor
         }
         else
         {
-            query.addQueryItem(QStringLiteral("before"), QString::number(before.toMSecsSinceEpoch()));
+            query.addQueryItem(u"before"_s, QString::number(before.toMSecsSinceEpoch()));
         }
     }
 
-    query.addQueryItem(QStringLiteral("limit"), QString::number(std::clamp(limit, 0, MAX_RECENTLY_PLAYED)));
+    query.addQueryItem(u"limit"_s, QString::number(std::clamp(limit, 0, MAX_RECENTLY_PLAYED)));
 
     url.setQuery(query);
     return m_spotify->get(NetworkUtils::makeJsonRequest(url));
@@ -380,7 +380,7 @@ auto PlayerAPI::getRecentlyPlayed(const QDateTime &after, const QDateTime &befor
 
 auto PlayerAPI::addToQueue(const QString &uri) const -> QFuture<gsl::owner<RestNetworkReply *>>
 {
-    return addToQueue(uri, QLatin1String());
+    return addToQueue(uri, u""_s);
 }
 
 auto PlayerAPI::addToQueue(const QString &uri, const QString &deviceId) const -> QFuture<gsl::owner<RestNetworkReply *>>
@@ -392,12 +392,12 @@ auto PlayerAPI::addToQueue(const QString &uri, const QString &deviceId) const ->
         return {};
     }
 
-    QUrl url("https://api.spotify.com/v1/me/player/queue");
-    QUrlQuery query = {{QStringLiteral("uri"), uri}};
+    QUrl url(u"https://api.spotify.com/v1/me/player/queue"_s);
+    QUrlQuery query = {{u"uri"_s, uri}};
 
     if (!deviceId.isEmpty())
     {
-        query.addQueryItem(QStringLiteral("device_id"), deviceId);
+        query.addQueryItem(u"device_id"_s, deviceId);
     }
 
     url.setQuery(query);

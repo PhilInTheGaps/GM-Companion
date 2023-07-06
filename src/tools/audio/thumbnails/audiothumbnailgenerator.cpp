@@ -7,11 +7,12 @@
 #include "loaders/webimageloader.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include <QLoggingCategory>
 #include <QtConcurrent/QtConcurrentRun>
 
-#include <QLoggingCategory>
 Q_LOGGING_CATEGORY(gmAudioThumbnailGenerator, "gm.audio.thumbnails.generator")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 QPointer<QNetworkAccessManager> AudioThumbnailGenerator::networkManager = nullptr;
@@ -71,7 +72,7 @@ void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
     const auto callbackWithFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, true); };
 
     // Is web url
-    if (iconPath.startsWith("http://") || iconPath.startsWith("https://"))
+    if (iconPath.startsWith("http://"_L1) || iconPath.startsWith("https://"_L1))
     {
         observe(WebImageLoader::loadImageAsync(iconPath, networkManager)).subscribe(callbackWithFallback);
         return;
@@ -98,11 +99,11 @@ auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPix
 
 auto AudioThumbnailGenerator::getPlaceholderImage(const QString &type) -> QPixmap
 {
-    if (type == "Sound") return getPlaceholderImage(AudioElement::Type::Sound);
+    if (type == "Sound"_L1) return getPlaceholderImage(AudioElement::Type::Sound);
 
-    if (type == "Radio") return getPlaceholderImage(AudioElement::Type::Radio);
+    if (type == "Radio"_L1) return getPlaceholderImage(AudioElement::Type::Radio);
 
-    if (type == "Music") return getPlaceholderImage(AudioElement::Type::Music);
+    if (type == "Music"_L1) return getPlaceholderImage(AudioElement::Type::Music);
 
     return emptyPixmap();
 }
@@ -112,13 +113,13 @@ auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement::Type type) -> QP
     switch (type)
     {
     case AudioElement::Type::Music:
-        return QPixmap(":/icons/media/music_image.png");
+        return QPixmap(u":/icons/media/music_image.png"_s);
 
     case AudioElement::Type::Sound:
-        return QPixmap(":/icons/media/sound_image.png");
+        return QPixmap(u":/icons/media/sound_image.png"_s);
 
     case AudioElement::Type::Radio:
-        return QPixmap(":/icons/media/radio_image.png");
+        return QPixmap(u":/icons/media/radio_image.png"_s);
 
     default:
         return emptyPixmap();

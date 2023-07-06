@@ -2,6 +2,8 @@
 #include "archiveaddonreader.h"
 #include "folderaddonreader.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 AddonReader::AddonReader(const Addon &addon)
 {
     switch (addon.type())
@@ -36,17 +38,17 @@ auto AddonReader::getFeatures() -> AddonReader::Features
 
     features.setFlag(Feature::None);
 
-    if (!findAllFiles(QStringLiteral("/names"), {QStringLiteral("*.json")}).isEmpty())
+    if (!findAllFiles(u"/names"_s, {u"*.json"_s}).isEmpty())
     {
         features.setFlag(Feature::Names);
     }
 
-    if (!findAllFiles(QStringLiteral("/audio"), {QStringLiteral("*.json"), QStringLiteral("*.audio")}).isEmpty())
+    if (!findAllFiles(u"/audio"_s, {u"*.json"_s, u"*.audio"_s}).isEmpty())
     {
         features.setFlag(Feature::Audio);
     }
 
-    if (!findAllFiles(QStringLiteral("/units"), {QStringLiteral("*.json")}).isEmpty())
+    if (!findAllFiles(u"/units"_s, {u"*.json"_s}).isEmpty())
     {
         features.setFlag(Feature::Units);
     }

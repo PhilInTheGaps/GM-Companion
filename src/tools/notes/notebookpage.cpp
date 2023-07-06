@@ -1,5 +1,7 @@
 #include "notebookpage.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 int NoteBookPage::editCount = 0;
 
 NoteBookPage::NoteBookPage(const QString &name, int depth, QObject *chapter) : TreeItem(name, depth, false, chapter)
@@ -86,7 +88,7 @@ void NoteBookPage::rename(const QString &newName)
     auto oldPath = path();
     auto correctName = newName;
 
-    if (newName.lastIndexOf('.') < 0) correctName += QStringLiteral(".md");
+    if (newName.lastIndexOf('.') < 0) correctName += ".md"_L1;
 
     name(correctName);
     emit renamePage(oldPath);

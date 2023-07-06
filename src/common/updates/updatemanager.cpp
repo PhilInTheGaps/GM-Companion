@@ -98,7 +98,7 @@ auto UpdateManager::findVersionsFromXML(const QByteArray &xml) -> QStringList
         }
 
         // Version is converted from git tag, so we have to remove a bunch of junk
-        versions << id.replace(u"tag:github.com,2008:Repository/78660365/"_s, QLatin1String());
+        versions << id.replace(u"tag:github.com,2008:Repository/78660365/"_s, ""_L1);
     }
 
     return versions;

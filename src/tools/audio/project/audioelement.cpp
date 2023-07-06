@@ -7,10 +7,12 @@
 #include <QLoggingCategory>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioElement, "gm.audio.project.element")
 
 AudioElement::AudioElement(const QString &name, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(name, path.split(QStringLiteral("/")).length() - 1, false, parent), a_type(type)
+    : TreeItem(name, path.split(u"/"_s).length() - 1, false, parent), a_type(type)
 {
     this->name(name);
     m_path = path + "/" + typeToString(type) + "/" + name;
@@ -18,16 +20,16 @@ AudioElement::AudioElement(const QString &name, Type type, const QString &path, 
 }
 
 AudioElement::AudioElement(const QJsonObject &object, Type type, const QString &path, AudioScenario *parent)
-    : TreeItem(QLatin1String(""), path.split(QStringLiteral("/")).length() - 1, false, parent), a_type(type)
+    : TreeItem(u""_s, path.split(u"/"_s).length() - 1, false, parent), a_type(type)
 {
-    name(object[QStringLiteral("name")].toString());
-    mode(static_cast<Mode>(object[QStringLiteral("mode")].toInt()));
+    name(object["name"_L1].toString());
+    mode(static_cast<Mode>(object["mode"_L1].toInt()));
     m_path = path + "/" + typeToString(type) + "/" + name();
+
     m_thumbnail = new AudioThumbnail(m_path, this);
+    m_thumbnail->setRelativeUrl(object["icon"_L1].toString());
 
-    m_thumbnail->setRelativeUrl(object[QStringLiteral("icon")].toString());
-
-    foreach (const auto &file, object.value(QStringLiteral("files")).toArray())
+    foreach (const auto &file, object.value("files"_L1).toArray())
     {
         m_files.append(new AudioFile(file.toObject(), this));
     }
@@ -55,7 +57,7 @@ auto AudioElement::toJson() const -> QJsonObject
     {
         files.append(file->toJson());
     }
-    object.insert(QStringLiteral("files"), files);
+    object.insert(u"files"_s, files);
     return object;
 }
 
@@ -135,15 +137,15 @@ auto AudioElement::typeToSettings(AudioElement::Type type) -> QString
     switch (type)
     {
     case AudioElement::Type::Music:
-        return QStringLiteral("music");
+        return u"music"_s;
     case AudioElement::Type::Sound:
-        return QStringLiteral("sounds");
+        return u"sounds"_s;
     case AudioElement::Type::Radio:
-        return QStringLiteral("radio");
+        return u"radio"_s;
     default:
         qCWarning(gmAudioElement()) << "Error: getPath() was called with illegal element type:"
                                     << AudioElement::typeToString(type);
-        return QLatin1String("");
+        return u""_s;
     }
 }
 

@@ -1,6 +1,8 @@
 #include "itemgroup.h"
 #include <QJsonArray>
 
+using namespace Qt::Literals::StringLiterals;
+
 ItemGroup::ItemGroup(const QString &name, const QList<Item *> &items, QObject *parent)
     : BaseProjectItem(name, parent), a_items(items)
 {
@@ -22,15 +24,15 @@ ItemGroup::ItemGroup(const ItemGroup &other, QObject *parent) : BaseProjectItem(
 
 ItemGroup::ItemGroup(const QString &name, const QJsonObject &json, QObject *parent) : BaseProjectItem(name, parent)
 {
-    const auto categories = json[QStringLiteral("categories")].toArray();
+    const auto categories = json["categories"_L1].toArray();
     a_categories.reserve(categories.count());
 
     foreach (const auto &category, categories)
     {
-        auto categoryName = category.toObject()[QStringLiteral("name")].toString();
+        auto categoryName = category["name"_L1].toString();
         a_categories.append(categoryName);
 
-        foreach (const auto &item, category.toObject()[QStringLiteral("items")].toArray())
+        foreach (const auto &item, category["items"_L1].toArray())
         {
             a_items.append(new Item(categoryName, item.toObject(), parent));
         }
@@ -46,7 +48,7 @@ auto ItemGroup::toJson() const -> QJsonObject
     foreach (const auto &category, categories())
     {
         QJsonObject categoryObject;
-        categoryObject.insert(QStringLiteral("name"), category);
+        categoryObject.insert(u"name"_s, category);
 
         QJsonArray itemArray;
 
@@ -58,11 +60,11 @@ auto ItemGroup::toJson() const -> QJsonObject
             }
         }
 
-        categoryObject.insert(QStringLiteral("items"), itemArray);
+        categoryObject.insert(u"items"_s, itemArray);
         categoryArray.append(categoryObject);
     }
 
-    root.insert(QStringLiteral("categories"), categoryArray);
+    root.insert(u"categories"_s, categoryArray);
     return root;
 }
 

@@ -8,6 +8,8 @@
 #include <QJsonObject>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 /**
  * @brief Constructor
  */
@@ -15,7 +17,7 @@ RESTServiceConnectorLocal::RESTServiceConnectorLocal(QNetworkAccessManager &netw
                                                      const QLoggingCategory &loggingCategory, QObject *parent = nullptr)
     : RESTServiceConnector(networkManager, loggingCategory, parent), m_o2(o2)
 {
-    m_settingsStore = new O0SettingsStore(QStringLiteral("gm-companion"), this);
+    m_settingsStore = new O0SettingsStore(u"gm-companion"_s, this);
     m_o2->setParent(this);
     m_o2->setStore(m_settingsStore);
 
@@ -242,10 +244,7 @@ void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkEr
     // Check if rate limit was exceeded
     if (error == QNetworkReply::UnknownContentError)
     {
-        const auto status = QJsonDocument::fromJson(data)
-                                .object()[QStringLiteral("error")]
-                                .toObject()[QStringLiteral("status")]
-                                .toInt();
+        const auto status = QJsonDocument::fromJson(data).object()["error"_L1]["status"_L1].toInt();
 
         if (status == HttpStatus::TooManyRequests)
         {
@@ -256,15 +255,15 @@ void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkEr
     // Sometimes services (like google drive) hide rate limit errors in 403s
     else if (error == QNetworkReply::ContentAccessDenied)
     {
-        const auto error = QJsonDocument::fromJson(data).object()[QStringLiteral("error")].toObject();
+        const auto error = QJsonDocument::fromJson(data).object()["error"_L1].toObject();
 
-        if (error.contains(QStringLiteral("errors")))
+        if (error.contains("errors"_L1))
         {
-            const auto errors = error[QStringLiteral("errors")].toArray();
+            const auto errors = error["errors"_L1].toArray();
 
             for (const auto &entry : errors)
             {
-                if (entry[QStringLiteral("reason")].toString() == QLatin1String("userRateLimitExceeded"))
+                if (entry["reason"_L1].toString() == "userRateLimitExceeded"_L1)
                 {
                     handleRateLimit(m_activeRequests[id]);
                     return;

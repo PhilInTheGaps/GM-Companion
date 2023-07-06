@@ -1,6 +1,8 @@
 #include "combatant.h"
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 Combatant::Combatant(const QString &name, const QString &notes, int ini, int health, int priority, QObject *parent)
     : Combatant(name, notes, ini, health, priority, false, parent)
 {
@@ -24,9 +26,8 @@ auto Combatant::toJson() const -> QJsonObject
 
 auto Combatant::fromJson(const QJsonObject &json, QObject *parent) -> Combatant *
 {
-    return new Combatant(json[QStringLiteral("name")].toString(), json[QStringLiteral("notes")].toString(),
-                         json[QStringLiteral("ini")].toInt(), json[QStringLiteral("health")].toInt(),
-                         json[QStringLiteral("priority")].toInt(), json[QStringLiteral("delay")].toBool(), parent);
+    return new Combatant(json["name"_L1].toString(), json["notes"_L1].toString(), json["ini"_L1].toInt(),
+                         json["health"_L1].toInt(), json["priority"_L1].toInt(), json["delay"_L1].toBool(), parent);
 }
 
 auto CombatantListModel::data(const QModelIndex &index, int /*role*/) const -> QVariant

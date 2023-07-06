@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmEffectTool, "gm.combat.effects")
 
 EffectTool::EffectTool(QObject *parent) : QObject(parent)
@@ -12,7 +14,7 @@ EffectTool::EffectTool(QObject *parent) : QObject(parent)
 
 void EffectTool::loadAddons()
 {
-    QStringList addonFolders = {":/addons", QDir::homePath() + "/.gm-companion/addons"};
+    //    QStringList addonFolders = {":/addons", QDir::homePath() + "/.gm-companion/addons"};
 
     m_addonPaths.clear();
     m_addons.clear();
@@ -96,16 +98,16 @@ auto EffectTool::getIcon(int index) -> QString
 
     if (icon.isEmpty())
     {
-        return "";
+        return u""_s;
     }
 
-    if (path.contains(":/"))
+    if (path.contains(":/"_L1))
     {
-        path = path.replace(":/", "qrc:///");
+        path = path.replace(":/"_L1, "qrc:///"_L1);
     }
     else
     {
-        path = "file:///" + path;
+        path = u"file:///"_s + path;
     }
 
     return path + icon;

@@ -1,6 +1,8 @@
 #include "htmlgenerator.h"
 #include "utils/markdownutils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 HtmlGenerator::HtmlGenerator(QObject *parent) : QObject(parent)
 {
     m_worker = new HtmlWorker;
@@ -27,10 +29,10 @@ void HtmlWorker::generate(const QString &raw, int id)
     auto html = MarkdownUtils::markdownToHtml(raw);
 
     // Qt RichText can only display <s>, not <del> for strikethrough
-    html.replace(QLatin1String("<del>"), "<s>").replace("</del>", "</s>");
+    html.replace("<del>"_L1, "<s>"_L1).replace("</del>"_L1, "</s>"_L1);
 
     // Insert table style manually here, does not work via CSS
-    html.replace(QLatin1String("<table>"), "<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">");
+    html.replace("<table>"_L1, "<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\">"_L1);
 
     emit generated(html, id);
 }

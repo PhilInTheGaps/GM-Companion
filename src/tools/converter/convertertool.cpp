@@ -10,6 +10,8 @@
 #include <QQmlContext>
 #include <QSettings>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmConverter, "gm.converter")
 
 ConverterTool::ConverterTool(const QQmlApplicationEngine *engine, QObject *parent)
@@ -17,7 +19,7 @@ ConverterTool::ConverterTool(const QQmlApplicationEngine *engine, QObject *paren
 {
     if (engine)
     {
-        engine->rootContext()->setContextProperty(QStringLiteral("converter_tool"), this);
+        engine->rootContext()->setContextProperty(u"converter_tool"_s, this);
     }
 
     connect(this, &ConverterTool::projectsChanged, this, &ConverterTool::onProjectsChanged);
@@ -105,7 +107,7 @@ void ConverterTool::onAddonManagerLoadingChanged(bool isLoading)
 
 auto ConverterTool::loadLocalProjects() -> QList<ConverterProject *>
 {
-    const auto dirs = {QStringLiteral(":/units"),
+    const auto dirs = {u":/units"_s,
                        FileUtils::fileInDir(FileUtils::dirFromFolders({".gm-companion", "units"}), QDir::homePath())};
     return loadLocalProjects(dirs, this);
 }
@@ -176,8 +178,8 @@ void ConverterTool::loadAddonProjects(const Addon &addon)
     AddonReader reader(addon);
     if (!reader.getFeatures().testFlag(AddonReader::Feature::Units)) return;
 
-    const auto unitsPath = QStringLiteral("/units");
-    const auto files = reader.findAllFiles(unitsPath, {QStringLiteral("*.json")});
+    const auto unitsPath = u"/units"_s;
+    const auto files = reader.findAllFiles(unitsPath, {u"*.json"_s});
     for (const auto &file : files)
     {
         const auto data = reader.readFile(FileUtils::fileInDir(file, unitsPath));
@@ -193,9 +195,9 @@ void ConverterTool::forceReloadData()
 
 auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, ConverterUnit *toUnit) -> QString
 {
-    if (!fromUnit || !toUnit) return QLatin1String();
+    if (!fromUnit || !toUnit) return u""_s;
 
-    if (fromUnit->value() == 0 || toUnit->value() == 0) return QLatin1String();
+    if (fromUnit->value() == 0 || toUnit->value() == 0) return u""_s;
 
     const auto factor = fromUnit->value() / toUnit->value();
     const auto value = textToNumber(fromValue);

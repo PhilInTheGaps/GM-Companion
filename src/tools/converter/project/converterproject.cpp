@@ -1,6 +1,8 @@
 #include "converterproject.h"
 #include <QJsonArray>
 
+using namespace Qt::Literals::StringLiterals;
+
 ConverterProject::ConverterProject(const QString &name, QObject *parent) : ConverterProject(name, {}, parent)
 {
 }
@@ -11,11 +13,11 @@ ConverterProject::ConverterProject(const QString &name, const QList<ConverterCat
 }
 
 ConverterProject::ConverterProject(const QJsonObject &json, QObject *parent)
-    : ConverterProject(json[QStringLiteral("name")].toString(), parent)
+    : ConverterProject(json["name"_L1].toString(), parent)
 {
-    a_version = json[QStringLiteral("version")].toInt();
+    a_version = json["version"_L1].toInt();
 
-    const auto categories = json[QStringLiteral("categories")].toArray();
+    const auto categories = json["categories"_L1].toArray();
     a_categories.reserve(categories.size());
 
     for (const auto &category : categories)
@@ -27,8 +29,8 @@ ConverterProject::ConverterProject(const QJsonObject &json, QObject *parent)
 auto ConverterProject::toJson() const -> QJsonDocument
 {
     QJsonArray categoriesJson;
-    const auto categories = this->categories();
-    for (const auto *category : categories)
+
+    foreach (const auto *category, this->categories())
     {
         categoriesJson << category->toJson();
     }

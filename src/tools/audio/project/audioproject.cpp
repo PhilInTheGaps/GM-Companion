@@ -4,6 +4,8 @@
 #include <QLoggingCategory>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioProject, "gm.audio.project")
 
 AudioProject::AudioProject(const QString &name, int version, QList<AudioCategory *> categories, QObject *parent)
@@ -30,10 +32,9 @@ AudioProject::AudioProject(const AudioProject &other, QObject *parent)
 }
 
 AudioProject::AudioProject(QJsonObject object, QObject *parent)
-    : TreeItem(object[QStringLiteral("name")].toString(), 0, true, parent),
-      a_version(object[QStringLiteral("version")].toInt())
+    : TreeItem(object["name"_L1].toString(), 0, true, parent), a_version(object["version"_L1].toInt())
 {
-    const auto categories = object[QStringLiteral("categories")].toArray();
+    const auto categories = object["categories"_L1].toArray();
     m_categories.reserve(categories.size());
 
     foreach (const auto &category, categories)
@@ -54,8 +55,8 @@ auto AudioProject::toJson() const -> QJsonObject
 {
     QJsonObject root;
 
-    root.insert(QStringLiteral("name"), name());
-    root.insert(QStringLiteral("version"), version());
+    root.insert(u"name"_s, name());
+    root.insert(u"version"_s, version());
 
     // Save Categories
     QJsonArray categoriesJson;
@@ -65,7 +66,7 @@ auto AudioProject::toJson() const -> QJsonObject
         if (category) categoriesJson.append(category->toJson());
     }
 
-    root.insert(QStringLiteral("categories"), categoriesJson);
+    root.insert(u"categories"_s, categoriesJson);
     return root;
 }
 

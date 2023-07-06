@@ -5,6 +5,7 @@
 #include <QLoggingCategory>
 #include <QtConcurrent/QtConcurrentRun>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 
 Q_LOGGING_CATEGORY(gmFileAccessLocal, "gm.files.access.local")
@@ -58,14 +59,14 @@ auto FileAccessLocal::createDir(const QDir &dir) -> FileResult *
 {
     if (dir.exists())
     {
-        auto message = QStringLiteral("The directory %1 already exists ...").arg(dir.path());
+        auto message = u"The directory %1 already exists ..."_s.arg(dir.path());
         qCWarning(gmFileAccessLocal()) << message;
         return new FileResult(message);
     }
 
     if (!dir.mkpath(dir.path()))
     {
-        auto message = QStringLiteral("Could not create directory %1.").arg(dir.path());
+        auto message = u"Could not create directory %1."_s.arg(dir.path());
         qCWarning(gmFileAccessLocal()) << message;
         return new FileResult(message);
     }
@@ -91,7 +92,7 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
         auto *createDirResult = createDir(info.dir());
         if (!createDirResult->success())
         {
-            errorMessage = QStringLiteral("Could not save file %1: %2").arg(path, createDirResult->errorMessage());
+            errorMessage = u"Could not save file %1: %2"_s.arg(path, createDirResult->errorMessage());
             createDirResult->deleteLater();
             return new FileResult(false, errorMessage);
         }
@@ -102,8 +103,8 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
     {
         if (f.write(data) == -1)
         {
-            errorMessage = QStringLiteral("Could not write to file %1: %2 %3")
-                               .arg(path, QString::number(f.error()), f.errorString());
+            errorMessage =
+                u"Could not write to file %1: %2 %3"_s.arg(path, QString::number(f.error()), f.errorString());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         }
         else
@@ -115,8 +116,8 @@ auto FileAccessLocal::save(const QString &path, const QByteArray &data) -> FileR
     }
     else
     {
-        errorMessage = QStringLiteral("Could not open file for saving %1: %2 %3")
-                           .arg(path, QString::number(f.error()), f.errorString());
+        errorMessage =
+            u"Could not open file for saving %1: %2 %3"_s.arg(path, QString::number(f.error()), f.errorString());
         status = false;
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
     }
@@ -141,8 +142,7 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
         auto *createDirResult = createDir(info.dir());
         if (!createDirResult->success())
         {
-            auto errorMessage =
-                QStringLiteral("Could not move %1 to %2: %3").arg(oldPath, newPath, createDirResult->errorMessage());
+            auto errorMessage = u"Could not move %1 to %2: %3"_s.arg(oldPath, newPath, createDirResult->errorMessage());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
             createDirResult->deleteLater();
             return new FileResult(false, errorMessage);
@@ -152,8 +152,8 @@ auto FileAccessLocal::move(const QString &oldPath, const QString &newPath) -> Fi
 
     if (!f.rename(newPath))
     {
-        auto errorMessage = QStringLiteral("Could not move %1 to %2: %3 %4")
-                                .arg(oldPath, newPath, QString::number(f.error()), f.errorString());
+        auto errorMessage =
+            u"Could not move %1 to %2: %3 %4"_s.arg(oldPath, newPath, QString::number(f.error()), f.errorString());
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         return new FileResult(false, errorMessage);
     }
@@ -175,8 +175,8 @@ auto FileAccessLocal::deleteAsync(const QString &path) -> QFuture<FileResult *>
     return QtConcurrent::run([path]() {
         if (QFile f(path); !f.remove())
         {
-            auto errorMessage = QStringLiteral("Could not delete file/folder %1: %2 %3")
-                                    .arg(path, QString::number(f.error()), f.errorString());
+            auto errorMessage =
+                u"Could not delete file/folder %1: %2 %3"_s.arg(path, QString::number(f.error()), f.errorString());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
             return new FileResult(false, errorMessage);
         }
@@ -194,8 +194,7 @@ auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResu
         auto *createDirResult = createDir(info.dir());
         if (!createDirResult->success())
         {
-            auto errorMessage =
-                QStringLiteral("Could not copy %1 to %2: %3").arg(path, copy, createDirResult->errorMessage());
+            auto errorMessage = u"Could not copy %1 to %2: %3"_s.arg(path, copy, createDirResult->errorMessage());
             qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
             createDirResult->deleteLater();
             return new FileResult(false, errorMessage);
@@ -205,8 +204,8 @@ auto FileAccessLocal::copy(const QString &path, const QString &copy) -> FileResu
 
     if (!f.copy(copy))
     {
-        auto errorMessage = QStringLiteral("Could not copy %1 to %2: %3 %4")
-                                .arg(path, copy, QString::number(f.error()), f.errorString());
+        auto errorMessage =
+            u"Could not copy %1 to %2: %3 %4"_s.arg(path, copy, QString::number(f.error()), f.errorString());
         qCWarning(gmFileAccessLocal()) << "Warning:" << errorMessage;
         return new FileResult(false, errorMessage);
     }

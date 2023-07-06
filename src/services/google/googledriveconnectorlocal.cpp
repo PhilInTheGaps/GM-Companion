@@ -5,6 +5,8 @@
 #include <QJsonObject>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 constexpr auto LOCAL_PORT = 59993;
 constexpr auto MAX_CONCURRENT_REQUESTS = 5;
 constexpr auto SCOPE = "https://www.googleapis.com/auth/drive";
@@ -20,9 +22,9 @@ GoogleDriveConnectorLocal::GoogleDriveConnectorLocal(const QString &serviceName,
     config.scope = SCOPE;
     config.port = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_CONCURRENT_REQUESTS;
-    config.authHeaderFormat = QStringLiteral("Bearer %1");
-    config.idRequest = SettingRequest<QString>(QStringLiteral("googleID"), QLatin1String(), serviceName);
-    config.secretRequest = SettingRequest<QString>(QStringLiteral("googleSecret"), QLatin1String(), serviceName);
+    config.authHeaderFormat = u"Bearer %1"_s;
+    config.idRequest = SettingRequest<QString>(u"googleID"_s, u""_s, serviceName);
+    config.secretRequest = SettingRequest<QString>(u"googleSecret"_s, u""_s, serviceName);
 
     setConfig(config);
 

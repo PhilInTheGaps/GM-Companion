@@ -4,6 +4,8 @@
 #include <QJsonObject>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmConverterUpgrader, "gm.converter.project.upgrader")
 
 ConverterProjectUpgrader::ConverterProjectUpgrader() : AbstractProjectUpgraderINI(OLD_VERSION)
@@ -60,7 +62,7 @@ auto ConverterProjectUpgrader::findProjectName() const -> QString
         for (int i = 0; i < length; i++)
         {
             ini->setArrayIndex(i);
-            auto projectName = ini->value(QStringLiteral("category")).toString();
+            auto projectName = ini->value("category"_L1).toString();
             if (!projectName.isEmpty())
             {
                 ini->endArray();
@@ -71,14 +73,14 @@ auto ConverterProjectUpgrader::findProjectName() const -> QString
         ini->endArray();
     }
 
-    return QStringLiteral("Custom");
+    return u"Custom"_s;
 }
 
 auto ConverterProjectUpgrader::categoryNameFromGroup(const QString &group) -> QString
 {
-    if (group.endsWith(QStringLiteral("Units")))
+    if (group.endsWith("Units"_L1))
     {
-        return group.left(group.length() - QStringLiteral("Units").length());
+        return group.left(group.length() - "Units"_L1.length());
     }
 
     return group;

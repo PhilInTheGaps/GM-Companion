@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <exception>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
@@ -20,8 +21,8 @@ AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
     qCDebug(gmAudioTool()) << "Loading ...";
 
     // QML Engine
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_tool"), this);
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_editor"), &editor);
+    engine->rootContext()->setContextProperty(u"audio_tool"_s, this);
+    engine->rootContext()->setContextProperty(u"audio_editor"_s, &editor);
 
     // Spotify
     connect(Spotify::instance(), &Spotify::authorized, this, &AudioTool::onSpotifyAuthorized);
@@ -82,7 +83,7 @@ auto AudioTool::currentProjectName() const -> QString
         return m_currentProject->name();
     }
 
-    return QLatin1String();
+    return u""_s;
 }
 
 /**
@@ -176,7 +177,7 @@ void AudioTool::play(AudioElement *element)
         break;
     }
 
-    metaDataReader.updateMetaData(QStringLiteral("Type"), element->name());
+    metaDataReader.updateMetaData(QMediaMetaData::MediaType, element->name());
 }
 
 void AudioTool::onStartedPlaying()

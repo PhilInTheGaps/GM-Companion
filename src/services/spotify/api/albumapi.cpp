@@ -1,17 +1,20 @@
 #include "albumapi.h"
 #include "spotify/spotify.h"
-#include "utils/networkutils.h"
 #include "thirdparty/asyncfuture/asyncfuture.h"
+#include "utils/networkutils.h"
 
-#include <QLoggingCategory>
 #include <QJsonDocument>
+#include <QLoggingCategory>
 #include <QUrlQuery>
 
 Q_LOGGING_CATEGORY(gmSpotifyAlbums, "gm.services.spotify.api.albums")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
-AlbumAPI::AlbumAPI(Spotify *parent) : QObject(parent), m_spotify(parent) {}
+AlbumAPI::AlbumAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
+{
+}
 
 auto AlbumAPI::getAlbum(const QString &id) -> QFuture<QSharedPointer<SpotifyAlbum>>
 {
@@ -21,10 +24,10 @@ auto AlbumAPI::getAlbum(const QString &id) -> QFuture<QSharedPointer<SpotifyAlbu
         return {};
     }
 
-    QUrl url(QStringLiteral("https://api.spotify.com/v1/albums/%1").arg(id));
+    QUrl url(u"https://api.spotify.com/v1/albums/%1"_s.arg(id));
 
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("market"), QStringLiteral("from_token"));
+    query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
     const auto callback = [this](RestNetworkReply *reply) {
@@ -59,14 +62,14 @@ auto AlbumAPI::getAlbumTracks(const QString &id) const -> QFuture<QSharedPointer
         return {};
     }
 
-    QUrl url(QStringLiteral("https://api.spotify.com/v1/albums/%1/tracks").arg(id));
+    QUrl url(u"https://api.spotify.com/v1/albums/%1/tracks"_s.arg(id));
 
     QUrlQuery query;
-    query.addQueryItem("limit", QString::number(MAX_TRACK_COUNT));
-    query.addQueryItem(QStringLiteral("market"), QStringLiteral("from_token"));
+    query.addQueryItem(u"limit"_s, QString::number(MAX_TRACK_COUNT));
+    query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [this](gsl::owner<RestNetworkReply*> reply) -> QFuture<QSharedPointer<SpotifyTrackList>> {
+    const auto callback = [this](gsl::owner<RestNetworkReply *> reply) -> QFuture<QSharedPointer<SpotifyTrackList>> {
         if (reply->hasError())
         {
             qCWarning(gmSpotifyAlbums()) << reply->errorText();
@@ -85,8 +88,7 @@ auto AlbumAPI::getAlbumTracks(const QString &id) const -> QFuture<QSharedPointer
         return completed(tracklist);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url)))
-            .subscribe(callback).future();
+    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
 }
 
 auto AlbumAPI::getAlbumTracks(QSharedPointer<SpotifyAlbum> album) const -> QFuture<QSharedPointer<SpotifyAlbum>>
@@ -114,11 +116,11 @@ auto AlbumAPI::getAlbumTracks(QSharedPointer<SpotifyAlbum> album) const -> QFutu
         return completed(album);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url)))
-            .subscribe(callback).future();
+    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
 }
 
-auto AlbumAPI::getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist) const -> QFuture<QSharedPointer<SpotifyTrackList>>
+auto AlbumAPI::getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist) const
+    -> QFuture<QSharedPointer<SpotifyTrackList>>
 {
     const QUrl url(tracklist->next);
 
@@ -141,6 +143,5 @@ auto AlbumAPI::getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist) const 
         return completed(tracklist);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url)))
-            .subscribe(callback).future();
+    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
 }

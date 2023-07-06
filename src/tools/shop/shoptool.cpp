@@ -2,11 +2,13 @@
 #include "utils/utils.h"
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
+
 ShopTool::ShopTool(QQmlApplicationEngine *engine, QObject *parent) : BaseShopTool(parent), m_shopEditor(engine)
 {
     if (engine)
     {
-        engine->rootContext()->setContextProperty(QStringLiteral("shop_tool"), this);
+        engine->rootContext()->setContextProperty(u"shop_tool"_s, this);
     }
 
     connect(&m_shopEditor, &ShopEditor::projectsSaved, this, &ShopTool::onShopEditorSaved);

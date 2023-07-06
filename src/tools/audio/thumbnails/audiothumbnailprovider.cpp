@@ -1,8 +1,9 @@
 #include "audiothumbnailprovider.h"
 #include "audiothumbnailcache.h"
 #include "audiothumbnailgenerator.h"
-
 #include <QRegularExpression>
+
+using namespace Qt::Literals::StringLiterals;
 
 AudioThumbnailProvider::AudioThumbnailProvider() : QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
@@ -11,7 +12,7 @@ AudioThumbnailProvider::AudioThumbnailProvider() : QQuickImageProvider(QQuickIma
 auto AudioThumbnailProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize) -> QPixmap
 {
     auto _id = id;
-    auto type = QStringLiteral("Music");
+    auto type = u"Music"_s;
 
     if (const auto match = regex.match(id); match.hasMatch())
     {

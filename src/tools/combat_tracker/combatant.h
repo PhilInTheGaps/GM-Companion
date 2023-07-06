@@ -1,12 +1,13 @@
 #ifndef COMBATANT_H
 #define COMBATANT_H
 
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QAbstractListModel>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
 
-#include "thirdparty/propertyhelper/PropertyHelper.h"
+using namespace Qt::Literals::StringLiterals;
 
 class Combatant : public QObject
 {
@@ -28,8 +29,8 @@ public:
 
     inline operator QString() const
     {
-        return QString("%1 (Ini: %2 [%3], Health: %4)")
-            .arg(name(), QString::number(ini()), QString::number(priority()), QString::number(health()));
+        return u"%1 (Ini: %2 [%3], Health: %4)"_s.arg(name(), QString::number(ini()), QString::number(priority()),
+                                                      QString::number(health()));
     }
 };
 

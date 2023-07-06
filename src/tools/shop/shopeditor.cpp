@@ -9,6 +9,7 @@
 #include <QRegularExpression>
 #include <algorithm>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmShopsEditor, "gm.shops.editor")
@@ -56,7 +57,7 @@ void ShopEditor::findItems()
 
     itemGroups({});
 
-    observe(Files::File::listAsync(SettingsManager::getPath(QStringLiteral("shops")), true, false))
+    observe(Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false))
         .subscribe([this](Files::FileListResult *result) { onItemFilesFound(result); });
 }
 
@@ -193,12 +194,12 @@ void ShopEditor::save()
 {
     if (projects().isEmpty()) return;
 
-    const auto basePath = SettingsManager::getPath(QStringLiteral("shops"));
+    const auto basePath = SettingsManager::getPath(u"shops"_s);
     auto combinator = combine();
 
     foreach (const auto *project, projects())
     {
-        combinator << observe(Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop", basePath),
+        combinator << observe(Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop"_L1, basePath),
                                                      QJsonDocument(project->toJson()).toJson()))
                           .future();
     }
@@ -250,7 +251,7 @@ auto ShopEditor::createShop(const QString &name) -> bool
 {
     if (!currentProject() || !currentProject()->currentCategory() || name.isEmpty()) return false;
 
-    auto *shop = new ItemShop(name, QLatin1String(""), QLatin1String(""), {}, this);
+    auto *shop = new ItemShop(name, u""_s, u""_s, {}, this);
     currentProject()->currentCategory()->addShop(shop);
     return true;
 }
@@ -386,7 +387,7 @@ void ShopEditor::onCurrentItemGroupChanged(ItemGroup *currentGroup)
 
 void ShopEditor::onDisabledItemCategoriesChanged(const QStringList &categories)
 {
-    const QRegularExpression ex(QStringLiteral("^(?!(%1)$).*$").arg(categories.join('|')));
+    const QRegularExpression ex(u"^(?!(%1)$).*$"_s.arg(categories.join('|')));
     m_itemModelGroupProxy.setFilterRegularExpression(ex);
 }
 

@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 static constexpr auto PROJECT_FILE_GLOB = "*.shop";
@@ -19,7 +20,7 @@ void BaseShopTool::loadData()
 
     projects({});
 
-    observe(Files::File::listAsync(SettingsManager::getPath(QStringLiteral("shops")), true, false))
+    observe(Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false))
         .subscribe([this](Files::FileListResult *result) { onShopFilesFound(result); });
 }
 

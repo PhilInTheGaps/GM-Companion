@@ -1,12 +1,14 @@
 #include "spotifyimage.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 auto SpotifyImage::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyImage>
 {
     auto *image = new SpotifyImage();
 
-    image->url = json[QStringLiteral("url")].toString();
-    image->width = json[QStringLiteral("width")].toInt();
-    image->height = json[QStringLiteral("height")].toInt();
+    image->url = json["url"_L1].toString();
+    image->width = json["width"_L1].toInt();
+    image->height = json["height"_L1].toInt();
 
     return QSharedPointer<SpotifyImage>(image);
 }

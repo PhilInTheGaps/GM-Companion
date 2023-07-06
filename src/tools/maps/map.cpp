@@ -11,6 +11,7 @@
 #include <QLoggingCategory>
 #include <QPixmap>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmMapsMap, "gm.maps.map")
@@ -55,7 +56,7 @@ void Map::loadMarkers()
             observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
                 if (!result) return;
 
-                auto markers = QJsonDocument::fromJson(result->data()).object()[QStringLiteral("markers")].toArray();
+                auto markers = QJsonDocument::fromJson(result->data()).object()["markers"_L1].toArray();
 
                 for (const auto &marker : markers)
                 {
@@ -106,14 +107,14 @@ void MapCategory::loadMaps()
 
     m_wasLoaded = true;
 
-    const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(QStringLiteral("maps")));
+    const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(u"maps"_s));
 
     observe(Files::File::listAsync(path, true, false)).subscribe([this, path](Files::FileListResult *result) {
         if (!result) return;
 
         foreach (const auto &file, result->files())
         {
-            if (!file.endsWith(QLatin1String(".json")))
+            if (!file.endsWith(".json"_L1))
             {
                 addMap(new Map(file, FileUtils::fileInDir(file, path), this));
             }

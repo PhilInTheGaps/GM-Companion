@@ -6,13 +6,15 @@
 #include <QQmlContext>
 #include <gsl/gsl>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmConverterEditor, "gm.converter.editor")
 
 ConverterEditor::ConverterEditor(const QQmlApplicationEngine *engine, QObject *parent) : AbstractTool{parent}
 {
     if (engine)
     {
-        engine->rootContext()->setContextProperty(QStringLiteral("converter_editor"), this);
+        engine->rootContext()->setContextProperty(u"converter_editor"_s, this);
     }
 
     connect(this, &ConverterEditor::projectsChanged, this, &ConverterEditor::onProjectsChanged);
@@ -234,7 +236,7 @@ void ConverterEditor::madeChanges()
 /// Move old v1 ini projects to a sub folder so that they are not loaded next time
 void ConverterEditor::backupV1Projects()
 {
-    const auto backupPath = FileUtils::fileInDir(QStringLiteral("v1"), getLocalProjectPath());
+    const auto backupPath = FileUtils::fileInDir(u"v1"_s, getLocalProjectPath());
 
     QDir const projectDir(getLocalProjectPath());
     if (!projectDir.exists()) return;
@@ -278,8 +280,7 @@ auto ConverterEditor::saveProject(const ConverterProject *project) -> bool
 {
     if (!project) return true;
 
-    const auto name =
-        QStringLiteral("%1.json").arg(project->name().isEmpty() ? QStringLiteral("unnamed project") : project->name());
+    const auto name = u"%1.json"_s.arg(project->name().isEmpty() ? u"unnamed project"_s : project->name());
 
     auto path = FileUtils::fileInDir(name, getLocalProjectPath());
 

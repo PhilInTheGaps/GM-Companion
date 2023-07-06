@@ -3,7 +3,7 @@
 #include "common/settings/settingsmanager.h"
 #include "common/utils/fileutils.h"
 #include "filesystem/file.h"
-
+#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <QTemporaryFile>
 #include <QUuid>
@@ -17,7 +17,7 @@
 #include <taglib/vorbisfile.h>
 #include <taglib/wavfile.h>
 
-#include "thirdparty/asyncfuture/asyncfuture.h"
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioTagImageLoader, "gm.audio.thumbnails.loaders.tag")
 
@@ -47,8 +47,7 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
         return completed(pixmap);
     }
 
-    const auto isLocalFile = SettingsManager::instance()->get(QStringLiteral("cloudMode"), QStringLiteral("local")) ==
-                             QStringLiteral("local");
+    const auto isLocalFile = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s) == "local"_L1;
     return observe(QtConcurrent::run(loadFromFile, path, isLocalFile)).future();
 }
 
@@ -72,7 +71,7 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
             QFile tempFile(FileUtils::fileInDir(fileName, QDir::tempPath()));
             tempFile.open(QIODevice::WriteOnly);
 #else
-            auto tempFile = QTemporaryFile(QStringLiteral("%1/XXXXXX.%2").arg(QDir::tempPath(), fileName));
+            auto tempFile = QTemporaryFile(u"%1/XXXXXX.%2"_s.arg(QDir::tempPath(), fileName));
             tempFile.setAutoRemove(false);
             tempFile.open();
 #endif

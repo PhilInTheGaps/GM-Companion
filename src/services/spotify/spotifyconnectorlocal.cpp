@@ -1,7 +1,8 @@
 #include "spotifyconnectorlocal.h"
 #include "config.h"
-
 #include <QLoggingCategory>
+
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmSpotifyLocal, "gm.service.spotify.local")
 
@@ -14,9 +15,8 @@ SpotifyConnectorLocal::SpotifyConnectorLocal(QNetworkAccessManager &networkManag
     config.scope = SCOPE;
     config.port = LOCAL_PORT;
     config.maxConcurrentRequests = MAX_REQUESTS;
-    config.idRequest = SettingRequest<QString>(QStringLiteral("spotifyID"), QLatin1String(), QStringLiteral("Spotify"));
-    config.secretRequest =
-        SettingRequest<QString>(QStringLiteral("spotifySecret"), QLatin1String(), QStringLiteral("Spotify"));
+    config.idRequest = SettingRequest<QString>(u"spotifyID"_s, u""_s, u"Spotify"_s);
+    config.secretRequest = SettingRequest<QString>(u"spotifySecret"_s, u""_s, u"Spotify"_s);
 
     setConfig(config);
 }

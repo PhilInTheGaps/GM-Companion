@@ -9,6 +9,7 @@
 #include <QQmlContext>
 #include <utility>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioEditor, "gm.audio.editor")
@@ -19,12 +20,11 @@ AudioEditor::AudioEditor(QQmlApplicationEngine *engine, QObject *parent)
 {
     qCDebug(gmAudioEditor) << "Loading Audio Editor ...";
 
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_exporter_addon_manager"), &audioExporter);
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_exporter"), &audioExporter);
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_addon_element_manager"), &addonElementManager);
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_editor_file_browser"), &fileBrowser);
-
-    engine->rootContext()->setContextProperty(QStringLiteral("audio_editor_file_model"), &fileModel);
+    engine->rootContext()->setContextProperty(u"audio_exporter_addon_manager"_s, &audioExporter);
+    engine->rootContext()->setContextProperty(u"audio_exporter"_s, &audioExporter);
+    engine->rootContext()->setContextProperty(u"audio_addon_element_manager"_s, &addonElementManager);
+    engine->rootContext()->setContextProperty(u"audio_editor_file_browser"_s, &fileBrowser);
+    engine->rootContext()->setContextProperty(u"audio_editor_file_model"_s, &fileModel);
 
     connect(this, &AudioEditor::currentScenarioChanged, this, &AudioEditor::onCurrentScenarioChanged);
 }
@@ -813,7 +813,7 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
 
     qCDebug(gmAudioEditor) << "Adding YouTube URL to element" << QString(*m_currentElement) << ":" << videoUrl;
 
-    auto *audioFile = new AudioFile(videoUrl, AudioFile::Source::Youtube, QLatin1String(), m_currentElement);
+    auto *audioFile = new AudioFile(videoUrl, AudioFile::Source::Youtube, u""_s, m_currentElement);
     if (!addAudioFile(audioFile)) return false;
 
     qCWarning(gmAudioEditor()) << "Youtube integration is broken!";
@@ -839,7 +839,7 @@ auto AudioEditor::addFile(QStringList path, const QString &filename) -> bool
 
     path.append(filename);
     auto pathString = "/" + FileUtils::dirFromFolders(path);
-    return addAudioFile(new AudioFile(pathString, AudioFile::Source::File, QLatin1String(), m_currentElement));
+    return addAudioFile(new AudioFile(pathString, AudioFile::Source::File, u""_s, m_currentElement));
 }
 
 /**
@@ -854,7 +854,7 @@ void AudioEditor::addFiles(const QStringList &files)
 
     for (const auto &file : files)
     {
-        addAudioFile(new AudioFile(file, AudioFile::Source::File, QLatin1String(), m_currentElement));
+        addAudioFile(new AudioFile(file, AudioFile::Source::File, u""_s, m_currentElement));
     }
 }
 
@@ -949,7 +949,7 @@ void AudioEditor::replaceFileFolder(int index, const QString &folder) const
         auto path = files[index]->url();
         auto folderPath = FileUtils::dirFromPath(path);
         auto newFolderPath = folder;
-        newFolderPath = newFolderPath.replace(basePath(), QLatin1String());
+        newFolderPath = newFolderPath.replace(basePath(), ""_L1);
 
         foreach (auto *file, files)
         {
@@ -1009,7 +1009,7 @@ void AudioEditor::setSubscenario(int index) const
  */
 auto AudioEditor::basePath() const -> QString
 {
-    if (!m_currentElement) return QLatin1String();
+    if (!m_currentElement) return u""_s;
 
     return SettingsManager::getPath(AudioElement::typeToSettings(m_currentElement->type()));
 }

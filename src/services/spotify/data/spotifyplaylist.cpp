@@ -1,22 +1,23 @@
 #include "spotifyplaylist.h"
 #include "spotifyimage.h"
 #include "spotifytrack.h"
-
 #include <QJsonDocument>
+
+using namespace Qt::Literals::StringLiterals;
 
 auto SpotifyPlaylist::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyPlaylist>
 {
     auto *playlist = new SpotifyPlaylist;
 
-    playlist->id              = json[QStringLiteral("id")].toString();
-    playlist->href            = json[QStringLiteral("href")].toString();
-    playlist->uri             = json[QStringLiteral("uri")].toString();
-    playlist->name            = json[QStringLiteral("name")].toString();
-    playlist->description     = json[QStringLiteral("description")].toString();
-    playlist->snapshotId      = json[QStringLiteral("snapshot_id")].toString();
-    playlist->isCollaborative = json[QStringLiteral("collaborative")].toBool();
-    playlist->isPublic        = json[QStringLiteral("public")].toBool();
-    playlist->images          = SpotifyImage::fromJson(json[QStringLiteral("images")].toArray());
+    playlist->id = json["id"_L1].toString();
+    playlist->href = json["href"_L1].toString();
+    playlist->uri = json["uri"_L1].toString();
+    playlist->name = json["name"_L1].toString();
+    playlist->description = json["description"_L1].toString();
+    playlist->snapshotId = json["snapshot_id"_L1].toString();
+    playlist->isCollaborative = json["collaborative"_L1].toBool();
+    playlist->isPublic = json["public"_L1].toBool();
+    playlist->images = SpotifyImage::fromJson(json["images"_L1].toArray());
 
     // TODO: tracks
 

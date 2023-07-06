@@ -5,6 +5,7 @@
 #include "utils/utils.h"
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmCharactersCharacter, "gm.characters.character")
@@ -18,9 +19,9 @@ int Character::type() const
 {
     if (m_files.size() < 1) return -1;
 
-    if (m_files.at(0)->name().endsWith(QStringLiteral("pdf"))) return 1;
+    if (m_files.at(0)->name().endsWith("pdf"_L1)) return 1;
 
-    if (m_files.at(0)->name().endsWith(QStringLiteral("json"))) return 2;
+    if (m_files.at(0)->name().endsWith("json"_L1)) return 2;
 
     return 0;
 }

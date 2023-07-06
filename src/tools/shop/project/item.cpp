@@ -1,5 +1,7 @@
 #include "item.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 Item::Item(const QString &name, const QString &price, const QString &description, const QString &category,
            QObject *parent)
     : BaseProjectItem(name, parent), a_price(price), a_description(description), a_category(category)
@@ -15,14 +17,13 @@ Item::Item(const Item &other, QObject *parent)
 }
 
 Item::Item(const QJsonObject &json, QObject *parent)
-    : Item(json[QStringLiteral("name")].toString(), json[QStringLiteral("price")].toString(),
-           json[QStringLiteral("description")].toString(), json[QStringLiteral("category")].toString(), parent)
+    : Item(json["name"_L1].toString(), json["price"_L1].toString(), json["description"_L1].toString(),
+           json["category"_L1].toString(), parent)
 {
 }
 
 Item::Item(const QString &category, const QJsonObject &json, QObject *parent)
-    : Item(json[QStringLiteral("name")].toString(), json[QStringLiteral("price")].toString(),
-           json[QStringLiteral("description")].toString(), category, parent)
+    : Item(json["name"_L1].toString(), json["price"_L1].toString(), json["description"_L1].toString(), category, parent)
 {
 }
 

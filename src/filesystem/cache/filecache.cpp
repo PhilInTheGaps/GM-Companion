@@ -10,7 +10,7 @@ auto FileCache::tryGetData(const QString &path, QByteArray &data) -> bool
         return false;
     }
 
-    auto *entry = m_entries[path];
+    auto *entry = m_entries.value(path);
     if (!entry->isFresh())
     {
         removeEntry(path);
@@ -24,7 +24,7 @@ auto FileCache::createOrUpdateEntry(const QString &path, const QByteArray &data)
 {
     if (m_entries.contains(path))
     {
-        auto *entry = m_entries[path];
+        auto *entry = m_entries.value(path);
         return entry->update(data);
     }
 
@@ -63,7 +63,7 @@ auto FileCache::copyEntry(const QString &path, const QString &copy) -> bool
 {
     if (!m_entries.contains(path)) return false;
 
-    if (auto *entry = m_entries[path]; entry->isFresh())
+    if (auto *entry = m_entries.value(path); entry->isFresh())
     {
         if (QByteArray data; entry->tryGetData(data))
         {
@@ -80,7 +80,7 @@ auto FileCache::copyEntry(const QString &path, const QString &copy) -> bool
 
 auto FileCache::checkEntry(const QString &path) -> bool
 {
-    return m_entries.contains(path) && m_entries[path]->isFresh();
+    return m_entries.contains(path) && m_entries.value(path)->isFresh();
 }
 
 void FileCache::printEntries() const

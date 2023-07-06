@@ -10,6 +10,8 @@
 #include <QLoggingCategory>
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmNameGenerator, "gm.generators.names")
 
 NameGenerator::NameGenerator(const QQmlApplicationEngine *engine, QObject *parent)
@@ -17,7 +19,7 @@ NameGenerator::NameGenerator(const QQmlApplicationEngine *engine, QObject *paren
 {
     if (engine)
     {
-        engine->rootContext()->setContextProperty(QStringLiteral("name_generator"), this);
+        engine->rootContext()->setContextProperty(u"name_generator"_s, this);
     }
 }
 
@@ -43,7 +45,7 @@ void NameGenerator::loadCategories()
     for (const auto &data : allFileData)
     {
         auto doc = QJsonDocument::fromJson(data);
-        auto name = doc.object()[QStringLiteral("name")].toString();
+        auto name = doc.object()["name"_L1].toString();
 
         a_categories << name;
         m_generatorLists << NameGeneratorFactory::buildFromJson(this, doc);

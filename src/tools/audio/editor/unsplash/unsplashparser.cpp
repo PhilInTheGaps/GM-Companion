@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <random>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmUnsplashParser, "gm.unsplash.parser")
 
 UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
@@ -17,7 +19,7 @@ UnsplashParser::UnsplashParser(QQmlApplicationEngine *engine, QObject *parent) :
     qmlEngine = engine;
     m_imageModel = new ImageListModel;
     m_manager = new QNetworkAccessManager;
-    qmlEngine->rootContext()->setContextProperty("unsplashImageListModel", m_imageModel);
+    qmlEngine->rootContext()->setContextProperty(u"unsplashImageListModel"_s, m_imageModel);
     parse();
 }
 
@@ -40,18 +42,16 @@ void UnsplashParser::parse()
 
         m_doc = QJsonDocument::fromJson(reply->readAll());
 
-        auto array = m_doc.array();
-
-        for (auto o : array)
+        foreach (auto o, m_doc.array())
         {
             auto *image = new UnsplashImage;
-            image->setId(o.toObject().value("id").toString());
-            image->setAuthor(o.toObject().value("author").toString());
-            image->setAuthorId(o.toObject().value("author_id").toString());
+            image->setId(o["id"_L1].toString());
+            image->setAuthor(o["author"_L1].toString());
+            image->setAuthorId(o["author_id"_L1].toString());
 
             QStringList tags;
 
-            for (auto t : o.toObject().value("tags").toArray())
+            foreach (auto t, o["tags"_L1].toArray())
             {
                 tags.append(t.toString());
             }
@@ -78,7 +78,7 @@ void UnsplashParser::findImage(const QString &text)
     }
 
     QList<UnsplashImage *> images;
-    QStringList terms = text.split(" ");
+    QStringList terms = text.split(u" "_s);
 
     for (auto i : m_images)
     {

@@ -15,6 +15,7 @@
 
 Q_LOGGING_CATEGORY(gmAddonRepoManager, "gm.addons.repositories")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 constexpr ConstQString REPOSITORY_SETTING = "addonRepositories";
@@ -89,7 +90,7 @@ void AddonRepositoryManager::fetchAllRepositoryData()
 
 void AddonRepositoryManager::loadLocalRepositories()
 {
-    QDir const dir(QStringLiteral(":/addon_repositories"));
+    QDir const dir(u":/addon_repositories"_s);
 
     if (!dir.exists()) return;
 
@@ -144,7 +145,7 @@ auto AddonRepositoryManager::getRepositoryUrls(bool onlyCustom) const -> QString
 
 auto AddonRepositoryManager::fetchRepositoryDataAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>
 {
-    if (url.startsWith(QStringLiteral("http://")) || url.startsWith(QStringLiteral("https://")))
+    if (url.startsWith("http://"_L1) || url.startsWith("https://"_L1))
     {
         return fetchRepositoryDataRemoteAsync(url);
     }
@@ -201,15 +202,13 @@ auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> std:
 
     for (const auto &entry : jsonArray)
     {
-        auto release = getNewestCompatibleRelease(entry.toObject()[QStringLiteral("releases")].toArray());
+        auto release = getNewestCompatibleRelease(entry["releases"_L1].toArray());
         if (release.isEmpty()) continue;
 
-        result.push_back(AddonReleaseInfo(
-            entry.toObject()[QStringLiteral("id")].toString(), entry.toObject()[QStringLiteral("name")].toString(),
-            entry.toObject()[QStringLiteral("name_short")].toString(), release[QStringLiteral("version")].toString(),
-            entry.toObject()[QStringLiteral("author")].toString(),
-            entry.toObject()[QStringLiteral("description")].toString(),
-            release[QStringLiteral("download")].toString()));
+        result.push_back(AddonReleaseInfo(entry["id"_L1].toString(), entry["name"_L1].toString(),
+                                          entry["name_short"_L1].toString(), release["version"_L1].toString(),
+                                          entry["author"_L1].toString(), entry["description"_L1].toString(),
+                                          release["download"_L1].toString()));
     }
 
     return result;
@@ -221,11 +220,11 @@ auto AddonRepositoryManager::getNewestCompatibleRelease(const QJsonArray &releas
 
     for (const auto &release : releases)
     {
-        if (release.toObject()[QStringLiteral("compatibility")].toInt() < MINIMAL_COMPATIBLE_VERSION) continue;
+        if (release["compatibility"_L1].toInt() < MINIMAL_COMPATIBLE_VERSION) continue;
 
-        auto version = release.toObject()[QStringLiteral("version")].toString();
+        auto version = release["version"_L1].toString();
 
-        if (newest.isEmpty() || UpdateManager::compareVersions(version, newest[QStringLiteral("version")].toString()))
+        if (newest.isEmpty() || UpdateManager::compareVersions(version, newest["version"_L1].toString()))
         {
             newest = release.toObject();
         }

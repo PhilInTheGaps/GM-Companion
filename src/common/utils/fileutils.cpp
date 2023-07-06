@@ -1,5 +1,7 @@
 #include "fileutils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 /**
  * @brief Get a path string from a list of folders.
  * Example: { "some", "folder" } becomes "/some/folder"
@@ -21,9 +23,9 @@ auto FileUtils::dirFromPath(const QString &path) -> QString
 {
     auto index = path.lastIndexOf('/');
 
-    if (index < 0) return QLatin1String();
+    if (index < 0) return u""_s;
 
-    if (index == 0) return QStringLiteral("/");
+    if (index == 0) return u"/"_s;
 
     return path.left(index);
 }
@@ -90,7 +92,7 @@ auto FileUtils::fileName(QStringView path) -> QString
  */
 auto FileUtils::incrementFileName(const QString &fileName) -> QString
 {
-    if (fileName.isEmpty()) return QLatin1String();
+    if (fileName.isEmpty()) return u""_s;
 
     auto nameAndSuffix = splitFileNameAndSuffix(fileName);
     auto incrementedName = incrementName(nameAndSuffix.first);
@@ -100,7 +102,7 @@ auto FileUtils::incrementFileName(const QString &fileName) -> QString
 
 auto FileUtils::incrementName(const QString &name) -> QString
 {
-    if (name.isEmpty()) return QLatin1String();
+    if (name.isEmpty()) return u""_s;
 
     auto list = name.split('_');
     auto number = list.length() == 1 ? 0 : incrementNumString(list.takeLast());
@@ -153,7 +155,7 @@ auto FileUtils::splitFileNameAndSuffix(const QString &fileName) -> std::pair<QSt
 {
     auto suffix = FileUtils::suffix(fileName);
     auto pathWithoutSuffix = fileName;
-    pathWithoutSuffix.replace(suffix, QLatin1String()).chop(1);
+    pathWithoutSuffix.replace(suffix, ""_L1).chop(1);
 
     return {pathWithoutSuffix, suffix};
 }

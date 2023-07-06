@@ -5,12 +5,14 @@
 #include <QLoggingCategory>
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmNotesTool, "gm.notes.tool")
 
 NotesTool::NotesTool(QQmlApplicationEngine *engine, QObject *parent)
     : AbstractTool(parent), m_saveLoad(this), m_htmlGenerator(this), m_markdownHighlighter(this)
 {
-    engine->rootContext()->setContextProperty(QStringLiteral("notes_tool"), this);
+    engine->rootContext()->setContextProperty(u"notes_tool"_s, this);
 
     connect(this, &NotesTool::loadBooks, &m_saveLoad, &NotesSaveLoad::loadBooks);
     connect(&m_saveLoad, &NotesSaveLoad::booksLoaded, this, &NotesTool::onNoteBooksLoaded);
@@ -25,7 +27,7 @@ void NotesTool::setQmlTextDoc(QQuickTextDocument *qmlTextDoc)
     if (!m_qmlTextDoc || !m_qmlTextDoc->textDocument()) return;
 
     // Load style sheet
-    QFile f(QStringLiteral(":/notes/style.css"));
+    QFile f(u":/notes/style.css"_s);
     if (f.open(QIODevice::ReadOnly))
     {
         const QString style = f.readAll();
@@ -233,7 +235,7 @@ void NotesTool::onPageContentLoaded()
         m_cursorPosition = m_currentPage->cursorPosition();
 
         auto *doc = m_qmlTextDoc->textDocument();
-        doc->setDefaultFont(QFont(QStringLiteral("Mono")));
+        doc->setDefaultFont(QFont(u"Mono"_s));
         doc->setPlainText(m_currentPage->content());
     }
 }
@@ -247,7 +249,7 @@ void NotesTool::onPageHtmlLoaded()
         if (!m_currentPage->content().isEmpty())
         {
             auto *doc = m_qmlTextDoc->textDocument();
-            doc->setDefaultFont(QFont(QStringLiteral("sans serif")));
+            doc->setDefaultFont(QFont(u"sans serif"_s));
             doc->setHtml(m_currentPage->html());
         }
     }

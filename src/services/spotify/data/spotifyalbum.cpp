@@ -1,25 +1,19 @@
 #include "spotifyalbum.h"
-#include "spotifyimage.h"
 #include "spotifyartist.h"
+#include "spotifyimage.h"
 #include "spotifytrack.h"
-
 #include <QJsonDocument>
+
+using namespace Qt::Literals::StringLiterals;
 
 auto SpotifyAlbum::fromJson(const QJsonObject &json) -> QSharedPointer<SpotifyAlbum>
 {
-    auto *album = new SpotifyAlbum
-    {
-        {
-            json[QStringLiteral("href")].toString(),
-            json[QStringLiteral("uri")].toString(),
-            json[QStringLiteral("id")].toString(),
-            json[QStringLiteral("name")].toString()
-        },
-        json[QStringLiteral("release_date")].toString(),
-        SpotifyImage::fromJson(json[QStringLiteral("images")].toArray()),
-        SpotifyArtist::fromJson(json[QStringLiteral("artists")].toArray()),
-        SpotifyTrackList::fromJson(json[QStringLiteral("tracks")].toObject())
-    };
+    auto *album = new SpotifyAlbum{
+        {json["href"_L1].toString(), json["uri"_L1].toString(), json["id"_L1].toString(), json["name"_L1].toString()},
+        json["release_date"_L1].toString(),
+        SpotifyImage::fromJson(json["images"_L1].toArray()),
+        SpotifyArtist::fromJson(json["artists"_L1].toArray()),
+        SpotifyTrackList::fromJson(json["tracks"_L1].toObject())};
 
     return QSharedPointer<SpotifyAlbum>(album);
 }

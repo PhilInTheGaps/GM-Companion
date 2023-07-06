@@ -127,7 +127,7 @@ auto Worker::copyNextMusic() -> bool
     if (m_musicFiles.isEmpty()) return false;
 
     return copyFile(m_musicFiles.dequeue(),
-                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Music)), "music");
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Music)), u"music"_s);
 }
 
 auto Worker::copyNextSound() -> bool
@@ -135,7 +135,7 @@ auto Worker::copyNextSound() -> bool
     if (m_soundFiles.isEmpty()) return false;
 
     return copyFile(m_soundFiles.dequeue(),
-                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Sound)), "sounds");
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Sound)), u"sounds"_s);
 }
 
 auto Worker::copyNextRadio() -> bool
@@ -143,7 +143,7 @@ auto Worker::copyNextRadio() -> bool
     if (m_radioFiles.isEmpty()) return false;
 
     return copyFile(m_radioFiles.dequeue(),
-                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Radio)), "radios");
+                    SettingsManager::getPath(AudioElement::typeToSettings(AudioElement::Type::Radio)), u"radios"_s);
 }
 
 auto Worker::copyFile(const QString &filePath, const QString &base, const QString &subfolder) -> bool

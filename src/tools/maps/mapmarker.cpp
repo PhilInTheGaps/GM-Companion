@@ -1,6 +1,8 @@
 #include "mapmarker.h"
 #include "utils/utils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 MapMarker::MapMarker(const QString &name, const QString &description, qreal x, qreal y, const QString &icon,
                      const QString &color, QObject *parent)
     : QObject(parent), a_name(name), a_description(description), a_color(color), a_icon(icon), m_x(x), m_y(y)
@@ -9,12 +11,12 @@ MapMarker::MapMarker(const QString &name, const QString &description, qreal x, q
 
 MapMarker::MapMarker(const QJsonObject &json, QObject *parent) : QObject(parent)
 {
-    name(json[QStringLiteral("title")].toString());
-    description(json[QStringLiteral("description")].toString());
-    color(json[QStringLiteral("color")].toString());
-    icon(json[QStringLiteral("icon")].toString());
+    name(json["title"_L1].toString());
+    description(json["description"_L1].toString());
+    color(json["color"_L1].toString());
+    icon(json["icon"_L1].toString());
 
-    setPosition(json[QStringLiteral("x")].toDouble(), json[QStringLiteral("y")].toDouble());
+    setPosition(json["x"_L1].toDouble(), json["y"_L1].toDouble());
 }
 
 auto MapMarker::toJson() const -> QJsonObject

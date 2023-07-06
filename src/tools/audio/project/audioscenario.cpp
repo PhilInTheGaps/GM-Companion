@@ -5,12 +5,14 @@
 #include <QJsonArray>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAudioScenario, "gm.audio.project.scenario")
 
 AudioScenario::AudioScenario(const QString &name, const QString &path, const AudioScenarioElements &elements,
                              bool isSubscenario, QObject *parent)
-    : TreeItem(name, path.split(QStringLiteral("/")).length() - 1, true, parent), a_isSubscenario(isSubscenario),
-      m_path(path + QStringLiteral("/") + name), m_musicLists(elements.musicLists), m_soundLists(elements.soundLists),
+    : TreeItem(name, path.split(u"/"_s).length() - 1, true, parent), a_isSubscenario(isSubscenario),
+      m_path(path + u"/"_s + name), m_musicLists(elements.musicLists), m_soundLists(elements.soundLists),
       m_radios(elements.radios), m_scenarios(elements.scenarios)
 {
     this->name(name);
@@ -49,34 +51,33 @@ AudioScenario::AudioScenario(const AudioScenario &other)
 }
 
 AudioScenario::AudioScenario(const QJsonObject &object, const QString &path, bool isSubscenario, QObject *parent)
-    : TreeItem(QLatin1String(), path.split(QStringLiteral("/")).length() - 1, true, parent),
-      a_isSubscenario(isSubscenario)
+    : TreeItem(u""_s, path.split(u"/"_s).length() - 1, true, parent), a_isSubscenario(isSubscenario)
 {
-    name(object[QStringLiteral("name")].toString());
-    m_path = path + QStringLiteral("/") + name();
+    name(object["name"_L1].toString());
+    m_path = path + u"/"_s + name();
 
-    foreach (const auto &element, object[QStringLiteral("music_elements")].toArray())
+    foreach (const auto &element, object["music_elements"_L1].toArray())
     {
         auto *object = new AudioElement(element.toObject(), AudioElement::Type::Music, m_path, this);
         prepareElement(object);
         m_musicLists.append(object);
     }
 
-    foreach (const auto &element, object[QStringLiteral("sound_elements")].toArray())
+    foreach (const auto &element, object["sound_elements"_L1].toArray())
     {
         auto *object = new AudioElement(element.toObject(), AudioElement::Type::Sound, m_path, this);
         prepareElement(object);
         m_soundLists.append(object);
     }
 
-    foreach (const auto &element, object[QStringLiteral("radio_elements")].toArray())
+    foreach (const auto &element, object["radio_elements"_L1].toArray())
     {
         auto *object = new AudioElement(element.toObject(), AudioElement::Type::Radio, m_path, this);
         prepareElement(object);
         m_radios.append(object);
     }
 
-    foreach (const auto &scenario, object[QStringLiteral("scenarios")].toArray())
+    foreach (const auto &scenario, object["scenarios"_L1].toArray())
     {
         auto *object = new AudioScenario(scenario.toObject(), m_path, this);
         prepareScenario(object);
@@ -127,9 +128,9 @@ auto AudioScenario::toJson() const -> QJsonObject
         }
     }
 
-    object.insert(QStringLiteral("music_elements"), musicElementsJson);
-    object.insert(QStringLiteral("sound_elements"), soundElementsJson);
-    object.insert(QStringLiteral("radio_elements"), radioElementsJson);
+    object.insert(u"music_elements"_s, musicElementsJson);
+    object.insert(u"sound_elements"_s, soundElementsJson);
+    object.insert(u"radio_elements"_s, radioElementsJson);
 
     QJsonArray scenariosJson;
 
@@ -138,7 +139,7 @@ auto AudioScenario::toJson() const -> QJsonObject
         if (scenario) scenariosJson.append(scenario->toJson());
     }
 
-    object.insert(QStringLiteral("scenarios"), scenariosJson);
+    object.insert(u"scenarios"_s, scenariosJson);
 
     return object;
 }

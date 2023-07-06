@@ -10,6 +10,7 @@
 #include <QLoggingCategory>
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 static constexpr auto DEFAULT_COLOR = "red";
@@ -22,9 +23,9 @@ MapTool::MapTool(QQmlApplicationEngine *engine, QObject *parent)
 {
     qCDebug(gmMapsTool()) << "Loading Map Tool ...";
 
-    engine->rootContext()->setContextProperty(QStringLiteral("map_tool"), this);
-    engine->rootContext()->setContextProperty(QStringLiteral("mapListModel"), &mapListModel);
-    engine->rootContext()->setContextProperty(QStringLiteral("mapMarkerModel"), &mapMarkerModel);
+    engine->rootContext()->setContextProperty(u"map_tool"_s, this);
+    engine->rootContext()->setContextProperty(u"mapListModel"_s, &mapListModel);
+    engine->rootContext()->setContextProperty(u"mapMarkerModel"_s, &mapMarkerModel);
 }
 
 MapTool::~MapTool()
@@ -112,14 +113,13 @@ void MapTool::addMarker()
 {
     if (m_currentMap)
     {
-        auto data = QByteArray::fromBase64(
-            m_currentMap->imageData().replace(QLatin1String("data:image/jpg;base64,"), QLatin1String("")).toLatin1());
+        auto data =
+            QByteArray::fromBase64(m_currentMap->imageData().replace("data:image/jpg;base64,"_L1, ""_L1).toLatin1());
         auto image = QImage::fromData(data);
         auto x = image.width() / 2.0;
         auto y = image.height() / 2.0;
 
-        m_currentMap->addMarker(
-            new MapMarker(tr("New Marker"), QLatin1String(""), x, y, DEFAULT_ICON, DEFAULT_COLOR, this));
+        m_currentMap->addMarker(new MapMarker(tr("New Marker"), u""_s, x, y, DEFAULT_ICON, DEFAULT_COLOR, this));
         m_currentMap->saveMarkers();
         mapMarkerModel.setElements(m_currentMap->markers()->elements());
         mapListModel.setElements(m_currentCategory->maps());
@@ -189,7 +189,7 @@ void MapTool::findCategories()
 {
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
-    const auto dir = SettingsManager::getPath(QStringLiteral("maps"));
+    const auto dir = SettingsManager::getPath(u"maps"_s);
     observe(Files::File::listAsync(dir, false, true)).subscribe([this](Files::FileListResult *result) {
         receivedCategories(result->folders());
         result->deleteLater();

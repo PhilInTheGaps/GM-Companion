@@ -16,6 +16,7 @@
 
 Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot")
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 LibrespotController::LibrespotController(QObject *parent)
@@ -26,7 +27,7 @@ LibrespotController::LibrespotController(QObject *parent)
 
 auto LibrespotController::start() -> QFuture<bool>
 {
-    updateStatus(ServiceStatus::Type::Info, QStringLiteral("Starting librespot client ..."));
+    updateStatus(ServiceStatus::Type::Info, u"Starting librespot client ..."_s);
 
     if (isOtherProcessIsRunning())
     {
@@ -37,9 +38,8 @@ auto LibrespotController::start() -> QFuture<bool>
 
     m_isExitExpected = false;
 
-    const auto username = SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
-                                                                    QStringLiteral("Spotify"));
-    const auto password = SettingsManager::getPassword(username, QStringLiteral("Spotify"));
+    const auto username = SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s);
+    const auto password = SettingsManager::getPassword(username, u"Spotify"_s);
 
     if (username.isEmpty())
     {
@@ -81,10 +81,10 @@ auto LibrespotController::start() -> QFuture<bool>
 
         // In librespot versions > 0.3.1 passing the password via stdin is broken
         // but older versions don't support passing the pw via env variables
-        if (UpdateManager::compareVersions(info.version, QStringLiteral("0.3.1")))
+        if (UpdateManager::compareVersions(info.version, u"0.3.1"_s))
         {
             auto env = QProcessEnvironment::systemEnvironment();
-            env.insert(QStringLiteral("LIBRESPOT_PASSWORD"), password);
+            env.insert(u"LIBRESPOT_PASSWORD"_s, password);
             m_librespotProcess.setProcessEnvironment(env);
 
             m_librespotProcess.start(librespotPath, args);
@@ -92,7 +92,7 @@ auto LibrespotController::start() -> QFuture<bool>
         else
         {
             m_librespotProcess.start(librespotPath, args);
-            m_librespotProcess.write(QStringLiteral("%1\n").arg(password).toUtf8()); // pass password via stdin
+            m_librespotProcess.write(u"%1\n"_s.arg(password).toUtf8()); // pass password via stdin
         }
 
         return m_hasAuthenticated.future();
@@ -231,24 +231,20 @@ auto LibrespotController::getLibrespotArgs(const QString &username) const -> QSt
 {
     QStringList args;
 
-    args << QStringLiteral("-n") << deviceName();
-    args << QStringLiteral("-u") << username;
-    args << QStringLiteral("-b")
-         << SettingsManager::instance()->get(QStringLiteral("bitrate"), QStringLiteral("160"),
-                                             QStringLiteral("Spotify"));
-    args << QStringLiteral("--volume-ctrl")
-         << QStringLiteral("linear");
-    args << QStringLiteral("--volume-range")
-         << QStringLiteral("60.0");
+    args << u"-n"_s << deviceName();
+    args << u"-u"_s << username;
+    args << u"-b"_s << SettingsManager::instance()->get(u"bitrate"_s, u"160"_s, u"Spotify"_s);
+    args << u"--volume-ctrl"_s << u"linear"_s;
+    args << u"--volume-range"_s << u"60.0"_s;
 
-    if (!SettingsManager::instance()->get(QStringLiteral("enableCache"), true, QStringLiteral("Spotify")))
+    if (!SettingsManager::instance()->get(u"enableCache"_s, true, u"Spotify"_s))
     {
-        args << QStringLiteral("--disable-audio-cache");
+        args << u"--disable-audio-cache"_s;
     }
 
-    if (SettingsManager::instance()->get(QStringLiteral("enableVolumeNormalization"), false, QStringLiteral("Spotify")))
+    if (SettingsManager::instance()->get(u"enableVolumeNormalization"_s, false, u"Spotify"_s))
     {
-        args << QStringLiteral("--enable-volume-normalisation");
+        args << u"--enable-volume-normalisation"_s;
     }
 
     return args;
@@ -264,8 +260,8 @@ auto LibrespotController::getLibrespotInfo() -> LibrespotInfo
         QRegularExpression(QStringLiteral(R"((?'version'(\d\.?)+)\s+(?'commit'\w*).*(?'date'\d{4}-\d{2}-\d{2}))"));
     auto match = regex.match(output);
 
-    return {match.captured("version"), match.captured("commit"),
-            QDate::fromString(match.captured("date"), QStringLiteral("yyyy-MM-dd"))};
+    return {match.captured("version"_L1), match.captured("commit"),
+            QDate::fromString(match.captured("date"_L1), u"yyyy-MM-dd"_s)};
 }
 
 void LibrespotController::onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -313,11 +309,11 @@ void LibrespotController::onLibrespotOutputReady()
 
 void LibrespotController::printOutputAndUpdateStatus(const QString &line)
 {
-    if (line.contains(QLatin1String("WARN")))
+    if (line.contains("WARN"_L1))
     {
         // for some reason "ignoring blacklisted access point ..."
         // messages are categorized as warnings, so we want to handle them as debug info
-        if (line.contains(QLatin1String("Ignoring")))
+        if (line.contains("Ignoring"_L1))
         {
             qCDebug(gmLibrespotController()) << "LIBRESPOT:" << line;
             return;
@@ -326,7 +322,7 @@ void LibrespotController::printOutputAndUpdateStatus(const QString &line)
         qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
         updateStatus(ServiceStatus::Type::Warning, line);
     }
-    else if (line.contains(QLatin1String("ERROR")))
+    else if (line.contains("ERROR"_L1))
     {
         qCWarning(gmLibrespotController()) << "LIBRESPOT:" << line;
         updateStatus(ServiceStatus::Type::Error, line);

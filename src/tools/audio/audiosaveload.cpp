@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace Files;
 using namespace AsyncFuture;
 
@@ -202,5 +203,5 @@ auto AudioSaveLoad::getProjectFolder(const QString &preferredFolder) -> QString
         return preferredFolder;
     }
 
-    return SettingsManager::getPath(QStringLiteral("audio"));
+    return SettingsManager::getPath(u"audio"_s);
 }

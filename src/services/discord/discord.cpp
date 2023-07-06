@@ -1,10 +1,12 @@
 #include "discord.h"
 #include "settings/settingsmanager.h"
 
+#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDesktopServices>
 #include <QLoggingCategory>
+
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmDiscord, "gm.service.discord")
 
@@ -13,13 +15,13 @@ Discord::Discord(QObject *parent) : Service("Discord", parent), a_enabled(false)
     m_networkManager = new QNetworkAccessManager(this);
     m_networkManager->setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
 
-    channel(SettingsManager::instance()->get<QString>(QStringLiteral("channel"), QLatin1String(), QStringLiteral("Discord")));
-    enabled(SettingsManager::instance()->get(QStringLiteral("enabled"), false, QStringLiteral("Discord")));
+    channel(SettingsManager::instance()->get<QString>(u"channel"_s, u""_s, u"Discord"_s));
+    enabled(SettingsManager::instance()->get(u"enabled"_s, false, u"Discord"_s));
 
-    updateStatus(ServiceStatus::Type::Info, "");
+    updateStatus(ServiceStatus::Type::Info, u""_s);
 }
 
-auto Discord::getInstance() -> Discord*
+auto Discord::getInstance() -> Discord *
 {
     if (!single)
     {
@@ -28,7 +30,7 @@ auto Discord::getInstance() -> Discord*
     return single;
 }
 
-void Discord::post(const QString &endpoint, const QByteArray& data)
+void Discord::post(const QString &endpoint, const QByteArray &data)
 {
     const auto url = serverUrl() + API_ENDPOINT + endpoint;
 
@@ -92,8 +94,7 @@ void Discord::testConnection()
             auto root = QJsonDocument::fromJson(data).object();
             auto status = root["status"].toString();
 
-            if (status == "connected")
-                updateStatus(ServiceStatus::Type::Success, tr("Connected."));
+            if (status == "connected") updateStatus(ServiceStatus::Type::Success, tr("Connected."));
             else
                 updateStatus(ServiceStatus::Type::Error, tr("Bot is not connected."));
         }

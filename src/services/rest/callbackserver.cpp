@@ -3,6 +3,8 @@
 #include <QLoggingCategory>
 #include <QUrlQuery>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmCallbackServer, "gm.service.rest.callbackserver")
 
 CallbackServer::CallbackServer(QObject *parent) : QObject{parent}
@@ -25,7 +27,7 @@ auto CallbackServer::isRunning() const -> bool
 
 auto CallbackServer::getUrl() const -> QString
 {
-    return QStringLiteral("http://localhost:%1").arg(m_port);
+    return u"http://localhost:%1"_s.arg(m_port);
 }
 
 auto CallbackServer::getParameters() const -> QMap<QString, QString>
@@ -48,7 +50,7 @@ auto CallbackServer::buildSuccessReply() const -> QByteArray
     QByteArray reply;
     reply.append("HTTP/1.0 200 OK \r\n");
     reply.append("Content-Type: text/html; charset=\"utf-8\"\r\n");
-    reply.append(QStringLiteral("Content-Length: %1\r\n\r\n").arg(page.size()).toLatin1());
+    reply.append(u"Content-Length: %1\r\n\r\n"_s.arg(page.size()).toLatin1());
     reply.append(page);
 
     return reply;
@@ -56,11 +58,11 @@ auto CallbackServer::buildSuccessReply() const -> QByteArray
 
 auto CallbackServer::parseQueryParams(const QByteArray &data) -> QMap<QString, QString>
 {
-    auto splitGetLine = QString(data).split(QStringLiteral("\r\n")).first();
-    splitGetLine.remove(QStringLiteral("GET "));
-    splitGetLine.remove(QStringLiteral("HTTP/1.1"));
-    splitGetLine.remove(QStringLiteral("\r\n"));
-    splitGetLine.prepend("http://localhost");
+    auto splitGetLine = QString(data).split(u"\r\n"_s).first();
+    splitGetLine.remove("GET "_L1);
+    splitGetLine.remove("HTTP/1.1"_L1);
+    splitGetLine.remove("\r\n"_L1);
+    splitGetLine.prepend("http://localhost"_L1);
     QUrl getTokenUrl(splitGetLine);
 
     QList<std::pair<QString, QString>> tokens;
@@ -93,7 +95,7 @@ void CallbackServer::onBytesReady()
     if (!socket)
     {
         qCWarning(gmCallbackServer()) << "onBytesReady: No socket available";
-        emit serverError(QStringLiteral("Error: No socket available."));
+        emit serverError(u"Error: No socket available."_s);
         return;
     }
 

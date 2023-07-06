@@ -37,8 +37,7 @@ auto FileAccessNextcloud::getDataAsync(const QString &path, bool allowCache) -> 
             const auto callback = [this, path, reply]() {
                 if (replyHasError(reply))
                 {
-                    const auto errorMessage =
-                        makeAndPrintError(QStringLiteral("Could not get data from %1").arg(path), reply);
+                    const auto errorMessage = makeAndPrintError(u"Could not get data from %1"_s.arg(path), reply);
                     return deleteReplyAndReturn(new FileDataResult(errorMessage, this), reply);
                 }
 
@@ -97,8 +96,7 @@ auto FileAccessNextcloud::saveAsync(const QString &path, const QByteArray &data)
                                                             reply);
                             }
 
-                            const auto errorMessage =
-                                makeAndPrintError(QStringLiteral("Could not save file %1").arg(path), reply);
+                            const auto errorMessage = makeAndPrintError(u"Could not save file %1"_s.arg(path), reply);
                             return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
                         }
 
@@ -140,8 +138,8 @@ auto FileAccessNextcloud::moveAsync(const QString &oldPath, const QString &newPa
                                                             reply);
                             }
 
-                            const auto errorMessage = makeAndPrintError(
-                                QStringLiteral("Could not move file %1 to %2").arg(oldPath, newPath), reply);
+                            const auto errorMessage =
+                                makeAndPrintError(u"Could not move file %1 to %2"_s.arg(oldPath, newPath), reply);
                             return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
                         }
 
@@ -172,8 +170,8 @@ auto FileAccessNextcloud::deleteAsync(const QString &path) -> QFuture<FileResult
                          [this, path, reply]() {
                              if (replyHasError(reply))
                              {
-                                 const auto errorMessage = makeAndPrintError(
-                                     QStringLiteral("Could not delete file/folder %1").arg(path), reply);
+                                 const auto errorMessage =
+                                     makeAndPrintError(u"Could not delete file/folder %1"_s.arg(path), reply);
                                  return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
                              }
 
@@ -215,8 +213,8 @@ auto FileAccessNextcloud::copyAsync(const QString &path, const QString &copy) ->
                                                                  reply);
                                  }
 
-                                 const auto errorMessage = makeAndPrintError(
-                                     QStringLiteral("Could not copy %1 to %2: %3 %4").arg(path), reply);
+                                 const auto errorMessage =
+                                     makeAndPrintError(u"Could not copy %1 to %2: %3 %4"_s.arg(path), reply);
                                  return deleteReplyAndReturn(completed(new FileResult(errorMessage, this)), reply);
                              }
 
@@ -250,8 +248,8 @@ auto FileAccessNextcloud::listAsync(const QString &path, bool files, bool folder
                          [this, path, files, folders, reply]() {
                              if (replyHasError(reply))
                              {
-                                 const auto errorMessage = makeAndPrintError(
-                                     QStringLiteral("Could not list content of folder %1").arg(path), reply);
+                                 const auto errorMessage =
+                                     makeAndPrintError(u"Could not list content of folder %1"_s.arg(path), reply);
                                  return deleteReplyAndReturn(new FileListResult(path, errorMessage, this), reply);
                              }
 
@@ -332,8 +330,8 @@ auto FileAccessNextcloud::createDirAsync(const QString &path) -> QFuture<FileRes
                          [this, path, reply]() {
                              if (replyHasError(reply))
                              {
-                                 const auto errorMessage = makeAndPrintError(
-                                     QStringLiteral("Could not create directory %1").arg(path), reply);
+                                 const auto errorMessage =
+                                     makeAndPrintError(u"Could not create directory %1"_s.arg(path), reply);
                                  return deleteReplyAndReturn(new FileResult(errorMessage, this), reply);
                              }
 
@@ -368,8 +366,8 @@ auto FileAccessNextcloud::checkAsync(const QString &path, bool allowCache) -> QF
 
                              if (hasError)
                              {
-                                 const auto errorMessage = makeAndPrintError(
-                                     QStringLiteral("Could not check if file %1 exists").arg(path), reply);
+                                 const auto errorMessage =
+                                     makeAndPrintError(u"Could not check if file %1 exists"_s.arg(path), reply);
                                  return deleteReplyAndReturn(new FileCheckResult(path, errorMessage, this), reply);
                              }
 
@@ -401,14 +399,14 @@ auto FileAccessNextcloud::replyHasError(QNetworkReply *reply) -> bool
 
 auto FileAccessNextcloud::makeAndPrintError(const QString &errorMessage, const QNetworkReply *reply) -> QString
 {
-    auto result = QStringLiteral("%1: %2").arg(errorMessage, replyErrorToString(reply));
+    auto result = u"%1: %2"_s.arg(errorMessage, replyErrorToString(reply));
     qCWarning(gmFileAccessNextCloud()) << "Warning:" << result;
     return result;
 }
 
 auto FileAccessNextcloud::replyErrorToString(const QNetworkReply *reply) -> QString
 {
-    return QStringLiteral("%1 (%2)").arg(QString::number(reply->error()), reply->errorString());
+    return u"%1 (%2)"_s.arg(QString::number(reply->error()), reply->errorString());
 }
 
 auto FileAccessNextcloud::makeMoveHeaders(const QString &newPath) -> QList<std::pair<QByteArray, QByteArray>>

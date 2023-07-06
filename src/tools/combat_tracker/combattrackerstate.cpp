@@ -2,6 +2,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+using namespace Qt::Literals::StringLiterals;
+
 void CombatTrackerState::reset()
 {
     currentIndex(0);
@@ -101,15 +103,15 @@ void CombatTrackerState::load(const QJsonDocument &json)
 
     auto state = json.object();
 
-    for (auto combatant : state["combatants"].toArray())
+    foreach (auto combatant, state["combatants"_L1].toArray())
     {
         m_combatants << Combatant::fromJson(combatant.toObject(), this);
     }
 
     loadModel();
 
-    currentIndex(state[QStringLiteral("currentIndex")].toInt());
-    currentRound(state[QStringLiteral("currentRound")].toInt());
+    currentIndex(state["currentIndex"_L1].toInt());
+    currentRound(state["currentRound"_L1].toInt());
 }
 
 auto CombatTrackerState::serialize() const -> QJsonDocument

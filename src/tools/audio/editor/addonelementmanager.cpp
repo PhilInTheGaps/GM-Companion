@@ -6,6 +6,8 @@
 #include "src/tools/audio/audiosaveload.h"
 #include "src/tools/audio/thumbnails/audiothumbnailgenerator.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 AddonElementManager::AddonElementManager(QObject *parent) : AbstractTool(parent)
 {
     connect(this, &AddonElementManager::currentIndexChanged, this, &AddonElementManager::onCurrentIndexChanged);
@@ -84,14 +86,13 @@ void AddonElementManager::loadAddonProjects(const Addon &addon)
 {
     AddonReader reader(addon);
 
-    auto projectFiles =
-        reader.findAllFiles(QStringLiteral("/audio"), {QStringLiteral("*.audio"), QStringLiteral("*.json")});
+    auto projectFiles = reader.findAllFiles(u"/audio"_s, {u"*.audio"_s, u"*.json"_s});
 
     QList<AudioProject *> projects;
 
     for (const auto &file : projectFiles)
     {
-        const auto data = reader.readFile(FileUtils::fileInDir(file, QStringLiteral("/audio")));
+        const auto data = reader.readFile(FileUtils::fileInDir(file, u"/audio"_s));
         auto *project = AudioSaveLoad::loadProject(data, this);
 
         removeUnsupportedElementsFromProject(*project);

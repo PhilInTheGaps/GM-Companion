@@ -6,6 +6,7 @@
 #include <QLoggingCategory>
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
@@ -13,7 +14,7 @@ Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
 AudioEditorFileBrowser::AudioEditorFileBrowser(QQmlApplicationEngine *engine, QObject *parent) : QObject(parent)
 {
     m_fileModel = new AudioEditorFileModel(this);
-    engine->rootContext()->setContextProperty(QStringLiteral("audioEditorFileBrowserModel"), m_fileModel);
+    engine->rootContext()->setContextProperty(u"audioEditorFileBrowserModel"_s, m_fileModel);
 
     onTypeChanged(type());
     connect(this, &AudioEditorFileBrowser::typeChanged, this, &AudioEditorFileBrowser::onTypeChanged);
@@ -88,15 +89,15 @@ void AudioEditorFileBrowser::onTypeChanged(AudioElement::Type type)
     switch (type)
     {
     case AudioElement::Type::Music:
-        m_basePath = SettingsManager::getPath(QStringLiteral("music"));
+        m_basePath = SettingsManager::getPath(u"music"_s);
         break;
 
     case AudioElement::Type::Sound:
-        m_basePath = SettingsManager::getPath(QStringLiteral("sounds"));
+        m_basePath = SettingsManager::getPath(u"sounds"_s);
         break;
 
     case AudioElement::Type::Radio:
-        m_basePath = SettingsManager::getPath(QStringLiteral("radio"));
+        m_basePath = SettingsManager::getPath(u"radio"_s);
         break;
 
     default:

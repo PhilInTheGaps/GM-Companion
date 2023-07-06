@@ -8,6 +8,7 @@
 #include <QQmlContext>
 #include <filesystem/file.h>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmShopsItemEditor, "gm.shops.items.editor")
@@ -61,7 +62,7 @@ auto ItemEditor::addItem(const QString &name, const QString &price, const QStrin
 {
     if (name.isEmpty() || category.isEmpty()) return false;
 
-    auto *item = new Item(name, price, description.replace(QLatin1String("\n"), QLatin1String(" ")), category, this);
+    auto *item = new Item(name, price, description.replace("\n"_L1, " "_L1), category, this);
     int insert = Item::findLastIndexWithCategory(category, Utils::toList<Item *>(m_itemModel.getAll())) + 1;
 
     if (insert <= 0)
@@ -99,8 +100,7 @@ void ItemEditor::save()
     if (isSaved()) return;
 
     // Save to disk
-    const auto savePath =
-        FileUtils::fileInDir(QStringLiteral("CustomItems.items"), SettingsManager::getPath(QStringLiteral("shops")));
+    const auto savePath = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     const auto group = ItemGroup(defaultGroupName(), Utils::toList<Item *>(m_itemModel.getAll()), nullptr);
     const auto data = QJsonDocument(group.toJson()).toJson();
@@ -128,8 +128,7 @@ void ItemEditor::loadData()
 
     qCDebug(gmShopsItemEditor()) << "Finding items ...";
 
-    const auto path =
-        FileUtils::fileInDir(QStringLiteral("CustomItems.items"), SettingsManager::getPath(QStringLiteral("shops")));
+    const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
     observe(Files::File::checkAsync(path))
         .subscribe([this](Files::FileCheckResult *result) { onFileCheckReceived(result); },

@@ -4,6 +4,8 @@
 #include <QJsonObject>
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmShopsShopCategory, "gm.shops.project.category")
 
 ShopCategory::ShopCategory(const QString &name, const QList<ItemShop *> &shops, QObject *parent)
@@ -43,7 +45,7 @@ auto ShopCategory::toJson() const -> QJsonObject
     {
         if (shop) shopArray.append(shop->toJson());
     }
-    root.insert(QStringLiteral("shops"), shopArray);
+    root.insert(u"shops"_s, shopArray);
 
     return root;
 }

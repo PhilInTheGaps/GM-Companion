@@ -1,6 +1,8 @@
 #include "abstractprojectupgraderini.h"
 #include <QLoggingCategory>
 
+using namespace Qt::Literals::StringLiterals;
+
 Q_LOGGING_CATEGORY(gmAbstractProjectUpgraderINI, "gm.common.projects.upgrader.ini")
 
 AbstractProjectUpgraderINI::AbstractProjectUpgraderINI(int version) : AbstractProjectUpgrader(version)
@@ -25,7 +27,7 @@ auto AbstractProjectUpgraderINI::isProjectCompatible() const -> bool
 {
     if (!m_ini) return false;
 
-    const auto version = m_ini->value(QStringLiteral("version"), 0).toInt();
+    const auto version = m_ini->value("version"_L1, 0).toInt();
 
     // does the file contain any keys?
     // if not it is probably of a different format

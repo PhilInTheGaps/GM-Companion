@@ -1,6 +1,8 @@
 #include "convertercategory.h"
 #include <QJsonArray>
 
+using namespace Qt::Literals::StringLiterals;
+
 ConverterCategory::ConverterCategory(const QString &name, QObject *parent) : ConverterCategory(name, {}, parent)
 {
 }
@@ -11,12 +13,12 @@ ConverterCategory::ConverterCategory(const QString &name, const QList<ConverterU
 }
 
 ConverterCategory::ConverterCategory(const QJsonObject &json, QObject *parent)
-    : ConverterCategory(json[QStringLiteral("name")].toString(), parent)
+    : ConverterCategory(json["name"_L1].toString(), parent)
 {
-    const auto units = json[QStringLiteral("units")].toArray();
+    const auto units = json["units"_L1].toArray();
     a_units.reserve(units.size());
 
-    for (const auto &unit : units)
+    foreach (const auto &unit, units)
     {
         a_units << new ConverterUnit(unit.toObject(), this);
     }
@@ -25,8 +27,8 @@ ConverterCategory::ConverterCategory(const QJsonObject &json, QObject *parent)
 auto ConverterCategory::toJson() const -> QJsonObject
 {
     QJsonArray unitsJson;
-    const auto units = this->units();
-    for (const auto *unit : units)
+
+    foreach (const auto *unit, this->units())
     {
         unitsJson << unit->toJson();
     }

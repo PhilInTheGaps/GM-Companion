@@ -9,17 +9,17 @@
 #include <QLoggingCategory>
 #include <QNetworkRequest>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
 Spotify::Spotify(QObject *parent)
-    : Service(QStringLiteral("Spotify"), parent), albums(new AlbumAPI(this)), player(new PlayerAPI(this)),
+    : Service(u"Spotify"_s, parent), albums(new AlbumAPI(this)), player(new PlayerAPI(this)),
       playlists(new PlaylistsAPI(this)), tracks(new TracksAPI(this))
 {
     m_networkManager = new QNetworkAccessManager(this);
-    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
-                                                       QStringLiteral("Spotify")));
+    username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
 
     connect(m_librespotController.status(), &ServiceStatus::messageChanged, this, &Spotify::forwardClientStatus);
 
@@ -32,8 +32,7 @@ void Spotify::updateConnector()
 
     if (m_connector) m_connector->deleteLater();
 
-    if (SettingsManager::instance()->get(QStringLiteral("connection"), QStringLiteral("default"),
-                                         QStringLiteral("Spotify")) == QLatin1String("local"))
+    if (SettingsManager::instance()->get(u"connection"_s, u"default"_s, u"Spotify"_s) == "local"_L1)
     {
         m_connector = new SpotifyConnectorLocal(*m_networkManager, new O2Spotify, this);
     }
@@ -152,8 +151,7 @@ auto Spotify::clientStatus() const -> ServiceStatus *
 
 void Spotify::connectService()
 {
-    username(SettingsManager::instance()->get<QString>(QStringLiteral("spotifyUsername"), QLatin1String(),
-                                                       QStringLiteral("Spotify")));
+    username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
 
     const auto hasClientStarted = startClient();
 
@@ -172,10 +170,10 @@ void Spotify::disconnectService()
 {
     connected(false);
     if (m_connector) m_connector->disconnectService();
-    SettingsManager::setPassword(username(), QLatin1String(), QStringLiteral("Spotify"));
-    SettingsManager::instance()->set(QStringLiteral("spotifyUsername"), QLatin1String(), QStringLiteral("Spotify"));
-    SettingsManager::instance()->set(QStringLiteral("spotifyID"), QLatin1String(), QStringLiteral("Spotify"));
-    SettingsManager::instance()->set(QStringLiteral("spotifySecret"), QLatin1String(), QStringLiteral("Spotify"));
+    SettingsManager::setPassword(username(), u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"spotifyUsername"_s, u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"spotifyID"_s, u""_s, u"Spotify"_s);
+    SettingsManager::instance()->set(u"spotifySecret"_s, u""_s, u"Spotify"_s);
     m_librespotController.stop();
 }
 
@@ -209,7 +207,7 @@ void Spotify::handleAccessDenied(const SpotifyNetworkError &error)
 {
     qCWarning(gmSpotify) << "Content Access Denied!" << (QString)error;
 
-    if (error.reason() == QStringLiteral("PREMIUM_REQUIRED"))
+    if (error.reason() == "PREMIUM_REQUIRED"_L1)
     {
         connected(false);
         updateStatus(ServiceStatus::Type::Error, tr("Error: Spotify premium is required!"));

@@ -1,23 +1,25 @@
 #include "audiothumbnail.h"
 #include "settings/settingsmanager.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 auto AudioThumbnail::imageIdForReload() -> QString
 {
     m_imageIdCounter = !m_imageIdCounter;
-    return QString("%1?r=%2").arg(m_imageId, QString::number(m_imageIdCounter));
+    return u"%1?r=%2"_s.arg(m_imageId, QString::number(m_imageIdCounter));
 }
 
 auto AudioThumbnail::absoluteUrl() const -> QString
 {
-    if (m_relativeUrl.isEmpty()) return QLatin1String();
+    if (m_relativeUrl.isEmpty()) return u""_s;
 
     // Is web url?
-    if (m_relativeUrl.startsWith("http://") || m_relativeUrl.startsWith("https://"))
+    if (m_relativeUrl.startsWith("http://"_L1) || m_relativeUrl.startsWith("https://"_L1))
     {
         return m_relativeUrl;
     }
 
-    return SettingsManager::getPath("resources") + m_relativeUrl;
+    return SettingsManager::getPath(u"resources"_s) + m_relativeUrl;
 }
 
 void AudioThumbnail::setRelativeUrl(const QString &url)

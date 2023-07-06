@@ -11,6 +11,7 @@
 #include <QSettings>
 #include <QTemporaryFile>
 
+using namespace Qt::Literals::StringLiterals;
 using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmCharactersTool, "gm.characters.tool")
@@ -21,8 +22,8 @@ CharacterTool::CharacterTool(QQmlApplicationEngine *engine, QObject *parent) : A
 
     m_imageViewer = new CharacterImageViewer(this);
 
-    engine->rootContext()->setContextProperty(QStringLiteral("character_tool"), this);
-    engine->rootContext()->setContextProperty(QStringLiteral("character_image_viewer"), m_imageViewer);
+    engine->rootContext()->setContextProperty(u"character_tool"_s, this);
+    engine->rootContext()->setContextProperty(u"character_image_viewer"_s, m_imageViewer);
 
     connect(m_imageViewer, &CharacterImageViewer::categoryChanged, this, [this]() {
         if (m_currentViewer == m_imageViewer) emit categoryChanged();
@@ -101,8 +102,7 @@ void CharacterTool::loadData()
 
     setIsDataLoaded(true);
 
-    const auto filePath =
-        FileUtils::fileInDir(QStringLiteral("inactive.json"), SettingsManager::getPath(QStringLiteral("characters")));
+    const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
     observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
         loadInactiveCharacters(result->data());
         result->deleteLater();
@@ -146,8 +146,7 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
         qCDebug(gmCharactersTool())
             << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
 
-        const auto filePath = FileUtils::fileInDir(QStringLiteral("settings.ini"),
-                                                   SettingsManager::getPath(QStringLiteral("characters")));
+        const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
         observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
             convertSettingsFile(result->data());
             result->deleteLater();
@@ -176,8 +175,7 @@ void CharacterTool::saveInactiveCharacters() const
 {
     qCDebug(gmCharactersTool()) << "Saving inactive characters ...";
 
-    const auto filePath =
-        FileUtils::fileInDir(QStringLiteral("inactive.json"), SettingsManager::getPath(QStringLiteral("characters")));
+    const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
     const auto data = QJsonDocument(QJsonArray::fromStringList(m_inactiveCharacters)).toJson();
 
     Files::File::saveAsync(filePath, data);
@@ -191,8 +189,7 @@ void CharacterTool::convertSettingsFile(const QByteArray &data)
 {
     if (!data.isEmpty())
     {
-        const auto filePath = FileUtils::fileInDir(QStringLiteral("settings.ini"),
-                                                   SettingsManager::getPath(QStringLiteral("characters")));
+        const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
         qCDebug(gmCharactersTool()) << "Converting old .ini file at" << filePath;
 
         QTemporaryFile file;
@@ -201,7 +198,7 @@ void CharacterTool::convertSettingsFile(const QByteArray &data)
         file.close();
 
         QSettings settings(file.fileName(), QSettings::IniFormat);
-        m_inactiveCharacters = settings.value(QStringLiteral("inactive"), {}).toStringList();
+        m_inactiveCharacters = settings.value("inactive"_L1, {}).toStringList();
         saveInactiveCharacters();
 
         qCDebug(gmCharactersTool()) << "Deleting old .ini file.";
@@ -215,7 +212,7 @@ void CharacterTool::loadCharacters()
 {
     qCDebug(gmCharactersTool()) << "Loaded inactive character list, now loading character files and folders ...";
 
-    const auto dir = SettingsManager::getPath(QStringLiteral("characters"));
+    const auto dir = SettingsManager::getPath(u"characters"_s);
     observe(Files::File::listAsync(dir, true, true)).subscribe([this](Files::FileListResult *result) {
         receivedCharacterFiles(result->files());
         receivedCharacterFolders(result->folders());
@@ -227,7 +224,7 @@ void CharacterTool::receivedCharacterFolders(const QStringList &folders)
 {
     qCDebug(gmCharactersTool()) << "Received character folders";
 
-    const auto basePath = SettingsManager::getPath(QStringLiteral("characters"));
+    const auto basePath = SettingsManager::getPath(u"characters"_s);
 
     for (const auto &folder : folders)
     {
@@ -245,9 +242,9 @@ void CharacterTool::receivedCharacterFiles(const QStringList &files)
 
     for (const auto &file : files)
     {
-        if (file.endsWith(QLatin1String(".pdf")))
+        if (file.endsWith(".pdf"_L1))
         {
-            const auto filePath = FileUtils::fileInDir(file, SettingsManager::getPath(QStringLiteral("characters")));
+            const auto filePath = FileUtils::fileInDir(file, SettingsManager::getPath(u"characters"_s));
             auto *character = new Character(file.left(file.lastIndexOf('.')), this);
             character->addFile(new CharacterFile(file, filePath, this));
             m_characters.append(character);

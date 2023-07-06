@@ -1,11 +1,13 @@
 #include "networkutils.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 /**
  * @brief Get a Basic Authorization header from username and password
  */
 auto NetworkUtils::basicAuthHeader(const QString &username, const QString &password) -> QByteArray
 {
-    const auto credentials = QStringLiteral("%1:%2").arg(username, password);
+    const auto credentials = u"%1:%2"_s.arg(username, password);
     const auto data = credentials.toUtf8().toBase64();
 
     return "Basic " + data;

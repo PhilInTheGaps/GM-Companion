@@ -189,10 +189,10 @@ void MetaDataReader::clearMetaData()
 
     if (!m_metaData) m_metaData = new AudioMetaData(this);
 
-    m_metaData->artist(QStringLiteral("-"));
-    m_metaData->album(QStringLiteral("-"));
-    m_metaData->title(QStringLiteral("-"));
-    m_metaData->cover(QLatin1String(""));
+    m_metaData->artist(u"-"_s);
+    m_metaData->album(u"-"_s);
+    m_metaData->title(u"-"_s);
+    m_metaData->cover(u""_s);
     m_metaData->length(0);
 
     emit metaDataChanged();

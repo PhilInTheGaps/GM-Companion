@@ -18,7 +18,7 @@ auto AudioProjectUpgrader::run() -> QByteArray
     qCDebug(gmAudioUpgrader()) << "Converting project to newest version ...";
 
     const auto project = json().object();
-    const auto categories = project[QStringLiteral("categories")].toArray();
+    const auto categories = project["categories"_L1].toArray();
     const auto categoriesNew = convertCategories(categories);
 
     const QJsonObject projectNew{{"name", project["name"]}, {"version", NEW_VERSION}, {"categories", categoriesNew}};
@@ -31,10 +31,10 @@ auto AudioProjectUpgrader::convertCategories(const QJsonArray &categories) -> QJ
 
     for (const auto &category : categories)
     {
-        QJsonObject categoryNew{{"name", category.toObject()["name"]}};
-        const auto scenarios = category.toObject()[QStringLiteral("scenarios")].toArray();
+        QJsonObject categoryNew{{"name", category["name"_L1]}};
+        const auto scenarios = category["scenarios"_L1].toArray();
 
-        categoryNew.insert(QStringLiteral("scenarios"), convertScenarios(scenarios));
+        categoryNew.insert(u"scenarios"_s, convertScenarios(scenarios));
         categoriesNew.append(categoryNew);
     }
 
@@ -81,18 +81,17 @@ auto AudioProjectUpgrader::convertMusicElements(const QJsonArray &elements) -> Q
 
     for (const auto &element : elements)
     {
-        QJsonObject elementNew{{"name", element.toObject()["name"]},
-                               {"icon", element.toObject()["icon"]},
-                               {"mode", element.toObject()["mode"]}};
+        QJsonObject elementNew{
+            {"name", element["name"_L1]}, {"icon", element["icon"_L1]}, {"mode", element["mode"_L1]}};
 
         QJsonArray filesNew;
 
-        foreach (const auto &file, element.toObject()[QStringLiteral("files")].toArray())
+        foreach (const auto &file, element["files"_L1].toArray())
         {
             filesNew.append(QJsonObject{{"url", file.toString()}, {"source", 0}});
         }
 
-        elementNew.insert(QStringLiteral("files"), filesNew);
+        elementNew.insert(u"files"_s, filesNew);
         elementsNew.append(elementNew);
     }
 
@@ -104,14 +103,14 @@ void AudioProjectUpgrader::convertSpotifyElements(const QJsonArray &elements, QJ
     for (const auto &element : elements)
     {
         QJsonObject elementNew{
-            {"name", element.toObject()["name"]},
-            {"icon", element.toObject()["icon"]},
+            {"name", element["name"_L1]},
+            {"icon", element["icon"_L1]},
         };
 
         QJsonArray filesNew;
-        filesNew.append(QJsonObject{{"url", element.toObject()["id"]}, {"source", 2}});
+        filesNew.append(QJsonObject{{"url", element["id"_L1]}, {"source", 2}});
 
-        elementNew.insert(QStringLiteral("files"), filesNew);
+        elementNew.insert(u"files"_s, filesNew);
         musicElementsNew.append(elementNew);
     }
 }
@@ -128,13 +127,12 @@ auto AudioProjectUpgrader::convertRadioElements(const QJsonArray &elements) -> Q
 
     for (const auto &element : elements)
     {
-        QJsonObject elementNew{{"name", element.toObject()["name"]}, {"icon", element.toObject()["icon"]}, {"mode", 0}};
+        QJsonObject elementNew{{"name", element["name"_L1]}, {"icon", element["icon"_L1]}, {"mode", 0}};
 
         QJsonArray filesNew;
-        filesNew.append(
-            QJsonObject{{"url", element.toObject()["url"]}, {"source", element.toObject()["local"].toBool() ? 0 : 1}});
+        filesNew.append(QJsonObject{{"url", element["url"_L1]}, {"source", element["local"_L1].toBool() ? 0 : 1}});
 
-        elementNew.insert(QStringLiteral("files"), filesNew);
+        elementNew.insert(u"files"_s, filesNew);
         elementsNew.append(elementNew);
     }
 

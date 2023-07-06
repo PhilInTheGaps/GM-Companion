@@ -3,13 +3,14 @@
 #include "exceptions/notimplementedexception.h"
 #include "settings/settingsmanager.h"
 #include "thirdparty/http-status-codes/HttpStatusCodes_Qt.h"
-
 #include <QDesktopServices>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLoggingCategory>
 #include <QTimer>
 #include <QUrlQuery>
+
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmSpotifyServer, "gm.service.spotify.server")
 
@@ -39,8 +40,8 @@ void SpotifyConnectorServer::grantAccess()
 void SpotifyConnectorServer::disconnectService()
 {
     qCDebug(gmSpotifyServer()) << "Disconnecting ...";
-    saveAccessToken(QLatin1String());
-    saveRefreshToken(QLatin1String());
+    saveAccessToken(u""_s);
+    saveRefreshToken(u""_s);
 }
 
 void SpotifyConnectorServer::sendRequest(RequestContainer *container,
@@ -130,10 +131,10 @@ void SpotifyConnectorServer::authenticate()
         m_callbackServer.start(SERVER_PORT, MAX_CALLBACK_RETRIES, SUCCESS_PAGE_PATH);
     }
 
-    auto url = QUrl(SettingsManager::getServerUrl(QStringLiteral("Spotify")) + "/spotify/login");
+    auto url = QUrl(SettingsManager::getServerUrl(u"Spotify"_s) + "/spotify/login"_L1);
 
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("redirect_uri"), QUrl::toPercentEncoding(m_callbackServer.getUrl()));
+    query.addQueryItem(u"redirect_uri"_s, QUrl::toPercentEncoding(m_callbackServer.getUrl()));
     url.setQuery(query);
 
     qCDebug(gmSpotifyServer()) << "Started server, opening browser ...";
@@ -154,11 +155,11 @@ void SpotifyConnectorServer::requestAccessToken(const QString &code)
 {
     qCDebug(gmSpotifyServer()) << "Requesting access token from server ...";
 
-    QUrl url(SettingsManager::getServerUrl(QStringLiteral("Spotify")) + "/spotify/token");
+    QUrl url(SettingsManager::getServerUrl(u"Spotify"_s) + "/spotify/token"_L1);
 
     QUrlQuery query;
-    query.addQueryItem(QStringLiteral("code"), code);
-    query.addQueryItem(QStringLiteral("redirect_uri"), QUrl::toPercentEncoding(m_callbackServer.getUrl()));
+    query.addQueryItem(u"code"_s, code);
+    query.addQueryItem(u"redirect_uri"_s, QUrl::toPercentEncoding(m_callbackServer.getUrl()));
     url.setQuery(query);
 
     auto *reply = m_networkManager.get(QNetworkRequest(url));
@@ -167,9 +168,9 @@ void SpotifyConnectorServer::requestAccessToken(const QString &code)
         qCDebug(gmSpotifyServer()) << "Received access token and refresh token ...";
         auto params = QJsonDocument::fromJson(reply->readAll()).object();
 
-        saveAccessToken(params[QStringLiteral("access_token")].toString());
-        saveRefreshToken(params[QStringLiteral("refresh_token")].toString());
-        updateExpireTime(params[QStringLiteral("expires_in")].toInt());
+        saveAccessToken(params["access_token"_L1].toString());
+        saveRefreshToken(params["refresh_token"_L1].toString());
+        updateExpireTime(params["expires_in"_L1].toInt());
 
         m_isWaitingForToken = false;
         m_isAccessGranted = true;
@@ -204,7 +205,7 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
     }
 
     m_isWaitingForToken = true;
-    QUrl url(SettingsManager::getServerUrl(QStringLiteral("Spotify")) + "/spotify/refresh");
+    QUrl url(SettingsManager::getServerUrl(u"Spotify"_s) + "/spotify/refresh"_L1);
     qCDebug(gmSpotifyServer()) << url;
 
     url.setQuery(QUrlQuery({{"refresh_token", refreshToken}}));
@@ -223,15 +224,15 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
         auto params = QJsonDocument::fromJson(reply->readAll()).object();
         reply->deleteLater();
 
-        saveAccessToken(params[QStringLiteral("access_token")].toString());
-        updateExpireTime(params[QStringLiteral("expires_in")].toInt());
+        saveAccessToken(params["access_token"_L1].toString());
+        updateExpireTime(params["expires_in"_L1].toInt());
 
         if (handleRefreshErrors(params)) return;
 
         if (getAccessToken().isEmpty())
         {
             qCWarning(gmSpotifyServer()) << "Something went wrong, access token is empty.";
-            emit statusChanged(ServiceStatus::Type::Error, QStringLiteral("Unexpected error, access token is empty."));
+            emit statusChanged(ServiceStatus::Type::Error, u"Unexpected error, access token is empty."_s);
             return;
         }
 
@@ -254,20 +255,19 @@ void SpotifyConnectorServer::refreshAccessToken(bool updateAuthentication)
 auto SpotifyConnectorServer::handleRefreshErrors(const QJsonObject &params) -> bool
 {
     // If user revoked permission, the refresh token is no longer valid
-    if ((params[QStringLiteral("error")].toString() == QStringLiteral("invalid_grant")) ||
-        (params[QStringLiteral("error")].toString() == QStringLiteral("invalid_client")))
+    if ((params["error"_L1].toString() == "invalid_grant"_L1) || (params["error"_L1].toString() == "invalid_client"_L1))
     {
         qCWarning(gmSpotifyServer()) << "Refresh token was not valid, trying to authenticate again ...";
-        saveRefreshToken(QLatin1String());
+        saveRefreshToken(u""_s);
         authenticate();
         return true;
     }
 
-    if (!params[QStringLiteral("error")].toString().isEmpty())
+    if (!params["error"_L1].toString().isEmpty())
     {
         qCWarning(gmSpotifyServer()) << "Could not refresh access token, an unexpected error occurred:"
-                                     << params[QStringLiteral("error")].toString();
-        emit statusChanged(ServiceStatus::Type::Error, params[QStringLiteral("error")].toString());
+                                     << params["error"_L1].toString();
+        emit statusChanged(ServiceStatus::Type::Error, params["error"_L1].toString());
         return true;
     }
 
@@ -367,10 +367,8 @@ void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContai
     // Check if rate limit was exceeded
     if (result->error() == QNetworkReply::UnknownContentError)
     {
-        const auto status = QJsonDocument::fromJson(result->data())
-                                .object()[QStringLiteral("error")]
-                                .toObject()[QStringLiteral("status")]
-                                .toInt();
+        const auto status =
+            QJsonDocument::fromJson(result->data()).object()["error"_L1]["status"_L1].toInt();
 
         if (status == HttpStatus::TooManyRequests)
         {
@@ -418,7 +416,7 @@ void SpotifyConnectorServer::onServerClosed(bool hasParameters)
 
     const auto parameters = m_callbackServer.getParameters();
 
-    if (!parameters.contains(QStringLiteral("code"))) return;
+    if (!parameters.contains("code"_L1)) return;
 
-    requestAccessToken(parameters[QStringLiteral("code")]);
+    requestAccessToken(parameters["code"_L1]);
 }

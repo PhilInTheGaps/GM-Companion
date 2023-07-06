@@ -4,6 +4,8 @@
 #include <QLoggingCategory>
 #include <QQmlContext>
 
+using namespace Qt::Literals::StringLiterals;
+
 constexpr ConstQString DICE_SETTINGS = "Dice";
 constexpr ConstQString ENABLE_CRITICALS_SETTING = "enableCriticals";
 constexpr ConstQString SUCCESS_SETTING = "success";
@@ -15,7 +17,7 @@ Q_LOGGING_CATEGORY(gmDiceTool, "gm.dice.tool")
 
 DiceTool::DiceTool(QQmlEngine *engine, QObject *parent) : QObject(parent)
 {
-    engine->rootContext()->setContextProperty(QStringLiteral("dice_tool"), this);
+    engine->rootContext()->setContextProperty(u"dice_tool"_s, this);
 }
 
 void DiceTool::setSides(int sides)

@@ -2,6 +2,8 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
+using namespace Qt::Literals::StringLiterals;
+
 constexpr int ROT13_PLACES = 13;
 
 /**
@@ -15,7 +17,7 @@ auto StringUtils::stringFromImage(const QPixmap &image) -> QString
     buffer.open(QIODevice::WriteOnly);
     image.save(&buffer, "JPEG");
 
-    auto imageString = QStringLiteral("data:image/jpg;base64,");
+    auto imageString = u"data:image/jpg;base64,"_s;
     imageString.append(QString::fromLatin1(bArray.toBase64().data()));
     return imageString;
 }
@@ -30,21 +32,21 @@ auto StringUtils::rot13(const QString &input) -> QString
     // When encrypting, a character is replaced by the one 13 spots to the right
     // The strings have to be 2 times as long as usual so that there are still
     // characters further to the right than 'z'
-    const auto lowCaps = QStringLiteral("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-    const auto upperCaps = QStringLiteral("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    const auto lowCaps = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"_L1;
+    const auto upperCaps = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"_L1;
 
-    QString encrypted = QLatin1String();
+    QString encrypted = u""_s;
 
     for (const auto &character : input)
     {
         if (lowCaps.contains(character))
         {
-            int index = lowCaps.indexOf(character);
+            const int index = lowCaps.indexOf(character);
             encrypted.append(lowCaps.at(index + ROT13_PLACES));
         }
         else if (upperCaps.contains(character))
         {
-            int index = upperCaps.indexOf(character);
+            const int index = upperCaps.indexOf(character);
             encrypted.append(upperCaps.at(index + ROT13_PLACES));
         }
         else
