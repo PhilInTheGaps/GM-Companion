@@ -1,7 +1,6 @@
 #include "charactertool.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QJsonArray>
@@ -12,7 +11,6 @@
 #include <QTemporaryFile>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmCharactersTool, "gm.characters.tool")
 
@@ -103,7 +101,7 @@ void CharacterTool::loadData()
     setIsDataLoaded(true);
 
     const auto filePath = FileUtils::fileInDir(u"inactive.json"_s, SettingsManager::getPath(u"characters"_s));
-    observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+    Files::File::getDataAsync(filePath).then(this, [this](Files::FileDataResult *result) {
         loadInactiveCharacters(result->data());
         result->deleteLater();
     });
@@ -147,7 +145,7 @@ void CharacterTool::loadInactiveCharacters(const QByteArray &data)
             << "Inactive characters file data is empty, maybe old .ini file exists, trying to convert ...";
 
         const auto filePath = FileUtils::fileInDir(u"settings.ini"_s, SettingsManager::getPath(u"characters"_s));
-        observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+        Files::File::getDataAsync(filePath).then(this, [this](Files::FileDataResult *result) {
             convertSettingsFile(result->data());
             result->deleteLater();
         });
@@ -213,7 +211,7 @@ void CharacterTool::loadCharacters()
     qCDebug(gmCharactersTool()) << "Loaded inactive character list, now loading character files and folders ...";
 
     const auto dir = SettingsManager::getPath(u"characters"_s);
-    observe(Files::File::listAsync(dir, true, true)).subscribe([this](Files::FileListResult *result) {
+    Files::File::listAsync(dir, true, true).then(this, [this](Files::FileListResult *result) {
         receivedCharacterFiles(result->files());
         receivedCharacterFolders(result->folders());
         result->deleteLater();

@@ -1,13 +1,12 @@
 #pragma once
 
-#include <QObject>
-#include <QFuture>
-#include <QPointer>
-#include <gsl/gsl>
-
-#include "rest/restnetworkreply.h"
 #include "../data/spotifyplaylist.h"
 #include "../data/spotifytracklist.h"
+#include "rest/restnetworkreply.h"
+#include <QFuture>
+#include <QObject>
+#include <QPointer>
+#include <gsl/gsl>
 
 class Spotify;
 
@@ -26,13 +25,14 @@ class PlaylistsAPI : public QObject
     friend Spotify;
 
 public:
-    [[nodiscard]] auto getPlaylist(const QString &id) const -> QFuture<QSharedPointer<SpotifyPlaylist>>;
+    [[nodiscard]] auto getPlaylist(const QString &id) -> QFuture<QSharedPointer<SpotifyPlaylist>>;
 
-    [[nodiscard]] auto getPlaylistTracks(const QString &id) const -> QFuture<QSharedPointer<SpotifyTrackList>>;
+    [[nodiscard]] auto getPlaylistTracks(const QString &id) -> QFuture<QSharedPointer<SpotifyTrackList>>;
 
-    [[nodiscard]] auto getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracks) const -> QFuture<QSharedPointer<SpotifyTrackList>>;
+    [[nodiscard]] auto getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracks)
+        -> QFuture<QSharedPointer<SpotifyTrackList>>;
 
-    [[nodiscard]] auto updatePlaylist(const PlaylistConfig &config) const -> QFuture<gsl::owner<RestNetworkReply*>>;
+    [[nodiscard]] auto updatePlaylist(const PlaylistConfig &config) const -> QFuture<gsl::owner<RestNetworkReply *>>;
 
 private:
     explicit PlaylistsAPI(Spotify *parent);
@@ -40,4 +40,3 @@ private:
 
     static constexpr auto MAX_TRACK_COUNT = 50;
 };
-

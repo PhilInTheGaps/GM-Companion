@@ -1,11 +1,9 @@
 #include "abstractaccesstest.h"
 #include "file.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QtTest>
 
 using namespace Files;
-using namespace AsyncFuture;
 
 void AbstractAccessTest::createTestDir()
 {

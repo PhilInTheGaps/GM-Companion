@@ -1,7 +1,6 @@
 #include "maptool.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/utils.h"
 #include <QImage>
 #include <QJsonArray>
@@ -11,7 +10,6 @@
 #include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 static constexpr auto DEFAULT_COLOR = "red";
 static constexpr auto DEFAULT_ICON = "\uf3c5";
@@ -190,7 +188,7 @@ void MapTool::findCategories()
     qCDebug(gmMapsTool()) << "Finding map categories ...";
 
     const auto dir = SettingsManager::getPath(u"maps"_s);
-    observe(Files::File::listAsync(dir, false, true)).subscribe([this](Files::FileListResult *result) {
+    Files::File::listAsync(dir, false, true).then(this, [this](Files::FileListResult *result) {
         receivedCategories(result->folders());
         result->deleteLater();
     });

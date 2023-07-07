@@ -32,7 +32,7 @@ private:
 private slots:
     void loadChapters();
     void loadPages();
-    void loadPageContent() const;
+    void loadPageContent();
     void savePage() const;
 
     void createChapter(const QString &name);

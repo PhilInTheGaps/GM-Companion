@@ -1,13 +1,11 @@
 #include "audioeditorfilebrowser.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 #include <QQmlContext>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioEditorFileBrowser, "gm.audio.editor.filebrowser")
 
@@ -34,8 +32,8 @@ void AudioEditorFileBrowser::addFiles(const QStringList &path, int index, bool f
     qCDebug(gmAudioEditorFileBrowser()) << "Adding files:" << m_basePath << path << index << folders;
 
     const auto dir = FileUtils::fileInDir(FileUtils::dirFromFolders(path), m_basePath);
-    observe(Files::File::listAsync(dir, !folders, folders))
-        .subscribe([this, path, folders, index](Files::FileListResult *result) {
+    Files::File::listAsync(dir, !folders, folders)
+        .then(this, [this, path, folders, index](Files::FileListResult *result) {
             if (!result) return;
 
             qCDebug(gmAudioEditorFileBrowser()) << "Received file list:" << result;

@@ -1,7 +1,6 @@
 #include "map.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/stringutils.h"
 #include "utils/utils.h"
@@ -12,14 +11,13 @@
 #include <QPixmap>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmMapsMap, "gm.maps.map")
 
 Map::Map(const QString &name, const QString &path, QObject *parent)
     : QObject(parent), a_name(name), a_path(path), m_markers(this)
 {
-    observe(Files::File::getDataAsync(path)).subscribe([this](Files::FileDataResult *result) {
+    Files::File::getDataAsync(path).then(this, [this](Files::FileDataResult *result) {
         if (!result) return;
 
         QPixmap pixmap;
@@ -48,12 +46,12 @@ void Map::saveMarkers() const
 void Map::loadMarkers()
 {
     const auto filePath = path() + ".json";
-    observe(Files::File::checkAsync(filePath)).subscribe([this, filePath](Files::FileCheckResult *result) {
+    Files::File::checkAsync(filePath).then(this, [this, filePath](Files::FileCheckResult *result) {
         if (!result) return;
 
         if (result->exists())
         {
-            observe(Files::File::getDataAsync(filePath)).subscribe([this](Files::FileDataResult *result) {
+            Files::File::getDataAsync(filePath).then(this, [this](Files::FileDataResult *result) {
                 if (!result) return;
 
                 auto markers = QJsonDocument::fromJson(result->data()).object()["markers"_L1].toArray();
@@ -109,7 +107,7 @@ void MapCategory::loadMaps()
 
     const auto path = FileUtils::fileInDir(name(), SettingsManager::getPath(u"maps"_s));
 
-    observe(Files::File::listAsync(path, true, false)).subscribe([this, path](Files::FileListResult *result) {
+    Files::File::listAsync(path, true, false).then(this, [this, path](Files::FileListResult *result) {
         if (!result) return;
 
         foreach (const auto &file, result->files())

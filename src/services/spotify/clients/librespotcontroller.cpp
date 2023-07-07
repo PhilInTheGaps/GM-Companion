@@ -1,10 +1,8 @@
 #include "librespotcontroller.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "updates/updatemanager.h"
 #include "utils/fileutils.h"
 #include "utils/processinfo.h"
-
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -17,7 +15,6 @@
 Q_LOGGING_CATEGORY(gmLibrespotController, "gm.service.spotify.clients.librespot")
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 LibrespotController::LibrespotController(QObject *parent)
     : AbstractSpotifyClientController(parent, gmLibrespotController())
@@ -39,13 +36,13 @@ auto LibrespotController::start() -> QFuture<bool>
     m_isExitExpected = false;
 
     const auto username = SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s);
-    const auto password = SettingsManager::getPassword(username, u"Spotify"_s);
+    auto password = SettingsManager::getPassword(username, u"Spotify"_s);
 
     if (username.isEmpty())
     {
         qCWarning(gmLibrespotController()) << "Could not start librespot, username is not set.";
         updateStatus(ServiceStatus::Type::Error, tr("Error: Username is not set."));
-        return completed(false);
+        return QtFuture::makeReadyFuture(false);
     }
 
     const auto callback = [this, username](const QString &password) {
@@ -53,7 +50,7 @@ auto LibrespotController::start() -> QFuture<bool>
         {
             qCWarning(gmLibrespotController()) << "Could not start librespot, password is not set.";
             updateStatus(ServiceStatus::Type::Error, tr("Error: Password is not set."));
-            return completed(false);
+            return QtFuture::makeReadyFuture(false);
         }
 
         const auto info = getLibrespotInfo();
@@ -63,11 +60,11 @@ auto LibrespotController::start() -> QFuture<bool>
             updateStatus(ServiceStatus::Type::Error,
                          tr("Error: Could not get librespot version number. "
                             "This probably means that the librespot executable can not be found."));
-            return completed(false);
+            return QtFuture::makeReadyFuture(false);
         }
 
         qCDebug(gmLibrespotController()) << QString(info);
-        m_hasAuthenticated = deferred<bool>();
+        m_hasAuthenticated.start();
 
         const auto args = getLibrespotArgs(username);
         const auto librespotPath = getLibrespotPath();
@@ -98,7 +95,7 @@ auto LibrespotController::start() -> QFuture<bool>
         return m_hasAuthenticated.future();
     };
 
-    return observe(password).subscribe(callback).future();
+    return password.then(this, callback).unwrap();
 }
 
 auto LibrespotController::stop() -> bool
@@ -182,8 +179,8 @@ void LibrespotController::setAsActiveDevice()
         return true;
     };
 
-    const auto future = getDevice(deviceName());
-    observe(future).subscribe(callback);
+    auto future = getDevice(deviceName());
+    future.then(this, callback);
 }
 
 auto LibrespotController::isOtherProcessIsRunning() -> bool
@@ -293,14 +290,16 @@ void LibrespotController::onLibrespotOutputReady()
         if (line.contains("Authenticated as"))
         {
             m_hasStarted = true;
-            m_hasAuthenticated.complete(true);
+            m_hasAuthenticated.addResult(true);
+            m_hasAuthenticated.finish();
             updateStatus(ServiceStatus::Type::Success,
                          tr("Successfully started librespot client. (Spotify device %1)").arg(deviceName()));
         }
 
         if (line.contains("Connection failed:"))
         {
-            m_hasAuthenticated.complete(false);
+            m_hasAuthenticated.addResult(false);
+            m_hasAuthenticated.finish();
             updateStatus(ServiceStatus::Type::Error, line);
             stop();
         }

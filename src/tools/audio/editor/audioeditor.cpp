@@ -2,7 +2,6 @@
 #include "../audiosaveload.h"
 #include "../thumbnails/audiothumbnailgenerator.h"
 #include "spotify/spotifyutils.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
@@ -10,7 +9,6 @@
 #include <utility>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioEditor, "gm.audio.editor")
 
@@ -36,9 +34,8 @@ void AudioEditor::loadData()
     isLoading(true);
     setIsDataLoaded(true);
 
-    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const std::vector<AudioProject *> &projects) {
-        onFoundProjects(projects);
-    });
+    AudioSaveLoad::findProjectsAsync(this).then(
+        this, [this](const std::vector<AudioProject *> &projects) { onFoundProjects(projects); });
 }
 
 void AudioEditor::onFoundProjects(const std::vector<AudioProject *> &projects)
@@ -562,7 +559,7 @@ void AudioEditor::loadElement(QObject *element)
     }
 
     // Tell AudioSaveLoad to find out if files are missing
-    AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
+    AudioSaveLoad::findMissingFilesAsync(this, m_currentElement->files(), basePath());
 }
 
 /**
@@ -727,9 +724,14 @@ void AudioEditor::saveProject()
             {
                 emit showInfoBar(tr("Saving ..."));
 
-                observe(AudioSaveLoad::saveProject(project))
-                    .subscribe([this]() { emit showInfoBar(tr("Saved!")); },
-                               [this]() { emit showInfoBar(tr("Error: Could not save project!")); });
+                AudioSaveLoad::saveProject(project)
+                    .then(this,
+                          [this](bool success) {
+                              if (success) emit showInfoBar(tr("Saved!"));
+                              else
+                                  emit showInfoBar(tr("Error: Could not save project!"));
+                          })
+                    .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save project!")); });
             }
             else
             {
@@ -877,7 +879,7 @@ void AudioEditor::removeFile(int index, bool findMissing)
         if (findMissing)
         {
             // Tell AudioSaveLoad to find out if files are missing
-            AudioSaveLoad::findMissingFilesAsync(m_currentElement->files(), basePath());
+            AudioSaveLoad::findMissingFilesAsync(this, m_currentElement->files(), basePath());
         }
     }
 }
@@ -934,7 +936,7 @@ void AudioEditor::moveFile(int index, int positions)
  * @param index Index of the file to change
  * @param folder New folder where file can be found
  */
-void AudioEditor::replaceFileFolder(int index, const QString &folder) const
+void AudioEditor::replaceFileFolder(int index, const QString &folder)
 {
     if (!m_currentElement || !scenarioExists()) return;
 
@@ -960,7 +962,7 @@ void AudioEditor::replaceFileFolder(int index, const QString &folder) const
             }
         }
 
-        AudioSaveLoad::findMissingFilesAsync(missingFiles, basePath());
+        AudioSaveLoad::findMissingFilesAsync(this, missingFiles, basePath());
     }
 }
 

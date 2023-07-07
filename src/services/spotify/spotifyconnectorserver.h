@@ -1,16 +1,16 @@
 #pragma once
 
-#include <QJsonObject>
-#include <QObject>
-#include <QQueue>
-#include <chrono>
-#include <o0settingsstore.h>
-
 #include "rest/callbackserver.h"
 #include "rest/requestcontainer.h"
 #include "rest/restserviceconnector.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/stringutils.h"
+#include <QJsonObject>
+#include <QObject>
+#include <QPromise>
+#include <QQueue>
+#include <QSharedPointer>
+#include <chrono>
+#include <o0settingsstore.h>
 
 class SpotifyConnectorServer : public RESTServiceConnector
 {
@@ -42,7 +42,7 @@ private:
     bool m_isOnCooldown = false;
     int m_requestCount = 0;
     int m_currentRequestCount = 0;
-    QQueue<std::pair<RequestContainer *, AsyncFuture::Deferred<RestNetworkReply *>>> m_requestQueue;
+    QQueue<std::pair<RequestContainer *, QSharedPointer<QPromise<RestNetworkReply *>>>> m_requestQueue;
 
     static constexpr ConstQString ACCESS_TOKEN_KEY = "SPOTIFY_ACCESS_TOKEN";
     static constexpr ConstQString REFRESH_TOKEN_KEY = "SPOTIFY_REFRESH_TOKEN";
@@ -64,20 +64,20 @@ private:
     [[nodiscard]] auto isTokenExpired() const -> bool;
 
     auto canSendRequest() -> bool;
-    void enqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
+    void enqueueRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
     void dequeueRequests();
 
-    void sendRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
+    void sendRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
 
     [[nodiscard]] auto addAuthHeader(QNetworkRequest request) -> QNetworkRequest;
 
-    void handleRateLimit(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
+    void handleRateLimit(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise,
                          const QList<std::pair<QByteArray, QByteArray>> &headers);
     void startCooldown(std::chrono::seconds seconds);
 
 private slots:
     void onReceivedReply(QNetworkReply *reply, RequestContainer *container,
-                         AsyncFuture::Deferred<RestNetworkReply *> deferred);
+                         QSharedPointer<QPromise<RestNetworkReply *>> promise);
     void onCooldownFinished();
     void onServerError(const QString &error);
     void onServerClosed(bool hasParameters);

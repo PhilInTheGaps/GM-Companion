@@ -13,6 +13,8 @@
 class TestAudioSaveLoad : public AbstractTest
 {
     Q_OBJECT
+public:
+    using AbstractTest::AbstractTest;
 
 private:
     AudioProject *m_project = nullptr;
@@ -54,7 +56,7 @@ void TestAudioSaveLoad::initTestCase()
     QVERIFY(m_project->isSaved());
 
     // Verify that no saved projects exist
-    auto future = AudioSaveLoad::findProjectsAsync(getFilePath());
+    auto future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
         QVERIFY2(list.empty(), "Project list is not empty, when it should be!");
@@ -101,7 +103,7 @@ void TestAudioSaveLoad::saveProject()
 
 void TestAudioSaveLoad::findProjects()
 {
-    auto future = AudioSaveLoad::findProjectsAsync(getFilePath());
+    auto future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
         QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
@@ -116,7 +118,7 @@ void TestAudioSaveLoad::findProjects()
     auto future2 = AudioSaveLoad::saveProject(m_project2, getFilePath());
     validateResult(future2, true);
 
-    future = AudioSaveLoad::findProjectsAsync(getFilePath());
+    future = AudioSaveLoad::findProjectsAsync(this, getFilePath());
     testFuture(future, "AudioSaveLoad::findProjectsAsync", [future]() {
         auto list = future.result();
         QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
@@ -148,7 +150,7 @@ void TestAudioSaveLoad::findMissingFiles()
     files.append(new AudioFile(QUuid::createUuid().toString() + ".mp3", AudioFile::Source::Youtube,
                                QString("Test File (Youtube)"), this));
 
-    auto future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
+    auto future = AudioSaveLoad::findMissingFilesAsync(this, files, getFilePath());
     validateResult(future, true);
 
     for (auto *file : files)
@@ -161,7 +163,7 @@ void TestAudioSaveLoad::findMissingFiles()
     testFuture(future1, "File::saveAsync", []() {});
     verifyThatFileExists(getFilePath(fileName), true);
 
-    future = AudioSaveLoad::findMissingFilesAsync(files, getFilePath());
+    future = AudioSaveLoad::findMissingFilesAsync(this, files, getFilePath());
     validateResult(future, true);
 
     for (auto *file : files)
@@ -175,7 +177,7 @@ void TestAudioSaveLoad::deleteProject()
     auto future = AudioSaveLoad::deleteProject(m_project1, getFilePath());
     validateResult(future, true);
 
-    auto future2 = AudioSaveLoad::findProjectsAsync(getFilePath());
+    auto future2 = AudioSaveLoad::findProjectsAsync(this, getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
         QVERIFY2(!list.empty(), "Project list is empty, when it should not be!");
@@ -196,7 +198,7 @@ void TestAudioSaveLoad::deleteProject()
     future = AudioSaveLoad::deleteProject(nullptr, getFilePath());
     validateResult(future, false);
 
-    future2 = AudioSaveLoad::findProjectsAsync(getFilePath());
+    future2 = AudioSaveLoad::findProjectsAsync(this, getFilePath());
     testFuture(future2, "AudioSaveLoad::findProjectsAsync", [future2]() {
         auto list = future2.result();
         QVERIFY2(list.empty(), "Project list is not empty, when it should be!");

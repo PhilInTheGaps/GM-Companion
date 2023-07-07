@@ -6,14 +6,12 @@
 #include "loaders/spotifyimageloader.h"
 #include "loaders/webimageloader.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <QtConcurrent/QtConcurrentRun>
 
 Q_LOGGING_CATEGORY(gmAudioThumbnailGenerator, "gm.audio.thumbnails.generator")
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 QPointer<QNetworkAccessManager> AudioThumbnailGenerator::networkManager = nullptr;
 
@@ -51,9 +49,8 @@ void AudioThumbnailGenerator::receivedImage(AudioElement *element, const QPixmap
     if (pixmap.isNull() && makeFallbackCollage)
     {
         qCDebug(gmAudioThumbnailGenerator()) << "Received pixmap is null, making collage as fallback ...";
-        observe(AudioThumbnailCollageGenerator::makeCollageAsync(element)).subscribe([element](const QPixmap &pixmap) {
-            receivedImage(element, pixmap, false);
-        });
+        AudioThumbnailCollageGenerator::makeCollageAsync(element).then(
+            [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); });
         return;
     }
 
@@ -74,21 +71,21 @@ void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
     // Is web url
     if (iconPath.startsWith("http://"_L1) || iconPath.startsWith("https://"_L1))
     {
-        observe(WebImageLoader::loadImageAsync(iconPath, networkManager)).subscribe(callbackWithFallback);
+        WebImageLoader::loadImageAsync(iconPath, networkManager).then(element, callbackWithFallback);
         return;
     }
 
     // Is a local file
     if (!iconPath.isEmpty())
     {
-        observe(FileImageLoader::loadImageAsync(iconPath)).subscribe(callbackWithFallback);
+        FileImageLoader::loadImageAsync(iconPath).then(element, callbackWithFallback);
         return;
     }
 
     // If no explicit thumbnail has been specified, generate collage
     const auto callbackWithoutFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, false); };
 
-    observe(AudioThumbnailCollageGenerator::makeCollageAsync(element)).subscribe(callbackWithoutFallback);
+    AudioThumbnailCollageGenerator::makeCollageAsync(element).then(element, callbackWithoutFallback);
 }
 
 auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement *element) -> QPixmap

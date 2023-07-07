@@ -1,9 +1,9 @@
 #pragma once
 
 #include "abstractspotifyclientcontroller.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QObject>
 #include <QProcess>
+#include <QPromise>
 
 class LibrespotController : public AbstractSpotifyClientController
 {
@@ -49,7 +49,7 @@ private:
     auto getLibrespotInfo() -> LibrespotInfo;
     void printOutputAndUpdateStatus(const QString &line);
 
-    AsyncFuture::Deferred<bool> m_hasAuthenticated;
+    QPromise<bool> m_hasAuthenticated;
 
 private slots:
     void onLibrespotFinished(int exitCode, QProcess::ExitStatus exitStatus);

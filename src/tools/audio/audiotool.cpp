@@ -1,7 +1,6 @@
 #include "audiotool.h"
 #include "audiosaveload.h"
 #include "services/spotify/spotify.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "thumbnails/audiothumbnailgenerator.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
@@ -11,7 +10,6 @@
 #include <exception>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
@@ -71,9 +69,8 @@ void AudioTool::loadData()
 
 void AudioTool::updateProjectList()
 {
-    observe(AudioSaveLoad::findProjectsAsync()).subscribe([this](const std::vector<AudioProject *> &projects) {
-        onProjectsChanged(projects);
-    });
+    AudioSaveLoad::findProjectsAsync(this).then(
+        this, [this](const std::vector<AudioProject *> &projects) { onProjectsChanged(projects); });
 }
 
 auto AudioTool::currentProjectName() const -> QString

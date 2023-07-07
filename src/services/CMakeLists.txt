@@ -80,7 +80,6 @@ target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(services
     common
     o2
-    qtasyncfuture
     http-status-codes
     GSL
     Qt6::Core

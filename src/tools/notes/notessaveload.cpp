@@ -1,14 +1,12 @@
 #include "notessaveload.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QBuffer>
 #include <QLoggingCategory>
 #include <QPdfWriter>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmNotesSaveLoad, "gm.notes.saveload")
 
@@ -21,7 +19,7 @@ void NotesSaveLoad::loadBooks()
 
     const auto directory = SettingsManager::getPath(u"notes"_s);
 
-    observe(Files::File::listAsync(directory, false, true)).subscribe([this](Files::FileListResult *result) {
+    Files::File::listAsync(directory, false, true).then(this, [this](Files::FileListResult *result) {
         buildBooks(result->folders(), nullptr);
         result->deleteLater();
     });
@@ -39,7 +37,7 @@ void NotesSaveLoad::loadChapters()
 
     qCDebug(gmNotesSaveLoad()) << "Loading chapters in" << directory;
 
-    observe(Files::File::listAsync(directory, false, true)).subscribe([this, book](Files::FileListResult *result) {
+    Files::File::listAsync(directory, false, true).then(this, [this, book](Files::FileListResult *result) {
         buildChapters(result->folders(), book);
         result->deleteLater();
     });
@@ -57,7 +55,7 @@ void NotesSaveLoad::loadPages()
 
     qCDebug(gmNotesSaveLoad()) << "Loading pages in" << directory;
 
-    observe(Files::File::listAsync(directory, true, false)).subscribe([this, chapter](Files::FileListResult *result) {
+    Files::File::listAsync(directory, true, false).then(this, [this, chapter](Files::FileListResult *result) {
         buildPages(result->files(), chapter);
         result->deleteLater();
     });
@@ -66,7 +64,7 @@ void NotesSaveLoad::loadPages()
 /**
  * Load content from page file
  */
-void NotesSaveLoad::loadPageContent() const
+void NotesSaveLoad::loadPageContent()
 {
     auto *page = qobject_cast<NoteBookPage *>(sender());
     if (!page) return;
@@ -75,7 +73,7 @@ void NotesSaveLoad::loadPageContent() const
 
     qCDebug(gmNotesSaveLoad()) << "Loading page content of" << fileName;
 
-    observe(Files::File::getDataAsync(fileName)).subscribe([page](Files::FileDataResult *result) {
+    Files::File::getDataAsync(fileName).then(this, [page](Files::FileDataResult *result) {
         page->onContentLoaded(result->data());
         result->deleteLater();
     });
@@ -180,9 +178,8 @@ void NotesSaveLoad::createBook(const QString &name, QObject *root)
     qCDebug(gmNotesSaveLoad()) << "Creating book" << name;
 
     const auto path = FileUtils::fileInDir(name, SettingsManager::getPath(u"notes"_s));
-    observe(Files::File::createDirAsync(path)).subscribe([this, name, root]() {
-        buildBooks({name}, qobject_cast<TreeItem *>(root));
-    });
+    Files::File::createDirAsync(path).then(
+        this, [this, name, root](Files::FileResult *) { buildBooks({name}, qobject_cast<TreeItem *>(root)); });
 }
 
 /**
@@ -206,7 +203,8 @@ void NotesSaveLoad::createChapter(const QString &name)
 
     const auto localPath = FileUtils::fileInDir(name, book->path());
     const auto path = FileUtils::fileInDir(localPath, SettingsManager::getPath(u"notes"_s));
-    observe(Files::File::createDirAsync(path)).subscribe([this, name, book]() { buildChapters({name}, book); });
+    Files::File::createDirAsync(path).then(this,
+                                           [this, name, book](Files::FileResult *) { buildChapters({name}, book); });
 }
 
 /**

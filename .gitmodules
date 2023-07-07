@@ -6,9 +6,6 @@
 	path = thirdparty/o2
 	url = https://github.com/pipacs/o2
 	
-[submodule "thirdparty/asyncfuture"]
-	path = thirdparty/asyncfuture
-	url = https://github.com/benlau/asyncfuture
 [submodule "thirdparty/propertyhelper"]
 	path = thirdparty/propertyhelper
 	url = https://github.com/PhilInTheGaps/Qt-PropertyHelper

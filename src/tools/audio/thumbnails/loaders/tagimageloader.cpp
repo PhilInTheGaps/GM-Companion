@@ -3,7 +3,6 @@
 #include "common/settings/settingsmanager.h"
 #include "common/utils/fileutils.h"
 #include "filesystem/file.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <QTemporaryFile>
 #include <QUuid>
@@ -22,18 +21,17 @@ using namespace Qt::Literals::StringLiterals;
 Q_LOGGING_CATEGORY(gmAudioTagImageLoader, "gm.audio.thumbnails.loaders.tag")
 
 using namespace TagLib;
-using namespace AsyncFuture;
 
 auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile) -> QFuture<QPixmap>
 {
     // Paranoid pointer check
-    if (!audioFile) return completed(QPixmap());
+    if (!audioFile) return QtFuture::makeReadyFuture(QPixmap());
 
     if (audioFile->source() != AudioFile::Source::File)
     {
         qCCritical(gmAudioTagImageLoader())
             << "Can not read image from tags, as audio file" << audioFile->url() << "is not a local file";
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     // Resolve file path
@@ -44,11 +42,11 @@ auto TagImageLoader::loadImageAsync(AudioElement *element, AudioFile *audioFile)
     QPixmap pixmap;
     if (AudioThumbnailCache::tryGet(path, &pixmap))
     {
-        return completed(pixmap);
+        return QtFuture::makeReadyFuture(pixmap);
     }
 
     const auto isLocalFile = SettingsManager::instance()->get(u"cloudMode"_s, u"local"_s) == "local"_L1;
-    return observe(QtConcurrent::run(loadFromFile, path, isLocalFile)).future();
+    return QtConcurrent::run(loadFromFile, path, isLocalFile).unwrap();
 }
 
 auto TagImageLoader::loadFromFile(const QString &path, bool isLocalFile) -> QFuture<QPixmap>
@@ -60,10 +58,10 @@ auto TagImageLoader::loadFromFile(const QString &path, bool isLocalFile) -> QFut
 
 auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
 {
-    const auto future = Files::File::getDataAsync(path);
+    auto future = Files::File::getDataAsync(path);
 
-    return observe(future)
-        .subscribe([path](Files::FileDataResult *result) {
+    return future
+        .then([path](Files::FileDataResult *result) {
             auto fileName = FileUtils::fileName(path);
 
 #ifdef Q_OS_WIN
@@ -82,7 +80,7 @@ auto TagImageLoader::loadViaTempFile(const QString &path) -> QFuture<QPixmap>
 
             return loadFromLocalFile(tempFile.fileName());
         })
-        .future();
+        .unwrap();
 }
 
 auto TagImageLoader::loadFromLocalFile(const QString &path) -> QFuture<QPixmap>
@@ -103,7 +101,7 @@ auto TagImageLoader::loadFromLocalFile(const QString &path) -> QFuture<QPixmap>
         return loadFromWav(path);
     default:
         qCDebug(gmAudioTagImageLoader()) << "Could not load image from" << path << "mime type is not supported yet";
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 }
 
@@ -114,7 +112,7 @@ auto TagImageLoader::loadFromLocalMpeg(const QString &path) -> QFuture<QPixmap>
     if (!mpeg.isValid())
     {
         qCCritical(gmAudioTagImageLoader) << "File could not be opened by TagLib!" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     if (mpeg.hasID3v2Tag())
@@ -123,7 +121,7 @@ auto TagImageLoader::loadFromLocalMpeg(const QString &path) -> QFuture<QPixmap>
     }
 
     qCDebug(gmAudioTagImageLoader) << "File does not contain supported tags" << path;
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }
 
 auto TagImageLoader::loadFromId3v2(const TagLib::ID3v2::Tag *tag, const QString &path) -> QFuture<QPixmap>
@@ -131,7 +129,7 @@ auto TagImageLoader::loadFromId3v2(const TagLib::ID3v2::Tag *tag, const QString 
     if (!tag)
     {
         qCWarning(gmAudioTagImageLoader) << "Could not read id3v2 meta data tags from file" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     // Get frames from tag for image
@@ -139,7 +137,7 @@ auto TagImageLoader::loadFromId3v2(const TagLib::ID3v2::Tag *tag, const QString 
     if (frames.isEmpty())
     {
         qCDebug(gmAudioTagImageLoader) << "Meta data tags (id3v2) do not contain images" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     // Convert image to Pixmap
@@ -155,7 +153,7 @@ auto TagImageLoader::loadFromId3v2(const TagLib::ID3v2::Tag *tag, const QString 
             << "Image exists in metadata, but could it could not be read correctly:" << path;
     }
 
-    return completed(image);
+    return QtFuture::makeReadyFuture(image);
 }
 
 auto TagImageLoader::pixmapFromId3v2Frames(const TagLib::ID3v2::FrameList &frames) -> QPixmap
@@ -207,7 +205,7 @@ auto TagImageLoader::loadFromVorbis(const QString &path) -> QFuture<QPixmap>
     if (!file.isValid())
     {
         qCWarning(gmAudioTagImageLoader) << "Could not read tags from vorbis (ogg) file" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     return loadFromXiphComment(file.tag(), path);
@@ -227,7 +225,7 @@ auto TagImageLoader::loadFromFlac(const QString &path) -> QFuture<QPixmap>
         return loadFromFlac(oggflac, path);
     }
 
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }
 
 auto TagImageLoader::loadFromFlac(const TagLib::Ogg::FLAC::File &file, const QString &path) -> QFuture<QPixmap>
@@ -238,7 +236,7 @@ auto TagImageLoader::loadFromFlac(const TagLib::Ogg::FLAC::File &file, const QSt
     }
 
     qCDebug(gmAudioTagImageLoader) << "File does not contain supported tags" << path;
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }
 
 auto TagImageLoader::loadFromFlac(TagLib::FLAC::File &file, const QString &path) -> QFuture<QPixmap>
@@ -254,7 +252,7 @@ auto TagImageLoader::loadFromFlac(TagLib::FLAC::File &file, const QString &path)
     }
 
     qCDebug(gmAudioTagImageLoader) << "File does not contain supported tags" << path;
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }
 
 auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QString &path) -> QFuture<QPixmap>
@@ -262,7 +260,7 @@ auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QS
     if (!tag)
     {
         qCWarning(gmAudioTagImageLoader) << "Could not read XiphComment meta data tags from file" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     for (const auto *pic : tag->pictureList())
@@ -278,7 +276,7 @@ auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QS
             {
                 qCDebug(gmAudioTagImageLoader) << "Successfully loaded image from audio file" << path;
                 AudioThumbnailCache::instance()->insertImage(path, result);
-                return completed(result);
+                return QtFuture::makeReadyFuture(result);
             }
             else
             {
@@ -290,7 +288,7 @@ auto TagImageLoader::loadFromXiphComment(TagLib::Ogg::XiphComment *tag, const QS
 
     qCDebug(gmAudioTagImageLoader) << "Could not find image in XiphComment meta data" << tag->pictureList().size()
                                    << path;
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }
 
 auto TagImageLoader::loadFromWav(const QString &path) -> QFuture<QPixmap>
@@ -300,7 +298,7 @@ auto TagImageLoader::loadFromWav(const QString &path) -> QFuture<QPixmap>
     if (!file.isValid())
     {
         qCWarning(gmAudioTagImageLoader) << "Could not read tags from wav file" << path;
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 
     if (file.hasID3v2Tag())
@@ -308,5 +306,5 @@ auto TagImageLoader::loadFromWav(const QString &path) -> QFuture<QPixmap>
         return loadFromId3v2(file.ID3v2Tag(), path);
     }
 
-    return completed(QPixmap());
+    return QtFuture::makeReadyFuture(QPixmap());
 }

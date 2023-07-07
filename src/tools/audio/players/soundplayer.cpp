@@ -1,6 +1,5 @@
 #include "soundplayer.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 #include <QRandomGenerator>
@@ -8,7 +7,6 @@
 #include <cstdlib>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioSounds, "gm.audio.sounds")
 
@@ -145,8 +143,8 @@ void SoundPlayer::loadMedia(const AudioFile *file)
         m_fileRequestContext = new QObject(this);
 
         m_fileName = file->url();
-        observe(Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"sounds"_s))))
-            .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
+        Files::File::getDataAsync(FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"sounds"_s)))
+            .then(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
         break;
     }
 

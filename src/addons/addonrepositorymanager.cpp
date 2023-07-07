@@ -1,9 +1,7 @@
 #include "addonrepositorymanager.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "updates/updatemanager.h"
 #include "utils/stringutils.h"
-
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -16,7 +14,6 @@
 Q_LOGGING_CATEGORY(gmAddonRepoManager, "gm.addons.repositories")
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 constexpr ConstQString REPOSITORY_SETTING = "addonRepositories";
 constexpr int MINIMAL_COMPATIBLE_VERSION = 1;
@@ -65,27 +62,25 @@ void AddonRepositoryManager::fetchAllRepositoryData()
 {
     isLoading(true);
 
-    auto combinator = combine(AllSettled);
-    const auto repos = repositories();
+    QList<QFuture<void>> combinator;
 
-    for (const auto *repo : repos)
+    foreach (const auto *repo, repositories())
     {
-        auto future = observe(fetchRepositoryDataAsync(repo->url()))
-                          .subscribe([this, repo](const std::vector<AddonReleaseInfo> &info) {
-                              if (!info.empty())
-                              {
-                                  qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
-                              }
+        auto future =
+            fetchRepositoryDataAsync(repo->url()).then(this, [this, repo](const std::vector<AddonReleaseInfo> &info) {
+                if (!info.empty())
+                {
+                    qCDebug(gmAddonRepoManager()) << "Successfully read addon repository" << repo->url();
+                }
 
-                              m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
-                          })
-                          .future();
+                m_releaseInfos.insert(m_releaseInfos.end(), info.begin(), info.end());
+            });
 
         combinator << future;
     }
 
-    auto callback = [this]() { isLoading(false); };
-    combinator.subscribe(callback, callback);
+    auto callback = [this](const QList<QFuture<void>> &) { isLoading(false); };
+    QtFuture::whenAll(combinator.begin(), combinator.end()).then(this, callback);
 }
 
 void AddonRepositoryManager::loadLocalRepositories()
@@ -176,22 +171,20 @@ auto AddonRepositoryManager::fetchRepositoryDataRemoteAsync(const QString &url)
 {
     auto *reply = m_networkManager.get(QNetworkRequest(QUrl(url)));
 
-    return observe(reply, &QNetworkReply::finished)
-        .subscribe([reply, url]() {
-            if (reply->error() != QNetworkReply::NoError)
-            {
-                qCWarning(gmAddonRepoManager())
-                    << "Could not read remote addon repository at" << url << reply->error() << reply->errorString();
-                reply->deleteLater();
-                return std::vector<AddonReleaseInfo>();
-            }
-
-            const auto data = reply->readAll();
+    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, [reply, url]() {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qCWarning(gmAddonRepoManager())
+                << "Could not read remote addon repository at" << url << reply->error() << reply->errorString();
             reply->deleteLater();
+            return std::vector<AddonReleaseInfo>();
+        }
 
-            return parseRepositoryData(data);
-        })
-        .future();
+        const auto data = reply->readAll();
+        reply->deleteLater();
+
+        return parseRepositoryData(data);
+    });
 }
 
 auto AddonRepositoryManager::parseRepositoryData(const QByteArray &data) -> std::vector<AddonReleaseInfo>

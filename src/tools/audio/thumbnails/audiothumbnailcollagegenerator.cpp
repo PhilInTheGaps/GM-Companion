@@ -3,31 +3,27 @@
 #include "audiothumbnailgenerator.h"
 #include "loaders/spotifyimageloader.h"
 #include "loaders/tagimageloader.h"
-#include "loaders/webimageloader.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QPainter>
-
-using namespace AsyncFuture;
 
 auto AudioThumbnailCollageGenerator::makeCollageAsync(AudioElement *element) -> QFuture<QPixmap>
 {
     // Check if collage can be generated
     if (!canMakeCollage(element))
     {
-        return completed(AudioThumbnailGenerator::getPlaceholderImage(element));
+        return QtFuture::makeReadyFuture(AudioThumbnailGenerator::getPlaceholderImage(element));
     }
 
     // Get pixmaps to use in the collage
-    const auto future = findPixmapsForCollageAsync(element, 0, 0, 0);
+    auto future = findPixmapsForCollageAsync(element, 0, 0, 0);
 
-    return observe(future).subscribe([element]() { return completed(generateCollageImage(element)); }).future();
+    return future.then(element, [element]() { return generateCollageImage(element); });
 }
 
 auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *element, int index, int fileCount,
                                                                 int failCount) -> QFuture<void>
 {
-    auto *audioFile = element->files()[index];
-    if (!audioFile) return completed();
+    auto *audioFile = element->files().at(index);
+    if (!audioFile) return QtFuture::makeReadyFuture();
 
     const auto callback = [element, audioFile, index, fileCount, failCount](const QPixmap &pixmap) {
         const auto audioFileCount = element->files().length();
@@ -59,11 +55,11 @@ auto AudioThumbnailCollageGenerator::findPixmapsForCollageAsync(AudioElement *el
             }
         }
 
-        return completed();
+        return QtFuture::makeReadyFuture();
     };
 
-    const auto future = getCoverArtAsync(element, audioFile);
-    return observe(future).subscribe(callback).future();
+    auto future = getCoverArtAsync(element, audioFile);
+    return future.then(element, callback).unwrap();
 }
 
 /**
@@ -89,7 +85,7 @@ auto AudioThumbnailCollageGenerator::getCoverArtAsync(AudioElement *element, Aud
     case AudioFile::Source::Youtube:
         // TODO: implement
     default:
-        return completed(QPixmap());
+        return QtFuture::makeReadyFuture(QPixmap());
     }
 }
 
@@ -124,11 +120,11 @@ auto AudioThumbnailCollageGenerator::getUniquePixmaps(AudioThumbnail *thumbnail)
 {
     QList<QPixmap> images;
 
-    for (auto imagePair : thumbnail->collageImages())
+    foreach (const auto &imagePair, thumbnail->collageImages())
     {
         bool doesExist = false;
 
-        for (auto pixmap : images)
+        foreach (const auto &pixmap, images)
         {
             if (imagePair.second.toImage() == pixmap.toImage())
             {

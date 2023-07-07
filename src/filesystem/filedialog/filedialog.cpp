@@ -1,12 +1,10 @@
 #include "filedialog.h"
 #include "file.h"
 #include "fileobject.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
 
 using namespace Files;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmFileDialog, "gm.files.dialog")
 
@@ -91,7 +89,7 @@ void FileDialog::createFolder(const QString &folderName)
 {
     const auto path = FileUtils::fileInDir(folderName, currentDir());
 
-    observe(FileAccess::getInstance()->createDirAsync(path)).subscribe([this](FileResult *result) {
+    FileAccess::getInstance()->createDirAsync(path).then(this, [this](FileResult *result) {
         if (!result)
         {
             qCWarning(gmFileDialog()) << "Error: createDirAsync returned a null result!";
@@ -118,12 +116,11 @@ void FileDialog::updateFileList()
     isLoading(true);
 
     m_currentFuture = File::listAsync(currentDir(), !folderMode(), true);
-    observe(m_currentFuture)
-        .subscribe([this](FileListResult *result) { onFileListReceived(result); },
-                   [this]() {
-                       qCDebug(gmFileDialog()) << "file list update was cancelled.";
-                       isLoading(false);
-                   });
+    m_currentFuture.then(this, [this](FileListResult *result) { onFileListReceived(result); })
+        .onCanceled(this, [this]() {
+            qCDebug(gmFileDialog()) << "file list update was cancelled.";
+            isLoading(false);
+        });
 }
 
 void FileDialog::clearFileList()

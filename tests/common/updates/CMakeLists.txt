@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.19)
 qt_add_executable(test_updatemanager testupdatemanager.cpp)
 target_link_libraries(test_updatemanager PRIVATE
     common
-    qtasyncfuture
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY}
     Qt6::Core

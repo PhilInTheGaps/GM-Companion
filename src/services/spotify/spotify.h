@@ -36,10 +36,10 @@ public:
 
     [[nodiscard]] auto clientStatus() const -> ServiceStatus *;
 
-    const AlbumAPI *albums;
-    const PlayerAPI *player;
-    const PlaylistsAPI *playlists;
-    const TracksAPI *tracks;
+    AlbumAPI *albums;
+    PlayerAPI *player;
+    PlaylistsAPI *playlists;
+    TracksAPI *tracks;
 
     AUTO_PROPERTY(QString, username);
 

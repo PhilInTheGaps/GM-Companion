@@ -1,12 +1,10 @@
 #include "baseshoptool.h"
 #include "file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QJsonDocument>
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 static constexpr auto PROJECT_FILE_GLOB = "*.shop";
 
@@ -20,8 +18,8 @@ void BaseShopTool::loadData()
 
     projects({});
 
-    observe(Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false))
-        .subscribe([this](Files::FileListResult *result) { onShopFilesFound(result); });
+    Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
+        .then(this, [this](Files::FileListResult *result) { onShopFilesFound(result); });
 }
 
 void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
@@ -41,9 +39,8 @@ void BaseShopTool::onShopFilesFound(Files::FileListResult *result)
         return;
     }
 
-    observe(Files::File::getDataAsync(files)).subscribe([this](const std::vector<Files::FileDataResult *> &results) {
-        onShopFileDataReceived(results);
-    });
+    Files::File::getDataAsync(files).then(
+        this, [this](const std::vector<Files::FileDataResult *> &results) { onShopFileDataReceived(results); });
 }
 
 void BaseShopTool::onShopFileDataReceived(const std::vector<Files::FileDataResult *> &results)

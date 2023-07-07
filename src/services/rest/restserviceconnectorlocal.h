@@ -6,9 +6,10 @@
 #include "requestcontainer.h"
 #include "restserviceconnector.h"
 #include "settings/abstractsettingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
+#include <QPromise>
 #include <QQueue>
+#include <QSharedPointer>
 
 struct RESTServiceLocalConfig
 {
@@ -47,14 +48,14 @@ protected:
     RESTServiceLocalConfig m_config;
 
     void setConfig(const RESTServiceLocalConfig &config);
-    void handleRateLimit(const std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair);
+    void handleRateLimit(const std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *> &pair);
     void startCooldown(int seconds);
     void dequeueRequests();
 
     bool m_isOnCooldown = false;
 
-    QMap<int, std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_activeRequests;
-    QQueue<std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> m_requestQueue;
+    QMap<int, std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> m_activeRequests;
+    QQueue<std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> m_requestQueue;
 
     [[nodiscard]] int activeRequestCount() const
     {
@@ -63,10 +64,10 @@ protected:
     int getQueueId();
 
 private:
-    bool checkAndEnqueueRequest(RequestContainer *container, const AsyncFuture::Deferred<RestNetworkReply *> &deferred);
+    bool checkAndEnqueueRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> deferred);
     O2Requestor *makeRequestor();
 
-    void sendRequest(RequestContainer *container, AsyncFuture::Deferred<RestNetworkReply *> deferred);
+    void sendRequest(RequestContainer *container, QSharedPointer<QPromise<RestNetworkReply *>> promise);
 
     int m_nextQueueId = 1;
 

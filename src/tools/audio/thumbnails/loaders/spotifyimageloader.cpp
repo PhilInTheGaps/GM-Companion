@@ -11,7 +11,6 @@
 Q_LOGGING_CATEGORY(gmAudioSpotifyImageLoader, "gm.audio.thumbnails.loaders.spotify")
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 auto SpotifyImageLoader::loadImageAsync(AudioFile *audioFile) -> QFuture<QPixmap>
 {
@@ -27,7 +26,7 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
     QPixmap image;
     if (AudioThumbnailCache::tryGet(id, &image))
     {
-        return completed(image);
+        return QtFuture::makeReadyFuture(image);
     }
 
     if (type == SpotifyUtils::SpotifyType::Playlist)
@@ -37,12 +36,13 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
 
     if (m_pendingFutures.contains(id))
     {
-        return m_pendingFutures[id].future();
+        return m_pendingFutures.value(id)->future();
     }
 
     enqueueRequest(id, type);
 
-    auto result = deferred<QPixmap>();
+    auto result = QSharedPointer<QPromise<QPixmap>>::create();
+    result->start();
     m_pendingFutures[id] = result;
 
     startTimer(type);
@@ -52,7 +52,7 @@ auto SpotifyImageLoader::loadImageAsync(const QString &uri) -> QFuture<QPixmap>
         stopTimerEarly(type);
     }
 
-    return result.future();
+    return result->future();
 }
 
 void SpotifyImageLoader::enqueueRequest(const QString &id, SpotifyUtils::SpotifyType type)
@@ -71,7 +71,7 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
         if (playlist.isNull()) return QFuture<QPixmap>();
 
         const auto url = playlist->images.first()->url;
-        const auto future = Spotify::instance()->get(url);
+        auto future = Spotify::instance()->get(url);
 
         const auto callback = [id, url](gsl::owner<RestNetworkReply *> reply) {
             QPixmap image;
@@ -86,11 +86,11 @@ auto SpotifyImageLoader::loadPlaylistImageAsync(const QString &id) -> QFuture<QP
             return image;
         };
 
-        return observe(future).subscribe(callback).future();
+        return future.then(Spotify::instance(), callback);
     };
 
-    const auto future = Spotify::instance()->playlists->getPlaylist(id);
-    return observe(future).subscribe(callback).future();
+    auto future = Spotify::instance()->playlists->getPlaylist(id);
+    return future.then(Spotify::instance(), callback).unwrap();
 }
 
 void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
@@ -104,8 +104,8 @@ void SpotifyImageLoader::startRequest(SpotifyUtils::SpotifyType type)
 
     qCDebug(gmAudioSpotifyImageLoader()) << "Sending batch request:" << url;
 
-    const auto future = Spotify::instance()->get(url);
-    observe(future).subscribe([type](RestNetworkReply *reply) { receivedRequest(reply, type); });
+    auto future = Spotify::instance()->get(url);
+    future.then(Spotify::instance(), [type](RestNetworkReply *reply) { receivedRequest(reply, type); });
 
     // Start timer again if there still are ids in the queue
     if (!getQueue(type)->isEmpty())
@@ -131,7 +131,7 @@ void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::
     for (const auto &value : entries)
     {
         const auto entry = value.toObject();
-        const auto id = entry["id"].toString();
+        const auto id = entry["id"_L1].toString();
         const auto name = entry["name"_L1].toString();
         auto images = entry["images"_L1].toArray();
 
@@ -147,12 +147,14 @@ void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::
         QPixmap image;
         if (AudioThumbnailCache::tryGet(url, &image))
         {
-            m_pendingFutures.take(id).complete(image);
+            auto promise = m_pendingFutures.take(id);
+            promise->addResult(image);
+            promise->finish();
             continue;
         }
 
         const auto request = QNetworkRequest(url);
-        const auto future = Spotify::instance()->get(request);
+        auto future = Spotify::instance()->get(request);
 
         const auto callback = [id, url](RestNetworkReply *reply) {
             QPixmap image;
@@ -162,10 +164,12 @@ void SpotifyImageLoader::receivedRequest(RestNetworkReply *reply, SpotifyUtils::
                 AudioThumbnailCache::instance()->insertImage(id, image);
             }
 
-            m_pendingFutures.take(id).complete(image);
+            auto promise = m_pendingFutures.take(id);
+            promise->addResult(image);
+            promise->finish();
         };
 
-        observe(future).subscribe(callback);
+        future.then(Spotify::instance(), callback);
     }
 }
 

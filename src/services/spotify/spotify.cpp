@@ -1,7 +1,5 @@
 ﻿#include "spotify.h"
-
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QDesktopServices>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -10,7 +8,6 @@
 #include <QNetworkRequest>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmSpotify, "gm.service.spotify")
 
@@ -54,7 +51,7 @@ void Spotify::updateConnector()
         }
         else
         {
-            observe(m_librespotController.start()).subscribe([this](bool success) {
+            m_librespotController.start().then(this, [this](bool success) {
                 if (success) grant();
             });
         }
@@ -107,7 +104,7 @@ auto Spotify::get(const QNetworkRequest &request) -> QFuture<gsl::owner<RestNetw
         return reply;
     };
 
-    return observe(m_connector->get(request)).subscribe(callback).future();
+    return m_connector->get(request).then(this, callback);
 }
 
 auto Spotify::get(const QUrl &url) -> QFuture<gsl::owner<RestNetworkReply *>>
@@ -124,7 +121,7 @@ auto Spotify::put(const QNetworkRequest &request, const QByteArray &data) -> QFu
         return reply;
     };
 
-    return observe(m_connector->put(request, data)).subscribe(callback).future();
+    return m_connector->put(request, data).then(this, callback);
 }
 
 auto Spotify::put(const QUrl &url, const QByteArray &data) -> QFuture<gsl::owner<RestNetworkReply *>>
@@ -141,7 +138,7 @@ auto Spotify::post(const QNetworkRequest &request, const QByteArray &data) -> QF
         return reply;
     };
 
-    return observe(m_connector->post(request, data)).subscribe(callback).future();
+    return m_connector->post(request, data).then(this, callback);
 }
 
 auto Spotify::clientStatus() const -> ServiceStatus *
@@ -153,9 +150,9 @@ void Spotify::connectService()
 {
     username(SettingsManager::instance()->get<QString>(u"spotifyUsername"_s, u""_s, u"Spotify"_s));
 
-    const auto hasClientStarted = startClient();
+    auto hasClientStarted = startClient();
 
-    observe(hasClientStarted).subscribe([this](bool success) {
+    hasClientStarted.then(this, [this](bool success) {
         qCDebug(gmSpotify()) << "Client has started:" << success;
 
         if (success)

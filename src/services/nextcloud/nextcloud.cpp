@@ -1,6 +1,5 @@
 #include "nextcloud.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/networkutils.h"
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -9,7 +8,6 @@
 #include <QTimer>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 constexpr auto AUTH_URL = "/index.php/login/v2";
 constexpr auto DAV_ENDPOINT = "/remote.php/dav/files";
@@ -26,38 +24,38 @@ NextCloud::NextCloud(QNetworkAccessManager &networkManager, QObject *parent)
 NextCloud::NextCloud(const QString &serviceName, QNetworkAccessManager &networkManager, QObject *parent)
     : Service(serviceName, parent), m_networkManager(networkManager)
 {
-    if (connected())
-    {
-        updateStatus(ServiceStatus::Type::Success, tr("Connected"));
-        loginName(SettingsManager::instance()->get<QString>(u"loginName"_s, u""_s, serviceName));
-        serverUrl(SettingsManager::getServerUrl(serviceName, false));
-        m_loggingIn = true;
+    if (!connected()) return;
 
-        const auto future = SettingsManager::getPassword(loginName(), serviceName);
+    updateStatus(ServiceStatus::Type::Success, tr("Connected"));
+    loginName(SettingsManager::instance()->get<QString>(u"loginName"_s, u""_s, serviceName));
+    serverUrl(SettingsManager::getServerUrl(serviceName, false));
+    m_loggingIn = true;
 
-        observe(future).subscribe(
-            [this](const QString &password) {
-                m_appPassword = password;
+    auto future = SettingsManager::getPassword(loginName(), serviceName);
 
-                if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
-                {
-                    connected(false);
-                }
-                else
-                {
-                    qCDebug(gmNextCloud())
-                        << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
-                }
+    future
+        .then(this,
+              [this](const QString &password) {
+                  m_appPassword = password;
 
-                m_loggingIn = false;
-                emit loggedIn();
-            },
-            [this]() {
-                qCCritical(gmNextCloud()) << "Error during reading of password";
-                m_loggingIn = false;
-                connected(false);
-            });
-    }
+                  if (loginName().isEmpty() || m_appPassword.isEmpty() || serverUrl().isEmpty())
+                  {
+                      connected(false);
+                  }
+                  else
+                  {
+                      qCDebug(gmNextCloud())
+                          << "Connected to Nextcloud as user" << loginName() << "on server" << serverUrl();
+                  }
+
+                  m_loggingIn = false;
+                  emit loggedIn();
+              })
+        .onCanceled(this, [this]() {
+            qCCritical(gmNextCloud()) << "Error during reading of password";
+            m_loggingIn = false;
+            connected(false);
+        });
 }
 
 auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, const QByteArray &data,
@@ -70,9 +68,9 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
     {
         qCDebug(gmNextCloud()) << "Delaying DAV request, because we are waiting for authentication ...";
 
-        return observe(this, &NextCloud::loggedIn)
-            .subscribe([this, method, path, data]() { return sendDavRequest(method, path, data); })
-            .future();
+        return QtFuture::connect(this, &NextCloud::loggedIn)
+            .then(this, [this, method, path, data]() { return sendDavRequest(method, path, data); })
+            .unwrap();
     }
 
     auto url = getPathUrl(path);
@@ -97,7 +95,7 @@ auto NextCloud::sendDavRequest(const QByteArray &method, const QString &path, co
         }
     }
 
-    return AsyncFuture::completed(m_networkManager.sendCustomRequest(request, method, data));
+    return QtFuture::makeReadyFuture(m_networkManager.sendCustomRequest(request, method, data));
 }
 
 auto NextCloud::getPathUrl(const QString &path) const -> QString

@@ -1,6 +1,5 @@
 #include "addonmanager.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QDir>
 #include <QFile>
@@ -13,7 +12,6 @@
 #include <quazipfile.h>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAddonManager, "gm.addons.manager")
 
@@ -149,7 +147,7 @@ auto AddonManager::installRemoteAsync(Addon &addon) -> QFuture<void>
         qCDebug(gmAddonManager()) << "Installed remote addon" << addon.id();
     };
 
-    return observe(reply, &QNetworkReply::finished).subscribe(callback).future();
+    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, callback);
 }
 
 /// Update addon by removing the old version and installing the new one

@@ -1,11 +1,8 @@
 #include "audioexporter.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
-
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioExporter, "gm.audio.exporter")
 
@@ -153,7 +150,9 @@ auto Worker::copyFile(const QString &filePath, const QString &base, const QStrin
     const auto oldPath = FileUtils::fileInDir(filePath, base);
     const auto newPath = FileUtils::fileInDir(FileUtils::fileInDir(filePath, subfolder), m_path);
 
-    observe(Files::File::copyAsync(oldPath, newPath)).subscribe([this]() { copyNext(); }, [this]() { copyNext(); });
+    Files::File::copyAsync(oldPath, newPath)
+        .then(this, [this](Files::FileResult *) { copyNext(); })
+        .onCanceled(this, [this]() { copyNext(); });
     return true;
 }
 

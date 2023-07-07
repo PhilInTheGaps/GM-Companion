@@ -69,7 +69,6 @@ qt_add_library(common STATIC ${SOURCES})
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(common PRIVATE
-    qtasyncfuture
     propertyhelper
     ${MARKDOWN_LIBRARY}
     ${QTKEYCHAIN_LIBRARY}

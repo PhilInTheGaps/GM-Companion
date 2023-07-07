@@ -1,8 +1,6 @@
 #include "playlistsapi.h"
 #include "spotify/spotify.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/networkutils.h"
-
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLoggingCategory>
@@ -11,13 +9,12 @@
 Q_LOGGING_CATEGORY(gmSpotifyPlaylists, "gm.spotify.api.playlists")
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 PlaylistsAPI::PlaylistsAPI(Spotify *parent) : QObject(parent), m_spotify(parent)
 {
 }
 
-auto PlaylistsAPI::getPlaylist(const QString &id) const -> QFuture<QSharedPointer<SpotifyPlaylist>>
+auto PlaylistsAPI::getPlaylist(const QString &id) -> QFuture<QSharedPointer<SpotifyPlaylist>>
 {
     if (id.isEmpty())
     {
@@ -30,7 +27,7 @@ auto PlaylistsAPI::getPlaylist(const QString &id) const -> QFuture<QSharedPointe
     query.addQueryItem(u"market"_s, u"from_token"_s);
     url.setQuery(query);
 
-    const auto callback = [](gsl::owner<RestNetworkReply *> reply) -> QFuture<QSharedPointer<SpotifyPlaylist>> {
+    const auto callback = [](gsl::owner<RestNetworkReply *> reply) -> QSharedPointer<SpotifyPlaylist> {
         if (reply->hasError())
         {
             qCWarning(gmSpotifyPlaylists()) << reply->errorText();
@@ -41,13 +38,13 @@ auto PlaylistsAPI::getPlaylist(const QString &id) const -> QFuture<QSharedPointe
         const auto data = reply->data();
         reply->deleteLater();
 
-        return completed(SpotifyPlaylist::fromJson(data));
+        return SpotifyPlaylist::fromJson(data);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback);
 }
 
-auto PlaylistsAPI::getPlaylistTracks(const QString &id) const -> QFuture<QSharedPointer<SpotifyTrackList>>
+auto PlaylistsAPI::getPlaylistTracks(const QString &id) -> QFuture<QSharedPointer<SpotifyTrackList>>
 {
     if (id.isEmpty())
     {
@@ -78,13 +75,13 @@ auto PlaylistsAPI::getPlaylistTracks(const QString &id) const -> QFuture<QShared
         {
             return getPlaylistTracks(tracklist);
         }
-        return completed(tracklist);
+        return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback).unwrap();
 }
 
-auto PlaylistsAPI::getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracklist) const
+auto PlaylistsAPI::getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracklist)
     -> QFuture<QSharedPointer<SpotifyTrackList>>
 {
     const QUrl url(tracklist->next);
@@ -94,7 +91,7 @@ auto PlaylistsAPI::getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracklist)
         {
             qCWarning(gmSpotifyPlaylists()) << reply->errorText();
             reply->deleteLater();
-            return completed(tracklist);
+            return QtFuture::makeReadyFuture(tracklist);
         }
 
         const auto data = reply->data();
@@ -105,10 +102,10 @@ auto PlaylistsAPI::getPlaylistTracks(QSharedPointer<SpotifyTrackList> tracklist)
         {
             return getPlaylistTracks(std::move(tracklist));
         }
-        return completed(tracklist);
+        return QtFuture::makeReadyFuture(tracklist);
     };
 
-    return observe(m_spotify->get(NetworkUtils::makeJsonRequest(url))).subscribe(callback).future();
+    return m_spotify->get(NetworkUtils::makeJsonRequest(url)).then(this, callback).unwrap();
 }
 
 auto PlaylistsAPI::updatePlaylist(const PlaylistConfig &config) const -> QFuture<gsl::owner<RestNetworkReply *>>

@@ -45,7 +45,7 @@ void SpotifyConnectorServer::disconnectService()
 }
 
 void SpotifyConnectorServer::sendRequest(RequestContainer *container,
-                                         const AsyncFuture::Deferred<RestNetworkReply *> &deferred)
+                                         QSharedPointer<QPromise<RestNetworkReply *>> deferred)
 {
     if (!canSendRequest())
     {
@@ -82,11 +82,13 @@ void SpotifyConnectorServer::sendRequest(RequestContainer *container,
 
 auto SpotifyConnectorServer::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
 {
-    const auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, GET, "", this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto SpotifyConnectorServer::get(const QUrl &url) -> QFuture<RestNetworkReply *>
@@ -96,20 +98,24 @@ auto SpotifyConnectorServer::get(const QUrl &url) -> QFuture<RestNetworkReply *>
 
 auto SpotifyConnectorServer::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
-    const auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, PUT, data, this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto SpotifyConnectorServer::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
-    const auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    const auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, POST, data, this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto SpotifyConnectorServer::customRequest(const QNetworkRequest &request, const QByteArray &verb,
@@ -291,7 +297,7 @@ auto SpotifyConnectorServer::addAuthHeader(QNetworkRequest request) -> QNetworkR
 }
 
 void SpotifyConnectorServer::handleRateLimit(RequestContainer *container,
-                                             const AsyncFuture::Deferred<RestNetworkReply *> &deferred,
+                                             QSharedPointer<QPromise<RestNetworkReply *>> promise,
                                              const QList<std::pair<QByteArray, QByteArray>> &headers)
 {
     using namespace std;
@@ -305,7 +311,7 @@ void SpotifyConnectorServer::handleRateLimit(RequestContainer *container,
             qCDebug(gmSpotifyServer()) << header;
             const auto seconds = chrono::seconds(header.second.toInt());
             startCooldown(seconds);
-            enqueueRequest(container, deferred);
+            enqueueRequest(container, promise);
             return;
         }
     }
@@ -333,9 +339,9 @@ auto SpotifyConnectorServer::canSendRequest() -> bool
 }
 
 void SpotifyConnectorServer::enqueueRequest(RequestContainer *container,
-                                            const AsyncFuture::Deferred<RestNetworkReply *> &deferred)
+                                            QSharedPointer<QPromise<RestNetworkReply *>> promise)
 {
-    m_requestQueue.enqueue(std::pair(container, deferred));
+    m_requestQueue.enqueue(std::pair(container, promise));
 }
 
 void SpotifyConnectorServer::dequeueRequests()
@@ -351,7 +357,7 @@ void SpotifyConnectorServer::dequeueRequests()
 }
 
 void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContainer *container,
-                                             AsyncFuture::Deferred<RestNetworkReply *> deferred)
+                                             QSharedPointer<QPromise<RestNetworkReply *>> promise)
 {
     m_currentRequestCount--;
 
@@ -367,12 +373,11 @@ void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContai
     // Check if rate limit was exceeded
     if (result->error() == QNetworkReply::UnknownContentError)
     {
-        const auto status =
-            QJsonDocument::fromJson(result->data()).object()["error"_L1]["status"_L1].toInt();
+        const auto status = QJsonDocument::fromJson(result->data()).object()["error"_L1]["status"_L1].toInt();
 
         if (status == HttpStatus::TooManyRequests)
         {
-            handleRateLimit(container, deferred, result->headers());
+            handleRateLimit(container, promise, result->headers());
             return;
         }
     }
@@ -391,7 +396,8 @@ void SpotifyConnectorServer::onReceivedReply(QNetworkReply *reply, RequestContai
         }
     }
 
-    deferred.complete(result);
+    promise->addResult(result);
+    promise->finish();
     reply->deleteLater();
 
     // If there are requests in queue, send next

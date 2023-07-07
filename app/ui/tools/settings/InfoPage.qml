@@ -104,13 +104,6 @@ Item {
                 spacing: 10
 
                 CreditsItem {
-                    title: "AsyncFuture"
-                    description: qsTr("Use QFuture like a Promise object")
-                    license: [["Apache 2.0", "https://github.com/benlau/asyncfuture/blob/master/LICENSE"]]
-                    links: [["benlau/asyncfuture", "https://github.com/benlau/asyncfuture"]]
-                }
-
-                CreditsItem {
                     title: "CMake Modules"
                     description: qsTr("Additional CMake functionality")
                     license: [["BSL-1.0", "https://github.com/bilke/cmake-modules/blob/master/LICENSE_1_0.txt"], ["BSD", "https://github.com/bilke/cmake-modules/blob/master/CodeCoverage.cmake"], ["MIT", "https://github.com/bilke/cmake-modules/blob/master/cotire-license"]]

@@ -1,15 +1,11 @@
 #include "spotifyplayer.h"
 #include "services/spotify/spotify.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
-
 #include <QDateTime>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
 
 Q_LOGGING_CATEGORY(gmAudioSpotify, "gm.audio.spotify")
-
-using namespace AsyncFuture;
 
 SpotifyPlayer::SpotifyPlayer(MetaDataReader &mDReader, QObject *parent)
     : AudioPlayer(parent), m_metaDataReader(mDReader)
@@ -82,7 +78,7 @@ void SpotifyPlayer::play(const QString &uri)
         startMetaDataTimer();
     };
 
-    observe(Spotify::instance()->player->play(uri)).subscribe(callback);
+    Spotify::instance()->player->play(uri).then(this, callback);
 
     m_isPlaying = true;
     emit startedPlaying();
@@ -97,7 +93,7 @@ void SpotifyPlayer::play()
 
     qCDebug(gmAudioSpotify) << "Continuing playback ...";
 
-    observe(Spotify::instance()->player->play()).subscribe([this](RestNetworkReply *reply) {
+    Spotify::instance()->player->play().then(this, [this](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
 
         startMetaDataTimer();
@@ -132,7 +128,7 @@ void SpotifyPlayer::stop()
     m_songDurationTimer->stop();
     m_metaDataTimer->stop();
 
-    observe(Spotify::instance()->player->pause()).subscribe([](RestNetworkReply *reply) {
+    Spotify::instance()->player->pause().then(this, [](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 
@@ -160,7 +156,7 @@ void SpotifyPlayer::next()
 {
     qCDebug(gmAudioSpotify) << "Skipping to next track ...";
 
-    observe(Spotify::instance()->player->next()).subscribe([this](RestNetworkReply *reply) {
+    Spotify::instance()->player->next().then(this, [this](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
 
         startMetaDataTimer();
@@ -174,7 +170,7 @@ void SpotifyPlayer::again()
 {
     qCDebug(gmAudioSpotify) << "Playing track again ...";
 
-    observe(Spotify::instance()->player->seek(1)).subscribe([](RestNetworkReply *reply) {
+    Spotify::instance()->player->seek(1).then(this, [](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 }
@@ -184,7 +180,7 @@ void SpotifyPlayer::setVolume(int linear, int logarithmic)
     Q_UNUSED(linear)
     qCDebug(gmAudioSpotify) << "Setting volume:" << logarithmic;
 
-    observe(Spotify::instance()->player->volume(logarithmic)).subscribe([](RestNetworkReply *reply) {
+    Spotify::instance()->player->volume(logarithmic).then(this, [](RestNetworkReply *reply) {
         if (reply) reply->deleteLater();
     });
 
@@ -221,5 +217,5 @@ void SpotifyPlayer::getCurrentSong()
         m_metaDataReader.setMetaData(metadata);
     };
 
-    observe(Spotify::instance()->player->getCurrentlyPlaying()).subscribe(callback);
+    Spotify::instance()->player->getCurrentlyPlaying().then(this, callback);
 }

@@ -1,5 +1,4 @@
 #include "settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <qt6keychain/keychain.h>
 
@@ -136,14 +135,14 @@ auto SettingsManager::getPassword(const QString &username, const QString &servic
         return pw;
     };
 
-    const auto future = AsyncFuture::observe(job, &QKeychain::ReadPasswordJob::finished)
-                            .subscribe(callback,
-                                       [job, service]() {
-                                           qCCritical(gmSettings) << "Password job cancelled for service" << service;
-                                           job->deleteLater();
-                                           return u""_s;
-                                       })
-                            .future();
+    const auto errorCallback = [job, service]() -> QString {
+        qCCritical(gmSettings) << "Password job cancelled for service" << service;
+        job->deleteLater();
+        return u""_s;
+    };
+
+    const auto future =
+        QtFuture::connect(job, &QKeychain::ReadPasswordJob::finished).then(callback).onCanceled(errorCallback);
 
     job->start();
     return future;

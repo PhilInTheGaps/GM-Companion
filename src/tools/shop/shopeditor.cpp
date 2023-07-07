@@ -1,7 +1,6 @@
 #include "shopeditor.h"
 #include "file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QJsonDocument>
@@ -10,7 +9,6 @@
 #include <algorithm>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmShopsEditor, "gm.shops.editor")
 
@@ -57,8 +55,8 @@ void ShopEditor::findItems()
 
     itemGroups({});
 
-    observe(Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false))
-        .subscribe([this](Files::FileListResult *result) { onItemFilesFound(result); });
+    Files::File::listAsync(SettingsManager::getPath(u"shops"_s), true, false)
+        .then(this, [this](Files::FileListResult *result) { onItemFilesFound(result); });
 }
 
 void ShopEditor::onItemFilesFound(Files::FileListResult *result)
@@ -78,7 +76,7 @@ void ShopEditor::onItemFilesFound(Files::FileListResult *result)
         return;
     }
 
-    observe(Files::File::getDataAsync(files)).subscribe([this](const std::vector<Files::FileDataResult *> &results) {
+    Files::File::getDataAsync(files).then(this, [this](const std::vector<Files::FileDataResult *> &results) {
         QList<ItemGroup *> groups = {};
 
         foreach (auto *result, results)
@@ -195,21 +193,22 @@ void ShopEditor::save()
     if (projects().isEmpty()) return;
 
     const auto basePath = SettingsManager::getPath(u"shops"_s);
-    auto combinator = combine();
+
+    QList<QFuture<Files::FileResult *>> combinator;
 
     foreach (const auto *project, projects())
     {
-        combinator << observe(Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop"_L1, basePath),
-                                                     QJsonDocument(project->toJson()).toJson()))
-                          .future();
+        combinator << Files::File::saveAsync(FileUtils::fileInDir(project->name() + ".shop"_L1, basePath),
+                                             QJsonDocument(project->toJson()).toJson());
     }
 
-    combinator.subscribe(
-        [this]() {
-            isSaved(true);
-            emit showInfoBar(tr("Saved!"));
-        },
-        [this]() { emit showInfoBar(tr("Error: Could not save project(s)!")); });
+    QtFuture::whenAll(combinator.begin(), combinator.end())
+        .then(this,
+              [this](const QList<QFuture<Files::FileResult *>> &) {
+                  isSaved(true);
+                  emit showInfoBar(tr("Saved!"));
+              })
+        .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save project(s)!")); });
 
     sendProjectCopiesToTool();
 }

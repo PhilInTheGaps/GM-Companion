@@ -1,27 +1,24 @@
 #include "fileimageloader.h"
 #include "../audiothumbnailcache.h"
 #include "file.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
-
-#include <QtConcurrent/QtConcurrent>
 #include <QFuture>
+#include <QtConcurrent/QtConcurrent>
 
-using namespace AsyncFuture;
 using namespace Files;
 
 auto FileImageLoader::loadImageAsync(const QString &path) -> QFuture<QPixmap>
 {
     // Try to load from cache
     QPixmap pixmap;
-    if (AudioThumbnailCache::tryGet(path, &pixmap)) return completed(pixmap);
+    if (AudioThumbnailCache::tryGet(path, &pixmap)) return QtFuture::makeReadyFuture(pixmap);
 
-    const auto future = observe(File::getDataAsync(path)).future();
+    auto future = File::getDataAsync(path);
 
     const auto callback = [path](FileDataResult *result) {
         return QtConcurrent::run(loadFromFileResult, path, result);
     };
 
-    return observe(future).subscribe(callback).future();
+    return future.then(callback).unwrap();
 }
 
 auto FileImageLoader::loadFromFileResult(const QString &path, FileDataResult *result) -> QPixmap

@@ -49,7 +49,6 @@ message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
 enable_testing(true)
 
-include(AddAsyncFuture)
 include(AddPropertyHelper)
 include(AddHttpStatusCodes)
 

@@ -77,7 +77,7 @@ public:
     Q_INVOKABLE void removeFile(int index, bool findMissing = true);
     Q_INVOKABLE void moveFile(int index, int positions);
     Q_INVOKABLE void removeMissingFiles();
-    Q_INVOKABLE void replaceFileFolder(int index, const QString &folder) const;
+    Q_INVOKABLE void replaceFileFolder(int index, const QString &folder);
     Q_INVOKABLE bool addFile(QStringList path, const QString &filename);
     Q_INVOKABLE bool addUrl(const QString &url, int mode, const QString &title = QLatin1String());
     Q_INVOKABLE bool addYtUrl(const QString &videoUrl);

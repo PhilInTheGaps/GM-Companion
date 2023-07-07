@@ -1,7 +1,6 @@
 #include "audiosaveload.h"
 #include "filesystem/file.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "tools/audio/project/audiofile.h"
 #include "tools/audio/project/audioproject.h"
 #include "tools/audio/project/audioprojectupgrader.h"
@@ -11,19 +10,18 @@
 
 using namespace Qt::Literals::StringLiterals;
 using namespace Files;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioSaveLoad, "gm.audio.saveload")
 
 /**
  * @brief Find audio project files
  */
-auto AudioSaveLoad::findProjectsAsync(const QString &folder) -> QFuture<std::vector<AudioProject *>>
+auto AudioSaveLoad::findProjectsAsync(QObject *context, const QString &folder) -> QFuture<std::vector<AudioProject *>>
 {
     qCDebug(gmAudioSaveLoad()) << "Finding audio projects ...";
 
     auto futureList = File::listAsync(getProjectFolder(folder), true, false);
-    return observe(futureList).subscribe([](FileListResult *list) { return loadProjects(list); }).future();
+    return futureList.then(context, [context](FileListResult *list) { return loadProjects(context, list); }).unwrap();
 }
 
 auto AudioSaveLoad::loadProject(const QByteArray &data, QObject *parent) -> AudioProject *
@@ -36,7 +34,7 @@ auto AudioSaveLoad::loadProject(const QByteArray &data, QObject *parent) -> Audi
     return new AudioProject(doc.object(), parent);
 }
 
-auto AudioSaveLoad::loadProjects(FileListResult *files) -> QFuture<std::vector<AudioProject *>>
+auto AudioSaveLoad::loadProjects(QObject *context, FileListResult *files) -> QFuture<std::vector<AudioProject *>>
 {
     QStringList fileNames;
     const auto filePaths = files->filesFull();
@@ -51,52 +49,50 @@ auto AudioSaveLoad::loadProjects(FileListResult *files) -> QFuture<std::vector<A
     auto futureContents = File::getDataAsync(fileNames);
     files->deleteLater();
 
-    return observe(futureContents)
-        .subscribe([](const std::vector<FileDataResult *> &contents) {
-            qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
-            std::vector<AudioProject *> projects;
-            projects.reserve(contents.size());
+    return futureContents.then(context, [](const std::vector<FileDataResult *> &contents) {
+        qCDebug(gmAudioSaveLoad()) << "Found audio projects.";
+        std::vector<AudioProject *> projects;
+        projects.reserve(contents.size());
 
-            for (auto *content : contents)
-            {
-                projects.push_back(loadProject(content->data(), nullptr));
-                content->deleteLater();
-            }
+        for (auto *content : contents)
+        {
+            projects.push_back(loadProject(content->data(), nullptr));
+            content->deleteLater();
+        }
 
-            return projects;
-        })
-        .future();
+        return projects;
+    });
 }
 
-auto AudioSaveLoad::findMissingFilesAsync(const QList<AudioFile *> &audioFiles, const QString &basePath)
-    -> QFuture<bool>
+auto AudioSaveLoad::findMissingFilesAsync(QObject *context, const QList<AudioFile *> &audioFiles,
+                                          const QString &basePath) -> QFuture<bool>
 {
     qCDebug(gmAudioSaveLoad()) << "Finding missing files ...";
 
     const auto filePaths = getFilePathsToCheck(audioFiles, basePath);
 
     auto futureCheckResult = File::checkAsync(filePaths, true);
-    return observe(futureCheckResult)
-        .subscribe(
-            [audioFiles, basePath](FileMultiCheckResult *multiResult) {
-                const auto foundPaths = multiResult->existing();
+    return futureCheckResult
+        .then(context,
+              [audioFiles, basePath](FileMultiCheckResult *multiResult) {
+                  const auto foundPaths = multiResult->existing();
 
-                for (auto *audioFile : audioFiles)
-                {
-                    audioFile->missing(audioFile->source() == AudioFile::Source::File &&
-                                       !foundPaths.contains(FileUtils::fileInDir(audioFile->url(), basePath)));
-                }
+                  for (auto *audioFile : audioFiles)
+                  {
+                      audioFile->missing(audioFile->source() == AudioFile::Source::File &&
+                                         !foundPaths.contains(FileUtils::fileInDir(audioFile->url(), basePath)));
+                  }
 
-                if (const auto missingPaths = multiResult->missing(); !missingPaths.isEmpty())
-                {
-                    qCDebug(gmAudioSaveLoad()) << "Could not find" << missingPaths.length() << "files:" << missingPaths;
-                }
+                  if (const auto missingPaths = multiResult->missing(); !missingPaths.isEmpty())
+                  {
+                      qCDebug(gmAudioSaveLoad())
+                          << "Could not find" << missingPaths.length() << "files:" << missingPaths;
+                  }
 
-                multiResult->deleteLater();
-                return true;
-            },
-            []() { return false; })
-        .future();
+                  multiResult->deleteLater();
+                  return true;
+              })
+        .onCanceled(context, []() { return false; });
 }
 
 auto AudioSaveLoad::getFilePathsToCheck(const QList<AudioFile *> &audioFiles, const QString &basePath) -> QStringList
@@ -125,7 +121,7 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
     if (!project)
     {
         qCWarning(gmAudioSaveLoad()) << "Could not save project: project is null!";
-        return completed(false);
+        return QtFuture::makeReadyFuture(false);
     }
 
     qCDebug(gmAudioSaveLoad()) << "Saving project:" << project->name() << "...";
@@ -133,7 +129,7 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
     if (project->isSaved())
     {
         qCDebug(gmAudioSaveLoad()) << "Project does not need to be saved, no changes were made.";
-        return completed(true);
+        return QtFuture::makeReadyFuture(true);
     }
 
     auto data = QJsonDocument(project->toJson()).toJson(QJsonDocument::Indented);
@@ -151,14 +147,13 @@ auto AudioSaveLoad::saveProject(AudioProject *project, const QString &folder) ->
 
 auto AudioSaveLoad::saveProject(AudioProject *project, const QString &filePath, const QByteArray &data) -> QFuture<bool>
 {
-    return observe(File::saveAsync(filePath, data))
-        .subscribe(
-            [project](FileResult *result) {
-                project->isSaved(result->success());
-                return true;
-            },
-            []() { return false; })
-        .future();
+    return File::saveAsync(filePath, data)
+        .then(project,
+              [project](FileResult *result) {
+                  project->isSaved(result->success());
+                  return true;
+              })
+        .onCanceled(project, []() { return false; });
 }
 
 auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &filePath, const QByteArray &data,
@@ -167,33 +162,32 @@ auto AudioSaveLoad::saveRenamedProject(AudioProject *project, const QString &fil
     auto filePathOld = getProjectFolder(folder) + "/" + project->originalName() + PROJECT_FILE_SUFFIX;
     auto future = File::moveAsync(filePathOld, filePath);
 
-    return observe(future)
-        .subscribe(
-            [filePath, data, project]() {
-                project->wasRenamed(false);
-                return saveProject(project, filePath, data);
-            },
-            []() { return false; })
-        .future();
+    return future
+        .then(project,
+              [filePath, data, project](FileResult *) {
+                  project->wasRenamed(false);
+                  return saveProject(project, filePath, data);
+              })
+        .onCanceled(project, []() { return QtFuture::makeReadyFuture(false); })
+        .unwrap();
 }
 
 auto AudioSaveLoad::deleteProject(AudioProject *project, const QString &folder) -> QFuture<bool>
 {
     if (!project)
     {
-        return completed(false);
+        return QtFuture::makeReadyFuture(false);
     }
 
     auto filePath = getProjectFolder(folder) + "/" + project->name() + PROJECT_FILE_SUFFIX;
-    return observe(File::deleteAsync(filePath))
-        .subscribe(
-            [](FileResult *result) {
-                const bool success = result->success();
-                result->deleteLater();
-                return success;
-            },
-            []() { return false; })
-        .future();
+    return File::deleteAsync(filePath)
+        .then(project,
+              [](FileResult *result) {
+                  const bool success = result->success();
+                  result->deleteLater();
+                  return success;
+              })
+        .onCanceled(project, []() { return false; });
 }
 
 auto AudioSaveLoad::getProjectFolder(const QString &preferredFolder) -> QString

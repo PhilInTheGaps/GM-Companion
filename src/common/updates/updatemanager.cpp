@@ -1,5 +1,4 @@
 #include "updatemanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/stringutils.h"
 #include <QLoggingCategory>
 #include <QXmlStreamReader>
@@ -43,7 +42,7 @@ void UpdateManager::checkForUpdates()
     qCDebug(gmUpdateManager) << "Releases feed URL:" << m_feedURL;
 
     auto version = fetchNewestVersion();
-    AsyncFuture::observe(version).subscribe([this](const QString &version) {
+    version.then(this, [this](const QString &version) {
         m_newestVersion = version;
         qCDebug(gmUpdateManager()) << "Newest available version:" << version;
 
@@ -121,14 +120,12 @@ auto UpdateManager::fetchNewestVersion() -> QFuture<QString>
     // Get the release feed to check for a new version
     auto *reply = networkManager.get(QNetworkRequest(QUrl(m_feedURL)));
 
-    return AsyncFuture::observe(reply, &QNetworkReply::finished)
-        .subscribe([reply]() {
-            auto versions = findVersionsFromXML(reply->readAll());
-            reply->deleteLater();
+    return QtFuture::connect(reply, &QNetworkReply::finished).then(this, [reply]() {
+        auto versions = findVersionsFromXML(reply->readAll());
+        reply->deleteLater();
 
-            qCDebug(gmUpdateManager()) << "Found the following versions:" << versions;
+        qCDebug(gmUpdateManager()) << "Found the following versions:" << versions;
 
-            return findNewestVersion(versions);
-        })
-        .future();
+        return findNewestVersion(versions);
+    });
 }

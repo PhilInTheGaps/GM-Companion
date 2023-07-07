@@ -2,14 +2,12 @@
 #include "services/spotify/spotify.h"
 #include "services/spotify/spotifyutils.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 #include <QRandomGenerator>
 #include <algorithm>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmAudioMusic, "gm.audio.music")
 
@@ -45,7 +43,7 @@ void MusicPlayer::play(AudioElement *element)
 
     emit metaDataChanged(&m_mediaPlayer);
 
-    observe(loadPlaylist()).subscribe([this]() { startPlaying(); });
+    loadPlaylist().then(this, [this]() { startPlaying(); });
 }
 
 /**
@@ -165,7 +163,7 @@ void MusicPlayer::loadSpotifyTrackNamesAsync(const QList<AudioFile *> &files)
         }
     };
 
-    observe(Spotify::instance()->tracks->getTracks(trackIds)).subscribe(callback);
+    Spotify::instance()->tracks->getTracks(trackIds).then(Spotify::instance(), callback);
 }
 
 /// Load all entries of a playlist by "expanding" entries like spotify playlists and albums
@@ -176,7 +174,7 @@ auto MusicPlayer::loadPlaylistRecursive(int index) -> QFuture<void>
         applyShuffleMode();
         loadTrackNamesAsync();
         emit playlistChanged(a_playlist);
-        return completed();
+        return QtFuture::makeReadyFuture();
     }
 
     const auto &files = m_currentElement->files();
@@ -231,9 +229,9 @@ auto MusicPlayer::loadPlaylistRecursiveSpotify(int index, AudioFile *audioFile) 
         switch (type)
         {
         case SpotifyUtils::SpotifyType::Playlist:
-            return observe(Spotify::instance()->playlists->getPlaylistTracks(id)).subscribe(callback).future();
+            return Spotify::instance()->playlists->getPlaylistTracks(id).then(this, callback).unwrap();
         case SpotifyUtils::SpotifyType::Album:
-            return observe(Spotify::instance()->albums->getAlbumTracks(id)).subscribe(callback).future();
+            return Spotify::instance()->albums->getAlbumTracks(id).then(this, callback).unwrap();
         default:
             qCCritical(gmAudioMusic()) << "loadPlaylistRecursiveSpotify(): not implemented for container type"
                                        << (int)type;
@@ -306,7 +304,7 @@ void MusicPlayer::loadLocalFile(AudioFile *file)
     const auto path = FileUtils::fileInDir(file->url(), SettingsManager::getPath(u"music"_s));
     const auto callback = [this](Files::FileDataResult *result) { onFileReceived(result); };
 
-    observe(Files::File::getDataAsync(path)).context(m_fileRequestContext, callback);
+    Files::File::getDataAsync(path).then(m_fileRequestContext, callback);
 }
 
 void MusicPlayer::loadWebFile(AudioFile *file)

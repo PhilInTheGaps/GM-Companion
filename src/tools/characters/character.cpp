@@ -1,12 +1,10 @@
 #include "character.h"
 #include "filesystem/file.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmCharactersCharacter, "gm.characters.character")
 
@@ -42,7 +40,7 @@ void Character::loadFiles()
 
 void Character::loadFileList()
 {
-    observe(Files::File::listAsync(folder(), true, false)).subscribe([this](Files::FileListResult *result) {
+    Files::File::listAsync(folder(), true, false).then(this, [this](Files::FileListResult *result) {
         if (!result) return;
 
         foreach (const auto &fileName, result->files())
@@ -66,13 +64,12 @@ void Character::loadFileData(int index)
         return;
     }
 
-    observe(Files::File::getDataAsync(m_files.at(index)->path()))
-        .subscribe([this, index](Files::FileDataResult *result) {
-            if (!result) return;
+    Files::File::getDataAsync(m_files.at(index)->path()).then(this, [this, index](Files::FileDataResult *result) {
+        if (!result) return;
 
-            m_files.at(index)->data(result->data());
-            emit fileDataLoaded(index, result->data());
+        m_files.at(index)->data(result->data());
+        emit fileDataLoaded(index, result->data());
 
-            result->deleteLater();
-        });
+        result->deleteLater();
+    });
 }

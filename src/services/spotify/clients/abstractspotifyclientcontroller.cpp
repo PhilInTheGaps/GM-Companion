@@ -1,8 +1,6 @@
 #include "abstractspotifyclientcontroller.h"
 #include "../config.h"
 #include "spotify/spotify.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
-
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
@@ -10,8 +8,6 @@
 #include <QRandomGenerator>
 
 Q_LOGGING_CATEGORY(gmSpotifyClientController, "gm.service.spotify.clients.abstract")
-
-using namespace AsyncFuture;
 
 AbstractSpotifyClientController::AbstractSpotifyClientController(QObject *parent,
                                                                  const QLoggingCategory &loggingCategory)
@@ -31,7 +27,7 @@ auto AbstractSpotifyClientController::getDevice(const QString &name) -> QFuture<
         return QSharedPointer<SpotifyDevice>();
     };
 
-    return observe(Spotify::instance()->player->devices()).subscribe(callback).future();
+    return Spotify::instance()->player->devices().then(Spotify::instance(), callback);
 }
 
 void AbstractSpotifyClientController::updateStatus(ServiceStatus::Type type, const QString &message)
@@ -47,7 +43,7 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
     qCDebug(m_loggingCategory) << "Found librespot instance" << deviceName()
                                << "but it is inactive, setting as active device ...";
 
-    const auto future = Spotify::instance()->player->transfer({device.id});
+    auto future = Spotify::instance()->player->transfer({device.id});
     const auto onReply = [this](RestNetworkReply *reply) {
         if (reply->hasError()) updateStatus(ServiceStatus::Type::Error, reply->errorText());
         reply->deleteLater();
@@ -57,7 +53,7 @@ void AbstractSpotifyClientController::setActiveDevice(const SpotifyDevice &devic
         updateStatus(ServiceStatus::Type::Error, tr("Error: Could not start librespot."));
     };
 
-    AsyncFuture::observe(future).subscribe(onReply, onCancellation);
+    future.then(this, onReply).onCanceled(this, onCancellation);
 }
 
 void AbstractSpotifyClientController::generateDeviceName(bool makeUnique)

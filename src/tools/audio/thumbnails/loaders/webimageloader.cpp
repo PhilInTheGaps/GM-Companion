@@ -1,6 +1,5 @@
 #include "webimageloader.h"
 #include "../audiothumbnailcache.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include <QLoggingCategory>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -8,15 +7,13 @@
 
 Q_LOGGING_CATEGORY(gmAudioWebImageLoader, "gm.audio.thumbnails.loaders.web")
 
-using namespace AsyncFuture;
-
 auto WebImageLoader::loadImageAsync(const QString &url, QNetworkAccessManager *networkManager) -> QFuture<QPixmap>
 {
     qCDebug(gmAudioWebImageLoader()) << "Loading image from web:" << url << "...";
 
     // Try to load from cache
     QPixmap pixmap;
-    if (AudioThumbnailCache::tryGet(url, &pixmap)) return completed(pixmap);
+    if (AudioThumbnailCache::tryGet(url, &pixmap)) return QtFuture::makeReadyFuture(pixmap);
 
     // Load from url
     const auto request = QNetworkRequest(QUrl(url));
@@ -27,7 +24,7 @@ auto WebImageLoader::loadImageAsync(const QString &url, QNetworkAccessManager *n
 
 auto WebImageLoader::loadImageAsync(QNetworkReply *reply, const QString &url) -> QFuture<QPixmap>
 {
-    auto future = observe(reply, &QNetworkReply::finished).future();
+    auto future = QtFuture::connect(reply, &QNetworkReply::finished);
 
     const auto callback = [url, reply]() {
         QPixmap image;
@@ -53,5 +50,5 @@ auto WebImageLoader::loadImageAsync(QNetworkReply *reply, const QString &url) ->
         return image;
     };
 
-    return observe(future).subscribe(callback).future();
+    return future.then(callback);
 }

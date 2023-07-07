@@ -4,7 +4,6 @@
 #include <utility>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 constexpr auto AUTH_REQUEST_URL = "https://accounts.google.com/o/oauth2/auth";
 constexpr auto AUTH_TOKEN_URL = "https://accounts.google.com/o/oauth2/token";

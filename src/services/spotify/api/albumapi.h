@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QObject>
 #include <QFuture>
+#include <QObject>
 #include <QPointer>
 
 #include "../data/spotifyalbum.h"
@@ -16,9 +16,10 @@ class AlbumAPI : public QObject
 public:
     [[nodiscard]] auto getAlbum(const QString &id) -> QFuture<QSharedPointer<SpotifyAlbum>>;
 
-    [[nodiscard]] auto getAlbumTracks(const QString &id) const -> QFuture<QSharedPointer<SpotifyTrackList>>;
-    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyAlbum> album) const -> QFuture<QSharedPointer<SpotifyAlbum>>;
-    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist) const -> QFuture<QSharedPointer<SpotifyTrackList>>;
+    [[nodiscard]] auto getAlbumTracks(const QString &id) -> QFuture<QSharedPointer<SpotifyTrackList>>;
+    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyAlbum> album) -> QFuture<QSharedPointer<SpotifyAlbum>>;
+    [[nodiscard]] auto getAlbumTracks(QSharedPointer<SpotifyTrackList> tracklist)
+        -> QFuture<QSharedPointer<SpotifyTrackList>>;
 
 private:
     explicit AlbumAPI(Spotify *parent);
@@ -26,4 +27,3 @@ private:
 
     static constexpr auto MAX_TRACK_COUNT = 50;
 };
-

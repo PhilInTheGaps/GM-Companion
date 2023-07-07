@@ -1,6 +1,5 @@
 #include "itemeditor.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include "utils/utils.h"
 #include <QJsonDocument>
@@ -9,7 +8,6 @@
 #include <filesystem/file.h>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 Q_LOGGING_CATEGORY(gmShopsItemEditor, "gm.shops.items.editor")
 
@@ -105,14 +103,14 @@ void ItemEditor::save()
     const auto group = ItemGroup(defaultGroupName(), Utils::toList<Item *>(m_itemModel.getAll()), nullptr);
     const auto data = QJsonDocument(group.toJson()).toJson();
 
-    observe(Files::File::saveAsync(savePath, data))
-        .subscribe(
-            [this]() {
-                // Notify editor
-                isSaved(true);
-                emit showInfoBar(tr("Saved!"));
-            },
-            [this]() { emit showInfoBar(tr("Error: Could not save items!")); });
+    Files::File::saveAsync(savePath, data)
+        .then(this,
+              [this](const QFuture<Files::FileResult *> &) {
+                  // Notify editor
+                  isSaved(true);
+                  emit showInfoBar(tr("Saved!"));
+              })
+        .onCanceled(this, [this]() { emit showInfoBar(tr("Error: Could not save items!")); });
 
     // Copy all items and send them to the shop editor
     auto *copy = new ItemGroup(group, this);
@@ -130,9 +128,9 @@ void ItemEditor::loadData()
 
     const auto path = FileUtils::fileInDir(u"CustomItems.items"_s, SettingsManager::getPath(u"shops"_s));
 
-    observe(Files::File::checkAsync(path))
-        .subscribe([this](Files::FileCheckResult *result) { onFileCheckReceived(result); },
-                   [this]() { isLoading(false); });
+    Files::File::checkAsync(path)
+        .then(this, [this](Files::FileCheckResult *result) { onFileCheckReceived(result); })
+        .onCanceled(this, [this]() { isLoading(false); });
 }
 
 /**
@@ -166,8 +164,9 @@ void ItemEditor::onFileCheckReceived(Files::FileCheckResult *result)
         return;
     }
 
-    observe(Files::File::getDataAsync(path))
-        .subscribe([this](Files::FileDataResult *result) { onDataReceived(result); }, [this]() { isLoading(false); });
+    Files::File::getDataAsync(path)
+        .then(this, [this](Files::FileDataResult *result) { onDataReceived(result); })
+        .onCanceled(this, [this]() { isLoading(false); });
 }
 
 void ItemEditor::onDataReceived(Files::FileDataResult *result)

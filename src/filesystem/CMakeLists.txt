@@ -41,7 +41,6 @@ target_include_directories(filesystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(filesystem
     PUBLIC
-    qtasyncfuture
     propertyhelper
     common
     PRIVATE

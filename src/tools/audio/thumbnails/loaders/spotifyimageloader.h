@@ -1,16 +1,17 @@
 #pragma once
 
-#include <QPixmap>
-#include <QString>
-#include <QQueue>
-#include <QHash>
-#include <QStringList>
-#include <QFuture>
-#include <QTimer>
 #include "../../project/audiofile.h"
-#include "services/spotify/spotifyutils.h"
 #include "services/rest/restnetworkreply.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
+#include "services/spotify/spotifyutils.h"
+#include <QFuture>
+#include <QHash>
+#include <QPixmap>
+#include <QPromise>
+#include <QQueue>
+#include <QSharedPointer>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
 
 class SpotifyImageLoader
 {
@@ -32,9 +33,9 @@ private:
     static void initTimers();
     static void initTimer(SpotifyUtils::SpotifyType type);
 
-    static auto getQueue(SpotifyUtils::SpotifyType type) -> QQueue<QString>*;
+    static auto getQueue(SpotifyUtils::SpotifyType type) -> QQueue<QString> *;
     static auto getCriticalQueueLength(SpotifyUtils::SpotifyType type) -> int;
-    static auto getTimer(SpotifyUtils::SpotifyType type) -> QTimer*;
+    static auto getTimer(SpotifyUtils::SpotifyType type) -> QTimer *;
     static auto getEndpoint(SpotifyUtils::SpotifyType type) -> QString;
     static auto getResultArrayName(SpotifyUtils::SpotifyType type) -> QString;
 
@@ -50,7 +51,7 @@ private:
     inline static QQueue<QString> m_episodeQueue;
     inline static QQueue<QString> m_showQueue;
 
-    inline static QHash<QString, AsyncFuture::Deferred<QPixmap>> m_pendingFutures;
+    inline static QHash<QString, QSharedPointer<QPromise<QPixmap>>> m_pendingFutures;
     inline static bool m_haveTimersBeenInitialized = false;
 
     // batch requests have a maximum amount of ids, depending on the type

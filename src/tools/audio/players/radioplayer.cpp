@@ -1,11 +1,9 @@
 #include "radioplayer.h"
 #include "settings/settingsmanager.h"
-#include "thirdparty/asyncfuture/asyncfuture.h"
 #include "utils/fileutils.h"
 #include <QLoggingCategory>
 
 using namespace Qt::Literals::StringLiterals;
-using namespace AsyncFuture;
 
 static constexpr auto BUFFER_FULL = 100;
 
@@ -55,8 +53,8 @@ void RadioPlayer::play(AudioElement *element)
         m_fileRequestContext = new QObject(this);
 
         m_fileName = audioFile->url();
-        observe(Files::File::getDataAsync(FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath(u"music"_s))))
-            .context(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
+        Files::File::getDataAsync(FileUtils::fileInDir(audioFile->url(), SettingsManager::getPath(u"music"_s)))
+            .then(m_fileRequestContext, [this](Files::FileDataResult *result) { onFileReceived(result); });
     }
     else
     {

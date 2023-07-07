@@ -91,10 +91,10 @@ void RESTServiceConnectorLocal::disconnectService()
 }
 
 void RESTServiceConnectorLocal::sendRequest(RequestContainer *container,
-                                            AsyncFuture::Deferred<RestNetworkReply *> deferred)
+                                            QSharedPointer<QPromise<RestNetworkReply *>> promise)
 {
     // If amount of concurrent requests is too high, enqueue request
-    if (checkAndEnqueueRequest(container, deferred)) return;
+    if (checkAndEnqueueRequest(container, promise)) return;
 
     auto *requestor = makeRequestor();
     auto request = container->request();
@@ -138,12 +138,12 @@ void RESTServiceConnectorLocal::sendRequest(RequestContainer *container,
     if (id == -1)
     {
         qCWarning(m_loggingCategory) << "Error: could not start requestor!";
-        deferred.cancel();
+        promise->future().cancel();
         container->deleteLater();
     }
     else
     {
-        m_activeRequests[id] = {deferred, container};
+        m_activeRequests[id] = {promise, container};
     }
 }
 
@@ -152,39 +152,47 @@ void RESTServiceConnectorLocal::sendRequest(RequestContainer *container,
  */
 auto RESTServiceConnectorLocal::get(const QNetworkRequest &request) -> QFuture<RestNetworkReply *>
 {
-    auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, GET, "", this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto RESTServiceConnectorLocal::put(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
-    auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, PUT, data, this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto RESTServiceConnectorLocal::post(QNetworkRequest request, const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
-    auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, POST, data, this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest &request, const QByteArray &verb,
                                               const QByteArray &data) -> QFuture<RestNetworkReply *>
 {
-    auto deferred = AsyncFuture::deferred<RestNetworkReply *>();
+    auto promise = QSharedPointer<QPromise<RestNetworkReply *>>::create();
+    promise->start();
+
     auto *container = new RequestContainer(request, CUSTOM, data, verb, this);
 
-    sendRequest(container, deferred);
-    return deferred.future();
+    sendRequest(container, promise);
+    return promise->future();
 }
 
 /**
@@ -193,8 +201,7 @@ auto RESTServiceConnectorLocal::customRequest(const QNetworkRequest &request, co
  * @return Returns true if the request has been enqueued
  */
 auto RESTServiceConnectorLocal::checkAndEnqueueRequest(RequestContainer *container,
-                                                       const AsyncFuture::Deferred<RestNetworkReply *> &deferred)
-    -> bool
+                                                       QSharedPointer<QPromise<RestNetworkReply *>> promise) -> bool
 {
     if (m_isOnCooldown)
     {
@@ -216,7 +223,7 @@ auto RESTServiceConnectorLocal::checkAndEnqueueRequest(RequestContainer *contain
     }
 
     container->id(getQueueId());
-    m_requestQueue.enqueue(std::pair(deferred, container));
+    m_requestQueue.enqueue(std::pair(promise, container));
 
     return true;
 }
@@ -281,8 +288,9 @@ void RESTServiceConnectorLocal::onReplyReceived(int id, QNetworkReply::NetworkEr
     auto *result = new RestNetworkReply(error, errorText, data, headers, this);
     const auto pair = m_activeRequests.take(id);
     auto *container = pair.second;
-    auto deferred = pair.first;
-    deferred.complete(result);
+    auto promise = pair.first;
+    promise->addResult(result);
+    promise->finish();
 
     // If there are requests in queue, send next
     dequeueRequests();
@@ -304,7 +312,7 @@ void RESTServiceConnectorLocal::dequeueRequests()
 {
     qCDebug(m_loggingCategory) << "Dequeueing requests ..." << m_requestQueue.count();
 
-    QQueue<std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *>> tempQueue;
+    QQueue<std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *>> tempQueue;
 
     while (tempQueue.length() < m_config.maxConcurrentRequests - activeRequestCount() && !m_requestQueue.empty())
     {
@@ -330,7 +338,7 @@ auto RESTServiceConnectorLocal::getQueueId() -> int
 }
 
 void RESTServiceConnectorLocal::handleRateLimit(
-    const std::pair<AsyncFuture::Deferred<RestNetworkReply *>, RequestContainer *> &pair)
+    const std::pair<QSharedPointer<QPromise<RestNetworkReply *>>, RequestContainer *> &pair)
 {
     qCDebug(m_loggingCategory) << "Rate limit was exceeded, setting cooldown and rescheduling request ...";
     startCooldown(2);

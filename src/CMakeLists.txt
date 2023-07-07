@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus Concurrent)
 find_package(QuaZip-Qt6 REQUIRED)
 
 include(AddPoppler)
@@ -216,6 +216,7 @@ target_link_libraries(gm-companion-lib PUBLIC
   Qt6::Multimedia
   Qt6::Network
   Qt6::DBus
+  Qt6::Concurrent
   QuaZip::QuaZip
   ${TAG_LIBRARY}
   ${POPPLER_QT6_LIBRARY})
