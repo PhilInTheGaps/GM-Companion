@@ -1,14 +1,17 @@
 # qtkeychain
-frankosterfeld/qtkeychain@v0.13.2
+frankosterfeld/qtkeychain@0.14.1 -DBUILD_WITH_QT6=ON
+
+# quazip
+stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=6
 
 # taglib
-taglib/taglib@v1.13
+taglib/taglib@v1.13.1
 
 # cmark-gfm
 github/cmark-gfm@0.29.0.gfm.11
 
 # quazip
-stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
+stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=6
 
 # poppler
-https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-23.04.0/poppler-poppler-23.04.0.tar.gz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT6=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_UTILS=OFF -DBUILD_QT5_TESTS=OFF
+https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-23.07.0/poppler-poppler-23.07.0.tar.gz -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_QT5=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_UTILS=OFF -DBUILD_QT6_TESTS=OFF

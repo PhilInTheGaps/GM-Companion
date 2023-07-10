@@ -16,6 +16,6 @@ set(SOURCES
     mockfs.cpp
 )
 
-qt_add_library(testhelper STATIC ${SOURCES} ${RESOURCES})
+qt_add_library(testhelper OBJECT ${SOURCES} ${RESOURCES})
 target_include_directories(testhelper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(testhelper PUBLIC gm-companion-lib filesystem Qt6::Gui Qt6::Quick Qt6::Test)
+target_link_libraries(testhelper PUBLIC gm-companion-lib Qt6::Gui Qt6::Quick Qt6::Test)

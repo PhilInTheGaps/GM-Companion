@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        qt-version: ["5.15.2"]
+        qt-version: ["6.5.1"]
         compiler: ["msvc2019_64"]
     steps:
       - name: Install Qt
@@ -15,8 +15,8 @@ jobs:
           host: "windows"
           arch: "win64_${{ matrix.compiler }}"
           tools: "tools_openssl_x64"
-          aqtversion: "==2.1.*"
           cache: "true"
+          modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
       - name: Install Dependencies with Chocolatey
         uses: crazy-max/ghaction-chocolatey@v1
@@ -89,7 +89,7 @@ jobs:
 
       - name: Install CQtDeployer
         run: |
-          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2277/CQtDeployer_1.6.2277.ecc6eed_Windows_AMD64.exe
+          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2295/CQtDeployer_1.6.2295.de25aa3_Windows_AMD64.exe
           .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
 
       - name: Download librespot
@@ -121,7 +121,8 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        qt-version: ["5.15.2"]
+        qt-version: ["6.5.1"]
+        compiler: ["gcc_64"]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -133,22 +134,23 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-focal
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+          echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
+
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq qtchooser mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools python3-setuptools patchelf libasound2-dev libquazip5-dev
+          sudo apt install -qq kitware-archive-keyring mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev
+          sudo apt install cmake
 
-          echo "Configuring Qt ..."
-          echo -e '/opt/qt515/bin\n/opt/qt515/lib' > qt515.conf
-          cat qt515.conf
-          sudo cp qt515.conf /usr/share/qtchooser/qt515.conf
-          sudo ln -snf /usr/share/qtchooser/qt515.conf /usr/lib/x86_64-linux-gnu/qtchooser/default.conf
-
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt-version }}
+          host: "linux"
+          arch: "${{ matrix.compiler }}"
+          target: "desktop"
+          cache: "true"
+          modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@1.2.0
@@ -173,24 +175,12 @@ jobs:
       - name: Build cget dependencies
         if: steps.cache-cget.outputs.cache-hit != 'true'
         run: |
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-
           cd build
           cget init --shared
-          cget install --release -f ../requirements.ubuntu.txt
+          cget install --release -f ../requirements.ubuntu.txt -DCMAKE_BUILD_PARALLEL_LEVEL=2 -DBUILD_TESTING=OFF
 
       - name: Make
         run: |
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=RelWithDebInfo -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON
           cmake --build . -j2
@@ -217,9 +207,10 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        qt-version: ["5.15.2"]
+        qt-version: ["6.5.1"]
+        compiler: ["gcc_64"]
     env:
-      SONAR_SCANNER_VERSION: 4.7.0.2747
+      SONAR_SCANNER_VERSION: 4.8.0.2856
       SONAR_SERVER_URL: "https://sonarcloud.io"
     steps:
       - name: Checkout Repository
@@ -233,23 +224,20 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          sudo add-apt-repository -y ppa:beineri/opt-qt-5.15.2-focal
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq qtchooser mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev qt515base qt515declarative qt515graphicaleffects qt515imageformats qt515multimedia qt515quickcontrols qt515quickcontrols2 qt515script qt515scxml qt515svg qt515wayland qt515x11extras qt515scxml qt515translations qt515tools python3-setuptools libquazip5-dev
+          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev
           sudo pip3 install gcovr
 
-          echo "Configuring Qt ..."
-          echo -e '/opt/qt515/bin\n/opt/qt515/lib' > qt515.conf
-          cat qt515.conf
-          sudo cp qt515.conf /usr/share/qtchooser/qt515.conf
-          sudo ln -snf /usr/share/qtchooser/qt515.conf /usr/lib/x86_64-linux-gnu/qtchooser/default.conf
-
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.qt-version }}
+          host: "linux"
+          arch: "${{ matrix.compiler }}"
+          target: "desktop"
+          cache: "true"
+          modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
       - name: Cache SonarCloud packages
         uses: actions/cache@v1
@@ -291,24 +279,12 @@ jobs:
       - name: Build cget dependencies
         if: steps.cache-cget.outputs.cache-hit != 'true'
         run: |
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-
           cd build
           cget init --shared
-          cget install --release -f ../requirements.ubuntu.txt
+          cget install --release -f ../requirements.ubuntu.txt -DCMAKE_BUILD_PARALLEL_LEVEL=2 -DBUILD_TESTING=OFF
 
       - name: Run build-wrapper
         run: |
-          export QT_BASE_DIR=/opt/qt515
-          export QTDIR=$QT_BASE_DIR
-          export PATH=$QT_BASE_DIR/bin:$PATH
-          export LD_LIBRARY_PATH=$QT_BASE_DIR/lib/x86_64-linux-gnu:$QT_BASE_DIR/lib:$LD_LIBRARY_PATH
-          export PKG_CONFIG_PATH=$QT_BASE_DIR/lib/pkgconfig:$PKG_CONFIG_PATH
-
           cd build
           cmake .. -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=AppDir/usr -DIS_RUNNING_IN_CI=ON -DENABLE_CODE_COVERAGE=ON
           build-wrapper-linux-x86-64 --out-dir bw-output cmake --build . -j2

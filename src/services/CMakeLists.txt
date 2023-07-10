@@ -78,11 +78,14 @@ qt_add_library(services STATIC ${HEADERS} ${SOURCES})
 target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(services
+    PUBLIC
     common
+    propertyhelper
     o2
-    http-status-codes
     GSL
     Qt6::Core
     Qt6::Gui
     Qt6::Network
+    PRIVATE
+    http-status-codes
 )

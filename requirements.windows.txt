@@ -5,10 +5,10 @@ pfultz2/pkgconfig
 madler/zlib@v1.2.13
 
 # qtkeychain
-frankosterfeld/qtkeychain@v0.13.2
+frankosterfeld/qtkeychain@0.14.1 -DBUILD_WITH_QT6=ON
 
 # taglib
-taglib/taglib@v1.13
+taglib/taglib@v1.13.1
 
 # cmark-gfm
 github/cmark-gfm@0.29.0.gfm.11 -DCMARK_STATIC=ON -DCMARK_SHARED=OFF -DCMARK_TESTS=OFF
@@ -17,7 +17,7 @@ github/cmark-gfm@0.29.0.gfm.11 -DCMARK_STATIC=ON -DCMARK_SHARED=OFF -DCMARK_TEST
 https://gitlab.com/bzip2/bzip2/-/archive/master/bzip2-master.zip
 
 # quazip
-stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
+stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=6
 
 ### requirements for poppler ###
 
@@ -25,7 +25,7 @@ stachenov/quazip@v1.4 -DQUAZIP_QT_MAJOR_VERSION=5
 glennrp/libpng@v1.6.39
 
 # curl
-curl/curl@curl-8_0_1 -DCMAKE_SH="CMAKE_SH-NOTFOUND"
+curl/curl@curl-8_1_2 -DCMAKE_SH="CMAKE_SH-NOTFOUND"
 
 # brotli (optional)
 google/brotli@v1.0.9
@@ -43,4 +43,4 @@ http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz -Dlzma=OFF -Dwebp=OFF
 uclouvain/openjpeg@v2.4.0
 
 # poppler
-https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-23.04.0/poppler-poppler-23.04.0.tar.gz -DBUILD_GTK_TESTS=OFF -DBUILD_QT5_TESTS=OFF -DBUILD_QT6_TESTS=OFF -DBUILD_CPP_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_BOOST=OFF -DENABLE_UTILS=OFF -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_GOBJECT_INTROSPECTION=OFF -DENABLE_QT5=ON -DENABLE_QT6=OFF
+https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-23.07.0/poppler-poppler-23.07.0.tar.gz -DBUILD_GTK_TESTS=OFF -DBUILD_QT5_TESTS=OFF -DBUILD_QT6_TESTS=OFF -DBUILD_CPP_TESTS=OFF -DBUILD_MANUAL_TESTS=OFF -DENABLE_BOOST=OFF -DENABLE_UTILS=OFF -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_GOBJECT_INTROSPECTION=OFF -DENABLE_QT5=OFF -DENABLE_QT6=ON

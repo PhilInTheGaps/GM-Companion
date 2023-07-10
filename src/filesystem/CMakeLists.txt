@@ -41,10 +41,9 @@ target_include_directories(filesystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(filesystem
     PUBLIC
-    propertyhelper
     common
-    PRIVATE
     services
+    propertyhelper
     Qt6::Core
     Qt6::Quick
     Qt6::Qml

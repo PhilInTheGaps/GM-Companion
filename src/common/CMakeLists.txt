@@ -68,10 +68,12 @@ set(SOURCES
 qt_add_library(common STATIC ${SOURCES})
 target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(common PRIVATE
+target_link_libraries(common
+    PUBLIC
     propertyhelper
-    ${MARKDOWN_LIBRARY}
-    ${QTKEYCHAIN_LIBRARY}
     Qt6::Core
     Qt6::Gui
-    Qt6::Network)
+    Qt6::Network
+    PRIVATE
+    ${MARKDOWN_LIBRARY}
+    ${QTKEYCHAIN_LIBRARY})
