@@ -200,7 +200,7 @@ jobs:
           sentry-cli upload-dif --org rophil --project gm-companion --include-sources AppDir/usr/bin/.debug/
           rm -rf AppDir/usr/bin/.debug
   static-analysis:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         qt-version: ["6.5.2"]
