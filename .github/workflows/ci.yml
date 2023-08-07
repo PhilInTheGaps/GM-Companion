@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        qt-version: ["6.5.1"]
+        qt-version: ["6.5.2"]
         compiler: ["msvc2019_64"]
     steps:
       - name: Install Qt
@@ -110,18 +110,18 @@ jobs:
           name: gm-companion_${{ runner.os }}
           path: .\build\install\bin
           if-no-files-found: error
-          
-      - name: Setup tmate session
-        if: ${{ failure() }}
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 20
-        with:
-          limit-access-to-actor: true
+
+      # - name: Setup tmate session
+      #   if: ${{ failure() }}
+      #   uses: mxschmitt/action-tmate@v3
+      #   timeout-minutes: 20
+      #   with:
+      #     limit-access-to-actor: true
   ubuntu:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        qt-version: ["6.5.1"]
+        qt-version: ["6.5.2"]
         compiler: ["gcc_64"]
     steps:
       - name: Checkout Repository
@@ -136,7 +136,7 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq kitware-archive-keyring mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
+          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -203,7 +203,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        qt-version: ["6.5.1"]
+        qt-version: ["6.5.2"]
         compiler: ["gcc_64"]
     env:
       SONAR_SCANNER_VERSION: 4.8.0.2856
