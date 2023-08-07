@@ -134,13 +134,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
-          echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
-
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq kitware-archive-keyring mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev
-          sudo apt install cmake
+          sudo apt install -qq kitware-archive-keyring mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -226,7 +222,7 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev
+          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
           sudo pip3 install gcovr
 
       - name: Install Qt

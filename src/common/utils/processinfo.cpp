@@ -40,7 +40,7 @@ auto ProcessInfo::isProcessRunning(const QString &procName) -> bool
 #elif defined Q_OS_WIN
     // https://stackoverflow.com/a/57164620
 
-    for (const auto &name : {procName, QString("%1%2").arg(procName, ".exe")})
+    for (const auto &name : {procName, u"%1%2"_s.arg(procName, u".exe"_s)})
     {
         if (isProcessRunningWin(name)) return true;
     }
@@ -141,7 +141,7 @@ auto ProcessInfo::isProcessRunningWin(const QString &name) -> bool
 
     do
     {
-        if (!QString::compare(QString::fromStdString(entry.szExeFile), name, Qt::CaseInsensitive))
+        if (!QString::compare(QString::fromWCharArray(entry.szExeFile), name, Qt::CaseInsensitive))
         {
             CloseHandle(snapshot);
             return true;
