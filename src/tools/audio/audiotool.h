@@ -30,7 +30,7 @@ class AudioTool : public AbstractTool
     Q_PROPERTY(int index READ index NOTIFY currentIndexChanged)
 
 public:
-    explicit AudioTool(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit AudioTool(QQmlApplicationEngine *engine, QNetworkAccessManager &networkManager, QObject *parent = nullptr);
 
     // Project
     [[nodiscard]] auto projects() const -> QList<QObject *>

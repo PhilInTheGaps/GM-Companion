@@ -7,13 +7,14 @@
 #include <QAudioOutput>
 #include <QBuffer>
 #include <QMediaPlayer>
+#include <QNetworkAccessManager>
 #include <QTemporaryDir>
 
 class RadioPlayer : public AudioPlayer
 {
     Q_OBJECT
 public:
-    RadioPlayer(MetaDataReader &metaDataReader, QObject *parent = nullptr);
+    RadioPlayer(QNetworkAccessManager &networkManager, MetaDataReader &metaDataReader, QObject *parent = nullptr);
 
 public slots:
     void play(AudioElement *element);
@@ -29,6 +30,7 @@ public slots:
     }
 
 private:
+    QNetworkAccessManager &m_networkManager;
     QMediaPlayer m_mediaPlayer;
     QAudioOutput m_audioOutput;
     QObject *m_fileRequestContext = nullptr;
@@ -38,6 +40,13 @@ private:
     QBuffer m_mediaBuffer;
     QTemporaryDir m_tempDir;
     QString m_fileName;
+
+    void play(const AudioFile *audioFile);
+
+    static auto isPlaylist(const QString &file) -> bool;
+
+    void playAudio(const QByteArray &data);
+    void playPlaylist(const QByteArray &data);
 
 signals:
     void startedPlaying();

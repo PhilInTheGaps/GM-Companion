@@ -1,3 +1,15 @@
+#include "addons/addonmanager.h"
+#include "filesystem/file.h"
+#include "filesystem/fileaccessswitcher.h"
+#include "filesystem/filedialog/filedialog.h"
+#include "logger.h"
+#include "messages/messagemanager.h"
+#include "services/google/googledrive.h"
+#include "services/nextcloud/nextcloud.h"
+#include "services/spotify/spotify.h"
+#include "settings/quicksettingsmanager.h"
+#include "tools.h"
+#include "updates/updatemanager.h"
 #include <QFontDatabase>
 #include <QFuture>
 #include <QGuiApplication>
@@ -11,18 +23,6 @@
 #include <QTranslator>
 #include <QtQuickControls2/QQuickStyle>
 #include <sentry.h>
-#include "addons/addonmanager.h"
-#include "filesystem/file.h"
-#include "filesystem/fileaccessswitcher.h"
-#include "filesystem/filedialog/filedialog.h"
-#include "logger.h"
-#include "messages/messagemanager.h"
-#include "services/google/googledrive.h"
-#include "services/nextcloud/nextcloud.h"
-#include "services/spotify/spotify.h"
-#include "settings/quicksettingsmanager.h"
-#include "tools.h"
-#include "updates/updatemanager.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -94,7 +94,8 @@ auto main(int argc, char *argv[]) -> int
     {
         qCDebug(gmMain()) << "Crash reports are enabled!";
         auto *sentryOptions = sentry_options_new();
-        sentry_options_set_dsn(sentryOptions, "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
+        sentry_options_set_dsn(sentryOptions,
+                               "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
         sentry_options_set_release(sentryOptions, u"gm-companion@%1"_s.arg(CURRENT_VERSION).toUtf8().data());
 
         auto isSessionTrackingEnabled = SettingsManager::instance()->get(u"sessionTracking"_s, false, u"Telemetry"_s);
@@ -122,7 +123,8 @@ auto main(int argc, char *argv[]) -> int
     engine.rootContext()->setContextProperty(u"settings_manager"_s, new QuickSettingsManager);
     engine.rootContext()->setContextProperty(u"update_manager"_s, new UpdateManager);
     engine.rootContext()->setContextProperty(u"addon_manager"_s, AddonManager::instance());
-    engine.rootContext()->setContextProperty(u"addon_repository_manager"_s, &(AddonManager::instance()->repositoryManager()));
+    engine.rootContext()->setContextProperty(u"addon_repository_manager"_s,
+                                             &(AddonManager::instance()->repositoryManager()));
     engine.rootContext()->setContextProperty(u"message_manager"_s, MessageManager::instance());
     engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider);
 
@@ -132,7 +134,7 @@ auto main(int argc, char *argv[]) -> int
     engine.rootContext()->setContextProperty(u"nextcloud_service"_s, &nc);
 
     // Load tools
-    const AudioTool audioTool(&engine);
+    const AudioTool audioTool(&engine, networkManager);
     const MapTool mapTool(&engine);
     const DiceTool diceTool(&engine);
     const CombatTracker combatTracker(&engine);

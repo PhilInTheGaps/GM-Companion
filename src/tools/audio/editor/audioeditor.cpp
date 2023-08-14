@@ -835,7 +835,7 @@ auto AudioEditor::addYtUrl(const QString &videoUrl) -> bool
  */
 auto AudioEditor::addFile(QStringList path, const QString &filename) -> bool
 {
-    if (!m_currentElement || !scenarioExists() || path.isEmpty()) return false;
+    if (!m_currentElement || !scenarioExists()) return false;
 
     qCDebug(gmAudioEditor) << "Adding file to element" << QString(*m_currentElement) << ":" << path << filename;
 

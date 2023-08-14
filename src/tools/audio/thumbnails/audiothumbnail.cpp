@@ -1,5 +1,6 @@
 #include "audiothumbnail.h"
 #include "settings/settingsmanager.h"
+#include "utils/networkutils.h"
 
 using namespace Qt::Literals::StringLiterals;
 
@@ -14,7 +15,7 @@ auto AudioThumbnail::absoluteUrl() const -> QString
     if (m_relativeUrl.isEmpty()) return u""_s;
 
     // Is web url?
-    if (m_relativeUrl.startsWith("http://"_L1) || m_relativeUrl.startsWith("https://"_L1))
+    if (NetworkUtils::isHttpUrl(m_relativeUrl))
     {
         return m_relativeUrl;
     }

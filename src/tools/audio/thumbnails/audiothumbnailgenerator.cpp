@@ -6,6 +6,7 @@
 #include "loaders/spotifyimageloader.h"
 #include "loaders/webimageloader.h"
 #include "settings/settingsmanager.h"
+#include "utils/networkutils.h"
 #include <QLoggingCategory>
 #include <QtConcurrent/QtConcurrentRun>
 
@@ -69,7 +70,7 @@ void AudioThumbnailGenerator::generateThumbnail(AudioElement *element)
     const auto callbackWithFallback = [element](const QPixmap &pixmap) { receivedImage(element, pixmap, true); };
 
     // Is web url
-    if (iconPath.startsWith("http://"_L1) || iconPath.startsWith("https://"_L1))
+    if (NetworkUtils::isHttpUrl(iconPath))
     {
         WebImageLoader::loadImageAsync(iconPath, networkManager).then(element, callbackWithFallback);
         return;

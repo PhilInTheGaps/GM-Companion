@@ -35,7 +35,7 @@ Rectangle {
         anchors.right: parent.right
 
         Row {
-            property var itemWidth: (width) / (spotify_button.visible ? 3 : 2)
+            property int itemWidth: (width) / (spotify_button.visible ? 3 : 2)
             anchors.fill: parent
 
             CustomButton {

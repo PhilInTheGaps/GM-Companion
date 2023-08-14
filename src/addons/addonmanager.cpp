@@ -1,6 +1,7 @@
 #include "addonmanager.h"
 #include "settings/settingsmanager.h"
 #include "utils/fileutils.h"
+#include "utils/networkutils.h"
 #include <QDir>
 #include <QFile>
 #include <QFuture>
@@ -60,7 +61,7 @@ auto AddonManager::installAsync(Addon *addon) -> QFuture<void>
         return {};
     }
 
-    if (addon->downloadUrl().startsWith("http://"_L1) || addon->downloadUrl().startsWith("https://"_L1))
+    if (NetworkUtils::isHttpUrl(addon->downloadUrl()))
     {
         return installRemoteAsync(*addon);
     }

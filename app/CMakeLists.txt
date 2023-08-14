@@ -34,6 +34,7 @@ if (BUILD_TRANSLATIONS)
     i18n/gm-companion_en_US.ts
     INCLUDE_DIRECTORIES
     .
+    ./ui
     ../src
   )
 

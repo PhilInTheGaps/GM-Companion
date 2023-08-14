@@ -13,8 +13,8 @@ using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmAudioTool, "gm.audio.tool")
 
-AudioTool::AudioTool(QQmlApplicationEngine *engine, QObject *parent)
-    : AbstractTool(parent), editor(engine), musicPlayer(metaDataReader), radioPlayer(metaDataReader)
+AudioTool::AudioTool(QQmlApplicationEngine *engine, QNetworkAccessManager &networkManager, QObject *parent)
+    : AbstractTool(parent), editor(engine), musicPlayer(metaDataReader), radioPlayer(networkManager, metaDataReader)
 {
     qCDebug(gmAudioTool()) << "Loading ...";
 

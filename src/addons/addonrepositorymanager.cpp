@@ -2,6 +2,7 @@
 #include "settings/settingsmanager.h"
 #include "updates/updatemanager.h"
 #include "utils/stringutils.h"
+#include "utils/networkutils.h"
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -140,7 +141,7 @@ auto AddonRepositoryManager::getRepositoryUrls(bool onlyCustom) const -> QString
 
 auto AddonRepositoryManager::fetchRepositoryDataAsync(const QString &url) -> QFuture<std::vector<AddonReleaseInfo>>
 {
-    if (url.startsWith("http://"_L1) || url.startsWith("https://"_L1))
+    if (NetworkUtils::isHttpUrl(url))
     {
         return fetchRepositoryDataRemoteAsync(url);
     }

@@ -25,3 +25,9 @@ qt_add_executable(test_audioaddons testaudioaddons.cpp)
 target_link_libraries(test_audioaddons PRIVATE gm-companion-lib common testhelper Qt6::Gui Qt6::Test)
 set_target_properties(test_audioaddons PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
 add_test(NAME test_audioaddons COMMAND test_audioaddons)
+
+# Audio Playlist
+qt_add_executable(test_audioplaylist testaudioplaylist.cpp)
+target_link_libraries(test_audioplaylist PRIVATE gm-companion-lib common testhelper Qt6::Gui Qt6::Test)
+set_target_properties(test_audioplaylist PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TEST_OUTPUT_DIR})
+add_test(NAME test_audioplaylist COMMAND test_audioplaylist)

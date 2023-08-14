@@ -20,6 +20,8 @@ qt_add_resources(testhelper "test-resources"
         resources/audiofiles/test.mp3
         resources/audiofiles/test.ogg
         resources/audiofiles/test.wav
+        resources/audioplaylist/test.m3u
+        resources/audioplaylist/test.pls
         resources/images/test.png
         resources/images/test.jpg
         resources/images/test.tif

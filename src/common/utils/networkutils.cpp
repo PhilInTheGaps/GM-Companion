@@ -37,3 +37,8 @@ auto NetworkUtils::queryToMap(const QUrlQuery &query) -> QMap<QString, QString>
 
     return map;
 }
+
+auto NetworkUtils::isHttpUrl(QStringView url) -> bool
+{
+    return url.startsWith("http://"_L1) || url.startsWith("https://"_L1);
+}

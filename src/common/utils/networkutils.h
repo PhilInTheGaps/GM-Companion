@@ -16,6 +16,8 @@ public:
     static void makeJsonRequest(QNetworkRequest &request);
 
     [[nodiscard]] static auto queryToMap(const QUrlQuery &query) -> QMap<QString, QString>;
+
+    [[nodiscard]] static auto isHttpUrl(QStringView url) -> bool;
 };
 
 #endif // NETWORKUTILS_H
