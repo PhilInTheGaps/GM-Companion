@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "../../buttons"
 import "../../../../sizes.js" as Sizes
@@ -128,7 +128,8 @@ Item {
 
                         Label {
                             text: FontAwesome.chevronUp
-                            font.family: FontAwesome.familySolid
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -163,7 +164,8 @@ Item {
 
                         Label {
                             text: FontAwesome.chevronDown
-                            font.family: FontAwesome.familySolid
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
                             horizontalAlignment: Text.AlignHCenter
@@ -188,7 +190,7 @@ Item {
 
                 // Delete
                 CustomToolBarButton {
-                    iconText: FontAwesome.trashAlt
+                    iconText: FontAwesome.trash
                     toolTipText: qsTr("Remove file from list")
 
                     onClicked: {

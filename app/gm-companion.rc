@@ -1,4 +1,4 @@
-IDI_ICON1               ICON    DISCARDABLE     "resources/icons/gm-companion.ico"
+IDI_ICON1               ICON    DISCARDABLE     "ui/resources/icons/gm-companion.ico"
 
 #include <windows.h>
 #include "version.h"

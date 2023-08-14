@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Rectangle {
     id: root
@@ -43,7 +43,7 @@ Rectangle {
 
                     CustomToolBarButton {
                         id: icon_button
-                        iconText: character_tool.active ? FontAwesome.times : FontAwesome.plus
+                        iconText: character_tool.active ? FontAwesome.xmark : FontAwesome.plus
                         anchors.right: parent.right
                         visible: parent.hovered || hovered
 

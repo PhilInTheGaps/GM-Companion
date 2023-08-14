@@ -1,12 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Qml Multimedia Network DBus Concurrent Core5Compat)
-find_package(QuaZip-Qt6 REQUIRED)
-
-include(AddPoppler)
-include(AddTagLib)
-include(AddGSL)
-
 add_subdirectory(common)
 add_subdirectory(services)
 add_subdirectory(filesystem)
@@ -200,9 +193,15 @@ set(SOURCES
     ${SRC_CONVERTER}
     ${SRC_ADDONS})
 
-set(RESOURCES resources/libresources.qrc)
-
 qt_add_library(gm-companion-lib STATIC ${SOURCES} ${RESOURCES})
+
+qt_add_resources(gm-companion-lib "libresources"
+    PREFIX "/"
+    BASE resources
+    FILES
+        resources/units/units.json
+        resources/notes/style.css
+        resources/names/generic.json)
 
 target_link_libraries(gm-companion-lib PUBLIC
   common

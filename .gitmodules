@@ -1,7 +1,3 @@
-[submodule "lib/fontawesome.pri"]
-	path = thirdparty/fontawesome.pri
-	url = https://github.com/PhilInTheGaps/fontawesome.pri
-
 [submodule "lib/o2"]
 	path = thirdparty/o2
 	url = https://github.com/pipacs/o2
@@ -15,3 +11,6 @@
 [submodule "thirdparty/sentry-native"]
 	path = thirdparty/sentry-native
 	url = https://github.com/getsentry/sentry-native
+[submodule "thirdparty/qml-icon-fonts"]
+	path = thirdparty/qml-icon-fonts
+	url = https://github.com/PhilInTheGaps/qml-icon-fonts

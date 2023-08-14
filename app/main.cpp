@@ -10,9 +10,7 @@
 #include <QScopeGuard>
 #include <QTranslator>
 #include <QtQuickControls2/QQuickStyle>
-
 #include <sentry.h>
-
 #include "addons/addonmanager.h"
 #include "filesystem/file.h"
 #include "filesystem/fileaccessswitcher.h"
@@ -25,6 +23,8 @@
 #include "settings/quicksettingsmanager.h"
 #include "tools.h"
 #include "updates/updatemanager.h"
+
+using namespace Qt::Literals::StringLiterals;
 
 Q_LOGGING_CATEGORY(gmMain, "gm.main")
 
@@ -50,8 +50,7 @@ void initTranslations()
     qCDebug(gmMain()) << "Initializing translations ...";
     auto *translator = new QTranslator;
 
-    if (translator->load(SettingsManager::getLanguage(), QStringLiteral("gm-companion"), QStringLiteral("_"),
-                         QStringLiteral(":/i18n")))
+    if (translator->load(SettingsManager::getLanguage(), u"gm-companion"_s, u"_"_s, u":/i18n"_s))
     {
         QGuiApplication::installTranslator(translator);
 
@@ -63,23 +62,19 @@ void initTranslations()
     }
 }
 
-/// Install fonts for FontAwesome.pri
 void initResources()
 {
-    Q_INIT_RESOURCE(fontawesome);
     Q_INIT_RESOURCE(libresources);
-    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-solid.ttf"));
-    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-regular.ttf"));
-    QFontDatabase::addApplicationFont(QStringLiteral(":/fonts/fa-brands.ttf"));
+    Q_INIT_RESOURCE(services_resources);
 }
 
 auto main(int argc, char *argv[]) -> int
 {
     QGuiApplication app(argc, argv);
-    QGuiApplication::setApplicationName(QStringLiteral("GM-Companion"));
-    QGuiApplication::setOrganizationName(QStringLiteral("GM-Companion"));
-    QGuiApplication::setOrganizationDomain(QStringLiteral("gm-companion.github.io"));
-    QGuiApplication::setWindowIcon(QIcon(":/icons/icon.png"));
+    QGuiApplication::setApplicationName(u"GM-Companion"_s);
+    QGuiApplication::setOrganizationName(u"GM-Companion"_s);
+    QGuiApplication::setOrganizationDomain(u"gm-companion.github.io"_s);
+    QGuiApplication::setWindowIcon(QIcon(u":/resources/icons/icon.png"_s));
 
 #if defined(Q_OS_WIN)
     app.setFont(QFont("Segoe UI"));
@@ -95,17 +90,14 @@ auto main(int argc, char *argv[]) -> int
 
     // Sentry.io crash reporting
     // Crash reports and session tracking are opt-in settings
-    if (SettingsManager::instance()->get(QStringLiteral("crashReports"), false, QStringLiteral("Telemetry")))
+    if (SettingsManager::instance()->get(u"crashReports"_s, false, u"Telemetry"_s))
     {
         qCDebug(gmMain()) << "Crash reports are enabled!";
         auto *sentryOptions = sentry_options_new();
-        sentry_options_set_dsn(sentryOptions,
-                               "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
-        sentry_options_set_release(sentryOptions,
-                                   QStringLiteral("gm-companion@%1").arg(CURRENT_VERSION).toUtf8().data());
+        sentry_options_set_dsn(sentryOptions, "https://e42ba403690043fa8fdd4216a4c58a08@o1229208.ingest.sentry.io/6375554");
+        sentry_options_set_release(sentryOptions, u"gm-companion@%1"_s.arg(CURRENT_VERSION).toUtf8().data());
 
-        auto isSessionTrackingEnabled =
-            SettingsManager::instance()->get(QStringLiteral("sessionTracking"), false, QStringLiteral("Telemetry"));
+        auto isSessionTrackingEnabled = SettingsManager::instance()->get(u"sessionTracking"_s, false, u"Telemetry"_s);
         sentry_options_set_auto_session_tracking(sentryOptions, isSessionTrackingEnabled ? 1 : 0);
         if (isSessionTrackingEnabled) qCDebug(gmMain()) << "Session tracking is enabled!";
 
@@ -116,13 +108,8 @@ auto main(int argc, char *argv[]) -> int
 
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
-    // Make classes available for QML
-    QUrl const source(QStringLiteral("qrc:/main.qml"));
-
-    QQuickStyle::setStyle(QStringLiteral("style"));
-
+    QQuickStyle::setStyle(u"Style"_s);
     QQmlApplicationEngine engine;
-    engine.addImportPath(QStringLiteral("qrc:/"));
 
     // Misc
     QNetworkAccessManager networkManager(nullptr);
@@ -132,18 +119,17 @@ auto main(int argc, char *argv[]) -> int
     GoogleDrive gd(networkManager, nullptr);
     Files::File::init(&nc, &gd);
 
-    engine.rootContext()->setContextProperty(QStringLiteral("settings_manager"), new QuickSettingsManager);
-    engine.rootContext()->setContextProperty(QStringLiteral("update_manager"), new UpdateManager);
-    engine.rootContext()->setContextProperty(QStringLiteral("addon_manager"), AddonManager::instance());
-    engine.rootContext()->setContextProperty(QStringLiteral("addon_repository_manager"),
-                                             &(AddonManager::instance()->repositoryManager()));
-    engine.rootContext()->setContextProperty(QStringLiteral("message_manager"), MessageManager::instance());
-    engine.addImageProvider(QStringLiteral("audioElementIcons"), new AudioThumbnailProvider);
+    engine.rootContext()->setContextProperty(u"settings_manager"_s, new QuickSettingsManager);
+    engine.rootContext()->setContextProperty(u"update_manager"_s, new UpdateManager);
+    engine.rootContext()->setContextProperty(u"addon_manager"_s, AddonManager::instance());
+    engine.rootContext()->setContextProperty(u"addon_repository_manager"_s, &(AddonManager::instance()->repositoryManager()));
+    engine.rootContext()->setContextProperty(u"message_manager"_s, MessageManager::instance());
+    engine.addImageProvider(u"audioElementIcons"_s, new AudioThumbnailProvider);
 
     // Services
-    engine.rootContext()->setContextProperty(QStringLiteral("spotify_service"), Spotify::instance());
-    engine.rootContext()->setContextProperty(QStringLiteral("googledrive_service"), &gd);
-    engine.rootContext()->setContextProperty(QStringLiteral("nextcloud_service"), &nc);
+    engine.rootContext()->setContextProperty(u"spotify_service"_s, Spotify::instance());
+    engine.rootContext()->setContextProperty(u"googledrive_service"_s, &gd);
+    engine.rootContext()->setContextProperty(u"nextcloud_service"_s, &nc);
 
     // Load tools
     const AudioTool audioTool(&engine);
@@ -156,7 +142,7 @@ auto main(int argc, char *argv[]) -> int
     const NotesTool notesTool(&engine);
     const ConverterTool converterTool(&engine);
 
-    engine.load(source);
+    engine.loadFromModule("ui"_L1, "Main"_L1);
 
     if (engine.rootObjects().isEmpty()) return -1;
 

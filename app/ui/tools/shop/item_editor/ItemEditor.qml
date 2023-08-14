@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../../../defines.js" as Defines
 
 Page {
@@ -195,8 +195,9 @@ Page {
                         }
 
                         Text {
-                            text: FontAwesome.times
-                            font.family: FontAwesome.familySolid
+                            text: FontAwesome.xmark
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             font.pointSize: 20
                             anchors.centerIn: parent
                             color: parent.pressed ? "grey" : (parent.hovered ? "lightgrey" : palette.text)

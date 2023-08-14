@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import lol.rophil.gmcompanion.fileaccessswitcher 1.0
 
 Item {
@@ -51,18 +51,18 @@ Item {
             model: [{
                     "name": "Local",
                     "setting": "local",
-                    "icon": FontAwesome.hdd,
-                    "iconFont": FontAwesome.familySolid
+                    "icon": FontAwesome.hardDrive,
+                    "iconFont": FontAwesome.fontSolid
                 }, {
                     "name": "GoogleDrive",
                     "setting": "GoogleDrive",
                     "icon": FontAwesome.googleDrive,
-                    "iconFont": FontAwesome.familyBrands
+                    "iconFont": FontAwesome.fontBrands
                 }, {
                     "name": "NextCloud",
                     "setting": "NextCloud",
                     "icon": FontAwesome.cloud,
-                    "iconFont": FontAwesome.familySolid
+                    "iconFont": FontAwesome.fontSolid
                 }]
 
             CustomRadioButton {

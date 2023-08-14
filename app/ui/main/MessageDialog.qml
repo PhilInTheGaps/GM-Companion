@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Dialog {
     id: root
@@ -89,10 +89,11 @@ Dialog {
 
                             Label {
                                 id: icon_label
-                                font.family: FontAwesome.familySolid
+                                font.family: FontAwesome.fontSolid.family
+                                font.styleName: FontAwesome.fontSolid.styleName
                                 font.pointSize: 12
                                 verticalAlignment: Text.AlignVCenter
-                                text: modelData.type === 4 ? FontAwesome.infoCircle : FontAwesome.exclamationTriangle
+                                text: modelData.type === 4 ? FontAwesome.circleInfo : FontAwesome.triangleExclamation
 
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom

@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 
 Item {
     id: root
@@ -59,8 +59,9 @@ Item {
 
         Text {
             id: edit_icon
-            text: FontAwesome.checkCircle
-            font.family: FontAwesome.familySolid
+            text: FontAwesome.circleCheck
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
             anchors.margins: 10
@@ -90,7 +91,8 @@ Item {
         Text {
             id: left_icon
             text: FontAwesome.minus
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
             color: left_area.pressed ? "black" : left_area.containsMouse ? "grey" : font_color
             anchors.centerIn: parent
@@ -116,7 +118,8 @@ Item {
         Text {
             id: right_icon
             text: FontAwesome.plus
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 13
             color: right_area.pressed ? "black" : right_area.containsMouse ? "grey" : font_color
             anchors.centerIn: parent

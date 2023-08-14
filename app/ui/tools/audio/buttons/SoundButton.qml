@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import "../../../defines.js" as Defines
 
 Button {
@@ -67,9 +67,10 @@ Button {
         visible: parent.hovered
 
         Text {
-            text: FontAwesome.times
+            text: FontAwesome.xmark
             font.pixelSize: parent.height - 10
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             anchors.centerIn: parent
             color: parent.parent.pressed ? "darkgrey" : "white"
         }

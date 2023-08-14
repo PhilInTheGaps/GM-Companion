@@ -1,17 +1,9 @@
 cmake_minimum_required(VERSION 3.19)
 
-include(AddFontAwesome)
-
-# set QML import path
-list(APPEND QML_IMPORT_PATH ${FONT_AWESOME_DIR})
-list(APPEND QML_IMPORT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ui")
-list(REMOVE_DUPLICATES QML_IMPORT_PATH)
-set(QML_IMPORT_PATH ${QML_IMPORT_PATH} CACHE STRING "Qt Creator extra qml import paths" FORCE)
-
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Qml LinguistTools)
 find_library(GM-COMPANION-LIB_DIR gm-companion-lib)
 
-# sources
+add_subdirectory(ui)
+
 set(SOURCES
   main.cpp
   logger.cpp
@@ -29,31 +21,17 @@ set(HEADERS
   messages/message.h
 )
 
-# resources
-set(RESOURCES
-  resources/resources.qrc
-  ui/qml.qrc
-  ui/CustomComponents/components.qrc
-)
-
-# rc files
 set(RCFILES
   gm-companion.rc
 )
 
-# translations
-set(TRANSLATIONS
-  resources/translations/gm-companion_de_DE.ts
-  resources/translations/gm-companion_en_US.ts
-)
-
-qt_add_executable(gm-companion ${SOURCES} ${HEADERS} ${RESOURCES} ${RCFILES})
+qt_add_executable(gm-companion ${SOURCES} ${HEADERS} ${RCFILES})
 
 if (BUILD_TRANSLATIONS)
   qt_add_translations(gm-companion
     TS_FILES
-    resources/translations/gm-companion_de_DE.ts
-    resources/translations/gm-companion_en_US.ts
+    i18n/gm-companion_de_DE.ts
+    i18n/gm-companion_en_US.ts
     INCLUDE_DIRECTORIES
     .
     ../src
@@ -67,12 +45,13 @@ target_include_directories(gm-companion PRIVATE
 
 target_link_libraries(gm-companion PRIVATE
   gm-companion-lib
+  gm-companion-ui
+  gm-companion-uiplugin
   Qt6::Core
   Qt6::Gui
   Qt6::Quick
   Qt6::QuickControls2
   Qt6::Qml
-  fontawesome
   sentry
 )
 

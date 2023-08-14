@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "../.."
 import "../../../../../colors.js" as Colors
@@ -51,7 +51,8 @@ Item {
             anchors.fill: parent
             anchors.margins: 10
             text: FontAwesome.expand
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             font.pixelSize: height
             visible: element_icon_mouse_area.containsMouse
             color: "white"
@@ -106,8 +107,8 @@ Item {
         anchors.right: icon_finder.left
         anchors.margins: 0
 
-        iconText: FontAwesome.search
-        iconFont: FontAwesome.familySolid
+        iconText: FontAwesome.magnifyingGlass
+        iconFont: FontAwesome.fontSolid
         toolTipText: qsTr("Select icon from unsplash.com")
         pointSize: 12
 

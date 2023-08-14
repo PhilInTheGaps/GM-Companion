@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../../defines.js" as Defines
 
 Item {
@@ -24,13 +24,13 @@ Item {
             anchors.bottom: parent.bottom
 
             CustomToolBarButton {
-                iconText: notes_tool.editMode ? FontAwesome.eye : FontAwesome.edit
+                iconText: notes_tool.editMode ? FontAwesome.eye : FontAwesome.penToSquare
 
                 onClicked: notes_tool.editMode = !notes_tool.editMode
             }
 
             CustomToolBarButton {
-                iconText: FontAwesome.save
+                iconText: FontAwesome.floppyDisk
 
                 onClicked: {
                     if (notes_tool.currentPage) {
@@ -155,7 +155,7 @@ Item {
                                  || mouseArea.containsMouse
                                  || !modelData.isSaved || modelData.isCurrent
 
-                        iconText: mouseArea.containsMouse ? FontAwesome.timesCircle : (modelData.isSaved ? FontAwesome.times : FontAwesome.asterisk)
+                        iconText: mouseArea.containsMouse ? FontAwesome.circleXmark : (modelData.isSaved ? FontAwesome.xmark : FontAwesome.asterisk)
                         pointSize: 10
 
                         onClicked: {

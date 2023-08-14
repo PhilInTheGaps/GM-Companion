@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "../../../../../colors.js" as Colors
 import "../../../../../sizes.js" as Sizes
@@ -92,8 +92,9 @@ Item {
             }
 
             Label {
-                text: element_name_field.edit_mode ? FontAwesome.checkCircle : FontAwesome.chevronUp
-                font.family: FontAwesome.familySolid
+                text: element_name_field.edit_mode ? FontAwesome.circleCheck : FontAwesome.chevronUp
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 color: element_name_field.edit_mode ? "limegreen" : Colors.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
@@ -127,8 +128,9 @@ Item {
             }
 
             Label {
-                text: element_name_field.edit_mode ? FontAwesome.timesCircle : FontAwesome.chevronDown
-                font.family: FontAwesome.familySolid
+                text: element_name_field.edit_mode ? FontAwesome.circleXmark : FontAwesome.chevronDown
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 color: element_name_field.edit_mode ? "red" : Colors.text
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
@@ -159,7 +161,7 @@ Item {
         padding: 0
         borderWidth: 0
 
-        iconText: FontAwesome.ellipsisV
+        iconText: FontAwesome.ellipsisVertical
         toolTipText: qsTr("Change subscenario")
 
         onClicked: subscenario_dialog.open()
@@ -190,7 +192,7 @@ Item {
             visible: !element_name_field.edit_mode
 
             iconText: FontAwesome.pen
-            iconFont: FontAwesome.familySolid
+            iconFont: FontAwesome.fontSolid
             pointSize: 12
 
             onClicked: {
@@ -212,8 +214,9 @@ Item {
             }
 
             Label {
-                text: FontAwesome.trashAlt
-                font.family: FontAwesome.familySolid
+                text: FontAwesome.trash
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 12
                 anchors.fill: parent
                 anchors.margins: 10
@@ -230,8 +233,9 @@ Item {
                 color: Colors.alternateBase
 
                 Label {
-                    text: FontAwesome.trashAlt
-                    font.family: FontAwesome.familySolid
+                    text: FontAwesome.trash
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     font.pixelSize: parent.height / 3
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
@@ -252,8 +256,9 @@ Item {
                     }
 
                     Label {
-                        text: FontAwesome.checkCircle
-                        font.family: FontAwesome.familySolid
+                        text: FontAwesome.circleCheck
+                        font.family: FontAwesome.fontSolid.family
+                        font.styleName: FontAwesome.fontSolid.styleName
                         color: "limegreen"
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter
@@ -279,8 +284,9 @@ Item {
                     }
 
                     Label {
-                        text: FontAwesome.timesCircle
-                        font.family: FontAwesome.familySolid
+                        text: FontAwesome.circleXmark
+                        font.family: FontAwesome.fontSolid.family
+                        font.styleName: FontAwesome.fontSolid.styleName
                         color: "red"
                         anchors.fill: parent
                         verticalAlignment: Text.AlignVCenter

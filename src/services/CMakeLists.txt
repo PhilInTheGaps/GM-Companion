@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-find_package(Qt6 COMPONENTS Core Gui Network REQUIRED)
-
-include(AddO2)
-include(AddGSL)
-
 set(HEADERS
     service.h
     servicestatus.h
@@ -74,6 +69,13 @@ set(SOURCES
 )
 
 qt_add_library(services STATIC ${HEADERS} ${SOURCES})
+
+qt_add_resources(services "services-resources"
+    PREFIX "/"
+    BASE resources
+    FILES
+        resources/services/auth-success.html
+        resources/services/nextcloud/getFileList.xml)
 
 target_include_directories(services PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

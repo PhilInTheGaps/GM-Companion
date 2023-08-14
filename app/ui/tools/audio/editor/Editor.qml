@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "../audio_exporter"
 import "./dialogs"

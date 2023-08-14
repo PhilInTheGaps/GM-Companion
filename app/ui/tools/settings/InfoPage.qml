@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Item {
     id: root
@@ -23,27 +23,27 @@ Item {
                 model: [{
                         "name": qsTr("Open Wiki"),
                         "icon": FontAwesome.book,
-                        "iconFont": FontAwesome.familySolid,
+                        "iconFont": FontAwesome.fontSolid,
                         "url": "https://gm-companion.github.io/docs/"
                     }, {
                         "name": qsTr("Report a Bug"),
                         "icon": FontAwesome.bug,
-                        "iconFont": FontAwesome.familySolid,
+                        "iconFont": FontAwesome.fontSolid,
                         "url": "https://github.com/PhilInTheGaps/GM-Companion/issues"
                     }, {
                         "name": qsTr("Older Versions"),
                         "icon": FontAwesome.download,
-                        "iconFont": FontAwesome.familySolid,
+                        "iconFont": FontAwesome.fontSolid,
                         "url": "https://github.com/PhilInTheGaps/GM-Companion/releases"
                     }, {
                         "name": qsTr("View on GitHub"),
                         "icon": FontAwesome.github,
-                        "iconFont": FontAwesome.familyBrands,
+                        "iconFont": FontAwesome.fontBrands,
                         "url": "https://github.com/PhilInTheGaps/GM-Companion"
                     }, {
                         "name": qsTr("Changelog"),
                         "icon": FontAwesome.clipboardList,
-                        "iconFont": FontAwesome.familySolid,
+                        "iconFont": FontAwesome.fontSolid,
                         "url": "https://gm-companion.github.io/docs/changelog/"
                     }]
 
@@ -118,10 +118,10 @@ Item {
                 }
 
                 CreditsItem {
-                    title: "FontAwesome.pri"
-                    description: qsTr("FontAwesome QML implementation. This project uses a fork of FontAwesome.pri by Ben Lau.")
-                    license: [["Icons: CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/"], ["Fonts: SIL OFL 1.1", "https://scripts.sil.org/OFL"], ["Library: Apache 2.0", "https://github.com/benlau/fontawesome.pri/blob/master/LICENSE"]]
-                    links: [[qsTr("Original"), "https://github.com/benlau/fontawesome.pri"], [qsTr("Fork"), "https://github.com/PhilInTheGaps/fontawesome.pri"], ["Ben Lau", "https://github.com/benlau"], ["FontAwesome", "https://fontawesome.com"]]
+                    title: "QML IconFonts"
+                    description: qsTr("Use icon fonts in QML")
+                    license: [["Font Awesome: SIL OFL 1.1", "https://scripts.sil.org/OFL"], ["Library: GPLv3", "https://www.gnu.org/licenses/gpl-3.0.en.html"]]
+                    links: [[qsTr("qml-icon-fonts"), "https://github.com/PhilInTheGaps/qml-icon-fonts"], ["FontAwesome", "https://fontawesome.com"]]
                 }
 
                 CreditsItem {

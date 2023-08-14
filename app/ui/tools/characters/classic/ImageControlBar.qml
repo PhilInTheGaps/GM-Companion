@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../../../defines.js" as Defines
 
 Rectangle {
@@ -102,7 +102,7 @@ Rectangle {
 
         CustomToolBarButton {
             id: rotate_left_button
-            iconText: FontAwesome.undo
+            iconText: FontAwesome.rotateLeft
             onClicked: rotateLeft()
             verticalMode: true
             outline: true
@@ -111,7 +111,7 @@ Rectangle {
 
         CustomToolBarButton {
             id: rotate_right_button
-            iconText: FontAwesome.redo
+            iconText: FontAwesome.rotateRight
             onClicked: rotateRight()
             verticalMode: true
             outline: true

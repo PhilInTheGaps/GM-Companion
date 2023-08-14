@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import CustomComponents 1.0
 
 CustomButton {
@@ -31,7 +31,7 @@ CustomButton {
             FontAwesome.drum
             break
         case 2:
-            FontAwesome.broadcastTower
+            FontAwesome.towerBroadcast
             break
         case 3:
             opened ? FontAwesome.folderOpen : FontAwesome.folder

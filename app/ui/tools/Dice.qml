@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../sizes.js" as Sizes
 import "./dice"
 import "../common"
@@ -88,7 +88,7 @@ Page {
             anchors.margins: 10
             hoverEnabled: true
 
-            iconText: FontAwesome.cog
+            iconText: FontAwesome.gear
             toolTipText: qsTr("Dice Settings")
 
             onClicked: dice_settings_dialog.open()
@@ -195,7 +195,8 @@ Page {
             Button {
                 contentItem: Label {
                     text: FontAwesome.dice
-                    font.family: FontAwesome.familySolid
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 16

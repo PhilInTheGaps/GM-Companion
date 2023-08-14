@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
 import "../../../defines.js" as Defines
-import FontAwesome 2.0
+import IconFonts
 
 Column {
     id: root
@@ -39,8 +39,9 @@ Column {
                 }
 
                 Text {
-                    text: shop_name_field.editMode ? FontAwesome.checkCircle : FontAwesome.chevronUp
-                    font.family: FontAwesome.familySolid
+                    text: shop_name_field.editMode ? FontAwesome.circleCheck : FontAwesome.chevronUp
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     color: shop_name_field.editMode ? "limegreen" : palette.buttonText
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
@@ -70,8 +71,9 @@ Column {
                 }
 
                 Text {
-                    text: shop_name_field.editMode ? FontAwesome.timesCircle : FontAwesome.chevronDown
-                    font.family: FontAwesome.familySolid
+                    text: shop_name_field.editMode ? FontAwesome.circleXmark : FontAwesome.chevronDown
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     color: shop_name_field.editMode ? "red" : palette.buttonText
                     anchors.fill: parent
                     verticalAlignment: Text.AlignVCenter
@@ -133,8 +135,9 @@ Column {
                 }
 
                 Text {
-                    text: FontAwesome.trashAlt
-                    font.family: FontAwesome.familySolid
+                    text: FontAwesome.trash
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     font.pixelSize: height
                     anchors.fill: parent
                     anchors.margins: 10
@@ -153,8 +156,9 @@ Column {
                     color: palette.alternateBase
 
                     Text {
-                        text: FontAwesome.trashAlt
-                        font.family: FontAwesome.familySolid
+                        text: FontAwesome.trash
+                        font.family: FontAwesome.fontSolid.family
+                        font.styleName: FontAwesome.fontSolid.styleName
                         color: palette.buttonText
                         font.pixelSize: parent.height / 3
                         anchors.top: parent.top
@@ -177,8 +181,9 @@ Column {
                         }
 
                         Text {
-                            text: FontAwesome.checkCircle
-                            font.family: FontAwesome.familySolid
+                            text: FontAwesome.circleCheck
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             color: "limegreen"
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
@@ -203,8 +208,9 @@ Column {
                         }
 
                         Text {
-                            text: FontAwesome.timesCircle
-                            font.family: FontAwesome.familySolid
+                            text: FontAwesome.circleXmark
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             color: "red"
                             anchors.fill: parent
                             verticalAlignment: Text.AlignVCenter
@@ -399,7 +405,7 @@ Column {
 
             CustomButton {
                 id: delete_item_button
-                iconText: FontAwesome.times
+                iconText: FontAwesome.xmark
                 iconItem.font.pointSize: 14
                 background: Item {}
 

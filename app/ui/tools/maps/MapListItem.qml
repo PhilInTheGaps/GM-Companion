@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 
 Rectangle {
     property var name
@@ -46,8 +46,9 @@ Rectangle {
     }
 
     Label {
-        text: FontAwesome.mapMarkerAlt
-        font.family: FontAwesome.familySolid
+        text: FontAwesome.locationDot
+        font.family: FontAwesome.fontSolid.family
+        font.styleName: FontAwesome.fontSolid.styleName
         anchors.bottom: name_label.top
         anchors.right: parent.right
         anchors.margins: 5

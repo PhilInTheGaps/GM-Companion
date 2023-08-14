@@ -2,14 +2,14 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 BaseAccountPage {
     id: root
 
     name: "Spotify"
     icon: FontAwesome.spotify
-    iconFamily: FontAwesome.familyBrands
+    iconFont: FontAwesome.fontBrands
     status: [spotify_service.status, spotify_service.clientStatus]
 
     leftPanel: Column {

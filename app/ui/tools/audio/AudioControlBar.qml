@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "../../defines.js" as Defines
 
@@ -40,7 +40,7 @@ ToolBar {
         CustomToolBarButton {
             anchors.margins: 0
             iconText: !audio_tool
-                      || audio_tool.isPaused ? FontAwesome.playCircle : FontAwesome.pauseCircle
+                      || audio_tool.isPaused ? FontAwesome.circlePlay : FontAwesome.circlePause
             onClicked: audio_tool.playPause()
             pointSize: 24
         }

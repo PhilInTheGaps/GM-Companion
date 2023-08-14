@@ -27,12 +27,13 @@ class AbstractSettingsManager : public QObject
 public:
     explicit AbstractSettingsManager(QObject *parent = nullptr);
 
-    Q_INVOKABLE template <typename T>
+    template <typename T>
     T get(const QString &setting, const T &defaultValue, const QString &group = DEFAULT_GROUP);
 
-    template <typename T> T get(const SettingRequest<T> &request);
+    template <typename T> T
+    get(const SettingRequest<T> &request);
 
-    Q_INVOKABLE template <typename T>
+    template <typename T>
     void set(const QString &setting, const T &value, const QString &group = DEFAULT_GROUP);
 
     Q_INVOKABLE bool has(const QString &setting, const QString &group = DEFAULT_GROUP);
@@ -57,12 +58,14 @@ auto AbstractSettingsManager::get(const QString &setting, const T &defaultValue,
     return variant.value<T>();
 }
 
-template <typename T> auto AbstractSettingsManager::get(const SettingRequest<T> &request) -> T
+template <typename T>
+auto AbstractSettingsManager::get(const SettingRequest<T> &request) -> T
 {
     return get(request.identifier, request.defaultValue, request.group);
 }
 
-template <typename T> void AbstractSettingsManager::set(const QString &setting, const T &value, const QString &group)
+template <typename T>
+void AbstractSettingsManager::set(const QString &setting, const T &value, const QString &group)
 {
     m_settings.beginGroup(group);
     m_settings.setValue(setting, value);

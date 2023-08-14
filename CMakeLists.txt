@@ -13,11 +13,6 @@ if (EXISTS ${CGET_TOOLCHAIN_FILE})
   message(STATUS "Found CGet toolchain file: ${CGET_TOOLCHAIN_FILE}")
 endif()
 
-find_package(Qt6 COMPONENTS Core REQUIRED)
-qt_standard_project_setup(REQUIRES 6.5)
-set(CMAKE_AUTORCC ON) # turn on automatic invocation of the RCC
-add_compile_definitions(QT_DEPRECATED_WARNINGS)
-
 # set c++ version
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,6 +26,14 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # set external lib dir
 set(EXTERNAL_LIB_DIR ${CMAKE_SOURCE_DIR}/thirdparty)
+
+find_package(Qt6 COMPONENTS Core Gui Quick QuickControls2 Qml Multimedia Network DBus Concurrent Core5Compat LinguistTools Test REQUIRED)
+find_package(QuaZip-Qt6 REQUIRED)
+find_package(QtKeychain REQUIRED)
+
+qt_standard_project_setup(REQUIRES 6.5)
+set(CMAKE_AUTORCC ON) # turn on automatic invocation of the RCC
+add_compile_definitions(QT_DEPRECATED_WARNINGS)
 
 # set version number
 include(SetVersionNumber)
@@ -49,11 +52,18 @@ message(STATUS "Build directory: ${CMAKE_CURRENT_BINARY_DIR}")
 
 enable_testing(true)
 
+include(AddPoppler)
+include(AddTagLib)
+include(AddGSL)
 include(AddPropertyHelper)
 include(AddHttpStatusCodes)
+include(AddMarkdownLib)
+include(AddO2)
 
 set(SENTRY_ENABLE_INSTALL ON)
 add_subdirectory(thirdparty/sentry-native)
+
+add_subdirectory(thirdparty/qml-icon-fonts)
 
 # Code Coverage
 if (ENABLE_CODE_COVERAGE)

@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Rectangle {
     id: character_button
@@ -59,8 +59,9 @@ Rectangle {
         }
 
         Text {
-            text: character_button.active ? FontAwesome.times : FontAwesome.plus
-            font.family: FontAwesome.familySolid
+            text: character_button.active ? FontAwesome.xmark : FontAwesome.plus
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 15
             anchors.centerIn: parent
             color: parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white"

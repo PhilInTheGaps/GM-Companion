@@ -1,13 +1,13 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 
 Item {
     id: root
     property string name: qsTr("New Location")
     property string description
     property string color: "red"
-    property string icon: FontAwesome.mapMarkerAlt
+    property string icon: FontAwesome.locationDot
     property int markerIndex: -1
     property bool showDelete: false
 
@@ -26,7 +26,8 @@ Item {
 
         Label {
             id: marker_text
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             text: icon
             anchors.centerIn: parent
 

@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 
-import FontAwesome 2.0
+import IconFonts
 import "../../../defines.js" as Defines
 
 Rectangle {
@@ -22,7 +22,7 @@ Rectangle {
         } else if (element_type === 1) {
             FontAwesome.drum
         } else if (element_type === 2) {
-            FontAwesome.broadcastTower
+            FontAwesome.towerBroadcast
         }
     }
 
@@ -58,9 +58,10 @@ Rectangle {
         color: Qt.rgba(0, 0, 0, 0.4)
 
         Text {
-            text: FontAwesome.playCircle
+            text: FontAwesome.circlePlay
             font.pointSize: 35
-            font.family: FontAwesome.familyRegular
+            font.family: FontAwesome.fontRegular.family
+            font.styleName: FontAwesome.fontRegular.styleName
             color: mouse_area.pressed ? "silver" : "white"
             anchors.centerIn: parent
             visible: overlay_enabled
@@ -103,7 +104,9 @@ Rectangle {
             font.pixelSize: parent.height * 0.5
             color: "white"
             text: type_icon
-            font.family: element_type === 3 ? FontAwesome.familyBrands : FontAwesome.familySolid
+            font.family: element_type
+                         === 3 ? FontAwesome.fontBrands.family : FontAwesome.fontSolid.family
+            font.styleName: element_type === 3 ? FontAwesome.fontBrands.styleName : FontAwesome.fontSolid.styleName
         }
     }
 

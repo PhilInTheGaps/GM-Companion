@@ -75,8 +75,10 @@ void AbstractTest::expectWarning()
 
 void AbstractTest::loadResources()
 {
-    Q_INIT_RESOURCE(tests);
+    Q_INIT_RESOURCE(test_resources);
+    Q_INIT_RESOURCE(test_resources_addons);
     Q_INIT_RESOURCE(libresources);
+    Q_INIT_RESOURCE(services_resources);
 }
 
 void AbstractTest::copyResourceToFile(const QString &resource, const QString &destination)

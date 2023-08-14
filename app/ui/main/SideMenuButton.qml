@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Effects
-import FontAwesome 2.0
+import IconFonts
 import "../defines.js" as Defines
 
 Button {
@@ -40,7 +40,7 @@ Button {
             height: sourceSize.height
             width: height
             source: iconSource
-            visible: settings_manager.classicIcons
+            visible: settings_manager.classicIcons && iconSource != ""
             asynchronous: true
 
             MultiEffect {
@@ -67,7 +67,8 @@ Button {
             width: parent.iconWidth
             height: width
             text: faIcon
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: button.down ? "grey" : button.hovered ? "darkgrey" : button.useAltColor ? button.altColor : palette.text

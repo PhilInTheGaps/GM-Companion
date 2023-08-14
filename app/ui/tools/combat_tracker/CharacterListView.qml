@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../../colors.js" as Colors
 import "../../sizes.js" as Sizes
 
@@ -70,7 +70,8 @@ ListView {
                         opacity: 0.7
 
                         text: FontAwesome.clock
-                        font.family: FontAwesome.familySolid
+                        font.family: FontAwesome.fontSolid.family
+                        font.styleName: FontAwesome.fontSolid.styleName
                     }
                 }
             }
@@ -135,7 +136,7 @@ ListView {
                 // Remove Character
                 CustomToolBarButton {
                     id: deletgate_remove_button
-                    iconText: FontAwesome.times
+                    iconText: FontAwesome.xmark
                     toolTipText: qsTr("Remove from tracker")
                     onClicked: combat_tracker.remove(index)
                 }

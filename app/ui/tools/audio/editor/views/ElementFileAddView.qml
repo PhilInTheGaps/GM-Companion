@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import ".."
 import "../../../../sizes.js" as Sizes
@@ -60,7 +60,7 @@ Rectangle {
                          && audio_editor.currentElement.type === 0
 
                 iconText: FontAwesome.spotify
-                iconFont: FontAwesome.familyBrands
+                iconFont: FontAwesome.fontBrands
                 buttonText: qsTr("Spotify")
 
                 usesFixedWidth: true
@@ -120,7 +120,7 @@ Rectangle {
             enabled: false
 
             iconText: root.mode === 1 ? FontAwesome.spotify : FontAwesome.globe
-            iconFont: root.mode === 1 ? FontAwesome.familyBrands : FontAwesome.familySolid
+            iconFont: root.mode === 1 ? FontAwesome.fontBrands : FontAwesome.fontSolid
         }
 
         TextField {
@@ -168,7 +168,7 @@ Rectangle {
             enabled: false
 
             iconText: FontAwesome.youtube
-            iconFont: FontAwesome.familyBrands
+            iconFont: FontAwesome.fontBrands
         }
 
         TextField {

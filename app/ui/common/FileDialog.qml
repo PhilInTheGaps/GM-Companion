@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import lol.rophil.gmcompanion.filedialog 1.0
 import "../defines.js" as Defines
 
@@ -105,7 +105,8 @@ Dialog {
             Label {
                 id: new_folder_form_row_icon
                 text: FontAwesome.folder
-                font.family: FontAwesome.familySolid
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 width: height
                 verticalAlignment: Text.AlignVCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -171,7 +172,8 @@ Dialog {
 
                     Label {
                         text: modelData.isFolder ? FontAwesome.folder : FontAwesome.file
-                        font.family: FontAwesome.familySolid
+                        font.family: FontAwesome.fontSolid.family
+                        font.styleName: FontAwesome.fontSolid.styleName
                         width: height
                         verticalAlignment: Text.AlignVCenter
                         anchors.verticalCenter: parent.verticalCenter

@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import CustomComponents 1.0
 import "../../defines.js" as Defines
 
@@ -98,7 +98,7 @@ Column {
 
     CustomToolBarButton {
         id: rotate_left_button
-        iconText: FontAwesome.undo
+        iconText: FontAwesome.rotateLeft
         onClicked: rotateLeft()
         verticalMode: true
         outline: true
@@ -107,7 +107,7 @@ Column {
 
     CustomToolBarButton {
         id: rotate_right_button
-        iconText: FontAwesome.redo
+        iconText: FontAwesome.rotateRight
         onClicked: rotateRight()
         verticalMode: true
         outline: true
@@ -116,7 +116,7 @@ Column {
 
     CustomToolBarButton {
         id: marker_button
-        iconText: FontAwesome.mapMarkerAlt
+        iconText: FontAwesome.locationDot
         iconColor: "red"
         onClicked: toggleMarkerMenu()
         verticalMode: true

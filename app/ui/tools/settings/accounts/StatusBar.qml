@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import "../../../defines.js" as Defines
-import FontAwesome 2.0
+import IconFonts
 
 Rectangle {
     id: root
@@ -20,7 +20,8 @@ Rectangle {
 
         Label {
             id: icon_label
-            font.family: FontAwesome.familySolid
+            font.family: FontAwesome.fontSolid.family
+            font.styleName: FontAwesome.fontSolid.styleName
             font.pointSize: 12
             verticalAlignment: Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -28,16 +29,16 @@ Rectangle {
             text: {
                 switch (root.status.type) {
                 case 1:
-                    FontAwesome.checkCircle
+                    FontAwesome.circleCheck
                     break
                 case 2:
-                    FontAwesome.exclamationTriangle
+                    FontAwesome.triangleExclamation
                     break
                 case 3:
-                    FontAwesome.exclamationCircle
+                    FontAwesome.circleExclamation
                     break
                 default:
-                    FontAwesome.infoCircle
+                    FontAwesome.circleInfo
                 }
             }
 

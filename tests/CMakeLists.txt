@@ -4,8 +4,6 @@ project(tests)
 
 set(TEST_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Network Test)
-
 add_subdirectory(testhelper)
 
 add_subdirectory(common)

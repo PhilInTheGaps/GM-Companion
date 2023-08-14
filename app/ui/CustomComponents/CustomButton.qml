@@ -1,8 +1,8 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
-import "../sizes.js" as Sizes
-import "../colors.js" as Colors
+import IconFonts
+import "./sizes.js" as Sizes
+import "./colors.js" as Colors
 
 Control {
     id: root
@@ -16,7 +16,7 @@ Control {
     property string buttonText: ""
     property string iconText: ""
     property string toolTipText: ""
-    property string iconFont: FontAwesome.familySolid
+    property var iconFont: FontAwesome.fontSolid
 
     // Visual options
     property int pointSize: 12
@@ -57,7 +57,8 @@ Control {
             color: iconColor ? iconColor : root.textColor
             opacity: root.enabled ? 1 : 0.7
 
-            font.family: root.iconFont
+            font.family: root.iconFont.family
+            font.styleName: root.iconFont.styleName
             font.bold: enableBold && mouse_area.containsMouse
             font.pointSize: root.pointSize
 

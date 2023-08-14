@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-find_package(Qt6 COMPONENTS Core Quick Qml REQUIRED)
-
 set(HEADERS
     file.h
     fileaccess.h

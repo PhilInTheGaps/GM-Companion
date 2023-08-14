@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import CustomComponents 1.0
 import "../../../../../sizes.js" as Sizes
 import "../../../../../colors.js" as Colors
@@ -30,8 +30,9 @@ Rectangle {
                        && audio_editor.currentElement.mode === 0 ? "green" : Colors.text
 
             Label {
-                text: FontAwesome.random
-                font.family: FontAwesome.familySolid
+                text: FontAwesome.shuffle
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pixelSize: height
 
                 height: parent.height / 3
@@ -55,7 +56,7 @@ Rectangle {
         CustomToolBarButton {
             property int modeNum: 1
             toolTipText: qsTr("Files are played randomly, does not stop.")
-            iconText: FontAwesome.random
+            iconText: FontAwesome.shuffle
             pointSize: 18
             iconColor: audio_editor && audio_editor.currentElement
                        && audio_editor.currentElement.mode === modeNum ? "green" : Colors.text
@@ -73,8 +74,9 @@ Rectangle {
                        && audio_editor.currentElement.mode === 2 ? "green" : Colors.text
 
             Label {
-                text: FontAwesome.sync
-                font.family: FontAwesome.familySolid
+                text: FontAwesome.rotate
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pixelSize: height
 
                 height: parent.height / 3
@@ -82,7 +84,8 @@ Rectangle {
                 x: parent.width - width * 1.5
                 y: parent.height - height * 1.5
 
-                color: audio_editor && audio_editor.currentElement.mode
+                color: audio_editor && audio_editor.currentElement
+                       && audio_editor.currentElement.mode
                        === parent.modeNum ? "limegreen" : (parent.pressed ? "grey" : parent.hovered ? "lightgrey" : "white")
 
                 background: Rectangle {

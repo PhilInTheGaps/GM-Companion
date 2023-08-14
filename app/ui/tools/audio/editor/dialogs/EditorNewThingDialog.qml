@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Dialog {
     id: root
@@ -136,8 +136,9 @@ Dialog {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: 5
 
-                text: FontAwesome.exclamationTriangle
-                font.family: FontAwesome.familySolid
+                text: FontAwesome.triangleExclamation
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 12
                 color: "red"
             }

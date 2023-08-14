@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "./accounts"
 
 Item {
@@ -10,17 +10,17 @@ Item {
     readonly property var accounts: [{
             "name": "Spotify",
             "icon": FontAwesome.spotify,
-            "iconFont": FontAwesome.familyBrands,
+            "iconFont": FontAwesome.fontBrands,
             "source": "./accounts/SpotifyAccount.qml"
         }, {
             "name": "GoogleDrive",
             "icon": FontAwesome.googleDrive,
-            "iconFont": FontAwesome.familyBrands,
+            "iconFont": FontAwesome.fontBrands,
             "source": "./accounts/GoogleDriveAccount.qml"
         }, {
             "name": "NextCloud",
             "icon": FontAwesome.cloud,
-            "iconFont": FontAwesome.familySolid,
+            "iconFont": FontAwesome.fontSolid,
             "source": "./accounts/NextCloudAccount.qml"
         }]
 

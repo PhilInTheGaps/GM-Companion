@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "./../../../defines.js" as Defines
 import "./../../../colors.js" as Colors
 
@@ -10,7 +10,7 @@ Item {
 
     property string name: "Unknown Account"
     property string icon: FontAwesome.users
-    property string iconFamily: FontAwesome.familySolid
+    property var iconFont: FontAwesome.fontSolid
     property bool isExperimental: false
 
     property alias leftPanel: left_loader.sourceComponent
@@ -31,7 +31,8 @@ Item {
         Label {
             id: header_icon_label
             text: root.icon
-            font.family: root.iconFamily
+            font.family: root.iconFont.family
+            font.styleName: root.iconFont.styleName
             font.pointSize: 12
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter

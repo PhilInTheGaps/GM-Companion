@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 import "../common"
 import "./settings"
 
@@ -29,7 +29,7 @@ Item {
                 id: page_repeater
                 model: [{
                         "name": qsTr("General"),
-                        "icon": FontAwesome.tools,
+                        "icon": FontAwesome.screwdriverWrench,
                         "source": "settings/GeneralPage.qml"
                     }, {
                         "name": qsTr("Accounts"),
@@ -45,7 +45,7 @@ Item {
                         "source": "settings/AddonsPage.qml"
                     }, {
                         "name": qsTr("Info"),
-                        "icon": FontAwesome.infoCircle,
+                        "icon": FontAwesome.circleInfo,
                         "source": "settings/InfoPage.qml"
                     }]
                 CustomButton {

@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
 
-find_package(Qt6 REQUIRED COMPONENTS Test)
-
 # Spotify Utils
 qt_add_executable(test_spotifyutils testspotifyutils.cpp)
 target_link_libraries(test_spotifyutils PRIVATE services Qt6::Test)

@@ -110,13 +110,13 @@ auto AudioThumbnailGenerator::getPlaceholderImage(AudioElement::Type type) -> QP
     switch (type)
     {
     case AudioElement::Type::Music:
-        return QPixmap(u":/icons/media/music_image.png"_s);
+        return QPixmap(u":/resources/icons/media/music_image.png"_s);
 
     case AudioElement::Type::Sound:
-        return QPixmap(u":/icons/media/sound_image.png"_s);
+        return QPixmap(u":/resources/icons/media/sound_image.png"_s);
 
     case AudioElement::Type::Radio:
-        return QPixmap(u":/icons/media/radio_image.png"_s);
+        return QPixmap(u":/resources/icons/media/radio_image.png"_s);
 
     default:
         return emptyPixmap();

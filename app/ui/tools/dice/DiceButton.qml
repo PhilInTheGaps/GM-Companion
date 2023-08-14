@@ -6,7 +6,7 @@ Button {
     id: root
 
     property int sides: 20
-    property string imageSource: "/icons/dice/d" + sides + ".png"
+    property string imageSource: "qrc:/resources/icons/dice/d" + sides + ".png"
     property string toolTipText: "D" + sides
     property bool isCurrentType: false
 

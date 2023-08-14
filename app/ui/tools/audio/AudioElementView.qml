@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 import "./buttons"
 import "../../defines.js" as Defines
@@ -131,8 +131,9 @@ Item {
             color: palette.button
 
             Label {
-                font.family: FontAwesome.familySolid
-                text: search_field.visible ? FontAwesome.times : FontAwesome.search
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
+                text: search_field.visible ? FontAwesome.xmark : FontAwesome.magnifyingGlass
                 anchors.centerIn: parent
                 color: search_mouse_area.containsMouse ? "grey" : palette.buttonText
                 font.pixelSize: parent.height / 2

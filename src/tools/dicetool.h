@@ -25,11 +25,11 @@ public:
     Q_INVOKABLE void setModifier(int modifier) { m_modifier = modifier; }
 
     Q_INVOKABLE static void setDiceSettings(bool enableCriticals, int success, int failure, bool minMax, bool successMax);
-    Q_INVOKABLE [[nodiscard]] static bool getCriticalEnabled();
-    Q_INVOKABLE [[nodiscard]] static int getSuccess();
-    Q_INVOKABLE [[nodiscard]] static int getFailure();
-    Q_INVOKABLE [[nodiscard]] static int getMinMax();
-    Q_INVOKABLE [[nodiscard]] static int getSuccessMax();
+    [[nodiscard]] Q_INVOKABLE static bool getCriticalEnabled();
+    [[nodiscard]] Q_INVOKABLE static int getSuccess();
+    [[nodiscard]] Q_INVOKABLE static int getFailure();
+    [[nodiscard]] Q_INVOKABLE static int getMinMax();
+    [[nodiscard]] Q_INVOKABLE static int getSuccessMax();
 
 signals:
     void sidesChanged();

@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Rectangle {
     id: root
@@ -62,8 +62,8 @@ Rectangle {
             CustomButton {
                 buttonText: modelData[0]
                 onClicked: Qt.openUrlExternally(modelData[1])
-                iconText: FontAwesome.balanceScale
-                iconFont: FontAwesome.familySolid
+                iconText: FontAwesome.scaleBalanced
+                iconFont: FontAwesome.fontSolid
                 usesFixedWidth: false
                 backgroundColor: "transparent"
 

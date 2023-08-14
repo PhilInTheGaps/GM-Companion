@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import "../common"
 
 Item {
@@ -101,7 +101,8 @@ Item {
 
                 contentItem: Label {
                     text: FontAwesome.dice
-                    font.family: FontAwesome.familySolid
+                    font.family: FontAwesome.fontSolid.family
+                    font.styleName: FontAwesome.fontSolid.styleName
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pointSize: 16

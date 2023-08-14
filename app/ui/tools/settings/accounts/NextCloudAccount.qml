@@ -2,14 +2,14 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 BaseAccountPage {
     id: root
 
     name: "NextCloud"
     icon: FontAwesome.cloud
-    iconFamily: FontAwesome.familySolid
+    iconFont: FontAwesome.fontSolid
     status: [nextcloud_service.status]
 
     leftPanel: Column {
@@ -39,7 +39,7 @@ BaseAccountPage {
                     Layout.fillWidth: true
                     placeholderText: "https://"
                     Component.onCompleted: text = settings_manager.getServerUrl(
-                                               "NextCloud", false)
+                                               "NextCloud")
                 }
             }
 

@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 Dialog {
     id: root
@@ -9,7 +9,7 @@ Dialog {
     property string markerName: "Placeholder"
     property string markerDescription: "Placeholder"
     property string markerColor: "red"
-    property string markerIcon: FontAwesome.mapMarkerAlt
+    property string markerIcon: FontAwesome.locationDot
 
     title: qsTr("Edit Marker")
     modal: true
@@ -69,7 +69,8 @@ Dialog {
             Label {
                 id: icon_text
                 text: root.markerIcon
-                font.family: FontAwesome.familySolid
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pixelSize: color_field.height
                 color: color_field.text
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -83,7 +84,7 @@ Dialog {
                 columns: 4
 
                 Repeater {
-                    model: [FontAwesome.mapMarkerAlt, FontAwesome.mapMarker, FontAwesome.anchor, FontAwesome.rocket, FontAwesome.plane, FontAwesome.parking, FontAwesome.bed, FontAwesome.beer, FontAwesome.book, FontAwesome.building, FontAwesome.suitcase, FontAwesome.crosshairs, FontAwesome.flag, FontAwesome.flask, FontAwesome.home, FontAwesome.industry, FontAwesome.hospital, FontAwesome.fireExtinguisher, FontAwesome.gavel, FontAwesome.landmark, FontAwesome.shoppingBasket, FontAwesome.subway, FontAwesome.tree, FontAwesome.trophy]
+                    model: [FontAwesome.locationDot, FontAwesome.locationPin, FontAwesome.anchor, FontAwesome.rocket, FontAwesome.plane, FontAwesome.squareParking, FontAwesome.bed, FontAwesome.beerMugEmpty, FontAwesome.book, FontAwesome.building, FontAwesome.suitcase, FontAwesome.crosshairs, FontAwesome.flag, FontAwesome.flask, FontAwesome.house, FontAwesome.industry, FontAwesome.hospital, FontAwesome.fireExtinguisher, FontAwesome.gavel, FontAwesome.landmark, FontAwesome.basketShopping, FontAwesome.train, FontAwesome.tree, FontAwesome.trophy]
 
                     Rectangle {
                         width: (parent.width - parent.spacing * 3) / 4
@@ -91,7 +92,8 @@ Dialog {
 
                         Label {
                             text: modelData
-                            font.family: FontAwesome.familySolid
+                            font.family: FontAwesome.fontSolid.family
+                            font.styleName: FontAwesome.fontSolid.styleName
                             font.pixelSize: parent.height - 10
                             anchors.centerIn: parent
                         }

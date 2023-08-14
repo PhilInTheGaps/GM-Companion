@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import CustomComponents 1.0
 import "../../defines.js" as Defines
 
@@ -108,7 +108,8 @@ Page {
             Label {
                 id: arrow_label
                 text: FontAwesome.arrowRight
-                font.family: FontAwesome.familySolid
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pointSize: 15
 
                 height: Defines.TOOLBAR_HEIGHT * 1.5

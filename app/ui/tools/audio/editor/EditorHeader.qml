@@ -1,7 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.2
 import CustomComponents 1.0
-import FontAwesome 2.0
+import IconFonts
 
 CustomToolBar {
     id: tool_bar
@@ -216,7 +216,7 @@ CustomToolBar {
 
         // Sort Elements
         CustomToolBarButton {
-            iconText: FontAwesome.sortAlphaDown
+            iconText: FontAwesome.arrowDownAZ
             toolTipText: qsTr("Sort elements alphabetically")
             onClicked: audio_editor.sortElements()
         }
@@ -228,8 +228,9 @@ CustomToolBar {
             toolTipText: qsTr("Remove missing files")
 
             Label {
-                text: FontAwesome.trashAlt
-                font.family: FontAwesome.familySolid
+                text: FontAwesome.trash
+                font.family: FontAwesome.fontSolid.family
+                font.styleName: FontAwesome.fontSolid.styleName
                 font.pixelSize: height
 
                 height: parent.height / 3

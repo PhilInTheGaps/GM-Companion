@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
-import FontAwesome 2.0
+import IconFonts
 import CustomComponents 1.0
 
 import "../../../common"
@@ -13,8 +13,8 @@ CustomToolBarButton {
     anchors.margins: 0
     centering: true
 
-    iconText: FontAwesome.ellipsisH
-    iconFont: FontAwesome.familySolid
+    iconText: FontAwesome.ellipsis
+    iconFont: FontAwesome.fontSolid
     toolTipText: qsTr("Select icon from files")
     pointSize: 12
 
