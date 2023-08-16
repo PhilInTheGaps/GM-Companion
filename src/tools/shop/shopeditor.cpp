@@ -343,6 +343,8 @@ void ShopEditor::itemEditorSaved(ItemGroup *group)
     }
 
     a_itemGroups.prepend(group);
+    emit itemGroupsChanged(a_itemGroups);
+
     currentItemGroup(group);
 }
 

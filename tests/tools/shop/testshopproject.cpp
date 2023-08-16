@@ -46,7 +46,7 @@ void TestShopProject::initTestCase()
 
     itemGroup = std::make_unique<ItemGroup>(QStringLiteral("TestGroup"),
                                             QJsonDocument::fromJson(itemGroupJson).object(), nullptr);
-    QVERIFY(project);
+    QVERIFY(itemGroup);
 }
 
 void TestShopProject::canSerializeProject()

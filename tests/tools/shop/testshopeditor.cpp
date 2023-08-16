@@ -58,7 +58,13 @@ void TestShopEditor::initTestCase()
     editor->loadData();
 
     QSignalSpy spyEditor(editor, &ShopEditor::isLoadingChanged);
-    spyEditor.wait();
+    QVERIFY(spyEditor.wait());
+
+    if (!editor->currentItemGroup())
+    {
+        QSignalSpy spyEditor2(editor, &ShopEditor::itemGroupsChanged);
+        QVERIFY(spyEditor2.wait());
+    }
 
     QVERIFY(!editor->isLoading());
     QVERIFY(editor->isDataLoaded());
@@ -287,10 +293,12 @@ void TestShopEditor::canSaveItems()
         itemEditor->addItem(QStringLiteral("save_item"), QLatin1String(), QStringLiteral("save_cat"), QLatin1String()));
     QVERIFY(!itemEditor->isSaved());
 
+    QSignalSpy spy(itemEditor, &ItemEditor::isSavedChanged);
+    QVERIFY(spy.isValid());
+
     itemEditor->save();
 
-    QSignalSpy spy(itemEditor, &ItemEditor::isSavedChanged);
-    spy.wait();
+    QVERIFY(spy.wait());
     QVERIFY(itemEditor->isSaved());
 
     // have items been copied to shop editor?
