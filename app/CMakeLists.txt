@@ -28,16 +28,22 @@ set(RCFILES
 qt_add_executable(gm-companion ${SOURCES} ${HEADERS} ${RCFILES})
 
 if (BUILD_TRANSLATIONS)
+  file(GLOB_RECURSE TO_TRANSLATE
+    LIST_DIRECTORIES false
+    ${CMAKE_SOURCE_DIR}/app/**/*.cpp
+    ${CMAKE_SOURCE_DIR}/app/**/*.qml
+    ${CMAKE_SOURCE_DIR}/app/**/*.js
+    ${CMAKE_SOURCE_DIR}/src/**/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/**/*.qml
+    ${CMAKE_SOURCE_DIR}/src/**/*.js
+  )
+
   qt_add_translations(gm-companion
     TS_FILES
     i18n/gm-companion_de_DE.ts
     i18n/gm-companion_en_US.ts
-    INCLUDE_DIRECTORIES
-    .
-    ./ui
-    ../src
+    SOURCES ${TO_TRANSLATE}
   )
-
 endif()
 
 target_include_directories(gm-companion PRIVATE
