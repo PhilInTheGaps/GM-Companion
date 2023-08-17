@@ -31,9 +31,11 @@ if (BUILD_TRANSLATIONS)
   file(GLOB_RECURSE TO_TRANSLATE
     LIST_DIRECTORIES false
     ${CMAKE_SOURCE_DIR}/app/**/*.cpp
+    ${CMAKE_SOURCE_DIR}/app/**/*.h
     ${CMAKE_SOURCE_DIR}/app/**/*.qml
     ${CMAKE_SOURCE_DIR}/app/**/*.js
     ${CMAKE_SOURCE_DIR}/src/**/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/**/*.h
     ${CMAKE_SOURCE_DIR}/src/**/*.qml
     ${CMAKE_SOURCE_DIR}/src/**/*.js
   )
@@ -43,6 +45,7 @@ if (BUILD_TRANSLATIONS)
     i18n/gm-companion_de_DE.ts
     i18n/gm-companion_en_US.ts
     SOURCES ${TO_TRANSLATE}
+    LUPDATE_OPTIONS "-no-obsolete"
   )
 endif()
 

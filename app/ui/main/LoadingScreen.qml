@@ -21,7 +21,7 @@ Popup {
         Image {
             id: image
             visible: showImage
-            source: ":/resources/splash.jpg"
+            source: "qrc:/resources/splash.jpg"
         }
 
         ProgressBar {

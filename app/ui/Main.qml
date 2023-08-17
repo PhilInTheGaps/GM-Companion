@@ -36,6 +36,8 @@ ApplicationWindow {
     signal zoomOut
     signal save
 
+    property int currentToolIndex: 0
+
     readonly property var tools: [{
             "name": qsTr("Audio"),
             "source": "tools/Audio.qml",
@@ -173,7 +175,7 @@ ApplicationWindow {
                         onClicked: setTool()
 
                         function setTool() {
-                            loader.setSource(modelData.source)
+                            currentToolIndex = index
                         }
                     }
                 }
@@ -211,7 +213,7 @@ ApplicationWindow {
             faIcon: FontAwesome.gear
 
             onClicked: {
-                loader.setSource("tools/Settings.qml")
+                currentToolIndex = -1
             }
         }
     }
@@ -223,7 +225,8 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         asynchronous: true
-        source: main_window.tools[0].source
+        source: currentToolIndex
+                < 0 ? "tools/Settings.qml" : main_window.tools[currentToolIndex].source
         active: true
 
         onLoaded: splash.close()

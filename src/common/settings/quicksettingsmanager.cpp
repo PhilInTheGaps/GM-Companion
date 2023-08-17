@@ -3,10 +3,6 @@
 
 using namespace Qt::Literals::StringLiterals;
 
-QuickSettingsManager::QuickSettingsManager(QObject *parent) : QObject{parent}
-{
-}
-
 auto QuickSettingsManager::has(const QString &setting, const QString &group) -> bool
 {
     return SettingsManager::instance()->has(setting, group);
@@ -46,6 +42,9 @@ void QuickSettingsManager::setLanguage(const QString &language)
     auto chosenLanguage = Utils::isInBounds(languages, index) ? languages[index] : u"default"_s;
 
     SettingsManager::instance()->set(u"language"_s, chosenLanguage);
+    emit languageChanged(chosenLanguage);
+
+    a_languageBcp47 = SettingsManager::getLanguageBcp47();
 }
 
 auto QuickSettingsManager::getServerUrl(const QString &service) -> QString

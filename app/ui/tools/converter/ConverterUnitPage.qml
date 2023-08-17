@@ -37,6 +37,7 @@ Page {
 
                 validator: DoubleValidator {
                     notation: DoubleValidator.ScientificNotation
+                    locale: settings_manager.languageBcp47
                 }
 
                 selectByMouse: true
@@ -137,10 +138,14 @@ Page {
                 height: Defines.TOOLBAR_HEIGHT * 1.5
                 font.pointSize: 12
                 readOnly: true
-                text: converter_tool ? converter_tool.convert(
-                                           converter_tool.fromUnit,
-                                           from_value_text_field.text,
-                                           converter_tool.toUnit) : ""
+                text: converter_tool ? Number(
+                                           converter_tool.convert(
+                                               converter_tool.fromUnit,
+                                               from_value_text_field.text,
+                                               converter_tool.toUnit)).toLocaleString(
+                                           Qt.locale(
+                                               settings_manager.languageBcp47),
+                                           'G', 8) : ""
             }
 
             Flickable {

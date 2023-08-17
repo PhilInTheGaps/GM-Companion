@@ -359,14 +359,19 @@ Page {
                             TextField {
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
-                                text: modelData.value
+                                text: Number(modelData.value).toLocaleString(
+                                          Qt.locale(
+                                              settings_manager.languageBcp47),
+                                          'G', 8)
+
                                 selectByMouse: true
 
                                 validator: DoubleValidator {
                                     notation: DoubleValidator.ScientificNotation
+                                    locale: settings_manager.languageBcp47
                                 }
 
-                                onTextEdited: {
+                                onEditingFinished: {
                                     converter_editor.changeUnitValue(modelData,
                                                                      text)
                                 }

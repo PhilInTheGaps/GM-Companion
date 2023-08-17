@@ -48,9 +48,12 @@ auto SettingsManager::getLanguage() -> QLocale
         getLanguageNames().contains(QLocale::languageToString(QLocale::system().language()));
     const auto useSystemLang = useDefault && isSystemLangAvailable;
 
-    qCDebug(gmSettings()) << "Language:" << QLocale(value).name() << QLocale::system().name();
-
     return useSystemLang ? QLocale::system() : QLocale(value);
+}
+
+auto SettingsManager::getLanguageBcp47() -> QString
+{
+    return getLanguage().bcp47Name();
 }
 
 auto SettingsManager::getLanguageString() -> QString
@@ -75,7 +78,6 @@ auto SettingsManager::getLanguages() -> QStringList
         languages.append(QLocale(temp).name());
     }
 
-    qCDebug(gmSettings()) << "Languages found:" << languages;
     return languages;
 }
 

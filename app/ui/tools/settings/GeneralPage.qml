@@ -30,7 +30,6 @@ Column {
                 id: language_box
 
                 property bool loaded: false
-                property int originalIndex: -1
 
                 model: settings_manager.getLanguageNames()
                 width: settings_page.width / 6
@@ -43,17 +42,8 @@ Column {
 
                 Component.onCompleted: {
                     currentIndex = settings_manager.getLanguageIndex()
-                    originalIndex = currentIndex
                     loaded = true
                 }
-            }
-
-            Label {
-                id: requires_restart_label
-                visible: language_box.currentIndex !== language_box.originalIndex
-                text: qsTr("Restart required!")
-                anchors.verticalCenter: parent.verticalCenter
-                verticalAlignment: Text.AlignVCenter
             }
         }
     }

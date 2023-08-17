@@ -149,7 +149,12 @@ auto ConverterEditor::changeUnitValue(ConverterUnit *unit, const QString &value)
 {
     if (!unit) return false;
 
-    unit->value(ConverterTool::textToNumber(value));
+    bool ok = false;
+    auto number = ConverterTool::textToNumber(value, &ok);
+
+    if (!ok) return false;
+
+    unit->value(number);
 
     madeChanges();
     return true;

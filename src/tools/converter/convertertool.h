@@ -49,7 +49,7 @@ private:
 
     void forceReloadData();
 
-    [[nodiscard]] static auto textToNumber(QString text, bool *ok = nullptr) -> double;
+    [[nodiscard]] static auto textToNumber(QStringView text, bool *ok = nullptr) -> double;
 
     gsl::owner<ConverterEditor *> m_editor = nullptr;
 };

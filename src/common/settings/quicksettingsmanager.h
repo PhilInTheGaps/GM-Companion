@@ -1,6 +1,7 @@
 #pragma once
 
 #include "settingsmanager.h"
+#include "thirdparty/propertyhelper/PropertyHelper.h"
 #include <QObject>
 #include <QVariant>
 
@@ -32,6 +33,7 @@ class QuickSettingsManager : public QObject
     SETTINGS_PROPERTY(bool, showToolNames, false)
     SETTINGS_PROPERTY(bool, classicIcons, false)
     SETTINGS_PROPERTY(QString, cloudMode, QStringLiteral("local"))
+    READ_PROPERTY2(QString, languageBcp47, SettingsManager::instance()->getLanguageBcp47())
 
 #ifdef NO_UPDATE_CHECK
     SETTINGS_PROPERTY2(bool, checkForUpdates, false, QStringLiteral("Updates"))
@@ -60,7 +62,7 @@ class QuickSettingsManager : public QObject
                        QStringLiteral("Spotify"))
 
 public:
-    explicit QuickSettingsManager(QObject *parent = nullptr);
+    using QObject::QObject;
 
     Q_INVOKABLE static bool has(const QString &setting, const QString &group);
 
@@ -69,10 +71,13 @@ public:
 
     Q_INVOKABLE static int getLanguageIndex();
     Q_INVOKABLE static QStringList getLanguageNames();
-    Q_INVOKABLE static void setLanguage(const QString &language);
+    Q_INVOKABLE void setLanguage(const QString &language);
 
     Q_INVOKABLE static QString getServerUrl(const QString &service);
     Q_INVOKABLE static void setServerUrl(const QString &url, const QString &service);
 
     Q_INVOKABLE static void setPassword(const QString &username, const QString &password, const QString &service);
+
+signals:
+    void languageChanged(QString language);
 };

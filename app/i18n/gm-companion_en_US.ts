@@ -1420,57 +1420,57 @@ This is disabled by default if you installed the application through a package m
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="40"/>
+        <location filename="../ui/Main.qml" line="42"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="45"/>
+        <location filename="../ui/Main.qml" line="47"/>
         <source>Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="50"/>
+        <location filename="../ui/Main.qml" line="52"/>
         <source>Dice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="55"/>
+        <location filename="../ui/Main.qml" line="57"/>
         <source>Combat Tracker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="60"/>
+        <location filename="../ui/Main.qml" line="62"/>
         <source>Item Shop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="65"/>
+        <location filename="../ui/Main.qml" line="67"/>
         <source>Characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="70"/>
+        <location filename="../ui/Main.qml" line="72"/>
         <source>Generators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="75"/>
+        <location filename="../ui/Main.qml" line="77"/>
         <source>Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="80"/>
+        <location filename="../ui/Main.qml" line="82"/>
         <source>Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="187"/>
+        <location filename="../ui/Main.qml" line="189"/>
         <source>Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="209"/>
+        <location filename="../ui/Main.qml" line="211"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1759,6 +1759,27 @@ It will then send an anonymous report to sentry.io so that we know how stable th
     <message>
         <location filename="../ui/tools/settings/accounts/NextCloudAccount.qml" line="96"/>
         <source>Logout</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NoteBook</name>
+    <message>
+        <location filename="../../src/tools/notes/notebook.h" line="17"/>
+        <source>Chapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/notes/notebook.h" line="17"/>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NoteBookChapter</name>
+    <message>
+        <location filename="../../src/tools/notes/notebookchapter.h" line="15"/>
+        <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

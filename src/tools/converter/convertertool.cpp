@@ -1,6 +1,7 @@
 #include "convertertool.h"
 #include "convertereditor.h"
 #include "project/converterprojectupgrader.h"
+#include "settings/settingsmanager.h"
 #include "src/addons/addon_reader/addonreader.h"
 #include "src/addons/addonmanager.h"
 #include "src/common/utils/fileutils.h"
@@ -204,8 +205,7 @@ auto ConverterTool::convert(ConverterUnit *fromUnit, const QString &fromValue, C
     return QString::number(factor * value, 'g', 6);
 }
 
-auto ConverterTool::textToNumber(QString text, bool *ok) -> double
+auto ConverterTool::textToNumber(QStringView text, bool *ok) -> double
 {
-    const auto temp = text.replace(',', '.');
-    return temp.toDouble(ok);
+    return SettingsManager::getLanguage().toDouble(text, ok);
 }

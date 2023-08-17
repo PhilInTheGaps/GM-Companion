@@ -44,22 +44,32 @@ void registerMetaTypes()
     qRegisterMetaType<QFuture<void>>();
 }
 
-/// Set the language and install a translator
-void initTranslations()
+void updateTranslation(QTranslator &translator)
 {
-    qCDebug(gmMain()) << "Initializing translations ...";
-    auto *translator = new QTranslator;
+    if (!translator.isEmpty()) QCoreApplication::removeTranslator(&translator);
 
-    if (translator->load(SettingsManager::getLanguage(), u"gm-companion"_s, u"_"_s, u":/i18n"_s))
+    if (translator.load(SettingsManager::getLanguage(), u"gm-companion"_s, u"_"_s, u":/i18n"_s))
     {
-        QGuiApplication::installTranslator(translator);
-
+        QGuiApplication::installTranslator(&translator);
         qCDebug(gmMain()) << "Loaded translation" << SettingsManager::getLanguage();
     }
     else
     {
         qCWarning(gmMain) << "Could not load translation";
     }
+}
+
+/// Set the language and install a translator
+void initTranslations(QTranslator &translator, QuickSettingsManager &quickSettings, QQmlEngine &engine)
+{
+    qCDebug(gmMain()) << "Initializing translations ...";
+
+    updateTranslation(translator);
+
+    QObject::connect(&quickSettings, &QuickSettingsManager::languageChanged, &translator, [&translator, &engine]() {
+        updateTranslation(translator);
+        engine.retranslate();
+    });
 }
 
 void initResources()
@@ -85,8 +95,14 @@ auto main(int argc, char *argv[]) -> int
     qCDebug(gmMain()).noquote() << "Starting GM-Companion" << CURRENT_VERSION << "...";
 
     registerMetaTypes();
-    initTranslations();
     initResources();
+
+    QQuickStyle::setStyle(u"Style"_s);
+
+    QTranslator translator;
+    QuickSettingsManager quickSettings;
+    QQmlApplicationEngine engine;
+    initTranslations(translator, quickSettings, engine);
 
     // Sentry.io crash reporting
     // Crash reports and session tracking are opt-in settings
@@ -109,9 +125,6 @@ auto main(int argc, char *argv[]) -> int
 
     auto sentryClose = qScopeGuard([] { sentry_close(); });
 
-    QQuickStyle::setStyle(u"Style"_s);
-    QQmlApplicationEngine engine;
-
     // Misc
     QNetworkAccessManager networkManager(nullptr);
     networkManager.setRedirectPolicy(QNetworkRequest::NoLessSafeRedirectPolicy);
@@ -120,7 +133,7 @@ auto main(int argc, char *argv[]) -> int
     GoogleDrive gd(networkManager, nullptr);
     Files::File::init(&nc, &gd);
 
-    engine.rootContext()->setContextProperty(u"settings_manager"_s, new QuickSettingsManager);
+    engine.rootContext()->setContextProperty(u"settings_manager"_s, &quickSettings);
     engine.rootContext()->setContextProperty(u"update_manager"_s, new UpdateManager);
     engine.rootContext()->setContextProperty(u"addon_manager"_s, AddonManager::instance());
     engine.rootContext()->setContextProperty(u"addon_repository_manager"_s,

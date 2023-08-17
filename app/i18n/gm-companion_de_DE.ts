@@ -18,30 +18,7 @@
     </message>
 </context>
 <context>
-    <name>AddUnitDialog</name>
-    <message>
-        <source>Add Units</source>
-        <translation type="vanished">Einheiten Hinzufügen</translation>
-    </message>
-    <message>
-        <source>Unit Name:</source>
-        <translation type="vanished">Einheit:</translation>
-    </message>
-    <message>
-        <source>Meters</source>
-        <translation type="vanished">Meter</translation>
-    </message>
-    <message>
-        <source>Add Unit</source>
-        <translation type="vanished">Einheit Hinzufügen</translation>
-    </message>
-</context>
-<context>
     <name>AddonElementDialog</name>
-    <message>
-        <source>Add Element from Addon</source>
-        <translation type="vanished">Element aus Addon hinzufügen</translation>
-    </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/AddonElementDialog.qml" line="13"/>
         <source>Add Project From Addon</source>
@@ -119,10 +96,6 @@
 <context>
     <name>AddonsPage</name>
     <message>
-        <source>The following addons are available:</source>
-        <translation type="vanished">Folgende Addons sind verfügbar:</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/settings/AddonsPage.qml" line="14"/>
         <source>Manage Repositories</source>
         <translation>Repositories verwalten</translation>
@@ -159,17 +132,6 @@
     </message>
 </context>
 <context>
-    <name>Attributes</name>
-    <message>
-        <source>MU</source>
-        <translation type="vanished">MU</translation>
-    </message>
-    <message>
-        <source>INI</source>
-        <translation type="vanished">INI</translation>
-    </message>
-</context>
-<context>
     <name>AudioCategoryView</name>
     <message>
         <location filename="../ui/tools/audio/AudioCategoryView.qml" line="37"/>
@@ -184,10 +146,6 @@
 </context>
 <context>
     <name>AudioEditor</name>
-    <message>
-        <source>No Subscenario</source>
-        <translation type="vanished">Kein Subszenario</translation>
-    </message>
     <message>
         <location filename="../../src/tools/audio/editor/audioeditor.cpp" line="725"/>
         <source>Saving ...</source>
@@ -236,18 +194,6 @@
         <translation>Ordner Festlegen</translation>
     </message>
     <message>
-        <source>Categories to Export</source>
-        <translation type="vanished">Zu exportierende Kategorien</translation>
-    </message>
-    <message>
-        <source>Scenarios to Export</source>
-        <translation type="vanished">Zu exportierende Szenarien</translation>
-    </message>
-    <message>
-        <source>Elements to Export</source>
-        <translation type="vanished">Zu exportierende Elemente</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/audio/audio_exporter/AudioExporter.qml" line="127"/>
         <source>Export</source>
         <translation>Exportieren</translation>
@@ -259,21 +205,6 @@
         <location filename="../ui/tools/audio/AudioInfoView.qml" line="34"/>
         <source>Playlist</source>
         <translation>Playlist</translation>
-    </message>
-</context>
-<context>
-    <name>AudioTool</name>
-    <message>
-        <source>Unknown Album</source>
-        <translation type="vanished">Unbekanntes Album</translation>
-    </message>
-    <message>
-        <source>Unknown Artist</source>
-        <translation type="vanished">Unbekannter Künstler</translation>
-    </message>
-    <message>
-        <source>Unknown Title</source>
-        <translation type="vanished">Unbekannter Titel</translation>
     </message>
 </context>
 <context>
@@ -474,7 +405,7 @@
     <message>
         <location filename="../ui/tools/converter/ConverterEditorNewThingDialog.qml" line="8"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neue(s)</translation>
     </message>
     <message>
         <location filename="../ui/tools/converter/ConverterEditorNewThingDialog.qml" line="33"/>
@@ -515,7 +446,7 @@
     <message>
         <location filename="../ui/tools/converter/ConverterEditorNewThingDialog.qml" line="80"/>
         <source>1.0</source>
-        <translation type="unfinished"></translation>
+        <translation>1,0</translation>
     </message>
     <message>
         <location filename="../ui/tools/converter/ConverterEditorNewThingDialog.qml" line="81"/>
@@ -545,38 +476,11 @@
     </message>
 </context>
 <context>
-    <name>ConverterTool</name>
-    <message>
-        <source>General</source>
-        <translation type="vanished">Allgemein</translation>
-    </message>
-    <message>
-        <source>Meters</source>
-        <translation type="vanished">Meter</translation>
-    </message>
-    <message>
-        <source>Square Meters</source>
-        <translation type="vanished">Quadratmeter</translation>
-    </message>
-    <message>
-        <source>Cubic Meters</source>
-        <translation type="vanished">Kubikmeter</translation>
-    </message>
-    <message>
-        <source>Kilograms</source>
-        <translation type="vanished">Kilogramm</translation>
-    </message>
-    <message>
-        <source>Dollars</source>
-        <translation type="vanished">Dollar</translation>
-    </message>
-</context>
-<context>
     <name>ConverterUnitPage</name>
     <message>
         <location filename="../ui/tools/converter/ConverterUnitPage.qml" line="36"/>
         <source>1.0</source>
-        <translation type="unfinished"></translation>
+        <translation>1,0</translation>
     </message>
 </context>
 <context>
@@ -698,7 +602,7 @@
     <message>
         <location filename="../ui/tools/dice/DiceSettings.qml" line="21"/>
         <source>Min / Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Min / Max</translation>
     </message>
     <message>
         <location filename="../ui/tools/dice/DiceSettings.qml" line="32"/>
@@ -790,17 +694,6 @@ Zwischenergebnis: </translation>
     </message>
 </context>
 <context>
-    <name>DiscordAccount</name>
-    <message>
-        <source>Use default server</source>
-        <translation type="obsolete">Standard-Server verwenden</translation>
-    </message>
-    <message>
-        <source>Use custom server</source>
-        <translation type="obsolete">Eigenen Server verwenden</translation>
-    </message>
-</context>
-<context>
     <name>EditorDeleteDialog</name>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorDeleteDialog.qml" line="12"/>
@@ -835,10 +728,6 @@ Zwischenergebnis: </translation>
 </context>
 <context>
     <name>EditorFileListView</name>
-    <message>
-        <source>Set Folder</source>
-        <translation type="vanished">Ordner Festlegen</translation>
-    </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/EditorFileListView.qml" line="102"/>
         <source>Select folder for file</source>
@@ -921,10 +810,6 @@ Zwischenergebnis: </translation>
         <translation>Entferne fehlende Dateien</translation>
     </message>
     <message>
-        <source>Remove missing files.</source>
-        <translation type="vanished">Fehlende Dateien entfernen.</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/shop/shop_editor/EditorHeader.qml" line="103"/>
         <source>No Items</source>
         <translation>Keine Waren</translation>
@@ -940,23 +825,23 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="32"/>
         <source>No Project!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Projekt!</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="36"/>
         <source>No Category!</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Kategorie!</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="42"/>
         <source>No Scenario!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Szenario!</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="46"/>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="129"/>
         <source>Unknown Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Fehler</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="55"/>
@@ -1001,7 +886,7 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="71"/>
         <source>In</source>
-        <translation type="unfinished"></translation>
+        <translation>In</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="72"/>
@@ -1011,7 +896,7 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="94"/>
         <source>No Subscenario</source>
-        <translation type="unfinished">Kein Subszenario</translation>
+        <translation>Kein Subszenario</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/dialogs/EditorNewThingDialog.qml" line="112"/>
@@ -1027,13 +912,9 @@ Zwischenergebnis: </translation>
 <context>
     <name>Effect</name>
     <message>
-        <source>Dice Result: </source>
-        <translation type="vanished">Würfelergebnis: </translation>
-    </message>
-    <message>
         <location filename="../../src/tools/combat_tracker/effect.cpp" line="19"/>
         <source>Dice Result</source>
-        <translation type="unfinished"></translation>
+        <translation>Würfelergebnis</translation>
     </message>
 </context>
 <context>
@@ -1046,27 +927,27 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/views/ElementFileAddView.qml" line="64"/>
         <source>Spotify</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/ElementFileAddView.qml" line="80"/>
         <source>Web</source>
-        <translation type="unfinished"></translation>
+        <translation>Internet</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/ElementFileAddView.qml" line="136"/>
         <source>Spotify URI</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/ElementFileAddView.qml" line="136"/>
         <source>URL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/ElementFileAddView.qml" line="184"/>
         <source>YouTube URL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1074,12 +955,12 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/views/element_properties/ElementIconView.qml" line="81"/>
         <source>Icon Path (Leave empty for default icon)</source>
-        <translation type="unfinished">Icon-Pfad (Leer lassen für Standardicon)</translation>
+        <translation>Icon-Pfad (Leer lassen für Standardicon)</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/element_properties/ElementIconView.qml" line="112"/>
         <source>Select icon from unsplash.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Icon von unsplash.com auswählen</translation>
     </message>
 </context>
 <context>
@@ -1087,24 +968,17 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/audio/editor/views/element_properties/ElementNameView.qml" line="27"/>
         <source>Change Subscenario</source>
-        <translation type="unfinished"></translation>
+        <translation>Subszenario ändern</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/element_properties/ElementNameView.qml" line="42"/>
         <source>No Subscenario</source>
-        <translation type="unfinished">Kein Subszenario</translation>
+        <translation>Kein Subszenario</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/views/element_properties/ElementNameView.qml" line="165"/>
         <source>Change subscenario</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ElementPropertiesView</name>
-    <message>
-        <source>Icon Path (Leave empty for default icon)</source>
-        <translation type="vanished">Icon-Pfad (Leer lassen für Standardicon)</translation>
+        <translation>Subszenario ändern</translation>
     </message>
 </context>
 <context>
@@ -1118,13 +992,9 @@ Zwischenergebnis: </translation>
 <context>
     <name>FileDialog</name>
     <message>
-        <source>Edit Marker</source>
-        <translation type="obsolete">Marker Bearbeiten</translation>
-    </message>
-    <message>
         <location filename="../ui/common/FileDialog.qml" line="118"/>
         <source>New Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Ordner</translation>
     </message>
     <message>
         <location filename="../ui/common/FileDialog.qml" line="227"/>
@@ -1157,7 +1027,7 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="66"/>
         <source>User Interface</source>
-        <translation>Benutzeroberfläche</translation>
+        <translation>Benutzungsoberfläche</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="72"/>
@@ -1172,29 +1042,31 @@ Zwischenergebnis: </translation>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="90"/>
         <source>Telemetry</source>
-        <translation type="unfinished"></translation>
+        <translation>Telemetrie</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="97"/>
         <source>Automated crash reports</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Absturzberichte</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="104"/>
         <source>When the application crashes, a report will be uploaded to sentry.io 
 so that the issue can be fixed in a future release.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn die Anwendung abstürzt, wird ein Bericht an sentry.io gesendet,
+damit das Problem in einem späteren Release behoben werden kann.</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="111"/>
         <source>Session tracking</source>
-        <translation type="unfinished"></translation>
+        <translation>Session Tracking</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="118"/>
         <source>The application will keep track of how long it is used and if any errors occured. 
 It will then send an anonymous report to sentry.io so that we know how stable the application is.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Anwendung überwacht, wie lange sie benutzt wird und ob Fehler aufgetreten sind.
+Anschließend wird ein anonymisierter Bericht and sentry.io gesendet, damit wir wissen, wie stabil die Anwendung ist.</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="128"/>
@@ -1215,7 +1087,8 @@ It will then send an anonymous report to sentry.io so that we know how stable th
         <location filename="../ui/tools/settings/GeneralPage.qml" line="159"/>
         <source>If enabled, the application will automatically check if there are any updates available and notify you if that is the case.
 This is disabled by default if you installed the application through a package manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese Option ausgewählt ist, überprüft die Anwendung regelmäßig, ob Updates verfügbar sind und informiert dich über neue Versionen.
+Ist standardmäßig ausgeschaltet, wenn die Anwendung mit einem Package Manager installiert wurde.</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/GeneralPage.qml" line="168"/>
@@ -1234,13 +1107,6 @@ This is disabled by default if you installed the application through a package m
     </message>
 </context>
 <context>
-    <name>Generators</name>
-    <message>
-        <source>Name Generator</source>
-        <translation type="vanished">Namensgenerator</translation>
-    </message>
-</context>
-<context>
     <name>GoogleDrive</name>
     <message>
         <location filename="../../src/services/google/googledrive.cpp" line="100"/>
@@ -1251,27 +1117,19 @@ This is disabled by default if you installed the application through a package m
 <context>
     <name>GoogleDriveAccount</name>
     <message>
-        <source>Save and Connect</source>
-        <translation type="vanished">Speichern und Verbinden</translation>
-    </message>
-    <message>
-        <source>Error: Wrong Password or Username</source>
-        <translation type="vanished">Error: Benutzername oder Passwort falsch</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/settings/accounts/GoogleDriveAccount.qml" line="27"/>
         <source>Client ID:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/GoogleDriveAccount.qml" line="47"/>
         <source>Client ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/GoogleDriveAccount.qml" line="59"/>
         <source>Client Secret</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/GoogleDriveAccount.qml" line="72"/>
@@ -1307,7 +1165,7 @@ This is disabled by default if you installed the application through a package m
     <message>
         <location filename="../ui/tools/audio/editor/IconFinderUnsplash.qml" line="35"/>
         <source>Type to search ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Suchbegriff hier eingeben ...</translation>
     </message>
     <message>
         <location filename="../ui/tools/audio/editor/IconFinderUnsplash.qml" line="43"/>
@@ -1335,7 +1193,7 @@ This is disabled by default if you installed the application through a package m
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="44"/>
         <source>Changelog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="73"/>
@@ -1388,17 +1246,9 @@ This is disabled by default if you installed the application through a package m
         <translation>Würfel- und Effekticons</translation>
     </message>
     <message>
-        <source>Icons by Skoll, Delapouite, Lorc and Cathelineau under CC BY 3.0.</source>
-        <translation type="vanished">Icons von Skoll, Delapouite, Lorc und Cathelineau unter CC BY 3.0 Lizenz.</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="34"/>
         <source>Older Versions</source>
         <translation>Alte Versionen</translation>
-    </message>
-    <message>
-        <source>FontAwesome QML implementation. This project uses a fork of FontAwesome.pri by Ben Lau.</source>
-        <translation type="vanished">FontAwesome QML Implementation. Dieses Projekt verwendet einen Fork von FontAwesome.pri von Ben Lau.</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/InfoPage.qml" line="150"/>
@@ -1431,7 +1281,7 @@ This is disabled by default if you installed the application through a package m
     <message>
         <location filename="../ui/tools/notes/InsertHeaderDialog.qml" line="30"/>
         <source>Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Überschrift</translation>
     </message>
 </context>
 <context>
@@ -1557,7 +1407,7 @@ This is disabled by default if you installed the application through a package m
         <location filename="../../src/tools/generators/names/listnamegenerator.cpp" line="123"/>
         <location filename="../../src/tools/generators/names/listnamegenerator.cpp" line="130"/>
         <source>None</source>
-        <translation type="unfinished">Keine</translation>
+        <translation>Keine</translation>
     </message>
 </context>
 <context>
@@ -1573,60 +1423,60 @@ This is disabled by default if you installed the application through a package m
     <message>
         <location filename="../ui/Main.qml" line="10"/>
         <source>GM-Companion</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="40"/>
+        <location filename="../ui/Main.qml" line="42"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="45"/>
+        <location filename="../ui/Main.qml" line="47"/>
         <source>Maps</source>
         <translation>Karten</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="50"/>
+        <location filename="../ui/Main.qml" line="52"/>
         <source>Dice</source>
         <translation>Würfel</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="55"/>
+        <location filename="../ui/Main.qml" line="57"/>
         <source>Combat Tracker</source>
         <translation type="unfinished">Kampfrunden</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="60"/>
+        <location filename="../ui/Main.qml" line="62"/>
         <source>Item Shop</source>
         <translation type="unfinished">Item Shop</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="65"/>
+        <location filename="../ui/Main.qml" line="67"/>
         <source>Characters</source>
         <translation type="unfinished">Charaktere</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="70"/>
+        <location filename="../ui/Main.qml" line="72"/>
         <source>Generators</source>
         <translation type="unfinished">Generatoren</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="75"/>
+        <location filename="../ui/Main.qml" line="77"/>
         <source>Notes</source>
         <translation type="unfinished">Notizen</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="80"/>
+        <location filename="../ui/Main.qml" line="82"/>
         <source>Converter</source>
         <translation type="unfinished">Umrechner</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="187"/>
+        <location filename="../ui/Main.qml" line="189"/>
         <source>Messages</source>
         <translation>Nachrichten</translation>
     </message>
     <message>
-        <location filename="../ui/Main.qml" line="209"/>
+        <location filename="../ui/Main.qml" line="211"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
@@ -1757,26 +1607,6 @@ This is disabled by default if you installed the application through a package m
 </context>
 <context>
     <name>NameGenerator</name>
-    <message>
-        <source>Generated Names</source>
-        <translation type="vanished">Generierte Namen</translation>
-    </message>
-    <message>
-        <source>Font Size</source>
-        <translation type="vanished">Schriftgröße</translation>
-    </message>
-    <message>
-        <source>Name Categories</source>
-        <translation type="vanished">Namenskategorien</translation>
-    </message>
-    <message>
-        <source>Male Names</source>
-        <translation type="vanished">Männliche Namen</translation>
-    </message>
-    <message>
-        <source>Female Names</source>
-        <translation type="vanished">Weibliche Namen</translation>
-    </message>
     <message>
         <location filename="../ui/tools/generators/NameGenerator.qml" line="32"/>
         <source>Loading ...</source>
@@ -1943,43 +1773,22 @@ Anschließend wird ein anonymisierter Bericht and sentry.io gesendet, damit wir 
 <context>
     <name>NoteBook</name>
     <message>
+        <location filename="../../src/tools/notes/notebook.h" line="17"/>
         <source>Chapter</source>
-        <translation type="obsolete">Kapitel</translation>
+        <translation>Kapitel</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/notes/notebook.h" line="17"/>
+        <source>Note</source>
+        <translation>Notiz</translation>
     </message>
 </context>
 <context>
-    <name>Notes</name>
+    <name>NoteBookChapter</name>
     <message>
-        <source>Chapter</source>
-        <translation type="vanished">Kapitel</translation>
-    </message>
-    <message>
-        <source>No Pages added yet!</source>
-        <translation type="vanished">Noch keine Seiten hinzugefügt!</translation>
-    </message>
-    <message>
-        <source>Add Page / Chapter</source>
-        <translation type="vanished">Seite / Kapitel hinzufügen</translation>
-    </message>
-    <message>
-        <source>Page</source>
-        <translation type="vanished">Seite</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="vanished">Titel</translation>
-    </message>
-    <message>
-        <source>Hold to delete chapter</source>
-        <translation type="vanished">Gedrückt halten um Kapitel zu löschen</translation>
-    </message>
-    <message>
-        <source>Delete page</source>
-        <translation type="vanished">Seite Löschen</translation>
-    </message>
-    <message>
-        <source>Encrypt page (using ROT13)</source>
-        <translation type="vanished">Seite verschlüsseln (mit ROT13)</translation>
+        <location filename="../../src/tools/notes/notebookchapter.h" line="15"/>
+        <source>Note</source>
+        <translation>Notiz</translation>
     </message>
 </context>
 <context>
@@ -2082,13 +1891,6 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     </message>
 </context>
 <context>
-    <name>ProfileOverview</name>
-    <message>
-        <source>Persönliche Daten</source>
-        <translation type="vanished">Persönliche Daten</translation>
-    </message>
-</context>
-<context>
     <name>RESTServiceConnectorLocal</name>
     <message>
         <location filename="../../src/services/rest/restserviceconnectorlocal.cpp" line="55"/>
@@ -2115,10 +1917,6 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
         <source>Error: Could not refresh token.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Connected.</source>
-        <translation type="vanished">Verbunden.</translation>
-    </message>
 </context>
 <context>
     <name>RadioPlayer</name>
@@ -2134,22 +1932,22 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/tools/notes/SavePageDialog.qml" line="32"/>
         <source>Do you want to save your changes to </source>
-        <translation type="unfinished"></translation>
+        <translation>Möchtest du deine Änderungen speichern: </translation>
     </message>
     <message>
         <location filename="../ui/tools/notes/SavePageDialog.qml" line="38"/>
         <source>Otherwise the changes will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Änderungen gehen sonst verloren.</translation>
     </message>
     <message>
         <location filename="../ui/tools/notes/SavePageDialog.qml" line="54"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="../ui/tools/notes/SavePageDialog.qml" line="69"/>
         <source>No</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein</translation>
     </message>
 </context>
 <context>
@@ -2180,7 +1978,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/tools/Settings.qml" line="35"/>
         <source>Accounts</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/Settings.qml" line="43"/>
@@ -2190,7 +1988,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/tools/Settings.qml" line="47"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -2270,26 +2068,6 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
 <context>
     <name>Spotify</name>
     <message>
-        <source>Starting librespot...</source>
-        <translation type="vanished">Starte librespot ...</translation>
-    </message>
-    <message>
-        <source>Error: Username is not set.</source>
-        <translation type="obsolete">Error: Kein Benutzername angegeben.</translation>
-    </message>
-    <message>
-        <source>Error: Password is not set.</source>
-        <translation type="obsolete">Error: Kein Passwort angegeben.</translation>
-    </message>
-    <message>
-        <source>Connected.</source>
-        <translation type="vanished">Verbunden.</translation>
-    </message>
-    <message>
-        <source>Error: Bad Credentials!</source>
-        <translation type="obsolete">Error: Benutzername oder Passwort ist falsch!</translation>
-    </message>
-    <message>
         <location filename="../../src/services/spotify/spotify.cpp" line="210"/>
         <source>Error: Spotify premium is required!</source>
         <translation>Error: Spotify premium wird benötigt!</translation>
@@ -2330,17 +2108,17 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="123"/>
         <source>Server URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Server URL</translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="155"/>
         <source>Client ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="169"/>
         <source>Client Secret</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="184"/>
@@ -2370,7 +2148,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="252"/>
         <source>Bitrate</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="262"/>
@@ -2393,17 +2171,9 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
         <translation>Speichern</translation>
     </message>
     <message>
-        <source>Save and Connect</source>
-        <translation type="vanished">Speichern und Verbinden</translation>
-    </message>
-    <message>
         <location filename="../ui/tools/settings/accounts/SpotifyAccount.qml" line="140"/>
         <source>Client ID and Secret</source>
         <translation>Client ID und Secret</translation>
-    </message>
-    <message>
-        <source>Error: Wrong Password or Username</source>
-        <translation type="vanished">Error: Benutzername oder Passwort falsch</translation>
     </message>
 </context>
 <context>
@@ -2444,50 +2214,12 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../ui/common/TreeViewItem.qml" line="191"/>
         <source>New</source>
-        <translation type="unfinished">Neue(r/s)</translation>
+        <translation>Neue(r/s)</translation>
     </message>
     <message>
         <location filename="../ui/common/TreeViewItem.qml" line="204"/>
         <source>Delete</source>
         <translation>Löschen</translation>
-    </message>
-</context>
-<context>
-    <name>UNITS</name>
-    <message>
-        <source>Area</source>
-        <translation type="vanished">Fläche</translation>
-    </message>
-    <message>
-        <source>Data Storage</source>
-        <translation type="vanished">Datenmenge</translation>
-    </message>
-    <message>
-        <source>Money</source>
-        <translation type="vanished">Geld</translation>
-    </message>
-    <message>
-        <source>Temperature</source>
-        <translation type="vanished">Temperatur</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="vanished">Zeit</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation type="vanished">Volumen</translation>
-    </message>
-    <message>
-        <source>Weight</source>
-        <translation type="vanished">Gewicht</translation>
-    </message>
-</context>
-<context>
-    <name>UNITS_JS</name>
-    <message>
-        <source>Square Meter</source>
-        <translation type="vanished">Quadratmeter</translation>
     </message>
 </context>
 <context>
@@ -2570,77 +2302,77 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="16"/>
         <source>Bit [b]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="17"/>
         <source>Nibble</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="18"/>
         <source>Byte [B]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="19"/>
         <source>Kilobyte [KB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="20"/>
         <source>Kibibyte [KiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="21"/>
         <source>Megabyte [MB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="22"/>
         <source>Mebibyte [MiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="23"/>
         <source>Gigabyte [GB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="24"/>
         <source>Gibibyte [GiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="25"/>
         <source>Terrabyte [TB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="26"/>
         <source>Tebibyte [TiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="27"/>
         <source>Petabyte [PB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="28"/>
         <source>Pebibyte [PiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="29"/>
         <source>Exabyte [EB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="30"/>
         <source>Exbibyte [EiB]</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="31"/>
@@ -2650,12 +2382,12 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="32"/>
         <source>Kilometer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="33"/>
         <source>Meter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="34"/>
@@ -2670,7 +2402,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="36"/>
         <source>Millimeter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="37"/>
@@ -2680,7 +2412,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="38"/>
         <source>Nanometer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="39"/>
@@ -2735,12 +2467,12 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="49"/>
         <source>Celsius</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="50"/>
         <source>Kelvin</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="51"/>
@@ -2775,7 +2507,7 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="57"/>
         <source>Minute</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/resources/units/units_ts.js" line="58"/>
@@ -3009,45 +2741,6 @@ Hinweis: ROT13 ist keine sichere Verschlüsselung und ist nur dafür gedacht zu 
         <location filename="../ui/main/UpdateDialog.qml" line="35"/>
         <source>Later</source>
         <translation>Später</translation>
-    </message>
-</context>
-<context>
-    <name>main</name>
-    <message>
-        <source>Maps</source>
-        <translation type="vanished">Karten</translation>
-    </message>
-    <message>
-        <source>Dice</source>
-        <translation type="vanished">Würfel</translation>
-    </message>
-    <message>
-        <source>Combat Tracker</source>
-        <translation type="vanished">Kampfrunden</translation>
-    </message>
-    <message>
-        <source>Item Shop</source>
-        <translation type="vanished">Item Shop</translation>
-    </message>
-    <message>
-        <source>Characters</source>
-        <translation type="vanished">Charaktere</translation>
-    </message>
-    <message>
-        <source>Generators</source>
-        <translation type="vanished">Generatoren</translation>
-    </message>
-    <message>
-        <source>Notes</source>
-        <translation type="vanished">Notizen</translation>
-    </message>
-    <message>
-        <source>Converter</source>
-        <translation type="vanished">Umrechner</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Einstellungen</translation>
     </message>
 </context>
 </TS>
