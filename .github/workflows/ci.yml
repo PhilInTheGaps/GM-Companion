@@ -225,12 +225,13 @@ jobs:
           cd build
           cp librespot/target/release/librespot AppDir/usr/bin/librespot
           bash ../deploy/appimage/build-appimage.sh
+          ls
 
       - name: Upload Build
         uses: actions/upload-artifact@v3
         with:
           name: gm-companion_x86_64.AppImage
-          path: .\build\GM-Companion-x86_64.AppImage
+          path: build/GM-Companion-x86_64.AppImage
           if-no-files-found: error
 
   static-analysis:
