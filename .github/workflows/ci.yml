@@ -136,7 +136,7 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
+          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev libxcb-cursor0
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
@@ -147,6 +147,12 @@ jobs:
           target: "desktop"
           cache: "true"
           modules: "qtimageformats qtmultimedia qtpdf qt5compat"
+
+      name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          default: true
 
       - name: Setup Sentry CLI
         uses: mathieu-bour/setup-sentry-cli@1.2.0
@@ -199,6 +205,32 @@ jobs:
           ../deploy/debug/generate-debug-info.sh AppDir/usr/bin/gm-companion
           sentry-cli upload-dif --org rophil --project gm-companion --include-sources AppDir/usr/bin/.debug/
           rm -rf AppDir/usr/bin/.debug
+
+      - name: Clone librespot repo
+        uses: actions/checkout@v2
+        with:
+          repository: librespot-org/librespot
+          path: build/librespot
+          ref: v0.4.2
+
+      - name: Build librespot
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Build AppImage
+        run: |
+          cd build
+          cp librespot/target/release/librespot AppDir/usr/bin/librespot
+          bash ../deploy/appimage/build-appimage.sh
+
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: gm-companion_x86_64.AppImage
+          path: .\build\GM-Companion-x86_64.AppImage
+          if-no-files-found: error
   static-analysis:
     runs-on: ubuntu-22.04
     strategy:
@@ -222,7 +254,7 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get upgrade -q
-          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev
+          sudo apt install -qq mesa-common-dev libglu1-mesa-dev libfreetype6-dev libfontconfig1-dev libjpeg-turbo8-dev libtiff-dev libnss3-dev libopenjp2-7-dev libboost-dev libcairo2-dev libcurl4-openssl-dev python3-setuptools patchelf libasound2-dev libsecret-1-dev libxcb-cursor0
           sudo pip3 install gcovr
 
       - name: Install Qt
