@@ -215,10 +215,9 @@ jobs:
           ref: v0.4.2
 
       - name: Build librespot
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release
+        run: |
+          cd build/librespot
+          /home/runner/.cargo/bin/cargo build --release
 
       - name: Build AppImage
         run: |
