@@ -14,7 +14,7 @@ jobs:
           version: ${{ matrix.qt-version }}
           host: "windows"
           arch: "win64_${{ matrix.compiler }}"
-          tools: "tools_openssl_x64"
+          tools: "tools_opensslv3_x64"
           cache: "true"
           modules: "qtimageformats qtmultimedia qtpdf qt5compat"
 
@@ -71,7 +71,7 @@ jobs:
       - name: Tests
         run: |
           cd build
-          cp ..\..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
+          cp ..\..\Qt\Tools\OpenSSLv3\Win_x64\bin\*.dll .\tests\RelWithDebInfo\
           cp .\cget\**\*.dll .\tests\RelWithDebInfo\
           ls tests
           ls tests\RelWithDebInfo
@@ -89,17 +89,17 @@ jobs:
 
       - name: Install CQtDeployer
         run: |
-          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2295/CQtDeployer_1.6.2295.de25aa3_Windows_AMD64.exe
+          curl -L -o .\cqtdeployer-installer.exe https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2311/CQtDeployer_1.6.2311.76d1d20_Windows_AMD64.exe
           .\cqtdeployer-installer.exe install -c --al -t ${{ github.workspace }}\cqtdeployer
 
       - name: Download librespot
         run: curl -L -o .\build\install\bin\librespot.exe https://github.com/PhilInTheGaps/librespot-bin/releases/download/v0.4.2/librespot-x86_64.exe
 
       - name: Copy OpenSSL DLLs to install folder
-        run: cp ..\Qt\Tools\OpenSSL\Win_x64\bin\*.dll .\build\install\bin
+        run: cp ..\Qt\Tools\OpenSSLv3\Win_x64\bin\*.dll .\build\install\bin
 
       - name: Deploy
-        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir ..\Qt\${{ matrix.qt-version }}\${{ matrix.compiler }}\qml -targetDir build\install\bin
+        run: ${{ github.workspace }}\cqtdeployer\1.6\CQtDeployer.exe -bin build\install\bin\gm-companion.exe,build\install\bin\librespot.exe -libDir build\cget\bin,build\cget\lib -qmlDir app\ui -targetDir build\install\bin
 
       - name: Remove debug info from install folder
         run: rm .\build\install\**\*.pdb
